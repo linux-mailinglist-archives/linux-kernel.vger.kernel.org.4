@@ -2,181 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D205B3EF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF4B5B3EFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIISkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S229629AbiIISrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiIISkR (ORCPT
+        with ESMTP id S229502AbiIISr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:40:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ED57FE6A;
-        Fri,  9 Sep 2022 11:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662748816; x=1694284816;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RuWWql8NdeIBQV13hvoz6HJI9WRtLwnwR+Z0ibAu/b8=;
-  b=Rj9GcD+2NmBWKH2Q/5WL/VId1A1ZFXiRYiyPlfl6IlkDGLW8qgqUZyq4
-   3XOJtijUnwJAyqHYXc11RHB139q/fOQg0fot3WYTsZ8CLWTlO7mdIk2np
-   7hcIb3PGN5RCpGLtQr5l/XDVHTO6h7oDpMBxuDxezxfOcifWoRm+JSqIF
-   CIt8I/ssKcG8W7lpM4OIEc7ikycea+izE3qK9UjZQjc72fxVmgVajEztM
-   HIlhl8RYADthF4SqQhWleDT1Qb5z2NTfZ8GfLV6guublUFUyqx66B2yLL
-   8keluoahlcC4gP6aw0drC1acHhISYqfNZnZwOpstMuB3/3ZDBHezJoRl/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298347056"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="298347056"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 11:40:14 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="592707394"
-Received: from hmadupal-mobl1.amr.corp.intel.com (HELO [10.251.6.204]) ([10.251.6.204])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 11:40:14 -0700
-Message-ID: <379acbc9-dd7d-f52b-b4d5-da5dac065891@linux.intel.com>
-Date:   Fri, 9 Sep 2022 11:40:14 -0700
+        Fri, 9 Sep 2022 14:47:27 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF312F73A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 11:47:26 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id g1so2135248iob.13
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 11:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tY2acVbA/Ha3+2EN4QAjkpHBg/SdpbP2hwHDbNpf9bw=;
+        b=ODw3NcxqU5t/spePY1O2k2TkXmXTPzngWZ+jzGxk48CMeQWHZCm43xP09J0X8msJpw
+         RAUkVxddDp2KODf4+zE1ChALe0wbOMml+kErKuzJ/uLWeR04yvJD6RwIfEjgdK2Z0g9Q
+         9o3ic/nQgpcfaq3PozndHUEK3yIhuLu7ebECI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tY2acVbA/Ha3+2EN4QAjkpHBg/SdpbP2hwHDbNpf9bw=;
+        b=ItLxVJKGmzOsICMt0gjWdFYOUuaw8D0uEvA0WsOTlxSbxUnehcKkHI9B0qICgYs1mh
+         RgHgo2X9zjuv8GaO2Vq83/iFJR5ty9pCEy7/pMHguIJMhLYoeg2UVI2yut3IQ49sd+BH
+         qLD1T15h9Il+Lv2AKN80s6SHzpqBFNK7tCJsEOTAzxaUKL8Q26vEzaCrDKiQitDY7PDL
+         N1DN/2cU3T2O8K8yzkf6MWBq5FFXyzjVTmUlBE+0wi4FmZIbp2iYqWmTUOhVFpB/RJrx
+         5asv4v8Z1fZV4ZUOid+9wp0+7TTZwd1EaGu63X6yxVcRC2gcjqVh5nZ5RbBJiQrrKGsL
+         ABBw==
+X-Gm-Message-State: ACgBeo0SVzSELhoj4YGSwAE1W0OpS9nVZZPjZUNKBg62pMNKE7qEWr2L
+        2ih/G001+UQUidTqdaj/x3RplbLhhA2Zgw==
+X-Google-Smtp-Source: AA6agR4WNow9ycTkAeyDChjWKVk46sVJJc7ZqQSj0aAC3p1IvaRiB6h6e0rg4uqPBPuVSX4o+mxkKw==
+X-Received: by 2002:a05:6638:1910:b0:35a:1119:a8bf with SMTP id p16-20020a056638191000b0035a1119a8bfmr972011jal.212.1662749245799;
+        Fri, 09 Sep 2022 11:47:25 -0700 (PDT)
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com. [209.85.166.47])
+        by smtp.gmail.com with ESMTPSA id i1-20020a056638050100b00346b96a352bsm438960jar.164.2022.09.09.11.47.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 11:47:23 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id q83so77766iod.7
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 11:47:23 -0700 (PDT)
+X-Received: by 2002:a05:6602:2d4f:b0:689:5bba:dc99 with SMTP id
+ d15-20020a0566022d4f00b006895bbadc99mr7410102iow.7.1662749242176; Fri, 09 Sep
+ 2022 11:47:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
- support
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxn5VDzJMUxSKz0Z@fedora>
- <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
- <CAAq0SUk9_DS4T5_uAg+3re7=wrGXMkiXgw_oPsWfrmgY79P=2g@mail.gmail.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <CAAq0SUk9_DS4T5_uAg+3re7=wrGXMkiXgw_oPsWfrmgY79P=2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220830231541.1135813-1-rrangel@chromium.org>
+ <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+ <YxftNQrRx3fwsobk@google.com> <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
+ <98559c23-cc22-3b85-2102-0cc760240804@redhat.com> <CAHQZ30ACZ-1UtgbXwEc+tFRvW-KpDg87Q4nj5Dwysz2BB26yiQ@mail.gmail.com>
+ <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Fri, 9 Sep 2022 12:47:11 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
+Message-ID: <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
+Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set wake_irq
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It looks like `i2c_acpi_get_irq` and `platform_get_irq_optional` are
+doing pretty much the same thing. Can we replace `i2c_acpi_get_irq`
+and switch over to `platform_get_irq_optional`? Is it possible to get
+a `platform_device` from an `i2c_client`?
 
-
-On 9/9/22 6:36 AM, Wander Lairson Costa wrote:
-> On Thu, Sep 8, 2022 at 8:45 PM Sathyanarayanan Kuppuswamy
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->>
->>
->>
->> On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
->>>> +#ifdef DEBUG
->>>> +static void print_array_hex(const char *title, const char *prefix_str,
->>>> +            const void *buf, int len)
->>>> +{
->>>> +    const __u8 *ptr = buf;
->>>> +    int i, rowsize = HEX_DUMP_SIZE;
->>>> +
->>>> +    if (!len || !buf)
->>>> +            return;
->>>> +
->>>> +    printf("\t\t%s", title);
->>>> +
->>>> +    for (i = 0; i < len; i++) {
->>>> +            if (!(i % rowsize))
->>>> +                    printf("\n%s%.8x:", prefix_str, i);
->>>> +            printf(" %.2x", ptr[i]);
->>>> +    }
->>>> +
->>>> +    printf("\n");
->>>> +}
->>>> +#endif
->>>> +
->>>> +TEST(verify_report)
->>>> +{
->>>> +    __u8 reportdata[TDX_REPORTDATA_LEN];
->>>> +    struct tdreport tdreport;
->>>> +    struct tdx_report_req req;
->>>> +    int devfd, i;
->>>> +
->>>> +    devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
->>>> +
->>>> +    ASSERT_LT(0, devfd);
->>>> +
->>>> +    /* Generate sample report data */
->>>> +    for (i = 0; i < TDX_REPORTDATA_LEN; i++)
->>>> +            reportdata[i] = i;
->>>> +
->>>> +    /* Initialize IOCTL request */
->>>> +    req.subtype     = 0;
->>>> +    req.reportdata  = (__u64)reportdata;
->>>> +    req.rpd_len     = TDX_REPORTDATA_LEN;
->>>> +    req.tdreport    = (__u64)&tdreport;
->>>> +    req.tdr_len     = sizeof(tdreport);
->>>> +
->>>> +    /* Get TDREPORT */
->>>> +    ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
->>>> +
->>>> +#ifdef DEBUG
->>>> +    print_array_hex("\n\t\tTDX report data\n", "",
->>>> +                    reportdata, sizeof(reportdata));
->>>> +
->>>> +    print_array_hex("\n\t\tTDX tdreport data\n", "",
->>>> +                    &tdreport, sizeof(tdreport));
->>>> +#endif
->>> You can unconditionally define print_array_hex, and
->>> use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
->>> will get rid of the unused code when DEBUG is not defined
->>> as expected, but you get the parser to validate it
->>> independent of the definition of DEBUG.
->>
->> Currently, DEBUG is a macro, so we cannot use if (DEBUG) directly.
->> You are suggesting to change DEBUG to a variable? Any reason to
->> make this change? I think both changes are functionally similar.
->> So I am wondering why to make this change?
->>
-> 
-> My thought is always to define DEBUG. If in debug mode it is defined
-> to 1; otherwise to 0.
-> Then, you can use `if (DEBUG)` instead of `#ifdef DEBUG`. But the
-> former will always check the syntax of the debug code,
-> independent of the value of DEBUG, and the compiler will generate the
-> same code. The GNU coding standard [1] explains that
-> better than I do.
-> 
-> [1] https://www.gnu.org/prep/standards/standards.html#Conditional-Compilation
-
-Got it. I will use if (DEBUG).
-
-> 
->>>
->>
->> --
->> Sathyanarayanan Kuppuswamy
->> Linux Kernel Developer
->>
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+On Thu, Sep 8, 2022 at 9:23 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Sep 8, 2022 at 4:40 PM Raul Rangel <rrangel@chromium.org> wrote:
+> >
+> > On Wed, Sep 7, 2022 at 2:12 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On 9/7/22 04:00, Raul Rangel wrote:
+> > > > On Tue, Sep 6, 2022 at 7:00 PM Dmitry Torokhov
+> > > > <dmitry.torokhov@gmail.com> wrote:
+> > > >>
+> > > >> On Tue, Aug 30, 2022 at 05:15:37PM -0600, Raul E Rangel wrote:
+> > > >>> Device tree already has a mechanism to pass the wake_irq. It does this
+> > > >>> by looking for the wakeup-source property and setting the
+> > > >>> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses at the
+> > > >>> ACPI GpioInt wake flag to determine if the interrupt can be used to wake
+> > > >>> the system. Previously the i2c drivers had to make assumptions and
+> > > >>> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> > > >>> If there is a device with an Active Low interrupt and the device gets
+> > > >>> powered off while suspending, the interrupt line will go low since it's
+> > > >>> no longer powered and wake the system. For this reason we should respect
+> > > >>> the board designers wishes and honor the wake bit defined on the
+> > > >>> GpioInt.
+> > > >>>
+> > > >>> This change does not cover the ACPI Interrupt or IRQ resources.
+> > > >>>
+> > > >>> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> > > >>> ---
+> > > >>>
+> > > >>>  drivers/i2c/i2c-core-acpi.c |  8 ++++++--
+> > > >>>  drivers/i2c/i2c-core-base.c | 17 +++++++++++------
+> > > >>>  drivers/i2c/i2c-core.h      |  4 ++--
+> > > >>>  3 files changed, 19 insertions(+), 10 deletions(-)
+> > > >>>
+> > > >>> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > > >>> index c762a879c4cc6b..cfe82a6ba3ef28 100644
+> > > >>> --- a/drivers/i2c/i2c-core-acpi.c
+> > > >>> +++ b/drivers/i2c/i2c-core-acpi.c
+> > > >>> @@ -182,12 +182,13 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> > > >>>  /**
+> > > >>>   * i2c_acpi_get_irq - get device IRQ number from ACPI
+> > > >>>   * @client: Pointer to the I2C client device
+> > > >>> + * @wake_capable: Set to 1 if the IRQ is wake capable
+> > > >>>   *
+> > > >>>   * Find the IRQ number used by a specific client device.
+> > > >>>   *
+> > > >>>   * Return: The IRQ number or an error code.
+> > > >>>   */
+> > > >>> -int i2c_acpi_get_irq(struct i2c_client *client)
+> > > >>> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+> > > >>>  {
+> > > >>>       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+> > > >>>       struct list_head resource_list;
+> > > >>> @@ -196,6 +197,9 @@ int i2c_acpi_get_irq(struct i2c_client *client)
+> > > >>>
+> > > >>>       INIT_LIST_HEAD(&resource_list);
+> > > >>>
+> > > >>> +     if (wake_capable)
+> > > >>> +             *wake_capable = 0;
+> > > >>> +
+> > > >>>       ret = acpi_dev_get_resources(adev, &resource_list,
+> > > >>>                                    i2c_acpi_add_resource, &irq);
+> > > >>
+> > > >
+> > > >
+> > > >> You also need to handle "Interrupt(..., ...AndWake)" case here. I would
+> > > >> look into maybe defining
+> > > >>
+> > > >> #define IORESOURCE_IRQ_WAKECAPABLE      (1<<6)
+> > > >>
+> > > >> in include/linux/ioport.h and plumbing it through from ACPI layer.
+> > > >>
+> > > >> Thanks.
+> > > >
+> > > > AFAIK the Intel (Not 100% certain) and AMD IO-APIC's can't actually
+> > > > wake a system from suspend/suspend-to-idle.
+> > >
+> > > That may be true for S3 suspend (it sounds about right) there
+> > > certainly is no way to "arm for wakeup" on the APIC, but with
+> > > s2idle all IRQs which are not explicitly disabled by the OS
+> > > still function normally so there any IRQ can be a wakeup
+> > > source (AFAIK).
+>
+> That's true.
+>
+> Moreover, even for S3 there are transitions into it and there may be
+> wakeup interrupts taking place during those transitions.  Those may be
+> any IRQs too.
+>
+> > > And even with S3 suspend I think some IRQs can act as wakeup,
+> > > but that is configured by the BIOS then and not something which
+> > > linux can enable/disable. E.g IIRC the parent IRQ of the GPIO
+> > > controllers on x86 is an APIC IRQ ...
+>
+> It's more about how the system is wired up AFAICS.  Basically, in
+> order to wake up the system from S3, the given IRQ needs to be
+> physically attached to an input that will trigger the platform wakeup
+> logic while in S3.
+>
+> > >
+> >
+> > SGTM. I wanted to make sure there was interest before I invested the
+> > time in adding the functionality. Hopefully I can push up a new patch
+> > set tomorrow.
+>
+> Sounds good. :-)
