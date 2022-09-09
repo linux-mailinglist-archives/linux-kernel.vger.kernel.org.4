@@ -2,162 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5535B3D84
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E505B3DA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiIIRBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S230401AbiIIREM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiIIRBA (ORCPT
+        with ESMTP id S230143AbiIIREE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:01:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3A4CAF486;
-        Fri,  9 Sep 2022 10:00:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5091165C;
-        Fri,  9 Sep 2022 10:01:05 -0700 (PDT)
-Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A60D23F73D;
-        Fri,  9 Sep 2022 10:00:55 -0700 (PDT)
-Message-ID: <a60be378-dce6-08fb-02b8-1efc660ee3cb@arm.com>
-Date:   Fri, 9 Sep 2022 18:00:29 +0100
+        Fri, 9 Sep 2022 13:04:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6B10C98D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662743040; x=1694279040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nipNB0i+x/zBCdq4Ynhzz+pJsK1m2sb1Tx6FZZqOI+8=;
+  b=W5tb27/DA0+rA4MTYEzvghaeC3b3IXIOPCJT4rGjz8RhSR80d1cyW8Mv
+   3ymor9eQWmaRwoyusWJkTrkaOg7DEQaQpzDCwi68pTlSzW5Me+3rmMlke
+   pUi1SXJ+KLhrZwls4tHCyILOGyoGz/YSO0VNAOPSHBPo0h9pNctBPMu32
+   ngigd+J58dWmeNdrkgcy3eV5pEJ1HJMP1T8bX/zSr5JD27EmlxldVj5Bc
+   VA2xibG7JpX8I+nA3gXCe82aJUpgfsrz+rJdqBp+do3W0vGva/XMk1Wkv
+   Xck4ubeaoRDb1XjTfYn4qsljEIflDNT7dwR0cgWakYO4hZRWIDw+3LUyQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277913721"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="277913721"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 10:03:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="704466338"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 10:03:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oWhPn-0004oh-0n;
+        Fri, 09 Sep 2022 20:03:39 +0300
+Date:   Fri, 9 Sep 2022 20:03:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v3 3/4] lib/find_bit: optimize find_next_bit() functions
+Message-ID: <Yxtx674np/Dr3YNg@smile.fi.intel.com>
+References: <20220827175807.4017673-1-yury.norov@gmail.com>
+ <20220827175807.4017673-4-yury.norov@gmail.com>
+ <xhsmhfsh3b15v.mognet@vschneid.remote.csb>
+ <YxjNeqLjGgRPIm+y@yury-laptop>
+ <yt9dv8pwspkw.fsf@linux.ibm.com>
+ <YxtR7tMhXwGEXmbO@yury-laptop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 01/13] x86/resctrl: Fix min_cbm_bits for AMD
-Content-Language: en-GB
-To:     Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
-        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de
-Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com, eranian@google.com
-References: <166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu>
- <166257359679.1043018.9253512972611409799.stgit@bmoger-ubuntu>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <166257359679.1043018.9253512972611409799.stgit@bmoger-ubuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxtR7tMhXwGEXmbO@yury-laptop>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
+On Fri, Sep 09, 2022 at 07:47:10AM -0700, Yury Norov wrote:
+> On Fri, Sep 09, 2022 at 02:24:31PM +0200, Sven Schnelle wrote:
 
-On 07/09/2022 18:59, Babu Moger wrote:
-> AMD systems support zero CBM (capacity bit mask) for L3 allocation.
-> That is reflected in rdt_init_res_defs_amd() by:
-> 
-> 	r->cache.arch_has_empty_bitmaps = true;
-> 
-> However given the unified code in cbm_validate(), checking for:
-> 	val == 0 && !arch_has_empty_bitmaps
-> 
-> is not enough because of another check in cbm_validate():
-> 
-> 	if ((zero_bit - first_bit) < r->cache.min_cbm_bits)
+...
 
-Right, the Intel version had this, but the AMD didn't. I evidently only thought about this
-the !arch_has_empty_bitmaps way round! Sorry about that.
+> I removed the whole series and will resend it with an appropriate fixes
+> at the weekend. Hopefully it will disappear in next-20220909 or 10.
+
+Usually there is no Linux Next releases on weekends. So it will be
+at best the 20220912 one.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> The default value of r->cache.min_cbm_bits = 1.
-> 
-> Leading to:
-> 
-> 	$ cd /sys/fs/resctrl
-> 	$ mkdir foo
-> 	$ cd foo
-> 	$ echo L3:0=0 > schemata
->           -bash: echo: write error: Invalid argument
-> 	$ cat /sys/fs/resctrl/info/last_cmd_status
-> 	  Need at least 1 bits in the mask
-> 
-> Fix the issue by initializing the min_cbm_bits to 0 for AMD. Also,
-> remove the default setting of min_cbm_bits and initialize it separately.
-> 
-> After the fix
-> 	$ cd /sys/fs/resctrl
-> 	$ mkdir foo
-> 	$ cd foo
-> 	$ echo L3:0=0 > schemata
-> 	$ cat /sys/fs/resctrl/info/last_cmd_status
-> 	  ok
-> 
-> Link: https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.com/
-> Fixes: 316e7f901f5a ("x86/resctrl: Add struct rdt_cache::arch_has_{sparse, empty}_bitmaps")
-
-> Signed-off-by: Stephane Eranian <eranian@google.com>
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-
-Er, who is the author if this patch? If you are reposting Stephane's patch then there
-needs to be a 'From: ' at the top of the email so that git preserves the ownership. You
-may need some incantation of "git commit --amend --author=" to fix this in your tree.
-
-As its a fix, have you posted this separately? Mixing fixes and new-code makes it hard for
-the maintainer to spot what needs to be taken for the next -rc.
-
-
-> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> index bb1c3f5f60c8..a5c51a14fbce 100644
-> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> @@ -66,9 +66,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
->  			.rid			= RDT_RESOURCE_L3,
->  			.name			= "L3",
->  			.cache_level		= 3,
-> -			.cache = {
-> -				.min_cbm_bits	= 1,
-> -			},
->  			.domains		= domain_init(RDT_RESOURCE_L3),
->  			.parse_ctrlval		= parse_cbm,
->  			.format_str		= "%d=%0*x",
-> @@ -83,9 +80,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
->  			.rid			= RDT_RESOURCE_L2,
->  			.name			= "L2",
->  			.cache_level		= 2,
-> -			.cache = {
-> -				.min_cbm_bits	= 1,
-> -			},
->  			.domains		= domain_init(RDT_RESOURCE_L2),
->  			.parse_ctrlval		= parse_cbm,
->  			.format_str		= "%d=%0*x",
-> @@ -877,6 +871,7 @@ static __init void rdt_init_res_defs_intel(void)
->  			r->cache.arch_has_sparse_bitmaps = false;
->  			r->cache.arch_has_empty_bitmaps = false;
->  			r->cache.arch_has_per_cpu_cfg = false;
-> +			r->cache.min_cbm_bits = 1;
->  		} else if (r->rid == RDT_RESOURCE_MBA) {
->  			hw_res->msr_base = MSR_IA32_MBA_THRTL_BASE;
->  			hw_res->msr_update = mba_wrmsr_intel;
-> @@ -897,6 +892,7 @@ static __init void rdt_init_res_defs_amd(void)
->  			r->cache.arch_has_sparse_bitmaps = true;
->  			r->cache.arch_has_empty_bitmaps = true;
->  			r->cache.arch_has_per_cpu_cfg = true;
-> +			r->cache.min_cbm_bits = 0;
->  		} else if (r->rid == RDT_RESOURCE_MBA) {
->  			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
->  			hw_res->msr_update = mba_wrmsr_amd;
-> 
-> 
-
-
-Reviewed-by: James Morse <james.morse@arm.com>
-
-Thanks,
-
-James
