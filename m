@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3683C5B3260
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC9D5B3261
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiIIIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S231228AbiIIIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiIIIwo (ORCPT
+        with ESMTP id S229974AbiIIIwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:52:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5744812D1A3;
-        Fri,  9 Sep 2022 01:52:43 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 08:52:40 -0000
+        Fri, 9 Sep 2022 04:52:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591CB12D183;
+        Fri,  9 Sep 2022 01:52:44 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 08:52:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662713562;
+        s=2020; t=1662713563;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CucUCmT2BgEXx4S+SjKXcoK6Z7ijrmAalaf7ZnD4ovA=;
-        b=0vYpzfGnzuem0TNmUN0qJ3+j4GE1TdNlja/3dentxbXYddLYL0nYOdM32EmukFFtevIONC
-        HT0I5cOKbxy8a26Zp2FGzmG8rrnH++eP82V89vidJsbRdePF2BOXsyP8qn/o5nckWA6Xds
-        aSOq/XaP7mqSbFxcu4eskM0N8Wh66X0nMQofBP+lV/Q0RW+h7CVKr+DLmBVKVQlcAfLxUR
-        tk2UIY1IebfZ9sirSRlY8EOnc0zp5e79UVIi4rzK8C53Lu25rbHz5Gjtxy2X5PzV4b0A0/
-        K/axr8zNIHmPmTj9Txw5ix4dj+KTKhLfjvcXFczawPx03ww4wAmjCFXwvpM1Aw==
+        bh=EkLlHUf5V3qYjPzJAngJrSkRW8mWN3xGC6k8351nL1Q=;
+        b=XYejB2vn6cVNnrzugMlad1odzFET+AelS1mrmSznByXJ3ZiwdyyMyjXMN7K0ksgulGpcvn
+        ZVXGej0smIYYk95lThrPQXnLRGEMz41M/h5ePlmpfAHptxgrn8X4CPoMOjUvUUzy21U8U5
+        wtfyn6K0caQQiltQwphdvff/YSIp9GwuVOxDjBnFHXSGXojcvN3jOf/1nKM6RvIDQkEgzx
+        3j7H1K/ykpiDmkmcVX83WnQ8MQpGdAL1/oRpY5Bvn1ZqAMHs65RT0sDHaON0p+htb1e7Q0
+        3KhGem15LubEi8YMQs3EBM2fI2GxHC0HHOJXX742qnG6UFLo8As0pL+AASyHQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662713562;
+        s=2020e; t=1662713563;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CucUCmT2BgEXx4S+SjKXcoK6Z7ijrmAalaf7ZnD4ovA=;
-        b=yVKRo83Yz9AMx99jiA4naThJNOlIa9m1vAUWEiMU25cVoqZYT1VF6DXoUIQZi6XgTp15Hx
-        eDyk+rWg7Qv8OBBg==
+        bh=EkLlHUf5V3qYjPzJAngJrSkRW8mWN3xGC6k8351nL1Q=;
+        b=hynCCeWMkH6WA4PWHHMAdXr8IfyFirgcyRdFfw8mBMeOrt7SrUymtvYYvUyqwwXZTSMCaL
+        xdC9rTyJJjtdqrAg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/intel: Move the topdown stuff into the intel driver
+Subject: [tip: perf/core] perf/x86: Add two more x86_pmu methods
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220829101321.505933457@infradead.org>
-References: <20220829101321.505933457@infradead.org>
+In-Reply-To: <20220829101321.440196408@infradead.org>
+References: <20220829101321.440196408@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166271356078.401.9490676054948431011.tip-bot2@tip-bot2>
+Message-ID: <166271356180.401.10487629377866189074.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,115 +66,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     e577bb17a1eaa35b86ee873a786e603be768d668
-Gitweb:        https://git.kernel.org/tip/e577bb17a1eaa35b86ee873a786e603be768d668
+Commit-ID:     73759c346341d39dfde39701476c0376dea0a98b
+Gitweb:        https://git.kernel.org/tip/73759c346341d39dfde39701476c0376dea0a98b
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 10 May 2022 21:28:06 +02:00
+AuthorDate:    Tue, 10 May 2022 21:27:22 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:54:02 +02:00
 
-perf/x86/intel: Move the topdown stuff into the intel driver
+perf/x86: Add two more x86_pmu methods
 
-Use the new x86_pmu::{set_period,update}() methods to push the topdown
-stuff into the Intel driver, where it belongs.
+In order to clean up x86_perf_event_{set_period,update)() start by
+adding them as x86_pmu methods.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220829101321.505933457@infradead.org
+Link: https://lkml.kernel.org/r/20220829101321.440196408@infradead.org
 ---
- arch/x86/events/core.c       |  7 -------
- arch/x86/events/intel/core.c | 26 +++++++++++++++++++++++---
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ arch/x86/events/core.c       | 22 +++++++++++++++++-----
+ arch/x86/events/perf_event.h |  5 +++++
+ 2 files changed, 22 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index bb559b7..b074e71 100644
+index bb34a28..bb559b7 100644
 --- a/arch/x86/events/core.c
 +++ b/arch/x86/events/core.c
-@@ -119,9 +119,6 @@ u64 x86_perf_event_update(struct perf_event *event)
- 	if (unlikely(!hwc->event_base))
- 		return 0;
+@@ -72,6 +72,9 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_add,  *x86_pmu.add);
+ DEFINE_STATIC_CALL_NULL(x86_pmu_del,  *x86_pmu.del);
+ DEFINE_STATIC_CALL_NULL(x86_pmu_read, *x86_pmu.read);
  
--	if (unlikely(is_topdown_count(event)) && x86_pmu.update_topdown_event)
--		return x86_pmu.update_topdown_event(event);
--
- 	/*
- 	 * Careful: an NMI might modify the previous event value.
- 	 *
-@@ -1373,10 +1370,6 @@ int x86_perf_event_set_period(struct perf_event *event)
- 	if (unlikely(!hwc->event_base))
- 		return 0;
++DEFINE_STATIC_CALL_NULL(x86_pmu_set_period, *x86_pmu.set_period);
++DEFINE_STATIC_CALL_NULL(x86_pmu_update,     *x86_pmu.update);
++
+ DEFINE_STATIC_CALL_NULL(x86_pmu_schedule_events,       *x86_pmu.schedule_events);
+ DEFINE_STATIC_CALL_NULL(x86_pmu_get_event_constraints, *x86_pmu.get_event_constraints);
+ DEFINE_STATIC_CALL_NULL(x86_pmu_put_event_constraints, *x86_pmu.put_event_constraints);
+@@ -1518,7 +1521,7 @@ static void x86_pmu_start(struct perf_event *event, int flags)
  
--	if (unlikely(is_topdown_count(event)) &&
--	    x86_pmu.set_topdown_event_period)
--		return x86_pmu.set_topdown_event_period(event);
--
- 	/*
- 	 * If we are way outside a reasonable range then just skip forward:
- 	 */
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index ba101c2..feed732 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2302,7 +2302,7 @@ static void intel_pmu_nhm_workaround(void)
- 	for (i = 0; i < 4; i++) {
- 		event = cpuc->events[i];
- 		if (event)
--			x86_perf_event_update(event);
-+			static_call(x86_pmu_update)(event);
+ 	if (flags & PERF_EF_RELOAD) {
+ 		WARN_ON_ONCE(!(event->hw.state & PERF_HES_UPTODATE));
+-		x86_perf_event_set_period(event);
++		static_call(x86_pmu_set_period)(event);
  	}
  
- 	for (i = 0; i < 4; i++) {
-@@ -2317,7 +2317,7 @@ static void intel_pmu_nhm_workaround(void)
- 		event = cpuc->events[i];
+ 	event->hw.state = 0;
+@@ -1610,7 +1613,7 @@ void x86_pmu_stop(struct perf_event *event, int flags)
+ 		 * Drain the remaining delta count out of a event
+ 		 * that we are disabling:
+ 		 */
+-		x86_perf_event_update(event);
++		static_call(x86_pmu_update)(event);
+ 		hwc->state |= PERF_HES_UPTODATE;
+ 	}
+ }
+@@ -1700,7 +1703,7 @@ int x86_pmu_handle_irq(struct pt_regs *regs)
  
- 		if (event) {
--			x86_perf_event_set_period(event);
-+			static_call(x86_pmu_set_period)(event);
- 			__x86_pmu_enable_event(&event->hw,
- 					ARCH_PERFMON_EVENTSEL_ENABLE);
- 		} else
-@@ -2794,7 +2794,7 @@ static void intel_pmu_add_event(struct perf_event *event)
-  */
- int intel_pmu_save_and_restart(struct perf_event *event)
+ 		event = cpuc->events[idx];
+ 
+-		val = x86_perf_event_update(event);
++		val = static_call(x86_pmu_update)(event);
+ 		if (val & (1ULL << (x86_pmu.cntval_bits - 1)))
+ 			continue;
+ 
+@@ -1709,7 +1712,7 @@ int x86_pmu_handle_irq(struct pt_regs *regs)
+ 		 */
+ 		handled++;
+ 
+-		if (!x86_perf_event_set_period(event))
++		if (!static_call(x86_pmu_set_period)(event))
+ 			continue;
+ 
+ 		perf_sample_data_init(&data, 0, event->hw.last_period);
+@@ -2025,6 +2028,9 @@ static void x86_pmu_static_call_update(void)
+ 	static_call_update(x86_pmu_del, x86_pmu.del);
+ 	static_call_update(x86_pmu_read, x86_pmu.read);
+ 
++	static_call_update(x86_pmu_set_period, x86_pmu.set_period);
++	static_call_update(x86_pmu_update, x86_pmu.update);
++
+ 	static_call_update(x86_pmu_schedule_events, x86_pmu.schedule_events);
+ 	static_call_update(x86_pmu_get_event_constraints, x86_pmu.get_event_constraints);
+ 	static_call_update(x86_pmu_put_event_constraints, x86_pmu.put_event_constraints);
+@@ -2044,7 +2050,7 @@ static void x86_pmu_static_call_update(void)
+ 
+ static void _x86_pmu_read(struct perf_event *event)
  {
 -	x86_perf_event_update(event);
 +	static_call(x86_pmu_update)(event);
- 	/*
- 	 * For a checkpointed counter always reset back to 0.  This
- 	 * avoids a situation where the counter overflows, aborts the
-@@ -2806,9 +2806,27 @@ int intel_pmu_save_and_restart(struct perf_event *event)
- 		wrmsrl(event->hw.event_base, 0);
- 		local64_set(&event->hw.prev_count, 0);
- 	}
-+	return static_call(x86_pmu_set_period)(event);
-+}
-+
-+static int intel_pmu_set_period(struct perf_event *event)
-+{
-+	if (unlikely(is_topdown_count(event)) &&
-+	    x86_pmu.set_topdown_event_period)
-+		return x86_pmu.set_topdown_event_period(event);
-+
- 	return x86_perf_event_set_period(event);
  }
  
-+static u64 intel_pmu_update(struct perf_event *event)
-+{
-+	if (unlikely(is_topdown_count(event)) &&
-+	    x86_pmu.update_topdown_event)
-+		return x86_pmu.update_topdown_event(event);
+ void x86_pmu_show_pmu_cap(int num_counters, int num_counters_fixed,
+@@ -2151,6 +2157,12 @@ static int __init init_hw_perf_events(void)
+ 	if (!x86_pmu.guest_get_msrs)
+ 		x86_pmu.guest_get_msrs = (void *)&__static_call_return0;
+ 
++	if (!x86_pmu.set_period)
++		x86_pmu.set_period = x86_perf_event_set_period;
 +
-+	return x86_perf_event_update(event);
-+}
++	if (!x86_pmu.update)
++		x86_pmu.update = x86_perf_event_update;
 +
- static void intel_pmu_reset(void)
+ 	x86_pmu_static_call_update();
+ 
+ 	/*
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 4a3dde2..7ae1a6c 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -743,6 +743,8 @@ struct x86_pmu {
+ 	void		(*add)(struct perf_event *);
+ 	void		(*del)(struct perf_event *);
+ 	void		(*read)(struct perf_event *event);
++	int		(*set_period)(struct perf_event *event);
++	u64		(*update)(struct perf_event *event);
+ 	int		(*hw_config)(struct perf_event *event);
+ 	int		(*schedule_events)(struct cpu_hw_events *cpuc, int n, int *assign);
+ 	unsigned	eventsel;
+@@ -1042,6 +1044,9 @@ static struct perf_pmu_format_hybrid_attr format_attr_hybrid_##_name = {\
+ struct pmu *x86_get_pmu(unsigned int cpu);
+ extern struct x86_pmu x86_pmu __read_mostly;
+ 
++DECLARE_STATIC_CALL(x86_pmu_set_period, *x86_pmu.set_period);
++DECLARE_STATIC_CALL(x86_pmu_update,     *x86_pmu.update);
++
+ static __always_inline struct x86_perf_task_context_opt *task_context_opt(void *ctx)
  {
- 	struct debug_store *ds = __this_cpu_read(cpu_hw_events.ds);
-@@ -4786,6 +4804,8 @@ static __initconst const struct x86_pmu intel_pmu = {
- 	.add			= intel_pmu_add_event,
- 	.del			= intel_pmu_del_event,
- 	.read			= intel_pmu_read_event,
-+	.set_period		= intel_pmu_set_period,
-+	.update			= intel_pmu_update,
- 	.hw_config		= intel_pmu_hw_config,
- 	.schedule_events	= x86_schedule_events,
- 	.eventsel		= MSR_ARCH_PERFMON_EVENTSEL0,
+ 	if (static_cpu_has(X86_FEATURE_ARCH_LBR))
