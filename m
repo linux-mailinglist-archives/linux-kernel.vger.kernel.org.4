@@ -2,67 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC8A5B38A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE7A5B38A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiIINI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S229964AbiIINKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiIINIw (ORCPT
+        with ESMTP id S229494AbiIINKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:08:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD483AF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:08:50 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2903FDD;
-        Fri,  9 Sep 2022 15:08:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662728929;
-        bh=95i6pSYo5KId5a16NEEkx8bNHa3xBU953QjVyHVJZlg=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=vj3bjLgSQDSA6XAAW28orIxzoaLcPXGmeJ6gVGILFxPoqRQMcI66x+BNQrs8h7QNi
-         /vuQ003qmMkuMoce/GqyRmFjQt90uHHBNLThoxVTkrztazJGRRi/1kcImrYM3fGYld
-         HSyITzcVp7igtmm/gpJTvFlKaGkZi4dQTNHMMXEY=
-Message-ID: <49fba94f-c3b3-d131-2c53-5563675400be@ideasonboard.com>
-Date:   Fri, 9 Sep 2022 16:08:46 +0300
+        Fri, 9 Sep 2022 09:10:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DE040BF8;
+        Fri,  9 Sep 2022 06:10:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C3461FCF;
+        Fri,  9 Sep 2022 13:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C53C433C1;
+        Fri,  9 Sep 2022 13:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662729004;
+        bh=5PnnwsoB3HvLeQ2lJwrsgQqPyCQ70pR6k0Vd37d4Gaw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bZUyUV8+PxmN04UzLSy7b0Jj++Zz9G5bOUzl01+8cLwj/nCCgPDPAXCW3fdguamOG
+         fOGVokZk9P5maRTV2uOpd9ijP4kCfkJtCtxagV2gSOuabEd1jt/xUv2ksiyenHRGeU
+         IYs8vj+j0kNcPICW2/tXF8aNzEnaT52Lo4XTmvTqa8eQ6aTOa4vJ6mWtdgIiVYk/Kn
+         KtMxOSMf+Q+iBSsCc1GlzPyy7SmaT2rKpjICklZOaW6deFc6r5PHPzTbM2FbqkehCS
+         QljCJgX2G4ahFuwWKu2R58fA0D+FI8PDnDOopxR6K85YuZYwVl9I2H1TzHF0l6jcLX
+         67PxlU/PeQqxA==
+Date:   Fri, 9 Sep 2022 15:09:58 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kishon@ti.com, gregkh@linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mie@igel.co.jp, kw@linux.com
+Subject: Re: [PATCH v2 0/5] pci_endpoint_test: Fix the return value of IOCTLs
+Message-ID: <Yxs7JlQ8jzNNwvdi@lpieralisi>
+References: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] drm: omapdrm: Improve check for contiguous buffers
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220825162609.14076-1-afd@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220825162609.14076-1-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 19:26, Andrew Davis wrote:
-> While a scatter-gather table having only 1 entry does imply it is
-> contiguous, it is a logic error to assume the inverse. Tables can have
-> more than 1 entry and still be contiguous. Use a proper check here.
+On Wed, Aug 24, 2022 at 06:00:05PM +0530, Manivannan Sadhasivam wrote:
+> During the review of a patch for pci_endpoint_test driver [1], Greg spotted
+> the wrong usage of the return value of IOCTLs in the driver. This series
+> fixes that by returning 0 for success and negative error code for failure.
+> Relevant change is also made to the userspace tool and the Documentation.
 > 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
+> Along with those, there are couple more patches fixing other small issues
+> I noted.
 > 
-> Changes from v1:
->   - Sent correct version of patch :)
+> NOTE: I have just compile tested this series. So it'd be good if someone
+> can test it on the PCI endpoint setup.
+> 
+> Thanks,
+> Mani
+> 
+> [1] https://lore.kernel.org/all/20220816100617.90720-1-mie@igel.co.jp/
+> 
+> Changes in v2:
+> 
+> * Fixed the error numbers in pci_endpoint_test
+> * Added Fixes tag and CCed stable list for relevant patches. The patches
+>   should get backported until 5.10 kernel only. Since for the LTS kernels
+>   before that, the pci_endpoint_test driver was not supporting all commands.
+> 
+> Manivannan Sadhasivam (5):
+>   misc: pci_endpoint_test: Fix the return value of IOCTL
+>   tools: PCI: Fix parsing the return value of IOCTLs
+>   Documentation: PCI: endpoint: Use the correct return value of
+>     pcitest.sh
+>   misc: pci_endpoint_test: Remove unnecessary WARN_ON
+>   tools: PCI: Fix memory leak
+> 
+>  Documentation/PCI/endpoint/pci-test-howto.rst | 152 ++++++++--------
+>  drivers/misc/pci_endpoint_test.c              | 167 ++++++++----------
+>  tools/pci/pcitest.c                           |  48 ++---
+>  3 files changed, 179 insertions(+), 188 deletions(-)
 
-Looks fine to me. But where do you need this? Are contiguous buffers 
-with multiple sgt entries handled correctly elsewhere in the driver, 
-i.e. do they work? =)
+May I ask where are we with this thread ? I have noticed some key
+comments from Greg that need addressing so I'd expect a new version.
 
-  Tomi
+Thanks,
+Lorenzo
