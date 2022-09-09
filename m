@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6AC5B3242
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3683C5B3260
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbiIIIxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S230396AbiIIIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiIIIwo (ORCPT
+        with ESMTP id S231590AbiIIIwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 04:52:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2112FB93;
-        Fri,  9 Sep 2022 01:52:42 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 08:52:39 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5744812D1A3;
+        Fri,  9 Sep 2022 01:52:43 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 08:52:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662713561;
+        s=2020; t=1662713562;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gqkjW98DMRYChszoVmaWu3Cc2pxnJYkUSMHWIMQTJoE=;
-        b=XrBoVfiid554fT+XYRRy6YMlQTA/W+spllG90rZp/zPDyM48aHEhz0hJ+zwIG+vetdUxfr
-        ThubDw+xNKWWYVlDU2pG6SbrucmFQK01ar7BVlZxUsLGOp1AVnZ2nHpqKxGnrr5kY3feQp
-        eQJ2A6utK5zJyWXLb6Crp+8aCrUrVMYJ2rLXjp9F3Bzeq4DncLtUPNUAKz22ulWqhpM/vr
-        tRyseAdieTvxR5EJD1737+jfPeXC9Mu46UVSkdw60+WoxRtjmiEvAcWz7tCYap1ss7IJcH
-        /Agpu+INJMapRHmbxH8ZCMElGzcGbdEnsaYqVqTkct0CPpGcq3APsVn2lSNUCQ==
+        bh=CucUCmT2BgEXx4S+SjKXcoK6Z7ijrmAalaf7ZnD4ovA=;
+        b=0vYpzfGnzuem0TNmUN0qJ3+j4GE1TdNlja/3dentxbXYddLYL0nYOdM32EmukFFtevIONC
+        HT0I5cOKbxy8a26Zp2FGzmG8rrnH++eP82V89vidJsbRdePF2BOXsyP8qn/o5nckWA6Xds
+        aSOq/XaP7mqSbFxcu4eskM0N8Wh66X0nMQofBP+lV/Q0RW+h7CVKr+DLmBVKVQlcAfLxUR
+        tk2UIY1IebfZ9sirSRlY8EOnc0zp5e79UVIi4rzK8C53Lu25rbHz5Gjtxy2X5PzV4b0A0/
+        K/axr8zNIHmPmTj9Txw5ix4dj+KTKhLfjvcXFczawPx03ww4wAmjCFXwvpM1Aw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662713561;
+        s=2020e; t=1662713562;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gqkjW98DMRYChszoVmaWu3Cc2pxnJYkUSMHWIMQTJoE=;
-        b=MXsUKXf2c3ZMnHmguZ4SEIA0mnJ0pUjGfi0XKjQDVGDCTPJRdFBW8jSv6NPY5qCrQrcn47
-        ey2Pg1ppHH4FYZAA==
+        bh=CucUCmT2BgEXx4S+SjKXcoK6Z7ijrmAalaf7ZnD4ovA=;
+        b=yVKRo83Yz9AMx99jiA4naThJNOlIa9m1vAUWEiMU25cVoqZYT1VF6DXoUIQZi6XgTp15Hx
+        eDyk+rWg7Qv8OBBg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86: Change x86_pmu::limit_period signature
+Subject: [tip: perf/core] perf/x86/intel: Move the topdown stuff into the intel driver
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220829101321.573713839@infradead.org>
-References: <20220829101321.573713839@infradead.org>
+In-Reply-To: <20220829101321.505933457@infradead.org>
+References: <20220829101321.505933457@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166271355975.401.1487336464504025509.tip-bot2@tip-bot2>
+Message-ID: <166271356078.401.9490676054948431011.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,140 +66,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     28f0f3c44b5c35be657a4f922dcdfb48285f4373
-Gitweb:        https://git.kernel.org/tip/28f0f3c44b5c35be657a4f922dcdfb48285f4373
+Commit-ID:     e577bb17a1eaa35b86ee873a786e603be768d668
+Gitweb:        https://git.kernel.org/tip/e577bb17a1eaa35b86ee873a786e603be768d668
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 10 May 2022 21:28:25 +02:00
+AuthorDate:    Tue, 10 May 2022 21:28:06 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:54:02 +02:00
 
-perf/x86: Change x86_pmu::limit_period signature
+perf/x86/intel: Move the topdown stuff into the intel driver
 
-In preparation for making it a static_call, change the signature.
+Use the new x86_pmu::{set_period,update}() methods to push the topdown
+stuff into the Intel driver, where it belongs.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220829101321.573713839@infradead.org
+Link: https://lkml.kernel.org/r/20220829101321.505933457@infradead.org
 ---
- arch/x86/events/amd/core.c   |  8 +++-----
- arch/x86/events/core.c       | 13 ++++++++-----
- arch/x86/events/intel/core.c | 19 ++++++++-----------
- arch/x86/events/perf_event.h |  2 +-
- 4 files changed, 20 insertions(+), 22 deletions(-)
+ arch/x86/events/core.c       |  7 -------
+ arch/x86/events/intel/core.c | 26 +++++++++++++++++++++++---
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index bd99d2a..8b70237 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -1224,16 +1224,14 @@ static ssize_t amd_event_sysfs_show(char *page, u64 config)
- 	return x86_event_sysfs_show(page, config, event);
- }
- 
--static u64 amd_pmu_limit_period(struct perf_event *event, u64 left)
-+static void amd_pmu_limit_period(struct perf_event *event, s64 *left)
- {
- 	/*
- 	 * Decrease period by the depth of the BRS feature to get the last N
- 	 * taken branches and approximate the desired period
- 	 */
--	if (has_branch_stack(event) && left > x86_pmu.lbr_nr)
--		left -= x86_pmu.lbr_nr;
--
--	return left;
-+	if (has_branch_stack(event) && *left > x86_pmu.lbr_nr)
-+		*left -= x86_pmu.lbr_nr;
- }
- 
- static __initconst const struct x86_pmu amd_pmu = {
 diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index b074e71..1e90bc7 100644
+index bb559b7..b074e71 100644
 --- a/arch/x86/events/core.c
 +++ b/arch/x86/events/core.c
-@@ -621,8 +621,9 @@ int x86_pmu_hw_config(struct perf_event *event)
- 		event->hw.config |= event->attr.config & X86_RAW_EVENT_MASK;
+@@ -119,9 +119,6 @@ u64 x86_perf_event_update(struct perf_event *event)
+ 	if (unlikely(!hwc->event_base))
+ 		return 0;
  
- 	if (event->attr.sample_period && x86_pmu.limit_period) {
--		if (x86_pmu.limit_period(event, event->attr.sample_period) >
--				event->attr.sample_period)
-+		s64 left = event->attr.sample_period;
-+		x86_pmu.limit_period(event, &left);
-+		if (left > event->attr.sample_period)
- 			return -EINVAL;
- 	}
- 
-@@ -1396,9 +1397,9 @@ int x86_perf_event_set_period(struct perf_event *event)
- 		left = x86_pmu.max_period;
- 
- 	if (x86_pmu.limit_period)
--		left = x86_pmu.limit_period(event, left);
-+		x86_pmu.limit_period(event, &left);
- 
--	per_cpu(pmc_prev_left[idx], smp_processor_id()) = left;
-+	this_cpu_write(pmc_prev_left[idx], left);
- 
+-	if (unlikely(is_topdown_count(event)) && x86_pmu.update_topdown_event)
+-		return x86_pmu.update_topdown_event(event);
+-
  	/*
- 	 * The hw event starts counting from this event offset,
-@@ -2677,7 +2678,9 @@ static int x86_pmu_check_period(struct perf_event *event, u64 value)
- 		return -EINVAL;
+ 	 * Careful: an NMI might modify the previous event value.
+ 	 *
+@@ -1373,10 +1370,6 @@ int x86_perf_event_set_period(struct perf_event *event)
+ 	if (unlikely(!hwc->event_base))
+ 		return 0;
  
- 	if (value && x86_pmu.limit_period) {
--		if (x86_pmu.limit_period(event, value) > value)
-+		s64 left = value;
-+		x86_pmu.limit_period(event, &left);
-+		if (left > value)
- 			return -EINVAL;
- 	}
- 
+-	if (unlikely(is_topdown_count(event)) &&
+-	    x86_pmu.set_topdown_event_period)
+-		return x86_pmu.set_topdown_event_period(event);
+-
+ 	/*
+ 	 * If we are way outside a reasonable range then just skip forward:
+ 	 */
 diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index feed732..92cc390 100644
+index ba101c2..feed732 100644
 --- a/arch/x86/events/intel/core.c
 +++ b/arch/x86/events/intel/core.c
-@@ -4344,28 +4344,25 @@ static u8 adl_get_hybrid_cpu_type(void)
-  * Therefore the effective (average) period matches the requested period,
-  * despite coarser hardware granularity.
-  */
--static u64 bdw_limit_period(struct perf_event *event, u64 left)
-+static void bdw_limit_period(struct perf_event *event, s64 *left)
- {
- 	if ((event->hw.config & INTEL_ARCH_EVENT_MASK) ==
- 			X86_CONFIG(.event=0xc0, .umask=0x01)) {
--		if (left < 128)
--			left = 128;
--		left &= ~0x3fULL;
-+		if (*left < 128)
-+			*left = 128;
-+		*left &= ~0x3fULL;
+@@ -2302,7 +2302,7 @@ static void intel_pmu_nhm_workaround(void)
+ 	for (i = 0; i < 4; i++) {
+ 		event = cpuc->events[i];
+ 		if (event)
+-			x86_perf_event_update(event);
++			static_call(x86_pmu_update)(event);
  	}
--	return left;
- }
  
--static u64 nhm_limit_period(struct perf_event *event, u64 left)
-+static void nhm_limit_period(struct perf_event *event, s64 *left)
+ 	for (i = 0; i < 4; i++) {
+@@ -2317,7 +2317,7 @@ static void intel_pmu_nhm_workaround(void)
+ 		event = cpuc->events[i];
+ 
+ 		if (event) {
+-			x86_perf_event_set_period(event);
++			static_call(x86_pmu_set_period)(event);
+ 			__x86_pmu_enable_event(&event->hw,
+ 					ARCH_PERFMON_EVENTSEL_ENABLE);
+ 		} else
+@@ -2794,7 +2794,7 @@ static void intel_pmu_add_event(struct perf_event *event)
+  */
+ int intel_pmu_save_and_restart(struct perf_event *event)
  {
--	return max(left, 32ULL);
-+	*left = max(*left, 32LL);
+-	x86_perf_event_update(event);
++	static_call(x86_pmu_update)(event);
+ 	/*
+ 	 * For a checkpointed counter always reset back to 0.  This
+ 	 * avoids a situation where the counter overflows, aborts the
+@@ -2806,9 +2806,27 @@ int intel_pmu_save_and_restart(struct perf_event *event)
+ 		wrmsrl(event->hw.event_base, 0);
+ 		local64_set(&event->hw.prev_count, 0);
+ 	}
++	return static_call(x86_pmu_set_period)(event);
++}
++
++static int intel_pmu_set_period(struct perf_event *event)
++{
++	if (unlikely(is_topdown_count(event)) &&
++	    x86_pmu.set_topdown_event_period)
++		return x86_pmu.set_topdown_event_period(event);
++
+ 	return x86_perf_event_set_period(event);
  }
  
--static u64 spr_limit_period(struct perf_event *event, u64 left)
-+static void spr_limit_period(struct perf_event *event, s64 *left)
++static u64 intel_pmu_update(struct perf_event *event)
++{
++	if (unlikely(is_topdown_count(event)) &&
++	    x86_pmu.update_topdown_event)
++		return x86_pmu.update_topdown_event(event);
++
++	return x86_perf_event_update(event);
++}
++
+ static void intel_pmu_reset(void)
  {
- 	if (event->attr.precise_ip == 3)
--		return max(left, 128ULL);
--
--	return left;
-+		*left = max(*left, 128LL);
- }
- 
- PMU_FORMAT_ATTR(event,	"config:0-7"	);
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 7ae1a6c..e82d2d2 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -781,7 +781,7 @@ struct x86_pmu {
- 	struct event_constraint *event_constraints;
- 	struct x86_pmu_quirk *quirks;
- 	int		perfctr_second_write;
--	u64		(*limit_period)(struct perf_event *event, u64 l);
-+	void		(*limit_period)(struct perf_event *event, s64 *l);
- 
- 	/* PMI handler bits */
- 	unsigned int	late_ack		:1,
+ 	struct debug_store *ds = __this_cpu_read(cpu_hw_events.ds);
+@@ -4786,6 +4804,8 @@ static __initconst const struct x86_pmu intel_pmu = {
+ 	.add			= intel_pmu_add_event,
+ 	.del			= intel_pmu_del_event,
+ 	.read			= intel_pmu_read_event,
++	.set_period		= intel_pmu_set_period,
++	.update			= intel_pmu_update,
+ 	.hw_config		= intel_pmu_hw_config,
+ 	.schedule_events	= x86_schedule_events,
+ 	.eventsel		= MSR_ARCH_PERFMON_EVENTSEL0,
