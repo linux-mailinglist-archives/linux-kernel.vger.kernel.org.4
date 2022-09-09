@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0C45B314D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5205B315B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiIIIFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
+        id S231245AbiIIIKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiIIIFH (ORCPT
+        with ESMTP id S231163AbiIIIKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:05:07 -0400
-X-Greylist: delayed 6013 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 01:04:59 PDT
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2775EDF1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1662710695;
-        bh=isS2ysJweAKK83d4hIdupBj3xtoj8eHTEYjA8Ve6cBk=;
-        h=From:To:Cc:Subject:Date;
-        b=I3gwmOBCC42hLCrWaiO75X+riU/PBXyOFDFxOSMMwXq3b2JrcOQFHn4AXlCnWK9kO
-         TM8fbwv4bScyFNdzAjAyzyZWGCV8cZNIwp0mWGZGe3sR0lgMu+8sKKc0Ba2JEejdFY
-         QP+eO2ckuPoFDZlVvW0+GuCn22aJnvVvvSHwBVVM=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
-        id 1321D2DC; Fri, 09 Sep 2022 16:04:50 +0800
-X-QQ-mid: xmsmtpt1662710690tgufuuhro
-Message-ID: <tencent_6715F3D7DF513D441A835321FAACFFCB0907@qq.com>
-X-QQ-XMAILINFO: MEi03zLH2FNOfwBidlbYsdG1dX0+QNukXPTg8smHnKYSTpAvmGjAdeoJPrNOLk
-         Hr57kpKtKcHYyhfXH9lnzkpBX3posdX/2ekDeCIyj2g2Xplma1vNb6L7DZOztz6pN6VVZDQ+PveA
-         4FTQlw6IpYpgV1B//6WXe1OYm6sCIMbSVPNsppfMcGCCKHm2fvdX7bB815h0X0OQzLZrg6ztjjI1
-         DeraHMD2iZoDZyYo/zHbzKoTBj4ooy5Ovk3+VIUHyGqQVKxIlB03moNgAFZtggLH+NKXd6Dkf0DQ
-         GUxJ1VAhsGgN9hHJ61XwYxQ6OIx4nSSQEXR0U2ItoQHT/VuD7GqgGW6YuWjQidwW/tCyGGNZ+KaK
-         ajLCdWaE08Lhd/Mt37YCSki1aM4G4MCRdVc1cKlNNN/woZuHe2NzNCYVsFqrnG3JTf98YdU9vE7c
-         WMxeAwnTXsb4O8F7EyegrCd9fRZ5cjxoG2ZOcT3Fu0Gf/1YIUEahAELyBuy7eKLjT3FuIJS03CIG
-         8xbeFXZG5ajP8CL5PRs9XHMVImIe+dQM76yD4myt12TbA8UgyQiABZYsNgXpZPIFTDbdzDnJuxpT
-         A+mke/gLgJ+ThzfFwoLKu6xL3aRZ3ZYjloneJpU3VXeeDQGEb0ZCaSIITH5rn+vI7rsxU6Mn2+8C
-         lrEthOVXQsxFI3sSUBUr3EQxJuqiHVf0iOv6mUR1wW3dhKBVP0S0py2THyybX1AL/bYbN3BdAQLp
-         25BO8xYV7C3RUYqjJZ9dy2b87LpNIbeEXVEue+W1rErtDKzydVICl7SOagVRg0kMel/NHJrAy5os
-         RaxWk+VP5+XJU3W8mGcn4l7EPbza+Ow9vD6j/PtMktmZ4LYoJSGnzyRFphBtv2VpVz6Mi+B9fxYA
-         SQv3oc4Xrd6aKMYf1VzRaeKktsZD0bBQ9dLh3EPg23i9yNbe3TP7aDJKhfBqGF1/krZgLI8Zi/Ym
-         sAyQ08GP1G1d1Q0/a/D+m2DM0Xx1Qfbsl8rvNfMs0j+SPrBFOlOHm4x2ORR6WzTNb/GibrDI0NcQ
-         vEcQfwMzqdRDqZM19b6ra1TWdY6y8Ypsw/78jPVQ==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Rong Tao <rongtao@cestc.cn>, Rong Tao <rtoax@foxmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf RESEND] samples/bpf: Replace blk_account_io_done() with __blk_account_io_done()
-Date:   Fri,  9 Sep 2022 16:04:48 +0800
-X-OQ-MSGID: <20220909080448.7728-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 9 Sep 2022 04:10:46 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEF66D9D5;
+        Fri,  9 Sep 2022 01:10:45 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2897o5Nd007560;
+        Fri, 9 Sep 2022 08:10:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=58/S1/E7WdYZacOEayRrVuVyfjN37qCIf7i0CMngiXc=;
+ b=SYGEB32JXNQsNcB8EAImnq+kJ7pVknpCZgTY6mCkNneTiR8IctFDYqr/zMlM993ySZgY
+ XjTyYO0HY7QChTgNK+Wjmht2wlpmQKNEaSeLdLC8S4lTXj4fPedNurWh9yc2N0eoSaHl
+ +1caVch5WajEOnMQJ3KSAjb0UPVMTzlXBziJFnOZI3l/UpeGaCMsrgh3D4KD2rjk0yro
+ swUkDUfaTuj3jxHy01T1QNkHo+17gSvhQ/Zg059XC9V9LT6IHE2QplV/fdyIGey3HdFA
+ d0lfSw2bmWZcip+Qa4RwZVhLde2SuhqdwsSrGBDYd7mjWOJ8nkw/kE6+ZPSiWUVqafCV MA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfdc73vv3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 08:10:43 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28985gAU028269
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Sep 2022 08:05:42 GMT
+Received: from ecbld-sh026-lnx.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 9 Sep 2022 01:05:41 -0700
+From:   Maria Yu <quic_aiquny@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
+CC:     Maria Yu <quic_aiquny@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+Subject: [PATCH] remoteproc: core: do pm relax when not first crash
+Date:   Fri, 9 Sep 2022 16:05:31 +0800
+Message-ID: <1662710731-57212-1-git-send-email-quic_aiquny@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wdmo4nApRUkWj3jFe47bQtolwmHX3B67
+X-Proofpoint-ORIG-GUID: wdmo4nApRUkWj3jFe47bQtolwmHX3B67
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_04,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 clxscore=1011 adultscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090027
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Even if it is not first crash, need to relax the pm
+wakelock otherwise the device will stay awake.
 
-Since commit be6bfe36db17 ("block: inline hot paths of blk_account_io_*()")
-blk_account_io_*() become inline functions.
-
-Signed-off-by: Rong Tao <rtoax@foxmail.com>
+Change-Id: I26bfeb44871aab0b57837a77a6243b2086f94473
+Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
 ---
- samples/bpf/task_fd_query_kern.c | 2 +-
- samples/bpf/task_fd_query_user.c | 2 +-
- samples/bpf/tracex3_kern.c       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/samples/bpf/task_fd_query_kern.c b/samples/bpf/task_fd_query_kern.c
-index c821294e1774..186ac0a79c0a 100644
---- a/samples/bpf/task_fd_query_kern.c
-+++ b/samples/bpf/task_fd_query_kern.c
-@@ -10,7 +10,7 @@ int bpf_prog1(struct pt_regs *ctx)
- 	return 0;
- }
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index e5279ed9a8d7..30078043e939 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1956,6 +1956,7 @@ static void rproc_crash_handler_work(struct work_struct *work)
+ 	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+ 		/* handle only the first crash detected */
+ 		mutex_unlock(&rproc->lock);
++		pm_relax(rproc->dev.parent);
+ 		return;
+ 	}
  
--SEC("kretprobe/blk_account_io_done")
-+SEC("kretprobe/__blk_account_io_done")
- int bpf_prog2(struct pt_regs *ctx)
- {
- 	return 0;
-diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
-index 424718c0872c..a33d74bd3a4b 100644
---- a/samples/bpf/task_fd_query_user.c
-+++ b/samples/bpf/task_fd_query_user.c
-@@ -348,7 +348,7 @@ int main(int argc, char **argv)
- 	/* test two functions in the corresponding *_kern.c file */
- 	CHECK_AND_RET(test_debug_fs_kprobe(0, "blk_mq_start_request",
- 					   BPF_FD_TYPE_KPROBE));
--	CHECK_AND_RET(test_debug_fs_kprobe(1, "blk_account_io_done",
-+	CHECK_AND_RET(test_debug_fs_kprobe(1, "__blk_account_io_done",
- 					   BPF_FD_TYPE_KRETPROBE));
- 
- 	/* test nondebug fs kprobe */
-diff --git a/samples/bpf/tracex3_kern.c b/samples/bpf/tracex3_kern.c
-index 710a4410b2fb..bde6591cb20c 100644
---- a/samples/bpf/tracex3_kern.c
-+++ b/samples/bpf/tracex3_kern.c
-@@ -49,7 +49,7 @@ struct {
- 	__uint(max_entries, SLOTS);
- } lat_map SEC(".maps");
- 
--SEC("kprobe/blk_account_io_done")
-+SEC("kprobe/__blk_account_io_done")
- int bpf_prog2(struct pt_regs *ctx)
- {
- 	long rq = PT_REGS_PARM1(ctx);
 -- 
-2.31.1
+2.7.4
 
