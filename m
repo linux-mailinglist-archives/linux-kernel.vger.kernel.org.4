@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0EF5B2E7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8B95B2E80
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiIIGGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 02:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S230341AbiIIGIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 02:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiIIGGt (ORCPT
+        with ESMTP id S230054AbiIIGIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 02:06:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22152F7774
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 23:06:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE85BB822BD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13DCCC433D6;
-        Fri,  9 Sep 2022 06:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662703605;
-        bh=7zGDU3BdHmCGK+cAAZcKUbBNWba3iuCoLKqtyl2YkKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HwlFn8Vc8k1c3GicNVCJM6ZPQ4AEPqwnGqALd3wmuCXlNKSX/UtK3udbFz0MP0FU8
-         nlq1VsEHpyM1DW68cppLDGeDxBsuH1s/a9L0xibzksW1W/Pyan4h0Tbck1HAnPvB2L
-         CATfE0rcSPnvgY1dMU5AyhjuV1+SU+xHspm7nlXg=
-Date:   Fri, 9 Sep 2022 08:06:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: vt6655: fix potential memory conruption bug
-Message-ID: <YxrX8tNR4uHCUWPT@kroah.com>
-References: <20220909053038.33188-1-namcaov@gmail.com>
- <YxrTiN1OuJ2cbtrn@kroah.com>
- <CA+sZ8B_VtmUWnvvfWBUV1WVq_=gRid+6ffGRQwdxp+9DYcLDtw@mail.gmail.com>
+        Fri, 9 Sep 2022 02:08:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C333F9FBC;
+        Thu,  8 Sep 2022 23:07:59 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MP57j3Zw2znV9L;
+        Fri,  9 Sep 2022 14:05:21 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 14:07:56 +0800
+Message-ID: <216ca3d8-cc7e-8bd8-1c39-cab701e33f21@huawei.com>
+Date:   Fri, 9 Sep 2022 14:07:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+sZ8B_VtmUWnvvfWBUV1WVq_=gRid+6ffGRQwdxp+9DYcLDtw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [-next v2 2/2] bpftool: Update doc (add auto_attach to prog load)
+From:   wangyufen <wangyufen@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <1662702807-591-1-git-send-email-wangyufen@huawei.com>
+ <1662702807-591-2-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1662702807-591-2-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+Ignore, will resend with 'bpf-next'
 
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Fri, Sep 09, 2022 at 08:01:29AM +0200, Nam Cao wrote:
-> Hi Greg,
-> 
-> Just out of curiosity, how can we be sure that sizeof(unsigned int)
-> is never 8 bytes? The C standard doesn't say anything about this, as
-> far as I know.
-
-Do you know of a Linux architecture that this is true?
-
-Linux has a few more requirements than C does (i.e. an unsigned long has
-to hold a pointer) so don't go by the C requirements please.
-
-thanks,
-
-greg k-h
+在 2022/9/9 13:53, Wang Yufen 写道:
+> Add auto_attach optional to prog load|loadall for supporting
+> one-step load-attach-pin_link.
+>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+>   tools/bpf/bpftool/Documentation/bpftool-prog.rst | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> index eb1b2a2..c640ad3 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -31,7 +31,8 @@ PROG COMMANDS
+>   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
+>   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
+>   |	**bpftool** **prog pin** *PROG* *FILE*
+> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] \
+> +|               [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
+>   |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
+>   |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+>   |	**bpftool** **prog tracelog**
+> @@ -131,7 +132,7 @@ DESCRIPTION
+>   		  contain a dot character ('.'), which is reserved for future
+>   		  extensions of *bpffs*.
+>   
+> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
+>   		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
+>   		  **bpftool prog load** pins only the first program from the
+>   		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
+> @@ -149,6 +150,8 @@ DESCRIPTION
+>   		  given networking device (offload).
+>   		  Optional **pinmaps** argument can be provided to pin all
+>   		  maps under *MAP_DIR* directory.
+> +		  If **auto_attach** is specified program will be attached
+> +		  before pin.
+>   
+>   		  Note: *PATH* must be located in *bpffs* mount. It must not
+>   		  contain a dot character ('.'), which is reserved for future
