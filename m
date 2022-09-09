@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD3F5B3343
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731565B3365
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiIIJRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S232083AbiIIJSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbiIIJRI (ORCPT
+        with ESMTP id S229930AbiIIJSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:17:08 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7567E128C3B;
-        Fri,  9 Sep 2022 02:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662715027; x=1694251027;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Dhw2jhCuJW+jka0cep0s3bFZ08dxRspNbt2WscRo39c=;
-  b=dDPmGkykmzA72XMUJvQmejkdet2cvT//1VVGGppQSNGO+jpKXm4x178I
-   x7bGg/c3+uSC4p4/YzyvEXjW/L8i4kuN6/SFehgFGSUcj07Ujhn4HXlKM
-   c9755DGR68yGjgoG1AxR2nyrG1ARjRFEV7Tsxv8qvztqPd5ah2+pTpgKy
-   2eb3HZ1PpzJxo21ElwYOyEEjELrIYYW4xjRNZu8QtwpTpbDo8bpam0sy1
-   LU2PyqmLyvPqYKzXGWChWIU1x6dJ0a9LqVnXqcPC7qEVsuCZxkbK+E8Gq
-   7fj3+sfmd7jmAlBkgH1nlTsSWJK+THPVOTJ474ugjkCWSLJaG9yk9H85X
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="280459202"
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="280459202"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:17:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="677089043"
-Received: from ppogotov-mobl.ger.corp.intel.com ([10.249.45.197])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:17:04 -0700
-Date:   Fri, 9 Sep 2022 12:16:58 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 1/1] serial: 8250_dma: Convert to use
- uart_xmit_advance()
-In-Reply-To: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <81acf91-ba43-f276-fca7-ac9c9e721a88@linux.intel.com>
-References: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
+        Fri, 9 Sep 2022 05:18:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E7F1395B5;
+        Fri,  9 Sep 2022 02:18:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 799F561F52;
+        Fri,  9 Sep 2022 09:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3EFC433C1;
+        Fri,  9 Sep 2022 09:18:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662715124;
+        bh=RosoBqrL7vwFwp7BUodrRS2bhB8pk1X87+R6M1CrRFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u2PByivqf1H9W9Q539mL0KbU2e/urfLjrIIZvNiRgh331taZqBSY2lkG/Ezgz7eRP
+         S5CBhTczX5wIV22EMhd+Hu5gXFGP1shqf0u/2rYuZslUYFtiZ721tsXg/UZVRLeuFr
+         Fspqe0BhFl9QhBZl+jnILOzmAFY7e0nn4csxgB5s873xMYTXAweBALUiS6uiISJMvm
+         86Qzd+MEB1gmNL1jOlLa9xW92IgtHldu0az70KEqCHe9VsEHrCYN7ZXXJAL356nEjT
+         5KdLrOloJcP2e1Yd0dApihydV/PAAizVv7thlSymqbWyKyyYKsj0+n1SXay5Zm4j8b
+         dfv35WsmOMn3A==
+Date:   Fri, 9 Sep 2022 11:18:37 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] PCI: mvebu: use BIT() and GENMASK() macros instead
+ of hardcoded hex values
+Message-ID: <YxsE7ZDDub2AP0Fq@lpieralisi>
+References: <20220905185150.22220-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1445102681-1662715026=:1967"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220905185150.22220-1-pali@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Sep 05, 2022 at 08:51:49PM +0200, Pali Rohár wrote:
 
---8323329-1445102681-1662715026=:1967
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+Add a commit log please, even if it is just one sentence.
 
-On Fri, 9 Sep 2022, Andy Shevchenko wrote:
+Lorenzo
 
-> uart_xmit_advance() provides a common way on how to advance
-> the Tx queue. Use it for the sake of unification and robustness.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 > ---
->  drivers/tty/serial/8250/8250_dma.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/pci/controller/pci-mvebu.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
-> index d99020fd3427..b85c82616e8c 100644
-> --- a/drivers/tty/serial/8250/8250_dma.c
-> +++ b/drivers/tty/serial/8250/8250_dma.c
-> @@ -26,9 +26,7 @@ static void __dma_tx_complete(void *param)
->  
->  	dma->tx_running = 0;
->  
-> -	xmit->tail += dma->tx_size;
-> -	xmit->tail &= UART_XMIT_SIZE - 1;
-> -	p->port.icount.tx += dma->tx_size;
-> +	uart_xmit_advance(&p->port, dma->tx_size);
->  
->  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
->  		uart_write_wakeup(&p->port);
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-Please note though that I already have patches for almost all these but 
-I've not just submitted the remaining ones yet.
-
-
--- 
- i.
-
---8323329-1445102681-1662715026=:1967--
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index 8bde4727aca4..c222dc189567 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -44,7 +44,7 @@
+>  #define PCIE_WIN5_BASE_OFF	0x1884
+>  #define PCIE_WIN5_REMAP_OFF	0x188c
+>  #define PCIE_CONF_ADDR_OFF	0x18f8
+> -#define  PCIE_CONF_ADDR_EN		0x80000000
+> +#define  PCIE_CONF_ADDR_EN		BIT(31)
+>  #define  PCIE_CONF_REG(r)		((((r) & 0xf00) << 16) | ((r) & 0xfc))
+>  #define  PCIE_CONF_BUS(b)		(((b) & 0xff) << 16)
+>  #define  PCIE_CONF_DEV(d)		(((d) & 0x1f) << 11)
+> @@ -70,13 +70,13 @@
+>  #define  PCIE_INT_ERR_MASK		(PCIE_INT_ERR_FATAL | PCIE_INT_ERR_NONFATAL | PCIE_INT_ERR_COR)
+>  #define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
+>  #define PCIE_CTRL_OFF		0x1a00
+> -#define  PCIE_CTRL_X1_MODE		0x0001
+> +#define  PCIE_CTRL_X1_MODE		BIT(0)
+>  #define  PCIE_CTRL_RC_MODE		BIT(1)
+>  #define  PCIE_CTRL_MASTER_HOT_RESET	BIT(24)
+>  #define PCIE_STAT_OFF		0x1a04
+> -#define  PCIE_STAT_BUS                  0xff00
+> -#define  PCIE_STAT_DEV                  0x1f0000
+>  #define  PCIE_STAT_LINK_DOWN		BIT(0)
+> +#define  PCIE_STAT_BUS			GENMASK(15, 8)
+> +#define  PCIE_STAT_DEV			GENMASK(20, 16)
+>  #define PCIE_SSPL_OFF		0x1a0c
+>  #define  PCIE_SSPL_VALUE_SHIFT		0
+>  #define  PCIE_SSPL_VALUE_MASK		GENMASK(7, 0)
+> -- 
+> 2.20.1
+> 
