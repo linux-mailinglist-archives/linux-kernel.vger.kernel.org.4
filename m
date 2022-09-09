@@ -2,116 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671A65B3276
+	by mail.lfdr.de (Postfix) with ESMTP id AFE7D5B3277
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiIII5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S231178AbiIII5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiIII4n (ORCPT
+        with ESMTP id S229771AbiIII4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:56:43 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9036113463F;
-        Fri,  9 Sep 2022 01:55:23 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b5so1593277wrr.5;
-        Fri, 09 Sep 2022 01:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=fPvofaEf+BM4TxtIyhxZC/zjNI9R8E3LUT46F136ga4=;
-        b=LNhiywTDLLHnBcl6OCNDZJVmYpUQQBo5Ipo/XFJKAg6DVnp+YKgrbAyDhqMhVredgr
-         pbVU/XS09EffKtsWs1yStnLABtBlZ5Wlyz2RhLmxam/PBYt/Nuc5A2gokC2fC2AK/zyK
-         GJgQQoPnfC8xEXFcZ4UzPAJfx3QnYZ57ZID05n1RakRRuMU9Jz+WokxBI+RNcnTGE8fG
-         fmk+GehVrfLCf7lLWPA0kgxEaupDmAPyvW/I+shS8facJ9KFNgEnws23ygoNAdnWqFfs
-         a4zGMDHcPYVtZjbQtvwCcywmh4+UT6CaUgF5X5P5yOlJ53YYRkcGs+jPMIZvv64lwJOI
-         k1zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=fPvofaEf+BM4TxtIyhxZC/zjNI9R8E3LUT46F136ga4=;
-        b=2uCzGuhtvvdrZUmGYbAB/Phpi1i1XUi2c+ROc+uODdDFIZhUffYeXysMEgO8bPCn9X
-         hNWDFQWjieY3mF/zRyaux5CDAvG9/WQGsCN2nTR+UJwuDMh4m0gEPxku2ur/pV8bOZ7+
-         UsCVDWYW5UI0jKwcBc21/dYYQJkfRS7O6J0W7PCIg+3fzetz29Z1+lAMljEN220JnSAQ
-         8SNY57E1/9LULGnVeB8CFCHpjbQzn4L2JDpMwLSHUE/b/u0j4njyGm+WK3xeIW1OAxbs
-         zfPumk9Y+c5NSTqOijaeKyYeEtDxgRNRDIC0aQoCXT3wTbEmBfNFv1fvShOYR6Ks6z+a
-         673w==
-X-Gm-Message-State: ACgBeo3awYN6PPzSl2jw0s0fezuHw+YcLQSpmT39tN3bch+FXZ4mErng
-        1PGq/zCTEAG3OAnFeYGFy6I=
-X-Google-Smtp-Source: AA6agR5ExbaE+aBChdxYVSD7wVDn3HYcvadDzcUXC1aJvwytLqqWjrNZI76Fxl1SHY9jife9qSYwXA==
-X-Received: by 2002:adf:fb0a:0:b0:225:265d:493 with SMTP id c10-20020adffb0a000000b00225265d0493mr7368942wrr.394.1662713720977;
-        Fri, 09 Sep 2022 01:55:20 -0700 (PDT)
-Received: from felia.fritz.box (200116b8261bf1004cd87416af9987ea.dip.versatel-1u1.de. [2001:16b8:261b:f100:4cd8:7416:af99:87ea])
-        by smtp.gmail.com with ESMTPSA id bt9-20020a056000080900b00228e071baadsm1586493wrb.36.2022.09.09.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 01:55:20 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ppc: select HAVE_PATA_PLATFORM in PPC instead of creating a PPC dependency
-Date:   Fri,  9 Sep 2022 10:55:05 +0200
-Message-Id: <20220909085505.15536-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 9 Sep 2022 04:56:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF307134605
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:55:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6CA2D1F8BA;
+        Fri,  9 Sep 2022 08:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662713718; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=Ez9zYPnUXtvzLap8OBMI4nC2mNPkolOWXW9s6dKBGSQ=;
+        b=fUhTq0SDReT1o+RgNl1mBwcNHbPK17NSmXoYO/Cn8x2hsBq8XciNcbaBd/OiqO8tuYAwsZ
+        ZEqHz2u0jxmD/TXhzkfXBzYxLfxKuAxKoXG9QyMTGLyElHPurp2lAMEjpZ0UQaMcKgai2k
+        UDx2b4YVWonryjIFzAnQVPsXPPiddUw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662713718;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=Ez9zYPnUXtvzLap8OBMI4nC2mNPkolOWXW9s6dKBGSQ=;
+        b=PB6KDnsgKeXXbIbmFGZaI+T8MBtj2AoBB5YqJTZtuNmRs9M/H8id/+7wv/X3yG67HJM/4w
+        1So8VSBDpmiogADA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E8B2139D5;
+        Fri,  9 Sep 2022 08:55:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KCBjEnb/GmPwUgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 09 Sep 2022 08:55:18 +0000
+Date:   Fri, 09 Sep 2022 10:55:17 +0200
+Message-ID: <87sfl1c4ga.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.0-rc5
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cc18e0fea790 ("LIBATA: Add HAVE_PATA_PLATFORM to select
-PATA_PLATFORM driver") introduces config HAVE_PATA_PLATFORM, and expects
-that all architectures simply select this config when the architecture
-supports using the PATA_PLATFORM driver.
+Linus,
 
-This is properly implemented already for all architectures except for the
-powerpc architecture. Implement this for powerpc now.
+please pull sound fixes for v6.0-rc5 from:
 
-Adjust the config of the powerpc architecture to use the config
-HAVE_PATA_PLATFORM and simplify the config PATA_PLATFORM to not mention
-any specific architecture anymore.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc5
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+The topmost commit is 09e3e3159cd4d3c9f3a1f025cb8e635d93c67c9a
+
+----------------------------------------------------------------
+
+sound fixes for 6.0-rc5
+
+we received lots of small fixes for various drivers at this time,
+hopefully it will be the last big bump before 6.0 release.
+
+The significant changes are regression fixes for (yet again) HD-audio
+memory allocations and USB-audio PCM parameter handling, while there
+are many small ASoC device-specific fixes as well as a few
+out-of-bounds and race issues spotted by fuzzers.
+
+----------------------------------------------------------------
+
+Bard Liao (1):
+      ASoC: SOF: ipc4-topology: fix alh_group_ida max value
+
+Dongxiang Ke (1):
+      ALSA: usb-audio: Fix an out-of-bounds bug in __snd_usb_parse_audio_interface()
+
+Jiaxin Yu (1):
+      ASoC: mediatek: mt8186: fix DMIC record noise
+
+Mohan Kumar (1):
+      ALSA: hda/tegra: Align BDL entry to 4KB boundary
+
+Nathan Chancellor (1):
+      ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+
+Pattara Teerapong (1):
+      ALSA: aloop: Fix random zeros in capture data when using jiffies timer
+
+Peter Ujfalusi (2):
+      ASoC: SOF: Kconfig: Make IPC_FLOOD_TEST depend on SND_SOC_SOF
+      ASoC: SOF: Kconfig: Make IPC_MESSAGE_INJECTOR depend on SND_SOC_SOF
+
+Pieterjan Camerlynck (1):
+      ASoC: fsl_sai: fix incorrect mclk number in error message
+
+Richard Fitzgerald (1):
+      ASoC: cs42l42: Only report button state if there was a button interrupt
+
+Shengjiu Wang (3):
+      ASoC: fsl_mqs: Fix supported clock DAI format
+      ASoC: fsl_aud2htx: register platform component before registering cpu dai
+      ASoC: fsl_aud2htx: Add error handler for pm_runtime_enable
+
+Srinivas Kandagatla (1):
+      ASoC: qcom: sm8250: add missing module owner
+
+Takashi Iwai (13):
+      ASoC: nau8821: Implement hw constraint for rates
+      ASoC: nau8824: Fix semaphore unbalance at error paths
+      ASoC: nau8824: Implement hw constraint for rates
+      ASoC: nau8825: Implement hw constraint for rates
+      ASoC: nau8540: Implement hw constraint for rates
+      ALSA: usb-audio: Inform the delayed registration more properly
+      ALSA: usb-audio: Register card again for iface over delayed_register option
+      ALSA: usb-audio: Split endpoint setups for hw_params and prepare
+      ALSA: hda/sigmatel: Keep power up while beep is enabled
+      ALSA: pcm: oss: Fix race at SNDCTL_DSP_SYNC
+      ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+      ALSA: hda: Once again fix regression of page allocations with IOMMU
+      ALSA: usb-audio: Clear fixed clock rate at closing EP
+
+Tasos Sahanidis (1):
+      ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
+
+Yang Yingliang (1):
+      ASoC: SOF: ipc4-topology: fix wrong use of sizeof in sof_ipc4_widget_setup_comp_src()
+
 ---
- arch/powerpc/Kconfig | 1 +
- drivers/ata/Kconfig  | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 39d71d7701bd..2575e21b6e6b 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -237,6 +237,7 @@ config PPC
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
-+	select HAVE_PATA_PLATFORM
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index 1c9f4fb2595d..ed3547165528 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1103,7 +1103,7 @@ config PATA_PCMCIA
- 
- config PATA_PLATFORM
- 	tristate "Generic platform device PATA support"
--	depends on EXPERT || PPC || HAVE_PATA_PLATFORM
-+	depends on EXPERT || HAVE_PATA_PLATFORM
- 	help
- 	  This option enables support for generic directly connected ATA
- 	  devices commonly found on embedded systems.
--- 
-2.17.1
+ sound/core/memalloc.c                       |  9 +++-
+ sound/core/oss/pcm_oss.c                    |  6 +--
+ sound/drivers/aloop.c                       |  7 +--
+ sound/pci/emu10k1/emupcm.c                  |  2 +-
+ sound/pci/hda/hda_intel.c                   |  2 +-
+ sound/pci/hda/hda_tegra.c                   |  3 +-
+ sound/pci/hda/patch_sigmatel.c              | 24 +++++++++
+ sound/soc/atmel/mchp-spdiftx.c              |  2 +-
+ sound/soc/codecs/cs42l42.c                  | 13 ++---
+ sound/soc/codecs/nau8540.c                  | 40 ++++++++++----
+ sound/soc/codecs/nau8821.c                  | 66 ++++++++++++-----------
+ sound/soc/codecs/nau8824.c                  | 80 +++++++++++++++------------
+ sound/soc/codecs/nau8825.c                  | 83 ++++++++++++++++-------------
+ sound/soc/fsl/fsl_aud2htx.c                 | 16 ++++--
+ sound/soc/fsl/fsl_mqs.c                     |  2 +-
+ sound/soc/fsl/fsl_sai.c                     |  2 +-
+ sound/soc/mediatek/mt8186/mt8186-dai-adda.c |  3 --
+ sound/soc/qcom/sm8250.c                     |  1 +
+ sound/soc/sof/Kconfig                       |  2 +
+ sound/soc/sof/ipc4-topology.c               |  4 +-
+ sound/usb/card.c                            |  2 +-
+ sound/usb/endpoint.c                        | 25 ++++-----
+ sound/usb/endpoint.h                        |  6 ++-
+ sound/usb/pcm.c                             | 14 +++--
+ sound/usb/quirks.c                          |  2 +-
+ sound/usb/stream.c                          |  9 ++--
+ 26 files changed, 257 insertions(+), 168 deletions(-)
 
