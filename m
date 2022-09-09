@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523C25B30C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCEC5B30B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiIIHo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S231835AbiIIHo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiIIHne (ORCPT
+        with ESMTP id S232255AbiIIHoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:43:34 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D50F22CE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:40:29 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id oz30-20020a1709077d9e00b0077239b6a915so581782ejc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:40:29 -0700 (PDT)
+        Fri, 9 Sep 2022 03:44:14 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF8A130D1E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:41:13 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id q32-20020a05640224a000b004462f105fa9so656264eda.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=ZgjuXiR7GOoWQwHIqm/Zq+w7cYIxur6W3viv+dY7RH8=;
-        b=j+UIMYBTztIdEddAyQiLGMbyZseB1O22pSgIKiq3dObuMbk/LL18hQYw2XnwhChEno
-         njdoU+3QMR7gbmgwGyVpo44ABifiMAXrO2NcXAV20tvaK2to9ta9VgLe7oqbevNVn+My
-         CY1IKSTmC7bwqSToFhdGidMuTizf0IuFctMiiQ22E0ixlDDbZuVt102UdCmuTQUeDRA1
-         naSl15bd2TUlgku+q5RdYvuyrx7QEZPOGsl+hbf2M6OGLfZUQW6IlzJV9y38f0cRr33g
-         JcMkGIiKLKS00KTmIczkcO+n7iSbzJfAOyzGap2cwppwbotjo7CBfOlAK5w52TOPfKwb
-         MWNw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=CwJgI/zqEG/WNCJEuUp+CMHdoz4DAXmnbuoZdi14Bqk=;
+        b=nx4UO6FGWdB0vzP8FiBCRGi6jWAecwwGmolsdjQeS05N/w/aqKfjKcXAYVgegeQje0
+         bqB/2LoH0zy2VvDaVaMjkhOmK7jEHBFQ0bxK8+tFG309lQiFZBL9hQqHXBqa2uHZ+ISO
+         vSS9lWhdz4gtoi0yFjfirj42Ywv5YL08vEHsKsmwS2258lt8g8bziZI3VT42AtyowGTo
+         tyUkMkyFR4ifx0HtUF53XLpG5aW87CT5KGtWoB0X2/5QUn+I+rUr79GU9LDlTZzsgUA+
+         MZRGI7gznSV5BWKds3sFjufh/v40H+2KpNALNG9bdu2PV75mdnduygY/DEZ1vQTGj20n
+         JjAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=ZgjuXiR7GOoWQwHIqm/Zq+w7cYIxur6W3viv+dY7RH8=;
-        b=cUgqe1jPhZ8SbUnuGZcN5BT7FyUH/ErWcQ1mFo7GmyfX+0FeDULOWAuDZ2OiW08A7O
-         vds8P0Ls0HmvYCcPu8zFulFeb7nN0StHzAeqvxq9T409nNRIM0eAeL4fRtASa/9jJ8Bd
-         5wjx5EgCo7BVVWLsHy9F0/jsD6hdyuPy3rPDJxYvFtapwzHy5xNOl7r9SBRKE0qCGr50
-         s+Lw8tQjm560kzPAQlXWmI0nzYzjRdDnFFMABPezvYFym59qJykAsv0CwF5+92wuZx7t
-         TC+VG6whZbunQA1i7cP+3obXxcs/nxRfSt71Izh1QbGKXuO2ADN6el0h/gOceraLC0oB
-         oEaw==
-X-Gm-Message-State: ACgBeo1qYjIfEINVlkOwoVvynpY27ttKN0woiJ/P/KCY1JyQNf5wJ0Iq
-        k4yDbil7kxwUpyA2phHb2qrIz4rAaA==
-X-Google-Smtp-Source: AA6agR72lEybpcVa7cBjPW4pKXFE8r3tYkQb5/NC95gOTISnGkgRwU/Efuez6zfWhM70OFPhqME9JBdrGw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=CwJgI/zqEG/WNCJEuUp+CMHdoz4DAXmnbuoZdi14Bqk=;
+        b=G+4END3M18WxHjfPhl/Ff635O3vOL6h9ynyBV8YKerK2fAVg6w9JGf/IZ0EwgI3xLt
+         Q05lnjKhrhdPs8LkJCgo9uFKlG5F0rVl+3Vk0KBELmROc+f6n5VODRCGR/NRiUNTfvFW
+         baGFbVNpG77/pUi2W7bQ25FFXDj+sVtAUv5fx/dnBF57K8WXVdYwSrP/kXLTqAjOTVW4
+         FsTghEFWKazlqZ7RJVZ5bUnbFiuF6W5fIE8H47hvTpX9JE6nLu068uQ3jW9t41Tb8yXE
+         70BzVsiklKyPDkW2lSdymrXcJ9bg00JnYM8MUSbNb/Jm833brdnkCVyLb9XkHS+nxGbK
+         1/Mg==
+X-Gm-Message-State: ACgBeo08Q940vTf6PR+oRIxLd1Pv3ajXKemZENf7IdEe4bkadvD8VkSr
+        92hPCLbVN5GBZA7iviULf3K0A4GgMw==
+X-Google-Smtp-Source: AA6agR55zHiBLxwKUigYV5E03IlRE8G/bXLTNM2ZQLcfJB47hg02LfbZ5lxPABjqhEP6sHcAmk436ldycg==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:1d1e:ddcd:2020:36c2])
- (user=elver job=sendgmr) by 2002:a05:6402:27cd:b0:44e:c4aa:5ff with SMTP id
- c13-20020a05640227cd00b0044ec4aa05ffmr10390086ede.193.1662709131149; Fri, 09
- Sep 2022 00:38:51 -0700 (PDT)
-Date:   Fri,  9 Sep 2022 09:38:38 +0200
+ (user=elver job=sendgmr) by 2002:a17:907:3f26:b0:770:8852:9bed with SMTP id
+ hq38-20020a1709073f2600b0077088529bedmr7603132ejc.658.1662709134191; Fri, 09
+ Sep 2022 00:38:54 -0700 (PDT)
+Date:   Fri,  9 Sep 2022 09:38:39 +0200
+In-Reply-To: <20220909073840.45349-1-elver@google.com>
 Mime-Version: 1.0
+References: <20220909073840.45349-1-elver@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220909073840.45349-1-elver@google.com>
-Subject: [PATCH v2 1/3] s390: Always declare __mem functions
+Message-ID: <20220909073840.45349-2-elver@google.com>
+Subject: [PATCH v2 2/3] kcsan: Instrument memcpy/memset/memmove with newer Clang
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Mark Rutland <mark.rutland@arm.com>,
@@ -66,61 +68,91 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-s390@vger.kernel.org
+        linux-s390@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like other architectures, always declare __mem*() functions if the
-architecture defines __HAVE_ARCH_MEM*.
+With Clang version 16+, -fsanitize=thread will turn
+memcpy/memset/memmove calls in instrumented functions into
+__tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
 
-For example, this is required by sanitizer runtimes to unambiguously
-refer to the arch versions of the mem-functions, and the compiler not
-attempting any "optimizations" such as replacing the calls with builtins
-(which may later be inlined etc.).
+Add these functions to the core KCSAN runtime, so that we (a) catch data
+races with mem* functions, and (b) won't run into linker errors with
+such newer compilers.
 
+Cc: stable@vger.kernel.org # v5.10+
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v2:
-* New patch.
+* Fix for architectures which do not provide their own
+  memcpy/memset/memmove and instead use the generic versions in
+  lib/string. In this case we'll just alias the __tsan_ variants.
 ---
- arch/s390/include/asm/string.h | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ kernel/kcsan/core.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/arch/s390/include/asm/string.h b/arch/s390/include/asm/string.h
-index 3fae93ddb322..2c3c48d526b9 100644
---- a/arch/s390/include/asm/string.h
-+++ b/arch/s390/include/asm/string.h
-@@ -20,8 +20,11 @@
- #define __HAVE_ARCH_MEMSET64	/* arch function */
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index fe12dfe254ec..4015f2a3e7f6 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -18,6 +18,7 @@
+ #include <linux/percpu.h>
+ #include <linux/preempt.h>
+ #include <linux/sched.h>
++#include <linux/string.h>
+ #include <linux/uaccess.h>
  
- void *memcpy(void *dest, const void *src, size_t n);
-+void *__memcpy(void *dest, const void *src, size_t n);
- void *memset(void *s, int c, size_t n);
-+void *__memset(void *s, int c, size_t n);
- void *memmove(void *dest, const void *src, size_t n);
-+void *__memmove(void *dest, const void *src, size_t n);
- 
- #ifndef CONFIG_KASAN
- #define __HAVE_ARCH_MEMCHR	/* inline & arch function */
-@@ -55,10 +58,6 @@ char *strstr(const char *s1, const char *s2);
- 
- #if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
- 
--extern void *__memcpy(void *dest, const void *src, size_t n);
--extern void *__memset(void *s, int c, size_t n);
--extern void *__memmove(void *dest, const void *src, size_t n);
--
- /*
-  * For files that are not instrumented (e.g. mm/slub.c) we
-  * should use not instrumented version of mem* functions.
+ #include "encoding.h"
+@@ -1308,3 +1309,41 @@ noinline void __tsan_atomic_signal_fence(int memorder)
+ 	}
+ }
+ EXPORT_SYMBOL(__tsan_atomic_signal_fence);
++
++#ifdef __HAVE_ARCH_MEMSET
++void *__tsan_memset(void *s, int c, size_t count);
++noinline void *__tsan_memset(void *s, int c, size_t count)
++{
++	check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
++	return __memset(s, c, count);
++}
++#else
++void *__tsan_memset(void *s, int c, size_t count) __alias(memset);
++#endif
++EXPORT_SYMBOL(__tsan_memset);
++
++#ifdef __HAVE_ARCH_MEMMOVE
++void *__tsan_memmove(void *dst, const void *src, size_t len);
++noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
++{
++	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
++	check_access(src, len, 0, _RET_IP_);
++	return __memmove(dst, src, len);
++}
++#else
++void *__tsan_memmove(void *dst, const void *src, size_t len) __alias(memmove);
++#endif
++EXPORT_SYMBOL(__tsan_memmove);
++
++#ifdef __HAVE_ARCH_MEMCPY
++void *__tsan_memcpy(void *dst, const void *src, size_t len);
++noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
++{
++	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
++	check_access(src, len, 0, _RET_IP_);
++	return __memcpy(dst, src, len);
++}
++#else
++void *__tsan_memcpy(void *dst, const void *src, size_t len) __alias(memcpy);
++#endif
++EXPORT_SYMBOL(__tsan_memcpy);
 -- 
 2.37.2.789.g6183377224-goog
 
