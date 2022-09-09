@@ -2,93 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8945B3AC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88E85B3AC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiIIOdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S231590AbiIIOgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIIOdO (ORCPT
+        with ESMTP id S231200AbiIIOg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:33:14 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3743FEB2D0;
-        Fri,  9 Sep 2022 07:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662733993; x=1694269993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gVTNsSyIBrhcPs2gtAOglD6dY69wve4jHFwcbsEjqEg=;
-  b=YCNEJkUgYMvWX8Ca4SiKVEusdseonO3G0U4IIfFgagOuXhrp5ATI+xoL
-   clsCmxL2VpJTPd8Jf0S73lg35hTTeVQYfs0DE1DC4/9o3RdFew1Bb8Cfi
-   r5Q1b8+O2G0OGmf1wDRoO123R9/AQAOzdjs8u8pQERZUwTZKIqEMBBN/N
-   3TLwrT++bDZY5bamSYL1XJhPdx028iyckiaOCjp/a+A1NPHa32X7gnLaM
-   pBj0zjJPdsbItTxwtdxJ1wE0fd8JqPDsYqnrXwcaGZdFjui792kJezeH8
-   A5x2o6EI425Iui/OnAFkyq57g5wWuWugeHhU3LEeSUxbhUsJDqEu54izA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="295068205"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="295068205"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 07:32:48 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="757619409"
-Received: from sumitdes-mobl3.gar.corp.intel.com (HELO box.shutemov.name) ([10.249.45.93])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 07:32:39 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id ED94B1037A2; Fri,  9 Sep 2022 17:32:36 +0300 (+03)
-Date:   Fri, 9 Sep 2022 17:32:36 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, jun.nakajima@intel.com,
-        dave.hansen@intel.com, ak@linux.intel.com, david@redhat.com,
-        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
+        Fri, 9 Sep 2022 10:36:29 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE34121681
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:36:27 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1CAB068AA6; Fri,  9 Sep 2022 16:36:22 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 16:36:20 +0200
+From:   ChristophHellwig <hch@lst.de>
+To:     Liwei Song <liwei.song@windriver.com>
+Cc:     ChristophHellwig <hch@lst.de>,
+        MiquelRaynal <miquel.raynal@bootlin.com>,
+        RichardWeinberger <richard@nod.at>,
+        VigneshRaghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd_blkdevs: add mtd_table_mutex lock back to
+ blktrans_{open, release} to avoid race condition
+Message-ID: <20220909143620.GA9978@lst.de>
+References: <20220809075753.21950-1-liwei.song@windriver.com> <20220809080809.GB14727@lst.de> <7f925359-69b0-49b1-cdbb-337912da4f9c@windriver.com> <4910c707-ad97-362f-911a-79e438e6e8ff@windriver.com> <cf66e306-f216-5247-7cff-36ce08eb4512@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <cf66e306-f216-5247-7cff-36ce08eb4512@windriver.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,53 +43,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:48:35PM -0700, Andy Lutomirski wrote:
-> On 8/19/22 17:27, Kirill A. Shutemov wrote:
-> > On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
-> > > On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
-> > > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > > > > 
-> > > > > If your memory could be swapped, that would be enough of a good reason
-> > > > > to make use of shmem.c: but it cannot be swapped; and although there
-> > > > > are some references in the mailthreads to it perhaps being swappable
-> > > > > in future, I get the impression that will not happen soon if ever.
-> > > > > 
-> > > > > If your memory could be migrated, that would be some reason to use
-> > > > > filesystem page cache (because page migration happens to understand
-> > > > > that type of memory): but it cannot be migrated.
-> > > > 
-> > > > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
-> > > > theoretically possible, but I'm not aware of any plans as of now.
-> > > > 
-> > > > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
-> > > 
-> > > I always forget, migration means different things to different audiences.
-> > > As an mm person, I was meaning page migration, whereas a virtualization
-> > > person thinks VM live migration (which that reference appears to be about),
-> > > a scheduler person task migration, an ornithologist bird migration, etc.
-> > > 
-> > > But you're an mm person too: you may have cited that reference in the
-> > > knowledge that TDX 1.5 Live Migration will entail page migration of the
-> > > kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
-> > 
-> > TDX 1.5 brings both.
-> > 
-> > In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
-> > 
-> 
-> This seems to be a pretty bad fit for the way that the core mm migrates
-> pages.  The core mm unmaps the page, then moves (in software) the contents
-> to a new address, then faults it in.  TDH.MEM.PAGE.RELOCATE doesn't fit into
-> that workflow very well.  I'm not saying it can't be done, but it won't just
-> work.
+Can you try this patch (it'll need to be split up into a few if it
+works):
 
-Hm. From what I see we have all necessary infrastructure in place.
-
-Unmaping is NOP for inaccessible pages as it is never mapped and we have
-mapping->a_ops->migrate_folio() callback that allows to replace software
-copying with whatever is needed, like TDH.MEM.PAGE.RELOCATE.
-
-What do I miss?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
+index 60b222799871e..9eda1dd98a406 100644
+--- a/drivers/mtd/mtd_blkdevs.c
++++ b/drivers/mtd/mtd_blkdevs.c
+@@ -24,24 +24,16 @@
+ 
+ static LIST_HEAD(blktrans_majors);
+ 
+-static void blktrans_dev_release(struct kref *kref)
++static void blktrans_free_disk(struct gendisk *disk)
+ {
+-	struct mtd_blktrans_dev *dev =
+-		container_of(kref, struct mtd_blktrans_dev, ref);
++	struct mtd_blktrans_dev *dev = disk->private_data;
+ 
+-	put_disk(dev->disk);
+ 	blk_mq_free_tag_set(dev->tag_set);
+ 	kfree(dev->tag_set);
+ 	list_del(&dev->list);
+ 	kfree(dev);
+ }
+ 
+-static void blktrans_dev_put(struct mtd_blktrans_dev *dev)
+-{
+-	kref_put(&dev->ref, blktrans_dev_release);
+-}
+-
+-
+ static blk_status_t do_blktrans_request(struct mtd_blktrans_ops *tr,
+ 			       struct mtd_blktrans_dev *dev,
+ 			       struct request *req)
+@@ -187,63 +179,58 @@ static int blktrans_open(struct block_device *bdev, fmode_t mode)
+ 	struct mtd_blktrans_dev *dev = bdev->bd_disk->private_data;
+ 	int ret = 0;
+ 
+-	kref_get(&dev->ref);
++	if (disk_openers(bdev->bd_disk) > 0)
++		return 0;
+ 
+-	mutex_lock(&dev->lock);
+-
+-	if (dev->open)
+-		goto unlock;
++	mutex_lock(&mtd_table_mutex);
++	if (!dev->mtd) {
++		mutex_lock(&mtd_table_mutex);
++		return -EINVAL;
++	}
++	ret = __get_mtd_device(dev->mtd);
++	mutex_unlock(&mtd_table_mutex);
++	if (ret)
++		return ret;
+ 
++	mutex_lock(&dev->lock);
+ 	__module_get(dev->tr->owner);
+-
+-	if (!dev->mtd)
+-		goto unlock;
+-
+ 	if (dev->tr->open) {
+ 		ret = dev->tr->open(dev);
+ 		if (ret)
+ 			goto error_put;
+ 	}
+-
+-	ret = __get_mtd_device(dev->mtd);
+-	if (ret)
+-		goto error_release;
+ 	dev->file_mode = mode;
+-
+-unlock:
+ 	dev->open++;
+ 	mutex_unlock(&dev->lock);
+-	return ret;
+ 
+-error_release:
+-	if (dev->tr->release)
+-		dev->tr->release(dev);
++	return 0;
++
+ error_put:
+ 	module_put(dev->tr->owner);
+ 	mutex_unlock(&dev->lock);
+-	blktrans_dev_put(dev);
++
++	put_mtd_device(dev->mtd);
+ 	return ret;
+ }
+ 
+ static void blktrans_release(struct gendisk *disk, fmode_t mode)
+ {
+ 	struct mtd_blktrans_dev *dev = disk->private_data;
++	struct mtd_info *mtd = NULL;
+ 
+-	mutex_lock(&dev->lock);
+-
+-	if (--dev->open)
+-		goto unlock;
++	if (disk_openers(disk) > 0)
++		return;
+ 
++	mutex_lock(&dev->lock);
++	dev->open--;
+ 	module_put(dev->tr->owner);
+-
+-	if (dev->mtd) {
+-		if (dev->tr->release)
+-			dev->tr->release(dev);
+-		__put_mtd_device(dev->mtd);
+-	}
+-unlock:
++	mtd = dev->mtd;
++	if (mtd && dev->tr->release)
++		dev->tr->release(dev);
+ 	mutex_unlock(&dev->lock);
+-	blktrans_dev_put(dev);
++
++	if (mtd)
++		put_mtd_device(dev->mtd);
+ }
+ 
+ static int blktrans_getgeo(struct block_device *bdev, struct hd_geometry *geo)
+@@ -266,6 +253,7 @@ static const struct block_device_operations mtd_block_ops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= blktrans_open,
+ 	.release	= blktrans_release,
++	.free_disk	= blktrans_free_disk,
+ 	.getgeo		= blktrans_getgeo,
+ };
+ 
+@@ -318,7 +306,6 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
+  added:
+ 
+ 	mutex_init(&new->lock);
+-	kref_init(&new->ref);
+ 	if (!tr->writesect)
+ 		new->readonly = 1;
+ 
+@@ -410,6 +397,7 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
+ 
+ int del_mtd_blktrans_dev(struct mtd_blktrans_dev *old)
+ {
++	struct mtd_info *old_mtd = NULL;
+ 	unsigned long flags;
+ 
+ 	lockdep_assert_held(&mtd_table_mutex);
+@@ -438,13 +426,14 @@ int del_mtd_blktrans_dev(struct mtd_blktrans_dev *old)
+ 	if (old->open) {
+ 		if (old->tr->release)
+ 			old->tr->release(old);
+-		__put_mtd_device(old->mtd);
++		old_mtd = old->mtd;
+ 	}
+-
+ 	old->mtd = NULL;
+-
+ 	mutex_unlock(&old->lock);
+-	blktrans_dev_put(old);
++	put_disk(old->disk);
++
++	if (old->mtd)
++		put_mtd_device(old_mtd);
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/mtd/blktrans.h b/include/linux/mtd/blktrans.h
+index 15cc9b95e32b5..41a81fc9f0462 100644
+--- a/include/linux/mtd/blktrans.h
++++ b/include/linux/mtd/blktrans.h
+@@ -7,7 +7,6 @@
+ #define __MTD_TRANS_H__
+ 
+ #include <linux/mutex.h>
+-#include <linux/kref.h>
+ #include <linux/sysfs.h>
+ 
+ struct hd_geometry;
+@@ -26,7 +25,6 @@ struct mtd_blktrans_dev {
+ 	unsigned long size;
+ 	int readonly;
+ 	int open;
+-	struct kref ref;
+ 	struct gendisk *disk;
+ 	struct attribute_group *disk_attributes;
+ 	struct request_queue *rq;
