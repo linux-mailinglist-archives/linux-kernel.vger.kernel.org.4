@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E8C5B38BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBDF5B38CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiIINTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S231140AbiIINUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIINTS (ORCPT
+        with ESMTP id S229697AbiIINUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:19:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1754AB1B4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uu4FKZ6m8FqFuZxmlF95kxb0xNsagokSRxqsYzwUQsI=; b=ut5fVKXMdS+luwtzvFplggRB2M
-        O4LjNb16pGtC/zWiwMotqWJWFimyX9raS8SgcXGAExwIHDhEwnhgVDODCFwI/+2z4ms0vMPyuaMqy
-        nSk5n6JBabnvBGEYxdwDu/MWRO84OjlfgIL6R7pIhsPZrf0zNiILBbiHQDaQ/qsk7HwJ0taNPDhuH
-        dPCKFvRf9OV+3wdzi0MnzxVuYq6RqzeArE8pKvZ4Ajuq177bywBsUXfhMzxrorQCEyFSwe7IXNfln
-        n3u/IArizmeE7KodnB3Q2jwSWTHBRyTku2ae/1HRHQckbr5vTK87I8byBR0v0PZSRBU6ERsEpiNil
-        fLvDa1QA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oWdu8-00DHcd-QL; Fri, 09 Sep 2022 13:18:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D84D6300023;
-        Fri,  9 Sep 2022 15:18:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AEA33201AF2DB; Fri,  9 Sep 2022 15:18:40 +0200 (CEST)
-Date:   Fri, 9 Sep 2022 15:18:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Manikandan Jagatheesan <mjagatheesan@vmware.com>
-Cc:     "bp@suse.de" <bp@suse.de>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Peter Jonasson <pjonasson@vmware.com>,
-        Yiu Cho Lau <lauyiuch@vmware.com>,
-        Rajender M <manir@vmware.com>,
-        Abdul Anshad Azeez <aazees@vmware.com>,
-        Kodeswaran Kumarasamy <kkumarasamy@vmware.com>,
-        Rahul Gopakumar <gopakumarr@vmware.com>
-Subject: Re: Performance Regression in Linux Kernel 5.19
-Message-ID: <Yxs9MGGmSShJGaXs@hirez.programming.kicks-ass.net>
-References: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
+        Fri, 9 Sep 2022 09:20:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D12CACA21;
+        Fri,  9 Sep 2022 06:20:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17FE1B824F7;
+        Fri,  9 Sep 2022 13:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68F5C433C1;
+        Fri,  9 Sep 2022 13:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662729635;
+        bh=OPjDbxZoA9mO4XMuKYHJGa1f/L+5w3XwGd4XzkJ8R0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CIvWAb/OYnRpDiKTv5aVChkLKNie0kPXsvHHNwV/FfS7fsToT+t6T5RkUO0x/0TVF
+         NZHl4pS7j7yNoV68SCyHxKl9ScvedeLhXWT7Xj/ZkdTBjxCQBvs7vOEO8l+4oVA3ho
+         tZFqvkEV/x7ZP9P8lDuh7gEr/xXZ1JnPTG055hJR8c4lpuletoPgsDDur4VnblQdau
+         5lb79mIkMay7/+T0CKxQCyuDUAmXRp+B3DdDXguce+Z65soRm1LlG7JzMqkUJpxtd4
+         FeJ6yrHb/ctsktHWVtVCxPTxSXMLLSzvbW1tXnxHB+PnTt6tu1ClvL3hbsKYYdvA44
+         g+zQsEAdgSplQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oWdw4-00024Y-En; Fri, 09 Sep 2022 15:20:45 +0200
+Date:   Fri, 9 Sep 2022 15:20:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/16] phy: qcom-qmp-combo: drop unused defines
+Message-ID: <Yxs9rCf/JTL5BA1S@hovoldconsulting.com>
+References: <20220907110728.19092-1-johan+linaro@kernel.org>
+ <20220907110728.19092-3-johan+linaro@kernel.org>
+ <7370ba1d-472c-b036-4155-f86ca13f9824@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <7370ba1d-472c-b036-4155-f86ca13f9824@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 11:46:08AM +0000, Manikandan Jagatheesan wrote:
-> As part of VMware's performance regression testing for Linux
-> Kernel upstream releases, we have evaluated the performance
-> of Linux kernel 5.19 against the 5.18 release and we have 
-> noticed performance regressions in Linux VMs on ESXi as shown 
-> below.
-> - Compute(up to -70%)
-> - Networking(up to -30%)
-> - Storage(up to -13%) 
->  
-> After performing the bisect between kernel 5.18 and 5.19, we 
-> identified the root cause to be the enablement of IBRS mitigation 
-> for spectre_v2 vulnerability by commit 6ad0ad2bf8a6 ("x86/bugs: 
-> Report Intel retbleed vulnerability").
->  
-> To confirm this, we have disabled the above security mitigation
-> through kernel boot parameter(spectre_v2=off) in 5.19 and re-ran
-> our tests & confirmed that the performance was on-par with 
-> 5.18 release. 
+On Fri, Sep 09, 2022 at 12:21:12PM +0300, Dmitry Baryshkov wrote:
+> On 07/09/2022 14:07, Johan Hovold wrote:
+> > Drop defines and enums that are unused since the QMP driver split.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 15 ---------------
+> >   1 file changed, 15 deletions(-)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > index 9ce2ab56be4c..838f7e328b55 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > @@ -28,16 +28,11 @@
+> >   #define SW_RESET				BIT(0)
+> >   /* QPHY_POWER_DOWN_CONTROL */
+> >   #define SW_PWRDN				BIT(0)
+> > -#define REFCLK_DRV_DSBL				BIT(1)
+> >   /* QPHY_START_CONTROL bits */
+> >   #define SERDES_START				BIT(0)
+> >   #define PCS_START				BIT(1)
+> > -#define PLL_READY_GATE_EN			BIT(3)
+> >   /* QPHY_PCS_STATUS bit */
+> >   #define PHYSTATUS				BIT(6)
+> > -#define PHYSTATUS_4_20				BIT(7)
+> > -/* QPHY_PCS_READY_STATUS & QPHY_COM_PCS_READY_STATUS bit */
+> > -#define PCS_READY				BIT(0)
+> 
+> I think these defines, describing registers and bits, can go to the 
+> common header instead.
 
-Well, duh.. :-)
+Adding those to a common header can be done later if needed at all (and
+would include adding a proper prefix etc).
+
+> For the rest of the patch:
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Johan
