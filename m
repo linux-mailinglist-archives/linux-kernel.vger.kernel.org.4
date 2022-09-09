@@ -2,83 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A17F5B4338
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9505B433C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiIIXvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S230512AbiIIXxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIIXvt (ORCPT
+        with ESMTP id S229506AbiIIXxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:51:49 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01FAAE9EC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:51:47 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id b9so2362869qka.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 16:51:47 -0700 (PDT)
+        Fri, 9 Sep 2022 19:53:15 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3631D11B008
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:53:14 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id m9so2449000qvv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 16:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=6fP8CNI1SxZ1fqsdJdaC/pv7thUt1nxPlxiORBGKp64=;
-        b=MxjwEnSwUP/WAiC2Q+zqIjSy1drtwLD0ENps6KAI9yPt4cV+v9E05MURgmj+hdRBqD
-         jZUB9jyyWboy1BHvh+Gi6L74g7oVbYIEUDhD/Udt90QyPHEgRVpei+rbTTFwPXNfa+RX
-         AnkQA16btV6Pykr4yUqLSsDgONAHGIFzx7qkPIPF6wvFMMK0uMtFfDaBN1AZEVG7a9BH
-         PZSUtdTJWhQ7Fdw63D1DVR2V19wDlduEyxc92ZPiIkfG25kwrEcbhf2gKNc4DlocfJkY
-         ena2XflfaF3Wqv7sY5grTEhZ7cNv/PswzBStBQPqpPoBOHsbyegfyFbpHIWPzr5GHHHC
-         2XGg==
+        bh=I7AGr5kxvD7L8BGImkaiYYIcWYTyuHALX3Uwn5SFGes=;
+        b=dABIJEmzczJA9TeUEwB/vqlw1on+BNexewwg9hQHdtE1Pf+5Eir7ZuRo5Ra74CBI2Y
+         mcA+UH3eeO9aAd0QqE0L7SFCTjpphtpc0ELtMYBKyyRw1a/HWDzHyUcOactrzkgR2sl3
+         L0nOmencTRW6FHXiEoY9iZZ+c/WYo/U0AzzN4UAFPlTI1iRVRUWqtRTHaf8sCXXZzJnf
+         NJL3l99mu6NE5Asx87J+/QD6IeeyB3qXivdFsvkAKE6TbTRWix12Dqc9T+JmjOGbnts9
+         4TFjGIVIDOrRXIamT7vOV1TzgaehJPaax4ZVZ8nlHpjlkRagg2W3Kahrivj4XNmSdY7D
+         YIBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6fP8CNI1SxZ1fqsdJdaC/pv7thUt1nxPlxiORBGKp64=;
-        b=xGpMG7XvotCK8yKMHTGuWZOHrYvl7MoIh2Z/of5hw5o6v+7kEEfG2qiy8n0lmpoJld
-         T28NpFSJvzfxivJFfU1G7C8vs4tuOIzQlLp5L0ftB8sCQXxKXe/2KTKciczg1YtAx7Yd
-         d8S0hNmKlIeHKJrx+jvIh8NBP2l2DLTlebIz0erBuPJ+jhgy1KQhKf9cVqhf7sg56xJx
-         q+b2jGhaddZH2+ThP2ZX8pMRWIiJ0V9wF7qBhmoCLPXihQCaPXuBpLIKL/Hx6xCwxx5u
-         TzPT7be89MFq5Bbt9dfULxbT7qWtae0af6jVTLh3qlpwZVyZhl1sLPo0P1NGlVPT+9UK
-         Cl+Q==
-X-Gm-Message-State: ACgBeo2Z9mD7WzaT5ojyLraK456K/u/lyWzuyRJfTlUdyWEzcTDY1uM3
-        neFPUOMPL5pcyQ0pU/aHMzHQDg==
-X-Google-Smtp-Source: AA6agR40F6wDnZVRyuVCU0Yg5WdYoSgzbpigfa0MDjdj1e9+PHm+LZ5aIlUjodnEFoQxhfhYn6oYnA==
-X-Received: by 2002:a05:620a:8088:b0:6cb:d5f0:2ad3 with SMTP id ef8-20020a05620a808800b006cbd5f02ad3mr7047916qkb.486.1662767506843;
-        Fri, 09 Sep 2022 16:51:46 -0700 (PDT)
+        bh=I7AGr5kxvD7L8BGImkaiYYIcWYTyuHALX3Uwn5SFGes=;
+        b=eebkyhLVRdtdKJNNAJTfLs5fPqJzWMqNQWLQAIL0mpOTny+y5rrz4fBleOp8ULxZhc
+         9cw1H3lXY7PhX1PcQHBp1IxeR8OJZPCLLjfyhdv+sBwpRwoqmTsI5VGXvCvmlt5B3xQt
+         bgYwnnnKErFnDaMNyi3eYIX5ho/tsD+2akKDzGCmismdRSMl4ffPBxB9Bm+qxUpuVDSv
+         v1ysy3zR9E2o6y6lS5BVlGUkkp298Jl4gZ5zrHvaF6EOV25KBFlDYdunyTFoc+VoXeQm
+         JxKpsemNbEKYF4+afSNeovDBDwFbR0L4zwXSbSuKftkI7ZNUOz4zbQVlLRbOhDHQAC76
+         /GGg==
+X-Gm-Message-State: ACgBeo3NGJzQZJ+33DsM8JuLUy+KoimQqXkK/+UCIkdSXWnSfgg4osUW
+        HAywpqolxdyf8QQhK53vpkZbHg==
+X-Google-Smtp-Source: AA6agR5hWM2GJ5zXaAdZz8/5jyfYnTB6f4lRkH4YbMaWcByENpIrNcfVlyo+HaeUh7LK3d+xbRkfaQ==
+X-Received: by 2002:a0c:f445:0:b0:4a6:9f4a:9a66 with SMTP id h5-20020a0cf445000000b004a69f4a9a66mr14581963qvm.65.1662767593396;
+        Fri, 09 Sep 2022 16:53:13 -0700 (PDT)
 Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id ay44-20020a05620a17ac00b006b5f06186aesm1588367qkb.65.2022.09.09.16.51.45
+        by smtp.gmail.com with ESMTPSA id fz16-20020a05622a5a9000b00342fc6a8e25sm1348798qtb.50.2022.09.09.16.53.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 16:51:46 -0700 (PDT)
+        Fri, 09 Sep 2022 16:53:12 -0700 (PDT)
 Received: from jgg by wakko with local (Exim 4.95)
         (envelope-from <jgg@ziepe.ca>)
-        id 1oWnmj-00A0En-13;
-        Fri, 09 Sep 2022 20:51:45 -0300
-Date:   Fri, 9 Sep 2022 20:51:45 -0300
+        id 1oWno8-00A0GS-4S;
+        Fri, 09 Sep 2022 20:53:12 -0300
+Date:   Fri, 9 Sep 2022 20:53:12 -0300
 From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Long Li <longli@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Ethan Zhao <haifeng.zhao@linux.intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
         Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [Patch v5 00/12] Introduce Microsoft Azure Network Adapter
- (MANA) RDMA driver
-Message-ID: <YxvRkW+u1jgOLD5X@ziepe.ca>
-References: <1661906071-29508-1-git-send-email-longli@linuxonhyperv.com>
- <PH7PR21MB3263E057A08312F679F8576ACE439@PH7PR21MB3263.namprd21.prod.outlook.com>
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v3 01/15] vfio: Add helpers for unifying vfio_device life
+ cycle
+Message-ID: <YxvR6PHywJCTgp3z@ziepe.ca>
+References: <20220909102247.67324-1-kevin.tian@intel.com>
+ <20220909102247.67324-2-kevin.tian@intel.com>
+ <acbaf0f2-91d4-3eae-5716-244893ca34c7@linux.intel.com>
+ <BN9PR11MB5276E41114EEE687975C698F8C439@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR21MB3263E057A08312F679F8576ACE439@PH7PR21MB3263.namprd21.prod.outlook.com>
+In-Reply-To: <BN9PR11MB5276E41114EEE687975C698F8C439@BN9PR11MB5276.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -89,19 +117,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 09:41:25PM +0000, Long Li wrote:
+On Fri, Sep 09, 2022 at 08:42:25AM +0000, Tian, Kevin wrote:
 
-> Can you take a look at this patch set. I have addressed all the
-> comments from previous review.
+> I think it's quite common to have an alloc() helper initialize refcount, e.g.
+> vfio_group_alloc() both initialize its user refcount and also call
+> device_initialize()  to gets kref initialized. Similar example in
+> ib_alloc_device(), etc.
 
-The last time I looked I thought it was looking OK, I was thinking of
-putting it in linux-next for a while to get the static checkers
-happy. But the netdev patches gave me pause on that plan.
+Right, it is quite a good/common pattern to have an allocation function
+return a refcount to the caller.
 
-However, Leon and I will be at LPC all next week so I don't know if it
-will happen.
-
-I would also like to see that the netdev patches are acked, and ask how
-you expect this cross-tree series to be merged?
+I don't know of any naming standard for this however.
 
 Jason
