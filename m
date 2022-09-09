@@ -2,42 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8C5B33B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0AA5B3364
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiIIJYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S230455AbiIIJTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiIIJYI (ORCPT
+        with ESMTP id S231137AbiIIJSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:24:08 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42EF131EF6;
-        Fri,  9 Sep 2022 02:23:09 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MP9Sj6w4XzHnfc;
-        Fri,  9 Sep 2022 17:20:21 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 17:22:18 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <santosh.shilimkar@oracle.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <rds-devel@oss.oracle.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] net: rds: add missing __init/__exit annotations to module init/exit funcs
-Date:   Fri, 9 Sep 2022 17:18:40 +0800
-Message-ID: <20220909091840.247946-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 9 Sep 2022 05:18:54 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1EF12E18A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:18:53 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id v6so1139994ljj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=kuIhzSkq3fDg9/NxRNM5sLOQILPo0CbgosVBQmELZ3s=;
+        b=Q5xo/72AqUs037hXFiKMXBWP9qQ0QCQQ5+liSy7CDb+vWuxmBFg9ZenRUPHYDJ+3LS
+         jZpyw2Fta5BxclW0Wr0sNrNL7aBK4EPIICj1rbzZ22Akx+mgm+/mPR31xaIzWWvSuf3y
+         gDfn1rzYrs+7VJeFQjypK4x+vyzr8nhRtQrxMZQeu2Ng8GjE3uBZgWOFxRUruFl7kuPc
+         Sr15nYY4iSg64vSH6bSSLtMdCU8zDYONnPixDlkpaSPJXabM+vWDe8y83SQaFavRO823
+         bHshACNkpvcKdHJ42YyFwZnX/UZQj04vtCy8/cGvMyEuwCOv8l/rR87/x5jwUQ+G6+RX
+         8mCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kuIhzSkq3fDg9/NxRNM5sLOQILPo0CbgosVBQmELZ3s=;
+        b=X7pPiRDu+5mkaWL+Yk4EY2tIdSuqUEDEA7W3OJd3aNmCiKHGxxkBFG8cNTiPqjiprJ
+         A9Hqs/Pk5s+3z5Q9R3Fpy4DaIpszHVouZ7ZGeisax8bnZx1zV0kZD9NrTdfQGcSId4kM
+         7D9i4t5KZDiUegx3yOMq5sZFlgSV1pp6hIfUoz06iuWRa26r21yo6RpkSnqONJUDvRi/
+         zEH8K5bMy2CWmpNKKzx4Nzxrqf7ZDsjquk7aPWny5RCfiOci7rbcH3ZCK+khGjWonYEc
+         drMgi7i9/I+gGIO6UhqI2AumKFy7bijGiqI29uddl/KpmXb4cX0Uqzv1GdZ/d62Hke1J
+         B1/g==
+X-Gm-Message-State: ACgBeo39lvEJ4wYp5S+AhmsSsyd5K8ojLHe+eE67zyD5KKBU0L8uMAF1
+        jl8RWIqSKGJ3AynKvpu1ItdZfg==
+X-Google-Smtp-Source: AA6agR4dZ40n+zYZc3ZCFRVBIqM5e2s9DGInqydOWBOPLjVazMP238WR4ZOgRpQsHcPHjYnMs4DiRA==
+X-Received: by 2002:a2e:50b:0:b0:26a:b7ec:59ea with SMTP id 11-20020a2e050b000000b0026ab7ec59eamr3860803ljf.312.1662715132031;
+        Fri, 09 Sep 2022 02:18:52 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id r24-20020ac24d18000000b004949f7cbb6esm6928lfi.79.2022.09.09.02.18.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 02:18:51 -0700 (PDT)
+Message-ID: <9a6c7419-a636-4af3-b4fc-d33b06c89505@linaro.org>
+Date:   Fri, 9 Sep 2022 12:18:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 3/3] phy: qcom-qmp: drop dual-lane comments
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220906074550.4383-1-johan+linaro@kernel.org>
+ <20220906074550.4383-4-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220906074550.4383-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,63 +81,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing __init/__exit annotations to module init/exit funcs.
+On 06/09/2022 10:45, Johan Hovold wrote:
+> Drop the obsolete and misleading dual-lane comments which gave the
+> impression that only combo PHYs have a second lane.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- net/rds/af_rds.c         | 2 +-
- net/rds/rdma_transport.c | 4 ++--
- net/rds/tcp.c            | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/net/rds/af_rds.c b/net/rds/af_rds.c
-index b239120dd9ca..3ff6995244e5 100644
---- a/net/rds/af_rds.c
-+++ b/net/rds/af_rds.c
-@@ -894,7 +894,7 @@ module_exit(rds_exit);
- 
- u32 rds_gen_num;
- 
--static int rds_init(void)
-+static int __init rds_init(void)
- {
- 	int ret;
- 
-diff --git a/net/rds/rdma_transport.c b/net/rds/rdma_transport.c
-index a9e4ff948a7d..d36f3f6b4351 100644
---- a/net/rds/rdma_transport.c
-+++ b/net/rds/rdma_transport.c
-@@ -291,7 +291,7 @@ static void rds_rdma_listen_stop(void)
- #endif
- }
- 
--static int rds_rdma_init(void)
-+static int __init rds_rdma_init(void)
- {
- 	int ret;
- 
-@@ -307,7 +307,7 @@ static int rds_rdma_init(void)
- }
- module_init(rds_rdma_init);
- 
--static void rds_rdma_exit(void)
-+static void __exit rds_rdma_exit(void)
- {
- 	/* stop listening first to ensure no new connections are attempted */
- 	rds_rdma_listen_stop();
-diff --git a/net/rds/tcp.c b/net/rds/tcp.c
-index 73ee2771093d..d8754366506a 100644
---- a/net/rds/tcp.c
-+++ b/net/rds/tcp.c
-@@ -712,7 +712,7 @@ static void rds_tcp_exit(void)
- }
- module_exit(rds_tcp_exit);
- 
--static int rds_tcp_init(void)
-+static int __init rds_tcp_init(void)
- {
- 	int ret;
- 
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 1 -
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c  | 1 -
+>   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c   | 1 -
+>   drivers/phy/qualcomm/phy-qcom-qmp-usb.c   | 1 -
+>   4 files changed, 4 deletions(-)
+
 -- 
-2.17.1
+With best wishes
+Dmitry
 
