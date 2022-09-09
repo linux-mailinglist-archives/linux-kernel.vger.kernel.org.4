@@ -2,140 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D605B3A68
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603225B3A64
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiIIOCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S232319AbiIIOD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiIIOBf (ORCPT
+        with ESMTP id S232101AbiIIODC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:01:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6895A3469;
-        Fri,  9 Sep 2022 07:00:38 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732036;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFlcBXEp7sIljUiwMOfLafUGr2rNlCE2sdK1fZRJj60=;
-        b=w1VRIhhGmnYc2gDKxwxVP2qxgxki7mhZWYLl295TkWPfrEqeBFNIXDOITnwR8OsLNn5Qno
-        Qu6MIXNFsHyhLPCVs6Ppxpymvp08/kQZf/Mveeb55yIb/HJkPm/zcuOsfBT4qIgtKgn9sC
-        S9nHlbRRqWCNYm+IfIH8i07FVFzDylKOpPyAR3ayAjXhdxama4dtJzZRfLX3Ae3MJW9FKq
-        +DmkyMBiH9r1dacTPDmMkXHX9y2XChAvWDl9hzoO+ItqHmhVKmFt9KrjVFTllnBW0w0TD+
-        uhrYsKLpBHrQd/v7P+DT5RV7h7XxtCjtAwo56Zbfdb7d2wKG1yIeM++rbN/c3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732036;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFlcBXEp7sIljUiwMOfLafUGr2rNlCE2sdK1fZRJj60=;
-        b=y9HtZ9U+HaZUyRet40THyBJaJgVTZSv01ezVHExR6rm3h33DYIjlCs/UY2PXqv6apDNlp+
-        Hjtxp6C6KDfk0lBw==
-From:   "tip-bot2 for Christoph Hellwig" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] devres: remove devm_ioremap_np
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220822061424.151819-1-hch@lst.de>
-References: <20220822061424.151819-1-hch@lst.de>
+        Fri, 9 Sep 2022 10:03:02 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B4A1451C6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:01:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id B0EA22B0591B;
+        Fri,  9 Sep 2022 10:01:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 09 Sep 2022 10:01:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662732069; x=1662739269; bh=m8uWKdPqim
+        TWOzbuWW9LjUIAMA5qm4azX49SLBOts+k=; b=YnzdqFanu76LTppWsnIK8yLtaw
+        lPA9imn+DZMPpvmB+I+7lJ6Jtp5+Hpp/Tok4Syo0TZ+GIWgrmrIbPdzEP4csf+60
+        UpEKybV/LKbOlJdebq8NtpHOX+q7UOoX+sClEWg/wr6povq2rrWI+ugq/sOCi5sZ
+        xXq4KnkJMjk8hfkCCos2ghiXoM12HoF0kloEOtYmIVJ6ltnGXUKNF564vpDCPNZ8
+        s3ORSfM8MEpwoQU39DDpbNTFwB5Y6PTP2jBZlZSeNbsxTCVjtqfLM5MdZpTnhTm0
+        1aNFaQE+vAnk+ZlPCXOLfH3n3kaTBYCY1K1ZgQJMdDQ0emXorULHJv6IpDTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662732069; x=1662739269; bh=m8uWKdPqimTWOzbuWW9LjUIAMA5q
+        m4azX49SLBOts+k=; b=UytRIGBeAIK3cYsdpEIIrN8FMBS+DdyAfw8Linj+rJgL
+        g9vqVDLzMqf7z+Zq8GuX6nB76z8BX3FKfH+w0cZYcxf5Vz1m0pmqpzc3QIz1lW3i
+        +qcJUgH8UYU/JZkQyJ+J0ILb8T/3YoB894efCxXtrvJD63y7GfgcmlpZQaGweQGA
+        3eQ73GeIApaHjQjnZeXMJ6l+v13ZgTzTWY7kfviqp+zfyuG5zITuOFrJ7DO7a31p
+        LGTFP167QAdPLgsgxgQNe88zlb9eOnmg96qLVG2u074AnI7rabwwsuOPnUoohp3d
+        BjaoBlxQzhdosblojNXzRuwyvhSKAM638mnzlx7/7w==
+X-ME-Sender: <xms:HUcbY1qT4kf-mTq2fLzQRaYzl9AUayFOIl0kpRAPDPE4ezb1dL-L8w>
+    <xme:HUcbY3q1yVbTY68aHnr8xWgLWQ2NifWxNpAv2F6FOlAMWgmXE5VamBILHxPMGXevN
+    _IGnIPLwdFJ29d9c7o>
+X-ME-Received: <xmr:HUcbYyM5xjzmO3e3dtMoonVbYC1ch27-ZEspCcDtsSMffAErxYBzJgCFtjCs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:HkcbYw4y40JUDqNYJ2TTJTgsJ4f-o9o3EZPSRODX5u_vtjccrEFEtg>
+    <xmx:HkcbY06o4B69hhN80GOqN_IEEzN6bZfUaP6ctsZrDz9l9eV09pSOOw>
+    <xmx:HkcbY4hZrEnQSH_qfGbJ9HkdECI_If740JoappUZ-WA_oiQJHLK6Cg>
+    <xmx:JUcbY07qgZzJA_p9otXIwoarGt3HNeaPn6bgdqRlPR-XGkX3B4ktoodc5Z8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Sep 2022 10:01:01 -0400 (EDT)
+Date:   Fri, 9 Sep 2022 16:00:59 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20220909140059.g57oihcmhuym62ei@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+ <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
+ <20220905133755.gcmmntg3wnecyqjq@houat>
+ <10ce686a-d7c8-9ce4-3979-735ad8eab3b5@gmail.com>
+ <20220907143421.4iopqwhp3yfircsh@houat>
+ <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
 MIME-Version: 1.0
-Message-ID: <166273203553.401.17063915348417685051.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kc2bu6zgime3t2ko"
+Content-Disposition: inline
+In-Reply-To: <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     3954cf4338becb1f140bb6fa4f5e9a42f2529b86
-Gitweb:        https://git.kernel.org/tip/3954cf4338becb1f140bb6fa4f5e9a42f2529b86
-Author:        Christoph Hellwig <hch@lst.de>
-AuthorDate:    Mon, 22 Aug 2022 08:14:24 +02:00
-Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CommitterDate: Thu, 01 Sep 2022 18:04:43 +02:00
+--kc2bu6zgime3t2ko
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-devres: remove devm_ioremap_np
+On Wed, Sep 07, 2022 at 11:31:21PM +0200, Mateusz Kwiatkowski wrote:
+> The "canonical" modelines (at least for vc4's VEC, see the notes below):
+>=20
+> - (vfp=3D=3D4, vsync=3D=3D6, vbp=3D=3D39) for 576i
+> - (vfp=3D=3D7, vsync=3D=3D6, vbp=3D=3D32) for 480i
+> - (vfp=3D=3D5, vsync=3D=3D6, vbp=3D=3D28) for 486i (full frame NTSC as or=
+iginally specified)
 
-devm_ioremap_np has never been used anywhere since it was added in early
-2021, so remove it.
+It's not clear to me either how you come up with those timings?
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220822061424.151819-1-hch@lst.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- Documentation/driver-api/driver-model/devres.rst |  1 +-
- include/linux/io.h                               |  2 +--
- lib/devres.c                                     | 15 +---------------
- 3 files changed, 18 deletions(-)
+Maxime
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index 5527294..2af6c9c 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -310,7 +310,6 @@ IOMAP
-   devm_ioremap()
-   devm_ioremap_uc()
-   devm_ioremap_wc()
--  devm_ioremap_np()
-   devm_ioremap_resource() : checks resource, requests memory region, ioremaps
-   devm_ioremap_resource_wc()
-   devm_platform_ioremap_resource() : calls devm_ioremap_resource() for platform device
-diff --git a/include/linux/io.h b/include/linux/io.h
-index 5fc8003..308f4f0 100644
---- a/include/linux/io.h
-+++ b/include/linux/io.h
-@@ -59,8 +59,6 @@ void __iomem *devm_ioremap_uc(struct device *dev, resource_size_t offset,
- 				   resource_size_t size);
- void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
- 				   resource_size_t size);
--void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
--				   resource_size_t size);
- void devm_iounmap(struct device *dev, void __iomem *addr);
- int check_signature(const volatile void __iomem *io_addr,
- 			const unsigned char *signature, int length);
-diff --git a/lib/devres.c b/lib/devres.c
-index 55eb07e..6baf439 100644
---- a/lib/devres.c
-+++ b/lib/devres.c
-@@ -104,21 +104,6 @@ void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
- EXPORT_SYMBOL(devm_ioremap_wc);
- 
- /**
-- * devm_ioremap_np - Managed ioremap_np()
-- * @dev: Generic device to remap IO address for
-- * @offset: Resource address to map
-- * @size: Size of map
-- *
-- * Managed ioremap_np().  Map is automatically unmapped on driver detach.
-- */
--void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
--			      resource_size_t size)
--{
--	return __devm_ioremap(dev, offset, size, DEVM_IOREMAP_NP);
--}
--EXPORT_SYMBOL(devm_ioremap_np);
--
--/**
-  * devm_iounmap - Managed iounmap()
-  * @dev: Generic device to unmap for
-  * @addr: Address to unmap
+--kc2bu6zgime3t2ko
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxtHGwAKCRDj7w1vZxhR
+xYMtAQC2BqS997PQeLRZyCLXvTlUXGBvB07pmDNLHPWzQICluwD9FWnB9aaQ3tLC
+/OsNpUuYwh9XQJfUVrt4RcFvukTzXgc=
+=jc5S
+-----END PGP SIGNATURE-----
+
+--kc2bu6zgime3t2ko--
