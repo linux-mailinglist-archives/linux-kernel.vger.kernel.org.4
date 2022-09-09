@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB725B320E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D115B3229
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiIIIo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S231892AbiIIIpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiIIIox (ORCPT
+        with ESMTP id S231774AbiIIIpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:44:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EC552804;
-        Fri,  9 Sep 2022 01:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662713091; x=1694249091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dx9fQD19vhc3Jmyo1THX6cO2GO5PTZm/g2LWty61b2Y=;
-  b=QHJpo1E6dJTFxXdxjg8SBKDzuiS7/urim38S/RO1qaRRdBd2XP988Ecv
-   9tLqlJovQe2PD08cuXLwF/sdkE00wSXtcUOxMIaNak+JOAE0JqLrtenmP
-   ck7SHlXHrJV3Dtk5PAwXopKGiVdoTQ07CgTLZWrEQdiX3zZCuQPNuHeDA
-   MdjXbjYsYoSKF+o4wiK7a0UKBg/XKgZxpbg+rvXDk9vsf56uS8cTshb5n
-   uS4lW0/W8cflaLO8+9WNqGUioCxrUgRKPQfbJcBN2NFlmLQaXXT2j9ev5
-   QbicBYoILqrJk4fzGuCUvjJL6oNDqTV8SOkE1MEEmVrdK1yKUhSqliPXt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284448271"
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="284448271"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 01:44:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="615204912"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 01:44:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWZcu-00AUCb-2A;
-        Fri, 09 Sep 2022 11:44:40 +0300
-Date:   Fri, 9 Sep 2022 11:44:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org, kbuild-all@lists.01.org,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
+        Fri, 9 Sep 2022 04:45:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D7E2291;
+        Fri,  9 Sep 2022 01:45:27 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2898a4Yg013286;
+        Fri, 9 Sep 2022 08:45:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=kb8qQseZWUATfPCRZc5nzAu2oEou8/t8rUjWQ8Ps+3Y=;
+ b=VAtDlGU2XRxC7A3DD3DtjxeBbHC44Xlj83dGZV6hIZzTEQ8K6hbxEvCOANKHLQSU+5Ay
+ kXoiekkRgM9ni3vsb9gjj4+hWJ50RI5GL4Zd76Gbyhb2RXjHinUgKsCbIo1Zik+Tpop6
+ eBpIxp3VHzO4EKfJASa6YKB6ejtVDmqqB25KoukA2F26Y4zlS/9qdEfdZDbCuiVInEwy
+ hEIj3ssBB2fMyfHguiQr/+LsMHXdOvjq9vHAzPgPxsXCMu0Yb7cBESbvkyVbGJa7IlFa
+ q+RXJW6BXQWoh1dmwYTdCba9M6UEY52yNWJI2hdhpj2Zaes/4gpKjpBe4WRCl3hrbocA Tg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfrhg9tdu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 08:45:16 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2898j5bJ014236;
+        Fri, 9 Sep 2022 08:45:05 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3jc00m8vq2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 09 Sep 2022 08:45:05 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2898iK7B013119;
+        Fri, 9 Sep 2022 08:45:04 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2898j4Mb014199;
+        Fri, 09 Sep 2022 08:45:04 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id B667344AB; Fri,  9 Sep 2022 14:15:03 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>
-Subject: Re: [PATCH v2 6/8] perf: qcom_l2_pmu: Refactor _UID handling to use
- acpi_dev_uid_to_integer()
-Message-ID: <Yxr8+NYw/+gbmTBu@smile.fi.intel.com>
-References: <20220908132910.62122-7-andriy.shevchenko@linux.intel.com>
- <202209091254.rIFedxQL-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209091254.rIFedxQL-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v6 2/5] PCI: qcom: Add retry logic for link to be stable in L1ss
+Date:   Fri,  9 Sep 2022 14:14:41 +0530
+Message-Id: <1662713084-8106-3-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RFDhlk6eYaRSL-nQgg0CIjidNWiKzRyF
+X-Proofpoint-GUID: RFDhlk6eYaRSL-nQgg0CIjidNWiKzRyF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_04,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 suspectscore=0
+ clxscore=1015 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090030
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:40:36PM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> I love your patch! Perhaps something to improve:
+Some specific devices are taking time to settle the link in L1ss.
+So added a retry logic before returning from the suspend op.
 
-Indeed.
+Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from include/linux/device.h:15,
->                     from include/linux/acpi.h:15,
->                     from drivers/perf/qcom_l2_pmu.c:4:
->    drivers/perf/qcom_l2_pmu.c: In function 'l2_cache_pmu_probe_cluster':
-> >> drivers/perf/qcom_l2_pmu.c:882:17: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Wformat=]
-
-Fixed locally.
-
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index 6e04d0d..15c2067 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1809,26 +1809,40 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+ static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
+ {
+ 	u32 val;
++	ktime_t timeout, start;
+ 	struct dw_pcie *pci = pcie->pci;
+ 	struct device *dev = pci->dev;
+ 
+ 	if (!pcie->cfg->supports_system_suspend)
+ 		return 0;
+ 
+-	/* if the link is not active turn off clocks */
+-	if (!dw_pcie_link_up(pci)) {
+-		dev_info(dev, "Link is not active\n");
+-		goto suspend;
+-	}
++	start = ktime_get();
++	/* Wait max 200 ms */
++	timeout = ktime_add_ms(start, 200);
+ 
+-	/* if the link is not in l1ss don't turn off clocks */
+-	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+-	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+-		dev_warn(dev, "Link is not in L1ss\n");
+-		return 0;
++	while (1) {
++
++		if (!dw_pcie_link_up(pci)) {
++			dev_warn(dev, "Link is not active\n");
++			break;
++		}
++
++		/* if the link is not in l1ss don't turn off clocks */
++		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
++		if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
++			dev_dbg(dev, "Link enters L1ss after %d  ms\n",
++					ktime_to_ms(ktime_get() - start));
++			break;
++		}
++
++		if (ktime_after(ktime_get(), timeout)) {
++			dev_warn(dev, "Link is not in L1ss\n");
++			return 0;
++		}
++
++		udelay(1000);
+ 	}
+ 
+-suspend:
+ 	if (pcie->cfg->ops->suspend)
+ 		pcie->cfg->ops->suspend(pcie);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 
