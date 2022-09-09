@@ -2,123 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0065B33C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4445B33B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiIIJXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S232180AbiIIJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiIIJW5 (ORCPT
+        with ESMTP id S231741AbiIIJWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:22:57 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34029133A26;
-        Fri,  9 Sep 2022 02:22:13 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CEB3E5C00B5;
-        Fri,  9 Sep 2022 05:21:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 09 Sep 2022 05:21:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1662715289; x=1662801689; bh=jlANohku92U8A5fXUAUP9klL/
-        FT+qyLMucoExzq9De0=; b=GUh0Znt7Rknaii71ptm8Vb/kfeZHYTXOMU9AskwCK
-        vXuyw+pxAG/NaglHzxqXUd6OiBHLPycqTFEF7Du11efgq+UwaV1ebFw2heR2bKrf
-        9svY0DzfBc1jWT4MB1RzOKw1+tL6yHc4gy0yiym7ExbcKW8qiRXM0NIjMS5tcaMe
-        fXgtrDzVgd9vL8c+R8mHCM6OVqMQnsFrs0n51Jk+IxPiHovJYWW+DdzMbFUQ7jRB
-        U9SJm5dYcGfX4B2C4fhjuDnSqyHVZkV4ixDrR0vb3/sCy1I/WF06JUZt5wti5Rhu
-        yVnge3E1kcIR3QDwakfuXeGAtItZ/Y1yM2wyk2qdvA6UA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1662715289; x=1662801689; bh=jlANohku92U8A5fXUAUP9klL/FT+qyLMuco
-        Exzq9De0=; b=Rp6jgHj8TIHXr7ZBB69+wH5e0+YfEd51ySRPELnkIp4oSylrvCM
-        KteZtxVSI8RHTgE08QJ/1r9ivsUPrj5CFeX71ZCIx6jMwo6iIMmVMU2xyJHMuNSH
-        swxSvORj9hy16kjQQFqGP3cVdubpa4OlWvH5c7LTy1+nKJjc4gmdjGguWt7usI07
-        6I2dvjyhrJIzVRzoiAiPr+Jtqk0/20ngRQwmcLKu3yScjuuBxTXcnnOEx3w3mgu7
-        6h+bYPYF7NE5e/Ym1Az0T4ASqc4wX3zCFCGrECy3+5u73tGL+cMWc42Ao12nJm62
-        Mpoj+zeLrCXCw2YrZZUM8x9rCje3bmv5BVg==
-X-ME-Sender: <xms:mAUbYw5rB1tMF3Ev_eiP6XbcyTrgAleHSXwQVd5D9PjPlwLaBrpqqQ>
-    <xme:mAUbYx5FNYnPW3okXRkRgGoi-p1ivdA9FAAibOeN-Giz0RefA0vtgwUPDoTC30WJB
-    UXYs11JKpRIdmxZmQ>
-X-ME-Received: <xmr:mAUbY_e5z_qaz6i9dD4TdU1o0gRZ-Lwnm_mTaY8WIYwibDSpuEK8ehg6BfdCYQ3skG9XTUT7_aKeYDaApQ0Gl2uq6R9gdH3QO61u_PU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepnfhorhgvnhii
-    uceurghuvghruceoohhssheslhhmsgdrihhoqeenucggtffrrghtthgvrhhnpedugfeltd
-    eiheejvdefhfeigffgteffgeelgeejleeuleehvefhgfdtheejudeftdenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
-X-ME-Proxy: <xmx:mAUbY1KEHVJGPGn6XWkiDnmg3XTmEPla8nhAHL41F8mOkGRZMTwlRg>
-    <xmx:mAUbY0LHTs9W8OSvP5V0e773qAeRQr7CcHMlo4ZGkvN4GUBrsImA9Q>
-    <xmx:mAUbY2y_TnnGfgm_OR9IQ_VK53dhpGBtyRhIzIXPOtaP2xNIXhzrfw>
-    <xmx:mQUbY2C_f-44XBSsaIq-eZV8K4J-pLZOxu1zvw5hkGnxJ6Zr3fcMLA>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Sep 2022 05:21:27 -0400 (EDT)
-From:   Lorenz Bauer <oss@lmb.io>
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     Lorenz Bauer <oss@lmb.io>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: btf: fix truncated last_member_type_id in btf_struct_resolve
-Date:   Fri,  9 Sep 2022 09:21:07 +0000
-Message-Id: <20220909092107.3035-1-oss@lmb.io>
-X-Mailer: git-send-email 2.34.1
+        Fri, 9 Sep 2022 05:22:17 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C279E136CD5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:21:26 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id w8so1635190lft.12
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=5C5lLPWXo2PEugtUTd2/amAX/cOIrsmkGvZKcxLNXv8=;
+        b=FjVvfjC4Qeanl9HJy1Wx0CDHchT64ls67ctXS3tW53xX37jJcTi0bJ0T8efnLOgred
+         dC15271al2nKmj0OGleXVqNIEwnGhWfh7YLZYvONOCHBX1yTnlntuymCC/6jd6WcSYtc
+         FHMsbFGKU/mpAINtvgEPyY++uCrQW47hJ75Sgl206LvZPHbtsmqhOONUoqZmOcE2Cqgk
+         8/C28GxQMxs7S3CMX8zSlWeADy5SNwGkiMMLfHB51glfXKmoL0UDtXw5njLAS/qJWBGG
+         iBCZxpw1Gwf4/zv5RK90wWztLUuvjKfdRwEWLde6spzua/n3Eqz2e6VwAhPmupfNSC8R
+         UL9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5C5lLPWXo2PEugtUTd2/amAX/cOIrsmkGvZKcxLNXv8=;
+        b=dRThmPLzAd7rEJkknoUnPLQmBJEeiQ90tv0z1Sc2lPGj3z6B1qfdTwf5LtoFemlfTL
+         ZeudTpB4aPehn05Qj1s3MZIHKyWyV0qe99cexG2PCEU6JIioFfrD+6fpYlyX3C6oYMjt
+         KDxuSLuBRyGkyySF8+GoCFnsqEG4eBEEH2hpIx/WshMfp87avK3fB784ArIj8gAUGays
+         aJl5xqlY9r2NdUZ2ZoYv3RsCHxzkOZQniMIR2SNZ/Q/EsI+MUe/tyX6Uz2q7yIt2+h9D
+         L5nzfbTHadelled8dN50+0U0qyL8aoTw86QFuhQYp1MHtv9NLYr53zo7+WjtgKvgg2lv
+         98HQ==
+X-Gm-Message-State: ACgBeo096gUElajnpOeSiDVdRpz4v3HZZdnfCLfZb5rOa847w8h2Pz8c
+        Cfblcz9enzyjJblrV/m6O+5opw==
+X-Google-Smtp-Source: AA6agR4yyCDK3ccYh+WDpIf9g7K8b0E/jVJyesR/aOpi2YHy8mnAnvD5r6xvAlgzq4ZTZOOdwrtHWQ==
+X-Received: by 2002:a05:6512:1694:b0:48a:9d45:763f with SMTP id bu20-20020a056512169400b0048a9d45763fmr3886463lfb.662.1662715273122;
+        Fri, 09 Sep 2022 02:21:13 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u23-20020a05651c131700b0026ac8c94022sm207044lja.119.2022.09.09.02.21.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 02:21:12 -0700 (PDT)
+Message-ID: <7370ba1d-472c-b036-4155-f86ca13f9824@linaro.org>
+Date:   Fri, 9 Sep 2022 12:21:12 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 02/16] phy: qcom-qmp-combo: drop unused defines
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220907110728.19092-1-johan+linaro@kernel.org>
+ <20220907110728.19092-3-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220907110728.19092-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When trying to finish resolving a struct member, btf_struct_resolve
-saves the member type id in a u16 temporary variable. This truncates
-the 32 bit type id value if it exceeds UINT16_MAX.
+On 07/09/2022 14:07, Johan Hovold wrote:
+> Drop defines and enums that are unused since the QMP driver split.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 15 ---------------
+>   1 file changed, 15 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> index 9ce2ab56be4c..838f7e328b55 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> @@ -28,16 +28,11 @@
+>   #define SW_RESET				BIT(0)
+>   /* QPHY_POWER_DOWN_CONTROL */
+>   #define SW_PWRDN				BIT(0)
+> -#define REFCLK_DRV_DSBL				BIT(1)
+>   /* QPHY_START_CONTROL bits */
+>   #define SERDES_START				BIT(0)
+>   #define PCS_START				BIT(1)
+> -#define PLL_READY_GATE_EN			BIT(3)
+>   /* QPHY_PCS_STATUS bit */
+>   #define PHYSTATUS				BIT(6)
+> -#define PHYSTATUS_4_20				BIT(7)
+> -/* QPHY_PCS_READY_STATUS & QPHY_COM_PCS_READY_STATUS bit */
+> -#define PCS_READY				BIT(0)
 
-As a result, structs that have members with type ids > UINT16_MAX and
-which need resolution will fail with a message like this:
+I think these defines, describing registers and bits, can go to the 
+common header instead.
 
-    [67414] STRUCT ff_device size=120 vlen=12
-        effect_owners type_id=67434 bits_offset=960 Member exceeds struct_size
+For the rest of the patch:
 
-Fix this by changing the type of last_member_type_id to u32.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
-Signed-off-by: Lorenz Bauer <oss@lmb.io>
----
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   
+>   /* QPHY_V3_DP_COM_RESET_OVRD_CTRL register bits */
+>   /* DP PHY soft reset */
+> @@ -71,8 +66,6 @@
+>   #define POWER_DOWN_DELAY_US_MIN			10
+>   #define POWER_DOWN_DELAY_US_MAX			11
+>   
+> -#define MAX_PROP_NAME				32
+> -
+>   /* Define the assumed distance between lanes for underspecified device trees. */
+>   #define QMP_PHY_LEGACY_LANE_STRIDE		0x400
+>   
+> @@ -115,22 +108,14 @@ struct qmp_phy_init_tbl {
+>   
+>   /* set of registers with offsets different per-PHY */
+>   enum qphy_reg_layout {
+> -	/* Common block control registers */
+> -	QPHY_COM_SW_RESET,
+> -	QPHY_COM_POWER_DOWN_CONTROL,
+> -	QPHY_COM_START_CONTROL,
+> -	QPHY_COM_PCS_READY_STATUS,
+>   	/* PCS registers */
+>   	QPHY_SW_RESET,
+>   	QPHY_START_CTRL,
+> -	QPHY_PCS_READY_STATUS,
+>   	QPHY_PCS_STATUS,
+>   	QPHY_PCS_AUTONOMOUS_MODE_CTRL,
+>   	QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR,
+>   	QPHY_PCS_LFPS_RXTERM_IRQ_STATUS,
+>   	QPHY_PCS_POWER_DOWN_CONTROL,
+> -	/* PCS_MISC registers */
+> -	QPHY_PCS_MISC_TYPEC_CTRL,
+>   	/* Keep last to ensure regs_layout arrays are properly initialized */
+>   	QPHY_LAYOUT_SIZE
+>   };
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 7e64447659f3..36fd4b509294 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3128,7 +3128,7 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
- 	if (v->next_member) {
- 		const struct btf_type *last_member_type;
- 		const struct btf_member *last_member;
--		u16 last_member_type_id;
-+		u32 last_member_type_id;
- 
- 		last_member = btf_type_member(v->t) + v->next_member - 1;
- 		last_member_type_id = last_member->type;
 -- 
-2.34.1
+With best wishes
+Dmitry
 
