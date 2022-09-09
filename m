@@ -2,33 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C85B2F1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C3C5B2F26
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiIIGhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 02:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S230268AbiIIGky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 02:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiIIGho (ORCPT
+        with ESMTP id S231126AbiIIGkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 02:37:44 -0400
+        Fri, 9 Sep 2022 02:40:49 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690F911EA8E;
-        Thu,  8 Sep 2022 23:37:40 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MP5mW2N3Gz14QYX;
-        Fri,  9 Sep 2022 14:33:47 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C34985B8;
+        Thu,  8 Sep 2022 23:40:44 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MP5r411qDz14QWd;
+        Fri,  9 Sep 2022 14:36:52 +0800 (CST)
 Received: from cgs.huawei.com (10.244.148.83) by
  kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 14:37:37 +0800
+ 15.1.2375.24; Fri, 9 Sep 2022 14:40:42 +0800
 From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <htejun@gmail.com>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ata: libata: remove ata_schedule_scsi_eh declaration
-Date:   Fri, 9 Sep 2022 14:37:37 +0800
-Message-ID: <20220909063737.1147983-1-cuigaosheng1@huawei.com>
+To:     <dhowells@redhat.com>, <marc.dionne@auristor.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <cuigaosheng1@huawei.com>
+CC:     <linux-afs@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] rxrpc: remove rxrpc_max_call_lifetime declaration
+Date:   Fri, 9 Sep 2022 14:40:42 +0800
+Message-ID: <20220909064042.1149404-1-cuigaosheng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -46,27 +48,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ata_schedule_scsi_eh has been removed since
-commit f8bbfc247efb ("[PATCH] SCSI: make scsi_implement_eh() generic
-API for SCSI transports"), so remove it.
+rxrpc_max_call_lifetime has been removed since
+commit a158bdd3247b ("rxrpc: Fix call timeouts"),
+so remove it.
 
 Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- drivers/ata/libata.h | 1 -
+ net/rxrpc/ar-internal.h | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
-index 2c5c8273af01..cb52afd695cf 100644
---- a/drivers/ata/libata.h
-+++ b/drivers/ata/libata.h
-@@ -121,7 +121,6 @@ extern void ata_scsi_set_sense_information(struct ata_device *dev,
- 					   const struct ata_taskfile *tf);
- extern void ata_scsi_media_change_notify(struct ata_device *dev);
- extern void ata_scsi_hotplug(struct work_struct *work);
--extern void ata_schedule_scsi_eh(struct Scsi_Host *shost);
- extern void ata_scsi_dev_rescan(struct work_struct *work);
- extern int ata_bus_probe(struct ata_port *ap);
- extern int ata_scsi_user_scan(struct Scsi_Host *shost, unsigned int channel,
+diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+index 62c70709d798..1ad0ec5afb50 100644
+--- a/net/rxrpc/ar-internal.h
++++ b/net/rxrpc/ar-internal.h
+@@ -782,7 +782,6 @@ void rxrpc_delete_call_timer(struct rxrpc_call *call);
+  */
+ extern const char *const rxrpc_call_states[];
+ extern const char *const rxrpc_call_completions[];
+-extern unsigned int rxrpc_max_call_lifetime;
+ extern struct kmem_cache *rxrpc_call_jar;
+ 
+ struct rxrpc_call *rxrpc_find_call_by_user_ID(struct rxrpc_sock *, unsigned long);
 -- 
 2.25.1
 
