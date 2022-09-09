@@ -2,306 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB02C5B3330
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587265B32FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiIIJK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S232106AbiIIJLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiIIJKy (ORCPT
+        with ESMTP id S232078AbiIIJLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:10:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573E9AF0CD;
-        Fri,  9 Sep 2022 02:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662714653; x=1694250653;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=CK7lxHgBXbASGx5hV8j//aKK75B+1V6K33Vc0X3FDyg=;
-  b=gip1itTbSkONIo6UNp+SwuQ8lEV8uLrGP0B1wfAGgcmKgC8m9mYtDzFY
-   iqEFRUCtXc/7qA2cbTXqsAD0nR8vF1OvV7+MZKFTNAF7SHodIvydopGzn
-   9JR5XKO/JTSpn1C8/lYd0v9YTLEiQJUmojWpHa/pIWIE1lLZIJljDck3I
-   gP/fP1oq9MNgoSUApvwQXGDNNkrJIXUX3lS53oi0iGJArGILdpeD+rWU/
-   2Rr5UL0AEEfgKkayWA+UVDoxMdCJIncR6TLV6ZhQL+lFQeMGponbrWdMv
-   T+4g0v1EE0au1hcAebsFo5xl5oK+J29o2JrR7jWH5JTJA9gMN9kQRF0rl
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298236633"
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="298236633"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:10:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="610999403"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2022 02:10:48 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 9 Sep 2022 02:10:48 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 9 Sep 2022 02:10:48 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 9 Sep 2022 02:10:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jLEmjNoazgooz49hIP4emammHS2XBcYrSEljErj/5oQETyTsGQD8FdCBe9aVv9aND6LwhjStvEyTRE6t0pXSdXkjnjOjQd+Wv9MIFQm55ctkY3PeoBU/cS6bA4rjljOAMXYFLeKDW+cNiWJXT2OWSJDA3tXlxcDzC0a6lGmIgZ3I1FiueBlsFNyAUUfNpip43dPosNPKL29ttVwIjigC6D6KUT4LV98oKZ19X+1g7sEPDkd4BK3cZzLwxL3nrWXjV3eXrgorMzA8cBX8F932TlyAlYQ+vcU/CJ76t+mGwgqhOnVtjr/I6l1PqYfEF2FknOZaM84e3o5kxm8GghVQkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FJ4TFmEwg8YMiV/SR+h6jtyORhLz0Fwo05VTtBpqgaI=;
- b=FGGsqtOnLImrnn5QJciqgJRctbo5jgSIKSsWtmjcBxUNZzXwR4KITOXedHeH1j+LBbJxDlYA3Tp8ajRTdJzzQMHw2VOd5HBpnQduegZdHTcE0p6jpeVd7w1My3fwsfK0QYlg9FsJFG7dXwEKeIZUwm8I6Sjt5L9/Fo7L93uncUS9Zy34YUGrPvEbi9S7I0fUC/udrVQamUnAzre5qTPFZmPmDO2fcPPS4aCQu/ssQXF1GH4gghYUu7mbTZ1t1dOnqfw8JBqKYD74BUkj3AzcxDjsEVKLGA0bafAaEJntNe2RFQ6HutaDrgqU6fh7k0HSXHTXLmSAXOjNoxi92KCKsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by DM6PR11MB4739.namprd11.prod.outlook.com (2603:10b6:5:2a0::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Fri, 9 Sep
- 2022 09:10:45 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::7ce8:1e4e:20d4:6bd4]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::7ce8:1e4e:20d4:6bd4%9]) with mapi id 15.20.5588.016; Fri, 9 Sep 2022
- 09:10:45 +0000
-Date:   Fri, 9 Sep 2022 05:10:40 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <intel-gfx@lists.freedesktop.org>
-Subject: Re: [Intel-gfx] [PATCH v3 32/37] docs: gpu: i915.rst: add the
- remaining kernel-doc markup files
-Message-ID: <YxsDEP30aZmyBvIo@intel.com>
-References: <cover.1662708705.git.mchehab@kernel.org>
- <7ed6d74b75061fb2800e5a59f5282b224bd0621a.1662708705.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7ed6d74b75061fb2800e5a59f5282b224bd0621a.1662708705.git.mchehab@kernel.org>
-X-ClientProxiedBy: BY3PR05CA0023.namprd05.prod.outlook.com
- (2603:10b6:a03:254::28) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Fri, 9 Sep 2022 05:11:03 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061C135D5B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:11:01 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id i26so1600220lfp.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Ru7Sx5i9RvgY3g7fyc0DntX2hhZQfjQ93TQ69JqCe9Q=;
+        b=Qkpoucx28Duq+NWHjpWycxiETGjowchu+jAIp4OPfbnygiILEsjNGFgiRLH/4QoFvB
+         de+MBz7CCHm4zXvnhMyLGxUc9jYkb/B029h5fWWApL3nE0Q6U0fXLcAhDJ8WUCuFpUBO
+         h7pxc4i32kGOvf2FPvk7vkFJrOMJL3kFsKzN0FUU/lsSmnkBICPE9Tm/pvOb3/CFXcOW
+         EFLcESJOlinIWR8IGZGtwa3biq92p+gxHvtswCI9Mmd/UF4hvAwTvHvIZpOHUCSNRsOt
+         S+f5YJJOmMJClItubheGV3tkFExxsu8J0u91JJeOKZfnm13MNrUK968/Fy29g9R6mp6Y
+         uE2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ru7Sx5i9RvgY3g7fyc0DntX2hhZQfjQ93TQ69JqCe9Q=;
+        b=VQGRR9pMHaN6t/c/yQICPVUPzObUuOwJbK9oGhOztltKhxxDuC26ijaIKbfkziPQ0x
+         W3gg7hV6bKHVlmzPkaJHPF7iZA6k25aixPPjSRt9l1/IotXGZ5ys86atDM7js5OkqocW
+         ZaYazwxXUIyY3zfnqAhQ8Dso6wJ2t6YtrkFEzkhGkorn9tizcRNFikZN29o4LrG0YFyL
+         Irs3KLt8Y2tKX97uZhu7yUla2u0rjtwXHUzl9LVWshIZhxUcQ4hrCWjT6vugR5o/BqPD
+         9vMuIS1DY39fjTfLKWYLbItz+/jSupP7YXi/6jgQ3xkb5ThRCG6EvtsbwYswTj4NWm1U
+         qf2A==
+X-Gm-Message-State: ACgBeo3TvRlS4Yr9HG0NwH2GBPNk1u52FTUD1+o9oKXOkWhEgzflmNte
+        QxViDBOog/i0McE6AFtszfy/Tg==
+X-Google-Smtp-Source: AA6agR7+f0ARlXM0jJUnvsVkrZZApw52MJnuOH4zi76ULJbHUHYUwamJBsE5yP9Jqf98yR788MdsSQ==
+X-Received: by 2002:ac2:5bd2:0:b0:498:909:9c81 with SMTP id u18-20020ac25bd2000000b0049809099c81mr2509172lfn.120.1662714660020;
+        Fri, 09 Sep 2022 02:11:00 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05651238b000b0049602a81111sm2758lft.107.2022.09.09.02.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 02:10:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3] dt-bindings: mfd: qcom,tcsr: drop simple-mfd from IPQ6018
+Date:   Fri,  9 Sep 2022 11:10:56 +0200
+Message-Id: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cfa57bc6-5c35-44cb-4d76-08da92432dc4
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4739:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DaVK+yh9u3F8lugZo2QrLu+VlNiufa5xCeC3y3bU9fM+mJW6fXgthGJyBMn1ZJVDd+7+VtcFw2ldkSJKBYhqgrvbkApLXg6UhxJJLsH671PKTyPZc+n/RG5lwT0xlGZci/AWUik2v1VhbwK8WlWtlLrKF0kTZCReLUYfvzbJM3/S7Yv58+FK5vE4Y0p/XHG49u23fJ0mEKLm9vrC0e7HgXtmzcjxwgVKQ+LFXoMXe9vT5W4EdujDbaA8pk8G1LKl9AYagMPqA67XkEMFxTkIbQn5EjBkQg1J3A0UKAIAwgXOx8rQXRRzX5IO9/h4KZQLw51kkTlN4azyRaCSa9jEKc5t7XFNKnytkNpGRymiNLSRW20GmmKnjQQKHBVfVtCjozoaIT8mXq35XJTDGVfJyCmcilShfpQOxgdlqK7m/s+smkfH2ycS++i99sywZBcGcoPBpbPz3v/2kEE+8/pEbIfUj8V3pl91nNGsSUdfacrK3h2KDsmlSXTr2xMfHT/dSaqKwtgNo2E/TS+CO9khb4t5XJOjpA9OdRPg7lMVnx/suUKEMu041uL4jUws5EI0FNeMzGDY4PP0IyUzrJCJfdiTTY6HUwhqKLU+vPApsIKf7PyscugEcliM+mGEgnFKOpNaq3YkNT6x7Omi0XqRm0p932REyp9kc2wqu5MDRJe0uuiDOK/Te764aJk0DM6YsdHdTarYkE3mXW0+g2i/UOlQFzDx1lD9+EIse0Ja4bQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(39860400002)(396003)(376002)(346002)(44832011)(7416002)(2906002)(8936002)(6506007)(6512007)(5660300002)(83380400001)(26005)(86362001)(2616005)(186003)(38100700002)(82960400001)(8676002)(41300700001)(36756003)(66476007)(478600001)(66946007)(966005)(4326008)(66556008)(54906003)(316002)(6916009)(6666004)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+1xBlUvVSOVXybxMti3uD42QjagQOisw0fmox6oS4ocwrwwKTn5vkH4XqlqN?=
- =?us-ascii?Q?hZRxj6vjPLf7UzfQ8VdylPVN3zPr5PkdREtSYLmSJsB7dNUtcgXBqMIDTvtY?=
- =?us-ascii?Q?auMacT+XG+DiXxkLR2kXmnB29nybUvbo27S/fnqK8dSv21SzengMMt6zRk0b?=
- =?us-ascii?Q?v7b6AhCdgucVd6uulGSmIAw9fpN7aTIQyClwjVYj6AvH00XqdslqwKCrkBCN?=
- =?us-ascii?Q?qqYp5Yli2DnJwfH0Fa41rUjrsyzp7NuHL6x/X65k85CqK0UWgg32g+B3Uaj3?=
- =?us-ascii?Q?idekwnMeHIThHLxnftJlToUNjuqAQpHEFrvvvM8Tc7b0bjS/1pbA065RZIjj?=
- =?us-ascii?Q?Wiy8wh4j0J8sv0WNOw6CRQVqt/lKAHzBeFlKi7TZEMD9WTWyEgf35Q+y2d1Q?=
- =?us-ascii?Q?pVV7+uhJJYJ34A6mE+5rdByifcNmMM6H/W1RAd+Brpa5xioFMp9NgRztKXd8?=
- =?us-ascii?Q?hJGxw7uCeMP6ypdh65CA7msC1EgzwTsqJIKRBq8LtvL7sHYA1Crao6SBd14l?=
- =?us-ascii?Q?VFaYtK8YmRIxhf8L593v/p8NHyNmqN15LR7aVZaLq9eDDQe/mcrYoiq4L/07?=
- =?us-ascii?Q?eLf5Kb4sCPn7G1WniqUuqNQWC7TIVxssrmId900SVDeEC5h321jk0RwEho9k?=
- =?us-ascii?Q?xCsIIEZBVdBpP7dTGM0aHOooRD+PoRDsqZa/wxaFnIIK7E0Vo2gwlZvWSr4k?=
- =?us-ascii?Q?1lDB3DYQ+UVm50vGcgixq4mCql+xZpfL9tw4ZNAKKAnltdpSZSfB4SeWRocN?=
- =?us-ascii?Q?2ZDlO0NCS8H4ymlLpZq5tHoOF2fxgZnCmaO/cN6dMtGW6TJVv8QNMlMiRfng?=
- =?us-ascii?Q?4NFj8J9b1bGlVbxxgbODSNct5iOVPbIIijYpxbW8lxKmrV19p6bI00talMC0?=
- =?us-ascii?Q?ZAQcVAHMGWRrhhRAixC+QR5WuF5VRJ6IdUbSSUvi34sJkDfQrDTHOqzr6pUF?=
- =?us-ascii?Q?4ndWinOvR5mFg8LpDg0/+cDwZv86tBADLSLxIRxcGHs0xj17L+okTfeyWx0e?=
- =?us-ascii?Q?YZrlWTM1nyNwPq7TUloluLDokZGLE+EALQhAWyfuKvLm5Y1SifUWbejUJ4E+?=
- =?us-ascii?Q?HrCdXXxObWx9otmscmRVEp2pF6AdEpr2vvPYXmBWBs64p+MA7IXbMIkwf14L?=
- =?us-ascii?Q?jnYVTDJpWtzsbAODysakXhzqA59EuJZYiVLGVB9Z5Yi4f94sP0KrDeOCi6ok?=
- =?us-ascii?Q?NAmqvmRLgyN0W6Q56MDQmLCbu0gZxjbCz0Uy0rZImZqpqdCujBHNaZrkQ0+s?=
- =?us-ascii?Q?bQ7qLnVTieTu/fTgjJJGxJ+vT+8rgsBDboLuGTGe2jv0yzO7UUQYuoE0AQ2T?=
- =?us-ascii?Q?3hPxu7W9oHVDf8wQ/EM4MzOP4f3iMFpoDYxPdGi9FZw03wgeOWkJgxybVsKN?=
- =?us-ascii?Q?dVh7Iq0GZ/EGcvdFka34lN7zOvh7i8uOzR+Bc0oJv29uFLbBVsRr+PK+Nkfh?=
- =?us-ascii?Q?2OgUUqReCx49+EgHguxtldiBvky6Xw/vwxD3hHrP8yYrH7Fjxctny/d9VzLs?=
- =?us-ascii?Q?89uQO2aGZznMBY31yjqrlm0oT4IqDCZemssybyLalBQGlz8xYP1aigVNf8oN?=
- =?us-ascii?Q?edNxgBQ36FI2Gw+tDLdBnY0E7yYDTsYKfqqp0WVo708rLMnJFqeZ2OPnAw8G?=
- =?us-ascii?Q?4g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfa57bc6-5c35-44cb-4d76-08da92432dc4
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 09:10:45.7618
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u3N54i9w/fe1TK563ILU/41bAIxPdvrRPw6c6kTMW14fHd2k7yffy2dEXY24RTr2P1it8ehThDoj5jo09GxZwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4739
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 09:34:39AM +0200, Mauro Carvalho Chehab wrote:
-> There are other files with kernel-doc markups:
-> 
-> 	$ git grep -l "/\*\*" $(git ls-files|grep drivers/gpu/drm/i915/) >kernel-doc-files
-> 	$ for i in $(cat kernel-doc-files); do if [ "$(git grep $i Documentation/)" == "" ]; then echo "$i"; fi; done >aaa
-> 
-> Add them to i915.rst as well.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Commit 7677ed11e9fa ("dt-bindings: mfd: qcom,tcsr: Convert to dtschema")
+converted bindings to DT schema literally - including the
+qcom,tcsr-ipq6018 expecting syscon and simple-mfd.  Such configuration
+is not used in DTS and there is no actual need of it.  The TCSR block is
+purely configuration block and should not have children.  Any child
+device should be simply moved outside of TCSR syscon block.
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
-> 
->  Documentation/gpu/i915.rst | 85 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 83 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
-> index 545fe630557a..7f5cd01ed398 100644
-> --- a/Documentation/gpu/i915.rst
-> +++ b/Documentation/gpu/i915.rst
-> @@ -13,6 +13,11 @@ Core Driver Infrastructure
->  This section covers core driver infrastructure used by both the display
->  and the GEM parts of the driver.
->  
-> +Core driver
-> +-----------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_driver.c
-> +
->  Runtime Power Management
->  ------------------------
->  
-> @@ -29,6 +34,8 @@ Runtime Power Management
->  
->  .. kernel-doc:: drivers/gpu/drm/i915/intel_pm.c
->  
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_wakeref.h
-> +
->  Interrupt Handling
->  ------------------
->  
-> @@ -44,8 +51,25 @@ Interrupt Handling
->  .. kernel-doc:: drivers/gpu/drm/i915/i915_irq.c
->     :functions: intel_runtime_pm_enable_interrupts
->  
-> -Intel GVT-g Guest Support(vGPU)
-> --------------------------------
-> +Memory Handling
-> +---------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_vma_resource.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_vma_resource.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_vma.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_vma.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_mm.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_memory_region.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_memcpy.c
-> +
-> +Intel GVT-g Guest Support (vGPU)
-> +--------------------------------
->  
->  .. kernel-doc:: drivers/gpu/drm/i915/i915_vgpu.c
->     :doc: Intel GVT-g guest support
-> @@ -109,6 +133,55 @@ Workarounds
->  .. kernel-doc:: drivers/gpu/drm/i915/gt/intel_workarounds.c
->     :doc: Hardware workarounds
->  
-> +Scatterlist handling
-> +--------------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_scatterlist.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_scatterlist.c
-> +
-> +i915 request
-> +------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_request.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_request.c
-> +
-> +Others
-> +------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_ioc32.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_gpu_error.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_active.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_deps.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_deps.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_device_info.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_params.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_sw_fence_work.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_syncmap.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_pcode.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_reg_defs.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_wopcm.h
-> +
-> +
-> +Protected Xe Path (PXP)
-> +-----------------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/pxp/intel_pxp_irq.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/pxp/intel_pxp_tee.c
-> +
->  Display Hardware Handling
->  =========================
->  
-> @@ -615,6 +688,12 @@ Protected Objects
->  Table Manager (TTM)
->  -------------------
->  
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_ttm_buddy_manager.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_ttm_buddy_manager.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/intel_region_ttm.c
-> +
->  .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_ttm.c
->  
->  .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_ttm.h
-> @@ -624,6 +703,8 @@ Table Manager (TTM)
->  Graphics Execution Manager (GEM)
->  --------------------------------
->  
-> +.. kernel-doc:: drivers/gpu/drm/i915/i915_gem.c
-> +
->  .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_create.c
->  
->  .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_domain.c
-> -- 
-> 2.37.3
-> 
+---
+
+Changes since v2
+================
+1. Rebase on current MFD changes.
+2. Split from the series. Nothing depends on it, AFAIK.
+v2: https://lore.kernel.org/all/20220817145901.865977-2-krzysztof.kozlowski@linaro.org/
+---
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 46 +++++++++----------
+ 1 file changed, 21 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+index d3c25daa995e..b12809b5cc22 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+@@ -15,31 +15,27 @@ description:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - items:
+-          - enum:
+-              - qcom,msm8998-tcsr
+-              - qcom,qcs404-tcsr
+-              - qcom,sc7180-tcsr
+-              - qcom,sc7280-tcsr
+-              - qcom,sdm630-tcsr
+-              - qcom,sdm845-tcsr
+-              - qcom,sm8150-tcsr
+-              - qcom,tcsr-apq8064
+-              - qcom,tcsr-apq8084
+-              - qcom,tcsr-ipq8064
+-              - qcom,tcsr-mdm9615
+-              - qcom,tcsr-msm8660
+-              - qcom,tcsr-msm8916
+-              - qcom,tcsr-msm8953
+-              - qcom,tcsr-msm8960
+-              - qcom,tcsr-msm8974
+-              - qcom,tcsr-msm8996
+-          - const: syscon
+-      - items:
+-          - const: qcom,tcsr-ipq6018
+-          - const: syscon
+-          - const: simple-mfd
++    items:
++      - enum:
++          - qcom,msm8998-tcsr
++          - qcom,qcs404-tcsr
++          - qcom,sc7180-tcsr
++          - qcom,sc7280-tcsr
++          - qcom,sdm630-tcsr
++          - qcom,sdm845-tcsr
++          - qcom,sm8150-tcsr
++          - qcom,tcsr-apq8064
++          - qcom,tcsr-apq8084
++          - qcom,tcsr-ipq6018
++          - qcom,tcsr-ipq8064
++          - qcom,tcsr-mdm9615
++          - qcom,tcsr-msm8660
++          - qcom,tcsr-msm8916
++          - qcom,tcsr-msm8953
++          - qcom,tcsr-msm8960
++          - qcom,tcsr-msm8974
++          - qcom,tcsr-msm8996
++      - const: syscon
+ 
+   reg:
+     maxItems: 1
+-- 
+2.34.1
+
