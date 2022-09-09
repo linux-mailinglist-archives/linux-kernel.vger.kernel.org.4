@@ -2,195 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B624F5B32D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6125B3317
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiIIJGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S231951AbiIIJMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiIIJFp (ORCPT
+        with ESMTP id S231181AbiIIJL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:05:45 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BBA99CD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:05:05 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id t184so1744566yba.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=e9oyM6c9eO+oX1i0ikmglldoQMouIxTI5tr1NuI9GT8=;
-        b=da8jwOMfsx5H05oRncihV5aFvyzpldWnjk6VRzdiJdjoiXpY+fCe9JssN6Nz9r+L+j
-         l9E4JVcp5pgWrIuipD6Pi6wcKO+xD+VxeNwfuFt6elE6UHvSev+WLO0vDrW/tLIznTIL
-         pDhzZzNph135gYHY2wx3yRTUBfbkz92m+AjchB4HbzuOoSIKq8dgKb1WAhflDbgHEbXY
-         ftwjMPa5bH9X96v79lvW7Je1K0OWgSPjvuOcjVadzfvMMakdATI1M68Gg6PzbT1hBWxD
-         jvBtOUUvWy5eJT0Fdxqw789DmY2q4uFclRA5L54De5cA0Z1HPHPMcwjpwr5m28TWxGz6
-         s6Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=e9oyM6c9eO+oX1i0ikmglldoQMouIxTI5tr1NuI9GT8=;
-        b=WGxrYI+QXBymZ7GDRCTxyDdYE9DaKqNq517BmAKp05MJv+hCMJPfAF7X9KO44LRLd8
-         5HSIpLpTZtE+bMq2S6eLPqitcmkRALGtfzdHTMcktZvIFS51T369slXqj6ZxxtNKhrYJ
-         3DXeY+gmI8hmLNZRure211CDWPyAvePFNZhMQMjhl2I1w+sWPRxP/PZqb8A+AN9Rjwaz
-         igTIPKDtcBqTY1CS+o2hyoM636DgTx1EEeNrlRsyRtzvX8ngGUw0DNXVoh3QVApdtPZY
-         /o1gnbI1HQeIAzGXN+UN4xOlEYpptMV6oZFNWwi7ZkuEI9/Uj/v3J4wHLQ0WhYpGrldX
-         ltIA==
-X-Gm-Message-State: ACgBeo179nImqOfds+9VqkSb6zC8ASbi493h0Xx1zLUjeB2iC5/XP5U2
-        +UXcFFFbv+VhN/SrD7WaggflY3TIwf5jrRXNRLIQCQ==
-X-Google-Smtp-Source: AA6agR60pT17TAOcus3ljp/+P1MMns0B4aTuhcTv8h8i4eJsYnX9f8UfuOksTxp7JfFCNnxnPWwh0eKuRzEoeHEZjnk=
-X-Received: by 2002:a25:5c3:0:b0:6a9:90fb:c9e6 with SMTP id
- 186-20020a2505c3000000b006a990fbc9e6mr10891297ybf.152.1662714304890; Fri, 09
- Sep 2022 02:05:04 -0700 (PDT)
+        Fri, 9 Sep 2022 05:11:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7B94456A;
+        Fri,  9 Sep 2022 02:11:57 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E475822967;
+        Fri,  9 Sep 2022 09:11:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662714715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=svGDPDOlBsrr/PzVyaO8AuSzY/ZDrtuMQ12+XBnVxBs=;
+        b=RLBjohMY6pdEMaLqrf0v3PyX6+x42o0Yuh5szP3JltpH1+PkbSf/82TOVeFMqmzOSr9ORP
+        KZmFqUd/jKUcWrLWY9Esrvru9o42baCo0iFU/tPeUOXFwyHMFRhp00z/F5g5je9BIhvQZZ
+        BTQNE4lAb59qUYj0potDj88zXwFQ7cc=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id DA9C32C142;
+        Fri,  9 Sep 2022 09:11:55 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id DDCD6DA8C5; Fri,  9 Sep 2022 11:06:32 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.0-rc5
+Date:   Fri,  9 Sep 2022 11:06:31 +0200
+Message-Id: <cover.1662664764.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com> <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
-In-Reply-To: <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 9 Sep 2022 12:04:53 +0300
-Message-ID: <CAA8EJppgaAuEDU44ePOt+ZWK0_rNsXHnE3WOEc9F-n=VE=3aVQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power up
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sept 2022 at 11:45, Krishna chaitanya chundru
-<quic_krichai@quicinc.com> wrote:
->
-> Introducing phy power down/up callbacks for allowing to park the
-> link-state in L1ss without holding any PCIe resources during
-> system suspend.
->
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
->  drivers/phy/phy-core.c  | 30 ++++++++++++++++++++++++++++++
->  include/linux/phy/phy.h | 20 ++++++++++++++++++++
->  2 files changed, 50 insertions(+)
->
-> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-> index d93ddf1..1b0b757 100644
-> --- a/drivers/phy/phy-core.c
-> +++ b/drivers/phy/phy-core.c
-> @@ -441,6 +441,36 @@ int phy_set_speed(struct phy *phy, int speed)
->  }
->  EXPORT_SYMBOL_GPL(phy_set_speed);
->
-> +int phy_power_down(struct phy *phy)
-> +{
-> +       int ret;
-> +
-> +       if (!phy || !phy->ops->power_down)
-> +               return 0;
-> +
-> +       mutex_lock(&phy->mutex);
-> +       ret = phy->ops->power_down(phy);
-> +       mutex_unlock(&phy->mutex);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(phy_power_down);
-> +
-> +int phy_power_up(struct phy *phy)
-> +{
-> +       int ret;
-> +
-> +       if (!phy || !phy->ops->power_up)
-> +               return 0;
-> +
-> +       mutex_lock(&phy->mutex);
-> +       ret = phy->ops->power_up(phy);
-> +       mutex_unlock(&phy->mutex);
-> +
-> +       return ret;
-> +}
+Hi,
 
-As it can be seen from the phy_power_off(), the PHY can be a shared
-resource, with the power_count counting the number of users that
-requested the PHY to be powered up. By introducing suc calls you break
-directly into this by allowing a single user to power down the PHY, no
-matter how many other users have requested the PHY to stay alive.
+a few more fixes to zoned mode and one regression fix for chunk limit.
+Please pull, thanks.
 
-> +EXPORT_SYMBOL_GPL(phy_power_up);
-> +
->  int phy_reset(struct phy *phy)
->  {
->         int ret;
-> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-> index b141375..3a45f4d 100644
-> --- a/include/linux/phy/phy.h
-> +++ b/include/linux/phy/phy.h
-> @@ -76,6 +76,8 @@ union phy_configure_opts {
->   * @set_mode: set the mode of the phy
->   * @set_media: set the media type of the phy (optional)
->   * @set_speed: set the speed of the phy (optional)
-> + * @power_down: parking the phy in power down state
-> + * @power_up: pulling back the phy from power down
->   * @reset: resetting the phy
->   * @calibrate: calibrate the phy
->   * @release: ops to be performed while the consumer relinquishes the PHY
-> @@ -89,6 +91,8 @@ struct phy_ops {
->         int     (*set_mode)(struct phy *phy, enum phy_mode mode, int submode);
->         int     (*set_media)(struct phy *phy, enum phy_media media);
->         int     (*set_speed)(struct phy *phy, int speed);
-> +       int     (*power_down)(struct phy *phy);
-> +       int     (*power_up)(struct phy *phy);
->
->         /**
->          * @configure:
-> @@ -226,6 +230,8 @@ int phy_init(struct phy *phy);
->  int phy_exit(struct phy *phy);
->  int phy_power_on(struct phy *phy);
->  int phy_power_off(struct phy *phy);
-> +int phy_power_down(struct phy *phy);
-> +int phy_power_up(struct phy *phy);
->  int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
->  #define phy_set_mode(phy, mode) \
->         phy_set_mode_ext(phy, mode, 0)
-> @@ -349,6 +355,20 @@ static inline int phy_power_off(struct phy *phy)
->         return -ENOSYS;
->  }
->
-> +static inline int phy_power_down(struct phy *phy)
-> +{
-> +       if (!phy)
-> +               return 0;
-> +       return -ENOSYS;
-> +}
-> +
-> +static inline int phy_power_up(struct phy *phy)
-> +{
-> +       if (!phy)
-> +               return 0;
-> +       return -ENOSYS;
-> +}
-> +
->  static inline int phy_set_mode_ext(struct phy *phy, enum phy_mode mode,
->                                    int submode)
->  {
-> --
-> 2.7.4
->
+- zoned fixes:
+  - fix how wait/wake up is done when finishing zone
+  - fix zone append limit in emulated mode
+  - fix mount on devices with conventional zones
 
+- fix regression, user settable data chunk limit got accidentally
+  lowered and causes allocation problems on some profiles (raid0, raid1)
 
--- 
-With best wishes
-Dmitry
+----------------------------------------------------------------
+The following changes since commit f2c3bec215694fb8bc0ef5010f2a758d1906fc2d:
+
+  btrfs: add info when mount fails due to stale replace target (2022-08-23 22:15:21 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.0-rc4-tag
+
+for you to fetch changes up to 5da431b71d4b9be3c8cf6786eff9e2d41a5f9f65:
+
+  btrfs: fix the max chunk size and stripe length calculation (2022-09-06 17:49:58 +0200)
+
+----------------------------------------------------------------
+Johannes Thumshirn (1):
+      btrfs: zoned: fix mounting with conventional zones
+
+Naohiro Aota (1):
+      btrfs: zoned: fix API misuse of zone finish waiting
+
+Qu Wenruo (1):
+      btrfs: fix the max chunk size and stripe length calculation
+
+Shin'ichiro Kawasaki (1):
+      btrfs: zoned: set pseudo max append zone limit in zone emulation mode
+
+ fs/btrfs/ctree.h      |  2 --
+ fs/btrfs/disk-io.c    |  1 -
+ fs/btrfs/inode.c      |  7 ++--
+ fs/btrfs/space-info.c |  2 +-
+ fs/btrfs/volumes.c    |  3 ++
+ fs/btrfs/zoned.c      | 99 +++++++++++++++++++++++++++------------------------
+ 6 files changed, 60 insertions(+), 54 deletions(-)
