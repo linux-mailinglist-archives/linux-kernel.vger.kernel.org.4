@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2323E5B3FBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27D65B3FC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiIIThD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S231636AbiIIThY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiIITgj (ORCPT
+        with ESMTP id S230268AbiIITgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:36:39 -0400
+        Fri, 9 Sep 2022 15:36:50 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A3B01153BB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D789D115CE3;
         Fri,  9 Sep 2022 12:36:37 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 6602ADBE;
-        Fri,  9 Sep 2022 22:40:21 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 6602ADBE
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 27E3FDBF;
+        Fri,  9 Sep 2022 22:40:22 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 27E3FDBF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662752421;
-        bh=wYx4YZQxrd0X1DNHR+uvu1prpgP1TFhOgzBZNgxVtkg=;
+        d=baikalelectronics.ru; s=mail; t=1662752422;
+        bh=4UEvOJBnrhYbJMOH5dIhZYkkbJ2g80CrYqwa/ZKcSYU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=ISH/lFNkRqQ0b2n9GqTdZQoZ0TN34V0kKKFH2GI5krA5iuCV7qhvwbY5i0in2OO0c
-         5D8yRBgaxdaaqM4oTUvkKvxzRyig7m+A1JzMkSCCe5ZU983wfMWAiZPITJzPllxh3g
-         nIq8uxfqUDODAlPeWIPOi5yRvggpRRAep+bFNNP0=
+        b=PuI+Re6LN1febwr8DWRC0N7Vh/Z6Olj+NKDllbtqHnTPgdUnqdjDaIBA608in6QIS
+         +6lx0LYqvn+sdfBUgmoYj2NSYvq9x0w4g6bTXl6ogVkgNqenHF4WdHU0ftgjvlrxCM
+         p0yOA7DYXbv+cA4gEgl1urShyqqMTVUjK3JcpcK8=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 9 Sep 2022 22:36:32 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 9 Sep 2022 22:36:33 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v8 05/23] dt-bindings: ata: sata-brcm: Apply common AHCI schema
-Date:   Fri, 9 Sep 2022 22:36:03 +0300
-Message-ID: <20220909193621.17380-6-Sergey.Semin@baikalelectronics.ru>
+        <devicetree@vger.kernel.org>
+Subject: [PATCH v8 06/23] ata: libahci_platform: Convert to using platform devm-ioremap methods
+Date:   Fri, 9 Sep 2022 22:36:04 +0300
+Message-ID: <20220909193621.17380-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -59,36 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Broadcom SATA controller is obviously based on the AHCI standard. The
-device driver uses the kernel AHCI library to work with it. Therefore we
-can be have a more thorough DT-bindings evaluation by referring to the
-AHCI-common schema instead of using the more relaxed SATA-common one.
+Currently the IOMEM AHCI registers space is mapped by means of the
+two functions invocation: platform_get_resource() is used to get the very
+first memory resource and devm_ioremap_resource() is called to remap that
+resource. Device-managed kernel API provides a handy wrapper to perform
+the same in single function call: devm_platform_ioremap_resource().
+
+While at it seeing many AHCI platform drivers rely on having the AHCI CSR
+space marked with "ahci" name let's first try to find and remap the CSR
+IO-mem with that name and only if it fails fallback to getting the very
+first registers space platform resource.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
 ---
 
-Changelog v4:
-- This is a new patch added on v4 lap of the review procedure.
+Changelog v2:
+- Check whether there is "ahci" reg resource before using the
+  devm_platform_ioremap_resource_byname() method in order to prevent a
+  false error message printed in the log (@Damien)
+- Slightly update the patch title due to the change above and to be more
+  specific about what the platform device managed methods are utilized
+  for.
 ---
- Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/ata/libahci_platform.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-index 4ee74df8e58a..fa8ebc8f243f 100644
---- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-+++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-@@ -14,7 +14,7 @@ maintainers:
-   - Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+index 32495ae96567..1e9e825d6cc5 100644
+--- a/drivers/ata/libahci_platform.c
++++ b/drivers/ata/libahci_platform.c
+@@ -402,8 +402,14 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
  
- allOf:
--  - $ref: sata-common.yaml#
-+  - $ref: ahci-common.yaml#
+ 	devres_add(dev, hpriv);
  
- properties:
-   compatible:
+-	hpriv->mmio = devm_ioremap_resource(dev,
+-			      platform_get_resource(pdev, IORESOURCE_MEM, 0));
++	/*
++	 * If the DT provided an "ahci" named resource, use it. Otherwise,
++	 * fallback to using the default first resource for the device node.
++	 */
++	if (platform_get_resource_byname(pdev, IORESOURCE_MEM, "ahci"))
++		hpriv->mmio = devm_platform_ioremap_resource_byname(pdev, "ahci");
++	else
++		hpriv->mmio = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hpriv->mmio)) {
+ 		rc = PTR_ERR(hpriv->mmio);
+ 		goto err_out;
 -- 
 2.37.2
 
