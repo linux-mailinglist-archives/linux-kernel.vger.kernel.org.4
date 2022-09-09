@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22A85B3F71
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7598D5B3F74
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiIITYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        id S230436AbiIITYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiIITYC (ORCPT
+        with ESMTP id S230406AbiIITYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:24:02 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62EA143431
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:24:01 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d82so2535653pfd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:24:01 -0700 (PDT)
+        Fri, 9 Sep 2022 15:24:11 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8854143425
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:24:08 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id y29so3030002ljq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1YL3JOnJhxMrmebag05eoFsKq7z4k+Mtpi8WQ+HWkBA=;
-        b=PFWHM6FNgcGzrNw+awdzUIJDCQyBKEQEKSlevJNyzCOj8tF/Q+hkpQjcpOciNhux9x
-         A0OdJumurQVQi1hUylldetn/Dicm6OGl1cwgvO1EgKFkc6h2YtJrmqHz464PBtcjGDSd
-         eXfyW4aqpypuN4Ldeon/6uequtYfihPaPzsVa1X9WircOCblJlS7alBk/5SPufUiqWWG
-         EE9cRuQcpwjPvVozrW4ItoU1r+I9X/Y931Cq70WNq2wfK1a3Bx0nUxLlNqF5Q6ev919z
-         q6vRtgguuTUyeeCPp2Bc4HBx070AZE40+M4agC1mW+twJFYyWDiT4mgb2YCdTMRCYVh+
-         plwg==
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=FullVTAt4NLdIeDKelIlCFqGink5lLzTlWXTWIoGShU=;
+        b=gY7m5pkzHy9mVSPHdaIRzFpSD5O8vMgSFKnzkWSWOvdqJ91rm8AxYSjgqnXlB0PMQV
+         uEuwbcIjgM8TeBsRJOpLXjP14xJzR8FEkO46TBZFDbS4lc1Yc9mZEotUGvHRooVMu2BS
+         qJMHKXbr32g9pP5VOvmB3s3g8GtEyZRToMURsHxjrz4EQl3pl3mOjmaxt2qvAH0Y45Ty
+         SLCqVKciLk/dvdnbF75ie9iIu5SmthPlKkxeEW4vwGhRfNdZEwFnYUcM4oy59BqJAayl
+         4Fb1aGtMMq8WZzsTFmpTedDZteouaXVGsS35EmKWN6+Z1qCEtmr4zEJdKI4L3qkhOm4W
+         sywA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1YL3JOnJhxMrmebag05eoFsKq7z4k+Mtpi8WQ+HWkBA=;
-        b=sZERwAhTKeixoeLsmX01M8Xq5c9VRpI8hka0ZJsJBIMiIR6OQyagSe3Y2jXRdt7Aw5
-         H4k2xWHbCB526HMxfvOArJS7u/xCjSV6jLD/aIq3jfmP9v7K3jF0W6UAtk1rmctJd9oL
-         wg2ewnKEm0OYR4NkbZBo4vPO5yAbGlUbePGOLj97N2jcBjUwLkb0d/9XuhIYFeDUGJWj
-         MjtI8XZkYfZwwsL3w+lfA2fX/vQjcWgii39MMjmFP1oyF4y7VTv5T3ijJ9L0nMNuE4s8
-         Rc/EOO9xaJCsCtQugXrM7poKnlwT0vMxJzn3wd0+ba7AFgN8t7njxp9HgcYAFk9semSM
-         mXaQ==
-X-Gm-Message-State: ACgBeo1dvGtUVc9PBlPOIboQzrZwf7OBL32+729Sp+MF/QytKpfUOmtj
-        VoYYDAGTSo/tNOVZMdk5oY5cFg==
-X-Google-Smtp-Source: AA6agR5GxFgslNSJSVhP7jovTdqKbGSdAnXUIpR+aTUm3kfP3svOkUQ9KU1U48DF+jRxLqyIW2628g==
-X-Received: by 2002:a63:5526:0:b0:434:c99c:6fdc with SMTP id j38-20020a635526000000b00434c99c6fdcmr13521836pgb.558.1662751441109;
-        Fri, 09 Sep 2022 12:24:01 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170903018800b001768452d4d7sm887925plg.14.2022.09.09.12.23.59
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FullVTAt4NLdIeDKelIlCFqGink5lLzTlWXTWIoGShU=;
+        b=VK/nx+irSAqb+hpdZfNXsw594VEheSahbmbIz6/7DcdkVcBap3Qp5oynH5LFiqz/wy
+         47V8+fsvz50YTUyVCDI+13stgvVh26yw3o75E1yKtVXpJToZEuOq50/lD3oNXZCNqyZq
+         ox2W7CLzabQRtFGV1s5nC20gLFLoNDL2uejtdCmvTduw2/wt2a+XoveYfpWqgxvZBBHj
+         nsV8sac5bw6BsAXdA8dqvtm/yWXJSS9XKC/CpXWy1AYN0wKaOVJF/R8ZMI6xPjs1DK1D
+         Ol49KQPL7GjrI+koR6aWXjCVa2hJmXmL4CCedmVuwdjW+i6I5ppdqCVIX6OnejurNmVx
+         cx/g==
+X-Gm-Message-State: ACgBeo0Cuw6VgYMA/ZyQZp+oHsfQa+yURU/qWibyDBCvJXP7sMOKzzRn
+        uTBSAUaZSaM/MAmmh0oHTKNlAQ==
+X-Google-Smtp-Source: AA6agR7Xty6bEZNFwVc9o5UlVTQNSYuLoZRzQM8sveYXmZcNyTkmFx7ajfrc9c6uuG8EUv5awnTy4w==
+X-Received: by 2002:a2e:92c4:0:b0:25d:9d30:5d61 with SMTP id k4-20020a2e92c4000000b0025d9d305d61mr4726427ljh.202.1662751446993;
+        Fri, 09 Sep 2022 12:24:06 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id e22-20020ac24e16000000b004926689d410sm28982lfr.171.2022.09.09.12.24.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 12:23:59 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 13:23:57 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Maria Yu <quic_aiquny@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_clew@quicinc.com
-Subject: Re: [PATCH v1] remoteproc: core: do pm relax when not first crash
-Message-ID: <20220909192357.GA319190@p14s>
-References: <1662712413-38233-1-git-send-email-quic_aiquny@quicinc.com>
+        Fri, 09 Sep 2022 12:24:06 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 21:24:05 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] thermal: rcar_thermal: Constify static
+ thermal_zone_device_ops
+Message-ID: <YxuS1ZjrPzTvMQWg@oden.dyn.berto.se>
+References: <20220909182838.11154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1662712413-38233-1-git-send-email-quic_aiquny@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220909182838.11154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maria,
+Hi Lad,
 
-On Fri, Sep 09, 2022 at 04:33:33PM +0800, Maria Yu wrote:
-> Even if it is not first crash, need to relax the pm
-> wakelock otherwise the device will stay awake.
+Thanks for your work.
+
+On 2022-09-09 19:28:38 +0100, Lad Prabhakar wrote:
+> The only usage of rcar_thermal_zone_of_ops is to pass its address to
+> devm_thermal_of_zone_register(), which takes a pointer to const struct
+> thermal_zone_device_ops. Make it const to allow the compiler to put
+> it in read-only memory.
 > 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The goal is exactly to keep the device awake... 
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
 > ---
->  drivers/remoteproc/remoteproc_core.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/thermal/rcar_thermal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index e5279ed9a8d7..30078043e939 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -1956,6 +1956,7 @@ static void rproc_crash_handler_work(struct work_struct *work)
->  	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
->  		/* handle only the first crash detected */
->  		mutex_unlock(&rproc->lock);
-> +		pm_relax(rproc->dev.parent);
-
-If we are here it means that rproc_crash_handler_work() has already been called
-_and_ that a recovery is in process.  When the first crash handler completes
-pm_relax() will be called and the device will go to sleep as expected.
-
-Thanks,
-Mathieu
-
->  		return;
->  	}
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 4df42d70d867..61c2b8855cb8 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -316,7 +316,7 @@ static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>  	return 0;
+>  }
+>  
+> -static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
+> +static const struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
+>  	.get_temp	= rcar_thermal_get_temp,
+>  };
 >  
 > -- 
-> 2.7.4
+> 2.25.1
 > 
+
+-- 
+Kind Regards,
+Niklas Söderlund
