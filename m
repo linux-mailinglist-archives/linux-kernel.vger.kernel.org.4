@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ED85B401E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8895B4023
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiIITrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S232166AbiIITrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiIITqW (ORCPT
+        with ESMTP id S232169AbiIITrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:46:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DE54A11C;
-        Fri,  9 Sep 2022 12:42:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F23CB82607;
-        Fri,  9 Sep 2022 19:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE4DC433D6;
-        Fri,  9 Sep 2022 19:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662752558;
-        bh=J4h0e1eeHD+F345cJw7D5vWTYQ3cTiWfm7V+L/GXkrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mPGhEzE0ic9kseOm2K6qxxz0hcm3QgU3PIGTsapTt3Gu6YUZuEMV7JcNfIe+lT+Jj
-         giFnL2k3y8frDA1x//9/UPSfAVNfq7/KPteflKfEKeGcNc3uQX/Lefq56eMVmJtJOG
-         HXKiGzA4ekzDFUW5102gMIwlvxz2U2UUCr0jD/3ltTpS0Rt+nn88I+o9pM6Sw9tjaB
-         58RQ7mjb7/ku5gfAdYxzf2OYfC4ecDPrRyPxkUMTHXGE8YVdq3mRu62R11cta9/Vo8
-         JHjg5RHBWSKGFBqcB2qpxkTevxEhwItTGUQ9V6HJ0kNmvQK7RXIWAWt6XFw5oPNrhT
-         0Zu4cU4jkz45A==
-Date:   Fri, 9 Sep 2022 13:42:34 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
- log-buffer
-Message-ID: <YxuXKrkVbGBJwxRS@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
- <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
+        Fri, 9 Sep 2022 15:47:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005B22BB3E;
+        Fri,  9 Sep 2022 12:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=PEeVwIo7409WEJkloETqqjFRsCULu9arzy1LvgXiyKI=; b=Q1WhaVDuCHAj8dH6b5oYBWKmg3
+        9aJ4m21t5CjQs7q5t5fyrL02UZ8d4/Ch6G2MJY5vGWgcrVxKK22YLlnBkajzl40uVQkHEZ0CCtOh+
+        PJIspLldhv2/8xzTPohFSPBDNFEqFB7tyFgPa3pr7055gDl2n4NjlM6epF7CvbprdzYhs9H+qw9wF
+        mbBd4dlki+QGXVKVbKyBx8xE2184OxbsFtevq8X1HzpXYImjnfayEfC/DVEvVpb50KpdOxFmJTfqw
+        KJiAojRfVuBqOyftKoHUaQtbNI4LMU+Zk1/OVvf+FGC/D/hbVcpf/nenaiWxP+1w/+LtkwyP68ZCm
+        oE+rGYWA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWjvc-0028Gm-Cy; Fri, 09 Sep 2022 19:44:40 +0000
+Date:   Fri, 9 Sep 2022 12:44:40 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] sched: Move numa_balancing sysctls to its own file
+Message-ID: <YxuXqF63RIMstdEN@bombadil.infradead.org>
+References: <20220908072531.87916-1-wangkefeng.wang@huawei.com>
+ <YxqDa+WALRr8L7Q8@bombadil.infradead.org>
+ <679d8f0c-f8cc-d43e-5467-c32a78bcb850@huawei.com>
+ <d99630ed-0753-da9e-ab03-848b66bc3c63@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d99630ed-0753-da9e-ab03-848b66bc3c63@huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 10:19:15PM +0300, Serge Semin wrote:
-> Recent commit 52fde2c07da6 ("nvme: set dma alignment to dword") has caused
+On Fri, Sep 09, 2022 at 11:37:41AM +0800, Kefeng Wang wrote:
 > 
-> Folks, I've thoroughly studied the whole NVME subsystem looking for
-> similar problems. Turned out there is one more place which may cause the
-> same issue. It's connected with the opal_dev.{cmd,req} buffers passed to
-> the nvme_sec_submit() method. The rest of the buffers involved in the NVME
-> DMA are either allocated by kmalloc (must be cache-line-aligned by design)
-> or bounced-buffered if allocated on the stack (see the blk_rq_map_kern()
-> method implementation).
-
-What about user space addresses? We can map those with cacheline offsets.
-
-> ---
->  drivers/nvme/host/hwmon.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> On 2022/9/9 9:46, Kefeng Wang wrote:
+> > 
+> > On 2022/9/9 8:06, Luis Chamberlain wrote:
+> > > On Thu, Sep 08, 2022 at 03:25:31PM +0800, Kefeng Wang wrote:
+> > > > The sysctl_numa_balancing_promote_rate_limit and sysctl_numa_balancing
+> > > > are part of sched, move them to its own file.
+> > > > 
+> > > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > > There is quite a bit of random cleanup on each kernel release
+> > > for sysctls to do things like what you just did. Because of this it
+> > > has its
+> > > own tree to help avoid conflicts. Can you base your patches on the
+> > > sysctl-testing branch here and re-submit:
+> > 
+> > Found this when reading memory tiering code，sure to re-submit based
+> > your branch,
+> > 
+> > thanks.
+> > 
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
+> > > 
+> Hi Luis，the numa_balancing_promote_rate_limit_MBps from commit 1db91dd846e0
+> “memory tiering: rate limit NUMA migration throughput”only on
+> linux-next（from mm repo），
 > 
-> diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
-> index 0a586d712920..94192ab7a02d 100644
-> --- a/drivers/nvme/host/hwmon.c
-> +++ b/drivers/nvme/host/hwmon.c
-> @@ -10,9 +10,10 @@
->  
->  #include "nvme.h"
->  
-> +/* DMA-noncoherent platforms require the cache-aligned buffers */
->  struct nvme_hwmon_data {
-> +	struct nvme_smart_log log ____cacheline_aligned;
->  	struct nvme_ctrl *ctrl;
-> -	struct nvme_smart_log log;
+> 1）only send sysctl_numa_balancing changes based on your branch
+> or
+> 
+> 2）queued this patch from mm repo if no objection， Cc'ed Andrew
+> 
+> Which one do your like, or other options, thanks.
 
-So this by chance happened to work before 52fde2c07da6 because the field
-started at a 4-byte offset on your arch?
+2) as that would give more testing to the new code as well. We can deal
+with merge conflicts on my tree later.
 
-The change looks good.
-
-Reviewed-by: Keith Busch <kbusch@kernel.org>
+  Luis
