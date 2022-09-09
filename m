@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119E45B3BFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521E15B3BF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiIIPbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S231730AbiIIPcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiIIPbr (ORCPT
+        with ESMTP id S231508AbiIIPbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:31:47 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7E189806
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:31:10 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id s10so1642483ljp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 08:31:10 -0700 (PDT)
+        Fri, 9 Sep 2022 11:31:50 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D3B14858F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:31:12 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id u18so3296359lfo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 08:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=6pvfiV9+INyHP8EaVtPQ3L9iXK4tIAduG9OAalFumKI=;
-        b=hwk1svK+XLopgPNDQPvZJKu/HyCXmOIB1A8uXEuCruJEFDkKPfXEfTKn3DrP2Is4eG
-         ZlKFNn226WYx/iEBQwxLJvV7/VBZO5lpkxNOMYKaXRYEeAMXR5i18Zs1kEHBcM67gJIr
-         u1zuscueTlI1HpWz/ushy+7rUzoOFWprY7sqdfKySHB0bnDvAdRVtf6yNtrNWVQTRc/g
-         g0xEE3VPY4fKF0A21tgXgBMwzfsz8t0xYCCZZgpOFbL6nCLY+y/tBrd2mmMR3+2AHrhg
-         q3wxi6mRJdLKtbst0PcJTVSMrSJ/J38Dqn0WynOlhEcI8rMyEFG4eBB7ZXcMgCAEPl/z
-         rCAw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=+mAqJOgM8Ae7l6t9jqHU0zRO0K/U2EOlnDRdwAzG1bY=;
+        b=B9bEZR+j7kRa6FIs825QyyfDUIAZ+ohPsf3dItiLcCo8ldqMOYLx9mZiWNDpE2AlYJ
+         f/VNQ68PNKBo35iao/6ZvZ8BJZAgRFatR06O1KiU8EzagLSwueVGBhlAGiw3hAQ/1/Iq
+         mxy+LtknzAjFZ/wOHC8ahHjok4envr3wCgHVfLIXH2/uGudiNHb9FoffXRNrT0rQ9VFB
+         6ogCHDaLJW6pv9YASpliIuSW6KTb2jsJA3zfQmaDtPZHcYvlSLe6aoE9IVL4xr6t+GGb
+         kjC4fo2m6yls4YXB4PAeQht6VtxCYG4ANGTLdbmjT12wymnK/0O+qVbYWe6QsSn0Y3N3
+         CWXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=6pvfiV9+INyHP8EaVtPQ3L9iXK4tIAduG9OAalFumKI=;
-        b=LxIXBDzmQbHbLVd7XdCIeuyghx2hgY5CptOi9bzGSjPtHbn8mhssSvDN67zgIcHgQF
-         1NfDz7J05yYmHlA6JOW+Db6wTjECV//J3lwjNDQ4W0d9M9oHh2lxPDAO5IM1UxH7+O98
-         s4m5sKuMoTRxjawFGnsvSZAImzDsx+dMgTptodmDuv9IzVYwjbtZFwjjZkl/oL8bxZCb
-         N5j5oLgLrRJ96TrXrHGeGYAsG7D+SUxPk2npHLxjneSUEnD+KEW+FQf72pCo9anmCJZJ
-         z1UNT19Bsgi6PNdY6nU3hHsHwb+DkNDgEDDctJnDL9yVrdRbesKYjWrENfIEJk2JN2Gi
-         H/jw==
-X-Gm-Message-State: ACgBeo2+vgVE+clsIBwWHvgZEGlEUAnARgOauywQkYeA1weG2VfnQRs9
-        LqZE5lrHpyg1k9BC24J0Yai8Rg==
-X-Google-Smtp-Source: AA6agR4n5KrMjwQPqMuO3rRwLQzPyLiIDI0c8ve44qmA15f6wlpOq4lsqfMl9r91o5ooRpyyA4R9nw==
-X-Received: by 2002:a2e:8344:0:b0:263:8194:9a83 with SMTP id l4-20020a2e8344000000b0026381949a83mr4287428ljh.368.1662737444747;
-        Fri, 09 Sep 2022 08:30:44 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=+mAqJOgM8Ae7l6t9jqHU0zRO0K/U2EOlnDRdwAzG1bY=;
+        b=2xVHnn12/Tz9LOKVC/kHsQUdBqVBPTlmCq+ocuTMML1ErLaFlNmXAUYwT/k8VYM7gC
+         3WEOG5FyNxtRS8dSxZawUmBPMViQqSNKr74/JW2qiQqmroUMXgw+Mxz70fOAPDQlvzS2
+         srU8nIWsvOZw2Qo32iFYhkxsGFn9DAUQuFLjvTgeEmOb9FV61Zhqc1JebKFrZaflZ5/e
+         cnaQJzTHEF99j2zD87fx1ZJ/2twcncJ1xjrOsoEyj3WerWhA3nNaMS1O9Lrsi8+u8hzM
+         7r0kNPpQ4lFm0BVtSEJzKJToZ0FTLRb8QDygv0BfaQ1A13xT86ZYbAZus0RKGgC6KnTt
+         4JKg==
+X-Gm-Message-State: ACgBeo2Ids9jaEqFv6FAGNzGTBefI/t51fN/VunZYao9usS+SD4E1qWf
+        XVvVQmMer52mHhbTA+1cXWxYMQ==
+X-Google-Smtp-Source: AA6agR54woyzOPP4GJVG8gcbyG903ZIhHAHadHE2YriQY9jB67GC0diYbnI+NB4qlUollAbzWY9APQ==
+X-Received: by 2002:a05:6512:168d:b0:491:3206:b63 with SMTP id bu13-20020a056512168d00b0049132060b63mr4384111lfb.149.1662737445845;
+        Fri, 09 Sep 2022 08:30:45 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05651c00c600b0026ac3fedd20sm117314ljr.86.2022.09.09.08.30.43
+        by smtp.gmail.com with ESMTPSA id 6-20020a05651c00c600b0026ac3fedd20sm117314ljr.86.2022.09.09.08.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 08:30:44 -0700 (PDT)
+        Fri, 09 Sep 2022 08:30:45 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         arm@kernel.org, soc@kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH PULL fixes 1/4] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
-Date:   Fri,  9 Sep 2022 17:30:34 +0200
-Message-Id: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 2/4] memory: drivers for v6.1
+Date:   Fri,  9 Sep 2022 17:30:35 +0200
+Message-Id: <20220909153037.824092-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
+References: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,31 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-Access denied:), so change maintainer to Peng Fan from NXP.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220817065946.24303-2-krzysztof.kozlowski@linaro.org
-Acked-by: Peng Fan <peng.fan@nxp.com>
----
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Maintainer update for current cycle.
- .../devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml  | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
-index 445e46feda69..2b39fce5f650 100644
---- a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: i.MX8M DDR Controller
- 
- maintainers:
--  - Leonard Crestez <leonard.crestez@nxp.com>
-+  - Peng Fan <peng.fan@nxp.com>
- 
- description:
-   The DDRC block is integrated in i.MX8M for interfacing with DDR based
--- 
-2.34.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.1
 
+for you to fetch changes up to 9f8fb8032febf594914999c33493c682eaf138cb:
+
+  dt-bindings: memory: mediatek,smi: Update condition for mt8195 smi node (2022-08-16 12:21:14 +0300)
+
+----------------------------------------------------------------
+Memory controller drivers for v6.1
+
+1. Fix OF node refcount leaks in pl353-smc and generic of_memory code.
+2. Add support for FPGA DFL EMIF revision 1.
+3. Update bindings for Mediatek SMI mt8195.
+
+----------------------------------------------------------------
+Debarati Biswas (1):
+      memory: dfl-emif: Update the dfl emif driver support revision 1
+
+Liang He (3):
+      memory: pl353-smc: Fix refcount leak bug in pl353_smc_probe()
+      memory: of: Fix refcount leak bug in of_get_ddr_timings()
+      memory: of: Fix refcount leak bug in of_lpddr3_get_ddr_timings()
+
+Tinghan Shen (1):
+      dt-bindings: memory: mediatek,smi: Update condition for mt8195 smi node
+
+ .../memory-controllers/mediatek,smi-common.yaml    | 11 +++-
+ drivers/memory/dfl-emif.c                          | 62 ++++++++++++++++++++--
+ drivers/memory/of_memory.c                         |  2 +
+ drivers/memory/pl353-smc.c                         |  1 +
+ 4 files changed, 70 insertions(+), 6 deletions(-)
