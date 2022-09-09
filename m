@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AD45B3A5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D605B3A68
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiIIOCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S232310AbiIIOCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbiIIOAu (ORCPT
+        with ESMTP id S232208AbiIIOBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:00:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1C9F74A;
-        Fri,  9 Sep 2022 07:00:37 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:34 -0000
+        Fri, 9 Sep 2022 10:01:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6895A3469;
+        Fri,  9 Sep 2022 07:00:38 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732035;
+        s=2020; t=1662732036;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xtYXvAW96OQptFLFPBfzBp6CkQBMVtL5E6E3SMyjjMI=;
-        b=vdy/G2MTRekHKXwz6DugsS+FL6tH23QGhp05T2nNnERqgkwcbsqQ0sd7Ef/Z4Kfg/gQWi5
-        7J65ZcI0aMnWOik+yrz4o8QTEwt2KgG6XowJOsdxRgpF6uJGsSZ30j/ToMF4t9nYV2wa7E
-        fll2iaix1JmsYWvhUYFdZSV/UJVto7UqnFeta275xvVW/G5tXnd+Cijb0jYScV8TIKqGAQ
-        Nt60SXh4C67y2HMS/EwHc8KwvR+DhnPsVO6Y05/Qi3WQM/JwmiaTSyCzHB/KAXDOS79s3h
-        BpauKSUImO8HDa9u8ixFGkKUg4X3xaqbPOGEdULRHrr3PJ18LR5O3xOzSbM9OQ==
+        bh=jFlcBXEp7sIljUiwMOfLafUGr2rNlCE2sdK1fZRJj60=;
+        b=w1VRIhhGmnYc2gDKxwxVP2qxgxki7mhZWYLl295TkWPfrEqeBFNIXDOITnwR8OsLNn5Qno
+        Qu6MIXNFsHyhLPCVs6Ppxpymvp08/kQZf/Mveeb55yIb/HJkPm/zcuOsfBT4qIgtKgn9sC
+        S9nHlbRRqWCNYm+IfIH8i07FVFzDylKOpPyAR3ayAjXhdxama4dtJzZRfLX3Ae3MJW9FKq
+        +DmkyMBiH9r1dacTPDmMkXHX9y2XChAvWDl9hzoO+ItqHmhVKmFt9KrjVFTllnBW0w0TD+
+        uhrYsKLpBHrQd/v7P+DT5RV7h7XxtCjtAwo56Zbfdb7d2wKG1yIeM++rbN/c3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732035;
+        s=2020e; t=1662732036;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xtYXvAW96OQptFLFPBfzBp6CkQBMVtL5E6E3SMyjjMI=;
-        b=fTF8PomuCYNpro0Qm8eh00U8Q+bsuVWYANf8wD9jtzXNB7a5UJZlK0gXDvhUeOUmIOClS8
-        YWfgs5cIdfMXK0Dw==
-From:   "tip-bot2 for Tejun Heo" <tip-bot2@linutronix.de>
+        bh=jFlcBXEp7sIljUiwMOfLafUGr2rNlCE2sdK1fZRJj60=;
+        b=y9HtZ9U+HaZUyRet40THyBJaJgVTZSv01ezVHExR6rm3h33DYIjlCs/UY2PXqv6apDNlp+
+        Hjtxp6C6KDfk0lBw==
+From:   "tip-bot2 for Christoph Hellwig" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] kernfs: Simply by replacing kernfs_deref_open_node()
- with of_on()
-Cc:     Imran Khan <imran.f.khan@oracle.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
+Subject: [tip: sched/psi] devres: remove devm_ioremap_np
+Cc:     Christoph Hellwig <hch@lst.de>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220828050440.734579-2-tj@kernel.org>
-References: <20220828050440.734579-2-tj@kernel.org>
+In-Reply-To: <20220822061424.151819-1-hch@lst.de>
+References: <20220822061424.151819-1-hch@lst.de>
 MIME-Version: 1.0
-Message-ID: <166273203440.401.9865519901772848692.tip-bot2@tip-bot2>
+Message-ID: <166273203553.401.17063915348417685051.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,171 +67,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     3db48aca879db475844182a24d1760ee3d230627
-Gitweb:        https://git.kernel.org/tip/3db48aca879db475844182a24d1760ee3d230627
-Author:        Tejun Heo <tj@kernel.org>
-AuthorDate:    Sat, 27 Aug 2022 19:04:32 -10:00
+Commit-ID:     3954cf4338becb1f140bb6fa4f5e9a42f2529b86
+Gitweb:        https://git.kernel.org/tip/3954cf4338becb1f140bb6fa4f5e9a42f2529b86
+Author:        Christoph Hellwig <hch@lst.de>
+AuthorDate:    Mon, 22 Aug 2022 08:14:24 +02:00
 Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CommitterDate: Thu, 01 Sep 2022 18:08:43 +02:00
+CommitterDate: Thu, 01 Sep 2022 18:04:43 +02:00
 
-kernfs: Simply by replacing kernfs_deref_open_node() with of_on()
+devres: remove devm_ioremap_np
 
-kernfs_node->attr.open is an RCU pointer to kernfs_open_node. However, RCU
-dereference is currently only used in kernfs_notify(). Everywhere else,
-either we're holding the lock which protects it or know that the
-kernfs_open_node is pinned becaused we have a pointer to a kernfs_open_file
-which is hanging off of it.
+devm_ioremap_np has never been used anywhere since it was added in early
+2021, so remove it.
 
-kernfs_deref_open_node() is used for the latter case - accessing
-kernfs_open_node from kernfs_open_file. The lifetime and visibility rules
-are simple and clear here. To someone who can access a kernfs_open_file, its
-kernfs_open_node is pinned and visible through of->kn->attr.open.
-
-Replace kernfs_deref_open_node() which simpler of_on(). The former takes
-both @kn and @of and RCU deref @kn->attr.open while sanity checking with
-@of. The latter takes @of and uses protected deref on of->kn->attr.open.
-
-As the return value can't be NULL, remove the error handling in the callers
-too.
-
-This shouldn't cause any functional changes.
-
-Cc: Imran Khan <imran.f.khan@oracle.com>
-Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
-Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220828050440.734579-2-tj@kernel.org
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220822061424.151819-1-hch@lst.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/kernfs/file.c | 56 ++++++++++-------------------------------------
- 1 file changed, 13 insertions(+), 43 deletions(-)
+ Documentation/driver-api/driver-model/devres.rst |  1 +-
+ include/linux/io.h                               |  2 +--
+ lib/devres.c                                     | 15 +---------------
+ 3 files changed, 18 deletions(-)
 
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index b3ec343..32b16fe 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -57,31 +57,17 @@ static inline struct mutex *kernfs_open_file_mutex_lock(struct kernfs_node *kn)
- }
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index 5527294..2af6c9c 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -310,7 +310,6 @@ IOMAP
+   devm_ioremap()
+   devm_ioremap_uc()
+   devm_ioremap_wc()
+-  devm_ioremap_np()
+   devm_ioremap_resource() : checks resource, requests memory region, ioremaps
+   devm_ioremap_resource_wc()
+   devm_platform_ioremap_resource() : calls devm_ioremap_resource() for platform device
+diff --git a/include/linux/io.h b/include/linux/io.h
+index 5fc8003..308f4f0 100644
+--- a/include/linux/io.h
++++ b/include/linux/io.h
+@@ -59,8 +59,6 @@ void __iomem *devm_ioremap_uc(struct device *dev, resource_size_t offset,
+ 				   resource_size_t size);
+ void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
+ 				   resource_size_t size);
+-void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
+-				   resource_size_t size);
+ void devm_iounmap(struct device *dev, void __iomem *addr);
+ int check_signature(const volatile void __iomem *io_addr,
+ 			const unsigned char *signature, int length);
+diff --git a/lib/devres.c b/lib/devres.c
+index 55eb07e..6baf439 100644
+--- a/lib/devres.c
++++ b/lib/devres.c
+@@ -104,21 +104,6 @@ void __iomem *devm_ioremap_wc(struct device *dev, resource_size_t offset,
+ EXPORT_SYMBOL(devm_ioremap_wc);
  
  /**
-- * kernfs_deref_open_node - Get kernfs_open_node corresponding to @kn.
+- * devm_ioremap_np - Managed ioremap_np()
+- * @dev: Generic device to remap IO address for
+- * @offset: Resource address to map
+- * @size: Size of map
 - *
-- * @of: associated kernfs_open_file instance.
-- * @kn: target kernfs_node.
-- *
-- * Fetch and return ->attr.open of @kn if @of->list is non empty.
-- * If @of->list is not empty we can safely assume that @of is on
-- * @kn->attr.open->files list and this guarantees that @kn->attr.open
-- * will not vanish i.e. dereferencing outside RCU read-side critical
-- * section is safe here.
-- *
-- * The caller needs to make sure that @of->list is not empty.
-+ * of_on - Return the kernfs_open_node of the specified kernfs_open_file
-+ * @of: taret kernfs_open_file
-  */
--static struct kernfs_open_node *
--kernfs_deref_open_node(struct kernfs_open_file *of, struct kernfs_node *kn)
-+static struct kernfs_open_node *of_on(struct kernfs_open_file *of)
- {
--	struct kernfs_open_node *on;
+- * Managed ioremap_np().  Map is automatically unmapped on driver detach.
+- */
+-void __iomem *devm_ioremap_np(struct device *dev, resource_size_t offset,
+-			      resource_size_t size)
+-{
+-	return __devm_ioremap(dev, offset, size, DEVM_IOREMAP_NP);
+-}
+-EXPORT_SYMBOL(devm_ioremap_np);
 -
--	on = rcu_dereference_check(kn->attr.open, !list_empty(&of->list));
--
--	return on;
-+	return rcu_dereference_protected(of->kn->attr.open,
-+					 !list_empty(&of->list));
- }
- 
- /**
-- * kernfs_deref_open_node_protected - Get kernfs_open_node corresponding to @kn
-+ * kernfs_deref_open_node_locked - Get kernfs_open_node corresponding to @kn
-  *
-  * @kn: target kernfs_node.
-  *
-@@ -96,7 +82,7 @@ kernfs_deref_open_node(struct kernfs_open_file *of, struct kernfs_node *kn)
-  * The caller needs to make sure that kernfs_open_file_mutex is held.
-  */
- static struct kernfs_open_node *
--kernfs_deref_open_node_protected(struct kernfs_node *kn)
-+kernfs_deref_open_node_locked(struct kernfs_node *kn)
- {
- 	return rcu_dereference_protected(kn->attr.open,
- 				lockdep_is_held(kernfs_open_file_mutex_ptr(kn)));
-@@ -207,12 +193,8 @@ static void kernfs_seq_stop(struct seq_file *sf, void *v)
- static int kernfs_seq_show(struct seq_file *sf, void *v)
- {
- 	struct kernfs_open_file *of = sf->private;
--	struct kernfs_open_node *on = kernfs_deref_open_node(of, of->kn);
--
--	if (!on)
--		return -EINVAL;
- 
--	of->event = atomic_read(&on->event);
-+	of->event = atomic_read(&of_on(of)->event);
- 
- 	return of->kn->attr.ops->seq_show(sf, v);
- }
-@@ -235,7 +217,6 @@ static ssize_t kernfs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	struct kernfs_open_file *of = kernfs_of(iocb->ki_filp);
- 	ssize_t len = min_t(size_t, iov_iter_count(iter), PAGE_SIZE);
- 	const struct kernfs_ops *ops;
--	struct kernfs_open_node *on;
- 	char *buf;
- 
- 	buf = of->prealloc_buf;
-@@ -257,14 +238,7 @@ static ssize_t kernfs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 		goto out_free;
- 	}
- 
--	on = kernfs_deref_open_node(of, of->kn);
--	if (!on) {
--		len = -EINVAL;
--		mutex_unlock(&of->mutex);
--		goto out_free;
--	}
--
--	of->event = atomic_read(&on->event);
-+	of->event = atomic_read(&of_on(of)->event);
- 
- 	ops = kernfs_ops(of->kn);
- 	if (ops->read)
-@@ -584,7 +558,7 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
- 	struct mutex *mutex = NULL;
- 
- 	mutex = kernfs_open_file_mutex_lock(kn);
--	on = kernfs_deref_open_node_protected(kn);
-+	on = kernfs_deref_open_node_locked(kn);
- 
- 	if (on) {
- 		list_add_tail(&of->list, &on->files);
-@@ -629,7 +603,7 @@ static void kernfs_unlink_open_file(struct kernfs_node *kn,
- 
- 	mutex = kernfs_open_file_mutex_lock(kn);
- 
--	on = kernfs_deref_open_node_protected(kn);
-+	on = kernfs_deref_open_node_locked(kn);
- 	if (!on) {
- 		mutex_unlock(mutex);
- 		return;
-@@ -839,7 +813,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
- 		return;
- 
- 	mutex = kernfs_open_file_mutex_lock(kn);
--	on = kernfs_deref_open_node_protected(kn);
-+	on = kernfs_deref_open_node_locked(kn);
- 	if (!on) {
- 		mutex_unlock(mutex);
- 		return;
-@@ -874,11 +848,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
-  */
- __poll_t kernfs_generic_poll(struct kernfs_open_file *of, poll_table *wait)
- {
--	struct kernfs_node *kn = kernfs_dentry_node(of->file->f_path.dentry);
--	struct kernfs_open_node *on = kernfs_deref_open_node(of, kn);
--
--	if (!on)
--		return EPOLLERR;
-+	struct kernfs_open_node *on = of_on(of);
- 
- 	poll_wait(of->file, &on->poll, wait);
- 
+-/**
+  * devm_iounmap - Managed iounmap()
+  * @dev: Generic device to unmap for
+  * @addr: Address to unmap
