@@ -2,127 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435A05B3BBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B725B3BC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiIIPVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S232095AbiIIPYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIIPVU (ORCPT
+        with ESMTP id S229728AbiIIPYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:21:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF77A00EF;
-        Fri,  9 Sep 2022 08:21:16 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289El24C003935;
-        Fri, 9 Sep 2022 15:21:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=ETxy00/oSLMaFwhEgTi64CSAohYWFjoKt+q44NRh+5E=;
- b=e2lK6FKnRBGUqzGIpdMTD3kgoJF94JDX7W3gB05VUy88pA9GOKEXGyy9CozkcTC+6NcT
- kqpvFq/c/UYv5n7/NenDrFRo1AwyJz5/mGp4J8oxL4mzIU6VfzlGyL79O6p6FFMdMsR0
- kxgmLNY+6pLYnQ8EXpibpE1eFCc8WDX5Qvd5psVHw+kP6lMlsxIyIKJABFOuS6LyxxK7
- uDVv4dpF51rI3dtZE9u9qBLU+Wg0B7aJtss7WQNKm0btkojHcdEGhpWJPZaZbDsAUZGU
- VH9VO+jfiE3C0yqlwwdmc1B0EmWjKiSJuZKDXCzG8ASCTaSlr5NRIUThJoYNIK2HWhGJ 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg7j6s3nj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 15:21:12 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 289ElHbX005279;
-        Fri, 9 Sep 2022 15:21:11 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg7j6s3n7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 15:21:11 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 289FKfiU030354;
-        Fri, 9 Sep 2022 15:21:10 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3jbxjash13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 15:21:10 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 289FL9Tb35521022
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Sep 2022 15:21:09 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41FFB7805F;
-        Fri,  9 Sep 2022 15:32:50 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AFD5E78064;
-        Fri,  9 Sep 2022 15:32:49 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Sep 2022 15:32:49 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests: tpm2: Implement class desstructor to close file descriptor
-Date:   Fri,  9 Sep 2022 11:20:56 -0400
-Message-Id: <20220909152056.1335261-1-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 9 Sep 2022 11:24:46 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4562F1EEC2;
+        Fri,  9 Sep 2022 08:24:41 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q9so1878390pgq.6;
+        Fri, 09 Sep 2022 08:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/TVYg9gxnjxr72JuEtFu8ksh5BgzWE/f1gnQNq1u/+E=;
+        b=VZuMHW81VVjpNX+Vyjnt4rACUL/5z92qHU7Areuz90DZsHDK9vUwGkHFFuXT/0VytH
+         b4zhpdCSf3qmerCOHVABawhAcECIabcCGVfAbnj45cGTO+1Y2hbA6af6nG9NROwdZiXZ
+         L0PI9hl3xg5Ist5NHfo7Z56lLXG1kM2aOjhDGSZCKWNG1JhXOf7niByXekmBL2hQElDj
+         BAbWpyDQ4+U20VNP3yzazNLHqdQTsAV3CEzwGr49yElYyja8af9qXQMO6VG5/U97R5xu
+         icKMZJHVcdWuy6tr9YVsBGGdbSN6T+xf3LM9bFk/+Q9oaKPVjxKaWHeHh34+lW1ei1dh
+         y0XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/TVYg9gxnjxr72JuEtFu8ksh5BgzWE/f1gnQNq1u/+E=;
+        b=0aF/esXdynbHv+QALBkHftNYLya45Wy7aQUOqBRc5AelypnrEnptXo4WAeaS6bQDjq
+         dd8RUVLMHX0zwbgH7nThp7tjWN18lSPpQjeV0+5sqWk/72VWEh8OBm5yJaR6/cyMiVq5
+         K4PQ45Ff4ckGSOtMRGd40iADbxHyKY8Q97xePBs6VQcolJqFu9ttXn1Yl3cppnv8bcMs
+         TYeFMfjcqcmvySmLm/54EJ8ZK5DTa/U7zC4uJDIfVjA+Vd9C9jO67aPyvrGl65YVTNCp
+         3cMfaYAfOF8xtTQyxfJ6UMORITPXSRC1CMjWQ6BkurSzqm65/wPFCD7Iv5y4lD5+j1Cy
+         Tf+g==
+X-Gm-Message-State: ACgBeo0U7kLjIkxu87PtgxQN3lZOop/kaPW/nF/OLl9MWhH1sqj3sWVy
+        UPdzJD+BwlAVbyhNmz2g0/M=
+X-Google-Smtp-Source: AA6agR5kZ1IFNHNFWBwHIpburBXe/NmIxjCCshqr15P4T2/+4qYY48Ic0fifdCh4McVkvVnW1MDO0A==
+X-Received: by 2002:a63:84c1:0:b0:434:b9db:b9d with SMTP id k184-20020a6384c1000000b00434b9db0b9dmr12768520pgd.397.1662737080891;
+        Fri, 09 Sep 2022 08:24:40 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id p20-20020a63e654000000b00434abd19eeasm604006pgj.78.2022.09.09.08.24.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 08:24:40 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [RESEND][PATCH V8 0/2] Add ums512 clocks and relative bindings file
+Date:   Fri,  9 Sep 2022 23:24:19 +0800
+Message-Id: <20220909152421.278662-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uBgP43LIeEsIw0QlRJAR-jQOm899RkpN
-X-Proofpoint-ORIG-GUID: K_4MA1wVvviQMNkflsxsgCsUvZOJ5Saa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1011 adultscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=483 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2209090053
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Implement a class destructor to close the open TPM file descriptor
-and avoid the following error message:
+This patchset is add the UMS512 clocks support
 
- test_flush_context (tpm2_tests.SpaceTest) ... \
-   /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
-   unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items"
+  list when use the latest dtschema.
 
----
- tools/testing/selftests/tpm2/tpm2.py | 4 ++++
- 1 file changed, 4 insertions(+)
+v4 changes:
+  move the syscon bindins from clk to glbreg yaml file by pickup 
+  chunyan's patch for global registers bindings
+  fix the comments from Krzysztof in v3 patchset
+  add the Acked-by: Krzysztof in patch v4 3/4
+  fix the  warning Prefer "GPL" over "GPL v2"
 
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index 057a4f49c79d..c7363c6764fc 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -371,6 +371,10 @@ class Client:
-             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
-             self.tpm_poll = select.poll()
- 
-+    def __del__(self):
-+        if self.tpm:
-+            self.tpm.close()
-+
-     def close(self):
-         self.tpm.close()
- 
+v5 changes:
+  Add review tags.
+  fix the comments in ums512-glbreg.yaml.
+
+v6 changes:
+  No more send the patch 1/4 and 3/4 in V5 for applied by Stephen
+  change GPL to GPL v2 license
+  fix the lack of space in some "{" and "}"
+  add check error for sprd_clk_regmap_init.
+
+v7 changes:
+  Resend the patchset after the cross-tree patch merged
+  use the absolute path for the mfd refs of patternProperties
+
+v8 changes:
+  add the const property for address-cells and size-cells.
+
+Chunyan Zhang (1):
+  dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+
+Cixi Geng (1):
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      |   71 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2202 +++++++++++++++++
+ 4 files changed, 2280 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+
 -- 
-2.35.1
+2.34.1
 
