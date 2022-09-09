@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119105B30A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2351D5B2FF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiIIHio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S231150AbiIIHew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiIIHh0 (ORCPT
+        with ESMTP id S231354AbiIIHee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:37:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7378E121684
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Sep 2022 03:34:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1731C10FCE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:34:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7E0261EEB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8761EC4315D;
-        Fri,  9 Sep 2022 07:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662708894;
-        bh=L8rUkjoV9HNsktkbsg/FUm/ooCwwHMTMAkEbe+YIqtY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CTE2idotzx5o2ReedqnWizaF/EcSOKF9W/br1IWlRc9p1ldhGiEpVHqydccQK7xKC
-         AoB7ncCqlcf47nw07ZoSWJZZvC6QV5Im+L3Dg7OVgJZh9f34e3FcCNAmzfv3pzCjqc
-         HK0JnjMLCKP42YQdrjFbN8H/5wy6A52+R/pJMQ0v7vgIL4VlwZYjx9TnR5RGuOsFyi
-         NA4umr6kS/p3HWL1PJA1IGOuKW5zlHKphPn7zPz9qrCg6h9gQvjsd8WJVUPkfabI1b
-         8q58nOUvecDfV8dLhDqN7+hXTrqpShcQkybW9kDEPhSwPTuSzuglOoA4rSKHwYuUCR
-         UR6MCHC5Gb6dg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oWYXG-007FGl-Ip;
-        Fri, 09 Sep 2022 09:34:46 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jasmine Newsome <jasmine.newsome@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 18/37] drm/i915: fix i915_gem_ttm_move.c DOC: markup
-Date:   Fri,  9 Sep 2022 09:34:25 +0200
-Message-Id: <b631d31866fc433eeeeb566ad32e71695d6a44f7.1662708705.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
-References: <cover.1662708705.git.mchehab@kernel.org>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 650A96601FB5;
+        Fri,  9 Sep 2022 08:34:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662708869;
+        bh=ah+w7LaAqF28DnY7d+1O80L02oQa2kje4Gx6qQdSYsk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ey+7xPgFMzl9qr9JrKqDdeQcrF8IZRaHem5Dc5V3sD2Wxc4YSqGhbLJonnI4RXXDE
+         UvapLlMIsbrGYzPnW6+L5p3pyeZHFHJhDRd0IFIG4QC9NyiTjn9B2QlawGCnIofBMT
+         Vc6Xu70QJ1oqnu/nbJnQ94ub5PfnibWZekFrTFmr0fzZq/kXohO0GN+xeU0Cfcot33
+         S5OECCIXd/GhQPRzQFmImZ1rn2Kce92O11iGE5O0ZXKSt+y2itKyvx5qN5+lLpRHO6
+         mi5fS8R2ei4jsmZWQX1Ex1QHcQRsV+sjy3Bv+4ubWY6a7YjLSkytGWOyZb6IPs+UrF
+         rvfKlJ4RsFlVw==
+Message-ID: <29b332ee-cef9-28af-8f87-00a2e7e37f80@collabora.com>
+Date:   Fri, 9 Sep 2022 09:34:25 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 08/10] ASoC: mediatek: mt8186: Allow setting shared clocks
+ from machine driver
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com, Chunxu Li <chunxu.li@mediatek.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220908161154.648557-1-nfraprado@collabora.com>
+ <20220908161154.648557-9-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220908161154.648557-9-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The doc markup should not end with ":", as it would generate a
-warning on Sphinx while generating the cross-reference tag.
+Il 08/09/22 18:11, Nícolas F. R. A. Prado ha scritto:
+> Add a new function to configure the shared clock between two i2s ports,
+> and export it. This will allow the clock sharing to be set from the
+> machine driver instead of the devicetree.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
-
- drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-index 56217d324a9b..16dd4991d527 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-@@ -20,7 +20,7 @@
- #include "gt/intel_migrate.h"
- 
- /**
-- * DOC: Selftest failure modes for failsafe migration:
-+ * DOC: Selftest failure modes for failsafe migration
-  *
-  * For fail_gpu_migration, the gpu blit scheduled is always a clear blit
-  * rather than a copy blit, and then we force the failure paths as if
--- 
-2.37.3
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
