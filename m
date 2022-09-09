@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704275B3A90
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D369E5B3A93
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiIIOUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S230161AbiIIOUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIIOUH (ORCPT
+        with ESMTP id S230006AbiIIOUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:20:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B3A476E7;
-        Fri,  9 Sep 2022 07:20:04 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id q21so2734427edc.9;
-        Fri, 09 Sep 2022 07:20:04 -0700 (PDT)
+        Fri, 9 Sep 2022 10:20:21 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A65A815
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:20:18 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q3so1658435pjg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=il7Ilq03Jy3qK9trP89NQpYDkyj+wCqI9a3iT+1TUqY=;
-        b=CYqElaWEXELaTF0ufxRzWiLbFPW1sx7er6sdeedSg0OT1QzYw90hDvOilly9mpWBKW
-         zZwb4PN2GpiSsd1vGWcIKFXE8BbOgjLlXuqqLwspWkxafjpkQMWIjYqEJjvIZh7KJ1Nq
-         c9AX+m67+KsZYoHJyfiLAh9iGp53sPqNxhIwc5sFv/TeKglFwBvBFquNMDUnwgKOranM
-         9dMCJVMR4sr3kRsrtjUj6xaj65KHH5E9baE8mH4Q3muoxyi6oBEPz9AP3jLMbk/qkc9r
-         m1KRfTv658tTc7Phr1A2CByAAFqcPc2/k67gI9RviGrkB6WI3bJstTbUg0IMvl+cQrvo
-         ghZw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date;
+        bh=oec0hsn7Vj6Lsi1D1urX59gL9xUdYb6/NenHblk0y/o=;
+        b=sQybks/LaONptfza6aKqOLqmzdWZ+YRsbNpztiVSRq/JMZqw6IUFIcSL1W42H1D0gS
+         IBgrn4SVMGLdtfh3jVS8FVWYUL/bh+TJjfponh4iCftkW4/LIb2ot7NC8DvmKQIsymDe
+         e8P4k9ZYAF6dLnmPV0MytOGFIS1FdnrekusF6EiiA6NTA23s/aptALhthYfB2gKoycvi
+         8xkBm5cqaJJT66V2VmF7ztWStW348CP+8Rn0Pm/iQRFSxqb0qZ4jmuj7uLFcel+BelNM
+         nXLLjfn+yFnlKEpuTTmhTDk5aD8AKT8Umz+sHaUJWyf093LFMVl7pGfT5O+0REb4qE0e
+         6M0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=il7Ilq03Jy3qK9trP89NQpYDkyj+wCqI9a3iT+1TUqY=;
-        b=CMxfiswvBcDU7fcwwIVFt/cZw9GBtbmYCDmEWPt9Gzy7ye0quqzIt+pc5ViNfvNfAs
-         ybPSlOb0J8NUstDj2qI6iF+tgF+4E1tMLHyGSkcyuCRNxDgngjvKSomaOQlHFG2Ed/2m
-         Hgw0OloqWhv/d2miY7LU+pIt7QSSLRFFQ2M+t6OGemp9OGU3jh/QfQj7W/CozhSmSJ1o
-         FlzJ8L4RAbhqGFXPA2At8XVMs/p69dl+gIYZIKcwbK3KADOrx1KcaMERK5AN/TyXf38B
-         8op8B21Bjnj+6AarLgCi5y8+vbECx14desnZoGgxJo+c36+fGR+rUQlPGeiFCwWjQKPF
-         NIZw==
-X-Gm-Message-State: ACgBeo1dFHDqyi35HVftSiIvF1uo8NB9L0QuCrMSBPwm0ujTp5d5o/p3
-        0D2LHAjgtgn6bp+wZo8O59bON/ccyn/WgohqYzo=
-X-Google-Smtp-Source: AA6agR5BmgQ4MZaa5djaaXJJtjRYycr9UQxM+gsSsbSBeg4Ttg4dQf/avu7U/6yHtqooywiUj42VL9eT8NWe4ua/Ccw=
-X-Received: by 2002:a05:6402:1d48:b0:44e:c6cf:778 with SMTP id
- dz8-20020a0564021d4800b0044ec6cf0778mr11986236edb.421.1662733202729; Fri, 09
- Sep 2022 07:20:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <166260087224.759381.4170102827490658262.stgit@devnote2>
- <166260088298.759381.11727280480035568118.stgit@devnote2> <20220908050855.w77mimzznrlp6pwe@treble>
- <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net> <Yxm+QkFPOhrVSH6q@hirez.programming.kicks-ass.net>
- <CAADnVQKWTaXFqYri9VG3ux-CJEBsjAP5PetH6Q1ccS8HoeP28g@mail.gmail.com> <Yxr2TaWaN8VjJ60D@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yxr2TaWaN8VjJ60D@hirez.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 9 Sep 2022 07:19:51 -0700
-Message-ID: <CAADnVQLqw5o5Pn9Bds03Qse6Y5vSDPj1jyfWesxJOP__kUPXLg@mail.gmail.com>
-Subject: Re: [PATCH] x86,retpoline: Be sure to emit INT3 after JMP *%\reg
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@suse.de>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=oec0hsn7Vj6Lsi1D1urX59gL9xUdYb6/NenHblk0y/o=;
+        b=3M90SPK2bNPSfIFx+L+3THYBXXm6/1SqLyvTfKJd+Li9E+dO1c60h78qLNNlUGxZ8m
+         MuvTHZRlqqvVuvXAmUwNUoCu+truUPoz8geRuxdlRg2mAiLGecRODM1gorn+KwF60Fk/
+         ECWF+mjtR0DkxCmGrq0qUTdwGR610coPpcJF09YlHzwslDluUOewF2KdrId9sXb7YeU5
+         aF6woqJt/lUS9QdaIBFiDsRe6S+yyxWwv06TIUJW5aP5Df3TdkomUecFCOvhH8Ae77dc
+         tXhAgUtnVwB5c1EZUTcY5ppQNprNV6vhxMM7FyBFF9S5XYoRAVu0KbXEprBXCMTo52jh
+         YulA==
+X-Gm-Message-State: ACgBeo0OGH18zTkzLrnRJRPPARAZRByVU3NYH6zHVg/P+/Q/6Xa37Hc1
+        JkuMq05M2D9s0Y2+j7+YfArjlg==
+X-Google-Smtp-Source: AA6agR6IU8iIBjl6/ctV6IYJtquGCshoeNTNDKJPa1vOlXqfcdxv4Ia1rnI8eabDPxhgPB8cWlYCRQ==
+X-Received: by 2002:a17:902:7082:b0:177:f7fc:5290 with SMTP id z2-20020a170902708200b00177f7fc5290mr6787355plk.143.1662733218057;
+        Fri, 09 Sep 2022 07:20:18 -0700 (PDT)
+Received: from localhost ([51.52.155.79])
+        by smtp.gmail.com with ESMTPSA id n26-20020a63a51a000000b0041c49af8156sm604549pgf.6.2022.09.09.07.20.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 07:20:17 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 07:20:17 -0700 (PDT)
+X-Google-Original-Date: Fri, 09 Sep 2022 07:20:13 PDT (-0700)
+Subject: [GIT PULL] RISC-V Fixes for 6.0-rc5
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-8b892856-b176-48da-8f9b-869810e0cf26@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 1:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Sep 08, 2022 at 07:01:12AM -0700, Alexei Starovoitov wrote:
->
-> > > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > > index c1f6c1c51d99..37f821dee68f 100644
-> > > --- a/arch/x86/net/bpf_jit_comp.c
-> > > +++ b/arch/x86/net/bpf_jit_comp.c
-> > > @@ -419,7 +419,8 @@ static void emit_indirect_jump(u8 **pprog, int reg, u8 *ip)
-> > >                 OPTIMIZER_HIDE_VAR(reg);
-> > >                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
-> > >         } else {
-> > > -               EMIT2(0xFF, 0xE0 + reg);
-> > > +               EMIT2(0xFF, 0xE0 + reg);        /* jmp *%\reg */
-> > > +               EMIT1(0xCC);                    /* int3 */
-> >
-> > Hmm. Why is this unconditional?
-> > Shouldn't it be guarded with CONFIG_xx or cpu_feature_enabled ?
-> > People that don't care about hw speculation vulnerabilities
-> > shouldn't pay the price of increased code size.
->
-> Sure, like so then?
->
-> ---
-> Subject: x86,retpoline: Be sure to emit INT3 after JMP *%\reg
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Thu, 8 Sep 2022 12:04:50 +0200
->
-> Both AMD and Intel recommend using INT3 after an indirect JMP. Make sure
-> to emit one when rewriting the retpoline JMP irrespective of compiler
-> SLS options or even CONFIG_SLS.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->
->  arch/x86/kernel/alternative.c |    9 +++++++++
->  arch/x86/net/bpf_jit_comp.c   |    4 +++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
->
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -453,6 +453,15 @@ static int patch_retpoline(void *addr, s
->                 return ret;
->         i += ret;
->
-> +       /*
-> +        * The compiler is supposed to EMIT an INT3 after every unconditional
-> +        * JMP instruction due to AMD BTC. However, if the compiler is too old
-> +        * or SLS isn't enabled, we still need an INT3 after indirect JMPs
-> +        * even on Intel.
-> +        */
-> +       if (op == JMP32_INSN_OPCODE && i < insn->length)
-> +               bytes[i++] = INT3_INSN_OPCODE;
-> +
->         for (; i < insn->length;)
->                 bytes[i++] = BYTES_NOP1;
->
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -419,7 +419,9 @@ static void emit_indirect_jump(u8 **ppro
->                 OPTIMIZER_HIDE_VAR(reg);
->                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
->         } else {
-> -               EMIT2(0xFF, 0xE0 + reg);
-> +               EMIT2(0xFF, 0xE0 + reg);        /* jmp *%\reg */
-> +               if (IS_ENABLED(CONFIG_RETPOLINE) || IS_ENABLED(CONFIG_SLS))
-> +                       EMIT1(0xCC);            /* int3 */
+The following changes since commit 1709c70c31e05e6e87b2ffa0a2b4cc0da4b2c513:
 
-Looks better. Ack.
+  Merge branch 'riscv-variable_fixes_without_kvm' of git://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git into fixes (2022-08-25 16:38:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.0-rc5
+
+for you to fetch changes up to 20e0fbab16003ae23a9e86a64bcb93e3121587ca:
+
+  perf: RISC-V: fix access beyond allocated array (2022-09-08 13:50:25 -0700)
+
+----------------------------------------------------------------
+RISC-V Fixes for 6.0-rc5
+
+* A pair of device tree fixes for the Polarfire SOC.
+* A fix to avoid overflowing the PMU counter array when firmware
+  incorrectly reports the number of supported counters, which manifests
+  on OpenSBI versions prior to 1.1.
+
+----------------------------------------------------------------
+Conor Dooley (2):
+      dt-bindings: riscv: sifive-l2: add a PolarFire SoC compatible
+      riscv: dts: microchip: use an mpfs specific l2 compatible
+
+Palmer Dabbelt (1):
+      Merge tag 'dt-fixes-for-palmer-6.0-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git into fixes
+
+Sergey Matyukevich (1):
+      perf: RISC-V: fix access beyond allocated array
+
+ .../devicetree/bindings/riscv/sifive-l2-cache.yaml | 79 ++++++++++++++--------
+ arch/riscv/boot/dts/microchip/mpfs.dtsi            |  2 +-
+ drivers/perf/riscv_pmu_sbi.c                       |  2 +-
+ 3 files changed, 51 insertions(+), 32 deletions(-)
