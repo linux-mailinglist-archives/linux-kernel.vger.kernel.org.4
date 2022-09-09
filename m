@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DFC5B4026
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C5C5B4042
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiIITsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S229774AbiIITzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiIITsC (ORCPT
+        with ESMTP id S231907AbiIITzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:48:02 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 325235F4A;
-        Fri,  9 Sep 2022 12:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FVEfS
-        rk5J5IIRdUuiB6oe+nFzivav0mW+6GBZvPewIs=; b=IU/HTleg6WQ42T4HZYEnu
-        rWbzkHdKM4f5US520C+BY3bs5IiQqJU5tcplpDa+12ayk1axg8Hrw7EDC5PK01Q7
-        VrOT8mBYstXM9O0cgwm2P8WtZQ454dDhaNGrCwdiB9mu68viavmiOqxDJD/Mugln
-        dRj0TWkVaeH6p+gs6KfUcQ=
-Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
-        by smtp7 (Coremail) with SMTP id C8CowABXQQzrlxtj40tnEg--.50296S4;
-        Sat, 10 Sep 2022 03:46:01 +0800 (CST)
-From:   Jingyu Wang <jingyuwang_vip@163.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jingyu Wang <jingyuwang_vip@163.com>
-Subject: [PATCH] block: remove unneeded "default n" options
-Date:   Sat, 10 Sep 2022 03:45:45 +0800
-Message-Id: <20220909194545.85603-1-jingyuwang_vip@163.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 9 Sep 2022 15:55:39 -0400
+X-Greylist: delayed 445 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 12:55:25 PDT
+Received: from vorpal.se (unknown [151.236.221.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B81FB4416
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:55:25 -0700 (PDT)
+Received: by vorpal.se (Postfix) with ESMTPSA id D1417142D4;
+        Fri,  9 Sep 2022 19:47:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
+        t=1662752849; bh=m5F9OisW+215YqSsE6KG9srcunWjr9IKPLu0+1gUwkM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XqNwTs8wTd/M0CbuYQvDJ3ZmWv23sIIwrtBLjJoaCGy9wSK3CzC71m0QTt1N3G45I
+         SkYrj5S1HSBo0MUZcIO0QzQHCB5GQ0up1zSmJFKRGmAwEMzAObyuaFoO4KXhlIm8k3
+         PPV7PFK6L4Yi+lCdSsup2/ftFArccJKlgkMJpMaxp1ZJg6cdpej//Bg+wctr5u/CN+
+         jwLrJK8gsTXUKRdPAHjLhvB9zFBVt3dXznN+/vsUEyqaW5/csF6RvLUjlzA8CnmpIk
+         3YaVSndfbWAcUIUzvKtQ3vGbWC6r+MAsEWQkpfF7YauBK2/btD9c7pDgklAvImqXQQ
+         5baCNBEC95+xA==
+Message-ID: <695c3c05-d6c9-8717-4cca-2119542f2f43@vorpal.se>
+Date:   Fri, 9 Sep 2022 21:47:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowABXQQzrlxtj40tnEg--.50296S4
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRN9NsUUUUU
-X-Originating-IP: [1.203.67.201]
-X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/1tbishl3F1UMWVTLewAAsv
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [pdx86-platform-drivers-x86:review-hans 59/65]
+ drivers/platform/x86/toshiba_acpi.c:2937:9: warning: no previous prototype
+ for 'toshiba_acpi_hwmon_is_visible'
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <202209100300.LjCie4bn-lkp@intel.com>
+From:   Arvid Norlander <lkml@vorpal.se>
+In-Reply-To: <202209100300.LjCie4bn-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,NO_DNS_FOR_FROM,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,28 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove "default n" options. If the "default" line is removed, it
-defaults to 'n'.
+Hi,
 
-Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
----
- block/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+On 2022-09-09 21:19, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
+> head:   79e8f8235a1686d0656b60cf72f7fda5530ee1cf
+> commit: b5f3665e82591d465357f4a69196f46b3d30e997 [59/65] platform/x86: toshiba_acpi: Add fan RPM reading (hwmon interface)
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220910/202209100300.LjCie4bn-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=b5f3665e82591d465357f4a69196f46b3d30e997
+>         git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
+>         git fetch --no-tags pdx86-platform-drivers-x86 review-hans
+>         git checkout b5f3665e82591d465357f4a69196f46b3d30e997
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/platform/x86/toshiba_acpi.c:2937:9: warning: no previous prototype for 'toshiba_acpi_hwmon_is_visible' [-Wmissing-prototypes]
+>     2937 | umode_t toshiba_acpi_hwmon_is_visible(const void *drvdata,
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/platform/x86/toshiba_acpi.c:2944:5: warning: no previous prototype for 'toshiba_acpi_hwmon_read' [-Wmissing-prototypes]
+>     2944 | int toshiba_acpi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>          |     ^~~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> vim +/toshiba_acpi_hwmon_is_visible +2937 drivers/platform/x86/toshiba_acpi.c
+> 
+>   2934	
+>   2935	/* HWMON support for fan */
+>   2936	#if IS_ENABLED(CONFIG_HWMON)
+>> 2937	umode_t toshiba_acpi_hwmon_is_visible(const void *drvdata,
+>   2938					      enum hwmon_sensor_types type,
+>   2939					      u32 attr, int channel)
+>   2940	{
+>   2941		return 0444;
+>   2942	}
+>   2943	
+>> 2944	int toshiba_acpi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>   2945				    u32 attr, int channel, long *val)
 
-diff --git a/block/Kconfig b/block/Kconfig
-index d4fdd606d138..d9dd24697967 100644
---- a/block/Kconfig
-+++ b/block/Kconfig
-@@ -50,7 +50,6 @@ config BLK_ICQ
- 
- config BLK_USE_PIN_USER_PAGES_FOR_DIO
- 	bool "DEVELOPERS ONLY: Enable pin_user_pages() for Direct IO" if EXPERT
--	default n
- 
- 	help
- 	  For Direct IO code, retain the pages via calls to
+Oops, clearly these are missing "static". Hans de Goede: Can you apply that
+fix locally easily, or should I send a patch? I must have forgotten to
+build with W=1.
 
-base-commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
--- 
-2.34.1
+>   2946	{
+>   2947		/*
+>   2948		 * There is only a single channel and single attribute (for the
+>   2949		 * fan) at this point.
+>   2950		 * This can be replaced with more advanced logic in the future,
+>   2951		 * should the need arise.
+>   2952		 */
+>   2953		if (type == hwmon_fan && channel == 0 && attr == hwmon_fan_input) {
+>   2954			u32 value;
+>   2955			int ret;
+>   2956	
+>   2957			ret = get_fan_rpm(toshiba_acpi, &value);
+>   2958			if (ret)
+>   2959				return ret;
+>   2960	
+>   2961			*val = value;
+>   2962			return 0;
+>   2963		}
+>   2964		return -EOPNOTSUPP;
+>   2965	}
+>   2966	
+> 
 
+Best regards,
+Arvid Norlander
