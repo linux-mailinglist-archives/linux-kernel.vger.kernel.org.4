@@ -2,165 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3395B34CE
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFFD5B34CF
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiIIKIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S230241AbiIIKI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiIIKH4 (ORCPT
+        with ESMTP id S230374AbiIIKIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:07:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC39A13866A;
-        Fri,  9 Sep 2022 03:07:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 147581F8CC;
-        Fri,  9 Sep 2022 10:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662718071; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 9 Sep 2022 06:08:15 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4824EA611;
+        Fri,  9 Sep 2022 03:08:11 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 11:07:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662718090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kaEFScBMLBkLYBcNzQihUKThBdl/zR6zylgLtwYJqtA=;
-        b=ZvC6OllSfSNUYzGZ7dmWufc5DaNSZzNNx3PbFNtRGnDLfEedrjTIfqydQ/L79IT5CdL9sz
-        oTMZm27pTL/r6Ld85pBb7xne2lATnQPylYA6CcIfqbxWvF81dqJnXLyGie95Lv8r5FScwG
-        i+j/JvLYI0+jynRCBiXHu7SwJ2yQfps=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662718071;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kaEFScBMLBkLYBcNzQihUKThBdl/zR6zylgLtwYJqtA=;
-        b=E86DZeHLq5768SlnDe7tB4FIHmk88ys1fIoiUXKMg+U89YFQDhoLAJ9NQtaE63+/BkJKgk
-        IpLqiyD8RmEFmmBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0150513A93;
-        Fri,  9 Sep 2022 10:07:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id f/9EAHcQG2OCcAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 09 Sep 2022 10:07:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8CADCA0684; Fri,  9 Sep 2022 12:07:50 +0200 (CEST)
-Date:   Fri, 9 Sep 2022 12:07:50 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     jack@suse.cz, tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com
-Subject: Re: [PATCH] ext4: Fix dir corruption when ext4_dx_add_entry() fails
-Message-ID: <20220909100750.nrr3gqvbwjss4yel@quack3>
-References: <20220909062736.2929221-1-chengzhihao1@huawei.com>
+        bh=gNzaPZG1mLQyJyRsZVtVFOttl8uuZk01rBnRTGZpE+s=;
+        b=uk4H9WhHFnTUkmuLpAFALPIaa+FU2UKVZ2XPdSwdnhtmtIobV8lxEqLkVO7Y7jbn01QNbB
+        1IXt1sYeBb3Il0++CysKXgK+Hj0N/NTHW8+zOLFKdpKtjUJ+HWy/8ou2g7YtsfTllff+lu
+        2L610rpZepsKnUQVPIxZalH6CRJXp8U=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/14] KVM: arm64: Tear down unlinked stage-2 subtree
+ after break-before-make
+Message-ID: <YxsQfwJ++izBQuEi@google.com>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
+ <20220830194132.962932-3-oliver.upton@linux.dev>
+ <YxkFrSmSKdBFEoZp@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909062736.2929221-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YxkFrSmSKdBFEoZp@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 09-09-22 14:27:36, Zhihao Cheng wrote:
-> Following process may lead to fs corruption:
-> 1. ext4_create(dir/foo)
->  ext4_add_nondir
->   ext4_add_entry
->    ext4_dx_add_entry
->      a. add_dirent_to_buf
->       ext4_mark_inode_dirty
->       ext4_handle_dirty_metadata   // dir inode bh is recorded into journal
->      b. ext4_append    // dx_get_count(entries) == dx_get_limit(entries)
->        ext4_bread(EXT4_GET_BLOCKS_CREATE)
->         ext4_getblk
->          ext4_map_blocks
->           ext4_ext_map_blocks
->             ext4_mb_new_blocks
->              dquot_alloc_block
->               dquot_alloc_space_nodirty
->                inode_add_bytes    // update dir's i_blocks
->             ext4_ext_insert_extent
-> 	     ext4_ext_dirty  // record extent bh into journal
->               ext4_handle_dirty_metadata(bh)
-> 	      // record new block into journal
->        inode->i_size += inode->i_sb->s_blocksize   // new size(in mem)
->      c. ext4_handle_dirty_dx_node(bh2)
-> 	// record dir's new block(dx_node) into journal
->      d. ext4_handle_dirty_dx_node((frame - 1)->bh)
->      e. ext4_handle_dirty_dx_node(frame->bh)
->      f. do_split    // ret err!
->      g. add_dirent_to_buf
-> 	 ext4_mark_inode_dirty(dir)  // update raw_inode on disk(skipped)
-> 2. fsck -a /dev/sdb
->  drop last block(dx_node) which beyonds dir's i_size.
->   /dev/sdb: recovering journal
->   /dev/sdb contains a file system with errors, check forced.
->   /dev/sdb: Inode 12, end of extent exceeds allowed value
-> 	(logical block 128, physical block 3938, len 1)
-> 3. fsck -fn /dev/sdb
->  dx_node->entry[i].blk > dir->i_size
->   Pass 2: Checking directory structure
->   Problem in HTREE directory inode 12 (/dir): bad block number 128.
->   Clear HTree index? no
->   Problem in HTREE directory inode 12: block #3 has invalid depth (2)
->   Problem in HTREE directory inode 12: block #3 has bad max hash
->   Problem in HTREE directory inode 12: block #3 not referenced
+On Wed, Sep 07, 2022 at 01:57:17PM -0700, David Matlack wrote:
+> On Tue, Aug 30, 2022 at 07:41:20PM +0000, Oliver Upton wrote:
+> [...]
+> >  
+> > +static int stage2_map_walk_leaf(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> > +				struct stage2_map_data *data);
+> > +
+> >  static int stage2_map_walk_table_pre(u64 addr, u64 end, u32 level,
+> >  				     kvm_pte_t *ptep,
+> >  				     struct stage2_map_data *data)
+> >  {
+> > -	if (data->anchor)
 > 
-> Just like make_indexed_dir() does, update dir inode if error occurs.
-> Fetch a reproducer in [Link].
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216466
-> CC: stable@vger.kernel.org
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Should @anchor and @childp be removed from struct stage2_map_data? This
+> commit removes the only remaining references to them.
 
-Thanks for the analysis and the fix! In principle it looks fine but overall
-we seem to be defering directory dirtying too much in ext4 directory
-handling code and as a result things are too fragile as you've noticed. By
-looking through fs/ext4/namei.c I've found several more places that have
-exactly the same problem as you're fixing here. I think that specifically
-for these problems with ext4_append() the best solution is to mark inode
-dirty directly inside ext4_append(). Sure it will result in more copying of
-inode data into the journal but growing directory size is not that
-performance critical operation so I think the code simplicity is worth the
-extra CPU cycles.
+Yup, I'll toss those in the next spin.
 
-								Honza
+> > -		return 0;
+> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
+> > +	kvm_pte_t *childp = kvm_pte_follow(*ptep, mm_ops);
+> > +	struct kvm_pgtable *pgt = data->mmu->pgt;
+> > +	int ret;
+> >  
+> >  	if (!stage2_leaf_mapping_allowed(addr, end, level, data))
+> >  		return 0;
+> >  
+> > -	data->childp = kvm_pte_follow(*ptep, data->mm_ops);
+> >  	kvm_clear_pte(ptep);
+> >  
+> >  	/*
+> [...]
+> >  static int stage2_map_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> >  			     enum kvm_pgtable_walk_flags flag, void * const arg)
+> > @@ -883,11 +849,9 @@ static int stage2_map_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> >  		return stage2_map_walk_table_pre(addr, end, level, ptep, data);
+> >  	case KVM_PGTABLE_WALK_LEAF:
+> >  		return stage2_map_walk_leaf(addr, end, level, ptep, data);
+> > -	case KVM_PGTABLE_WALK_TABLE_POST:
+> > -		return stage2_map_walk_table_post(addr, end, level, ptep, data);
+> 
+> kvm_pgtable_stage2_set_owner() still uses stage2_map_walker() with
+> KVM_PGTABLE_WALK_TABLE_POST.
 
-> ---
->  fs/ext4/namei.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-> index 3a31b662f661..f04871fa4ead 100644
-> --- a/fs/ext4/namei.c
-> +++ b/fs/ext4/namei.c
-> @@ -2617,6 +2617,13 @@ static int ext4_dx_add_entry(handle_t *handle, struct ext4_filename *fname,
->  	 */
->  	if (restart && err == 0)
->  		goto again;
-> +	/*
-> +	 * Even if the dx_add_entry failed, we have to properly write
-> +	 * out all the changes we did so far. Otherwise we can end up
-> +	 * with corrupted filesystem.
-> +	 */
-> +	if (err)
-> +		ext4_mark_inode_dirty(handle, dir);
->  	return err;
->  }
->  
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Good catch, I'll drop the TABLE_POST flag there as well.
+
+Appreciate the reviews on the series.
+
+--
+Thanks,
+Oliver
