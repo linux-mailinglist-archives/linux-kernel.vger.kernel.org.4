@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5205B315B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D545B3156
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiIIIKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
+        id S230101AbiIIIIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiIIIKq (ORCPT
+        with ESMTP id S229566AbiIIIIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:10:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEF66D9D5;
-        Fri,  9 Sep 2022 01:10:45 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2897o5Nd007560;
-        Fri, 9 Sep 2022 08:10:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=58/S1/E7WdYZacOEayRrVuVyfjN37qCIf7i0CMngiXc=;
- b=SYGEB32JXNQsNcB8EAImnq+kJ7pVknpCZgTY6mCkNneTiR8IctFDYqr/zMlM993ySZgY
- XjTyYO0HY7QChTgNK+Wjmht2wlpmQKNEaSeLdLC8S4lTXj4fPedNurWh9yc2N0eoSaHl
- +1caVch5WajEOnMQJ3KSAjb0UPVMTzlXBziJFnOZI3l/UpeGaCMsrgh3D4KD2rjk0yro
- swUkDUfaTuj3jxHy01T1QNkHo+17gSvhQ/Zg059XC9V9LT6IHE2QplV/fdyIGey3HdFA
- d0lfSw2bmWZcip+Qa4RwZVhLde2SuhqdwsSrGBDYd7mjWOJ8nkw/kE6+ZPSiWUVqafCV MA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfdc73vv3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 08:10:43 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28985gAU028269
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Sep 2022 08:05:42 GMT
-Received: from ecbld-sh026-lnx.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 9 Sep 2022 01:05:41 -0700
-From:   Maria Yu <quic_aiquny@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
-CC:     Maria Yu <quic_aiquny@quicinc.com>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_clew@quicinc.com>
-Subject: [PATCH] remoteproc: core: do pm relax when not first crash
-Date:   Fri, 9 Sep 2022 16:05:31 +0800
-Message-ID: <1662710731-57212-1-git-send-email-quic_aiquny@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 9 Sep 2022 04:08:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D4110E859
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:08:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DD06B823CB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C10C433C1;
+        Fri,  9 Sep 2022 08:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662710894;
+        bh=BEEAJt3FrfRKaGdrMeSMHYVN70A8IJdJOsUKIwcPUwo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rtLzayYmoSW/4FDm8L9kBBAybnyOAVcg5hrghsFx0+NykW2AKTGHfv2vivvvyteKO
+         ijVIsXq7eumnCS21u4EbJUmz9i17BefkMYaFRa4vAgHolMRGWiUaeTHBdIJn4wxbdr
+         SgCITPdlO71VGXy8HPx18GC3AOoiaPDvtSAAOCUM=
+Date:   Fri, 9 Sep 2022 10:08:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     sudipm.mukherjee@gmail.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ppdev: check ida_simple_get() return value
+Message-ID: <Yxr0a3fnLUsPnyJL@kroah.com>
+References: <20220907023642.2333-1-liubo03@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wdmo4nApRUkWj3jFe47bQtolwmHX3B67
-X-Proofpoint-ORIG-GUID: wdmo4nApRUkWj3jFe47bQtolwmHX3B67
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_04,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 clxscore=1011 adultscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209090027
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907023642.2333-1-liubo03@inspur.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even if it is not first crash, need to relax the pm
-wakelock otherwise the device will stay awake.
+On Tue, Sep 06, 2022 at 10:36:42PM -0400, Bo Liu wrote:
+> As ida_simple_get() can fail, we should check the return value.
+> 
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  drivers/char/ppdev.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/char/ppdev.c b/drivers/char/ppdev.c
+> index 38b46c7d1737..13b58b6823ee 100644
+> --- a/drivers/char/ppdev.c
+> +++ b/drivers/char/ppdev.c
+> @@ -300,6 +300,11 @@ static int register_device(int minor, struct pp_struct *pp)
+>  	}
+>  
+>  	index = ida_simple_get(&ida_index, 0, 0, GFP_KERNEL);
+> +	if (index < 0) {
+> +		rc = index;
+> +		goto err;
+> +	}
+> +
+>  	memset(&ppdev_cb, 0, sizeof(ppdev_cb));
+>  	ppdev_cb.irq_func = pp_irq;
+>  	ppdev_cb.flags = (pp->flags & PP_EXCL) ? PARPORT_FLAG_EXCL : 0;
+> -- 
+> 2.27.0
+> 
 
-Change-Id: I26bfeb44871aab0b57837a77a6243b2086f94473
-Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
----
- drivers/remoteproc/remoteproc_core.c | 1 +
- 1 file changed, 1 insertion(+)
+You just leaked a memory reference here :(
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index e5279ed9a8d7..30078043e939 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1956,6 +1956,7 @@ static void rproc_crash_handler_work(struct work_struct *work)
- 	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
- 		/* handle only the first crash detected */
- 		mutex_unlock(&rproc->lock);
-+		pm_relax(rproc->dev.parent);
- 		return;
- 	}
- 
--- 
-2.7.4
+How did you test this?  What tool caused this to be changed?  Please fix
+up your tool to not add problems when it is attempting to fix problems,
+as that's a never-ending cycle we do not want to be in :(
 
+thanks,
+
+greg k-h
