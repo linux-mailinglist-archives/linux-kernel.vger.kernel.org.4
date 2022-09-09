@@ -2,148 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6BC5B30B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7ED5B2FF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiIIHhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S230204AbiIIHfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiIIHgZ (ORCPT
+        with ESMTP id S231390AbiIIHen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7032A3460;
-        Fri,  9 Sep 2022 00:35:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Sep 2022 03:34:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F0B95BF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:34:38 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F7A61F10;
-        Fri,  9 Sep 2022 07:34:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233ECC4FEE2;
-        Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662708895;
-        bh=p0gRNxopbv/9oIGzyzpAiFGWySnAU40dy4twByJWqqA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UF86OSy1bdrAVtz2A0D0TfkQsXszkgNG3lm2ofj+awZdWdrJhutftWrsNWL1HFCoA
-         B7AG2oHiP8REm09hAfc5y+8QWu8OM1jLQT1vBua2p9fTIpu4JHYP0wQbiqYStaZDNM
-         0zMC30RVi8rUVlinq3Ym1AF5hmk2MThFKmCbXD7hQ5YeqV3v5DjmyVXZOgna+nHFaH
-         hSt5Cx1slBZyLUzZWkJaHQyOY528jucre/DmlC1805E2+EGxVQZSLfMaVERDyl0if+
-         s6oXv4nzgSDhZ/7H0DEU4O5bY4jdY1hLPKlYvnlRx9W89YlljeswIFdvIE77dS8QMO
-         uvx2ZCXmUchVg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oWYXH-007FHH-31;
-        Fri, 09 Sep 2022 09:34:47 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 26/37] docs: gpu: i915.rst: display: add kernel-doc markups
-Date:   Fri,  9 Sep 2022 09:34:33 +0200
-Message-Id: <690f8555b119dc783764de7d484ac07a711d2cd5.1662708705.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
-References: <cover.1662708705.git.mchehab@kernel.org>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A7A06601FAE;
+        Fri,  9 Sep 2022 08:34:36 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662708877;
+        bh=5VvwnbXofTSVecEzap842tdZGEPaG2MhXLhAO0Qr1uE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DR8eG5rO8nqbt0vO7cWvvbgPnu4vs92+CAEGSKvmgoD7++/LVTMNQ2RjTJeUwl0fQ
+         bW87Q0NELXwTBKeKPx7pb41Lyrd71itLmxs+RduZqOaEMmvjlj6/l5y1ZV5p398kdh
+         o+1pxbi7K4y9rch1ufgvPVrWJpOh5yXwuwBZNYsyP7GFmUUfbd72x9yofdd6tAroyj
+         yPicSUfMmnR+055S1tCcFOi2sYENo8/aMVQRiuykI1vLoWPYckH0OHvWaXWTLskFqs
+         lqvSgA0MGZue42utV+SAv1KfyoXaz9gKzgbtYaHcqNGri0rrv1pgP6rLaVULDVAFz7
+         1lPmdZuUxJI4A==
+Message-ID: <ecb5fb65-9e87-aeaa-48f4-f825646b5228@collabora.com>
+Date:   Fri, 9 Sep 2022 09:34:33 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 06/10] ASoC: mediatek: mt8183: Remove clock share parsing
+ from DT
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220908161154.648557-1-nfraprado@collabora.com>
+ <20220908161154.648557-7-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220908161154.648557-7-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are several documented kAPI at the display side that
-aren't currently part of the docs. Add them, as this allows
-identifying issues with badly-formatted tags.
+Il 08/09/22 18:11, Nícolas F. R. A. Prado ha scritto:
+> Now that the clock sharing for i2s ports can be configured from the
+> sound machine driver, remove the logic that was used to parse the
+> properties from the devicetree.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
-
- Documentation/gpu/i915.rst | 50 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
-index 4e59db1cfb00..2ad7941a79f2 100644
---- a/Documentation/gpu/i915.rst
-+++ b/Documentation/gpu/i915.rst
-@@ -100,6 +100,56 @@ Display FIFO Underrun Reporting
- .. kernel-doc:: drivers/gpu/drm/i915/display/intel_fifo_underrun.c
-    :internal:
- 
-+Atomic Modeset Support
-+----------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_atomic.c
-+
-+Display Power Domain
-+--------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_display_power.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_display_power_map.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_display_power_well.c
-+
-+Misc display functions
-+----------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_backlight.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_crtc.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_connector.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_display_debugfs.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_dp.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_dp_link_training.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_dpll.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_dpt.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_fb.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_fb_pin.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_gmbus.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_lvds.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_opregion.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_snps_phy.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/intel_tc.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/display/skl_scaler.c
-+
-+
- Plane Configuration
- -------------------
- 
--- 
-2.37.3
 
