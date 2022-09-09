@@ -2,76 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7ED5B2FF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747ED5B30A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiIIHfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S231483AbiIIHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiIIHen (ORCPT
+        with ESMTP id S230516AbiIIHgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:34:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F0B95BF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:34:38 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 9 Sep 2022 03:36:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3081269CC;
+        Fri,  9 Sep 2022 00:35:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A7A06601FAE;
-        Fri,  9 Sep 2022 08:34:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662708877;
-        bh=5VvwnbXofTSVecEzap842tdZGEPaG2MhXLhAO0Qr1uE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DR8eG5rO8nqbt0vO7cWvvbgPnu4vs92+CAEGSKvmgoD7++/LVTMNQ2RjTJeUwl0fQ
-         bW87Q0NELXwTBKeKPx7pb41Lyrd71itLmxs+RduZqOaEMmvjlj6/l5y1ZV5p398kdh
-         o+1pxbi7K4y9rch1ufgvPVrWJpOh5yXwuwBZNYsyP7GFmUUfbd72x9yofdd6tAroyj
-         yPicSUfMmnR+055S1tCcFOi2sYENo8/aMVQRiuykI1vLoWPYckH0OHvWaXWTLskFqs
-         lqvSgA0MGZue42utV+SAv1KfyoXaz9gKzgbtYaHcqNGri0rrv1pgP6rLaVULDVAFz7
-         1lPmdZuUxJI4A==
-Message-ID: <ecb5fb65-9e87-aeaa-48f4-f825646b5228@collabora.com>
-Date:   Fri, 9 Sep 2022 09:34:33 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1034D61F02;
+        Fri,  9 Sep 2022 07:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CD5C43165;
+        Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662708895;
+        bh=hMbCpBcT2vFUAUJkRSUmrCoccfdseZPeZQleafPjwmo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gI6htIKsXFDNpNE4e3TBpBlAm3K38T+orpddKU8nqv5tjPsUhrvD3lHKiFYy58KbL
+         1Jd4TKu1Dau2XQiCeoJvXrwaUJ7H1Sbg7sjF1UVQ28KWrGOfqC0rwlKTFVB81Ztryf
+         MUh9d3fZbpQopYPFIo6taBfLBDXUrP84/97KzY3pOt9JOoZ1HeC1ihPSNgvjt7tCSQ
+         hiiE6VE5csG4uKYFDT8Pi15ZxJ/EF4gEk2FWb0PoFIT1kBtfwDHI28TtX+8HaRSQaS
+         JeqfvF0FkkBIIF7QarRLbtM3fSvw0FCehb9ae1xxSPl4UOnC84PYguXzp3LQxchJ23
+         NzOrFHe/satUQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1oWYXH-007FHL-4n;
+        Fri, 09 Sep 2022 09:34:47 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 27/37] docs: gpu: i915.rst: gt: add more kernel-doc markups
+Date:   Fri,  9 Sep 2022 09:34:34 +0200
+Message-Id: <6d31414391976615b5c1818cafba066132c24e85.1662708705.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
+References: <cover.1662708705.git.mchehab@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 06/10] ASoC: mediatek: mt8183: Remove clock share parsing
- from DT
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220908161154.648557-1-nfraprado@collabora.com>
- <20220908161154.648557-7-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220908161154.648557-7-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/09/22 18:11, Nícolas F. R. A. Prado ha scritto:
-> Now that the clock sharing for i2s ports can be configured from the
-> sound machine driver, remove the logic that was used to parse the
-> properties from the devicetree.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+There are several documented GT kAPI that aren't currently part
+of the docs. Add them, as this allows identifying issues with
+badly-formatted tags.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
+
+ Documentation/gpu/i915.rst | 40 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
+index 2ad7941a79f2..b668f36fb0a3 100644
+--- a/Documentation/gpu/i915.rst
++++ b/Documentation/gpu/i915.rst
+@@ -149,7 +149,6 @@ Misc display functions
+ 
+ .. kernel-doc:: drivers/gpu/drm/i915/display/skl_scaler.c
+ 
+-
+ Plane Configuration
+ -------------------
+ 
+@@ -308,6 +307,45 @@ Multicast/Replicated (MCR) Registers
+ .. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gt_mcr.c
+    :internal:
+ 
++GT engine
++---------
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_types.h
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_cs.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_pm.c
++
++Graphics Translation Tables
++---------------------------
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_ggtt.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gtt.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gtt.h
++
++Other GT functionality
++----------------------
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_context.h
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gsc.h
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_migrate.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_mocs.h
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rc6.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_reset.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rps_types.h
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rps.c
++
++.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_sseu.c
++
+ Memory Management and Command Submission
+ ========================================
+ 
+-- 
+2.37.3
 
