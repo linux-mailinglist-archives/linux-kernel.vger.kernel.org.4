@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2E35B3938
+	by mail.lfdr.de (Postfix) with ESMTP id 261D75B3937
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbiIINkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S231423AbiIINk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiIINkg (ORCPT
+        with ESMTP id S230272AbiIINkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:40:36 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5389989820;
-        Fri,  9 Sep 2022 06:40:28 -0700 (PDT)
+        Fri, 9 Sep 2022 09:40:39 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B148C462;
+        Fri,  9 Sep 2022 06:40:30 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F1FF31C0007;
-        Fri,  9 Sep 2022 13:40:20 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E01401C0003;
+        Fri,  9 Sep 2022 13:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662730826;
+        t=1662730829;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ymJxpyXPHP7SnAhvIF7gZ8BpVklD5DeS9VKlbiuGSqo=;
-        b=aMUOBNCAEpF9nr+LoVLA74Tm2wRdWubL7OjHHSiyxjNF7A5DyJnc+Tw8Ry0qoodVDZTRGD
-        Bn4rtApb/9sE30UV7S24NOsKqrDHZuLNvhqrNsbfIxeQt1y7REkrP02NNSADgM+DoGSYWu
-        shA/LsPKsCqimA/DlAcdto195BwSyJB0Qb0e25G71nXurK+HWiCAiKeVNza3UX1HYxf93u
-        PQ2wAu2+XsbTK2s361PNJ23W0dNbAknKuFwV7iY3a5I3jgLrmH7b9MOmBOj+2ejPM9aGJs
-        L8C0UkQFZS5QPIHJrL4uPSQBNmtHWj/Nr0CgDq8vI/TuwaWPr/PKKECRYDynNw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NzDRiNxlngXMkep4VlkVbmP7SB6g960sXKbI90dfLZ4=;
+        b=hGtcLJPqM6oYiVcr1WZyCzBbTYzH6GqgwUSJpWEVhLJj54xhH2+gf6jNPZ5lhKogjzqxMz
+        M4+Rh08pagsRVtaGzmKC/MmFVBOJsrUmg+6wDlc3QXZi2YNnFAXmkeg0gLLSUtUkBY/Gdn
+        vLppwZCqwWJVX6DEQlRuFeHgpNx0Ovtgyx2292NAtRRO+Ycnhx0PbuGo3WRuqd/9ea8Jhp
+        nIIAaMYBdHhhu+zsg0JExUKGfajlOgZqeBWyvDCIIEhDmQ78fEiaEV8T6aiND8FR5WQnir
+        AIgZ1j2wJXmSYCu+1FaZqbzyK/eeaGPkkQhnMDbZzubKyFg1tD7NbBtPWNgFpQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
@@ -41,10 +42,12 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH 0/4] media: sunxi: MIPI CSI-2 controllers link fixups
-Date:   Fri,  9 Sep 2022 15:39:50 +0200
-Message-Id: <20220909133954.97010-1-paul.kocialkowski@bootlin.com>
+Subject: [PATCH 1/4] media: sun6i-mipi-csi2: Require both pads to be connected for streaming
+Date:   Fri,  9 Sep 2022 15:39:51 +0200
+Message-Id: <20220909133954.97010-2-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220909133954.97010-1-paul.kocialkowski@bootlin.com>
+References: <20220909133954.97010-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
@@ -56,32 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the MIPI CSI-2 drivers to correctly check enabled links and to
-register their subdev even without a sensor attached. This allows
-their parent driver to register in that situation and makes it
-possible to use a parallel sensor when both parallel and MIPI CSI-2
-are fed to the same controller but no sensor is connected to the
-MIPI CSI-2 bridge.
+The bridge needs both its pads connected to be able to stream data.
+Enforcing this is useful to produce an error when no sensor is
+connected.
 
-With this change, it becomes possible to always describe the links
-between the CSI and MIPI CSI-2 blocks in device-tree.
+Fixes: af54b4f4c17f ("media: sunxi: Add support for the A31 MIPI CSI-2 controller")
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ .../media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c  | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-This series is based atop Christophe JAILLET's fixes at:
-https://patchwork.kernel.org/project/linux-media/list/?series=670059
-
-Paul Kocialkowski (4):
-  media: sun6i-mipi-csi2: Require both pads to be connected for
-    streaming
-  media: sun8i-a83t-mipi-csi2: Require both pads to be connected for
-    streaming
-  media: sun6i-mipi-csi2: Register async subdev with no sensor attached
-  media: sun8i-a83t-mipi-csi2: Register async subdev with no sensor
-    attached
-
- .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   | 23 +++++++++++++------
- .../sun8i_a83t_mipi_csi2.c                    | 23 +++++++++++++------
- 2 files changed, 32 insertions(+), 14 deletions(-)
-
+diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+index 30d6c0c5161f..340380a5f66f 100644
+--- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+@@ -519,8 +519,10 @@ static int sun6i_mipi_csi2_bridge_setup(struct sun6i_mipi_csi2_device *csi2_dev)
+ 
+ 	/* Media Pads */
+ 
+-	pads[SUN6I_MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+-	pads[SUN6I_MIPI_CSI2_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
++	pads[SUN6I_MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK |
++					       MEDIA_PAD_FL_MUST_CONNECT;
++	pads[SUN6I_MIPI_CSI2_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE |
++						 MEDIA_PAD_FL_MUST_CONNECT;
+ 
+ 	ret = media_entity_pads_init(&subdev->entity, SUN6I_MIPI_CSI2_PAD_COUNT,
+ 				     pads);
 -- 
 2.37.3
 
