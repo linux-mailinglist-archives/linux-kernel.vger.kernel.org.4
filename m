@@ -2,56 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4203F5B33F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27B65B33DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiIIJa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S231400AbiIIJbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiIIJaX (ORCPT
+        with ESMTP id S230439AbiIIJaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:30:23 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BC7E13A054;
-        Fri,  9 Sep 2022 02:28:35 -0700 (PDT)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.105])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOIrBxtjH04VAA--.19971S4;
-        Fri, 09 Sep 2022 17:28:16 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     lpieralisi@kernel.org, robin.murphy@arm.com, chenhuacai@loongson.cn
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        lenb@kernel.org, robert.moore@intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        loongarch@lists.linux.dev
-Subject: [PATCH V4 2/2] LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA
-Date:   Fri,  9 Sep 2022 17:28:11 +0800
-Message-Id: <20220909092811.22627-3-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220909092811.22627-1-lvjianmin@loongson.cn>
-References: <20220909092811.22627-1-lvjianmin@loongson.cn>
+        Fri, 9 Sep 2022 05:30:24 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7B613D787
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:28:30 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 3DB3832008FD;
+        Fri,  9 Sep 2022 05:28:21 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 09 Sep 2022 05:28:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662715700; x=
+        1662802100; bh=PjPU9k9R2A+Pq3a2t6Rt8kAyGY1XV3vq1wKmujKhE8c=; b=y
+        hOqJ0iujJCrTrNvzDMNAAtapzZabCRBIaB/u8uoch5AQCaZDTh0TDBfQPGioQh16
+        jWSOycrPrRxITdvyl6emqt7JRDCY0k7ltG05wOH48X5UXQ3KMPN5qCFj0ODUepHn
+        l+BFepm9vK3JmZZsee9BTCKjAmHRgIQQeTGiDdecW25meO/B+mv995iGrE4ubSIv
+        LjG+VUqksyWwzsXDH2HQ1qPygEMicAC9N42V0+5DqKcLZIqDxDgjTRFIEmKp1cRp
+        lvgNeEALSAaBKvEl64LO1ZzPcWxjnKwIA6BxEE+un/Bl9aytb9z6FLGxygVU3mIA
+        wWq+COJTGO9MaBPmFu1iQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662715700; x=
+        1662802100; bh=PjPU9k9R2A+Pq3a2t6Rt8kAyGY1XV3vq1wKmujKhE8c=; b=Y
+        iaCO0JA9F5MlyjE2f6d704OV8Rj6Zh4RBmV+ocM0wa30Q3eHZMEXli33Wjus26Wg
+        4w3CHfEY/7iurEWPO31uuMsDm0gU3JY26B+GKlQTKVhkIl6AkL5c5kyHASQ0NTck
+        bn1vrXqsr1lRJyUOo9emUr+iYK/05WQebrMbQCcuWFnJMMjRCS4dMZ1H3RSBF1wK
+        qkV1gC2rg4QNiQ3cMygPxQLblhRWACRch9G8i9QsroOCkUNPAfIdYYqUjAL1214I
+        QuSaL9Xh++sdgYQ4MWllfXTdIMoLgSKOKrzFuZn5Cuau/JcC8ycgKxufa4YwzSCt
+        2zYd4q8eMLA6WIIcMPcJA==
+X-ME-Sender: <xms:MwcbYzlixEAoCpEnm1AWX6e9ZkDUIufVliI6CSs7_JkFuF2J-tVcPA>
+    <xme:MwcbY20kX0b_cHnrmfYPddLgQweqOlJEkjNZaSu1-NNIeF57TE-O9J45zzIkg4px9
+    SX2Ku2aq6OP7HCl_CE>
+X-ME-Received: <xmr:MwcbY5rIGINYtpJCie-G3rAZ2ob8CZ_bvk1nJxaeNHJNag26UUK2P7Q9Ow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddunecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepleelfeeileelteetfedvieekfeefffevhfdtvefgheevudevheejvddv
+    ieeltdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:MwcbY7kxo9RX7gwuUCJi7WIaW0GlPToEyaha26PsZhgKbJYu_CYWJQ>
+    <xmx:MwcbYx0m-KjmQHfJcn2AiwsfgmJOLteXXoRgFHLv0Qldkp2deZN9Tg>
+    <xmx:MwcbY6vkiK1OfN3EjjgLgPywK4O9s4iXbuydObvgOxMM-Yk8xPeWQA>
+    <xmx:NAcbY4vV9MbhEtznBH2AViPxyGN-S791832Xm10aA5ZvFPXA-bxrNw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Sep 2022 05:28:18 -0400 (EDT)
+Date:   Fri, 9 Sep 2022 11:28:16 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        michal.winiarski@intel.com,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] drm/tests: Change "igt_" prefix to "drm_test_"
+Message-ID: <20220909092816.oecjw6p5uz3rqxxh@houat>
+References: <20220907200247.89679-1-mairacanal@riseup.net>
+ <20220907200247.89679-2-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxBOIrBxtjH04VAA--.19971S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw47XF4rAF45CryDXF1UZFb_yoW7Gr43pa
-        srCrs8Gr4xKrs7XrykCw18Zr15X3s2kay7XFW7K3sakFnFqr1UXr1vyF9rZF1YqrZrKF4I
-        qF95CFyYqF4UWw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU921xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
-        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
-        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4
-        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-        MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-        6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220907200247.89679-2-mairacanal@riseup.net>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,176 +98,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use _DMA defined in ACPI spec for translation between
-DMA address and CPU address, and implement acpi_arch_dma_setup
-for initializing dev->dma_range_map, where acpi_dma_get_range
-is called for parsing _DMA.
+On Wed, Sep 07, 2022 at 05:02:47PM -0300, Ma=EDra Canal wrote:
+> With the introduction of KUnit, IGT is no longer the only option to run
+> the DRM unit tests, as the tests can be run through kunit-tool or on
+> real hardware with CONFIG_KUNIT.
+>=20
+> Therefore, remove the "igt_" prefix from the tests and replace it with
+> the "drm_test_" prefix, making the tests' names independent from the tool
+> used.
+>=20
+> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
+> Acked-by: David Gow <davidgow@google.com>
 
-e.g.
-If we have two dma ranges:
-cpu address      dma address    size         offset
-0x200080000000   0x2080000000   0x400000000  0x1fe000000000
-0x400080000000   0x4080000000   0x400000000  0x3fc000000000
+Acked-by: Maxime Ripard <maxime@cerno.tech>
 
-_DMA for pci devices should be declared in host bridge as
-flowing:
-
-Name (_DMA, ResourceTemplate() {
-        QWordMemory (ResourceProducer,
-            PosDecode,
-            MinFixed,
-            MaxFixed,
-            NonCacheable,
-            ReadWrite,
-            0x0,
-            0x4080000000,
-            0x447fffffff,
-            0x3fc000000000,
-            0x400000000,
-            ,
-            ,
-            )
-
-        QWordMemory (ResourceProducer,
-            PosDecode,
-            MinFixed,
-            MaxFixed,
-            NonCacheable,
-            ReadWrite,
-            0x0,
-            0x2080000000,
-            0x247fffffff,
-            0x1fe000000000,
-            0x400000000,
-            ,
-            ,
-            )
-    })
-
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- arch/loongarch/Kconfig        |  1 -
- arch/loongarch/kernel/dma.c   | 52 ++++++++++++++---------------------
- arch/loongarch/kernel/setup.c |  2 +-
- include/linux/acpi.h          |  9 ++++--
- 4 files changed, 28 insertions(+), 36 deletions(-)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index c7dd6ad779af..551dd99e98b8 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -10,7 +10,6 @@ config LOONGARCH
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
--	select ARCH_HAS_PHYS_TO_DMA
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_INLINE_READ_LOCK if !PREEMPTION
-diff --git a/arch/loongarch/kernel/dma.c b/arch/loongarch/kernel/dma.c
-index 8c9b5314a13e..7a9c6a9dd2d0 100644
---- a/arch/loongarch/kernel/dma.c
-+++ b/arch/loongarch/kernel/dma.c
-@@ -2,39 +2,29 @@
- /*
-  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-  */
--#include <linux/init.h>
-+#include <linux/acpi.h>
- #include <linux/dma-direct.h>
--#include <linux/dma-mapping.h>
--#include <linux/dma-map-ops.h>
--#include <linux/swiotlb.h>
- 
--#include <asm/bootinfo.h>
--#include <asm/dma.h>
--#include <asm/loongson.h>
--
--/*
-- * We extract 4bit node id (bit 44~47) from Loongson-3's
-- * 48bit physical address space and embed it into 40bit.
-- */
--
--static int node_id_offset;
--
--dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
--{
--	long nid = (paddr >> 44) & 0xf;
--
--	return ((nid << 44) ^ paddr) | (nid << node_id_offset);
--}
--
--phys_addr_t dma_to_phys(struct device *dev, dma_addr_t daddr)
-+void acpi_arch_dma_setup(struct device *dev)
- {
--	long nid = (daddr >> node_id_offset) & 0xf;
-+	int ret;
-+	u64 mask, end = 0;
-+	const struct bus_dma_region *map = NULL;
-+
-+	ret = acpi_dma_get_range(dev, &map);
-+	if (!ret && map) {
-+		const struct bus_dma_region *r = map;
-+
-+		for (end = 0; r->size; r++) {
-+			if (r->dma_start + r->size - 1 > end)
-+				end = r->dma_start + r->size - 1;
-+		}
-+
-+		mask = DMA_BIT_MASK(ilog2(end) + 1);
-+		dev->bus_dma_limit = end;
-+		dev->dma_range_map = map;
-+		dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
-+		*dev->dma_mask = min(*dev->dma_mask, mask);
-+	}
- 
--	return ((nid << node_id_offset) ^ daddr) | (nid << 44);
--}
--
--void __init plat_swiotlb_setup(void)
--{
--	swiotlb_init(true, SWIOTLB_VERBOSE);
--	node_id_offset = ((readl(LS7A_DMA_CFG) & LS7A_DMA_NODE_MASK) >> LS7A_DMA_NODE_SHF) + 36;
- }
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 8f5c2f9a1a83..d97c69dbe553 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -247,7 +247,7 @@ static void __init arch_mem_init(char **cmdline_p)
- 	sparse_init();
- 	memblock_set_bottom_up(true);
- 
--	plat_swiotlb_setup();
-+	swiotlb_init(true, SWIOTLB_VERBOSE);
- 
- 	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
- 
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index bb41623dab77..a71d73a0d43e 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -279,14 +279,17 @@ acpi_numa_processor_affinity_init(struct acpi_srat_cpu_affinity *pa) { }
- 
- void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
- 
-+#if defined(CONFIG_ARM64) || defined(CONFIG_LOONGARCH)
-+void acpi_arch_dma_setup(struct device *dev);
-+#else
-+static inline void acpi_arch_dma_setup(struct device *dev) { }
-+#endif
-+
- #ifdef CONFIG_ARM64
- void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
--void acpi_arch_dma_setup(struct device *dev);
- #else
- static inline void
- acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
--static inline void
--acpi_arch_dma_setup(struct device *dev) { }
- #endif
- 
- int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
--- 
-2.31.1
-
+Maxime
