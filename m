@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F2B5B3A46
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036095B3A47
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiIIOBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S232174AbiIIOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiIIOAc (ORCPT
+        with ESMTP id S232004AbiIIOAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 10:00:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524A895D9;
-        Fri,  9 Sep 2022 07:00:26 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:24 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D278A6FC;
+        Fri,  9 Sep 2022 07:00:27 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732025;
+        s=2020; t=1662732026;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Uk7FfUDeErAni6sFaVO4TJ86JFekHVkd7pi6rsCzH/0=;
-        b=AgRKx92pE6deGvsIEE41Xz5JO8pEjRKlJyf43neZZ56tg0Mu3T/3u+XaQ8gshZPqHYfsK8
-        wDuhgp1ASIpj2OJw+fYbUAjA3Dur8uafhYNxjNhKlaXPJLxLQNvwqQUALPgLALVCtrDcXi
-        ylL7jcUMcYWS6e9Ttska0yX6c0PZNTmt90JbkxUywHmk5uTW+FlfS9UQPkQEUlxLbrFo3F
-        QDfp70zZnRgO2f6wM2WhZZxs7xUX1LtsNIqDCzm3P0h44a+Oi0qxGCbMGIILRVLKSeAWCF
-        aY6VaEaDzcZ+/j4HtGpNBIDvNrhmL/V4p3mZ3KHP7Q2HjBFUhPwsHGbRUcA6JQ==
+        bh=jOuVbKQXTlZ31neaC6shUn0CS98gD3q+wAn9vPt2B9A=;
+        b=bKAj3YzKZu5H2AXPvrGkLJUaN9HqzEVCm2e2WmhmFoYoTR8kU4rFfApFbTqVU8oNDTAvrl
+        8XV+iiMjfKpG8rxhzTegBVgrMxEcq0lsw50pgffVsHkbkbYf9CeRVp4Q9dpFeO1p1PmO0Z
+        CwABrnSsNwieFX2uxsfQrT9KCj0S/nqcand+o2/Da+OuKXcwXSIJ7iCzEAcdnXdzPw74/M
+        8R8iz5f7I+3iHOTE9ku0JnRl3+lyfehld759F35idLBVqhJ7hQ+3d1mrA4TnFgna1fULiB
+        dB6mbFTN6F002Lm3E7XLUEIlez8LymXNBdVGaAJO80r/zKz33eln/AUpGZYMzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732025;
+        s=2020e; t=1662732026;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Uk7FfUDeErAni6sFaVO4TJ86JFekHVkd7pi6rsCzH/0=;
-        b=zBGPTfsAgtTw0AtY8bDWTDp/XirPo831PIm0aSURMhNjTk0S5YFDk1Tf4k7xuN2b3fr1C6
-        cxSs753MrfhLh/AQ==
-From:   "tip-bot2 for Wolfram Sang" <tip-bot2@linutronix.de>
+        bh=jOuVbKQXTlZ31neaC6shUn0CS98gD3q+wAn9vPt2B9A=;
+        b=TtqP4IX5EoJ3R7SdoPlga84ZraDpZROu7rRUfI/OGjfOCY7HwP29ZVLXuntz49QdBQdBSa
+        zJ9XRqixs+Q2lrDg==
+From:   "tip-bot2 for Tejun Heo" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] driver_core: move from strlcpy with unused retval to strscpy
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+Subject: [tip: sched/psi] cgroup: Implement cgroup_file_show()
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220818205956.6528-1-wsa+renesas@sang-engineering.com>
-References: <20220818205956.6528-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220828050440.734579-10-tj@kernel.org>
+References: <20220828050440.734579-10-tj@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166273202403.401.2653523086260038649.tip-bot2@tip-bot2>
+Message-ID: <166273202517.401.11532505009516572799.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,37 +69,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     07b7b883be5ba0b4bd9ebf8d72c236ef36ae2676
-Gitweb:        https://git.kernel.org/tip/07b7b883be5ba0b4bd9ebf8d72c236ef36ae2676
-Author:        Wolfram Sang <wsa+renesas@sang-engineering.com>
-AuthorDate:    Thu, 18 Aug 2022 22:59:56 +02:00
+Commit-ID:     e2691f6b44ed2135bfd005ad5fbabac4f433a7a1
+Gitweb:        https://git.kernel.org/tip/e2691f6b44ed2135bfd005ad5fbabac4f433a7a1
+Author:        Tejun Heo <tj@kernel.org>
+AuthorDate:    Sat, 27 Aug 2022 19:04:40 -10:00
 Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CommitterDate: Thu, 01 Sep 2022 18:15:32 +02:00
+CommitterDate: Thu, 01 Sep 2022 18:08:44 +02:00
 
-driver_core: move from strlcpy with unused retval to strscpy
+cgroup: Implement cgroup_file_show()
 
-Follow the advice of the below link and prefer 'strscpy' in this
-subsystem. Conversion is 1:1 because the return value is not used.
-Generated by a coccinelle script.
+Add cgroup_file_show() which allows toggling visibility of a cgroup file
+using the new kernfs_show(). This will be used to hide psi interface files
+on cgroups where it's disabled.
 
-Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Link: https://lore.kernel.org/r/20220818205956.6528-1-wsa+renesas@sang-engineering.com
+Cc: Chengming Zhou <zhouchengming@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
+Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Link: https://lore.kernel.org/r/20220828050440.734579-10-tj@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/dd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/cgroup.h |  1 +
+ kernel/cgroup/cgroup.c | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 70f79fc..428265a 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -806,7 +806,7 @@ static int __init save_async_options(char *buf)
- 	if (strlen(buf) >= ASYNC_DRV_NAMES_MAX_LEN)
- 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index ed53bfe..f61dd13 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -114,6 +114,7 @@ int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
+ int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
+ int cgroup_rm_cftypes(struct cftype *cfts);
+ void cgroup_file_notify(struct cgroup_file *cfile);
++void cgroup_file_show(struct cgroup_file *cfile, bool show);
  
--	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
-+	strscpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
- 	async_probe_default = parse_option_str(async_probe_drv_names, "*");
+ int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen);
+ int cgroupstats_build(struct cgroupstats *stats, struct dentry *dentry);
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index ffaccd6..217469a 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -4340,6 +4340,26 @@ void cgroup_file_notify(struct cgroup_file *cfile)
+ }
  
- 	return 1;
+ /**
++ * cgroup_file_show - show or hide a hidden cgroup file
++ * @cfile: target cgroup_file obtained by setting cftype->file_offset
++ * @show: whether to show or hide
++ */
++void cgroup_file_show(struct cgroup_file *cfile, bool show)
++{
++	struct kernfs_node *kn;
++
++	spin_lock_irq(&cgroup_file_kn_lock);
++	kn = cfile->kn;
++	kernfs_get(kn);
++	spin_unlock_irq(&cgroup_file_kn_lock);
++
++	if (kn)
++		kernfs_show(kn, show);
++
++	kernfs_put(kn);
++}
++
++/**
+  * css_next_child - find the next child of a given css
+  * @pos: the current position (%NULL to initiate traversal)
+  * @parent: css whose children to walk
