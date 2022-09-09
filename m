@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6725B3575
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B351B5B357C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiIIKp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S231354AbiIIKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiIIKpQ (ORCPT
+        with ESMTP id S231193AbiIIKpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:45:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEADB4B484
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:45:14 -0700 (PDT)
+        Fri, 9 Sep 2022 06:45:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1333B3D595
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662720313;
+        s=mimecast20190719; t=1662720318;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4DkIOa4ss6n0l+Uwq2rxErjUkkNwBYbVflsNmqJrnW0=;
-        b=ekEpNkodtiVDPpOj+oL7FcXwzntcLwWEn5eBNHY+AUt+YbX1M/inAnbVVL2/2EjedUCmXW
-        5eoxRnIIvex5Obe3l1xSE1++jAC8Bm/Y8L7E6BKHf0f7hDW8lKyaVmgfkX96SjGiNwFsWI
-        bk5dbqLC5lAyxtl3Rs/sDamiLDN/Wuc=
+        bh=c0NgkoxjaxWZzPMna+r8g36cHTkfcmxMVnLk3I8tBk0=;
+        b=fWqeG7Wyo4W7OKCfpYA05ncHYtS+mNME7k9G8zPqGoNWnixbtplWU0W1YyF0i4aFvEFsQv
+        98faVJPCXwKo3zYVGXpxeIRFR36sXQpft5H6yWFCoPn1SSQLxgqf9a7kTGs6uUjlqCe9ne
+        Ozl3xQ1YxkwFIDS1rtNP+S4axewU+jc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-mP8g3QoaPCyRCIhg2g8B6A-1; Fri, 09 Sep 2022 06:45:12 -0400
-X-MC-Unique: mP8g3QoaPCyRCIhg2g8B6A-1
+ us-mta-614-MkxgwddvMM-9vnd2TjolAQ-1; Fri, 09 Sep 2022 06:45:13 -0400
+X-MC-Unique: MkxgwddvMM-9vnd2TjolAQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC66B80029D;
-        Fri,  9 Sep 2022 10:45:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52A2C101A56C;
+        Fri,  9 Sep 2022 10:45:12 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A63D40D282E;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E512E40D282E;
         Fri,  9 Sep 2022 10:45:11 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
@@ -53,9 +53,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [RFC PATCH 6/9] kvm_main.c: simplify change-specific callbacks
-Date:   Fri,  9 Sep 2022 06:45:03 -0400
-Message-Id: <20220909104506.738478-7-eesposit@redhat.com>
+Subject: [RFC PATCH 7/9] kvm_main.c: duplicate invalid memslot also in inactive list
+Date:   Fri,  9 Sep 2022 06:45:04 -0400
+Message-Id: <20220909104506.738478-8-eesposit@redhat.com>
 In-Reply-To: <20220909104506.738478-1-eesposit@redhat.com>
 References: <20220909104506.738478-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,119 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of replacing the memslot in the inactive slots and
-activate for each "change" specific function (NEW, MOVE, DELETE, ...),
-make kvm_set_memslot() replace the memslot in current inactive list
-and swap the lists, and then kvm_finish_memslot just takes care of
-updating the new inactive list (was active).
+In preparation for atomic memslot updates, make sure the
+invalid memslot is also replacing the old one in the inactive list.
 
-We can generalize here the pre-swap replacement with
-replace(old, new) because even if in a DELETE or MOVE operation,
-old will always stay in the inactive list (used by kvm_replace_memslot).
+This implies that once we want to insert the new slot for a MOVE,
+or simply delete the existing one for a DELETE,
+we need to remove the "invalid" slot, not the "old" one.
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- virt/kvm/kvm_main.c | 44 +++++++++++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 21 deletions(-)
+ virt/kvm/kvm_main.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 9d917af30593..6b73615891f0 100644
+index 6b73615891f0..31e46f9a06fa 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -1747,34 +1747,26 @@ static void kvm_invalidate_memslot(struct kvm *kvm,
- static void kvm_create_memslot(struct kvm *kvm,
- 			       struct kvm_memory_slot *new)
- {
--	/* Add the new memslot to the inactive set and activate. */
-+	/* Update inactive slot (was active) by adding the new slot */
- 	kvm_replace_memslot(kvm, NULL, new);
--	kvm_activate_memslot(kvm, NULL, new);
- }
+@@ -1830,6 +1830,7 @@ static int kvm_prepare_memslot(struct kvm *kvm,
+ 		}
+ 		batch->invalid = invalid_slot;
+ 		kvm_invalidate_memslot(kvm, old, invalid_slot);
++		kvm_replace_memslot(kvm, old, invalid_slot);
+ 	}
  
- static void kvm_delete_memslot(struct kvm *kvm,
--			       struct kvm_memory_slot *old,
- 			       struct kvm_memory_slot *invalid_slot)
- {
--	/*
--	 * Remove the old memslot (in the inactive memslots) by passing NULL as
--	 * the "new" slot, and for the invalid version in the active slots.
--	 */
--	kvm_replace_memslot(kvm, old, NULL);
--	kvm_activate_memslot(kvm, invalid_slot, NULL);
-+	/* Update inactive slot (was active) by removing the invalid slot */
-+	kvm_replace_memslot(kvm, invalid_slot, NULL);
- }
- 
- static void kvm_move_memslot(struct kvm *kvm,
--			     struct kvm_memory_slot *old,
- 			     struct kvm_memory_slot *new,
- 			     struct kvm_memory_slot *invalid_slot)
- {
- 	/*
--	 * Replace the old memslot in the inactive slots, and then swap slots
--	 * and replace the current INVALID with the new as well.
-+	 * Update inactive slot (was active) by removing the invalid slot
-+	 * and adding the new one.
- 	 */
--	kvm_replace_memslot(kvm, old, new);
--	kvm_activate_memslot(kvm, invalid_slot, new);
-+	kvm_replace_memslot(kvm, invalid_slot, new);
- }
- 
- static void kvm_update_flags_memslot(struct kvm *kvm,
-@@ -1782,12 +1774,10 @@ static void kvm_update_flags_memslot(struct kvm *kvm,
- 				     struct kvm_memory_slot *new)
- {
- 	/*
--	 * Similar to the MOVE case, but the slot doesn't need to be zapped as
--	 * an intermediate step. Instead, the old memslot is simply replaced
--	 * with a new, updated copy in both memslot sets.
-+	 * Update inactive slot (was active) by removing the old slot
-+	 * and adding the new one.
- 	 */
- 	kvm_replace_memslot(kvm, old, new);
--	kvm_activate_memslot(kvm, old, new);
- }
- 
- /*
-@@ -1880,9 +1870,9 @@ static void kvm_finish_memslot(struct kvm *kvm,
- 	if (change == KVM_MR_CREATE)
- 		kvm_create_memslot(kvm, new);
- 	else if (change == KVM_MR_DELETE)
--		kvm_delete_memslot(kvm, old, invalid_slot);
-+		kvm_delete_memslot(kvm, invalid_slot);
- 	else if (change == KVM_MR_MOVE)
--		kvm_move_memslot(kvm, old, new, invalid_slot);
-+		kvm_move_memslot(kvm, new, invalid_slot);
- 	else if (change == KVM_MR_FLAGS_ONLY)
- 		kvm_update_flags_memslot(kvm, old, new);
- 	else
-@@ -1903,12 +1893,24 @@ static void kvm_finish_memslot(struct kvm *kvm,
- static int kvm_set_memslot(struct kvm *kvm,
- 			   struct kvm_internal_memory_region_list *batch)
- {
--	int r;
-+	int r, as_id;
- 
- 	r = kvm_prepare_memslot(kvm, batch);
- 	if (r)
+ 	r = kvm_prepare_memory_region(kvm, batch);
+@@ -1900,10 +1901,14 @@ static int kvm_set_memslot(struct kvm *kvm,
  		return r;
  
-+	/*
-+	 * if change is DELETE or MOVE, invalid is in active memslots
-+	 * and old in inactive, so replace old with new.
-+	 */
-+	kvm_replace_memslot(kvm, batch->old, batch->new);
-+
-+	/* either old or invalid is the same, since invalid is old's copy */
-+	as_id = kvm_memslots_get_as_id(batch->old, batch->new);
-+
-+	/* releases kvm->slots_arch_lock */
-+	kvm_swap_active_memslots(kvm, as_id);
-+
- 	kvm_finish_memslot(kvm, batch);
+ 	/*
+-	 * if change is DELETE or MOVE, invalid is in active memslots
+-	 * and old in inactive, so replace old with new.
++	 * if change is DELETE or MOVE, invalid is in both active and inactive
++	 * memslot list. This means that we don't need old anymore, and
++	 * we should replace invalid with new.
+ 	 */
+-	kvm_replace_memslot(kvm, batch->old, batch->new);
++	if (batch->change == KVM_MR_DELETE || batch->change == KVM_MR_MOVE)
++		kvm_replace_memslot(kvm, batch->invalid, batch->new);
++	else
++		kvm_replace_memslot(kvm, batch->old, batch->new);
  
- 	return 0;
+ 	/* either old or invalid is the same, since invalid is old's copy */
+ 	as_id = kvm_memslots_get_as_id(batch->old, batch->new);
 -- 
 2.31.1
 
