@@ -2,135 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB415B3558
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F271A5B3560
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiIIKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S230511AbiIIKku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIIKig (ORCPT
+        with ESMTP id S230419AbiIIKkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:38:36 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE5134C05;
-        Fri,  9 Sep 2022 03:38:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q9McqXzSdkTx2uFZkHvIFX25Hm9PwZjZ14Mmq3giveY2al7nhfplcnQUVaZVaB3ON59kTKJABlgSi1TJC+xSMlPuQtHaEhDZaBGee3PvfYrSW3EYgH0ueQ61O7OvMX9LbhvYCmnmrQSj2InOA6oNaGZN2iwLmNRUvN8HwTkhVWLhXDypX/J1egxS+rRzx2LxrMOfxAKGPz1Va8khZ967XNf5wNDIIf+zfoN/M/IQocBi0GpHDKuzlHJyw1uIH/Krv499+IvvjW7JLzyk8LrdLI0fi45MM3PPAOOWNqXzZUrutusUHHXZwrkjv1CMfPxlDsDib4e/e2uooLQlkc6+Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DPazzFm/14Sovur6+lmIGQo4cWvcrmUx1/Jfz+urxqY=;
- b=FpJfdPE0au078Xx6ZlJ1XgHtYJe9+7c4hwL9NMxlOOK20fuOq1cq0oAYp3z6i0j2L/xndFhX98VvZVFL8bZEpGpcWkERRYcZWBwSKgMm4baw1tUbaqg1AxPpSz7SHhSSEJGUVpGyvibFaY8nyaPNDkFf2153Aai/t6n4JQETY+pn9sofhoUp1dav+BW8DNANivZTNOnMkgEWjzjGHIvd7w48XM7cKmvt2yjo4Cp7XG5Len9qOiaTYoYvAyp2tsYBfjDz9+u7GCXwMpJBl4si69ND/26j3appW+YQc3BUOtwYQ9AKDDlL+cq3QYAvOdIYzj0ZONDNNIYAQLcINd+Ceg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=stgolabs.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPazzFm/14Sovur6+lmIGQo4cWvcrmUx1/Jfz+urxqY=;
- b=2PlgY6PGO3eCbfbIEHSFx5uiq0z5CAnAp13LfziM2yVr8MCCCpInKscXw+wM51tWegWQz05P9Ea6F0PiwVdZza1ZgyrTr/bo5qAV0f4WjJH7l0k6jwMaGuLx5rOvMDRB6gH6NW+Rm0EIVGxlJa0CsvTiDfliHmHM5hHgHEJBNEo=
-Received: from MW4PR04CA0301.namprd04.prod.outlook.com (2603:10b6:303:82::6)
- by CH0PR12MB5171.namprd12.prod.outlook.com (2603:10b6:610:ba::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Fri, 9 Sep
- 2022 10:38:33 +0000
-Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::e6) by MW4PR04CA0301.outlook.office365.com
- (2603:10b6:303:82::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.15 via Frontend
- Transport; Fri, 9 Sep 2022 10:38:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Fri, 9 Sep 2022 10:38:33 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 9 Sep
- 2022 05:38:30 -0500
-Date:   Fri, 9 Sep 2022 12:38:27 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 1/15] cxl/core: Remove duplicate declaration of
- devm_cxl_iomap_block()
-Message-ID: <YxsXo09JCL8fbDBn@rric.localdomain>
-References: <20220831081603.3415-1-rrichter@amd.com>
- <20220831081603.3415-2-rrichter@amd.com>
- <20220907161158.iaqgvqkgvdwoc5l2@offworld>
+        Fri, 9 Sep 2022 06:40:46 -0400
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C643134C2E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1662720042;
+        bh=moyCOVLTLgtvkGdeoqzEJhhH4xd+dkMzT/AaRw4nmAo=;
+        h=From:To:Cc:Subject:Date;
+        b=cBhvix+OwCZg2lo03EEnza1mPAOHMb7haQOrxgJpQVauV+D+4jLbEFnXZM6S9nk4J
+         WqSjBEyk9Z3sAreINXySLn8FzQUl6RkpVzBCqrTUoMw51oaVOJRRVRY8wvdUQ/A6ep
+         1WMOx75ib1PvJcU0ttRNjhQPeXz0dhAwgAHI9zE0=
+Received: from localhost.localdomain ([59.172.176.188])
+        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
+        id A2810C67; Fri, 09 Sep 2022 18:40:40 +0800
+X-QQ-mid: xmsmtpt1662720040tnqyheovx
+Message-ID: <tencent_C3B899D2FC3F1BC827F3552E0B0734056006@qq.com>
+X-QQ-XMAILINFO: NkHKfw09D6j8rYnMFzSHOj7N6uP2cMNaeRcALeO1T4QD1KAoh3JMHQQiA1TJ+w
+         FS1hGJ86uCYUhyRfg4lvZAhzu0juj8KxzyrluLkC8zDCMxNoyK8ikAP6U6Tpac1UY+zh6Zpoa8as
+         Z/Hs1ZzPglfURTRKZ4UDRc39P8JPUHNXa6pQRhqb6sHM03WPHHyvJsWxaBVL9MEy4HK4LvwOAz1x
+         mM4u0rxL1KrFWEWfE7yr3JedMUrJvWGkt78PtXJLEyGBg/DokOX8nVBqG06/nM+4zfHsdbieJ5rW
+         hYuPRUYA2WVFzqRmDfVVhOL8rCCi7ZtA45jgJhwbFwQ55Tl3vzRUXF6TKL7WLohzYrixTULVXDi8
+         urNA1vfqAdEqAIx51zztri3JjJZtxr/iSTsKImqutIgrfRxoVx7NEYdbuZeTbidjn89QNnmKsIxL
+         2lnOLCE0Go7wGzeWZaEEkg3+6AlpTMhWgaD/NWp+VLYQ0kuGBb1XUwyo0mheWYcCrFPDvN0jpoU1
+         SwEHh1Qmdj1Sy0e+huwnHTodLmRLu+RTXaDgJND71czc8Ou3mh6K7kBN4xCkGamZG54tperF94lB
+         eTsfXKYXoKeVOKxnWNI3f5zRmxTvQM2co/5l6f9WcQ3pHwtGeHQmFDEGAfA7wdB4JWp3LML4Hdw9
+         SrDjAtZOJ44tpF10GQbpnunzYYmS9IVXnM28AI8cxpmHglZYRcYIy08H9KBTtf7XqZZoLzA6VnE0
+         lGFlxT68tnNc+pZ7G32r4fDsb7NP5faKw6P8K4LVzJdYPGKDwEMeeEVXHYBLIkRyaGKsXOGuGCDt
+         ihbxDy1bTo0Ik0c34YkcRJrMUKtwLlZJzcLNq2hn14FQayyAa9lOJbMbls/uVfPMHYVsgoPSMrBg
+         bjnWYEAmaWQZOP3RxgB9IcO0sovbR40VWdzVfyUL4yfAlO0/J2B6gAQ0UClAxVSMehq991uFmQFJ
+         j+K15UbQbuvlRieT3GeV4Yx97Q37pMeDUjj8HQWGZ+E05aB62BjXxMBwfBSw3kXcU1+QhgbPo=
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v4] staging: rtl8723bs: fix potential memory leak in rtw_init_drv_sw()
+Date:   Fri,  9 Sep 2022 18:39:35 +0800
+X-OQ-MSGID: <20220909103935.3196-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220907161158.iaqgvqkgvdwoc5l2@offworld>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT019:EE_|CH0PR12MB5171:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c9e3a94-9aae-4be9-d5fc-08da924f719a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZUVNVrO9RlmYf1eXkMoqza1SxYLr4R3CkQlKiBy1D7Yl8CL9Ci0hEtmtQAMezB0DxfiK5x5XHp3+ZQgJInAxwt9ZRSciRsb1ARJGcOlIPQ0ZmnDyhdtsBJggbtzBTVH+7zkSYpaXlQf+HA0hWzJbEiW7HneBlWEig8/gEXcoTx3qe4FOYh/baHLuT30qS4gs4fcMlNe0vB/QqIx2E7E77q6lcsZfqphAA/HqMbz09jY7TyA4Z56KQCYJgcS1TX0e92sd/IFhSsEVb5/1jBJEZQqfrFj2FaaZok3iFBWPqW8oevidfUXAGqkzmoR/DtyJ026fqGq4H1rnCVUVtXNjcNqYVv7I4ymm2+uJvZroPLsigeML1EKrQYGLx0EAEp6cQzcsBW93VLSM9FLHXLn9i8DM/RadO10hPAmWAJNwwZPVFcfMY5JJNPXVJX8clqHluy95pr9czXSZYzoledeYPOXA0qMDiWV77VFf0USZrViVDfZHnK0NHy6xQUG7WNm1lQ2zbFQm8IaTK7pXqZm8SlvjyOo4a7RLGGSPDAZM9gi1/3DgrhxtjhdBYGE88q0WKVs/6hXs8vtZXU6pYUu2GICIeuHbIvFvhFwnbc9kw8dR5oMpFns11kW9H/CxLctdwaz44FKG812ThcID2XTb/YWEmkjNTgUkDXGYHhjFoQRfAYX3CVbfVAESJmOO+JMQmEggAOdLF3rkJJ+jcN6V9WLPkPXFI1hg4ypGEQWQIL64mAmAVHkA7u2Wq8IIsnc6XlPMjyc+sOGNMOT4GMIHyy7WRhRP7eLzVohyC1CCH2k70tynmo/cEENugkgxpqN1
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(346002)(376002)(396003)(40470700004)(36840700001)(46966006)(82310400005)(47076005)(41300700001)(426003)(186003)(16526019)(6666004)(9686003)(55016003)(478600001)(26005)(40480700001)(53546011)(336012)(7696005)(40460700003)(81166007)(356005)(82740400003)(83380400001)(5660300002)(70206006)(316002)(36860700001)(4326008)(70586007)(2906002)(8676002)(7416002)(8936002)(6916009)(4744005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 10:38:33.0672
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c9e3a94-9aae-4be9-d5fc-08da924f719a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5171
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.09.22 09:11:58, Davidlohr Bueso wrote:
-> On Wed, 31 Aug 2022, Robert Richter wrote:
-> 
-> > The function devm_cxl_iomap_block() is only used in the core
-> > code. There are two declarations in header files of it, in
-> > drivers/cxl/core/core.h and drivers/cxl/cxl.h. Remove its unused
-> > declaration in drivers/cxl/cxl.h.
-> > 
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Does this want a
-> 
-> Fixes: d17d0540a0d (cxl/core/hdm: Add CXL standard decoder enumeration to the core)
-> 
-> tag?
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Looks like a code cleanup to me, nothing worth to backport to stable
-which the fixes tag would trigger.
+In rtw_init_drv_sw(), there are various init functions are called to
+populate the padapter structure and some checks for their return value.
+However, except for the first one error path, the other five error paths
+do not properly release the previous allocated resources, which leads to
+various memory leaks.
 
-Thanks for review.
+This patch fixes them and keeps the success and error separate.
+Note that these changes keep the form of `rtw_init_drv_sw()` in
+"drivers/staging/r8188eu/os_dep/os_intfs.c". As there is no proper device
+to test with, no runtime testing was performed.
 
--Robert
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ChangeLog:
+v1->v2 update the description.
+v2->v3 update the description.
+v3->v4 remove trailing whitespace and update the description.
+ drivers/staging/rtl8723bs/os_dep/os_intfs.c | 60 +++++++++++----------
+ 1 file changed, 31 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/os_dep/os_intfs.c b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+index 0a8c24e..1bf6fc0 100644
+--- a/drivers/staging/rtl8723bs/os_dep/os_intfs.c
++++ b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+@@ -664,51 +664,36 @@ void rtw_reset_drv_sw(struct adapter *padapter)
+ 
+ u8 rtw_init_drv_sw(struct adapter *padapter)
+ {
+-	u8 ret8 = _SUCCESS;
+-
+ 	rtw_init_default_value(padapter);
+ 
+ 	rtw_init_hal_com_default_value(padapter);
+ 
+-	if (rtw_init_cmd_priv(&padapter->cmdpriv)) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_cmd_priv(&padapter->cmdpriv))
++		return _FAIL;
+ 
+ 	padapter->cmdpriv.padapter = padapter;
+ 
+-	if (rtw_init_evt_priv(&padapter->evtpriv)) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_evt_priv(&padapter->evtpriv))
++		goto free_cmd_priv;
+ 
+-
+-	if (rtw_init_mlme_priv(padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_mlme_priv(padapter) == _FAIL)
++		goto free_evt_priv;
+ 
+ 	init_mlme_ext_priv(padapter);
+ 
+-	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
++		goto free_mlme_ext;
+ 
+-	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
++		goto free_xmit_priv;
+ 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
+ 	spin_lock_init(&padapter->security_key_mutex);
+ 
+ 	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
+ 	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
+ 
+-	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
++		goto free_recv_priv;
+ 
+ 	padapter->stapriv.padapter = padapter;
+ 	padapter->setband = GHZ24_50;
+@@ -719,9 +704,26 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ 
+ 	rtw_hal_dm_init(padapter);
+ 
+-exit:
++	return _SUCCESS;
++
++free_recv_priv:
++	_rtw_free_recv_priv(&padapter->recvpriv);
++
++free_xmit_priv:
++	_rtw_free_xmit_priv(&padapter->xmitpriv);
++
++free_mlme_ext:
++	free_mlme_ext_priv(&padapter->mlmeextpriv);
+ 
+-	return ret8;
++	rtw_free_mlme_priv(&padapter->mlmepriv);
++
++free_evt_priv:
++	rtw_free_evt_priv(&padapter->evtpriv);
++
++free_cmd_priv:
++	rtw_free_cmd_priv(&padapter->cmdpriv);
++
++	return _FAIL;
+ }
+ 
+ void rtw_cancel_all_timer(struct adapter *padapter)
+-- 
