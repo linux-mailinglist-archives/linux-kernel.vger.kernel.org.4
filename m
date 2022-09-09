@@ -2,81 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC725B2FC4
+	by mail.lfdr.de (Postfix) with ESMTP id 933425B2FC5
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIIH1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S231337AbiIIH2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiIIH1s (ORCPT
+        with ESMTP id S231322AbiIIH16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:27:48 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE6B115CE5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:27:46 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id v6so850219ljj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=etwEkk2VMTsvKW/MD7eFPXx3btRLMMRGIwWTmP+5sC4=;
-        b=IwzwnANBy9F7D/ttwPax+/1RWtgAwga7gpYygMnP4+LnIrKVv/IrYMcPvinhgbf9VF
-         LZDKSJOpWU7b4WpiH/mERKjijFNbDUCvzAb4yJst9kh4OYpJwCqSUnsDBP/Jvnc603AD
-         T5z/r5n1vQRCYne+fTc8BydhT1iZS8mz3ogW6AqIXNxQJ9KeblyHRCCbTmi472cY4B0n
-         usbPPXpzJc3u651dKid1t4PDcjM0OegmRq5yJ/8iTa2lsRgXZgpWcRejElxDQt2hbQmt
-         9P3SyOLqVEElZjd1T/TCWfTch04w91y5vcwE3J+ORCl4UQUrBiqv5UnFk9eebwBE/qxg
-         fcTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=etwEkk2VMTsvKW/MD7eFPXx3btRLMMRGIwWTmP+5sC4=;
-        b=qqfDs4nLAGfFrXRxoQDTljHGDu5AjfN3jFpsYoRRUxNbE4sVFL8W4d4Y+yO1rfD2vE
-         GtHCljxteQrayeFpbPzDwBO8eVUmj/dvIuoNVEYTvIUnEZNGgVRp7UB6FGCaW52s5T5c
-         1gjrX9Jd85esZFzi685bxWBkdKOKoro974XU/E+H3MnL63L5aSoE2HW3auzXFMpi6DjH
-         TbKG/fUPmd6LKC2lbCToFsVYoEeSfx9I4RUGEhioe6qLxyp59bXuqhJmkmCOeUZKs5cD
-         X8HpkFLiSlm/NUC6DLvjUjn6TFEop78TGUijpPkrXSoGTX3X2MIfSyBxN5kGkxqMtfeE
-         5f0w==
-X-Gm-Message-State: ACgBeo0InthYd8/GwsKW1xoIhX2lYqLnZ7ViARLWNU/kzwyO4qBRcssO
-        +e+cBaE37aPpjO5AvXcR56DUoA==
-X-Google-Smtp-Source: AA6agR4LaOp4Oh1qeSJZZcIF0uXsXMXOP3ZzWqjc7Mgld08iz1U69hbOoV5YWs8UYnD4+0cl55OGug==
-X-Received: by 2002:a2e:a370:0:b0:25e:502a:5308 with SMTP id i16-20020a2ea370000000b0025e502a5308mr3438370ljn.282.1662708465061;
-        Fri, 09 Sep 2022 00:27:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05651c02c700b0025e42f8e771sm174577ljo.34.2022.09.09.00.27.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 00:27:44 -0700 (PDT)
-Message-ID: <747079f8-cf39-a78c-6b8a-51a14991b5c9@linaro.org>
-Date:   Fri, 9 Sep 2022 09:27:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/2] dt-bindings: gce: add gce header file for mt8188
-Content-Language: en-US
-To:     "elvis.wang" <elvis.wang@mediatek.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        Fri, 9 Sep 2022 03:27:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3225117780;
+        Fri,  9 Sep 2022 00:27:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 450C8B81AD8;
+        Fri,  9 Sep 2022 07:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C35AC433D6;
+        Fri,  9 Sep 2022 07:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662708474;
+        bh=mnzTTxDh8PH0IXMo6zEj1N+2BnrD3K/mqm5cDR3dKA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1zjYMpdfhCXPCSPrYli9XUVpiqogqzjwfL+8WJpBrKEuThmS7fK/WqLUmLWJ5SbG+
+         exvx2T/uu6bjPhd2UqSKL2fp6wJQ/1gbW5xdAv7HO1VHrmkMDXIpLSe67a1CFN1UFB
+         HlC98PmAOchOqVMaiN3rES6BapDYt7W68elSp428=
+Date:   Fri, 9 Sep 2022 09:27:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        CK Hu <ck.hu@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220729084319.6880-1-Elvis.Wang@mediatek.com>
- <20220729084319.6880-3-Elvis.Wang@mediatek.com>
- <995fbb2b-2b34-d407-6bfd-4798de2251d7@linaro.org>
- <1f7ab756af6e27f5336e3caaefc3081f70bbc85b.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1f7ab756af6e27f5336e3caaefc3081f70bbc85b.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
+Message-ID: <Yxrq9wUWa3/WKI3Q@kroah.com>
+References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
+ <PA4PR04MB9640CB3CA93301CA1571D85789419@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <3126965.5fSG56mABF@steina-w>
+ <PA4PR04MB9640E5CB572980CB087BE9E389409@PA4PR04MB9640.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB9640E5CB572980CB087BE9E389409@PA4PR04MB9640.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,117 +63,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 08:46, elvis.wang wrote:
-> Hello Krzysztof,
+On Thu, Sep 08, 2022 at 09:07:06AM +0000, Jun Li wrote:
+> Hi,
 > 
-> On Tue, 2022-08-02 at 10:08 +0200, Krzysztof Kozlowski wrote:
->> On 29/07/2022 10:43, Elvis Wang wrote:
->>> Add gce header file to define the gce subsys id, hardware event id
->>> and
->>> constant for mt8188.
->>>
->>> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
->>> ---
->>>  include/dt-bindings/gce/mt8188-gce.h | 1079
->>> ++++++++++++++++++++++++++
->>>  1 file changed, 1079 insertions(+)
->>>  create mode 100644 include/dt-bindings/gce/mt8188-gce.h
->>>
->>> diff --git a/include/dt-bindings/gce/mt8188-gce.h b/include/dt-
->>> bindings/gce/mt8188-gce.h
->>> new file mode 100644
->>> index 000000000000..b15e965fe671
->>> --- /dev/null
->>> +++ b/include/dt-bindings/gce/mt8188-gce.h
->>
->> Use vendor in filename, so mediatek,mt8188-gce.h
+> > -----Original Message-----
+> > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Sent: Thursday, September 8, 2022 1:50 PM
+> > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
+> > <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
+> > Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
+> > <linux-imx@nxp.com>; Jun Li <jun.li@nxp.com>
+> > Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: RE: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
+> > 
+> > Hi,
+> > 
+> > Am Mittwoch, 7. September 2022, 18:08:25 CEST schrieb Jun Li:
+> > > Hi
+> > >
+> > > > -----Original Message-----
+> > > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > Sent: Wednesday, September 7, 2022 10:46 PM
+> > > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
+> > > > <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > > > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo
+> > > > <shawnguo@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
+> > > > Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam
+> > > > <festevam@gmail.com>; dl-linux-imx <linux-imx@nxp.com>; Jun Li
+> > > > <jun.li@nxp.com>
+> > > > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
+> > > > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+> > > > linux-kernel@vger.kernel.org
+> > > > Subject: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
+> > > >
+> > > > Hi everybody,
+> > > >
+> > > > this is a series based on the RFC at [1] for USB host support on
+> > > > TQMa8MPxL
+> > > > + MBa8MPxL. The main difference is that USB DR support has already
+> > > > + been
+> > > > added and has been removed from this series.
+> > > >
+> > > > The DT configuration itself (patch 4) is rather straight forward,
+> > > > but leads
+> > > >
+> > > > to the following dmesg errors regarding superspeed ports:
+> > > > > [    8.549243] hub 2-1:1.0: hub_ext_port_status failed (err = -110)
+> > > > > [   22.885263] usb 2-1: Failed to suspend device, error -110
+> > > >
+> > > > This hardware works fine using the downstream kernel, because for
+> > > > imx8mp this ITP sync feature is enabled conditionally [2] & [3].
+> > > > Hacking this into mainline resulted in a working superspeed setup as
+> > well.
+> > > > I also noticed that on some android kernel [4] depending in IP core
+> > > > version either GCTL.SOFTITPSYNC or GFLADJ.GFLADJ_REFCLK_LPM_SEL is
+> > > > enabled unconditionally.
+> > > > So I opted for the latter one using some quirk (patch 1-3).
+> > > >
+> > > > I have to admit I do not know what this is actually about, nor why
+> > > > my setup does not work without this change or why this fixed my
+> > > > problem. So maybe someone with more knowledge can say if this is the
+> > > > way to go or what this is about.
+> > >
+> > > This can be updated:)
+> > >
+> > > > I also added snps,dis_u3_susphy_quirk to the board level as for some
+> > > > reason USB Superspeed U3 does not work. Detecting the onboard hub
+> > > > takes much longer and once all devices are diconnected from the hub
+> > > > it is put into runtime suspend (U3) and new attached devices are not
+> > > > detected at all.
+> > > > Until the cause is known and fixed runtime suspend has to be disabled.
+> > >
+> > > For this issue you are reporting, I am not sure if this is caused by a
+> > > USB clock change merged on v5.19, if you use latest kernel, can you
+> > > try with below patches applied to see if U3 can work for you?
+> > 
+> > Awesome, This does the trick!
+> > I was already running with patches [1] & [2], but was missing patch [3].
+> > With all of them applied, USB detects a newly attached superspeed device
+> > when the HUB is in runtime suspend (U3).
 > 
-> yes, mediatek,mt8188-gce.h as filename would be better, will change in
-> next version.
-> 
->>
->>> @@ -0,0 +1,1079 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>
->> Dual license.
-> 
-> ok, will use /* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */ in
-> next version. Also ask if it is possible to use BSD-3-CLause?
+> Yes, patch[3] needs to apply with patches [1]&[2], I am applying the
+> same tag to make sure the 3 patches land on the same target release
+> as they will go through diff maintainer's trees.
 
-Please use GPL-2.0 OR BSD-2-Clause.
+What "tag"?
 
->>
->>> +
->>> +/* GCE thread priority */
->>> +#define CMDQ_THR_PRIO_LOWEST	0
->>> +#define CMDQ_THR_PRIO_1		1
->>> +#define CMDQ_THR_PRIO_2		2
->>> +#define CMDQ_THR_PRIO_3		3
->>> +#define CMDQ_THR_PRIO_4		4
->>> +#define CMDQ_THR_PRIO_5		5
->>> +#define CMDQ_THR_PRIO_6		6
->>> +#define CMDQ_THR_PRIO_HIGHEST	7
->>> +
->>> +/* CPR count in 32bit register */
->>> +#define GCE_CPR_COUNT		1312
->>
->> No register values in the bindings.
-> 
-> Those thread priority will be referenced in the device node and
-> congfigured to the hw when trigger hw work.
+And I'm confused as to the status of all of these, please resend the
+series once you have a new version with the proper acked and reviewed-by
+added.
 
-Using something in DTS does not mean you have to encode it in bindings.
-Bindings describe the DTS, not the hardware programming model.
+thanks,
 
-> 
->>
->>
->>
->>> +
->>> +/* GCE subsys table */
->>> +#define SUBSYS_1400XXXX		0
->>> +#define SUBSYS_1401XXXX		1
->>> +#define SUBSYS_1402XXXX		2
->>> +#define SUBSYS_1c00XXXX		3
->>> +#define SUBSYS_1c01XXXX		4
->>> +#define SUBSYS_1c02XXXX		5
->>> +#define SUBSYS_1c10XXXX		6
->>> +#define SUBSYS_1c11XXXX		7
->>> +#define SUBSYS_1c12XXXX		8
->>> +#define SUBSYS_14f0XXXX		9
->>> +#define SUBSYS_14f1XXXX		10
->>> +#define SUBSYS_14f2XXXX		11
->>> +#define SUBSYS_1800XXXX		12
->>> +#define SUBSYS_1801XXXX		13
->>> +#define SUBSYS_1802XXXX		14
->>> +#define SUBSYS_1803XXXX		15
->>> +#define SUBSYS_1032XXXX		16
->>> +#define SUBSYS_1033XXXX		17
->>> +#define SUBSYS_1600XXXX		18
->>> +#define SUBSYS_1601XXXX		19
->>> +#define SUBSYS_14e0XXXX		20
->>> +#define SUBSYS_1c20XXXX		21
->>> +#define SUBSYS_1c30XXXX		22
->>> +#define SUBSYS_1c40XXXX		23
->>> +#define SUBSYS_1c50XXXX		24
->>> +#define SUBSYS_1c60XXXX		25
->>> +#define SUBSYS_NO_SUPPORT	99
->>> +
->>> +/* GCE General Purpose Register (GPR) support
->>> + * Leave note for scenario usage here
->>> + */
->>> +/* GCE: write mask */
->>> +#define GCE_GPR_R00		0x00
->>> +#define GCE_GPR_R01		0x01
->>
->> No. These are no bindings. Do not embed device programming model into
->> bindings header. I'll stop review.
-> 
-> This GCE_GPR define is an attribute of hw, and different hw versions
-> may have different gpr number.
-
-It does not matter that different devices have different programming
-model. The bindings are not a place for it.
-
-Best regards,
-Krzysztof
+greg k-h
