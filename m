@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0AE5B3AE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C335B3AE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiIIOnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S232169AbiIIOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiIIOn3 (ORCPT
+        with ESMTP id S232093AbiIIOng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:43:29 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFE5110AA3;
-        Fri,  9 Sep 2022 07:43:28 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id l10so1981906plb.10;
-        Fri, 09 Sep 2022 07:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=itwUGd1Te1mSjRZ83ukeLvlZZen/Z6jAc3c4dT7PUuM=;
-        b=eiTxh5Z/TuXFJclg3CW7GlqMhzXIzs40Q5nb6sMkkchg5kEMtgl8V7NcCc+V/AFFy1
-         iNwpBGFlbAHewEmKfdCbgqalyRW5fGfDW8hdPgjZipthynyfGbvPewpGLZt39j/9tcuh
-         PEwkyJplF4dwjTWipSWEXhMr/9QW5/PwT9Zqli4rEEaDMIpIZ3fKdGTHa0UJDDDXXB2A
-         yfYWlekEa3993lE4w/YiRo8nOCMMwAjLPfLnLcCJtiO4m1dc/wZp8IxKsdhni9B0qsz4
-         Ri/Jju+RPq1wjL/pJjr+XKhvUKvHx/Nqr/k+MB+hTWeYOJEWW8MjMvrYG5VrgV36SUsV
-         lsFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=itwUGd1Te1mSjRZ83ukeLvlZZen/Z6jAc3c4dT7PUuM=;
-        b=Fb7rTz4Q0WZfS7S96mZ52gRNvzpwSB6I52CLqHXoFvjnLinISOyimR7rNusOza7c58
-         nBRKZN56d5KKeNxE8WN13glsxqD658JuiZFDmqjOchk9TB9Te4hVBQAcN/2Hm9zwivX4
-         04Sda8dBBHa5UKPwmdtZaTCwCQCEnL2AdPI+qwsLysEJqdt9dL2XGDQZPHi4qHElZoXR
-         oh0j70Czoq4MLczJ/ickn6OsEjf5hGFmtnnP7r3brcTKuqpeXOl5Is8Wg1sSgZzV89Vo
-         JIS3Hc9bPCzKqhCgL07he/BuPTE1z/DJLiyJxEZRR5J4PT41ivzaduF+T9ljflIMfP/1
-         Ud3Q==
-X-Gm-Message-State: ACgBeo0+7Nb+4ichD+h5XV2ou+bv/jCkHzjXe+x8lkp1Ty9qbD4gDn4I
-        BkaZlW0QJOMsMHPgHeNoGJU=
-X-Google-Smtp-Source: AA6agR5/Uh8A5sMDltA5OxD66RX3Nj35zygvhPbwQ0qODJgYHrZHZvjluWlMY0tp0uCHbPulGQz+HQ==
-X-Received: by 2002:a17:902:6b42:b0:174:4308:ce52 with SMTP id g2-20020a1709026b4200b001744308ce52mr14023716plt.81.1662734607666;
-        Fri, 09 Sep 2022 07:43:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u16-20020a17090a0c5000b00200b2894648sm489793pje.52.2022.09.09.07.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 07:43:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 9 Sep 2022 07:43:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) autoload module via DMI data
-Message-ID: <20220909144324.GA2951669@roeck-us.net>
-References: <20220909113820.92360-1-eugene.shalygin@gmail.com>
+        Fri, 9 Sep 2022 10:43:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FEB11778F;
+        Fri,  9 Sep 2022 07:43:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 363A462007;
+        Fri,  9 Sep 2022 14:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632D3C433D6;
+        Fri,  9 Sep 2022 14:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662734614;
+        bh=jXc+YOCMq9/xoEX+tOTlV/SGQTrctfHXTzVY7GoW6yk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pKuSQ0WXtewALbm9bIXUwgShYUzZZMekwIFtT4+gNj6B05+lcXkzpq14+Z9vS8bVb
+         orpamrV1hkAfBdiskqjjn6BFBh2cRJ9yo7gYVwIRXk1prXydRTGRhDVTMaZ0lN7LSW
+         6ecPmO7JBma7FXKXz1rA0nIPZy3kcE0311QzuB/Qxk3gL7srP6cZF/hA0pPsdrVjak
+         8pH4mu2zIEqtK8pTAEYqV6BLqmYnpHxyufyORlaTGoYHDoRpahAv52GnEzcgHBT+mP
+         UQ+qf8rkZVNGDzMU2INyxkvrI1DefJ0Xzr+tul0HsZ22/cMdXrgI/lftE8ogTLllp2
+         RCqqdZPlrSPfA==
+Message-ID: <8b556c2dadb717a25ab47f02f70cfaaa6c6074c7.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Date:   Fri, 09 Sep 2022 10:43:30 -0400
+In-Reply-To: <YxtEHIkfX0nQQC0n@mit.edu>
+References: <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+         <20220907135153.qvgibskeuz427abw@quack3>
+         <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+         <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
+         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+         <20220908155605.GD8951@fieldses.org>
+         <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+         <YxstWiu34TfJ6muW@mit.edu>
+         <6173b33e43ac8b0e4377b5d65fec7231608f71f7.camel@kernel.org>
+         <YxtEHIkfX0nQQC0n@mit.edu>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909113820.92360-1-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 01:38:20PM +0200, Eugene Shalygin wrote:
-> Replace autoloading data based on the ACPI EC device with the DMI
-> records for motherboards models. The ACPI method created a bug that when
-> this driver returns error from the probe function because of the
-> unsupported motherboard model, the ACPI subsystem concludes
-> that the EC device does not work properly.
-> 
-> Fixes: 5cd29012028d
-> Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216412
-> Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2121844
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 413 ++++++++++++++++++--------------
->  1 file changed, 227 insertions(+), 186 deletions(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 61a4684fc020..206265ea8122 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
+On Fri, 2022-09-09 at 09:48 -0400, Theodore Ts'o wrote:
+> On Fri, Sep 09, 2022 at 08:47:17AM -0400, Jeff Layton wrote:
+> >=20
+> > i_version only changes now if someone has queried it since it was last
+> > changed. That makes a huge difference in performance. We can try to
+> > optimize it further, but it probably wouldn't move the needle much unde=
+r
+> > real workloads.
+>=20
+> Good point.  And to be clear, from NFS's perspective, you only need to
+> have i_version bumped if there is a user-visible change to the
+> file. --- with an explicit exception here of the FIEMAP system call,
+> since in the case of a delayed allocation, FIEMAP might change from
+> reporting:
+>=20
+>  ext:     logical_offset:        physical_offset: length:   expected: fla=
+gs:
+>    0:        0..       0:          0..         0:      0:             las=
+t,unknown_loc,delalloc,eof
+>=20
+> to this:
+>=20
+>  ext:     logical_offset:        physical_offset: length:   expected: fla=
+gs:
+>    0:        0..       0:  190087172.. 190087172:      1:             las=
+t,eof
+>=20
+> after a sync(2) or fsync(2) call, or after time passes.
+>=20
 
-[ ... ]
+In general, we want to bump i_version if the ctime changes. I'm guessing
+that we don't change ctime on a delalloc? If it's not visible to NFS,
+then NFS won't care about it.  We can't project FIEMAP info across the
+wire at this time, so we'd probably like to avoid seeing an i_version
+bump in due to delalloc.
 
-> +
-> +static void cleanup_device(void)
-> +{
-> +	platform_device_unregister(asus_ec_sensors_platform_device);
-> +	platform_driver_unregister(&asus_ec_sensors_platform_driver);
-> +}
-> +
-> +static int __init asus_ec_init(void)
-> +{
-> +	asus_ec_sensors_platform_device =
-> +		platform_create_bundle(&asus_ec_sensors_platform_driver,
-> +				       asus_ec_probe, NULL, 0, NULL, 0);
-> +
-> +	if (IS_ERR(asus_ec_sensors_platform_device))
-> +		return PTR_ERR(asus_ec_sensors_platform_device);
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit asus_ec_exit(void)
-> +{
-> +	cleanup_device();
+> > Great! That's what I was hoping for with ext4. Would you be willing to
+> > pick up these two patches for v6.1?
+> >=20
+> > https://lore.kernel.org/linux-ext4/20220908172448.208585-3-jlayton@kern=
+el.org/T/#u
+> > https://lore.kernel.org/linux-ext4/20220908172448.208585-4-jlayton@kern=
+el.org/T/#u
+>=20
+> I think you mean:
+>=20
+> https://lore.kernel.org/linux-ext4/20220908172448.208585-2-jlayton@kernel=
+.org/T/#u
+> https://lore.kernel.org/linux-ext4/20220908172448.208585-3-jlayton@kernel=
+.org/T/#u
+>=20
+> Right?
+>=20
+> BTW, sorry for not responding to these patches earlier; between
+> preparing for the various Linux conferences in Dublin next week, and
+> being in Zurich and meeting with colleagues at $WORK all of this week,
+> I'm a bit behind on my patch reviews.
+>=20
 
-I don't see the point of that extra function. Please drop and call
-platform_device_unregister() as well as platform_driver_unregister()
-directly.
+No worries. As long as they're on your radar, that's fine.
 
-> +}
-> +
-> +module_init(asus_ec_init);
-> +module_exit(asus_ec_exit);
->  
->  module_param_named(mutex_path, mutex_path_override, charp, 0);
->  MODULE_PARM_DESC(mutex_path,
-> -- 
-> 2.37.3
-> 
+Thanks!
+--=20
+Jeff Layton <jlayton@kernel.org>
