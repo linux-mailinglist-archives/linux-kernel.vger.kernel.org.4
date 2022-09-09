@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FC35B306E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4905B3087
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiIIHkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S231849AbiIIHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiIIHkV (ORCPT
+        with ESMTP id S231794AbiIIHkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:40:21 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17512F227
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:36:30 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 2230B2B058D2;
-        Fri,  9 Sep 2022 03:36:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 09 Sep 2022 03:36:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662708972; x=1662712572; bh=DL7ygxzLrl
-        gjFceREV0rSGNkAZXz4IRTULK8AU3epH4=; b=qBlp0P+HvgN677U3dxEP8fPAFV
-        Z7QJ3fgzc1doU5SD0F2v6126ZtZLuVTEAOnPbBuOX3h53p8+X8mx5J1C2C8T7BIl
-        IFmdW0DB1oUD8klTUif25EFgcCNEXZHdM97B8RgMXzikEsWM0kpfcjswi5wC6Ofh
-        K2IwqrYvR083SXx6eNLaFH6+ZnELxTTYbGEuA4yG4LUyatyJTJieSg5yhwjp50yA
-        DZ3wpIVDDGRwumnb1z1cBj6L6ie+3/HJg9fJu5dfigXWElYquJ5M7Vrczo8mZTlq
-        mnhO4mdzxnC4b8ns36vMtZbHPHI2b3eePZY5/fgMThJWoG3OtuIlpmnhOdow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662708972; x=1662712572; bh=DL7ygxzLrlgjFceREV0rSGNkAZXz
-        4IRTULK8AU3epH4=; b=gQqypgT38k+45jaLTaZUKBp1DeDJadnGaxBr1vtccBne
-        wdJp8fCDUYkf0/6MwVYpgpj7w76IQ6zt2n45rgM0FirPIzCnWDZmWN8reKEugOSc
-        IIWt5rHeNslvXQN/vjTsC6z8jJe7bD+7ko3r3ib2hZu6YGqmJbVOk6QAHsLvYgP2
-        A+z9XfIbcljPAZbXQYGoC5Glq7cDZ1M9+JhjIJfziSmZYgV6XW4oxOnDp3DMZXCW
-        /8GXI8F2e4UY+Y68qEaV/H5oDvYpKtUmnJBwR6vHcaPT2RWr3HWitbQCB+1tH+fN
-        OUllIbGo0bWE/smQhoTOqtKw/7KciMDaBal4QYbRfw==
-X-ME-Sender: <xms:6-waYySxYAv2Gd4YpMZtPw5rf-NRGtvh4X5zUa4tDhxbWdCeFtFIEA>
-    <xme:6-waY3zgd4SDHqLM15FRiO6An5UX58XDLVUi055xS_CD6hXlizuKe2c8l9ZnYsL9i
-    qSOeSd6uqsWRxib-Uk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtgedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6-waY_1Uaoy9HtNU5udztZJcvb0Vs2Q9yXEXcono4WO-rGLzucZk2Q>
-    <xmx:6-waY-DpwFXaFwA1SdfNfBG__4TT6OQzakhHsRU8mGE-vdOs9saZ-A>
-    <xmx:6-waY7iYBuyhPpbSGJbTUs3Hr56bSm-x_pDty2z02JkVt8ogh419Vg>
-    <xmx:7OwaYxY1ikoR5ygGz5cWHvh9MxJ8ypyC2xOdP4GfCbiKPKyyFLVHC434oXI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D0B5EB60086; Fri,  9 Sep 2022 03:36:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <23cde275-613b-4895-a05c-48a0ec55ff6a@www.fastmail.com>
-In-Reply-To: <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
-References: <202209091157.akimiv18-lkp@intel.com>
- <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
- <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
-Date:   Fri, 09 Sep 2022 09:35:50 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Qi Zheng" <zhengqi.arch@bytedance.com>,
-        "kernel test robot" <lkp@intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Ammar Faizi" <ammarfaizi2@gnuweeb.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:arm64/linux/for-next/misc 2/2]
- arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function
- 'do_softirq_own_stack'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Sep 2022 03:40:18 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F05A12894A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:36:27 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id d2so1314107wrn.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=4e7RlBTjQ/k7/7tVuA9R5TTzLZ8Baa2EHE13JLauQ6Y=;
+        b=0jHVBB6vKhPCnwAJHFWzRMHXXiIrqoOYDn7Zh/vMmaV7ZC+JtEUN1G1S90boOZRoMO
+         Snu4nB3VgcjpYiTT3Fq2KEaZbayZhCjF+50KF39bzaEQr8GoI3WuxwVbTQ/+xbmy2fY8
+         pgzMXcKRgQhv5mWnmqaI8iKdQrJV9IVfvYrBcZVG5zWTiJ2ehpBQleR7aas6uRlj4kKq
+         AmhZghYC42o1WEQHynaLG4dDJPjHnlkcRnz2BQT9hkczL231U9LW1oZiYxW04iFAxx0v
+         rZT3I5ejiH65xkXAd71h6uRXTQpMF+83RFd/VOyOHYugFswy2DOJQlHVwiZ3fMXG7TP5
+         iKvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=4e7RlBTjQ/k7/7tVuA9R5TTzLZ8Baa2EHE13JLauQ6Y=;
+        b=GH+aFL1n+5f0XfqCk5FdVSzlnyb/1E8wN8yLPnWZszQTdoST5G2ja6RcnHvgHRIjnN
+         J2MSs3dAzGP2FqSeUTYFHCQu4yoat4YR3QFmMpED2RJtS1ofskJHjMgmIxXlNS+AqcjP
+         jGXqlglrnM5jNKmPG+deqiuw/eC2ECBN3lfsXSXxzNT0cProTDFLIl9fBuoRIPpAanND
+         h+9IxA8AUIkKy3qYRCRUggcZSLkqirk9JHaLf6R8iM22zqFv+dqHQYN1yWxYPEMKQcZ3
+         QOTCDv/jitopu08jyskWwSiuOefHm4GFigdrT2j02t1mIVRFFBiau8Lheqi88qpeNILR
+         DQJw==
+X-Gm-Message-State: ACgBeo10w9DOGbxI/jBbH/fXvotrE9FAc5K26ZFDW10gzlnQOAuxbdjL
+        W9zHKc7quEGBl/+GGwgGL3uCPw==
+X-Google-Smtp-Source: AA6agR7krDdgNfaZrjk3h6m6Rzfrva10aTZHIv8TVDFrCMcpmMU3UrZGl4+8EOO5Zx+4WYxcvFE3+Q==
+X-Received: by 2002:a5d:508c:0:b0:228:de49:b808 with SMTP id a12-20020a5d508c000000b00228de49b808mr7014788wrt.23.1662708982694;
+        Fri, 09 Sep 2022 00:36:22 -0700 (PDT)
+Received: from amjad-ThinkPad-T490.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id j5-20020a05600c1c0500b003a682354f63sm5345901wms.11.2022.09.09.00.36.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 00:36:21 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     matthias.bgg@gmail.com
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, rafael@kernel.org,
+        fparent@baylibre.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com
+Subject: [PATCH v4 0/4] thermal: mediatek: Add support for MT8365 SoC
+Date:   Fri,  9 Sep 2022 09:36:05 +0200
+Message-Id: <20220909073609.32337-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022, at 9:07 AM, Qi Zheng wrote:
+This patchset adds thermal support for MT8365 SoC which contains three
+thermal sensors.
 
-> BTW, when I just compiled the kernel with W=1, I found a lot of
-> compilation warnings, which is somewhat unexpected.
+Changes in V4:
+- rebased on thermal/linux-next
+- Use callback for raw_to_mcelsius()
+- Use struct 'struct thermal_zone_device_ops' instead of
+no longer existent 'struct thermal_zone_of_device_ops'
 
-Correct, the kernel test robot only sends emails for newly introduced
-warnings, but it will keep nagging you about them.
+Amjad Ouled-Ameur (1):
+  thermal: mediatek: add another get_temp ops for thermal sensors
 
-       Aarn
+Fabien Parent (2):
+  dt-bindings: thermal: mediatek: add binding documentation for MT8365
+    SoC
+  thermal: mediatek: add support for MT8365 SoC
+
+Markus Schneider-Pargmann (1):
+  thermal: mediatek: control buffer enablement tweaks
+
+ .../bindings/thermal/mediatek-thermal.txt     |   1 +
+ drivers/thermal/mtk_thermal.c                 | 197 +++++++++++++++---
+ 2 files changed, 166 insertions(+), 32 deletions(-)
+
+-- 
+2.37.3
+
