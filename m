@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A515B33ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7750D5B33F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiIIJ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S231319AbiIIJ1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiIIJ04 (ORCPT
+        with ESMTP id S231336AbiIIJ05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:26:56 -0400
+        Fri, 9 Sep 2022 05:26:57 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF27BAD97
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE05A4B13
         for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:25:31 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MP9V93JMVzlVqK;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MP9V96Vw2zlVnt;
         Fri,  9 Sep 2022 17:21:37 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <david@redhat.com>, <osalvador@suse.de>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 07/16] mm: remove obsolete pgdat_is_empty()
-Date:   Fri, 9 Sep 2022 17:24:42 +0800
-Message-ID: <20220909092451.24883-8-linmiaohe@huawei.com>
+Subject: [PATCH 08/16] mm/page_alloc: add missing is_migrate_isolate() check in set_page_guard()
+Date:   Fri, 9 Sep 2022 17:24:43 +0800
+Message-ID: <20220909092451.24883-9-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220909092451.24883-1-linmiaohe@huawei.com>
 References: <20220909092451.24883-1-linmiaohe@huawei.com>
@@ -48,29 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no caller. Remove it.
+In MIGRATE_ISOLATE case, zone freepage state shouldn't be modified as
+caller will take care of it. Add missing is_migrate_isolate() here to
+avoid possible unbalanced freepage state.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- include/linux/mmzone.h | 5 -----
- 1 file changed, 5 deletions(-)
+ mm/page_alloc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 6950179a20a2..ab17a0e6f26f 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1247,11 +1247,6 @@ static inline unsigned long pgdat_end_pfn(pg_data_t *pgdat)
- 	return pgdat->node_start_pfn + pgdat->node_spanned_pages;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index a35ef385d906..94baf33da865 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -873,7 +873,8 @@ static inline bool set_page_guard(struct zone *zone, struct page *page,
+ 	INIT_LIST_HEAD(&page->buddy_list);
+ 	set_page_private(page, order);
+ 	/* Guard pages are not available for any usage */
+-	__mod_zone_freepage_state(zone, -(1 << order), migratetype);
++	if (!is_migrate_isolate(migratetype))
++		__mod_zone_freepage_state(zone, -(1 << order), migratetype);
+ 
+ 	return true;
  }
- 
--static inline bool pgdat_is_empty(pg_data_t *pgdat)
--{
--	return !pgdat->node_start_pfn && !pgdat->node_spanned_pages;
--}
--
- #include <linux/memory_hotplug.h>
- 
- void build_all_zonelists(pg_data_t *pgdat);
 -- 
 2.23.0
 
