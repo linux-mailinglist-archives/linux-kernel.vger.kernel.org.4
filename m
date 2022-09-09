@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E475B42DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB385B42CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiIIXHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S231718AbiIIXHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiIIXGh (ORCPT
+        with ESMTP id S231391AbiIIXGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:06:37 -0400
+        Fri, 9 Sep 2022 19:06:48 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E07113C5E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B62114A4F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662764795; x=1694300795;
+  t=1662764796; x=1694300796;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=ph2e/rZv3NU9Gpgu/xHvmk0/dbumZf1WgNIx8DuCq7c=;
-  b=b/Is0rM6YF9A6hHBaYOwsZnTaTsPDi76V8P6+bwPKkgqqll8/ebKFPry
-   nx2Nywzi4FSbnPMTARQIxoNRO4AlQ8LZj/RxUldX2RB5Dex8+uOTwBsTE
-   edjW2qprm9vReGgZvMkyvudrtWTPOxz/NT4S/TKIHvkYx3mu0ndhN5QbI
-   blpLG5SjvFhXaKPPj3iH6aVtpEOb//Nk7odww8XxA0B33iHdYA8CuKq83
-   p9N6UkYuhbVyUacRRr6iTGZYPygyGMlVDftoG/IU1tC9HV5RM/AHTiQyR
-   s6dhMlHCn3YjOtim96wHmnLyOK3SL6+DJuoeEsEp/kJVeW8n73CJoB7tf
+  bh=spEa4CAXn7MTUE1zSapnlyxFmIuHPNbYjXwqFnk4Zi4=;
+  b=DaRwzdUVCzUA9YGnSC11Kw527fCCK3ifukFzjOb+sEIqS4lsZ24or/FK
+   B/2BxB78uMnMYCNOOx7lwTdHtl/2jXjbxQFOuAMeeLhp5+sPxsoI1p8vF
+   pjO9V5c4vzYY1kprWhGDXeLL8VMtzRX+piiwdWeT66WcWtzPbKb+GkNj+
+   kBeRikt0W6Mdc+SI3CJ4XSUZwSs1mRYXE9VtLBzM9OoBkv6KZyzTrpTTO
+   ZRuu+WuvF4CsprxnWYPSxHZo7qAg+WPfsWLpsErEcScCstPaqh4ecU0Rv
+   TjPKDd7K0fpnxnXmAWdWtxXj3ZjXQ6G4M18mVzjdc/Izua3DVlE3246CB
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386913"
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386915"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="298386913"
+   d="scan'208";a="298386915"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:34 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="677355003"
+   d="scan'208";a="677355007"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:33 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -56,9 +56,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [RFC PATCH 10/23] sched/fair: Use classes of tasks when selecting a busiest runqueue
-Date:   Fri,  9 Sep 2022 16:11:52 -0700
-Message-Id: <20220909231205.14009-11-ricardo.neri-calderon@linux.intel.com>
+Subject: [RFC PATCH 11/23] thermal: intel: hfi: Introduce Hardware Feedback Interface classes
+Date:   Fri,  9 Sep 2022 16:11:53 -0700
+Message-Id: <20220909231205.14009-12-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
@@ -72,9 +72,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For two runqueues of equal priority and equal number of running of tasks,
-select the one whose current task would have the highest task class score
-if placed on the destination CPU.
+On Intel hybrid parts, each type of CPU has specific performance and
+energy efficiency capabilities. The Intel Thread Director technology
+extends the Hardware Feedback Interface (HFI) to provide performance and
+energy efficiency data for advanced classes of instructions.
+
+Add support to parse and parse per-class capabilities.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -90,42 +93,109 @@ Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- kernel/sched/fair.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/thermal/intel/intel_hfi.c | 34 +++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7368a0b453ee..085b1f75d90b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10009,6 +10009,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
- 	int i;
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index 239afe02e518..405495dad0b2 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -79,7 +79,7 @@ union cpuid6_edx {
+  * @ee_cap:		Energy efficiency capability
+  *
+  * Capabilities of a logical processor in the HFI table. These capabilities are
+- * unitless.
++ * unitless and specific to each HFI class.
+  */
+ struct hfi_cpu_data {
+ 	u8	perf_cap;
+@@ -91,7 +91,8 @@ struct hfi_cpu_data {
+  * @perf_updated:	Hardware updated performance capabilities
+  * @ee_updated:		Hardware updated energy efficiency capabilities
+  *
+- * Properties of the data in an HFI table.
++ * Properties of the data in an HFI table. There exists one header per each
++ * HFI class.
+  */
+ struct hfi_hdr {
+ 	u8	perf_updated;
+@@ -129,16 +130,21 @@ struct hfi_instance {
  
- 	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
-+		int busiest_class_delta_score = INT_MIN;
- 		unsigned long capacity, load, util;
- 		unsigned int nr_running;
- 		enum fbq_type rt;
-@@ -10118,6 +10119,20 @@ static struct rq *find_busiest_queue(struct lb_env *env,
- 			if (busiest_nr < nr_running) {
- 				busiest_nr = nr_running;
- 				busiest = rq;
-+			} else if (sched_task_classes_enabled() &&
-+				   busiest_nr == nr_running) {
-+				int curr_class_delta_score;
-+
-+				curr_class_delta_score = arch_get_task_class_score(rq->curr->class,
-+										   env->dst_cpu) -
-+							 arch_get_task_class_score(rq->curr->class,
-+										   cpu_of(rq));
-+
-+				if (busiest_class_delta_score < curr_class_delta_score) {
-+					busiest_class_delta_score = curr_class_delta_score;
-+					busiest_nr = nr_running;
-+					busiest = rq;
-+				}
- 			}
- 			break;
+ /**
+  * struct hfi_features - Supported HFI features
++ * @nr_classes:		Number of classes supported
+  * @nr_table_pages:	Size of the HFI table in 4KB pages
+  * @cpu_stride:		Stride size to locate the capability data of a logical
+  *			processor within the table (i.e., row stride)
++ * @class_stride:	Stride size to locate a class within the capability
++ *			data of a logical processor or the HFI table header
+  * @hdr_size:		Size of the table header
+  *
+  * Parameters and supported features that are common to all HFI instances
+  */
+ struct hfi_features {
++	int		nr_classes;
+ 	size_t		nr_table_pages;
+ 	unsigned int	cpu_stride;
++	unsigned int	class_stride;
+ 	unsigned int	hdr_size;
+ };
  
+@@ -177,6 +183,10 @@ static void get_hfi_caps(struct hfi_instance *hfi_instance,
+ 		s16 index;
+ 
+ 		index = per_cpu(hfi_cpu_info, cpu).index;
++		/*
++		 * Only report the legacy (i.e., class 0) capabilities. No need
++		 * of hfi_features.class_stride.
++		 */
+ 		caps = hfi_instance->data + index * hfi_features.cpu_stride;
+ 		cpu_caps[i].cpu = cpu;
+ 
+@@ -325,8 +335,8 @@ static void init_hfi_cpu_index(struct hfi_cpu_info *info)
+ }
+ 
+ /*
+- * The format of the HFI table depends on the number of capabilities that the
+- * hardware supports. Keep a data structure to navigate the table.
++ * The format of the HFI table depends on the number of capabilities and classes
++ * that the hardware supports. Keep a data structure to navigate the table.
+  */
+ static void init_hfi_instance(struct hfi_instance *hfi_instance)
+ {
+@@ -507,18 +517,30 @@ static __init int hfi_parse_features(void)
+ 	/* The number of 4KB pages required by the table */
+ 	hfi_features.nr_table_pages = edx.split.table_pages + 1;
+ 
++	/*
++	 * Capability fields of an HFI class are grouped together. Classes are
++	 * contiguous in memory.  Hence, use the number of supported features to
++	 * locate a specific class.
++	 */
++	hfi_features.class_stride = nr_capabilities;
++
++	/* For now, use only one class of the HFI table */
++	hfi_features.nr_classes = 1;
++
+ 	/*
+ 	 * The header contains change indications for each supported feature.
+ 	 * The size of the table header is rounded up to be a multiple of 8
+ 	 * bytes.
+ 	 */
+-	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities *
++					     hfi_features.nr_classes, 8) * 8;
+ 
+ 	/*
+ 	 * Data of each logical processor is also rounded up to be a multiple
+ 	 * of 8 bytes.
+ 	 */
+-	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities *
++					       hfi_features.nr_classes, 8) * 8;
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
