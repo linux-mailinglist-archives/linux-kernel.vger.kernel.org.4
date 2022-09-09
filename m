@@ -2,116 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C0E5B34DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED335B34D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiIIKK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S230170AbiIIKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiIIKKU (ORCPT
+        with ESMTP id S230090AbiIIKKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:10:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7007D78B;
-        Fri,  9 Sep 2022 03:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 047AF61F80;
-        Fri,  9 Sep 2022 10:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5059CC433D6;
-        Fri,  9 Sep 2022 10:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662718218;
-        bh=wR9F8nSh4V4XSc6Tz8iK3zjct6Psyrop68NsVJbELFg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DalXn0OYQczFU/qhFSCFn0lc1dYFxumM0PAtp9Ookp0f8MLJd4xyAEiYJ4Np0ijsE
-         CP3mzO4sh17yLczXgHWae6wSfqUDNaVbHu95LBpKo8KuDdm5Zw630uUYSIK1H1TJgG
-         1ccY+No/NNOKiGI4yzF+7uFFB9f0+AZD47GMOmszXtg2EAVxSLDEwnJ/H+uj1PY57s
-         XfBQqijKP9uw6Znd2+J4y0X6vsCQ3FBn8dkKzm+ZHlGE5d3wGlzZG490ZKqHkFMe0O
-         r4am3Hkqfg5iiIr9ilf9Ew4kOM1jvMmQhrqGOmbSTdHvYeQPQTuafLzdw+lvszMhgo
-         VFikwvTyzrj2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22F68E1CABD;
-        Fri,  9 Sep 2022 10:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 9 Sep 2022 06:10:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8E19A6A7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:10:31 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id f24so1348061plr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 03:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Uu8/Y7CXXBHRNAqM/p4WezJYKvf+VwWvJUdWkJfyMKo=;
+        b=KkyxGz1900lycU6F64B1E5AGOyGFi9NaUG/1QGhRXkEnya90K3ATDXi/QwnFauVwsh
+         2kalkbOwpmu8FwpDQRx3Qk8hmPNSeqNL6bK1WokhhHqCvClPjW8AKgJY6i0uoucARmQj
+         N+Dh1O+uvpEQ2R/kF8zluGF4JMnhUOxmMLNecZmPtST5aqgAt3R5LkWbnIAF4V3La7S0
+         3PbkiXnblk7DP9oSmwfo8H+PHYfvr40kppotFzvKf7I4dIWYmMwht+8Zx/rTYJLQMcYS
+         LnXGGJ9Ih3GXR9ZUBHNP19U/vlzzm4VZCSY0AkOCMw8NYPAHkQLN+dm/E5KfOiDsade2
+         rKnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Uu8/Y7CXXBHRNAqM/p4WezJYKvf+VwWvJUdWkJfyMKo=;
+        b=EcCHQTFg1LAYPCar3fUtcStgC72kp5XyaQhng9ImaXC10Qop6cT7JJK9jJE+8yuRsR
+         fFh1kjC1hm1Fh1rHV24dQvzJ7KidxAhCf4ZQZ54aUqVTysXbqbZPHZ8yGfDXX+XgJfxy
+         j0jlAKkD8/qYB4AyMZI64CBYteFlIFwLnwlGfES6mJ3geUJaGZwmjrbob5hb4Yavakr9
+         1gfxJOCxALqt5SXhypKat7/TqJI8RcXbAzmeqoYZV9aklZxVLaax4q8C1/3tf3vfTvW9
+         wYfpEjaTcw1H3pXcE+qqBW8d9nb61jcXv5Gret6UOgemCXOtRSicbNcr9EUqvu66TMZn
+         aDFg==
+X-Gm-Message-State: ACgBeo0D9eEmgkIiiGO+eCK2RKVIXx9UWkaXPRF6JQ0uzJRhn9YIb/ah
+        /vviu26ox58GzA6DLjM48EmOyofGyxk=
+X-Google-Smtp-Source: AA6agR5GRcLHupA/O/ATwASHpZ3W7F7CXeIy2G8uy7pg2Jhd4zriysokpuJwLhFMn90IsyKSTmj/qA==
+X-Received: by 2002:a17:90b:350b:b0:202:8495:6275 with SMTP id ls11-20020a17090b350b00b0020284956275mr4081802pjb.216.1662718230775;
+        Fri, 09 Sep 2022 03:10:30 -0700 (PDT)
+Received: from C02FG34WMD6R.bytedance.net ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id o10-20020a62cd0a000000b00537d0207b30sm107469pfg.184.2022.09.09.03.10.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 03:10:30 -0700 (PDT)
+From:   wuchi <wuchi.zero@gmail.com>
+To:     hch@lst.de, axboe@kernel.dk, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] relay: use kvcalloc to alloc page array in relay_alloc_page_array
+Date:   Fri,  9 Sep 2022 18:10:25 +0800
+Message-Id: <20220909101025.82955-1-wuchi.zero@gmail.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/14] Standardized ethtool counters for Felix DSA
- driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166271821812.3591.390061450752416705.git-patchwork-notify@kernel.org>
-Date:   Fri, 09 Sep 2022 10:10:18 +0000
-References: <20220908164816.3576795-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20220908164816.3576795-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, xiaoliang.yang_1@nxp.com,
-        claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
-        UNGLinuxDriver@microchip.com, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, fido_max@inbox.ru,
-        colin.foster@in-advantage.com, richard.pearn@nxp.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+The kvcalloc is safer because it will check the integer overflows,
+and using it will simple the logic of allocation size.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+---
+ kernel/relay.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-On Thu,  8 Sep 2022 19:48:02 +0300 you wrote:
-> The main purpose of this change set is to add reporting of structured
-> ethtool statistics counters to the felix DSA driver (see patch 11/14 for
-> details), as a prerequisite for extending these counters to the
-> eMAC/pMAC defined by the IEEE MAC Merge layer.
-> 
-> Along the way, the main purpose has diverged into multiple sub-purposes
-> which are also tackled:
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,01/14] net: dsa: felix: add definitions for the stream filter counters
-    https://git.kernel.org/netdev/net-next/c/0a2360c59687
-  - [net-next,02/14] net: mscc: ocelot: make access to STAT_VIEW sleepable again
-    https://git.kernel.org/netdev/net-next/c/96980ff7c2ca
-  - [net-next,03/14] net: dsa: felix: check the 32-bit PSFP stats against overflow
-    https://git.kernel.org/netdev/net-next/c/25027c8409b4
-  - [net-next,04/14] net: mscc: ocelot: report FIFO drop counters through stats->rx_dropped
-    https://git.kernel.org/netdev/net-next/c/cc160fc29a26
-  - [net-next,05/14] net: mscc: ocelot: sort Makefile files alphabetically
-    https://git.kernel.org/netdev/net-next/c/28c8df8d4785
-  - [net-next,06/14] net: mscc: ocelot: move stats code to ocelot_stats.c
-    https://git.kernel.org/netdev/net-next/c/fe90104cd604
-  - [net-next,07/14] net: mscc: ocelot: unexport ocelot_port_fdb_do_dump from the common lib
-    https://git.kernel.org/netdev/net-next/c/97076c3cc9fe
-  - [net-next,08/14] net: mscc: ocelot: move more PTP code from the lib to ocelot_ptp.c
-    https://git.kernel.org/netdev/net-next/c/d50e41bf0234
-  - [net-next,09/14] net: dsa: felix: use ocelot's ndo_get_stats64 method
-    https://git.kernel.org/netdev/net-next/c/776b71e55384
-  - [net-next,10/14] net: mscc: ocelot: exclude stats from bulk regions based on reg, not name
-    https://git.kernel.org/netdev/net-next/c/d3e75f1665f3
-  - [net-next,11/14] net: mscc: ocelot: add support for all sorts of standardized counters present in DSA
-    https://git.kernel.org/netdev/net-next/c/e32036e1ae7b
-  - [net-next,12/14] net: mscc: ocelot: harmonize names of SYS_COUNT_TX_AGING and OCELOT_STAT_TX_AGED
-    https://git.kernel.org/netdev/net-next/c/be5c13f26205
-  - [net-next,13/14] net: mscc: ocelot: minimize definitions for stats
-    https://git.kernel.org/netdev/net-next/c/b69cf1c67572
-  - [net-next,14/14] net: mscc: ocelot: share the common stat definitions between all drivers
-    https://git.kernel.org/netdev/net-next/c/4d1d157fb6a4
-
-You are awesome, thank you!
+diff --git a/kernel/relay.c b/kernel/relay.c
+index 6a611e779e95..d7edc934c56d 100644
+--- a/kernel/relay.c
++++ b/kernel/relay.c
+@@ -60,10 +60,7 @@ static const struct vm_operations_struct relay_file_mmap_ops = {
+  */
+ static struct page **relay_alloc_page_array(unsigned int n_pages)
+ {
+-	const size_t pa_size = n_pages * sizeof(struct page *);
+-	if (pa_size > PAGE_SIZE)
+-		return vzalloc(pa_size);
+-	return kzalloc(pa_size, GFP_KERNEL);
++	return kvcalloc(n_pages, sizeof(struct page *), GFP_KERNEL);
+ }
+ 
+ /*
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.20.1
 
