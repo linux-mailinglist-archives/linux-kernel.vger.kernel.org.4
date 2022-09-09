@@ -2,175 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BFD5B4326
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8A85B4329
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiIIXn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S231233AbiIIXpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiIIXnY (ORCPT
+        with ESMTP id S229986AbiIIXpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:43:24 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F6DBD121
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:43:23 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id s192so1500772vkb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 16:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yM/kvhJdsI8NBo5uNMFm8JlRP3HNMGQbZs8fTKlnEQM=;
-        b=TS4swxQjHiLEbHAj3vKqdkMS1ch47fEWIsqb2o3dZdeDVdjCQyiQsRifCw0sWVOuXo
-         x40vLFFVCjzDimP/9hUK/X98obdnxxdbKibUweQAeRGndm91NxkxvdcMBAgwchLbw8D8
-         svly7WfSSESy4mWTg8k65fzYcIaQij+HSNhVFrkZ0R2CiRA9Ak3aOI1WSza2CdXKht9U
-         x4MupFXFIQ7cs5jRSTDBf9Yjc5VTT/uZhHupLi2Xchv3e0D0ZPSWzJrgvMD0IMuYsiWf
-         NnocaNi6QRN08Bu1qGQuRHzqamNKxC3n+xsOY2Al30rx60Nho4l65S300AWLZtNvXOK/
-         hKqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yM/kvhJdsI8NBo5uNMFm8JlRP3HNMGQbZs8fTKlnEQM=;
-        b=afvAmrL1lzWbiIWBYzlBmeFnHOJew4joOdk92PiSRDmF2+SiJZCeCCogoIDva1auZU
-         kKyCGqWOumy3tWciXXBk5XpABGqjDzOKfp8k45V+CsXCthiJklzeYlXoOvwKDJ+I1laz
-         f/HnC6vt8jq2N3uqYaDccp9YnyfbUKCyOxMDwqdBe1XRtFB1YqAwHLvuvNzNtaA0H5Pk
-         kXHK0OEPdB9d2zYyA6L1CqyqOfmaPxs8F0X1TL32+xvjJLLEHYUVhigiZ8lHMGkHFzDQ
-         gYvacs/0+PiQcwh7pRb+GcRTpwYJcUj+1iPP1XRnN8bVJOubLelpLtmzN02weFJm0pc0
-         JCGQ==
-X-Gm-Message-State: ACgBeo1QiFOFCkil5E3M/f14QkJG+/j4CHUtQQQSvl0RUiR+R3HRfTOk
-        26eo/Nt/cPs844Rlji38nHwMcWIpm/ewjdAEjj4=
-X-Google-Smtp-Source: AA6agR7LGX14G3rAUr9BzeWCa0Er0i9E3ZBlG/vg0BrB9buV8rSqHWfvPInCBO6KJneE9thG9epmo6YcJmkLknluQBY=
-X-Received: by 2002:a1f:2ad4:0:b0:38c:5a9c:2d98 with SMTP id
- q203-20020a1f2ad4000000b0038c5a9c2d98mr5862449vkq.24.1662767002164; Fri, 09
- Sep 2022 16:43:22 -0700 (PDT)
+        Fri, 9 Sep 2022 19:45:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7B64F3B9;
+        Fri,  9 Sep 2022 16:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662767102; x=1694303102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qibUas8M4LKstHIxFpwhzFLKeKh7lGdHjYN36A8LgWY=;
+  b=EizHyk2OHTmVCPUYmfPcFN6hLKeuFP29LHPCVxiDiAyZX2anCR4FcIpD
+   jbg27NPcvkDkmPjEMVn1ZI1JfJ5MwK5jKQ0av29evw1EwvJF0ve005nok
+   4UmSX6W1XrSqnqWTKllA3dQNLZ7IcltoiPOKLSyHC0blxVPvfpK/igwG/
+   Bo04GrnpWgtA30n7dyjVAIcBsa5CWZ1PQ4RpC0bOQXmEpf3Z7/Lf7rOYH
+   BOurE2qXMkIVQjK47umiJCptbiNk6lRrC3GoWYRoiA2DyQwDHYWJPXgJs
+   n4cw2nkIShYLx2xtCzBX0rks4m6oAjjt3RqXktmFjv75njjmXG3wu3ubE
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="359316113"
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="359316113"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:44:55 -0700
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="677365338"
+Received: from gtpedreg-mobl.amr.corp.intel.com (HELO [10.209.57.19]) ([10.209.57.19])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:44:54 -0700
+Message-ID: <e64438cf-16f1-227d-188a-56d6e7fea47b@linux.intel.com>
+Date:   Fri, 9 Sep 2022 16:44:53 -0700
 MIME-Version: 1.0
-References: <20220904214134.408619-1-jim.cromie@gmail.com> <20220904214134.408619-29-jim.cromie@gmail.com>
- <Yxg86v7UsB8jtyYi@phenom.ffwll.local>
-In-Reply-To: <Yxg86v7UsB8jtyYi@phenom.ffwll.local>
-From:   jim.cromie@gmail.com
-Date:   Fri, 9 Sep 2022 17:42:55 -0600
-Message-ID: <CAJfuBxx_MnNbC=HDypKvG-aLxRu_k_jcPCwWqAwC+ghqjb9NmQ@mail.gmail.com>
-Subject: Re: [PATCH v6 28/57] drm_print: refine drm_debug_enabled for jump-label
-To:     Jim Cromie <jim.cromie@gmail.com>, Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sean Paul <seanpaul@chromium.org>, robdclark@gmail.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Joe Perches <joe@perches.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/9] PCI/PTM: Add pci_suspend_ptm() and
+ pci_resume_ptm()
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20220909202505.314195-1-helgaas@kernel.org>
+ <20220909202505.314195-5-helgaas@kernel.org>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220909202505.314195-5-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 12:40 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Sun, Sep 04, 2022 at 03:41:05PM -0600, Jim Cromie wrote:
-> > In order to use dynamic-debug's jump-label optimization in drm-debug,
-> > its clarifying to refine drm_debug_enabled into 3 uses:
-> >
-> > 1.   drm_debug_enabled - legacy, public
-> > 2. __drm_debug_enabled - optimized for dyndbg jump-label enablement.
-> > 3.  _drm_debug_enabled - pr_debug instrumented, observable
-> >
-> > 1. The legacy version always checks the bits.
-> >
-> > 2. is privileged, for use by __drm_dbg(), __drm_dev_dbg(), which do an
-> > early return unless the category is enabled.  For dyndbg builds, debug
-> > callsites are selectively "pre-enabled", so __drm_debug_enabled()
-> > short-circuits to true there.  Remaining callers of 1 may be able to
-> > use 2, case by case.
-> >
-> > 3. is 1st wrapped in a macro, with a pr_debug, which reports each
-> > usage in /proc/dynamic_debug/control, making it observable in the
-> > logs.  The macro lets the pr_debug see the real caller, not an inline
-> > function.
-> >
-> > When plugged into 1, 3 identified ~10 remaining callers of the
-> > function, leading to the follow-on cleanup patch, and would allow
-> > activating the pr_debugs, estimating the callrate, and the potential
-> > savings by using the wrapper macro.  It is unused ATM, but it fills
-> > out the picture.
-> >
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
->
-> So instead of having 3 here as a "you need to hack it in to see what
-> should be converted" I have a bit a different idea: Could we make the
-> public version also a dyndbg callsite (like the printing wrappers), but
-> instead of a dynamic call we'd have a dynamically fixed value we get out?
-> I think that would take care of everything you have here as an open.
->
-> Otherwise I'd just drop 3 for the series we're going to merge.
-> -Daniel
->
 
-OK - So here it is in use again,  with  modules drm amdgpu i915 loaded + deps
 
-:#> grep todo /proc/dynamic_debug/control
-drivers/gpu/drm/drm_edid_load.c:178 [drm]edid_load =_ "todo: maybe
-avoid via dyndbg\n"
-drivers/gpu/drm/drm_vblank.c:410 [drm]drm_crtc_accurate_vblank_count
-=_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/drm_vblank.c:787
-[drm]drm_crtc_vblank_helper_get_vblank_timestamp_internal =_ "todo:
-maybe avoid via dyndbg\n"
-drivers/gpu/drm/drm_vblank.c:1491 [drm]drm_vblank_restore =_ "todo:
-maybe avoid via dyndbg\n"
-drivers/gpu/drm/drm_vblank.c:1433 [drm]drm_vblank_enable =_ "todo:
-maybe avoid via dyndbg\n"
-drivers/gpu/drm/drm_plane.c:2168 [drm]drm_mode_setplane =_ "todo:
-maybe avoid via dyndbg\n"
-drivers/gpu/drm/display/drm_dp_mst_topology.c:1359
-[drm_display_helper]drm_dp_mst_wait_tx_reply =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/display/drm_dp_mst_topology.c:2864
-[drm_display_helper]process_single_tx_qlock =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/display/drm_dp_mst_topology.c:2909
-[drm_display_helper]drm_dp_queue_down_tx =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/display/drm_dp_mst_topology.c:1686
-[drm_display_helper]drm_dp_mst_update_slots =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/i915/display/intel_dp.c:1111
-[i915]intel_dp_print_rates =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/display/intel_backlight.c:5434
-[i915]cnp_enable_backlight =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/display/intel_backlight.c:5459
-[i915]intel_backlight_device_register =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/i915/display/intel_opregion.c:43
-[i915]intel_opregion_notify_encoder =_ "todo: maybe avoid via
-dyndbg\n"
-drivers/gpu/drm/i915/display/intel_opregion.c:53
-[i915]asle_set_backlight =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/display/intel_bios.c:1088
-[i915]intel_bios_is_dsi_present =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/display/intel_display_debugfs.c:6153
-[i915]i915_drrs_ctl_set =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/intel_pcode.c:26 [i915]snb_pcode_read =_ "todo:
-maybe avoid via dyndbg\n"
-drivers/gpu/drm/i915/i915_getparam.c:785 [i915]i915_getparam_ioctl =_
-"todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:282
-[amdgpu]vcn_v2_5_process_interrupt =_ "todo: maybe avoid via dyndbg\n"
-drivers/gpu/drm/amd/amdgpu/vcn_v2_0.c:433
-[amdgpu]vcn_v2_0_process_interrupt =_ "todo: maybe avoid via dyndbg\n"
+On 9/9/22 1:25 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> We disable PTM during suspend because that allows some Root Ports to enter
+> lower-power PM states, which means we also need to disable PTM for all
+> downstream devices.  Add pci_suspend_ptm() and pci_resume_ptm() for this
+> purpose.
+> 
+> pci_enable_ptm() and pci_disable_ptm() are for drivers to use to enable or
+> disable PTM.  They use dev->ptm_enabled to keep track of whether PTM should
+> be enabled.
+> 
+> pci_suspend_ptm() and pci_resume_ptm() are PCI core-internal functions to
+> temporarily disable PTM during suspend and (depending on dev->ptm_enabled)
+> re-enable PTM during resume.
+> 
+> Enable/disable/suspend/resume all use internal __pci_enable_ptm() and
+> __pci_disable_ptm() functions that only update the PTM Control register.
+> Outline:
+> 
+>   pci_enable_ptm(struct pci_dev *dev)
+>   {
+>      __pci_enable_ptm(dev);
+>      dev->ptm_enabled = 1;
+>      pci_ptm_info(dev);
+>   }
+> 
+>   pci_disable_ptm(struct pci_dev *dev)
+>   {
+>      if (dev->ptm_enabled) {
+>        __pci_disable_ptm(dev);
+>        dev->ptm_enabled = 0;
+>      }
+>   }
+> 
+>   pci_suspend_ptm(struct pci_dev *dev)
+>   {
+>      if (dev->ptm_enabled)
+>        __pci_disable_ptm(dev);
+>   }
+> 
+>   pci_resume_ptm(struct pci_dev *dev)
+>   {
+>      if (dev->ptm_enabled)
+>        __pci_enable_ptm(dev);
+>   }
+> 
+> Nothing currently calls pci_resume_ptm(); the suspend path saves the PTM
 
-w/o actually looking, the vblank debug could be called frequently.
-I'll build on my amdgpu box to run on real hardware.
+Is semicolon intentional ?
 
-And Im inclined to restore the instrumented version (with the "todo:")
-care to suggest a better message than "maybe avoid" ?
+> state before disabling PTM, so the PTM state restore in the resume path
+> implicitly re-enables it.  A future change will use pci_resume_ptm() to fix
+> some problems with this approach.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/pci.c      |  4 +--
+>  drivers/pci/pci.h      |  6 ++--
+>  drivers/pci/pcie/ptm.c | 71 +++++++++++++++++++++++++++++++++---------
+>  include/linux/pci.h    |  2 ++
+>  4 files changed, 65 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..83818f81577d 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2714,7 +2714,7 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>  	 * lower-power idle state as a whole.
+>  	 */
+>  	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> +		pci_suspend_ptm(dev);
+>  
+>  	pci_enable_wake(dev, target_state, wakeup);
+>  
+> @@ -2772,7 +2772,7 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+>  	 * lower-power idle state as a whole.
+>  	 */
+>  	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> +		pci_suspend_ptm(dev);
+>  
+>  	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>  
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 785f31086313..ce4a277e3f41 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -507,11 +507,13 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
+>  #ifdef CONFIG_PCIE_PTM
+>  void pci_save_ptm_state(struct pci_dev *dev);
+>  void pci_restore_ptm_state(struct pci_dev *dev);
+> -void pci_disable_ptm(struct pci_dev *dev);
+> +void pci_suspend_ptm(struct pci_dev *dev);
+> +void pci_resume_ptm(struct pci_dev *dev);
+>  #else
+>  static inline void pci_save_ptm_state(struct pci_dev *dev) { }
+>  static inline void pci_restore_ptm_state(struct pci_dev *dev) { }
+> -static inline void pci_disable_ptm(struct pci_dev *dev) { }
+> +static inline void pci_suspend_ptm(struct pci_dev *dev) { }
+> +static inline void pci_resume_ptm(struct pci_dev *dev) { }
+>  #endif
+>  
+>  unsigned long pci_cardbus_resource_alignment(struct resource *);
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index ba1d50c965fa..70a28b74e721 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -29,7 +29,7 @@ static void pci_ptm_info(struct pci_dev *dev)
+>  		 dev->ptm_root ? " (root)" : "", clock_desc);
+>  }
+>  
+> -void pci_disable_ptm(struct pci_dev *dev)
+> +static void __pci_disable_ptm(struct pci_dev *dev)
+>  {
+>  	u16 ptm = dev->ptm_cap;
+>  	u16 ctrl;
+> @@ -42,6 +42,21 @@ void pci_disable_ptm(struct pci_dev *dev)
+>  	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
+>  }
+>  
+> +/**
+> + * pci_disable_ptm() - Disable Precision Time Measurement
+> + * @dev: PCI device
+> + *
+> + * Disable Precision Time Measurement for @dev.
+> + */
+> +void pci_disable_ptm(struct pci_dev *dev)
+> +{
+> +	if (dev->ptm_enabled) {
+> +		__pci_disable_ptm(dev);
+> +		dev->ptm_enabled = 0;
+> +	}
+> +}
+> +EXPORT_SYMBOL(pci_disable_ptm);
+> +
+>  void pci_save_ptm_state(struct pci_dev *dev)
+>  {
+>  	u16 ptm = dev->ptm_cap;
+> @@ -151,18 +166,8 @@ void pci_ptm_init(struct pci_dev *dev)
+>  		pci_enable_ptm(dev, NULL);
+>  }
+>  
+> -/**
+> - * pci_enable_ptm() - Enable Precision Time Measurement
+> - * @dev: PCI device
+> - * @granularity: pointer to return granularity
+> - *
+> - * Enable Precision Time Measurement for @dev.  If successful and
+> - * @granularity is non-NULL, return the Effective Granularity.
+> - *
+> - * Return: zero if successful, or -EINVAL if @dev lacks a PTM Capability or
+> - * is not a PTM Root and lacks an upstream path of PTM-enabled devices.
+> - */
+> -int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> +/* Enable PTM in the Control register if possible */
+> +static int __pci_enable_ptm(struct pci_dev *dev)
+>  {
+>  	u16 ptm = dev->ptm_cap;
+>  	struct pci_dev *ups;
+> @@ -191,8 +196,29 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  		ctrl |= PCI_PTM_CTRL_ROOT;
+>  
+>  	pci_write_config_dword(dev, ptm + PCI_PTM_CTRL, ctrl);
+> +	return 0;
+> +}
+> +
+> +/**
+> + * pci_enable_ptm() - Enable Precision Time Measurement
+> + * @dev: PCI device
+> + * @granularity: pointer to return granularity
+> + *
+> + * Enable Precision Time Measurement for @dev.  If successful and
+> + * @granularity is non-NULL, return the Effective Granularity.
+> + *
+> + * Return: zero if successful, or -EINVAL if @dev lacks a PTM Capability or
+> + * is not a PTM Root and lacks an upstream path of PTM-enabled devices.
+> + */
+> +int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> +{
+> +	int rc;
+> +
+> +	rc = __pci_enable_ptm(dev);
+> +	if (rc)
+> +		return rc;
+> +
+>  	dev->ptm_enabled = 1;
+> -
+>  	pci_ptm_info(dev);
+>  
+>  	if (granularity)
+> @@ -201,6 +227,23 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  }
+>  EXPORT_SYMBOL(pci_enable_ptm);
+>  
+> +/*
+> + * Disable PTM, but preserve dev->ptm_enabled so we silently re-enable it on
+> + * resume if necessary.
+> + */
+> +void pci_suspend_ptm(struct pci_dev *dev)
+> +{
+> +	if (dev->ptm_enabled)
+> +		__pci_disable_ptm(dev);
+> +}
+> +
+> +/* If PTM was enabled before suspend, re-enable it when resuming */
+> +void pci_resume_ptm(struct pci_dev *dev)
+> +{
+> +	if (dev->ptm_enabled)
+> +		__pci_enable_ptm(dev);
+> +}
+> +
+>  bool pcie_ptm_enabled(struct pci_dev *dev)
+>  {
+>  	if (!dev)
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 54be939023a3..cb5f796e3319 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1678,10 +1678,12 @@ bool pci_ats_disabled(void);
+>  
+>  #ifdef CONFIG_PCIE_PTM
+>  int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
+> +void pci_disable_ptm(struct pci_dev *dev);
+>  bool pcie_ptm_enabled(struct pci_dev *dev);
+>  #else
+>  static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  { return -EINVAL; }
+> +static inline void pci_disable_ptm(struct pci_dev *dev) { }
+>  static inline bool pcie_ptm_enabled(struct pci_dev *dev)
+>  { return false; }
+>  #endif
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
