@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF845B360E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFFC5B3611
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiIILJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S229930AbiIILJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiIILJb (ORCPT
+        with ESMTP id S229970AbiIILJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:09:31 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743BB62E1;
-        Fri,  9 Sep 2022 04:09:28 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 1486F2B059B1;
-        Fri,  9 Sep 2022 07:09:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 09 Sep 2022 07:09:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662721765; x=1662725365; bh=wqSZnyFI/c
-        l/mPByp5iGdJ8icj1uq3tpAsMYxesXc90=; b=JNCUOHygKHzw5ymEwgIx150ccZ
-        kk3QcAxPZ+kBSPmdW6jFGXpxAjxmEeG0M6d57nMRbAoHaCqHoE+FBWHfNpOeLwBs
-        /mPuqtbvd/1IPDbHrQuUxW5yCDGLAoB2om5QEevKLcUZVQYafKN1g6jZbmhwHLOu
-        0HRA6C+WddeqcV+7yTAaDTKC7uE2YRZYNsPxH2KSdrzIovQgodn9vw1xR87nCG+W
-        KPYRz8ti9cnn/qzN8glQRQibQH2l1HmUfIA2qVa5UgrX/L1qAkJdpn9gAKjxC3Ks
-        SIdQUbZKUYYQjMI+lOUwNGQgo3vZPc4FYLNL3mkZQP6Adk+Ua83PVyjTJQyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662721765; x=1662725365; bh=wqSZnyFI/cl/mPByp5iGdJ8icj1u
-        q3tpAsMYxesXc90=; b=NcnoBpow2qM+ovsG2uQ1UBwQb5Coksk8+GOfbMClmXg0
-        FljMyHsOsV/d4c2jkdzcmMrS2dB9O4m2MafmQaN7+qU8HuJK7d2K++DLiICuLM2y
-        AjcE4yKVEsPIlL52TJa57qkn2k9qeBsuhvHX5alkWuvvcLRv0wOUjJzb8d836EGo
-        F/KD5NIL8QMwpvF5G6UbyM0UHVuQPX7ZmSljDoIFpGPeaKEsv8wxuVziYA/Mq6AL
-        AUzrsvFBNWDvi84l76doHdoBRON5BMvjWLQKymPY0D6dPOHzwqS91ZBhGP94gs+3
-        yWnpDzgYO8/dcTsXF9pcTpg4Ajh7Ere3cJRjMUriXA==
-X-ME-Sender: <xms:5R4bY4GaqDmt3X-LJ-uV8Zcyr7ZBZR-NmmXwK3Kgf75UWFViN9SQ3g>
-    <xme:5R4bYxXLe5wUEH8ByBurgfVYAMPzogSUu2s6bS8sgxCTXaY0NKVYElWrRz4Vw1bco
-    W8mW2HX1LXeLyrxkTQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5R4bYyKu5j3kSAt9BrZFBOj8MBqapEHrpfOZjwAiyNhZaKRGdpro4g>
-    <xmx:5R4bY6Ec5uNpaboa5u0lOfhinRTwp9OIPIF7MMPIYGNvn2WkJnk6VA>
-    <xmx:5R4bY-WaYgUrlM9_vLjYf5DX1sz3ev5uymLjtLvtFVpsaTXoPZPTDQ>
-    <xmx:5R4bYwKi5QKMiJ_n2x8PmIi78ZHDXfR-pJPa3AoM33UYbxvq50eFoaVECX8>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0E194B60086; Fri,  9 Sep 2022 07:09:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
-In-Reply-To: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
-References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
-Date:   Fri, 09 Sep 2022 13:09:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of creating a
- PPC dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Fri, 9 Sep 2022 07:09:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26A4E84A;
+        Fri,  9 Sep 2022 04:09:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F1292288F;
+        Fri,  9 Sep 2022 11:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662721785; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jc0d4GvYAZFGV+o/z8IImilKpYEBIOuhp0/HsQ8mNfY=;
+        b=OtZDXLRAx8/3DXs7hJJ/D+PJQ5qqbdbUBgJFXYVCoDY6wzHrg9HPmkWGDZ3u8QSE4ssn1t
+        aQJ3dwkChQWmRaVP3iVCjGMSQ+Qjuh2kZmPvpXTL+w6TkKocroeX9T2c8mw7XgsgXXWPuF
+        SsizCCQDo5hZu0ObFUvkdyU0v2XG2Tw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662721785;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jc0d4GvYAZFGV+o/z8IImilKpYEBIOuhp0/HsQ8mNfY=;
+        b=qLZIFqvob0RnArjNrWkgvQBYJkD6KS6Ck8NjN9xQqOOYzPiVWqkAL7HDJdoARbJoBJgYMB
+        OqAeq1tj2qeUT8Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80D84139D5;
+        Fri,  9 Sep 2022 11:09:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BdpvH/keG2MCCwAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 09 Sep 2022 11:09:45 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DDADFA0684; Fri,  9 Sep 2022 13:09:44 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 13:09:44 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>, Jan Kara <jack@suse.cz>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
+ permission event response
+Message-ID: <20220909110944.yfnuqhsiyw3ekkcn@quack3>
+References: <cover.1659996830.git.rgb@redhat.com>
+ <2254258.ElGaqSPkdT@x2>
+ <Yxqn6NVQr0jTQHiu@madcap2.tricolour.ca>
+ <2254543.ElGaqSPkdT@x2>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2254543.ElGaqSPkdT@x2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,43 +79,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022, at 11:03 AM, Lukas Bulwahn wrote:
-> Commit cc18e0fea790 ("LIBATA: Add HAVE_PATA_PLATFORM to select
-> PATA_PLATFORM driver") introduces config HAVE_PATA_PLATFORM, and expects
-> that all architectures simply select this config when the architecture
-> supports using the PATA_PLATFORM driver.
->
-> This is properly implemented already for all architectures except for the
-> powerpc architecture. Implement this for powerpc now.
->
-> Adjust the config of the powerpc architecture to use the config
-> HAVE_PATA_PLATFORM and simplify the config PATA_PLATFORM to not mention
-> any specific architecture anymore.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  arch/powerpc/Kconfig | 1 +
->  drivers/ata/Kconfig  | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 39d71d7701bd..2575e21b6e6b 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -237,6 +237,7 @@ config PPC
->  	select HAVE_MOD_ARCH_SPECIFIC
->  	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
->  	select HAVE_OPTPROBES
-> +	select HAVE_PATA_PLATFORM
->  	select HAVE_PERF_EVENTS
->  	select HAVE_PERF_EVENTS_NMI		if PPC64
->  	select HAVE_PERF_REGS
+Hello Steve!
 
-I don't see a single powerpc machine that creates a
- name="pata_platform" platform_device. I suspect this was
-only needed bwfore 2007 commit 9cd55be4d223 ("[POWERPC] pasemi:
-Move electra-ide to pata_of_platform"), so the "|| PPC"
-bit should just get removed without adding the HAVE_PATA_PLATFORM
-bit.
+On Fri 09-09-22 00:03:53, Steve Grubb wrote:
+> On Thursday, September 8, 2022 10:41:44 PM EDT Richard Guy Briggs wrote:
+> > > I'm trying to abide by what was suggested by the fs-devel folks. I can
+> > > live with it. But if you want to make something non-generic for all
+> > > users of fanotify, call the new field "trusted". This would decern when
+> > > a decision was made because the file was untrusted or access denied for
+> > > another reason.
+> >
+> > So, "u32 trusted;" ?  How would you like that formatted?
+> > "fan_trust={0|1}"
+> 
+> So how does this play out if there is another user? Do they want a num= and 
+> trust=  if not, then the AUDIT_FANOTIFY record will have multiple formats 
+> which is not good. I'd rather suggest something generic that can be 
+> interpreted based on who's attached to fanotify. IOW we have a fan_type=0 and 
+> then followed by info0= info1=  the interpretation of those solely depend on 
+> fan_type. If the fan_type does not need both, then any interpretation skips 
+> what it doesn't need. If fan_type=1, then it follows what arg0= and arg1= is 
+> for that format. But make this pivot on fan_type and not actual names.
 
-       Arnd
+So I think there is some misunderstanding so let me maybe spell out in
+detail how I see things so that we can get on the same page:
+
+It was a requirement from me (and probably Amir) that there is a generic
+way to attach additional info to a response to fanotify permission event.
+This is achieved by defining:
+
+struct fanotify_response_info_header {
+       __u8 type;
+       __u8 pad;
+       __u16 len;
+};
+
+which is a generic header and kernel can based on 'len' field decide how
+large the response structure is (to safely copy it from userspace) and
+based on 'type' field it can decide who should be the recipient of this
+extra information (or generally what to do with it). So any additional
+info needs to start with this header.
+
+Then there is:
+
+struct fanotify_response_info_audit_rule {
+       struct fanotify_response_info_header hdr;
+       __u32 audit_rule;
+};
+
+which properly starts with the header and hdr.type is expected to be
+FAN_RESPONSE_INFO_AUDIT_RULE. What happens after the header with type
+FAN_RESPONSE_INFO_AUDIT_RULE until length hdr.len is fully within *audit*
+subsystem's responsibility. Fanotify code will just pass this as an opaque
+blob to the audit subsystem.
+
+So if you know audit subsystem will also need some other field together
+with 'audit_rule' now is a good time to add it and it doesn't have to be
+useful for anybody else besides audit. If someone else will need other
+information passed along with the response, he will append structure with
+another header with different 'type' field. In principle, there can be
+multiple structures appended to fanotify response like
+
+<hdr> <data> <hdr> <data> ...
+
+and fanotify subsystem will just pass them to different receivers based
+on the type in 'hdr' field.
+
+Also if audit needs to pass even more information along with the respose,
+we can define a new 'type' for it. But the 'type' space is not infinite so
+I'd prefer this does not happen too often...
+
+I hope this clears out things a bit.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
