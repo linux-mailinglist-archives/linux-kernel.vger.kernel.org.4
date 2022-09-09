@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8674A5B3BDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F715B3BEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiIIP1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S231410AbiIIPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiIIPZt (ORCPT
+        with ESMTP id S230342AbiIIPbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:25:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1DEE72EA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:25:47 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fs14so1829294pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 08:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=KQ7mx//Yg3b2on5K+GcpEYxceEeGkrI8LOMH1KIOtyM=;
-        b=apSZrIUd0edt1e799SLrlrQR3GXfeVcUUKtqogNKmO7yvEgyM+r5QdzvwENRWZsvi4
-         wYUC4Llu/OW541iIwi2uuN+0LvpCKCnIhDLiy6LD7cXmeko44lBKFLIJb8g4o+1kv88j
-         nIgBmeaeoiVlluHT3HvfbgN3Jvq1Kwr30az76zrtzPPlIanPcBoHZ8Yo4hLq2CIYXuUF
-         ci9NkrxM6NVa26MZxzaG9luuGMzvyRho8O3DSuIPcsG2RhjNsfSQvettqeZ1qzVQIxO7
-         8y0Oeoxh+F8E3Krunu/YzI+bMe8eyYVA498tjMRJ1WbOKZuo/KVMNLIYVq9CEyHuACp5
-         0hUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KQ7mx//Yg3b2on5K+GcpEYxceEeGkrI8LOMH1KIOtyM=;
-        b=W21eDn8+2x6BD/F92RaiASoyGGQOn2zNaahgI6g/zNvMn6+FYxsH3aDS+tiTMxngDF
-         SPvePPAFyI6YIXNetlM4hW/Db115egz2ZauDqxh/B3J656cYRq/F8TYzTIHPXwrND1Nw
-         VeH+oM5kFQnl32NASXeRYWQShDpGoTC1Lv7Es5TmFWi2TAaD3N22uCgFP0Sg5mmmxgrZ
-         +kC7HaElwXjf78ZlsjBQdIH0lzQF4SDlemnsvqG/lBlAeDru0LoD6RSWss+8Rwrv3tZk
-         RotZfzYjlM3cKrSWUflkwrF+F7f5kYdawauoyORhAnpoD+q8miBMfU1JrdYneb9DwKFx
-         TVjQ==
-X-Gm-Message-State: ACgBeo2jJYU52Zqrt14zqYNIGV5kMO13w8E6dzFU/F0gcJM/AURnIcw4
-        nAC7sdbuSXIceL/gCgmST2MIIQD04D6AJoaFvAzmJw==
-X-Google-Smtp-Source: AA6agR70u57I14PlxIWQrF1g1H8PEpE9+18WBH6uHadtu50fnLZueSFTpB0VIM5c6Xnie3UVTtcGT/NvGN/j7P2b5Sg=
-X-Received: by 2002:a17:903:41c6:b0:174:3acf:8294 with SMTP id
- u6-20020a17090341c600b001743acf8294mr14185533ple.118.1662737147158; Fri, 09
- Sep 2022 08:25:47 -0700 (PDT)
+        Fri, 9 Sep 2022 11:31:25 -0400
+X-Greylist: delayed 231 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 08:30:52 PDT
+Received: from p3plwbeout24-02.prod.phx3.secureserver.net (p3plsmtp24-02-2.prod.phx3.secureserver.net [68.178.252.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455FE1475C4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:30:51 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.144])
+        by :WBEOUT: with ESMTP
+        id WfuCofxtiw2jOWfuDok3O6; Fri, 09 Sep 2022 08:26:57 -0700
+X-CMAE-Analysis: v=2.4 cv=DZ/SFthW c=1 sm=1 tr=0 ts=631b5b43
+ a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10 a=VwQbUJbxAAAA:8
+ a=i0EeH86SAAAA:8 a=QyXUC8HyAAAA:8 a=AgdXCVuIJE-Ip5MHRPMA:9
+ a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  WfuCofxtiw2jO
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp02.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1oWfuC-0009Mr-0b; Fri, 09 Sep 2022 16:26:56 +0100
+Message-ID: <56f53190-c6dc-7d9f-71c7-6626163df15c@squashfs.org.uk>
+Date:   Fri, 9 Sep 2022 16:26:50 +0100
 MIME-Version: 1.0
-References: <20220902230500.2624739-1-tharvey@gateworks.com>
- <20220908211916.GA3348959-robh@kernel.org> <CAJ+vNU1NEYWvev3s=1rPPNCRovBqa0p=JTXLHLpV7fOWf-dFLg@mail.gmail.com>
- <a24f920b-60e2-f32b-96e5-9bafee6be8e6@kernel.org>
-In-Reply-To: <a24f920b-60e2-f32b-96e5-9bafee6be8e6@kernel.org>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Fri, 9 Sep 2022 08:25:35 -0700
-Message-ID: <CAJ+vNU1a3CoCYWsVf52Nrta2Mb635j0zF54mwCHWdHw1U=2x3w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: Add i.MX8M Mini Gateworks GW7904 board
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 0/2] squashfs: Add the mount parameter "threads="
+To:     Xiaoming Ni <nixiaoming@huawei.com>, linux-kernel@vger.kernel.org
+Cc:     wangle6@huawei.com, yi.zhang@huawei.com, wangbing6@huawei.com,
+        zhongjubin@huawei.com, chenjianguo3@huawei.com
+References: <20220816010052.15764-1-nixiaoming@huawei.com>
+ <20220902094855.22666-1-nixiaoming@huawei.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <20220902094855.22666-1-nixiaoming@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfIbT6N89EXZC9Ay38cwuwM4PXp/m/5Ff7PyKkve1Bb3IXsEngdwQp2PXnjGlh/6bmFCo41Slmu3vmaIaHsUQLvZFFGT6NcqMP1xol/4vKey7gROYZPTe
+ BgdYYmOqqCGZPT6FQ/OFO7RW7vlFoHu4+Lg+djdrKxr6FEsIBgP97v36aGkSBTYUhvkMA9PMtn3q0FN7TI13n043Y0awT8T8ktY=
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,90 +60,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 1:03 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 08/09/2022 23:44, Tim Harvey wrote:
-> > On Thu, Sep 8, 2022 at 2:19 PM Rob Herring <robh@kernel.org> wrote:
-> >>
-> >> On Fri, Sep 02, 2022 at 04:04:59PM -0700, Tim Harvey wrote:
-> >>> Add DT compatible string for i.MX8M Mini based Gateworks GW7904 board.
-> >>>
-> >>> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> >>> Cc: Rob Herring <robh+dt@kernel.org>
-> >>> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> >>> Cc: Shawn Guo <shawnguo@kernel.org>
-> >>> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> >>> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> >>> Cc: Fabio Estevam <festevam@gmail.com>
-> >>> Cc: NXP Linux Team <linux-imx@nxp.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> >>> index 7431579ab0e8..ce89fac1898e 100644
-> >>> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> >>> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> >>> @@ -831,6 +831,7 @@ properties:
-> >>>                - gw,imx8mm-gw7901          # i.MX8MM Gateworks Board
-> >>>                - gw,imx8mm-gw7902          # i.MX8MM Gateworks Board
-> >>>                - gw,imx8mm-gw7903          # i.MX8MM Gateworks Board
-> >>> +              - gateworks,imx8mm-gw7904   # i.MX8MM Gateworks Board
-> >>
-> >> A useful comment would be ones that distuiguish these boards. It's
-> >> obvious from the compatible it's a i.MX8MM board from Gateworks.
-> >
-> > But isn't it clear that you need to go to the device-tree itself to
-> > understand the details?
-> >
-> > As far as basic features go sometimes there is very little difference
-> > in these board models. It would be a struggle to list all the board
-> > details (which I do in the dts commit) in a way that doesn't take up
-> > too much space in fsl.yaml.
-> >
->
-> But then the comment you added is useless. So either add useful comment
-> or no comment. :)
->
->
-> Best regards,
-> Krzysztof
+On 02/09/2022 10:48, Xiaoming Ni wrote:
+> Currently, Squashfs supports multiple decompressor parallel modes. However, this
+> mode can be configured only during kernel building and does not support flexible
+> selection during runtime.
+> 
+> In the current patch set, the mount parameter "threads=" is added to allow users
+> to select the parallel decompressor mode and configure the number of decompressors
+> when mounting a file system.
+> 
+> "threads=<single|multi|percpu|1|2|3|...>"
+> The upper limit is num_online_cpus() * 2.
+> 
+> 
+> 
+> v3: Based on Philip Lougher's suggestion, make the following updates:
+>    1. The default configuration is the same as that before the patch installation.
+>    2. Compile the three decompression modes when the new configuration is enabled.
+>    3. "threads=1" supports only the SQUASHFS_DECOMP_SINGLE mode.
+> 
 
-Krzysztof,
+Hi,
 
-so are you saying that no comment is fine here as well? It seems to me
-that most of the comments in that file look just like mine which I
-agree are about just as descriptive as the compatible string.
+This patch-set looks a lot better IMHO.  I only have a couple of
+relatively minor issues, which will be dealt with as comments on
+the patches.
 
-For discussion purposes here is for example the commit log for the GW7904 dts:
-    The GW7904 is based on the i.MX 8M Mini SoC featuring:
-     - LPDDR4 DRAM
-     - eMMC FLASH
-     - microSD connector with UHS support
-     - LIS2DE12 3-axis accelerometer
-     - Gateworks System Controller
-     - IMX8M FEC
-     - 2x RS232 off-board connectors
-     - PMIC
-     - 10x bi-color LED's
-     - 1x miniPCIe socket with PCIe and USB2.0
-     - 802.3at Class 4 PoE
-     - 10-30VDC input via barrel-jack
+Phillip
 
-And the comit log for the very similar GW7903 dts:
-    The GW7903 is based on the i.MX 8M Mini SoC featuring:
-     - LPDDR4 DRAM
-     - eMMC FLASH
-     - microSD connector with UHS support
-     - LIS2DE12 3-axis accelerometer
-     - Gateworks System Controller
-     - IMX8M FEC
-     - software selectable RS232/RS485/RS422 serial transceiver
-     - PMIC
-     - 2x off-board bi-directional opto-isolated digital I/O
-     - 1x M.2 A-E Key Socket and 1x MiniPCIe socket with USB2.0 and PCIe
-       (resistor loading to route PCIe/USB2 between M.2 and MiniPCIe socket)
+> v2: https://lore.kernel.org/lkml/20220816010052.15764-1-nixiaoming@huawei.com/
+>    fix warning: sparse: incorrect type in initializer (different address spaces)
+>    Reported-by: kernel test robot <lkp@intel.com>
+> 
+> v1: https://lore.kernel.org/lkml/20220815031100.75243-1-nixiaoming@huawei.com/
+> 
+> Xiaoming Ni (2):
+>    squashfs: add the mount parameter theads=<single|multi|percpu>
+>    squashfs: Allows users to configure the number of decompression
+>      threads.
+> 
+>   fs/squashfs/Kconfig                     | 51 ++++++++++++++++--
+>   fs/squashfs/decompressor_multi.c        | 32 +++++++-----
+>   fs/squashfs/decompressor_multi_percpu.c | 39 ++++++++------
+>   fs/squashfs/decompressor_single.c       | 23 +++++---
+>   fs/squashfs/squashfs.h                  | 43 +++++++++++++--
+>   fs/squashfs/squashfs_fs_sb.h            |  4 +-
+>   fs/squashfs/super.c                     | 93 ++++++++++++++++++++++++++++++++-
+>   7 files changed, 237 insertions(+), 48 deletions(-)
+> 
 
-Best Regards,
-
-Tim
