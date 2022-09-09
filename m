@@ -2,98 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4597F5B3765
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9F15B3762
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiIIMQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S231295AbiIIMRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiIIMQM (ORCPT
+        with ESMTP id S230311AbiIIMQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:16:12 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2ED1485B7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:13:52 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id d189so2325877ybh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 05:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=SbqGZ41/heDOlkBsUBLVx+zaVQBFoaHFYxB4cUuv1cC39cHBgtFasnqwwJeIrPEhMH
-         vBIxJwqJbzlgQgFRZVZOR0ogjZpTev1oaCZzVFJlcjdXkLRpraE1B5bbVa0turumx7F2
-         9SiTTWhup9bB0KovlFBIG1kxszwTks49ONlSsGmcxuk/ZZNTiMP4dO1gg8XKKWeB+KOw
-         dL+zT6cjWmxpzYKNWCHeUsYlzFRj5iKFxPlLYOd4Frkk+kMjagTZVFTBsYK51vbaIUoR
-         GES5bYkNeF7+ErClCK4Q9QKeSxf3cICaHw/8DOLBN/jd2Rx6+Uu+7mkEBgFpDkwKAfIt
-         RBZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=msd65pUeU3+Bc5TjMUyrhaOB5uT6fMmSOpfkg8bKQPdlrvy9ziER7dSCewLFN+5ub0
-         Ozb1zy4GkQDJO9mBtufssrD2/fWZogc/9Xs0+XJ4xAR8xyPEj8iBP7t5CSLvVnbNp9Jl
-         8SWySPFYHNaitR1PUdDNYX7w/gk6FGxRIeVUhbFa2G16ljhKp6Vq41jgsVQyNILOMtPh
-         2ytzVqYiFxY+TO8a9tsK/iKhVzk7FUxCoq5Am4wEI8qN8Y+lh9HwdYxpDcI2HEiClXzy
-         QftyM6Mtr9GSMRkf/TPbH1Ub5GVxZnAnktb4buzu+HYeS8ByfVx34vQTr8izmcMqq3bl
-         ai3Q==
-X-Gm-Message-State: ACgBeo3Pumg6zhPnEU+YLAFmeI2D0UalUZq9KOH57jgNrlUTmz9knKmH
-        rOreuXwTxcdP3AYORTK80tqyFBbjgEn3bXZXeG8=
-X-Google-Smtp-Source: AA6agR6nE9ZGAOzZpZOiDWZwapswitbjiPgDD0+c2qgRRJRbEmYpQA5ruBL4Gym+6OXe6eLZx7EwEwQTgbtHo4QsdY4=
-X-Received: by 2002:a25:e68c:0:b0:6a8:f979:60f3 with SMTP id
- d134-20020a25e68c000000b006a8f97960f3mr11239973ybh.28.1662725571503; Fri, 09
- Sep 2022 05:12:51 -0700 (PDT)
+        Fri, 9 Sep 2022 08:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2E314480A;
+        Fri,  9 Sep 2022 05:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E37C5B822A8;
+        Fri,  9 Sep 2022 12:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B6FC433D6;
+        Fri,  9 Sep 2022 12:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662725583;
+        bh=wyT+RSE2oHYcIwAAxN7k6rwPkCm4BMGf+S0umuD69PI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NBqgc3wBvCesUWYOaFSVqvPibG0TlWjXeieipY3hhTeBxSYoj4x1Ndfxzn1f+HITd
+         yN8VLlCxn+pr+ThxvZ1Fk9DT8rpqDqFcoPD/2b9Ai2KTvvIEiSrmiksGL4LAWWUfR4
+         qEmg4H+k0qGHIGGFd2Uw131KFADN81mhBgE1JvKuhGcQ6J+hUHG8Ni05+WGomVshAk
+         NlR1nW4/iXg3S/T8qQ3X0iueyhrovxA0ThwAs1PUhJBmrrR/Wz9O9pxTHzTJi+9y9A
+         RIP5Ox2cQVTZZOmCYB/xxqpnGxpNE997blqsjsOdbrxxkENe+qqZRpLbuQnGjAtLqJ
+         0foEurx1g3yVg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oWcsi-0001Ru-3k; Fri, 09 Sep 2022 14:13:12 +0200
+Date:   Fri, 9 Sep 2022 14:13:12 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     gregkh@linuxfoundation.org,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] tty: TX helpers
+Message-ID: <Yxst2PGeiQN+dL9e@hovoldconsulting.com>
+References: <20220906104805.23211-1-jslaby@suse.cz>
+ <Yxcvbk281f/vy4vb@hovoldconsulting.com>
+ <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:554e:0:0:0:0 with HTTP; Fri, 9 Sep 2022 05:12:51
- -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   Dodo Blez <dodoblez0@gmail.com>
-Date:   Fri, 9 Sep 2022 12:12:51 +0000
-Message-ID: <CANMXh-wTng_CKvS2VAtb12cAVxvKmYTvtb0t9+T3TfQ26a0PXA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b2b listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6211]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [dodoblez0[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [dodoblez0[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+On Wed, Sep 07, 2022 at 09:19:25AM +0200, Jiri Slaby wrote:
+> On 06. 09. 22, 13:30, Johan Hovold wrote:
+> > On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
+> >> This series introduces DEFINE_UART_PORT_TX_HELPER +
+> >> DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 2/4 for the
+> >> details. Comments welcome.
+> >>
+> >> Then it switches drivers to use them. First, to
+> >> DEFINE_UART_PORT_TX_HELPER() in 3/4 and then
+> >> DEFINE_UART_PORT_TX_HELPER_LIMITED() in 4/4.
+> >>
+> >> The diffstat of patches 3+4 is as follows:
+> >>   26 files changed, 191 insertions(+), 823 deletions(-)
+> >> which appears to be nice.
+> > 
+> > Not really. This is horrid. Quality can't be measured in LoC (only).
+> > 
+> > The resulting code is unreadable. And for no good reason.
+> 
+> IMO, it's much more readable than the original ~ 30 various (and buggy 
+> -- see Ilpo's fixes) copies of this code. Apart from that, it makes 
+> further rework much easier (I have switch to kfifo in my mind for example).
+
+Sure, but you can't have that at the cost of something that is
+unreadable. Arnd's suggestions seems to improve things somewhat in this
+respect, though.
+ 
+> > [ And note that you're "saving" something like 20 lines per driver:
+> 
+> It's not about saving, it's about deduplicating and unifying.
+
+It was you who brought the diff stat that up and I put this in
+parentheses for a reason.
+ 
+> > 	 12 files changed, 84 insertions(+), 349 deletions(-)
+> > ]
+> > 
+> > NAK
+> 
+> I'd love to come up with something nicer. That would be a function in 
+> serial-core calling hooks like I had [1] for example. But provided all 
+> those CPU workarounds/thunks, it'd be quite expensive to call two 
+> functions per character.
+
+Yeah, that was even worse so no need to reiterate that.
+
+> Or creating a static inline (having ± the macro content) and the hooks 
+> as parameters and hope for optimizations to eliminate thunks (also 
+> suggested in the past [1]).
+> 
+> [1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
+
+If that works then that should improve readability as well.
+
+Johan
