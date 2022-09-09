@@ -2,171 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABFE5B3632
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1FC5B3648
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiIILUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S229987AbiIILY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIILT7 (ORCPT
+        with ESMTP id S229937AbiIILYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:19:59 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90044.outbound.protection.outlook.com [40.107.9.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC765A3F0;
-        Fri,  9 Sep 2022 04:19:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EaE70WD02rcILm3eSjMAglsiRRmVzGWTxdqrT4e0nxrJsl6t5IvpA4jKrM1DNXtnOGdRBZdrGVVnJ9cnPL9dbEZEjynmq/1LOmUO86QS8nuPEX4V77YcBHnRenk5xSP+/3qBgxun7G5hcsCzTTsPQJgPnGddvuBK+1gJWpXiVr5xyQYvv+lapxVg3U1rX3ezOhzUBaOTkb0w3LxFrEWEznxirz08M4UtD1PU2mmecnym6ajkhClp8swujqrRacD9qeI8nsI64nCspP0mCOLUIdefvb+/lACvrFNAqh6DsACcta345b2thKkDHlbYqu4++lbef1/Nz1YJPZf6txUDww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JFkqq9zgSvG9fziwKuKxbH3g1ru8N7j5KsmveNx5ZMo=;
- b=oZvcpHJuRngHj7g7wW44fP6QPtmnTYLaMKfag1dx9N2cbYTPqxFn3NdyGkJ54SscF9sFMRPpFiUISDdWBbYRnwu2Atw4lAm5c9tRM9p2VcR5dnmQcGEad4SofxT+ELHg/I+uiRf/mIuJtnjUffox/dfFdzYIFv3mhWCwNdCsnFMXFiabSRhmder/mWUhJH56x09G/nNFvntcFNlO34MfCKVpFeK8cMArZ3wBMvU3xlSpV8UGs06ieLFR9dp5+qyy7Rdr6Drk2YVb1UqQGbOnir9CDxB73wmoKZHYIsQJMhePSqAPPvTolYQNAWfrAhjl2gev731ltMBnXt46lBYEWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JFkqq9zgSvG9fziwKuKxbH3g1ru8N7j5KsmveNx5ZMo=;
- b=w23FVbHsyZZWf9rTA0ohPGB+LAenV+ULsFi7Uo3wVyG4FsG87Jchbd1FYqdAu+DQR30l8x9la4/2G0EGkFKyXQv992xvNEEnfMq/hVLelrHaHJjp6Kc4EE24niCLEJDpbBl+6xdzvmiSCDvbwBc5Z0NJHIpvjjKgCZQWtttz4hVe/V8UPPdxr0frjBT0xlYOT/yP3kz7O3qxRSG+IYGR9PmUlditRkHQGc61ft+V0ifKIB9U79pU8ZNWYR3a1iOwca8bmcF1JrOVdZphMRQzTT3frc040T2Fv1R+3A9gryb5w3kRhERtjag4Pq+dtyVL90w20k+BAnzAi7wE7o6ubA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3110.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Fri, 9 Sep
- 2022 11:19:53 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%5]) with mapi id 15.20.5612.020; Fri, 9 Sep 2022
- 11:19:53 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of
- creating a PPC dependency
-Thread-Topic: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of
- creating a PPC dependency
-Thread-Index: AQHYxCsW50qhWcc7f0iHq7StqfLKda3W8M2AgAADB4A=
-Date:   Fri, 9 Sep 2022 11:19:53 +0000
-Message-ID: <2379456e-4f18-d619-10bf-022327de0463@csgroup.eu>
-References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
- <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
-In-Reply-To: <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB3110:EE_
-x-ms-office365-filtering-correlation-id: c138658d-087b-4ebb-b881-08da925537be
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KoNtdjiAWYZd+5AKum3WcTGMSxtGjtFXSq3tqROOxs/zaK806/ZsGLR2PW2XEZ0a38z3FUBl8jQ99grnbV7+clPF7AEJK9cBrT+OcHPo2ZWvCjUh5+kJSo49L0itcECqqk7kNKliVg9p4ocpkfZrs+TUrnqHyeS622CqWW3obK9nkpXjt382ct/GR/bFiTNnml+5Pl9R8RYrrEU+t/PfCxN9OnwoqOc0CWnma5a5Dsm4e9q3axvDvXWAXAl1Am3VAkHUMiAt0yzgATrqj728QovYWaYe0l69oDnczfAlAGOTBjPjXRo3a6H7c76dopbAsT0FRRHKc1T3cVS2QFjiTgwL5HEPBjTKVDsALLqbcDOFZVaMBvFlmlFD3BTCVzpDzbAE9MogqaIHThaYsnWlqxbb+hLEDlV7JcgH28gr1BpsWgi/sFi/z/CzfNtxbqD1SooPLCo7gPpItynxLTjWZtd5babOXwKHcbOhqptW35s+jzWeMjbZW77uDc7DYkwt2H8pPPdh4aU1W3SwAabBWwMkwRBA2vK1LxQxZa9o1YPZ7CeMc+Hohm3E13UIeCDM/zVdLTAH0oeeV0wU1eU7u+Dx2QNnWsnHQDpCHfsCHVG74Ol7Q2EffWMnfHAQLc2lT9+tA4AFR4Jhq1K31fAJoI20RmUW9LtixGsJlXBwqVzX/164JImT4odhwNtzytJqwBTzNE13zygNJ5tQtoHIKhpBNqCtNie2TioNOY2+vzwHJcdtQcUb5aIEPKDKnD1EaiICzL0ibEs1zJokt0yGm+Vx4rVq0htx2PHdJquH0eswDbJKJlvkzP0zfvpKKGvacIubF/bqnkfFk0HDsIu9uw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(396003)(376002)(39850400004)(136003)(2616005)(86362001)(38100700002)(83380400001)(122000001)(66574015)(186003)(5660300002)(316002)(44832011)(54906003)(31696002)(110136005)(64756008)(66446008)(8676002)(31686004)(91956017)(36756003)(66476007)(76116006)(66556008)(2906002)(4326008)(66946007)(8936002)(26005)(71200400001)(6486002)(38070700005)(6506007)(41300700001)(478600001)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aHlTRDB4bEI0YlVFS2ljMjZsb0p2K2FGZElwbGlKeDhtRkRISHJGUkpSY0M0?=
- =?utf-8?B?OXdhN0tST3hNaWNKK21pZ2ZXOWRHZTNsYStIWjFGNTZNcFo4bmY2SHAxME0v?=
- =?utf-8?B?RGRBZVJZWVpZcmNCa0VFclRTWmFLaTRZdkJ0YmxzL1FTcUo5aFZRWE1TWko3?=
- =?utf-8?B?dThpbDFmQUx3Wi9kMm9VVDcvV3dwZWhCbksyQ3RsNzVWVjRlNHlXbVhpbUxi?=
- =?utf-8?B?TDZBdWVVVExlWW1PZmtmTHdwTWlVdS9IVHNTelZ3NTA1dFY4aTVJaTFUODNZ?=
- =?utf-8?B?c0FHSXlPeFlRNTdsV21zRWJnV0d0RUtFZHdjb1lkY1NOUUc4NndPQ2Z5alhE?=
- =?utf-8?B?SXNRT0hMcnJTTE5IVk1EWjBPS09KNEVra2gveHFRd2pQdVNxQnY2RkUvTmZL?=
- =?utf-8?B?b0Y1NDAzbUlRc0hhRkhTNGozcGtXdG1xNFJ3L00wMVJlZll6bElJbG5BT1Bh?=
- =?utf-8?B?UUpodlhqSHRmVGxQVGZqTHBiY3ArbE1jcU9mWlZ0TXl0U2NneVlFQWtlZHBI?=
- =?utf-8?B?RFJlWHBZYWVyN3d2VFJYNWpTYjY1SGZ6bkk5MWNPRmJyTVVjaXo5VmRncisr?=
- =?utf-8?B?ZlBBUUxhZFBlVEkreExsSFNoenFGZHU3ZDN1UnZ0empnQUhGUXVGcDV4QTUz?=
- =?utf-8?B?d2NsOVE2Z05GbmVoVTB1NW1pb1p2dG43blMwUlRxN0VFY1oxY2tDSG43WG9k?=
- =?utf-8?B?OWhFY2FRRG1ONEZsSzg3UUJyVmhwRlA5ZTlHdTBNNmZlK3Y2RFhJT1F3ZkN6?=
- =?utf-8?B?ZnNxMndEWkIySGtmcVpyeXJiOFpKenBFOEZpSVpzRFExZ0hJTXBRU1QyZUdO?=
- =?utf-8?B?MlVlV1d3WFpLRDBSUk5od1c4UUZDMTFhRmE1UnlHNjY5UjdaZzVIcTBsR2Fx?=
- =?utf-8?B?a1hXWWsyaVowK0w2bVd2aUdjQ0ljN2ZickVQd2FVRmhlRGxiOVhDUDhVL0hs?=
- =?utf-8?B?aTMrQndUVmtTVDBkQ2JYMk01SGg4NnIrNjVmY1pMKzRsYzJaNldtY2REbjU3?=
- =?utf-8?B?QUgvMTEzVHZhczFmME12T2VjQVFBK0pXRWg4bVc0Mlg0TlBVZ043eWl4dXRu?=
- =?utf-8?B?TEx2YnJ6cStJQnU1WDBCWTlvZXl3bEtkZ0MrVklFa2c5V2RnU0xJQ0lML2xN?=
- =?utf-8?B?VmdjcVFqTDFiVEl2R1F5bTdIUzFwaW1OUzRUemhpdXBhNDlicVc2cjRlaHdE?=
- =?utf-8?B?eTlsQWZoZ0RBMS9uMjM2L202eGgyenZoQXNpcmhGTlRxeEc3YzRNSVU0TXAx?=
- =?utf-8?B?bFFaU3VXTjNVenhiZFpaRHFFZUY2UTI2R0dvYVoyakloRkVtUTg0VFVURThi?=
- =?utf-8?B?MkorRjdwWWl1UUczdWRwV1lWeWRreS9lN0ZaM0daamZzZnkxZUI3WFBSRGlQ?=
- =?utf-8?B?d2JWRExreTBSZTNuRjNXM1NDUUppSDNtMEVnajg5dHZsbVpzRnlUQ0Z4dStj?=
- =?utf-8?B?Q1BJaklkWlJHdk4rREI4amJFWDl3OExHWWNaZUJOcUoybm9JVlErS3orMXZT?=
- =?utf-8?B?c2J6Y1pObkJoZVlOMituUGF3YksxRk5HMFg3TndBUUNpajZGUS8rZ29wakZt?=
- =?utf-8?B?QTNIWVM4TEo2MGlDM1pjZU81bXl1a3djU3U3TXI4WDFGaFdoOXQ0VTl2bkhN?=
- =?utf-8?B?bmhWcFZPdnpsS1pFanI3VFZtdHZxQkJERDBCc0M3RElja2N3dXVRRjZoYnUy?=
- =?utf-8?B?Zk5WYm9NK3Y0L3dBSDdjRWNSME1rMC81emtrei9nYzJRM0FNbklVeUV4aEpB?=
- =?utf-8?B?T1JuSEo3S05oMEVRbDJzSERXMDhXVmVYMElBL1JHVDdockppOWJaVGF4Z29F?=
- =?utf-8?B?WkRwV20vN01HTWFZUzlTaXlBMUo5a1V2WWk4a1c5QzhUWjVlWnJIU0hmOWFz?=
- =?utf-8?B?MTVRdCtyZC9ueFVCcmxheHV2N1Vobk11MTVhd2VwVTBnemxyMjRyTHQ0RFVj?=
- =?utf-8?B?czFUNlNVQVdkV3hGbkdPMzR1cTVRY0RPOFFCdWFPSVVLbE5SUHdzbzkveFlW?=
- =?utf-8?B?S1N3S2RiTnhNQ05qVTAxVVdxSWJrYjZsclBXWWw0Y1V5REhmQXdLWlZ1c3I0?=
- =?utf-8?B?TG85czRBODIvZzBrRmE2THRLU3lMZnhCczVEU0s2bEwxMTZ0T2RicGp4Wm4z?=
- =?utf-8?B?YUU0NGZjSnNLRVE5NW9DbXkxTnA3d2tLQUduMmpSa2JBMHNGdlI5RmlIWW04?=
- =?utf-8?Q?WW1/BIm81fANalG5QsCg6q4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <614544A03F9A7C40B3A9CAFE80D6C2D8@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 9 Sep 2022 07:24:21 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D184A138660;
+        Fri,  9 Sep 2022 04:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662722657; x=1694258657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tNZVvaoIroI4CcedWHpWhX3pMpdWjxPYKYoBC7xujYM=;
+  b=OCxdYWmEzMgCyifTLcyIApr+AIA10p8WFgilNgPAJhKA5KdQb8+YGfbV
+   Liz8wXrIcaFmu2N1J+nyS7HX8KkJWkDGo/fQUprHbllf7VA9EJd5S+kc+
+   38tjY1IV19LPIUtxbohVz2am0jejnf7fS/1KeA3kwj6fBSkrfg5ovbYus
+   y+ewOfS/WYTFFvTNHPR9pI3+o1h/qTXzaH2olUr6Mdl39jC6c5VLrCmnl
+   4PeSFKPN2ed9wqQmKT7ZlsefTME5KFG8AY0sC09zoOI/S+3tSPSDjTuba
+   9hXEjmEim56Yqg0NCtG6LhH47ggBMN66UxJCYMr8/26pCE4B7oayNnZew
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298791882"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="298791882"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 04:24:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="741022180"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 09 Sep 2022 04:24:14 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWc7J-00016h-39;
+        Fri, 09 Sep 2022 11:24:13 +0000
+Date:   Fri, 9 Sep 2022 19:23:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, heghedus.razvan@gmail.com,
+        evgreen@chromium.org, yuanjilin@cdjrlc.com,
+        stern@rowland.harvard.edu, jj251510319013@gmail.com,
+        gregkh@linuxfoundation.org, Li Zhong <floridsleeves@gmail.com>
+Subject: Re: [PATCH v1] drivers/usb/core/driver: check return value of
+ usb_set_interface()
+Message-ID: <202209091933.ydDI9QtH-lkp@intel.com>
+References: <20220909044215.2620024-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: c138658d-087b-4ebb-b881-08da925537be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 11:19:53.1311
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DtR3txwqVKfDYeg5rCU2ofDM6bfn/LJJah0EGkDigHOehtT/GRfAtd1oQGrogNEqNHrFX0u/ACKzKXsH7D0BI3eFky/qrJwaBH1TMg0W1E0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3110
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909044215.2620024-1-floridsleeves@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzA5LzIwMjIgw6AgMTM6MDksIEFybmQgQmVyZ21hbm4gYSDDqWNyaXTCoDoNCj4g
-T24gRnJpLCBTZXAgOSwgMjAyMiwgYXQgMTE6MDMgQU0sIEx1a2FzIEJ1bHdhaG4gd3JvdGU6DQo+
-PiBDb21taXQgY2MxOGUwZmVhNzkwICgiTElCQVRBOiBBZGQgSEFWRV9QQVRBX1BMQVRGT1JNIHRv
-IHNlbGVjdA0KPj4gUEFUQV9QTEFURk9STSBkcml2ZXIiKSBpbnRyb2R1Y2VzIGNvbmZpZyBIQVZF
-X1BBVEFfUExBVEZPUk0sIGFuZCBleHBlY3RzDQo+PiB0aGF0IGFsbCBhcmNoaXRlY3R1cmVzIHNp
-bXBseSBzZWxlY3QgdGhpcyBjb25maWcgd2hlbiB0aGUgYXJjaGl0ZWN0dXJlDQo+PiBzdXBwb3J0
-cyB1c2luZyB0aGUgUEFUQV9QTEFURk9STSBkcml2ZXIuDQo+Pg0KPj4gVGhpcyBpcyBwcm9wZXJs
-eSBpbXBsZW1lbnRlZCBhbHJlYWR5IGZvciBhbGwgYXJjaGl0ZWN0dXJlcyBleGNlcHQgZm9yIHRo
-ZQ0KPj4gcG93ZXJwYyBhcmNoaXRlY3R1cmUuIEltcGxlbWVudCB0aGlzIGZvciBwb3dlcnBjIG5v
-dy4NCj4+DQo+PiBBZGp1c3QgdGhlIGNvbmZpZyBvZiB0aGUgcG93ZXJwYyBhcmNoaXRlY3R1cmUg
-dG8gdXNlIHRoZSBjb25maWcNCj4+IEhBVkVfUEFUQV9QTEFURk9STSBhbmQgc2ltcGxpZnkgdGhl
-IGNvbmZpZyBQQVRBX1BMQVRGT1JNIHRvIG5vdCBtZW50aW9uDQo+PiBhbnkgc3BlY2lmaWMgYXJj
-aGl0ZWN0dXJlIGFueW1vcmUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogTHVrYXMgQnVsd2FobiA8
-bHVrYXMuYnVsd2FobkBnbWFpbC5jb20+DQo+PiAtLS0NCj4+ICAgYXJjaC9wb3dlcnBjL0tjb25m
-aWcgfCAxICsNCj4+ICAgZHJpdmVycy9hdGEvS2NvbmZpZyAgfCAyICstDQo+PiAgIDIgZmlsZXMg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdp
-dCBhL2FyY2gvcG93ZXJwYy9LY29uZmlnIGIvYXJjaC9wb3dlcnBjL0tjb25maWcNCj4+IGluZGV4
-IDM5ZDcxZDc3MDFiZC4uMjU3NWUyMWI2ZTZiIDEwMDY0NA0KPj4gLS0tIGEvYXJjaC9wb3dlcnBj
-L0tjb25maWcNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9LY29uZmlnDQo+PiBAQCAtMjM3LDYgKzIz
-Nyw3IEBAIGNvbmZpZyBQUEMNCj4+ICAgCXNlbGVjdCBIQVZFX01PRF9BUkNIX1NQRUNJRklDDQo+
-PiAgIAlzZWxlY3QgSEFWRV9OTUkJCQkJaWYgUEVSRl9FVkVOVFMgfHwgKFBQQzY0ICYmIFBQQ19C
-T09LM1MpDQo+PiAgIAlzZWxlY3QgSEFWRV9PUFRQUk9CRVMNCj4+ICsJc2VsZWN0IEhBVkVfUEFU
-QV9QTEFURk9STQ0KPj4gICAJc2VsZWN0IEhBVkVfUEVSRl9FVkVOVFMNCj4+ICAgCXNlbGVjdCBI
-QVZFX1BFUkZfRVZFTlRTX05NSQkJaWYgUFBDNjQNCj4+ICAgCXNlbGVjdCBIQVZFX1BFUkZfUkVH
-Uw0KPiANCj4gSSBkb24ndCBzZWUgYSBzaW5nbGUgcG93ZXJwYyBtYWNoaW5lIHRoYXQgY3JlYXRl
-cyBhDQo+ICAgbmFtZT0icGF0YV9wbGF0Zm9ybSIgcGxhdGZvcm1fZGV2aWNlLiBJIHN1c3BlY3Qg
-dGhpcyB3YXMNCj4gb25seSBuZWVkZWQgYndmb3JlIDIwMDcgY29tbWl0IDljZDU1YmU0ZDIyMyAo
-IltQT1dFUlBDXSBwYXNlbWk6DQo+IE1vdmUgZWxlY3RyYS1pZGUgdG8gcGF0YV9vZl9wbGF0Zm9y
-bSIpLCBzbyB0aGUgInx8IFBQQyINCj4gYml0IHNob3VsZCBqdXN0IGdldCByZW1vdmVkIHdpdGhv
-dXQgYWRkaW5nIHRoZSBIQVZFX1BBVEFfUExBVEZPUk0NCj4gYml0Lg0KDQpCdXQgdGhhdCB3YXMg
-YWRkZWQgaW4gMjAwOCBieSBjb21taXQgNjFmNzE2MjExN2Q0ICgibGliYXRhOiANCnBhdGFfb2Zf
-cGxhdGZvcm06IE9GLVBsYXRmb3JtIFBBVEEgZGV2aWNlIGRyaXZlciIp
+Hi Li,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on westeri-thunderbolt/next staging/staging-testing linus/master v6.0-rc4 next-20220909]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/drivers-usb-core-driver-check-return-value-of-usb_set_interface/20220909-124349
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220909/202209091933.ydDI9QtH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/720d6f8c6938ee748288a012e3212b26962a7960
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Zhong/drivers-usb-core-driver-check-return-value-of-usb_set_interface/20220909-124349
+        git checkout 720d6f8c6938ee748288a012e3212b26962a7960
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from drivers/usb/core/driver.c:28:
+   drivers/usb/core/driver.c: In function 'usb_resume_interface':
+>> drivers/usb/core/driver.c:1337:45: error: incompatible type for argument 1 of '_dev_err'
+    1337 |                                 dev_err(intf->dev, "usb_set_interface error %d\n",
+         |                                         ~~~~^~~~~
+         |                                             |
+         |                                             struct device
+   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   drivers/usb/core/driver.c:1337:33: note: in expansion of macro 'dev_err'
+    1337 |                                 dev_err(intf->dev, "usb_set_interface error %d\n",
+         |                                 ^~~~~~~
+   include/linux/dev_printk.h:50:36: note: expected 'const struct device *' but argument is of type 'struct device'
+      50 | void _dev_err(const struct device *dev, const char *fmt, ...);
+         |               ~~~~~~~~~~~~~~~~~~~~~^~~
+
+
+vim +/_dev_err +1337 drivers/usb/core/driver.c
+
+  1316	
+  1317	static int usb_resume_interface(struct usb_device *udev,
+  1318			struct usb_interface *intf, pm_message_t msg, int reset_resume)
+  1319	{
+  1320		struct usb_driver	*driver;
+  1321		int			status = 0;
+  1322	
+  1323		if (udev->state == USB_STATE_NOTATTACHED)
+  1324			goto done;
+  1325	
+  1326		/* Don't let autoresume interfere with unbinding */
+  1327		if (intf->condition == USB_INTERFACE_UNBINDING)
+  1328			goto done;
+  1329	
+  1330		/* Can't resume it if it doesn't have a driver. */
+  1331		if (intf->condition == USB_INTERFACE_UNBOUND) {
+  1332	
+  1333			/* Carry out a deferred switch to altsetting 0 */
+  1334			if (intf->needs_altsetting0 && !intf->dev.power.is_prepared) {
+  1335				status = usb_set_interface(udev, intf->altsetting[0].desc.bInterfaceNumber, 0);
+  1336				if (status < 0)
+> 1337					dev_err(intf->dev, "usb_set_interface error %d\n",
+  1338								status);
+  1339				intf->needs_altsetting0 = 0;
+  1340			}
+  1341			goto done;
+  1342		}
+  1343	
+  1344		/* Don't resume if the interface is marked for rebinding */
+  1345		if (intf->needs_binding)
+  1346			goto done;
+  1347		driver = to_usb_driver(intf->dev.driver);
+  1348	
+  1349		if (reset_resume) {
+  1350			if (driver->reset_resume) {
+  1351				status = driver->reset_resume(intf);
+  1352				if (status)
+  1353					dev_err(&intf->dev, "%s error %d\n",
+  1354							"reset_resume", status);
+  1355			} else {
+  1356				intf->needs_binding = 1;
+  1357				dev_dbg(&intf->dev, "no reset_resume for driver %s?\n",
+  1358						driver->name);
+  1359			}
+  1360		} else {
+  1361			status = driver->resume(intf);
+  1362			if (status)
+  1363				dev_err(&intf->dev, "resume error %d\n", status);
+  1364		}
+  1365	
+  1366	done:
+  1367		dev_vdbg(&intf->dev, "%s: status %d\n", __func__, status);
+  1368	
+  1369		/* Later we will unbind the driver and/or reprobe, if necessary */
+  1370		return status;
+  1371	}
+  1372	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
