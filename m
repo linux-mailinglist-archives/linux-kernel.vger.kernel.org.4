@@ -2,116 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED7D5B3912
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787F55B3920
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIINfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S229881AbiIINgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiIINfV (ORCPT
+        with ESMTP id S229598AbiIINgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:35:21 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F45B72BC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:35:19 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id y9so1221986qvo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 06:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JowtK10yvVmyUpTESi/zVeCC2TkAptyeECG562T7tNo=;
-        b=kkoh2qFvdpskjcO3O9CspqSrm+Wuc1/hOeiZjsnq3rNju1rfqdoOhvtJUOvkzIqr98
-         wTnfqyDwIntAXt6osUowan3L9rhZZyuME5qPACRgQCjoFRYtI3jzbtnSzIeov/g87UTD
-         /eh4u/OBZfKgMEqttI/k13/ERI0pNjfYIZlmWlaK3yc6gEMQDGBbd58yz50W95FL3M8a
-         9JGJGqJKb4A7daZpC1B3dsXNQnA0hgg4UP2r1VsVLY1wzXYGLIINA6MnKIxHJp2b7lbr
-         lLvZJNqVLt5MVXehr0DuSi/n41P0s0Tka8LacU4yKBmbrf6LsGreHTOaQagB+o3gXtxU
-         q2xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JowtK10yvVmyUpTESi/zVeCC2TkAptyeECG562T7tNo=;
-        b=GQl+tYo0SRpd0NrjGcYSWYB/gcgMcGk4vehrnUwHuvQ1g49TwXy+ALyWBj4ZO7XTxu
-         AhBcKQj8r1GTIQ7M/5DAxPSW2oCRbliK/6Yc7Hypl76ZztN0sS6IfRQK5xJ9tp9zU4DK
-         Ahbzkdlbd7Oei5ypvmF33aEh2xgzz0imJ5RlcLjUOkL2PdXU2x/oD+pElnRo4NbXJWt3
-         I0Yosr5lf/Jd3dz4X+Xj/jfA0uxY8m+SSkzFXLIMooHXs2IIUm1hz/ihsRpOcTLqSZc1
-         BE8rEV4huiXF/Sv7qFg1xLBY1ycIZR3R6/6mpfMws1/VazGf38gj1e6JM5N/yjf3v3EO
-         gg6Q==
-X-Gm-Message-State: ACgBeo3OUKhECqmRGGA5ARyy88uaB4umpD9h2G1cl5CW9RRupFU7322n
-        afX5zbL6agEbBcX1bQsSMy3LKQxSPsSxi7bOBZo=
-X-Google-Smtp-Source: AA6agR7YMsTtgJFIi7UbUzLeHKPkUeVDEUvCuHO7Yfi7TfUL6dmtKcBrILqT8YrI6z6mvf14yS66NhsLhhhwSxCEli0=
-X-Received: by 2002:ad4:5bc1:0:b0:496:fd12:3ece with SMTP id
- t1-20020ad45bc1000000b00496fd123ecemr12060263qvt.27.1662730518310; Fri, 09
- Sep 2022 06:35:18 -0700 (PDT)
+        Fri, 9 Sep 2022 09:36:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA87712894B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:36:22 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289CbeEW003994;
+        Fri, 9 Sep 2022 13:35:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xzhKYU684b2dfu1qPjE8Sin6GXCrrR5aDRD7oDV2Xis=;
+ b=MIZOHfGkG81ENiTzgtzdNTkOxu7gtMcXp5ItRULSjhQYA1A1wHQmvJArKj6CTc4YM/ZF
+ p8VMM8QHQ71mTwcOx63AXAV6sQWHiE0ycCDFxh/tI2JdLtLcYBkCMyCObhDjYmrYycob
+ dX8Afx3eYOj46LHUxk9xv9TOowINu30uYi2Ky8NyeKe087ZbMV9gEIViDEdWE1i4ixlQ
+ kKJljtLjmcDMu+DrQPb+x8deALtgnLzwuVaYFBqBrwvvR/il5KqsCa1J/0fVN/+bx0xm
+ LeHODLSv1tRdPXp4SzLDa/jKkpAxl7CaJpH6t4p59APgarqxjXHXYIvTe4/POlXX/IEX /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg4d5vvay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 13:35:39 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 289CkGBh023200;
+        Fri, 9 Sep 2022 13:35:35 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg4d5vv8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 13:35:35 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 289DKtaB027527;
+        Fri, 9 Sep 2022 13:35:32 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3jbxj8nyb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 13:35:31 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 289DZrGm41615782
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Sep 2022 13:35:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7093642047;
+        Fri,  9 Sep 2022 13:35:29 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EEFF14203F;
+        Fri,  9 Sep 2022 13:35:27 +0000 (GMT)
+Received: from [9.145.83.17] (unknown [9.145.83.17])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  9 Sep 2022 13:35:27 +0000 (GMT)
+Message-ID: <7fcc871c-fcc2-e993-fe88-f0da49ff227a@linux.ibm.com>
+Date:   Fri, 9 Sep 2022 15:35:27 +0200
 MIME-Version: 1.0
-References: <20220901141307.2361752-1-georgepee@gmail.com> <Yxsl5PaioteeAcnh@arm.com>
-In-Reply-To: <Yxsl5PaioteeAcnh@arm.com>
-From:   George Pee <georgepee@gmail.com>
-Date:   Fri, 9 Sep 2022 08:35:07 -0500
-Message-ID: <CAKj0CMs5S8RWJ6FU8wGda8fZzoFZCxjCQ6=dgz1pX-v2D+p6tw@mail.gmail.com>
-Subject: Re: [PATCH] Report support for optional ARMv8.2 half-precision
- floating point extension
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
-        Austin Kim <austindh.kim@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [RFC PATCH RESEND 14/28] mm: mark VMAs as locked before isolating
+ them
+Content-Language: fr
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-15-surenb@google.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20220901173516.702122-15-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0KecVJz831Cuz_-X5Ig4InH-HLRsZ-Pd
+X-Proofpoint-ORIG-GUID: 9jojeoe4RfU5Q7JxugN35FnBK9tZpSK6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=943
+ spamscore=0 mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090047
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use case is really being able to tell, from userspace on a 32-bit
-kernel, if FPHP is supported. It's really just reporting for
-convenience.
+Le 01/09/2022 à 19:35, Suren Baghdasaryan a écrit :
+> Mark VMAs as locked before isolating them and clear their tree node so
+> that isolated VMAs are easily identifiable. In the later patches page
+> fault handlers will try locking the found VMA and will check whether
+> the VMA was isolated. Locking VMAs before isolating them ensures that
+> page fault handlers don't operate on isolated VMAs.
 
-It wasn't clear to me why HWCAP2 was used in some cases and not
-others.  I can add FPHP to HWCAP2 if that's the right thing to do
-here.
+Found another place where the VMA should probably mark locked:
+*** drivers/gpu/drm/drm_vma_manager.c:
+drm_vma_node_revoke[338]       rb_erase(&entry->vm_rb, &node->vm_files);
 
-On Fri, Sep 9, 2022 at 6:39 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Thu, Sep 01, 2022 at 09:13:05AM -0500, george pee wrote:
-> > Report as fphp to be consistent with arm64
->
-> Do you have a use-case as well? It may help deciding what to do with
-> this.
->
-> > diff --git a/arch/arm/include/uapi/asm/hwcap.h b/arch/arm/include/uapi/asm/hwcap.h
-> > index 990199d8b7c6..f975845ce5d3 100644
-> > --- a/arch/arm/include/uapi/asm/hwcap.h
-> > +++ b/arch/arm/include/uapi/asm/hwcap.h
-> > @@ -28,6 +28,7 @@
-> >  #define HWCAP_IDIV   (HWCAP_IDIVA | HWCAP_IDIVT)
-> >  #define HWCAP_LPAE   (1 << 20)
-> >  #define HWCAP_EVTSTRM        (1 << 21)
-> > +#define HWCAP_FPHP   (1 << 22)
->
-> I think with ARMv8 features on the arm32 kernel we tend to add them to
-> HWCAP2_*. With such change:
->
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
->
-> I'll leave the decision to Russell on whether he wants this merged. An
-> argument may be that people still want to run 32-bit user-space and even
-> if they use am arm64 kernel, we can't add a COMPAT_HWCAP2_FPHP until we
-> have the arm32 counterpart. An alternative may be to only add the uapi
-> definition under arch/arm but without any functionality (so never
-> exposed to user). The arm64 kernel could expose it to compat tasks.
->
-> So, if Russell is ok with any of the options above, please also add the
-> compat arm64 support ;).
->
-> --
-> Catalin
+There are 2 others entries in nommu.c but I guess this is not supported,
+isn't it?
+
+
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  mm/mmap.c  | 2 ++
+>  mm/nommu.c | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 094678b4434b..b0d78bdc0de0 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -421,12 +421,14 @@ static inline void vma_rb_insert(struct vm_area_struct *vma,
+>  
+>  static void __vma_rb_erase(struct vm_area_struct *vma, struct rb_root *root)
+>  {
+> +	vma_mark_locked(vma);
+>  	/*
+>  	 * Note rb_erase_augmented is a fairly large inline function,
+>  	 * so make sure we instantiate it only once with our desired
+>  	 * augmented rbtree callbacks.
+>  	 */
+>  	rb_erase_augmented(&vma->vm_rb, root, &vma_gap_callbacks);
+> +	RB_CLEAR_NODE(&vma->vm_rb);
+>  }
+>  
+>  static __always_inline void vma_rb_erase_ignore(struct vm_area_struct *vma,
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index e819cbc21b39..ff9933e57501 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -622,6 +622,7 @@ static void delete_vma_from_mm(struct vm_area_struct *vma)
+>  	struct mm_struct *mm = vma->vm_mm;
+>  	struct task_struct *curr = current;
+>  
+> +	vma_mark_locked(vma);
+>  	mm->map_count--;
+>  	for (i = 0; i < VMACACHE_SIZE; i++) {
+>  		/* if the vma is cached, invalidate the entire cache */
+> @@ -644,6 +645,7 @@ static void delete_vma_from_mm(struct vm_area_struct *vma)
+>  
+>  	/* remove from the MM's tree and list */
+>  	rb_erase(&vma->vm_rb, &mm->mm_rb);
+> +	RB_CLEAR_NODE(&vma->vm_rb);
+>  
+>  	__vma_unlink_list(mm, vma);
+>  }
+
