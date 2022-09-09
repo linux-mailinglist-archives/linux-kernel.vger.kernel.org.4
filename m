@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736E45B34A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D7B5B33AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiIIJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S229949AbiIIJYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiIIJ4s (ORCPT
+        with ESMTP id S231555AbiIIJYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:56:48 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DB0129C6D;
-        Fri,  9 Sep 2022 02:56:47 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2899uYFO073458;
-        Fri, 9 Sep 2022 04:56:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662717394;
-        bh=swu/b/egvLaIh4KxRu0r45VIJnFolDvGx0gZBY8MyAQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=lDX0mNsG9J3PSrVB/K/w3p2lR08X1KEob4FG6oQSXcNoFxuS/dgWxzCP/qacCCO9i
-         dwIysJAl+zmZ7cg48EC0g8Y1IF+TOqPOtRIB2bxlm0GRQCDETC9bEbyiu+ctqwj7lW
-         Ew3dHIB2VadbigqpLQb6PmDTTXTVTeJLF37U/T+Q=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2899uY4o120796
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 9 Sep 2022 04:56:34 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 9 Sep
- 2022 04:56:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 9 Sep 2022 04:56:33 -0500
-Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2899uTHr005120;
-        Fri, 9 Sep 2022 04:56:30 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>, Tero Kristo <kristo@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v2 1/4] arm64: dts: ti: k3-am65-main: Disable RNG node
-Date:   Fri, 9 Sep 2022 15:26:21 +0530
-Message-ID: <166271737625.1620505.2192569000187439281.b4-ty@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220823001136.10944-1-afd@ti.com>
-References: <20220823001136.10944-1-afd@ti.com>
+        Fri, 9 Sep 2022 05:24:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EC51177AC;
+        Fri,  9 Sep 2022 02:23:09 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MP9Qs26TTzmV5k;
+        Fri,  9 Sep 2022 17:18:45 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 17:22:23 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
+ 2022 17:22:22 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] ACPI: HMAT: remove unused dev_fmt() and redundant prefixing 'HMAT'
+Date:   Fri, 9 Sep 2022 17:56:24 +0800
+Message-ID: <20220909095624.3719051-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,48 +52,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew Davis,
+Remove unused macro dev_pmt() and redundant prefixing 'HMAT' from pr_*() calls.
 
-On Mon, 22 Aug 2022 19:11:33 -0500, Andrew Davis wrote:
-> The hardware random number generator is used by OP-TEE and is access is
-> denied to other users with SoC level bus firewalls. Any access to this
-> device from Linux will result in firewall errors.
-> 
-> We could remove this node, but it is still valid device description,
-> and it is possible it could be re-enabled in the bootloader if OP-TEE
-> is not used. So only disable this node for now.
-> 
-> [...]
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/acpi/numa/hmat.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-I have applied the following to branch master on [1].
-Thank you!
-
-[1/4] arm64: dts: ti: k3-am65-main: Disable RNG node
-      commit: 1ad4669b4bbe6b72784acdb5b24f72b22ad8f1d1
-[2/4] arm64: dts: ti: k3-am65-main: Move SA2UL to unused PSI-L thread ID
-      commit: 530eaa573a33fdd86725fdd2b979cbbbc539d47c
-[3/4] arm64: dts: ti: k3-am65-main: Do not exclusively claim SA2UL
-      commit: 49611f43e035f30be685fcf7468f23e85ce2ee06
-[4/4] arm64: dts: ti: k3-j7200-mcu-wakeup: Add SA2UL node
-      commit: d683a73980a61cc5d8abea7f3f996028e64e9144
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
+index c3d783aca196..23f49a2f4d14 100644
+--- a/drivers/acpi/numa/hmat.c
++++ b/drivers/acpi/numa/hmat.c
+@@ -9,7 +9,6 @@
+  */
+ 
+ #define pr_fmt(fmt) "acpi/hmat: " fmt
+-#define dev_fmt(fmt) "acpi/hmat: " fmt
+ 
+ #include <linux/acpi.h>
+ #include <linux/bitops.h>
+@@ -302,7 +301,7 @@ static __init int hmat_parse_locality(union acpi_subtable_headers *header,
+ 	u8 type, mem_hier;
+ 
+ 	if (hmat_loc->header.length < sizeof(*hmat_loc)) {
+-		pr_notice("HMAT: Unexpected locality header length: %u\n",
++		pr_notice("Unexpected locality header length: %u\n",
+ 			 hmat_loc->header.length);
+ 		return -EINVAL;
+ 	}
+@@ -314,12 +313,12 @@ static __init int hmat_parse_locality(union acpi_subtable_headers *header,
+ 	total_size = sizeof(*hmat_loc) + sizeof(*entries) * ipds * tpds +
+ 		     sizeof(*inits) * ipds + sizeof(*targs) * tpds;
+ 	if (hmat_loc->header.length < total_size) {
+-		pr_notice("HMAT: Unexpected locality header length:%u, minimum required:%u\n",
++		pr_notice("Unexpected locality header length:%u, minimum required:%u\n",
+ 			 hmat_loc->header.length, total_size);
+ 		return -EINVAL;
+ 	}
+ 
+-	pr_info("HMAT: Locality: Flags:%02x Type:%s Initiator Domains:%u Target Domains:%u Base:%lld\n",
++	pr_info("Locality: Flags:%02x Type:%s Initiator Domains:%u Target Domains:%u Base:%lld\n",
+ 		hmat_loc->flags, hmat_data_type(type), ipds, tpds,
+ 		hmat_loc->entry_base_unit);
+ 
+@@ -363,13 +362,13 @@ static __init int hmat_parse_cache(union acpi_subtable_headers *header,
+ 	u32 attrs;
+ 
+ 	if (cache->header.length < sizeof(*cache)) {
+-		pr_notice("HMAT: Unexpected cache header length: %u\n",
++		pr_notice("Unexpected cache header length: %u\n",
+ 			 cache->header.length);
+ 		return -EINVAL;
+ 	}
+ 
+ 	attrs = cache->cache_attributes;
+-	pr_info("HMAT: Cache: Domain:%u Size:%llu Attrs:%08x SMBIOS Handles:%d\n",
++	pr_info("Cache: Domain:%u Size:%llu Attrs:%08x SMBIOS Handles:%d\n",
+ 		cache->memory_PD, cache->cache_size, attrs,
+ 		cache->number_of_SMBIOShandles);
+ 
+@@ -424,24 +423,24 @@ static int __init hmat_parse_proximity_domain(union acpi_subtable_headers *heade
+ 	struct memory_target *target = NULL;
+ 
+ 	if (p->header.length != sizeof(*p)) {
+-		pr_notice("HMAT: Unexpected address range header length: %u\n",
++		pr_notice("Unexpected address range header length: %u\n",
+ 			 p->header.length);
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (hmat_revision == 1)
+-		pr_info("HMAT: Memory (%#llx length %#llx) Flags:%04x Processor Domain:%u Memory Domain:%u\n",
++		pr_info("Memory (%#llx length %#llx) Flags:%04x Processor Domain:%u Memory Domain:%u\n",
+ 			p->reserved3, p->reserved4, p->flags, p->processor_PD,
+ 			p->memory_PD);
+ 	else
+-		pr_info("HMAT: Memory Flags:%04x Processor Domain:%u Memory Domain:%u\n",
++		pr_info("Memory Flags:%04x Processor Domain:%u Memory Domain:%u\n",
+ 			p->flags, p->processor_PD, p->memory_PD);
+ 
+ 	if ((hmat_revision == 1 && p->flags & ACPI_HMAT_MEMORY_PD_VALID) ||
+ 	    hmat_revision > 1) {
+ 		target = find_mem_target(p->memory_PD);
+ 		if (!target) {
+-			pr_debug("HMAT: Memory Domain missing from SRAT\n");
++			pr_debug("Memory Domain missing from SRAT\n");
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -449,7 +448,7 @@ static int __init hmat_parse_proximity_domain(union acpi_subtable_headers *heade
+ 		int p_node = pxm_to_node(p->processor_PD);
+ 
+ 		if (p_node == NUMA_NO_NODE) {
+-			pr_debug("HMAT: Invalid Processor Domain\n");
++			pr_debug("Invalid Processor Domain\n");
+ 			return -EINVAL;
+ 		}
+ 		target->processor_pxm = p->processor_PD;
+@@ -840,7 +839,7 @@ static __init int hmat_init(void)
+ 	case 2:
+ 		break;
+ 	default:
+-		pr_notice("Ignoring HMAT: Unknown revision:%d\n", hmat_revision);
++		pr_notice("Ignoring: Unknown revision:%d\n", hmat_revision);
+ 		goto out_put;
+ 	}
+ 
+@@ -848,7 +847,7 @@ static __init int hmat_init(void)
+ 		if (acpi_table_parse_entries(ACPI_SIG_HMAT,
+ 					     sizeof(struct acpi_table_hmat), i,
+ 					     hmat_parse_subtable, 0) < 0) {
+-			pr_notice("Ignoring HMAT: Invalid table");
++			pr_notice("Ignoring: Invalid table");
+ 			goto out_put;
+ 		}
+ 	}
+-- 
+2.25.1
 
