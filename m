@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFF55B410D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1888A5B4111
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiIIUwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S230012AbiIIUxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiIIUwl (ORCPT
+        with ESMTP id S229806AbiIIUxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:52:41 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA314739A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:52:40 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11eab59db71so6988438fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 13:52:40 -0700 (PDT)
+        Fri, 9 Sep 2022 16:53:32 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF70E582A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:53:30 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso1851058otv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 13:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=auTdx0ufon/JFw//ZNUMeBnNVMPTikmUwRLNyCwLhpU=;
-        b=SJkHXuVd9goGm1zd4i9WhAGT1g0Zy2AKdDf0GPFcAbHCov3BndcvhuUauQZhMFRcMX
-         alqvHPrT4MIH2xIL7HGk3BF0zm5aZsm8eajaq9PvCe7rQ9YkGbzBoXPI7PcUf+K1oLva
-         9lv7Gpc4il9uXSRLobO/DChwj/Kt8XXVY9rmqpMsxSFKwEjKAOubguW+aYFjdxDFI0H2
-         9GVRy6xkUavjj2VFF2BH677C69+6qcStEKWKFbljkhn/ss5VXIWL/KHJKzk/eiQAa3Mv
-         qMm83dnbWh64C+xOy2TmpFY1rFWJVRIV88bmL7WhNC5vqXjw/jL4nh91gOKdklcFH8Gb
-         Y3kQ==
+        bh=Tv3Et/tqY6Zk/pnAAyJuFDBD309Fy7UgcvolVBKAIt0=;
+        b=XDqQfKosBFzUJL2xT8WnuKul95HYglkg8NPZTdD8yer3mkW0yRnXch4X7L024AWOpG
+         lHhrc0bFdyTds58pYk8wgR+4CCChs02NqRg70znBM6Aq/MFeaft1dGIE2EnIDuXc4Pvh
+         WPohlQkvZXJQed98j2WW2vYLuHj5mi1PpppqVit2JpE1KWLFaeVev2MZCX2xYDFePU42
+         2lO1uClPEbP6gGdVFuoKyHDJ7DccqBAJmkDVinAjyh+pbyEj+NdiwNZl7CxJw0Zv++k9
+         RjOD8wMR/g8OyqZusKMmA0yY6OU3FRaQ6RISA2FEEJveonpA0094igOC5Cm4+vYxIVSp
+         tVrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=auTdx0ufon/JFw//ZNUMeBnNVMPTikmUwRLNyCwLhpU=;
-        b=ZlJToSUpmZrfEyCjyGtXVn8Ccki6zKP7svdZsbCsEUrBsoIfgE43QxJtYN9rX0Nxp3
-         d9eLiOF5yBuPq1YHbZRo4G6vvrt/FZPqkj+lvEHGzIx/Qq3+6dgj3MjwsrccKFY9AEde
-         y4TgWYo41cWc2N+azfIC8nOfoJIyeGgQjA3EVPb0OJq5LdC+8gbWZyp3zoc/ruP8zB0V
-         kku8x+R4B0WT9QbzrHfZ1ahPgZQsVTIT1rgR8tXnX2Vjod/SEjhOj+0xdjtHaFaRG8IJ
-         BqxHm5vBANFHXL6b+GxqZpu++QGivDxAlrDOmKX5VUK9Bj8L+9VN8VceGEND86dWiWDm
-         oDzg==
-X-Gm-Message-State: ACgBeo0/XEYhXh3+bQWQXAkMqR3GX0MJGsMDr0bOmH07/ohaIK9oOgXW
-        RKMGXU9fH6ONQNSAxPgQu197HniAfqrPbcnQCvc=
-X-Google-Smtp-Source: AA6agR5I6Ldv3MIUY+iIA3U5//fxJC666jQR7VxjwrS9FgbbXxBYox+wQkCo795/fGd9GkuMcDlk0vPS+veH5/osdS0=
-X-Received: by 2002:a05:6870:1783:b0:12a:f442:504d with SMTP id
- r3-20020a056870178300b0012af442504dmr4719371oae.46.1662756760178; Fri, 09 Sep
- 2022 13:52:40 -0700 (PDT)
+        bh=Tv3Et/tqY6Zk/pnAAyJuFDBD309Fy7UgcvolVBKAIt0=;
+        b=euh2BB06eO2/thQigZNz2726cjONtmqXMKkr6ZBEY/+MMiGsIRl7D+hAQdnL7/5ZX0
+         AUJmiLcEmL9u9Q/6uqG9ZYdozrpjseAzQ1wEOrj4ZhjEp4u9+/jtMEz+Q67cb/hF8akn
+         +FfNV9KJPIxcQB7lvxYtEVKCN7J8bE+SABGdJHgadOzNAwk2vrUmyNri0p6pAgGwj+rL
+         0HJSqLzaU5CZ1hme/IJr5b+muIxwdt+vAvDNGGRIom2TbLQdzYiiaAMnWySwMjzYnzB1
+         mt68C1p8iSGlaXqapBuL1YTYswgnBUECrojHAOTxubaqqzHvDfYnsdNgmwHlVe4j5EoM
+         F/BA==
+X-Gm-Message-State: ACgBeo18fBsD/BUNUnnclgjRwvsLqdmP8HlIL9vdJsoep/h0J7YPBzfD
+        NZ+u9PEykpW7h3VQw7aQAmv6DmW2qJxPyjveegw=
+X-Google-Smtp-Source: AA6agR6OyPFZC2Rer+UUiW1qXoiXPjbx2R+7p2UUCURa7R4KDh0CNuFWNY3EZu5Y9xqXHY5l76BxtbO4Zjwk8hSy4PQ=
+X-Received: by 2002:a9d:12ce:0:b0:654:9bf:94ee with SMTP id
+ g72-20020a9d12ce000000b0065409bf94eemr3411691otg.123.1662756810347; Fri, 09
+ Sep 2022 13:53:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220904183307.14550-1-jingyuwang_vip@163.com>
-In-Reply-To: <20220904183307.14550-1-jingyuwang_vip@163.com>
+References: <20220905075624.22979-1-jingyuwang_vip@163.com>
+In-Reply-To: <20220905075624.22979-1-jingyuwang_vip@163.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 9 Sep 2022 16:52:29 -0400
-Message-ID: <CADnq5_OGdH17hhYh4=f70UJyqxgA2Od=_AkiLDo0wMSYSJ_Urg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_sync.c file
+Date:   Fri, 9 Sep 2022 16:53:19 -0400
+Message-ID: <CADnq5_NbUSWstURQQ8NKXehByBZY-2-gimwvA9kUyoGvaqKtKg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_amdkfd.c
 To:     Jingyu Wang <jingyuwang_vip@163.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Felix.Kuehling@amd.com, dri-devel@lists.freedesktop.org,
+Cc:     Felix.Kuehling@amd.com, lexander.deucher@amd.com,
+        hristian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,46 +70,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Applied.  Thanks!
 
-Alex
-
-On Mon, Sep 5, 2022 at 2:29 AM Jingyu Wang <jingyuwang_vip@163.com> wrote:
+On Mon, Sep 5, 2022 at 3:57 AM Jingyu Wang <jingyuwang_vip@163.com> wrote:
 >
-> This is a patch to the amdgpu_sync.c file that fixes some warnings found by the checkpatch.pl tool
+> Fix everything checkpatch.pl complained about in amdgpu_amdkfd.c
 >
 > Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-> index 504af1b93bfa..090e66a1b284 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
+> index 091415a4abf0..4f5bd96000ec 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
 > @@ -1,3 +1,4 @@
 > +// SPDX-License-Identifier: MIT
 >  /*
 >   * Copyright 2014 Advanced Micro Devices, Inc.
->   * All Rights Reserved.
-> @@ -315,6 +316,7 @@ struct dma_fence *amdgpu_sync_get_fence(struct amdgpu_sync *sync)
->         struct hlist_node *tmp;
->         struct dma_fence *f;
->         int i;
+>   *
+> @@ -130,6 +131,7 @@ static void amdgpu_amdkfd_reset_work(struct work_struct *work)
+>                                                   kfd.reset_work);
+>
+>         struct amdgpu_reset_context reset_context;
 > +
->         hash_for_each_safe(sync->fences, i, tmp, e, node) {
+>         memset(&reset_context, 0, sizeof(reset_context));
 >
->                 f = e->fence;
-> @@ -392,7 +394,7 @@ void amdgpu_sync_free(struct amdgpu_sync *sync)
->  {
->         struct amdgpu_sync_entry *e;
->         struct hlist_node *tmp;
-> -       unsigned i;
-> +       unsigned int i;
->
->         hash_for_each_safe(sync->fences, i, tmp, e, node) {
->                 hash_del(&e->node);
+>         reset_context.method = AMD_RESET_METHOD_NONE;
 >
 > base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
-> prerequisite-patch-id: fefd0009b468430bb223fc92e4abe9710518b1ea
 > --
 > 2.34.1
 >
