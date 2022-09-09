@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0505B3E1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216605B3E1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiIIRnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S231167AbiIIRpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiIIRnr (ORCPT
+        with ESMTP id S229813AbiIIRpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:43:47 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50E3B9FA3;
-        Fri,  9 Sep 2022 10:43:44 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y136so2335465pfb.3;
-        Fri, 09 Sep 2022 10:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date;
-        bh=LRneblQEh19hJEGNPBGoCScjU1yIefedI8Ztk/H4XpI=;
-        b=ZyVYfIQhHxbP2RIGijgGRHxVOYG1qVsMPjeAY+0oRQqvpeMcYUcOvUhwwChDq7U+QY
-         T268rh1P17qPTRwdT0nRTO3sLd05SB3u9ORvc4RLhXSAZyXRWPPv2zXD38FDm2qkK/Wf
-         6DRQFNGV+QPySp0BERNAZx9NCG9IJXs5Ou3+2LaL0lkZBS+9NQppoShJNnxPLfhZLFv+
-         MLrdzp0HCsjzZuaxRwhBn7zguVmnA0Oe//vwYIKm1+CAZBVmEqIjGIZVBhXJiXImjxWP
-         b2wePYHlAfeXmXQcGMKhWM/zmUUxqHV+OFrOlgRym4/Xx/pfj1LgYI16y3sKLAgAMjdT
-         0mJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=LRneblQEh19hJEGNPBGoCScjU1yIefedI8Ztk/H4XpI=;
-        b=LQTk1Vc6w9f7yMpRDrd09BL79Lz3++5QFOyJC1f8VyUaw9H8ciRXC36Bk0u5YvCF9S
-         neYiCNNx9emg6PIYWz4lSGK/BMuv6P0EK6NI7dp3PR/lbKk26FIOaQfDC26R5/35ZdFg
-         2o13tPMqs8bG1iqkR68YI2+WgEYxTAsgeS8I1smMAiGPQD3VG2QKOXmxjZYNbpbf5REt
-         HpaVFSqu98yG/dzpVeiE9PHAh27MAvY+ZEE+d+VdxrhD5OfK2eKlzqatM15CPjkLXCST
-         9e4M2POgGX4Cb3EFbrAdDwLthYBxcJDSeyqdrOFaksdcPY+Q5mXmIRlyN0ta4fY5VotC
-         epZw==
-X-Gm-Message-State: ACgBeo1V5JH3Tj1IDS1gr3hYzBNFjaVuNkFpoey2dDZ3mXdFiAR0qPOo
-        uUYpiWSE20UVwJtBDOGhLM8=
-X-Google-Smtp-Source: AA6agR5wvJM2nrbRK+TYJzP0jh/Ed4N7B502wnYuPZ0ddAef+8gWcPCMCv9pxRjEyeOQT3p/8E7O9g==
-X-Received: by 2002:a05:6a00:2395:b0:52f:723c:363 with SMTP id f21-20020a056a00239500b0052f723c0363mr15292989pfc.21.1662745422445;
-        Fri, 09 Sep 2022 10:43:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016dc6279ab7sm754007plg.149.2022.09.09.10.43.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 10:43:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fd0b0c53-192e-7205-91a8-fdb8953e9026@roeck-us.net>
-Date:   Fri, 9 Sep 2022 10:43:39 -0700
+        Fri, 9 Sep 2022 13:45:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B30B6D77
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:45:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 734036206C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 17:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2482DC433D6;
+        Fri,  9 Sep 2022 17:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662745530;
+        bh=KdPZ5U4EtJZbXVT6+9r/auhCgT6zhp52ldzOwpEGufI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lE0Q59peidqpfqCr5rwID2so6f9iQIwghhiR8I8idiD/eC/uM3t4ssp4jnIg41eqa
+         +PUbTkEsLCddgx+9zCfZA6JDlXWhn56ZWSHXX9K/7W2GilhenR4C6ZJ7KucuSyztqE
+         STW+tdexhxx8rkaBLa+tUr4pxUZZGsQuK5bdLUBYEOKjvmLlyVJcv4uJh69TkHz+7i
+         GTcS4D/UH1dCjUvVzNNUhrtJAfa2Jvpk5KFDym3K84U6xui9tZHLjJJqWfRWpP9ggV
+         w9tM2d+HCAoBgcYAdiBGvy9JT4d6H2z2FfOEKtPli7u33GR1giiagl2u7CDuQMiDyu
+         F4FXQwQqO3D9Q==
+Date:   Fri, 9 Sep 2022 18:45:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, kernel@axis.com,
+        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: ts3a227e: allow enabling the jack detect in driver
+Message-ID: <Yxt7tfm6MRMaDthO@sirena.org.uk>
+References: <20220909093001.13110-1-astrid.rost@axis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
- <20220909133718.388213-2-Ibrahim.Tilki@analog.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v8 1/4] drivers: hwmon: Add max31760 fan speed controller
- driver
-In-Reply-To: <20220909133718.388213-2-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iaEPXYJpK/+YHHRT"
+Content-Disposition: inline
+In-Reply-To: <20220909093001.13110-1-astrid.rost@axis.com>
+X-Cookie: FORTH IF HONK THEN
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 06:37, Ibrahim Tilki wrote:
-> MAX31760 is a precision fan speed controller with nonvolatile lookup table.
-> Device has one internal and one external temperature sensor support.
-> Controls two fans and measures their speeds. Generates hardware alerts when
-> programmable max and critical temperatures are exceeded.
-> 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> Reviewed-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 
-Since you'll have to resend this anyway to address the devicetree
-failures:
+--iaEPXYJpK/+YHHRT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[ ... ]
+On Fri, Sep 09, 2022 at 11:30:01AM +0200, Astrid Rost wrote:
 
-> +
-> +static int max31760_write(struct device *dev, enum hwmon_sensor_types type,
-> +			  u32 attr, int channel, long val)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	unsigned int pwm_index;
-> +	unsigned int reg_temp;
-> +	int temp;
-> +	u8 reg_val[2];
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_max:
-> +			reg_temp = REG_TEMP_MAX(channel);
-> +			break;
-> +		case hwmon_temp_crit:
-> +			reg_temp = REG_TEMP_CRIT(channel);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		temp = TEMP11_TO_REG(val);
-> +		reg_val[0] = temp >> 8;
-> +		reg_val[1] = temp & 0xFF;
-> +
-> +		return regmap_bulk_write(state->regmap, reg_temp, reg_val, 2);
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_enable:
-> +			if (val == 0)
-> +				return regmap_clear_bits(state->regmap, REG_CR3, BIT(channel));
-> +
-> +			if (val == 1)
-> +				return regmap_set_bits(state->regmap, REG_CR3, BIT(channel));
-> +
-> +			return -EOPNOTSUPP;
+> ti,jack-detect enables the jack detection input device
 
-This should return -EINVAL.
+New properties need to be documented, I'm happy for that to be in the
+existing document though obviously a conversion to YAML would be very
+much appreciated.  However...
 
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			if (val < 0 || val > 255)
-> +				return -EINVAL;
+> +	if (enable) {
+> +		/* Enable Headset and 4 Buttons Jack detection */
+> +		ts3a227e->jack = devm_kzalloc(component->dev,
+> +				sizeof(struct snd_soc_jack), GFP_KERNEL);
 > +
-> +			return regmap_write(state->regmap, REG_PWMR, val);
-> +		case hwmon_pwm_enable:
-> +			if (val == 1)
-> +				return regmap_set_bits(state->regmap, REG_CR2, CR2_DFC);
+> +		ret = snd_soc_card_jack_new_pins(card, "Headset Jack",
+> +					    SND_JACK_HEADSET |
+> +					    SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+> +					    SND_JACK_BTN_2 | SND_JACK_BTN_3,
+> +					    ts3a227e->jack,
+> +					    ts3a227e_jack_pins,
+> +					    ARRAY_SIZE(ts3a227e_jack_pins));
+> +		if (ret)
+> +			return ret;
 > +
-> +			if (val == 2)
-> +				return regmap_clear_bits(state->regmap, REG_CR2, CR2_DFC);
-> +
-> +			return -EOPNOTSUPP;
+> +		ret = ts3a227e_enable_jack_detect(component, ts3a227e->jack);
+> +	}
 
-This should return -EINVAL (the _operation_ is supported, after all,
-but the written value is invalid).
+...this is something that should be done in the machine driver rather
+than the CODEC, the way the device is wired up in an individual system
+may be surprising or the system may have some more specific labelling
+that can be usefully applied so this is all deferred to the card.
 
-Thanks,
-Guenter
+It would sense to convert ts3a277e_enable_jack_detect() to be a
+component set_jack() operation, that'd enable it to be used more easily
+with generic cards (though I see that it's not yet wired up for
+audio-graph-card unfortunately).
+
+--iaEPXYJpK/+YHHRT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMbe7QACgkQJNaLcl1U
+h9C7nAf/QdfOK4zJRdJvo2aFm0+Re0RQ56ntnchc2zx6RmSDPMQ6JKO3yHNVSQp0
+hll5NvMnaDhaCOj0NaoXKq1hk8lAW5nsHINJZAU7M7QjrhJ2c6yskIDtlyPJHVOI
+1sT8YNwlwTvKDlPWvnmz8rqcHoXx2IN4m1e/uDtKWu3edI50pKNuz06YB0dJIzt9
+NXpaRlrCLQVUtE9Rb6iKW/pH6fRIe3l/nCd6PhA6GCPtL4TKglTOWkaQkB0p0kXP
+hnGfThWfAf8SVe19JNwg2X2IsNdDe7bJ3Y9AqWoEH6fLBxmzqiBvcjsfWXI2mKQw
+bY38NzYd3Ls9HTWRaCpTMmJ/Iy5PxQ==
+=L8qU
+-----END PGP SIGNATURE-----
+
+--iaEPXYJpK/+YHHRT--
