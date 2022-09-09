@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12915B4034
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE095B4036
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiIITv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S230430AbiIITyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiIITvN (ORCPT
+        with ESMTP id S229612AbiIITyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:51:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BADE7A741;
-        Fri,  9 Sep 2022 12:51:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 737BA62088;
-        Fri,  9 Sep 2022 19:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA887C433D6;
-        Fri,  9 Sep 2022 19:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662753071;
-        bh=9DjjD+aR7NYx3bikzYihaf7tVq9u5fJQiSFi20D95t4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=m9DJzj4qvuGCUF+iJ+1YF6PU4OQ0kehy72dEUeUCiihqeJl8lYu36FG+/i7QYXgJ/
-         IJAdFMlZ2L5bZsyFbWsp7C9Fqd48/7p3Bl8zjzs9pLoUPd217F0Du8VPYmQFqspwzt
-         quUlBbfOwxznQXdyuXnIhJ/arQ7BGuyUf5mUYOjccja7RhFaGeX/nyKyTInD6VZx94
-         OBjf+8mp+nMKcn31yV8ntA0C7bZ9bL+wlYVq3I0XqLfD6uCavNUxMOLh0rWfYrlIgA
-         6mAjajs6GPyiWZk1GQL4uyBdA4gTpa8zEuoWBtGsTmA9qfiUP6Acz7wg8sBi6FlVDK
-         crUh4kg4vgBDQ==
-Date:   Fri, 9 Sep 2022 14:51:10 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH v6 0/5] PCI: qcom: Add system suspend & resume support
-Message-ID: <20220909195110.GA310839@bhelgaas>
+        Fri, 9 Sep 2022 15:54:02 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2F8DA830E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=MD7Ku
+        o/8ZI7rK5baDMxuo/yBRJbppXCYTo0SO7OLZo0=; b=Onm3pJflkFpnGTNMGJRku
+        18aUFeyWrqhJRW0O6o/rgRoR3sb9MIdAW5yU/YpKy3Dc+A/1/kryYJ9kVDzhgfy9
+        Yk6ncVo+YIYckjsS2tfvM00KTDvrWNLaStn13MMO95oL+bR6h9r+1gPkqeQ22GVq
+        j4c42uPtyJgU++9GK5RQNE=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp7 (Coremail) with SMTP id C8CowAB3C228mRtjZhFoEg--.50987S4;
+        Sat, 10 Sep 2022 03:53:43 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     arry.wentland@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] drm/amdgpu/display: remove unneeded "default n" options
+Date:   Sat, 10 Sep 2022 03:53:30 +0800
+Message-Id: <20220909195330.85888-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowAB3C228mRtjZhFoEg--.50987S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw1fKry5XF4kXryDWFWfZrb_yoWDXrX_K3
+        yUAw1rZF15AasFgr12vr4rury0ya1UZrZ7XFy8tryavr17ur4fW3s7u3y3Kr17u3ZrCFZx
+        u3yrCF4aywn3tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRi5r2tUUUUU==
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbCoAd3F1zmWJAhuAAAss
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 02:14:39PM +0530, Krishna chaitanya chundru wrote:
-> Add suspend and resume syscore ops.
-> 
-> When system suspends, and if the link is in L1ss, disable the clocks
-> and power down the phy so that system enters into low power state by
-> parking link in L1ss to save the maximum power. And when the system
-> resumes, enable the clocks back and power on phy if they are disabled
-> in the suspend path.
-> 
-> we are doing this only when link is in l1ss but not in L2/L3 as
-> nowhere we are forcing link to L2/L3 by sending PME turn off.
-> 
-> is_suspended flag indicates if the clocks are disabled in the suspend
-> path or not.
-> 
-> There is access to Ep PCIe space to mask MSI/MSIX after pm suspend ops
-> (getting hit by affinity changes while making CPUs offline during suspend,
-> this will happen after devices are suspended (all phases of suspend ops)).
-> When registered with pm ops there is a crash due to un-clocked access,
-> as in the pm suspend op clocks are disabled. So, registering with syscore
-> ops which will called after making CPUs offline.
-> 
-> Make GDSC always on to ensure controller and its dependent clocks
-> won't go down during system suspend.
-> 
-> Krishna chaitanya chundru (5):
->   PCI: qcom: Add system suspend and resume support
->   PCI: qcom: Add retry logic for link to be stable in L1ss
->   phy: core: Add support for phy power down & power up
->   phy: qcom: Add power down/up callbacks to pcie phy
->   clk: qcom: Alwaya on pcie gdsc
+Remove "default n" options. If the "default" line is removed, it
+defaults to 'n'.
 
-This seems fairly ugly because it doesn't fit nicely into the PM
-framework.  Why is this a qcom-specific thing?  What about other
-DWC-based controllers?
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+---
+ drivers/gpu/drm/amd/display/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
->  drivers/clk/qcom/gcc-sc7280.c            |   2 +-
->  drivers/pci/controller/dwc/pcie-qcom.c   | 156 ++++++++++++++++++++++++++++++-
->  drivers/phy/phy-core.c                   |  30 ++++++
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c |  50 ++++++++++
->  include/linux/phy/phy.h                  |  20 ++++
->  5 files changed, 256 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+index 413d8c6d592f..6925e0280dbe 100644
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@ -28,7 +28,6 @@ config DRM_AMD_DC_SI
+ 	bool "AMD DC support for Southern Islands ASICs"
+ 	depends on DRM_AMDGPU_SI
+ 	depends on DRM_AMD_DC
+-	default n
+ 	help
+ 	  Choose this option to enable new AMD DC support for SI asics
+ 	  by default. This includes Tahiti, Pitcairn, Cape Verde, Oland.
+@@ -43,7 +42,6 @@ config DEBUG_KERNEL_DC
+ 
+ config DRM_AMD_SECURE_DISPLAY
+         bool "Enable secure display support"
+-        default n
+         depends on DEBUG_FS
+         depends on DRM_AMD_DC_DCN
+         help
+
+base-commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
+-- 
+2.34.1
+
