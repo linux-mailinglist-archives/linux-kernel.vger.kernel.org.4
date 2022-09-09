@@ -2,271 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8405B3720
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C975B3779
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIIMIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S231627AbiIIMM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiIIMIP (ORCPT
+        with ESMTP id S231330AbiIIMMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:08:15 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77683128C05
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:08:13 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id t184so2360764yba.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 05:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9eo0O+oisX+ZKEctyYEq1GZOppdKmxJ/zNX7cz0mcds=;
-        b=eVy4XOVBTnBF3IjRrpnh/Pt74A6QldQcpp2MHekAsFk/AAjp+qAZklAZ/v/uS3wTS1
-         mbK10JpHCT/pxAEnQVT7DjUwO4fogFNPG47lQo9ItuM/5/+A8M7iY+JVePadqld4Fl1I
-         dJaC6doWm3MD1lrTaGRA2F0m+YZX+9QFmnNIIpm9ctmXDIXnAXFPYNr4WZ30OM3lDDF9
-         SQAmH50tS0ivmuOIeo0nB/8e4yFNz/VH6uFCVkaUaeCl2q3Ll0oG5dxJgjyjOfYR0mXe
-         GwN49pMm5RqjBQjjFRIS31XzfLWjJnQZrYOK6fJqD1F+E4szzmg/cmm+Qs/RvmrfVyHo
-         +6PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9eo0O+oisX+ZKEctyYEq1GZOppdKmxJ/zNX7cz0mcds=;
-        b=T2Tkh63PU8tqxcj7QekooKXQovJoVmlQgHeNWpbFRUSgWPt3/Ql0vE1VEaejaWHvdr
-         FY5BlHi97MZWjyBe93g8+CHLoh/zJ5EfngOVKSa5D6wirI+hyxEzkRGrLpcFvIZYeF1x
-         lffsQRYfLhyMxNHcXtokvNZ/tNwzAPTNsnt+F+xQqXlQb0PLQ/cIhkHzSQyC4BqAMZuN
-         FY4qGwRqP6WYOfUedD0pj0NYs2urQRo/TTVBn2rOVzRtpfbDhxNprYixWY8zGZvwFUSB
-         hAlxXh/1N3Rom7AqRXssj5epgjWqYyVNeQo0t6H242F6a/o1Mmhxv3+hLG2rc1zJhoKa
-         tjxA==
-X-Gm-Message-State: ACgBeo3mplZ6xUGtJkt6YvFUGUnNPQ1Ut7sy8tqREFLEPinvtjm0iSLv
-        mymjiYdvEBmrdWpFfCcL+GWWPzC57GbXbM9cyMxD7gIYKOjZzQ==
-X-Google-Smtp-Source: AA6agR49nJ0QplWEX2xxNtZSfhgRrDwMAiotUBWR2GAdLxl30X4PLhNHt6KnDJc6ByU46llJzZkB/Z8QK/k0N/ha7jU=
-X-Received: by 2002:a25:556:0:b0:6a8:bf73:9c42 with SMTP id
- 83-20020a250556000000b006a8bf739c42mr10766581ybf.584.1662725292036; Fri, 09
- Sep 2022 05:08:12 -0700 (PDT)
+        Fri, 9 Sep 2022 08:12:01 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE5913B549;
+        Fri,  9 Sep 2022 05:10:41 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MPF6k1b0vz9xHvT;
+        Fri,  9 Sep 2022 20:05:02 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3rpKVLBtj1uszAA--.31607S14;
+        Fri, 09 Sep 2022 13:10:11 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v17 12/12] selftests/bpf: Add tests for dynamic pointers parameters in kfuncs
+Date:   Fri,  9 Sep 2022 14:07:36 +0200
+Message-Id: <20220909120736.1027040-13-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com>
+References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-References: <202209091909.o5AIdvoX-lkp@intel.com>
-In-Reply-To: <202209091909.o5AIdvoX-lkp@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 9 Sep 2022 14:07:35 +0200
-Message-ID: <CANpmjNPgaJ1HhW+siCvZTxBGc2DRsCSkTTtZWiFfjcb2k8iijA@mail.gmail.com>
-Subject: Re: main.c:undefined reference to `__tsan_memset'
-To:     kernel test robot <lkp@intel.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwC3rpKVLBtj1uszAA--.31607S14
+X-Coremail-Antispam: 1UD129KBjvJXoW3JryUJryxurWUCFy5ur48JFb_yoWftF1rpa
+        yrWryj9r40q3W3Xr98JFs7ur4fKr48Zw17CrZI9FyxZr1DXFZ3XF18KFy5t3Z8K395Xw45
+        Z3ySvFWruw4UJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4LqSwABsc
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is being fixed:
-https://lore.kernel.org/all/20220909073840.45349-2-elver@google.com/
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-This is an unreleased version of Clang, so not an urgent issue.
+Add tests to ensure that only supported dynamic pointer types are accepted,
+that the passed argument is actually a dynamic pointer, that the passed
+argument is a pointer to the stack, and that bpf_verify_pkcs7_signature()
+correctly handles dynamic pointers with data set to NULL.
 
-On Fri, 9 Sept 2022 at 13:59, kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   506357871c18e06565840d71c2ef9f818e19f460
-> commit: e37b3dd063a1a68e28a7cfaf77c84c472112e330 s390: enable KCSAN
-> date:   1 year, 1 month ago
-> config: s390-randconfig-r044-20220909
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e37b3dd063a1a68e28a7cfaf77c84c472112e330
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e37b3dd063a1a68e28a7cfaf77c84c472112e330
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    s390x-linux-ld: init/main.o: in function `trace_event_raw_event_initcall_level':
-> >> main.c:(.text+0x1ea): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/main.o: in function `trace_event_raw_event_initcall_start':
->    main.c:(.text+0x2fa): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/main.o: in function `trace_event_raw_event_initcall_finish':
->    main.c:(.text+0x3ce): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/main.o: in function `do_one_initcall':
-> >> (.text+0x4c0): undefined reference to `__tsan_memset'
->    s390x-linux-ld: (.text+0x4d2): undefined reference to `__tsan_memset'
->    s390x-linux-ld: (.text+0x83c): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: init/main.o: in function `init_setup':
-> >> main.c:(.init.text+0x1ba): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/main.o: in function `rdinit_setup':
->    main.c:(.init.text+0x20e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/main.o: in function `unknown_bootoption':
-> >> main.c:(.init.text+0xd84): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: init/main.o: in function `set_init_arg':
->    main.c:(.init.text+0x11ea): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: init/do_mounts.o: in function `name_to_dev_t':
-> >> do_mounts.c:(.text+0x26e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/do_mounts.o: in function `mount_block_root':
-> >> do_mounts.c:(.init.text+0x2ee): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/do_mounts_rd.o: in function `identify_ramdisk_image':
-> >> do_mounts_rd.c:(.init.text+0x59c): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `panic_show_mem':
-> >> initramfs.c:(.text+0xfc): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `do_populate_rootfs':
-> >> initramfs.c:(.init.text+0x384): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `do_collect':
-> >> initramfs.c:(.init.text+0xf46): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: init/initramfs.o: in function `do_name':
->    initramfs.c:(.init.text+0x1558): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `do_copy':
->    initramfs.c:(.init.text+0x1a06): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `do_symlink':
->    initramfs.c:(.init.text+0x1d44): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `parse_header':
->    initramfs.c:(.init.text+0x1fc8): undefined reference to `__tsan_memset'
->    s390x-linux-ld: init/initramfs.o: in function `maybe_link':
->    initramfs.c:(.init.text+0x2234): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/time.o:time.c:(.text+0x938): more undefined references to `__tsan_memset' follow
->    s390x-linux-ld: arch/s390/kernel/time.o: in function `leap_seconds_scheduled_show':
-> >> time.c:(.text+0x17ea): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/time.o: in function `time_early_init':
-> >> (.init.text+0x28): undefined reference to `__tsan_memset'
->    s390x-linux-ld: (.init.text+0x3a): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/time.o: in function `read_persistent_wall_and_boot_offset':
->    (.init.text+0x30e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: (.init.text+0x332): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/process.o: in function `arch_dup_task_struct':
-> >> process.c:(.text+0x1b8): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/process.o: in function `copy_thread':
-> >> process.c:(.text+0x254): undefined reference to `__tsan_memset'
-> >> s390x-linux-ld: process.c:(.text+0x290): undefined reference to `__tsan_memset'
->    s390x-linux-ld: process.c:(.text+0x354): undefined reference to `__tsan_memset'
-> >> s390x-linux-ld: process.c:(.text+0x41a): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: process.c:(.text+0x4a4): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/process.o: in function `get_wchan':
->    process.c:(.text+0x57c): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/early.o: in function `startup_init':
-> >> early.c:(.init.text+0x30e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/early.o: in function `setup_facility_list':
-> >> early.c:(.init.text+0x410): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/early.o: in function `setup_arch_string':
->    early.c:(.init.text+0x51a): undefined reference to `__tsan_memset'
-> >> s390x-linux-ld: early.c:(.init.text+0x52c): undefined reference to `__tsan_memset'
-> >> s390x-linux-ld: early.c:(.init.text+0x652): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: early.c:(.init.text+0x6d2): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: early.c:(.init.text+0x80a): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: early.c:(.init.text+0x88a): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: arch/s390/kernel/setup.o: in function `relocate_dma_section':
->    setup.c:(.init.text+0xa22): undefined reference to `__tsan_memmove'
->    s390x-linux-ld: setup.c:(.init.text+0xa42): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/setup.o: in function `setup_resources':
->    setup.c:(.init.text+0x1372): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/setup.o: in function `setup_lowcore_dat_off':
->    setup.c:(.init.text+0x194a): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/setup.o: in function `conmode_default':
->    setup.c:(.init.text+0x1b62): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/idle.o: in function `account_idle_time_irq':
->    idle.c:(.text+0x3e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/idle.o: in function `arch_cpu_idle':
->    idle.c:(.text+0x2a8): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/vtime.o: in function `do_account_vtime':
->    vtime.c:(.text+0x2d4): undefined reference to `__tsan_memset'
->    s390x-linux-ld: vtime.c:(.text+0x4c8): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/syscall.o: in function `__se_sys_mmap2':
->    syscall.c:(.text+0x40): undefined reference to `__tsan_memset'
->    s390x-linux-ld: syscall.c:(.text+0x116): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `update_cr_regs':
->    ptrace.c:(.text+0x3c): undefined reference to `__tsan_memset'
->    s390x-linux-ld: ptrace.c:(.text+0x4e): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `ptrace_disable':
->    ptrace.c:(.text+0x3de): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o:ptrace.c:(.text+0x458): more undefined references to `__tsan_memset' follow
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_regs_get':
->    ptrace.c:(.text+0x1774): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_fpregs_get':
->    ptrace.c:(.text+0x1ea2): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x1f02): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x20a2): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_fpregs_set':
->    ptrace.c:(.text+0x2162): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o:ptrace.c:(.text+0x2356): more undefined references to `__tsan_memcpy' follow
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_gs_cb_set':
->    ptrace.c:(.text+0x3574): undefined reference to `__tsan_memset'
->    s390x-linux-ld: ptrace.c:(.text+0x35ce): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x3690): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x36e4): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_gs_bc_get':
->    ptrace.c:(.text+0x385e): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_gs_bc_set':
->    ptrace.c:(.text+0x39ba): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/ptrace.o:ptrace.c:(.text+0x3ae0): more undefined references to `__tsan_memcpy' follow
->    s390x-linux-ld: arch/s390/kernel/ptrace.o: in function `s390_runtime_instr_set':
->    ptrace.c:(.text+0x3b64): undefined reference to `__tsan_memset'
->    s390x-linux-ld: ptrace.c:(.text+0x3bc4): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x3c80): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: ptrace.c:(.text+0x3de2): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/signal.o: in function `__s390x_sys_sigreturn':
->    signal.c:(.text+0xca): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x220): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/signal.o:signal.c:(.text+0x242): more undefined references to `__tsan_memcpy' follow
->    s390x-linux-ld: arch/s390/kernel/signal.o: in function `__s390x_sys_sigreturn':
->    signal.c:(.text+0x43a): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/signal.o: in function `__s390x_sys_rt_sigreturn':
->    signal.c:(.text+0x87a): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x9d0): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x9f2): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0xa3e): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0xbea): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/signal.o: in function `arch_do_signal_or_restart':
->    signal.c:(.text+0xf80): undefined reference to `__tsan_memset'
->    s390x-linux-ld: signal.c:(.text+0x155a): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x15b2): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x15d6): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x161c): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: signal.c:(.text+0x187c): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/signal.o:signal.c:(.text+0x18d6): more undefined references to `__tsan_memcpy' follow
->    s390x-linux-ld: arch/s390/kernel/cpcmd.o: in function `__cpcmd':
->    cpcmd.c:(.text+0xe2): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/cpcmd.o: in function `cpcmd':
->    cpcmd.c:(.text+0x296): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: cpcmd.c:(.text+0x2ea): undefined reference to `__tsan_memset'
->    s390x-linux-ld: cpcmd.c:(.text+0x38e): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: cpcmd.c:(.text+0x3b4): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: cpcmd.c:(.text+0x412): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/nmi.o: in function `__s390_handle_mcck':
->    nmi.c:(.text+0x1ee): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_hex_ascii_format_fn':
->    debug.c:(.text+0x194): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_sprintf_format_fn':
->    debug.c:(.text+0x4d6): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_event_common':
->    (.text+0x1b58): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: (.text+0x1b88): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_exception_common':
->    (.text+0x2066): undefined reference to `__tsan_memcpy'
->    s390x-linux-ld: (.text+0x2092): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `__debug_sprintf_event':
->    (.text+0x23b8): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `__debug_sprintf_exception':
->    (.text+0x2a18): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_info_alloc':
->    debug.c:(.text+0x34f4): undefined reference to `__tsan_memset'
->    s390x-linux-ld: arch/s390/kernel/debug.o: in function `debug_prolog_level_fn':
->    debug.c:(.text+0x389e): undefined reference to `__tsan_memcpy'
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+The tests are currently in the deny list for s390x (JIT does not support
+calling kernel function).
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../bpf/prog_tests/kfunc_dynptr_param.c       | 164 ++++++++++++++++++
+ .../bpf/progs/test_kfunc_dynptr_param.c       |  99 +++++++++++
+ 3 files changed, 264 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index 759b2bb53b53..5fc7d0de19f3 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -73,3 +73,4 @@ htab_update                              # failed to attach: ERROR: strerror_r(-
+ tracing_struct                           # failed to auto-attach: -524                                                 (trampoline)
+ lookup_key                               # JIT does not support calling kernel function                                (kfunc)
+ verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
++kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+new file mode 100644
+index 000000000000..c210657d4d0a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2022 Facebook
++ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ */
++
++#include <test_progs.h>
++#include "test_kfunc_dynptr_param.skel.h"
++
++static size_t log_buf_sz = 1048576; /* 1 MB */
++static char obj_log_buf[1048576];
++
++static struct {
++	const char *prog_name;
++	const char *expected_verifier_err_msg;
++	int expected_runtime_err;
++} kfunc_dynptr_tests[] = {
++	{"dynptr_type_not_supp",
++	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to unsupported dynamic pointer type", 0},
++	{"not_valid_dynptr",
++	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and initialized", 0},
++	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern not to stack", 0},
++	{"dynptr_data_null", NULL, -EBADMSG},
++};
++
++static bool kfunc_not_supported;
++
++static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
++			   va_list args)
++{
++	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in kernel or module BTFs\n"))
++		return 0;
++
++	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
++		return 0;
++
++	kfunc_not_supported = true;
++	return 0;
++}
++
++static void verify_fail(const char *prog_name, const char *expected_err_msg)
++{
++	struct test_kfunc_dynptr_param *skel;
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	libbpf_print_fn_t old_print_cb;
++	struct bpf_program *prog;
++	int err;
++
++	opts.kernel_log_buf = obj_log_buf;
++	opts.kernel_log_size = log_buf_sz;
++	opts.kernel_log_level = 1;
++
++	skel = test_kfunc_dynptr_param__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	bpf_program__set_autoload(prog, true);
++
++	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
++
++	kfunc_not_supported = false;
++
++	old_print_cb = libbpf_set_print(libbpf_print_cb);
++	err = test_kfunc_dynptr_param__load(skel);
++	libbpf_set_print(old_print_cb);
++
++	if (err < 0 && kfunc_not_supported) {
++		fprintf(stderr,
++		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not supported\n",
++		  __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	if (!ASSERT_ERR(err, "unexpected load success"))
++		goto cleanup;
++
++	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
++		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
++		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
++	}
++
++cleanup:
++	test_kfunc_dynptr_param__destroy(skel);
++}
++
++static void verify_success(const char *prog_name, int expected_runtime_err)
++{
++	struct test_kfunc_dynptr_param *skel;
++	libbpf_print_fn_t old_print_cb;
++	struct bpf_program *prog;
++	struct bpf_link *link;
++	__u32 next_id;
++	int err;
++
++	skel = test_kfunc_dynptr_param__open();
++	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open"))
++		return;
++
++	skel->bss->pid = getpid();
++
++	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
++
++	kfunc_not_supported = false;
++
++	old_print_cb = libbpf_set_print(libbpf_print_cb);
++	err = test_kfunc_dynptr_param__load(skel);
++	libbpf_set_print(old_print_cb);
++
++	if (err < 0 && kfunc_not_supported) {
++		fprintf(stderr,
++		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not supported\n",
++		  __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	if (!ASSERT_OK(err, "test_kfunc_dynptr_param__load"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
++		goto cleanup;
++
++	err = bpf_prog_get_next_id(0, &next_id);
++
++	bpf_link__destroy(link);
++
++	if (!ASSERT_OK(err, "bpf_prog_get_next_id"))
++		goto cleanup;
++
++	ASSERT_EQ(skel->bss->err, expected_runtime_err, "err");
++
++cleanup:
++	test_kfunc_dynptr_param__destroy(skel);
++}
++
++void test_kfunc_dynptr_param(void)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
++		if (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
++			continue;
++
++		if (kfunc_dynptr_tests[i].expected_verifier_err_msg)
++			verify_fail(kfunc_dynptr_tests[i].prog_name,
++			  kfunc_dynptr_tests[i].expected_verifier_err_msg);
++		else
++			verify_success(kfunc_dynptr_tests[i].prog_name,
++				kfunc_dynptr_tests[i].expected_runtime_err);
++	}
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+new file mode 100644
+index 000000000000..704eabe4fe46
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ */
++
++#include "vmlinux.h"
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct bpf_dynptr {
++	__u64 :64;
++	__u64 :64;
++} __attribute__((aligned(8)));
++
++extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
++extern void bpf_key_put(struct bpf_key *key) __ksym;
++extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
++				      struct bpf_dynptr *sig_ptr,
++				      struct bpf_key *trusted_keyring) __ksym;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++} ringbuf SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);
++} array_map SEC(".maps");
++
++int err, pid;
++
++char _license[] SEC("license") = "GPL";
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
++	     unsigned int size)
++{
++	char write_data[64] = "hello there, world!!";
++	struct bpf_dynptr ptr;
++
++	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0, &ptr);
++
++	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
++}
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	unsigned long val;
++
++	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
++					  (struct bpf_dynptr *)&val, NULL);
++}
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	unsigned long val;
++
++	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
++					  (struct bpf_dynptr *)val, NULL);
++}
++
++SEC("lsm.s/bpf")
++int BPF_PROG(dynptr_data_null, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	struct bpf_key *trusted_keyring;
++	struct bpf_dynptr ptr;
++	__u32 *value;
++	int ret, zero = 0;
++
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	value = bpf_map_lookup_elem(&array_map, &zero);
++	if (!value)
++		return 0;
++
++	/* Pass invalid flags. */
++	ret = bpf_dynptr_from_mem(value, sizeof(*value), ((u64)~0ULL), &ptr);
++	if (ret != -EINVAL)
++		return 0;
++
++	trusted_keyring = bpf_lookup_system_key(0);
++	if (!trusted_keyring)
++		return 0;
++
++	err = bpf_verify_pkcs7_signature(&ptr, &ptr, trusted_keyring);
++
++	bpf_key_put(trusted_keyring);
++
++	return 0;
++}
+-- 
+2.25.1
+
