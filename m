@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25325B37C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2285B3793
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiIIM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S231450AbiIIMUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiIIM2o (ORCPT
+        with ESMTP id S231421AbiIIMTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:28:44 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D512D189;
-        Fri,  9 Sep 2022 05:28:41 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z8so2264460edb.6;
-        Fri, 09 Sep 2022 05:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :from:to:cc:subject:date;
-        bh=DZugOTI9KxAAOxuZDWfK5HFNxfJINOMz8DoYNPEVrxE=;
-        b=lP6IXIosqw1mX3RUVPRs96rv8hOGgFuRGED7qFb42YRjSWI+CeLsmTvzWjajwO5BSB
-         +f6ubmLcdB3LEqhpZp4TSWAY/VZrcKtUa4qie7UUihIxnLNtb6kmCIfVfQYcdRbMpqO5
-         Y6KtvYWJCCOVdzelCUIVkry7ACt3ikyTuwJFA03MZUKmDA7fwvUgSw4onBsGuyMu+eS0
-         E7/aPdvEJxov6gphSzPzat9KHTW7tdp5B0NFqXSDxA2LP2GkqtIpfSnWMMwZ5YstpZUe
-         dlkmdzba+8iG2mBsW0ddcU/gLGsui/3sW/91JZ/T0cslCFYkFv+JkQFhLejomqP8JJLv
-         klxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DZugOTI9KxAAOxuZDWfK5HFNxfJINOMz8DoYNPEVrxE=;
-        b=TNdcak3EV3pYZydcUwSXSOqcVWsSHzOBUrTz4Y0Q4AKYLlw1u4+L5aNyGualWNwnUY
-         /KFS5DqoAEIyuM7FuRlzdh1ieuZuBUaZexGuDcfqldfgxaCAekEsaXnTzHpn/+GsueqW
-         ABjPWv6279cO+KHaC+cMwgm4erR6pqwZJZQnF1PqoZETQnfYLHqoQrm0fcnyVk4dAupJ
-         L0lG+xk1yMqMlhytIqf98GaPmKJZSKhiaf4VQe8LTibOAndihk7DnEZI3GaTacAgkhKS
-         YGHUd+PpnWTsgDXemewjWIcCO7ZkobBswo0LRey9JOGsXM2caIehe2pfarOvuAfLuXuh
-         xLDQ==
-X-Gm-Message-State: ACgBeo1PaU3EMT9IWMG4zfrtE5I/zGUTDakKb1By0S0v1wZBjJYf2fqX
-        oMpplZ5Pz1EwPwOcUIIeO4Q=
-X-Google-Smtp-Source: AA6agR5YgTVZARMKttFGjA8k6Eywr7Ql/1DY+N58DFl5dP75S5ttL6Mvi+AoeeBe2d660jgf1MJOcA==
-X-Received: by 2002:a05:6402:520d:b0:450:d599:52c with SMTP id s13-20020a056402520d00b00450d599052cmr5530085edd.119.1662726519788;
-        Fri, 09 Sep 2022 05:28:39 -0700 (PDT)
-Received: from localhost ([89.40.126.93])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170906194c00b007753477db05sm207271eje.115.2022.09.09.05.28.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 05:28:39 -0700 (PDT)
-Message-ID: <631b3177.170a0220.ccacb.0862@mx.google.com>
-X-Google-Original-Message-ID: <Yxtbm3mXtEu+rzuF@<DarkDistro>>
-Date:   Fri, 9 Sep 2022 15:28:27 +0000
-From:   Burak Ozdemir <bozdemir@gmail.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: sm750fb: Coding style clean up
+        Fri, 9 Sep 2022 08:19:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5264F11452
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662725852; x=1694261852;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UAAQ+YLzvmmUI6dBHAsDTOGyqlQLeOvNNzTP+cKD4uk=;
+  b=RRVm+v3ML6ZI55FuhTAZaubBujoKuP2qAvoJov8ypCW0EtTB/jbT0c70
+   CRyd/YKCEYKJUkWs9yWAkwfG9qcgZX5ogvsn9Jngzc9iPih8v7OSMYkYe
+   GWJd8c8HekVb5Wc2EpjPaK5NTWUard5WOxk/2mTH/FTecu152uANGVIrX
+   X5cpBtqs1Hv4gpn4jQHEqgMvuPztdULFNehgWaXiC+7Cv2tXoiPmjZ9VG
+   OpjCphR6GQM9d6x5lgNkUQWu5c/+YuzOFlGd0BfcV96oO6lYfoqZMH23K
+   EgjcL9zMXXgS0k5gCYt6vtMegP2hZMnMcYXbuAw7jWbQUh0VzGVzkrmYg
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361416745"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="361416745"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 05:17:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="645516055"
+Received: from linux-pnp-server-13.sh.intel.com ([10.239.176.176])
+  by orsmga008.jf.intel.com with ESMTP; 09 Sep 2022 05:17:28 -0700
+From:   Jiebin Sun <jiebin.sun@intel.com>
+To:     akpm@linux-foundation.org, vasily.averin@linux.dev,
+        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
+        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
+Subject: [PATCH v5 0/2] ipc/msg: mitigate the lock contention in ipc/msg
+Date:   Sat, 10 Sep 2022 04:36:34 +0800
+Message-Id: <20220909203636.2652466-1-jiebin.sun@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220902152243.479592-1-jiebin.sun@intel.com>
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +64,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Burak OZDEMIR <bozdemir@gmail.com>
 
-Adhere to coding style and fix camel casing in function name.
+Hi,
 
-Signed-off-by: Burak Ozdemir <bozdemir@gmail.com>
----
- drivers/staging/sm750fb/sm750.c        | 2 +-
- drivers/staging/sm750fb/sm750_cursor.c | 2 +-
- drivers/staging/sm750fb/sm750_cursor.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Here are two patches to mitigate the lock contention in ipc/msg.
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index 3e09e56d3930..a86222cdcb68 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -120,7 +120,7 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
-+		sm750_hw_cursor_set_size(cursor,
- 					fbcursor->image.width,
- 					fbcursor->image.height);
- 
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2551..d5ef40b8bc8e 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,7 +58,7 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd61ed..edeed2ea4b04 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,7 +5,7 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
- void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
- void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
- void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--- 
-2.35.1
+The 1st patch is to add the new interface percpu_counter_add_local and
+percpu_counter_sub_local. The batch size in percpu_counter_add_batch should
+be very large in heavy writing and rare reading case. Add the "_local"
+version, and mostly it will do local adding, reduce the global updating and
+mitigate lock contention in writing.
+
+The 2nd patch is to use percpu_counter instead of atomic update in ipc/msg.
+The msg_bytes and msg_hdrs atomic counters are frequently updated when IPC
+msg queue is in heavy use, causing heavy cache bounce and overhead. Change
+them to percpu_counter greatly improve the performance. Since there is one
+percpu struct per namespace, additional memory cost is minimal. Reading of
+the count done in msgctl call, which is infrequent. So the need to sum up
+the counts in each CPU is infrequent.
+
+Changes in v5:
+1. Use INT_MAX as the large batch size in percpu_counter_local_add and
+percpu_counter_sub_local.
+2. Use the latest kernel 6.0-rc4 as the baseline for performance test.
+3. Move the percpu_counter_local_add and percpu_counter_sub_local from
+percpu_counter.c to percpu_counter.h.
+
+Changes in v3:
+1. Add comment and change log for the new function percpu_counter_add_local.
+Who should use it and who shouldn't.
+
+Changes in v2:
+1. Separate the original patch into two patches.
+2. Add error handling for percpu_counter_init.
+
+The performance gain increases as the threads of workload become larger.
+Performance gain: 3.99x
+
+CPU: ICX 8380 x 2 sockets
+Core number: 40 x 2 physical cores
+Benchmark: pts/stress-ng-1.4.0
+-- system v message passing (160 threads)
+
+
+Regards
+Jiebin
 
