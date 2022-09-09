@@ -2,186 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95375B3F9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46A15B3F9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiIIT2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S229937AbiIIT3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiIIT2F (ORCPT
+        with ESMTP id S229755AbiIIT3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:28:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AD21485A2;
-        Fri,  9 Sep 2022 12:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662751649; x=1694287649;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ehj9Y8g3f/A+0X8CQW5RE0tEhx4HVX+couLNQCvFzeI=;
-  b=Mlq6J+YHimBmYC+MjZ3Y4Iq/d8YzTvaeF5zbBYAtsX66NETHHaMm+biN
-   fTLVmM46tEQlZkAeevXX3JblUVWbbiBWaP7/QNUKJdsA6e8lEQW2SRoF0
-   rC3I1EBRWYJgNp8s27uWVhkLvaxN164LqZHoQZEF2YC3CYvpQqFXHH5KV
-   r5ijT+OCW09RWtVzugEGBcsX69J0yWGehkyStI3DMSrHLlbSxvIDLp8Oq
-   D26YsQlrT/7sc4R/r4B9VHGRHq4wddGLQq5VM1gvwTd15286lA7bvsGZB
-   YKiA0G9ecfnPTWJFyfkmCyxMOkXoAUpftsIFCmCspsHBuI0bSeZ2hgMpr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277945419"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="277945419"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:27:18 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="677287752"
-Received: from hmadupal-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.6.204])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:27:17 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v13 3/3] Documentation/x86: Document TDX attestation process
-Date:   Fri,  9 Sep 2022 12:27:08 -0700
-Message-Id: <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Fri, 9 Sep 2022 15:29:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B632A1238F1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662751737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=scB/A0eqZPNbc0FcobF2auT2+RpNVwKOnjb7JpfOEKI=;
+        b=URueGIP6mpMqET43WqVODqkjyUeSqlj1vf4LFGe3d93lEUPY9GZUaSw2vHUfyUzHxCfUGd
+        XVVhPK64sgjhAU8Lmv9SX32GwPfY2ZKj7YOzg5Z0MtkbM22Vu2bmxqI/P67Hm85wCUNQmX
+        yfGKMSdJcK5rnWdGMgC1sBFCGqAtM8Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-NcN6HpSwPBGKK6oRUzuLYw-1; Fri, 09 Sep 2022 15:28:56 -0400
+X-MC-Unique: NcN6HpSwPBGKK6oRUzuLYw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BED08032FB;
+        Fri,  9 Sep 2022 19:28:55 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 435491415102;
+        Fri,  9 Sep 2022 19:28:55 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] locking/semaphore: Use wake_q to wake up processes outside lock critical section
+Date:   Fri,  9 Sep 2022 15:28:48 -0400
+Message-Id: <20220909192848.963982-1-longman@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document details about TDX attestation process and related user API
-support.
+It was found that a circular lock dependency can happen with the
+following locking sequence:
 
-Attestation details can be found in Guest-Host-Communication Interface
-(GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
-attestation".
+   +--> (console_sem).lock --> &p->pi_lock --> &rq->__lock --+
+   |                                                         |
+   +---------------------------------------------------------+
 
-[Bagas Sanjaya fixed htmldocs warning]
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+The &p->pi_lock --> &rq->__lock sequence is very common in all the
+task_rq_lock() calls.
+
+The &rq->__lock --> (console_sem).lock sequence happens when the
+scheduler code calling printk() or more likely the various WARN*()
+macros while holding the rq lock. The (console_sem).lock is actually
+a raw spinlock guarding the semaphore. In the particular lockdep splat
+that I saw, it was caused by SCHED_WARN_ON() call in update_rq_clock().
+To work around this locking sequence, we may have to ban all WARN*()
+calls when the rq lock is held, which may be too restrictive, or we
+may have to add a WARN_DEFERRED() call and modify all the call sites
+to use it.
+
+Even then, a deferred printk or WARN function may still call
+console_trylock() which may, in turn, calls up_console_sem() leading
+to this locking sequence.
+
+The other ((console_sem).lock --> &p->pi_lock) locking sequence
+was caused by the fact that the semaphore up() function is calling
+wake_up_process() while holding the semaphore raw spinlock. This lockiing
+sequence can be easily eliminated by moving the wake_up_processs()
+call out of the raw spinlock critical section using wake_q which is
+what this patch implements. That is the easiest and the most certain
+way to break this circular locking sequence.
+
+v1: https://lore.kernel.org/lkml/20220118153254.358748-1-longman@redhat.com/
+
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
+ kernel/locking/semaphore.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Change since v12:
- * None
-
-Changes since v11:
- * Fixed htmldocs warnings.
-
- Documentation/x86/tdx.rst | 75 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
-
-diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
-index b8fa4329e1a5..c9e3ecf86e0b 100644
---- a/Documentation/x86/tdx.rst
-+++ b/Documentation/x86/tdx.rst
-@@ -210,6 +210,81 @@ converted to shared on boot.
- For coherent DMA allocation, the DMA buffer gets converted on the
- allocation. Check force_dma_unencrypted() for details.
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index f2654d2fe43a..b4b817451dd7 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -29,6 +29,7 @@
+ #include <linux/export.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
++#include <linux/sched/wake_q.h>
+ #include <linux/semaphore.h>
+ #include <linux/spinlock.h>
+ #include <linux/ftrace.h>
+@@ -38,7 +39,7 @@ static noinline void __down(struct semaphore *sem);
+ static noinline int __down_interruptible(struct semaphore *sem);
+ static noinline int __down_killable(struct semaphore *sem);
+ static noinline int __down_timeout(struct semaphore *sem, long timeout);
+-static noinline void __up(struct semaphore *sem);
++static noinline void __up(struct semaphore *sem, struct wake_q_head *wake_q);
  
-+Attestation
-+===========
-+
-+Attestation is used to verify the TDX guest trustworthiness to other
-+entities before provisioning secrets to the guest. For example, a key
-+server may request for attestation before releasing the encryption keys
-+to mount the encrypted rootfs or secondary drive.
-+
-+TDX module records the state of the TDX guest in various stages of guest
-+boot process using build time measurement register (MRTD) and runtime
-+measurement registers (RTMR). Measurements related to guest initial
-+configuration and firmware image is recorded in the MRTD register.
-+Measurements related to initial state, kernel image, firmware image,
-+command line options, initrd, ACPI tables, etc are recorded in RTMR
-+registers. For more details, please refer to TDX Virtual Firmware design
-+specification, sec titled "TD Measurement".
-+
-+At TDX guest runtime, the Intel TDX module reuses the Intel SGX attestation
-+infrastructure to provide support for attesting to these measurements as
-+described below.
-+
-+The attestation process consists of two steps: TDREPORT generation and
-+Quote generation.
-+
-+TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
-+from the TDX module. TDREPORT is a fixed-size data structure generated by
-+the TDX module which contains guest-specific information (such as build
-+and boot measurements), platform security version, and the MAC to protect
-+the integrity of the TDREPORT.
-+
-+After getting the TDREPORT, the second step of the attestation process
-+is to send it to the QE to generate the Quote. TDREPORT by design can only
-+be verified on local platform as the MAC key is bound to the platform. To
-+support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
-+Enclave (QE) to verify the TDREPORT locally and convert it to a remote
-+verifiable Quote. Method of sending TDREPORT to QE is implemenentation
-+specific. Attestation software can choose whatever communication channel
-+available (i.e. vsock or hypercall) to send the TDREPORT to QE and receive
-+the Quote.
-+
-+To allow userspace attestation agent get the TDREPORT, TDX guest driver
-+exposes an IOCTL (TDX_CMD_GET_REPORT) interface via /dev/tdx-guest misc
-+device.
-+
-+TDX Guest driver
-+================
-+
-+The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
-+device to allow user space to get certain TDX guest specific details
-+(like attestation report, attestation quote or storage keys, etc).
-+
-+In this section, for each supported IOCTL, following information is
-+provided along with generic description.
-+
-+:Input parameters: Parameters passed to the IOCTL and related details.
-+:Output: Details about output data and return value (with details
-+         about the non common error values).
-+
-+TDX_CMD_GET_REPORT
-+------------------
-+
-+:Input parameters: struct tdx_report_req
-+:Output: Upon successful execution, TDREPORT data is copied to
-+         tdx_report_req.tdreport and returns 0 or returns
-+         -EIO on TDCALL failure and standard error number on
-+         other common failures.
-+
-+The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
-+get the TDX guest measurements data (with few other info) in the format
-+of TDREPORT_STRUCT. It uses TDCALL[TDG.MR.REPORT] to get the TDREPORT
-+from the TDX Module.
-+
-+Format of TDREPORT_STRUCT can be found in TDX 1.0 Module specification,
-+sec titled "TDREPORT_STRUCT".
-+
- References
- ==========
+ /**
+  * down - acquire the semaphore
+@@ -183,13 +184,16 @@ EXPORT_SYMBOL(down_timeout);
+ void up(struct semaphore *sem)
+ {
+ 	unsigned long flags;
++	DEFINE_WAKE_Q(wake_q);
  
+ 	raw_spin_lock_irqsave(&sem->lock, flags);
+ 	if (likely(list_empty(&sem->wait_list)))
+ 		sem->count++;
+ 	else
+-		__up(sem);
++		__up(sem, &wake_q);
+ 	raw_spin_unlock_irqrestore(&sem->lock, flags);
++	if (!wake_q_empty(&wake_q))
++		wake_up_q(&wake_q);
+ }
+ EXPORT_SYMBOL(up);
+ 
+@@ -269,11 +273,12 @@ static noinline int __sched __down_timeout(struct semaphore *sem, long timeout)
+ 	return __down_common(sem, TASK_UNINTERRUPTIBLE, timeout);
+ }
+ 
+-static noinline void __sched __up(struct semaphore *sem)
++static noinline void __sched __up(struct semaphore *sem,
++				  struct wake_q_head *wake_q)
+ {
+ 	struct semaphore_waiter *waiter = list_first_entry(&sem->wait_list,
+ 						struct semaphore_waiter, list);
+ 	list_del(&waiter->list);
+ 	waiter->up = true;
+-	wake_up_process(waiter->task);
++	wake_q_add(wake_q, waiter->task);
+ }
 -- 
-2.34.1
+2.31.1
 
