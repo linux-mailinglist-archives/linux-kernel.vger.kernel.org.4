@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCAA5B3D24
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E275B3D29
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbiIIQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S230432AbiIIQjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiIIQhT (ORCPT
+        with ESMTP id S229809AbiIIQjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:37:19 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C0813FA7F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662741432; x=1694277432;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=axQDD1e0+9YXYZpyuAeHcsK5y6w1wt57SYTlNV2Ts68=;
-  b=Cj44paFID5ztUy7tkl44iAcG/u45W4cas9uZB2S9P3pXZ/G/tK1bMOCV
-   K0UH1f0ikmKyyh1K4pYNWjZCYIUyCabMzRtTExXyeWKeK3y/ZGWP60vYN
-   hoYyCh7LCdgcjn2A4IglAHfFyKjXClKSrtQmIP/iutzrvYmN/M8kZkxDG
-   K0EYKTinx6lptgUEIQO533LtDafhWYJ4UmUDn1kqI8pXOsmV8TTUA5hlr
-   YWeOIsDS8yW8JLcP31+Z8TQPqboKvUKVDnAujOtdoEPVaoE32zsx/kDTB
-   R5RP3VH424Tfw2xKekmPEuVXNzcbXUCyLR0UZ7yGU3FR1FCCpXW8CrRP2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298855911"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="298855911"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:37:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="943835618"
-Received: from schen9-mobl.amr.corp.intel.com ([10.212.177.99])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:37:10 -0700
-Message-ID: <346eb3cc79a657f3e45d3fa2bea2fdffa741af3d.camel@linux.intel.com>
-Subject: Re: [PATCH v5 1/2] percpu: Add percpu_counter_add_local and
- percpu_counter_sub_local
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Jiebin Sun <jiebin.sun@intel.com>, akpm@linux-foundation.org,
-        vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
-        legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com
-Date:   Fri, 09 Sep 2022 09:37:09 -0700
-In-Reply-To: <20220909203636.2652466-2-jiebin.sun@intel.com>
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
-         <20220909203636.2652466-1-jiebin.sun@intel.com>
-         <20220909203636.2652466-2-jiebin.sun@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Fri, 9 Sep 2022 12:39:08 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76835142DA2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:39:07 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bn9so2508903ljb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=C8EFOrarFgcH9AimKTDz/kV+dDC4aGl58YpTJdmNSjU=;
+        b=m4xdA0A0cbvAzvVI69pUofSXJcUZHq8o/kzFhmSVtGPDXMsaRHIbqvCF4PdTp0UAI7
+         S+F0Q4RnehEwjK0N+6Fcy9N/PLicbeQawYrjQj91X3xXHpetqLKwnZKZ9qEORyxnYaXD
+         mV1KQHXAz75M3s5YnXyC08gKAyRuDa+I6amGAaxshpuUHpEBYZ3Mlf2qV5peTmqSbk58
+         7KAtuRMokdnJ7LOZJqxAgVL9TFh+AgPUNwNayVXO8GKj7uP9uDoE7oIzNZcDbi8JNWs8
+         Epq8tJ4sotYEql6Jn/3O7I4ORZ+uj+w6fw9Y3eP72ogq9vpkMb96soZfTxZdDGGO0o9e
+         ImGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=C8EFOrarFgcH9AimKTDz/kV+dDC4aGl58YpTJdmNSjU=;
+        b=oKelvLbOQA9VzZMfef25khq1vX2VlEg299mrL82yU5VONul3layclyv29vHyqI+IyN
+         xMO+ZmpfxfUJeD8SCZRgQEkF9ofRqkB+BoExhQFklv6Cmjx1DBSzCkROhm5PM5QllphJ
+         5dwGxsDc/XkZhLOVkZHF8m3wzteKLyR89aSWVa+Gpm9WXJk1Wy7/2MXBocby8Ub3Vm0n
+         ZOlRh627DNxcidx2SiZfWP1Psg8UMxpgDxai0OZe4bpc8ZQDU62Ip6aq0r2wVswlXrN0
+         ZuaRroTw/0q5pTvLII01OTWh+2DTjxmlFqRkrgKvfvLSpc+ej37OxK+5MTdAE6Tq/A9g
+         waaQ==
+X-Gm-Message-State: ACgBeo0dnhZEop3beOnosgi3hDsrzuqJwxJzy70ekXT23hAVtjveyrrj
+        XjRAyjLrPfRPB2DIMI7ERG9oLw==
+X-Google-Smtp-Source: AA6agR4SNJRWarydZ5VLp359Lgv+QR+yZRAFXcH/WrnxMJMgK9lSw/Vl7ODP9YCBx7Qb7RooCS+bLg==
+X-Received: by 2002:a05:651c:1cd:b0:261:bef9:ada8 with SMTP id d13-20020a05651c01cd00b00261bef9ada8mr4128624ljn.387.1662741545867;
+        Fri, 09 Sep 2022 09:39:05 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 6-20020a05651c00c600b0026ac3fedd20sm139001ljr.86.2022.09.09.09.39.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 09:39:05 -0700 (PDT)
+Message-ID: <7585e56e-0983-de27-7c1b-9ec30898d4bd@linaro.org>
+Date:   Fri, 9 Sep 2022 18:39:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: pwm: tegra: Document Tegra234 pwm binding
+Content-Language: en-US
+To:     Sandipan Patra <spatra@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bbasu@nvidia.com, kyarlagadda@nvidia.com
+References: <20220909155258.17908-1-spatra@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220909155258.17908-1-spatra@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-09-10 at 04:36 +0800, Jiebin Sun wrote:
-> The batch size in percpu_counter_add_batch should be very large
-> in heavy writing and rare reading case. Add the "_local" version,
-> and mostly it will do local adding, reduce the global updating
-> and mitigate lock contention in writing.
+On 09/09/2022 17:52, Sandipan Patra wrote:
+> The PWM controller blocks are identical to ones found on the
+> Tegra194 SoC. No driver changes are required and compatible string
+> "nvidia,tegra194-pwm" will be used as a fallback.
 > 
-> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
 > ---
->  include/linux/percpu_counter.h | 38 ++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+> V4: Mention fallback compatible
+
+The patch is not titled v4.
+
 > 
-> diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-> index 01861eebed79..6dd7eaba8527 100644
-> --- a/include/linux/percpu_counter.h
-> +++ b/include/linux/percpu_counter.h
-> @@ -15,6 +15,9 @@
->  #include <linux/types.h>
->  #include <linux/gfp.h>
->  
-> +/* percpu_counter batch for local add or sub */
-> +#define PERCPU_COUNTER_LOCAL_BATCH	INT_MAX
-> +
->  #ifdef CONFIG_SMP
->  
->  struct percpu_counter {
-> @@ -56,6 +59,27 @@ static inline void percpu_counter_add(struct percpu_counter *fbc, s64 amount)
->  	percpu_counter_add_batch(fbc, amount, percpu_counter_batch);
->  }
->  
-> +/*
-> + * Use this function in heavy writing but rare reading case. The large
-> + * batch size will reduce the global updating.
+>  Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
+> index 74c41e34c3b6..331c1e66e8fa 100644
+> --- a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
+> +++ b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
+> @@ -9,7 +9,7 @@ Required properties:
+>    - "nvidia,tegra132-pwm", "nvidia,tegra20-pwm": for Tegra132
+>    - "nvidia,tegra210-pwm", "nvidia,tegra20-pwm": for Tegra210
+>    - "nvidia,tegra186-pwm": for Tegra186
+> -  - "nvidia,tegra194-pwm": for Tegra194
+> +  - "nvidia,tegra194-pwm": for Tegra194, Tegra234
 
-Suggest revising the comment, so it is clear we need to use
-percpu_counter_sum() to access the counter: 
+No differences here. You sent something old...
 
-With percpu_counter_add_local() and percpu_counter_sub_local(),
-counts are accumulated in local per cpu counter and not in
-fbc->count until local count overflows PERCPU_COUNTER_LOCAL_BATCH.
-This makes counter write efficient.
-
-But percpu_counter_sum(), instead of percpu_counter_read(),
-needs to be used to add up the counts
-from each CPU to account for all the local counts.
-So percpu_counter_add_local() and percpu_counter_sub_local()
-should be used when a counter is updated frequently and read
-rarely.
-
-
-> + */
-> +static inline void
-> +percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
-> +{
-> +	percpu_counter_add_batch(fbc, amount, PERCPU_COUNTER_LOCAL_BATCH);
-> +}
-> +
-> +/*
-> + * Similar with percpu_counter_add_local, use it in heavy writing but
-> + * rare reading case. The large batch size will reduce the global
-> + * updating.
-> + */
-> +static inline void
-> +percpu_counter_sub_local(struct percpu_counter *fbc, s64 amount)
-> +{
-> +	percpu_counter_add_batch(fbc, -amount, PERCPU_COUNTER_LOCAL_BATCH);
-> +}
-> +
->  static inline s64 percpu_counter_sum_positive(struct percpu_counter *fbc)
->  {
->  	s64 ret = __percpu_counter_sum(fbc);
-> @@ -138,6 +162,20 @@ percpu_counter_add(struct percpu_counter *fbc, s64 amount)
->  	preempt_enable();
->  }
->  
-> +/* no smp percpu_counter_add_local is the same with percpu_counter_add */
-> +static inline void
-> +percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
-> +{
-> +	percpu_counter_add(fbc, amount);
-> +}
-> +
-> +/* no smp percpu_counter_sub_local is the same with percpu_counter_sub */
-> +static inline void
-> +percpu_counter_sub_local(struct percpu_counter *fbc, s64 amount)
-> +{
-> +	percpu_counter_sub(fbc, amount);
-> +}
-> +
->  static inline void
->  percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount, s32 batch)
->  {
-
+Best regards,
+Krzysztof
