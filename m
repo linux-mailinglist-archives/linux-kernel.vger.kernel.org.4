@@ -2,132 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678CD5B3606
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF845B360E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiIILGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S229793AbiIILJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIILGN (ORCPT
+        with ESMTP id S229589AbiIILJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:06:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF34D21CA;
-        Fri,  9 Sep 2022 04:06:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1395B824F0;
-        Fri,  9 Sep 2022 11:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFB4C433C1;
-        Fri,  9 Sep 2022 11:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662721568;
-        bh=3NEzg2EVTYL6D0L+bzYSw8gVTESohGyL9ED7X39zx8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HU5k6uR8qPVfMuxjpDGRdI+N9D1yMcepeX2HGegy4PMObnPCDRR8K5GtT7OuQmMAs
-         vXwFDf3X12zECHtFKyXBvTi9vyydPUy0yn5eZNJhWXeZSzKGqpZd5lUfzZBY8q4+kL
-         XzO/DAiVs1Vpku7HoApKQqDZ6NEUe1+9QqfgoffM=
-Date:   Fri, 9 Sep 2022 13:06:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] tty: TX helpers
-Message-ID: <YxseGPHVkSVdDnrh@kroah.com>
-References: <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
- <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
- <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
- <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
- <YxiONiDgGYp8MGQA@kroah.com>
- <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
- <YxiQVTN/jX8AfO4L@kroah.com>
- <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
- <2197faa3-0217-41e0-8ff0-b5396561c623@www.fastmail.com>
- <5feff23c-9458-616c-66ce-13cca5829162@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5feff23c-9458-616c-66ce-13cca5829162@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 07:09:31 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743BB62E1;
+        Fri,  9 Sep 2022 04:09:28 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 1486F2B059B1;
+        Fri,  9 Sep 2022 07:09:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 09 Sep 2022 07:09:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662721765; x=1662725365; bh=wqSZnyFI/c
+        l/mPByp5iGdJ8icj1uq3tpAsMYxesXc90=; b=JNCUOHygKHzw5ymEwgIx150ccZ
+        kk3QcAxPZ+kBSPmdW6jFGXpxAjxmEeG0M6d57nMRbAoHaCqHoE+FBWHfNpOeLwBs
+        /mPuqtbvd/1IPDbHrQuUxW5yCDGLAoB2om5QEevKLcUZVQYafKN1g6jZbmhwHLOu
+        0HRA6C+WddeqcV+7yTAaDTKC7uE2YRZYNsPxH2KSdrzIovQgodn9vw1xR87nCG+W
+        KPYRz8ti9cnn/qzN8glQRQibQH2l1HmUfIA2qVa5UgrX/L1qAkJdpn9gAKjxC3Ks
+        SIdQUbZKUYYQjMI+lOUwNGQgo3vZPc4FYLNL3mkZQP6Adk+Ua83PVyjTJQyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662721765; x=1662725365; bh=wqSZnyFI/cl/mPByp5iGdJ8icj1u
+        q3tpAsMYxesXc90=; b=NcnoBpow2qM+ovsG2uQ1UBwQb5Coksk8+GOfbMClmXg0
+        FljMyHsOsV/d4c2jkdzcmMrS2dB9O4m2MafmQaN7+qU8HuJK7d2K++DLiICuLM2y
+        AjcE4yKVEsPIlL52TJa57qkn2k9qeBsuhvHX5alkWuvvcLRv0wOUjJzb8d836EGo
+        F/KD5NIL8QMwpvF5G6UbyM0UHVuQPX7ZmSljDoIFpGPeaKEsv8wxuVziYA/Mq6AL
+        AUzrsvFBNWDvi84l76doHdoBRON5BMvjWLQKymPY0D6dPOHzwqS91ZBhGP94gs+3
+        yWnpDzgYO8/dcTsXF9pcTpg4Ajh7Ere3cJRjMUriXA==
+X-ME-Sender: <xms:5R4bY4GaqDmt3X-LJ-uV8Zcyr7ZBZR-NmmXwK3Kgf75UWFViN9SQ3g>
+    <xme:5R4bYxXLe5wUEH8ByBurgfVYAMPzogSUu2s6bS8sgxCTXaY0NKVYElWrRz4Vw1bco
+    W8mW2HX1LXeLyrxkTQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5R4bYyKu5j3kSAt9BrZFBOj8MBqapEHrpfOZjwAiyNhZaKRGdpro4g>
+    <xmx:5R4bY6Ec5uNpaboa5u0lOfhinRTwp9OIPIF7MMPIYGNvn2WkJnk6VA>
+    <xmx:5R4bY-WaYgUrlM9_vLjYf5DX1sz3ev5uymLjtLvtFVpsaTXoPZPTDQ>
+    <xmx:5R4bYwKi5QKMiJ_n2x8PmIi78ZHDXfR-pJPa3AoM33UYbxvq50eFoaVECX8>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0E194B60086; Fri,  9 Sep 2022 07:09:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
+In-Reply-To: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
+References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
+Date:   Fri, 09 Sep 2022 13:09:03 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of creating a
+ PPC dependency
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:53:04PM +0200, Jiri Slaby wrote:
-> On 07. 09. 22, 16:56, Arnd Bergmann wrote:
-> > On Wed, Sep 7, 2022, at 3:52 PM, Russell King (Oracle) wrote:
-> > > On Wed, Sep 07, 2022 at 02:36:37PM +0200, Greg Kroah-Hartman wrote:
-> > > 
-> > > Of course, it would have been nicer to see the definition of this
-> > > macro, because then we can understand what the "ch" argument is to
-> > > this macro, and how that relates to the macro argument that is
-> > > shown in the example as a writel().
-> > 
-> > I pulled out the 'ch' variable from the macro to avoid having
-> > the macro define local variables that are then passed to the
-> > inner expressions.
-> 
-> Note that I had "port" and "ch" as a part of the macro parameters in [v2],
-> but it didn't help the situation much.
-> > > Maybe a more complete example would help clear up the confusion?
-> > > Arnd?
-> > 
-> > Here is a patch on top of the series that would implement the
-> > uart_port_tx_helper_limited() and uart_port_tx_helper()
-> > macros that can be used directly from drivers in place of defining
-> > local functions, with the (alphabetically) first two drivers
-> > converted to that.
-> 
-> If there are no objections, I will push the patches this directorin. I like
-> this more than [v2] or [v3] (the helper macros). Actually, I mentioned this
-> wait_event() style in [v1], but I perhaps simplified the concept too much to
-> completely eliminate the need of a wrapper function. And that made it too
-> complicated/too hard to understand.
-> 
-> Except I'd drop the "_helper" part from the name. Originally (in [v1]), I
-> had uart_port_tx() and uart_port_tx_limited() functions. In [v2+v3], I added
-> _helper to avoid confusion as we were generating a helpers using the macros.
-> Yes, technically, uart_port_tx() is still a helper, but I think it's
-> superfluous to have it in the name now.
+On Fri, Sep 9, 2022, at 11:03 AM, Lukas Bulwahn wrote:
+> Commit cc18e0fea790 ("LIBATA: Add HAVE_PATA_PLATFORM to select
+> PATA_PLATFORM driver") introduces config HAVE_PATA_PLATFORM, and expects
+> that all architectures simply select this config when the architecture
+> supports using the PATA_PLATFORM driver.
+>
+> This is properly implemented already for all architectures except for the
+> powerpc architecture. Implement this for powerpc now.
+>
+> Adjust the config of the powerpc architecture to use the config
+> HAVE_PATA_PLATFORM and simplify the config PATA_PLATFORM to not mention
+> any specific architecture anymore.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  arch/powerpc/Kconfig | 1 +
+>  drivers/ata/Kconfig  | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 39d71d7701bd..2575e21b6e6b 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -237,6 +237,7 @@ config PPC
+>  	select HAVE_MOD_ARCH_SPECIFIC
+>  	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
+>  	select HAVE_OPTPROBES
+> +	select HAVE_PATA_PLATFORM
+>  	select HAVE_PERF_EVENTS
+>  	select HAVE_PERF_EVENTS_NMI		if PPC64
+>  	select HAVE_PERF_REGS
 
-No objection from me, thanks for doing this work!
+I don't see a single powerpc machine that creates a
+ name="pata_platform" platform_device. I suspect this was
+only needed bwfore 2007 commit 9cd55be4d223 ("[POWERPC] pasemi:
+Move electra-ide to pata_of_platform"), so the "|| PPC"
+bit should just get removed without adding the HAVE_PATA_PLATFORM
+bit.
 
-greg k-h
+       Arnd
