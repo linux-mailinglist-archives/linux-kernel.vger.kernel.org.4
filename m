@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4355B4015
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FBA5B4019
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiIITqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S231760AbiIITq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiIITp1 (ORCPT
+        with ESMTP id S231318AbiIITps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:45:27 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833B93BC60;
-        Fri,  9 Sep 2022 12:42:22 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289JWWc3022342;
-        Fri, 9 Sep 2022 19:41:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=h02mNx2EPfukJ8KeZkU7qKUi1nlfwjxtfdCaxPTiFIY=;
- b=JHCGxnfH7nT9c97aUxUtFtUi2OIdRukHGYDRkYBjDDmu+O5zJGOtTwiYK44eDB63Er7n
- iankjXn+bJZrJU3GKzhFMxnj6FoTdRvt5+fNNBNWdHVcG+r66iTQ9RPjD9BQkqe/PNSc
- +7HgpKlW19LVlSoAiaYAXEV+bjzKGaO4sjKYRxlZJ+WoCBsgJrY3PGrXf8Trd0C/5Whn
- yDo2QWthNTAehbABDxIETbmCH98L9qCo4MA6vQ+nMGV0KC3ziERiyU8cae0AwpBM/miC
- s7cx0zDQh/3ZF/POFybmkYWbExqmssCrVmEfW/BoyP8sz2QnuNhgtlqb2rc7arZ9YBqn uw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfupqbfmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 19:41:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 289JfCcX020403
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Sep 2022 19:41:12 GMT
-Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 9 Sep 2022 12:41:12 -0700
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-To:     <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>
-Subject: [PATCH v5 2/2] power: reset: qcom-pon: add support for qcom,pmk8350-pon compatible string
-Date:   Fri, 9 Sep 2022 12:40:39 -0700
-Message-ID: <20220909194038.20515-2-quic_amelende@quicinc.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220909194038.20515-1-quic_amelende@quicinc.com>
-References: <20220909194038.20515-1-quic_amelende@quicinc.com>
+        Fri, 9 Sep 2022 15:45:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB4910FC7;
+        Fri,  9 Sep 2022 12:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662752556; x=1694288556;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+/1qN74VTzXrOaU2w2PUWN7E8sji2DXVrWuidjxRfvQ=;
+  b=DW8MG5l130abbkagfcYolgjzpBKYvVe/YJ77X1l9Ul/P9jJI1VR+rMfO
+   NLj/GipBqShA49sUL8YhrargDgmKKey4O77SH2W49bQK433qwvZBal1Us
+   McDetZp0Toxq+FSeLnO3LmYg9kHc/AD/PgFs86Hgml1siPUKbE6hsh64V
+   j04xb5GAcXyhauG/GKjbvQ2o0u/Pm+3UX4EY6jgNma6nL7hxDV+p7dKsF
+   gD0DkzQk5KSs873wCJpA1Bu5gFxjb/i6sGA6ONk62NSXqrfn9ckm+aKME
+   e5B+XJXS0n4/4cAuQbrGWPqMnUFIOu5Bu682u2mAdiC7iOU7LWaWRNNXn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298357746"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="298357746"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:41:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="566476659"
+Received: from omeier-mobl1.ger.corp.intel.com (HELO [10.209.54.138]) ([10.209.54.138])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:41:04 -0700
+Message-ID: <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
+Date:   Fri, 9 Sep 2022 12:41:04 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jOIN7hXB7hEEz6A3UTXq2qwX9lWSBErY
-X-Proofpoint-ORIG-GUID: jOIN7hXB7hEEz6A3UTXq2qwX9lWSBErY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_09,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209090069
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,25 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the new "qcom,pmk8350-pon" comptaible string.
+On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
+> +	u8 reserved[7] = {0};
+...
+> +	if (!req.reportdata || !req.tdreport || req.subtype ||
+> +		req.rpd_len != TDX_REPORTDATA_LEN ||
+> +		req.tdr_len != TDX_REPORT_LEN ||
+> +		memcmp(req.reserved, reserved, 7))
+> +		return -EINVAL;
 
-Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
----
- drivers/power/reset/qcom-pon.c | 1 +
- 1 file changed, 1 insertion(+)
+Huh, so to look for 0's, you:
 
-diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
-index 4a688741a88a..16bc01738be9 100644
---- a/drivers/power/reset/qcom-pon.c
-+++ b/drivers/power/reset/qcom-pon.c
-@@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
- 	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
- 	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
- 	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
-+	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
--- 
-2.35.1
+1. Declare an on-stack structure with a hard coded, magic numbered field
+   that has to be zeroed.
+2. memcmp() that structure
+3. Feed memcmp() with another hard coded magic number
 
+I've gotta ask: did you have any reservations writing this code?  Were
+there any alarm bells going off saying that something might be wrong?
+
+Using memcmp() itself is probably forgivable.  But, the two magic
+numbers are pretty mortal sins in my book.  What's going to happen the
+first moment someone wants to repurpose a reserved byte?  They're going
+to do:
+
+-	__u8 reserved[7];
++	__u8 my_new_byte;
++	__u8 reserved[6];
+
+What's going to happen to the code you wrote?  Will it continue to work?
+ Or will the memcmp() silently start doing crazy stuff as it overruns
+the structure into garbage land?
+
+What's wrong with:
+
+	memchr_inv(&req.reserved, sizeof(req.reserved), 0)
