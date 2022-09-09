@@ -2,170 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00255B42A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D6B5B42AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiIIWvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 18:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S231137AbiIIWxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 18:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbiIIWu7 (ORCPT
+        with ESMTP id S231220AbiIIWxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:50:59 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE546E9140;
-        Fri,  9 Sep 2022 15:50:54 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id a70so4614772edf.10;
-        Fri, 09 Sep 2022 15:50:54 -0700 (PDT)
+        Fri, 9 Sep 2022 18:53:37 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080EEB6D35;
+        Fri,  9 Sep 2022 15:53:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id m3so2786639pjo.1;
+        Fri, 09 Sep 2022 15:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=ddaea6KsAhhjAZKYACOlzIhLsiROzNYXdgJxjRQBMDQ=;
-        b=azXG4FPFPuCnzdrFw85LflyOYx47ORkl+U+Oe74JvhngCWIwqfP4TUiW/fAhgzYgXs
-         vxTEZsWDIyyCvURSsjbUBrRHBWG+CQQzWcCd1WNBBYtNia7na7l0Wd4Om8mgkNMysvuC
-         cJfSJtenXxKVw1OM8R9w3jhQ5Iw4HvB4HNST1Wl52DxVcUv+8HN7UT8NdhIWFwV5JMei
-         VEfisF/RPNh2nwjX7Roj4nbXJ5R7uEszNXhdYjgebeQK4jxExRL2GT/OP9vL6Eywu026
-         JMBwOknlTNdY78yAhIxVGeruevU/x+OBEE1pxc3cBFsI1DqxuBV8whmjIgeNSewo+j8p
-         YQTQ==
+        bh=e6Nts+3idlV43hoPx0IN1c0Smn69tiUjPzKb3UiWLNc=;
+        b=XrgVeTd3yl87Ht/zfj7AfnfRFbalfc04gZ8a96PBL9FT+krozXZ8Pi73XftqZtGPvf
+         ChlUhbCL9/ChDS1/Oy2f1LDONGsKW72baAE9uE5tyw9SXr/bkoXgG0zjqvq8804VgsU4
+         ugI6VeKO+yJlTOujmEyRU+HN/DxjpPuXXR/ZtIlKpIh1bFlQygaxC5EBuXL22rngQ47T
+         scVGR12fYp7pZTKDYf1jgc/iwvh0tSxNUdotHQZkf/mxTBx8v3VdbDO/L+XO5M7W+DOz
+         0O09QbQx9gWcA1GMdGnR1t4J8Tm7bY966/s4RZzx4zyzIuKAJ7V301UXF8GPjygS3A/+
+         fKSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ddaea6KsAhhjAZKYACOlzIhLsiROzNYXdgJxjRQBMDQ=;
-        b=AhoF+E72Ve/tPLIoFk8TitRFK213nAY4Zhx4BRwoYUUbmGFMpcq7/Av8J60OAZq46y
-         +RD4YLXbB+YvxW9XOj3jMHP18mRoVLDdItbeRfVWr5gmwaJBB52/KuxR+gaN5ftzWita
-         AVbv9feFTZSlaBCh+OIbHjDbpA64J4XMv1I8YIRHNRQvd5G1CJubzf4eaaTusBQKS3v3
-         EhxXRLjneNEgkKUsMQxIDodjpPwEw3W4DJywjb0rsYbirmfkacvgQ9vCkmDbd6ZMIQeO
-         BxnURgBf5CIKGTyt1nIa7wu7aXAvvnuZM/9Xulf7mhTW7nsfTAfaai2vaEuJ3Qa5XjfD
-         +5Ig==
-X-Gm-Message-State: ACgBeo0HGxKTzvLZyuwPR1n8AtJzV40ERDwgzhFoOSj/QUEFx0+9mmA3
-        7uGTcma7bDAeM+NWRdGOk0rHfSK7dLz6a4JEJ+0=
-X-Google-Smtp-Source: AA6agR5q39d8oo+twChOzp8587yPanCFhhRs7uGCGvwJ2AhV4bPVs/7mczuWyPUIFGHU1TeV3eBCYeDCxMT5VNl9W1k=
-X-Received: by 2002:a05:6402:5192:b0:44f:2bdf:c075 with SMTP id
- q18-20020a056402519200b0044f2bdfc075mr10580286edd.224.1662763853114; Fri, 09
- Sep 2022 15:50:53 -0700 (PDT)
+        bh=e6Nts+3idlV43hoPx0IN1c0Smn69tiUjPzKb3UiWLNc=;
+        b=tKPsoBkhdx9JyiKmSi3BhmVJY7HJgVW6B1lsYbXkpmaLLEupq5oZqtgi2DJtqDCr+D
+         gVkNVs6Pwz8BEyfNtLbotYC6wnt7H/hPMBYqt0CbDyB4XXTgTOuMZTk6ZRS+W40QiuGq
+         JYwk4lHvzivxIakCnMguH0SGIUXH6T258zMR8z5QLjXJb0wIinRnQSrXUcd905xOFiFR
+         PupLAALmTSDhMnSFfoiKRHuIo8Yf1ZmYJ2eCgMZNA0wHaPwGffoaR3x9JKY+XAxIr/vM
+         uCfSGbXJmIGylqoDhEiJNY5aT78tQdVI+mqZYs6lSM+RVBeWGnjVlduL/Rjasux2qFvY
+         2U6Q==
+X-Gm-Message-State: ACgBeo1rQmX2UCjENyafUgL/o1zTNjsxo0GqxLrobgbvaAFGZ35BnMNf
+        l2qszheWNm1nNWRrFzFRbONiY202YJxuBojUdzk=
+X-Google-Smtp-Source: AA6agR50plFfC0huHSv5cDDj1B+SRejOk0fjbqSY+vvBXbnwq14zbRVezXn1X6MRmSmC/1CMVbFG2CBeio4+Eydyl6M=
+X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id
+ p2-20020a1709026b8200b0016dd2683842mr16063592plk.16.1662764016340; Fri, 09
+ Sep 2022 15:53:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-4-void@manifault.com>
- <CAEf4BzZkzZacR7ziFf2orNk2znNqhJhBTDGhSOtGNvB2z4moJQ@mail.gmail.com> <Yw4TzMPXL41YuZZ6@maniforge.dhcp.thefacebook.com>
-In-Reply-To: <Yw4TzMPXL41YuZZ6@maniforge.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Sep 2022 15:50:42 -0700
-Message-ID: <CAEf4BzZFhPVicfkjyN4P6mwqmuPZzyfWiGr9wRXTGZYgTBGZbg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] bpf: Add libbpf logic for user-space ring buffer
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220829210546.755377-1-james.hilliard1@gmail.com>
+ <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
+ <CADvTj4pF=D7PEBF-LK_sKckRUCq-vd9ZjohpiEgLvORg8UaZyw@mail.gmail.com> <CAEf4BzbjMWC50J-mn_aNd2BeJWU=nLJmsJCAVvTqLSYsh4RejA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbjMWC50J-mn_aNd2BeJWU=nLJmsJCAVvTqLSYsh4RejA@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Fri, 9 Sep 2022 16:53:24 -0600
+Message-ID: <CADvTj4qLhgQ1K30dKoviw10G6f5XTv7T6SChUPvYnNWZGxw4OA@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        David Faust <david.faust@oracle.com>, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 6:42 AM David Vernet <void@manifault.com> wrote:
+On Fri, Sep 9, 2022 at 12:56 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On Wed, Aug 24, 2022 at 02:58:31PM -0700, Andrii Nakryiko wrote:
->
-> [...]
->
-> > > +LIBBPF_API struct user_ring_buffer *
-> > > +user_ring_buffer__new(int map_fd, const struct user_ring_buffer_opts *opts);
-> > > +LIBBPF_API void *user_ring_buffer__reserve(struct user_ring_buffer *rb,
-> > > +                                          __u32 size);
-> > > +
-> > > +LIBBPF_API void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb,
-> > > +                                                   __u32 size,
-> > > +                                                   int timeout_ms);
-> > > +LIBBPF_API void user_ring_buffer__submit(struct user_ring_buffer *rb,
-> > > +                                        void *sample);
-> > > +LIBBPF_API void user_ring_buffer__discard(struct user_ring_buffer *rb,
-> > > +                                         void *sample);
-> > > +LIBBPF_API void user_ring_buffer__free(struct user_ring_buffer *rb);
-> > > +
-
-[...]
-
-> > > +void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb, __u32 size, int timeout_ms)
-> > > +{
-> > > +       int ms_elapsed = 0, err;
-> > > +       struct timespec start;
-> > > +
-> > > +       if (timeout_ms < 0 && timeout_ms != -1)
-> > > +               return errno = EINVAL, NULL;
-> > > +
-> > > +       if (timeout_ms != -1) {
-> > > +               err = clock_gettime(CLOCK_MONOTONIC, &start);
-> > > +               if (err)
-> > > +                       return NULL;
-> > > +       }
-> > > +
-> > > +       do {
-> > > +               int cnt, ms_remaining = timeout_ms - ms_elapsed;
+> On Fri, Sep 9, 2022 at 11:23 AM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
 > >
-> > let's max(0, timeout_ms - ms_elapsed) to avoid negative ms_remaining
-> > in some edge timing cases
->
-> We actually want to have a negative ms_remaining if timeout_ms is -1. -1
-> in epoll_wait() specifies an infinite timeout. If we were to round up to
-> 0, it wouldn't block at all.
-
-then I think it's better to special case timeout_ms == -1. My worry
-here as I mentioned is edge case timing where ms_elapsed is bigger
-than our remaining timeout_ms and we go into <0 and stay blocked for
-long time.
-
-So I think it's best to pass `timeout_ms < 0 ? -1 : ms_remaining` and
-still do max. But I haven't checked v5 yet, so if you already
-addressed this, it's fine.
-
-
->
-> > > +               void *sample;
-> > > +               struct timespec curr;
-> > > +
-> > > +               sample = user_ring_buffer__reserve(rb, size);
-> > > +               if (sample)
-> > > +                       return sample;
-> > > +               else if (errno != ENODATA)
-> > > +                       return NULL;
-> > > +
-> > > +               /* The kernel guarantees at least one event notification
-> > > +                * delivery whenever at least one sample is drained from the
-> > > +                * ringbuffer in an invocation to bpf_ringbuf_drain(). Other
-> > > +                * additional events may be delivered at any time, but only one
-> > > +                * event is guaranteed per bpf_ringbuf_drain() invocation,
-> > > +                * provided that a sample is drained, and the BPF program did
-> > > +                * not pass BPF_RB_NO_WAKEUP to bpf_ringbuf_drain().
-> > > +                */
-> > > +               cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, ms_remaining);
-> > > +               if (cnt < 0)
-> > > +                       return NULL;
-> > > +
-> > > +               if (timeout_ms == -1)
-> > > +                       continue;
-> > > +
-> > > +               err = clock_gettime(CLOCK_MONOTONIC, &curr);
-> > > +               if (err)
-> > > +                       return NULL;
-> > > +
-> > > +               ms_elapsed = ms_elapsed_timespec(&start, &curr);
-> > > +       } while (ms_elapsed <= timeout_ms);
+> > On Fri, Sep 9, 2022 at 12:05 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 2:05 PM James Hilliard
+> > > <james.hilliard1@gmail.com> wrote:
+> > > >
+> > > > The bpf_tail_call_static function is currently not defined unless
+> > > > using clang >= 8.
+> > > >
+> > > > To support bpf_tail_call_static on GCC we can check if __clang__ is
+> > > > not defined to enable bpf_tail_call_static.
+> > > >
+> > > > We need to use GCC assembly syntax when the compiler does not define
+> > > > __clang__ as LLVM inline assembly is not fully compatible with GCC.
+> > > >
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > ---
+> > > > Changes v1 -> v2:
+> > > >   - drop __BPF__ check as GCC now defines __bpf__
+> > > > ---
+> > > >  tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
+> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > > > index 7349b16b8e2f..867b734839dd 100644
+> > > > --- a/tools/lib/bpf/bpf_helpers.h
+> > > > +++ b/tools/lib/bpf/bpf_helpers.h
+> > > > @@ -131,7 +131,7 @@
+> > > >  /*
+> > > >   * Helper function to perform a tail call with a constant/immediate map slot.
+> > > >   */
+> > > > -#if __clang_major__ >= 8 && defined(__bpf__)
+> > > > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
+> > > >  static __always_inline void
+> > > >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> > > >  {
+> > > > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> > > >                 __bpf_unreachable();
+> > > >
+> > > >         /*
+> > > > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+> > > > -        * pointer) and r3 (constant map index) from _different paths_ ending
+> > > > +        * Provide a hard guarantee that the compiler won't optimize setting r2
+> > > > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
+> > > >          * up at the _same_ call insn as otherwise we won't be able to use the
+> > > >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+> > > >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+> > > > @@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> > > >          *
+> > > >          * Note on clobber list: we need to stay in-line with BPF calling
+> > > >          * convention, so even if we don't end up using r0, r4, r5, we need
+> > > > -        * to mark them as clobber so that LLVM doesn't end up using them
+> > > > -        * before / after the call.
+> > > > +        * to mark them as clobber so that the compiler doesn't end up using
+> > > > +        * them before / after the call.
+> > > >          */
+> > > > -       asm volatile("r1 = %[ctx]\n\t"
+> > > > +       asm volatile(
+> > > > +#ifdef __clang__
+> > > > +                    "r1 = %[ctx]\n\t"
+> > > >                      "r2 = %[map]\n\t"
+> > > >                      "r3 = %[slot]\n\t"
+> > > > +#else
+> > > > +                    "mov %%r1,%[ctx]\n\t"
+> > > > +                    "mov %%r2,%[map]\n\t"
+> > > > +                    "mov %%r3,%[slot]\n\t"
+> > > > +#endif
+> > >
+> > > Hey James,
+> > >
+> > > I don't think it's a good idea to have a completely different BPF asm
+> > > syntax in GCC-BPF vs what Clang is supporting. Note that Clang syntax
+> > > is also what BPF users see in BPF verifier log and in llvm-objdump
+> > > output, so that's what BPF users are familiar with.
 > >
-> > let's simplify all the time keeping to use nanosecond timestamps and
-> > only convert to ms when calling epoll_wait()? Then you can just have a
-> > tiny helper to convert timespec to nanosecond ts ((u64)ts.tv_sec *
-> > 1000000000 + ts.tv_nsec) and compare u64s directly. WDYT?
+> > Is the difference a BPF specific assembly format deviation or a generic
+> > deviation in assembler template syntax between GCC/llvm?
+> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
+> >
 >
-> Sounds like an improvement to me!
+> Sorry, I don't understand the question. I'm talking about the above
+> snippet with "r1 = %[ctx]" vs "mov %%r1,%[ctx]". Seems like the rest
+> stayed the same. So this would be a "BPF specific assembly format"
+> case, right? I don't know what else could be different with GCC-BPF
+> assembly.
+
+I mean it's unclear if it's a generic assembly template format difference
+that applies to all targets or one that's BPF target specific.
+
+Anyways for now I sent a new patch so that bpf_tail_call_static is defined
+on non-clang compilers so that it will work when GCC-BPF supports the
+existing asm format.
+https://lore.kernel.org/bpf/20220909224544.3702931-1-james.hilliard1@gmail.com/
+
 >
-> Thanks,
-> David
+> > >
+> > > This will cause constant and unavoidable maintenance burden both for
+> > > libraries like libbpf and end users and their BPF apps as well.
+> > >
+> > > Given you are trying to make GCC-BPF part of the BPF ecosystem, please
+> > > think about how to help the ecosystem, move it forward and unify it,
+> > > not how to branch out and have Clang vs GCC differences everywhere.
+> > > There is a lot of embedded BPF asm in production applications, having
+> > > to write something as trivial as `r1 = X` in GCC or Clang-specific
+> > > ways is a huge burden.
+> > >
+> > > As such, we've reverted your patch ([0]). Please add de facto BPF asm
+> > > syntax support to GCC-BPF and this change won't be necessary.
+> > >
+> > >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=665f5d3577ef43e929d59cf39683037887c351bf
+> > >
+> > > >                      "call 12"
+> > > >                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+> > > >                      : "r0", "r1", "r2", "r3", "r4", "r5");
+> > > > --
+> > > > 2.34.1
+> > > >
