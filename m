@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DF85B37A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2875B37AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiIIMVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S231744AbiIIMVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiIIMUm (ORCPT
+        with ESMTP id S230473AbiIIMUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:20:42 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F763AB02
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:18:36 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id m1so2214520edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 05:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Tcj9zdEuhhwwc+19W7KyuMTeuqCemH8yB/Q5e9nu8aA=;
-        b=QJxqTxB//D87aPuiZfpZ5VujODmr6Zn7XTUdwOc9fB7P++LBDU6mZ5MyPB3filboiV
-         3QdtP/VQuoOT6v1Amv1a4hZ1jKAfJlN/9HqbXqmHT41NJpE30/3fubB7OH+lNLRM4z2B
-         nQzKDW23vFo83M4VlpOExEGMPpLjeefE0pGi0G77AGb5GnW2WkMbFh6+TXebQ9ugKTvi
-         NWhYU1FnmKwrFWOPZW7GNwol2T0ILIeBQsEDYMGFxMxZ6wPT0soA/hjuwzBNgCOztft4
-         TqZ1qaaDz72BmobxjK+vp0+LaU/FSRf5OZVLYlCpSMiXZ0fLzWs14bctFAP8EU9TzfW+
-         n0sA==
+        Fri, 9 Sep 2022 08:20:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59297330A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662725921;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C1UePzLOz1wZO53Q7qIAQAN+1mLe/XFxJBDYGz76QS8=;
+        b=F6ZTWvHAekDdVLBwbZre/TVWwSHle09Cya5bgGFG+7fcSLe4QMUBU2nKJxlL7mj2mUikir
+        OQnK0SAvN7nBP3vtTIaXv0SVIq6BsWSI2BBuW+1e4ktA5T+L2u1ooBtbWJ5vLhraciTTqA
+        rAa4Z+J2PBCrJ4R2oeg8Q8qv/UMjKNM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-379-7s3GVRWgPBWcgy3KcjPX1g-1; Fri, 09 Sep 2022 08:18:40 -0400
+X-MC-Unique: 7s3GVRWgPBWcgy3KcjPX1g-1
+Received: by mail-wm1-f70.google.com with SMTP id f7-20020a1c6a07000000b003a60ede816cso460809wmc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 05:18:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Tcj9zdEuhhwwc+19W7KyuMTeuqCemH8yB/Q5e9nu8aA=;
-        b=lo93TmJejOWRF/0q/Ha8H2pCZUajdpb2ulb4DxI1KIk0ueVke4rpIVFkcnxMUVpRYo
-         oT26HIdAapaWwSxSGX4I39pOtgKbjrp29FJgpNXtX5Qaa73HQrqi2yN4BWajEqj5QvP2
-         K1lSJJSQvlf/NTCb/SrSHKbxEOmiN/fhXjrjSLM0m+a/JafOR1AuL8bU2Me3pDwO3ft1
-         t7o1skz+3ZK+i8MfRG2Tsf+mF2P1iQeWUDpBAev9JSDnbr2chzpgkMNyX20LAqc2tvij
-         plNZJkAQEuM96b5t3SbBsKK9dPjzoaPoN1CFkXVoy77SQnGx5CauXsLhilLPLW14Ugxr
-         ooJA==
-X-Gm-Message-State: ACgBeo04k3Aa0Z0Lbc8U7WbcBH9l54VNmYpYj/5zXI2Wl/01fBEJKUk9
-        PACZhyde2OazQKX7vP6TAIrdALU+Zms=
-X-Google-Smtp-Source: AA6agR7tG4OqK0nNY0mWWPRkvmCx6vmHSl4Auf4Q6D2X/J23GoevX7VhHbkYiUTqyfiLEpEzMQzThA==
-X-Received: by 2002:a05:6402:1a4d:b0:44e:221d:d1dd with SMTP id bf13-20020a0564021a4d00b0044e221dd1ddmr11469097edb.267.1662725914920;
-        Fri, 09 Sep 2022 05:18:34 -0700 (PDT)
-Received: from localhost.localdomain (wlan-244090.nbw.tue.nl. [131.155.244.90])
-        by smtp.gmail.com with ESMTPSA id p17-20020a170906785100b0073bdb2f6f28sm167143ejm.217.2022.09.09.05.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 05:18:34 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     forest@alittletooquiet.net, gregkh@linuxfoundation.org
-Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v3 2/2] staging: vt6655: use memset to make code clearer
-Date:   Fri,  9 Sep 2022 14:17:56 +0200
-Message-Id: <e545c514608bbef296baa37417d2c5af4403ee4c.1662724786.git.namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1662724786.git.namcaov@gmail.com>
-References: <cover.1662724786.git.namcaov@gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=C1UePzLOz1wZO53Q7qIAQAN+1mLe/XFxJBDYGz76QS8=;
+        b=kAbBmD66YIurY8R5R3Soo+6tODFSFd+GvVB2g6m3QT5e9vdFy4BnQxurPt/8UlBhQ/
+         fKxRg/9Pu69vcKb3fjKwZ8HUfTUKewg2RUuk80hZqU3HTbypl0UIEANURUbDwktPwNFW
+         3hIIeX6Tki2EqytDtPg54fV8N8kceGqfguyNsqqYCzkYrFbbqb+y+xWGyx0dfUz9NDgY
+         AvYwIuRaSUZ85lBJrc4qyD9ML9I7RZmCsHfdAa8yhKBUQJJOdRSFCqfgdthZ7t1z+/8D
+         ty6vQbRxYnSbds1Z0w3r6kvHjbn2F7kcL5o0qy17YeFa3ruF5ce66t7hI7XUKPvB0WYw
+         xVXg==
+X-Gm-Message-State: ACgBeo1C+K3Q1rHbXC13LGaQeiJKFQ+xXVHHvCcNrGn6nB9i3a9vKD/P
+        JhjxoYpVmOtoMkqu5E/ks5TeEHNK1tG42lq/afrUrr8L4Rd0B1sy+TBKRULgW0iztgsr9GabwNg
+        vT7NACnJQNkxQGFw8yg5Zf5I/
+X-Received: by 2002:adf:aad8:0:b0:228:da00:72ed with SMTP id i24-20020adfaad8000000b00228da0072edmr7790408wrc.483.1662725919599;
+        Fri, 09 Sep 2022 05:18:39 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5tMHThzhDM9UmbRu652GEnmckUCr5U/s1IUwwqCuZv5g0XbC/1Nbh7KIdE4A7S+yBwuQn5xQ==
+X-Received: by 2002:adf:aad8:0:b0:228:da00:72ed with SMTP id i24-20020adfaad8000000b00228da0072edmr7790394wrc.483.1662725919361;
+        Fri, 09 Sep 2022 05:18:39 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
+        by smtp.gmail.com with ESMTPSA id bg35-20020a05600c3ca300b003a5c1e916c8sm1711870wmb.1.2022.09.09.05.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 05:18:38 -0700 (PDT)
+Message-ID: <8b36d6dd-5973-e9c3-0a5d-2521753d04bd@redhat.com>
+Date:   Fri, 9 Sep 2022 14:18:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH -next 5/5] docs: notifier-error-inject: Correct test's
+ name
+Content-Language: en-US
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
+        shuah@kernel.org
+References: <20220909075200.198363-1-zhaogongyi@huawei.com>
+ <20220909075200.198363-6-zhaogongyi@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220909075200.198363-6-zhaogongyi@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A line of code sets the entire struct vnt_rdes0 to zero by treating it as
-unsigned int. This works because sizeof(unsigned int) is equal to
-sizeof(struct vnt_rdes0) (4 bytes). However it is not obvious what this
-code is doing. Re-write this using memset to make the code clearer.
+On 09.09.22 09:52, Zhao Gongyi wrote:
+> Correct test's name for mem-on-off-test.sh/cpu-on-off-test.sh.
+> 
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> ---
+>   Documentation/fault-injection/notifier-error-inject.rst | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/fault-injection/notifier-error-inject.rst b/Documentation/fault-injection/notifier-error-inject.rst
+> index 0e2790122166..170c583eb5bc 100644
+> --- a/Documentation/fault-injection/notifier-error-inject.rst
+> +++ b/Documentation/fault-injection/notifier-error-inject.rst
+> @@ -95,8 +95,8 @@ For more usage examples
+>   There are tools/testing/selftests using the notifier error injection features
+>   for CPU and memory notifiers.
+> 
+> - * tools/testing/selftests/cpu-hotplug/on-off-test.sh
+> - * tools/testing/selftests/memory-hotplug/on-off-test.sh
+> + * tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> + * tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> 
+>   These scripts first do simple online and offline tests and then do fault
+>   injection tests if notifier error injection module is available.
+> --
+> 2.17.1
+> 
+> 
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/staging/vt6655/device_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 3397c78b975a..34a65a92d602 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -867,7 +867,7 @@ static bool device_alloc_rx_buf(struct vnt_private *priv,
- 		return false;
- 	}
- 
--	*((unsigned int *)&rd->rd0) = 0; /* FIX cast */
-+	memset(&rd->rd0, 0, sizeof(rd->rd0));
- 
- 	rd->rd0.res_count = cpu_to_le16(priv->rx_buf_sz);
- 	rd->rd0.owner = OWNED_BY_NIC;
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
