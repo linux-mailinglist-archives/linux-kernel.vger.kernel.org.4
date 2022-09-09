@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B6C5B319F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCED5B31AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiIIIZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S231181AbiIII01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiIIIZo (ORCPT
+        with ESMTP id S230236AbiIII0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:25:44 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D47AC06
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:25:42 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id m15so1434192lfl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FdkeN45+bpzn92GuTJsvAHffS0/CIgbdMCx/tHdOYZc=;
-        b=jaQcvdJRg763YYgdwLo8KSl1ulYiKmO6nCev7fjRJSfsDBd/4r5N5791QcL3at27EK
-         a62cQDjK5HiUYjDxqcoVF+iPFiLO0uoZ4Iur3BUyYnVU1YXWTfoU4aDAwkr5cHCebiuc
-         DKKqgubknUvBciYoh0PY4+J+jffAZ/DiOFHFMfHWilrj3/5IZJJmA0GLRMH7ogtOh3XI
-         2ZR3BYVtMTzj2sS9sBXOY6tnAgsyAnOnfgzBn9V4myili1RXukmd61bRzzL1xKzrWqI4
-         rtGJUBOTYiAu4tCDJgycXBan998pVXshYtbeQURg07f6TLC9NoIdZwakMMeYn6+2nXDv
-         eQaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FdkeN45+bpzn92GuTJsvAHffS0/CIgbdMCx/tHdOYZc=;
-        b=lDDChC1l8ilebZCv7fyTHf1Ga0jZncdo2AL+XpHKsVQw3RGBi9CDbtmQH/evYKaWaJ
-         8hh3sQseOLJfmGCJwwrgtNiHNm8G/4Taf2Uirlu+B3pKItW4No5Uel4Q88txt1eqPp51
-         1qL4mt+4Za5JTxiGhYtMN1CJbHTLEjrjwxyhVj5frmWsUVA37X0q7KZVEMb5FwlGAkoD
-         +E9z7nsxmmWG3QDuy562ZJWRvDZOrJ2GdlEQo4ojDeO++mU7w/LBBk6oUIXMiBWufQOH
-         vfV3vrRsN9y2hEcwR9A6/YhoFeh8D4l4xfhGroS1xkM1zwUbfGKbGKCXXa2W+eALfbw/
-         oNyQ==
-X-Gm-Message-State: ACgBeo1Z/aM0bPAHyKpgDzr198tOSu/hEHjz8l8wdFIQmwu1fjZL1fw6
-        BtLnWUrBcks8Y8Cx7HsGecc0Og==
-X-Google-Smtp-Source: AA6agR6sXGaQC/MGJzYgm5A/kkMiHKD4dqdS7hGBSaJrUpLAeb1q6i/CUX1vmLcbcRKk4rCOrB8OiA==
-X-Received: by 2002:a05:6512:159a:b0:492:d0c8:aec1 with SMTP id bp26-20020a056512159a00b00492d0c8aec1mr4300245lfb.275.1662711940468;
-        Fri, 09 Sep 2022 01:25:40 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f11-20020a056512360b00b004946c99e78asm170519lfs.277.2022.09.09.01.25.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 01:25:40 -0700 (PDT)
-Message-ID: <fdfbe7a3-73c5-01b1-1d71-3ba3c1f6f143@linaro.org>
-Date:   Fri, 9 Sep 2022 10:25:39 +0200
+        Fri, 9 Sep 2022 04:26:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951861282E5;
+        Fri,  9 Sep 2022 01:26:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MP8GP0B6qz4xPB;
+        Fri,  9 Sep 2022 18:26:20 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662711981;
+        bh=bwrIORF/AtRjaLf9xPfPXgnz5crku/Tbu2ksFz07DUk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P8TIbeV9zhCAichVK//+wgALZhYfhoCJAUMIVqjTlUH/ECgK4WpftP5X6uQCn3HnG
+         p9y0z/HzqPaAEX0IJwlhgp7TgrUQRWzRjKewuhsKYaJXZZfOHtSYw4eubcSbslL0Vr
+         agC8T+/bdj9ToZ9p5D0LsjhBk7MwdAcAA5I2ddGVLOnWJ0dsC/4VKGP6JkStbBsxhi
+         3sAzEFB31UcSVbFLIUX90DR+vv3k0xXBAgAZN+kbxQufTmRBl2rpiXmUPGOvJ69LA+
+         yfR2FD6DnhGZXWCIvrmOTiQp8lUCFzzPTwqqkXagatjggJ2IeippYlsLa9j1XC+y4y
+         7vXq24gnok33A==
+Date:   Fri, 9 Sep 2022 18:26:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+Message-ID: <20220909182619.4e66cb5c@canb.auug.org.au>
+In-Reply-To: <CAK7LNATR0-Y_yHTcD62J4N36T-_4G=-N1me8EWYNTNYbwXerDw@mail.gmail.com>
+References: <20220909090024.47458048@canb.auug.org.au>
+        <CAK7LNARPX2Ov-nLAT6mPWbgqQMDCuoW84VN_C2sS1CJkR_n8YQ@mail.gmail.com>
+        <20220909152453.5400cf7e@canb.auug.org.au>
+        <20220909161354.2c94a495@canb.auug.org.au>
+        <CAK7LNATR0-Y_yHTcD62J4N36T-_4G=-N1me8EWYNTNYbwXerDw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 1/3] arm64: dts: qcom: split beryllium dts into common
- dtsi and tianma dts
-Content-Language: en-US
-To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20220909035447.36674-1-joelselvaraj.oss@gmail.com>
- <20220909035447.36674-2-joelselvaraj.oss@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220909035447.36674-2-joelselvaraj.oss@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bSUUPCxNGxaSRkN.HfOHQDM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 05:54, Joel Selvaraj wrote:
-> There are two panel variants of Xiaomi Poco F1. Tianma and EBBG panel.
-> The previous beryllium dts supported the Tianma variant. In order to
-> add support for EBBG variant, the common nodes from beryllium dts are
-> moved to a new common dtsi and to make the variants distinguishable,
-> sdm845-xiaomi-beryllium.dts is now named as
-> sdm845-xiaomi-beryllium-tianma.dts. The model property is updated to
-> distinguish between the variants. The compatibility property is
-> moved to the tianma variant, but it is not updated to avoid any
-> further conflict with other projects/users that might depend on it.
-> 
-> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+--Sig_/bSUUPCxNGxaSRkN.HfOHQDM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, 9 Sep 2022 15:48:55 +0900 Masahiro Yamada <masahiroy@kernel.org> wr=
+ote:
+>
+> > $ make ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- O=3D../obj -j15 =
+-O
+> > make[1]: Entering directory '/home/sfr/kernels/obj'
+> >   GEN     Makefile
+> > make[1]: Leaving directory '/home/sfr/kernels/obj'
+> > make[1]: Entering directory '/home/sfr/kernels/obj'
+> >   UPD     include/generated/compile.h
+> > make[1]: Leaving directory '/home/sfr/kernels/obj' =20
+>=20
+>=20
+> Weird 'Entering/Leaving directory' logs.
 
+That is because I pass -O to make.
 
-Best regards,
-Krzysztof
+Without -O, I get:
+
+$ make ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- O=3D../obj -j15
+make[1]: Entering directory '/home/sfr/kernels/obj'
+  GEN     Makefile
+  DESCEND objtool
+make[2]: *** No rule to make target 'objtool/objtool'.  Stop.
+make[1]: *** [/home/sfr/kernels/test/Makefile:1351: tools/objtool/objtool] =
+Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory '/home/sfr/kernels/obj'
+make: *** [Makefile:222: __sub-make] Error 2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bSUUPCxNGxaSRkN.HfOHQDM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMa+KsACgkQAVBC80lX
+0GyyBQf/eLkBIl5Z5SRSqcM3RTbXjyqxuFjR2bXSOSTa15XPO3zmOZg8e4/VsPin
+v8SpEqEQ4T/t6FKhtGpSwFjOu9VR84ERXBvGaVicYcDslXPnnP29yVldgQsNtRag
+hvTL+yp1XFaKTVi3aNWA6nhV5fZEK5ZuQ3xcNa1hbNqH7TyYyMciFA68Pcb6qdkN
+GQih13yTr8H6EEFidLWKcYGVhNwIgOvaLZzaVrZeU26Ixex6ql5fVqfylYNMngnD
+PgoqLPCQy+KaBioSgWEC2e+VpehR2yE50a3GjkBmOHa8yRwZV6FYmAzXed3Chur0
+vgDlHSbdTEHHGpBDyfI7zCHf6A7T8g==
+=Qc9m
+-----END PGP SIGNATURE-----
+
+--Sig_/bSUUPCxNGxaSRkN.HfOHQDM--
