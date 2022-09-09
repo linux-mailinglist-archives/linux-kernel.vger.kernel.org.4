@@ -2,185 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0A75B3F3A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE2B5B3F3F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiIITHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
+        id S230033AbiIITLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIITG4 (ORCPT
+        with ESMTP id S229728AbiIITLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:06:56 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD51365DA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:06:54 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id k2so2684525vsk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ahr14h6KjlyOLxYXPAD4hS0TZjmkL0paFuUiYdgkD0s=;
-        b=iX5Xydo/Hc2RaWqEtFNZ+b8pT3uTmTNTwMis8W63WAkrjmv1dj3TO26rpoSDowHb8X
-         Ea6o5nkPc8osXBO+eDUg4r5vJw14F6/BzM1PuR0ji5eNWTZ01z+b1onwv2skwetzPieg
-         6KKZ8Ku0AhQ4Ma/R52Z0QfbcVAfXRkR+ALPNFw9N/2ZfZTnKBfgry+CHI4KV3t4PS6OR
-         KO1/RWZSobotWZfzVHJm2urieXjAX6iRkGk+6zmjxZnNXEqkUOi7DfAQI3AWWdlHlbU8
-         jLaw+SGWegoHDigXkzejk1HDQfnhiaqkkQPQjzoxBrTZphEQtJvY0Dg+aQKK7iO5OQ9q
-         /nFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ahr14h6KjlyOLxYXPAD4hS0TZjmkL0paFuUiYdgkD0s=;
-        b=I/HozR6FnaKtam5NPiWS+As9HjelTofu52Mur5EpePC2IdgwLVO4a8Ir/23J+2OdUk
-         ybb1FAnkLCJFE32IPxDUQZDX+xIbGC1UbEkxEQrNz7k80h66Y3lcXHmJ/8Ub89AhYb3R
-         l/An7isAzuyYGR4NB+YOvlTEUAn+trK//Dz1IzrSltyLv0M0RNDZjWe2Uz97pzqdhrV1
-         cuoZ37DYNpiUyz7sjPKKRPUynSoXZgaiGxDST7h035Zi2KfNqF3WT8CSHMGfxL5THRFw
-         x86SqsAQD3SEFKP9njVJ1qn7G5u1SiKtM49Ggd4vVTRRJ/W+mQK6zgt430W4koUKO+R+
-         XZkw==
-X-Gm-Message-State: ACgBeo1FmbxNi3z0tJDIgfVKn2UAr9s19OuTOy6+huKS0YB4GUCIprS1
-        3y+nE7Gh2C4lGsgW1THBy7o9/ZCPUT2cFCQDBSo=
-X-Google-Smtp-Source: AA6agR5028DA7OqZ9J9sMFi7dkLQnKJMdrQ0zAppoctI1FwlBjJBW3gpcuNvgALdzQrHynswLpBZL/WwynuYEgcuqbw=
-X-Received: by 2002:a05:6102:538:b0:398:2ca3:bec2 with SMTP id
- m24-20020a056102053800b003982ca3bec2mr4860540vsa.56.1662750413144; Fri, 09
- Sep 2022 12:06:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220904214134.408619-1-jim.cromie@gmail.com> <20220904214134.408619-24-jim.cromie@gmail.com>
- <Yxg2b2stA27B6B0t@phenom.ffwll.local>
-In-Reply-To: <Yxg2b2stA27B6B0t@phenom.ffwll.local>
-From:   jim.cromie@gmail.com
-Date:   Fri, 9 Sep 2022 13:06:27 -0600
-Message-ID: <CAJfuBxx3T3SquEWe-Uj0UW3zHacup_sHe0SWsffNzNj1XMmuQg@mail.gmail.com>
-Subject: Re: [PATCH v6 23/57] drm: POC drm on dyndbg - use in core, 2 helpers,
- 3 drivers.
-To:     Jim Cromie <jim.cromie@gmail.com>, Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sean Paul <seanpaul@chromium.org>, robdclark@gmail.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Joe Perches <joe@perches.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 15:11:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6807C0B53
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 304B46207A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 19:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804DAC433C1;
+        Fri,  9 Sep 2022 19:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662750690;
+        bh=SUgnHRqE57J9ijihjzghns114gPu46lDz6ObxsACSls=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=fTdb4ftAq7R9/GGRhnXmD2nv/XLZdUp78IC3/k1noM0mwC3ia4w4JmkSoNel+Ot4u
+         kO7uEgI3rWIF9d+q0yVj9JzimKSIiFI5w4VI7vzV2gL/AqjtODf0zHe6ZpzT2r7bOU
+         bBtjUaVmEvsKeFSmE/+pjzwNffNkXhjWRx2D+AULoQLP9FuB1Zn8xi6605QLcSEH0e
+         oLt7BzlpcaEt3g0oAKqBMQduFEIO554y3f8XgZPOv5cfN37vX7NQT7I+nD8+/rasz+
+         Gg/HVms627W4sQu0JF+Reug86HzEcGb9S+2x6xEowoF3FfIR0AAk6EF758cLaYuTjt
+         TS0MvwAO5K49A==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 553A027C005B;
+        Fri,  9 Sep 2022 15:11:28 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Fri, 09 Sep 2022 15:11:28 -0400
+X-ME-Sender: <xms:3Y8bY6W-KYrmAFI553F8rujXR0g64BgP6DLpnotxRF1FXtLNJ8HFBw>
+    <xme:3Y8bY2mGIHOUYqrgPQoo6lCLblHQfRXn1TrwdrKu37BsJGaUl1q9KEsnmDthPnrkU
+    H166w9VAMXv6wF6C60>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekuddthfelkeegtdelteeuieevkeegudduheevtdetieegheet
+    ffelleduvddtueenucffohhmrghinhepihhnthgvlhdrtghomhdpmhgvmhdrphgrghgvne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnugih
+    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqddvie
+    efudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhhtohdr
+    uhhs
+X-ME-Proxy: <xmx:3Y8bY-boxyux9UHxTSpDjSQ_XMb8t9pN3tnUfCzsYYr-YmbSUrrfYQ>
+    <xmx:3Y8bYxU6SKx_iHwkYWHhgjAFp228ubVUSNUw1K9UBfWNqpN08LyJKg>
+    <xmx:3Y8bY0ldjzwm-xTSJ0MnLj-GuI65WGFYRayDMrmStHHIV_vywU2XFg>
+    <xmx:4I8bY2CvMpUqEExrjUfE79Y1rQF_Xta75SFKNDsCa1iznWpscOiDs5SXkxE>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4802E31A0062; Fri,  9 Sep 2022 15:11:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
+In-Reply-To: <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
+ <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
+Date:   Fri, 09 Sep 2022 12:11:05 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     "Kirill A . Shutemov" <kirill@shutemov.name>,
+        "Hugh Dickins" <hughd@google.com>,
+        "Chao Peng" <chao.p.peng@linux.intel.com>,
+        "kvm list" <kvm@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        "Linux API" <linux-api@vger.kernel.org>, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Sean Christopherson" <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        "Wanpeng Li" <wanpengli@tencent.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Steven Price" <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Vishal Annapurve" <vannapurve@google.com>,
+        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        "David Hildenbrand" <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        "Quentin Perret" <qperret@google.com>,
+        "Michael Roth" <michael.roth@amd.com>,
+        "Michal Hocko" <mhocko@suse.com>,
+        "Muchun Song" <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM guest
+ private memory
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 12:13 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+
+
+On Fri, Sep 9, 2022, at 7:32 AM, Kirill A . Shutemov wrote:
+> On Thu, Sep 08, 2022 at 09:48:35PM -0700, Andy Lutomirski wrote:
+>> On 8/19/22 17:27, Kirill A. Shutemov wrote:
+>> > On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
+>> > > On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
+>> > > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+>> > > > > 
+>> > > > > If your memory could be swapped, that would be enough of a good reason
+>> > > > > to make use of shmem.c: but it cannot be swapped; and although there
+>> > > > > are some references in the mailthreads to it perhaps being swappable
+>> > > > > in future, I get the impression that will not happen soon if ever.
+>> > > > > 
+>> > > > > If your memory could be migrated, that would be some reason to use
+>> > > > > filesystem page cache (because page migration happens to understand
+>> > > > > that type of memory): but it cannot be migrated.
+>> > > > 
+>> > > > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
+>> > > > theoretically possible, but I'm not aware of any plans as of now.
+>> > > > 
+>> > > > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+>> > > 
+>> > > I always forget, migration means different things to different audiences.
+>> > > As an mm person, I was meaning page migration, whereas a virtualization
+>> > > person thinks VM live migration (which that reference appears to be about),
+>> > > a scheduler person task migration, an ornithologist bird migration, etc.
+>> > > 
+>> > > But you're an mm person too: you may have cited that reference in the
+>> > > knowledge that TDX 1.5 Live Migration will entail page migration of the
+>> > > kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
+>> > 
+>> > TDX 1.5 brings both.
+>> > 
+>> > In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
+>> > 
+>> 
+>> This seems to be a pretty bad fit for the way that the core mm migrates
+>> pages.  The core mm unmaps the page, then moves (in software) the contents
+>> to a new address, then faults it in.  TDH.MEM.PAGE.RELOCATE doesn't fit into
+>> that workflow very well.  I'm not saying it can't be done, but it won't just
+>> work.
 >
-> On Sun, Sep 04, 2022 at 03:41:00PM -0600, Jim Cromie wrote:
-> > Use DECLARE_DYNDBG_CLASSMAP across DRM:
-> >
-> >  - in .c files, since macro defines/initializes a record
-> >
-> >  - in drivers, $mod_{drv,drm,param}.c
-> >    ie where param setup is done, since a classmap is param related
-> >
-> >  - in drm/drm_print.c
-> >    since existing __drm_debug param is defined there,
-> >    and we ifdef it, and provide an elaborated alternative.
-> >
-> >  - in drm_*_helper modules:
-> >    dp/drm_dp - 1st item in makefile target
-> >    drivers/gpu/drm/drm_crtc_helper.c - random pick iirc.
-> >
-> > Since these modules all use identical CLASSMAP declarations (ie: names
-> > and .class_id's) they will all respond together to "class DRM_UT_*"
-> > query-commands:
-> >
-> >   :#> echo class DRM_UT_KMS +p > /proc/dynamic_debug/control
-> >
-> > NOTES:
-> >
-> > This changes __drm_debug from int to ulong, so BIT() is usable on it.
-> >
-> > DRM's enum drm_debug_category values need to sync with the index of
-> > their respective class-names here.  Then .class_id == category, and
-> > dyndbg's class FOO mechanisms will enable drm_dbg(DRM_UT_KMS, ...).
-> >
-> > Though DRM needs consistent categories across all modules, thats not
-> > generally needed; modules X and Y could define FOO differently (ie a
-> > different NAME => class_id mapping), changes are made according to
-> > each module's private class-map.
-> >
-> > No callsites are actually selected by this patch, since none are
-> > class'd yet.
-> >
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> Hm. From what I see we have all necessary infrastructure in place.
 >
-> So maybe I should just try, but what happens if a drm module doesn't have
-> these classbits declared? You simply have to use the raw number instead?
-
-without the classnames declared via macro,
-dyndbg has no names by which to validate the query.
-raw class numbers are not usable into >control.
-This is what privatizes the module's class-id space.
-
-If the macro is missing, the drm_dbg()s ( after conversion to reside
-atop dyndbg)
-will do this in `cat control`
-                        seq_printf(m, " class unknown, _id:%d", dp->class_id);
-
-
-
+> Unmaping is NOP for inaccessible pages as it is never mapped and we have
+> mapping->a_ops->migrate_folio() callback that allows to replace software
+> copying with whatever is needed, like TDH.MEM.PAGE.RELOCATE.
 >
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 14 +++++++++++++
-> >  drivers/gpu/drm/display/drm_dp_helper.c | 13 ++++++++++++
-> >  drivers/gpu/drm/drm_crtc_helper.c       | 13 ++++++++++++
-> >  drivers/gpu/drm/drm_print.c             | 27 +++++++++++++++++++++++--
-> >  drivers/gpu/drm/i915/i915_params.c      | 12 +++++++++++
-> >  drivers/gpu/drm/nouveau/nouveau_drm.c   | 13 ++++++++++++
-> >  include/drm/drm_print.h                 |  3 ++-
-> >  7 files changed, 92 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > index de7144b06e93..97e184f44a52 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > @@ -38,6 +38,8 @@
-> >  #include <linux/mmu_notifier.h>
-> >  #include <linux/suspend.h>
-> >  #include <linux/cc_platform.h>
-> > +#include <linux/fb.h>
-> > +#include <linux/dynamic_debug.h>
-> >
-> >  #include "amdgpu.h"
-> >  #include "amdgpu_irq.h"
-> > @@ -185,6 +187,18 @@ int amdgpu_vcnfw_log;
-> >
-> >  static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
-> >
-> > +DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
->
-> Iirc we've talked about maybe some kbuild trickery so that any module
-> under drivers/gpu/drm gets these by default. I don't think we need to have
-> this for the first cut, but a macro to avoid the copypaste mistakes would
-> be really good here.
+> What do I miss?
 
-It *may be* that theres a perfect place to declare it once, for everyone.
-For me thats exploratory, error prone.
-Proving that the sub-optimal worked seemed a good place to stop.
+Hmm, maybe this isn't as bad as I thought.
 
-that said, theres a macro in test-dynamic-debug that is a candidate
-for wider availability - it needs a better name
+Right now, unless I've missed something, the migration workflow is to unmap (via try_to_migrate) all mappings, then migrate the backing store (with ->migrate_folio(), although it seems like most callers expect the actual copy to happen outside of ->migrate_folio(), and then make new mappings.  With the *current* (vma-based, not fd-based) model for KVM memory, this won't work -- we can't unmap before calling TDH.MEM.PAGE.RELOCATE.
 
-#define DD_SYS_WRAP(_model, _flags)                                     \
-        static unsigned long bits_##_model;                             \
-        static struct ddebug_class_param _flags##_model = {             \
-                .bits = &bits_##_model,                                 \
-                .flags = #_flags,                                       \
-                .map = &map_##_model,                                   \
-        };                                                              \
-        module_param_cb(_flags##_##_model, &param_ops_dyndbg_classes,
-&_flags##_model, 0600)
+But maybe it's actually okay with some care or maybe mild modifications with the fd-based model.  We don't have any mmaps, per se, to unmap for secret / INACCESSIBLE memory.  So maybe we can get all the way to ->migrate_folio() without zapping anything in the secure EPT and just call TDH-MEM.PAGE.RELOCATE from inside migrate_folio().  And there will be nothing to fault back in.  From the core code's perspective, it's like migrating a memfd that doesn't happen to have my mappings at the time.
+
+--Andy
