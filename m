@@ -2,145 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D85B3DB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99005B3DBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbiIIRLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S230100AbiIIRMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiIIRLE (ORCPT
+        with ESMTP id S231502AbiIIRLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:11:04 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2070.outbound.protection.outlook.com [40.107.96.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A7AA062B;
-        Fri,  9 Sep 2022 10:10:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ql2fpg+6JcEvAXY1UNhN28m3MDCmymHjeBsHNizPEuplZPMqURX2wTqeaTpB5xNteoJhA6AEIw7mkwlX2SvjZNwxhHdVF65m2zZdG47KTye9ukf5aWrmkNxzpjmoJgAyOYKzTMyFVAFFTS2dqT+g5Yv1sMLsA6kZEMrerbXgthRqtm//oWrsz5o7rldS6hyYW5GvMGsUzABaSxV4Em/sxZ+lg/yadP8y6ZCCjM4QL3+MT4manIfE0dLUGh5YfXPm5ZrfpI7ujTB95rxkGyzAKtFpWAJg1SIh7/iNmLO1XKjrsQtHGEm0TCyEZRgaXwMmqDyCZpc87qaiZl+F40ZYvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jN5zHMAS5qCzEG2s2Awu4a0yhtajsUBmQZQF9De4neE=;
- b=A3b5EUNqXa6hPQT4CPBOv/iGGN5R1LklnKa/A5EGzcCJrnIc5tbV7SlIGwETmuwW/VsSVzC9wuwpgt6rfAPiZouGEaKKwOe0JBw03ggCgI10ucKRYd4hrJOncW3IihRZWTKuJ7Rag1uOauXV8yl5OVNKlDDvbKPlbKD06zLi1X7Ivd8i8YNk5WmplBpfuqEeSe2BB06SQ4kTaOFxODTRMADtZS1lCchuqOlJ1FQzAuP8KqydZcHuMYf67jYouGrSNyc0FpXQCA5tokWyD4TBROItqLQx76utvlRHX9/2wWfihogopMcb1gENg+BBnObdtGJyrRPjKVtHQnH64r7ZUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jN5zHMAS5qCzEG2s2Awu4a0yhtajsUBmQZQF9De4neE=;
- b=lJzzi9ieVaBaRod5bpG6wtJB3AhAzHMQE84ceKscdvP4k013E4zaq503oKsiIsJDwJYwnRAJdsSXg8RlFevBv5wK3FKxglca6mZdDSrDxQALsQBQ1Shlk6ymC1SM7kQbWNvjiEDbFjBi5D5XOZ5cso9ujvLoXI8HQjNIqqbRQXU=
-Received: from BN0PR02CA0009.namprd02.prod.outlook.com (2603:10b6:408:e4::14)
- by SN7PR12MB7372.namprd12.prod.outlook.com (2603:10b6:806:29b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Fri, 9 Sep
- 2022 17:10:56 +0000
-Received: from BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e4:cafe::e1) by BN0PR02CA0009.outlook.office365.com
- (2603:10b6:408:e4::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
- Transport; Fri, 9 Sep 2022 17:10:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT104.mail.protection.outlook.com (10.13.177.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Fri, 9 Sep 2022 17:10:56 +0000
-Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 9 Sep
- 2022 12:10:51 -0500
-From:   Arvind Yadav <Arvind.Yadav@amd.com>
-To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
-        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
-        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
-        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
-CC:     Arvind Yadav <Arvind.Yadav@amd.com>
-Subject: [PATCH v3 6/6] dma-buf: Check status of enable-signaling bit on debug
-Date:   Fri, 9 Sep 2022 22:38:45 +0530
-Message-ID: <20220909170845.4946-7-Arvind.Yadav@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220909170845.4946-1-Arvind.Yadav@amd.com>
-References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+        Fri, 9 Sep 2022 13:11:44 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4565EA431;
+        Fri,  9 Sep 2022 10:11:38 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D87C240002;
+        Fri,  9 Sep 2022 17:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662743497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qzTczB6munZOD4DwLGAw/A7taonsXXSbVs8d7tpSJ3M=;
+        b=czkgcDmevNYuTr84omI64YQ7bf32DFyD3vn9t5gdj9ru9e9w3lYITFnCP81FR2oWOiIGcV
+        90THyh7b8kJx7inMaW213VE8lE3bsvtuAktpMsIgl5iWB2KGweR/DZwgzzEEGioTjG3Bc4
+        bMYCCaSCIgNncZ0bAbv9wTcKF5QnHtBRSjnDUtm2Y/j6Za9Rm+XMC97wtkGhplR7ufE+uF
+        8xf40iVDGPzxYQVrNxJTvY9Wh8N1VsudkoYasIXba+j6YvZ7DaTf5aFtwgmWqPfYWMnE6o
+        eIbP+4Y/E1GJ4ct9jDDmsphv8IzVtnkfFQWtFYelErFspv2kVc5nytaKcZP8sg==
+Date:   Fri, 9 Sep 2022 19:11:32 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 7/8] ASoC: codecs: Add RK3308 internal audio codec
+ driver
+Message-ID: <20220909191132.6920ba09@booty>
+In-Reply-To: <YxoX+G5OFVDTX7s3@sirena.org.uk>
+References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
+        <20220907142124.2532620-8-luca.ceresoli@bootlin.com>
+        <YxoX+G5OFVDTX7s3@sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT104:EE_|SN7PR12MB7372:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bf1b7dd-d50a-4efb-cc07-08da92864267
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JDgxQvs09GAUpOeuKuLIIyvZ95+8K4Jq1kPcW9eYHVZgwhF6V0TU2XW9QmzhXln88KQeqXS/ovbQi1tqrokA0F7dLHwUQIi1/HoSGSHP8uLI+pqyKSx1JyXKu5xjGNVxYumVshILjEnulScuBeDkvyltrIVIX17c+Z8opbCr6+WV/OQBG5F0w2nT9m6YAEL+ZydwNOxIYeXo8TP6IMT2lGoAQsnGaCiYY47sQzH6dDuCSy+iwQ+RvPNattv7kGToW75iYdjUdFs8avlIMIQVzyWd5qHGW13CeHHE0owp06GrB/pyJQYbivQmDy6XucwuYiEZfbdSChavAOd5BnEC0j8NYG76PiLB++tJFV4HtxExgVkj5lpwm2Yymu0ktAg6YCBNhQ1QgEOU3LDk7qsnBzARDffazOIzqPf7D4QlydO1/ow7gdaApp8e+aFiEx7ZJRKAENBfhXhjJGtRfLm9SGdsSd+eZINLoj+8rLYz4VJoYD+bltCkjkJkkS9Ak9iyvsfv70xul0Jjf1s7EOlrVjscRgj4yGaVNTts4KNl6BuQCl69IR2efv8RMBqjetrhbQy1yGLNH3ym5iOa0Cts39RaRogPI8A/nQbAnylE6qJhvmFll8YzoyY+xQs+N6O+erFXFREv4FDxtx12cuTVhloFyAJ2foT6XgcO3Dn/iWEduUIyZzi3napWGKbDYlZ65aIbK27eXdQcfE0JUdcN0TzpCCwhvhKby0XTYkC/5wVvZYPyjU0ZtNJs66IkkE+Gd0M3mC/Pd7bxSrudOUo1Fz75u19rQxFaJylE3Rz4lKJxLBnzUhnNnYdf174lJcFezGpKqIqIzh0TJiOgDgNQjvDRMPrkUGRePJS/Uk1t1oQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(39860400002)(40470700004)(36840700001)(46966006)(7696005)(316002)(36860700001)(356005)(8676002)(336012)(921005)(70586007)(70206006)(4326008)(2616005)(82740400003)(1076003)(81166007)(41300700001)(426003)(16526019)(186003)(47076005)(6666004)(110136005)(26005)(40460700003)(83380400001)(86362001)(8936002)(2906002)(5660300002)(478600001)(36756003)(82310400005)(40480700001)(83996005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 17:10:56.3093
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bf1b7dd-d50a-4efb-cc07-08da92864267
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7372
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fence signaling must be enabled to make sure that
-the dma_fence_is_signaled() function ever returns true.
-Since drivers and implementations sometimes mess this up,
-this ensures correct behaviour when DEBUG_WW_MUTEX_SLOWPATH
-is used during debugging.
-This should make any implementation bugs resulting in not
-signaled fences much more obvious.
+Hello Mark,
 
-Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
----
+On Thu, 8 Sep 2022 17:27:36 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-Changes in v1,v2 :
-1- Addressing Christian's comment to replace
-CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
-2- As per Christian's comment moving this patch at last so
-The version of this patch is also changed and previously
-it was [PATCH 1/4]
+> On Wed, Sep 07, 2022 at 04:21:23PM +0200, luca.ceresoli@bootlin.com wrote:
 
----
- include/linux/dma-fence.h | 5 +++++
- 1 file changed, 5 insertions(+)
+Thank you for taking the time to review my patch in such detail! This
+is my first contribution to ALSA, and it was not clear to me which
+parts of the existing vendor driver needed even more cleanups than I
+have already done. I will probably get back to you with specific
+questions later on, while addressing your comments.
 
-diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-index 775cdc0b4f24..ba1ddc14c5d4 100644
---- a/include/linux/dma-fence.h
-+++ b/include/linux/dma-fence.h
-@@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence *fence)
- static inline bool
- dma_fence_is_signaled(struct dma_fence *fence)
- {
-+#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
-+	if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-+		return false;
-+#endif
-+
- 	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
- 		return true;
- 
+Best regards,
+Luca
 -- 
-2.25.1
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
