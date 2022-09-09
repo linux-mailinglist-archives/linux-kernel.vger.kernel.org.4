@@ -2,292 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EFC5B4158
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A985B415F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiIIVS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S230407AbiIIVWT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Sep 2022 17:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiIIVSw (ORCPT
+        with ESMTP id S230300AbiIIVWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:18:52 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F0D129C66;
-        Fri,  9 Sep 2022 14:18:50 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id c0f8f35c6b42e9b1; Fri, 9 Sep 2022 23:18:48 +0200
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C10E166D48A;
-        Fri,  9 Sep 2022 23:18:47 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        whitehat002 <hackyzh002@gmail.com>
-Subject: Re: [PATCH] PCI/ACPI: do not reference a pci device after it has been released
-Date:   Fri, 09 Sep 2022 23:18:46 +0200
-Message-ID: <5870387.lOV4Wx5bFT@kreacher>
-In-Reply-To: <YxrufXoPZnKCxqRP@kroah.com>
-References: <20220428142854.1065953-1-gregkh@linuxfoundation.org> <CAJZ5v0hfdnRg0EqG2Zcp9=Kjq+P1NC45iudatisVL_G=QjOC+A@mail.gmail.com> <YxrufXoPZnKCxqRP@kroah.com>
+        Fri, 9 Sep 2022 17:22:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D1BEE98E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:22:16 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-75-4x4mabv-MMeVWZPOeCQ1kQ-1; Fri, 09 Sep 2022 22:22:13 +0100
+X-MC-Unique: 4x4mabv-MMeVWZPOeCQ1kQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 9 Sep
+ 2022 22:22:12 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 9 Sep 2022 22:22:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Manikandan Jagatheesan' <mjagatheesan@vmware.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bp@suse.de" <bp@suse.de>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Peter Jonasson <pjonasson@vmware.com>,
+        Yiu Cho Lau <lauyiuch@vmware.com>,
+        Rajender M <manir@vmware.com>,
+        Abdul Anshad Azeez <aazees@vmware.com>,
+        "Kodeswaran Kumarasamy" <kkumarasamy@vmware.com>,
+        Rahul Gopakumar <gopakumarr@vmware.com>
+Subject: RE: Performance Regression in Linux Kernel 5.19
+Thread-Topic: Performance Regression in Linux Kernel 5.19
+Thread-Index: AQHYxD76FSnznGGLrEKJhYfY7fdHzK3Xmvxw
+Date:   Fri, 9 Sep 2022 21:22:12 +0000
+Message-ID: <3758868033fe49d5ba54e500e16df35f@AcuMS.aculab.com>
+References: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
+In-Reply-To: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgudeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
- vghlrdhorhhgpdhrtghpthhtoheplhgvnhgssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrtghkhiiihhdttddvsehgmhgrihhlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, September 9, 2022 9:42:53 AM CEST Greg Kroah-Hartman wrote:
-> On Mon, Jun 27, 2022 at 06:37:06PM +0200, Rafael J. Wysocki wrote:
-> > On Mon, Jun 27, 2022 at 5:07 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Apr 28, 2022 at 10:30:38PM +0200, Rafael J. Wysocki wrote:
-> > > > On Thu, Apr 28, 2022 at 10:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > >
-> > > > > On Thu, Apr 28, 2022 at 6:22 PM Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Thu, Apr 28, 2022 at 10:58:58AM -0500, Bjorn Helgaas wrote:
-> > > > > > > On Thu, Apr 28, 2022 at 04:28:53PM +0200, Greg Kroah-Hartman wrote:
-> > > > > > > > In acpi_get_pci_dev(), the debugging message for when a PCI bridge is
-> > > > > > > > not found uses a pointer to a pci device whose reference has just been
-> > > > > > > > dropped.  The chance that this really is a device that is now been
-> > > > > > > > removed from the system is almost impossible to happen, but to be safe,
-> > > > > > > > let's print out the debugging message based on the acpi root device
-> > > > > > > > which we do have a valid reference to at the moment.
-> > > > > > >
-> > > > > > > This code was added by 497fb54f578e ("ACPI / PCI: Fix NULL pointer
-> > > > > > > dereference in acpi_get_pci_dev() (rev. 2)").  Not sure if it's worth
-> > > > > > > a Fixes: tag.
-> > > > > >
-> > > > > > Can't hurt, I'll add it for the v2 based on this review.
-> > > > > >
-> > > > > > >
-> > > > > > > acpi_get_pci_dev() is used by only five callers, three of which are
-> > > > > > > video/backlight related.  I'm always skeptical of one-off interfaces
-> > > > > > > like this, but I don't know enough to propose any refactoring or other
-> > > > > > > alternatives.
-> > > > > > >
-> > > > > > > I'll leave this for Rafael, but if I were applying I would silently
-> > > > > > > touch up the subject to match convention:
-> > > > > > >
-> > > > > > >   PCI/ACPI: Do not reference PCI device after it has been released
-> > > > > >
-> > > > > > Much simpler, thanks.
-> > > > > >
-> > > > > > >
-> > > > > > > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > > > > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > > > > > Cc: Len Brown <lenb@kernel.org>
-> > > > > > > > Cc: linux-pci@vger.kernel.org
-> > > > > > > > Cc: linux-acpi@vger.kernel.org
-> > > > > > > > Reported-by: whitehat002 <hackyzh002@gmail.com>
-> > > > > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > > > > ---
-> > > > > > > >  drivers/acpi/pci_root.c | 3 ++-
-> > > > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> > > > > > > > index 6f9e75d14808..ecda378dbc09 100644
-> > > > > > > > --- a/drivers/acpi/pci_root.c
-> > > > > > > > +++ b/drivers/acpi/pci_root.c
-> > > > > > > > @@ -303,7 +303,8 @@ struct pci_dev *acpi_get_pci_dev(acpi_handle handle)
-> > > > > > > >              * case pdev->subordinate will be NULL for the parent.
-> > > > > > > >              */
-> > > > > > > >             if (!pbus) {
-> > > > > > > > -                   dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
-> > > > > > > > +                   dev_dbg(&root->device->dev,
-> > > > > > > > +                           "dev %d, function %d is not a PCI-to-PCI bridge\n", dev, fn);
-> > > > > > >
-> > > > > > > This should use "%02x.%d" to be consistent with the dev_set_name() in
-> > > > > > > pci_setup_device().
-> > > > > >
-> > > > > > Ah, missed that, will change it and send out a new version tomorrow.
-> > > > >
-> > > > > I would make the change below (modulo the gmail-induced wthite space
-> > > > > breakage), though.
-> > > >
-> > > > That said ->
-> > > >
-> > > > > ---
-> > > > >  drivers/acpi/pci_root.c |    5 +++--
-> > > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > Index: linux-pm/drivers/acpi/pci_root.c
-> > > > > ===================================================================
-> > > > > --- linux-pm.orig/drivers/acpi/pci_root.c
-> > > > > +++ linux-pm/drivers/acpi/pci_root.c
-> > > > > @@ -295,8 +295,6 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
-> > > > >              break;
-> > > > >
-> > > > >          pbus = pdev->subordinate;
-> > > > > -        pci_dev_put(pdev);
-> > > > > -
-> > > > >          /*
-> > > > >           * This function may be called for a non-PCI device that has a
-> > > > >           * PCI parent (eg. a disk under a PCI SATA controller).  In that
-> > > > > @@ -304,9 +302,12 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
-> > > > >           */
-> > > > >          if (!pbus) {
-> > > > >              dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
-> > > > > +            pci_dev_put(pdev);
-> > > > >              pdev = NULL;
-> > > > >              break;
-> > > > >          }
-> > > > > +
-> > > > > +        pci_dev_put(pdev);
-> > > >
-> > > > -> we are going to use pbus after this and it is pdev->subordinate
-> > > > which cannot survive without pdev AFAICS.
-> > > >
-> > > > Are we not concerned about this case?
-> > >
-> > > Good point.
-> > >
-> > > whitehat002, any ideas?  You found this issue but it really looks like
-> > > it is not anything that can ever be hit, so how far do you want to go to
-> > > unwind it?
-> > 
-> > I have an idea, sorry for the delay here.
-> > 
-> > I should be ready to post something tomorrow.
+From: Manikandan Jagatheesan
+> Sent: 09 September 2022 12:46
 > 
-> Was this ever posted?
+> As part of VMware's performance regression testing for Linux
+> Kernel upstream releases, we have evaluated the performance
+> of Linux kernel 5.19 against the 5.18 release and we have
+> noticed performance regressions in Linux VMs on ESXi as shown
+> below.
+> - Compute(up to -70%)
+> - Networking(up to -30%)
+> - Storage(up to -13%)
+> 
+> After performing the bisect between kernel 5.18 and 5.19, we
+> identified the root cause to be the enablement of IBRS mitigation
+> for spectre_v2 vulnerability by commit 6ad0ad2bf8a6 ("x86/bugs:
+> Report Intel retbleed vulnerability").
 
-No, it wasn't.  Sorry for the glacial pace here.
+As a matter of interest how much faster does it go if you
+boot with all mitigations disabled and compile without
+retpolines and without page table separation?
 
-So the idea is based on the observation that the PCI device returned by the current
-code in acpi_get_pci_dev() needs to be registered, so if it corresponds to an ACPI
-device object, the struct acpi_device representing it must be registered too and,
-moreover, it should be the ACPI companion of that PCI device.  Thus it should be
-sufficient to look for it in the ACPI device object's list of physical nodes
-corresponding to it.  Hence, the patch below.
+There are plenty of semi-embedded systems (even running on x86)
+where there are a limited set of binaries, it is difficult to
+add new binaries, and everything basically runs as root.
 
-I actually can't test it right now (or even compile it for that matter), but
-I'll put it in order tomorrow.
+	David
 
----
- drivers/acpi/pci_root.c |   82 +++++++++---------------------------------------
- 1 file changed, 16 insertions(+), 66 deletions(-)
-
-Index: linux-pm/drivers/acpi/pci_root.c
-===================================================================
---- linux-pm.orig/drivers/acpi/pci_root.c
-+++ linux-pm/drivers/acpi/pci_root.c
-@@ -312,76 +312,26 @@ struct acpi_handle_node {
-  */
- struct pci_dev *acpi_get_pci_dev(acpi_handle handle)
- {
--	int dev, fn;
--	unsigned long long adr;
--	acpi_status status;
--	acpi_handle phandle;
--	struct pci_bus *pbus;
--	struct pci_dev *pdev = NULL;
--	struct acpi_handle_node *node, *tmp;
--	struct acpi_pci_root *root;
--	LIST_HEAD(device_list);
 -
--	/*
--	 * Walk up the ACPI CA namespace until we reach a PCI root bridge.
--	 */
--	phandle = handle;
--	while (!acpi_is_root_bridge(phandle)) {
--		node = kzalloc(sizeof(struct acpi_handle_node), GFP_KERNEL);
--		if (!node)
--			goto out;
--
--		INIT_LIST_HEAD(&node->node);
--		node->handle = phandle;
--		list_add(&node->node, &device_list);
--
--		status = acpi_get_parent(phandle, &phandle);
--		if (ACPI_FAILURE(status))
--			goto out;
--	}
--
--	root = acpi_pci_find_root(phandle);
--	if (!root)
--		goto out;
--
--	pbus = root->bus;
--
--	/*
--	 * Now, walk back down the PCI device tree until we return to our
--	 * original handle. Assumes that everything between the PCI root
--	 * bridge and the device we're looking for must be a P2P bridge.
--	 */
--	list_for_each_entry(node, &device_list, node) {
--		acpi_handle hnd = node->handle;
--		status = acpi_evaluate_integer(hnd, "_ADR", NULL, &adr);
--		if (ACPI_FAILURE(status))
--			goto out;
--		dev = (adr >> 16) & 0xffff;
--		fn  = adr & 0xffff;
--
--		pdev = pci_get_slot(pbus, PCI_DEVFN(dev, fn));
--		if (!pdev || hnd == handle)
--			break;
--
--		pbus = pdev->subordinate;
--		pci_dev_put(pdev);
--
--		/*
--		 * This function may be called for a non-PCI device that has a
--		 * PCI parent (eg. a disk under a PCI SATA controller).  In that
--		 * case pdev->subordinate will be NULL for the parent.
--		 */
--		if (!pbus) {
--			dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
--			pdev = NULL;
-+	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
-+	struct acpi_device_physical_node *pn;
-+	struct device *pci_dev = NULL;
-+
-+	if (!adev)
-+		return NULL;
-+
-+	mutex_lock(&adev->physical_node_lock);
-+
-+	list_for_each_entry(pn, &acpi_dev->physical_node_list, node) {
-+		if (dev_is_pci(pn->dev)) {
-+			pci_dev = to_pci_dev(pn->dev);
- 			break;
- 		}
-+			
- 	}
--out:
--	list_for_each_entry_safe(node, tmp, &device_list, node)
--		kfree(node);
- 
--	return pdev;
-+	mutex_unlock(&adev->physical_node_lock);
-+
-+	return pci_dev;
- }
- EXPORT_SYMBOL_GPL(acpi_get_pci_dev);
- 
-
-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
