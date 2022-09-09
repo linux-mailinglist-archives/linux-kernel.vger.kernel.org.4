@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35545B3CB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CF55B3CB9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiIIQL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S231303AbiIIQML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiIIQLx (ORCPT
+        with ESMTP id S230264AbiIIQMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:11:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EB3FA6AA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662739911; x=1694275911;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R7uldPIxQTD99q9iPRRhNcQ5enqGBJMtDCznMl2iRNE=;
-  b=Tr7UWzu81Xib/jQICErXnxaFWVL5fPIxfu8vsPWFLhr6CMAnsY9RcjvU
-   6PfM8poKRLmc9S3SLud8V1PfrADrwC0YkEcFBvbfqa+eR4XxLU3shnfhp
-   6vM94BXczHgYfCRSbCOIq8iNRZ7pooS5UcgDvFV0gIGeAg/t6r/B6X8sU
-   H/0r7kUzYA2m7tV9ZLvzEBzNouSGpSSDIP0EqVAw+6Rak6rQkxAyhStXJ
-   IGXGynf9sVBm49dLmISslGNwzBYpfsIClVcSyF4ZKZeoE9TYarTHdCfTm
-   5h5gW5PtqUvhQxGsK6NlGNWag29hWt+RlPdpjF+BHK0Or0kcRvpIMe5B7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298849762"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="298849762"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:11:17 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="611101556"
-Received: from schen9-mobl.amr.corp.intel.com ([10.212.177.99])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:11:16 -0700
-Message-ID: <c14415f18273d134665819bb0d43b1c99b88030c.camel@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] ipc/msg: mitigate the lock contention with
- percpu counter
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Jiebin Sun <jiebin.sun@intel.com>, akpm@linux-foundation.org,
-        vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
-        legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com
-Date:   Fri, 09 Sep 2022 09:11:16 -0700
-In-Reply-To: <20220909203636.2652466-3-jiebin.sun@intel.com>
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
-         <20220909203636.2652466-1-jiebin.sun@intel.com>
-         <20220909203636.2652466-3-jiebin.sun@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Fri, 9 Sep 2022 12:12:06 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F2811E6C7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:12:00 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id iw17so2282873plb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=eDrfYVwDQC+B+QpEvQ41UIS7OrQEnld5CNSxZdpZPgA=;
+        b=F0wkqBGJL1xYRFxmN2T75z4AIhNt1UbmivRoZwZ3KboiF5oDQtO7ium3Kzq9dCV+3L
+         RP2ICzUpgzxqrq8hUXPMY0eGLmRwA+zAdDYSuZh9GUeWrGuwZqUh08H8pA77P9iEsPGp
+         b6pnj6Rb9wFZ+c+JdoNtMdcrNCB7NeeWChdxumtbo3jnTMvn/m+9Yh9o+8/jqU14NYlo
+         Uq/uY6XTV/gnfIa8IZ92OH+bqS6ePdD+EGQoRQq+nYue9IGW4Px3jClughrHNWAxX7uT
+         XPnuvp8oyCH45KSg9104v6Oi+FYeivUUTm11neuKW+KDrm0old9h/hl2dytqCvmymdak
+         rzBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=eDrfYVwDQC+B+QpEvQ41UIS7OrQEnld5CNSxZdpZPgA=;
+        b=lKPUrpNPQ8lao1ATlrcQeW6CazEPoPv0PHg1ubK1/ZGiPcK9XwtemSXrBBkPdm8CPX
+         /pRUnDv0I7flU8ErnZdL93ivUlYedhoPgue75L4p+cUJY2LzBh/9rW+r0Roi6TlLsAw4
+         vMhvnZHCXqrH5OYRQFd9p8yr9YdVBFzJOviz+aghcyypjNbGMIhVYMYF2+QVJ0dsXVuq
+         5/V43Zt3mTf3a/qW9hpgma2GR0N7fLAq9fpfuVHrJ0KxP9a1WMFGFhiNcW/PcgOtK09Q
+         aKs6j1Y9Eyh4h25uH95Zl5uAj9aR1IPl/ZcCJqoTVDUKPog5PKzi0f3DLiKNc2BlJof2
+         MrHA==
+X-Gm-Message-State: ACgBeo0AJ27u2gGnp7bLD76i6xfnKG+o9nN4/gFLOLpc+VX+Mkx4Z35O
+        sDa3gLWJ56YWAR2NGVgkrBsFTVEHIwwa1eFwf4G6tQ==
+X-Google-Smtp-Source: AA6agR6o1k8OYU6c3VZsjtmoi4GU+j620+63W9MswFegv3cf067xiW0Q2ntmP7g7tJsYUNwDAHlv3rflaFDJncKmQIQ=
+X-Received: by 2002:a17:902:b410:b0:172:c9d1:7501 with SMTP id
+ x16-20020a170902b41000b00172c9d17501mr14547983plr.106.1662739919860; Fri, 09
+ Sep 2022 09:11:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220907043537.3457014-1-shakeelb@google.com> <20220907043537.3457014-2-shakeelb@google.com>
+ <YxqIQOWzrsrPnff3@blackbook>
+In-Reply-To: <YxqIQOWzrsrPnff3@blackbook>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 9 Sep 2022 09:11:48 -0700
+Message-ID: <CALvZod77qUb0XRJh3y3-GQevoKjcwdt-Gtq0u0Tp6zTxBe-4CA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] memcg: extract memcg_vmstats from struct mem_cgroup
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-09-10 at 04:36 +0800, Jiebin Sun wrote:
-> The msg_bytes and msg_hdrs atomic counters are frequently
-> updated when IPC msg queue is in heavy use, causing heavy
-> cache bounce and overhead. Change them to percpu_counter
-> greatly improve the performance. Since there is one percpu
-> struct per namespace, additional memory cost is minimal.
-> Reading of the count done in msgctl call, which is infrequent.
-> So the need to sum up the counts in each CPU is infrequent.
-> 
-> Apply the patch and test the pts/stress-ng-1.4.0
-> -- system v message passing (160 threads).
-> 
-> Score gain: 3.99x
-> 
-> CPU: ICX 8380 x 2 sockets
-> Core number: 40 x 2 physical cores
-> Benchmark: pts/stress-ng-1.4.0
-> -- system v message passing (160 threads)
+On Thu, Sep 8, 2022 at 5:26 PM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
+>
+> Hi.
+>
+> On Wed, Sep 07, 2022 at 04:35:35AM +0000, Shakeel Butt <shakeelb@google.c=
+om> wrote:
+> > This is a preparatory patch to reduce the memory overhead of memory
+> > cgroup. The struct memcg_vmstats is the largest object embedded into th=
+e
+> > struct mem_cgroup.
+> > This patch extracts struct memcg_vmstats from struct
+> > mem_cgroup to ease the following patches in reducing the size of struct
+> > memcg_vmstats.
+>
+> Is the reason for the extraction just moving things away from the header
+> file?
+> Or is the separate allocation+indirection somehow beneficial wrt, e.g.
+> fragmentation?
+>
 
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
-
-> 
-> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
-> ---
-> 
-
+The main reason was to move away from the head file. I have not yet
+measured the performance impact of these changes. I am planning to
+rearrange struct mem_cgroup and will do some performance tests after
+that.
