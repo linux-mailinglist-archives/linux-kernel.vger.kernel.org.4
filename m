@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0AE5B42DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFC35B42D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiIIXIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S232071AbiIIXId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiIIXGt (ORCPT
+        with ESMTP id S231589AbiIIXGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 19:06:49 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAFC116B5F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F32E115CE3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662764804; x=1694300804;
-  h=from:to:cc:subject:date:message-id;
-  bh=LdJRsGR2OiQ9tX1pJHtSJ2poqL5uwV1h4OZKqo38uOg=;
-  b=gEiwDSiXzZMRcJJh59DLA2MyqT4ueWiWs+CE6VKtzwCiHk3X2B6BhuXC
-   oUOu8yP2/lsFdbjBFS4c+vnpQSafAr5SnnPWQCyo02kni5M4VQWSgBa4f
-   8oslMejLivkYu1kT9iW4gLwgVFt6esa0Ds2qt2MXVj/y1eRsI/m6XqLAL
-   lp3YO7o8Eb3t1gV7MByKufdLHyezF4TgU3EfweVjyVCGdc3lLqkBofWQy
-   HldrcQPcTtOavyrnmIkw9R0XsZoCGkJ54G1SIJM5tsHW1Q+CebcQ7UNTU
-   mTJ28xzv1RTxaNHsHne9h3ErD9g4zjszI65PeZopRetXyx7WlJuU2ol63
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296325071"
+  t=1662764806; x=1694300806;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=yuPvdFo7/1bTUT3MpNBmCDYH8QDT7A+ZWsPsgReg8HQ=;
+  b=IjizealNH1JjGQ4B0beU1qpNmEMHzEIqSkiv37ss9EVFOSYe+uCLnoiB
+   P7Y3gVK8A2vWgGj0gbYvie9anSceKSuEQr/mRe9BDzNUr9mwvCmEUBCp1
+   5dJBScgE47W9EI/d/2k5DuKFihpx9oY4qcgX9EF2nuBY+5FBmfm456v6G
+   bcpwGpN3ewWfTG3OOehX5IUh4C/M0UUz9iBBOWJH86axxRqHMANVMfB15
+   Ik57v1YWX9E+jRSiKdMfXjLzkASVVGkBEuWEw12581ASMiFj/Ndf00BdS
+   jti7anu1jsmU4MZmPIrDaCT6LK2MrQ6aJN46S9OFVsMVRDEHdBjXX8aiu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296325075"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="296325071"
+   d="scan'208";a="296325075"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:31 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="677354961"
+   d="scan'208";a="677354966"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:31 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,11 +54,14 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         Tim Chen <tim.c.chen@linux.intel.com>,
         Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [RFC PATCH 00/23] sched: Introduce classes of tasks for load balance
-Date:   Fri,  9 Sep 2022 16:11:42 -0700
-Message-Id: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: [RFC PATCH 01/23] sched/task_struct: Introduce classes of tasks
+Date:   Fri,  9 Sep 2022 16:11:43 -0700
+Message-Id: <20220909231205.14009-2-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -68,224 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+++ Introduction
+On hybrid processors, the architecture differences between the types of
+CPUs lead to different instructions-per-cycle (IPC) on each type of CPU.
+IPCs may differ further by the type of instructions. Instructions can be
+grouped into classes of similar IPCs.
 
-On hybrid processors, the microarchitectural properties of the different
-types of CPUs cause them to have different instruction-per-cycle (IPC)
-capabilities. IPC can be higher on some CPUs for advanced instructions
-Figure 1 illustrates this concept. It plots hypothetical workloads
-grouped by classes of instructions vs the IPC ratio between high and low
-performance CPUs.
+Hence, tasks may be classified into groups depending on the type of
+instructions they execute.
 
-IPC ratio
-  ^
-  | Class0 .             Class1               .   ClassN-1    .  ClassN
-  |        .                                  .               .   +
-  |        .                                  .               .  +
-  |        .                                  .               . +
-  |        .                                  . + + + + + + + +
-  |        .                                  .               .
-  |        .                                  .               .
-  |        .             + + + + + + + + + + +                .
-  |        + + + + + + +                      .               .
-  |      + .                                  .               .
-  |     +  .                                  .               .
-  |    +   .                                  .               .
-  |   +    .                                  .               .
-1 |-------------------------------------------//---------------------------->
-  |                                                      wokloads of interest
-															
-            Figure 1. Hypothetical workloads sorted by IPC ratio
+Add a new member task_struct::classid to associate a particular task to
+a classification that depends on the instructions it executes.
 
+The scheduler may use the classification of a task and information about
+the relative performance among CPUs of a particular class of task to
+improve throughput. It may, for instance, place certain tasks on CPUs that
+have higher performance
 
-The load balancer can discover the use of advanced instructions and prefer
-CPUs with higher IPC for tasks running those instructions.
+The methods to determine the classification of a task and its relative
+IPC are specific to each CPU architecture.
 
-Hardware is free to partition its instruction set into an arbitrary number
-of classes. It must provide a mechanism identify the class of the
-currently running task and inform the kernel about the performance of each
-class of task on each type of CPU.
+Cc: Ben Segall <bsegall@google.com>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Tim C. Chen <tim.c.chen@intel.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+---
+ include/linux/sched.h | 7 +++++++
+ init/Kconfig          | 9 +++++++++
+ 2 files changed, 16 insertions(+)
 
-This patchset introduces the concept of classes of tasks, proposes the
-interfaces that hardware needs to implement and proposes changes to the
-load balancer to leverage this extra information in combination with
-asymmetric packing.
-
-This patchset includes a full implementation for Intel hybrid processors
-using Intel Thread Director technology [1].
-
-
-+++ Structure of this series
-
-Patches 1-6 introduce the concept of classes of tasks. They also introduce
-interfaces that architectures implement to update the class of a task and
-to inform the scheduler about the class-specific performance scores.
-
-Patches 7-9 use the class of the current task of each runqueue to break
-ties between two otherwise identical group_asym_packing scheduling groups.
-
-Patches 10-16 implement support for classes of tasks on Intel hybrid
-processors using Intel Thread Director technology.
-
-Patches 17-19 introduce extra helper members to task_struct to deal with
-transient classification of tasks and arch-specific implementation
-vagaries.
-
-Patches 20-22 are specific to Intel Thread Director. They reset the
-classification hardware when switching to a new task.
-
-
-+++ Classes of tasks
-
-The first step to leverage the asymmetries in IPC ratios is to assign a
-class label to each individual task. Hardware can monitor the instruction
-stream and classify a task as it runs. At user tick, the kernel reads the
-resulting classification and assigns it to the currently running task. It
-stores the class in the proposed task_struct::class.
-
-
-+++ Balancing load using classes of tasks. Theory of operation
-
-Intel hybrid processors rely on asymmetric packing to place tasks on
-higher performance CPUs first. The class of the current task on each
-runqueue can be used to break ties between two otherwise identical
-scheduling groups.
-
-Consider these scenarios (for simplicity, assume that task-class
-performance score is such that
-
-score(Cl0) < score(Cl1) < ... < score(Cl(n-1)) < score(Cln)). (Eq I)
-
-Boxes depict scheduling groups being considered during load balance.
-Labels inside the box depict the class of rq->curr, or the CPU being
-idle.
-
-    asym
-    packing
-    priorities    50    50           30           30
-                _____________
-                |  i  .  i  |
-                |  d  .  d  |
-                |  l  .  l  |      _______      _______
-                |  e  .  e  |      | Cl0 |      | Cl1 |
-                |___________|      |_____|      |_____|
-
-                         ^
-                      dst_cpu        sgA          sgB
-                                                   ^
-                                                busiest
-
-                           Figure 2. Scenario A
-	
-In Figure 2, dst_cpu is a group of SMT siblings, has become idle, has
-higher priority, and is identifying the busiest group. sgA and sgB are of
-group_asym_packing type, have the same priority, have a single CPU, and
-have the same number of running tasks. By checking the class of the task
-currently running on both scheduling groups, it selects sgB as the busiest
-because it has a class of task higher performance score if placed on
-dst_cpu.
-
-    asym
-    packing
-    priorities    50    50           50    50           30
-                _____________     _____________
-                |     .     |     |     .     |
-                |     .     |     |     .     |       idle
-                | cl0 . cl1 |     | cl0 . cl2 |      _______
-                |     .     |     |     .     |      |     |
-                |___________|     |___________|      |_____|
-
-                                                        ^
-                     sgA                sgB          dst_cpu
-                                         ^
-                                    busiest group
-
-                                     ^
-                                  busiest queue
-
-                           Figure 3. Scenario B
-
-In Figure 3, dst_cpu has become idle, has lower priority and is identifying
-a busiest group. sgA and sgB are groups of SMT siblings. Both siblings are
-busy and, therefore, classified as group_asym_packing [2], have the same
-priority and the same number of running tasks. The load balancer computes
-the class-specific performance score (scaled by the number of busy
-siblings) by observing the currently running task on each runqueue.
-
-As per Eq. I, cl0+cl2 has a higher throughput than cl0+cl1. So, it selects
-sgB as the busiest group. If cl2 is left to run with the whole big core to
-itself, it would deliver higher throughput than cl0. Hence, the runqueue of
-cl0 is selected as the busiest.
-
-
-+++ Dependencies
-These patches assume that both SMT siblings of a core have the same
-priority, as proposed in [3]. Also, they rely on the existing support for
-the Hardware Feedback Interface [4].
-
-
-I look forward to your review and thank you in advance!
-
-These patches have been Acked-by: Len Brown <len.brown@intel.com>
-
-Thanks and BR,
-Ricardo
-
-[1]. Intel Software Developer Manual, Volume 3, Section 14.6
-     https://intel.com/sdm
-[2]. https://lkml.kernel.org/r/20210911011819.12184-7-ricardo.neri-calderon@linux.intel.com
-[3]. https://lore.kernel.org/lkml/20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com/
-[4]. https://lore.kernel.org/linux-pm/20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com/
-
-Ricardo Neri (23):
-  sched/task_struct: Introduce classes of tasks
-  sched: Add interfaces for classes of tasks
-  sched/core: Initialize the class of a new task
-  sched/core: Add user_tick as argument to scheduler_tick()
-  sched/core: Move is_core_idle() out of fair.c
-  sched/core: Update the classification of the current task
-  sched/fair: Collect load-balancing stats for task classes
-  sched/fair: Compute task-class performance scores for load balancing
-  sched/fair: Use task-class performance score to pick the busiest group
-  sched/fair: Use classes of tasks when selecting a busiest runqueue
-  thermal: intel: hfi: Introduce Hardware Feedback Interface classes
-  thermal: intel: hfi: Convert table_lock to use flags-handling variants
-  x86/cpufeatures: Add the Intel Thread Director feature definitions
-  thermal: intel: hfi: Update the class of the current task
-  thermal: intel: hfi: Report per-cpu class-specific performance scores
-  thermal: intel: hfi: Define a default classification for unclassified
-    tasks
-  thermal: intel: hfi: Enable the Intel Thread Director
-  sched/task_struct: Add helpers for task classification
-  sched/core: Initialize helpers of task classification
-  thermal: intel: hfi: Implement model-specific checks for task
-    classification
-  x86/cpufeatures: Add feature bit for HRESET
-  x86/hreset: Configure history reset
-  x86/process: Reset hardware history in context switch
-
- arch/x86/include/asm/cpufeatures.h       |   2 +
- arch/x86/include/asm/disabled-features.h |   8 +-
- arch/x86/include/asm/hreset.h            |  30 ++++
- arch/x86/include/asm/msr-index.h         |   4 +
- arch/x86/include/asm/topology.h          |  10 ++
- arch/x86/kernel/cpu/common.c             |  35 +++-
- arch/x86/kernel/cpu/cpuid-deps.c         |   1 +
- arch/x86/kernel/cpu/scattered.c          |   1 +
- arch/x86/kernel/process_32.c             |   3 +
- arch/x86/kernel/process_64.c             |   3 +
- drivers/thermal/intel/Kconfig            |  12 ++
- drivers/thermal/intel/intel_hfi.c        | 215 +++++++++++++++++++++--
- include/linux/sched.h                    |  19 +-
- init/Kconfig                             |   9 +
- kernel/sched/core.c                      |  10 +-
- kernel/sched/fair.c                      | 214 ++++++++++++++++++++--
- kernel/sched/sched.h                     |  81 +++++++++
- kernel/sched/topology.c                  |   8 +
- kernel/time/timer.c                      |   2 +-
- 19 files changed, 635 insertions(+), 32 deletions(-)
- create mode 100644 arch/x86/include/asm/hreset.h
-
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e7b2f8a5c711..acc33dbaa47c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -117,6 +117,8 @@ struct task_group;
+ 					 __TASK_TRACED | EXIT_DEAD | EXIT_ZOMBIE | \
+ 					 TASK_PARKED)
+ 
++#define TASK_CLASS_UNCLASSIFIED		-1
++
+ #define task_is_running(task)		(READ_ONCE((task)->__state) == TASK_RUNNING)
+ 
+ #define task_is_traced(task)		((READ_ONCE(task->jobctl) & JOBCTL_TRACED) != 0)
+@@ -1512,6 +1514,11 @@ struct task_struct {
+ 	union rv_task_monitor		rv[RV_PER_TASK_MONITORS];
+ #endif
+ 
++#ifdef CONFIG_SCHED_TASK_CLASSES
++	/* Class of task that the scheduler uses for task placement decisions */
++	short				class;
++#endif
++
+ 	/*
+ 	 * New fields for task_struct should be added above here, so that
+ 	 * they are included in the randomized portion of task_struct.
+diff --git a/init/Kconfig b/init/Kconfig
+index 532362fcfe31..edfa27f8717a 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -854,6 +854,15 @@ config UCLAMP_BUCKETS_COUNT
+ 
+ 	  If in doubt, use the default value.
+ 
++config SCHED_TASK_CLASSES
++	bool "Classes of tasks"
++	depends on SMP
++	help
++	  If selected, each task is assigned a classification value that
++	  reflects the types of instructions that the task executes. The
++	  scheduler uses the classification value to improve the placement of
++	  tasks.
++
+ endmenu
+ 
+ #
 -- 
 2.25.1
 
