@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364B95B4073
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0875B4076
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiIIUVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S231205AbiIIUZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiIIUVt (ORCPT
+        with ESMTP id S229792AbiIIUZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:21:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BB9BA9EA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:21:48 -0700 (PDT)
+        Fri, 9 Sep 2022 16:25:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61EA96777;
+        Fri,  9 Sep 2022 13:25:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D677B824FD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 20:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68592C433C1;
-        Fri,  9 Sep 2022 20:21:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D400620BA;
+        Fri,  9 Sep 2022 20:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7C2C433D6;
+        Fri,  9 Sep 2022 20:25:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662754906;
-        bh=GKpxAviIRf0Cm5Wh0WlIJnPelOqjKCHbR94gPvMQyCw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PEoFgf9678ZZKfCRW/iY3TZ1QT5zzs1XjdCPolznYEGyMpDx+SY0gUs4HzvJgtzSD
-         8If15nTuUngVqYWIR0ZH/UJOL4TPc4x0YuzcD/kZyWPoewc9ienTCyUtqcF7D8BgUL
-         s0XIZV5SdEKZqP95oV1dh/yWT/2dV1peQsiUZlb78Knfm20sM++wqvLpvUsyJejTmT
-         AULxkvaK0h3/mfg8ngKALehmsWZ2+boOcdyMRkBH/hV6vSSmiOJEWN9ISVyGakwdOi
-         pWq2xXCNLxNskQN8s7jzsa0PdlOK2YoiS5sK+up+KnlrYbm0ki71MNpXz6OnUCvj+/
-         XY7uHwUrl3kCw==
-Message-ID: <8abfed2c-2499-b2da-1e06-ecc188f7c7b0@kernel.org>
-Date:   Fri, 9 Sep 2022 22:21:41 +0200
+        s=k20201202; t=1662755109;
+        bh=zXin2k6immi9tRPLVqcDbBOQa3ynjPMF/61sq6IxOfs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=THWl6dZUIK4gf+Qcoy1C86uQh+oNBTxuoyebdvnf1ttaIdKiqlM3SJsz3qdoYfsjy
+         380DhO6arhGh5i0oIweM8c2dJuFoLlAydHYaa1louu9iUNC/50Q7Wp1kI3Su16YWT8
+         RSiZNFz6xV4/vqjqBLZhXbhBESqEn8mz21rW9YCLcSSiiyHU2sGh8p8P/OsOt13l7W
+         IzX9enk3iqI13+Q4O+yRGjHH3bMhAIkjpcncf4Tm4MCb7ItXmqUyx5VBTDp7VVSPus
+         Zd6R4JuVrwqR/aJC5VmFKSwPS/At/NyQgfF6tjDLEAbw3wleY3n9Ja7J7abOAkpfUL
+         D+wfrbAKReo/A==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v4 0/9] PCI/PM: Always disable PTM for all devices during suspend
+Date:   Fri,  9 Sep 2022 15:24:56 -0500
+Message-Id: <20220909202505.314195-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, Chao Yu <chao@kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
-        David Rientjes <rientjes@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-References: <20220830141009.150075-1-chao@kernel.org>
- <BAC9CE6A-5873-429F-ACE2-E0A9E507D807@linux.dev>
- <dbef29b2-ab0a-c3df-638c-381916a0d15a@kernel.org>
- <Yxucs30FNkbWQHVh@casper.infradead.org>
-Content-Language: en-US
-From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <Yxucs30FNkbWQHVh@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 22:06, Matthew Wilcox wrote:
-> On Thu, Sep 08, 2022 at 11:25:08PM +0200, Vlastimil Babka (SUSE) wrote:
->> > I tend to agree with you. A mount operation shouldn’t panic the
->> > kernel.
->> 
->> Hmm kmalloc(64) shouldn't normally due that due to the the underlying page
->> allocation falling into the "too small to fail" category, wonder if
->> syzkaller was doing anything special here?
-> 
-> Here's the repro:
-> 
-> https://syzkaller.appspot.com/x/repro.c?x=17cd7fa3080000
-> 
-> you can see it does:
-> 
->   fd = open("/proc/thread-self/fail-nth", O_RDWR);
->   if (fd == -1)
->     exit(1);
->   char buf[16];
->   sprintf(buf, "%d", nth);
->   if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
-> 
-> so this is the kind of stupid nitpicky bug that we shouldn't be
-> reporting, let alone fixing, IMO.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Ah, thanks.
+We currently disable PTM for Root Ports during suspend.  Leaving PTM
+enabled for downstream devices causes UR errors if they send PTM Requests
+to upstream devices that have PTM disabled.
 
-Well I'm ok with eventually removing all such BUG_ONs including what
-Christophe Jaillet suggested, but it certainly isn't urgent nor deserves Cc:
-stable then.
+The intent of this series is to:
+
+  - Unconditionally disable PTM during suspend (even if the driver saves
+    its own state) by moving the disable from pci_prepare_to_sleep() to
+    pci_pm_suspend().
+
+  - Disable PTM for all devices by removing the Root Port condition and
+    doing it early in the suspend paths.
+
+  - Explicitly re-enable PTM during resume.
+
+Changes between v3 and v4:
+  - Use u16 for ptm_cap
+  - Add kernel-doc for pci_enable_ptm() and pci_disable_ptm() (exported
+    functions)
+  - Drop "Preserve PTM Root Select" (unnecessary since enabling PTM sets
+    Root Select when needed)
+  - Squash these three patches into one because they make more sense that
+    way:
+	PCI/PTM: Add suspend/resume
+	PCI/PTM: Add pci_enable_ptm() wrapper
+	PCI/PTM: Add pci_disable_ptm() wrapper
+  - Add "PCI/PTM: Preserve RsvdP bits in PTM Control register"
+  - Add "PCI/PTM: Consolidate PTM interface declarations"
+
+Bjorn Helgaas (9):
+  PCI/PTM: Cache PTM Capability offset
+  PCI/PTM: Add pci_upstream_ptm() helper
+  PCI/PTM: Separate configuration and enable
+  PCI/PTM: Add pci_suspend_ptm() and pci_resume_ptm()
+  PCI/PTM: Move pci_ptm_info() body into its only caller
+  PCI/PTM: Preserve RsvdP bits in PTM Control register
+  PCI/PTM: Reorder functions in logical order
+  PCI/PTM: Consolidate PTM interface declarations
+  PCI/PM: Always disable PTM for all devices during suspend
+
+ drivers/pci/pci-driver.c |  11 ++
+ drivers/pci/pci.c        |  28 +--
+ drivers/pci/pci.h        |  14 +-
+ drivers/pci/pcie/ptm.c   | 384 +++++++++++++++++++++------------------
+ include/linux/pci.h      |   3 +
+ 5 files changed, 234 insertions(+), 206 deletions(-)
+
+-- 
+2.25.1
+
