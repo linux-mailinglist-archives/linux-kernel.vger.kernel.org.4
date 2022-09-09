@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DF65B42D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686275B42D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiIIXGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S232277AbiIIXIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiIIXGf (ORCPT
+        with ESMTP id S231597AbiIIXGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:06:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AFB112B13
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:35 -0700 (PDT)
+        Fri, 9 Sep 2022 19:06:50 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D449117488
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662764795; x=1694300795;
+  t=1662764806; x=1694300806;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=tvE2qSOAJYgPdimf6y9rbAfyRdXmrVfr0H+iQAnFajc=;
-  b=AHXDIVfb7Yozs3wxCMCjPmW9yhJsowylDipVEt4VQLw/e8F4t0FGmkl7
-   uyy4LR63H4CXFFFDziuDj0gUCT41+uL1/1X4Gd+xZqDCCYlw7np5N4E85
-   oKr0LtT54T5ABqp1uvLNB9FlY59Gt0lRTz9319CbCTi9I0eRCOZM/a7Zi
-   PU5qJM6xuJ2KI4ZE3BZj2sEvSWMbL6IanT4LKk/7aBUagHt/JU/eBVaVw
-   63WY8bIKiID3RwUwxj8SRVNXfDAcmNpbhMCt6kP5ZpIqV4hdBvBeF+Lxk
-   Wab3bEbN9VtSKW8BmFYK1cUbpHW9P9pZXpzU+TTLbPUZKUOAcLMedsu4s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386910"
+  bh=fqp/+ja2AfhJThgnSNq5HdkqvXnSgr2PPJsRa8AnaJk=;
+  b=QczBKilwnDEPW/wBznPezBi3UWzYS+7y+AsICkn67juUBlF7kbn4eIxd
+   hZq2e9QJzh/lZz6/cI9qoYQSB1rbnX9LKkdnguYfeNG9w23JHUjZXydD6
+   D/13cQ17jnnAOCe5xKyGCJORnkeKeZPPm1UvNafFKebuAyDBjJZVYRsnP
+   aCRgqAcq9glQJqVIcWCqyQcDLkqftpgHaafm7GLr3TubU00UwVwXZld4q
+   z8XrhBJFs+VX7ELxSPM/EybW8q865X0NLF1WSezxSaHrroip9I7xE023/
+   /j0k0Y8AV9oavFNnQwK7BRdDSKjX/OOIJ2RJ2y5v6Mnx/L+e1+BljdNlL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296325087"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="298386910"
+   d="scan'208";a="296325087"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:33 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="677354993"
+   d="scan'208";a="677354999"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:32 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:33 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -56,36 +56,29 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [RFC PATCH 08/23] sched/fair: Compute task-class performance scores for load balancing
-Date:   Fri,  9 Sep 2022 16:11:50 -0700
-Message-Id: <20220909231205.14009-9-ricardo.neri-calderon@linux.intel.com>
+Subject: [RFC PATCH 09/23] sched/fair: Use task-class performance score to pick the busiest group
+Date:   Fri,  9 Sep 2022 16:11:51 -0700
+Message-Id: <20220909231205.14009-10-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compute both the current and the prospective the task-class performance
-of a scheduling group. As task-class statistics are used during asym_
-packing load balancing, the scheduling group will become idle.
+update_sd_pick_busiest() keeps on selecting as the busiest group scheduling
+groups of identical priority. Since both groups have the same priority,
+either group is a good choice. The classes of tasks in the scheduling
+groups can break this tie.
 
-For a scheduling group with only one CPU, the prospective performance is
-the performance of its current task if placed on the destination CPU.
-
-In a scheduling group composed of SMT siblings the current tasks of all
-CPUs share the resources of the core. Divide the task-class performance of
-scheduling group by the number of busy CPUs.
-
-After load balancing, the throughput of the siblings that remain busy
-increases. Plus, the destination CPU now contributes to the overall
-throughput.
+Pick as busiest the scheduling group that yields a higher task-class
+performance score after load balancing.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -101,94 +94,102 @@ Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- kernel/sched/fair.c | 53 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 58a435a04c1c..97731f81b570 100644
+index 97731f81b570..7368a0b453ee 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -8405,6 +8405,8 @@ struct sg_lb_stats {
- 	enum group_type group_type;
- 	unsigned int group_asym_packing; /* Tasks should be moved to preferred CPU */
- 	unsigned long group_misfit_task_load; /* A CPU has a task too big for its capacity */
-+	long task_class_score_after; /* Prospective task-class score after load balancing */
-+	long task_class_score_before; /* Task-class score before load balancing */
- #ifdef CONFIG_NUMA_BALANCING
- 	unsigned int nr_numa_running;
- 	unsigned int nr_preferred_running;
-@@ -8732,6 +8734,49 @@ static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sg
- 	class_sgs->min_score = score;
- 	class_sgs->p_min_score = rq->curr;
+@@ -8777,6 +8777,60 @@ static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *clas
+ 	sgs->task_class_score_before = group_score;
  }
-+
-+static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *class_sgs,
-+					     struct sg_lb_stats *sgs,
-+					     int dst_cpu)
+ 
++/**
++ * sched_asym_class_prefer - Select a sched group based on its classes of tasks
++ * @a:	Load balancing statistics of @sg_a
++ * @b:	Load balancing statistics of @sg_b
++ *
++ * Returns: true if preferring @a yields a higher overall throughput after
++ * balancing load. Returns false otherwise.
++ */
++static bool sched_asym_class_prefer(struct sg_lb_stats *a,
++				    struct sg_lb_stats *b)
 +{
-+	int group_score, group_score_without, score_on_dst_cpu;
-+	int busy_cpus = sgs->group_weight - sgs->idle_cpus;
-+
 +	if (!sched_task_classes_enabled())
-+		return;
++		return false;
 +
-+	/* No busy CPUs in the group. No tasks to move. */
-+	if (!busy_cpus)
-+		return;
-+
-+	score_on_dst_cpu = arch_get_task_class_score(class_sgs->p_min_score->class,
-+						     dst_cpu);
++	/* @a increases overall throughput after load balance. */
++	if (a->task_class_score_after > b->task_class_score_after)
++		return true;
 +
 +	/*
-+	 * The simpest case. The single busy CPU in the current group will
-+	 * become idle after pulling its current task. The destination CPU is
-+	 * idle.
++	 * If @a and @b yield the same overall throughput, pick @a if
++	 * its current throughput is lower than that of @b.
 +	 */
-+	if (busy_cpus == 1) {
-+		sgs->task_class_score_before = class_sgs->sum_score;
-+		sgs->task_class_score_after = score_on_dst_cpu;
-+		return;
-+	}
++	if (a->task_class_score_after == b->task_class_score_after)
++		return a->task_class_score_before < b->task_class_score_before;
 +
++	return false;
++}
++
++/**
++ * sched_asym_class_pick - Select a sched group based on classes of tasks
++ * @a:		A scheduling group
++ * @b:		A second scheduling group
++ * @a_stats:	Load balancing statistics of @a
++ * @b_stats:	Load balancing statistics of @b
++ *
++ * Returns: true if @a has the same priority and @a has classes of tasks that
++ * yield higher overall throughput after load balance. Returns false otherwise.
++ */
++static bool sched_asym_class_pick(struct sched_group *a,
++				  struct sched_group *b,
++				  struct sg_lb_stats *a_stats,
++				  struct sg_lb_stats *b_stats)
++{
 +	/*
-+	 * Now compute the group score with and without the task with the
-+	 * lowest score. We assume that the tasks that remain in the group share
-+	 * the CPU resources equally.
++	 * Only use the class-specific preference selection if both sched
++	 * groups have the same priority.
 +	 */
-+	group_score = class_sgs->sum_score / busy_cpus;
++	if (arch_asym_cpu_priority(a->asym_prefer_cpu) !=
++	    arch_asym_cpu_priority(b->asym_prefer_cpu))
++		return false;
 +
-+	group_score_without =  (class_sgs->sum_score - class_sgs->min_score) /
-+			       (busy_cpus - 1);
-+
-+	sgs->task_class_score_after = group_score_without + score_on_dst_cpu;
-+	sgs->task_class_score_before = group_score;
++	return sched_asym_class_prefer(a_stats, b_stats);
 +}
 +
  #else /* CONFIG_SCHED_TASK_CLASSES */
  static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs,
  					 struct rq *rq)
-@@ -8741,6 +8786,13 @@ static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sg
- static void init_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs)
+@@ -8793,6 +8847,14 @@ static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *clas
  {
  }
-+
-+static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *class_sgs,
-+					     struct sg_lb_stats *sgs,
-+					     int dst_cpu)
+ 
++static bool sched_asym_class_pick(struct sched_group *a,
++				  struct sched_group *b,
++				  struct sg_lb_stats *a_stats,
++				  struct sg_lb_stats *b_stats)
 +{
++	return false;
 +}
 +
  #endif /* CONFIG_SCHED_TASK_CLASSES */
  
  /**
-@@ -8920,6 +8972,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
- 	if (!local_group && env->sd->flags & SD_ASYM_PACKING &&
- 	    env->idle != CPU_NOT_IDLE && sgs->sum_h_nr_running &&
- 	    sched_asym(env, sds, sgs, group)) {
-+		compute_ilb_sg_task_class_scores(&class_stats, sgs, env->dst_cpu);
- 		sgs->group_asym_packing = 1;
- 	}
+@@ -9049,6 +9111,12 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 		/* Prefer to move from lowest priority CPU's work */
+ 		if (sched_asym_prefer(sg->asym_prefer_cpu, sds->busiest->asym_prefer_cpu))
+ 			return false;
++
++		/* @sg and @sds::busiest have the same priority. */
++		if (sched_asym_class_pick(sds->busiest, sg, &sds->busiest_stat, sgs))
++			return false;
++
++		/* @sg has lower priority than @sds::busiest. */
+ 		break;
  
+ 	case group_misfit_task:
 -- 
 2.25.1
 
