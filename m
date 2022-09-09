@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834185B3BE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0545B3BF0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiIIPaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S229616AbiIIPb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiIIP3c (ORCPT
+        with ESMTP id S231414AbiIIPbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:29:32 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E887AB5326
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662737325; x=1694273325;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RuBa4e3QmLHKQ2j7H+ky5v61IXa2A+iP22YYziucdtU=;
-  b=XrbQMOQXu0Vps2P9+lbUSIP0B///STxzn8vh0aEGct+AaXMW6FFiL5iA
-   5XfKWmLGv/lQmXsrCybEbtTwzGIKTmylK9BFsINlVtuYTCcX/LCoeGUfN
-   nBvHZsKPR40xCMKu+3sosYwNwlCaxm+cRGbndILUYbyV1QmX2cKh0Llb2
-   Y2fdP4bjxUyTULiZEbSZWHJsLw2RUHw6SwbFi1OKXbO1Qgwvs3iSrTK4X
-   hq5TCvvzfBqDLDUGLr4VfnPsen+mrv9slbnxFpyi5EeTnaFY19MuYUkp4
-   cPjxL8hMpb7t+31mGg/3iRiIv78deODujxATtVFyUFtgvWEaeMSz/BhrS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296236316"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="296236316"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 08:27:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="615303870"
-Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
-  by orsmga002.jf.intel.com with ESMTP; 09 Sep 2022 08:27:29 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
+        Fri, 9 Sep 2022 11:31:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D87A539B9A;
+        Fri,  9 Sep 2022 08:30:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57FD7165C;
+        Fri,  9 Sep 2022 08:28:32 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.17.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8338E3F73D;
+        Fri,  9 Sep 2022 08:28:24 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
 To:     linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] x86/mm: Set NX bit when making pages present
-Date:   Fri,  9 Sep 2022 08:27:21 -0700
-Message-Id: <20220909152721.1685334-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v9 00/13] perf: test: Add trace data quality tests for CoreSight
+Date:   Fri,  9 Sep 2022 16:27:50 +0100
+Message-Id: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The x86 mm code now actively refuses to create writable, executable
-mappings and warns when there is an attempt to create one.
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-0day ran across a case triggered by module unloading, but that looks
-to be a generic problem.  It presumably goes like this:
+This series adds more test cases to perf test as well as new
+infrastructure for testing coresight data quality to ensure the data
+coming out of the kernel via perf actually contains useful information.
 
-	1. Load module with direct map, P=1,W=1,NX=1
-	2. Map module executable, set P=1,W=0,NX=0
-	3. Free module, land in vfree()->vm_remove_mappings()
-	4. Set P=0 during alias processing, P=0,W=0,NX=0
-	5. Restore kernel mapping via set_direct_map_default_noflush(),
-	   set P=1,W=1, resulting in P=1,W=1,NX=0
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 
-That's clearly a writable, executable mapping which is a no-no.  The
-new W^X code is clearly doing its job.
 
-Fix it by actively setting _PAGE_NX when creating writable mappings.
+Carsten Haitzler (13):
+  perf test: Add CoreSight shell lib shared code for future tests
+  perf test: Add build infra for perf test tools for CoreSight tests
+  perf test: Add asm pureloop test tool
+  perf test: Add asm pureloop test shell script
+  perf test: Add git ignore for perf data generated by the CoreSight
+    tests
+  perf test: Add memcpy thread test tool
+  perf test: Add memcpy thread test shell script
+  perf test: Add thread loop test tool
+  perf test: Add thread loop test shell scripts
+  perf test: Add unroll thread test tool
+  perf test: Add unroll thread test shell script
+  perf test: Add git ignore for tmp and output files of CoreSight tests
+  perf test: Add relevant documentation about CoreSight testing
 
-One concern: I haven't been able to actually reproduce this, even by
-loading and unloading the module that 0day hit it with.  I'd like to
-be able to reproduce this before committing a fix.
+ .../trace/coresight/coresight-perf.rst        | 158 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ tools/perf/.gitignore                         |   6 +-
+ .../perf/Documentation/perf-arm-coresight.txt |   5 +
+ tools/perf/Makefile.config                    |   2 +
+ tools/perf/Makefile.perf                      |  15 +-
+ tools/perf/tests/shell/coresight/Makefile     |  29 ++++
+ .../tests/shell/coresight/Makefile.miniconfig |  14 ++
+ .../tests/shell/coresight/asm_pure_loop.sh    |  18 ++
+ .../shell/coresight/asm_pure_loop/.gitignore  |   1 +
+ .../shell/coresight/asm_pure_loop/Makefile    |  34 ++++
+ .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 ++++
+ .../shell/coresight/memcpy_thread/.gitignore  |   1 +
+ .../shell/coresight/memcpy_thread/Makefile    |  33 ++++
+ .../coresight/memcpy_thread/memcpy_thread.c   |  79 +++++++++
+ .../shell/coresight/memcpy_thread_16k_10.sh   |  18 ++
+ .../shell/coresight/thread_loop/.gitignore    |   1 +
+ .../shell/coresight/thread_loop/Makefile      |  33 ++++
+ .../shell/coresight/thread_loop/thread_loop.c |  86 ++++++++++
+ .../coresight/thread_loop_check_tid_10.sh     |  19 +++
+ .../coresight/thread_loop_check_tid_2.sh      |  19 +++
+ .../coresight/unroll_loop_thread/.gitignore   |   1 +
+ .../coresight/unroll_loop_thread/Makefile     |  33 ++++
+ .../unroll_loop_thread/unroll_loop_thread.c   |  74 ++++++++
+ .../shell/coresight/unroll_loop_thread_10.sh  |  18 ++
+ tools/perf/tests/shell/lib/coresight.sh       | 132 +++++++++++++++
+ 26 files changed, 854 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+ create mode 100644 tools/perf/Documentation/perf-arm-coresight.txt
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile.miniconfig
+ create mode 100755 tools/perf/tests/shell/coresight/asm_pure_loop.sh
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/asm_pure_loop.S
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/thread_loop.c
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/unroll_loop_thread_10.sh
+ create mode 100644 tools/perf/tests/shell/lib/coresight.sh
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Link: https://lore.kernel.org/all/fcf89147-440b-e478-40c9-228c9fe56691@intel.com/
-
---
-
-0day folks, please do share these as they come up.  We want to keep
-fixing them.
----
- arch/x86/mm/pat/set_memory.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 1a2d6376251c..5fb5874ea2c6 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2247,6 +2247,12 @@ static int __set_pages_p(struct page *page, int numpages)
- 				.mask_clr = __pgprot(0),
- 				.flags = 0};
- 
-+	/*
-+	 * Avoid W^X mappings that occur if the old
-+	 * mapping was !_PAGE_RW and !_PAGE_NX.
-+	 */
-+	pgprot_val(cpa.mask_set) |= __supported_pte_mask & _PAGE_NX;
-+
- 	/*
- 	 * No alias checking needed for setting present flag. otherwise,
- 	 * we may need to break large pages for 64-bit kernel text
 -- 
-2.34.1
+2.32.0
 
