@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAA15B31E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054E55B31EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiIIIiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S231126AbiIIIjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiIIIiW (ORCPT
+        with ESMTP id S230095AbiIIIjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:38:22 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D8D12B2BC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:38:18 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id z23so1005305ljk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:38:18 -0700 (PDT)
+        Fri, 9 Sep 2022 04:39:03 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F812FBBB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:38:58 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bt10so1537321lfb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=BQBhZcEfl6T9p1U34zgQ/JzWRYaK36lx1DLrHB7PYZQ=;
-        b=j09QxsNsiS6ScV7OwpSKQmeohH2DKbk8MbRDvGLQqmFFj3+o0zQSiT8fi+lgn0VfZS
-         oOZOz34KyZ8NMQRv9iQ4lVxa5lqYz2FcGB971Cz4/3uiyh5opfc43F3u30kDXOz2vbHn
-         XGkJ95fRoYADZy99hd8d0cTEF3oThzAUFDqK0k4GKjP7b5zxPSU8qwi2tghumha15dJy
-         wuGILdiH48QfezIT9wAx2qblM6SKGhI6eZag9/mlHTfvuFJwYOoRw+GfawubrnLmpCxL
-         CgkwutO4hNTkkSNUNU/qCkXG8jqKS8cZ529W44ybltGfRLaGYMFMikbpQ9Av5rw4xWYg
-         aj4g==
+        bh=BZdXdwTdKGe0baQEwZY8VKfE+Zui9u+0KrTmD1YE7Hc=;
+        b=ta7vUt+h77XK1nbaY+2lNhiO3rTKLgScRasuIurPBQmFUDsNBKMtBpHOVMJ51ZJAQv
+         WFjDrA1m79Tg9yk7WW8ICYI531G0nPm7Ny17zWs0NXcLWh8uVg9eVVEK7WxsruIWYGO4
+         H7pu+8sOp7KqlJG3nW83gMdCt3exqVE+nLChtw+pMCCV4+nR4PHKeTDKr9HWoqJ2FniA
+         pH09KU/Dm0kvXxFL8vBmSTROyllKS4Ud0VwpzBvREHb53P0HtvuCsexxdIm8nc2wE0G4
+         5mK7uDvL66SzYpO3P5aT66pY7EP0HskmVY9qcNJdA5qh4Wyk09LNjU6AlexmzTMuWC5C
+         TUqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BQBhZcEfl6T9p1U34zgQ/JzWRYaK36lx1DLrHB7PYZQ=;
-        b=IuPa6SoxMGdQQspTb9hbDng0OcAh5Z2DOhlomA1VSVyGijraOE4it3uI8aR/DP6AYr
-         Rj/j6iLA7uGk8MIm546EwKWAxAa+nIEmZ13uQEOz4PMtLgJxDHyWpSsthWwZBDXdZyel
-         7QxStD2NUWOy9SyuIs8JUh6LkNQ0hxd+LzKBRGZ9p5zeZBuFV7cWTDgmVBnGEUHZ2e5I
-         xugf+oV0t19vAkSPTcVVIKgpE1gbobhdGYbXuiZfpa+5b8qT3aGotCSc3fmN8EHjHVq7
-         pcn5EfaD8bE2Y4oFR+3X+eFrV/ed1Mio/mfos6ZR2WGl50xiWZl2s84/6HlgwVFtmEPM
-         BYDw==
-X-Gm-Message-State: ACgBeo24kSBOhUH8KdrYuJT7VL+C6vifwSoBeocmdwDDDpL4PyZ+ye8P
-        CaeP5rs2ixRkPAObY1twLw4XDZlcWDxsROLWTu13UjIvwOxFAQ==
-X-Google-Smtp-Source: AA6agR6RJr6eTkMa6PU0QWPPFxYYwmaaxaNYjGWefoTfZlImxv5iZJCWz/Amdxg7tYqmq+XELjddohxZwdle5nSJeDs=
-X-Received: by 2002:a2e:bf07:0:b0:261:cafb:d4a8 with SMTP id
- c7-20020a2ebf07000000b00261cafbd4a8mr3459885ljr.268.1662712696564; Fri, 09
- Sep 2022 01:38:16 -0700 (PDT)
+        bh=BZdXdwTdKGe0baQEwZY8VKfE+Zui9u+0KrTmD1YE7Hc=;
+        b=xXVV41RbdoiY8JpyMR003DMUrS5QqtqGVvWibZ5JefIYBY5DxvACT3DfnwaZokp+em
+         CZuqdRKReCIQI1XWgzgfFnkk8KaSnsKcVq6wXFypNmqCL/Nnr0Cxn4ilTUQ6ldEWCPY2
+         CJDJxvfSz3EwdKIjEzkenROVwsRhbOWh0eYLl3cSdSTHS77EcdjNA8RbXcKa/5D14azN
+         hnhhqqMlfBv73uwNW2zPOUGiJ3MmOTz/X2/2I+9lJ2GHW7mKOeOHOt2IQjwSN8BF8XhO
+         8MDhHWakK1ZqB61Z4tjMY5IYH0T7UF4ienfI6mPV4qU/uQee1JkhWZQLzm0YwbjzSSct
+         2mgw==
+X-Gm-Message-State: ACgBeo2X4CVWlawtlriRw9JZGub9bHZExRe7Ez5IF0u9bYQjDN/oUB3O
+        BNxWRRM5cfa1Pc3arkdFB6oryqzdHYIwkTz0vgWZwg==
+X-Google-Smtp-Source: AA6agR4e9oWULjRziRq6BJvzm03afAE7CthF2BBKMgyNC0AoRlZQbNF5PpM8IXTvogSdIcHPvp6WSzcAKJtRkBHidYw=
+X-Received: by 2002:a05:6512:118b:b0:492:e3c4:a164 with SMTP id
+ g11-20020a056512118b00b00492e3c4a164mr4400289lfr.598.1662712735864; Fri, 09
+ Sep 2022 01:38:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220909073840.45349-1-elver@google.com> <20220909073840.45349-2-elver@google.com>
-In-Reply-To: <20220909073840.45349-2-elver@google.com>
+References: <20220909073840.45349-1-elver@google.com> <20220909073840.45349-3-elver@google.com>
+In-Reply-To: <20220909073840.45349-3-elver@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 9 Sep 2022 10:38:04 +0200
-Message-ID: <CACT4Y+Zuf+ynzSbboTAN0_VLedeVErO6qm49H4YzuR1e8EgJUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kcsan: Instrument memcpy/memset/memmove with newer Clang
+Date:   Fri, 9 Sep 2022 10:38:44 +0200
+Message-ID: <CACT4Y+ZJXS0Hcj4D-O+KfXT0SJ9pUhEx=zDqhwgOa9Pz2te0KQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] objtool, kcsan: Add volatile read/write
+ instrumentation to whitelist
 To:     Marco Elver <elver@google.com>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -66,13 +67,13 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-s390@vger.kernel.org, stable@vger.kernel.org
+        linux-s390@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,84 +82,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 9 Sept 2022 at 09:38, Marco Elver <elver@google.com> wrote:
 >
-> With Clang version 16+, -fsanitize=thread will turn
-> memcpy/memset/memmove calls in instrumented functions into
-> __tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
+> Adds KCSAN's volatile instrumentation to objtool's uaccess whitelist.
 >
-> Add these functions to the core KCSAN runtime, so that we (a) catch data
-> races with mem* functions, and (b) won't run into linker errors with
-> such newer compilers.
+> Recent kernel change have shown that this was missing from the uaccess
+> whitelist (since the first upstreamed version of KCSAN):
 >
-> Cc: stable@vger.kernel.org # v5.10+
+>   mm/gup.o: warning: objtool: fault_in_readable+0x101: call to __tsan_volatile_write1() with UACCESS enabled
+>
+> Fixes: 75d75b7a4d54 ("kcsan: Support distinguishing volatile accesses")
 > Signed-off-by: Marco Elver <elver@google.com>
+
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+
 > ---
 > v2:
-> * Fix for architectures which do not provide their own
->   memcpy/memset/memmove and instead use the generic versions in
->   lib/string. In this case we'll just alias the __tsan_ variants.
+> * Fix commit message.
 > ---
->  kernel/kcsan/core.c | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
+>  tools/objtool/check.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index fe12dfe254ec..4015f2a3e7f6 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -18,6 +18,7 @@
->  #include <linux/percpu.h>
->  #include <linux/preempt.h>
->  #include <linux/sched.h>
-> +#include <linux/string.h>
->  #include <linux/uaccess.h>
->
->  #include "encoding.h"
-> @@ -1308,3 +1309,41 @@ noinline void __tsan_atomic_signal_fence(int memorder)
->         }
->  }
->  EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-> +
-> +#ifdef __HAVE_ARCH_MEMSET
-> +void *__tsan_memset(void *s, int c, size_t count);
-> +noinline void *__tsan_memset(void *s, int c, size_t count)
-> +{
-> +       check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
-
-These can use large sizes, does it make sense to truncate it to
-MAX_ENCODABLE_SIZE?
-
-
-> +       return __memset(s, c, count);
-> +}
-> +#else
-> +void *__tsan_memset(void *s, int c, size_t count) __alias(memset);
-> +#endif
-> +EXPORT_SYMBOL(__tsan_memset);
-> +
-> +#ifdef __HAVE_ARCH_MEMMOVE
-> +void *__tsan_memmove(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memmove(dst, src, len);
-> +}
-> +#else
-> +void *__tsan_memmove(void *dst, const void *src, size_t len) __alias(memmove);
-> +#endif
-> +EXPORT_SYMBOL(__tsan_memmove);
-> +
-> +#ifdef __HAVE_ARCH_MEMCPY
-> +void *__tsan_memcpy(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memcpy(dst, src, len);
-> +}
-> +#else
-> +void *__tsan_memcpy(void *dst, const void *src, size_t len) __alias(memcpy);
-> +#endif
-> +EXPORT_SYMBOL(__tsan_memcpy);
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index e55fdf952a3a..67afdce3421f 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -999,6 +999,16 @@ static const char *uaccess_safe_builtin[] = {
+>         "__tsan_read_write4",
+>         "__tsan_read_write8",
+>         "__tsan_read_write16",
+> +       "__tsan_volatile_read1",
+> +       "__tsan_volatile_read2",
+> +       "__tsan_volatile_read4",
+> +       "__tsan_volatile_read8",
+> +       "__tsan_volatile_read16",
+> +       "__tsan_volatile_write1",
+> +       "__tsan_volatile_write2",
+> +       "__tsan_volatile_write4",
+> +       "__tsan_volatile_write8",
+> +       "__tsan_volatile_write16",
+>         "__tsan_atomic8_load",
+>         "__tsan_atomic16_load",
+>         "__tsan_atomic32_load",
 > --
 > 2.37.2.789.g6183377224-goog
 >
