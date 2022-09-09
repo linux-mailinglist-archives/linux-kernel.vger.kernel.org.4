@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5925B3743
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BECF5B373C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiIIMMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S231558AbiIIMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIIMKs (ORCPT
+        with ESMTP id S230100AbiIIMKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:10:48 -0400
+        Fri, 9 Sep 2022 08:10:46 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C600116B7D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AEC12E19D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:16 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDp38mYz4xcd;
-        Fri,  9 Sep 2022 22:10:18 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDk5w18z4xcR;
+        Fri,  9 Sep 2022 22:10:14 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     benh@kernel.crashing.org, Liang He <windhl@126.com>,
-        christophe.leroy@csgroup.eu, mpe@ellerman.id.au
+To:     paulus@samba.org, Liang He <windhl@126.com>,
+        christophe.leroy@csgroup.eu, benh@kernel.crashing.org,
+        mpe@ellerman.id.au
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220617124045.4048757-1-windhl@126.com>
-References: <20220617124045.4048757-1-windhl@126.com>
-Subject: Re: [PATCH] powerpc: maple: Fix refcount leak bug in time.c
-Message-Id: <166272522531.2076816.11324523465764463502.b4-ty@ellerman.id.au>
-Date:   Fri, 09 Sep 2022 22:07:05 +1000
+In-Reply-To: <20220618024930.4056825-1-windhl@126.com>
+References: <20220618024930.4056825-1-windhl@126.com>
+Subject: Re: [PATCH] powerpc: 8xx: Fix refcount leak bug in tqm8xx_setup
+Message-Id: <166272522623.2076816.13575618880147514212.b4-ty@ellerman.id.au>
+Date:   Fri, 09 Sep 2022 22:07:06 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,16 +43,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 20:40:45 +0800, Liang He wrote:
-> In maple_get_boot_time(), of_find_compatible_node() will return
-> a node pointer with refcount incremented. We should use of_node_put()
-> in fail path or when it is not used anymore.
+On Sat, 18 Jun 2022 10:49:30 +0800, Liang He wrote:
+> In init_ioports(), of_find_node_by_name() will return a node pointer
+> with refcount incremented. We should use of_node_put() when it is not
+> used anymore.
 > 
 > 
 
 Applied to powerpc/next.
 
-[1/1] powerpc: maple: Fix refcount leak bug in time.c
-      https://git.kernel.org/powerpc/c/23b1481898ee8704394cead67eae2634003f7ca8
+[1/1] powerpc: 8xx: Fix refcount leak bug in tqm8xx_setup
+      https://git.kernel.org/powerpc/c/edc17890ae8ee475b566079bea2e9ba83fec021d
 
 cheers
