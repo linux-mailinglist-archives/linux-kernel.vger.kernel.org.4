@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6651D5B3500
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47155B350C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiIIKRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S230095AbiIIKUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIIKRr (ORCPT
+        with ESMTP id S229597AbiIIKU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:17:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CF3129C6C;
-        Fri,  9 Sep 2022 03:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662718666; x=1694254666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=twmve2pp6FrQGPPjMyndpXyUbQtJvOD5cguRNbI4b8k=;
-  b=LNomahuwvi9Ima+PTJbdzu13/NoqIfSY+viDyk/pqJBLgBx79r1tzYSL
-   dNoApEmfTG1kXPexjt5yrVSLkOnzgJSVr74dgajVbkCQroE1DD3+TgInx
-   J1Z9d7/kEEmk+6RDwZegYRqg7UCmN/cNPMoF4gyjJAfwJeNYUJ6e+YmuL
-   AxtryTlJqF1dhFEQ5n/+rHl9+vi8LzjChrxmhxJm6CtIJRvLhC7ZZ1bM8
-   qrx/X5LSkcPjR9zWWolCv8ztbsyLSZRcJLUzn/aCZ+0kyCr+LA82LfYdn
-   gMWGxIjVDSQvpWL1Gbs9lPoNAG+6/EN6iiIjouvKPq/0ooZcE6tQhWfrt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323652426"
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="323652426"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 03:17:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="592559923"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 03:17:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWb4v-00AW30-1f;
-        Fri, 09 Sep 2022 13:17:41 +0300
-Date:   Fri, 9 Sep 2022 13:17:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 1/1] serial: 8250_dma: Convert to use
- uart_xmit_advance()
-Message-ID: <YxsSxbB47TNm2p0B@smile.fi.intel.com>
-References: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
- <81acf91-ba43-f276-fca7-ac9c9e721a88@linux.intel.com>
+        Fri, 9 Sep 2022 06:20:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C4E6F25F;
+        Fri,  9 Sep 2022 03:20:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD575B82485;
+        Fri,  9 Sep 2022 10:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712FEC433D7;
+        Fri,  9 Sep 2022 10:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662718826;
+        bh=8Sn8WrNoUZJkKYo6rTUp7rYpe1gjGfheWMeOFH/9gwM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OR7JgDg7bdffNymnK5Ogz4vTx4lz76/qHZsuCZ80REXdSETL5vt5nKzl8YAV/hzUI
+         fXqIwBRjzwbf5bq+MVx812yeQG4W8001z+ML1zRBiPO8ZCBhaXeB8j04MwlSSxDa00
+         rOY4yCDnT8uK+eJRPRsYwon77m2OW5UURaWMYVS9867PlRjUhjIsoU5eXbWW3RKJRs
+         iLfLuzp8yGAcfl0vbzg89BTU9HOAMr2XBK8AJkGQeQz4lx2FS+ORLn3tv0Zoq0oN/j
+         lJd4AmC1IaMInJ3ddDOcHJt9Zj9oqlGyF8wFsNhiC4UL9p1xBf9mEw/vXKBU3h0heH
+         6u399K72zzGrg==
+Date:   Fri, 9 Sep 2022 12:20:19 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>, bhelgaas@google.com,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: endpoint: Use link_up() callback in place of
+ LINK_UP notifier
+Message-ID: <YxsTYzGkfzFiBIsq@lpieralisi>
+References: <20220811094237.77632-1-manivannan.sadhasivam@linaro.org>
+ <20220811094237.77632-3-manivannan.sadhasivam@linaro.org>
+ <c200a544-31fe-b660-82bb-4bbed5acf135@ti.com>
+ <20220831082025.GC5076@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81acf91-ba43-f276-fca7-ac9c9e721a88@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220831082025.GC5076@thinkpad>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:16:58PM +0300, Ilpo Järvinen wrote:
-> On Fri, 9 Sep 2022, Andy Shevchenko wrote:
+On Wed, Aug 31, 2022 at 01:50:25PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Aug 25, 2022 at 03:47:10PM +0530, Kishon Vijay Abraham I wrote:
+> > Hi Mani,
+> > 
+> > On 11/08/22 15:12, Manivannan Sadhasivam wrote:
+> > > As a part of the transition towards callback mechanism for signalling the
+> > > events from EPC to EPF, let's use the link_up() callback in the place of
+> > > the LINK_UP notifier. This also removes the notifier support completely
+> > > from the PCI endpoint framework.
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
+> > >  drivers/pci/endpoint/pci-epc-core.c           |  8 +++--
+> > >  include/linux/pci-epc.h                       |  8 -----
+> > >  include/linux/pci-epf.h                       |  8 ++---
+> > >  4 files changed, 18 insertions(+), 39 deletions(-)
+> > > 
+> > 
+> > .
+> > .
+> > <snip>
+> > .
+> > .
+> > > diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> > > index 805f3d64f93b..a51ba9f158c3 100644
+> > > --- a/drivers/pci/endpoint/pci-epc-core.c
+> > > +++ b/drivers/pci/endpoint/pci-epc-core.c
+> > > @@ -690,10 +690,15 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
+> > >   */
+> > >  void pci_epc_linkup(struct pci_epc *epc)
+> > >  {
+> > > +	struct pci_epf *epf;
+> > > +
+> > >  	if (!epc || IS_ERR(epc))
+> > >  		return;
+> > >  
+> > > -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+> > > +	list_for_each_entry(epf, &epc->pci_epf, list) {
+> > > +		if (epf->event_ops->link_up)
+> > > +			epf->event_ops->link_up(epf);
+> > > +	}
+> > 
+> > how do you ensure there is no race while invoking the call back
+> > functions during add/remove of epf?
+> > 
 > 
-> > uart_xmit_advance() provides a common way on how to advance
-> > the Tx queue. Use it for the sake of unification and robustness.
+> Good catch! These should be guarded by epf->lock.
 
-...
+I shall wait for v2 then and mark this one as "Changes requested".
 
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-Thanks!
-
-> Please note though that I already have patches for almost all these but
-> I've not just submitted the remaining ones yet.
-
-My interest only for a limited scope of 8250 compatible UARTs, I have sent
-just a couple of patches and I don't think I will send more.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lorenzo
