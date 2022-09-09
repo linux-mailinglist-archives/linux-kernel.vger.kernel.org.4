@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6545B3A2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706F45B39FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbiIINzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S229589AbiIINzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiIINy5 (ORCPT
+        with ESMTP id S230237AbiIINyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:54:57 -0400
+        Fri, 9 Sep 2022 09:54:53 -0400
 Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92F55FDD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86BED96;
         Fri,  9 Sep 2022 06:54:45 -0700 (PDT)
 From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1662731679; bh=NCPpxyFjG5FDRL0rwynjPqiU4WUuUILsCbqISKQ667o=;
+        t=1662731679; bh=wQ6gFpgaheXkQG5O+w8BcmO70ntpKXeJcMOFxz0cQhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JKqmA8UGZ0fsk4Hle78vm2vedlZrjhQBjpkHzOlLAYXH2sqTJXRkazf7im1JyBKVz
-         vkJICabGUFIGOOoq+zhjLqYGqW8QCwCmc1Y/03WyxPNzayUjl0UupLWLR40eJEPd1o
-         z0diyJ3eV5Uy/50BgOYNR2Si7sfpyzLrIkMqWjtQ=
+        b=clWEAI06jkFStRcuwd8cUXB9hBJ7JLu6dKwoGCyN9xn4ljLQwCBQIPJszq4VSdXvf
+         Pv1jdYCc5AlRQVfoCOqBetcZH++1mNhDehxXf+0bN8MqcAvA/rqSD1w+VGoh5yU6w7
+         DpVpVCigQyN/9S512LZszclhRgyY/4BfnALrCISc=
 To:     James Schulman <james.schulman@cirrus.com>,
         David Rhodes <david.rhodes@cirrus.com>,
         Lucas Tanure <tanureal@opensource.cirrus.com>,
@@ -41,9 +41,9 @@ Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
         - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         asahi@lists.linux.dev
-Subject: [PATCH 05/10] ASoC: cs42l42: Split cs42l42_resume into two functions
-Date:   Fri,  9 Sep 2022 15:53:29 +0200
-Message-Id: <20220909135334.98220-6-povik+lin@cutebit.org>
+Subject: [PATCH 06/10] ASoC: cs42l42: Pass component and dai defs into common probe
+Date:   Fri,  9 Sep 2022 15:53:30 +0200
+Message-Id: <20220909135334.98220-7-povik+lin@cutebit.org>
 In-Reply-To: <20220909135334.98220-1-povik+lin@cutebit.org>
 References: <20220909135334.98220-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
@@ -60,66 +60,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-On SoundWire the system resume cannot restore registers until the
-host controller has re-enumerated the peripheral.
+Pass pointers to snd_soc_component_driver and snd_soc_dai_driver
+objects into cs42l42_common_probe().
 
-This patch splits cs42l42_resume() into two functions, one to
-power up and the other to restore registers, ready for adding
-SoundWire support.
+This is in preparation for adding SoundWire support.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- sound/soc/codecs/cs42l42.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ sound/soc/codecs/cs42l42.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index 451357a1c315..2efec8cce089 100644
+index 2efec8cce089..bffe0347bec0 100644
 --- a/sound/soc/codecs/cs42l42.c
 +++ b/sound/soc/codecs/cs42l42.c
-@@ -2183,6 +2183,15 @@ static int __maybe_unused cs42l42_resume(struct device *dev)
- 	gpiod_set_value_cansleep(cs42l42->reset_gpio, 1);
- 	usleep_range(CS42L42_BOOT_TIME_US, CS42L42_BOOT_TIME_US * 2);
- 
-+	dev_dbg(dev, "System resume powered up\n");
-+
-+	return 0;
-+}
-+
-+static void __maybe_unused cs42l42_resume_restore(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+
- 	regcache_cache_only(cs42l42->regmap, false);
- 	regcache_mark_dirty(cs42l42->regmap);
- 
-@@ -2195,6 +2204,17 @@ static int __maybe_unused cs42l42_resume(struct device *dev)
- 	mutex_unlock(&cs42l42->irq_lock);
- 
- 	dev_dbg(dev, "System resumed\n");
-+}
-+
-+static int __maybe_unused cs42l42_i2c_resume(struct device *dev)
-+{
-+	int ret;
-+
-+	ret = cs42l42_resume(dev);
-+	if (ret)
-+		return ret;
-+
-+	cs42l42_resume_restore(dev);
- 
+@@ -579,7 +579,7 @@ static int cs42l42_set_jack(struct snd_soc_component *component, struct snd_soc_
  	return 0;
  }
-@@ -2416,7 +2436,7 @@ static int cs42l42_i2c_remove(struct i2c_client *i2c_client)
+ 
+-static const struct snd_soc_component_driver soc_component_dev_cs42l42 = {
++static const struct snd_soc_component_driver cs42l42_soc_component = {
+ 	.set_jack		= cs42l42_set_jack,
+ 	.dapm_widgets		= cs42l42_dapm_widgets,
+ 	.num_dapm_widgets	= ARRAY_SIZE(cs42l42_dapm_widgets),
+@@ -2219,7 +2219,9 @@ static int __maybe_unused cs42l42_i2c_resume(struct device *dev)
+ 	return 0;
  }
  
- static const struct dev_pm_ops cs42l42_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l42_resume)
-+	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l42_i2c_resume)
- };
+-static int cs42l42_common_probe(struct cs42l42_private *cs42l42)
++static int cs42l42_common_probe(struct cs42l42_private *cs42l42,
++				const struct snd_soc_component_driver *component_drv,
++				struct snd_soc_dai_driver *dai)
+ {
+ 	int ret, i;
  
- #ifdef CONFIG_OF
+@@ -2277,9 +2279,7 @@ static int cs42l42_common_probe(struct cs42l42_private *cs42l42)
+ 	}
+ 
+ 	/* Register codec now so it can EPROBE_DEFER */
+-	ret = devm_snd_soc_register_component(cs42l42->dev,
+-					      &soc_component_dev_cs42l42,
+-					      &cs42l42_dai, 1);
++	ret = devm_snd_soc_register_component(cs42l42->dev, component_drv, dai, 1);
+ 	if (ret < 0)
+ 		goto err;
+ 
+@@ -2415,7 +2415,7 @@ static int cs42l42_i2c_probe(struct i2c_client *i2c_client)
+ 	cs42l42->regmap = regmap;
+ 	cs42l42->irq = i2c_client->irq;
+ 
+-	ret = cs42l42_common_probe(cs42l42);
++	ret = cs42l42_common_probe(cs42l42, &cs42l42_soc_component, &cs42l42_dai);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.33.0
 
