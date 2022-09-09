@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F715B3BEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834185B3BE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiIIPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S229813AbiIIPaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiIIPbZ (ORCPT
+        with ESMTP id S229930AbiIIP3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:31:25 -0400
-X-Greylist: delayed 231 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 08:30:52 PDT
-Received: from p3plwbeout24-02.prod.phx3.secureserver.net (p3plsmtp24-02-2.prod.phx3.secureserver.net [68.178.252.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455FE1475C4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:30:51 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.144])
-        by :WBEOUT: with ESMTP
-        id WfuCofxtiw2jOWfuDok3O6; Fri, 09 Sep 2022 08:26:57 -0700
-X-CMAE-Analysis: v=2.4 cv=DZ/SFthW c=1 sm=1 tr=0 ts=631b5b43
- a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10 a=VwQbUJbxAAAA:8
- a=i0EeH86SAAAA:8 a=QyXUC8HyAAAA:8 a=AgdXCVuIJE-Ip5MHRPMA:9
- a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  WfuCofxtiw2jO
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp02.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1oWfuC-0009Mr-0b; Fri, 09 Sep 2022 16:26:56 +0100
-Message-ID: <56f53190-c6dc-7d9f-71c7-6626163df15c@squashfs.org.uk>
-Date:   Fri, 9 Sep 2022 16:26:50 +0100
+        Fri, 9 Sep 2022 11:29:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E887AB5326
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662737325; x=1694273325;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RuBa4e3QmLHKQ2j7H+ky5v61IXa2A+iP22YYziucdtU=;
+  b=XrbQMOQXu0Vps2P9+lbUSIP0B///STxzn8vh0aEGct+AaXMW6FFiL5iA
+   5XfKWmLGv/lQmXsrCybEbtTwzGIKTmylK9BFsINlVtuYTCcX/LCoeGUfN
+   nBvHZsKPR40xCMKu+3sosYwNwlCaxm+cRGbndILUYbyV1QmX2cKh0Llb2
+   Y2fdP4bjxUyTULiZEbSZWHJsLw2RUHw6SwbFi1OKXbO1Qgwvs3iSrTK4X
+   hq5TCvvzfBqDLDUGLr4VfnPsen+mrv9slbnxFpyi5EeTnaFY19MuYUkp4
+   cPjxL8hMpb7t+31mGg/3iRiIv78deODujxATtVFyUFtgvWEaeMSz/BhrS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296236316"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="296236316"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 08:27:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="615303870"
+Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
+  by orsmga002.jf.intel.com with ESMTP; 09 Sep 2022 08:27:29 -0700
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/mm: Set NX bit when making pages present
+Date:   Fri,  9 Sep 2022 08:27:21 -0700
+Message-Id: <20220909152721.1685334-1-dave.hansen@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 0/2] squashfs: Add the mount parameter "threads="
-To:     Xiaoming Ni <nixiaoming@huawei.com>, linux-kernel@vger.kernel.org
-Cc:     wangle6@huawei.com, yi.zhang@huawei.com, wangbing6@huawei.com,
-        zhongjubin@huawei.com, chenjianguo3@huawei.com
-References: <20220816010052.15764-1-nixiaoming@huawei.com>
- <20220902094855.22666-1-nixiaoming@huawei.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20220902094855.22666-1-nixiaoming@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfIbT6N89EXZC9Ay38cwuwM4PXp/m/5Ff7PyKkve1Bb3IXsEngdwQp2PXnjGlh/6bmFCo41Slmu3vmaIaHsUQLvZFFGT6NcqMP1xol/4vKey7gROYZPTe
- BgdYYmOqqCGZPT6FQ/OFO7RW7vlFoHu4+Lg+djdrKxr6FEsIBgP97v36aGkSBTYUhvkMA9PMtn3q0FN7TI13n043Y0awT8T8ktY=
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09/2022 10:48, Xiaoming Ni wrote:
-> Currently, Squashfs supports multiple decompressor parallel modes. However, this
-> mode can be configured only during kernel building and does not support flexible
-> selection during runtime.
-> 
-> In the current patch set, the mount parameter "threads=" is added to allow users
-> to select the parallel decompressor mode and configure the number of decompressors
-> when mounting a file system.
-> 
-> "threads=<single|multi|percpu|1|2|3|...>"
-> The upper limit is num_online_cpus() * 2.
-> 
-> 
-> 
-> v3: Based on Philip Lougher's suggestion, make the following updates:
->    1. The default configuration is the same as that before the patch installation.
->    2. Compile the three decompression modes when the new configuration is enabled.
->    3. "threads=1" supports only the SQUASHFS_DECOMP_SINGLE mode.
-> 
+The x86 mm code now actively refuses to create writable, executable
+mappings and warns when there is an attempt to create one.
 
-Hi,
+0day ran across a case triggered by module unloading, but that looks
+to be a generic problem.  It presumably goes like this:
 
-This patch-set looks a lot better IMHO.  I only have a couple of
-relatively minor issues, which will be dealt with as comments on
-the patches.
+	1. Load module with direct map, P=1,W=1,NX=1
+	2. Map module executable, set P=1,W=0,NX=0
+	3. Free module, land in vfree()->vm_remove_mappings()
+	4. Set P=0 during alias processing, P=0,W=0,NX=0
+	5. Restore kernel mapping via set_direct_map_default_noflush(),
+	   set P=1,W=1, resulting in P=1,W=1,NX=0
 
-Phillip
+That's clearly a writable, executable mapping which is a no-no.  The
+new W^X code is clearly doing its job.
 
-> v2: https://lore.kernel.org/lkml/20220816010052.15764-1-nixiaoming@huawei.com/
->    fix warning: sparse: incorrect type in initializer (different address spaces)
->    Reported-by: kernel test robot <lkp@intel.com>
-> 
-> v1: https://lore.kernel.org/lkml/20220815031100.75243-1-nixiaoming@huawei.com/
-> 
-> Xiaoming Ni (2):
->    squashfs: add the mount parameter theads=<single|multi|percpu>
->    squashfs: Allows users to configure the number of decompression
->      threads.
-> 
->   fs/squashfs/Kconfig                     | 51 ++++++++++++++++--
->   fs/squashfs/decompressor_multi.c        | 32 +++++++-----
->   fs/squashfs/decompressor_multi_percpu.c | 39 ++++++++------
->   fs/squashfs/decompressor_single.c       | 23 +++++---
->   fs/squashfs/squashfs.h                  | 43 +++++++++++++--
->   fs/squashfs/squashfs_fs_sb.h            |  4 +-
->   fs/squashfs/super.c                     | 93 ++++++++++++++++++++++++++++++++-
->   7 files changed, 237 insertions(+), 48 deletions(-)
-> 
+Fix it by actively setting _PAGE_NX when creating writable mappings.
+
+One concern: I haven't been able to actually reproduce this, even by
+loading and unloading the module that 0day hit it with.  I'd like to
+be able to reproduce this before committing a fix.
+
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Link: https://lore.kernel.org/all/fcf89147-440b-e478-40c9-228c9fe56691@intel.com/
+
+--
+
+0day folks, please do share these as they come up.  We want to keep
+fixing them.
+---
+ arch/x86/mm/pat/set_memory.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 1a2d6376251c..5fb5874ea2c6 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -2247,6 +2247,12 @@ static int __set_pages_p(struct page *page, int numpages)
+ 				.mask_clr = __pgprot(0),
+ 				.flags = 0};
+ 
++	/*
++	 * Avoid W^X mappings that occur if the old
++	 * mapping was !_PAGE_RW and !_PAGE_NX.
++	 */
++	pgprot_val(cpa.mask_set) |= __supported_pte_mask & _PAGE_NX;
++
+ 	/*
+ 	 * No alias checking needed for setting present flag. otherwise,
+ 	 * we may need to break large pages for 64-bit kernel text
+-- 
+2.34.1
 
