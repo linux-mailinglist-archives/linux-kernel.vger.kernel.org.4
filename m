@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB575B3F49
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1313E5B3F4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiIITOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S230401AbiIITOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiIITNy (ORCPT
+        with ESMTP id S230024AbiIITNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:13:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE19AA98FA;
-        Fri,  9 Sep 2022 12:13:53 -0700 (PDT)
+        Fri, 9 Sep 2022 15:13:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358099E0D0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E65BB8261A;
-        Fri,  9 Sep 2022 19:13:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09AC1C433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8448620C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 19:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3446CC433D7;
         Fri,  9 Sep 2022 19:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1662750831;
-        bh=FRorE2tqhivaqaiXvxumMf91B+pC0jEFrqK7ogJh1m8=;
+        bh=+v5ng4wmNW3c0sSfOKJuxKTz3QSRCG60yJSnGDdtZIw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=faeVX0sKA6LaeYFKMej/kIxhebnPzLJZOoSDBZ7kbm5bsQbPCiO3UOTNHti33YNBX
-         Ac/R0cYIZyP2RzPy/2GTgjk7ZCwEhfGNwmccOhgy3vEcGmyfIDIGVXf9J6p/c8zrlW
-         9ULQmyRSTxvc1OcgN/GPA35MgA5UB+8Kt8hegp+9L7yg1HC+V3q+pXLHeCvWdthIao
-         9GHJuzHYl1qS1nvAmmYav4cnVWn0lCovpFH/vvz7uG3uYIPcpjbpVDLkqmop0zoBXF
-         fBTvMRHXXUg1KxhL2xUc8Kl76tCflDWldvqDQl1GbRN/WbSToZmEetazKOD7UuazKt
-         cW26h6UJQMYvg==
+        b=distVyKpEBgIFfla7alfKaHxXiwpZJUGyg7pmHcPWX2DEU8sxYhuZRJqJr1Zj+Brx
+         kNILBdtztR0O4M4DXcbuh6p4AKuGNCAZKW9iYzhVIzVi1bjr4j5jHeSkAaJequpSet
+         J08MTpsRTYk2J/dHH1bvQy44tGAd1s1Uk3DJET022ywutC+HZZs4YVTJ9m6nLla/By
+         5BdCcY/x8576MUdlo9CGZRtamyTzOBbFXbFFAjltfqpPlHT1cYim5RTk6xzIZZ2Fi+
+         y489LUksXhIGyPaozU04aTkOQ6umh/FJCV5+RhMJdRhHqvZC4hxl/WHKCVgPWqPFne
+         PSVf5ty5Nt9OA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EDB0FC4166E;
-        Fri,  9 Sep 2022 19:13:50 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1CC06C73FE7;
+        Fri,  9 Sep 2022 19:13:51 +0000 (UTC)
+Subject: Re: [GIT PULL] Driver core fixes for 6.0-rc5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YxtnD/fPifXhPxc/@nvidia.com>
-References: <YxtnD/fPifXhPxc/@nvidia.com>
+In-Reply-To: <YxuEnRoUlZPzjfL6@kroah.com>
+References: <YxuEnRoUlZPzjfL6@kroah.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YxtnD/fPifXhPxc/@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: a261786fdc0a5bed2e5f994dcc0ffeeeb0d662c7
+X-PR-Tracked-Message-Id: <YxuEnRoUlZPzjfL6@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc5
+X-PR-Tracked-Commit-Id: 5ac251c8a05ce074e5efac779debf82a15d870a3
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0099baa87962799d19b05d12f39ff13600482645
-Message-Id: <166275083096.6812.4422087407209852.pr-tracker-bot@kernel.org>
-Date:   Fri, 09 Sep 2022 19:13:50 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
+X-PR-Merge-Commit-Id: e35be05d748a1b82c0bd3f62dafbad859a3bd027
+Message-Id: <166275083111.6812.2421240276825496673.pr-tracker-bot@kernel.org>
+Date:   Fri, 09 Sep 2022 19:13:51 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 9 Sep 2022 13:17:19 -0300:
+The pull request you sent on Fri, 9 Sep 2022 20:23:25 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc5
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0099baa87962799d19b05d12f39ff13600482645
+https://git.kernel.org/torvalds/c/e35be05d748a1b82c0bd3f62dafbad859a3bd027
 
 Thank you!
 
