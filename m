@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DE45B3B81
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AD55B3B84
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiIIPKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S229876AbiIIPLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIIPKx (ORCPT
+        with ESMTP id S232138AbiIIPLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:10:53 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09A9915F9;
-        Fri,  9 Sep 2022 08:10:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1662736247; bh=4NS9jOc+DKYjPlXdslwxuf9QrepRBJxIl1RQFwG0wLc=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=LJ4wFHF5Ch89nRfLgiUdEOVGOXI0VmjoH78a0fFKjH3755SQJKgdpZx2R9Wm+7h3g
-         xzMl3lYqxW3Hplz2UlV735ZTboKP6xQiA0IQBoQMOrUmJMxaVFmlmpOI2XZ52xGDFI
-         2kUJ2+JtivHhevG9Tt6VpzCZ0r3Oq2YcBy9Gfyyk=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 09/10] ASoC: cs42l83: Extend CS42L42 support to new part
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <541b11a1-6b5a-cae0-73d9-f1fe8c961a15@linaro.org>
-Date:   Fri, 9 Sep 2022 17:10:45 +0200
-Cc:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Matt Flax <flatmax@flatmax.com>,
-        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <822926B0-CF33-4FF0-B234-8EF644DCED21@cutebit.org>
-References: <20220909135334.98220-1-povik+lin@cutebit.org>
- <20220909135334.98220-10-povik+lin@cutebit.org>
- <541b11a1-6b5a-cae0-73d9-f1fe8c961a15@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 11:11:02 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0322EE984;
+        Fri,  9 Sep 2022 08:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662736260; x=1694272260;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vGy4fIFwjFSNzA65qv4QDCYsy+swZzfD5tvaJcOb5X4=;
+  b=maglAEPBCMFqi8C/cflgtKDpV2ASrc1p2Ui21rpg+cpNTeU4DHUrmCuV
+   1RiybquVl3mCHYi5VNJFP7wRqL3RosMkboX0MnjApyQkAxkdfbUMMBAj7
+   e6MfEdJ/8pQu6c8+oV7vWRIaggJdSTi2b/Q6jT0k6V12/vOF2V7DRklBa
+   LAga3kgWGgMzFW7M/BBwAqOBD5JO5MT1vAS3XKupikCn+bKbEwdZ3K0CJ
+   bUbSJHeShnH0YfMOAHVOcH6wTZX7/TNEcDPYXVLwLyYrJRm49Rz98BQA0
+   +ZSbjsINIisT/JYC3tTioHrNyKIlyZCmBCUFHKftrpKhnmW9pBk4duokw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="359217074"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="359217074"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 08:10:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="611085785"
+Received: from jkrzyszt-mobl1.ger.corp.intel.com ([10.213.25.143])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 08:10:54 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     igt-dev@lists.freedesktop.org
+Cc:     linux-kselftest@vger.kernel.org, daniel@ffwll.ch,
+        kunit-dev@googlegroups.com, magalilemes00@gmail.com,
+        maira.canal@usp.br, dlatypov@google.com, n@nfraprado.net,
+        linux-kernel@vger.kernel.org, leandro.ribeiro@collabora.com,
+        dri-devel@lists.freedesktop.org, davidgow@google.com,
+        tales.aparecida@gmail.com, skhan@linuxfoundation.org,
+        andrealmeid@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        brendanhiggins@google.com, twoerner@gmail.com,
+        Isabella Basso <isabbasso@riseup.net>
+Subject: Re: [igt-dev] [PATCH i-g-t v2 2/4] lib/igt_kmod.c: check if module is builtin before attempting to unload it
+Date:   Fri, 09 Sep 2022 17:10:52 +0200
+Message-ID: <13576898.RDIVbhacDa@jkrzyszt-mobl1.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220829000920.38185-3-isabbasso@riseup.net>
+References: <20220829000920.38185-1-isabbasso@riseup.net> <20220829000920.38185-3-isabbasso@riseup.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Monday, 29 August 2022 02:09:18 CEST Isabella Basso wrote:
+> This change makes `igt_module_unload_r` safer as it checks whether the
+
+s/igt_module_unload_r/igt_kmod_unload_r/
+
+> module can be unloaded before attempting it.
+> 
+> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+> ---
+>  lib/igt_kmod.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+> index bb6cb7bb..97cac7f5 100644
+> --- a/lib/igt_kmod.c
+> +++ b/lib/igt_kmod.c
+> @@ -256,6 +256,9 @@ static int igt_kmod_unload_r(struct kmod_module *kmod, unsigned int flags)
+>  	struct kmod_list *holders, *pos;
+>  	int err = 0;
+>  
+> +	if (kmod_module_get_initstate(kmod) == KMOD_MODULE_BUILTIN)
+> +		return err;
+
+NIT: I think that return 0; would be more clear.  Anyway,
+
+Acked-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+
+> +
+>  	holders = kmod_module_get_holders(kmod);
+>  	kmod_list_foreach(pos, holders) {
+>  		struct kmod_module *it = kmod_module_get_module(pos);
+> 
 
 
-> On 9. 9. 2022, at 16:47, Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org> wrote:
->=20
-> On 09/09/2022 15:53, Martin Povi=C5=A1er wrote:
->> The CS42L83 part is a headphone jack codec found in recent Apple
->> machines. It is a publicly undocumented part but as far as can be =
-told
->> it is identical to CS42L42 except for two points:
->>=20
 
-(...)
-
->> +static const struct dev_pm_ops cs42l83_i2c_pm_ops =3D {
->> +	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l83_i2c_resume)
->> +};
->> +
->> +static const struct of_device_id __maybe_unused cs42l83_of_match[] =3D=
- {
->> +	{ .compatible =3D "cirrus,cs42l83", },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, cs42l83_of_match);
->> +
->> +static struct i2c_driver cs42l83_i2c_driver =3D {
->> +	.driver =3D {
->> +		.name =3D "cs42l83",
->> +		.pm =3D &cs42l83_i2c_pm_ops,
->> +		.of_match_table =3D of_match_ptr(cs42l83_of_match),
->=20
-> This should complain with compile testing. Usually it comes with
-> __maybe_unused/
-
-Which symbol? cs42l83_of_match has maybe_unused.
-
-Best, Martin
-
->=20
->=20
-> Best regards,
-> Krzysztof
 
