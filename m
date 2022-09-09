@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2B35B3F00
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248835B3F02
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIISrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S229710AbiIISsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiIISrr (ORCPT
+        with ESMTP id S229582AbiIISsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:47:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC36130842;
-        Fri,  9 Sep 2022 11:47:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Sep 2022 14:48:14 -0400
+Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CF7F0A7;
+        Fri,  9 Sep 2022 11:48:12 -0700 (PDT)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from mx1-us1.ppe-hosted.com (unknown [10.7.64.31])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 4CEFC1C0087;
+        Fri,  9 Sep 2022 18:48:11 +0000 (UTC)
+Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 3276D600077;
+        Fri,  9 Sep 2022 18:48:10 +0000 (UTC)
+Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C078C620B7;
-        Fri,  9 Sep 2022 18:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79EC433C1;
-        Fri,  9 Sep 2022 18:47:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662749265;
-        bh=KQAifQugDA8mdZXeKVOC1h5AUP6dZ+XfBsejVtQVVyQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cgis6XqH+8A4x2sfm5RGxquGi/ap8JDpYGVGSK8HwEdDNx9f5uJzm9g44eIHLEtXb
-         R187VsPfk5yB/JsY5GwlNxySWc4RTCwZVw0feIPS4QQ1GhXcfYpgGS885Bqy5kaRL9
-         avZjnCAVL9s6dAmPYNaoX/y44661Bmk05HgfmWNf6w0v0Y1K1macnFc8tCxGzLk2NZ
-         Coh25f8O/4jRgf/a2IP7k7vp+X8jFEhscUUP0am97p9Fy1xWzsYV77DLii59RlxTCR
-         zIT0JQgHHROtYIFeIYrWFBIrOFofnUerphTtiUFgOsUf0dMPEv7elJPm7Ac23xEY7O
-         DC7lp/fo/BKTQ==
-Date:   Fri, 9 Sep 2022 19:47:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Astrid Rost <astrid.rost@axis.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@axis.com,
-        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
- times
-Message-ID: <YxuKS7S3/aHtDNMq@sirena.org.uk>
-References: <20220907135827.16209-1-astrid.rost@axis.com>
- <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
- <Yxn9o1MVMPnFO3PM@sirena.org.uk>
- <ac2bcca1-6997-2d17-b1d6-a5e81ced2613@linaro.org>
- <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
+        by mail3.candelatech.com (Postfix) with ESMTPSA id 4C9DD13C2B0;
+        Fri,  9 Sep 2022 11:48:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 4C9DD13C2B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
+        s=default; t=1662749289;
+        bh=OxEUMDoySFKOhq0UBTVO7cZL3nEq0r+AmeukrDSmFU8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jVKmEoZWvxt500qv4Qf+/OwLytJDXGCoAhJUbZ0HJ4idoSiFxgfA+Rq7cIuV7qHw9
+         48QxFrrYhK/ec+idHm/32urIFVAtDapJ1LQPxXQnZ10/K3fgTw7TZ1/erU5iLXNsLU
+         1wN1cjnMX2Db2IqR1u26qfSq2LYZy775f2wysx+g=
+Subject: Re: [PATCH AUTOSEL 5.4 06/16] wifi: mac80211: do not wake queues on a
+ vif that is being stopped
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@kernel.org>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220720011730.1025099-1-sashal@kernel.org>
+ <20220720011730.1025099-6-sashal@kernel.org>
+ <b43cfde3-7f33-9153-42ca-9e1ecf409d2a@candelatech.com>
+ <ff30252059ae6a7a74c135f9fa9525d379f9e74a.camel@sipsolutions.net>
+From:   Ben Greear <greearb@candelatech.com>
+Organization: Candela Technologies
+Message-ID: <aafaf5f1-c8a1-2a13-2201-b83f65c77942@candelatech.com>
+Date:   Fri, 9 Sep 2022 11:48:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Jqed1H5o0jXqkowM"
-Content-Disposition: inline
-In-Reply-To: <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
-X-Cookie: FORTH IF HONK THEN
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ff30252059ae6a7a74c135f9fa9525d379f9e74a.camel@sipsolutions.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-MDID: 1662749291-c0RrVeYq27PU
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/19/22 10:50 PM, Johannes Berg wrote:
+> On Tue, 2022-07-19 at 18:58 -0700, Ben Greear wrote:
+>> I think this one had a regression and needs another init-lock-early patch to keep from causing
+>> problems?
+>>
+> 
+> Yes, for now we should drop it from all stable trees. We'll re-assess
+> the situation later if it's needed there or not, I guess.
+> 
+> johannes
+> 
 
---Jqed1H5o0jXqkowM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think there is a second problem with this patch:
 
-On Fri, Sep 09, 2022 at 10:21:30AM +0200, Krzysztof Kozlowski wrote:
+If I create multiple station vdevs (on mtk7916 radio, not sure that matters much or not),
+and admin up a few of them, but leave remainder down, then the queues on the originally-down-vdevs
+are never started and so tx-path-hang on those stations.
 
-> It's more than one property and many other patch submitters were using
-> this reason as well. As a result, few TXT bindings grew from 5 to 10
-> properties within one year and there was still no conversion to YAML.
+I am not sure the best way to fix this.
 
-> I understand your concerns however I have stronger motivation to do the
-> conversion, than for accepting new features.
+Thanks,
+Ben
 
-For me the metric is proportionality - the amount of extra effort we're
-forcing people to go through should bear some relationship to the change
-they're trying to make.  We can't very well complain that people don't
-upstream things if when they try to do so they have to jump through some
-tangentially related hoops relating to the existing code in order to get
-anything done.  We can and should *ask* people to do additional cleanups
-or whatever but creating requirements that dramatically expand the scope
-of work someone's having to do are a lot of stop energy.
+-- 
+Ben Greear <greearb@candelatech.com>
+Candela Technologies Inc  http://www.candelatech.com
 
---Jqed1H5o0jXqkowM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMbiksACgkQJNaLcl1U
-h9A7Wgf/ZgdTJKiEDmpaLKTPfTfTsjf1KAym2sQrtDKauo+M6AOHc0PWCDgjnRC1
-04Oi9yEs/3/WdJVIqImjQQEfzEfPH3SLekj4cwKGu1KM4Otog62IqZT2Ms3ZhMRR
-TOBSy0lNibBQmrDehFTTrYusFwZI+Zri5JBpcEksWu7swxM/BKkteB75Xm0uKZo/
-k80IIhTEaY6SBQ+3k/6cgvVJAFIRo1MFkdlOKboL7sZTKKVTE4F4P0Pdr+FlfGel
-mYysNGLILSi4Awk9RaeSyiIcZmNSaW6OlOdaH1rFT3dl0Qx8Co7JGjm0SGkwO9uY
-e6JJht7Nnigw5VzTrwNoX8w19iRlng==
-=tvQB
------END PGP SIGNATURE-----
-
---Jqed1H5o0jXqkowM--
