@@ -2,266 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799845B378E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005ED5B3A59
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiIIMUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S232246AbiIIOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiIIMTs (ORCPT
+        with ESMTP id S232078AbiIIOAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:19:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F7731EF1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662725863; x=1694261863;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gnViO/Iw4edKiz51fF3is7oCxusylrKNkvOJBiOocp0=;
-  b=Ue5V9G6oSTRfk8lYAGfbcoUkGWBdt6PHv7Rrmz+qPpS7rZ9f21XQF/+v
-   jLWW8OFeaBiNV9R7oCiyrvCikMc1Cedy4Wj80uqCPU/9yHAjdkT+d6fLx
-   oX5wqswxaK+1tlaJqumkm9K9b1ArbPKLZp1kiTC5dxRoYwTAEu0tBIlHq
-   xbnOrI6UixwRuwh663rSH1kd17qwEFCN7vE0WYSMIbgpgNVWDE9y6BEWI
-   aRKXlsBxowWTzJP2cv+qRtmFfgOVi7pVooXFfPPV+BpIcwgryh0dqxooE
-   K/FxnmS/ndxiroAH3mO2rBaeXIiUWzmJtoFk2bxfYRqe2xxlHcAHYtHj2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361416781"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="361416781"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 05:17:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="645516085"
-Received: from linux-pnp-server-13.sh.intel.com ([10.239.176.176])
-  by orsmga008.jf.intel.com with ESMTP; 09 Sep 2022 05:17:39 -0700
-From:   Jiebin Sun <jiebin.sun@intel.com>
-To:     akpm@linux-foundation.org, vasily.averin@linux.dev,
-        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
-        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
-Subject: [PATCH v5 2/2] ipc/msg: mitigate the lock contention with percpu counter
-Date:   Sat, 10 Sep 2022 04:36:36 +0800
-Message-Id: <20220909203636.2652466-3-jiebin.sun@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220909203636.2652466-1-jiebin.sun@intel.com>
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
- <20220909203636.2652466-1-jiebin.sun@intel.com>
+        Fri, 9 Sep 2022 10:00:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30997F13B;
+        Fri,  9 Sep 2022 07:00:32 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662732031;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZAvy1zrYwy9XTqh4ODG8ma1JhILysPikvRzldVe3EIw=;
+        b=yj53lHF4ifqca4ewyc7V72N9qYpXrk7wGlYVr5ACnQRpE7imjnLV7rNiwPQzyZzsnfDNsl
+        CDa5+dVaflJnmCWGUnoYYgzzdOqINPzmkkJ/XRT8UcS6Wlxc0ExJq5QtQNYAINsSI7+Xwc
+        2peo9VP6ubXLheppAJejyKwvU/CgwRhXE7eBeN3gL5M8zj6D2kzIy+A9hPMeRzXDaj1y4o
+        0i4/vfOVdJHZbCj/eq6gZ8is3FxG/9VMPTaiuo1FljblVl7GfeZnnGARVGbexbOnM9WpMU
+        ivDSpX4LiyU3NORs9XDB9vyxyRKuUoW+4ZyGLJT4x/IuSY6C4kb/zlUqba03PQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662732031;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZAvy1zrYwy9XTqh4ODG8ma1JhILysPikvRzldVe3EIw=;
+        b=FWmgdlcyvjfvFjzRj2ePr1x0lQgBIPvX2AaVAY82sXG1WB28XP7eQvlZs9oWaFvEBi0qEi
+        n9cPA9S9zFBnLdAA==
+From:   "tip-bot2 for Tejun Heo" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/psi] kernfs: Improve kernfs_drain() and always call on removal
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Tejun Heo <tj@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220828050440.734579-6-tj@kernel.org>
+References: <20220828050440.734579-6-tj@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166273202980.401.2949316254189258021.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The msg_bytes and msg_hdrs atomic counters are frequently
-updated when IPC msg queue is in heavy use, causing heavy
-cache bounce and overhead. Change them to percpu_counter
-greatly improve the performance. Since there is one percpu
-struct per namespace, additional memory cost is minimal.
-Reading of the count done in msgctl call, which is infrequent.
-So the need to sum up the counts in each CPU is infrequent.
+The following commit has been merged into the sched/psi branch of tip:
 
-Apply the patch and test the pts/stress-ng-1.4.0
--- system v message passing (160 threads).
+Commit-ID:     2d7f9f8c1815707e9ddb454648a523efc67a04d3
+Gitweb:        https://git.kernel.org/tip/2d7f9f8c1815707e9ddb454648a523efc67a04d3
+Author:        Tejun Heo <tj@kernel.org>
+AuthorDate:    Sat, 27 Aug 2022 19:04:36 -10:00
+Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CommitterDate: Thu, 01 Sep 2022 18:08:44 +02:00
 
-Score gain: 3.99x
+kernfs: Improve kernfs_drain() and always call on removal
 
-CPU: ICX 8380 x 2 sockets
-Core number: 40 x 2 physical cores
-Benchmark: pts/stress-ng-1.4.0
--- system v message passing (160 threads)
+__kernfs_remove() was skipping draining based on KERNFS_ACTIVATED - whether
+the node has ever been activated since creation. Instead, update it to
+always call kernfs_drain() which now drains or skips based on the precise
+drain conditions. This ensures that the nodes will be deactivated and
+drained regardless of their states.
 
-Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+This doesn't make meaningful difference now but will enable deactivating and
+draining nodes dynamically by making removals safe when racing those
+operations.
+
+While at it, drop / update comments.
+
+v2: Fix the inverted test on kernfs_should_drain_open_files() noted by
+    Chengming. This was fixed by the next unrelated patch in the previous
+    posting.
+
+Cc: Chengming Zhou <zhouchengming@bytedance.com>
+Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
+Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Link: https://lore.kernel.org/r/20220828050440.734579-6-tj@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/ipc_namespace.h |  5 ++--
- ipc/msg.c                     | 44 ++++++++++++++++++++++++-----------
- ipc/namespace.c               |  5 +++-
- ipc/util.h                    |  4 ++--
- 4 files changed, 39 insertions(+), 19 deletions(-)
+ fs/kernfs/dir.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/ipc_namespace.h b/include/linux/ipc_namespace.h
-index e3e8c8662b49..e8240cf2611a 100644
---- a/include/linux/ipc_namespace.h
-+++ b/include/linux/ipc_namespace.h
-@@ -11,6 +11,7 @@
- #include <linux/refcount.h>
- #include <linux/rhashtable-types.h>
- #include <linux/sysctl.h>
-+#include <linux/percpu_counter.h>
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 8ae44db..b3d2018 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -472,6 +472,16 @@ static void kernfs_drain(struct kernfs_node *kn)
+ 	lockdep_assert_held_write(&root->kernfs_rwsem);
+ 	WARN_ON_ONCE(kernfs_active(kn));
  
- struct user_namespace;
++	/*
++	 * Skip draining if already fully drained. This avoids draining and its
++	 * lockdep annotations for nodes which have never been activated
++	 * allowing embedding kernfs_remove() in create error paths without
++	 * worrying about draining.
++	 */
++	if (atomic_read(&kn->active) == KN_DEACTIVATED_BIAS &&
++	    !kernfs_should_drain_open_files(kn))
++		return;
++
+ 	up_write(&root->kernfs_rwsem);
  
-@@ -36,8 +37,8 @@ struct ipc_namespace {
- 	unsigned int	msg_ctlmax;
- 	unsigned int	msg_ctlmnb;
- 	unsigned int	msg_ctlmni;
--	atomic_t	msg_bytes;
--	atomic_t	msg_hdrs;
-+	struct percpu_counter percpu_msg_bytes;
-+	struct percpu_counter percpu_msg_hdrs;
- 
- 	size_t		shm_ctlmax;
- 	size_t		shm_ctlall;
-diff --git a/ipc/msg.c b/ipc/msg.c
-index a0d05775af2c..f2bb4c193ecf 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -39,6 +39,7 @@
- #include <linux/nsproxy.h>
- #include <linux/ipc_namespace.h>
- #include <linux/rhashtable.h>
-+#include <linux/percpu_counter.h>
- 
- #include <asm/current.h>
- #include <linux/uaccess.h>
-@@ -285,10 +286,10 @@ static void freeque(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp)
- 	rcu_read_unlock();
- 
- 	list_for_each_entry_safe(msg, t, &msq->q_messages, m_list) {
--		atomic_dec(&ns->msg_hdrs);
-+		percpu_counter_sub_local(&ns->percpu_msg_hdrs, 1);
- 		free_msg(msg);
- 	}
--	atomic_sub(msq->q_cbytes, &ns->msg_bytes);
-+	percpu_counter_sub_local(&ns->percpu_msg_bytes, msq->q_cbytes);
- 	ipc_update_pid(&msq->q_lspid, NULL);
- 	ipc_update_pid(&msq->q_lrpid, NULL);
- 	ipc_rcu_putref(&msq->q_perm, msg_rcu_free);
-@@ -495,17 +496,18 @@ static int msgctl_info(struct ipc_namespace *ns, int msqid,
- 	msginfo->msgssz = MSGSSZ;
- 	msginfo->msgseg = MSGSEG;
- 	down_read(&msg_ids(ns).rwsem);
--	if (cmd == MSG_INFO) {
-+	if (cmd == MSG_INFO)
- 		msginfo->msgpool = msg_ids(ns).in_use;
--		msginfo->msgmap = atomic_read(&ns->msg_hdrs);
--		msginfo->msgtql = atomic_read(&ns->msg_bytes);
-+	max_idx = ipc_get_maxidx(&msg_ids(ns));
-+	up_read(&msg_ids(ns).rwsem);
-+	if (cmd == MSG_INFO) {
-+		msginfo->msgmap = percpu_counter_sum(&ns->percpu_msg_hdrs);
-+		msginfo->msgtql = percpu_counter_sum(&ns->percpu_msg_bytes);
- 	} else {
- 		msginfo->msgmap = MSGMAP;
- 		msginfo->msgpool = MSGPOOL;
- 		msginfo->msgtql = MSGTQL;
- 	}
--	max_idx = ipc_get_maxidx(&msg_ids(ns));
--	up_read(&msg_ids(ns).rwsem);
- 	return (max_idx < 0) ? 0 : max_idx;
- }
- 
-@@ -935,8 +937,8 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- 		list_add_tail(&msg->m_list, &msq->q_messages);
- 		msq->q_cbytes += msgsz;
- 		msq->q_qnum++;
--		atomic_add(msgsz, &ns->msg_bytes);
--		atomic_inc(&ns->msg_hdrs);
-+		percpu_counter_add_local(&ns->percpu_msg_bytes, msgsz);
-+		percpu_counter_add_local(&ns->percpu_msg_hdrs, 1);
+ 	if (kernfs_lockdep(kn)) {
+@@ -480,7 +490,6 @@ static void kernfs_drain(struct kernfs_node *kn)
+ 			lock_contended(&kn->dep_map, _RET_IP_);
  	}
  
- 	err = 0;
-@@ -1159,8 +1161,8 @@ static long do_msgrcv(int msqid, void __user *buf, size_t bufsz, long msgtyp, in
- 			msq->q_rtime = ktime_get_real_seconds();
- 			ipc_update_pid(&msq->q_lrpid, task_tgid(current));
- 			msq->q_cbytes -= msg->m_ts;
--			atomic_sub(msg->m_ts, &ns->msg_bytes);
--			atomic_dec(&ns->msg_hdrs);
-+			percpu_counter_sub_local(&ns->percpu_msg_bytes, msg->m_ts);
-+			percpu_counter_sub_local(&ns->percpu_msg_hdrs, 1);
- 			ss_wakeup(msq, &wake_q, false);
+-	/* but everyone should wait for draining */
+ 	wait_event(root->deactivate_waitq,
+ 		   atomic_read(&kn->active) == KN_DEACTIVATED_BIAS);
  
- 			goto out_unlock0;
-@@ -1297,20 +1299,34 @@ COMPAT_SYSCALL_DEFINE5(msgrcv, int, msqid, compat_uptr_t, msgp,
- }
- #endif
+@@ -1370,23 +1379,14 @@ static void __kernfs_remove(struct kernfs_node *kn)
+ 		pos = kernfs_leftmost_descendant(kn);
  
--void msg_init_ns(struct ipc_namespace *ns)
-+int msg_init_ns(struct ipc_namespace *ns)
- {
-+	int ret;
-+
- 	ns->msg_ctlmax = MSGMAX;
- 	ns->msg_ctlmnb = MSGMNB;
- 	ns->msg_ctlmni = MSGMNI;
+ 		/*
+-		 * kernfs_drain() drops kernfs_rwsem temporarily and @pos's
++		 * kernfs_drain() may drop kernfs_rwsem temporarily and @pos's
+ 		 * base ref could have been put by someone else by the time
+ 		 * the function returns.  Make sure it doesn't go away
+ 		 * underneath us.
+ 		 */
+ 		kernfs_get(pos);
  
--	atomic_set(&ns->msg_bytes, 0);
--	atomic_set(&ns->msg_hdrs, 0);
-+	ret = percpu_counter_init(&ns->percpu_msg_bytes, 0, GFP_KERNEL);
-+	if (ret)
-+		goto fail_msg_bytes;
-+	ret = percpu_counter_init(&ns->percpu_msg_hdrs, 0, GFP_KERNEL);
-+	if (ret)
-+		goto fail_msg_hdrs;
- 	ipc_init_ids(&ns->ids[IPC_MSG_IDS]);
-+	return 0;
-+
-+	fail_msg_hdrs:
-+		percpu_counter_destroy(&ns->percpu_msg_bytes);
-+	fail_msg_bytes:
-+		return ret;
- }
+-		/*
+-		 * Drain iff @kn was activated.  This avoids draining and
+-		 * its lockdep annotations for nodes which have never been
+-		 * activated and allows embedding kernfs_remove() in create
+-		 * error paths without worrying about draining.
+-		 */
+-		if (kn->flags & KERNFS_ACTIVATED)
+-			kernfs_drain(pos);
+-		else
+-			WARN_ON_ONCE(atomic_read(&kn->active) != KN_DEACTIVATED_BIAS);
++		kernfs_drain(pos);
  
- #ifdef CONFIG_IPC_NS
- void msg_exit_ns(struct ipc_namespace *ns)
- {
-+	percpu_counter_destroy(&ns->percpu_msg_bytes);
-+	percpu_counter_destroy(&ns->percpu_msg_hdrs);
- 	free_ipcs(ns, &msg_ids(ns), freeque);
- 	idr_destroy(&ns->ids[IPC_MSG_IDS].ipcs_idr);
- 	rhashtable_destroy(&ns->ids[IPC_MSG_IDS].key_ht);
-diff --git a/ipc/namespace.c b/ipc/namespace.c
-index e1fcaedba4fa..8316ea585733 100644
---- a/ipc/namespace.c
-+++ b/ipc/namespace.c
-@@ -66,8 +66,11 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
- 	if (!setup_ipc_sysctls(ns))
- 		goto fail_mq;
- 
-+	err = msg_init_ns(ns);
-+	if (err)
-+		goto fail_put;
-+
- 	sem_init_ns(ns);
--	msg_init_ns(ns);
- 	shm_init_ns(ns);
- 
- 	return ns;
-diff --git a/ipc/util.h b/ipc/util.h
-index 2dd7ce0416d8..1b0086c6346f 100644
---- a/ipc/util.h
-+++ b/ipc/util.h
-@@ -64,7 +64,7 @@ static inline void mq_put_mnt(struct ipc_namespace *ns) { }
- 
- #ifdef CONFIG_SYSVIPC
- void sem_init_ns(struct ipc_namespace *ns);
--void msg_init_ns(struct ipc_namespace *ns);
-+int msg_init_ns(struct ipc_namespace *ns);
- void shm_init_ns(struct ipc_namespace *ns);
- 
- void sem_exit_ns(struct ipc_namespace *ns);
-@@ -72,7 +72,7 @@ void msg_exit_ns(struct ipc_namespace *ns);
- void shm_exit_ns(struct ipc_namespace *ns);
- #else
- static inline void sem_init_ns(struct ipc_namespace *ns) { }
--static inline void msg_init_ns(struct ipc_namespace *ns) { }
-+static inline int msg_init_ns(struct ipc_namespace *ns) { return 0;}
- static inline void shm_init_ns(struct ipc_namespace *ns) { }
- 
- static inline void sem_exit_ns(struct ipc_namespace *ns) { }
--- 
-2.31.1
-
+ 		/*
+ 		 * kernfs_unlink_sibling() succeeds once per node.  Use it
