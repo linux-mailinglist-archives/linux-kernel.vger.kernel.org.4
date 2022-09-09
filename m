@@ -2,38 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B15B42F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22185B42ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiIIXNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S231755AbiIIXMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiIIXMd (ORCPT
+        with ESMTP id S231488AbiIIXMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 19:12:33 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E812E1AD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CFB36DC8;
         Fri,  9 Sep 2022 16:11:56 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1oWn9K-0000Qa-1p; Sat, 10 Sep 2022 01:11:02 +0200
+        id 1oWn9K-0000Qa-JY; Sat, 10 Sep 2022 01:11:02 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
-        linux-rockchip@lists.infradead.org, edumazet@google.com,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
-Subject: Re: (subset) [PATCH v2 1/3] dt-bindings: net: convert emac_rockchip.txt to YAML
-Date:   Sat, 10 Sep 2022 01:10:56 +0200
-Message-Id: <166276502653.27767.6801437957827321608.b4-ty@sntech.de>
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>,
+        devicetree@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] arm64: dts: rk3399: i2s: switch BCLK to GPIO
+Date:   Sat, 10 Sep 2022 01:10:57 +0200
+Message-Id: <166276502654.27767.11970180490311201106.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220603163539.537-1-jbx6244@gmail.com>
-References: <20220603163539.537-1-jbx6244@gmail.com>
+In-Reply-To: <20220708080726.4170711-1-judyhsiao@chromium.org>
+References: <20220708080726.4170711-1-judyhsiao@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,19 +53,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 18:35:37 +0200, Johan Jonker wrote:
-> Convert emac_rockchip.txt to YAML.
+On Fri, 8 Jul 2022 08:07:26 +0000, Judy Hsiao wrote:
+> We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
+> may cause the speaker melting issue. Removing LRCLK while BCLK
+> is present can cause unexpected output behavior including a large
+> DC output voltage as described in the Max98357a datasheet.
 > 
-> Changes against original bindings:
->   Add mdio sub node.
->   Add extra clock for rk3036
+> In order to:
+>   1. prevent BCLK from turning on by other component.
+>   2. keep BCLK and LRCLK being present at the same time
+> 
+> [...]
 
 Applied, thanks!
 
-[2/3] ARM: dts: rockchip: fix rk3036 emac node compatible string
-      commit: d28b680a34948d7634b824b1fc7546e9dc8422fb
-[3/3] ARM: dts: rockchip: restyle emac nodes
-      commit: 1dabb74971b38d966ecef566bafddc4a34f4db9d
+[1/1] arm64: dts: rk3399: i2s: switch BCLK to GPIO
+      commit: 91419ae0420f0c91a326655d687b740826d0a3f9
 
 Best regards,
 -- 
