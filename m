@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7806B5B316D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789365B3183
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbiIIIN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S231262AbiIIIPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiIIIN0 (ORCPT
+        with ESMTP id S230181AbiIIIPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:13:26 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A24E1174BD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:13:24 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z25so1435203lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=S2fum64ByqkOeJl+LO3V1LaGVG9omN46/lj7osptdj4=;
-        b=WGdxn4I64th6g1EPMDsoEgyfOQN2uuuDDHA8YIje0WGJdVKSbENbHgKD4X5N3mXAV6
-         JcJVCiUyVyH2aibywApaaOfCHOwvnVxo/h2eRLPneeiEQJcvmd8tSXDMZn9XdfRk4Dsk
-         6rcTrGRezO2QywnQzU4WKhA+kBA9KouTt5jThrRWjYpYxgEP+jpoX/I2sVG0EMRPIBHP
-         GNdUt935U53+e986SQDqdAb5nnr1xt84VYdw/6bFcNJFUpAAs+9YV7Lp4ruePhoidtnx
-         UAEm6vIN3zsAHZap6kFQBIJvoKBYOCJz2ysrYCGmYJutP00mix3FxoM3pmiO4qO7HpNZ
-         XceA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=S2fum64ByqkOeJl+LO3V1LaGVG9omN46/lj7osptdj4=;
-        b=xyDRSG3FPXPqB8zHuWHJXscq83K3eps3cWJz4CB0swLvWbJV9lZHVtKX9X9pbPO1IK
-         4n5AQGc5k5BLTlugzjU3VFXElxpX89Q1FtKbwjH1tIRWfxSw4WKQUys2mnXYPa7Ct1Ur
-         wqM73fuN8MtYNeAqf7im62vIFZ3fAnlfTcTrILujbZjDxTYIL82YvQxbCeCGjplmcAtr
-         L2whxDrq7pXSYGRoVUbrqbtm34kr8tAbMItpsO/5v2M6WT8XS3kCDhCRBDLFLvvtSFMW
-         tDKStsGWVqvOJD4bjp+O8xr6dQM6ouB6AYssDPSIXYrKBUtEuglKnAU8sTXgNo2e5Evr
-         LQ0w==
-X-Gm-Message-State: ACgBeo3boTR/vBfpweG8X/xakKDOCbnb13ERFYk70vpyXdksz4Pgqlzm
-        u3qV2T0MxqI2ILTkymW9cU4s/Q==
-X-Google-Smtp-Source: AA6agR44SozBclTc6GLHAKXHxkjnOVy5XY214P2T5ZXYza2eZE8wISfmmRLMYgXu5N0qeK628rQHug==
-X-Received: by 2002:a05:6512:3403:b0:48c:9727:50b0 with SMTP id i3-20020a056512340300b0048c972750b0mr3780115lfr.309.1662711202905;
-        Fri, 09 Sep 2022 01:13:22 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m18-20020a195212000000b00492d270db5esm168834lfb.242.2022.09.09.01.13.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 01:13:22 -0700 (PDT)
-Message-ID: <1e0505c4-d98f-03bf-468e-43226d20cc77@linaro.org>
-Date:   Fri, 9 Sep 2022 10:13:21 +0200
+        Fri, 9 Sep 2022 04:15:09 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4EF6BCCE;
+        Fri,  9 Sep 2022 01:15:07 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MP7z83tTQzHngR;
+        Fri,  9 Sep 2022 16:13:08 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 16:15:05 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 16:15:04 +0800
+Subject: Re: [PATCH] mm/memcontrol: use kstrtobool for swapaccount param
+ parsing
+To:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220908083452.2844125-1-liushixin2@huawei.com>
+ <20220908150248.85fff32bf275844f0927a856@linux-foundation.org>
+ <YxrtODqHhdEkW2Lx@dhcp22.suse.cz>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <ee96ad93-e40b-6614-6cf7-b64bbc78ebc2@huawei.com>
+Date:   Fri, 9 Sep 2022 16:15:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 9/9] arm64: dts: qcom: sm4250: Add support for
- oneplus-billie2
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
-References: <20220903174150.3566935-1-iskren.chernev@gmail.com>
- <20220903174150.3566935-10-iskren.chernev@gmail.com>
- <e655cddd-677b-f277-667f-48107671db2a@linaro.org>
- <843b8280-5e71-c008-0ca2-4d289ca6e7da@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <843b8280-5e71-c008-0ca2-4d289ca6e7da@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YxrtODqHhdEkW2Lx@dhcp22.suse.cz>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 19:52, Iskren Chernev wrote:
-> 
-> 
-> On 9/6/22 11:33, Krzysztof Kozlowski wrote:
->> On 03/09/2022 19:41, Iskren Chernev wrote:
->>> Remaining issues from make dtbs_check:
->>> - rpm-requests: it doesn't like the pm6125-regulators subnode. Every other
->>>   DTS I checked is written in this way.
+
+
+On 2022/9/9 15:37, Michal Hocko wrote:
+> On Thu 08-09-22 15:02:48, Andrew Morton wrote:
+>> On Thu, 8 Sep 2022 16:34:52 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
 >>
->> Yes, I sent patches for it, already merged, so please rebase on linux-next.
->>
->> https://lore.kernel.org/all/20220828084341.112146-1-krzysztof.kozlowski@linaro.org/
->>
->> Please rebase and test with
->> Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> 
-> It looks like this patch covers SPMI regulators. In most devices RPM/H (i.e
-> indirect) regulators are used, so this doesn't fix it for me.
+>>> --- a/mm/swap_cgroup.c
+>>> +++ b/mm/swap_cgroup.c
+>>> @@ -194,7 +194,7 @@ int swap_cgroup_swapon(int type, unsigned long max_pages)
+>>>  	return 0;
+>>>  nomem:
+>>>  	pr_info("couldn't allocate enough memory for swap_cgroup\n");
+>>> -	pr_info("swap_cgroup can be disabled by swapaccount=0 boot option\n");
+>>> +	pr_info("swap_cgroup can be disabled by swapaccount=[oO][Ff]/N/n/0 boot option\n");
+>> I'm not sure this really needed changing.  "=0" was OK and the message
+>> now looks rather silly.
+> Agreed. While swapaccount=0 is clear the extended form, even if correct,
+> might just confuse some admins.
+Thanks, the previous info is more appropriate, I will update the patch.
 
-Indeed, but I got good news! The SMD/RPM was fixed here:
-https://lore.kernel.org/all/20220901093243.134288-1-krzysztof.kozlowski@linaro.org/
-
-Although anyway you Cc old addresses here, so you need to rebase on next
-and use get_maintainers.pl.
-
-Bjorn,
-Can we get the schemas merged?
-
-Best regards,
-Krzysztof
