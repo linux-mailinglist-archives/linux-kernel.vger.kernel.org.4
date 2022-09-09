@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135205B2F7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CBC5B2F87
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiIIHK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S230171AbiIIHKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIIHKY (ORCPT
+        with ESMTP id S230342AbiIIHKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:10:24 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123624F64C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:10:23 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id 129so812218vsi.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date;
-        bh=lAUjNqEdc1E9cs5e03MyLNO50XmSan8Di/UMnnE+jpQ=;
-        b=qu/quewykfk0tkABcRSFTHNTrd8he7MBvI0o4mA2lIJD3vM/m0Mnx14K7S44rR3MIB
-         nKYYwGF/4ttAIuS8kr+FU9J8lsUiArTLY+jRmZL7nMEO8Wu9RVNnzwhWudEVzjozmHkv
-         pTSnNx6qGWz0RMpnVVFKVhfE/CACxMO6dV0M31k1DvW7eX7fdg7XUF26lUXKH08XxfUO
-         EZ/TXTG5sUqVfIiB6kqGpQkygplH3X/sdMzHJ2iIDwi2BtTUZakrVMp94RDSyybjVnWu
-         QeYDfPd2L515vTEGKczD4DTWtDsBLyMAT9lGKUqbQ2qaL3wPGd5raYkjulIcG3DhGsIj
-         +KLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lAUjNqEdc1E9cs5e03MyLNO50XmSan8Di/UMnnE+jpQ=;
-        b=mCnu1qyrBBdn8/46Ss+oPdvxPwE7NS3ZGKNBUW19tq8c81tvnw/FHelJ53QHE6enT5
-         WwkjjbXRh5qnpBi0HmDolbwQhZ30AQGBNJ+rgtP94/vwa53USfCBbpSQHJ9rql2X+Xsb
-         VTOvKlbrGxxMXHtXAovoZwVZ6VXZgjB0bgHTcN01iovgqTyRrcVra80DQzxAdFFTeSRC
-         jRzz2rLfV6czgredS0FcYzFR1CqTAjg8Vb3nEqLUMqTgtJzCHlRUs5zRpMlU56Vq1neK
-         te5/Zm9W2Eo2Ux7Zb2cO4jPnCjGIM3zGJVwGgQF9RP5IDfKNJrpe07+33qv04W0O4YRs
-         bR9w==
-X-Gm-Message-State: ACgBeo1a3l59dLu1wXwDpJu522PheZFUQLUgRwccDkSVUic03roY7lhg
-        MSXhyK394KDEW5HdMUG9OfMJJ2CY5ldDO+r8APGGAQ4U
-X-Google-Smtp-Source: AA6agR6LR4giu6pUrMF6xxK4b0j151Xw8bLawTWPUFoXLSsDpw07Om1eLXa2uAoQyharQkXtHGU48NzHLacpLPT4cW4=
-X-Received: by 2002:a67:c089:0:b0:392:a432:b292 with SMTP id
- x9-20020a67c089000000b00392a432b292mr4298359vsi.69.1662707422150; Fri, 09 Sep
- 2022 00:10:22 -0700 (PDT)
-MIME-Version: 1.0
-Sender: annabelhester33@gmail.com
-Received: by 2002:a59:c08e:0:b0:2ec:c4:e257 with HTTP; Fri, 9 Sep 2022
- 00:10:21 -0700 (PDT)
-From:   Kayla <sgtkaylamanthey612@gmail.com>
-Date:   Fri, 9 Sep 2022 07:10:21 +0000
-X-Google-Sender-Auth: HIZnfkY-qDINsZ-eqY_A1AKoNZg
-Message-ID: <CAEhO1EWrO4_i+rVJ=iVDG90iNawPGNkga+zjUYoQmPoLzkwZjg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Fri, 9 Sep 2022 03:10:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1D66FA1C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:10:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8318F225DC;
+        Fri,  9 Sep 2022 07:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662707432; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XPSOWuSG52ywfJTRUjhZtp9sMl05WwDTgOnE0sdlu2Q=;
+        b=cQPifeWJUVo+dfprwqrs5S/ibMMSO1kl5q08YdyHC3McsPrLGI2LWAkHIEHv2oD7NF4akl
+        NwWdColp7lFBosB6GRzRECUUWMU7kXZI0pBAKkiQS8jAiUUmLwhckSJ6vpfnTB/TLLZakH
+        YpwzouA+Li8jitnzle2Z0XpxtzUeNXM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662707432;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XPSOWuSG52ywfJTRUjhZtp9sMl05WwDTgOnE0sdlu2Q=;
+        b=KJSLJg6pbrE79GceW712KYAz4vDbg99zvOow66Whwv5saL4ZONH1wmS8ZctLoj6/y+5jdD
+        nloexn3TmSSUFvAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48C9A13A93;
+        Fri,  9 Sep 2022 07:10:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Tmr3EOjmGmNsKQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 09 Sep 2022 07:10:32 +0000
+Date:   Fri, 09 Sep 2022 09:10:31 +0200
+Message-ID: <87bkrpdnvc.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     <perex@perex.cz>, <tiwai@suse.com>, <johan@kernel.org>,
+        <stefanha@gmail.com>, <dhowells@redhat.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Remove unused declarations
+In-Reply-To: <20220909035443.1065737-1-cuigaosheng1@huawei.com>
+References: <20220909035443.1065737-1-cuigaosheng1@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,7 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-16nXnNeV150sINeQ16DXmSDXnteQ157XmdefINep15DXqteUINeY15XXkS4g15DXoNeQINeR15PX
-ldenINeV15TXqdeRINec157XmdeZ15zXmdedINeU16fXldeT157XmdedINep15zXmS4NCg0KR3Jl
-ZXRpbmdzLCB0cnVzdCB5b3UncmUgZ29vZC4gcGxlYXNlIGNoZWNrIGFuZCByZXBseSBteSBwcmV2
-aW91cyBlbWFpbHMgdG8geW91Lg0K
+On Fri, 09 Sep 2022 05:54:41 +0200,
+Gaosheng Cui wrote:
+> 
+> This series contains a few cleanup patches, to remove unused
+> declarations which have been removed. Thanks!
+> 
+> Gaosheng Cui (2):
+>   ALSA: line6: remove line6_set_raw declaration
+>   ALSA: memalloc: remove snd_dma_sg_ops declaration
+
+Thanks, applied both patches.
+
+
+Takashi
