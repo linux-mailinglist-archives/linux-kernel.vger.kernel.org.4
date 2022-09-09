@@ -2,177 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779275B3A50
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25325B37C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiIIOBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S230143AbiIIM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiIIOAe (ORCPT
+        with ESMTP id S231574AbiIIM2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:00:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC058895C6;
-        Fri,  9 Sep 2022 07:00:31 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732029;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gcWh1TCgrHt56LhGM5/FqvCB9ztWauERAJTs/QzpBcc=;
-        b=YwoI0Y/4CzLalDEi4qpQaKoUb1mOVGGPbQrfdUwfBy/OuP5VpWJv14i/wtSt3n2rRAxKQ3
-        QJGoWZcnv9SPjxB+polKjgOnFmkTZ3ORRCISl0m5sZqUW6Pmegp0XGWQIJE6Opb9w87gwK
-        Lr6oqRUy0rLqTIfyU+7ubiGrm1ynyPJaqVseS1rxHsCwhipILClDE+HqJ4qmLMggO0x9ct
-        KOijXhGHAFnagquBnE8nUkQmY4cMQlodVccGZumMBGWXaKc47bwKwlggzHGjwtJrAU5MNI
-        j+EqM5k8NSF9JXYch5mIhBsXh2ZpS13wLL+EjYcwDEfn5Si7jnpYEC4jW18mRA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732029;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gcWh1TCgrHt56LhGM5/FqvCB9ztWauERAJTs/QzpBcc=;
-        b=ARgeA3irjXUkC8yHlZLGMl6gIE7ruCiWL4P7e91DILDzGZmKL0Btyk4uaSq7miSFHKPXJ3
-        2MGgf772bCJEfOCA==
-From:   "tip-bot2 for Tejun Heo" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] kernfs: Add KERNFS_REMOVING flags
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
+        Fri, 9 Sep 2022 08:28:44 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D512D189;
+        Fri,  9 Sep 2022 05:28:41 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z8so2264460edb.6;
+        Fri, 09 Sep 2022 05:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
+         :from:to:cc:subject:date;
+        bh=DZugOTI9KxAAOxuZDWfK5HFNxfJINOMz8DoYNPEVrxE=;
+        b=lP6IXIosqw1mX3RUVPRs96rv8hOGgFuRGED7qFb42YRjSWI+CeLsmTvzWjajwO5BSB
+         +f6ubmLcdB3LEqhpZp4TSWAY/VZrcKtUa4qie7UUihIxnLNtb6kmCIfVfQYcdRbMpqO5
+         Y6KtvYWJCCOVdzelCUIVkry7ACt3ikyTuwJFA03MZUKmDA7fwvUgSw4onBsGuyMu+eS0
+         E7/aPdvEJxov6gphSzPzat9KHTW7tdp5B0NFqXSDxA2LP2GkqtIpfSnWMMwZ5YstpZUe
+         dlkmdzba+8iG2mBsW0ddcU/gLGsui/3sW/91JZ/T0cslCFYkFv+JkQFhLejomqP8JJLv
+         klxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DZugOTI9KxAAOxuZDWfK5HFNxfJINOMz8DoYNPEVrxE=;
+        b=TNdcak3EV3pYZydcUwSXSOqcVWsSHzOBUrTz4Y0Q4AKYLlw1u4+L5aNyGualWNwnUY
+         /KFS5DqoAEIyuM7FuRlzdh1ieuZuBUaZexGuDcfqldfgxaCAekEsaXnTzHpn/+GsueqW
+         ABjPWv6279cO+KHaC+cMwgm4erR6pqwZJZQnF1PqoZETQnfYLHqoQrm0fcnyVk4dAupJ
+         L0lG+xk1yMqMlhytIqf98GaPmKJZSKhiaf4VQe8LTibOAndihk7DnEZI3GaTacAgkhKS
+         YGHUd+PpnWTsgDXemewjWIcCO7ZkobBswo0LRey9JOGsXM2caIehe2pfarOvuAfLuXuh
+         xLDQ==
+X-Gm-Message-State: ACgBeo1PaU3EMT9IWMG4zfrtE5I/zGUTDakKb1By0S0v1wZBjJYf2fqX
+        oMpplZ5Pz1EwPwOcUIIeO4Q=
+X-Google-Smtp-Source: AA6agR5YgTVZARMKttFGjA8k6Eywr7Ql/1DY+N58DFl5dP75S5ttL6Mvi+AoeeBe2d660jgf1MJOcA==
+X-Received: by 2002:a05:6402:520d:b0:450:d599:52c with SMTP id s13-20020a056402520d00b00450d599052cmr5530085edd.119.1662726519788;
+        Fri, 09 Sep 2022 05:28:39 -0700 (PDT)
+Received: from localhost ([89.40.126.93])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170906194c00b007753477db05sm207271eje.115.2022.09.09.05.28.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 05:28:39 -0700 (PDT)
+Message-ID: <631b3177.170a0220.ccacb.0862@mx.google.com>
+X-Google-Original-Message-ID: <Yxtbm3mXtEu+rzuF@<DarkDistro>>
+Date:   Fri, 9 Sep 2022 15:28:27 +0000
+From:   Burak Ozdemir <bozdemir@gmail.com>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220828050440.734579-7-tj@kernel.org>
-References: <20220828050440.734579-7-tj@kernel.org>
+Subject: [PATCH] staging: sm750fb: Coding style clean up
 MIME-Version: 1.0
-Message-ID: <166273202866.401.12020095971904286257.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/psi branch of tip:
+From: Burak OZDEMIR <bozdemir@gmail.com>
 
-Commit-ID:     c25491747b21536bd56dccb82a109754bbc8d52c
-Gitweb:        https://git.kernel.org/tip/c25491747b21536bd56dccb82a109754bbc8d52c
-Author:        Tejun Heo <tj@kernel.org>
-AuthorDate:    Sat, 27 Aug 2022 19:04:37 -10:00
-Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CommitterDate: Thu, 01 Sep 2022 18:08:44 +02:00
+Adhere to coding style and fix camel casing in function name.
 
-kernfs: Add KERNFS_REMOVING flags
-
-KERNFS_ACTIVATED tracks whether a given node has ever been activated. As a
-node was only deactivated on removal, this was used for
-
- 1. Drain optimization (removed by the previous patch).
- 2. To hide !activated nodes
- 3. To avoid double activations
- 4. Reject adding children to a node being removed
- 5. Skip activaing a node which is being removed.
-
-We want to decouple deactivation from removal so that nodes can be
-deactivated and hidden dynamically, which makes KERNFS_ACTIVATED useless for
-all of the above purposes.
-
-#1 is already gone. #2 and #3 can instead test whether the node is currently
-active. A new flag KERNFS_REMOVING is added to explicitly mark nodes which
-are being removed for #4 and #5.
-
-While this leaves KERNFS_ACTIVATED with no users, leave it be as it will be
-used in a following patch.
-
-Cc: Chengming Zhou <zhouchengming@bytedance.com>
-Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
-Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220828050440.734579-7-tj@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Burak Ozdemir <bozdemir@gmail.com>
 ---
- fs/kernfs/dir.c        | 21 +++++++--------------
- include/linux/kernfs.h |  1 +
- 2 files changed, 8 insertions(+), 14 deletions(-)
+ drivers/staging/sm750fb/sm750.c        | 2 +-
+ drivers/staging/sm750fb/sm750_cursor.c | 2 +-
+ drivers/staging/sm750fb/sm750_cursor.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index b3d2018..f8cbd05 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -705,13 +705,7 @@ struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
- 			goto err_unlock;
- 	}
+diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+index 3e09e56d3930..a86222cdcb68 100644
+--- a/drivers/staging/sm750fb/sm750.c
++++ b/drivers/staging/sm750fb/sm750.c
+@@ -120,7 +120,7 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
  
--	/*
--	 * ACTIVATED is protected with kernfs_mutex but it was clear when
--	 * @kn was added to idr and we just wanna see it set.  No need to
--	 * grab kernfs_mutex.
--	 */
--	if (unlikely(!(kn->flags & KERNFS_ACTIVATED) ||
--		     !atomic_inc_not_zero(&kn->count)))
-+	if (unlikely(!kernfs_active(kn) || !atomic_inc_not_zero(&kn->count)))
- 		goto err_unlock;
+ 	sm750_hw_cursor_disable(cursor);
+ 	if (fbcursor->set & FB_CUR_SETSIZE)
+-		sm750_hw_cursor_setSize(cursor,
++		sm750_hw_cursor_set_size(cursor,
+ 					fbcursor->image.width,
+ 					fbcursor->image.height);
  
- 	spin_unlock(&kernfs_idr_lock);
-@@ -753,10 +747,7 @@ int kernfs_add_one(struct kernfs_node *kn)
- 		goto out_unlock;
+diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+index 43e6f52c2551..d5ef40b8bc8e 100644
+--- a/drivers/staging/sm750fb/sm750_cursor.c
++++ b/drivers/staging/sm750fb/sm750_cursor.c
+@@ -58,7 +58,7 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+ 	poke32(HWC_ADDRESS, 0);
+ }
  
- 	ret = -ENOENT;
--	if (parent->flags & KERNFS_EMPTY_DIR)
--		goto out_unlock;
--
--	if ((parent->flags & KERNFS_ACTIVATED) && !kernfs_active(parent))
-+	if (parent->flags & (KERNFS_REMOVING | KERNFS_EMPTY_DIR))
- 		goto out_unlock;
- 
- 	kn->hash = kernfs_name_hash(kn->name, kn->ns);
-@@ -1336,7 +1327,7 @@ void kernfs_activate(struct kernfs_node *kn)
- 
- 	pos = NULL;
- 	while ((pos = kernfs_next_descendant_post(pos, kn))) {
--		if (pos->flags & KERNFS_ACTIVATED)
-+		if (kernfs_active(pos) || (pos->flags & KERNFS_REMOVING))
- 			continue;
- 
- 		WARN_ON_ONCE(pos->parent && RB_EMPTY_NODE(&pos->rb));
-@@ -1368,11 +1359,13 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 
- 	pr_debug("kernfs %s: removing\n", kn->name);
- 
--	/* prevent any new usage under @kn by deactivating all nodes */
-+	/* prevent new usage by marking all nodes removing and deactivating */
- 	pos = NULL;
--	while ((pos = kernfs_next_descendant_post(pos, kn)))
-+	while ((pos = kernfs_next_descendant_post(pos, kn))) {
-+		pos->flags |= KERNFS_REMOVING;
- 		if (kernfs_active(pos))
- 			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
-+	}
- 
- 	/* deactivate and unlink the subtree node-by-node */
- 	do {
-diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 367044d..b77d257 100644
---- a/include/linux/kernfs.h
-+++ b/include/linux/kernfs.h
-@@ -112,6 +112,7 @@ enum kernfs_node_flag {
- 	KERNFS_SUICIDED		= 0x0800,
- 	KERNFS_EMPTY_DIR	= 0x1000,
- 	KERNFS_HAS_RELEASE	= 0x2000,
-+	KERNFS_REMOVING		= 0x4000,
- };
- 
- /* @flags for kernfs_create_root() */
+-void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
++void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+ {
+ 	cursor->w = w;
+ 	cursor->h = h;
+diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+index b59643dd61ed..edeed2ea4b04 100644
+--- a/drivers/staging/sm750fb/sm750_cursor.h
++++ b/drivers/staging/sm750fb/sm750_cursor.h
+@@ -5,7 +5,7 @@
+ /* hw_cursor_xxx works for voyager,718 and 750 */
+ void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+ void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+-void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
++void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
+ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+-- 
+2.35.1
+
