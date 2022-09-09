@@ -2,119 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D3D5B32BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B624F5B32D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiIIJE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S230143AbiIIJGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiIIJEU (ORCPT
+        with ESMTP id S231933AbiIIJFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:04:20 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552E112D563;
-        Fri,  9 Sep 2022 02:04:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id fy31so2489394ejc.6;
-        Fri, 09 Sep 2022 02:04:02 -0700 (PDT)
+        Fri, 9 Sep 2022 05:05:45 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BBA99CD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:05:05 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id t184so1744566yba.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=fPvofaEf+BM4TxtIyhxZC/zjNI9R8E3LUT46F136ga4=;
-        b=V0cXt/H+gZ651uUZmm5iiWwtYqb2u1S6mX/kvwk2irwNgDBDieodH7EdvM2CzPu0TE
-         LmPXhFryzDJGiH+0Bq4X4GECAdbCMZFIFhftJft1jpHfDLa1Tcot9wOzdWSD6xiAc5qC
-         oeadlFmbDJTQKdApcRJjHcal4kelyTvUFTcdMgnTMQEJXNvJA1+R/F0uTvlcOekx6Y4f
-         IomTf06Wtuc+4kGwqGNhA7ThCsd2kMqgMIPoXY7GCHK2VIewPWTPI0m0EtpZxi6l8h+L
-         Spu5fr95w8VMv2TwJ8MciXtWHCyKFbeDWr5A8in6zZ6jJc3j36zswvB3e9W/poLTEdYM
-         gJ+w==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=e9oyM6c9eO+oX1i0ikmglldoQMouIxTI5tr1NuI9GT8=;
+        b=da8jwOMfsx5H05oRncihV5aFvyzpldWnjk6VRzdiJdjoiXpY+fCe9JssN6Nz9r+L+j
+         l9E4JVcp5pgWrIuipD6Pi6wcKO+xD+VxeNwfuFt6elE6UHvSev+WLO0vDrW/tLIznTIL
+         pDhzZzNph135gYHY2wx3yRTUBfbkz92m+AjchB4HbzuOoSIKq8dgKb1WAhflDbgHEbXY
+         ftwjMPa5bH9X96v79lvW7Je1K0OWgSPjvuOcjVadzfvMMakdATI1M68Gg6PzbT1hBWxD
+         jvBtOUUvWy5eJT0Fdxqw789DmY2q4uFclRA5L54De5cA0Z1HPHPMcwjpwr5m28TWxGz6
+         s6Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fPvofaEf+BM4TxtIyhxZC/zjNI9R8E3LUT46F136ga4=;
-        b=koZMhKq8YjJmBeH4NxdRVD7Fh8F1hqWtTVc265n19geV3HzkD6XTSQRIu+Agksyd2b
-         CC5XqKbrGS5+TQpj0PY3Y1iV9K7yMBPXMKtAw1K2ybGskTJ1QI1P+aMWW4LIp9Fm0W/M
-         3ADmc2C0gdK0tuAb8VC9NVwAMbipMdazn8iCbhwC6NOoqFVDrPcGpmIadxM+oXw9fmsf
-         IztCi3On6toTX+MjY3CPnGqZTOUVFAZhKOuObfuH3VNKfr+z80mYzOsJCMmmRzoG3CLJ
-         J0HAh52i/6yb4ep5k5DPRyfP1EnnjuXgl4JhG1AMlY2u++klXWd0UvPWaxbW7/5vZMSm
-         qu1Q==
-X-Gm-Message-State: ACgBeo1mtxD1JUY04xTtyw+ul2Ou9n6fLL7yfu/d7ziNvA6qUSfeJh4p
-        BDDHMLkW1/NHoTmo7dCpzp4=
-X-Google-Smtp-Source: AA6agR5KinRgSTiwz5kN6HDarpCdBIq4fZNySV5zqrv/4j6rw46dTQNHhN6XvlLxLoIrOIguD9C/Tg==
-X-Received: by 2002:a17:907:8686:b0:773:6f77:f110 with SMTP id qa6-20020a170907868600b007736f77f110mr5960404ejc.547.1662714240883;
-        Fri, 09 Sep 2022 02:04:00 -0700 (PDT)
-Received: from felia.fritz.box (200116b8261bf1004cd87416af9987ea.dip.versatel-1u1.de. [2001:16b8:261b:f100:4cd8:7416:af99:87ea])
-        by smtp.gmail.com with ESMTPSA id nb3-20020a1709071c8300b007303fe58eb2sm659797ejc.154.2022.09.09.02.03.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 02:04:00 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ppc: select HAVE_PATA_PLATFORM in PPC instead of creating a PPC dependency
-Date:   Fri,  9 Sep 2022 11:03:43 +0200
-Message-Id: <20220909090343.21886-2-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
-References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=e9oyM6c9eO+oX1i0ikmglldoQMouIxTI5tr1NuI9GT8=;
+        b=WGxrYI+QXBymZ7GDRCTxyDdYE9DaKqNq517BmAKp05MJv+hCMJPfAF7X9KO44LRLd8
+         5HSIpLpTZtE+bMq2S6eLPqitcmkRALGtfzdHTMcktZvIFS51T369slXqj6ZxxtNKhrYJ
+         3DXeY+gmI8hmLNZRure211CDWPyAvePFNZhMQMjhl2I1w+sWPRxP/PZqb8A+AN9Rjwaz
+         igTIPKDtcBqTY1CS+o2hyoM636DgTx1EEeNrlRsyRtzvX8ngGUw0DNXVoh3QVApdtPZY
+         /o1gnbI1HQeIAzGXN+UN4xOlEYpptMV6oZFNWwi7ZkuEI9/Uj/v3J4wHLQ0WhYpGrldX
+         ltIA==
+X-Gm-Message-State: ACgBeo179nImqOfds+9VqkSb6zC8ASbi493h0Xx1zLUjeB2iC5/XP5U2
+        +UXcFFFbv+VhN/SrD7WaggflY3TIwf5jrRXNRLIQCQ==
+X-Google-Smtp-Source: AA6agR60pT17TAOcus3ljp/+P1MMns0B4aTuhcTv8h8i4eJsYnX9f8UfuOksTxp7JfFCNnxnPWwh0eKuRzEoeHEZjnk=
+X-Received: by 2002:a25:5c3:0:b0:6a9:90fb:c9e6 with SMTP id
+ 186-20020a2505c3000000b006a990fbc9e6mr10891297ybf.152.1662714304890; Fri, 09
+ Sep 2022 02:05:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com> <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 9 Sep 2022 12:04:53 +0300
+Message-ID: <CAA8EJppgaAuEDU44ePOt+ZWK0_rNsXHnE3WOEc9F-n=VE=3aVQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power up
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cc18e0fea790 ("LIBATA: Add HAVE_PATA_PLATFORM to select
-PATA_PLATFORM driver") introduces config HAVE_PATA_PLATFORM, and expects
-that all architectures simply select this config when the architecture
-supports using the PATA_PLATFORM driver.
+On Fri, 9 Sept 2022 at 11:45, Krishna chaitanya chundru
+<quic_krichai@quicinc.com> wrote:
+>
+> Introducing phy power down/up callbacks for allowing to park the
+> link-state in L1ss without holding any PCIe resources during
+> system suspend.
+>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/phy/phy-core.c  | 30 ++++++++++++++++++++++++++++++
+>  include/linux/phy/phy.h | 20 ++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
+>
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index d93ddf1..1b0b757 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -441,6 +441,36 @@ int phy_set_speed(struct phy *phy, int speed)
+>  }
+>  EXPORT_SYMBOL_GPL(phy_set_speed);
+>
+> +int phy_power_down(struct phy *phy)
+> +{
+> +       int ret;
+> +
+> +       if (!phy || !phy->ops->power_down)
+> +               return 0;
+> +
+> +       mutex_lock(&phy->mutex);
+> +       ret = phy->ops->power_down(phy);
+> +       mutex_unlock(&phy->mutex);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_power_down);
+> +
+> +int phy_power_up(struct phy *phy)
+> +{
+> +       int ret;
+> +
+> +       if (!phy || !phy->ops->power_up)
+> +               return 0;
+> +
+> +       mutex_lock(&phy->mutex);
+> +       ret = phy->ops->power_up(phy);
+> +       mutex_unlock(&phy->mutex);
+> +
+> +       return ret;
+> +}
 
-This is properly implemented already for all architectures except for the
-powerpc architecture. Implement this for powerpc now.
+As it can be seen from the phy_power_off(), the PHY can be a shared
+resource, with the power_count counting the number of users that
+requested the PHY to be powered up. By introducing suc calls you break
+directly into this by allowing a single user to power down the PHY, no
+matter how many other users have requested the PHY to stay alive.
 
-Adjust the config of the powerpc architecture to use the config
-HAVE_PATA_PLATFORM and simplify the config PATA_PLATFORM to not mention
-any specific architecture anymore.
+> +EXPORT_SYMBOL_GPL(phy_power_up);
+> +
+>  int phy_reset(struct phy *phy)
+>  {
+>         int ret;
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index b141375..3a45f4d 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -76,6 +76,8 @@ union phy_configure_opts {
+>   * @set_mode: set the mode of the phy
+>   * @set_media: set the media type of the phy (optional)
+>   * @set_speed: set the speed of the phy (optional)
+> + * @power_down: parking the phy in power down state
+> + * @power_up: pulling back the phy from power down
+>   * @reset: resetting the phy
+>   * @calibrate: calibrate the phy
+>   * @release: ops to be performed while the consumer relinquishes the PHY
+> @@ -89,6 +91,8 @@ struct phy_ops {
+>         int     (*set_mode)(struct phy *phy, enum phy_mode mode, int submode);
+>         int     (*set_media)(struct phy *phy, enum phy_media media);
+>         int     (*set_speed)(struct phy *phy, int speed);
+> +       int     (*power_down)(struct phy *phy);
+> +       int     (*power_up)(struct phy *phy);
+>
+>         /**
+>          * @configure:
+> @@ -226,6 +230,8 @@ int phy_init(struct phy *phy);
+>  int phy_exit(struct phy *phy);
+>  int phy_power_on(struct phy *phy);
+>  int phy_power_off(struct phy *phy);
+> +int phy_power_down(struct phy *phy);
+> +int phy_power_up(struct phy *phy);
+>  int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
+>  #define phy_set_mode(phy, mode) \
+>         phy_set_mode_ext(phy, mode, 0)
+> @@ -349,6 +355,20 @@ static inline int phy_power_off(struct phy *phy)
+>         return -ENOSYS;
+>  }
+>
+> +static inline int phy_power_down(struct phy *phy)
+> +{
+> +       if (!phy)
+> +               return 0;
+> +       return -ENOSYS;
+> +}
+> +
+> +static inline int phy_power_up(struct phy *phy)
+> +{
+> +       if (!phy)
+> +               return 0;
+> +       return -ENOSYS;
+> +}
+> +
+>  static inline int phy_set_mode_ext(struct phy *phy, enum phy_mode mode,
+>                                    int submode)
+>  {
+> --
+> 2.7.4
+>
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/powerpc/Kconfig | 1 +
- drivers/ata/Kconfig  | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 39d71d7701bd..2575e21b6e6b 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -237,6 +237,7 @@ config PPC
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
-+	select HAVE_PATA_PLATFORM
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index 1c9f4fb2595d..ed3547165528 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1103,7 +1103,7 @@ config PATA_PCMCIA
- 
- config PATA_PLATFORM
- 	tristate "Generic platform device PATA support"
--	depends on EXPERT || PPC || HAVE_PATA_PLATFORM
-+	depends on EXPERT || HAVE_PATA_PLATFORM
- 	help
- 	  This option enables support for generic directly connected ATA
- 	  devices commonly found on embedded systems.
 -- 
-2.17.1
-
+With best wishes
+Dmitry
