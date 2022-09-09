@@ -2,83 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF49C5B4189
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EAE5B418B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiIIVi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S229585AbiIIVjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiIIViw (ORCPT
+        with ESMTP id S230513AbiIIVjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:38:52 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37621365CB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:38:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso2479485wmr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 14:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=2Y+NLNuQyKNaFU6mPTgzkQeYfosTVSCZJmxTb/6tykg=;
-        b=S9fvTRoZDs1adI4sC3PL20INBwJC7nCemJe/AWoDTwEcfdlhgkbeQ39SsyPpbuMjDN
-         rVj+mRn1WT6L0Ojlq1kZzN8OWl+nNhMwBrR7+vfwU/D3QXYA3+ZwnOzrQf6mYAFLjSKs
-         J/P+mrf/AGE3uU4oRTx3+dWzPl+UQfnW/BHvCnvvziTLm5OaWP+0Ha+d2oFsW4chiekM
-         ZxcMhqfKh2Osx3CpVUUXCMb0Px0hkDa/gRrE/MccqDaNC2X00pNm/+7B4E0wK+lzmC8M
-         /5eZN3sut+pyn9MKpdI2ajTtNp9TZeFLfKo6oA0DTH6ccWmsOXF9fMqs4BS8nsUdg1/k
-         ID3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2Y+NLNuQyKNaFU6mPTgzkQeYfosTVSCZJmxTb/6tykg=;
-        b=qXE/y0llmlac/g/2FlnRjfvb3EN9fqUtrOTajdKKNfSE0PJrLn+TZdMwakaqs7sB8E
-         RatO9Kmvk08DE8S7+C4c/jp64Ip+K9xTtobP2mXRCl1wVQyWCxVj0aegnb63qqRVKoo0
-         OyyBj7R4Zd6SWh2z0+aDPaDI0iNmlK6ysEYtW6cnzo2HRa6/oUIKZnvSmuY0uS0jhxxm
-         VSQ1rIejU/aFP211SVtok2LOIkkWWM07XgRbM13Wsey2hXFwJLw4OMAKTLwCi/1GihOc
-         u/LQEZkWdz3KpmgA6BLl3vWYKRfOZ/Nxjjc+zHycU3/l3EVsnPt2FVku6AalOiB3exJt
-         mGIQ==
-X-Gm-Message-State: ACgBeo3DTxH4p1aR01nwTs0qpxe8Fx+UCYRNxckhhQdMeE7ZP6MP9z++
-        ETY8MwNoUJDOHeOEX+w68Ptdop+zolkVM16B4G49+g==
-X-Google-Smtp-Source: AA6agR55Ji109n89/PIZXx7w8Zwy/UxdI6HoxoE5W3L937PCHDl99glgs5wvCTO9sZZ0mnsie1BGFRbQMfSmWlHgRwg=
-X-Received: by 2002:a7b:c416:0:b0:3ab:73e4:c44a with SMTP id
- k22-20020a7bc416000000b003ab73e4c44amr6512861wmi.147.1662759529003; Fri, 09
- Sep 2022 14:38:49 -0700 (PDT)
+        Fri, 9 Sep 2022 17:39:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51418343
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:39:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A3B3620D5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 21:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E40C433C1;
+        Fri,  9 Sep 2022 21:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662759573;
+        bh=ex7Bf0A+D0ut+bV7nbUASsm4O5uu3FG1xP29PsRanAI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=j/kOBJE9/qBLBeRdYxTX8is5Xov7qBhcvCrkE3pySFEblHSvpQMa092HH+7wFUQjw
+         f41Y9KYPVP+1RAD0veTboU0ghOTpLsMjIrLjtfy+r++xzwbUWfhv9sVz7LdMqxEW7G
+         nX0Yziat8SBqkxOMeXpts373A3PXW1AqAcAehZNYMUujOe6Khe/FgcEQM9nCyZAnSj
+         2RVTOmAsDBdvyTdzeBNdoz4sPLDEEBoit0faAZe49NwG9fd6731/BYEM+qo/MRsqzn
+         OpNeRNFbbACh0oTK1xwsYWqL94elfE5W6ce5nZXf1U84K5RyMF7RndLk+6vRIXCcZh
+         M6Bp5A5AzHefQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Xin Hao <xhao@linux.alibaba.com>, akpm@linux-foundation.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4] mm/damon: Remove duplicate get_monitoring_region() definitions
+Date:   Fri,  9 Sep 2022 21:39:31 +0000
+Message-Id: <20220909213931.136283-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220909204520.60047-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-References: <20220909180617.374238-1-fmayer@google.com> <202209091432.5FEEE461F7@keescook>
-In-Reply-To: <202209091432.5FEEE461F7@keescook>
-From:   Florian Mayer <fmayer@google.com>
-Date:   Fri, 9 Sep 2022 14:38:37 -0700
-Message-ID: <CAJAyTCBuETy0oY-2tjvKxDDmQCsBdL2d4UU7Fv-ySKZw_S4DNA@mail.gmail.com>
-Subject: Re: [PATCH RESEND] Add sicode to /proc/<PID>/stat.
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sept 2022 at 14:34, Kees Cook <keescook@chromium.org> wrote:
->
-> Normally no changes are made to "stat" any more. New additions are made
-> to "status" instead. Could it live there instead?
+As my previous comments are almost only cosmetic trivial nits and I don't want
+to make this unnecessarily delayed long, I made the changes on my own and
+posted it:
+https://lore.kernel.org/damon/20220909213606.136221-1-sj@kernel.org/
 
-Yes, that would also work.
-I put it in stat for consistency because the exit_code is also there
-(and not in status).
+Xin, if there was anything I missed or there is anything you disagree about my
+changes, please let me know.
+
+
+Thanks,
+SJ
+
+On Fri, 9 Sep 2022 20:45:20 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> On Fri, 9 Sep 2022 10:41:05 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+> 
+> > In lru_sort.c and reclaim.c, they are all defining get_monitoring_region()
+> > function, there is no need to define it separately.
+> > 
+> > As 'get_monitoring_region()' is not a 'static' function anymore, we try
+> > to use a prefix to distinguish with other functions, so there rename it
+> > to 'damon_find_biggest_system_ram'.
+> > 
+> > Suggested-by: SeongJae Park <sj@kernel.org>
+> > Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> > ---
+> >  include/linux/damon.h | 11 +++++++++++
+> >  mm/damon/core.c       | 29 +++++++++++++++++++++++++++++
+> >  mm/damon/lru_sort.c   | 37 ++-----------------------------------
+> >  mm/damon/reclaim.c    | 37 ++-----------------------------------
+> >  4 files changed, 44 insertions(+), 70 deletions(-)
+> > 
+> > diff --git a/include/linux/damon.h b/include/linux/damon.h
+> > index 7b1f4a488230..6c863b281fb2 100644
+> > --- a/include/linux/damon.h
+> > +++ b/include/linux/damon.h
+> > @@ -448,6 +448,16 @@ struct damon_ctx {
+> >  	struct list_head schemes;
+> >  };
+> >  
+> > +/**
+> > + * struct damon_system_ram_region - System RAM resource address region of [@start, @end).
+> 
+> I prefer 80 columns, let's break down this line.
+> https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
+> 
+> Also this struct is gonna be used by only damon_find_biggest_system_ram(), so I
+> think it might make more sense to move this into core.c.
+> 
+> And, as this is not aimed to directly be used by external API users, I think it
+> would make more sense to hide from kernel doc (/* instead of /**).
+> 
+> > + * @start:	Start address of the  (inclusive).
+> 
+> of the 'region'?
+> 
+> > + * @end:	End address of the region (exclusive).
+> 
+> I like the nice explanation: whether its inclusive or exclusive.
+> 
+> > + */
+> > +struct damon_system_ram_region {
+> > +	unsigned long start;
+> > +	unsigned long end;
+> > +};
+> > +
+> 
+> As this struct is only used by damon_find_biggest_system_ram(), I think it
+> might make more sense to move this into core.c?
+> 
+> Below parts all look good.
+> 
+> Also, this patch seems cannot cleanly applied on top of the latest
+> mm/mm-unstable branch.  Would need rebase.
+> 
+> 
+> Thanks,
+> SJ
+> 
+> [...]
+> 
