@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517625B42AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79C65B42B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiIIW5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 18:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S231348AbiIIW5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 18:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiIIW5C (ORCPT
+        with ESMTP id S231338AbiIIW5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:57:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70642F16D2
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 15:57:01 -0700 (PDT)
+        Fri, 9 Sep 2022 18:57:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C004108737
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 15:57:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B86162109
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 22:57:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6055BC433C1;
-        Fri,  9 Sep 2022 22:56:59 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7E915CE2479
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 22:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF068C433D6;
+        Fri,  9 Sep 2022 22:57:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662764220;
-        bh=D7LR6k5R4/eW1eEyJm5gBaN50zfTXQgjgX+zG82s6Rs=;
+        s=k20201202; t=1662764221;
+        bh=T7EGkQFNZ4TLhBEc3jwOP5d1nX+ofEwNi7R64f46odM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=SBXqY3sPVyUWeqVWUOEt9MC+QvySfOKYXTsxd9MtCmgZl4niFXZ7pTE99E6LzadoJ
-         1ClS/NQOKzMEOmXwtoHedB9P7NNV/sCM1ik6h25ULqLbGeqbn0Tgd8WjYf1YmYnOPc
-         ONppxYKxxOmWJcL5c3OOsvSCQGlG/wRjOhjeud+eptDTsfN9764q0GOBJWQK0RPSvG
-         ZVQeT2Tg/tQOhXMcn5QavjvJVnxY68zALRVifGmJTJMZTpxLN+36s5h6IGOJXrGplw
-         Dw2LnQEHgKn8jTbLjs4BoONeKUetIsYPr7JEZFvH+4cOofTkpafyYzmNDojiPUAATK
-         4NSmRog5ugJ/A==
+        b=Tjl+0alfiIdUyGpBWXwXaZHMw3rsOXnUCjKZH9df0E6f8qHfzzIqEDemLdNSWc2PR
+         PsAsJh4T6SSuTnhQLaPZxVnN6C9b1y9YSEaTSW3t/6iTRLhASzEXF30J7ETf6QOEIU
+         XdtqbLW2wX8Q8r8pXAO1cYTcoRDWJPfgEZkee7YDGwtmhlerQkXIFH/Wg2L6hBr4/+
+         yiAA3I2BpO5/9Ye6vTVjDIAaVHr9eiaseN3LGKskOE9N54eFL9DVo8hLdxDJMrbWGp
+         LLHLYOc5aoDjMeOghAejkVp1LBOYkVbVzVW8oHTlBjFDutjHYf4fWtATrtREsJAFVc
+         vVbEzh/o+Qukw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Axel Lin <axel.lin@ingics.com>
-Cc:     linux-kernel@vger.kernel.org, Jerome Neanne <jneanne@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Liam Girdwood <lgirdwood@gmail.com>
-In-Reply-To: <20220828120153.1512508-1-axel.lin@ingics.com>
-References: <20220828120153.1512508-1-axel.lin@ingics.com>
-Subject: Re: [RFT] [PATCH] regulator: tps65219: Fix .bypass_val_on setting
-Message-Id: <166276421911.339577.1528725955840823989.b4-ty@kernel.org>
-Date:   Fri, 09 Sep 2022 23:56:59 +0100
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20220909125954.577669-1-patrick.rudolph@9elements.com>
+References: <20220909125954.577669-1-patrick.rudolph@9elements.com>
+Subject: Re: [PATCH] regulator: core: Prevent integer underflow
+Message-Id: <166276422064.339577.12378154352653239391.b4-ty@kernel.org>
+Date:   Fri, 09 Sep 2022 23:57:00 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,13 +55,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Aug 2022 20:01:53 +0800, Axel Lin wrote:
-> The .bypass_val_on setting does not match the .bypass_mask setting, so the
-> .bypass_mask bit will never get set.  Fix it by removing .bypass_val_on
-> setting, the regulator_set_bypass_regmap and regulator_get_bypass_regmap
-> helpers will use rdev->desc->bypass_mask as val_on if the val_on is 0.
+On Fri, 9 Sep 2022 14:59:53 +0200, Patrick Rudolph wrote:
+> By using a ratio of delay to poll_enabled_time that is not integer
+> time_remaining underflows and does not exit the loop as expected.
+> As delay could be derived from DT and poll_enabled_time is defined
+> in the driver this can easily happen.
 > 
+> Use a signed iterator to make sure that the loop exits once
+> the remaining time is negative.
 > 
+> [...]
 
 Applied to
 
@@ -70,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: tps65219: Fix .bypass_val_on setting
-      commit: 69a673c9e54d952cf404f80169d3100b7a9645bb
+[1/1] regulator: core: Prevent integer underflow
+      commit: 8d8e16592022c9650df8aedfe6552ed478d7135b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
