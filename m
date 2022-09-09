@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB3E5B318A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3285B318C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiIIIUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
+        id S230188AbiIIIVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiIIIT5 (ORCPT
+        with ESMTP id S229781AbiIIIVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:19:57 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CE94D154
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:19:56 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so3892283wmk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:19:56 -0700 (PDT)
+        Fri, 9 Sep 2022 04:21:35 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D793ED2923
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:21:33 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id z20so951216ljq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=M80nuH0as/dyuPHdT1nX8UsUUmqoa+KIEZcH7oWzmKc=;
-        b=dMC9Cl2UatNEGchSPLYQrxGB2PGv4NvywsDD3724PHbU/3oVL2aNcU8+xSWplpjvc4
-         neJcokyoHrO3vUSbIvx0+1+2VtjUGH73P+zfgHD4BqOmErVnf4CtdoGNCnH5zm0o9vPp
-         Ka6Ah02a91aoNAf5SmayHSVsqtkKlvoyawaUKvbAFFFxlh9Z21k6rl4khDfHPcKVWyJK
-         +BvAzQSljhxVojUxdj/RJDONhnlPdearj0kdbCEyZSlSZ+QApC28ByJ1k8HgxUdnnZ9h
-         UVPT52bUnR6zPH24+su1/TYHfG5wXSBrAqCI6Tb2/Jbi0lGXgxXNY7MBJWDaBax88kqC
-         RZvw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=VIOofoEHYZmULXPTWVPGHc4pkhqvtC/tMOM+JD3igag=;
+        b=h1FG2nMj6e9S5512GyMcPIKesaliGmRKaXgVBLNQER9TuQ+CU9BcsTY9CmMNBvMeHV
+         gaVtUE2506qGQMtNji9+xRUrEnEGauYBHnEyCOZQf2G8qTiep/DuDPa/aygCCENsGdIZ
+         7sPOOSAcUCavibVyqsqUVmfK/FnymyJOl6UyjUyMbpvyQxsXi1vL3OlPdAV1KOZere7D
+         QG5khTFtrf0++WHA8O7/M/PZDs9pyh7rnT7CVFAGRnD2uIo5AgR2JOgRzbgTibYEjKVM
+         mJdYUJ9ArSVt4ALUHuqoVNKu6jnELbzbu/FvzcOIrA0EdejdhvNKYd8OXp+aLpcW8y50
+         QISg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=M80nuH0as/dyuPHdT1nX8UsUUmqoa+KIEZcH7oWzmKc=;
-        b=gIZqc9IWYsFGMQ1AQgzSf//LoXpM+WvXlbkhTX/KYgu3OYiLKP1dC8BdDh/0SgryCZ
-         Uwk+iMH0MZIkOAQiY8zqSA6XYPGcaWDdS3Fn0xRAwjm4Ch8uH6m5IDJjpfe4Ut9YEIlF
-         fwFC2i9wVUwWCYI6JppL9T32FVo9XdfBBCi0e4Hfj6rC06uXG/qq56BZ8e3kycdNAd9z
-         QwWqYs1oDpjr0VkQ65U1FUn8HWdDb2zUp2jHtVv5uPlL5JRD++Xi1qmqtONEPVY96QPD
-         vXG3WTMueCJ/HzNkfxoLdo22fsbU4ttEA8aSn2dKIipqL5EiLg1ISq65tTvgUmVxMj/5
-         qJhQ==
-X-Gm-Message-State: ACgBeo2EWKYaSLCjMyU6kFeMeUgyX03iKYJcPMN15zJau+wg8xqsnbqW
-        6B5VeQNM6h8JeyWZZy5ZFDfosA==
-X-Google-Smtp-Source: AA6agR7gJw/MYcMBE4WBJCYjAtalYkIhggEBXED0qnUmijJhSc7OaCgGWT9NwnsXwoUQs+n8htTAWQ==
-X-Received: by 2002:a05:600c:1c16:b0:3a6:b11:79be with SMTP id j22-20020a05600c1c1600b003a60b1179bemr4491777wms.203.1662711594959;
-        Fri, 09 Sep 2022 01:19:54 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:1d1e:ddcd:2020:36c2])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d68cc000000b00228a6ce17b4sm1265073wrw.37.2022.09.09.01.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 01:19:54 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 10:19:47 +0200
-From:   Marco Elver <elver@google.com>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH] mm: kfence: convert to DEFINE_SEQ_ATTRIBUTE
-Message-ID: <Yxr3I6Ru2WUGzEWn@elver.google.com>
-References: <20220909083140.3592919-1-liushixin2@huawei.com>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VIOofoEHYZmULXPTWVPGHc4pkhqvtC/tMOM+JD3igag=;
+        b=0+rT3ZD0wNAozOsSWD5TEkbRnuwRsh7ea+1Q5kXCj2mxxAwfEJOj/E6JloIC7lkdVQ
+         t8GLVGeUhGu7LgC0+sXJVnIdhtVVwH50cK6fkrimbzBCUxEuIh74HoeDeV79BgMxmaAz
+         cLieA6HQr3VMyNn8jLgfCbeHkBl+XBrarHuH3+TG4++UEV/wuJzHxPR2by9pwQQ8k/KG
+         ckM9y0cged3Zji5DjYvPvI3OBoDuVWugWeMjGCxdYVfxypVvcugOOtNSNldr/1/wfUNp
+         Cii6OT9e+M2ifTKEAvrgNcerwYwnGLG5VJLOkBZ3sC+ryYnp/qhHxEpVe5Q+ibDW4kZG
+         RZ9Q==
+X-Gm-Message-State: ACgBeo155Z9g1RD+KZM/JO2v4q+jjwd1yVED6VgJPGtJW/6O1YhfnE/Q
+        1Icb2ZXH6rSvpGOu2ZU5zvgSXA==
+X-Google-Smtp-Source: AA6agR7Jar9ldUV3gwhxvjF2xUIm+NzQJ3cd0ihIdQCNH34VPmDvaDFUKs5QG+gPdVUMh8Y8lJLxCg==
+X-Received: by 2002:a2e:944a:0:b0:24f:10bd:b7e8 with SMTP id o10-20020a2e944a000000b0024f10bdb7e8mr3866304ljh.238.1662711692268;
+        Fri, 09 Sep 2022 01:21:32 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p13-20020a2eb98d000000b0026ac2fffda4sm180761ljp.105.2022.09.09.01.21.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 01:21:31 -0700 (PDT)
+Message-ID: <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
+Date:   Fri, 9 Sep 2022 10:21:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909083140.3592919-1-liushixin2@huawei.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
+ times
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Astrid Rost <astrid.rost@axis.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@axis.com,
+        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220907135827.16209-1-astrid.rost@axis.com>
+ <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
+ <Yxn9o1MVMPnFO3PM@sirena.org.uk>
+ <ac2bcca1-6997-2d17-b1d6-a5e81ced2613@linaro.org>
+In-Reply-To: <ac2bcca1-6997-2d17-b1d6-a5e81ced2613@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:31PM +0800, 'Liu Shixin' via kasan-dev wrote:
-> Use DEFINE_SEQ_ATTRIBUTE helper macro to simplify the code.
+On 09/09/2022 09:23, Krzysztof Kozlowski wrote:
+> On 08/09/2022 16:35, Mark Brown wrote:
+>> On Thu, Sep 08, 2022 at 02:20:42PM +0200, Krzysztof Kozlowski wrote:
+>>
+>>> Anyway new properties cannot be accepted. This has to be converted to DT
+>>> schema (YAML).
+>>
+>> Doing a whole binding conversion feels like a bit of a steep requirement
+>> when people are just adding a simple property, it's a lot of stop energy
+>> to figure out the tooling, do the conversion and deal with all the
+>> bikeshedding that the tools don't catch.  It's definitely nice if people
+>> want to look at that, for more complex binding changes it gets more
+>> reasonable but for trivial properties it's disproportionate.
 > 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-
-Reviewed-by: Marco Elver <elver@google.com>
-Tested-by: Marco Elver <elver@google.com>
-
-> ---
->  mm/kfence/core.c | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
+> It's more than one property here and many patch submitters are using
+> this reason as well. In an effect few bindings TXT grew from 5 to 10
+> properties in one year and still no conversion to YAML.
 > 
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 8c08ae2101d7..26de62a51665 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -719,24 +719,13 @@ static int show_object(struct seq_file *seq, void *v)
->  	return 0;
->  }
->  
-> -static const struct seq_operations object_seqops = {
-> +static const struct seq_operations objects_sops = {
->  	.start = start_object,
->  	.next = next_object,
->  	.stop = stop_object,
->  	.show = show_object,
->  };
-> -
-> -static int open_objects(struct inode *inode, struct file *file)
-> -{
-> -	return seq_open(file, &object_seqops);
-> -}
-> -
-> -static const struct file_operations objects_fops = {
-> -	.open = open_objects,
-> -	.read = seq_read,
-> -	.llseek = seq_lseek,
-> -	.release = seq_release,
-> -};
-> +DEFINE_SEQ_ATTRIBUTE(objects);
->  
->  static int __init kfence_debugfs_init(void)
->  {
-> -- 
-> 2.25.1
+> I understand your concerns however I have stronger motivation to do the
+> conversion is stronger for me, than for accepting new features.
+
+Eh, that was still during drinking coffee, so it barely reminds English
+sentences. Let me try one more time:
+
+It's more than one property and many other patch submitters were using
+this reason as well. As a result, few TXT bindings grew from 5 to 10
+properties within one year and there was still no conversion to YAML.
+
+I understand your concerns however I have stronger motivation to do the
+conversion, than for accepting new features.
+
+Best regards,
+Krzysztof
