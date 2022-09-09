@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50995B3443
+	by mail.lfdr.de (Postfix) with ESMTP id 6C90B5B3442
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiIIJnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S230265AbiIIJnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiIIJnQ (ORCPT
+        with ESMTP id S231649AbiIIJnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:43:16 -0400
+        Fri, 9 Sep 2022 05:43:35 -0400
 Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3B5D5737;
-        Fri,  9 Sep 2022 02:43:15 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3450990b0aeso12396037b3.12;
-        Fri, 09 Sep 2022 02:43:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4B5CCE13;
+        Fri,  9 Sep 2022 02:43:34 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3378303138bso12506307b3.9;
+        Fri, 09 Sep 2022 02:43:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=CjOr/xVdCatVWvrfBKrHvrf5/qwfqa22a/dV5JbB6Ns=;
-        b=Wdb6x0hGfcz3f+ab9h93qPN15RUgQQOKVi2aFt+pDNe0fL0DvMs6qxRm/afiQ0zHms
-         GuHo+QHZDfWCwP3x5Nhw2KtErCDmCFGD+Ev7WiFgzoU/lsin2IQViX0UW9n5lMSDAwxy
-         Cc/xODhSz68S8kGpdq8vfRyxiYl+0hmK36cqqJt4K+oPIrs7/7flOmqVlzaq4x0fOeOR
-         2ZiFyzHdxqeYxvn/Lspa9cikJuXK91RfxdLAnT9+cFw5YJkBN3ApsZyCxfNct7Tto7/d
-         q3dFPx4BWvjN1uF+rGiWafmwO26m1yV7vi02ykBoH6Ox9jwdr+mW2/A+VZz3/WP7PmHj
-         BwHQ==
+        bh=7ZB/vFj1LBEvoFTPtCpwJzQSMMS3bz1eErTDvpmrofs=;
+        b=BWmld3ITX+giHZRWkJWwbcDCiOUpMOxQyqf6WsoI7BqlMauyRaz/ygBKpHYYcBNO+X
+         tUxzbx0oJP2PdXRc4UssH4YzjbKa/tcZH7uuybjb+cmvR5GjcY7cZ/Xsbyy+i1O+eVY/
+         5/eT+SZULnxNPSVsQc5sDf7lQCC7IoTjd1fArydNSxtxWzw2iE/Fln6qxNRm4kefwf37
+         4M6EC6OUSjfjZqTc+UWWlYsyNA3Oed/L+1/CNdtZ3ENyEEc/cmVDMI1zpmkJNfkxuGYp
+         yxVvAV/1WQPtYBsUTCvuAEcN+S8yvFEBQZDSt5Fkb86VT+ZJwOTRpUJOP8tNS5jFDDd2
+         qt1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CjOr/xVdCatVWvrfBKrHvrf5/qwfqa22a/dV5JbB6Ns=;
-        b=MixkcJoKx4xjNN6MAIEAC2jseRhx35h14ZYHEE7v0AmOsA8poYcPw9zVtDBkQlk+k5
-         18JP6SuAmbTcxfygvMCvWYp0XgdIaBBlGrV7v53awjmx3Kv5xsHRz4fOCb3BLhMRBL5M
-         is5uD48Ug6cAUHanMgIYwCLmObzbbrfXaCoyp+Ga037zD7vi6Ha3+2nUngmckJVMKcJA
-         6gFcW74XFx39NLEEqNsF7OnKPD20Gvi7qONtcHJLH2UWIT1OUyllCg7H6H9F2LnwgpP/
-         1EGGTmn2xO61Z5Pp5THuBcFHq6Jmp+JbZ9XOBaNqFCSfDCtEpvEGhG8ZhdK+hdNtiewC
-         RZRQ==
-X-Gm-Message-State: ACgBeo1GiHvS2QeKbXXHUt0SPJzhnc+CEV7h+qcrfi3xBN9Ex+qBO6oP
-        rzwuw6hXaZXMt9Wt0V+l4qbWgoubrmZlp1CzxsjGDykh07s=
-X-Google-Smtp-Source: AA6agR6rVJh6TPlfqtSjbFfxwPrDCj6n15t/wcCkrItZvLKXf3DDre4zvFAl//4/COVWHFsukMwmkRQPTc4zgSco0pI=
-X-Received: by 2002:a0d:f701:0:b0:32a:17d3:d189 with SMTP id
- h1-20020a0df701000000b0032a17d3d189mr11100556ywf.401.1662716594449; Fri, 09
- Sep 2022 02:43:14 -0700 (PDT)
+        bh=7ZB/vFj1LBEvoFTPtCpwJzQSMMS3bz1eErTDvpmrofs=;
+        b=Pw3GAMaBKs8XttQ1mpLxwYUl+0BjVsADW018DmKvnTBzhD2OyZNBnuKvhg95aQIYQ1
+         /wXL3uOkxIdlFeK8GBMRw73AmJVwIGDnq1mjWUGeSa6I9Rp0t6d2Fr2X/xqRVJ7b2xdH
+         DYn1ynT2Keemknx+7eAMo89GDC5ejBQHCckdRYBc623a/wdOe1ojbQ9a2vRcxWbx/siB
+         2cD9CxhGvk8zcSApIKBSOJEBuHTSz88wrJCh//TXtu+gJdLyTFEf+G7kgxX1kKEjPpvJ
+         7tL/Axb6eV/7rskcL/Ttqb5ktsPS2UznXOUwyJxBTrjEsEcD6e6dU6GcXxnChBsqTpH4
+         luEA==
+X-Gm-Message-State: ACgBeo2twCqoTjlb9k2U+EE6ssPWD8aTMO1ZwxFHHClemIkU/Sk16jN4
+        6NA2cybVDX2cjmeHNdyUpEJMHXq3nQUXYn0tvxA=
+X-Google-Smtp-Source: AA6agR5jda4a3EcM5GDvNbwnprqfr/4CFDLarXT4mFEldLG0qPusFNe2TD+NpCjCIUQz5j77+wo6CNsqhSjzPuzhyYc=
+X-Received: by 2002:a81:7702:0:b0:328:297a:fdcb with SMTP id
+ s2-20020a817702000000b00328297afdcbmr11117970ywc.335.1662716613820; Fri, 09
+ Sep 2022 02:43:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220909085505.15536-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220909085505.15536-1-lukas.bulwahn@gmail.com>
+References: <20220909090343.21886-1-lukas.bulwahn@gmail.com> <20220909090343.21886-2-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220909090343.21886-2-lukas.bulwahn@gmail.com>
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 9 Sep 2022 11:43:03 +0200
-Message-ID: <CAKXUXMzuwzE4bSmq7okPo3Y2h6q_83NeERm8P9yQ1i393vyNBg@mail.gmail.com>
+Date:   Fri, 9 Sep 2022 11:43:23 +0200
+Message-ID: <CAKXUXMyDON2ys_bxNi07h_BOYkjd1Gidi6qTHXQ-=L5Vsu9kxA@mail.gmail.com>
 Subject: Re: [PATCH] ppc: select HAVE_PATA_PLATFORM in PPC instead of creating
  a PPC dependency
 To:     Michael Ellerman <mpe@ellerman.id.au>,
@@ -70,7 +70,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 10:55 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Fri, Sep 9, 2022 at 11:04 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
 > Commit cc18e0fea790 ("LIBATA: Add HAVE_PATA_PLATFORM to select
 > PATA_PLATFORM driver") introduces config HAVE_PATA_PLATFORM, and expects
