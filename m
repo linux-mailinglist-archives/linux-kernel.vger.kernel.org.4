@@ -2,158 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7BD5B325E
+	by mail.lfdr.de (Postfix) with ESMTP id E2C4C5B325F
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiIIIwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S231803AbiIIIwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiIIIw0 (ORCPT
+        with ESMTP id S229455AbiIIIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:52:26 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B248D12D183
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:52:24 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id d2so1608287wrn.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=jP0pFkmG2zxr05jAdP1hMbeqbKg9CqioB38AAHYVmvI=;
-        b=MWcZT2bBh9VDvvGbZLvEXabNfeumwaVjX+C8C2lPoW4Lzw2BVRn9kf1sdPts0yU59Z
-         6w+JLleDLWIcIh/3S3Ff0eN/U+jzEy41q+IYpzzmHe/N1iGnVQZSoQzADliQBn1KENxq
-         j38StCiYIncAbOmbMVjX78rijk0Ts7f0yZTOaxH8hL704wVr3jhAv8dT3/8RORO1kP02
-         PsR0Nv6voD2mRfTNa2D3quz4Yg5ywoWqkPBTATHfI4uio4FeFwF5pTbCW4cXqCupay9F
-         QlaIOHDnK9FTYRmjbW0ZA98pihdseqyVQPMNL9xDTi90hZxNEGC4PFTZK7QNfNtUzIit
-         EgRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=jP0pFkmG2zxr05jAdP1hMbeqbKg9CqioB38AAHYVmvI=;
-        b=M8Icl/l6qJZQKXpPwvYgvdHyiX6T2vUiDGkFK/Grc8QwBffLktnCmlAeh2dwIDR7+T
-         ojnsVTVh4/1As+VKsY7OO4a1CLLIg3sDpMOAHlurYlWKHi4NElo7Cj4WHkpJCVkqBHxR
-         FzcuEEcZgOP04liypbdqVDDUqMQaD5YnROTM//U/p8oyO3J4sVAmmDawCbWH9/Wa3bsr
-         kEKFkFoUg7p5ZkqpMqVrmanvOh9nBxDa7KNQ+cBVD35q0AUdPIeQWdMG5EOpz5QCu5yf
-         LYOmvs8G9HRUL55XVcC1K1j+XHopQk8gLq4mzxZD6EJWrNxzqIhFh1IF/Z2X35+50n2d
-         FPkw==
-X-Gm-Message-State: ACgBeo0B/FEZQrDVl6ZKYmmrfi9fH9XUrE5t1Ts4O31ioNzxxKyNW3Ok
-        wb8mVA+IVBlLgkYsazR1xUMzew==
-X-Google-Smtp-Source: AA6agR7U4hYZ9NiomZcOOo9VGy/PUI8bKuRPuMPqKufZMN5CbjFrj0TUBx99J+MQ2ojU8hv9P1zvqw==
-X-Received: by 2002:a05:6000:110d:b0:228:db67:75c4 with SMTP id z13-20020a056000110d00b00228db6775c4mr7518711wrw.217.1662713543296;
-        Fri, 09 Sep 2022 01:52:23 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id q3-20020adff783000000b0021f15514e7fsm21381wrp.0.2022.09.09.01.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 01:52:22 -0700 (PDT)
-Message-ID: <373b10aa-f5c8-28b3-88b0-f87a1a40b000@linaro.org>
-Date:   Fri, 9 Sep 2022 09:52:21 +0100
+        Fri, 9 Sep 2022 04:52:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BD812B365;
+        Fri,  9 Sep 2022 01:52:37 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 08:52:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662713555;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=df1Z6P2tJqbbKAD+5iJN0WRGAbe9hGKW/QVVuMizVvM=;
+        b=dfmoC3FUSHU277kh43c55Lk+rT3WdPZXZe0gzks/QVO8c+6CV6Ifdi9vGJP3pdDETSrA+U
+        MgeOdGtvwb56WU52GG3hulgslWY7WNyxdF3ok51KTQCqMjEduVfIPHYjHRNosxjjVS2Ekp
+        A0Kf07EBC3Z+SzeYR5CwwSEnZzYNjL0EB7I1TzcWD+esjsYh2KVtFobNuxiIs1UsMv/29O
+        LG20bKenaH3qC8yx7FF+8XDxDdKq2gAYwS4Kg1SeeA2XVLavO3csz0CO5C9Six7u93LuCR
+        oi1q9l9iS3kkVEfSj8Pik2l4vE76hITfpqbZGpIGcX5MV9LDQ4DUP+lZAI+AhA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662713555;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=df1Z6P2tJqbbKAD+5iJN0WRGAbe9hGKW/QVVuMizVvM=;
+        b=4/w1nJMTRvTMOMChkmjRfi+dBJWnFhtveaT2Q1Pk9hmoDNsr9unqpeVRrF0i9Ywhlgo/RI
+        bzEC5VOUEsFUq/Cw==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/intel: Optimize FIXED_CTR_CTRL access
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220804140729.2951259-1-kan.liang@linux.intel.com>
+References: <20220804140729.2951259-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 13/20] nvmem: core: drop priv pointer in post process
- callback
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-References: <20220901221857.2600340-1-michael@walle.cc>
- <20220901221857.2600340-14-michael@walle.cc>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220901221857.2600340-14-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <166271355396.401.13292491978156019931.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the perf/core branch of tip:
 
+Commit-ID:     fae9ebde9696385fa2e993e752cf68d9781f3ea0
+Gitweb:        https://git.kernel.org/tip/fae9ebde9696385fa2e993e752cf68d9781f3ea0
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Thu, 04 Aug 2022 07:07:29 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 07 Sep 2022 21:54:04 +02:00
 
-On 01/09/2022 23:18, Michael Walle wrote:
-> It doesn't make any more sense to have a opaque pointer set up by the
-> nvmem device. Usually, the layout isn't associated with a particular
-> nvmem device.
-> 
-This is really not a good idea to remove the context pointer, as this is 
-the only way for callback to get context which it can make use of.
+perf/x86/intel: Optimize FIXED_CTR_CTRL access
 
-I would prefer this to be left as it is.
+All the fixed counters share a fixed control register. The current
+perf reads and re-writes the fixed control register for each fixed
+counter disable/enable, which is unnecessary.
 
---srini
+When changing the fixed control register, the entire PMU must be
+disabled via the global control register. The changing cannot be taken
+effect until the entire PMU is re-enabled. Only updating the fixed
+control register once right before the entire PMU re-enabling is
+enough.
 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> changes since v1:
->   - new patch
-> 
->   drivers/nvmem/core.c           | 4 ++--
->   drivers/nvmem/imx-ocotp.c      | 4 ++--
->   include/linux/nvmem-provider.h | 5 +++--
->   3 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index d31d3f0ab517..6910796937f9 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -1523,8 +1523,8 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
->   		nvmem_shift_read_buffer_in_place(cell, buf);
->   
->   	if (cell->read_post_process) {
-> -		rc = cell->read_post_process(nvmem->priv, id, index,
-> -					     cell->offset, buf, cell->bytes);
-> +		rc = cell->read_post_process(id, index, cell->offset, buf,
-> +					     cell->bytes);
->   		if (rc)
->   			return rc;
->   	}
-> diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
-> index ac0edb6398f1..5e869d4a81c5 100644
-> --- a/drivers/nvmem/imx-ocotp.c
-> +++ b/drivers/nvmem/imx-ocotp.c
-> @@ -222,8 +222,8 @@ static int imx_ocotp_read(void *context, unsigned int offset,
->   	return ret;
->   }
->   
-> -static int imx_ocotp_cell_pp(void *context, const char *id, int index,
-> -			     unsigned int offset, void *data, size_t bytes)
-> +static int imx_ocotp_cell_pp(const char *id, int index, unsigned int offset,
-> +			     void *data, size_t bytes)
->   {
->   	u8 *buf = data;
->   	int i;
-> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-> index 9d22dc5a3fa5..46067a6a0395 100644
-> --- a/include/linux/nvmem-provider.h
-> +++ b/include/linux/nvmem-provider.h
-> @@ -19,8 +19,9 @@ typedef int (*nvmem_reg_read_t)(void *priv, unsigned int offset,
->   typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
->   				 void *val, size_t bytes);
->   /* used for vendor specific post processing of cell data */
-> -typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, int index,
-> -					 unsigned int offset, void *buf, size_t bytes);
-> +typedef int (*nvmem_cell_post_process_t)(const char *id, int index,
-> +					 unsigned int offset, void *buf,
-> +					 size_t bytes);
->   
->   enum nvmem_type {
->   	NVMEM_TYPE_UNKNOWN = 0,
+The read of the fixed control register is not necessary either. The
+value can be cached in the per CPU cpu_hw_events.
+
+Test results:
+
+Counting all the fixed counters with the perf bench sched pipe as below
+on a SPR machine.
+
+ $perf stat -e cycles,instructions,ref-cycles,slots --no-inherit --
+  taskset -c 1 perf bench sched pipe
+
+The Total elapsed time reduces from 5.36s (without the patch) to 4.99s
+(with the patch), which is ~6.9% improvement.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220804140729.2951259-1-kan.liang@linux.intel.com
+---
+ arch/x86/events/intel/core.c | 22 +++++++++++++---------
+ arch/x86/events/perf_event.h |  4 ++++
+ 2 files changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 1e429e8..7f4e7e6 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2190,6 +2190,12 @@ static void __intel_pmu_enable_all(int added, bool pmi)
+ 	u64 intel_ctrl = hybrid(cpuc->pmu, intel_ctrl);
+ 
+ 	intel_pmu_lbr_enable_all(pmi);
++
++	if (cpuc->fixed_ctrl_val != cpuc->active_fixed_ctrl_val) {
++		wrmsrl(MSR_ARCH_PERFMON_FIXED_CTR_CTRL, cpuc->fixed_ctrl_val);
++		cpuc->active_fixed_ctrl_val = cpuc->fixed_ctrl_val;
++	}
++
+ 	wrmsrl(MSR_CORE_PERF_GLOBAL_CTRL,
+ 	       intel_ctrl & ~cpuc->intel_ctrl_guest_mask);
+ 
+@@ -2407,9 +2413,10 @@ static inline void intel_clear_masks(struct perf_event *event, int idx)
+ 
+ static void intel_pmu_disable_fixed(struct perf_event *event)
+ {
++	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct hw_perf_event *hwc = &event->hw;
+-	u64 ctrl_val, mask;
+ 	int idx = hwc->idx;
++	u64 mask;
+ 
+ 	if (is_topdown_idx(idx)) {
+ 		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -2426,9 +2433,7 @@ static void intel_pmu_disable_fixed(struct perf_event *event)
+ 	intel_clear_masks(event, idx);
+ 
+ 	mask = 0xfULL << ((idx - INTEL_PMC_IDX_FIXED) * 4);
+-	rdmsrl(hwc->config_base, ctrl_val);
+-	ctrl_val &= ~mask;
+-	wrmsrl(hwc->config_base, ctrl_val);
++	cpuc->fixed_ctrl_val &= ~mask;
+ }
+ 
+ static void intel_pmu_disable_event(struct perf_event *event)
+@@ -2701,8 +2706,9 @@ static void intel_pmu_read_event(struct perf_event *event)
+ 
+ static void intel_pmu_enable_fixed(struct perf_event *event)
+ {
++	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct hw_perf_event *hwc = &event->hw;
+-	u64 ctrl_val, mask, bits = 0;
++	u64 mask, bits = 0;
+ 	int idx = hwc->idx;
+ 
+ 	if (is_topdown_idx(idx)) {
+@@ -2746,10 +2752,8 @@ static void intel_pmu_enable_fixed(struct perf_event *event)
+ 		mask |= ICL_FIXED_0_ADAPTIVE << (idx * 4);
+ 	}
+ 
+-	rdmsrl(hwc->config_base, ctrl_val);
+-	ctrl_val &= ~mask;
+-	ctrl_val |= bits;
+-	wrmsrl(hwc->config_base, ctrl_val);
++	cpuc->fixed_ctrl_val &= ~mask;
++	cpuc->fixed_ctrl_val |= bits;
+ }
+ 
+ static void intel_pmu_enable_event(struct perf_event *event)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 20c2ee2..3719670 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -270,6 +270,10 @@ struct cpu_hw_events {
+ 	u64			active_pebs_data_cfg;
+ 	int			pebs_record_size;
+ 
++	/* Intel Fixed counter configuration */
++	u64			fixed_ctrl_val;
++	u64			active_fixed_ctrl_val;
++
+ 	/*
+ 	 * Intel LBR bits
+ 	 */
