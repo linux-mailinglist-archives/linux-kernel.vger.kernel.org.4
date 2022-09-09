@@ -2,229 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9515B3DDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A834C5B3DDD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiIIRUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S231509AbiIIRWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiIIRUQ (ORCPT
+        with ESMTP id S230432AbiIIRWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:20:16 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBFC5E559
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:20:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y17so471335ejo.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 10:20:14 -0700 (PDT)
+        Fri, 9 Sep 2022 13:22:01 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EE9B728E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:22:00 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id 62so1973183iov.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 10:22:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=VNJB3n4FUi+BHktH6vzQujwSPpO94XEVY5hhJm3auuk=;
-        b=n1oW3uTx5XQ+9CsTanRj1ei6pfz0sPENUkGDfzIkKq5TUi3LzHtWhRYedTagb6m5wr
-         Z9AQLYW3+wHogDcXUiax4vSS5mEFRQvLLggCh7bfxjTuTCAhVJk9ortTBnfpFeq486Eu
-         O1D+EhVr7T0z9pO0N9mRcc3Ab7CcwM60iyDDSoNic9B1M0yYYp5TmqktexJc96HRbDg5
-         qow0fTO4rmNoAtgh69YmLrKY4zBl5Yw1YX+dT4l/m67rYMxiP4bSJsuvIVGX7J+qh6Gg
-         BwisT/8bi/nO5Pf9J8YKTCsh1zFg1rJzL1bU3LlNy6M86x/pYIldXIHcHwj7PquZQLS/
-         CzeA==
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=3Etc9WmkRLUabLzVnKHqxnZ1JREVH9qJ5PUutx84jrQ=;
+        b=FN4Iqfk27BEwrm/oPJldpVlYgrxMtLjxStte25tvFybbnff/7IgrZc3Ot5C2m4M/E/
+         XchPoM+zyXL9SHUcgsH1cegqESl7v7qIM9Ntc+6gub83OkdxAXa0Dvw0k6JK7Y/61iQk
+         metMjenQ8GFGYqJFDz3e1xt5Zsa+I2WB11ooQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VNJB3n4FUi+BHktH6vzQujwSPpO94XEVY5hhJm3auuk=;
-        b=FR4tbNfvxZ1jzzWmMLsnq0gYcxC6YVjrII+QlzQk30lgya5aErhQYEKgONiZmgTZAJ
-         3xqoC/kx/7+fj2lkdTHIp7ch3k9SY1NSJHN8ffTqHSuCSMWI38rRtymKs+p/ymSQTMMO
-         hNWf84Zb8+T+fd/swoSTdpzsS3uPP5rEdSvHlS5Czy9lsIKGz+IlWZ/G4AhLLYhOf88v
-         3PeytqdLx5Krsj50DQ3VnIzx221trc0Nsd7rpllCDE10qWYdXaeDutU2Ja6ULOsn80l5
-         sfnR7zWc8XChk+mJGzH3jsIUGS4hwzI1wC6cVvczKkaAimq9hXTV2/5Q43DTk/O/xvnR
-         +ICA==
-X-Gm-Message-State: ACgBeo2mxhAMob6JhtF44fqQEzVVM4ZXfvF1Qt7GwSyib8OrJtJgnkqT
-        EcSdvQIvMF8AZQc5b/7QonI=
-X-Google-Smtp-Source: AA6agR5chadUkv5bhym96Don8egp9jM+IYDc2Zi0yDo26xtYcyfjpYArncrSs7Ou54Ucj6ifzdkGgg==
-X-Received: by 2002:a17:906:5a64:b0:741:3586:92f with SMTP id my36-20020a1709065a6400b007413586092fmr10732962ejc.721.1662744013125;
-        Fri, 09 Sep 2022 10:20:13 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f3e:6a99:2499:da3b:c93f:9b48? (p200300c78f3e6a992499da3bc93f9b48.dip0.t-ipconnect.de. [2003:c7:8f3e:6a99:2499:da3b:c93f:9b48])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0073d83f80b05sm528314eja.94.2022.09.09.10.20.11
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=3Etc9WmkRLUabLzVnKHqxnZ1JREVH9qJ5PUutx84jrQ=;
+        b=qnfSi/vwdMmIp+Laqq+5SnlAUS4qscyZcM0Pn/6qkqdmaPdZPJ68wuCZgQdKe8hUc6
+         HcAoSHmOrTh0DvmmCs5uD6W13uEedovXC4bJtP0Qr3OTqHdTMs7zdEHe3xZd6tU0TR9t
+         wTnbuhe19V56vLvkx9jKWUyS0AGp332iN/vCwWZMa9UFEceibKscoP1u4sL8iX1ynLpQ
+         mHazs3Qx3XT8fNnZchtlZ7+hKuXodGtURGQqdX/JOYwdPluRJ4s8WrFLxr91CqsYEhGh
+         km6YcK0nMmkzJzXLpnGXiE4hWWFUSFdUZ2A5PCFGbYjwV2WJRTEPs2TgWJHavAHma4ot
+         a3Aw==
+X-Gm-Message-State: ACgBeo071Y2l8jAgSvhLImnWk6RCiuZvyWS1mA1fod4Yw0zzp9EUPBII
+        y09f6xfk4zKZAAfHRneEkiQgPw==
+X-Google-Smtp-Source: AA6agR4XV2RQPKYy1qWY6ZM9aaey8d2IcpcpNoWs/tvloEk8OmtE0Q32GunKASn2pNVDRWPnu4DTlA==
+X-Received: by 2002:a05:6638:168a:b0:345:977d:dec0 with SMTP id f10-20020a056638168a00b00345977ddec0mr8122126jat.174.1662744119416;
+        Fri, 09 Sep 2022 10:21:59 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 6-20020a056e0220c600b002eb4c9bb34asm343228ilq.55.2022.09.09.10.21.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 10:20:12 -0700 (PDT)
-Message-ID: <a0c8fa9d-cc86-b39b-e65f-e8a0ccf12a15@gmail.com>
-Date:   Fri, 9 Sep 2022 19:20:09 +0200
+        Fri, 09 Sep 2022 10:21:58 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------CPMvoEp0Py6k3a9YjRSeSkaH"
+Message-ID: <daa35f0a-afca-ec6c-82d1-8c71b4250d7c@linuxfoundation.org>
+Date:   Fri, 9 Sep 2022 11:21:58 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: rtl8192e: Fix return type for implementation of
- ndo_start_xmit
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>,
-        GUO Zihua <guozihua@huawei.com>
-References: <20220908203243.GA23048@matrix-ESPRIMO-P710>
- <YxrxywN9wDypohyY@kroah.com> <YxryqJs4k3B26/7o@kroah.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <YxryqJs4k3B26/7o@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.0-rc5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 10:00, Greg Kroah-Hartman wrote:
-> On Fri, Sep 09, 2022 at 09:56:59AM +0200, Greg Kroah-Hartman wrote:
->> On Thu, Sep 08, 2022 at 10:32:43PM +0200, Philipp Hortmann wrote:
->>> CFI (Control Flow Integrity) is a safety feature allowing the system to
->>> detect and react should a potential control flow hijacking occurs. In
->>> particular, the Forward-Edge CFI protects indirect function calls by
->>> ensuring the prototype of function that is actually called matches the
->>> definition of the function hook.
->>>
->>> Since Linux now supports CFI, it will be a good idea to fix mismatched
->>> return type for implementation of hooks. Otherwise this would get
->>> cought out by CFI and cause a panic.
->>>
->>> Use enums from netdev_tx_t as return value instead, then change return
->>> type to netdev_tx_t.
->>>
->>> Suggested-by: Dan Carpenter <error27@gmail.com>
->>> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
->>> ---
->>> Tested with rtl8192e
->>> Transferred this patch over wlan connection of rtl8192e
->>> ---
->>>   drivers/staging/rtl8192e/rtllib.h    |  2 +-
->>>   drivers/staging/rtl8192e/rtllib_tx.c | 10 +++++-----
->>>   2 files changed, 6 insertions(+), 6 deletions(-)
->>
->> Someone sent the same patch before you did:
->> 	https://lore.kernel.org/r/20220905130053.10731-1-guozihua@huawei.com
->>
-> 
-> This patch does not apply to my tree either :(
-> 
-> Please rebase and resubmit.
-> 
-> thanks,
-> 
-> greg k-h
+This is a multi-part message in MIME format.
+--------------CPMvoEp0Py6k3a9YjRSeSkaH
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi Linus,
 
-Sorry Greg,
+Please pull the following KUnit fixes update for Linux 6.0-rc5.
 
-I cannot find my error.
-I just downloaded the patch and applied it to the staging-next branch 
-and that worked fine.
+This KUnit fixes update for Linux 6.0-rc5 consists of 2 fixes to test
+build and a fix to incorrect taint reason reporting.
 
-Please find my logs below:
+Please note that this update touches drivers/thunderbolt and drivers/virt
+Kconfig files.
 
+diff is attached.
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git remote 
-show origin
-* remote origin
-   Fetch URL: 
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-   Push  URL: 
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-   HEAD branch: master
-   Remote branches:
-     bus_cleanup     tracked
-     greybus         tracked
-     main            tracked
-     master          tracked
-     staging-linus   tracked
-     staging-next    tracked
-     staging-octeon  tracked
-     staging-testing tracked
-   Local branches configured for 'git pull':
-     master          merges with remote master
-     staging-next    merges with remote staging-next
-     staging-testing merges with remote staging-testing
-   Local refs configured for 'git push':
-     master          pushes to master          (up to date)
-     staging-next    pushes to staging-next    (up to date)
-     staging-testing pushes to staging-testing (local out of date)
+thanks,
+-- Shuah
 
+----------------------------------------------------------------
+The following changes since commit 41a55567b9e31cb852670684404654ec4fd0d8d6:
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git pull
-Already up to date.
+   module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m (2022-08-15 13:51:07 -0600)
 
+are available in the Git repository at:
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git branch -a
-   checkout
-   master
-* staging-next
-   staging-testing
-   remotes/origin/HEAD -> origin/master
-   remotes/origin/bus_cleanup
-   remotes/origin/greybus
-   remotes/origin/main
-   remotes/origin/master
-   remotes/origin/staging-linus
-   remotes/origin/staging-next
-   remotes/origin/staging-octeon
-   remotes/origin/staging-testing
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.0-rc5
 
+for you to fetch changes up to 2a2dfc869d3345ccdd91322b023f4b0da84acbe7:
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ cat 
-~/Downloads/PATCH-staging-rtl8192e-Fix-return-type-for-implementation-of-ndo_start_xmit.txt 
-| git am
-Applying: staging: rtl8192e: Fix return type for implementation of 
-ndo_start_xmit
+   tools: Add new "test" taint to kernel-chktaint (2022-09-07 14:51:12 -0600)
 
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-6.0-rc5
 
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git log
-commit 1990e48f8e9fef88e044e65918566bd87f274b1c (HEAD -> staging-next)
-Author: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Date:   Thu Sep 8 22:32:43 2022 +0200
+This KUnit fixes update for Linux 6.0-rc5 consists of 2 fixes to test
+build and a fix to incorrect taint reason reporting.
 
-     staging: rtl8192e: Fix return type for implementation of ndo_start_xmit
+----------------------------------------------------------------
+Joe Fradley (1):
+       tools: Add new "test" taint to kernel-chktaint
 
-     CFI (Control Flow Integrity) is a safety feature allowing the system to
-     detect and react should a potential control flow hijacking occurs. In
-     particular, the Forward-Edge CFI protects indirect function calls by
-     ensuring the prototype of function that is actually called matches the
-     definition of the function hook.
+Nico Pache (1):
+       kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
 
-     Since Linux now supports CFI, it will be a good idea to fix mismatched
-     return type for implementation of hooks. Otherwise this would get
-     cought out by CFI and cause a panic.
+Sander Vanheule (1):
+       kunit: fix assert_type for comparison macros
 
-     Use enums from netdev_tx_t as return value instead, then change return
-     type to netdev_tx_t.
+  drivers/thunderbolt/Kconfig         | 3 +--
+  drivers/virt/nitro_enclaves/Kconfig | 2 +-
+  include/kunit/test.h                | 6 +++---
+  tools/debugging/kernel-chktaint     | 9 +++++++++
+  4 files changed, 14 insertions(+), 6 deletions(-)
+----------------------------------------------------------------
+--------------CPMvoEp0Py6k3a9YjRSeSkaH
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-6.0-rc5.diff"
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-6.0-rc5.diff"
+Content-Transfer-Encoding: base64
 
-     Suggested-by: Dan Carpenter <error27@gmail.com>
-     Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGh1bmRlcmJvbHQvS2NvbmZpZyBiL2RyaXZlcnMvdGh1
+bmRlcmJvbHQvS2NvbmZpZwppbmRleCBlNzZhNmMxNzM2MzcuLmYxMmQwYTNlZTNlMiAxMDA2
+NDQKLS0tIGEvZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnCisrKyBiL2RyaXZlcnMvdGh1
+bmRlcmJvbHQvS2NvbmZpZwpAQCAtMjksOCArMjksNyBAQCBjb25maWcgVVNCNF9ERUJVR0ZT
+X1dSSVRFCiAKIGNvbmZpZyBVU0I0X0tVTklUX1RFU1QKIAlib29sICJLVW5pdCB0ZXN0cyIg
+aWYgIUtVTklUX0FMTF9URVNUUwotCWRlcGVuZHMgb24gKFVTQjQ9bSB8fCBLVU5JVD15KQot
+CWRlcGVuZHMgb24gS1VOSVQKKwlkZXBlbmRzIG9uIFVTQjQgJiYgS1VOSVQ9eQogCWRlZmF1
+bHQgS1VOSVRfQUxMX1RFU1RTCiAKIGNvbmZpZyBVU0I0X0RNQV9URVNUCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZyBiL2RyaXZlcnMvdmlydC9u
+aXRyb19lbmNsYXZlcy9LY29uZmlnCmluZGV4IGNlOTFhZGQ4MTQwMS4uZGM0ZDI1YzI2MjU2
+IDEwMDY0NAotLS0gYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZworKysg
+Yi9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZwpAQCAtMTcsNyArMTcsNyBA
+QCBjb25maWcgTklUUk9fRU5DTEFWRVMKIAogY29uZmlnIE5JVFJPX0VOQ0xBVkVTX01JU0Nf
+REVWX1RFU1QKIAlib29sICJUZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9uYWxp
+dHkgb2YgdGhlIE5pdHJvIEVuY2xhdmVzIiBpZiAhS1VOSVRfQUxMX1RFU1RTCi0JZGVwZW5k
+cyBvbiBOSVRST19FTkNMQVZFUyAmJiBLVU5JVAorCWRlcGVuZHMgb24gTklUUk9fRU5DTEFW
+RVMgJiYgS1VOSVQ9eQogCWRlZmF1bHQgS1VOSVRfQUxMX1RFU1RTCiAJaGVscAogCSAgRW5h
+YmxlIEtVbml0IHRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVuY3Rpb25hbGl0eSBvZiB0
+aGUgTml0cm8KZGlmZiAtLWdpdCBhL2luY2x1ZGUva3VuaXQvdGVzdC5oIGIvaW5jbHVkZS9r
+dW5pdC90ZXN0LmgKaW5kZXggYzk1ODg1NTY4MWNjLi44NDBhMmMzNzUwNjUgMTAwNjQ0Ci0t
+LSBhL2luY2x1ZGUva3VuaXQvdGVzdC5oCisrKyBiL2luY2x1ZGUva3VuaXQvdGVzdC5oCkBA
+IC04MjYsNyArODI2LDcgQEAgZG8gewkJCQkJCQkJCSAgICAgICBcCiAKICNkZWZpbmUgS1VO
+SVRfRVhQRUNUX0xFX01TRyh0ZXN0LCBsZWZ0LCByaWdodCwgZm10LCAuLi4pCQkgICAgICAg
+XAogCUtVTklUX0JJTkFSWV9JTlRfQVNTRVJUSU9OKHRlc3QsCQkJCSAgICAgICBcCi0JCQkJ
+ICAgS1VOSVRfQVNTRVJUSU9OLAkJCSAgICAgICBcCisJCQkJICAgS1VOSVRfRVhQRUNUQVRJ
+T04sCQkJICAgICAgIFwKIAkJCQkgICBsZWZ0LCA8PSwgcmlnaHQsCQkJICAgICAgIFwKIAkJ
+CQkgICBmbXQsCQkJCQkgICAgICAgXAogCQkJCSAgICAjI19fVkFfQVJHU19fKQpAQCAtMTEx
+Niw3ICsxMTE2LDcgQEAgZG8gewkJCQkJCQkJCSAgICAgICBcCiAKICNkZWZpbmUgS1VOSVRf
+QVNTRVJUX0xUX01TRyh0ZXN0LCBsZWZ0LCByaWdodCwgZm10LCAuLi4pCQkgICAgICAgXAog
+CUtVTklUX0JJTkFSWV9JTlRfQVNTRVJUSU9OKHRlc3QsCQkJCSAgICAgICBcCi0JCQkJICAg
+S1VOSVRfRVhQRUNUQVRJT04sCQkJICAgICAgIFwKKwkJCQkgICBLVU5JVF9BU1NFUlRJT04s
+CQkJICAgICAgIFwKIAkJCQkgICBsZWZ0LCA8LCByaWdodCwJCQkgICAgICAgXAogCQkJCSAg
+IGZtdCwJCQkJCSAgICAgICBcCiAJCQkJICAgICMjX19WQV9BUkdTX18pCkBAIC0xMTU3LDcg
+KzExNTcsNyBAQCBkbyB7CQkJCQkJCQkJICAgICAgIFwKIAogI2RlZmluZSBLVU5JVF9BU1NF
+UlRfR1RfTVNHKHRlc3QsIGxlZnQsIHJpZ2h0LCBmbXQsIC4uLikJCSAgICAgICBcCiAJS1VO
+SVRfQklOQVJZX0lOVF9BU1NFUlRJT04odGVzdCwJCQkJICAgICAgIFwKLQkJCQkgICBLVU5J
+VF9FWFBFQ1RBVElPTiwJCQkgICAgICAgXAorCQkJCSAgIEtVTklUX0FTU0VSVElPTiwJCQkg
+ICAgICAgXAogCQkJCSAgIGxlZnQsID4sIHJpZ2h0LAkJCSAgICAgICBcCiAJCQkJICAgZm10
+LAkJCQkJICAgICAgIFwKIAkJCQkgICAgIyNfX1ZBX0FSR1NfXykKZGlmZiAtLWdpdCBhL3Rv
+b2xzL2RlYnVnZ2luZy9rZXJuZWwtY2hrdGFpbnQgYi90b29scy9kZWJ1Z2dpbmcva2VybmVs
+LWNoa3RhaW50CmluZGV4IGYxYWYyN2NlOWYyMC4uMjc5YmUwNjMzMmJlIDEwMDc1NQotLS0g
+YS90b29scy9kZWJ1Z2dpbmcva2VybmVsLWNoa3RhaW50CisrKyBiL3Rvb2xzL2RlYnVnZ2lu
+Zy9rZXJuZWwtY2hrdGFpbnQKQEAgLTE4Nyw2ICsxODcsNyBAQCBlbHNlCiAJZWNobyAiICog
+YXV4aWxpYXJ5IHRhaW50LCBkZWZpbmVkIGZvciBhbmQgdXNlZCBieSBkaXN0cm9zICgjMTYp
+IgogCiBmaQorCiBUPWBleHByICRUIC8gMmAKIGlmIFsgYGV4cHIgJFQgJSAyYCAtZXEgMCBd
+OyB0aGVuCiAJYWRkb3V0ICIgIgpAQCAtMTk1LDYgKzE5NiwxNCBAQCBlbHNlCiAJZWNobyAi
+ICoga2VybmVsIHdhcyBidWlsdCB3aXRoIHRoZSBzdHJ1Y3QgcmFuZG9taXphdGlvbiBwbHVn
+aW4gKCMxNykiCiBmaQogCitUPWBleHByICRUIC8gMmAKK2lmIFsgYGV4cHIgJFQgJSAyYCAt
+ZXEgMCBdOyB0aGVuCisJYWRkb3V0ICIgIgorZWxzZQorCWFkZG91dCAiTiIKKwllY2hvICIg
+KiBhbiBpbi1rZXJuZWwgdGVzdCAoc3VjaCBhcyBhIEtVbml0IHRlc3QpIGhhcyBiZWVuIHJ1
+biAoIzE4KSIKK2ZpCisKIGVjaG8gIkZvciBhIG1vcmUgZGV0YWlsZWQgZXhwbGFuYXRpb24g
+b2YgdGhlIHZhcmlvdXMgdGFpbnQgZmxhZ3Mgc2VlIgogZWNobyAiIERvY3VtZW50YXRpb24v
+YWRtaW4tZ3VpZGUvdGFpbnRlZC1rZXJuZWxzLnJzdCBpbiB0aGUgTGludXgga2VybmVsIHNv
+dXJjZXMiCiBlY2hvICIgb3IgaHR0cHM6Ly9rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9h
+ZG1pbi1ndWlkZS90YWludGVkLWtlcm5lbHMuaHRtbCIK
 
-commit 28a2a54901f66a45ab339e944fdfc69667e639c1 (origin/staging-next, 
-staging-testing)
-Merge: 7bd581f3c263 7e18e42e4b28
-Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Mon Sep 5 07:57:37 2022 +0200
-
-     Merge 6.0-rc4 into staging-next
-
-     Resolves the merge issue with:
-             drivers/staging/r8188eu/os_dep/os_intfs.c
-
-     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-commit 7e18e42e4b280c85b76967a9106a13ca61c16179 (tag: v6.0-rc4, 
-origin/staging-linus, origin/main)
-
-
-Or have you applied the patch already from GUO Zihua <guozihua@huawei.com>?
-
-When I would have seen that GUO Zihua has send that patch already I 
-would not have send it. Sorry.
-
-Thanks for your support.
-
-Bye Philipp
+--------------CPMvoEp0Py6k3a9YjRSeSkaH--
