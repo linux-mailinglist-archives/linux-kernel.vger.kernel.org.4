@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAC35B326C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815965B3268
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIIIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S231971AbiIIIxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiIIIwr (ORCPT
+        with ESMTP id S231755AbiIIIws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:52:47 -0400
+        Fri, 9 Sep 2022 04:52:48 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C9120A5;
-        Fri,  9 Sep 2022 01:52:46 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 08:52:43 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC9912D1A3;
+        Fri,  9 Sep 2022 01:52:47 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 08:52:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662713565;
+        s=2020; t=1662713566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8UjciCxnwDFe5HfT2KxABHvlfHJGvifckudNFh3Asr0=;
-        b=qSqy+iRt7ndyLyoNWDKEMmAX9Y1LAgwpq2doMiyi5nnn+F3sQCwZhiPAVE1EhCxzVDkI5S
-        GFFHBT6o+yQ56pL6rDetk4x3D/zQOrT1R6XiuG1oCxQzF3QryBP4pivt5FS9XYdKlRK3E3
-        ru/WRvRRlKn8Ke1hO1M4HjHdgyf004tlRQk3amQIOw9AKZEna+84qVvRCHHXtiQ+jgtOCu
-        LDmxXs9G/BKaD0XqKp0QU1Pk9v/KoHRqEQroMllwleCzOQgo4YwRz/VPDABUhqscAm0FAG
-        7n/YyLyeDl/9nCRJMAuOt8iaX3L7yzh10j0TX6eGSU8PfkpAQ6RGoIjZb7llUQ==
+        bh=GOZq4BqeraHwOmXiy4lDTJCRNB6Ut0FDu75s/fPevQk=;
+        b=NFxWpzNgFzCLROf1cx1Uvv1HP+oua8TM8YIgmVoT4YcOIKelwfTgePzimzKdMxFNu0XwPB
+        lu1mMn819BBhJGq1AsKdaddVdYSR0vJ9z90glJkzKU+SwzlnDQPgMhuGqiVEIYL/w2235w
+        EsBzobKOf40FXOaIlGwd1IIQTUeivWYpqEoZyDN3JIFNrDhgl864RLHRxa6sJfzv4XtqT5
+        9C1V57pLD0oXXURFFPiGo/lhlriW3TjPJW01qMbyXIXhBzK+87wnHtcAAUfNcY//dqyq2N
+        LFn8q7iMPin8OnhqmECWsiYtQf1LiqDmWbLhOzh15FrF/BR9D0BLaS7I9LycZA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662713565;
+        s=2020e; t=1662713566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8UjciCxnwDFe5HfT2KxABHvlfHJGvifckudNFh3Asr0=;
-        b=vMfGvmOUvsEqjsy7OfBr0pBCdU2klESAvDBeAlZ92mkMvs+a1sDu6i3KZ49VQT4VTwTijf
-        VWbLV32+7YOF0EDg==
+        bh=GOZq4BqeraHwOmXiy4lDTJCRNB6Ut0FDu75s/fPevQk=;
+        b=JctSBAu4EUgF+j8GV+9tHkToTIP//HgO7Xh31Z3ReJ11KM+bF2eqV+MIEonRUcsnnieLTP
+        WhoiS4JHIgGcj/Dg==
 From:   "tip-bot2 for Anshuman Khandual" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] x86/perf: Assert all platform event flags are within
- PERF_EVENT_FLAG_ARCH
+Subject: [tip: perf/core] arm64/perf: Assert all platform event flags are
+ within PERF_EVENT_FLAG_ARCH
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         James Clark <james.clark@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220907091924.439193-5-anshuman.khandual@arm.com>
-References: <20220907091924.439193-5-anshuman.khandual@arm.com>
+In-Reply-To: <20220907091924.439193-4-anshuman.khandual@arm.com>
+References: <20220907091924.439193-4-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Message-ID: <166271356383.401.6859119036807311988.tip-bot2@tip-bot2>
+Message-ID: <166271356485.401.5518967906571539201.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,100 +69,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     88081cfb699ce2568e5309c145eb9f9e9497b53f
-Gitweb:        https://git.kernel.org/tip/88081cfb699ce2568e5309c145eb9f9e9497b53f
+Commit-ID:     91207f62616f9f51b52436364e6d064f002e9112
+Gitweb:        https://git.kernel.org/tip/91207f62616f9f51b52436364e6d064f002e9112
 Author:        Anshuman Khandual <anshuman.khandual@arm.com>
-AuthorDate:    Wed, 07 Sep 2022 14:49:24 +05:30
+AuthorDate:    Wed, 07 Sep 2022 14:49:23 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:54:01 +02:00
 
-x86/perf: Assert all platform event flags are within PERF_EVENT_FLAG_ARCH
+arm64/perf: Assert all platform event flags are within PERF_EVENT_FLAG_ARCH
 
 Ensure all platform specific event flags are within PERF_EVENT_FLAG_ARCH.
 
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: James Clark <james.clark@arm.com>
-Link: https://lkml.kernel.org/r/20220907091924.439193-5-anshuman.khandual@arm.com
+Link: https://lkml.kernel.org/r/20220907091924.439193-4-anshuman.khandual@arm.com
 ---
- arch/x86/events/perf_event.h       | 34 +++++++++++++----------------
- arch/x86/events/perf_event_flags.h | 22 +++++++++++++++++++-
- 2 files changed, 38 insertions(+), 18 deletions(-)
- create mode 100644 arch/x86/events/perf_event_flags.h
+ drivers/perf/arm_spe_pmu.c   |  4 +++-
+ include/linux/perf/arm_pmu.h |  9 +++++----
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 93263b9..4a3dde2 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -64,27 +64,25 @@ static inline bool constraint_match(struct event_constraint *c, u64 ecode)
- 	return ((ecode & c->cmask) - c->code) <= (u64)c->size;
- }
- 
-+#define PERF_ARCH(name, val)	\
-+	PERF_X86_EVENT_##name = val,
-+
- /*
-  * struct hw_perf_event.flags flags
+diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+index b65a7d9..db8a0a8 100644
+--- a/drivers/perf/arm_spe_pmu.c
++++ b/drivers/perf/arm_spe_pmu.c
+@@ -44,7 +44,9 @@
+  * This allows us to perform the check, i.e, perfmon_capable(),
+  * in the context of the event owner, once, during the event_init().
   */
--#define PERF_X86_EVENT_PEBS_LDLAT	0x00001 /* ld+ldlat data address sampling */
--#define PERF_X86_EVENT_PEBS_ST		0x00002 /* st data address sampling */
--#define PERF_X86_EVENT_PEBS_ST_HSW	0x00004 /* haswell style datala, store */
--#define PERF_X86_EVENT_PEBS_LD_HSW	0x00008 /* haswell style datala, load */
--#define PERF_X86_EVENT_PEBS_NA_HSW	0x00010 /* haswell style datala, unknown */
--#define PERF_X86_EVENT_EXCL		0x00020 /* HT exclusivity on counter */
--#define PERF_X86_EVENT_DYNAMIC		0x00040 /* dynamic alloc'd constraint */
--
--#define PERF_X86_EVENT_EXCL_ACCT	0x00100 /* accounted EXCL event */
--#define PERF_X86_EVENT_AUTO_RELOAD	0x00200 /* use PEBS auto-reload */
--#define PERF_X86_EVENT_LARGE_PEBS	0x00400 /* use large PEBS */
--#define PERF_X86_EVENT_PEBS_VIA_PT	0x00800 /* use PT buffer for PEBS */
--#define PERF_X86_EVENT_PAIR		0x01000 /* Large Increment per Cycle */
--#define PERF_X86_EVENT_LBR_SELECT	0x02000 /* Save/Restore MSR_LBR_SELECT */
--#define PERF_X86_EVENT_TOPDOWN		0x04000 /* Count Topdown slots/metrics events */
--#define PERF_X86_EVENT_PEBS_STLAT	0x08000 /* st+stlat data address sampling */
--#define PERF_X86_EVENT_AMD_BRS		0x10000 /* AMD Branch Sampling */
--#define PERF_X86_EVENT_PEBS_LAT_HYBRID	0x20000 /* ld and st lat for hybrid */
-+enum {
-+#include "perf_event_flags.h"
-+};
+-#define SPE_PMU_HW_FLAGS_CX			BIT(0)
++#define SPE_PMU_HW_FLAGS_CX			0x00001
 +
-+#undef PERF_ARCH
-+
-+#define PERF_ARCH(name, val)						\
-+	static_assert((PERF_X86_EVENT_##name & PERF_EVENT_FLAG_ARCH) ==	\
-+		      PERF_X86_EVENT_##name);
-+
-+#include "perf_event_flags.h"
-+
-+#undef PERF_ARCH
++static_assert((PERF_EVENT_FLAG_ARCH & SPE_PMU_HW_FLAGS_CX) == SPE_PMU_HW_FLAGS_CX);
  
- static inline bool is_topdown_count(struct perf_event *event)
+ static void set_spe_event_has_cx(struct perf_event *event)
  {
-diff --git a/arch/x86/events/perf_event_flags.h b/arch/x86/events/perf_event_flags.h
-new file mode 100644
-index 0000000..1dc19b9
---- /dev/null
-+++ b/arch/x86/events/perf_event_flags.h
-@@ -0,0 +1,22 @@
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 0407a38..0356cb6 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -24,10 +24,11 @@
+ /*
+  * ARM PMU hw_event flags
+  */
+-/* Event uses a 64bit counter */
+-#define ARMPMU_EVT_64BIT		1
+-/* Event uses a 47bit counter */
+-#define ARMPMU_EVT_47BIT		2
++#define ARMPMU_EVT_64BIT		0x00001 /* Event uses a 64bit counter */
++#define ARMPMU_EVT_47BIT		0x00002 /* Event uses a 47bit counter */
 +
-+/*
-+ * struct hw_perf_event.flags flags
-+ */
-+PERF_ARCH(PEBS_LDLAT,		0x00001) /* ld+ldlat data address sampling */
-+PERF_ARCH(PEBS_ST,		0x00002) /* st data address sampling */
-+PERF_ARCH(PEBS_ST_HSW,		0x00004) /* haswell style datala, store */
-+PERF_ARCH(PEBS_LD_HSW,		0x00008) /* haswell style datala, load */
-+PERF_ARCH(PEBS_NA_HSW,		0x00010) /* haswell style datala, unknown */
-+PERF_ARCH(EXCL,			0x00020) /* HT exclusivity on counter */
-+PERF_ARCH(DYNAMIC,		0x00040) /* dynamic alloc'd constraint */
-+			/*	0x00080	*/
-+PERF_ARCH(EXCL_ACCT,		0x00100) /* accounted EXCL event */
-+PERF_ARCH(AUTO_RELOAD,		0x00200) /* use PEBS auto-reload */
-+PERF_ARCH(LARGE_PEBS,		0x00400) /* use large PEBS */
-+PERF_ARCH(PEBS_VIA_PT,		0x00800) /* use PT buffer for PEBS */
-+PERF_ARCH(PAIR,			0x01000) /* Large Increment per Cycle */
-+PERF_ARCH(LBR_SELECT,		0x02000) /* Save/Restore MSR_LBR_SELECT */
-+PERF_ARCH(TOPDOWN,		0x04000) /* Count Topdown slots/metrics events */
-+PERF_ARCH(PEBS_STLAT,		0x08000) /* st+stlat data address sampling */
-+PERF_ARCH(AMD_BRS,		0x10000) /* AMD Branch Sampling */
-+PERF_ARCH(PEBS_LAT_HYBRID,	0x20000) /* ld and st lat for hybrid */
++static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_64BIT) == ARMPMU_EVT_64BIT);
++static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_47BIT) == ARMPMU_EVT_47BIT);
+ 
+ #define HW_OP_UNSUPPORTED		0xFFFF
+ #define C(_x)				PERF_COUNT_HW_CACHE_##_x
