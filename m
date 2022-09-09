@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA4C5B37DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDEB5B37F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiIIMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
+        id S231838AbiIIMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiIIMcP (ORCPT
+        with ESMTP id S231635AbiIIMcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 08:32:15 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99EC1153BC;
-        Fri,  9 Sep 2022 05:32:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CE0117493;
+        Fri,  9 Sep 2022 05:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662726731; x=1694262731;
+  t=1662726733; x=1694262733;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7t9fB7n5BXz/TvDnDRUyp7NhU4pUYNzktSxEQMgJVzo=;
-  b=AWSSw2JqZsyTZBxYmYU4PBxpGqr05Ze2pjyGfAho9i/U34JCV+tCLnhq
-   aEw8oOujl6F6jmDQ5WRMG5lGz4GHfhJsKOMYQx4RwB5avC6DVyEWr67nu
-   MUKlPwxW5e8JdY8w4Rmaqw5OvovEKr02LvIQ724I+GAXVYOGO5SOCikiT
-   VIzde8eeO4Fp95gux6scA6/jFwuMuYhf5YSFHk4Xiz9H/mXgOKvRdCAva
-   NIx5ztJxPjep7tCN0JGrjC/gne1IVvWz91JQM4ySWAGX0tYZ3nf4rti9J
-   Q/sLMSMYJ0jy8qM3qi9NBceUszBZM16poyyPWSbeCJ9+4BjHQHxjDz5wb
-   g==;
+  bh=22sX6hdQWVNBlKUnAfqAl8ZrlZKUVg33klYFVGAaHB0=;
+  b=E/7M/QRgpdsHoI3y1Ga9XHTYgFhoVVy6xcqF20bbmKNse43FUOd+SEkQ
+   6lL5XjbYqsEWmRlhMQYXvDRrYuBoPPY44POkURHy4fzUFytPsMDhtGaI4
+   Tz2VicMCyQVLm8PHyB3vjDi2lcQSLI6cQ54EYS6e/TodnndaTlwvEBX8C
+   fAc4cAJHtU0s26/erj+HzhS0cFmZU3B8OpEzkqKLLM3Q1EnDUuIwBUZaN
+   7UAF0iLbczu7SVZjjLeaVrsqD4M12IvZOrsPuztp1rlj2vUw9XxGgq7TZ
+   xj/1W5cnbgR4PQSX2LRGZdCIRABEiBzzlWZ2KC4rUthLb26u8HC+6zcRe
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="176399234"
+   d="scan'208";a="173130618"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Sep 2022 05:32:10 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Sep 2022 05:32:12 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 9 Sep 2022 05:32:03 -0700
+ 15.1.2507.12; Fri, 9 Sep 2022 05:32:06 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 9 Sep 2022 05:32:00 -0700
+ Transport; Fri, 9 Sep 2022 05:32:03 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -52,9 +52,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v5 06/14] MAINTAINERS: add polarfire soc reset controller
-Date:   Fri, 9 Sep 2022 13:31:15 +0100
-Message-ID: <20220909123123.2699583-7-conor.dooley@microchip.com>
+Subject: [PATCH v5 07/14] riscv: dts: microchip: add mpfs specific macb reset support
+Date:   Fri, 9 Sep 2022 13:31:16 +0100
+Message-ID: <20220909123123.2699583-8-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220909123123.2699583-1-conor.dooley@microchip.com>
 References: <20220909123123.2699583-1-conor.dooley@microchip.com>
@@ -71,27 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the newly added reset controller for the PolarFire SoC (MPFS) to
-the existing MAINTAINERS entry.
+The macb on PolarFire SoC has reset support which the generic compatible
+does not use. Add the newly introduced MPFS specific compatible as the
+primary compatible to avail of this support & wire up the reset to the
+clock controllers devicetree entry.
 
 Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/boot/dts/microchip/mpfs.dtsi | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff9..6136b1b22e2c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17532,6 +17532,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
- F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/pci/controller/pcie-microchip-host.c
-+F:	drivers/reset/reset-mpfs.c
- F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
- F:	drivers/spi/spi-microchip-core.c
+diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+index 499c2e63ad35..ae5839534d9c 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+@@ -234,6 +234,7 @@ clkcfg: clkcfg@20002000 {
+ 			reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
+ 			clocks = <&refclk>;
+ 			#clock-cells = <1>;
++			#reset-cells = <1>;
+ 		};
+ 
+ 		mmuart0: serial@20000000 {
+@@ -383,7 +384,7 @@ can1: can@2010d000 {
+ 		};
+ 
+ 		mac0: ethernet@20110000 {
+-			compatible = "cdns,macb";
++			compatible = "microchip,mpfs-macb", "cdns,macb";
+ 			reg = <0x0 0x20110000 0x0 0x2000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -392,11 +393,12 @@ mac0: ethernet@20110000 {
+ 			local-mac-address = [00 00 00 00 00 00];
+ 			clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
+ 			clock-names = "pclk", "hclk";
++			resets = <&clkcfg CLK_MAC0>;
+ 			status = "disabled";
+ 		};
+ 
+ 		mac1: ethernet@20112000 {
+-			compatible = "cdns,macb";
++			compatible = "microchip,mpfs-macb", "cdns,macb";
+ 			reg = <0x0 0x20112000 0x0 0x2000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -405,6 +407,7 @@ mac1: ethernet@20112000 {
+ 			local-mac-address = [00 00 00 00 00 00];
+ 			clocks = <&clkcfg CLK_MAC1>, <&clkcfg CLK_AHB>;
+ 			clock-names = "pclk", "hclk";
++			resets = <&clkcfg CLK_MAC1>;
+ 			status = "disabled";
+ 		};
+ 
 -- 
 2.36.1
 
