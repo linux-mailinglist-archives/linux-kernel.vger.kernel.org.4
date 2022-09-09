@@ -2,143 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57B25B4124
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA6F5B412B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIIU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S230358AbiIIVAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiIIU7K (ORCPT
+        with ESMTP id S230272AbiIIVAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:59:10 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F779106364
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:59:09 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso1838791otb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 13:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kFpwCO+On23s16RN6YGg888A8dXgjAXd7O3o6mtZAY0=;
-        b=cYkP9UO8oDCe3MN/KnrrGL0KCht5K/tJE9DYpePXowaPHMlqyifnqJxYZh769Q0PDJ
-         bOkpXwXjY/PFQbSVwQr8KhksmiBqhWR8If7zp5W7RDD7ohmBSncSkEakpY8YzR90OJA0
-         Veqj8LnRuQ3RNExoPv4HPo+5j19PBjKTgbXsLTwxFI57Hk66Fcxax0CICkcJBLMfwVsh
-         ijLEZdx7xeQYY/JN6nqDQgmGSS4UWKbxnS4yxc8qpEayy560CNXnnml57yKnmPVbH+UU
-         ir2ZwLIBmu0TwsksFOscqgME3e9SViB2Vv+67zBUehw64W0qLtp1vxmgkJ2CmohFHkqJ
-         KsAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kFpwCO+On23s16RN6YGg888A8dXgjAXd7O3o6mtZAY0=;
-        b=dHvjKD7zi4tda4U3AIuhUlLLBJhF5nXmIibD0swhBYneekrKHSzlIqeJBf0BacwM9r
-         Sfq3lYqqyavh3ZWr3fkYRoU3/zHHHRzYxS74CvVOwJ1ErgPy9pwFeCWYk1oNn7JqU+IJ
-         t15XAZl9oeuUNkFkjb10DBceL/JbSVsSiozQEZ60Fgm4qB5TkW3tGRTSWopcL8lKKNyS
-         zoAghGRgUCqf4lIa2jpUyCJiF577+wbYgyePp3fHRINOCmnmKwHitlh9UduR3JlCNSVM
-         ZmCPN+kPO7csQVGl3Qbj3ZSGDgpFLfdi6upzCPASbo6V/2/2JLsRrXbjTiCUrsuympSV
-         d2og==
-X-Gm-Message-State: ACgBeo1+T4vUWAID0h5/UqgpACCtmllTRUrkKk1LYenLcQ0B6q85Ray6
-        Z1Gn388aibUzu7Aa47bPjZwH4uFP+FFYm0qNPhcI0HF/
-X-Google-Smtp-Source: AA6agR61J889n91RmOLJ7O6XBg1xUpgddBBhA43Rf9/H121Hpj2mrQx3L2n6t+Ve2fKV/hfgVj+4xjwvoRH1KsBRfOQ=
-X-Received: by 2002:a9d:376:0:b0:655:b4bc:fd6e with SMTP id
- 109-20020a9d0376000000b00655b4bcfd6emr1346569otv.233.1662757148908; Fri, 09
- Sep 2022 13:59:08 -0700 (PDT)
+        Fri, 9 Sep 2022 17:00:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AEF54CB3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662757220; x=1694293220;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6/qEbL6nGy8XCAlo7vmGPdOyMLtwdayCXu+VwzMFfB4=;
+  b=gwBg/l4QwMvBItCByGfoifdiHoLO+oVGb+ylw7X2XHLj0zxsA61YObL/
+   cydAEiSBcBs0B3FpYFCq1bvxtvCuJOuPtsfTlXRo8Xff/FISwG+5ao6X7
+   6LF9SqdyWL9EB/d2uYP0I9sGo/5drbWKIGP3U5/jCgS+TBCOlf4rulazJ
+   98N2p6gMviyMnMI/d1PGUArQ3FU+G11NdGZZYN7u17yUnmlhkWspr+2j9
+   vrLO6OYLH74mwXLhwuR1/1jnzYOyDhRMeDytFDAMjH7fMocPGldf19Knc
+   phHM/RCTf1RT/YJt0CN+bgCCZX30qLL7IS6XIt8oqafmXkOqBOWcdaptk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="297570054"
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="297570054"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 14:00:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="615403287"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 09 Sep 2022 14:00:07 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWl6d-0001j4-01;
+        Fri, 09 Sep 2022 21:00:07 +0000
+Date:   Sat, 10 Sep 2022 04:59:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ fae9ebde9696385fa2e993e752cf68d9781f3ea0
+Message-ID: <631ba948.qhmgVIAlTlGJ3PDH%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220905083825.23429-1-jingyuwang_vip@163.com>
- <18083c05-7636-2155-610b-2d1347f8585f@amd.com> <BL1PR12MB51444461B0F15AAF3BE46F91F77E9@BL1PR12MB5144.namprd12.prod.outlook.com>
-In-Reply-To: <BL1PR12MB51444461B0F15AAF3BE46F91F77E9@BL1PR12MB5144.namprd12.prod.outlook.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 9 Sep 2022 16:58:57 -0400
-Message-ID: <CADnq5_M9HQViZp9yj55+yr3K0udh4-zqFDKTgXfuo9yyYeiNcw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_amdkfd_gpuvm.c
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     "Kuehling, Felix" <Felix.Kuehling@amd.com>,
-        Jingyu Wang <jingyuwang_vip@163.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+branch HEAD: fae9ebde9696385fa2e993e752cf68d9781f3ea0  perf/x86/intel: Optimize FIXED_CTR_CTRL access
 
-Alex
+elapsed time: 731m
 
-On Tue, Sep 6, 2022 at 2:48 PM Deucher, Alexander
-<Alexander.Deucher@amd.com> wrote:
->
-> [Public]
->
->
-> Yeah, seems to be a mix.  I don't have a strong opinion as long as it has MIT.
->
-> Alex
->
-> ________________________________
-> From: Kuehling, Felix <Felix.Kuehling@amd.com>
-> Sent: Tuesday, September 6, 2022 9:46 AM
-> To: Jingyu Wang <jingyuwang_vip@163.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; airlied@linux.ie <airlied@linux.ie>; daniel@ffwll.ch <daniel@ffwll.ch>
-> Cc: amd-gfx@lists.freedesktop.org <amd-gfx@lists.freedesktop.org>; dri-devel@lists.freedesktop.org <dri-devel@lists.freedesktop.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
-> Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_amdkfd_gpuvm.c
->
->
-> Am 2022-09-05 um 04:38 schrieb Jingyu Wang:
-> > Fix everything checkpatch.pl complained about in amdgpu_amdkfd_gpuvm.c
-> >
-> > Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> > index cbd593f7d553..eff596c60c89 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> > @@ -1,3 +1,4 @@
-> > +// SPDX-License-Identifier: MIT
->
-> I'm not sure if this is correct. We've used "GPL-2.0 OR MIT" in KFD. In
-> amdgpu there is currently a mix of licenses. Alex, do you want to make a
-> call on a consistent one to use in amdgpu?
->
-> Other than that, this patch is
->
-> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
->
->
-> >   /*
-> >    * Copyright 2014-2018 Advanced Micro Devices, Inc.
-> >    *
-> > @@ -1612,6 +1613,7 @@ size_t amdgpu_amdkfd_get_available_memory(struct amdgpu_device *adev)
-> >        uint64_t reserved_for_pt =
-> >                ESTIMATE_PT_SIZE(amdgpu_amdkfd_total_mem_size);
-> >        size_t available;
-> > +
-> >        spin_lock(&kfd_mem_limit.mem_limit_lock);
-> >        available = adev->gmc.real_vram_size
-> >                - adev->kfd.vram_used_aligned
-> > @@ -2216,7 +2218,7 @@ int amdgpu_amdkfd_gpuvm_get_vm_fault_info(struct amdgpu_device *adev,
-> >   {
-> >        if (atomic_read(&adev->gmc.vm_fault_info_updated) == 1) {
-> >                *mem = *adev->gmc.vm_fault_info;
-> > -             mb();
-> > +             mb(); /* make sure read happened */
-> >                atomic_set(&adev->gmc.vm_fault_info_updated, 0);
-> >        }
-> >        return 0;
-> >
-> > base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+configs tested: 114
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+x86_64                           allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+arm                                 defconfig
+x86_64                        randconfig-a006
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a014
+i386                          randconfig-a003
+arm                              allyesconfig
+i386                          randconfig-a012
+mips                             allyesconfig
+i386                          randconfig-a016
+powerpc                           allnoconfig
+i386                          randconfig-a005
+powerpc                          allmodconfig
+x86_64                        randconfig-a011
+i386                             allyesconfig
+sh                               allmodconfig
+arm64                            allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+mips                            ar7_defconfig
+mips                         rt305x_defconfig
+arc                      axs103_smp_defconfig
+openrisc                    or1ksim_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arc                    vdk_hs38_smp_defconfig
+sh                         microdev_defconfig
+mips                           xway_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+i386                          randconfig-c001
+sh                             shx3_defconfig
+xtensa                              defconfig
+mips                    maltaup_xpa_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                        edosk7705_defconfig
+arm                             pxa_defconfig
+arc                              alldefconfig
+arm                           u8500_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+m68k                       m5475evb_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     tqm8548_defconfig
+nios2                            allyesconfig
+sh                             espt_defconfig
+sh                     magicpanelr2_defconfig
+s390                       zfcpdump_defconfig
+mips                        bcm47xx_defconfig
+riscv                               defconfig
+nios2                         10m50_defconfig
+powerpc                 mpc837x_rdb_defconfig
+ia64                             allmodconfig
+arm                           sunxi_defconfig
+sh                        dreamcast_defconfig
+arm                            zeus_defconfig
+riscv                randconfig-r042-20220908
+arc                  randconfig-r043-20220907
+arc                  randconfig-r043-20220908
+s390                 randconfig-r044-20220908
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+x86_64                        randconfig-k001
+powerpc                        fsp2_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                        qi_lb60_defconfig
+arm                          pcm027_defconfig
+mips                           mtx1_defconfig
+riscv                randconfig-r042-20220907
+hexagon              randconfig-r041-20220907
+hexagon              randconfig-r041-20220908
+hexagon              randconfig-r045-20220908
+hexagon              randconfig-r045-20220907
+s390                 randconfig-r044-20220907
+riscv                randconfig-r042-20220909
+hexagon              randconfig-r041-20220909
+hexagon              randconfig-r045-20220909
+s390                 randconfig-r044-20220909
+powerpc                          allmodconfig
+powerpc                     tqm8540_defconfig
+powerpc                      ppc44x_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
