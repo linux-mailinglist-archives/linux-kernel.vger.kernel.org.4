@@ -2,52 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47285B4180
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700765B4185
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiIIVfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
+        id S231470AbiIIVgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiIIVf2 (ORCPT
+        with ESMTP id S231339AbiIIVgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:35:28 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BF5C0BE4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:35:27 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id n4-20020a056e02100400b002f09be72a53so2208131ilj.18
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 14:35:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qvMKEVxzkjP30KVacXSCCSGWq4tedEnyYyuSltD6/Ig=;
-        b=BBe7X19VybBoj2/gsDuqsJVL7EzVdmjvN9IAQz2El51tP7qnRiLw1AnlQgm3cvhuTN
-         n79kkgIMhj6t4xy2YDId7PTQNgIVS10FZOSa56HuxQLt1+Ys9ovUS6W+6QChGLsbUAmK
-         HsayrV+x7C+auUUMSFNjgPRpBOKgZ4nlTTbHJPefKi5CAhI3NXvbYLgiJIzYZo73oDdx
-         hTagbfpsgMCnv1796mfSskTS89S9Zm7Z9HasbW66BDHe2+ekbTZnuHhVsOJ1nHBF8LJV
-         mecbV8JEhI1K3GPza4+bBrRureHySjz0AGix8KPAZqt0e+THZSmNq29NoSIhl0H5ne8C
-         NV7Q==
-X-Gm-Message-State: ACgBeo0eZe62YxnxY9MpYGoKvuZJnanJKtXwr1hC4xq1NWrlDPnAi1z/
-        QnCXHEzfkGL0K3bQQqyS3cOPwF18eEDw/Mclz0NEg9bsaKCA
-X-Google-Smtp-Source: AA6agR4mglpJ0W9sqFSYbZS4GCFS8h6ir8Tl+U5YmG1/6SSZfTjhHCWmLfNKBJwYacfdz3fkcUbCtwtIlhY77dS5y8umcETUim5M
+        Fri, 9 Sep 2022 17:36:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E4E11B030;
+        Fri,  9 Sep 2022 14:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662759369; x=1694295369;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=CSMDz4mvVzeK5IjzUy0aQNVFk6bPEpcmg6FBMe42Lcc=;
+  b=eZtlZ95p8c0dvLLYjmJq73RidmYhSiBp6pv4mfgoHB5bah0ClUBKAmrm
+   MIGTs6TnVBG2M9DWQEBNiQj7m6nkpEk10gg9O1p3zXLUmrFeDBat4sF/P
+   kh88nYmvxqG3q4hstnhua5D+F/Zf9IMhNdSd/bKF4b06iFjy6DMhTjy7W
+   niaXQYxLgtHZfiPWm2TYNQ7099OIID5OWlOZadBojz4JHufYyiRQqw7wC
+   vPFO4EB1XJlq8aQoD3rU/k9EIZlvg6pkfkJ8tKJhgCaBLiXbEmLN57P35
+   JFIQYqasfvMyUJIQ3pk7Jozf+QsDtmkQSrNrBrvpEgf+fJOKjcb7AP/G5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="296313550"
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="296313550"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 14:36:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="592756567"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 09 Sep 2022 14:36:07 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 9 Sep 2022 14:36:07 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 9 Sep 2022 14:36:07 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 9 Sep 2022 14:36:07 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 9 Sep 2022 14:36:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nXuUYiMtuwDSArURgDoNakjPJv/D4VD+Ynjl47NC8ZeTW+4Mn5A4f6qCA9NAL+oZhtWi5u4OT3dM1vXOXrmFR44R+svHCyO3zgtMxhThPHZjLtQfXWchxaQjf4fyMgjTOlTGTH/DNxHvQTmrt1HrwTe+uxu2rhtnSm1m/IN/xXGdh0lBWEYKmq2YjbVwLiVJzzpuf8ugGBTblnsz0iCwSTHs8iR/YWlWNwSMdurLLVdFvjom13x/RVCdc7dyAd9zcVxdU22yFRCXz0mrahO/axtKyHem04qatfGoqHiPap1aapI6kbtq+8fYg6FYg7HJ9mFbbgQbXLBQfcPQ8MzY0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pU9K7JvfkHLHWWXjG4iUKiRs57aJKxVOzDedtJad7zY=;
+ b=dA+tpb32ySDqTFNEkI5OBBe9kNfDdxctd9U0QF+8etUbgYwdrZ32iN1A1xJsx/FEcT4fLSyTHLwmmyBJLAmx/8UfcqDsPq3pceHn06JVq1AuTcVEB34fRVR+KN+j/OK/OlhQP/c9CV0NxFaBTbnYeMYmom9DDr/5+5jiM9+jtBjGwQZlc8+IsAFT1BGxjTVCmU0Ux5mb33LKiYfTTBlmU6UIauox+JcB+AIzCegz9LVXSNJ124BT/F2Cy1qCWxW0hmjSF6Rpyy1ILe/PyJCGSrNXNd9bKNh60pJkkFxH7sicBNNSTrAUiQK25HtRIlQJ4JuAnQcIENZPp8UQsd8Qew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by DM4PR11MB5520.namprd11.prod.outlook.com (2603:10b6:5:39f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Fri, 9 Sep
+ 2022 21:36:05 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::2896:319b:82a1:a4d0]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::2896:319b:82a1:a4d0%6]) with mapi id 15.20.5588.012; Fri, 9 Sep 2022
+ 21:36:05 +0000
+Date:   Fri, 9 Sep 2022 14:35:32 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/9] cxl/mem: Implement Clear Event Records command
+Message-ID: <YxuxpIZ9Xh01247Y@iweiny-desk3>
+References: <20220813053243.757363-1-ira.weiny@intel.com>
+ <20220813053243.757363-3-ira.weiny@intel.com>
+ <20220824165513.00000987@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220824165513.00000987@huawei.com>
+X-ClientProxiedBy: SJ0PR05CA0114.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::29) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:378f:b0:356:4966:9b7b with SMTP id
- w15-20020a056638378f00b0035649669b7bmr8427233jal.103.1662759326695; Fri, 09
- Sep 2022 14:35:26 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:35:26 -0700
-In-Reply-To: <0000000000006c2bbc05e714ec79@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000003c78505e845532e@google.com>
-Subject: Re: [syzbot] WARNING in reiserfs_lookup
-From:   syzbot <syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a33396b7-a076-44f3-ea70-08da92ab4d06
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5520:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1hIMlLcui2YP/WWVRTDEEBwLbB50IVF8JjqG28eziUAT2f56urx0i4f5ndjmiXqNo6AZTX8UKxkxZQo/IP+wSrFULS0j8oqhWv7vCilDDsfzCQe0eRWZcrBoa7VaWvqsEI0NH2/RTLCXBFwKbHFg64ELG2dJunWjrY7tPA5R0hgToXaf2vXCSKZIjblN69jBXvkWSxBtpFo7lRjWH7PEPwgcjAU8XDfcErK4oKt1mv3rPz6HlaNXbHa3DKwKjpju6NAAap3b0blqvldG8B/+/OG0Wk1arn+UaHf2/045kry++eXfVPwUouXxu51v7D1Ua+McTBSgzORTQ+bKa9wir5iPNWgZvv+k3Qc4qTIuPNyozjCOdcG2B63HvAjKcNhd2df5qFcrG1In8MV/oUdwqwTSxvS3122pUSKhy/PR6OYN1pdL0KRNpBNhY5neLCeUv9mo/IZ42s7QIYIm+ls6gyZdhpXcdX+IjvmMb4eqByMw5TuytJAYeYU4WHWHaOM/7o41OZg3gRTDVkL91YiWFYOCMQi+oHgiLyW137XZO6f4nxbmHuEUF+sgkC5S6qu90HqJtA+mV/nEx+FZ+yDWf7c7zOJPfm5QbjojCCId0FU/oBvzY+U84+Fh8eZ+68QtZwYokY/EzQW1Y8xkus6bwKQ46+Z43avm0XblGzAG/516TIVVXQl2hLWh2gSrw1Lk7wLSjI1J0T84nzjyva4Ekg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(396003)(366004)(376002)(346002)(136003)(54906003)(83380400001)(26005)(6512007)(9686003)(6666004)(478600001)(6506007)(316002)(6916009)(86362001)(33716001)(186003)(4326008)(66946007)(66476007)(66556008)(8676002)(5660300002)(2906002)(44832011)(82960400001)(8936002)(6486002)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LF3QP4ahaOooYp9SIK7mIsewwE0jKyFA2s9EAmKF+9RRM9/2JLqK2qyx0IJv?=
+ =?us-ascii?Q?9g3Hu3fRxZFoYoB56+rOWhhQ7sRnZvGvR+f8tFClNnArE3OwddcZDnxnDNYi?=
+ =?us-ascii?Q?NS/eU2VGaaIshrmeDKLaqElz5mfBrMMJHEL98jhZ8KcEsWvC2Nn1dWHI0JYf?=
+ =?us-ascii?Q?kaQv7NMgv6L25d6ykCVxKy9W5zkn34P0U4ddjT1d3+AuwL1n80+kvsIRbSom?=
+ =?us-ascii?Q?v2E4I4Sj53QOBYS8r4f35vNV4NKsgc6H2tX+E9pSKtk1nvcyoaXgFa9UIGlx?=
+ =?us-ascii?Q?E0EaUXcTntEUtN4FWYQpFWcxguOtzr2uPAaXFeCNk3CkrF0EiJXBpMs0pSIL?=
+ =?us-ascii?Q?Za5TZgH8cgIukTN0l6pmV5KiOayavxtMo4HwwbcnifsrLIoHpVNa/Q7wSYFK?=
+ =?us-ascii?Q?xfebxiTs7fsNvaruPzPr/O+OJTV3uM5jUq2nkcwb+0a8Vd61SKjUpOFJOkVm?=
+ =?us-ascii?Q?A2zcaO7bCRophI1d2CC+f0B4Wwxre+R9J3lpOJkvoFqmbz1OJsHr2gHasjYF?=
+ =?us-ascii?Q?b5241Wmkco5W/YpWQY1tQq0mxmIP4OrQHk9tulbpb1A0Q0u2eQ7W7w/0gRnq?=
+ =?us-ascii?Q?XKlrJumYtsHOap6Qb0mKPm2uuJ6rr9pCpU4OrE6EbwxLDiwMjYT7yaVvwEVA?=
+ =?us-ascii?Q?Owxrq2u1KIKhJQFOOdKlwAcJyE3NOWLSsQ1m88LIFGsGUJoO4hqasQkA8JpJ?=
+ =?us-ascii?Q?mqSC7cHCZX9HTz7WybPGvtM1JRwVEW628twpoKi8OJCfA5ELw1POxWdrwn3u?=
+ =?us-ascii?Q?ZGtvujQloZbbcKdpt51lGMqlibbxBqOCWrxVog0UJpieVIQFBdRyorlOvk0y?=
+ =?us-ascii?Q?ktFWuBJ3z0bZ0ZLpd63aIcX0rw2EMRCGHvAMwKHZoBvzYem8jjE9sLPxuJk+?=
+ =?us-ascii?Q?wTgDwAU5B5mTaBDM5JWAfCyE8R3qTyniPT/A3frHkdUY31BI8oRUUGPFwIh9?=
+ =?us-ascii?Q?j4lBsNX8JhbecPYrXtdsW+NTT45SJEjt+3uXtTsNksGQt9kggC5E3UiUtnkU?=
+ =?us-ascii?Q?vkMP+0I3fyf8H44TqYvYK4sVMISRfRBRfBiBEjJJa9ver/2mxVdNfllS1izo?=
+ =?us-ascii?Q?wJpSwpF6DBlPjxXWmKwPYjmDFzSCfz/Fp3D3EJW4QBeKVjEJRRAoMKMvZAMo?=
+ =?us-ascii?Q?7YG1LcWWxrKUVezgnMz8H1rL6j0Wlo4NcEc4672wfH7oI7izsYOdmnoD0plg?=
+ =?us-ascii?Q?ENcSv2EADp7UghfI7NwGx/JO4JSrl7S9Caz7mAyA9glELyj2GgwGjk3/y+s0?=
+ =?us-ascii?Q?aaZzWnSdNyBAH+MAjZvagzHFUGN+QkXK4OYS9zEHyqKU9ckYA6R1EO2BoWjF?=
+ =?us-ascii?Q?AKPF0iSdr8BY3+fQvMBPcUGvt+kgMcXr4kfDy7CZ/xmGnyzvJJLBxIJv9y+I?=
+ =?us-ascii?Q?NFVSG094q/5tnqvqMrOAGzkLGhRNXeX9s1AFuh3vi+nlqXdUj/Ax7qtTOd+j?=
+ =?us-ascii?Q?aCRoH/b57cvyRxi2F04oGCsd8EV/DphJ52ZvNQdVRna6hJ3Px6IraL4fMpZN?=
+ =?us-ascii?Q?pFQyChOKIHCNx+pUs6IgJYiXKAEGMQdHgf+L5GUYq9NUj+tnOUOvLiZLmXU6?=
+ =?us-ascii?Q?9sa40DLaCrZ0vliRcj+LvSs2KYFrE+vqfthw+Jtn?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a33396b7-a076-44f3-ea70-08da92ab4d06
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 21:36:05.6958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8GxQTeVnX+l78k3jtkm17R5OEslKAdvT6EIon6PLZ4987JurjgSquLlZQjOgvAUH5U5cf8+tOM2Fs5bGDaxOnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5520
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,124 +155,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Wed, Aug 24, 2022 at 04:55:13PM +0100, Jonathan Cameron wrote:
+> On Fri, 12 Aug 2022 22:32:36 -0700
+> ira.weiny@intel.com wrote:
+> 
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > CXL v3.0 section 8.2.9.2.3 defines the Clear Event Records mailbox
+> > command.  After an event record is read it needs to be cleared from the
+> > event log.
+> > 
+> > Implement cxl_clear_event_record() and call it for each record retrieved
+> > from the device.
+> > 
+> > Each record is cleared individually.  A clear all bit is specified but
+> > events could arrive between a get and the final clear all operation.
+> > Therefore each event is cleared specifically.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Trivial suggestions inline, but other than that LGTM
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-HEAD commit:    92221e2af10d Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15b18f43080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e79d82586727c5df
-dashboard link: https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172e6877080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12cad8af080000
+Thanks!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8ea7850f2fc1/disk-92221e2a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8b514f934717/vmlinux-92221e2a.xz
+> 
+> > ---
+> >  drivers/cxl/core/mbox.c      | 31 ++++++++++++++++++++++++++++---
+> >  drivers/cxl/cxlmem.h         | 15 +++++++++++++++
+> >  include/uapi/linux/cxl_mem.h |  1 +
+> >  3 files changed, 44 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> > index 2cceed8608dc..493f5ceb5d1c 100644
+> > --- a/drivers/cxl/core/mbox.c
+> > +++ b/drivers/cxl/core/mbox.c
+> > @@ -52,6 +52,7 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
+> >  #endif
+> >  	CXL_CMD(GET_SUPPORTED_LOGS, 0, CXL_VARIABLE_PAYLOAD, CXL_CMD_FLAG_FORCE_ENABLE),
+> >  	CXL_CMD(GET_EVENT_RECORD, 1, CXL_VARIABLE_PAYLOAD, 0),
+> > +	CXL_CMD(CLEAR_EVENT_RECORD, CXL_VARIABLE_PAYLOAD, 0, 0),
+> >  	CXL_CMD(GET_FW_INFO, 0, 0x50, 0),
+> >  	CXL_CMD(GET_PARTITION_INFO, 0, 0x20, 0),
+> >  	CXL_CMD(GET_LSA, 0x8, CXL_VARIABLE_PAYLOAD, 0),
+> > @@ -708,6 +709,26 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
+> >  
+> > +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
+> > +				  enum cxl_event_log_type log,
+> > +				  __le16 handle)
+> > +{
+> > +	struct cxl_mbox_clear_event_payload payload;
+> > +	int rc;
+> > +
+> > +	memset(&payload, 0, sizeof(payload));
+> 
+> Could just do payload = {};
+> 
+> Thouch as you are setting stuff, why not just do
+> 
+> payload = {
+> 	.event_log = log,
+> 	.nr_recs = 1,
+> 	.handle = handle,
+> };
+> and let the compiler zero anything else (I think there are no holes to complicate
+> things).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com
+Yea!  Done.
 
-loop0: detected capacity change from 0 to 64
-BFS-fs: bfs_fill_super(): loop0 is unclean, continuing
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 0 PID: 3079 at kernel/locking/mutex.c:582 __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-Modules linked in:
-CPU: 0 PID: 3079 Comm: syz-executor275 Not tainted 6.0.0-rc4-syzkaller-17255-g92221e2af10d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-lr : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-sp : ffff8000127938e0
-x29: ffff800012793950 x28: ffff80000ee5a000 x27: ffff0000caad0618
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000002
-x23: ffff80000878cbbc x22: 0000000000000000 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff0000c8f03e28 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d61f820
-x11: ff808000081c1fa0 x10: 0000000000000000 x9 : 1d38989ac5d23000
-x8 : 1d38989ac5d23000 x7 : 4e5241575f534b43 x6 : ffff8000081965e0
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
-Call trace:
- __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_lookup+0xa4/0x1c4 fs/reiserfs/namei.c:364
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x738/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-irq event stamp: 1073
-hardirqs last  enabled at (1073): [<ffff80000bfd8fbc>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (1073): [<ffff80000bfd8fbc>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (1072): [<ffff80000bfd8df8>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (1072): [<ffff80000bfd8df8>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
-softirqs last  enabled at (982): [<ffff80000801c370>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (980): [<ffff80000801c33c>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-Unable to handle kernel execute from non-executable memory at virtual address ffff80000ef5d0a8
-Mem abort info:
-  ESR = 0x000000008600000e
-  EC = 0x21: IABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x0e: level 2 permission fault
-swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c56f6000
-[ffff80000ef5d0a8] pgd=100000023ffff003, p4d=100000023ffff003, pud=100000023fffe003, pmd=00680001c7400701
-Internal error: Oops: 8600000e [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3079 Comm: syz-executor275 Tainted: G        W          6.0.0-rc4-syzkaller-17255-g92221e2af10d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : bfs_fill_super.__key+0x0/0x10
-lr : get_third_component fs/reiserfs/namei.c:196 [inline]
-lr : reiserfs_find_entry+0x130/0x298 fs/reiserfs/namei.c:317
-sp : ffff800012793960
-x29: ffff800012793990 x28: 0000000000000040 x27: ffff0000caad0618
-x26: ffff0000c057e750 x25: ffff0000c70db000 x24: 0000000010000000
-x23: ffff0000c057e7c0 x22: 000000000000000e x21: ffff8000127939e0
-x20: ffff800012793a48 x19: ffff0000cabd87b8 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000002 x12: ffff80000d4b94d8
-x11: ff80800008754e24 x10: 0000000000000000 x9 : ffff800008754e24
-x8 : ffff80000ef5d0a8 x7 : 4e5241575f534b43 x6 : ffff80000878cbbc
-x5 : 0000000000000000 x4 : ffff8000127939e0 x3 : ffff800012793a48
-x2 : 000000000000000e x1 : 000000000000000e x0 : ffff0000c057e7c0
-Call trace:
- bfs_fill_super.__key+0x0/0x10
- reiserfs_lookup+0xc4/0x1c4 fs/reiserfs/namei.c:368
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x738/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Code: 00000000 00000000 00000000 00000000 (00000000) 
----[ end trace 0000000000000000 ]---
+> 
+> > +	payload.event_log = log;
+> > +	payload.nr_recs = 1;
+> > +	payload.handle = handle;
+> > +
+> > +	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_CLEAR_EVENT_RECORD,
+> > +			       &payload, sizeof(payload), NULL, 0);
+> 
+> return cxl_mbox_send_cmd() and drop rc definition.
 
+And Done.  I've also used the return value now!  ;-)
+
+Thanks again!
+Ira
