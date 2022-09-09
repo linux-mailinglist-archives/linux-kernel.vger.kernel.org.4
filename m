@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036095B3A47
+	by mail.lfdr.de (Postfix) with ESMTP id EF3EB5B3A4B
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiIIOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S232202AbiIIOBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiIIOAc (ORCPT
+        with ESMTP id S232010AbiIIOAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:00:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D278A6FC;
-        Fri,  9 Sep 2022 07:00:27 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:25 -0000
+        Fri, 9 Sep 2022 10:00:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14418923CD;
+        Fri,  9 Sep 2022 07:00:29 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:26 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732026;
+        s=2020; t=1662732027;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jOuVbKQXTlZ31neaC6shUn0CS98gD3q+wAn9vPt2B9A=;
-        b=bKAj3YzKZu5H2AXPvrGkLJUaN9HqzEVCm2e2WmhmFoYoTR8kU4rFfApFbTqVU8oNDTAvrl
-        8XV+iiMjfKpG8rxhzTegBVgrMxEcq0lsw50pgffVsHkbkbYf9CeRVp4Q9dpFeO1p1PmO0Z
-        CwABrnSsNwieFX2uxsfQrT9KCj0S/nqcand+o2/Da+OuKXcwXSIJ7iCzEAcdnXdzPw74/M
-        8R8iz5f7I+3iHOTE9ku0JnRl3+lyfehld759F35idLBVqhJ7hQ+3d1mrA4TnFgna1fULiB
-        dB6mbFTN6F002Lm3E7XLUEIlez8LymXNBdVGaAJO80r/zKz33eln/AUpGZYMzg==
+        bh=gvoq0aP5YpV3gsEemiWgVEd8RBLPpZGpxGyGMv2Y5J4=;
+        b=1Csf1Rqvc7mAh9BPLznjxhSsoEgWpFcE3y3dBOtY0b5//iWIlLWMmzp5iiMEJsTxLGpMUY
+        tYK8KeQX93SkWk8JTib8fdPXyxNeCAxLaPELan3vJpElhn2T28xUppB5eOEY40y7L3FCnI
+        xEuwkNDNhPLtDd/8j/xq5VQy9Jfm7kuskfWXA326RhTaxWvXp9NaMYWsWei+5AX6hWIlfF
+        RRDpPLoyX2P8DodZpp1BHU3S5DzmGYBGZXjop+ShApTOm739GUaQqB7DPgaG9/NRoIzL+T
+        sIELN00qIU4Ug/KJ7cOlDTXBfVpJi88vQ+C2evDmyzNPDkz9arzPfjT0wk7iWA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732026;
+        s=2020e; t=1662732027;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jOuVbKQXTlZ31neaC6shUn0CS98gD3q+wAn9vPt2B9A=;
-        b=TtqP4IX5EoJ3R7SdoPlga84ZraDpZROu7rRUfI/OGjfOCY7HwP29ZVLXuntz49QdBQdBSa
-        zJ9XRqixs+Q2lrDg==
+        bh=gvoq0aP5YpV3gsEemiWgVEd8RBLPpZGpxGyGMv2Y5J4=;
+        b=xrVx2BOHaNIpa9Skth4bikgb3EyYDtdgzZ/mPkIBaIxBcY/bna1UM4ZL8Vf9R1uHZ2NhVK
+        62pji0PxSrOAaBBQ==
 From:   "tip-bot2 for Tejun Heo" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] cgroup: Implement cgroup_file_show()
+Subject: [tip: sched/psi] kernfs: Implement kernfs_show()
 Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Tejun Heo <tj@kernel.org>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220828050440.734579-10-tj@kernel.org>
-References: <20220828050440.734579-10-tj@kernel.org>
+In-Reply-To: <20220828050440.734579-9-tj@kernel.org>
+References: <20220828050440.734579-9-tj@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166273202517.401.11532505009516572799.tip-bot2@tip-bot2>
+Message-ID: <166273202640.401.14793882914219935256.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,71 +69,113 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     e2691f6b44ed2135bfd005ad5fbabac4f433a7a1
-Gitweb:        https://git.kernel.org/tip/e2691f6b44ed2135bfd005ad5fbabac4f433a7a1
+Commit-ID:     783bd07d095b722108725af11113795ee046ed0e
+Gitweb:        https://git.kernel.org/tip/783bd07d095b722108725af11113795ee046ed0e
 Author:        Tejun Heo <tj@kernel.org>
-AuthorDate:    Sat, 27 Aug 2022 19:04:40 -10:00
+AuthorDate:    Sat, 27 Aug 2022 19:04:39 -10:00
 Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CommitterDate: Thu, 01 Sep 2022 18:08:44 +02:00
 
-cgroup: Implement cgroup_file_show()
+kernfs: Implement kernfs_show()
 
-Add cgroup_file_show() which allows toggling visibility of a cgroup file
-using the new kernfs_show(). This will be used to hide psi interface files
-on cgroups where it's disabled.
+Currently, kernfs nodes can be created hidden and activated later by calling
+kernfs_activate() to allow creation of multiple nodes to succeed or fail as
+a unit. This is an one-way one-time-only transition. This patch introduces
+kernfs_show() which can toggle visibility dynamically.
+
+As the currently proposed use - toggling the cgroup pressure files - only
+requires operating on leaf nodes, for the sake of simplicity, restrict it as
+such for now.
+
+Hiding uses the same mechanism as deactivation and likewise guarantees that
+there are no in-flight operations on completion. KERNFS_ACTIVATED and
+KERNFS_HIDDEN are used to manage the interactions between activations and
+show/hide operations. A node is visible iff both activated & !hidden.
 
 Cc: Chengming Zhou <zhouchengming@bytedance.com>
 Cc: Johannes Weiner <hannes@cmpxchg.org>
 Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
 Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220828050440.734579-10-tj@kernel.org
+Link: https://lore.kernel.org/r/20220828050440.734579-9-tj@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/cgroup.h |  1 +
- kernel/cgroup/cgroup.c | 20 ++++++++++++++++++++
- 2 files changed, 21 insertions(+)
+ fs/kernfs/dir.c        | 37 ++++++++++++++++++++++++++++++++++++-
+ include/linux/kernfs.h |  2 ++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index ed53bfe..f61dd13 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -114,6 +114,7 @@ int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_rm_cftypes(struct cftype *cfts);
- void cgroup_file_notify(struct cgroup_file *cfile);
-+void cgroup_file_show(struct cgroup_file *cfile, bool show);
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index c932395..7fb5a72 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -1311,7 +1311,7 @@ static void kernfs_activate_one(struct kernfs_node *kn)
  
- int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen);
- int cgroupstats_build(struct cgroupstats *stats, struct dentry *dentry);
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index ffaccd6..217469a 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4340,6 +4340,26 @@ void cgroup_file_notify(struct cgroup_file *cfile)
+ 	kn->flags |= KERNFS_ACTIVATED;
+ 
+-	if (kernfs_active(kn) || (kn->flags & KERNFS_REMOVING))
++	if (kernfs_active(kn) || (kn->flags & (KERNFS_HIDDEN | KERNFS_REMOVING)))
+ 		return;
+ 
+ 	WARN_ON_ONCE(kn->parent && RB_EMPTY_NODE(&kn->rb));
+@@ -1347,6 +1347,41 @@ void kernfs_activate(struct kernfs_node *kn)
+ 	up_write(&root->kernfs_rwsem);
  }
  
- /**
-+ * cgroup_file_show - show or hide a hidden cgroup file
-+ * @cfile: target cgroup_file obtained by setting cftype->file_offset
++/**
++ * kernfs_show - show or hide a node
++ * @kn: kernfs_node to show or hide
 + * @show: whether to show or hide
++ *
++ * If @show is %false, @kn is marked hidden and deactivated. A hidden node is
++ * ignored in future activaitons. If %true, the mark is removed and activation
++ * state is restored. This function won't implicitly activate a new node in a
++ * %KERNFS_ROOT_CREATE_DEACTIVATED root which hasn't been activated yet.
++ *
++ * To avoid recursion complexities, directories aren't supported for now.
 + */
-+void cgroup_file_show(struct cgroup_file *cfile, bool show)
++void kernfs_show(struct kernfs_node *kn, bool show)
 +{
-+	struct kernfs_node *kn;
++	struct kernfs_root *root = kernfs_root(kn);
 +
-+	spin_lock_irq(&cgroup_file_kn_lock);
-+	kn = cfile->kn;
-+	kernfs_get(kn);
-+	spin_unlock_irq(&cgroup_file_kn_lock);
++	if (WARN_ON_ONCE(kernfs_type(kn) == KERNFS_DIR))
++		return;
 +
-+	if (kn)
-+		kernfs_show(kn, show);
++	down_write(&root->kernfs_rwsem);
 +
-+	kernfs_put(kn);
++	if (show) {
++		kn->flags &= ~KERNFS_HIDDEN;
++		if (kn->flags & KERNFS_ACTIVATED)
++			kernfs_activate_one(kn);
++	} else {
++		kn->flags |= KERNFS_HIDDEN;
++		if (kernfs_active(kn))
++			atomic_add(KN_DEACTIVATED_BIAS, &kn->active);
++		kernfs_drain(kn);
++	}
++
++	up_write(&root->kernfs_rwsem);
 +}
 +
-+/**
-  * css_next_child - find the next child of a given css
-  * @pos: the current position (%NULL to initiate traversal)
-  * @parent: css whose children to walk
+ static void __kernfs_remove(struct kernfs_node *kn)
+ {
+ 	struct kernfs_node *pos;
+diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+index b77d257..73f5c12 100644
+--- a/include/linux/kernfs.h
++++ b/include/linux/kernfs.h
+@@ -108,6 +108,7 @@ enum kernfs_node_flag {
+ 	KERNFS_HAS_SEQ_SHOW	= 0x0040,
+ 	KERNFS_HAS_MMAP		= 0x0080,
+ 	KERNFS_LOCKDEP		= 0x0100,
++	KERNFS_HIDDEN		= 0x0200,
+ 	KERNFS_SUICIDAL		= 0x0400,
+ 	KERNFS_SUICIDED		= 0x0800,
+ 	KERNFS_EMPTY_DIR	= 0x1000,
+@@ -430,6 +431,7 @@ struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
+ 				       const char *name,
+ 				       struct kernfs_node *target);
+ void kernfs_activate(struct kernfs_node *kn);
++void kernfs_show(struct kernfs_node *kn, bool show);
+ void kernfs_remove(struct kernfs_node *kn);
+ void kernfs_break_active_protection(struct kernfs_node *kn);
+ void kernfs_unbreak_active_protection(struct kernfs_node *kn);
