@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814DF5B3EB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DAC5B3EB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiIISRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S231233AbiIISSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiIISQp (ORCPT
+        with ESMTP id S230047AbiIISSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:16:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B7410B011;
-        Fri,  9 Sep 2022 11:16:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1605F620B3;
-        Fri,  9 Sep 2022 18:16:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D13CC433D6;
-        Fri,  9 Sep 2022 18:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662747403;
-        bh=Ir95EY4ql4acrnL9tllvFhQtCORvvTC1cnvM0vYUjXA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=eG/qW4oiUk4yanCsNVIN4iMQOL5ZjQZUYYSF6s0jL6jafCeI5i9X4aGV8U8/HGMwJ
-         tPIgdvWOdB0DkmWmLcdidQ9Vncm8rqCVGnzbGDwke0FtuHplnH5nWly6DGlVc/2vU2
-         fH8p4+gCRNhSMdWpi/c7ELgUdoM+FWKVy5UyyqoHFPO6PLhxwmlvJEIpBveGJxa52Q
-         Ltiw+0bYijaIMLAJNlDYMCJlhSWlRpourdHH7BHPKxiHTMRBZknIlsoarDl5K3B4KV
-         ZOfB8UxAXlMPhd6JWsNmMi2zeW5FqaYYbJ+2Ri6yy2/FN9n8o96h8XzB3njVtXBMJB
-         K/Sy0r3ekKYeQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A28FC4166E;
-        Fri,  9 Sep 2022 18:16:43 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit fixes update for Linux 6.0-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <daa35f0a-afca-ec6c-82d1-8c71b4250d7c@linuxfoundation.org>
-References: <daa35f0a-afca-ec6c-82d1-8c71b4250d7c@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <daa35f0a-afca-ec6c-82d1-8c71b4250d7c@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.0-rc5
-X-PR-Tracked-Commit-Id: 2a2dfc869d3345ccdd91322b023f4b0da84acbe7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e35ff25f9fda4385249f909bce21c8f759bc46d4
-Message-Id: <166274740342.9705.13723870578047429849.pr-tracker-bot@kernel.org>
-Date:   Fri, 09 Sep 2022 18:16:43 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 14:18:01 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC155B0289;
+        Fri,  9 Sep 2022 11:17:57 -0700 (PDT)
+Message-ID: <d2fd289d-a5b5-f0af-3125-417ba9d242f0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662747476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hxQnEaoROX92cThvzg5SE/OCMATF1xv047X1ewBjYn8=;
+        b=m8SodHb5jeDFvbUyYV1O1Y0W46rXSYhxvBG8BB6oEwoHAP8jqiq3J3cly6azMFcDa8y/H+
+        9BJ0IlatuXdUVOgKcncGTdWVnfVVf5OvL5JkfzcTkoz1FFZr936j817sHQ9ziHDexX/YkH
+        Y3Rz+oCABNYQi1VXHpGSZVemq5fGU3A=
+Date:   Fri, 9 Sep 2022 11:17:52 -0700
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf] bpf: btf: fix truncated last_member_type_id in
+ btf_struct_resolve
+Content-Language: en-US
+To:     Lorenz Bauer <oss@lmb.io>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20220909092107.3035-1-oss@lmb.io>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20220909092107.3035-1-oss@lmb.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 9 Sep 2022 11:21:58 -0600:
+On 9/9/22 2:21 AM, Lorenz Bauer wrote:
+> When trying to finish resolving a struct member, btf_struct_resolve
+> saves the member type id in a u16 temporary variable. This truncates
+> the 32 bit type id value if it exceeds UINT16_MAX.
+> 
+> As a result, structs that have members with type ids > UINT16_MAX and
+> which need resolution will fail with a message like this:
+> 
+>      [67414] STRUCT ff_device size=120 vlen=12
+>          effect_owners type_id=67434 bits_offset=960 Member exceeds struct_size
+> 
+> Fix this by changing the type of last_member_type_id to u32.
+> 
+> Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.0-rc5
+The fix tag should be
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e35ff25f9fda4385249f909bce21c8f759bc46d4
+Fixes: a0791f0df7d2 ("bpf: fix BTF limits")
 
-Thank you!
+> Signed-off-by: Lorenz Bauer <oss@lmb.io>
+> ---
+>   kernel/bpf/btf.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 7e64447659f3..36fd4b509294 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -3128,7 +3128,7 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+>   	if (v->next_member) {
+>   		const struct btf_type *last_member_type;
+>   		const struct btf_member *last_member;
+> -		u16 last_member_type_id;
+> +		u32 last_member_type_id;
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+The change makes sense.
+
+The kernel's vmlinux and module btf parsing doesn't go through this 
+resolve check though.  Are you trying to __sys_bpf(BPF_BTF_LOAD) the btf 
+from the vmlinux file into the kernel ?
+
