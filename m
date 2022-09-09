@@ -2,116 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FBA5B4019
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEE95B401F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiIITq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S231966AbiIITqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiIITps (ORCPT
+        with ESMTP id S231932AbiIITqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:45:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB4910FC7;
-        Fri,  9 Sep 2022 12:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662752556; x=1694288556;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+/1qN74VTzXrOaU2w2PUWN7E8sji2DXVrWuidjxRfvQ=;
-  b=DW8MG5l130abbkagfcYolgjzpBKYvVe/YJ77X1l9Ul/P9jJI1VR+rMfO
-   NLj/GipBqShA49sUL8YhrargDgmKKey4O77SH2W49bQK433qwvZBal1Us
-   McDetZp0Toxq+FSeLnO3LmYg9kHc/AD/PgFs86Hgml1siPUKbE6hsh64V
-   j04xb5GAcXyhauG/GKjbvQ2o0u/Pm+3UX4EY6jgNma6nL7hxDV+p7dKsF
-   gD0DkzQk5KSs873wCJpA1Bu5gFxjb/i6sGA6ONk62NSXqrfn9ckm+aKME
-   e5B+XJXS0n4/4cAuQbrGWPqMnUFIOu5Bu682u2mAdiC7iOU7LWaWRNNXn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298357746"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="298357746"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:41:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="566476659"
-Received: from omeier-mobl1.ger.corp.intel.com (HELO [10.209.54.138]) ([10.209.54.138])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:41:04 -0700
-Message-ID: <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
-Date:   Fri, 9 Sep 2022 12:41:04 -0700
+        Fri, 9 Sep 2022 15:46:14 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B236869;
+        Fri,  9 Sep 2022 12:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=/q9eNcU3uzrC4vnpWsAF5H9wAjfFopX07fmzyDgI15M=; b=AtvsIuqKCKXtdg78Gc+1WUzE8b
+        dPJVkIa/LVmXo1MsStXD32O8hF1TUOKb4Yi02aOtlLfr1zKxqzYiPNSF+zSoCh7KFEU8g8GhdtB2W
+        tj2IXFa5GraXvFjaGW07lEK/V6SefMSj2N0b3Gokcnyjs/VL6zjPZ4bdeOVn2A1zscyt2jvpXt87i
+        oStBDQQdoikF/txOT7Ug1inDhdM5b0kbfddgo8RwJBAotyWB9vhWkcK7iOJqu7KxmbJIc9QUrdoyd
+        hExDDtRkWd9XbJlSJgkL6rnCdO19Xe36Re+VeV6+IQI3Av9AZ/TToPYKLZSyxgJ/+eX2PLoYH+0Vy
+        E3rPHm7g==;
+Received: from [177.215.76.177] (helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oWjtX-00E5na-3x; Fri, 09 Sep 2022 21:42:31 +0200
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     linux-efi@vger.kernel.org
+Cc:     ardb@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        matt@codeblueprint.co.uk, mjg59@srcf.ucam.org,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Subject: [PATCH V2] efi: efibc: Guard against allocation failure
+Date:   Fri,  9 Sep 2022 16:42:14 -0300
+Message-Id: <20220909194214.186731-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
-> +	u8 reserved[7] = {0};
-...
-> +	if (!req.reportdata || !req.tdreport || req.subtype ||
-> +		req.rpd_len != TDX_REPORTDATA_LEN ||
-> +		req.tdr_len != TDX_REPORT_LEN ||
-> +		memcmp(req.reserved, reserved, 7))
-> +		return -EINVAL;
+There is a single kmalloc in this driver, and it's not currently
+guarded against allocation failure. Do it here by just bailing-out
+the reboot handler, in case this tentative allocation fails.
 
-Huh, so to look for 0's, you:
+Fixes: 416581e48679 ("efi: efibc: avoid efivar API for setting variables")
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+---
 
-1. Declare an on-stack structure with a hard coded, magic numbered field
-   that has to be zeroed.
-2. memcmp() that structure
-3. Feed memcmp() with another hard coded magic number
+V2:
+* Rebased against 6.0-rc4;
+* Dropped from the original series [0].
 
-I've gotta ask: did you have any reservations writing this code?  Were
-there any alarm bells going off saying that something might be wrong?
+[0] https://lore.kernel.org/linux-efi/20220729194532.228403-1-gpiccoli@igalia.com/
 
-Using memcmp() itself is probably forgivable.  But, the two magic
-numbers are pretty mortal sins in my book.  What's going to happen the
-first moment someone wants to repurpose a reserved byte?  They're going
-to do:
 
--	__u8 reserved[7];
-+	__u8 my_new_byte;
-+	__u8 reserved[6];
+ drivers/firmware/efi/efibc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-What's going to happen to the code you wrote?  Will it continue to work?
- Or will the memcmp() silently start doing crazy stuff as it overruns
-the structure into garbage land?
+diff --git a/drivers/firmware/efi/efibc.c b/drivers/firmware/efi/efibc.c
+index 8ced7af8e56d..4f9fb086eab7 100644
+--- a/drivers/firmware/efi/efibc.c
++++ b/drivers/firmware/efi/efibc.c
+@@ -48,6 +48,9 @@ static int efibc_reboot_notifier_call(struct notifier_block *notifier,
+ 		return NOTIFY_DONE;
+ 
+ 	wdata = kmalloc(MAX_DATA_LEN * sizeof(efi_char16_t), GFP_KERNEL);
++	if (!wdata)
++		return NOTIFY_DONE;
++
+ 	for (l = 0; l < MAX_DATA_LEN - 1 && str[l] != '\0'; l++)
+ 		wdata[l] = str[l];
+ 	wdata[l] = L'\0';
+-- 
+2.37.2
 
-What's wrong with:
-
-	memchr_inv(&req.reserved, sizeof(req.reserved), 0)
