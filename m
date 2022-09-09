@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563625B3897
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC9F5B3896
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiIINDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S229687AbiIINEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiIINDS (ORCPT
+        with ESMTP id S231298AbiIINDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:03:18 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC95B8F1E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:03:17 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so4403200wmk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 06:03:17 -0700 (PDT)
+        Fri, 9 Sep 2022 09:03:20 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2AC696F5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:03:19 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id e15so162215wmq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 06:03:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date;
-        bh=zREa4GRmzGBOIzgpCLdUUrk2ik+zgQmFE/1EecWF98s=;
-        b=NJSSbH4laihrup5pfaCYKDg8K6C8DbhDQr5QpZFUyEyCC9LZkIX6/+BA1A3F/ix1BX
-         gMc6lUK1qs0XoqT1sSze3zHEHRKEfFmsciTJtwAQc3jUFKXVy6xWno9cWHeps38FDC6O
-         o3EBTWU5Q4AR5SWzWnk/UnJ2Cn3BFQm4zq07FdbotpvRX81E+oJ2J5zd0/5m/7t8Mxol
-         Oo6EmN2d53s5CorKgvkgQx5tQQt1AeLrP6wQEaTS9gm3gKenqQBbbJ6bo7KXuCWrShKK
-         RXJZxQNwHEKYdzZGNliQCNM61WQsQCoDfxzddZTDMZSputZ/b4Xk6c6YcX+0BmnrHUrE
-         Kk0A==
+        bh=rlyri6gFQXbjH6qaw2UpG7VLO1J+noZ/tZbnqvT/NqA=;
+        b=hSQpx/vphpHkQs39vs9BDtqrWFMFnPic+HPynK8XcJzdxRGKV9EwhS4i3t+PofmJzd
+         b12BfAivvKi/iwuwFVGOyulbrtU0jObl35cg6XWYYtA14S+162Xhrj8iSL3N3d2dGClJ
+         VV43PPqpxWISAfoIiiPgPS8qP88oUg8lzOq9TofhhCV1KNJ3rDbx0mf0mJJqN/HCvoId
+         DDqPB2ISeRNbTCl7rN9rZHsqzreF8AtqfOoSwLLeR5UuJ46zBNngIiVfcfTbpsGSstz6
+         9RE4x22HGLyrP7sVFn1KDiNissQZQIgxu4gWIidnPrG0l0Ng22Q7Ib7eGxUivVkK5ElA
+         XHQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=zREa4GRmzGBOIzgpCLdUUrk2ik+zgQmFE/1EecWF98s=;
-        b=kwiPDOqY7BAk+8uLndV3C0e8xoAkJ6voWTlz0I/4TJGapetUo7a+Wd36v6CM1uJq9m
-         tA22xon9hM7QK74RyNR3s+AR/eD1Bwe+wmHnT3BuVuI47yqy2jgQ8IF7VnZVJgBrLbsV
-         uFMfu8DIEsYPQr9suokeo7ldMwzRdn8q1I9welmYKp1E2ZRi7UtuvaEpBzHdHhTw/UyD
-         s1nq1ROYGuZvrOtp6C2gPYnH/ZEbZVq2LqMph//mzhgI1M7ZfcaKhlaGUW++yVpAzgja
-         4II0lgiieIzJa0Sm9nvOVjnN0/AlVWIHGb9xrWPvLeVfJG29Yu7ySkPQlS33qTIRPulZ
-         PoQA==
-X-Gm-Message-State: ACgBeo0ezJO+BwhqQ7uldasyDonvK19oBQGINh7RLDqHi8gh6uXhbcA7
-        Jy/3mg5/zsfYhdWdNrAb9ekUKg==
-X-Google-Smtp-Source: AA6agR6qCCPJOrw/4kBOZ9wBhNGB5IYvJMhF7B0Rh3diwo2uOj6ZQnX41ZZssaHKOTvh3g0s8tS2sQ==
-X-Received: by 2002:a05:600c:1694:b0:3b4:6205:1f95 with SMTP id k20-20020a05600c169400b003b462051f95mr822977wmn.151.1662728595449;
-        Fri, 09 Sep 2022 06:03:15 -0700 (PDT)
+        bh=rlyri6gFQXbjH6qaw2UpG7VLO1J+noZ/tZbnqvT/NqA=;
+        b=kcUiMFy6YiQPUDcjhQ6E8Pl3m8vDGNmYM988ih065Lzcpg3BjDAyzAPhhdLNrpCGq3
+         XiSk/kd1y7nBkNtfejE96HhfvnXu77bCQKYDLUcRLV7MWI1hZyKsprlAJkqMvxZxz9Ht
+         XC1fzyr5KgLiTitZuKBKVGuZwD9PtcipEAOX8mSDq+JYavsQV5Z257gciCngD8/RVXLA
+         VWzeYLqr2L87SU+NcshhOcCQ5R+5mqQrzbeS5biTBZthfMl3z3wGa4RnZL0mcIwytumG
+         yCATjrSmXrtDWGmY4ckR5kVJwp2rZi/V0qFPFlH583B8iRrWkOkE0weoNEmpyXeyZMB+
+         SMrg==
+X-Gm-Message-State: ACgBeo36043zO2ukbSVWti626EdiEwGRBs9VPOok+s7Y57uplykvQIBW
+        /8XZKQMUdDXjns4FMaspBkEcNg==
+X-Google-Smtp-Source: AA6agR76kOGvyPCMLTmHnGhkRdQAP3O/7XvJLAwjU1LsD0LXyUpQ1A4jr0gDj3JR1lXALEaZo3Cmhw==
+X-Received: by 2002:a05:600c:410d:b0:3a6:1db8:b419 with SMTP id j13-20020a05600c410d00b003a61db8b419mr5405856wmi.119.1662728597787;
+        Fri, 09 Sep 2022 06:03:17 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:f:6020:c6e:e86:ab92:92b7])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003a5f4fccd4asm569909wms.35.2022.09.09.06.03.14
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003a5f4fccd4asm569909wms.35.2022.09.09.06.03.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 06:03:14 -0700 (PDT)
+        Fri, 09 Sep 2022 06:03:16 -0700 (PDT)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -58,9 +58,9 @@ Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
         David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
         tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
         joshdon@google.com, Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v3 1/8] sched: Introduce latency-nice as a per-task attribute
-Date:   Fri,  9 Sep 2022 15:03:02 +0200
-Message-Id: <20220909130309.25458-2-vincent.guittot@linaro.org>
+Subject: [PATCH v3 2/8] sched/core: Propagate parent task's latency requirements to the child task
+Date:   Fri,  9 Sep 2022 15:03:03 +0200
+Message-Id: <20220909130309.25458-3-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909130309.25458-1-vincent.guittot@linaro.org>
 References: <20220909130309.25458-1-vincent.guittot@linaro.org>
@@ -76,81 +76,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Parth Shah <parth@linux.ibm.com>
 
-Latency-nice indicates the latency requirements of a task with respect
-to the other tasks in the system. The value of the attribute can be within
-the range of [-20, 19] both inclusive to be in-line with the values just
-like task nice values.
+Clone parent task's latency_nice attribute to the forked child task.
 
-latency_nice = -20 indicates the task to have the least latency as
-compared to the tasks having latency_nice = +19.
+Reset the latency_nice value to default value when the child task is
+set to sched_reset_on_fork.
 
-The latency_nice may affect only the CFS SCHED_CLASS by getting
-latency requirements from the userspace.
-
-Additionally, add debugging bits for newly added latency_nice attribute.
+Also, initialize init_task.latency_nice value with DEFAULT_LATENCY_NICE
+value
 
 Signed-off-by: Parth Shah <parth@linux.ibm.com>
 [rebase]
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- include/linux/sched.h |  1 +
- kernel/sched/debug.c  |  1 +
- kernel/sched/sched.h  | 18 ++++++++++++++++++
- 3 files changed, 20 insertions(+)
+ init/init_task.c    | 1 +
+ kernel/sched/core.c | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 88b8817b827d..a0adb55efa1c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -773,6 +773,7 @@ struct task_struct {
- 	int				static_prio;
- 	int				normal_prio;
- 	unsigned int			rt_priority;
-+	int				latency_nice;
+diff --git a/init/init_task.c b/init/init_task.c
+index 73cc8f03511a..225d11a39bc9 100644
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -78,6 +78,7 @@ struct task_struct init_task
+ 	.prio		= MAX_PRIO - 20,
+ 	.static_prio	= MAX_PRIO - 20,
+ 	.normal_prio	= MAX_PRIO - 20,
++	.latency_nice	= DEFAULT_LATENCY_NICE,
+ 	.policy		= SCHED_NORMAL,
+ 	.cpus_ptr	= &init_task.cpus_mask,
+ 	.user_cpus_ptr	= NULL,
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 603a80ec9b0e..3c5fb04f00e1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4511,6 +4511,9 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+ 	 */
+ 	p->prio = current->normal_prio;
  
- 	struct sched_entity		se;
- 	struct sched_rt_entity		rt;
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index bb3d63bdf4ae..a3f7876217a6 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -1042,6 +1042,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
- #endif
- 	P(policy);
- 	P(prio);
-+	P(latency_nice);
- 	if (task_has_dl_policy(p)) {
- 		P(dl.runtime);
- 		P(dl.deadline);
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 74130a69d365..b927269b84f9 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -124,6 +124,24 @@ extern int sched_rr_timeslice;
-  */
- #define NS_TO_JIFFIES(TIME)	((unsigned long)(TIME) / (NSEC_PER_SEC / HZ))
++	/* Propagate the parent's latency requirements to the child as well */
++	p->latency_nice = current->latency_nice;
++
+ 	uclamp_fork(p);
  
-+/*
-+ * Latency nice is meant to provide scheduler hints about the relative
-+ * latency requirements of a task with respect to other tasks.
-+ * Thus a task with latency_nice == 19 can be hinted as the task with no
-+ * latency requirements, in contrast to the task with latency_nice == -20
-+ * which should be given priority in terms of lower latency.
-+ */
-+#define MAX_LATENCY_NICE	19
-+#define MIN_LATENCY_NICE	-20
-+
-+#define LATENCY_NICE_WIDTH	\
-+	(MAX_LATENCY_NICE - MIN_LATENCY_NICE + 1)
-+
-+/*
-+ * Default tasks should be treated as a task with latency_nice = 0.
-+ */
-+#define DEFAULT_LATENCY_NICE	0
-+
- /*
-  * Increase resolution of nice-level calculations for 64-bit architectures.
-  * The extra resolution improves shares distribution and load balancing of
+ 	/*
+@@ -4527,6 +4530,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+ 		p->prio = p->normal_prio = p->static_prio;
+ 		set_load_weight(p, false);
+ 
++		p->latency_nice = DEFAULT_LATENCY_NICE;
+ 		/*
+ 		 * We don't need the reset flag anymore after the fork. It has
+ 		 * fulfilled its duty:
 -- 
 2.17.1
 
