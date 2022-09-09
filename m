@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166265B3D67
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2FE5B3D68
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiIIQsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S232125AbiIIQs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiIIQsJ (ORCPT
+        with ESMTP id S232114AbiIIQsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:48:09 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B960146D39
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:47:54 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id WhATopmnsPMmaWhAToUQN3; Fri, 09 Sep 2022 18:47:51 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 09 Sep 2022 18:47:51 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
-Date:   Fri, 9 Sep 2022 18:47:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-Content-Language: fr
-To:     Chao Yu <chao@kernel.org>, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        jaegeuk@kernel.org, Chao Yu <chao.yu@oppo.com>, vbabka@kernel.org,
-        muchun.song@linux.dev
-References: <20220830141009.150075-1-chao@kernel.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220830141009.150075-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 12:48:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699F0145FFB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:48:09 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id l12-20020a25ad4c000000b006a8e04c284dso2107148ybe.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=EiWKoBzR0iZJ4t5t4o8KKYQS1ZEBQp5DPZAlqfx7Mbw=;
+        b=KQwKfUkXf85y1dPVwfQ8Qc7MSxQLT9AYU5ZGZvPs+5ppPcywurh+ZJ4JvmKqp13RJF
+         366/1+1wq7kJ4iBC3fym2Y0RRxCoLod6Ygnhy/n2U7mlPpVFOgYn6ZbmoqJZyL7LxQ2Z
+         rHwme73ruJzdXxRJGS9cu07qAtNPJtyb3GXOMbmmzZj34WHQtm9fe2v2QkDS8UVbrdQV
+         xsCsQzZv7It58MNmjAKZMpfX3nNntS2K4PMw/e9l9MPUijKpR3+3g2+Yw8W99Egy0wdy
+         ADLqB6rQ0lkUCci1VU4uKtBM0wLo68D+Vzk/70jgprUpnCJHrVGH4gddrS2YteDyj7q2
+         jbZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=EiWKoBzR0iZJ4t5t4o8KKYQS1ZEBQp5DPZAlqfx7Mbw=;
+        b=nTIYtcqbRuo21rKQaldPFnCjbZkvvVdxnLh7q5IZNQ5QYJpaDnjvYiEmswRWrZlWKz
+         8Bip3VCfHF3+Pc06dA/oTqzJOONaO8hAr/vtF5FT57hOObsieT9dYMLa36mv56tZ+cAo
+         cayohljemrTmu6IceYJTK+L4T0Cskj0VijSNuhueT7ZXAtsqvSThgSAPAR9HrD2SkFgk
+         tzW7GU+WvPNe4eTNOMIQQ5HaLJk0lRduCWsdFcbA32zXYF0ro00tbheI07WH8QbcgAFI
+         GQwDkQvpTqRI32GGk7s1rpg4Nqs/M7qD7pHDfX5PnCkvhG+/J7fUB+Cw5vWl7y4kwUXg
+         ngCQ==
+X-Gm-Message-State: ACgBeo0EzU3GhW82ccJk4AViweOl55jPP0TkbudEtzdU6Nk0KIYiZ2Q9
+        i45qdI84ppak2V03I1znVTylAA8=
+X-Google-Smtp-Source: AA6agR4kYomPbLNUC/WT0027++lNLZfdZRdSZGZCMqTiWLGwnVmGNNXmOYwbsCb7MKr15OhG6+d4jro=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6902:1143:b0:6ad:a593:2612 with SMTP id
+ p3-20020a056902114300b006ada5932612mr11807651ybu.474.1662742088546; Fri, 09
+ Sep 2022 09:48:08 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 09:48:07 -0700
+In-Reply-To: <tencent_6715F3D7DF513D441A835321FAACFFCB0907@qq.com>
+Mime-Version: 1.0
+References: <tencent_6715F3D7DF513D441A835321FAACFFCB0907@qq.com>
+Message-ID: <YxtuR6hWUkGfiWya@google.com>
+Subject: Re: [PATCH bpf RESEND] samples/bpf: Replace blk_account_io_done()
+ with __blk_account_io_done()
+From:   sdf@google.com
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     bpf@vger.kernel.org, Rong Tao <rongtao@cestc.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 30/08/2022 à 16:10, Chao Yu a écrit :
-> From: Chao Yu <chao.yu@oppo.com>
-> 
-> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
-> out-of-memory, if it fails, return errno correctly rather than
-> triggering panic via BUG_ON();
-> 
-> kernel BUG at mm/slub.c:5893!
-> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> 
-> Call trace:
->   sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->   __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->   create_cache mm/slab_common.c:229 [inline]
->   kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->   kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->   f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->   f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->   f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->   mount_bdev+0x1b8/0x210 fs/super.c:1400
->   f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->   legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->   vfs_get_tree+0x40/0x140 fs/super.c:1530
->   do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->   path_mount+0x358/0x914 fs/namespace.c:3370
->   do_mount fs/namespace.c:3383 [inline]
->   __do_sys_mount fs/namespace.c:3591 [inline]
->   __se_sys_mount fs/namespace.c:3568 [inline]
->   __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
-> 
-> Cc: <stable@kernel.org>
-> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+On 09/09, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+
+> Since commit be6bfe36db17 ("block: inline hot paths of  
+> blk_account_io_*()")
+> blk_account_io_*() become inline functions.
+
+Thanks for the fix.
+
+Not sure why RESEND. And it should target bpf-next; this doesn't seem like
+an important fix to warrant bpf. For future submissions, if you're targeting
+bpf, try to also add Fixes: tag.
+
+Not worth another resend though. Assuming it can be pulled in the proper
+subtree by the maintainers.
+
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+
+> Signed-off-by: Rong Tao <rtoax@foxmail.com>
 > ---
->   mm/slub.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 862dbd9af4f5..e6f3727b9ad2 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5890,7 +5890,8 @@ static char *create_unique_id(struct kmem_cache *s)
->   	char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
+>   samples/bpf/task_fd_query_kern.c | 2 +-
+>   samples/bpf/task_fd_query_user.c | 2 +-
+>   samples/bpf/tracex3_kern.c       | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi,
+> diff --git a/samples/bpf/task_fd_query_kern.c  
+> b/samples/bpf/task_fd_query_kern.c
+> index c821294e1774..186ac0a79c0a 100644
+> --- a/samples/bpf/task_fd_query_kern.c
+> +++ b/samples/bpf/task_fd_query_kern.c
+> @@ -10,7 +10,7 @@ int bpf_prog1(struct pt_regs *ctx)
+>   	return 0;
+>   }
 
-looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+> -SEC("kretprobe/blk_account_io_done")
+> +SEC("kretprobe/__blk_account_io_done")
+>   int bpf_prog2(struct pt_regs *ctx)
+>   {
+>   	return 0;
+> diff --git a/samples/bpf/task_fd_query_user.c  
+> b/samples/bpf/task_fd_query_user.c
+> index 424718c0872c..a33d74bd3a4b 100644
+> --- a/samples/bpf/task_fd_query_user.c
+> +++ b/samples/bpf/task_fd_query_user.c
+> @@ -348,7 +348,7 @@ int main(int argc, char **argv)
+>   	/* test two functions in the corresponding *_kern.c file */
+>   	CHECK_AND_RET(test_debug_fs_kprobe(0, "blk_mq_start_request",
+>   					   BPF_FD_TYPE_KPROBE));
+> -	CHECK_AND_RET(test_debug_fs_kprobe(1, "blk_account_io_done",
+> +	CHECK_AND_RET(test_debug_fs_kprobe(1, "__blk_account_io_done",
+>   					   BPF_FD_TYPE_KRETPROBE));
 
-The 2nd BUG_ON at the end of the function could certainly be just 
-removed as well or remplaced by a:
-    	if (p > name + ID_STR_LENGTH - 1) {
-		kfree(name);
-		return -E<something>;
-	}
+>   	/* test nondebug fs kprobe */
+> diff --git a/samples/bpf/tracex3_kern.c b/samples/bpf/tracex3_kern.c
+> index 710a4410b2fb..bde6591cb20c 100644
+> --- a/samples/bpf/tracex3_kern.c
+> +++ b/samples/bpf/tracex3_kern.c
+> @@ -49,7 +49,7 @@ struct {
+>   	__uint(max_entries, SLOTS);
+>   } lat_map SEC(".maps");
 
-Just my 2c,
-
-CJ
-
->   	char *p = name;
->   
-> -	BUG_ON(!name);
-> +	if (!name)
-> +		return ERR_PTR(-ENOMEM);
->   
->   	*p++ = ':';
->   	/*
-> @@ -5948,6 +5949,8 @@ static int sysfs_slab_add(struct kmem_cache *s)
->   		 * for the symlinks.
->   		 */
->   		name = create_unique_id(s);
-> +		if (IS_ERR(name))
-> +			return PTR_ERR(name);
->   	}
->   
->   	s->kobj.kset = kset;
+> -SEC("kprobe/blk_account_io_done")
+> +SEC("kprobe/__blk_account_io_done")
+>   int bpf_prog2(struct pt_regs *ctx)
+>   {
+>   	long rq = PT_REGS_PARM1(ctx);
+> --
+> 2.31.1
 
