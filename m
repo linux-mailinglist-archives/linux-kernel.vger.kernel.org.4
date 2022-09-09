@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8250B5B30CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C24D5B30EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiIIHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S231825AbiIIHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiIIHr4 (ORCPT
+        with ESMTP id S231459AbiIIHvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:47:56 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4093A12A329;
-        Fri,  9 Sep 2022 00:44:02 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id z20so855148ljq.3;
-        Fri, 09 Sep 2022 00:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4XMjwR+ZVeD0USbUtiJHh3TkUmGAdp/KlppcqPAVl1E=;
-        b=choRwB5G8477CiDOj2pqYwuD9m2AS55XMrKVnGig2OvBR1eCq7RxsLzpulqA2nYZlr
-         E2hpeVWo6QP+Y+giRj6Mo/4a2a2Z7qjEVOpMDBskCPg2wKXbgwyISJPPn0cNctE1wrGw
-         TVCidUSbPePmCrcfapYi5hkVK1Ch/gtJPWc8Iyzw5t5gbIHtqe2B9NsYmWKomNR9z+/s
-         f/nln8Dpka3XLbqD68Ew6Oqcz26dqOj78HsrbkiV6QRaxaXJZcXNYpYlo2TQAT0x3bcC
-         yujyILzBlabLOZRRwsDig5/kX2aV/ivVW/h00aedB6cNghw+WbH7VBBJnUr094Or/qTp
-         Zb9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4XMjwR+ZVeD0USbUtiJHh3TkUmGAdp/KlppcqPAVl1E=;
-        b=Uw9qqC9hZut9D5lQn/XjVlX4FfyaSMl8+Y+QxpiOXVYBYp+2hrfSc3PA4Bk+dCtA95
-         LSdnfS4WwAQJzwuP0v38y7YgVqD3NXIHDZq24sdWsORQwlozhoM7pEbuwURyucAsxp1f
-         pH0Xcq1+b/N4In7duI2Nemz32amsmNSqQ9x8N6DCc7eozSVurbW3t+HlJ1gdQeQnoo7C
-         p9OEradu35r2lI+r5GJ9EtxXIIDB0dXzF3OCEgt5W8zwuqpCFGDIR9cbJFNckUl+8jo5
-         u6+9jGw592bxc2ExzX8YWYo4ragGUItfMTpAH3wydOcZ1jt19VlPxsoLSjEFB1W1z7x8
-         DiUw==
-X-Gm-Message-State: ACgBeo0QO2TYcmIjMbrjDbs8OSTq/eyr0OfcParLD4Dp8E4kKWzHsx/0
-        0bNO5rBu7EnLQnR83CbTgew=
-X-Google-Smtp-Source: AA6agR7+yVTqO60RqNzHeqffx6oFD+WICAw4ojvnQWZqe1a8W6jSo+QmECUJX5sc0vEmcnl0zde9oQ==
-X-Received: by 2002:a05:651c:b26:b0:267:18e2:2024 with SMTP id b38-20020a05651c0b2600b0026718e22024mr3764904ljr.409.1662709413556;
-        Fri, 09 Sep 2022 00:43:33 -0700 (PDT)
-Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
-        by smtp.gmail.com with ESMTPSA id q30-20020ac2511e000000b004979ec19387sm153247lfb.305.2022.09.09.00.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 00:43:32 -0700 (PDT)
-Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
-        by home.paul.comp (8.15.2/8.15.2/Debian-22) with ESMTP id 2897hT0H020245;
-        Fri, 9 Sep 2022 10:43:30 +0300
-Received: (from paul@localhost)
-        by home.paul.comp (8.15.2/8.15.2/Submit) id 2897hRPB020244;
-        Fri, 9 Sep 2022 10:43:27 +0300
-Date:   Fri, 9 Sep 2022 10:43:27 +0300
-From:   Paul Fertser <fercerpav@gmail.com>
-To:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/ncsi: Add Intel OS2BMC OEM command
-Message-ID: <Yxrun9LRcFv2QntR@home.paul.comp>
-References: <20220909025716.2610386-1-jiaqing.zhao@linux.intel.com>
- <YxrWPfErV7tKRjyQ@home.paul.comp>
- <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com>
+        Fri, 9 Sep 2022 03:51:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24BA12D182;
+        Fri,  9 Sep 2022 00:46:29 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 479E36601F9B;
+        Fri,  9 Sep 2022 08:46:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662709587;
+        bh=btuOYk8Yksu/mrbm/ksppF4pLolIdwf7c7FNNubU8tY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ER9D9KgU4DiM/CrXc531i54AIBoZ+wfDxtiZMsWtHmFOLLB9UxakfunXndj3dEMjz
+         f9x5HT7A7lt+2PtIGlOjL7gB/802NDc2XpMUKuhnBLYpMMttOkGycGC4SumkCVwf7r
+         IjzEZlpiy9BAYOaf2Qqi8RNyY3PG43Z707ctgTsDDTSgEPrFdmaybQk/dgDhZ4e6er
+         Y4BjND23ymZ3IXthUfcIUQmrv4x+a8havLKYYPsHz1pycRqpbrmpa+4f4MWmgg7+KF
+         bUQuS4jP9uIldU3LhB7Lu4RdOgbYEFNjgt4ppmxMWl2g3mZO7rtvE+I0kI85Rnjy9m
+         fEQKZKqYdaAfw==
+Message-ID: <a8474650-3083-837e-9f0d-590b025978b5@collabora.com>
+Date:   Fri, 9 Sep 2022 09:46:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 2/3] arm64: dts: mediatek: asurada: Add display backlight
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220908171153.670762-1-nfraprado@collabora.com>
+ <20220908171153.670762-3-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220908171153.670762-3-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Il 08/09/22 19:11, Nícolas F. R. A. Prado ha scritto:
+> Add the display backlight for the Asurada platform. It relies on the
+> display PWM controller, so also enable and configure this component.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-On Fri, Sep 09, 2022 at 03:34:53PM +0800, Jiaqing Zhao wrote:
-> > Can you please outline some particular use cases for this feature?
-> > 
-> It enables access between host and BMC when BMC shares the network connection
-> with host using NCSI, like accessing BMC via HTTP or SSH from host. 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Why having a compile time kernel option here more appropriate than
-just running something like "/usr/bin/ncsi-netlink --package 0
---channel 0 --index 3 --oem-payload 00000157200001" (this example uses
-another OEM command) on BMC userspace startup?
 
--- 
-Be free, use free (http://www.gnu.org/philosophy/free-sw.html) software!
-mailto:fercerpav@gmail.com
