@@ -2,136 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA6D5B39AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EE65B3997
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiIINrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S231683AbiIINrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbiIINqp (ORCPT
+        with ESMTP id S231667AbiIINqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:46:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849912E1AF;
-        Fri,  9 Sep 2022 06:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662731194; x=1694267194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tV01OCiZqy6nXlyR7eAfCljasS50nB/vF+IgCufZZUE=;
-  b=maIfq4KDFkhkLOgbNbQ20ZzVuqE/nJllh6ru6GJ5a2LTFLErxWJpDIyy
-   6BxShoSvqnIc3g/PkSbEXVkDfLaFRxGAL4pMDSYsPZ4+z1f3PmyK42p7a
-   mK8hqzDNKeGGpPI0sBx5pfbOoA9z5vNT98orN2zlK3YWKWFgjCHS4puSn
-   3vMo71QRQxMU18YJlP757iZXRTDquCFCgawbC7ZHnQm/2pNUtQH7uG8LI
-   wXgeFmbUIra9Y8J79vrObfOJW9WIhAtNCbF5Kx9NKK9DIzgX4OpTxVmHx
-   8cQYQoP5L48JO1Ka4BtNzKfMWYdHM2u91PrO8Giv+jTVqraXRVTJC5LCj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="383769238"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="383769238"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:45:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="566371087"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:45:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWeKA-00Aa6F-0b;
-        Fri, 09 Sep 2022 16:45:38 +0300
-Date:   Fri, 9 Sep 2022 16:45:37 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] gpiolib: un-inline gpiod_request_user()
-Message-ID: <YxtDgUbdJnP3RHf7@smile.fi.intel.com>
-References: <20220909121329.42004-1-brgl@bgdev.pl>
- <20220909121329.42004-2-brgl@bgdev.pl>
+        Fri, 9 Sep 2022 09:46:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899A2142D80;
+        Fri,  9 Sep 2022 06:46:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9654B8234C;
+        Fri,  9 Sep 2022 13:46:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6C1C433D7;
+        Fri,  9 Sep 2022 13:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662731163;
+        bh=trwxe4IAvNyEME56RQVerBqHxD5EQM85KO+x9pEr+BE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UbvrhDDm6UwismMwQg8S08Z6FLJv+446HAmX9WTTCLq9kcBjjT0BkFp5fm/FZ6EE6
+         L/HzrOfoutOjiQ4HKFvWKWvaAMhkB/uEsREn1Ph21qlMb6XyccexqskGQ3YG5/yGId
+         UeX1BrddAILgMBPEBnWgdfM22bGcdVuicmzodMyJgfsw1pF5WDhm+fXJAlPPLqSRc3
+         OEfcNi8sD640juil+rCcWkXea7v1AkpLPDn6PeGauphyu3xvq04Op+rWRT/9PDf4PL
+         o1PKlGdEzCjWixgTZHshwyexCRwzC0cxdty9GfR8Nqi7mhLp+UJkW3zVvhRwXR1PO+
+         8Vdndh2TpOTSw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8F07B404A1; Fri,  9 Sep 2022 10:46:00 -0300 (-03)
+Date:   Fri, 9 Sep 2022 10:46:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, atrajeev@linux.vnet.ibm.com,
+        eranian@google.com
+Subject: Re: [PATCH 2/2] perf tools: remove perf_pmu_lex declaration
+Message-ID: <YxtDmJWVx05Pmwwl@kernel.org>
+References: <20220909044542.1087870-1-cuigaosheng1@huawei.com>
+ <20220909044542.1087870-3-cuigaosheng1@huawei.com>
+ <50fba997-d8c1-257b-fd11-db2bb1e53f70@arm.com>
+ <YxtDGLZwi2Cu2U+p@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909121329.42004-2-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxtDGLZwi2Cu2U+p@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 02:13:28PM +0200, Bartosz Golaszewski wrote:
-> Pull this bit of code into gpiolib.c as we're soon be calling certain
-> symbols static in this compilation unit.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  drivers/gpio/gpiolib.c | 11 +++++++++++
->  drivers/gpio/gpiolib.h | 12 +-----------
->  2 files changed, 12 insertions(+), 11 deletions(-)
+Em Fri, Sep 09, 2022 at 10:43:52AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Sep 09, 2022 at 11:29:43AM +0100, James Clark escreveu:
+> > 
+> > 
+> > On 09/09/2022 05:45, Gaosheng Cui wrote:
+> > > perf_pmu_lex has been removed since
+> > > commit 65f3e56e0c81 ("perf tools: Remove auto-generated bison/flex files"),
+> > > so remove it.
+> > 
+> > Not 100% sure if that is the right commit to reference because it didn't
+> > touch pmu.y.
 > 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index cc9c0a12259e..6768734b9e15 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -2009,6 +2009,17 @@ int gpiod_request(struct gpio_desc *desc, const char *label)
->  	return ret;
->  }
+> Yeah, indeed, unsure if at that time the declaration was needed.
 >  
-> +int gpiod_request_user(struct gpio_desc *desc, const char *label)
-> +{
-> +	int ret;
-> +
-> +	ret = gpiod_request(desc, label);
-> +	if (ret == -EPROBE_DEFER)
-> +		ret = -ENODEV;
-> +
-> +	return ret;
-> +}
-> +
->  static bool gpiod_free_commit(struct gpio_desc *desc)
->  {
->  	bool			ret = false;
-> diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-> index d900ecdbac46..b35deb08a7f5 100644
-> --- a/drivers/gpio/gpiolib.h
-> +++ b/drivers/gpio/gpiolib.h
-> @@ -179,19 +179,9 @@ struct gpio_desc {
->  #define gpiod_not_found(desc)		(IS_ERR(desc) && PTR_ERR(desc) == -ENOENT)
->  
->  int gpiod_request(struct gpio_desc *desc, const char *label);
-> +int gpiod_request_user(struct gpio_desc *desc, const char *label);
->  void gpiod_free(struct gpio_desc *desc);
->  
-> -static inline int gpiod_request_user(struct gpio_desc *desc, const char *label)
-> -{
-> -	int ret;
-> -
-> -	ret = gpiod_request(desc, label);
-> -	if (ret == -EPROBE_DEFER)
-> -		ret = -ENODEV;
-> -
-> -	return ret;
-> -}
-> -
->  int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
->  		unsigned long lflags, enum gpiod_flags dflags);
->  int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
-> -- 
-> 2.34.1
+> > perf_pmu_lex is still used and there are plenty of references to it, but
+> > maybe the extern declaration isn't needed anymore because it still
+> > builds for me with this change.
 > 
+> Ditto here, I'll remove the reference and rewrite the cset log a bit.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I left it as:
 
+perf pmu: Remove perf_pmu_lex() needless declaration
 
+It builds without it, perhaps with some older combination of flex/bison
+we needed this, clean it up a bit removing this.
