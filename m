@@ -2,143 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603225B3A64
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484DB5B3A67
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbiIIOD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S232259AbiIIOEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiIIODC (ORCPT
+        with ESMTP id S230270AbiIIOEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:03:02 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B4A1451C6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:01:17 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id B0EA22B0591B;
-        Fri,  9 Sep 2022 10:01:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 09 Sep 2022 10:01:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1662732069; x=1662739269; bh=m8uWKdPqim
-        TWOzbuWW9LjUIAMA5qm4azX49SLBOts+k=; b=YnzdqFanu76LTppWsnIK8yLtaw
-        lPA9imn+DZMPpvmB+I+7lJ6Jtp5+Hpp/Tok4Syo0TZ+GIWgrmrIbPdzEP4csf+60
-        UpEKybV/LKbOlJdebq8NtpHOX+q7UOoX+sClEWg/wr6povq2rrWI+ugq/sOCi5sZ
-        xXq4KnkJMjk8hfkCCos2ghiXoM12HoF0kloEOtYmIVJ6ltnGXUKNF564vpDCPNZ8
-        s3ORSfM8MEpwoQU39DDpbNTFwB5Y6PTP2jBZlZSeNbsxTCVjtqfLM5MdZpTnhTm0
-        1aNFaQE+vAnk+ZlPCXOLfH3n3kaTBYCY1K1ZgQJMdDQ0emXorULHJv6IpDTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662732069; x=1662739269; bh=m8uWKdPqimTWOzbuWW9LjUIAMA5q
-        m4azX49SLBOts+k=; b=UytRIGBeAIK3cYsdpEIIrN8FMBS+DdyAfw8Linj+rJgL
-        g9vqVDLzMqf7z+Zq8GuX6nB76z8BX3FKfH+w0cZYcxf5Vz1m0pmqpzc3QIz1lW3i
-        +qcJUgH8UYU/JZkQyJ+J0ILb8T/3YoB894efCxXtrvJD63y7GfgcmlpZQaGweQGA
-        3eQ73GeIApaHjQjnZeXMJ6l+v13ZgTzTWY7kfviqp+zfyuG5zITuOFrJ7DO7a31p
-        LGTFP167QAdPLgsgxgQNe88zlb9eOnmg96qLVG2u074AnI7rabwwsuOPnUoohp3d
-        BjaoBlxQzhdosblojNXzRuwyvhSKAM638mnzlx7/7w==
-X-ME-Sender: <xms:HUcbY1qT4kf-mTq2fLzQRaYzl9AUayFOIl0kpRAPDPE4ezb1dL-L8w>
-    <xme:HUcbY3q1yVbTY68aHnr8xWgLWQ2NifWxNpAv2F6FOlAMWgmXE5VamBILHxPMGXevN
-    _IGnIPLwdFJ29d9c7o>
-X-ME-Received: <xmr:HUcbYyM5xjzmO3e3dtMoonVbYC1ch27-ZEspCcDtsSMffAErxYBzJgCFtjCs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:HkcbYw4y40JUDqNYJ2TTJTgsJ4f-o9o3EZPSRODX5u_vtjccrEFEtg>
-    <xmx:HkcbY06o4B69hhN80GOqN_IEEzN6bZfUaP6ctsZrDz9l9eV09pSOOw>
-    <xmx:HkcbY4hZrEnQSH_qfGbJ9HkdECI_If740JoappUZ-WA_oiQJHLK6Cg>
-    <xmx:JUcbY07qgZzJA_p9otXIwoarGt3HNeaPn6bgdqRlPR-XGkX3B4ktoodc5Z8>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Sep 2022 10:01:01 -0400 (EDT)
-Date:   Fri, 9 Sep 2022 16:00:59 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
- display modes
-Message-ID: <20220909140059.g57oihcmhuym62ei@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
- <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
- <20220905133755.gcmmntg3wnecyqjq@houat>
- <10ce686a-d7c8-9ce4-3979-735ad8eab3b5@gmail.com>
- <20220907143421.4iopqwhp3yfircsh@houat>
- <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
+        Fri, 9 Sep 2022 10:04:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69814A521
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662732103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mmurUuPfY4CSsGXMopu3kXzx5e5l7+stCxGfg5MZbeg=;
+        b=bzbd2Sai6nJgzReUHUuhYG7WQDJNb6C8umqTUePfXTNBqjq3hMGuPQ3sVreMym4DfMnG4Z
+        wKybVVzkuk7E61Z7rHMuN6omJkVn1ufYzHwtor8iBjJKDHXBwDeCW78GMHM5I4G8kNsKvP
+        Vqot/c1vIwhta5rxk+rq47+2HDoRFGQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-348-s9HLbSFzOvOQxha8j3NwKw-1; Fri, 09 Sep 2022 10:01:41 -0400
+X-MC-Unique: s9HLbSFzOvOQxha8j3NwKw-1
+Received: by mail-ed1-f72.google.com with SMTP id s17-20020a056402521100b004511c8d59e3so888600edd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:01:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=mmurUuPfY4CSsGXMopu3kXzx5e5l7+stCxGfg5MZbeg=;
+        b=FBsueWKMqxZOB2PF70fLNIksw0hBZIuwGQQd08iV3GW14YL4H+w0OMEXKiRyk6B5TK
+         FdIroKX22qvWQc51cn1Jga8KYI/Z1yVXcYYbIK1qMeGumziB/p0TXXO0B9C6RDk8EqsP
+         qdBEd04zIr15fg3LOVUcSCaZmZRLi4zI/HGpWDfLUgz6zxRR9mOkKqtv/eLyoQK4vNqz
+         1RCJ4EAYPrgPekDkv2MC0hTLkAadzDrpC3fAC6ZjnOcprLBwFxbvRzeKmcVUK1Txwktf
+         AZVeGveROiMoiZh7n26UDyef+RJDTK+yEZqZujVrCcKVv6zxULaVOGwIW2EgmF4zrDza
+         6L5g==
+X-Gm-Message-State: ACgBeo1txVe1SnuRGIUpoEzaxzmBkf2OywWSKowZ9nN+MaO8HTIQ735L
+        SCLVPuZKXU7L6sIN+gIZECIl3QR0mZmJnGdVRaD99wFfw6RmmhcTQkXFwCf9cwrXftPr8WQfC6p
+        XCYPlJR8GPRL9SaXoV6QNVnQ8
+X-Received: by 2002:a17:906:846b:b0:770:82e5:1519 with SMTP id hx11-20020a170906846b00b0077082e51519mr9690588ejc.221.1662732100551;
+        Fri, 09 Sep 2022 07:01:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5cRBPXdEZPFZlONtBxXbkVKluQAB+eqr/N7QwxhdMBwFCwN/QJRPkdLZUifQ+2NbWPIwNn1Q==
+X-Received: by 2002:a17:906:846b:b0:770:82e5:1519 with SMTP id hx11-20020a170906846b00b0077082e51519mr9690572ejc.221.1662732100345;
+        Fri, 09 Sep 2022 07:01:40 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f4-20020a17090631c400b0073d6093ac93sm353806ejf.16.2022.09.09.07.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 07:01:39 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     eahariha@linux.microsoft.com
+Cc:     Deepak Rawat <drawat.floss@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Helge Deller <deller@gmx.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Easwar Hariharan <easwar.hariharan@microsoft.com>,
+        Colin Ian King <colin.i.king@googlemail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "open list:DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE" 
+        <linux-hyperv@vger.kernel.org>,
+        "open list:DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE" 
+        <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH 2/3] pci_ids: Add Microsoft PCI Vendor ID, and remove
+ redundant definitions
+In-Reply-To: <1662674757-31945-2-git-send-email-eahariha@linux.microsoft.com>
+References: <1662674757-31945-1-git-send-email-eahariha@linux.microsoft.com>
+ <1662674757-31945-2-git-send-email-eahariha@linux.microsoft.com>
+Date:   Fri, 09 Sep 2022 16:01:37 +0200
+Message-ID: <87leqsr6im.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kc2bu6zgime3t2ko"
-Content-Disposition: inline
-In-Reply-To: <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+eahariha@linux.microsoft.com writes:
 
---kc2bu6zgime3t2ko
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: Easwar Hariharan <easwar.hariharan@microsoft.com>
+>
+> Move the Microsoft PCI Vendor ID from the various drivers to the pci_ids
+> file
+>
+> Signed-off-by: Easwar Hariharan <easwar.hariharan@microsoft.com>
+> ---
+>  drivers/gpu/drm/hyperv/hyperv_drm_drv.c         | 1 -
+>  drivers/net/ethernet/microsoft/mana/gdma_main.c | 4 ----
+>  drivers/video/fbdev/hyperv_fb.c                 | 3 ---
+>  include/linux/pci_ids.h                         | 2 ++
+>  4 files changed, 2 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> index 6d11e79..61083c7 100644
+> --- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> @@ -23,7 +23,6 @@
+>  #define DRIVER_MAJOR 1
+>  #define DRIVER_MINOR 0
+>  
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+>  #define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
+>  
+>  DEFINE_DRM_GEM_FOPS(hv_fops);
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 5f92401..00d8198 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -1465,10 +1465,6 @@ static void mana_gd_shutdown(struct pci_dev *pdev)
+>  	pci_disable_device(pdev);
+>  }
+>  
+> -#ifndef PCI_VENDOR_ID_MICROSOFT
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+> -#endif
+> -
+>  static const struct pci_device_id mana_id_table[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_PF_DEVICE_ID) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_VF_DEVICE_ID) },
+> diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
+> index 886c564..a502c80 100644
+> --- a/drivers/video/fbdev/hyperv_fb.c
+> +++ b/drivers/video/fbdev/hyperv_fb.c
+> @@ -58,7 +58,6 @@
+>  
+>  #include <linux/hyperv.h>
+>  
+> -
+>  /* Hyper-V Synthetic Video Protocol definitions and structures */
+>  #define MAX_VMBUS_PKT_SIZE 0x4000
+>  
+> @@ -74,10 +73,8 @@
+>  #define SYNTHVID_DEPTH_WIN8 32
+>  #define SYNTHVID_FB_SIZE_WIN8 (8 * 1024 * 1024)
+>  
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+>  #define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
+>  
+> -
+>  enum pipe_msg_type {
+>  	PIPE_MSG_INVALID,
+>  	PIPE_MSG_DATA,
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 6feade6..c008fda 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -2079,6 +2079,8 @@
+>  #define PCI_DEVICE_ID_ICE_1712		0x1712
+>  #define PCI_DEVICE_ID_VT1724		0x1724
+>  
+> +#define PCI_VENDOR_ID_MICROSOFT  	0x1414
+> +
+>  #define PCI_VENDOR_ID_OXSEMI		0x1415
+>  #define PCI_DEVICE_ID_OXSEMI_12PCI840	0x8403
+>  #define PCI_DEVICE_ID_OXSEMI_PCIe840		0xC000
 
-On Wed, Sep 07, 2022 at 11:31:21PM +0200, Mateusz Kwiatkowski wrote:
-> The "canonical" modelines (at least for vc4's VEC, see the notes below):
->=20
-> - (vfp=3D=3D4, vsync=3D=3D6, vbp=3D=3D39) for 576i
-> - (vfp=3D=3D7, vsync=3D=3D6, vbp=3D=3D32) for 480i
-> - (vfp=3D=3D5, vsync=3D=3D6, vbp=3D=3D28) for 486i (full frame NTSC as or=
-iginally specified)
+I've sent a similar patch recently:
+https://lore.kernel.org/linux-hyperv/20220827130345.1320254-2-vkuznets@redhat.com/
 
-It's not clear to me either how you come up with those timings?
+which Wei has already queued to hyperv/fixes. Moving
+PCI_DEVICE_ID_MICROSOFT_MANA_PF/VF definitions to 'pci_ids.h' does make
+sense but please rebase first.
 
-Maxime
+-- 
+Vitaly
 
---kc2bu6zgime3t2ko
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxtHGwAKCRDj7w1vZxhR
-xYMtAQC2BqS997PQeLRZyCLXvTlUXGBvB07pmDNLHPWzQICluwD9FWnB9aaQ3tLC
-/OsNpUuYwh9XQJfUVrt4RcFvukTzXgc=
-=jc5S
------END PGP SIGNATURE-----
-
---kc2bu6zgime3t2ko--
