@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47C85B34D0
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3395B34CE
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiIIKHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
+        id S230115AbiIIKIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiIIKHp (ORCPT
+        with ESMTP id S230021AbiIIKH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:07:45 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF2B13866B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:07:43 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id r18so2800115eja.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 03:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=d0rkg1Wut40eiym1yldjAgKe+UB9rsjZIgZDS1zS8Og=;
-        b=TPjJ6gb6kEtf88JMwg1KzNxfCwiR8/s2cVlZ271QMlPhrKPmINFT3USrixhDu6YCoI
-         2/StKZnkBqo7nt6pFPqO/Th75YmDp/wiEsmJQob5nSs2VrEmh/OjvJVaT0sbHevghCPL
-         yNilw3cUqRwzY44SQOD0mlwD/vUVLtwM9XLxPmRVqyhPlH9ehw1q/lB9cZ3lY/yHK1+F
-         c3L3aOqGRgGjPzfYuHETnoyptz0XwcsjfnUqKmDSmFjpaZNUefVf1sJkt/ImjBEwTfMs
-         me/1QJqYJX9U4XnjwsSmhvy3yl9X4v2ijghlsLFcQwX27nfZw2++MztTZhSYcMvLa7/h
-         Bk1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=d0rkg1Wut40eiym1yldjAgKe+UB9rsjZIgZDS1zS8Og=;
-        b=jA5SWGwqi7377DgREtlgSs3pMvYCrOJd2071vyU67hSIPPSHrrZ8m+YtI+ULkKuMIh
-         NbeKNV+2UC6K44uyVyOq4H2ZGix2JP6T4HnbB0zrWyjKUAcOnu36p+jYRblf9QWUlhWF
-         4TnsDmGYIdwy4agPHaTfCKdH/ZXIYqqcDuTrRbn4h3tV1EctNLGtFuIQ5+tu1ki7PMxc
-         sZwCxVR0bK8yaQdSypExCW/cDKV8nxX4TgQdSLaZ0Edmq8ZMolEMnWp4m4TucsmeHvFm
-         bbxN7GPQGTG4O3WY9gHRchFgDXfBqA4FzjJYHNRgH96YmtuR0e5XGVMugUtz6ONRc9gJ
-         ULfA==
-X-Gm-Message-State: ACgBeo2QETd53Gs9W04IbNS58n6gfBLrvNARFnCFnwzx6gDgHNlm4Gc9
-        wwOayREQPQp76HDh/AKWduo=
-X-Google-Smtp-Source: AA6agR5kUAD0FvJcUodcBXnZvqfYdN7vGbvmaFWosgjKQ/z+limR4Mqb9s/UoQmlIHT4GNVI0UqAYA==
-X-Received: by 2002:a17:906:216:b0:711:f623:8bb0 with SMTP id 22-20020a170906021600b00711f6238bb0mr9533387ejd.174.1662718062233;
-        Fri, 09 Sep 2022 03:07:42 -0700 (PDT)
-Received: from localhost.localdomain ([131.155.244.90])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906210200b00715a02874acsm82283ejt.35.2022.09.09.03.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 03:07:41 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     forest@alittletooquiet.net, gregkh@linuxfoundation.org
-Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] staging: vt6655: remove unnecessary null check
-Date:   Fri,  9 Sep 2022 12:06:51 +0200
-Message-Id: <20220909100650.44609-1-namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 9 Sep 2022 06:07:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC39A13866A;
+        Fri,  9 Sep 2022 03:07:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 147581F8CC;
+        Fri,  9 Sep 2022 10:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662718071; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kaEFScBMLBkLYBcNzQihUKThBdl/zR6zylgLtwYJqtA=;
+        b=ZvC6OllSfSNUYzGZ7dmWufc5DaNSZzNNx3PbFNtRGnDLfEedrjTIfqydQ/L79IT5CdL9sz
+        oTMZm27pTL/r6Ld85pBb7xne2lATnQPylYA6CcIfqbxWvF81dqJnXLyGie95Lv8r5FScwG
+        i+j/JvLYI0+jynRCBiXHu7SwJ2yQfps=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662718071;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kaEFScBMLBkLYBcNzQihUKThBdl/zR6zylgLtwYJqtA=;
+        b=E86DZeHLq5768SlnDe7tB4FIHmk88ys1fIoiUXKMg+U89YFQDhoLAJ9NQtaE63+/BkJKgk
+        IpLqiyD8RmEFmmBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0150513A93;
+        Fri,  9 Sep 2022 10:07:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id f/9EAHcQG2OCcAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 09 Sep 2022 10:07:50 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8CADCA0684; Fri,  9 Sep 2022 12:07:50 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 12:07:50 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.cz, tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com
+Subject: Re: [PATCH] ext4: Fix dir corruption when ext4_dx_add_entry() fails
+Message-ID: <20220909100750.nrr3gqvbwjss4yel@quack3>
+References: <20220909062736.2929221-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909062736.2929221-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove null check for priv->tx0_bufs, because it can never be null at
-this point.
+On Fri 09-09-22 14:27:36, Zhihao Cheng wrote:
+> Following process may lead to fs corruption:
+> 1. ext4_create(dir/foo)
+>  ext4_add_nondir
+>   ext4_add_entry
+>    ext4_dx_add_entry
+>      a. add_dirent_to_buf
+>       ext4_mark_inode_dirty
+>       ext4_handle_dirty_metadata   // dir inode bh is recorded into journal
+>      b. ext4_append    // dx_get_count(entries) == dx_get_limit(entries)
+>        ext4_bread(EXT4_GET_BLOCKS_CREATE)
+>         ext4_getblk
+>          ext4_map_blocks
+>           ext4_ext_map_blocks
+>             ext4_mb_new_blocks
+>              dquot_alloc_block
+>               dquot_alloc_space_nodirty
+>                inode_add_bytes    // update dir's i_blocks
+>             ext4_ext_insert_extent
+> 	     ext4_ext_dirty  // record extent bh into journal
+>               ext4_handle_dirty_metadata(bh)
+> 	      // record new block into journal
+>        inode->i_size += inode->i_sb->s_blocksize   // new size(in mem)
+>      c. ext4_handle_dirty_dx_node(bh2)
+> 	// record dir's new block(dx_node) into journal
+>      d. ext4_handle_dirty_dx_node((frame - 1)->bh)
+>      e. ext4_handle_dirty_dx_node(frame->bh)
+>      f. do_split    // ret err!
+>      g. add_dirent_to_buf
+> 	 ext4_mark_inode_dirty(dir)  // update raw_inode on disk(skipped)
+> 2. fsck -a /dev/sdb
+>  drop last block(dx_node) which beyonds dir's i_size.
+>   /dev/sdb: recovering journal
+>   /dev/sdb contains a file system with errors, check forced.
+>   /dev/sdb: Inode 12, end of extent exceeds allowed value
+> 	(logical block 128, physical block 3938, len 1)
+> 3. fsck -fn /dev/sdb
+>  dx_node->entry[i].blk > dir->i_size
+>   Pass 2: Checking directory structure
+>   Problem in HTREE directory inode 12 (/dir): bad block number 128.
+>   Clear HTree index? no
+>   Problem in HTREE directory inode 12: block #3 has invalid depth (2)
+>   Problem in HTREE directory inode 12: block #3 has bad max hash
+>   Problem in HTREE directory inode 12: block #3 not referenced
+> 
+> Just like make_indexed_dir() does, update dir inode if error occurs.
+> Fetch a reproducer in [Link].
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216466
+> CC: stable@vger.kernel.org
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/staging/vt6655/device_main.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+Thanks for the analysis and the fix! In principle it looks fine but overall
+we seem to be defering directory dirtying too much in ext4 directory
+handling code and as a result things are too fragile as you've noticed. By
+looking through fs/ext4/namei.c I've found several more places that have
+exactly the same problem as you're fixing here. I think that specifically
+for these problems with ext4_append() the best solution is to mark inode
+dirty directly inside ext4_append(). Sure it will result in more copying of
+inode data into the journal but growing directory size is not that
+performance critical operation so I think the code simplicity is worth the
+extra CPU cycles.
 
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 3397c78b975a..0d8876278953 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -586,13 +586,12 @@ static void device_free_rings(struct vnt_private *priv)
- 			  priv->opts.tx_descs[1] * sizeof(struct vnt_tx_desc),
- 			  priv->aRD0Ring, priv->pool_dma);
- 
--	if (priv->tx0_bufs)
--		dma_free_coherent(&priv->pcid->dev,
--				  priv->opts.tx_descs[0] * PKT_BUF_SZ +
--				  priv->opts.tx_descs[1] * PKT_BUF_SZ +
--				  CB_BEACON_BUF_SIZE +
--				  CB_MAX_BUF_SIZE,
--				  priv->tx0_bufs, priv->tx_bufs_dma0);
-+	dma_free_coherent(&priv->pcid->dev,
-+			  priv->opts.tx_descs[0] * PKT_BUF_SZ +
-+			  priv->opts.tx_descs[1] * PKT_BUF_SZ +
-+			  CB_BEACON_BUF_SIZE +
-+			  CB_MAX_BUF_SIZE,
-+			  priv->tx0_bufs, priv->tx_bufs_dma0);
- }
- 
- static int device_init_rd0_ring(struct vnt_private *priv)
+								Honza
+
+> ---
+>  fs/ext4/namei.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index 3a31b662f661..f04871fa4ead 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -2617,6 +2617,13 @@ static int ext4_dx_add_entry(handle_t *handle, struct ext4_filename *fname,
+>  	 */
+>  	if (restart && err == 0)
+>  		goto again;
+> +	/*
+> +	 * Even if the dx_add_entry failed, we have to properly write
+> +	 * out all the changes we did so far. Otherwise we can end up
+> +	 * with corrupted filesystem.
+> +	 */
+> +	if (err)
+> +		ext4_mark_inode_dirty(handle, dir);
+>  	return err;
+>  }
+>  
+> -- 
+> 2.31.1
+> 
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
