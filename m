@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54B35B42F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690685B4305
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiIIXQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S230077AbiIIXVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIIXQT (ORCPT
+        with ESMTP id S229610AbiIIXVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:16:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA790D291E;
-        Fri,  9 Sep 2022 16:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662765378; x=1694301378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0uN71c00HFkAIz5Dwqa2+eWE5a4KA5z0eUIK9Imqs3Q=;
-  b=bbA63zMc2cW+rs1BO1hu8T6H+1+4UHQae/ygBAbXNPQJGhM9KikFdcwK
-   ufXNr1V810ZmYNNywrhNhqTIS27HWZrbYSeH2FmmMspxHQsSxg+pqnN+m
-   /skFQLyTpjPFywbXNVxXxjWF9IElN1U4oleSbADzTYVThYk41T1anFIUC
-   +IpuwDWQHoA/SUJrb6d1AK0dA82rmj9V9plHP3eSTJSTBjYk60B9pzZnZ
-   uVgImqrfG074YRVoLqug6yN+WJbNiCL5JVbMXd5CUIV8LZsu5y81wH0VG
-   OzRIwi38jM3tlo573ASOiX84+rcyzmU/Ih0+Ep+avLpSSAH8pLHgFi5TM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277980625"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="277980625"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:16:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="648613954"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 09 Sep 2022 16:16:13 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWnEL-0001qf-0Y;
-        Fri, 09 Sep 2022 23:16:13 +0000
-Date:   Sat, 10 Sep 2022 07:15:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     luca.ceresoli@bootlin.com, alsa-devel@alsa-project.org,
-        linux-rockchip@lists.infradead.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 7/8] ASoC: codecs: Add RK3308 internal audio codec driver
-Message-ID: <202209100733.bM1xaUdC-lkp@intel.com>
-References: <20220907142124.2532620-8-luca.ceresoli@bootlin.com>
+        Fri, 9 Sep 2022 19:21:46 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761B96D9E0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:21:44 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j12so3013284pfi.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 16:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=l9PuuyJSQVeq02GdOw2R6VgeBJa3DnGqhNZZR4MkHcI=;
+        b=ks3rXN7xrG05isUQ01v3nTatFgkPeTP1wLKXZrOTl7ms5XHhnZK3vEPNTnm1Vkks/5
+         kkV+wTPG8eEtVUpJicqlIODj6x3xJt/z3XSndMtAWaT00POhatjXJ3Qxjq2ojPv8kOln
+         UYLFpaxg7uPUKBFERe5W3mlqpnZWWiRcb1l94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=l9PuuyJSQVeq02GdOw2R6VgeBJa3DnGqhNZZR4MkHcI=;
+        b=3px2Ilyii0xW8qgWB8pSPDYKb+vjphOVKmqaRKjmfwDNpvZwrUCEbzJX5zjNL494UK
+         E0uaRlLzYOd5w2EhLYCzPeZ8iFTBqmXVE9oVQ0HQX7MzLOn4LZa/G8AsTIDm1jaUkmg0
+         YwhfVMufkVcYR4YMvQUHWOJ9E6URHVOjM1eyD5E8W2wUyPHfdmMoDn6w4wPDN3B3s6ro
+         Y5dwEVsCUHaynlt8A4mcleqnitCYfu6ubhq7KVijdChjYJPhaz5nSWaDsH3BzuMHu8A+
+         MS/BfO+RTDueI3ZUhpfugP/CMbtx0dKZs/twZuSVCsYqOyF9N0AYcpksIlv6i2xeoke/
+         O78Q==
+X-Gm-Message-State: ACgBeo2YH5bWuzPaAuWdpuH53i5y5SpvcWbj9pYwyNHqwnr+jQNb/VpW
+        4Vnw0BjGHuO59dwxRjzP2UXfnw==
+X-Google-Smtp-Source: AA6agR6a9Hpze+LwaBUvlnfgOYvZ0heZqlJgYsiysfcyKl4rkV3Zbnd6kFD5neRCVlxzy49VEz12oA==
+X-Received: by 2002:a63:4907:0:b0:434:731f:c0ae with SMTP id w7-20020a634907000000b00434731fc0aemr14118564pga.405.1662765703958;
+        Fri, 09 Sep 2022 16:21:43 -0700 (PDT)
+Received: from jwerner-p920.mtv.corp.google.com ([2620:15c:202:201:809e:14a9:9f5d:18f7])
+        by smtp.gmail.com with ESMTPSA id x127-20020a626385000000b0053b2681b0e0sm299449pfb.39.2022.09.09.16.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 16:21:43 -0700 (PDT)
+From:   Julius Werner <jwerner@chromium.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Julius Werner <jwerner@chromium.org>
+Subject: [PATCH 3/4 v3] dt-bindings: memory: Add jedec,lpddr4 and jedec,lpddr5 bindings
+Date:   Fri,  9 Sep 2022 16:21:39 -0700
+Message-Id: <20220909232139.645945-1-jwerner@chromium.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907142124.2532620-8-luca.ceresoli@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,55 +68,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patch adds bindings for LPDDR4 and LPDDR5 memory analogous to the
+existing bindings for LPDDR2 and LPDDR3. For now, the new types are only
+needed for topology description, so other properties like timing
+parameters are omitted. They can be added later if needed.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Julius Werner <jwerner@chromium.org>
+---
+ .../ddr/jedec,lpddr-props.yaml                |  4 ++
+ .../memory-controllers/ddr/jedec,lpddr4.yaml  | 35 ++++++++++++++
+ .../memory-controllers/ddr/jedec,lpddr5.yaml  | 46 +++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on rockchip/for-next tiwai-sound/for-next linus/master v6.0-rc4 next-20220909]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Changelog:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/luca-ceresoli-bootlin-com/Add-support-for-the-internal-RK3308-audio-codec/20220907-222555
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: hexagon-randconfig-r033-20220907 (https://download.01.org/0day-ci/archive/20220910/202209100733.bM1xaUdC-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/786c160ad64ae5a6c5266184b12ecf2674db2fbe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review luca-ceresoli-bootlin-com/Add-support-for-the-internal-RK3308-audio-codec/20220907-222555
-        git checkout 786c160ad64ae5a6c5266184b12ecf2674db2fbe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+- v2
+  - removed minItems
+  - moved `$ref` below `maintainers`
+  - renamed example node from `lpddr4` to `lpddr`
+- v3
+  - removed manufacturer-id property from examples
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   sound/soc/codecs/rk3308_codec.c:2007:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-           int err;
-               ^
->> sound/soc/codecs/rk3308_codec.c:2104:34: warning: unused variable 'rk3308codec_of_match' [-Wunused-const-variable]
-   static const struct of_device_id rk3308codec_of_match[] = {
-                                    ^
-   2 warnings generated.
-
-
-vim +/rk3308codec_of_match +2104 sound/soc/codecs/rk3308_codec.c
-
-  2103	
-> 2104	static const struct of_device_id rk3308codec_of_match[] = {
-  2105		{ .compatible = "rockchip,rk3308-codec", },
-  2106		{},
-  2107	};
-  2108	MODULE_DEVICE_TABLE(of, rk3308codec_of_match);
-  2109	
-
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+index 4114cfa8de67f1..92ef660888f318 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+@@ -45,9 +45,13 @@ properties:
+       - 512
+       - 1024
+       - 2048
++      - 3072
+       - 4096
++      - 6144
+       - 8192
++      - 12288
+       - 16384
++      - 24576
+       - 32768
+ 
+   io-width:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+new file mode 100644
+index 00000000000000..fa9b30ee89cb81
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr4.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LPDDR4 SDRAM compliant to JEDEC JESD209-4
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++
++allOf:
++  - $ref: "jedec,lpddr-props.yaml#"
++
++properties:
++  compatible:
++    items:
++      - pattern: "^lpddr4-[0-9a-f]{2},[0-9a-f]{4}$"
++      - const: jedec,lpddr4
++
++required:
++  - compatible
++  - density
++  - io-width
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    lpddr {
++        compatible = "lpddr4-ff,0100", "jedec,lpddr4";
++        density = <8192>;
++        io-width = <16>;
++        revision-id = <1 0>;
++    };
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
+new file mode 100644
+index 00000000000000..01e11aabc5a3f9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr5.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LPDDR5 SDRAM compliant to JEDEC JESD209-5
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++
++allOf:
++  - $ref: "jedec,lpddr-props.yaml#"
++
++properties:
++  compatible:
++    items:
++      - pattern: "^lpddr5-[0-9a-f]{2},[0-9a-f]{4}$"
++      - const: jedec,lpddr5
++
++  serial-id:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      Serial IDs read from Mode Registers 47 through 54. One byte per uint32
++      cell (i.e. <MR47 MR48 MR49 MR50 MR51 MR52 MR53 MR54>).
++    maxItems: 8
++    items:
++      minimum: 0
++      maximum: 255
++
++required:
++  - compatible
++  - density
++  - io-width
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    lpddr {
++        compatible = "lpddr5-01,0200", "jedec,lpddr5";
++        density = <8192>;
++        io-width = <8>;
++        revision-id = <2 0>;
++        serial-id = <3 1 0 0 0 0 0 0>;
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.0
+
