@@ -2,144 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C055B42A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00255B42A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiIIWsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 18:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S230415AbiIIWvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 18:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiIIWsd (ORCPT
+        with ESMTP id S230526AbiIIWu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:48:33 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379AAFC676
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 15:48:32 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d18-20020a056e020c1200b002eaea8e6081so2303988ile.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 15:48:32 -0700 (PDT)
+        Fri, 9 Sep 2022 18:50:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE546E9140;
+        Fri,  9 Sep 2022 15:50:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a70so4614772edf.10;
+        Fri, 09 Sep 2022 15:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ddaea6KsAhhjAZKYACOlzIhLsiROzNYXdgJxjRQBMDQ=;
+        b=azXG4FPFPuCnzdrFw85LflyOYx47ORkl+U+Oe74JvhngCWIwqfP4TUiW/fAhgzYgXs
+         vxTEZsWDIyyCvURSsjbUBrRHBWG+CQQzWcCd1WNBBYtNia7na7l0Wd4Om8mgkNMysvuC
+         cJfSJtenXxKVw1OM8R9w3jhQ5Iw4HvB4HNST1Wl52DxVcUv+8HN7UT8NdhIWFwV5JMei
+         VEfisF/RPNh2nwjX7Roj4nbXJ5R7uEszNXhdYjgebeQK4jxExRL2GT/OP9vL6Eywu026
+         JMBwOknlTNdY78yAhIxVGeruevU/x+OBEE1pxc3cBFsI1DqxuBV8whmjIgeNSewo+j8p
+         YQTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=hZ0sk6GtJ/mTRESHsdFOvkaVVjN/Wqt7oUUKzm3DAe8=;
-        b=J3RglbNr7TGD19JOo5VAforN4y9bS0lrzUtKeyXFeftJXongvJhxzwgW1hPIIUldqM
-         A8c5KcAfpr9QTtWXRaeT37dVyU74cv7HlfUCa5T7pdxr59tr6bkJiJc9FMa+lk/5Oqpo
-         DcTeIDp912Rb2qYIqefkLTG3/j+mSN7/kNXyqCAMJ8mKoCiL0dKvoJpzOmQLbv5elAf0
-         /FEpdRBsKvTj44gxLTY3BnfVSSWfxcjUsVZfK2xVsmeDIVTYgLL77e3EWVk5RDw/u4LD
-         IFLB/Pe7A4Quo4tYpJGm07qeKtsUpXg2OC6r6osOegIRzDg+ZbXGqafG1SGRo68IwC0X
-         6zQA==
-X-Gm-Message-State: ACgBeo1cBMri5llnVp+iJgqLsjUoMNpg0VuDDdbsS6BNKSrPz1iAOJaM
-        cpkv4A9yNgsMCXFflQ3jyfJyl46L2KDWeUx3h0YjriivxsG2
-X-Google-Smtp-Source: AA6agR435MDd/F7lHyXeyHhwzx6HnFFs8kd+Q2Xn/CywCUrsZRX8aW0Ei8GaPhzGGDO9OuEWyu59RxPXGSvEv626zAt6BAU53jhd
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ddaea6KsAhhjAZKYACOlzIhLsiROzNYXdgJxjRQBMDQ=;
+        b=AhoF+E72Ve/tPLIoFk8TitRFK213nAY4Zhx4BRwoYUUbmGFMpcq7/Av8J60OAZq46y
+         +RD4YLXbB+YvxW9XOj3jMHP18mRoVLDdItbeRfVWr5gmwaJBB52/KuxR+gaN5ftzWita
+         AVbv9feFTZSlaBCh+OIbHjDbpA64J4XMv1I8YIRHNRQvd5G1CJubzf4eaaTusBQKS3v3
+         EhxXRLjneNEgkKUsMQxIDodjpPwEw3W4DJywjb0rsYbirmfkacvgQ9vCkmDbd6ZMIQeO
+         BxnURgBf5CIKGTyt1nIa7wu7aXAvvnuZM/9Xulf7mhTW7nsfTAfaai2vaEuJ3Qa5XjfD
+         +5Ig==
+X-Gm-Message-State: ACgBeo0HGxKTzvLZyuwPR1n8AtJzV40ERDwgzhFoOSj/QUEFx0+9mmA3
+        7uGTcma7bDAeM+NWRdGOk0rHfSK7dLz6a4JEJ+0=
+X-Google-Smtp-Source: AA6agR5q39d8oo+twChOzp8587yPanCFhhRs7uGCGvwJ2AhV4bPVs/7mczuWyPUIFGHU1TeV3eBCYeDCxMT5VNl9W1k=
+X-Received: by 2002:a05:6402:5192:b0:44f:2bdf:c075 with SMTP id
+ q18-20020a056402519200b0044f2bdfc075mr10580286edd.224.1662763853114; Fri, 09
+ Sep 2022 15:50:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:29c7:b0:68b:3a08:4512 with SMTP id
- z7-20020a05660229c700b0068b3a084512mr7911988ioq.199.1662763711517; Fri, 09
- Sep 2022 15:48:31 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 15:48:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005ed86405e846585a@google.com>
-Subject: [syzbot] WARNING: ODEBUG bug in htab_map_alloc
-From:   syzbot <syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
-        song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-4-void@manifault.com>
+ <CAEf4BzZkzZacR7ziFf2orNk2znNqhJhBTDGhSOtGNvB2z4moJQ@mail.gmail.com> <Yw4TzMPXL41YuZZ6@maniforge.dhcp.thefacebook.com>
+In-Reply-To: <Yw4TzMPXL41YuZZ6@maniforge.dhcp.thefacebook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 9 Sep 2022 15:50:42 -0700
+Message-ID: <CAEf4BzZFhPVicfkjyN4P6mwqmuPZzyfWiGr9wRXTGZYgTBGZbg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] bpf: Add libbpf logic for user-space ring buffer
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 30, 2022 at 6:42 AM David Vernet <void@manifault.com> wrote:
+>
+> On Wed, Aug 24, 2022 at 02:58:31PM -0700, Andrii Nakryiko wrote:
+>
+> [...]
+>
+> > > +LIBBPF_API struct user_ring_buffer *
+> > > +user_ring_buffer__new(int map_fd, const struct user_ring_buffer_opts *opts);
+> > > +LIBBPF_API void *user_ring_buffer__reserve(struct user_ring_buffer *rb,
+> > > +                                          __u32 size);
+> > > +
+> > > +LIBBPF_API void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb,
+> > > +                                                   __u32 size,
+> > > +                                                   int timeout_ms);
+> > > +LIBBPF_API void user_ring_buffer__submit(struct user_ring_buffer *rb,
+> > > +                                        void *sample);
+> > > +LIBBPF_API void user_ring_buffer__discard(struct user_ring_buffer *rb,
+> > > +                                         void *sample);
+> > > +LIBBPF_API void user_ring_buffer__free(struct user_ring_buffer *rb);
+> > > +
 
-syzbot found the following issue on:
+[...]
 
-HEAD commit:    274052a2b0ab Merge branch 'bpf-allocator'
-git tree:       bpf-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11a26bcd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=924833c12349a8c0
-dashboard link: https://syzkaller.appspot.com/bug?extid=5d1da78b375c3b5e6c2b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114109f5080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b3b56d080000
+> > > +void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb, __u32 size, int timeout_ms)
+> > > +{
+> > > +       int ms_elapsed = 0, err;
+> > > +       struct timespec start;
+> > > +
+> > > +       if (timeout_ms < 0 && timeout_ms != -1)
+> > > +               return errno = EINVAL, NULL;
+> > > +
+> > > +       if (timeout_ms != -1) {
+> > > +               err = clock_gettime(CLOCK_MONOTONIC, &start);
+> > > +               if (err)
+> > > +                       return NULL;
+> > > +       }
+> > > +
+> > > +       do {
+> > > +               int cnt, ms_remaining = timeout_ms - ms_elapsed;
+> >
+> > let's max(0, timeout_ms - ms_elapsed) to avoid negative ms_remaining
+> > in some edge timing cases
+>
+> We actually want to have a negative ms_remaining if timeout_ms is -1. -1
+> in epoll_wait() specifies an infinite timeout. If we were to round up to
+> 0, it wouldn't block at all.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/be8eff3df48b/disk-274052a2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cd3150e84ddd/vmlinux-274052a2.xz
+then I think it's better to special case timeout_ms == -1. My worry
+here as I mentioned is edge case timing where ms_elapsed is bigger
+than our remaining timeout_ms and we go into <0 and stay blocked for
+long time.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-ODEBUG: free active (active state 0) object type: percpu_counter hint: 0x0
-WARNING: CPU: 0 PID: 3624 at lib/debugobjects.c:502 debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Modules linked in:
-CPU: 0 PID: 3624 Comm: syz-executor257 Not tainted 5.19.0-syzkaller-14117-g274052a2b0ab #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 60 0c 49 8a 4c 89 ee 48 c7 c7 00 00 49 8a e8 df f1 38 05 <0f> 0b 83 05 65 86 dd 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffc90003edfa90 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff8880773cbb00 RSI: ffffffff8161f148 RDI: fffff520007dbf44
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8a4b90c0
-R13: ffffffff8a490520 R14: 0000000000000000 R15: dffffc0000000000
-FS:  00007f0136485700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200004c0 CR3: 0000000072b25000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __debug_check_no_obj_freed lib/debugobjects.c:989 [inline]
- debug_check_no_obj_freed+0x301/0x420 lib/debugobjects.c:1020
- slab_free_hook mm/slub.c:1729 [inline]
- slab_free_freelist_hook+0xeb/0x1c0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kfree+0xe2/0x580 mm/slub.c:4562
- kvfree+0x42/0x50 mm/util.c:655
- htab_map_alloc+0xc76/0x1620 kernel/bpf/hashtab.c:632
- find_and_alloc_map kernel/bpf/syscall.c:131 [inline]
- map_create kernel/bpf/syscall.c:1105 [inline]
- __sys_bpf+0xa82/0x5f80 kernel/bpf/syscall.c:4938
- __do_sys_bpf kernel/bpf/syscall.c:5060 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5058 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5058
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f01364d3919
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0136485318 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007f013655b3e8 RCX: 00007f01364d3919
-RDX: 0000000000000048 RSI: 00000000200004c0 RDI: 0000000000000000
-RBP: 00007f013655b3e0 R08: 00007f0136485700 R09: 0000000000000000
-R10: 00007f0136485700 R11: 0000000000000246 R12: 00007f013655b3ec
-R13: 00007ffee9a220af R14: 00007f0136485400 R15: 0000000000022000
- </TASK>
-irq event stamp: 19441
-hardirqs last  enabled at (19445): [<ffffffff816188e8>] __down_trylock_console_sem+0x108/0x120 kernel/printk/printk.c:247
-hardirqs last disabled at (19448): [<ffffffff816188ca>] __down_trylock_console_sem+0xea/0x120 kernel/printk/printk.c:245
-softirqs last  enabled at (19350): [<ffffffff814914c3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last  enabled at (19350): [<ffffffff814914c3>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-softirqs last disabled at (19341): [<ffffffff814914c3>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (19341): [<ffffffff814914c3>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
----[ end trace 0000000000000000 ]---
+So I think it's best to pass `timeout_ms < 0 ? -1 : ms_remaining` and
+still do max. But I haven't checked v5 yet, so if you already
+addressed this, it's fine.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+> > > +               void *sample;
+> > > +               struct timespec curr;
+> > > +
+> > > +               sample = user_ring_buffer__reserve(rb, size);
+> > > +               if (sample)
+> > > +                       return sample;
+> > > +               else if (errno != ENODATA)
+> > > +                       return NULL;
+> > > +
+> > > +               /* The kernel guarantees at least one event notification
+> > > +                * delivery whenever at least one sample is drained from the
+> > > +                * ringbuffer in an invocation to bpf_ringbuf_drain(). Other
+> > > +                * additional events may be delivered at any time, but only one
+> > > +                * event is guaranteed per bpf_ringbuf_drain() invocation,
+> > > +                * provided that a sample is drained, and the BPF program did
+> > > +                * not pass BPF_RB_NO_WAKEUP to bpf_ringbuf_drain().
+> > > +                */
+> > > +               cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, ms_remaining);
+> > > +               if (cnt < 0)
+> > > +                       return NULL;
+> > > +
+> > > +               if (timeout_ms == -1)
+> > > +                       continue;
+> > > +
+> > > +               err = clock_gettime(CLOCK_MONOTONIC, &curr);
+> > > +               if (err)
+> > > +                       return NULL;
+> > > +
+> > > +               ms_elapsed = ms_elapsed_timespec(&start, &curr);
+> > > +       } while (ms_elapsed <= timeout_ms);
+> >
+> > let's simplify all the time keeping to use nanosecond timestamps and
+> > only convert to ms when calling epoll_wait()? Then you can just have a
+> > tiny helper to convert timespec to nanosecond ts ((u64)ts.tv_sec *
+> > 1000000000 + ts.tv_nsec) and compare u64s directly. WDYT?
+>
+> Sounds like an improvement to me!
+>
+> Thanks,
+> David
