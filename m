@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75775B345F
+	by mail.lfdr.de (Postfix) with ESMTP id 458995B345D
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiIIJrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S231809AbiIIJre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiIIJrV (ORCPT
+        with ESMTP id S231903AbiIIJrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:47:21 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9216DFA6A7;
-        Fri,  9 Sep 2022 02:47:19 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id f131so1860867ybf.7;
-        Fri, 09 Sep 2022 02:47:19 -0700 (PDT)
+        Fri, 9 Sep 2022 05:47:24 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A88DFA68F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:47:22 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a8so1729710lff.13
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=jfc5PI7vUD4Aq68rXzOdTc1GotoBc8f6RchZ+GS6IIs=;
-        b=c704vzTIEE8fD/+/yEejZ7dnnrVdpFgSizdgMZGxd8hZWJzMFgmZ5EdxpBlbOUvAiV
-         UQNGbMKvyIxj4+AF6dbyQIpPlzKw+9WRX+pf6AxZusOzuIp904FHwapLxuZWjRvIjeJf
-         ptoKp+v53gvE4UhNe8CdSyRhZfVnBoFPuZk88c09lR0b7uM3YomAA+haLBE671ddHqt9
-         5O23+VDPTnCnyUQOmnbvzeqZid4M8FkuKKCt1CKRl2K3GVKhLKLAYSATr40xRAU41ihb
-         JRU2ZscubQRTTjS6NFsUdEJv8luO2yB46THkdYNHN3FqL6Tgt4ObN2jxmU0iSe6vZW//
-         4mKw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v4ZqJESqWEDqaIz6R+zp2/x1nVd3NULUMDv3pG+GOq4=;
+        b=Zh89azYzcvL1KK99kdg8dL5hwP1TOMs46RS3tyx6ccu2sNlSmxjN4FTc3DTkMpcDw1
+         z3w/rlcBV1N3iv05Bk9b8LpIthKMSeFdXXpIDWuP7ZvUP2DrZ/iHRDID03U/sBwQSVZl
+         ALr49/V3fMiF7j1mXGTS/5GK0vlWYJvkfuiAuscNfc0H6XHFbXUF76P8vvLesWHT+ACu
+         KTweSG1g16wTF5l3US5O7akQA2aCucezmMsKKchRQTD4h8m+vtVvSGm53i5YRkKb839O
+         fwqR+Ju9WrAQyZ8XFBlfn+W/WXmZhZVKkeM4bzoNddRskgWEj0MHvlbGQBGOg+jV1MoT
+         IXhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jfc5PI7vUD4Aq68rXzOdTc1GotoBc8f6RchZ+GS6IIs=;
-        b=jK5k6/D1IU1Zjm6URqDbSEvoa8L8yRV5A5AcFjdzRNBsrclVsv256A4PdteLC24IaW
-         AD7qhpUnvdNcFF++l9EZAZn+5GsS4ac9QptOGhve8ImJVmqgtPsOYD7eAQIAD/Fvc0Mb
-         F/vfd8QNtJ0e9Ji2RJ4dRNpHkeZeJoo1LVWgQKy0i20s3HFZS1mlUxKWcCdlQhPKJ/jH
-         zekdj1kuqAz6AojX8T/rZweycriT7eQQfJDi76I0QtdGaEYTsdsDQ0ekTANeeupOCf9C
-         5c9yhxwvhWcjMoRJEkFMpcrRIizxXMxxw74m1LwibUIUM6MJXcmzaGpEveLj+FtLXZI3
-         ccsQ==
-X-Gm-Message-State: ACgBeo0mij3n7Xhh1NfzQdojZ9BIVFcqQ9ri8IJFM6Uk7LyNJXUF3yIO
-        8E0cbUHqLfquOSr9j24++dV35fPkp8zV+IVyds0=
-X-Google-Smtp-Source: AA6agR5iecDvFUTm3i7dnv6+ipXhF18SNJAuAN5Vk4ZI4UmY6mu5QedSKsbgiHyH5fdvRxxAyuv6TJXapYjUleCR1Vk=
-X-Received: by 2002:a25:d791:0:b0:6ae:2ee3:710e with SMTP id
- o139-20020a25d791000000b006ae2ee3710emr6161116ybg.389.1662716838695; Fri, 09
- Sep 2022 02:47:18 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v4ZqJESqWEDqaIz6R+zp2/x1nVd3NULUMDv3pG+GOq4=;
+        b=WlW+UcyA+wOGv/qLO8PQ+IElQi5MJZcQXJg8X6oh2DyAwDIaNn/l3dlLKJaT32rCtp
+         cz96k8wL+1DuUO8o8gbULwKhrE3+LjwyWhC8oVVCqpysFVRNEy85UeT0ysMAK7rNFnCv
+         qcz4sfEUK2FB4h/RFG4Kq3cN/OAMv6CixhNFlofTLQ+hzJdph62g70er1ovplMt89x27
+         2m+jxul98oeopOezSwdJ0GKY6yxhyH0aZmDLHg3uzq7yT7spDYOPwBhYBMxwb7fJli41
+         MvbVjZJmG/1leE99EJyNoud+Y17fsGT9WnfJCeHCtabBZxTQqu5gTzlXvby3BQFxJ7aU
+         /DmQ==
+X-Gm-Message-State: ACgBeo2pxQTBX4UULT38YnG+TyWrbt/8XiH908V59AZ+c5sMHxBKqE9Y
+        PyKvaHdbE42c7TshgEs/lLpB3w==
+X-Google-Smtp-Source: AA6agR7ictm0hi0zGBTrEMlAhD5zXwZHeImTpbkkQLuEw05MdbjhA91y32yrf70t+577Wlx0JkMYLQ==
+X-Received: by 2002:a05:6512:10c1:b0:492:a27d:ff44 with SMTP id k1-20020a05651210c100b00492a27dff44mr3819219lfg.405.1662716840687;
+        Fri, 09 Sep 2022 02:47:20 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id e3-20020a05651236c300b00497a5a91763sm21221lfs.12.2022.09.09.02.47.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 02:47:20 -0700 (PDT)
+Message-ID: <e1a2c231-b524-821c-afb5-865cd88606b4@linaro.org>
+Date:   Fri, 9 Sep 2022 12:47:19 +0300
 MIME-Version: 1.0
-References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
- <20220908104337.11940-7-lukas.bulwahn@gmail.com> <ca25a32d-aadb-f0d0-9e24-70fbabc4d377@csgroup.eu>
-In-Reply-To: <ca25a32d-aadb-f0d0-9e24-70fbabc4d377@csgroup.eu>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 9 Sep 2022 11:47:07 +0200
-Message-ID: <CAKXUXMwo-X+cM9f_K=JpnjAcPr89OKCZ4JRAFMYCaTwt85UJ5Q@mail.gmail.com>
-Subject: Re: [PATCH 6/6] init/Kconfig: remove confusing config EMBEDDED
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 13/16] phy: qcom-qmp-pcie-msm8996: drop unused secondary
+ init tables
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220907110728.19092-1-johan+linaro@kernel.org>
+ <20220907110728.19092-14-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220907110728.19092-14-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >   init/Kconfig | 8 --------
-> >   1 file changed, 8 deletions(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 9e3fd79b089c..d7429e0b8cae 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1818,14 +1818,6 @@ config DEBUG_RSEQ
-> >
-> >         If unsure, say N.
-> >
-> > -config EMBEDDED
-> > -     bool "Embedded system"
-> > -     select EXPERT
-> > -     help
-> > -       This option should be enabled if compiling the kernel for
-> > -       an embedded system so certain expert options are available
-> > -       for configuration.
-> > -
-> >   config HAVE_PERF_EVENTS
-> >       bool
-> >       help
->
-> That's fine, but what happens to existing defconfigs then ?
->
-> $ git grep -w CONFIG_EMBEDDED arch/powerpc/
-> arch/powerpc/configs/40x/klondike_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/44x/fsp2_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/52xx/tqm5200_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/mgcoge_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/microwatt_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/ps3_defconfig:CONFIG_EMBEDDED=y
->
-> They need to get converted to selecting CONFIG_EXPERT instead.
->
-> And that needs to be done before you remove CONFIG_EMBEDDED.
->
+On 07/09/2022 14:07, Johan Hovold wrote:
+> Drop the secondary register initialisation tables which aren't used by
+> this driver.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  | 26 -------------------
+>   1 file changed, 26 deletions(-)
 
-Agree. Let us get the first five patches included. Then adjust the
-configs for all architectures and then delete the CONFIG_EMBEDDED.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Lukas
+
+-- 
+With best wishes
+Dmitry
+
