@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DAE5B31B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F655B31BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiIIIaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S229674AbiIIIag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiIIIaU (ORCPT
+        with ESMTP id S230309AbiIIIad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:30:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF03D99DE;
-        Fri,  9 Sep 2022 01:30:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A2DB61F11;
-        Fri,  9 Sep 2022 08:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF8AC433D7;
-        Fri,  9 Sep 2022 08:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662712217;
-        bh=QYV3AcvV07yDjEzSbdbsIiWRINYDtPK3crfCXheJR7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C80BlFY6oDU8kaqApH5MbPeVzf7QLXJooo/1lTNZY4XdqgxGygh5gND9mo2L9I8mz
-         rOXZoX45CUeI0ZorAicDj2qROzvz0XpLTquP59YkIHZlZqyrGFRJkm/Ma+YQEQkG72
-         ApKHzK7kia58rU5nJStl3zte8rsq5HKATTpFUusM=
-Date:   Fri, 9 Sep 2022 10:30:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kai Ye <yekai13@huawei.com>
-Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangzhou1@hisilicon.com,
-        liulongfang@huawei.com
-Subject: Re: [PATCH v8 1/3] uacce: supports device isolation feature
-Message-ID: <Yxr5lvnbYGk7SCy7@kroah.com>
-References: <20220902031304.37516-1-yekai13@huawei.com>
- <20220902031304.37516-2-yekai13@huawei.com>
+        Fri, 9 Sep 2022 04:30:33 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B83CD474B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:30:31 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id t3so1139457ply.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Ou6wa1PVBMpfkqq+3IOtn1cL4mqN7hg0CTIQr6+JHrE=;
+        b=k29S8AxGMHFWQb8aV9I9jiOP+bcF2zGv0IToTdNBof3ybIaNO4T6jnm1tS6/8PRK5h
+         3d/fYkpeUDTrLk8Ce9Pq4l80ZF7UWQlvgqCy1KGM7ZC2+o5myGT6mfr6UnHP+3Dqp9aA
+         JUz/khEdoZI7lF6+uXIfRouWlO4OLPMQC8HPk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ou6wa1PVBMpfkqq+3IOtn1cL4mqN7hg0CTIQr6+JHrE=;
+        b=HAsQa0eX1dl55EG8FXtlsdDkk7y0jZDwyfN9P27O9aT3s8f0FlIEuOSxJOLxYns3RE
+         XkFJ4n7g6Z4oyS5NCIbANzYqhPWlKkepXAS7BTyYH25Rmw8F5oX/MT7iX9QbL7O1iCiF
+         JG7XYUSOKj1xPTTT5q499BwEhdQheBgSHWSIhMxv9qH8Khp9eg0XkubOiJAzcQV/JLeS
+         kPitA8VN+I8sXCgMrrZUTrur5/2ZldiY2JfRygHteXZu/m6uxprnuyE9ElvuWaw5ohyv
+         8teKdipeMy2iaOkAGFS+JfpSdfraM+kU+QQvqD/E9mLeGEK5HufLFMzk0rvSxTmvYeMR
+         47bQ==
+X-Gm-Message-State: ACgBeo3VKUAGIYSHcduGkt3GnyCu2/scJ7t46mh1qnSshKxKg+JHUrmx
+        gXkAbYyOF8siL8L5XKpfEmyxSQ==
+X-Google-Smtp-Source: AA6agR4REQKERpKP0UCk9dLv0Tcg8I1xeCZhKyCdHUjFT3qh8cSkvjXT/9g5ibSPuPgdd7nAKJ1YNQ==
+X-Received: by 2002:a17:902:d58a:b0:177:f86c:4456 with SMTP id k10-20020a170902d58a00b00177f86c4456mr5545162plh.171.1662712230384;
+        Fri, 09 Sep 2022 01:30:30 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:48ca:975b:3395:bf])
+        by smtp.gmail.com with ESMTPSA id e125-20020a621e83000000b0052dbad1ea2esm1054354pfe.6.2022.09.09.01.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 01:30:29 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 17:30:24 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Brian Geffon <bgeffon@google.com>, Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org
+Subject: Re: [RESEND RFC] zram: Allow rw_page when page isn't written back.
+Message-ID: <Yxr5oNaCwjn8cdFF@google.com>
+References: <20220908125037.1119114-1-bgeffon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902031304.37516-2-yekai13@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220908125037.1119114-1-bgeffon@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,119 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:13:02AM +0000, Kai Ye wrote:
-> UACCE adds the hardware error isolation API. Users can configure
-> the isolation frequency by this sysfs node. UACCE reports the device
-> isolate state to the user space. If the AER error frequency exceeds
-> the value of setting for a certain period of time, the device will be
-> isolated.
-> 
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
-> ---
->  drivers/misc/uacce/uacce.c | 58 ++++++++++++++++++++++++++++++++++++++
->  include/linux/uacce.h      | 11 ++++++++
->  2 files changed, 69 insertions(+)
-> 
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index 281c54003edc..41f454c89cd1 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -7,6 +7,8 @@
->  #include <linux/slab.h>
->  #include <linux/uacce.h>
+On (22/09/08 08:50), Brian Geffon wrote:
+[..]
+> +++ b/drivers/block/zram/zram_drv.h
+> @@ -50,6 +50,7 @@ enum zram_pageflags {
+>  	ZRAM_UNDER_WB,	/* page is under writeback */
+>  	ZRAM_HUGE,	/* Incompressible page */
+>  	ZRAM_IDLE,	/* not accessed page since last idle marking */
+> +	ZRAM_NO_WB,	/* Do not allow page to be written back */
 >  
-> +#define MAX_ERR_ISOLATE_COUNT		65535
-
-What units is this in?  Shouldn't this be in a .h file somewhere as it
-is a limit you impose on a driver implementing this API.
-
-> +
->  static struct class *uacce_class;
->  static dev_t uacce_devt;
->  static DEFINE_MUTEX(uacce_mutex);
-> @@ -339,12 +341,57 @@ static ssize_t region_dus_size_show(struct device *dev,
->  		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
->  }
->  
-> +static ssize_t isolate_show(struct device *dev,
-> +			    struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +
-> +	if (!uacce->ops->get_isolate_state)
-> +		return -ENODEV;
-> +
-> +	return sysfs_emit(buf, "%d\n", uacce->ops->get_isolate_state(uacce));
-> +}
-> +
-> +static ssize_t isolate_strategy_show(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +	u32 val;
-> +
-> +	val = uacce->ops->isolate_strategy_read(uacce);
-> +	if (val > MAX_ERR_ISOLATE_COUNT)
-> +		return -EINVAL;
-
-How can a driver return a higher number here?
-
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t isolate_strategy_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf, size_t count)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 0, &val) < 0)
-> +		return -EINVAL;
-> +
-> +	if (val > MAX_ERR_ISOLATE_COUNT)
-> +		return -EINVAL;
-> +
-> +	ret = uacce->ops->isolate_strategy_write(uacce, val);
-> +
-> +	return ret ? ret : count;
-
-Please write out if statements.
-
-> +}
-> +
->  static DEVICE_ATTR_RO(api);
->  static DEVICE_ATTR_RO(flags);
->  static DEVICE_ATTR_RO(available_instances);
->  static DEVICE_ATTR_RO(algorithms);
->  static DEVICE_ATTR_RO(region_mmio_size);
->  static DEVICE_ATTR_RO(region_dus_size);
-> +static DEVICE_ATTR_RO(isolate);
-> +static DEVICE_ATTR_RW(isolate_strategy);
->  
->  static struct attribute *uacce_dev_attrs[] = {
->  	&dev_attr_api.attr,
-> @@ -353,6 +400,8 @@ static struct attribute *uacce_dev_attrs[] = {
->  	&dev_attr_algorithms.attr,
->  	&dev_attr_region_mmio_size.attr,
->  	&dev_attr_region_dus_size.attr,
-> +	&dev_attr_isolate.attr,
-> +	&dev_attr_isolate_strategy.attr,
->  	NULL,
+>  	__NR_ZRAM_PAGEFLAGS,
 >  };
->  
-> @@ -368,6 +417,15 @@ static umode_t uacce_dev_is_visible(struct kobject *kobj,
->  	    (!uacce->qf_pg_num[UACCE_QFRT_DUS])))
->  		return 0;
->  
-> +	if (attr == &dev_attr_isolate_strategy.attr &&
-> +	    (!uacce->ops->isolate_strategy_read ||
-> +	     !uacce->ops->isolate_strategy_write))
 
-So you need either a read or write?  Why not both?
+Unrelated but somehow related.
 
-thanks,
-
-greg k-h
+I wonder if it's time for us to introduce a dedicated, say u16,
+flags member to struct zram_table_entry. Unless my calculations
+are extremely wrong, we are about to run out of spare bits in
+zram_table_entry::flags on 32-bit systems.
