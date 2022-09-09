@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A939B5B3F58
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A0B5B3F5E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiIITSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S230224AbiIITTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIITSl (ORCPT
+        with ESMTP id S229835AbiIITTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:18:41 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CFB13D791
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:18:40 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id lz22so6264510ejb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:18:40 -0700 (PDT)
+        Fri, 9 Sep 2022 15:19:38 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 515505FA6;
+        Fri,  9 Sep 2022 12:19:24 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id C5083DB9;
+        Fri,  9 Sep 2022 22:23:08 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com C5083DB9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=bWppDnHcPKTnuypihInrM+uVif9S3LL38Vx/2xcXQ9k=;
-        b=g7HrYuvgsD4YAQaqYaXK1xqRnzd7giTbhTVuKr1ZCDpVya7ZfOEm6064HpCGJitxTF
-         LHCqLs4IArnyFufmpiJGMHOCvmjFvDOOegBe8MEaQznefjKy8CkGRBgs8WNaNWJ6BZyJ
-         F0uonF2zMSb6Ztug3MolFD2FZRms3NViQVLGZ8k0ZUSnruEC1iEKMDii2EU0+VLhdlrD
-         pHoFH5sR0zIojtx29xLRxYt60bEiEfAnlocKtMYgNx20nWUeWfxm54J2BNGCAN3i8WEI
-         aPtOJyOy0VeI8Vl2zgFJsygKfK3galPyODb6ssEJ4LxL5X3/7vJ+HANgz1gfyxtA+ZIO
-         FUXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bWppDnHcPKTnuypihInrM+uVif9S3LL38Vx/2xcXQ9k=;
-        b=kHZs7RCSwNHCK9ABuDhpFPHPSBYd1L38iEkzpmIdKLjZ6iBlOPNVb+oapCZYUm3ZK1
-         gooC5qhjHKNrlOCScD8Bt98FKCWKLVE4VqpSkykTlOCiXTX1b2+F939/q3hllYYulHH1
-         2baLWXd091g07QnN/hBiRZAfQT8J/hDRJVU03mGZCPxdw8ezUI7050Min6b+EiDPioZd
-         ybOJ/hQhIKrIrayIdwYS/nq9vmozKrIpol9QEVScbK4pA46fTugu2c8QoUG2LlPclouO
-         xzq6XiZu5oObZezm39QV5jRXhURePoFyxZeDpbQ1CsJ5fqJss4Ux2vy8LY9UgHDiAo7j
-         VRRw==
-X-Gm-Message-State: ACgBeo2hRGnlh75W67MTmXIdYlrGXRvSgRpT76u7pOwc/rGDBfeGQRsP
-        b03avHrYVdkXJWqWEf8vslwfLKu9voMjmMGFejec/w==
-X-Google-Smtp-Source: AA6agR6Cp8/UX8n/CVq3P5YqszAg4JxSezXNwhJrr/8OtG/sg2IdUZJ3mSjClVq7iDV+/+BBRtpcx6Cw1PrT0CiQOx8=
-X-Received: by 2002:a17:907:1c87:b0:741:8199:a59d with SMTP id
- nb7-20020a1709071c8700b007418199a59dmr10694013ejc.736.1662751118977; Fri, 09
- Sep 2022 12:18:38 -0700 (PDT)
+        d=baikalelectronics.ru; s=mail; t=1662751390;
+        bh=WAHooePitRG2Wrs35vuzbHd8NY3KHdanVqS7QR9FpIU=;
+        h=From:To:CC:Subject:Date:From;
+        b=iX1wdQ2tkUspgFc45FW4WaEGuHMyax4z91TFFPsyBuNjTD6YjXEsw0tHxAJvtqnSB
+         loxA3zfIH2xmTcU1D4Sj6Wg3eS+gwpjCDDhD2DLZdYTcrOMOyN59o6Ke9r9pSWF+0i
+         RPP0tKa4w1wrlP2q/CfZU6K5PS33NnM71gu7lKFQ=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 9 Sep 2022 22:19:20 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jonathan Derrick <jonathan.derrick@intel.com>,
+        Revanth Rajashekar <revanth.rajashekar@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-nvme@lists.infradead.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] block/nvme: Fix DMA-noncoherent platforms support
+Date:   Fri, 9 Sep 2022 22:19:14 +0300
+Message-ID: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220909121329.42004-1-brgl@bgdev.pl> <20220909121329.42004-3-brgl@bgdev.pl>
- <YxtEFNdgzmpbN94s@smile.fi.intel.com>
-In-Reply-To: <YxtEFNdgzmpbN94s@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 9 Sep 2022 21:18:28 +0200
-Message-ID: <CAMRc=MfVr__25iAhA08LUo361i9y=fiPwj08TcYdDu0dru_N7Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 3:48 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> +Cc: Kees
->
-> On Fri, Sep 09, 2022 at 02:13:29PM +0200, Bartosz Golaszewski wrote:
-> > It's useful for user-space to be able to know the PIDs of processes
-> > holding GPIO lines in case they have the permissions and need to kill
-> > them.
-> >
-> > Extend the gpio_v2_line_info structure with the consumer_pid field
-> > that's set to the PID of the user-space process or 0 if the user lives
-> > in the kernel.
->
-> I'm wondering if there is any security implications and this PID
-> can be abused.
->
+Our SoC doesn't have the CPU caches coherent on DMA's. After getting the
+kernel updated to the 6.0-rcX version we've discovered a problem with the
+NVME hwmon probe. It turned out that the root cause of it was connected
+with the cache-line-unaligned buffer passed to the DMA-engine. Due to the
+cache-invalidation performed on the buffer mapping stage a part of the
+structure the buffer was embedded to was lost. Here we suggest to fix the
+problem just by aligning the buffer accordingly as the
+Documentation/core-api/dma-api.rst document requires. (See the
+corresponding patch log for more details.)
 
-I was wondering about that too but nothing came to my mind. By default
-any user - even one who doesn't have permissions to access
-/dev/gpiochip* - can already figure out by browsing /proc/$PID/fd that
-a process does have some lines requested - but not which exactly. This
-provides that additional bit of knowledge to users who already do have
-permissions to call ioctl() on /dev/gpiochip*.
+A potential root of a similar problem has been detected in the sed-opal
+driver too. Even though we have not got any difficulties connected with
+that part we still suggest to fix that in the same way as it is done for
+the NVME hwmon driver.
 
-Bart
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-nvme@lists.infradead.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (2):
+  nvme-hwmon: Cache-line-align the NVME SMART log-buffer
+  block: sed-opal: Cache-line-align the cmd/resp buffers
+
+ block/sed-opal.c          | 5 +++--
+ drivers/nvme/host/hwmon.c | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+-- 
+2.37.2
+
