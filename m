@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FA15B365B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E135B365E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIIL2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S230188AbiIIL3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiIIL2s (ORCPT
+        with ESMTP id S230419AbiIIL3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:28:48 -0400
+        Fri, 9 Sep 2022 07:29:03 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CA113867C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:28:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6095B13A052
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662722924;
+        s=mimecast20190719; t=1662722938;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zADjijewHqE/ifMUiS21SSfRedrzbyoD3zQRtee5o1s=;
-        b=aySK+C/CSgOySxetymwlRu/ir9zIj/2RJoORs5rMhyz17r4jLnpENDt/DF2vsdLQETTfUP
-        V7yNgiKKrkbZSj/GPnLEf0J+tkSqlM3i/V5dyfNnVqyYPdqWjCOHzT/rtz3VLXs3KsKGvp
-        BCuhOSEQaw8Vf0OjMtSw0yeib9biiWk=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=SasvhSvsF8LRZn/BC37PTfJFjK4JwrXoE1DtDBs5qJE=;
+        b=Xl+q680GfKavNW23viaSop0v4EVvcWpjpVYOm5Q9L8ODg0abTsKzKNMm2QRrN6vjNNccQg
+        UNArpXgv+l+NO9ZurbTDWPkY2VdEf0YlXWqeyNHdRMKFZ7UNTzr8RxavJmAdfk+fFzQImw
+        qo4z+sl1oj7OtG+8g4Hw3+XoSR220G4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-190-LLctdqQjPJG4BjWT4BGsKg-1; Fri, 09 Sep 2022 07:28:43 -0400
-X-MC-Unique: LLctdqQjPJG4BjWT4BGsKg-1
-Received: by mail-wr1-f72.google.com with SMTP id v15-20020adf8b4f000000b002285ec61b3aso280482wra.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:28:43 -0700 (PDT)
+ us-mta-322-28lyun8VORm8ZVi9XGCSzw-1; Fri, 09 Sep 2022 07:28:56 -0400
+X-MC-Unique: 28lyun8VORm8ZVi9XGCSzw-1
+Received: by mail-wr1-f71.google.com with SMTP id h2-20020adfa4c2000000b00228db7822cbso276557wrb.19
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:28:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=zADjijewHqE/ifMUiS21SSfRedrzbyoD3zQRtee5o1s=;
-        b=7Fn66ngN1tIEYHuct+PifFmsp7YSlBlx7m8whio3i/ArX4J+myYt+57Nhj8lmfswc4
-         eIdUzicgt1owiGQLIqpKi6lm2mjqA9FJdeRo4mAu889Y76S8VLfdqwZYSiuMER69nmYv
-         WmtMJ91keSurBLMin2CWKJ+4PnONgPFEG89vihNQVl76etd/DK9HtQBCjUqlFbNJVx3D
-         a9V4N6MJ4QJIjgCV2ptM+5aDqeoX+ypNWWSZhTrQDQcrJrxxcyBsYeqK8qD/HBpi4Va6
-         8J5JZOkM0lcsXsmMcyacMJn6yzcAW5k4nToj5Cl/44uMVEyclFCR4pzUDf1ykKX6cy0Q
-         DShA==
-X-Gm-Message-State: ACgBeo2Ykbnd+smiNNrIEwcHRlNIfSyQBRqn4OIIjHsHq9LnjQCCMsYI
-        PpJjP2gh5w7EKottI4Ym1xLEVQkKwkCMWtHs5zd/V1KOV9fj8BasMcQNFvW5lDM/stFtpDPdgkx
-        NT2J1ICKX3tT77xs3bpYYeYX9
-X-Received: by 2002:adf:fb52:0:b0:225:2ada:b741 with SMTP id c18-20020adffb52000000b002252adab741mr7921755wrs.56.1662722922182;
-        Fri, 09 Sep 2022 04:28:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6EXjNEJoF9ivl3Lb7bmTMXb8vStG/mECAtj/fEXGvK9a7Rd6A9BshsJOiCYcMrA9NoxQZ5Og==
-X-Received: by 2002:adf:fb52:0:b0:225:2ada:b741 with SMTP id c18-20020adffb52000000b002252adab741mr7921748wrs.56.1662722921959;
-        Fri, 09 Sep 2022 04:28:41 -0700 (PDT)
+        bh=SasvhSvsF8LRZn/BC37PTfJFjK4JwrXoE1DtDBs5qJE=;
+        b=aZwXpiuQkuFY+5Og0oZ/OjWNFHYi/erKNo7I0PoPQPKpRqtziSVWfsF3QSoa/K7GRf
+         hbwBxLG98kvU+NwT5+26zCPhtjry1bCgLds4MLbgnjelXL3pkaFH3dfJCiRM3AdYzo3b
+         QROqRlPBBXHkQT1aKqpytQ01IvsASehrPAxGZG1Dku2AfryyCJ0fN2Sn4Gx/2TWRB30g
+         fkhKZQF9eMqRp5/Ils4SoyUuKcB9FpI7c9RU24/ysDGZ4vkXJhvk793KoVI5AibCIDzD
+         ROgQb3apuVvAGhZeV1nxbl/Jmq0xw3Zcve0LcEIsF++NNy4pxmfly7NdBKxNgBNLe7mQ
+         AOvQ==
+X-Gm-Message-State: ACgBeo0CPx6XAlo4yzee9oc/Mc2yv4ftDAYlSLRGi7gKj1262k7sqhSB
+        N8qcnqR6xMLCGwTo3c7vyhK/iniDz5Yi2tKYXvjepqPYqEeIQjP4fjDuG86UiwezvW4yntCNo4F
+        FgQCwoxLUwR1fOVIQGtJLvJmj
+X-Received: by 2002:a5d:6581:0:b0:228:e143:ddd7 with SMTP id q1-20020a5d6581000000b00228e143ddd7mr7704453wru.329.1662722935827;
+        Fri, 09 Sep 2022 04:28:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7+GVIZJsogN8g2DQ972mWraqbf9/Bobl5Kgm79b3QnjHam0io1+c3nVbusvey9AdDy3KQuog==
+X-Received: by 2002:a5d:6581:0:b0:228:e143:ddd7 with SMTP id q1-20020a5d6581000000b00228e143ddd7mr7704443wru.329.1662722935568;
+        Fri, 09 Sep 2022 04:28:55 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c2cb100b003a5ca627333sm467212wmc.8.2022.09.09.04.28.41
+        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b00229d55994e0sm277293wrp.59.2022.09.09.04.28.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 04:28:41 -0700 (PDT)
-Message-ID: <77c1ccc6-9125-ea91-45d8-7e087b38e196@redhat.com>
-Date:   Fri, 9 Sep 2022 13:28:40 +0200
+        Fri, 09 Sep 2022 04:28:54 -0700 (PDT)
+Message-ID: <2378a08b-d3ab-1a99-eb16-f51ac4358a3e@redhat.com>
+Date:   Fri, 9 Sep 2022 13:28:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH 06/16] mm/page_alloc: fix freeing static percpu memory
+Subject: Re: [PATCH 07/16] mm: remove obsolete pgdat_is_empty()
 Content-Language: en-US
 To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
 Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-7-linmiaohe@huawei.com>
+ <20220909092451.24883-8-linmiaohe@huawei.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20220909092451.24883-7-linmiaohe@huawei.com>
+In-Reply-To: <20220909092451.24883-8-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -83,36 +83,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 09.09.22 11:24, Miaohe Lin wrote:
-> The size of struct per_cpu_zonestat can be 0 on !SMP && !NUMA. In that
-> case, zone->per_cpu_zonestats will always equal to boot_zonestats. But
-> in zone_pcp_reset(), zone->per_cpu_zonestats is freed via free_percpu()
-> directly without checking against boot_zonestats first. boot_zonestats
-> will be released by free_percpu() unexpectedly.
+> There's no caller. Remove it.
 > 
-> Fixes: 28f836b6777b ("mm/page_alloc: split per cpu page lists and zone stats")
 > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->   mm/page_alloc.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+>   include/linux/mmzone.h | 5 -----
+>   1 file changed, 5 deletions(-)
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3497919f4ef5..a35ef385d906 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -9510,9 +9510,11 @@ void zone_pcp_reset(struct zone *zone)
->   			drain_zonestat(zone, pzstats);
->   		}
->   		free_percpu(zone->per_cpu_pageset);
-> -		free_percpu(zone->per_cpu_zonestats);
->   		zone->per_cpu_pageset = &boot_pageset;
-> -		zone->per_cpu_zonestats = &boot_zonestats;
-> +		if (zone->per_cpu_zonestats != &boot_zonestats) {
-> +			free_percpu(zone->per_cpu_zonestats);
-> +			zone->per_cpu_zonestats = &boot_zonestats;
-> +		}
->   	}
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 6950179a20a2..ab17a0e6f26f 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -1247,11 +1247,6 @@ static inline unsigned long pgdat_end_pfn(pg_data_t *pgdat)
+>   	return pgdat->node_start_pfn + pgdat->node_spanned_pages;
 >   }
 >   
+> -static inline bool pgdat_is_empty(pg_data_t *pgdat)
+> -{
+> -	return !pgdat->node_start_pfn && !pgdat->node_spanned_pages;
+> -}
+> -
+>   #include <linux/memory_hotplug.h>
+>   
+>   void build_all_zonelists(pg_data_t *pgdat);
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 
