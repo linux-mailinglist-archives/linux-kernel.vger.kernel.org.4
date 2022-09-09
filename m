@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F9A5B3269
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAC35B326C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiIIIxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S229572AbiIIIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbiIIIwq (ORCPT
+        with ESMTP id S231444AbiIIIwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:52:46 -0400
+        Fri, 9 Sep 2022 04:52:47 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAC2642E9;
-        Fri,  9 Sep 2022 01:52:45 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 08:52:42 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C9120A5;
+        Fri,  9 Sep 2022 01:52:46 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 08:52:43 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662713564;
+        s=2020; t=1662713565;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=8gXRgbP3W4liUT+JmVQ6Zc7HdIptENQvpioZS0wZpsM=;
-        b=SFN2KFK93ASQUyBGYjB1OErWyhh/lIGEg25YbrI3Ai6vPAu06saG1HgnXn3esSixHbof+I
-        plBf7BbQuTNNRzfqogbbOrkp5fBcZOa/Q/zC2CEO6pcCXLrjQj11dN2egPRXsIetvilZMB
-        YQ+MxCQlgp++mcrbF9DhJ5pIdlTfi+4mJZ0tInYWCk5E/ehSRvwyq4sOO6gdUTv0QI5qvN
-        LPL0XoNT3++prJHbfzh0uiff05O/H6RYl3NmGYEfgEvpQzyHhPl4UpsIhlgCdmAeof6ay0
-        Q/ZcuMwsp8ZJbR3hL11fKGaQtBEL35AMg8NAgJk56013mM3J5Ncbp3+zt4Vv2w==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8UjciCxnwDFe5HfT2KxABHvlfHJGvifckudNFh3Asr0=;
+        b=qSqy+iRt7ndyLyoNWDKEMmAX9Y1LAgwpq2doMiyi5nnn+F3sQCwZhiPAVE1EhCxzVDkI5S
+        GFFHBT6o+yQ56pL6rDetk4x3D/zQOrT1R6XiuG1oCxQzF3QryBP4pivt5FS9XYdKlRK3E3
+        ru/WRvRRlKn8Ke1hO1M4HjHdgyf004tlRQk3amQIOw9AKZEna+84qVvRCHHXtiQ+jgtOCu
+        LDmxXs9G/BKaD0XqKp0QU1Pk9v/KoHRqEQroMllwleCzOQgo4YwRz/VPDABUhqscAm0FAG
+        7n/YyLyeDl/9nCRJMAuOt8iaX3L7yzh10j0TX6eGSU8PfkpAQ6RGoIjZb7llUQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662713564;
+        s=2020e; t=1662713565;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=8gXRgbP3W4liUT+JmVQ6Zc7HdIptENQvpioZS0wZpsM=;
-        b=N5/F+rlNYC5Glj3SghUAp8lUl/BobRI4NmFCR3maLVKfrvpi0o1U94v7NB497G9jVnkrqo
-        6G4bzRk5lIPVvyDA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8UjciCxnwDFe5HfT2KxABHvlfHJGvifckudNFh3Asr0=;
+        b=vMfGvmOUvsEqjsy7OfBr0pBCdU2klESAvDBeAlZ92mkMvs+a1sDu6i3KZ49VQT4VTwTijf
+        VWbLV32+7YOF0EDg==
+From:   "tip-bot2 for Anshuman Khandual" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf: Add a few assertions
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: perf/core] x86/perf: Assert all platform event flags are within
+ PERF_EVENT_FLAG_ARCH
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        James Clark <james.clark@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20220907091924.439193-5-anshuman.khandual@arm.com>
+References: <20220907091924.439193-5-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Message-ID: <166271356280.401.12499695044219675825.tip-bot2@tip-bot2>
+Message-ID: <166271356383.401.6859119036807311988.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,81 +69,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     f3c0eba287049237b23d1300376768293eb89e69
-Gitweb:        https://git.kernel.org/tip/f3c0eba287049237b23d1300376768293eb89e69
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 02 Sep 2022 18:48:55 +02:00
+Commit-ID:     88081cfb699ce2568e5309c145eb9f9e9497b53f
+Gitweb:        https://git.kernel.org/tip/88081cfb699ce2568e5309c145eb9f9e9497b53f
+Author:        Anshuman Khandual <anshuman.khandual@arm.com>
+AuthorDate:    Wed, 07 Sep 2022 14:49:24 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:54:01 +02:00
 
-perf: Add a few assertions
+x86/perf: Assert all platform event flags are within PERF_EVENT_FLAG_ARCH
 
-While auditing 6b959ba22d34 ("perf/core: Fix reentry problem in
-perf_output_read_group()") a few spots were found that wanted
-assertions.
+Ensure all platform specific event flags are within PERF_EVENT_FLAG_ARCH.
 
-Notable for_each_sibling_event() relies on exclusion from
-modification. This would normally be holding either ctx->lock or
-ctx->mutex, however due to how things are constructed disabling IRQs
-is a valid and sufficient substitute for ctx->lock.
-
-Another possible site to add assertions would be the various
-pmu::{add,del,read,..}() methods, but that's not trivially expressable
-in C -- the best option is wrappers, but those are easy enough to
-forget.
-
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: James Clark <james.clark@arm.com>
+Link: https://lkml.kernel.org/r/20220907091924.439193-5-anshuman.khandual@arm.com
 ---
- include/linux/perf_event.h | 17 +++++++++++++++++
- kernel/events/core.c       |  2 ++
- 2 files changed, 19 insertions(+)
+ arch/x86/events/perf_event.h       | 34 +++++++++++++----------------
+ arch/x86/events/perf_event_flags.h | 22 +++++++++++++++++++-
+ 2 files changed, 38 insertions(+), 18 deletions(-)
+ create mode 100644 arch/x86/events/perf_event_flags.h
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index f88cb31..368bdc4 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -61,6 +61,7 @@ struct perf_guest_info_callbacks {
- #include <linux/refcount.h>
- #include <linux/security.h>
- #include <linux/static_call.h>
-+#include <linux/lockdep.h>
- #include <asm/local.h>
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 93263b9..4a3dde2 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -64,27 +64,25 @@ static inline bool constraint_match(struct event_constraint *c, u64 ecode)
+ 	return ((ecode & c->cmask) - c->code) <= (u64)c->size;
+ }
  
- struct perf_callchain_entry {
-@@ -634,7 +635,23 @@ struct pmu_event_list {
- 	struct list_head	list;
- };
- 
-+/*
-+ * event->sibling_list is modified whole holding both ctx->lock and ctx->mutex
-+ * as such iteration must hold either lock. However, since ctx->lock is an IRQ
-+ * safe lock, and is only held by the CPU doing the modification, having IRQs
-+ * disabled is sufficient since it will hold-off the IPIs.
-+ */
-+#ifdef CONFIG_PROVE_LOCKING
-+#define lockdep_assert_event_ctx(event)				\
-+	WARN_ON_ONCE(__lockdep_enabled &&			\
-+		     (this_cpu_read(hardirqs_enabled) ||	\
-+		      lockdep_is_held(&(event)->ctx->mutex) != LOCK_STATE_HELD))
-+#else
-+#define lockdep_assert_event_ctx(event)
-+#endif
++#define PERF_ARCH(name, val)	\
++	PERF_X86_EVENT_##name = val,
 +
- #define for_each_sibling_event(sibling, event)			\
-+	lockdep_assert_event_ctx(event);			\
- 	if ((event)->group_leader == (event))			\
- 		list_for_each_entry((sibling), &(event)->sibling_list, sibling_list)
+ /*
+  * struct hw_perf_event.flags flags
+  */
+-#define PERF_X86_EVENT_PEBS_LDLAT	0x00001 /* ld+ldlat data address sampling */
+-#define PERF_X86_EVENT_PEBS_ST		0x00002 /* st data address sampling */
+-#define PERF_X86_EVENT_PEBS_ST_HSW	0x00004 /* haswell style datala, store */
+-#define PERF_X86_EVENT_PEBS_LD_HSW	0x00008 /* haswell style datala, load */
+-#define PERF_X86_EVENT_PEBS_NA_HSW	0x00010 /* haswell style datala, unknown */
+-#define PERF_X86_EVENT_EXCL		0x00020 /* HT exclusivity on counter */
+-#define PERF_X86_EVENT_DYNAMIC		0x00040 /* dynamic alloc'd constraint */
+-
+-#define PERF_X86_EVENT_EXCL_ACCT	0x00100 /* accounted EXCL event */
+-#define PERF_X86_EVENT_AUTO_RELOAD	0x00200 /* use PEBS auto-reload */
+-#define PERF_X86_EVENT_LARGE_PEBS	0x00400 /* use large PEBS */
+-#define PERF_X86_EVENT_PEBS_VIA_PT	0x00800 /* use PT buffer for PEBS */
+-#define PERF_X86_EVENT_PAIR		0x01000 /* Large Increment per Cycle */
+-#define PERF_X86_EVENT_LBR_SELECT	0x02000 /* Save/Restore MSR_LBR_SELECT */
+-#define PERF_X86_EVENT_TOPDOWN		0x04000 /* Count Topdown slots/metrics events */
+-#define PERF_X86_EVENT_PEBS_STLAT	0x08000 /* st+stlat data address sampling */
+-#define PERF_X86_EVENT_AMD_BRS		0x10000 /* AMD Branch Sampling */
+-#define PERF_X86_EVENT_PEBS_LAT_HYBRID	0x20000 /* ld and st lat for hybrid */
++enum {
++#include "perf_event_flags.h"
++};
++
++#undef PERF_ARCH
++
++#define PERF_ARCH(name, val)						\
++	static_assert((PERF_X86_EVENT_##name & PERF_EVENT_FLAG_ARCH) ==	\
++		      PERF_X86_EVENT_##name);
++
++#include "perf_event_flags.h"
++
++#undef PERF_ARCH
  
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 00389d5..3e90e45 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1468,6 +1468,8 @@ static void __update_context_time(struct perf_event_context *ctx, bool adv)
+ static inline bool is_topdown_count(struct perf_event *event)
  {
- 	u64 now = perf_clock();
- 
-+	lockdep_assert_held(&ctx->lock);
+diff --git a/arch/x86/events/perf_event_flags.h b/arch/x86/events/perf_event_flags.h
+new file mode 100644
+index 0000000..1dc19b9
+--- /dev/null
++++ b/arch/x86/events/perf_event_flags.h
+@@ -0,0 +1,22 @@
 +
- 	if (adv)
- 		ctx->time += now - ctx->timestamp;
- 	ctx->timestamp = now;
++/*
++ * struct hw_perf_event.flags flags
++ */
++PERF_ARCH(PEBS_LDLAT,		0x00001) /* ld+ldlat data address sampling */
++PERF_ARCH(PEBS_ST,		0x00002) /* st data address sampling */
++PERF_ARCH(PEBS_ST_HSW,		0x00004) /* haswell style datala, store */
++PERF_ARCH(PEBS_LD_HSW,		0x00008) /* haswell style datala, load */
++PERF_ARCH(PEBS_NA_HSW,		0x00010) /* haswell style datala, unknown */
++PERF_ARCH(EXCL,			0x00020) /* HT exclusivity on counter */
++PERF_ARCH(DYNAMIC,		0x00040) /* dynamic alloc'd constraint */
++			/*	0x00080	*/
++PERF_ARCH(EXCL_ACCT,		0x00100) /* accounted EXCL event */
++PERF_ARCH(AUTO_RELOAD,		0x00200) /* use PEBS auto-reload */
++PERF_ARCH(LARGE_PEBS,		0x00400) /* use large PEBS */
++PERF_ARCH(PEBS_VIA_PT,		0x00800) /* use PT buffer for PEBS */
++PERF_ARCH(PAIR,			0x01000) /* Large Increment per Cycle */
++PERF_ARCH(LBR_SELECT,		0x02000) /* Save/Restore MSR_LBR_SELECT */
++PERF_ARCH(TOPDOWN,		0x04000) /* Count Topdown slots/metrics events */
++PERF_ARCH(PEBS_STLAT,		0x08000) /* st+stlat data address sampling */
++PERF_ARCH(AMD_BRS,		0x10000) /* AMD Branch Sampling */
++PERF_ARCH(PEBS_LAT_HYBRID,	0x20000) /* ld and st lat for hybrid */
