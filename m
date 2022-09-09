@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2455B3C16
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A8A5B3C1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiIIPfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S232385AbiIIPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiIIPer (ORCPT
+        with ESMTP id S232394AbiIIPfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:34:47 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FFC146D18
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 08:34:09 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y29so2277666ljq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 08:34:09 -0700 (PDT)
+        Fri, 9 Sep 2022 11:35:25 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60AFA186;
+        Fri,  9 Sep 2022 08:34:40 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1274ec87ad5so4906840fac.0;
+        Fri, 09 Sep 2022 08:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=lP9I9C231dArXcMlyocTl/qVE0j3Pv37aaLeqVQ7UZU=;
-        b=twITONxYLgPP9PxkRf8UDAvKbnLUZmH56aq6q+qd7igqBv9W6NMmSitWjOGWFf4it3
-         LCQhRxyuGz4oj/8i+t3bY/DBVlHmyqeJ0czsSq2tS1agOxqtYqcs5Ig3ltIpR6JSGpaG
-         rAHgebTzPRAZdHLod8VnLOin5og/nVCVDoRaWHZDhDN7SxfzFnushm2QkPMUEdyI31pC
-         gFoixmPBfD30PnD+gsGvzQ5X4e+hbsCfU3XyyEGO6r6UMEdTPcZ0IlKDhU6bF/gGWecW
-         BD7jLpreMkNBMcqA7so5sDsOkQ2C+OoxBscwm81lyVy7/1FNFUJ+YfZu3FCexn4K2KWu
-         VWOw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=X+Q+XxogE2IjpyqqxHb1Rmob5mxFBfelVSRSDl23U/0=;
+        b=MYeKp/my9+idmuuuAX6U7MZeK78ZVnmx7OyeIejkqZ3YQbcjeX7m3fkstN56N7E/tj
+         mYutp3pu5pBxRCvAfYMCu4xh+JQFwoQgxDCQfDliBbxH+NaRLjtVMLYoV3obdai585Xi
+         zGUUYoVVwagneWDIVNlE9hhrNLl6H8ePxIXq6ZFS0zXwc8JvXPfXJILOozJc8JFZKUdR
+         IcpanS+kbRJfFxUbLalKuNiptKenxQKKfMjeidH/9PXRCo3aAjjrB9BmBmXzWPEWoYUv
+         K6LAcUdbHOP9Xhw5mlPXhk++L7SazZHMM4d6rk7kwnsnA6tTB+2hyJG+rnWZPX8bsn3s
+         TpGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=lP9I9C231dArXcMlyocTl/qVE0j3Pv37aaLeqVQ7UZU=;
-        b=CY8xdAQ+TEf/TBv2WNHDg3Bc1SjNeHkrZW7b98VEb3Y64QRysk2eojhh9WwcXeTHfS
-         2Faa3qXfWKQEjBzukIEqTHNFsHdzkXivWZiGP2EsM+v6Up8HG4YZq4p/5YLRwp5J1ejN
-         UvV6bAKK4yWMAF4w5Rncb10+HhQwxPmm73KQwvgOxV6oBrKieEi/TdWtLqLrm5q2gq/d
-         k/cfXtrSfh211MTzA1IIWFKJAxnGPDhTRmrWpPlSea3Grd2o7NXIyRHGNC/1KZ1U7RvD
-         ezQvx0pf52VDLQhePq/VcD0LzU4xiHyTqZhsBLLrn6lANifvfvQSOsseEaSkj4X3LGfW
-         YiHQ==
-X-Gm-Message-State: ACgBeo1O6f5c/5ioQZ4FkIM/IkUZSQdJ+KOJC1Btp0JyTA7Y2wHplSCo
-        y4SbTeCQi2a0566VHF+ampNdUg==
-X-Google-Smtp-Source: AA6agR6CrTnN/jL30qM2oy1chzWlwWkFSKzElgaz5C6XKHdy3uLj5jrCJc6y5+wmuCf2/Doyz1zYhw==
-X-Received: by 2002:a05:651c:511:b0:266:c941:67ca with SMTP id o17-20020a05651c051100b00266c94167camr3956347ljp.28.1662737588111;
-        Fri, 09 Sep 2022 08:33:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u17-20020a2e8551000000b00261d6f45c2csm113367ljj.124.2022.09.09.08.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 08:33:07 -0700 (PDT)
-Message-ID: <47eb92fc-f5ff-de82-aacd-91aa0fcc68cb@linaro.org>
-Date:   Fri, 9 Sep 2022 17:33:05 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=X+Q+XxogE2IjpyqqxHb1Rmob5mxFBfelVSRSDl23U/0=;
+        b=8NhpscRFUKxxSL3L1hHrQNafbIf3saqWg+lLAW11WX3zT+ZJTPoUCYlkTekyAxSJGS
+         JFfj30E5rx3Jy6L7s1P/sBGivdlxaw+MT+4E1foh3YWds9Yp4YUVBxFMf2ZRfWlzEnIh
+         6HZwYBWYlh3wQLaPWPCKJpMDjRBFX23voLtKfftC7CiiF2q9OGyFpfx1taqdLwpdhZB9
+         tvtDGkLZAxvHnzTAwJDF5ZOaqjk0Y666UFjfCHDXCjTLP6WFjPU+qFkbHw6/pulrwBfh
+         Pcz2l1N0rgTfJUy3PLfVX96a4/Yzr8RRqkACWZvZXessp4cUjjOzGBGObaEMAUSx8Ds3
+         VBgA==
+X-Gm-Message-State: ACgBeo1u4zPWy0L0JmljGgHhUYd561evVatHLvujWdsWPpQcRzjHtCEp
+        oVSeHwoVNJzy8xuUwgUldR8=
+X-Google-Smtp-Source: AA6agR5GUcwZAyBns5XYf1CuC9+EMdBn9OyKTc8QvLj28mLxDgG0xgaZzo/tPWTK8royTxPFOSzFuw==
+X-Received: by 2002:a05:6808:152b:b0:343:ef9d:4729 with SMTP id u43-20020a056808152b00b00343ef9d4729mr3926178oiw.286.1662737625456;
+        Fri, 09 Sep 2022 08:33:45 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cc:ed0b:fde6:d0df:8e59:d84f])
+        by smtp.gmail.com with ESMTPSA id l4-20020aca1904000000b00344851ea0ddsm351759oii.56.2022.09.09.08.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 08:33:45 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ACPI: PCC: Release resources on address space setup failure path
+Date:   Fri,  9 Sep 2022 12:33:19 -0300
+Message-Id: <20220909153320.501347-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 09/10] ASoC: cs42l83: Extend CS42L42 support to new part
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>
-Cc:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Matt Flax <flatmax@flatmax.com>,
-        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-References: <20220909135334.98220-1-povik+lin@cutebit.org>
- <20220909135334.98220-10-povik+lin@cutebit.org>
- <541b11a1-6b5a-cae0-73d9-f1fe8c961a15@linaro.org>
- <822926B0-CF33-4FF0-B234-8EF644DCED21@cutebit.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <822926B0-CF33-4FF0-B234-8EF644DCED21@cutebit.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 17:10, Martin Povišer wrote:
->>> +};
->>> +MODULE_DEVICE_TABLE(of, cs42l83_of_match);
->>> +
->>> +static struct i2c_driver cs42l83_i2c_driver = {
->>> +	.driver = {
->>> +		.name = "cs42l83",
->>> +		.pm = &cs42l83_i2c_pm_ops,
->>> +		.of_match_table = of_match_ptr(cs42l83_of_match),
->>
->> This should complain with compile testing. Usually it comes with
->> __maybe_unused/
-> 
-> Which symbol? cs42l83_of_match has maybe_unused.
-> 
+The allocated memory for the pcc_data struct doesn't get freed under an
+error path in pcc_mbox_request_channel() or acpi_os_ioremap(). Also, the
+PCC mailbox channel doesn't get freed under an error path in
+acpi_os_ioremap().
 
-Ah, I missed it completely. It's fine.
+Fixes: 77e2a04745ff8 ("ACPI: PCC: Implement OperationRegion handler for the PCC Type 3 subtype")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+v1->v2
+- Add PCC mailbox channel release to the unwind path 
+- Update commit msg to reflect the addition of the mailbox free
+---
+ drivers/acpi/acpi_pcc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
+index a12b55d81209..84f1ac416b57 100644
+--- a/drivers/acpi/acpi_pcc.c
++++ b/drivers/acpi/acpi_pcc.c
+@@ -63,6 +63,7 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
+ 	if (IS_ERR(data->pcc_chan)) {
+ 		pr_err("Failed to find PCC channel for subspace %d\n",
+ 		       ctx->subspace_id);
++		kfree(data);
+ 		return AE_NOT_FOUND;
+ 	}
+ 
+@@ -72,6 +73,8 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
+ 	if (!data->pcc_comm_addr) {
+ 		pr_err("Failed to ioremap PCC comm region mem for %d\n",
+ 		       ctx->subspace_id);
++		pcc_mbox_free_channel(data->pcc_chan);
++		kfree(data);
+ 		return AE_NO_MEMORY;
+ 	}
+ 
+-- 
+2.34.1
 
-Best regards,
-Krzysztof
