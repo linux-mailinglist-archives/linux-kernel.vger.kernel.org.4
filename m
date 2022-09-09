@@ -2,101 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFCB5B3D93
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5535B3D84
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiIIRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S231208AbiIIRBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiIIRBV (ORCPT
+        with ESMTP id S230012AbiIIRBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:01:21 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F89BFA86;
-        Fri,  9 Sep 2022 10:01:15 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289BjWBv029808;
-        Fri, 9 Sep 2022 19:00:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=sERDejrMQ7a07/9+h5otEUi4YoJw3dLxFd3+jBKQQHA=;
- b=vGws1a421YqUC3n2fykmG565ZhK7xAeLO/8mb3XE9jA7F2aiI3C8y19czgpWsXm34rCI
- H4GtibDfon2VN8NVWNUIyN2gaPzIlJXX4CGqasBVSDRKnde/pcVqbxQYYGjtfyiGlHlg
- ttHSuSma3Q5LXt0RAtVTm1EFYk5MtyfihQO+6ZFf/PdL6hIU0coKMUXoqjxN0lXPAKOX
- CCNsEUfSkvj0qUiKXeH59vMNX7OCcuiqxol5cv/QUA/4hDF8gIFuxPh7HGC7shlrTOz2
- seHWlzgBOfofZIudWdRntRSDzIgslOpxkJ8wFReEOxFJ052XdaPhtMmvsmJzXUl/GZz3 4Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jfd5j29ab-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 19:00:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82D8010002A;
-        Fri,  9 Sep 2022 19:00:53 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D40824551C;
-        Fri,  9 Sep 2022 19:00:53 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Fri, 9 Sep 2022
- 19:00:53 +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Philippe CORNU <philippe.cornu@foss.st.com>
-Subject: [PATCH 5/5] ARM: multi_v7_defconfig: enable STM32 DCMIPP media support
-Date:   Fri, 9 Sep 2022 18:59:59 +0200
-Message-ID: <20220909165959.5899-6-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220909165959.5899-1-hugues.fruchet@foss.st.com>
-References: <20220909165959.5899-1-hugues.fruchet@foss.st.com>
+        Fri, 9 Sep 2022 13:01:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3A4CAF486;
+        Fri,  9 Sep 2022 10:00:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5091165C;
+        Fri,  9 Sep 2022 10:01:05 -0700 (PDT)
+Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A60D23F73D;
+        Fri,  9 Sep 2022 10:00:55 -0700 (PDT)
+Message-ID: <a60be378-dce6-08fb-02b8-1efc660ee3cb@arm.com>
+Date:   Fri, 9 Sep 2022 18:00:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 01/13] x86/resctrl: Fix min_cbm_bits for AMD
+Content-Language: en-GB
+To:     Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
+        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com
+References: <166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu>
+ <166257359679.1043018.9253512972611409799.stgit@bmoger-ubuntu>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <166257359679.1043018.9253512972611409799.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enables support of STM32 DCMIPP V4L2 media driver.
+Hi Babu,
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 07/09/2022 18:59, Babu Moger wrote:
+> AMD systems support zero CBM (capacity bit mask) for L3 allocation.
+> That is reflected in rdt_init_res_defs_amd() by:
+> 
+> 	r->cache.arch_has_empty_bitmaps = true;
+> 
+> However given the unified code in cbm_validate(), checking for:
+> 	val == 0 && !arch_has_empty_bitmaps
+> 
+> is not enough because of another check in cbm_validate():
+> 
+> 	if ((zero_bit - first_bit) < r->cache.min_cbm_bits)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 12b35008571f..9bd503233966 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -691,6 +691,7 @@ CONFIG_VIDEO_STI_BDISP=m
- CONFIG_VIDEO_STI_DELTA=m
- CONFIG_VIDEO_STI_HVA=m
- CONFIG_VIDEO_STM32_DCMI=m
-+CONFIG_VIDEO_STM32_DCMIPP=m
- CONFIG_V4L_TEST_DRIVERS=y
- CONFIG_VIDEO_VIVID=m
- CONFIG_VIDEO_ADV7180=m
--- 
-2.25.1
+Right, the Intel version had this, but the AMD didn't. I evidently only thought about this
+the !arch_has_empty_bitmaps way round! Sorry about that.
 
+
+> The default value of r->cache.min_cbm_bits = 1.
+> 
+> Leading to:
+> 
+> 	$ cd /sys/fs/resctrl
+> 	$ mkdir foo
+> 	$ cd foo
+> 	$ echo L3:0=0 > schemata
+>           -bash: echo: write error: Invalid argument
+> 	$ cat /sys/fs/resctrl/info/last_cmd_status
+> 	  Need at least 1 bits in the mask
+> 
+> Fix the issue by initializing the min_cbm_bits to 0 for AMD. Also,
+> remove the default setting of min_cbm_bits and initialize it separately.
+> 
+> After the fix
+> 	$ cd /sys/fs/resctrl
+> 	$ mkdir foo
+> 	$ cd foo
+> 	$ echo L3:0=0 > schemata
+> 	$ cat /sys/fs/resctrl/info/last_cmd_status
+> 	  ok
+> 
+> Link: https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.com/
+> Fixes: 316e7f901f5a ("x86/resctrl: Add struct rdt_cache::arch_has_{sparse, empty}_bitmaps")
+
+> Signed-off-by: Stephane Eranian <eranian@google.com>
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
+
+Er, who is the author if this patch? If you are reposting Stephane's patch then there
+needs to be a 'From: ' at the top of the email so that git preserves the ownership. You
+may need some incantation of "git commit --amend --author=" to fix this in your tree.
+
+As its a fix, have you posted this separately? Mixing fixes and new-code makes it hard for
+the maintainer to spot what needs to be taken for the next -rc.
+
+
+> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> index bb1c3f5f60c8..a5c51a14fbce 100644
+> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> @@ -66,9 +66,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
+>  			.rid			= RDT_RESOURCE_L3,
+>  			.name			= "L3",
+>  			.cache_level		= 3,
+> -			.cache = {
+> -				.min_cbm_bits	= 1,
+> -			},
+>  			.domains		= domain_init(RDT_RESOURCE_L3),
+>  			.parse_ctrlval		= parse_cbm,
+>  			.format_str		= "%d=%0*x",
+> @@ -83,9 +80,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
+>  			.rid			= RDT_RESOURCE_L2,
+>  			.name			= "L2",
+>  			.cache_level		= 2,
+> -			.cache = {
+> -				.min_cbm_bits	= 1,
+> -			},
+>  			.domains		= domain_init(RDT_RESOURCE_L2),
+>  			.parse_ctrlval		= parse_cbm,
+>  			.format_str		= "%d=%0*x",
+> @@ -877,6 +871,7 @@ static __init void rdt_init_res_defs_intel(void)
+>  			r->cache.arch_has_sparse_bitmaps = false;
+>  			r->cache.arch_has_empty_bitmaps = false;
+>  			r->cache.arch_has_per_cpu_cfg = false;
+> +			r->cache.min_cbm_bits = 1;
+>  		} else if (r->rid == RDT_RESOURCE_MBA) {
+>  			hw_res->msr_base = MSR_IA32_MBA_THRTL_BASE;
+>  			hw_res->msr_update = mba_wrmsr_intel;
+> @@ -897,6 +892,7 @@ static __init void rdt_init_res_defs_amd(void)
+>  			r->cache.arch_has_sparse_bitmaps = true;
+>  			r->cache.arch_has_empty_bitmaps = true;
+>  			r->cache.arch_has_per_cpu_cfg = true;
+> +			r->cache.min_cbm_bits = 0;
+>  		} else if (r->rid == RDT_RESOURCE_MBA) {
+>  			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
+>  			hw_res->msr_update = mba_wrmsr_amd;
+> 
+> 
+
+
+Reviewed-by: James Morse <james.morse@arm.com>
+
+Thanks,
+
+James
