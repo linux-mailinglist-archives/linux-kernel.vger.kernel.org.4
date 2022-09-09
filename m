@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCDC5B3A11
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6095C5B3A12
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiIIOBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S232153AbiIIOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiIIOAY (ORCPT
+        with ESMTP id S231970AbiIIOAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:00:24 -0400
+        Fri, 9 Sep 2022 10:00:31 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617CF7F13B;
-        Fri,  9 Sep 2022 07:00:23 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:20 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA9A83BC9;
+        Fri,  9 Sep 2022 07:00:24 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732021;
+        s=2020; t=1662732023;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lE5RwnibNt7wQdy94SVqKuvSwCROx+VoFtcIbDqU9Xs=;
-        b=aNtzdobZMEXy6sDn+5AR+RkZdhiwo+49NJbpw1NCHDMzlXqMntFD/7kbEXjfAMR5K0YOeD
-        JaOuDttMug8ocn3y7zJHpBpDTVNXYHkLBZEMo4n2DtqCww9YrJ5UQvyFTn8yiP47Nc/2tP
-        CgnUKS9nGGydvMTpsk/Gb4pb3NwWAd0r4SyLbhI+QTjAUnFrF2I+e1rEoyZ5XCnyZaJq5g
-        PsTafpi+Az2VLYJ5+ZYY/8eZLQcrg2elBlBMkAFdsWo8kFkKGrytfmQeVM1k++E730hxju
-        y1wHqF5FBgn9QDJDa2N8GyWhLOEMhkWUGAeeFHqbxRb9aJwh6kzNjs/xTTLmzg==
+        bh=QmXv+2Vq7xlcJgmE4broRI/IR8cyC5RzFZWPgou2fUQ=;
+        b=lV72/Kw6f/pVEa8TvjwM5faVBuOHMpqFvZq0ekGTLx8itUzxam9JmvAsET8p4KtqPLuvsM
+        6nGxigEu2sSAVyMagwVWKHcObUEaZRvG+2ohW97Cio1Mij7S+yEFEESAgE2D0UD1KOT+2V
+        pd9lRpQBcSathQgDSeUSPH3zrLq6trKNxwwmVe1lhAUBHQza3ENQLo8rh2Md+p0G/4ybho
+        km+Hx50EMDJ8xfYnev+xOVLrUL8QwOdQA/VbXTS9t4EgXYJDDLZDdv9OQuN+3MUokHciyb
+        oLLq1RSiVNxKaoF8tVUKoF8TMd5DMQXOi1ajmxKmsqUPkHTK01xBznCiRYHmdg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732021;
+        s=2020e; t=1662732023;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lE5RwnibNt7wQdy94SVqKuvSwCROx+VoFtcIbDqU9Xs=;
-        b=XqKyDXC13KBCZDZuk/nLTC9GJlgEUgs7VUHlChJoFjiKH0+5aGSZ2zsQ/kgHsv4kyGj29n
-        rbqeatJq1Ro+iEDQ==
-From:   "tip-bot2 for Christophe JAILLET" <tip-bot2@linutronix.de>
+        bh=QmXv+2Vq7xlcJgmE4broRI/IR8cyC5RzFZWPgou2fUQ=;
+        b=C+H75a9AsTruxBL43hbbq8Co+gP77X6mxSE2bOCm8D7t33RLsnXbzy7euIXxJ27v0D2FNM
+        RmhZ59kHQkPTc6AA==
+From:   "tip-bot2 for Brian Norris" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] devres: Slightly optimize alloc_dr()
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+Subject: [tip: sched/psi] drivers: base: Print error code on synthetic uevent failure
+Cc:     Brian Norris <briannorris@chromium.org>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cd255bd871484e63cdd628e819f929e2df59afb02=2E16583?=
- =?utf-8?q?52383=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
-References: =?utf-8?q?=3Cd255bd871484e63cdd628e819f929e2df59afb02=2E165835?=
- =?utf-8?q?2383=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
+In-Reply-To: <20220824165213.1.Ifdb98af3d0c23708a11d8d5ae5697bdb7e96a3cc@changeid>
+References: <20220824165213.1.Ifdb98af3d0c23708a11d8d5ae5697bdb7e96a3cc@changeid>
 MIME-Version: 1.0
-Message-ID: <166273202054.401.17562686262553239194.tip-bot2@tip-bot2>
+Message-ID: <166273202172.401.4074111270309086983.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,45 +67,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     61742a7cd5b194d2cc52d78de8ec6967634a4cd6
-Gitweb:        https://git.kernel.org/tip/61742a7cd5b194d2cc52d78de8ec6967634a4cd6
-Author:        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-AuthorDate:    Wed, 20 Jul 2022 23:26:36 +02:00
+Commit-ID:     6bb7ea3afd3eaae95eda6ef5589c3087f2cd70d8
+Gitweb:        https://git.kernel.org/tip/6bb7ea3afd3eaae95eda6ef5589c3087f2cd70d8
+Author:        Brian Norris <briannorris@chromium.org>
+AuthorDate:    Wed, 24 Aug 2022 16:52:16 -07:00
 Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CommitterDate: Thu, 01 Sep 2022 18:17:14 +02:00
+CommitterDate: Thu, 01 Sep 2022 18:15:50 +02:00
 
-devres: Slightly optimize alloc_dr()
+drivers: base: Print error code on synthetic uevent failure
 
-If the gfp flag used for the memory allocation already has __GFP_ZERO,
-then there is no need to explicitly clear the "struct devres_node". It is
-already zeroed.
+If we're going to log the failure, we might as well log the return code
+too.
 
-This saves a few cycles when using devm_zalloc() and co.
-
-In the case of devres_alloc() (which calls __devres_alloc_node()), the
-compiler could remove the test and the memset() because it should be able
-to see that the __GFP_ZERO flag is set.
-So this would make the code both faster and smaller.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/d255bd871484e63cdd628e819f929e2df59afb02.1658352383.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Link: https://lore.kernel.org/r/20220824165213.1.Ifdb98af3d0c23708a11d8d5ae5697bdb7e96a3cc@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/devres.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/base/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-index 864d0b3..4ab2b50 100644
---- a/drivers/base/devres.c
-+++ b/drivers/base/devres.c
-@@ -117,7 +117,9 @@ static __always_inline struct devres * alloc_dr(dr_release_t release,
- 	if (unlikely(!dr))
- 		return NULL;
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 753e7cc..fd04103 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2509,7 +2509,7 @@ static ssize_t uevent_store(struct device *dev, struct device_attribute *attr,
+ 	rc = kobject_synth_uevent(&dev->kobj, buf, count);
  
--	memset(dr, 0, offsetof(struct devres, data));
-+	/* No need to clear memory twice */
-+	if (!(gfp & __GFP_ZERO))
-+		memset(dr, 0, offsetof(struct devres, data));
+ 	if (rc) {
+-		dev_err(dev, "uevent: failed to send synthetic uevent\n");
++		dev_err(dev, "uevent: failed to send synthetic uevent: %d\n", rc);
+ 		return rc;
+ 	}
  
- 	INIT_LIST_HEAD(&dr->node.entry);
- 	dr->node.release = release;
