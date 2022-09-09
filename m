@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3AE5B3F6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22A85B3F71
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiIITWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S230218AbiIITYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiIITWW (ORCPT
+        with ESMTP id S230114AbiIITYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:22:22 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D89144956
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:22:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gh9so6247839ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:22:18 -0700 (PDT)
+        Fri, 9 Sep 2022 15:24:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62EA143431
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:24:01 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d82so2535653pfd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date;
-        bh=a/Ks7J+SbGZiBo7wbQorabT/5WmVbsbSn3RJSyr6imE=;
-        b=oSvr4+rjYsGhnTDq7UnTYgcl0i7LCByjGI2GCX2Se41xKYJo7k6VJGSPFvyjIoS5t4
-         HY2pkazrjq0/zcJPYkaQOkeKjyusESqctNmWn+KidMDwBCwsRvo1oqF1E7pe/ra0byCe
-         lBc1NZKXsRSL5l+Py59WmBcx6jNNjdQ0gK81gKP6/EQxbmhJGdg9jO7bxuoe77tDQB9L
-         12VqlbtN7jQ2OK2gEOBrMfs+W1bLA7hW6vsaTY6Sr7UdBcGZCh2X9NsP3gTz+F7ymoKp
-         B/cc3k+aZUyY/PmGXEY3Wgm36lUU8jXJhSU2Vk4TKkgcAcfuUys3RlIyQl24keOLKvOY
-         l5gA==
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1YL3JOnJhxMrmebag05eoFsKq7z4k+Mtpi8WQ+HWkBA=;
+        b=PFWHM6FNgcGzrNw+awdzUIJDCQyBKEQEKSlevJNyzCOj8tF/Q+hkpQjcpOciNhux9x
+         A0OdJumurQVQi1hUylldetn/Dicm6OGl1cwgvO1EgKFkc6h2YtJrmqHz464PBtcjGDSd
+         eXfyW4aqpypuN4Ldeon/6uequtYfihPaPzsVa1X9WircOCblJlS7alBk/5SPufUiqWWG
+         EE9cRuQcpwjPvVozrW4ItoU1r+I9X/Y931Cq70WNq2wfK1a3Bx0nUxLlNqF5Q6ev919z
+         q6vRtgguuTUyeeCPp2Bc4HBx070AZE40+M4agC1mW+twJFYyWDiT4mgb2YCdTMRCYVh+
+         plwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=a/Ks7J+SbGZiBo7wbQorabT/5WmVbsbSn3RJSyr6imE=;
-        b=eN3m6dlns68bd3gn6CTOpo0suRJSMuOyWVi6bRKlYJlNYr3y9/CRqowLCjy0NMNW9z
-         iirMIiAVgyWj9BJMz5gGKAIVbwCwjKrAUO+OZtWhxbAhEM7NNgTR2qxfcqFoCUsS8mjR
-         gE+nqCfA/YSy9fJjs0Ey7DiwSWVHcB1bB1LJwNCD0geihxm3gTIsGqkl/mQDGqV74C49
-         WOgtUDunqkzTzC5hVRSyt5Vacmh5mdj65dp/ZWjrtOMN56hx76+2GJVQV9o0D/740Fmv
-         ZkBc72nNsveRT3yXDtVr+bf0OBXfKnQFIiEWwKKJtGbg5iGzkTF+vUOhtbA2uJtOz2nM
-         H83A==
-X-Gm-Message-State: ACgBeo1fBC4+keaY/RYsjy6s8P7mQsxp7NJYYcpFIPBJULotvTg2PxWZ
-        ZjdAseYMoNGOGrXRBUBC/MA=
-X-Google-Smtp-Source: AA6agR5Iq4uzLaSVrbc2HH6cwYNAsJ2EEiJbhwCM1npW3GqsZ+D6JPDBtkepkS2Jf8XyeqYCoda28Q==
-X-Received: by 2002:a17:906:9b83:b0:730:b3ae:343 with SMTP id dd3-20020a1709069b8300b00730b3ae0343mr11224767ejc.670.1662751336838;
-        Fri, 09 Sep 2022 12:22:16 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id u9-20020a17090626c900b00775f6081a87sm622639ejc.121.2022.09.09.12.22.16
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1YL3JOnJhxMrmebag05eoFsKq7z4k+Mtpi8WQ+HWkBA=;
+        b=sZERwAhTKeixoeLsmX01M8Xq5c9VRpI8hka0ZJsJBIMiIR6OQyagSe3Y2jXRdt7Aw5
+         H4k2xWHbCB526HMxfvOArJS7u/xCjSV6jLD/aIq3jfmP9v7K3jF0W6UAtk1rmctJd9oL
+         wg2ewnKEm0OYR4NkbZBo4vPO5yAbGlUbePGOLj97N2jcBjUwLkb0d/9XuhIYFeDUGJWj
+         MjtI8XZkYfZwwsL3w+lfA2fX/vQjcWgii39MMjmFP1oyF4y7VTv5T3ijJ9L0nMNuE4s8
+         Rc/EOO9xaJCsCtQugXrM7poKnlwT0vMxJzn3wd0+ba7AFgN8t7njxp9HgcYAFk9semSM
+         mXaQ==
+X-Gm-Message-State: ACgBeo1dvGtUVc9PBlPOIboQzrZwf7OBL32+729Sp+MF/QytKpfUOmtj
+        VoYYDAGTSo/tNOVZMdk5oY5cFg==
+X-Google-Smtp-Source: AA6agR5GxFgslNSJSVhP7jovTdqKbGSdAnXUIpR+aTUm3kfP3svOkUQ9KU1U48DF+jRxLqyIW2628g==
+X-Received: by 2002:a63:5526:0:b0:434:c99c:6fdc with SMTP id j38-20020a635526000000b00434c99c6fdcmr13521836pgb.558.1662751441109;
+        Fri, 09 Sep 2022 12:24:01 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id z8-20020a170903018800b001768452d4d7sm887925plg.14.2022.09.09.12.23.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 12:22:16 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 21:22:14 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] staging: rtl8192e: Rename CurSlotTime
-Message-ID: <1b71366d87b2b178fcd8f182127a51c7a7507936.1662402870.git.philipp.g.hortmann@gmail.com>
-References: <cover.1662402870.git.philipp.g.hortmann@gmail.com>
+        Fri, 09 Sep 2022 12:23:59 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 13:23:57 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Maria Yu <quic_aiquny@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_clew@quicinc.com
+Subject: Re: [PATCH v1] remoteproc: core: do pm relax when not first crash
+Message-ID: <20220909192357.GA319190@p14s>
+References: <1662712413-38233-1-git-send-email-quic_aiquny@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1662402870.git.philipp.g.hortmann@gmail.com>
+In-Reply-To: <1662712413-38233-1-git-send-email-quic_aiquny@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable CurSlotTime to cur_slot_time to avoid CamelCase which is
-not accepted by checkpatch.pl.
+Hi Maria,
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Fri, Sep 09, 2022 at 04:33:33PM +0800, Maria Yu wrote:
+> Even if it is not first crash, need to relax the pm
+> wakelock otherwise the device will stay awake.
+> 
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index fb9e5fe5fa5d..671fe547639b 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -304,17 +304,17 @@ static void _rtl92e_update_cap(struct net_device *dev, u16 cap)
- 
- 	if (net->mode & (IEEE_G | IEEE_N_24G)) {
- 		u8	slot_time_val;
--		u8	CurSlotTime = priv->slot_time;
-+		u8	cur_slot_time = priv->slot_time;
- 
- 		if ((cap & WLAN_CAPABILITY_SHORT_SLOT_TIME) &&
- 		   (!priv->rtllib->pHTInfo->bCurrentRT2RTLongSlotTime)) {
--			if (CurSlotTime != SHORT_SLOT_TIME) {
-+			if (cur_slot_time != SHORT_SLOT_TIME) {
- 				slot_time_val = SHORT_SLOT_TIME;
- 				priv->rtllib->SetHwRegHandler(dev,
- 					 HW_VAR_SLOT_TIME, &slot_time_val);
- 			}
- 		} else {
--			if (CurSlotTime != NON_SHORT_SLOT_TIME) {
-+			if (cur_slot_time != NON_SHORT_SLOT_TIME) {
- 				slot_time_val = NON_SHORT_SLOT_TIME;
- 				priv->rtllib->SetHwRegHandler(dev,
- 					 HW_VAR_SLOT_TIME, &slot_time_val);
--- 
-2.37.2
+The goal is exactly to keep the device awake... 
 
+> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index e5279ed9a8d7..30078043e939 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1956,6 +1956,7 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>  	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+>  		/* handle only the first crash detected */
+>  		mutex_unlock(&rproc->lock);
+> +		pm_relax(rproc->dev.parent);
+
+If we are here it means that rproc_crash_handler_work() has already been called
+_and_ that a recovery is in process.  When the first crash handler completes
+pm_relax() will be called and the device will go to sleep as expected.
+
+Thanks,
+Mathieu
+
+>  		return;
+>  	}
+>  
+> -- 
+> 2.7.4
+> 
