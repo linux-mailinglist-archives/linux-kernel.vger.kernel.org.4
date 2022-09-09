@@ -2,162 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB885B37FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA7A5B3800
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiIIMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S231136AbiIIMjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIIMh7 (ORCPT
+        with ESMTP id S230283AbiIIMjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:37:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157C36DD8;
-        Fri,  9 Sep 2022 05:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662727078; x=1694263078;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Mo99IpYm1AvzncHba+O/i3dk/CKKv38nddBho+Fzb6Y=;
-  b=hLdYq4ClIxika3o6y653o4u858fTa8ViclQGvB7MSUhQUjjEwYdQBmic
-   zSojbK4c0fr4/4/BjA/qyLyQfTEDgSt8DeFvGL+zpdocNdVt4ZZY9XdJ+
-   CTMycAjIM0oMmcrGU72Pv+2QsN5KZZB9BZ6JtClifw8kq6LEpBEOQKH1d
-   rn/KuVsdFSflHY47md7rq0skrfAs4NxOqgRmNOA8yKeMT5Qt+sOO2SrA0
-   g0wH+jZpbVeH/NcJpP/doA5mQkqYfJt6MjWEbXDHZzs+Y30Vp0ySV+Eb6
-   tqVGokVuvrX9+uIUyIpa92C3MvaW4vWXkMxFm/ISNx1OQChOVVu7CvP/0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284482523"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="284482523"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 05:37:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="683625990"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Sep 2022 05:37:57 -0700
-Received: from [10.252.209.107] (kliang2-mobl1.ccr.corp.intel.com [10.252.209.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 9 Sep 2022 08:39:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A3C1707B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:39:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id CA530580692;
-        Fri,  9 Sep 2022 05:37:54 -0700 (PDT)
-Message-ID: <842164ce-b754-b727-c976-39d05c34ddf3@linux.intel.com>
-Date:   Fri, 9 Sep 2022 08:37:53 -0400
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFtd6LZsz4xPB;
+        Fri,  9 Sep 2022 22:39:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1662727178;
+        bh=gdgKruRzyKjPVi5bAZLzebsCGCDJal29o5ykCf7Y6Z4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Y5dl+LtKR/dieSR3wubP1gZfKdgCpr11hX6e3Oybcj8d7Yhx7Vqu7s1yfrM1fTBIx
+         GE0owCOm73VbeM/AkRr8nNdF9HyX8zHQgSaYL8NcstoTr4vLeQIJdEAbEhNoiKuizE
+         njk0dh1Hsuz1F/CvIM278pc7TwvSrqeilltWE8ue1Cw4p7T17xsxM1UlLLQBhqp91p
+         3MCIG/vPXJoC19/zomhB3cTDW7zZN8ikUiiBRopGZSXKTeY/iDopRr6QO+e6Snc4Wl
+         EznaIQwAJAq2Rlw6BRto2lofB4BzLXEt/hLva5c85QGBDhTgFgVL9SCSQyu7TLtoCQ
+         ysjt59wWanoJg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v1 02/19] powerpc/64e: Tie PPC_BOOK3E_64 to PPC_E500MC
+In-Reply-To: <e60c6e97-f73e-5a5e-9ddf-8956e9a5b950@csgroup.eu>
+References: <4e7e6259e5af0e0e171f19ee1f85ab5b2553723f.1662658653.git.christophe.leroy@csgroup.eu>
+ <f2d30eb7fadcfd89f7ac3784cb0b4a4b47d47db1.1662658653.git.christophe.leroy@csgroup.eu>
+ <87r10ldrk2.fsf@mpe.ellerman.id.au>
+ <e60c6e97-f73e-5a5e-9ddf-8956e9a5b950@csgroup.eu>
+Date:   Fri, 09 Sep 2022 22:39:37 +1000
+Message-ID: <87k06cen7a.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 1/3] perf: Use sample_flags for callchain
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220908214104.3851807-1-namhyung@kernel.org>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220908214104.3851807-1-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 09/09/2022 =C3=A0 07:50, Michael Ellerman a =C3=A9crit=C2=A0:
+>> Hi Christophe,
+>>=20
+>> Thanks for trying to clean up this tangled mess.
+>>=20
+>> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+>>> The only 64-bit Book3E CPUs we support is the e500mc.
+>>=20
+>> AFAIK the e500mc is 32-bit?
+>
+> Yes it seems.
+>
+>>=20
+>> We support e5500 and e6500 which are 64-bit Book3E.
+>>=20
+>> They're derivatives of the e500mc AIUI.
+>>=20
+>> So CONFIG_PPC_E500MC actually means e500mc *and later derivatives*.
+>>=20
+>> You can see that with eg:
+>>=20
+>> config SPE_POSSIBLE
+>> 	def_bool y
+>> 	depends on E500 && !PPC_E500MC
+>>=20
+>> Because e500mc dropped SPE, and so therefore e5500 and e6500 don't have
+>> it either.
+>>=20
+>> And eg:
+>>=20
+>> #ifdef CONFIG_PPC_E500MC
+>> _GLOBAL(__setup_cpu_e6500)
+>> 	mflr	r6
+>>=20
+>>=20
+>>> However our Kconfig allows configurating a kernel that has 64-bit
+>>> Book3E support, but no e500mc support enabled. Such a kernel
+>>> would never boot, it doesn't know about any CPUs.
+>>=20
+>> That is true.
+>>=20
+>>> To fix this, force e500mc to be selected whenever we are
+>>> building a 64-bit Book3E kernel.
+>>=20
+>> I think that's a reasonable fix, just it's important to differentiate
+>> between CONFIG_PPC_E500MC (the symbol) and e500mc (the CPU).
+>
+> Ok, I'll see how I can make it more explicit.
+>
+>>=20
+>>> And add a test to detect futur situations where cpu_specs is empty.
+>>                             future
+>>>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>> ---
+>>>   arch/powerpc/kernel/cputable.c         | 2 ++
+>>>   arch/powerpc/platforms/Kconfig.cputype | 2 ++
+>>>   2 files changed, 4 insertions(+)
+>>>
+>> ..
+>>> diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/plat=
+forms/Kconfig.cputype
+>>> index 5185d942b455..19fd95a06352 100644
+>>> --- a/arch/powerpc/platforms/Kconfig.cputype
+>>> +++ b/arch/powerpc/platforms/Kconfig.cputype
+>>> @@ -108,6 +108,8 @@ config PPC_BOOK3S_64
+>>>   config PPC_BOOK3E_64
+>>>   	bool "Embedded processors"
+>>>   	select PPC_FSL_BOOK3E
+>>> +	select E500
+>>> +	select PPC_E500MC
+>>>   	select PPC_FPU # Make it a choice ?
+>>>   	select PPC_SMP_MUXED_IPI
+>>>   	select PPC_DOORBELL
+>>=20
+>> I think that makes the select of PPC_E500MC below redundant:
+>>=20
+>> config PPC_QEMU_E500
+>> 	bool "QEMU generic e500 platform"
+>> 	select DEFAULT_UIMAGE
+>> 	select E500
+>> 	select PPC_E500MC if PPC64
+>
+> That's handled in  [v1,10/19] powerpc: Remove redundant selection of=20
+> E500 and E500MC. Should I reorder patches ?
 
+No that's fine the way it is, I hadn't looked at patch 10 when I replied.
 
-On 2022-09-08 5:41 p.m., Namhyung Kim wrote:
-> So that it can call perf_callchain() only if needed.  Historically it used
-> __PERF_SAMPLE_CALLCHAIN_EARLY but we can do that with sample_flags in the
-> struct perf_sample_data.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-
-The series look good to me.
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> ---
->  arch/x86/events/amd/ibs.c  | 4 +++-
->  arch/x86/events/intel/ds.c | 8 ++++++--
->  kernel/events/core.c       | 2 +-
->  3 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index c251bc44c088..dab094166693 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -798,8 +798,10 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
->  	 * recorded as part of interrupt regs. Thus we need to use rip from
->  	 * interrupt regs while unwinding call stack.
->  	 */
-> -	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-> +	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
->  		data.callchain = perf_callchain(event, iregs);
-> +		data.sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> +	}
->  
->  	throttle = perf_event_overflow(event, &data, &regs);
->  out:
-> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-> index a5275c235c2a..4ba6ab6d0d92 100644
-> --- a/arch/x86/events/intel/ds.c
-> +++ b/arch/x86/events/intel/ds.c
-> @@ -1546,8 +1546,10 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
->  	 * previous PMI context or an (I)RET happened between the record and
->  	 * PMI.
->  	 */
-> -	if (sample_type & PERF_SAMPLE_CALLCHAIN)
-> +	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
->  		data->callchain = perf_callchain(event, iregs);
-> +		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> +	}
->  
->  	/*
->  	 * We use the interrupt regs as a base because the PEBS record does not
-> @@ -1719,8 +1721,10 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
->  	 * previous PMI context or an (I)RET happened between the record and
->  	 * PMI.
->  	 */
-> -	if (sample_type & PERF_SAMPLE_CALLCHAIN)
-> +	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
->  		data->callchain = perf_callchain(event, iregs);
-> +		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> +	}
->  
->  	*regs = *iregs;
->  	/* The ip in basic is EventingIP */
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 15d27b14c827..b8af9fdbf26f 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -7323,7 +7323,7 @@ void perf_prepare_sample(struct perf_event_header *header,
->  	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
->  		int size = 1;
->  
-> -		if (!(sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
-> +		if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
->  			data->callchain = perf_callchain(event, regs);
->  
->  		size += data->callchain->nr;
+cheers
