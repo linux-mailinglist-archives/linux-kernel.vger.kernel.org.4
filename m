@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8A75B42B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EF25B42B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiIIW5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 18:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S230311AbiIIXAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiIIW5H (ORCPT
+        with ESMTP id S229464AbiIIXA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:57:07 -0400
+        Fri, 9 Sep 2022 19:00:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C463010B007;
-        Fri,  9 Sep 2022 15:57:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6E48F94B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:00:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AED1B82320;
-        Fri,  9 Sep 2022 22:57:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E43EC433D7;
-        Fri,  9 Sep 2022 22:57:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A241CB82657
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 23:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D264DC433D6;
+        Fri,  9 Sep 2022 23:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662764223;
-        bh=ZCVhj1+wfjOMA0Had6ciscyEFKnluS+v1H1EBTpafiY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=fNossQnLiG/J6rtZTmNxIyHMbCYbg2ohdsHBi0Arvjcr20QuWwu7fRY7Y1QQXFzYe
-         plOFby9dAQIehBeHZ0WZvkujKtVKVN8Ep5h4Wp7iLnsc9z09N1dPzTDvCoDTUeXwQL
-         ytYMNyVUXaFyIX2tt5D8LJdbP5zG4RGSb72JGVG++XiBjQ436VZs7PhWdgYcW95Rwq
-         7BTwwdr4kMrLDwkeABEq85kKOikMPzObp01DIYqrlke+sKFpnF2eyCE6Zocgv0Beb3
-         5RfiV989cBKK/Y50AQKavpGuzz56KSg63yzQFS5pVtPG3epSyD2sUc8lzVM1uuw9Cv
-         sSoHuXCiave5A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>
-In-Reply-To: <20220909112529.239143-1-linus.walleij@linaro.org>
-References: <20220909112529.239143-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] regulator: qcom_rpm: Fix circular deferral regression
-Message-Id: <166276422182.339577.316696992835624011.b4-ty@kernel.org>
-Date:   Fri, 09 Sep 2022 23:57:01 +0100
+        s=k20201202; t=1662764424;
+        bh=f/7dJ5txgGxEVcbNQbggz7c0bBv4vFnX6giz7/h7ftA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=s/vk82qK4O+vymiABD4L2SfJe9CfTJlUDAy5G7oIRlyj3Prygy5S27vbNAXVFhKJA
+         oAbjjcTp5S0fatq2klxDqoBs0OX0vB0pY/nYc/KJx/i3WBcKSCeaNhnxPDgJDQngbU
+         NzOM5kWmqpls5cHBHrOZMdANEfK8qittiqo28ob1UGYQyTbdY3hEe6DHPpAqkZbeeo
+         HL0WJplG7wBxIah4XUlpMZO8Ru/uKeDFogzsZLnGCdNrbaDXYfai4nEM41p6IfpKhE
+         E9mEi6PUNZbDedqcATGtGQNbo0LgeV/VmT9yWrde/T1JGZW9Vt85YQ2cRaXfPRc7Nm
+         rhEbzYWiyZAjw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Xin Hao <xhao@linux.alibaba.com>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/sysfs: change few functions execute order
+Date:   Fri,  9 Sep 2022 23:00:22 +0000
+Message-Id: <20220909230022.51436-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220909154434.5870e33657a11d53320861e7@linux-foundation.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,40 +55,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sep 2022 13:25:29 +0200, Linus Walleij wrote:
-> On recent kernels, the PM8058 L16 (or any other PM8058 LDO-regulator)
-> does not come up if they are supplied by an SMPS-regulator. This
-> is not very strange since the regulators are registered in a long
-> array and the L-regulators are registered before the S-regulators,
-> and if an L-regulator defers, it will never get around to registering
-> the S-regulator that it needs.
+On Fri, 9 Sep 2022 15:44:34 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+
+> On Thu,  8 Sep 2022 22:16:53 +0000 SeongJae Park <sj@kernel.org> wrote:
 > 
-> [...]
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
+> Cool.  I rewrote the changelog significantly:
+> 
+> From: Xin Hao <xhao@linux.alibaba.com>
+> Subject: mm/damon/sysfs: change few functions execute order
+> Date: Thu, 8 Sep 2022 16:19:32 +0800
+> 
+> There's no need to run container_of() as early as we do.
+> 
+> The compiler figures this out, but the resulting code is more readable.
 
-Applied to
+Looks very nice to me.  Thank you, Andrew!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: qcom_rpm: Fix circular deferral regression
-      commit: 8478ed5844588703a1a4c96a004b1525fbdbdd5e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
 Thanks,
-Mark
+SJ
+
+[...]
