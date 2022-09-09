@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D55B3FC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2323E5B3FBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiIIThU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S231467AbiIIThD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiIITgq (ORCPT
+        with ESMTP id S230436AbiIITgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:36:46 -0400
+        Fri, 9 Sep 2022 15:36:39 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C0DA11213D;
-        Fri,  9 Sep 2022 12:36:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A3B01153BB;
+        Fri,  9 Sep 2022 12:36:37 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 9AF04DBD;
-        Fri,  9 Sep 2022 22:40:20 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 9AF04DBD
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 6602ADBE;
+        Fri,  9 Sep 2022 22:40:21 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 6602ADBE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662752420;
-        bh=d2GPchrpvVOgjuEOQF2EanFTi3kLUr78uJWuPrwrf50=;
+        d=baikalelectronics.ru; s=mail; t=1662752421;
+        bh=wYx4YZQxrd0X1DNHR+uvu1prpgP1TFhOgzBZNgxVtkg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=pW1qm12n8TUUoawpbk1GHwTl7ZL6XeNLE+u6nnBBKX2P+ZZdeet8dv5w/59D7y3Gh
-         do78eRjnqamBaheNS0BIm13HV5q4E9BEMmt02mLfLBGpnGGWL2gqiMAIQUCIN1EZ+v
-         /JVaQOCa7r96dtDm4HpDcVK3rfej96wkBhILC2Dw=
+        b=ISH/lFNkRqQ0b2n9GqTdZQoZ0TN34V0kKKFH2GI5krA5iuCV7qhvwbY5i0in2OO0c
+         5D8yRBgaxdaaqM4oTUvkKvxzRyig7m+A1JzMkSCCe5ZU983wfMWAiZPITJzPllxh3g
+         nIq8uxfqUDODAlPeWIPOi5yRvggpRRAep+bFNNP0=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
  Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 9 Sep 2022 22:36:32 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -34,16 +34,16 @@ To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Florian Fainelli <f.fainelli@gmail.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v8 04/23] dt-bindings: ata: sata: Extend number of SATA ports
-Date:   Fri, 9 Sep 2022 22:36:02 +0300
-Message-ID: <20220909193621.17380-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v8 05/23] dt-bindings: ata: sata-brcm: Apply common AHCI schema
+Date:   Fri, 9 Sep 2022 22:36:03 +0300
+Message-ID: <20220909193621.17380-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -59,51 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The denoted in the description upper limit only concerns the Port
-Multipliers, but not the actual SATA ports. It's an external device
-attached to a SATA port in order to access more than one SATA-drive. So
-when it's attached to a SATA port it just extends the port capability
-while the number of actual SATA ports stays the same. For instance on AHCI
-controllers the number of actual ports is determined by the CAP.NP field
-and the PI (Ports Implemented) register. AFAICS in general the maximum
-number of SATA ports depends on the particular controller implementation.
-Generic AHCI controller can't have more than 32 ports (since CAP.NP is of
-5 bits wide and PI register is 32-bits size), while DWC AHCI SATA
-controller can't be configured with more than 8 ports activated. So let's
-discard the SATA ports reg-property restrictions and just make sure that
-it consists of a single reg-item.
+The Broadcom SATA controller is obviously based on the AHCI standard. The
+device driver uses the kernel AHCI library to work with it. Therefore we
+can be have a more thorough DT-bindings evaluation by referring to the
+AHCI-common schema instead of using the more relaxed SATA-common one.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 
 ---
 
-Changelog v2:
-- Add comma and replace "channel" with "SATA port" in the reg property
-  description (@Damien).
+Changelog v4:
+- This is a new patch added on v4 lap of the review procedure.
 ---
- Documentation/devicetree/bindings/ata/sata-common.yaml | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/sata-common.yaml b/Documentation/devicetree/bindings/ata/sata-common.yaml
-index 5a31a902618d..58c9342b9925 100644
---- a/Documentation/devicetree/bindings/ata/sata-common.yaml
-+++ b/Documentation/devicetree/bindings/ata/sata-common.yaml
-@@ -49,10 +49,9 @@ $defs:
-     properties:
-       reg:
-         minimum: 0
--        maximum: 14
-         description:
--          The ID number of the drive port SATA can potentially use a port
--          multiplier making it possible to connect up to 15 disks to a single
--          SATA port.
-+          The ID number of the SATA port. Aside with being directly used,
-+          each port can have a Port Multiplier attached thus allowing to
-+          access more than one drive by means of a single SATA port.
+diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+index 4ee74df8e58a..fa8ebc8f243f 100644
+--- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
++++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+@@ -14,7 +14,7 @@ maintainers:
+   - Florian Fainelli <f.fainelli@gmail.com>
  
- ...
+ allOf:
+-  - $ref: sata-common.yaml#
++  - $ref: ahci-common.yaml#
+ 
+ properties:
+   compatible:
 -- 
 2.37.2
 
