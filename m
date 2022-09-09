@@ -2,132 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325BC5B33EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E899B5B33F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiIIJ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S231346AbiIIJap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiIIJ2R (ORCPT
+        with ESMTP id S231936AbiIIJaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:28:17 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C4ADF29;
-        Fri,  9 Sep 2022 02:26:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VP9-qIZ_1662715615;
-Received: from 30.221.130.74(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VP9-qIZ_1662715615)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Sep 2022 17:26:56 +0800
-Message-ID: <fc63c7ed-bffe-4127-7622-a7ce0c4b4378@linux.alibaba.com>
-Date:   Fri, 9 Sep 2022 17:26:55 +0800
+        Fri, 9 Sep 2022 05:30:15 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7059813CB1B;
+        Fri,  9 Sep 2022 02:28:25 -0700 (PDT)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.105])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOIrBxtjH04VAA--.19971S2;
+        Fri, 09 Sep 2022 17:28:11 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     lpieralisi@kernel.org, robin.murphy@arm.com, chenhuacai@loongson.cn
+Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
+        lenb@kernel.org, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        loongarch@lists.linux.dev
+Subject: [PATCH V4 0/2] DMA: update acpi_dma_get_range to return dma map regions 
+Date:   Fri,  9 Sep 2022 17:28:09 +0800
+Message-Id: <20220909092811.22627-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V2 3/5] erofs: add 'domain_id' prefix when register sysfs
-Content-Language: en-US
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com
-References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
- <20220902105305.79687-4-zhujia.zj@bytedance.com>
- <539dcc26-a250-5bf4-0f3c-a3f7cdc2ce48@linux.alibaba.com>
-In-Reply-To: <539dcc26-a250-5bf4-0f3c-a3f7cdc2ce48@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxBOIrBxtjH04VAA--.19971S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UKF4xtr1ftF1xXF4xZwb_yoW8Jw4DpF
+        9a9r43Gr1UKrZxJry3Aw1rZw15Xw1fZry7Ga9rK34kJF4jvr17Jry8Z3WxCa4UAa47Gr40
+        qF98Ja45WF1UAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU921xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
+        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
+        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4
+        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+        MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+        6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The patch series changed acpi_dma_get_range to return dma regions
+as of_dma_get_range, so that dev->dma_range_map can be initialized
+conveniently.
 
+And acpi_arch_dma_setup for ARM64 is changed wih removing dma_base
+and size from it's parameters.
 
-On 9/9/22 5:23 PM, JeffleXu wrote:
-> 
-> 
-> On 9/2/22 6:53 PM, Jia Zhu wrote:
->> In shared domain mount procedure, add 'domain_id' prefix to register
->> sysfs entry. Thus we could distinguish mounts that don't use shared
->> domain.
->>
->> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
->> ---
->>  fs/erofs/sysfs.c | 11 ++++++++++-
->>  1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
->> index c1383e508bbe..c0031d7bd817 100644
->> --- a/fs/erofs/sysfs.c
->> +++ b/fs/erofs/sysfs.c
->> @@ -201,12 +201,21 @@ static struct kobject erofs_feat = {
->>  int erofs_register_sysfs(struct super_block *sb)
->>  {
->>  	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +	char *name = NULL;
->>  	int err;
->>  
->> +	if (erofs_is_fscache_mode(sb)) {
->> +		name = kasprintf(GFP_KERNEL, "%s%s%s", sbi->opt.domain_id ?
->> +				sbi->opt.domain_id : "", sbi->opt.domain_id ? "," : "",
->> +				sbi->opt.fsid);
->> +		if (!name)
->> +			return -ENOMEM;
->> +	}
-> 
-> 
-> How about:
-> 
-> name = erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id;
-> if (sbi->opt.domain_id) {
-> 	str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id, sbi->opt.fsid);
-> 	name = str;
-> }
+Remove ARCH_HAS_PHYS_TO_DMA for LoongArch and use generic
+phys_to_dma/dma_to_phys in include/linux/dma-direct.h.
 
-Another choice:
+V1 -> V2
+- Removed dma_base and size from acpi_arch_dma_setup' parameters
+- Add patch to remove ARCH_HAS_PHYS_TO_DMA for LoongArch
 
-if (erofs_is_fscache_mode(sb)) {
-	if (sbi->opt.domain_id) {
-		str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id, sbi->opt.fsid);
-		name = str;
-	} else {
-		name = sbi->opt.fsid;
-	}
-} else {
-	name = sb->s_id;
-}
+V2 -> V3
+- Add kerneldoc for acpi_dma_get_range changing
+- Remove redundant code in acpi_arch_dma_setup, and check map
 
+V3 -> V4
+- Change title to "Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA"
+- Use resource_size() to get size 
 
+Jianmin Lv (2):
+  ACPI / scan: Support multiple dma windows with different offsets
+  LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA
 
-
-> 
-> 
->>  	sbi->s_kobj.kset = &erofs_root;
->>  	init_completion(&sbi->s_kobj_unregister);
->>  	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
->> -			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
->> +			name ? name : sb->s_id);
-> 
-> 	kobject_init_and_add(..., "%s", name);
-> 	kfree(str);
-> 
-> though it's still not such straightforward...
-> 
-> Any better idea?
-> 
-> 
->> +	kfree(name);
->>  	if (err)
->>  		goto put_sb_kobj;
->>  	return 0;
-> 
+ arch/loongarch/Kconfig        |  1 -
+ arch/loongarch/kernel/dma.c   | 52 ++++++++++++++--------------------
+ arch/loongarch/kernel/setup.c |  2 +-
+ drivers/acpi/arm64/dma.c      | 29 +++++++++++--------
+ drivers/acpi/scan.c           | 53 +++++++++++++++--------------------
+ include/acpi/acpi_bus.h       |  3 +-
+ include/linux/acpi.h          | 12 ++++----
+ 7 files changed, 71 insertions(+), 81 deletions(-)
 
 -- 
-Thanks,
-Jingbo
+2.31.1
+
