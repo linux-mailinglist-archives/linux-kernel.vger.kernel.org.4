@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9E05B333D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD3F5B3343
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiIIJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S232141AbiIIJRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiIIJRB (ORCPT
+        with ESMTP id S232131AbiIIJRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:17:01 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683B1128C36
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:16:56 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id p5so1059569ljc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=HwSPkOLsB3PaeJ/979fVd6W4oSX7MjdZh6/4vBoMvj8=;
-        b=fLLK6hOWnY1NKt2/9ajJcBXVBawXcP/rjqy5sIzCV2fC6BSP2GyZMCrq/Oe2XtVHHc
-         0UdYW+rQP1P51uENHMtg4PZ45PX+IlMOYfA9fn2iRzihWA1IyM0UxzL3xT7TZsikSicy
-         RVAz8bl5sLqfVAHDPBGjvlsyo61vlc+3OOHFW+UTEaLIzbr8md3sxfF3hRIZWe1cKYg9
-         85mdXqUmtYGjcNBYCt4gW4MfB8J3awgA2aY1Oz0EWC/Awy40MCebQDkPhLypHjCOc/LN
-         lVKIaazrD26h2zV4qxX7aL/CXHhME8xJOekIwykOKFW2Gj5OKG7b9Xscwv8MLskBvm4O
-         AWZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HwSPkOLsB3PaeJ/979fVd6W4oSX7MjdZh6/4vBoMvj8=;
-        b=aiQtrsXf2hQhZrL2AeNH1z6Xy5z+PMrMPHEg8516eSV7vsmEoKyBFFGcBv5ewk5ssE
-         5+8GgMdF3BAGR7/xxrP9lmhxNqb+oPRENqg8W1cyepXKiYn4LLbzyzfTSw30VmCyfgfp
-         4fv91QKLu2bljRpNFsuDwFVc6jYUHK43LD6KVmAhrVPsydm+2Gsgb2rysLC8vPGkxLxT
-         xQZ+vrtRPKno19C9cWiAA2G/EbjKCSGgqM81f3xqhuwNt0VwH0jScMFRirfo5GnEGmWm
-         EV/Y4pTyIlHmkfGSbwI37g9bSX5H98vtMupOYcFPtFv14gkLcEOVIejoGWqUx2vhJaKK
-         ZtTg==
-X-Gm-Message-State: ACgBeo0ThkoohrK5z+c8zmNqoyvgFH7tc0NeqwmmJnBbs34i4Mojc3yJ
-        zJvDB+txyQ5ueG5vflb6jkP6qQ==
-X-Google-Smtp-Source: AA6agR5tI6dxeZKZCdHy9EBG+L1v4GYsDaaX6M/D1VJQjaAot1Jq+s3AYRya/65TCVY4znvdNajeOQ==
-X-Received: by 2002:a2e:804a:0:b0:26b:66d3:4d51 with SMTP id p10-20020a2e804a000000b0026b66d34d51mr2396991ljg.293.1662715014841;
-        Fri, 09 Sep 2022 02:16:54 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05651203a900b0049476261c30sm3305lfp.113.2022.09.09.02.16.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 02:16:54 -0700 (PDT)
-Message-ID: <47066467-bab6-2f68-2924-cc93cf0c803f@linaro.org>
-Date:   Fri, 9 Sep 2022 12:16:53 +0300
+        Fri, 9 Sep 2022 05:17:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7567E128C3B;
+        Fri,  9 Sep 2022 02:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662715027; x=1694251027;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Dhw2jhCuJW+jka0cep0s3bFZ08dxRspNbt2WscRo39c=;
+  b=dDPmGkykmzA72XMUJvQmejkdet2cvT//1VVGGppQSNGO+jpKXm4x178I
+   x7bGg/c3+uSC4p4/YzyvEXjW/L8i4kuN6/SFehgFGSUcj07Ujhn4HXlKM
+   c9755DGR68yGjgoG1AxR2nyrG1ARjRFEV7Tsxv8qvztqPd5ah2+pTpgKy
+   2eb3HZ1PpzJxo21ElwYOyEEjELrIYYW4xjRNZu8QtwpTpbDo8bpam0sy1
+   LU2PyqmLyvPqYKzXGWChWIU1x6dJ0a9LqVnXqcPC7qEVsuCZxkbK+E8Gq
+   7fj3+sfmd7jmAlBkgH1nlTsSWJK+THPVOTJ474ugjkCWSLJaG9yk9H85X
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="280459202"
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="280459202"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:17:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="677089043"
+Received: from ppogotov-mobl.ger.corp.intel.com ([10.249.45.197])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:17:04 -0700
+Date:   Fri, 9 Sep 2022 12:16:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v1 1/1] serial: 8250_dma: Convert to use
+ uart_xmit_advance()
+In-Reply-To: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <81acf91-ba43-f276-fca7-ac9c9e721a88@linux.intel.com>
+References: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/3] phy: qcom-qmp-pcie: shorten function prefixes
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220906074550.4383-1-johan+linaro@kernel.org>
- <20220906074550.4383-3-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220906074550.4383-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1445102681-1662715026=:1967"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 10:45, Johan Hovold wrote:
-> The driver function prefix has gotten unnecessarily long and hurts
-> readability.
-> 
-> Shorten "qcom_qmp_phy_" to "qmp_" (which likely stands for "Qualcomm
-> Multi PHY" or similar anyway).
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--8323329-1445102681-1662715026=:1967
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
+On Fri, 9 Sep 2022, Andy Shevchenko wrote:
+
+> uart_xmit_advance() provides a common way on how to advance
+> the Tx queue. Use it for the sake of unification and robustness.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 137 +++++++++++------------
->   1 file changed, 63 insertions(+), 74 deletions(-)
-> -- 
-With best wishes
-Dmitry
+>  drivers/tty/serial/8250/8250_dma.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+> index d99020fd3427..b85c82616e8c 100644
+> --- a/drivers/tty/serial/8250/8250_dma.c
+> +++ b/drivers/tty/serial/8250/8250_dma.c
+> @@ -26,9 +26,7 @@ static void __dma_tx_complete(void *param)
+>  
+>  	dma->tx_running = 0;
+>  
+> -	xmit->tail += dma->tx_size;
+> -	xmit->tail &= UART_XMIT_SIZE - 1;
+> -	p->port.icount.tx += dma->tx_size;
+> +	uart_xmit_advance(&p->port, dma->tx_size);
+>  
+>  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+>  		uart_write_wakeup(&p->port);
 
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+Please note though that I already have patches for almost all these but 
+I've not just submitted the remaining ones yet.
+
+
+-- 
+ i.
+
+--8323329-1445102681-1662715026=:1967--
