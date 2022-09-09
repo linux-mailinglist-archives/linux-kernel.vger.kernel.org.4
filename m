@@ -2,72 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AF25B39B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A938E5B39A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiIINsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S231814AbiIINsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiIINsN (ORCPT
+        with ESMTP id S231643AbiIINsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:48:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82F37144091;
-        Fri,  9 Sep 2022 06:47:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFDDA165C;
-        Fri,  9 Sep 2022 06:47:33 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 917FB3F9AB;
-        Fri,  9 Sep 2022 06:47:24 -0700 (PDT)
-Message-ID: <5bfd7d4d-d431-6321-89bc-663dcd36e930@arm.com>
-Date:   Fri, 9 Sep 2022 14:47:19 +0100
+        Fri, 9 Sep 2022 09:48:25 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB7563F2A;
+        Fri,  9 Sep 2022 06:48:04 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3450990b0aeso19358197b3.12;
+        Fri, 09 Sep 2022 06:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=XNsL7A+ParoI+QQ6Xv0iUaI58zw0NLxrSar+h7dj9ic=;
+        b=i8dShfjNLy/UDAtFho8YmRkq1V+zKZO4FEer5IpuaPzN+RjDGfNg25NdaItiA/MSoV
+         V8LvnyIrToatsgR6HAKhGcsJ3d7IwRejPtekRmTdQHjMNpHgdR2cV1FAWntCBnQQc774
+         yefztNDXms4lJvs6hEjLXAx9nbMtT48CwKxCIhgjsnMFA3vxrk2mYnr8a2Z+OZJO+kmA
+         89icyrnUwNgkN/jai7x197eRbTqkDarA5nN7fk6Vgff4SZNlYFyAdm4iREQ/B2KYiVWQ
+         Bz/YjR6CRhzhSrdDNqvy/orVECVCU+adILNIVcrhsULO4TnBelUNNKPmtMK95FTRTxLt
+         fjoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=XNsL7A+ParoI+QQ6Xv0iUaI58zw0NLxrSar+h7dj9ic=;
+        b=77hANl7MoFEEJeQnV4iAmEv0AHSV5vMTRtXCzeNe9GraRal0lrUAtEVJ5OvqUSSYBt
+         9VAPt6UYDmHBkPSWv8qJPDVh0hqvw1BSMcOgzwUwMiRHZgmmJuYDtVBL+hUrP1xH8GFk
+         8sNvhluiAEK+SI3Rme6xzq6lXFr4UHjoeMx10LAR+4kOcmuFhiC3LK2JY972YqvArooh
+         JVBIsNL0rFnHKHLPDHU7KGh+M6ReyeLAi5WVUBmt1VCpQnbsm9602GjdEp1GDlJ6JjJO
+         Vj3CaH5mH04KnxBpS1uJNOHUaL13//M/KTdcR3B0lnMW3UaZgCdibz0PoK6De/pcFJ7U
+         DJhg==
+X-Gm-Message-State: ACgBeo1B0sR/hZiLoSSOUtBrVOmqH2GgMv1rlxT6wRQNdxOHxuI5gJci
+        67qvym4qDSgUGzqVWcx7cuncQ8ghYCjTGp16fso=
+X-Google-Smtp-Source: AA6agR6FOqzzU7JQSMz01Q6u6UiAUpMuFACh7Mr4F/7w2ukrPXLqBzqyG7GfefRz6A8DXYVTHr6nnEOhflXbaHwH/3A=
+X-Received: by 2002:a0d:d441:0:b0:345:83ae:9330 with SMTP id
+ w62-20020a0dd441000000b0034583ae9330mr11962783ywd.97.1662731283363; Fri, 09
+ Sep 2022 06:48:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target
- address
-Content-Language: en-GB
-To:     Christoph Hellwig <hch@infradead.org>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220825185026.3816331-1-willmcvicker@google.com>
- <20220825185026.3816331-3-willmcvicker@google.com>
- <Yxs/zguOb52tY2C0@infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Yxs/zguOb52tY2C0@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220908141210.1375828-1-zhiguangni01@zhaoxin.com> <YxoPS5OCup1h8QD4@google.com>
+In-Reply-To: <YxoPS5OCup1h8QD4@google.com>
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Fri, 9 Sep 2022 21:47:53 +0800
+Message-ID: <CACZJ9cVSYtda7oyJnMmNDtfZotXZu+0i-c8G8onLqj4sPDkCRg@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM:x86: Clean up ModR/M "reg" initialization in reg
+ op decoding
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        pbonzini@redhat.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-09 14:29, Christoph Hellwig wrote:
-> On Thu, Aug 25, 2022 at 06:50:25PM +0000, Will McVicker wrote:
->> Since not all devices require a 32-bit MSI address, add support to the
->> PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
->> allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
->> buffering (swiotlb) without risking not being able to get a 32-bit address
->> during DMA allocation.
-> 
-> Umm.  You can't just disable ZONE_DMA32.  Linux absolutely requires a
-> 32-bit dma mask to work, it is in fact the implicit default.
+On Thu, 8 Sept 2022 at 23:50, Sean Christopherson <seanjc@google.com> wrote=
+:
+>
+> On Thu, Sep 08, 2022, Liam Ni wrote:
+> > From: Liam Ni <zhiguangni01@gmail.com>
+> >
+> > Refactor decode_register_operand() to get the ModR/M register if and
+> > only if the instruction uses a ModR/M encoding to make it more obvious
+> > how the register operand is retrieved.
+> >
+> > Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+> > ---
+>
+> Pushed to branch `for_paolo/6.1` at:
+>
+>     https://github.com/sean-jc/linux.git
+>
+> with the below nit sqaushed.  Unless you hear otherwise, it will make its=
+ way to
+> kvm/queue "soon".
+>
+> Note, the commit IDs are not guaranteed to be stable.
+>
+> >  arch/x86/kvm/emulate.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> > index f092c54d1a2f..879b52af763a 100644
+> > --- a/arch/x86/kvm/emulate.c
+> > +++ b/arch/x86/kvm/emulate.c
+> > @@ -1137,9 +1137,11 @@ static int em_fnstsw(struct x86_emulate_ctxt *ct=
+xt)
+> >  static void decode_register_operand(struct x86_emulate_ctxt *ctxt,
+> >                                   struct operand *op)
+> >  {
+> > -     unsigned reg =3D ctxt->modrm_reg;
+> > +     unsigned int reg;
+> >
+> > -     if (!(ctxt->d & ModRM))
+> > +     if ((ctxt->d & ModRM))
+>
+> Only need one set of parentheses.
 
-Eh, it's behind CONFIG_EXPERT, which makes it enough of a "I think I 
-know what I'm doing and accept responsibility for picking up the pieces 
-if it breaks" thing.
+Sorry=EF=BC=8C  Should I prepare a new patch?
 
-Robin.
+>
+> > +             reg =3D ctxt->modrm_reg;
+> > +     else
+> >               reg =3D (ctxt->b & 7) | ((ctxt->rex_prefix & 1) << 3);
+> >
+> >       if (ctxt->d & Sse) {
+> > --
+> > 2.34.1
+> >
