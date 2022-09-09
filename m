@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BAB5B3282
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF1F5B32A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIII7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S231347AbiIII7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiIII6d (ORCPT
+        with ESMTP id S230439AbiIII7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:58:33 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F7F10BA6A;
-        Fri,  9 Sep 2022 01:58:04 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 1E34721F3;
-        Fri,  9 Sep 2022 10:58:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662713882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OKWpGy9Sm/h+vL8rknv+UFCIpuNP8hHTtInxhBqUUDg=;
-        b=1q0wZefGZU+a4bo3O0XKv6aSKfvwAMAjX9kZILz6cFvd4hJc7n+RCZAqPbbJWnWs2NG9Ej
-        XTKxJ5WMmUyE+Jf8aY30uRm4NMKCbE1Xr1RoiPmX23porTbAu35EWL/RGX+RjPMVu0CXR6
-        s1l5XzVG6ytQ2dL3uB/L1QdwhTy7VXdS35mBIdH+eIdB62mbXYjITgDZSGY5Loanzmi0vM
-        yiAOdWIIvKZqoHUfw5imLbdL92IbqSj6VznRJ8FU/rfP7o+UkMeGWusj+mf2TcBL9OgNiz
-        kcsFcOTibFGsYngS5wygKrK9aqqO+wbqskG/E77XNAvy4JDWQaoYg9+Ep2fY3g==
+        Fri, 9 Sep 2022 04:59:12 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B610311E6E3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:59:10 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id b5so1608813wrr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:59:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date;
+        bh=5WlnBB4XpnEReTODutDj2ZW7HQbMxkdht0TI84bTlHQ=;
+        b=L4qaaQP0Vo42jGNSjwiEBH63IqqtB+/r3fp38w0CNYZ6FZ54H3Qx6sFc5dGgsjPZfa
+         N8xnnPnZnrTamgYz3czva7fs4kdWOPL2ZgMUF6So7UvqNcJmiDhM9GuhFi0OVsnF5ReG
+         P7baLG7J/lR9VxGZV4+kfxc3Kp2FAJSHdPcub4qLQHHnyAyYJng1DC6tJxtwgINZp7/J
+         weXtb4JKD81zAuyM38vzx7QXt2ee4VRPTXUrickojkAhje3vaiZ2Op2DVpFSifomb9fl
+         VzXYOICm2Vccq1ZyxE32kOdwj59BuvCOp/K0ZjLdr6aYVrgcG+0ny8p1l4SEympZ42A+
+         4b1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5WlnBB4XpnEReTODutDj2ZW7HQbMxkdht0TI84bTlHQ=;
+        b=Xymvjyf8dV39hCQVJ/S0QoW/G+DqSbmdQuqCRL4JXdUtbxV3lZlVNkjWoNzVgLPnXU
+         +nUWQ+yFdCUZkI+HRLh1Q8bbE9hn6SWBcb+KU6U/pjE4Xt6LQNBHXHaWbHvyMFNTaqmW
+         wn6cGxp1TEKVBHvfsO1TJryRZ48VHXi5+xqNB0NfbK8L5nNSblk2qtfpsE717s+zaicd
+         DDJErr8Xp8W89bpGi4X/J/tArmmMkjtzxgOz/OgFrouqXblYKbc5QY1uf4ZFraqey2DB
+         +Gi8s+KWiGFArRgjLvKhozwJKtKnIUoSP7piVjBHnO61r3DqCkRuX79ZCsiJ/v64+OkB
+         LlUA==
+X-Gm-Message-State: ACgBeo3Q9ie1FpebDlydreRx3y6ojSvik3kF0WbdE+u63HmjMj4/AQds
+        Z9zAcMhPrpG1G9Cy/hxeJ8QuCA==
+X-Google-Smtp-Source: AA6agR7NIHsOLGkRDmLYOcciOPD6KzeuMZ5q9DeMaupwLQjwqtsy3HhFlO71hTPW6pESTByCFbXxOg==
+X-Received: by 2002:a05:6000:1f8d:b0:22a:28c3:47be with SMTP id bw13-20020a0560001f8d00b0022a28c347bemr5529997wrb.485.1662713949309;
+        Fri, 09 Sep 2022 01:59:09 -0700 (PDT)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id s14-20020a5d4ece000000b0022865038308sm1357257wrv.93.2022.09.09.01.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 01:59:08 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        zhoufeng.zf@bytedance.com, Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [External] Re: Re: [PATCH v2] bpf: Simplify code by using
+ for_each_cpu_wrap()
+References: <20220907155746.1750329-1-punit.agrawal@bytedance.com>
+        <CAPhsuW6+D0bfoPZdQ0j-NtCvgMED4YF-LyqXTQQHo+x7tw3yug@mail.gmail.com>
+        <877d2ecffy.fsf_-_@stealth>
+        <CAPhsuW6fUuc6E7_EoY1h-cikDAT6AuLYCwb89JnaTeOcdrsNFw@mail.gmail.com>
+Date:   Fri, 09 Sep 2022 09:59:07 +0100
+In-Reply-To: <CAPhsuW6fUuc6E7_EoY1h-cikDAT6AuLYCwb89JnaTeOcdrsNFw@mail.gmail.com>
+        (Song Liu's message of "Thu, 8 Sep 2022 13:21:04 -0700")
+Message-ID: <87leqsc49w.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Date:   Fri, 09 Sep 2022 10:58:01 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2 13/20] nvmem: core: drop priv pointer in post process
- callback
-In-Reply-To: <373b10aa-f5c8-28b3-88b0-f87a1a40b000@linaro.org>
-References: <20220901221857.2600340-1-michael@walle.cc>
- <20220901221857.2600340-14-michael@walle.cc>
- <373b10aa-f5c8-28b3-88b0-f87a1a40b000@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <42bc3f6796cc75baafc15c6d2c71ec92@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,83 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-09 10:52, schrieb Srinivas Kandagatla:
-> On 01/09/2022 23:18, Michael Walle wrote:
->> It doesn't make any more sense to have a opaque pointer set up by the
->> nvmem device. Usually, the layout isn't associated with a particular
->> nvmem device.
->> 
-> This is really not a good idea to remove the context pointer, as this
-> is the only way for callback to get context which it can make use of.
+Song Liu <song@kernel.org> writes:
 
-In which case? As I mentioned it's the priv to the nvmem driver and all
-the "normal" callbacks can do very little with it. If there will be a
-future need, then there should be a proper opaque pointer associated
-with the layout and not the nvmem driver.
+> On Thu, Sep 8, 2022 at 3:45 AM Punit Agrawal
+> <punit.agrawal@bytedance.com> wrote:
+>>
+>> Hi Song,
+>>
+>> Thanks for taking a look.
+>>
+>> Song Liu <song@kernel.org> writes:
+>>
+>> > On Wed, Sep 7, 2022 at 8:58 AM Punit Agrawal
+>> > <punit.agrawal@bytedance.com> wrote:
+>> >>
+>> >> In the percpu freelist code, it is a common pattern to iterate over
+>> >> the possible CPUs mask starting with the current CPU. The pattern is
+>> >> implemented using a hand rolled while loop with the loop variable
+>> >> increment being open-coded.
+>> >>
+>> >> Simplify the code by using for_each_cpu_wrap() helper to iterate over
+>> >> the possible cpus starting with the current CPU. As a result, some of
+>> >> the special-casing in the loop also gets simplified.
+>> >>
+>> >> No functional change intended.
+>> >>
+>> >> Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
+>> >> ---
+>> >> v1 -> v2:
+>> >> * Fixed the incorrect transformation changing semantics of __pcpu_freelist_push_nmi()
+>> >>
+>> >> Previous version -
+>> >> v1: https://lore.kernel.org/all/20220817130807.68279-1-punit.agrawal@bytedance.com/
+>> >>
+>> >>  kernel/bpf/percpu_freelist.c | 48 ++++++++++++------------------------
+>> >>  1 file changed, 16 insertions(+), 32 deletions(-)
+>> >>
+>> >> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+>> >> index 00b874c8e889..b6e7f5c5b9ab 100644
+>> >> --- a/kernel/bpf/percpu_freelist.c
+>> >> +++ b/kernel/bpf/percpu_freelist.c
+>> >> @@ -58,23 +58,21 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
+>> >>  {
+>> >>         int cpu, orig_cpu;
+>> >>
+>> >> -       orig_cpu = cpu = raw_smp_processor_id();
+>> >> +       orig_cpu = raw_smp_processor_id();
+>> >>         while (1) {
+>> >> -               struct pcpu_freelist_head *head;
+>> >> +               for_each_cpu_wrap(cpu, cpu_possible_mask, orig_cpu) {
+>> >> +                       struct pcpu_freelist_head *head;
+>> >>
+>> >> -               head = per_cpu_ptr(s->freelist, cpu);
+>> >> -               if (raw_spin_trylock(&head->lock)) {
+>> >> -                       pcpu_freelist_push_node(head, node);
+>> >> -                       raw_spin_unlock(&head->lock);
+>> >> -                       return;
+>> >> +                       head = per_cpu_ptr(s->freelist, cpu);
+>> >> +                       if (raw_spin_trylock(&head->lock)) {
+>> >> +                               pcpu_freelist_push_node(head, node);
+>> >> +                               raw_spin_unlock(&head->lock);
+>> >> +                               return;
+>> >> +                       }
+>> >>                 }
+>> >> -               cpu = cpumask_next(cpu, cpu_possible_mask);
+>> >> -               if (cpu >= nr_cpu_ids)
+>> >> -                       cpu = 0;
+>> >
+>> > I personally don't like nested loops here. Maybe we can keep
+>> > the original while loop and use cpumask_next_wrap()?
+>>
+>> Out of curiosity, is there a reason to avoid nesting here? The nested
+>> loop avoids the "cpu == orig_cpu" unnecessary check every iteration.
+>
+> for_each_cpu_wrap is a more complex loop, so we are using some
+> checks either way.
 
--michael
+That's true, indeed. While putting the patch together I wondering about
+the need for a simpler / optimized version of for_each_cpu_wrap().
 
-> I would prefer this to be left as it is.
-> 
-> --srini
-> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->> changes since v1:
->>   - new patch
->> 
->>   drivers/nvmem/core.c           | 4 ++--
->>   drivers/nvmem/imx-ocotp.c      | 4 ++--
->>   include/linux/nvmem-provider.h | 5 +++--
->>   3 files changed, 7 insertions(+), 6 deletions(-)
->> 
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index d31d3f0ab517..6910796937f9 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -1523,8 +1523,8 @@ static int __nvmem_cell_read(struct nvmem_device 
->> *nvmem,
->>   		nvmem_shift_read_buffer_in_place(cell, buf);
->>     	if (cell->read_post_process) {
->> -		rc = cell->read_post_process(nvmem->priv, id, index,
->> -					     cell->offset, buf, cell->bytes);
->> +		rc = cell->read_post_process(id, index, cell->offset, buf,
->> +					     cell->bytes);
->>   		if (rc)
->>   			return rc;
->>   	}
->> diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
->> index ac0edb6398f1..5e869d4a81c5 100644
->> --- a/drivers/nvmem/imx-ocotp.c
->> +++ b/drivers/nvmem/imx-ocotp.c
->> @@ -222,8 +222,8 @@ static int imx_ocotp_read(void *context, unsigned 
->> int offset,
->>   	return ret;
->>   }
->>   -static int imx_ocotp_cell_pp(void *context, const char *id, int 
->> index,
->> -			     unsigned int offset, void *data, size_t bytes)
->> +static int imx_ocotp_cell_pp(const char *id, int index, unsigned int 
->> offset,
->> +			     void *data, size_t bytes)
->>   {
->>   	u8 *buf = data;
->>   	int i;
->> diff --git a/include/linux/nvmem-provider.h 
->> b/include/linux/nvmem-provider.h
->> index 9d22dc5a3fa5..46067a6a0395 100644
->> --- a/include/linux/nvmem-provider.h
->> +++ b/include/linux/nvmem-provider.h
->> @@ -19,8 +19,9 @@ typedef int (*nvmem_reg_read_t)(void *priv, unsigned 
->> int offset,
->>   typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
->>   				 void *val, size_t bytes);
->>   /* used for vendor specific post processing of cell data */
->> -typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, 
->> int index,
->> -					 unsigned int offset, void *buf, size_t bytes);
->> +typedef int (*nvmem_cell_post_process_t)(const char *id, int index,
->> +					 unsigned int offset, void *buf,
->> +					 size_t bytes);
->>     enum nvmem_type {
->>   	NVMEM_TYPE_UNKNOWN = 0,
+> OTOH, the nesting is not too deep (two loops then one if), so I guess
+> current version is fine.
+>
+> Acked-by: Song Liu <song@kernel.org>
+>
+
+Thanks!
+
+[...]
+
