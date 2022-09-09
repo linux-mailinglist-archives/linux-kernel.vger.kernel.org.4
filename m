@@ -2,126 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180135B3E10
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56615B3E11
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiIIRjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S231479AbiIIRjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiIIRjD (ORCPT
+        with ESMTP id S231563AbiIIRji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:39:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DD9F824E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:39:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E7B7B82582
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 17:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D9FC433C1;
-        Fri,  9 Sep 2022 17:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662745139;
-        bh=B66a8C1X/c5zPewOicz13RnmstNqV+5vYGnV+DI9Mz8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQUDETN+LWBmPfZErXpnHaqb5uHodgXScTK0tOX7PaLs1Ru3xF69TKwoe+EfGMxqE
-         SGigusBOUu8DfkZhAulf2pHsBGsjWY5koB6BfUwmGedQQF4p98VbcFt3AOp1yN6DUa
-         6Y3PVjL6DwvpAwITuK4hc1usAVK//cnn9AgxoemUY5nCLo5zKn169+WTgk6rRzh79a
-         8J1rIQZUcZFoy6AA48Ye21VyJZdAHsa6IGb6hRrfOnEM+QRxrSehqYSskZ5uYOo096
-         Zvq544TCpNCfkEcp53JaXguHU4xUgom5w1XFkpG/G7c50REz0jB1JdUCo6/1XaX69C
-         28aPkpL0aB3lg==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
-        linux-damon-trial@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: DAMON Beer/Coffee/Tea chat series
-Date:   Fri,  9 Sep 2022 17:38:56 +0000
-Message-Id: <20220909173856.55818-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220830215428.84567-1-sj@kernel.org>
-References: 
+        Fri, 9 Sep 2022 13:39:38 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7CA11178
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:39:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id nc14so5692987ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 10:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=YYE++NCGFbuUF2VRzA5/5zW4q4wqIZcX3o/nGchQf8s=;
+        b=LF9CkMRcwYnu3iLOXzLr032DkmZzSgLT96pDi2AwJiHj86cv81EKt7yAgp9qHQCoR4
+         6L1I5/gsQwovsT8lChuRDdZjIm+PlbSEyOgxb2UouUon5sGvP1zKt7Ki9RtZymxK7yj4
+         vP2p2cQijIjNkW5qd0bgufN5S+njF2cLdrtE369ChbMRpdibv+QO+fqIDJXuLTZX8HfA
+         2GOE3J13yieXvjG1kDael2tUGGftpvcF1JeWU3FNXGuw7PanEl5Eydtwacrx+sjjdiT4
+         oFZBtAk13qd/+NNtquNK69Hu2Vb6g+OsOqMWrIPNQW+jYbVWXoTvaIZ8ju0ewyXvFhPS
+         bBsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YYE++NCGFbuUF2VRzA5/5zW4q4wqIZcX3o/nGchQf8s=;
+        b=WNrGbL4+8mzNROFAtJkmGZmB4DgeD67CGUOmXTQssjZNEycSlpnta7p8uGeopKvd1R
+         2VBD90F38wbuRLxj/HRrwATu54sKjabQKbLo9XIXUppToNrV/qxMTN11CkA6IWDuHcaB
+         bR/e2CRrM2qlK/vDK/z6FqDWeDV0b0pgUgfjZCkWM8uU/i9/LkzNt53g0JT6DPrKe0fg
+         eB5rfrvs1Z1//EffbhSUdEPFtwkdyNq4YqkDQwjwH+0oEpCJmO5a0fhRtm2dAlzQdMTi
+         Tw1rQ1OtfFwZrC7dMdStssUdFX8WZ56w7vPS4XrV9QVI9Ly6vBwsPG7NYzrJ3gc8SpUr
+         MjWw==
+X-Gm-Message-State: ACgBeo0WwXcq6HPPqADWveaPj3Rw9DRh5mANdiMCFS6BPaDzchYKrB6t
+        /XkBc4ZTHuS4GbY6mQmdAps=
+X-Google-Smtp-Source: AA6agR5lG99FI09JSlZ4ykqdQS3DTFfWyclk+sJJ6K/gynUXQIvBEOhw+spaW3nSBdDzWGQaNAjv3w==
+X-Received: by 2002:a17:906:7311:b0:772:a5c0:1f05 with SMTP id di17-20020a170906731100b00772a5c01f05mr8029064ejc.77.1662745174317;
+        Fri, 09 Sep 2022 10:39:34 -0700 (PDT)
+Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170906340200b0073cc17cdb92sm544733ejb.106.2022.09.09.10.39.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 10:39:33 -0700 (PDT)
+Message-ID: <d8e32b2a-380c-842b-cd9e-2da1bff1909b@gmail.com>
+Date:   Fri, 9 Sep 2022 19:39:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: r8188eu: make c2h_evt_read() static
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220909100232.8305-1-straube.linux@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220909100232.8305-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, 30 Aug 2022 21:54:28 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> Hello,
+On 9/9/22 12:02, Michael Straube wrote:
+> The function c2h_evt_read() is only used in rtw_cmd.c.
+> Make it static.
 > 
-> On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
+> This addresses the TODO item:
+> * Remove the HAL layer and migrate its functionality into the relevant
+>    parts of the driver.
 > 
-> > Hello,
-> > 
-> > 
-> > In short, I'd like to start an open, regular, and informal virtual bi-weekly
-> > meeting series for DAMON community.
-> > 
-> > Important links and dates
-> > -------------------------
-> > 
-> > Location: https://meet.google.com/ndx-evoc-gbu
-> > Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-> > 
-> > First instance: 2022-08-15 18:00 PDT
-> > Second instance: 2022-08-30 09:00 PDT
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_cmd.c    | 60 +++++++++++++++++++++
+>   drivers/staging/r8188eu/hal/hal_com.c     | 63 -----------------------
+>   drivers/staging/r8188eu/include/hal_com.h |  2 -
+>   3 files changed, 60 insertions(+), 65 deletions(-)
 > 
-> According to the bi-weekly schedule, the third instance of this meeting series
-> should be scheduled to 2022-09-12 18:00 PDT.  It means it will conflict with
-> LPC'22[1].  For the reason, I'd like to reserve a session in the BoF trakc of
-> the conference, and do an _in-persion_ DAMON community meeting in the session.
-> The session could also include some followup QnA/discussions of the kernel
-> summit DAMON talk[2].
-> 
-> I just submitted the BoF proposal asking it to be scheduled after the kernel
-> summit DAMON talk.  I will provide further update once I get the feedback from
-> the committee.  Hope it to be accepted!
+> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> index 4be83807405c..ca1f2cc52470 100644
+> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> @@ -1277,6 +1277,66 @@ u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt)
+>   	return res;
+>   }
+>   
+> +/* C2H event format:
+> + * Field    TRIGGER      CONTENT     CMD_SEQ    CMD_LEN    CMD_ID
+> + * BITS     [127:120]    [119:16]    [15:8]     [7:4]      [3:0]
+> + */
+> +static s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
+> +{
+> +	s32 ret = _FAIL;
+> +	struct c2h_evt_hdr *c2h_evt;
+> +	int i;
+> +	u8 trigger;
+> +
+> +	if (!buf)
+> +		goto exit;
+> +
+> +	ret = rtw_read8(adapter, REG_C2HEVT_CLEAR, &trigger);
+> +	if (ret)
+> +		return _FAIL;
+> +
+> +	if (trigger == C2H_EVT_HOST_CLOSE)
+> +		goto exit; /* Not ready */
+> +	else if (trigger != C2H_EVT_FW_CLOSE)
+> +		goto clear_evt; /* Not a valid value */
+> +
+> +	c2h_evt = (struct c2h_evt_hdr *)buf;
+> +
+> +	memset(c2h_evt, 0, 16);
+> +
+> +	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL, buf);
+> +	if (ret) {
+> +		ret = _FAIL;
+> +		goto clear_evt;
+> +	}
+> +
+> +	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1, buf + 1);
+> +	if (ret) {
+> +		ret = _FAIL;
+> +		goto clear_evt;
+> +	}
+> +	/* Read the content */
+> +	for (i = 0; i < c2h_evt->plen; i++) {
+> +		ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
+> +				sizeof(*c2h_evt) + i, c2h_evt->payload + i);
+> +		if (ret) {
+> +			ret = _FAIL;
+> +			goto clear_evt;
+> +		}
+> +	}
+> +
+> +	ret = _SUCCESS;
+> +
+> +clear_evt:
+> +	/* Clear event to notify FW we have read the command.
+> +	 * If this field isn't clear, the FW won't update the next
+> +	 * command message.
+> +	 */
+> +	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
+> +exit:
+> +	return ret;
+> +}
+> +
+>   static void c2h_evt_hdl(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
+>   {
+>   	u8 buf[16];
+> diff --git a/drivers/staging/r8188eu/hal/hal_com.c b/drivers/staging/r8188eu/hal/hal_com.c
+> index 8416a65ba47b..33967eb3c0d0 100644
+> --- a/drivers/staging/r8188eu/hal/hal_com.c
+> +++ b/drivers/staging/r8188eu/hal/hal_com.c
+> @@ -137,66 +137,3 @@ void HalSetBrateCfg(struct adapter *adapt, u8 *brates, u16 *rate_cfg)
+>   		}
+>   	}
+>   }
+> -
+> -/*
+> -* C2H event format:
+> -* Field	 TRIGGER		CONTENT	   CMD_SEQ	CMD_LEN		 CMD_ID
+> -* BITS	 [127:120]	[119:16]      [15:8]		  [7:4]		   [3:0]
+> -*/
+> -
+> -s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
+> -{
+> -	s32 ret = _FAIL;
+> -	struct c2h_evt_hdr *c2h_evt;
+> -	int i;
+> -	u8 trigger;
+> -
+> -	if (!buf)
+> -		goto exit;
+> -
+> -	ret = rtw_read8(adapter, REG_C2HEVT_CLEAR, &trigger);
+> -	if (ret)
+> -		return _FAIL;
+> -
+> -	if (trigger == C2H_EVT_HOST_CLOSE)
+> -		goto exit; /* Not ready */
+> -	else if (trigger != C2H_EVT_FW_CLOSE)
+> -		goto clear_evt; /* Not a valid value */
+> -
+> -	c2h_evt = (struct c2h_evt_hdr *)buf;
+> -
+> -	memset(c2h_evt, 0, 16);
+> -
+> -	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL, buf);
+> -	if (ret) {
+> -		ret = _FAIL;
+> -		goto clear_evt;
+> -	}
+> -
+> -	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1, buf + 1);
+> -	if (ret) {
+> -		ret = _FAIL;
+> -		goto clear_evt;
+> -	}
+> -	/* Read the content */
+> -	for (i = 0; i < c2h_evt->plen; i++) {
+> -		ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
+> -						sizeof(*c2h_evt) + i, c2h_evt->payload + i);
+> -		if (ret) {
+> -			ret = _FAIL;
+> -			goto clear_evt;
+> -		}
+> -	}
+> -
+> -	ret = _SUCCESS;
+> -
+> -clear_evt:
+> -	/*
+> -	* Clear event to notify FW we have read the command.
+> -	* If this field isn't clear, the FW won't update the next
+> -	* command message.
+> -	*/
+> -	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
+> -exit:
+> -	return ret;
+> -}
+> diff --git a/drivers/staging/r8188eu/include/hal_com.h b/drivers/staging/r8188eu/include/hal_com.h
+> index e8007295cd79..cd3f845e146a 100644
+> --- a/drivers/staging/r8188eu/include/hal_com.h
+> +++ b/drivers/staging/r8188eu/include/hal_com.h
+> @@ -143,6 +143,4 @@ u8 MRateToHwRate(u8 rate);
+>   
+>   void HalSetBrateCfg(struct adapter *Adapter, u8 *mBratesOS, u16 *pBrateCfg);
+>   
+> -s32 c2h_evt_read(struct adapter *adapter, u8 *buf);
+> -
+>   #endif /* __HAL_COMMON_H__ */
 
-And I just received the acceptance notification of my BoF proposal.  The
-schedule is not updated yet, but I guess it should be 2022-09-14 (Wednesday)
-17:00-18:30 in Irish Standard Time (IST, UTC+01:00, Europe/Dublin timezone).
-So, our next DAMON Beer/Coffee/Tea Chat series will be held in LPC2022, in
-person.  I will update the final time and location as soon as possible.
-
-I will also attend OSSummit EU.  Amazon will have a booth there, and I will
-also be near the booth in usual.  So if anyone doesn't attend LPC but OSSummit
-EU and wants to ask or discuss anything about DAMON, please come and find me
-there.  Please feel free to send me mails for making appointment or check my
-schedule.
-
-For people who cannot join in person there, I will schedule next virtual
-instance of the chat series in the Monday of the LPC's next week.  That is, the
-next virtual instance of this chat series will be in
-
-	2022-09-19 18:00 PDT (https://meet.google.com/ndx-evoc-gbu)
-
-I will also update the Google doc for the schedules and agendas:
-https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-
-Looking forward to meet you DAMON community in person as many as possible!
-
-
-Thanks,
-SJ
-
-> 
-> [1] https://lpc.events/
-> [2] https://lpc.events/event/16/contributions/1224/
-> 
-> 
-> Thanks,
-> SJ
-> 
-> [...]
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
