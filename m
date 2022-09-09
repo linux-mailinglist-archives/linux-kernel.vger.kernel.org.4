@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF725B40BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C8C5B40F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiIIUdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S231318AbiIIUpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiIIUca (ORCPT
+        with ESMTP id S229890AbiIIUou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:32:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE25167F3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662755528; x=1694291528;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Pmu8frnOL/Ly+FNwVD525vqNUcP+gJG6E+zFw5SaXio=;
-  b=kyC/NX9EMrMoEFOypn230UO6ZDnU+5De0hShsFaO/ltY69+VXotl0WxT
-   OgZcfwZLJa0XTjdAVP2n5SMzwJXrauhGoTU1EcvIE/dsgwTWlsxrPcZgA
-   ipnXnBnp17DUMDSr5aPV7aBfaIwtY4IjaRY53Dtk8mrJW3pwDOip4mnp/
-   ScVHz2r8k8YV4gtWVanA0O1maMGo/8RNIeHY+E7VgXJjZdGx99Gsh/tye
-   zL7VxeJJlojb4lk+8VWcBd12s4bz2RpYJ/YALF6ezO9Zu8VlUJoPppbbj
-   lKC40RO6GkzMstFBHMMl43Y05rRZ/0Ai/Rf0bfcp/a9yFaKHM4HkVTyc4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="359289176"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="359289176"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:32:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="683767711"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Sep 2022 13:32:06 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWkfW-0001hl-0b;
-        Fri, 09 Sep 2022 20:32:06 +0000
-Date:   Sat, 10 Sep 2022 04:31:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:tp_fix 1/1] trampoline.c:undefined reference to
- `bpf_prog_inc_misses_counter'
-Message-ID: <202209100409.3Y73xcfp-lkp@intel.com>
+        Fri, 9 Sep 2022 16:44:50 -0400
+X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 13:44:35 PDT
+Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AD518E3C;
+        Fri,  9 Sep 2022 13:44:28 -0700 (PDT)
+Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.stoffel.org (Postfix) with ESMTPSA id 7A8FB270B5;
+        Fri,  9 Sep 2022 16:34:14 -0400 (EDT)
+Received: by quad.stoffel.org (Postfix, from userid 1000)
+        id 2733AA7E79; Fri,  9 Sep 2022 16:34:14 -0400 (EDT)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+Message-ID: <25371.41798.87576.861659@quad.stoffel.home>
+Date:   Fri, 9 Sep 2022 16:34:14 -0400
+From:   "John Stoffel" <john@stoffel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-Reply-To: <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+        <20220907125211.GB17729@fieldses.org>
+        <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+        <20220907135153.qvgibskeuz427abw@quack3>
+        <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+        <20220908083326.3xsanzk7hy3ff4qs@quack3>
+        <YxoIjV50xXKiLdL9@mit.edu>
+        <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+        <20220908155605.GD8951@fieldses.org>
+        <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+        <20220908182252.GA18939@fieldses.org>
+        <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,32 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git tp_fix
-head:   1d5150ae30634ba3ff98b5ac0489f44375acca56
-commit: 1d5150ae30634ba3ff98b5ac0489f44375acca56 [1/1] bpf: Prevent bpf program recursion for raw tracepoint probes
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220910/202209100409.3Y73xcfp-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1d5150ae30634ba3ff98b5ac0489f44375acca56
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf tp_fix
-        git checkout 1d5150ae30634ba3ff98b5ac0489f44375acca56
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+>>>>> "Jeff" == Jeff Layton <jlayton@kernel.org> writes:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> On Thu, 2022-09-08 at 14:22 -0400, J. Bruce Fields wrote:
+>> On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
+>> > Yeah, ok. That does make some sense. So we would mix this into the
+>> > i_version instead of the ctime when it was available. Preferably, we'd
+>> > mix that in when we store the i_version rather than adding it afterward.
+>> > 
+>> > Ted, how would we access this? Maybe we could just add a new (generic)
+>> > super_block field for this that ext4 (and other filesystems) could
+>> > populate at mount time?
+>> 
+>> Couldn't the filesystem just return an ino_version that already includes
+>> it?
+>> 
 
-All errors (new ones prefixed by >>):
+> Yes. That's simple if we want to just fold it in during getattr. If we
+> want to fold that into the values stored on disk, then I'm a little less
+> clear on how that will work.
 
-   ld: kernel/bpf/trampoline.o: in function `__bpf_prog_enter':
->> trampoline.c:(.text+0x1681): undefined reference to `bpf_prog_inc_misses_counter'
-   ld: kernel/bpf/trampoline.o: in function `__bpf_prog_enter_sleepable':
-   trampoline.c:(.text+0x19b1): undefined reference to `bpf_prog_inc_misses_counter'
+I wonder if this series should also include some updates to the
+various xfstests to hopefully document in code what this statx() call
+will do in various situations.  Or at least document how to test it in
+some manner?  Especially since it's layers on top of layers to make
+this work. 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+My assumption is that if the underlying filesystem doesn't support the
+new values, it just returns 0 or c_time?
+
+John
