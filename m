@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576345B32B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BAB5B3282
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiIII7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 04:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S229774AbiIII7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiIII6Z (ORCPT
+        with ESMTP id S230439AbiIII6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:58:25 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330E1365DA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 01:57:46 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-324ec5a9e97so11456557b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 01:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=BA7v9By/PKm8Lb5EGh75hqx3B2NthlRyqEiydr+9MIw=;
-        b=goGwbFEzBCu6ZReNVsQFXEaSFbARIBvytLuNW4v5IzfqaOxEddum2eMnFGd4n1giOm
-         12yr+tkvZlEG8nCUA88s5hp100Jh85VNfSeMZi+Aq6wwHb9IOv/FFX1jCussxyGiaJ5U
-         Nxmc1qPjqj8jpEfcvVPhcAgsqpQiA8h9e32psMV1REa/fw4xpH7NmtwCwq0Y3Dt9YILC
-         176tLQDsChJoJCd8+GYPQmm5OjJtrlmbnNDXKD8AX6dyKzZgJPWyMxrYwLc7vOjaOYBI
-         O9WJIH6/NkpPX9UbGKPOwAa8jlb13aKJ3GYGRyRTRCnNMOKLHvbAfbfKvl8FcfN+moBm
-         H51Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BA7v9By/PKm8Lb5EGh75hqx3B2NthlRyqEiydr+9MIw=;
-        b=aLDDthgbfbh6O1rwT41LzWI8iFuCyShxP8tLmcXBTxn2VP0m0Rcu1RwgllquB4IDq+
-         RMT7lDyXTxPZPuzSZ8rIhiP4bfiPciiG/emm5cVTaKI/WdsmffrlbbranFSjto42YVmt
-         UfZT/B9zq8MzWHOTb4metp95NVQwvcRQIc2bG9YktWw+SeiQcbVqkBTD/rncH9G99yo9
-         hrF+n0KF5sRHpwi8bwOry/D1dBf6RpN1BVfec1xFr6FdRvSrfy41kwEYcAJfcr1pU5ZT
-         KFBnpK80yoXmqgq3Ibl9uC2DP9hH+gIggB0NwNtu5zIq1BpbuYZgF0zpHY8lAXTlsUw2
-         ma9w==
-X-Gm-Message-State: ACgBeo0DhkirqFf3K5zjIwS2blg3VM7aTfGfWZoUJ+NpgWaKpC86PmV5
-        lPio1HSRRMWHeG9k9ysOykwQ7Dp+QXJ4ne44s3tBeg==
-X-Google-Smtp-Source: AA6agR6yLRVeEL7qXOrcf6i7wNdKQSe6OY+YRtuC5CLYDGWplZp6/6tDwb3XUHj4CjP4Gwj8mLOWHJSGHRh50UlvyRs=
-X-Received: by 2002:a0d:c7c3:0:b0:31e:9622:c4f6 with SMTP id
- j186-20020a0dc7c3000000b0031e9622c4f6mr10866606ywd.144.1662713865771; Fri, 09
- Sep 2022 01:57:45 -0700 (PDT)
+        Fri, 9 Sep 2022 04:58:33 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F7F10BA6A;
+        Fri,  9 Sep 2022 01:58:04 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 1E34721F3;
+        Fri,  9 Sep 2022 10:58:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1662713882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKWpGy9Sm/h+vL8rknv+UFCIpuNP8hHTtInxhBqUUDg=;
+        b=1q0wZefGZU+a4bo3O0XKv6aSKfvwAMAjX9kZILz6cFvd4hJc7n+RCZAqPbbJWnWs2NG9Ej
+        XTKxJ5WMmUyE+Jf8aY30uRm4NMKCbE1Xr1RoiPmX23porTbAu35EWL/RGX+RjPMVu0CXR6
+        s1l5XzVG6ytQ2dL3uB/L1QdwhTy7VXdS35mBIdH+eIdB62mbXYjITgDZSGY5Loanzmi0vM
+        yiAOdWIIvKZqoHUfw5imLbdL92IbqSj6VznRJ8FU/rfP7o+UkMeGWusj+mf2TcBL9OgNiz
+        kcsFcOTibFGsYngS5wygKrK9aqqO+wbqskG/E77XNAvy4JDWQaoYg9+Ep2fY3g==
 MIME-Version: 1.0
-References: <20220905122452.2258262-1-glider@google.com> <20220905122452.2258262-41-glider@google.com>
-In-Reply-To: <20220905122452.2258262-41-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 9 Sep 2022 10:57:09 +0200
-Message-ID: <CAG_fn=Wz1b5nKTACGa_oPBuxXcn4Hb7hDT-3Fcx5P3ODY+ivpA@mail.gmail.com>
-Subject: Re: [PATCH v6 40/44] x86: kmsan: don't instrument stack walking functions
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Fri, 09 Sep 2022 10:58:01 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 13/20] nvmem: core: drop priv pointer in post process
+ callback
+In-Reply-To: <373b10aa-f5c8-28b3-88b0-f87a1a40b000@linaro.org>
+References: <20220901221857.2600340-1-michael@walle.cc>
+ <20220901221857.2600340-14-michael@walle.cc>
+ <373b10aa-f5c8-28b3-88b0-f87a1a40b000@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <42bc3f6796cc75baafc15c6d2c71ec92@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 2:26 PM Alexander Potapenko <glider@google.com> wrote:
->
-> Upon function exit, KMSAN marks local variables as uninitialized.
-> Further function calls may result in the compiler creating the stack
-> frame where these local variables resided. This results in frame
-> pointers being marked as uninitialized data, which is normally correct,
-> because they are not stack-allocated.
->
-> However stack unwinding functions are supposed to read and dereference
-> the frame pointers, in which case KMSAN might be reporting uses of
-> uninitialized values.
->
-> To work around that, we mark update_stack_state(), unwind_next_frame()
-> and show_trace_log_lvl() with __no_kmsan_checks, preventing all KMSAN
-> reports inside those functions and making them return initialized
-> values.
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+Am 2022-09-09 10:52, schrieb Srinivas Kandagatla:
+> On 01/09/2022 23:18, Michael Walle wrote:
+>> It doesn't make any more sense to have a opaque pointer set up by the
+>> nvmem device. Usually, the layout isn't associated with a particular
+>> nvmem device.
+>> 
+> This is really not a good idea to remove the context pointer, as this
+> is the only way for callback to get context which it can make use of.
 
-Hi Andrew, Stephen,
+In which case? As I mentioned it's the priv to the nvmem driver and all
+the "normal" callbacks can do very little with it. If there will be a
+future need, then there should be a proper opaque pointer associated
+with the layout and not the nvmem driver.
 
-I've noticed this particular patch is missing in -mm (and, as a
-result, in linux-next), which results in tons of false positives at
-boot time.
-Could you please add it as well?
+-michael
+
+> I would prefer this to be left as it is.
+> 
+> --srini
+> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>> changes since v1:
+>>   - new patch
+>> 
+>>   drivers/nvmem/core.c           | 4 ++--
+>>   drivers/nvmem/imx-ocotp.c      | 4 ++--
+>>   include/linux/nvmem-provider.h | 5 +++--
+>>   3 files changed, 7 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+>> index d31d3f0ab517..6910796937f9 100644
+>> --- a/drivers/nvmem/core.c
+>> +++ b/drivers/nvmem/core.c
+>> @@ -1523,8 +1523,8 @@ static int __nvmem_cell_read(struct nvmem_device 
+>> *nvmem,
+>>   		nvmem_shift_read_buffer_in_place(cell, buf);
+>>     	if (cell->read_post_process) {
+>> -		rc = cell->read_post_process(nvmem->priv, id, index,
+>> -					     cell->offset, buf, cell->bytes);
+>> +		rc = cell->read_post_process(id, index, cell->offset, buf,
+>> +					     cell->bytes);
+>>   		if (rc)
+>>   			return rc;
+>>   	}
+>> diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
+>> index ac0edb6398f1..5e869d4a81c5 100644
+>> --- a/drivers/nvmem/imx-ocotp.c
+>> +++ b/drivers/nvmem/imx-ocotp.c
+>> @@ -222,8 +222,8 @@ static int imx_ocotp_read(void *context, unsigned 
+>> int offset,
+>>   	return ret;
+>>   }
+>>   -static int imx_ocotp_cell_pp(void *context, const char *id, int 
+>> index,
+>> -			     unsigned int offset, void *data, size_t bytes)
+>> +static int imx_ocotp_cell_pp(const char *id, int index, unsigned int 
+>> offset,
+>> +			     void *data, size_t bytes)
+>>   {
+>>   	u8 *buf = data;
+>>   	int i;
+>> diff --git a/include/linux/nvmem-provider.h 
+>> b/include/linux/nvmem-provider.h
+>> index 9d22dc5a3fa5..46067a6a0395 100644
+>> --- a/include/linux/nvmem-provider.h
+>> +++ b/include/linux/nvmem-provider.h
+>> @@ -19,8 +19,9 @@ typedef int (*nvmem_reg_read_t)(void *priv, unsigned 
+>> int offset,
+>>   typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
+>>   				 void *val, size_t bytes);
+>>   /* used for vendor specific post processing of cell data */
+>> -typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, 
+>> int index,
+>> -					 unsigned int offset, void *buf, size_t bytes);
+>> +typedef int (*nvmem_cell_post_process_t)(const char *id, int index,
+>> +					 unsigned int offset, void *buf,
+>> +					 size_t bytes);
+>>     enum nvmem_type {
+>>   	NVMEM_TYPE_UNKNOWN = 0,
