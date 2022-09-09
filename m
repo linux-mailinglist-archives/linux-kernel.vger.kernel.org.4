@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A985B415F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CC65B4162
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiIIVWT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Sep 2022 17:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        id S231189AbiIIVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiIIVWS (ORCPT
+        with ESMTP id S229685AbiIIVXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:22:18 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D1BEE98E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:22:16 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-75-4x4mabv-MMeVWZPOeCQ1kQ-1; Fri, 09 Sep 2022 22:22:13 +0100
-X-MC-Unique: 4x4mabv-MMeVWZPOeCQ1kQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 9 Sep
- 2022 22:22:12 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 9 Sep 2022 22:22:12 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Manikandan Jagatheesan' <mjagatheesan@vmware.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bp@suse.de" <bp@suse.de>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Peter Jonasson <pjonasson@vmware.com>,
-        Yiu Cho Lau <lauyiuch@vmware.com>,
-        Rajender M <manir@vmware.com>,
-        Abdul Anshad Azeez <aazees@vmware.com>,
-        "Kodeswaran Kumarasamy" <kkumarasamy@vmware.com>,
-        Rahul Gopakumar <gopakumarr@vmware.com>
-Subject: RE: Performance Regression in Linux Kernel 5.19
-Thread-Topic: Performance Regression in Linux Kernel 5.19
-Thread-Index: AQHYxD76FSnznGGLrEKJhYfY7fdHzK3Xmvxw
-Date:   Fri, 9 Sep 2022 21:22:12 +0000
-Message-ID: <3758868033fe49d5ba54e500e16df35f@AcuMS.aculab.com>
-References: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
-In-Reply-To: <PH0PR05MB8448A203A909959FAC754B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 9 Sep 2022 17:23:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EA8EC77D;
+        Fri,  9 Sep 2022 14:23:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A51CFB82628;
+        Fri,  9 Sep 2022 21:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9566BC433D6;
+        Fri,  9 Sep 2022 21:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662758603;
+        bh=GIfHdGft0Lzt3WDIoEI411kBlv+ZkUVLai/Bwx7Bpu0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=pSqKKMEjppbUOdl7y+q6d/EJmw19UmffNqTVbjRA6GzFiU6iPrCfQ87vBCNCyoRYY
+         +JrM3HQaX2MgIgtI27xo98SX8v2IiRvdr9q3ttEJBZBoYl8AgKmYA80a/cyBdstuqJ
+         Uah/ueYLm6WqXHlEK8yrvxHkBgXFsRioSHp2UKJTcX/+xY1caoS276S39iDGzrk97S
+         qSG1mj8s1QnnUN5Dazlg25sswChtztNfvRV0iyOy2oIzfTlZ3xsLCuB2w33E3Ikslf
+         d85qoaf1G/m0T9uDv/v5RFhV93kUYrPAmU0XHbiUxYE3wlgdvg5Th3QftZMgCMECez
+         bkEBZ33pBtF4Q==
+Message-ID: <6b2f3bd41cb194944fe457d659618d91020a6999.camel@kernel.org>
+Subject: Re: [PATCH] tmpfs: add support for an i_version counter
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     hughd@google.com, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+Date:   Fri, 09 Sep 2022 17:23:21 -0400
+In-Reply-To: <20220909140344.16f2bf7fbc11a5ac62b932bc@linux-foundation.org>
+References: <20220909130031.15477-1-jlayton@kernel.org>
+         <20220909140344.16f2bf7fbc11a5ac62b932bc@linux-foundation.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,34 +58,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manikandan Jagatheesan
-> Sent: 09 September 2022 12:46
-> 
-> As part of VMware's performance regression testing for Linux
-> Kernel upstream releases, we have evaluated the performance
-> of Linux kernel 5.19 against the 5.18 release and we have
-> noticed performance regressions in Linux VMs on ESXi as shown
-> below.
-> - Compute(up to -70%)
-> - Networking(up to -30%)
-> - Storage(up to -13%)
-> 
-> After performing the bisect between kernel 5.18 and 5.19, we
-> identified the root cause to be the enablement of IBRS mitigation
-> for spectre_v2 vulnerability by commit 6ad0ad2bf8a6 ("x86/bugs:
-> Report Intel retbleed vulnerability").
+On Fri, 2022-09-09 at 14:03 -0700, Andrew Morton wrote:
+> On Fri,  9 Sep 2022 09:00:31 -0400 Jeff Layton <jlayton@kernel.org> wrote=
+:
+>=20
+> > NFSv4 mandates a change attribute to avoid problems with timestamp
+> > granularity, which Linux implements using the i_version counter. This i=
+s
+> > particularly important when the underlying filesystem is fast.
+> >=20
+> > Give tmpfs an i_version counter. Since it doesn't have to be persistent=
+,
+> > we can just turn on SB_I_VERSION and sprinkle some inode_inc_iversion
+> > calls in the right places.
+> >=20
+> > Also, while there is no formal spec for xattrs, most implementations
+> > update the ctime on setxattr. Fix shmem_xattr_handler_set to update the
+> > ctime and bump the i_version appropriately.
+> >=20
+> > ...
+> >=20
+> > --- a/fs/posix_acl.c
+> > +++ b/fs/posix_acl.c
+> > @@ -24,6 +24,7 @@
+> >  #include <linux/user_namespace.h>
+> >  #include <linux/namei.h>
+> >  #include <linux/mnt_idmapping.h>
+> > +#include <linux/iversion.h>
+> > =20
+> >  static struct posix_acl **acl_by_type(struct inode *inode, int type)
+> >  {
+> > @@ -1073,6 +1074,8 @@ int simple_set_acl(struct user_namespace *mnt_use=
+rns, struct inode *inode,
+> >  	}
+> > =20
+> >  	inode->i_ctime =3D current_time(inode);
+> > +	if (IS_I_VERSION(inode))
+> > +		inode_inc_iversion(inode);
+> >  	set_cached_acl(inode, type, acl);
+> >  	return 0;
+> >  }
+>=20
+> adds a kilobyte of text to shmem.o because the quite large
+> inode_maybe_inc_iversion() get inlined all over the place.  Why oh why.
+>=20
+> Is there any reason not to do the obvious?
+>=20
 
-As a matter of interest how much faster does it go if you
-boot with all mitigations disabled and compile without
-retpolines and without page table separation?
+No reason at all:
 
-There are plenty of semi-embedded systems (even running on x86)
-where there are a limited set of binaries, it is difficult to
-add new binaries, and everything basically runs as root.
+Acked-by: Jeff Layton <jlayton@kernel.org>
 
-	David
+> --- a/include/linux/iversion.h~a
+> +++ a/include/linux/iversion.h
+> @@ -177,56 +177,7 @@ inode_set_iversion_queried(struct inode
+>  				I_VERSION_QUERIED);
+>  }
+> =20
+> -/**
+> - * inode_maybe_inc_iversion - increments i_version
+> - * @inode: inode with the i_version that should be updated
+> - * @force: increment the counter even if it's not necessary?
+> - *
+> - * Every time the inode is modified, the i_version field must be seen to=
+ have
+> - * changed by any observer.
+> - *
+> - * If "force" is set or the QUERIED flag is set, then ensure that we inc=
+rement
+> - * the value, and clear the queried flag.
+> - *
+> - * In the common case where neither is set, then we can return "false" w=
+ithout
+> - * updating i_version.
+> - *
+> - * If this function returns false, and no other metadata has changed, th=
+en we
+> - * can avoid logging the metadata.
+> - */
+> -static inline bool
+> -inode_maybe_inc_iversion(struct inode *inode, bool force)
+> -{
+> -	u64 cur, old, new;
+> -
+> -	/*
+> -	 * The i_version field is not strictly ordered with any other inode
+> -	 * information, but the legacy inode_inc_iversion code used a spinlock
+> -	 * to serialize increments.
+> -	 *
+> -	 * Here, we add full memory barriers to ensure that any de-facto
+> -	 * ordering with other info is preserved.
+> -	 *
+> -	 * This barrier pairs with the barrier in inode_query_iversion()
+> -	 */
+> -	smp_mb();
+> -	cur =3D inode_peek_iversion_raw(inode);
+> -	for (;;) {
+> -		/* If flag is clear then we needn't do anything */
+> -		if (!force && !(cur & I_VERSION_QUERIED))
+> -			return false;
+> -
+> -		/* Since lowest bit is flag, add 2 to avoid it */
+> -		new =3D (cur & ~I_VERSION_QUERIED) + I_VERSION_INCREMENT;
+> -
+> -		old =3D atomic64_cmpxchg(&inode->i_version, cur, new);
+> -		if (likely(old =3D=3D cur))
+> -			break;
+> -		cur =3D old;
+> -	}
+> -	return true;
+> -}
+> -
+> +bool inode_maybe_inc_iversion(struct inode *inode, bool force);
+> =20
+>  /**
+>   * inode_inc_iversion - forcibly increment i_version
+> --- a/fs/libfs.c~a
+> +++ a/fs/libfs.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/namei.h>
+>  #include <linux/exportfs.h>
+> +#include <linux/iversion.h>
+>  #include <linux/writeback.h>
+>  #include <linux/buffer_head.h> /* sync_mapping_buffers */
+>  #include <linux/fs_context.h>
+> @@ -1529,3 +1530,53 @@ void generic_set_encrypted_ci_d_ops(stru
+>  #endif
+>  }
+>  EXPORT_SYMBOL(generic_set_encrypted_ci_d_ops);
+> +
+> +/**
+> + * inode_maybe_inc_iversion - increments i_version
+> + * @inode: inode with the i_version that should be updated
+> + * @force: increment the counter even if it's not necessary?
+> + *
+> + * Every time the inode is modified, the i_version field must be seen to=
+ have
+> + * changed by any observer.
+> + *
+> + * If "force" is set or the QUERIED flag is set, then ensure that we inc=
+rement
+> + * the value, and clear the queried flag.
+> + *
+> + * In the common case where neither is set, then we can return "false" w=
+ithout
+> + * updating i_version.
+> + *
+> + * If this function returns false, and no other metadata has changed, th=
+en we
+> + * can avoid logging the metadata.
+> + */
+> +bool inode_maybe_inc_iversion(struct inode *inode, bool force)
+> +{
+> +	u64 cur, old, new;
+> +
+> +	/*
+> +	 * The i_version field is not strictly ordered with any other inode
+> +	 * information, but the legacy inode_inc_iversion code used a spinlock
+> +	 * to serialize increments.
+> +	 *
+> +	 * Here, we add full memory barriers to ensure that any de-facto
+> +	 * ordering with other info is preserved.
+> +	 *
+> +	 * This barrier pairs with the barrier in inode_query_iversion()
+> +	 */
+> +	smp_mb();
+> +	cur =3D inode_peek_iversion_raw(inode);
+> +	for (;;) {
+> +		/* If flag is clear then we needn't do anything */
+> +		if (!force && !(cur & I_VERSION_QUERIED))
+> +			return false;
+> +
+> +		/* Since lowest bit is flag, add 2 to avoid it */
+> +		new =3D (cur & ~I_VERSION_QUERIED) + I_VERSION_INCREMENT;
+> +
+> +		old =3D atomic64_cmpxchg(&inode->i_version, cur, new);
+> +		if (likely(old =3D=3D cur))
+> +			break;
+> +		cur =3D old;
+> +	}
+> +	return true;
+> +}
+> +EXPORT_SYMBOL(inode_maybe_inc_iversion);
+> _
+>=20
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+--=20
