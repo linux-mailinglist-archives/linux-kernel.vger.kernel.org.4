@@ -2,46 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5218A5B37EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB885B37FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiIIMgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
+        id S231488AbiIIMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiIIMga (ORCPT
+        with ESMTP id S229706AbiIIMh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:36:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79F536DD8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:36:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 9 Sep 2022 08:37:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157C36DD8;
+        Fri,  9 Sep 2022 05:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662727078; x=1694263078;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Mo99IpYm1AvzncHba+O/i3dk/CKKv38nddBho+Fzb6Y=;
+  b=hLdYq4ClIxika3o6y653o4u858fTa8ViclQGvB7MSUhQUjjEwYdQBmic
+   zSojbK4c0fr4/4/BjA/qyLyQfTEDgSt8DeFvGL+zpdocNdVt4ZZY9XdJ+
+   CTMycAjIM0oMmcrGU72Pv+2QsN5KZZB9BZ6JtClifw8kq6LEpBEOQKH1d
+   rn/KuVsdFSflHY47md7rq0skrfAs4NxOqgRmNOA8yKeMT5Qt+sOO2SrA0
+   g0wH+jZpbVeH/NcJpP/doA5mQkqYfJt6MjWEbXDHZzs+Y30Vp0ySV+Eb6
+   tqVGokVuvrX9+uIUyIpa92C3MvaW4vWXkMxFm/ISNx1OQChOVVu7CvP/0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284482523"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="284482523"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 05:37:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="683625990"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Sep 2022 05:37:57 -0700
+Received: from [10.252.209.107] (kliang2-mobl1.ccr.corp.intel.com [10.252.209.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFpx1t4lz4xPB;
-        Fri,  9 Sep 2022 22:36:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1662726985;
-        bh=gqLCwR5ksB6FpQbRsYpoI0uGdVoPaLEJOth1SfGfWTE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lLZb37grJKR53+9dXWgmx38xqP922SwaXuHpe3ojjUJ6/QEioKQJKV2C+n80NezhW
-         7qA3IgA6RYnCc8Ki7lT9PnGuz3sxIIh7uBQrsHznMAxVoQ9+JKBgdZYQ4JI2kteW2k
-         P5hdEWc+8KVxMcqGol4DNpdrPooMSAdxXzK6UGcQLWPZIUPk8a7Zn+jEMVjZRRfTBW
-         c5XTs0fZRyXWJ1g9t2EGDgFNoNPWd73wzxn6K1jmXCMJqWK/F1/Bhg9thORBlgxiif
-         vfhPKgH3OV5Z6Yf7W5tYMpIq8B3w+CRGVqstDKskHHewDUs57EDyIpz9yLM4fCDWT7
-         6MExmOiTg1D9Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.0-5 tag
-Date:   Fri, 09 Sep 2022 22:36:24 +1000
-Message-ID: <87mtb8encn.fsf@mpe.ellerman.id.au>
+        by linux.intel.com (Postfix) with ESMTPS id CA530580692;
+        Fri,  9 Sep 2022 05:37:54 -0700 (PDT)
+Message-ID: <842164ce-b754-b727-c976-39d05c34ddf3@linux.intel.com>
+Date:   Fri, 9 Sep 2022 08:37:53 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/3] perf: Use sample_flags for callchain
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220908214104.3851807-1-namhyung@kernel.org>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220908214104.3851807-1-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,57 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
-
-Hi Linus,
-
-Please pull another powerpc fix for 6.0:
-
-The following changes since commit 6cf07810e9ef8535d60160d13bf0fd05f2af38e7:
-
-  powerpc/papr_scm: Ensure rc is always initialized in papr_scm_pmu_registe=
-r() (2022-09-02 18:55:11 +1000)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
-werpc-6.0-5
-
-for you to fetch changes up to a66de5283e16602b74658289360505ceeb308c90:
-
-  powerpc/pseries: Fix plpks crash on non-pseries (2022-09-08 10:45:57 +100=
-0)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.0 #5
-
- - Fix crashes on bare metal due to the new plkps driver trying to probe an=
-d call the
-   hypervisor on non-pseries machines.
-
-Thanks to: Nathan Chancellor, Dan Hor=C3=A1k.
-
-- ------------------------------------------------------------------
-Michael Ellerman (1):
-      powerpc/pseries: Fix plpks crash on non-pseries
 
 
- arch/powerpc/platforms/pseries/plpks.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
------BEGIN PGP SIGNATURE-----
+On 2022-09-08 5:41 p.m., Namhyung Kim wrote:
+> So that it can call perf_callchain() only if needed.  Historically it used
+> __PERF_SAMPLE_CALLCHAIN_EARLY but we can do that with sample_flags in the
+> struct perf_sample_data.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmMbMlsACgkQUevqPMjh
-pYDiuQ//YmIsWEcmoHw68cNBVxousox6fuzlAtAjUKPXuIk5ftZqEJV65CoPfp9/
-MzQnW+BeLJ1ubMnkHxO5/ZNSly7t428EdvmO3fApOmrwbiUSTBhZKd4i7tmlgpoG
-qH9PtCekYjm9MHTBg1ksEvZiozQccw0QrXyNoZiaLSsw7nxRUvS2yDQlITHaiA8m
-a1HopFZiriouQDlVcm/0ubGCxhOEzB6HtTpiNsT0jrULN/w08Ffjc8auMLycfIJR
-53XlfEP3ICd3+LzK0GYlp+IkPkPdJ0ZgWx+bpcq9ZvptYA0S0dW/tDKq4oqguKOu
-jk/WwU4ohbmamR/qWIdd+dwcMwQqaoW10Xa0uxthLSsS2d3x1gMU1rSjjQca4Xkq
-Bbm3hxWhTZwyYBQEhLPVlUoEzGCLY6JvXwnObypeTNcbGs8l548OIbnXaKT3FEps
-pvjLpzwI8hSljXSovXa1hY1h/ywZnFrSTb0KGtDhZ13zuv0Strhr2UJCndmPadFJ
-K48aQiDPQmcqXEwCgyEp5TmZhK7hZJlAFAJse/GvLdJTSuHUrszqoqG3pu4GQCWH
-Pryw1sMuyWqv/PgTYuoi1PJGn4BA4igCxqISuFnfsUZV+R9r1my+jzIcVkYkfXCm
-LOSE1azP2JS8bq9zQKfHYnuldM5As7dz6aNETouSOXqvQtpXMIA=3D
-=3D4YFO
------END PGP SIGNATURE-----
+The series look good to me.
+
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+
+> ---
+>  arch/x86/events/amd/ibs.c  | 4 +++-
+>  arch/x86/events/intel/ds.c | 8 ++++++--
+>  kernel/events/core.c       | 2 +-
+>  3 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index c251bc44c088..dab094166693 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -798,8 +798,10 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+>  	 * recorded as part of interrupt regs. Thus we need to use rip from
+>  	 * interrupt regs while unwinding call stack.
+>  	 */
+> -	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
+> +	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
+>  		data.callchain = perf_callchain(event, iregs);
+> +		data.sample_flags |= PERF_SAMPLE_CALLCHAIN;
+> +	}
+>  
+>  	throttle = perf_event_overflow(event, &data, &regs);
+>  out:
+> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> index a5275c235c2a..4ba6ab6d0d92 100644
+> --- a/arch/x86/events/intel/ds.c
+> +++ b/arch/x86/events/intel/ds.c
+> @@ -1546,8 +1546,10 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+>  	 * previous PMI context or an (I)RET happened between the record and
+>  	 * PMI.
+>  	 */
+> -	if (sample_type & PERF_SAMPLE_CALLCHAIN)
+> +	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+>  		data->callchain = perf_callchain(event, iregs);
+> +		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+> +	}
+>  
+>  	/*
+>  	 * We use the interrupt regs as a base because the PEBS record does not
+> @@ -1719,8 +1721,10 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
+>  	 * previous PMI context or an (I)RET happened between the record and
+>  	 * PMI.
+>  	 */
+> -	if (sample_type & PERF_SAMPLE_CALLCHAIN)
+> +	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+>  		data->callchain = perf_callchain(event, iregs);
+> +		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+> +	}
+>  
+>  	*regs = *iregs;
+>  	/* The ip in basic is EventingIP */
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 15d27b14c827..b8af9fdbf26f 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -7323,7 +7323,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+>  	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+>  		int size = 1;
+>  
+> -		if (!(sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
+> +		if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
+>  			data->callchain = perf_callchain(event, regs);
+>  
+>  		size += data->callchain->nr;
