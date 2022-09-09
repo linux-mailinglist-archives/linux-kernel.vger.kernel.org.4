@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484DB5B3A67
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0834C5B3A63
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiIIOEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
+        id S231808AbiIIOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiIIOEV (ORCPT
+        with ESMTP id S232212AbiIIOGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:04:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69814A521
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662732103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mmurUuPfY4CSsGXMopu3kXzx5e5l7+stCxGfg5MZbeg=;
-        b=bzbd2Sai6nJgzReUHUuhYG7WQDJNb6C8umqTUePfXTNBqjq3hMGuPQ3sVreMym4DfMnG4Z
-        wKybVVzkuk7E61Z7rHMuN6omJkVn1ufYzHwtor8iBjJKDHXBwDeCW78GMHM5I4G8kNsKvP
-        Vqot/c1vIwhta5rxk+rq47+2HDoRFGQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-348-s9HLbSFzOvOQxha8j3NwKw-1; Fri, 09 Sep 2022 10:01:41 -0400
-X-MC-Unique: s9HLbSFzOvOQxha8j3NwKw-1
-Received: by mail-ed1-f72.google.com with SMTP id s17-20020a056402521100b004511c8d59e3so888600edd.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:01:41 -0700 (PDT)
+        Fri, 9 Sep 2022 10:06:16 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9621475C7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:04:16 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id z23so1977669ljk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=HTiwWhAENNhIdLAnL0q1JuTZt3PgfN9bElkee4uC7PM=;
+        b=fp9SeIEauOO6gv+bXrgAEGstp67oasZqo97ba10K89jiblfRCJKkRtqAhDdHq7ux3+
+         bgtec+hVMUKvJhHWbaSkMUN0qnPxHQtA9U2qlBAygm+FvnCtbMLxp5Oqvri9y+KqDXHH
+         yWpjFdYMeVWl3tFEaCQZwGMJUZyXMIg8mvf7Eo27KfAFL3K9eM/JkT6jEZH653Lw9Kt7
+         onA8t6bG2Kd+7H//eaahCzr3Uf+T6m8+P+GXedU7M8G3bJtzttE9mXWV1zIqCQgtfRTO
+         RCKi5cxpN0XpmJwB8J/5T0loAKzozsx/sjhFkvnFNDQniOkSms/In4bstTiYXefgz8kT
+         yzsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=mmurUuPfY4CSsGXMopu3kXzx5e5l7+stCxGfg5MZbeg=;
-        b=FBsueWKMqxZOB2PF70fLNIksw0hBZIuwGQQd08iV3GW14YL4H+w0OMEXKiRyk6B5TK
-         FdIroKX22qvWQc51cn1Jga8KYI/Z1yVXcYYbIK1qMeGumziB/p0TXXO0B9C6RDk8EqsP
-         qdBEd04zIr15fg3LOVUcSCaZmZRLi4zI/HGpWDfLUgz6zxRR9mOkKqtv/eLyoQK4vNqz
-         1RCJ4EAYPrgPekDkv2MC0hTLkAadzDrpC3fAC6ZjnOcprLBwFxbvRzeKmcVUK1Txwktf
-         AZVeGveROiMoiZh7n26UDyef+RJDTK+yEZqZujVrCcKVv6zxULaVOGwIW2EgmF4zrDza
-         6L5g==
-X-Gm-Message-State: ACgBeo1txVe1SnuRGIUpoEzaxzmBkf2OywWSKowZ9nN+MaO8HTIQ735L
-        SCLVPuZKXU7L6sIN+gIZECIl3QR0mZmJnGdVRaD99wFfw6RmmhcTQkXFwCf9cwrXftPr8WQfC6p
-        XCYPlJR8GPRL9SaXoV6QNVnQ8
-X-Received: by 2002:a17:906:846b:b0:770:82e5:1519 with SMTP id hx11-20020a170906846b00b0077082e51519mr9690588ejc.221.1662732100551;
-        Fri, 09 Sep 2022 07:01:40 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5cRBPXdEZPFZlONtBxXbkVKluQAB+eqr/N7QwxhdMBwFCwN/QJRPkdLZUifQ+2NbWPIwNn1Q==
-X-Received: by 2002:a17:906:846b:b0:770:82e5:1519 with SMTP id hx11-20020a170906846b00b0077082e51519mr9690572ejc.221.1662732100345;
-        Fri, 09 Sep 2022 07:01:40 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id f4-20020a17090631c400b0073d6093ac93sm353806ejf.16.2022.09.09.07.01.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 07:01:39 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     eahariha@linux.microsoft.com
-Cc:     Deepak Rawat <drawat.floss@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Helge Deller <deller@gmx.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Easwar Hariharan <easwar.hariharan@microsoft.com>,
-        Colin Ian King <colin.i.king@googlemail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "open list:DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE" 
-        <linux-hyperv@vger.kernel.org>,
-        "open list:DRM DRIVER FOR HYPERV SYNTHETIC VIDEO DEVICE" 
-        <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 2/3] pci_ids: Add Microsoft PCI Vendor ID, and remove
- redundant definitions
-In-Reply-To: <1662674757-31945-2-git-send-email-eahariha@linux.microsoft.com>
-References: <1662674757-31945-1-git-send-email-eahariha@linux.microsoft.com>
- <1662674757-31945-2-git-send-email-eahariha@linux.microsoft.com>
-Date:   Fri, 09 Sep 2022 16:01:37 +0200
-Message-ID: <87leqsr6im.fsf@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HTiwWhAENNhIdLAnL0q1JuTZt3PgfN9bElkee4uC7PM=;
+        b=WeZHGAm/rAJ6YhQBYNmMPAdX3Z/sNEmt/F1+nTM1KuYjlu/OTHMsbbBtCivvEl2Fhy
+         zArjTBQLOUAjhOzOxBYaXg1n6TvWWezyeNl9xAVHGu7D0iDF6PO+YU1Bf74Fl+0+B0ih
+         louiHklVbWUZZUFJlM0TuJOq3ySRssUB4U9j/imwP84nJtfjG8lKZR1WhwQc9rBoUlPc
+         QIRdrdio1vjuAJ7mVeycIHdQHGuhdE7pp3ZCDMRINu9kdQH1tA88kb9tEWvquiXXGud5
+         97N2cEUqLvgVV5rMCilqvbPwN+qJ7/vgmf+Dh0d4jMUd/3SAQ3wM4L3np6/jJLNpF0e4
+         yWEA==
+X-Gm-Message-State: ACgBeo1zz/UzFChO5jrJpooQrKqN1+VVOimmIwsoto8AF0HWuBSaYU20
+        hI87/06FjQqbImJ1NIeLyfDaGgLrCniWFim6JAQTjw==
+X-Google-Smtp-Source: AA6agR7RBA9XwnQM5IKRnQ3zR1VpLxmB/kqlLu/OeejID0BHrlgvln7NMOT9Fn4QicXBD8nFwzPphRVgW0OVfA323cQ=
+X-Received: by 2002:a05:651c:23b:b0:26a:66fe:47e6 with SMTP id
+ z27-20020a05651c023b00b0026a66fe47e6mr3822438ljn.17.1662732223154; Fri, 09
+ Sep 2022 07:03:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220825122726.20819-1-vincent.guittot@linaro.org>
+ <20220825122726.20819-5-vincent.guittot@linaro.org> <Yxsf/5ErmVoKFucb@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yxsf/5ErmVoKFucb@hirez.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 9 Sep 2022 16:03:31 +0200
+Message-ID: <CAKfTPtAo=PzN1MDyqGW17zimxYLE08TMFMAhhY6YuGNBvvfusw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] sched/fair: limit sched slice duration
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,92 +69,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eahariha@linux.microsoft.com writes:
+On Fri, 9 Sept 2022 at 13:14, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+>
+> Picked up the first three.
+>
+> On Thu, Aug 25, 2022 at 02:27:26PM +0200, Vincent Guittot wrote:
+> > In presence of a lot of small weight tasks like sched_idle tasks, normal
+> > or high weight tasks can see their ideal runtime (sched_slice) to increase
+> > to hundreds ms whereas it normally stays below sysctl_sched_latency.
+> >
+> > 2 normal tasks running on a CPU will have a max sched_slice of 12ms
+> > (half of the sched_period). This means that they will make progress
+> > every sysctl_sched_latency period.
+> >
+> > If we now add 1000 idle tasks on the CPU, the sched_period becomes
+>
+> Surely people aren't actually having that many runnable tasks and this
+> is a device for the argument?
+>
+> > 3006 ms and the ideal runtime of the normal tasks becomes 609 ms.
+> > It will even become 1500ms if the idle tasks belongs to an idle cgroup.
+> > This means that the scheduler will look for picking another waiting task
+> > after 609ms running time (1500ms respectively). The idle tasks change
+> > significantly the way the 2 normal tasks interleave their running time
+> > slot whereas they should have a small impact.
+> >
+> > Such long sched_slice can delay significantly the release of resources
+> > as the tasks can wait hundreds of ms before the next running slot just
+> > because of idle tasks queued on the rq.
+> >
+> > Cap the ideal_runtime to sysctl_sched_latency when comparing to the next
+> > waiting task to make sure that tasks will regularly make progress and will
+> > not be significantly impacted by idle/background tasks queued on the rq.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >
+> > While studying the problem, I have also considered to substract
+> > cfs.idle_h_nr_running before computing the sched_slice but we can have
+> > quite similar problem with low weight bormal task/cgroup so I have decided
+> > to keep this solution.
+>
+> That ^... my proposal below has the same problem.
+>
+> This:
+>
+> > Also, this solution doesn't completly remove the impact of idle tasks
+> > in the scheduling pattern but cap the running slice of a task to a max
+> > value of 2*sysctl_sched_latency.
+>
+> I'm failing to see how.
 
-> From: Easwar Hariharan <easwar.hariharan@microsoft.com>
+The 1st part of  check_preempt_tick ensures that we wait at least
+sysctl_sched_min_granularity but not more than ideal_runtime before
+possibly picking another entity.
+
+Once both conditions above tested, we check that the vruntime diff
+with the 1st pending entity is not larger than a sysctl_sched_latency.
+
+Normally sched_slice should return an ideal_runtime value less than
+sysctl_sched_latency. But we also want to provide a minimum runtime to
+all tasks  so we increase the sched_period when the number of tasks
+increases too much.
+
+The case described above is a corner case because of the large
+difference between the tasks' prio.
+
+Now, let assume that we have only 1 normal task and 1000 idle tasks, I
+don't see any problem with providing a large ideal runtime for this
+normal task. The problem comes when you have at least 2 normal tasks
+as we don't expect the other normal task to wait for several hundreds
+of ms before running.
+
+That's why the comparison is done against the diff of vruntime; idle
+task running for a 4ms tick will increase its vruntime with + 1366ms
+which is comparable with the slice duration of the normal task. On the
+other side, a 4ms tick will increase the vruntime of a nice 0 task to
+4ms only. So the vruntime diff will quickly move above the
+sysctl_sched_latency.
+
+That being said, it doesn't completely fix the case of 2 nice -20 task runnings
+
 >
-> Move the Microsoft PCI Vendor ID from the various drivers to the pci_ids
-> file
+> >  kernel/sched/fair.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 260a55ac462f..96fedd0ab5fa 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4599,6 +4599,8 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> >       if (delta < 0)
+> >               return;
 >
-> Signed-off-by: Easwar Hariharan <easwar.hariharan@microsoft.com>
-> ---
->  drivers/gpu/drm/hyperv/hyperv_drm_drv.c         | 1 -
->  drivers/net/ethernet/microsoft/mana/gdma_main.c | 4 ----
->  drivers/video/fbdev/hyperv_fb.c                 | 3 ---
->  include/linux/pci_ids.h                         | 2 ++
->  4 files changed, 2 insertions(+), 8 deletions(-)
+> (I'm thinking that early return is a bit pointless, a negative value
+> won't be larger than ideal_time anyway)
+
+yes
+
 >
-> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> index 6d11e79..61083c7 100644
-> --- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> @@ -23,7 +23,6 @@
->  #define DRIVER_MAJOR 1
->  #define DRIVER_MINOR 0
->  
-> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
->  #define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
->  
->  DEFINE_DRM_GEM_FOPS(hv_fops);
-> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> index 5f92401..00d8198 100644
-> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> @@ -1465,10 +1465,6 @@ static void mana_gd_shutdown(struct pci_dev *pdev)
->  	pci_disable_device(pdev);
->  }
->  
-> -#ifndef PCI_VENDOR_ID_MICROSOFT
-> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
-> -#endif
-> -
->  static const struct pci_device_id mana_id_table[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_PF_DEVICE_ID) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_VF_DEVICE_ID) },
-> diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-> index 886c564..a502c80 100644
-> --- a/drivers/video/fbdev/hyperv_fb.c
-> +++ b/drivers/video/fbdev/hyperv_fb.c
-> @@ -58,7 +58,6 @@
->  
->  #include <linux/hyperv.h>
->  
-> -
->  /* Hyper-V Synthetic Video Protocol definitions and structures */
->  #define MAX_VMBUS_PKT_SIZE 0x4000
->  
-> @@ -74,10 +73,8 @@
->  #define SYNTHVID_DEPTH_WIN8 32
->  #define SYNTHVID_FB_SIZE_WIN8 (8 * 1024 * 1024)
->  
-> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
->  #define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
->  
-> -
->  enum pipe_msg_type {
->  	PIPE_MSG_INVALID,
->  	PIPE_MSG_DATA,
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 6feade6..c008fda 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2079,6 +2079,8 @@
->  #define PCI_DEVICE_ID_ICE_1712		0x1712
->  #define PCI_DEVICE_ID_VT1724		0x1724
->  
-> +#define PCI_VENDOR_ID_MICROSOFT  	0x1414
+> > +     ideal_runtime =  min_t(u64, ideal_runtime, sysctl_sched_latency);
+> > +
+>
+> (superfluous whitespace -- twice, once after the = once this whole extra
+> line)
+
+sorry for that...
+
+>
+> >       if (delta > ideal_runtime)
+> >               resched_curr(rq_of(cfs_rq));
+> >  }
+>
+> Urgghhhh..
+>
+> so delta is in vtime here, while sched_latency is not, so the heavier
+> the queue, the larger this value becomes.
+>
+> Given those 1000 idle tasks, rq-weight would be around 2048; however due
+> to nr_running being insane, sched_slice() ends up being something like:
+
+rq weight will be 1000*3+2*1024=5048
+sched_period becomes 1002 * min_gran = 3006ms
+
+idle task got a slice of weight(3) * (1002 min_gran) / 5048 =
+3002/5048 * min_gran
+
+normal task got a slice of weight(1024) * (1002 min_gran) / 5048 =
+1024*1002*5048 * min_gran ~ 200 min_gran
+
+if the 1000 task are in a idle sched group, that even worth because
+the rq weight decrease to 3+2*1024 = 2051 and the slice increase to
+500 min_gran
+
+note that if we use 2 tasks nice -20 and 1000 tasks with nice 19 we
+have similar slice duration (around 500 min_gran) so we can't really
+rely on idle_nr_running
+
+>
+>   1000 * min_gran * 2 / 2048
+>
+> which is around ~min_gran and so won't come near to latency.
+>
+>
+> since we already have idle_min_gran; how about something like this?
+
+the idl_min gran will divide by 4 the sched_slice which can still
+remain quite high
+
+The main problem with my proposal is that task with negative nice prio
+can still get larger sched_slice because vruntime increases slower
+than  real time
+
+>
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index efceb670e755..8dd18fc0affa 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -706,12 +706,14 @@ static inline u64 calc_delta_fair(u64 delta, struct sched_entity *se)
+>   *
+>   * p = (nr <= nl) ? l : l*nr/nl
+>   */
+> -static u64 __sched_period(unsigned long nr_running)
+> +static u64 __sched_period(unsigned long nr_running, unsigned long nr_idle)
+>  {
+> -       if (unlikely(nr_running > sched_nr_latency))
+> -               return nr_running * sysctl_sched_min_granularity;
+> -       else
+> -               return sysctl_sched_latency;
+> +       u64 period = 0;
 > +
->  #define PCI_VENDOR_ID_OXSEMI		0x1415
->  #define PCI_DEVICE_ID_OXSEMI_12PCI840	0x8403
->  #define PCI_DEVICE_ID_OXSEMI_PCIe840		0xC000
-
-I've sent a similar patch recently:
-https://lore.kernel.org/linux-hyperv/20220827130345.1320254-2-vkuznets@redhat.com/
-
-which Wei has already queued to hyperv/fixes. Moving
-PCI_DEVICE_ID_MICROSOFT_MANA_PF/VF definitions to 'pci_ids.h' does make
-sense but please rebase first.
-
--- 
-Vitaly
-
+> +       period += nr_running * sysctl_sched_min_granularity;
+> +       period += nr_idle    * sysctl_sched_idle_min_granularity;
+> +
+> +       return max_t(u64, period, sysctl_sched_latency);
+>  }
+>
+>  static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq);
+> @@ -724,15 +726,25 @@ static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq);
+>   */
+>  static u64 sched_slice(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+> -       unsigned int nr_running = cfs_rq->nr_running;
+> +       unsigned int nr_idle = cfs_rq->idle_nr_running;
+> +       unsigned int nr_running = cfs_rq->nr_running - nr_idle;
+>         struct sched_entity *init_se = se;
+>         unsigned int min_gran;
+>         u64 slice;
+>
+> -       if (sched_feat(ALT_PERIOD))
+> -               nr_running = rq_of(cfs_rq)->cfs.h_nr_running;
+> +       if (sched_feat(ALT_PERIOD)) {
+> +               nr_idle = rq_of(cfs_rq)->cfs.idle_h_nr_running;
+> +               nr_running = rq_of(cfs_rq)->cfs.h_nr_running - nr_idle;
+> +       }
+> +
+> +       if (!se->on_rq) {
+> +               if (se_is_idle(se))
+> +                       nr_idle++;
+> +               else
+> +                       nr_running++;
+> +       }
+>
+> -       slice = __sched_period(nr_running + !se->on_rq);
+> +       slice = __sched_period(nr_running, nr_idle);
+>
+>         for_each_sched_entity(se) {
+>                 struct load_weight *load;
+>
+>
+> This changes how the compute the period depending on the composition. It
+> suffers the exact same problem you had earlier though in that it doesn't
+> work for the other low-weight cases. But perhaps we can come up with a
+> better means of computing the period that *does* consider them?
+>
+> As said before;... urgh! bit of a sticky problem this.
