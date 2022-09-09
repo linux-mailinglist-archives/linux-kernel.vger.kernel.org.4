@@ -2,44 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7875B34AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA725B34A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiIIJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S229786AbiIIJ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIIJzs (ORCPT
+        with ESMTP id S229821AbiIIJ4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:55:48 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157D6D51DE;
-        Fri,  9 Sep 2022 02:55:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VP9-zDX_1662717341;
-Received: from 30.221.130.74(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VP9-zDX_1662717341)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Sep 2022 17:55:42 +0800
-Message-ID: <3f75d266-7ccd-be6d-657c-fe0633b25687@linux.alibaba.com>
-Date:   Fri, 9 Sep 2022 17:55:41 +0800
+        Fri, 9 Sep 2022 05:56:35 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5C112D19E;
+        Fri,  9 Sep 2022 02:56:10 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 10:55:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662717368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lDpC67NopcBY3WkfHCdst9Y40eb0+fWa3aZaj8C1P74=;
+        b=LVUcgLVEKlJeyJh274QBbSm2SunUsd/+Fnhi8Oa83s4LnsBzI0E2D1UEwYFcXtQEulUU+W
+        LVnoIby+wN2xFlyIPs/26HCtShwG9QsGAppu7ff2QUan911DOy14slnZlOYJWqyTLNYjZD
+        NI3YBiakBpwSB/KZjauRUKa3/8sbkjE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/14] KVM: arm64: Protect page table traversal with RCU
+Message-ID: <YxsNr+79UUm5Go9x@google.com>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
+ <20220830194132.962932-9-oliver.upton@linux.dev>
+ <YxkRXLsLuhjBNanT@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V2 4/5] erofs: remove duplicated unregister_cookie
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
- <20220902105305.79687-5-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220902105305.79687-5-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxkRXLsLuhjBNanT@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,77 +63,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/2/22 6:53 PM, Jia Zhu wrote:
-> In erofs umount scenario, erofs_fscache_unregister_cookie() is called
-> twice in kill_sb() and put_super().
+On Wed, Sep 07, 2022 at 02:47:08PM -0700, David Matlack wrote:
+> On Tue, Aug 30, 2022 at 07:41:26PM +0000, Oliver Upton wrote:
+> > The use of RCU is necessary to change the paging structures in parallel.
+> > Acquire and release an RCU read lock when traversing the page tables.
+> > 
+> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> > ---
+> >  arch/arm64/include/asm/kvm_pgtable.h | 19 ++++++++++++++++++-
+> >  arch/arm64/kvm/hyp/pgtable.c         |  7 ++++++-
+> >  2 files changed, 24 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> > index 78fbb7be1af6..7d2de0a98ccb 100644
+> > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > @@ -578,9 +578,26 @@ enum kvm_pgtable_prot kvm_pgtable_stage2_pte_prot(kvm_pte_t pte);
+> >   */
+> >  enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte);
+> >  
+> > +#if defined(__KVM_NVHE_HYPERVISOR___)
+> > +
 > 
-> It works for original semantics, cause 'ctx' will be set to NULL in
-> put_super() and will not be unregister again in kill_sb().
-> However, in shared domain scenario, we use refcount to maintain the
-> lifecycle of cookie. Unregister the cookie twice will cause it to be
-> released early.
+> Future readers will wonder why NVHE stubs out RCU support and how that
+> is even correct. Some comments here would be useful explain it.
+
+Good point.
+
+> > +static inline void kvm_pgtable_walk_begin(void) {}
+> > +static inline void kvm_pgtable_walk_end(void) {}
+> > +
+> > +#define kvm_dereference_ptep rcu_dereference_raw
 > 
-> For the above reasons, this patch removes duplicate unregister_cookie
-> and move fscache_unregister_* before shotdown_super() to prevent busy
-> inode(ctx->inode) when umount.
+> How does NVHE have access rcu_dereference_raw()?
+
+rcu_dereference_raw() is inlined and simply recasts the pointer into the
+kernel address space.
+
+Perhaps it is less confusing to template this on kvm_pte_read() to avoid
+polluting nVHE with an otherwise benign reference to RCU.
+
+> > +
+> > +#else	/* !defined(__KVM_NVHE_HYPERVISOR__) */
+> > +
+> > +#define kvm_pgtable_walk_begin	rcu_read_lock
+> > +#define kvm_pgtable_walk_end	rcu_read_unlock
+> > +#define kvm_dereference_ptep	rcu_dereference
+> > +
+> > +#endif	/* defined(__KVM_NVHE_HYPERVISOR__) */
+> > +
+> >  static inline kvm_pte_t kvm_pte_read(kvm_pte_t *ptep)
+> >  {
+> > -	return READ_ONCE(*ptep);
+> > +	kvm_pte_t __rcu *p = (kvm_pte_t __rcu *)ptep;
+> > +
+> > +	return READ_ONCE(*kvm_dereference_ptep(p));
 > 
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> ---
->  fs/erofs/super.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+> What about all the other places where page table memory is accessed?
 > 
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 69de1731f454..667a78f0ee70 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -919,19 +919,20 @@ static void erofs_kill_sb(struct super_block *sb)
->  		kill_litter_super(sb);
->  		return;
->  	}
-> -	if (erofs_is_fscache_mode(sb))
-> -		generic_shutdown_super(sb);
-> -	else
-> -		kill_block_super(sb);
-> -
->  	sbi = EROFS_SB(sb);
->  	if (!sbi)
->  		return;
->  
-> +	if (erofs_is_fscache_mode(sb)) {
-> +		erofs_fscache_unregister_cookie(&sbi->s_fscache);
-> +		erofs_fscache_unregister_fs(sb);
-> +		generic_shutdown_super(sb);
+> If RCU is going to be used to protect page table memory, then all
+> accesses have to go under an RCU critical section. This means that page
+> table memory should only be accessed through __rcu annotated pointers
+> and dereferenced with rcu_dereference().
 
-Generally we can't do clean ups before generic_shutdown_super(), since
-generic_shutdown_super() may trigger IO, e.g. in sync_filesystem(),
-though it's not the case for erofs (read-only).
+Let me play around with this a bit, as the annoying part is trying to
+sprinkle in RCU annotations w/o messing with nVHE. 
 
-How about embedding erofs_fscache_unregister_cookie() into
-erofs_fscache_unregister_fs(), and thus we can check domain_id in
-erofs_fscache_unregister_fs()?
-
-> +	} else {
-> +		kill_block_super(sb);
-> +	}
-> +
->  	erofs_free_dev_context(sbi->devs);
->  	fs_put_dax(sbi->dax_dev, NULL);
-> -	erofs_fscache_unregister_cookie(&sbi->s_fscache);
-> -	erofs_fscache_unregister_fs(sb);
->  	kfree(sbi->opt.fsid);
->  	kfree(sbi->opt.domain_id);
->  	kfree(sbi);
-> @@ -951,7 +952,6 @@ static void erofs_put_super(struct super_block *sb)
->  	iput(sbi->managed_cache);
->  	sbi->managed_cache = NULL;
->  #endif
-> -	erofs_fscache_unregister_cookie(&sbi->s_fscache);
->  }
->  
->  struct file_system_type erofs_fs_type = {
-
--- 
+--
 Thanks,
-Jingbo
+Oliver
