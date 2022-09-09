@@ -2,156 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFFC5B3611
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854E05B3616
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiIILJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S229987AbiIILN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiIILJs (ORCPT
+        with ESMTP id S229647AbiIILNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:09:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26A4E84A;
-        Fri,  9 Sep 2022 04:09:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F1292288F;
-        Fri,  9 Sep 2022 11:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662721785; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jc0d4GvYAZFGV+o/z8IImilKpYEBIOuhp0/HsQ8mNfY=;
-        b=OtZDXLRAx8/3DXs7hJJ/D+PJQ5qqbdbUBgJFXYVCoDY6wzHrg9HPmkWGDZ3u8QSE4ssn1t
-        aQJ3dwkChQWmRaVP3iVCjGMSQ+Qjuh2kZmPvpXTL+w6TkKocroeX9T2c8mw7XgsgXXWPuF
-        SsizCCQDo5hZu0ObFUvkdyU0v2XG2Tw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662721785;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jc0d4GvYAZFGV+o/z8IImilKpYEBIOuhp0/HsQ8mNfY=;
-        b=qLZIFqvob0RnArjNrWkgvQBYJkD6KS6Ck8NjN9xQqOOYzPiVWqkAL7HDJdoARbJoBJgYMB
-        OqAeq1tj2qeUT8Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80D84139D5;
-        Fri,  9 Sep 2022 11:09:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BdpvH/keG2MCCwAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 09 Sep 2022 11:09:45 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DDADFA0684; Fri,  9 Sep 2022 13:09:44 +0200 (CEST)
-Date:   Fri, 9 Sep 2022 13:09:44 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, Jan Kara <jack@suse.cz>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
- permission event response
-Message-ID: <20220909110944.yfnuqhsiyw3ekkcn@quack3>
-References: <cover.1659996830.git.rgb@redhat.com>
- <2254258.ElGaqSPkdT@x2>
- <Yxqn6NVQr0jTQHiu@madcap2.tricolour.ca>
- <2254543.ElGaqSPkdT@x2>
+        Fri, 9 Sep 2022 07:13:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8C0AA369;
+        Fri,  9 Sep 2022 04:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662722028; x=1694258028;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JbCdULcpLNTKeyruG9enleFdW1gpzUig7Itvs4b5dVc=;
+  b=INsG+aeUFP0VRrFgtvRzDzvrqWY8chU4Mnk26lLnpf2S52nT4wy9WYbE
+   Ta+epC9pJh7zKxulnZzFkoDwzhJj89whGrnqM4xFtjC7yiJvpNJYE16Vy
+   qFpScU0pt/lWi7EMacfFwBhk9xl97BePkhtT+44ojIWSibn7t/+PA5FZR
+   r/c3rtz0FVIML6i8SbwaOGn8G2C6z00riQv0pPQvsgg+q5dRYPd3HiDZS
+   UHFxrV8MsVDNxriaWBqqaYi5uuQOxxD8MKHLOwrqoNEoq44UpcTi50R6Z
+   xOuRzXEMzfJDLoHtFnM5h44hzegBBKjL8N4oIPto/6K3kltw7Wwkk5vbs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298255036"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="298255036"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 04:13:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="790781551"
+Received: from lmongeax-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.106.181])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 04:13:39 -0700
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-sgx@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, seanjc@google.com, jarkko@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] x86/intel: Clear SGX feature bit if both SGX driver and KVM SGX are not enabled
+Date:   Fri,  9 Sep 2022 23:13:31 +1200
+Message-Id: <20220909111331.558936-1-kai.huang@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2254543.ElGaqSPkdT@x2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Steve!
+Currently on platform which has SGX enabled, if CONFIG_X86_SGX is not
+enabled, the X86_FEATURE_SGX bit is not cleared in init_ia32_feat_ctl().
+This results in /proc/cpuinfo still showing "sgx" feature when the
+kernel doesn't support SGX at all, which is not desired.
 
-On Fri 09-09-22 00:03:53, Steve Grubb wrote:
-> On Thursday, September 8, 2022 10:41:44 PM EDT Richard Guy Briggs wrote:
-> > > I'm trying to abide by what was suggested by the fs-devel folks. I can
-> > > live with it. But if you want to make something non-generic for all
-> > > users of fanotify, call the new field "trusted". This would decern when
-> > > a decision was made because the file was untrusted or access denied for
-> > > another reason.
-> >
-> > So, "u32 trusted;" ?  How would you like that formatted?
-> > "fan_trust={0|1}"
-> 
-> So how does this play out if there is another user? Do they want a num= and 
-> trust=  if not, then the AUDIT_FANOTIFY record will have multiple formats 
-> which is not good. I'd rather suggest something generic that can be 
-> interpreted based on who's attached to fanotify. IOW we have a fan_type=0 and 
-> then followed by info0= info1=  the interpretation of those solely depend on 
-> fan_type. If the fan_type does not need both, then any interpretation skips 
-> what it doesn't need. If fan_type=1, then it follows what arg0= and arg1= is 
-> for that format. But make this pivot on fan_type and not actual names.
+Clear SGX feature bit if both SGX driver and KVM SGX are not enabled in
+init_ia32_feat_ctl().
 
-So I think there is some misunderstanding so let me maybe spell out in
-detail how I see things so that we can get on the same page:
+Signed-off-by: Kai Huang <kai.huang@intel.com>
+---
 
-It was a requirement from me (and probably Amir) that there is a generic
-way to attach additional info to a response to fanotify permission event.
-This is achieved by defining:
+Hi Dave, Sean, Jarkko,
 
-struct fanotify_response_info_header {
-       __u8 type;
-       __u8 pad;
-       __u16 len;
-};
+Could you help to review?  Tested on SGX (BIOS) enabled machine with
+CONFIG_X86_SGX unset.
 
-which is a generic header and kernel can based on 'len' field decide how
-large the response structure is (to safely copy it from userspace) and
-based on 'type' field it can decide who should be the recipient of this
-extra information (or generally what to do with it). So any additional
-info needs to start with this header.
+This patch is generated on latest tip/master, but it applies to
+tip/x86/sgx cleanly as well.
 
-Then there is:
+v1 -> v2:
 
-struct fanotify_response_info_audit_rule {
-       struct fanotify_response_info_header hdr;
-       __u32 audit_rule;
-};
+ - Move the check down after checking X86_FEATURE_VMX which may set
+   enable_sgx_kvm to false.
+ - Slightly improve changelog.
+ - Change "Clear SGX bit" to "Clear SGX feature bit" in patch title.
 
-which properly starts with the header and hdr.type is expected to be
-FAN_RESPONSE_INFO_AUDIT_RULE. What happens after the header with type
-FAN_RESPONSE_INFO_AUDIT_RULE until length hdr.len is fully within *audit*
-subsystem's responsibility. Fanotify code will just pass this as an opaque
-blob to the audit subsystem.
+---
+ arch/x86/kernel/cpu/feat_ctl.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-So if you know audit subsystem will also need some other field together
-with 'audit_rule' now is a good time to add it and it doesn't have to be
-useful for anybody else besides audit. If someone else will need other
-information passed along with the response, he will append structure with
-another header with different 'type' field. In principle, there can be
-multiple structures appended to fanotify response like
+diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
+index 993697e71854..79d18caebff1 100644
+--- a/arch/x86/kernel/cpu/feat_ctl.c
++++ b/arch/x86/kernel/cpu/feat_ctl.c
+@@ -200,6 +200,19 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+ 		enable_sgx_kvm = 0;
+ 	}
+ 
++	/*
++	 * By reaching here, it is certain that:
++	 *  - CPU supports SGX.
++	 *  - SGX is enabled by BIOS.
++	 *
++	 * However if both SGX driver and KVM SGX are not enabled, just
++	 * need to clear SGX feature bit.
++	 */
++	if (!enable_sgx_driver && !enable_sgx_kvm) {
++		clear_cpu_cap(c, X86_FEATURE_SGX);
++		return;
++	}
++
+ 	if (!(msr & FEAT_CTL_SGX_LC_ENABLED) && enable_sgx_driver) {
+ 		if (!enable_sgx_kvm) {
+ 			pr_err_once("SGX Launch Control is locked. Disable SGX.\n");
 
-<hdr> <data> <hdr> <data> ...
-
-and fanotify subsystem will just pass them to different receivers based
-on the type in 'hdr' field.
-
-Also if audit needs to pass even more information along with the respose,
-we can define a new 'type' for it. But the 'type' space is not infinite so
-I'd prefer this does not happen too often...
-
-I hope this clears out things a bit.
-
-								Honza
+base-commit: b8b09110cf290fdab4006b717da7a776ffb0cb73
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.37.1
+
