@@ -2,154 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587265B32FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A4F5B3323
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiIIJLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S232059AbiIIJLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiIIJLD (ORCPT
+        with ESMTP id S231849AbiIIJKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:11:03 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061C135D5B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:11:01 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id i26so1600220lfp.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Ru7Sx5i9RvgY3g7fyc0DntX2hhZQfjQ93TQ69JqCe9Q=;
-        b=Qkpoucx28Duq+NWHjpWycxiETGjowchu+jAIp4OPfbnygiILEsjNGFgiRLH/4QoFvB
-         de+MBz7CCHm4zXvnhMyLGxUc9jYkb/B029h5fWWApL3nE0Q6U0fXLcAhDJ8WUCuFpUBO
-         h7pxc4i32kGOvf2FPvk7vkFJrOMJL3kFsKzN0FUU/lsSmnkBICPE9Tm/pvOb3/CFXcOW
-         EFLcESJOlinIWR8IGZGtwa3biq92p+gxHvtswCI9Mmd/UF4hvAwTvHvIZpOHUCSNRsOt
-         S+f5YJJOmMJClItubheGV3tkFExxsu8J0u91JJeOKZfnm13MNrUK968/Fy29g9R6mp6Y
-         uE2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ru7Sx5i9RvgY3g7fyc0DntX2hhZQfjQ93TQ69JqCe9Q=;
-        b=VQGRR9pMHaN6t/c/yQICPVUPzObUuOwJbK9oGhOztltKhxxDuC26ijaIKbfkziPQ0x
-         W3gg7hV6bKHVlmzPkaJHPF7iZA6k25aixPPjSRt9l1/IotXGZ5ys86atDM7js5OkqocW
-         ZaYazwxXUIyY3zfnqAhQ8Dso6wJ2t6YtrkFEzkhGkorn9tizcRNFikZN29o4LrG0YFyL
-         Irs3KLt8Y2tKX97uZhu7yUla2u0rjtwXHUzl9LVWshIZhxUcQ4hrCWjT6vugR5o/BqPD
-         9vMuIS1DY39fjTfLKWYLbItz+/jSupP7YXi/6jgQ3xkb5ThRCG6EvtsbwYswTj4NWm1U
-         qf2A==
-X-Gm-Message-State: ACgBeo3TvRlS4Yr9HG0NwH2GBPNk1u52FTUD1+o9oKXOkWhEgzflmNte
-        QxViDBOog/i0McE6AFtszfy/Tg==
-X-Google-Smtp-Source: AA6agR7+f0ARlXM0jJUnvsVkrZZApw52MJnuOH4zi76ULJbHUHYUwamJBsE5yP9Jqf98yR788MdsSQ==
-X-Received: by 2002:ac2:5bd2:0:b0:498:909:9c81 with SMTP id u18-20020ac25bd2000000b0049809099c81mr2509172lfn.120.1662714660020;
-        Fri, 09 Sep 2022 02:11:00 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05651238b000b0049602a81111sm2758lft.107.2022.09.09.02.10.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 02:10:59 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] dt-bindings: mfd: qcom,tcsr: drop simple-mfd from IPQ6018
-Date:   Fri,  9 Sep 2022 11:10:56 +0200
-Message-Id: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 9 Sep 2022 05:10:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007A912D548;
+        Fri,  9 Sep 2022 02:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662714654; x=1694250654;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1t24DAZdaTeTQgh9a9FDeIongWZD4EJoGdOMahPOlbo=;
+  b=k0TXLjzf1mOpxk2SjuNXeMj/GrHe7c2GLGTdCfizOmXWXGyh8BVlnJcZ
+   4OJLBUGzt6a0XhuAHy8faEqQRArW4Amr1z1jZ2zW/5C5p/N900unNcXAh
+   daFkro8tyvnqy+C1sn3ncbAsF5jegmxN65q9Dq6tsZLgb0+wUgnyfQGR/
+   YdxCZXMOMr6R+2xrbL/0oq/sQobxJA1Acx7h/gG4wJPeERit3XAcSA7DX
+   x46kuXksWiAGOEXqim/c7wEBsUeuVZLwM5YQ/dtOTb9CC/wPu7nNbBGMy
+   bqYGHkxtyelCW9ltM4nHQtTwVC0xIRH36LfDpi4tqQFxTqM/Bif9TU99c
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277822336"
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="277822336"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 02:10:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="704338246"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Sep 2022 02:10:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 33843238; Fri,  9 Sep 2022 12:11:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] serial: 8250_dma: Convert to use uart_xmit_advance()
+Date:   Fri,  9 Sep 2022 12:11:02 +0300
+Message-Id: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7677ed11e9fa ("dt-bindings: mfd: qcom,tcsr: Convert to dtschema")
-converted bindings to DT schema literally - including the
-qcom,tcsr-ipq6018 expecting syscon and simple-mfd.  Such configuration
-is not used in DTS and there is no actual need of it.  The TCSR block is
-purely configuration block and should not have children.  Any child
-device should be simply moved outside of TCSR syscon block.
+uart_xmit_advance() provides a common way on how to advance
+the Tx queue. Use it for the sake of unification and robustness.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
+ drivers/tty/serial/8250/8250_dma.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Changes since v2
-================
-1. Rebase on current MFD changes.
-2. Split from the series. Nothing depends on it, AFAIK.
-v2: https://lore.kernel.org/all/20220817145901.865977-2-krzysztof.kozlowski@linaro.org/
----
- .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 46 +++++++++----------
- 1 file changed, 21 insertions(+), 25 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index d3c25daa995e..b12809b5cc22 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -15,31 +15,27 @@ description:
+diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+index d99020fd3427..b85c82616e8c 100644
+--- a/drivers/tty/serial/8250/8250_dma.c
++++ b/drivers/tty/serial/8250/8250_dma.c
+@@ -26,9 +26,7 @@ static void __dma_tx_complete(void *param)
  
- properties:
-   compatible:
--    oneOf:
--      - items:
--          - enum:
--              - qcom,msm8998-tcsr
--              - qcom,qcs404-tcsr
--              - qcom,sc7180-tcsr
--              - qcom,sc7280-tcsr
--              - qcom,sdm630-tcsr
--              - qcom,sdm845-tcsr
--              - qcom,sm8150-tcsr
--              - qcom,tcsr-apq8064
--              - qcom,tcsr-apq8084
--              - qcom,tcsr-ipq8064
--              - qcom,tcsr-mdm9615
--              - qcom,tcsr-msm8660
--              - qcom,tcsr-msm8916
--              - qcom,tcsr-msm8953
--              - qcom,tcsr-msm8960
--              - qcom,tcsr-msm8974
--              - qcom,tcsr-msm8996
--          - const: syscon
--      - items:
--          - const: qcom,tcsr-ipq6018
--          - const: syscon
--          - const: simple-mfd
-+    items:
-+      - enum:
-+          - qcom,msm8998-tcsr
-+          - qcom,qcs404-tcsr
-+          - qcom,sc7180-tcsr
-+          - qcom,sc7280-tcsr
-+          - qcom,sdm630-tcsr
-+          - qcom,sdm845-tcsr
-+          - qcom,sm8150-tcsr
-+          - qcom,tcsr-apq8064
-+          - qcom,tcsr-apq8084
-+          - qcom,tcsr-ipq6018
-+          - qcom,tcsr-ipq8064
-+          - qcom,tcsr-mdm9615
-+          - qcom,tcsr-msm8660
-+          - qcom,tcsr-msm8916
-+          - qcom,tcsr-msm8953
-+          - qcom,tcsr-msm8960
-+          - qcom,tcsr-msm8974
-+          - qcom,tcsr-msm8996
-+      - const: syscon
+ 	dma->tx_running = 0;
  
-   reg:
-     maxItems: 1
+-	xmit->tail += dma->tx_size;
+-	xmit->tail &= UART_XMIT_SIZE - 1;
+-	p->port.icount.tx += dma->tx_size;
++	uart_xmit_advance(&p->port, dma->tx_size);
+ 
+ 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+ 		uart_write_wakeup(&p->port);
 -- 
-2.34.1
+2.35.1
 
