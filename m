@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679EC5B34A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7875B34AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiIIJ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S229502AbiIIJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiIIJz6 (ORCPT
+        with ESMTP id S229478AbiIIJzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:55:58 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7534210D716;
-        Fri,  9 Sep 2022 02:55:56 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2899tiT8128627;
-        Fri, 9 Sep 2022 04:55:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662717344;
-        bh=yfJHCddKoM4/t4ldECOTSRa6m8lwHsn3/QA2RapOHow=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=oXjG371K99Fe7fjvf/Wbhof3BXUmrWGMVPfCEuFSYrjAv1539n+3Pm/3qbVv/CSaq
-         2WVD7K6p6yTRWw85UUphfTnO1Cddin3AN0oYVuF3Z+LQR/72JNFL6N1g5nMR3NeijQ
-         PlPcz0KBDmlptP6MpJLN1UEZadAMETCJMKUpZqgc=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2899tiba009395
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 9 Sep 2022 04:55:44 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 9 Sep
- 2022 04:55:43 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 9 Sep 2022 04:55:43 -0500
-Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2899tePE081550;
-        Fri, 9 Sep 2022 04:55:41 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3] arm64: dts: ti: k3-am642-sk: Add DT entry for onboard LEDs
-Date:   Fri, 9 Sep 2022 15:25:38 +0530
-Message-ID: <166271733143.1620157.7880368240890578820.b4-ty@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220830123254.522222-1-vigneshr@ti.com>
-References: <20220830123254.522222-1-vigneshr@ti.com>
+        Fri, 9 Sep 2022 05:55:48 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157D6D51DE;
+        Fri,  9 Sep 2022 02:55:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VP9-zDX_1662717341;
+Received: from 30.221.130.74(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VP9-zDX_1662717341)
+          by smtp.aliyun-inc.com;
+          Fri, 09 Sep 2022 17:55:42 +0800
+Message-ID: <3f75d266-7ccd-be6d-657c-fe0633b25687@linux.alibaba.com>
+Date:   Fri, 9 Sep 2022 17:55:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V2 4/5] erofs: remove duplicated unregister_cookie
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
+        xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
+ <20220902105305.79687-5-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220902105305.79687-5-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh Raghavendra,
 
-On Tue, 30 Aug 2022 18:02:54 +0530, Vignesh Raghavendra wrote:
-> From: Aparna M <a-m1@ti.com>
+
+On 9/2/22 6:53 PM, Jia Zhu wrote:
+> In erofs umount scenario, erofs_fscache_unregister_cookie() is called
+> twice in kill_sb() and put_super().
 > 
-> AM642 SK has 8 leds connected to tpic2810 onboard. Add support for these
-> gpio leds.
+> It works for original semantics, cause 'ctx' will be set to NULL in
+> put_super() and will not be unregister again in kill_sb().
+> However, in shared domain scenario, we use refcount to maintain the
+> lifecycle of cookie. Unregister the cookie twice will cause it to be
+> released early.
 > 
+> For the above reasons, this patch removes duplicate unregister_cookie
+> and move fscache_unregister_* before shotdown_super() to prevent busy
+> inode(ctx->inode) when umount.
 > 
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+> ---
+>  fs/erofs/super.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 69de1731f454..667a78f0ee70 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -919,19 +919,20 @@ static void erofs_kill_sb(struct super_block *sb)
+>  		kill_litter_super(sb);
+>  		return;
+>  	}
+> -	if (erofs_is_fscache_mode(sb))
+> -		generic_shutdown_super(sb);
+> -	else
+> -		kill_block_super(sb);
+> -
+>  	sbi = EROFS_SB(sb);
+>  	if (!sbi)
+>  		return;
+>  
+> +	if (erofs_is_fscache_mode(sb)) {
+> +		erofs_fscache_unregister_cookie(&sbi->s_fscache);
+> +		erofs_fscache_unregister_fs(sb);
+> +		generic_shutdown_super(sb);
 
-I have applied the following to branch master on [1].
-Thank you!
+Generally we can't do clean ups before generic_shutdown_super(), since
+generic_shutdown_super() may trigger IO, e.g. in sync_filesystem(),
+though it's not the case for erofs (read-only).
 
-[1/1] arm64: dts: ti: k3-am642-sk: Add DT entry for onboard LEDs
-      commit: b216dc1a41f787620636376bf2be666f08c031d0
+How about embedding erofs_fscache_unregister_cookie() into
+erofs_fscache_unregister_fs(), and thus we can check domain_id in
+erofs_fscache_unregister_fs()?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> +	} else {
+> +		kill_block_super(sb);
+> +	}
+> +
+>  	erofs_free_dev_context(sbi->devs);
+>  	fs_put_dax(sbi->dax_dev, NULL);
+> -	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+> -	erofs_fscache_unregister_fs(sb);
+>  	kfree(sbi->opt.fsid);
+>  	kfree(sbi->opt.domain_id);
+>  	kfree(sbi);
+> @@ -951,7 +952,6 @@ static void erofs_put_super(struct super_block *sb)
+>  	iput(sbi->managed_cache);
+>  	sbi->managed_cache = NULL;
+>  #endif
+> -	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+>  }
+>  
+>  struct file_system_type erofs_fs_type = {
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
-
+-- 
+Thanks,
+Jingbo
