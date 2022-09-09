@@ -2,79 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B7E5B4308
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00EB5B430C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiIIXYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S230338AbiIIX0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIIXYA (ORCPT
+        with ESMTP id S229610AbiIIX0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:24:00 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866B6FC644
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:23:58 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t14so5472614wrx.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 16:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=bRaE9VlG8rxXV8LOLxE12g2wr02ny6fYaneIhHeaMW0=;
-        b=X4GXKUaqUzCBKA2kMpVzwpZeUsxbYvbj0Sz3zFSstJI0CGKQvAd3GjZa0cT1guGJIS
-         J7Utp+0TDzpZn1xLEuTusL01ldDVjccil49/h+TQU9hsgsEoYUUuaY/ADESkB9QFpUF+
-         Ssv2s9jBgQasDaVDLqekt/5mwh9d87KNgcmfg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bRaE9VlG8rxXV8LOLxE12g2wr02ny6fYaneIhHeaMW0=;
-        b=JMDV3FPitHAFZAEjrAGIsMe/n8+njv0kMm/tArg009SMP/Pv0YdKtaAngKIT55yvpu
-         f0Jm+S61UT0wDKIPlMkOliWcY2v/qu7vcVlQVilt5ApiAeqy8YmYng9huxY401GzfR1G
-         B6Cm1LxQjO+vf70srqBei/hWMh0NdR8sHBNXoDLo6K8G0RqXk7vOk4pFsiZ+MZK4VKf4
-         2zOxSl73y3iOygOJGDYI8jBpzTO2QrPYjHDLdnWshM2U+e6PVIgrC3g/AobHs7jgHioJ
-         lXnxjoSZf1gBWDlKTeuzNzSAylta8qANywpNvF6DCcgGFjFRE8G648oET+8PP/dIT+Av
-         /F9w==
-X-Gm-Message-State: ACgBeo0ik/2vXT/RoZh3QLEHfhbo02T+4knvKBzZzrABMd4uqKBbqGFa
-        rfyiCD8xC/QbrASBv7Hs4UH/kH5HC3VIJOpeTmxEqQ==
-X-Google-Smtp-Source: AA6agR546eH6QhOLWF/Pn2ZwTB2XiRBT33HV0pbKqrfPt5VFQ8uLshkpCPEmhxdxdqcjvfcY/iuoAXTL7HTLGwUDHwI=
-X-Received: by 2002:adf:e306:0:b0:225:618e:1711 with SMTP id
- b6-20020adfe306000000b00225618e1711mr9175141wrj.407.1662765836972; Fri, 09
- Sep 2022 16:23:56 -0700 (PDT)
+        Fri, 9 Sep 2022 19:26:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C1BE72E2;
+        Fri,  9 Sep 2022 16:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662765977; x=1694301977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g4hwGH0pU6mpaM2OsQ0RAEaOxEzoLrvVkvHORBX2fMc=;
+  b=Tq4VuaoTqMseb11BYoAfLq/KQiHTyU98tnbBuDTKoYxQs8RamBHIPC6X
+   UPXZFPEHf5Pa5BFxkoDlI3q02PwDncWRpu+w9XRgE9Zbog+QdAMB8krWB
+   atgbLgyzzsKKAOEZuL2FcHTP8GdloW7kO5YvT4+JH9cmWZivR9akvnxNq
+   Qwh5ELHkSdTVyOfltZdp3USIiK1R3/BVHiqI3UNvTUjlLtXJy8yKOTACB
+   OdlCvwV4AFxt9dSC18s+jFiuVyzYp72+uZf3Zk+XLJtwtXZ3jhSoyDzcw
+   pauO+tdoICjM32xd4USbwgNHIpl9ks6rcZoPgBYtVPpqbgYRlo0nmY1G7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298389574"
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="298389574"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:26:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="683808816"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Sep 2022 16:26:14 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWnO1-0001rD-1N;
+        Fri, 09 Sep 2022 23:26:13 +0000
+Date:   Sat, 10 Sep 2022 07:25:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Philippe CORNU <philippe.cornu@foss.st.com>
+Subject: Re: [PATCH 3/5] media: stm32-dcmipp: STM32 DCMIPP camera interface
+ driver
+Message-ID: <202209100741.2q2uPfCJ-lkp@intel.com>
+References: <20220909165959.5899-4-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
-References: <20220907232914.243502-1-jwerner@chromium.org> <20220907232914.243502-3-jwerner@chromium.org>
- <5b3014f9-d827-f1e7-c44c-162c4443f36d@linaro.org>
-In-Reply-To: <5b3014f9-d827-f1e7-c44c-162c4443f36d@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Fri, 9 Sep 2022 16:23:45 -0700
-Message-ID: <CAODwPW8nmAFysGOp=QUcnOxiRXJTh-1RFGFUvYHy9Qggz=LkvQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4 v2] dt-bindings: memory: Add jedec,lpddr4 and
- jedec,lpddr5 bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Jian-Jia Su <jjsu@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909165959.5899-4-hugues.fruchet@foss.st.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Does not look like you tested the bindings. Please run `make
-> dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Hi Hugues,
 
-No, I did, and it found plenty of other issues... not sure why it
-didn't find these ones. I have yamllint installed, too... strange.
+I love your patch! Yet something to improve:
 
-Anyway, fixed the issue and resent this as v3.
+[auto build test ERROR on atorgue-stm32/stm32-next]
+[also build test ERROR on media-tree/master sailus-media-tree/streams linus/master v6.0-rc4 next-20220909]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hugues-Fruchet/Add-support-for-DCMIPP-camera-interface-of-STMicroelectronics-STM32-SoC-series/20220910-010413
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git stm32-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220910/202209100741.2q2uPfCJ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/27ecbfe1ec56d46466cf305ba5f44de8e5a676f0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hugues-Fruchet/Add-support-for-DCMIPP-camera-interface-of-STMicroelectronics-STM32-SoC-series/20220910-010413
+        git checkout 27ecbfe1ec56d46466cf305ba5f44de8e5a676f0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/media/platform/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:27:
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h:120:41: error: field 'bus' has incomplete type
+     120 |         struct v4l2_fwnode_bus_parallel bus;
+         |                                         ^~~
+   drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c: In function 'dcmipp_comp_unbind':
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:225:9: error: implicit declaration of function 'v4l2_async_notifier_unregister'; did you mean 'v4l2_async_nf_unregister'? [-Werror=implicit-function-declaration]
+     225 |         v4l2_async_notifier_unregister(&dcmipp->notifier);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         v4l2_async_nf_unregister
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:226:9: error: implicit declaration of function 'v4l2_async_notifier_cleanup'; did you mean 'v4l2_async_nf_cleanup'? [-Werror=implicit-function-declaration]
+     226 |         v4l2_async_notifier_cleanup(&dcmipp->notifier);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         v4l2_async_nf_cleanup
+   drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c: In function 'dcmipp_graph_init':
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:465:9: error: implicit declaration of function 'v4l2_async_notifier_init'; did you mean 'v4l2_async_nf_init'? [-Werror=implicit-function-declaration]
+     465 |         v4l2_async_notifier_init(&dcmipp->notifier);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+         |         v4l2_async_nf_init
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:467:15: error: implicit declaration of function 'v4l2_async_notifier_add_fwnode_remote_subdev'; did you mean 'v4l2_async_nf_add_fwnode_remote'? [-Werror=implicit-function-declaration]
+     467 |         asd = v4l2_async_notifier_add_fwnode_remote_subdev
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               v4l2_async_nf_add_fwnode_remote
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:469:18: error: expected expression before 'struct'
+     469 |                  struct v4l2_async_subdev);
+         |                  ^~~~~~
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c:480:15: error: implicit declaration of function 'v4l2_async_notifier_register'; did you mean 'v4l2_async_nf_register'? [-Werror=implicit-function-declaration]
+     480 |         ret = v4l2_async_notifier_register(&dcmipp->v4l2_dev, &dcmipp->notifier);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               v4l2_async_nf_register
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c:14:
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h:120:41: error: field 'bus' has incomplete type
+     120 |         struct v4l2_fwnode_bus_parallel bus;
+         |                                         ^~~
+--
+   In file included from drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c:24:
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h:120:41: error: field 'bus' has incomplete type
+     120 |         struct v4l2_fwnode_bus_parallel bus;
+         |                                         ^~~
+   drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c: In function 'dcmipp_pipeline_s_stream':
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c:460:23: error: implicit declaration of function 'media_entity_remote_pad'; did you mean 'media_entity_remove_links'? [-Werror=implicit-function-declaration]
+     460 |                 pad = media_entity_remote_pad(pad);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~
+         |                       media_entity_remove_links
+>> drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c:460:21: warning: assignment to 'struct media_pad *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     460 |                 pad = media_entity_remote_pad(pad);
+         |                     ^
+   cc1: some warnings being treated as errors
+
+
+vim +/bus +120 drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+
+    92	
+    93	/**
+    94	 * struct dcmipp_ent_device - core struct that represents a node in the topology
+    95	 *
+    96	 * @ent:		the pointer to struct media_entity for the node
+    97	 * @pads:		the list of pads of the node
+    98	 * @process_frame:	callback send a frame to that node
+    99	 * @vdev_get_format:	callback that returns the current format a pad, used
+   100	 *			only when is_media_entity_v4l2_video_device(ent) returns
+   101	 *			true
+   102	 *
+   103	 * Each node of the topology must create a dcmipp_ent_device struct. Depending on
+   104	 * the node it will be of an instance of v4l2_subdev or video_device struct
+   105	 * where both contains a struct media_entity.
+   106	 * Those structures should embedded the dcmipp_ent_device struct through
+   107	 * v4l2_set_subdevdata() and video_set_drvdata() respectivaly, allowing the
+   108	 * dcmipp_ent_device struct to be retrieved from the corresponding struct
+   109	 * media_entity
+   110	 */
+   111	struct dcmipp_ent_device {
+   112		struct media_entity *ent;
+   113		struct media_pad *pads;
+   114		void * (*process_frame)(struct dcmipp_ent_device *ved,
+   115					const void *frame);
+   116		void (*vdev_get_format)(struct dcmipp_ent_device *ved,
+   117					struct v4l2_pix_format *fmt);
+   118	
+   119		/* Parallel input device */
+ > 120		struct v4l2_fwnode_bus_parallel	bus;
+   121		enum v4l2_mbus_type		bus_type;
+   122		irq_handler_t handler;
+   123		irqreturn_t handler_ret;
+   124		irq_handler_t thread_fn;
+   125	};
+   126	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
