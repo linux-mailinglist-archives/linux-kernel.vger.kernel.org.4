@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781AA5B32A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCBA5B3297
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbiIIJBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S231355AbiIIJBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiIIJAn (ORCPT
+        with ESMTP id S231590AbiIIJAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 05:00:43 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD3A32AA5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC202EF3D;
         Fri,  9 Sep 2022 02:00:30 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 09:00:26 -0000
+Date:   Fri, 09 Sep 2022 09:00:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662714027;
+        s=2020; t=1662714028;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KlweZF8EmTyFXxz3TxTAu6ZmbjaWJAOjflJYfKtIW1c=;
-        b=OuyIU9xfvTyO/F8RkUz05bgnUvmI2B9zEUbGJphEWyX0u6pLkbgK4XqW+0lB4UIeUnTyzb
-        J/5cEzLPNVLPFYqBS+ZxARJCa9gNi8czm8ol2M/5adIpKVyQe/I7wRnUIxXZjP0Go/da1f
-        aa8QnYtPShD17Rlep4nS2dheyfJL6lXtxQO20sGGmj+fFuw7VB+H/2UObzOYiszGaRndKt
-        tQWAEWLtBIAvaieqR4ghvUOn2N/kPwEi7nN3cs85JrE5oOPVXi6QFtWnsVBCjSBWpcjrAp
-        bpQzEVv1KlvpV9O22fXFHnZSOc0j35q6ISiBX3SBJCj2xmajqSUOxurtOPyxRA==
+        bh=zmBqnugyFSwUbAVLFK207QeMtERovpuxVQBJ8i1MZNw=;
+        b=ACSp71+lOfINWQmQdQviqXhbapEOK/L/cRQX1SH4BZbgBPDy0GFZzG6YXF7PZbiLwAIOR4
+        cAwjv88ReOa8e5VdLc5SxqE6x1jeVGL33X+dvtzTeMypjQOummusDaCEwx0pETbQhfQpia
+        y8jNhYcFw6QL7WwcgW7VGu4LwrLa4UhyXsuuWlvvX1Vg1yRsyaLhk6P00Kn3xikw1l4K2m
+        lWJoabNeBtawgzqfqNRln0gG+lrWHnVjHewUadpR7pni2GX9NNlbZVzuljOx78mgYIh9eb
+        mJVMBvNFfsZmZAchVhzsp8fMTKdOPJ41QC4bDG0C2nOfnzLZzpx9YzhFtZzVcA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662714027;
+        s=2020e; t=1662714028;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KlweZF8EmTyFXxz3TxTAu6ZmbjaWJAOjflJYfKtIW1c=;
-        b=mccZhGUDjiTmM8pucXPfJAhRH+DeTh/b0ND62nnPTEQSqtwFpZyRt0qz7MdWehE+pUcRnO
-        cLsAwRS7SaF2W1CQ==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=zmBqnugyFSwUbAVLFK207QeMtERovpuxVQBJ8i1MZNw=;
+        b=NYnXAI2wRyQdy8jNZSyA2YXGr4hREO4jDoZpjPvPVaIRQfnbkaXoFkrN5uYOhpoHl881jn
+        /pUM4l7lx2NA4fBA==
+From:   "tip-bot2 for Abel Wu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Rename task_running() to task_on_cpu()
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Cleanup for SIS_PROP
+Cc:     Abel Wu <wuyun.abel@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <Yxhkhn55uHZx+NGl@hirez.programming.kicks-ass.net>
-References: <Yxhkhn55uHZx+NGl@hirez.programming.kicks-ass.net>
+In-Reply-To: <20220907112000.1854-6-wuyun.abel@bytedance.com>
+References: <20220907112000.1854-6-wuyun.abel@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <166271402603.401.5726393155491707442.tip-bot2@tip-bot2>
+Message-ID: <166271402714.401.13027499685283802470.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,174 +68,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     0b9d46fc5ef7a457cc635b30b010081228cb81ac
-Gitweb:        https://git.kernel.org/tip/0b9d46fc5ef7a457cc635b30b010081228cb81ac
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 06 Sep 2022 12:33:04 +02:00
+Commit-ID:     96c1c0cfe493a7ed549169a6f044bbb83e490fb5
+Gitweb:        https://git.kernel.org/tip/96c1c0cfe493a7ed549169a6f044bbb83e490fb5
+Author:        Abel Wu <wuyun.abel@bytedance.com>
+AuthorDate:    Wed, 07 Sep 2022 19:20:00 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:53:47 +02:00
 
-sched: Rename task_running() to task_on_cpu()
+sched/fair: Cleanup for SIS_PROP
 
-There is some ambiguity about task_running() in that it is unrelated
-to TASK_RUNNING but instead tests ->on_cpu. As such, rename the thing
-task_on_cpu().
+The sched-domain of this cpu is only used for some heuristics when
+SIS_PROP is enabled, and it should be irrelevant whether the local
+sd_llc is valid or not, since all we care about is target sd_llc
+if !SIS_PROP.
 
-Suggested-by: Ingo Molnar <mingo@kernel.org>
+Access the local domain only when there is a need.
+
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/Yxhkhn55uHZx+NGl@hirez.programming.kicks-ass.net
+Acked-by: Mel Gorman <mgorman@suse.de>
+Link: https://lore.kernel.org/r/20220907112000.1854-6-wuyun.abel@bytedance.com
 ---
- kernel/sched/core.c       | 10 +++++-----
- kernel/sched/core_sched.c |  2 +-
- kernel/sched/deadline.c   |  6 +++---
- kernel/sched/fair.c       |  2 +-
- kernel/sched/rt.c         |  6 +++---
- kernel/sched/sched.h      |  2 +-
- 6 files changed, 14 insertions(+), 14 deletions(-)
+ kernel/sched/fair.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 7d289d8..1630181 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2777,7 +2777,7 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
- 		return -EINVAL;
- 	}
- 
--	if (task_running(rq, p) || READ_ONCE(p->__state) == TASK_WAKING) {
-+	if (task_on_cpu(rq, p) || READ_ONCE(p->__state) == TASK_WAKING) {
- 		/*
- 		 * MIGRATE_ENABLE gets here because 'p == current', but for
- 		 * anything else we cannot do is_migration_disabled(), punt
-@@ -3289,11 +3289,11 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		 *
- 		 * NOTE! Since we don't hold any locks, it's not
- 		 * even sure that "rq" stays as the right runqueue!
--		 * But we don't care, since "task_running()" will
-+		 * But we don't care, since "task_on_cpu()" will
- 		 * return false if the runqueue has changed and p
- 		 * is actually now running somewhere else!
- 		 */
--		while (task_running(rq, p)) {
-+		while (task_on_cpu(rq, p)) {
- 			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
- 				return 0;
- 			cpu_relax();
-@@ -3306,7 +3306,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		 */
- 		rq = task_rq_lock(p, &rf);
- 		trace_sched_wait_task(p);
--		running = task_running(rq, p);
-+		running = task_on_cpu(rq, p);
- 		queued = task_on_rq_queued(p);
- 		ncsw = 0;
- 		if (!match_state || READ_ONCE(p->__state) == match_state)
-@@ -8648,7 +8648,7 @@ again:
- 	if (curr->sched_class != p->sched_class)
- 		goto out_unlock;
- 
--	if (task_running(p_rq, p) || !task_is_running(p))
-+	if (task_on_cpu(p_rq, p) || !task_is_running(p))
- 		goto out_unlock;
- 
- 	yielded = curr->sched_class->yield_to_task(rq, p);
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 1ec807f..a57fd8f 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -88,7 +88,7 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
- 	 * core has now entered/left forced idle state. Defer accounting to the
- 	 * next scheduling edge, rather than always forcing a reschedule here.
- 	 */
--	if (task_running(rq, p))
-+	if (task_on_cpu(rq, p))
- 		resched_curr(rq);
- 
- 	task_rq_unlock(rq, p, &rf);
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d0fe6a2..86dea6a 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2092,7 +2092,7 @@ static void task_fork_dl(struct task_struct *p)
- 
- static int pick_dl_task(struct rq *rq, struct task_struct *p, int cpu)
- {
--	if (!task_running(rq, p) &&
-+	if (!task_on_cpu(rq, p) &&
- 	    cpumask_test_cpu(cpu, &p->cpus_mask))
- 		return 1;
- 	return 0;
-@@ -2244,7 +2244,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
- 		if (double_lock_balance(rq, later_rq)) {
- 			if (unlikely(task_rq(task) != rq ||
- 				     !cpumask_test_cpu(later_rq->cpu, &task->cpus_mask) ||
--				     task_running(rq, task) ||
-+				     task_on_cpu(rq, task) ||
- 				     !dl_task(task) ||
- 				     !task_on_rq_queued(task))) {
- 				double_unlock_balance(rq, later_rq);
-@@ -2474,7 +2474,7 @@ skip:
-  */
- static void task_woken_dl(struct rq *rq, struct task_struct *p)
- {
--	if (!task_running(rq, p) &&
-+	if (!task_on_cpu(rq, p) &&
- 	    !test_tsk_need_resched(rq->curr) &&
- 	    p->nr_cpus_allowed > 1 &&
- 	    dl_task(rq->curr) &&
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7bad641..4e5b171 100644
+index 23b020c..7bad641 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -7935,7 +7935,7 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
- 	/* Record that we found at least one task that could run on dst_cpu */
- 	env->flags &= ~LBF_ALL_PINNED;
+@@ -6396,19 +6396,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool 
+ 	struct sched_domain_shared *sd_share;
+ 	struct rq *this_rq = this_rq();
+ 	int this = smp_processor_id();
+-	struct sched_domain *this_sd;
++	struct sched_domain *this_sd = NULL;
+ 	u64 time = 0;
  
--	if (task_running(env->src_rq, p)) {
-+	if (task_on_cpu(env->src_rq, p)) {
- 		schedstat_inc(p->stats.nr_failed_migrations_running);
- 		return 0;
- 	}
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 27e694c..d869bcf 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1845,7 +1845,7 @@ static void put_prev_task_rt(struct rq *rq, struct task_struct *p)
+-	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+-	if (!this_sd)
+-		return -1;
+-
+ 	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
  
- static int pick_rt_task(struct rq *rq, struct task_struct *p, int cpu)
- {
--	if (!task_running(rq, p) &&
-+	if (!task_on_cpu(rq, p) &&
- 	    cpumask_test_cpu(cpu, &p->cpus_mask))
- 		return 1;
+ 	if (sched_feat(SIS_PROP) && !has_idle_core) {
+ 		u64 avg_cost, avg_idle, span_avg;
+ 		unsigned long now = jiffies;
  
-@@ -2000,7 +2000,7 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
- 			 */
- 			if (unlikely(task_rq(task) != rq ||
- 				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
--				     task_running(rq, task) ||
-+				     task_on_cpu(rq, task) ||
- 				     !rt_task(task) ||
- 				     !task_on_rq_queued(task))) {
++		this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
++		if (!this_sd)
++			return -1;
++
+ 		/*
+ 		 * If we're busy, the assumption that the last idle period
+ 		 * predicts the future is flawed; age away the remaining
+@@ -6462,7 +6462,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool 
+ 	if (has_idle_core)
+ 		set_idle_cores(target, false);
  
-@@ -2458,7 +2458,7 @@ skip:
-  */
- static void task_woken_rt(struct rq *rq, struct task_struct *p)
- {
--	bool need_to_push = !task_running(rq, p) &&
-+	bool need_to_push = !task_on_cpu(rq, p) &&
- 			    !test_tsk_need_resched(rq->curr) &&
- 			    p->nr_cpus_allowed > 1 &&
- 			    (dl_task(rq->curr) || rt_task(rq->curr)) &&
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index b75ac74..91b2c7e 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2051,7 +2051,7 @@ static inline int task_current(struct rq *rq, struct task_struct *p)
- 	return rq->curr == p;
- }
+-	if (sched_feat(SIS_PROP) && !has_idle_core) {
++	if (sched_feat(SIS_PROP) && this_sd && !has_idle_core) {
+ 		time = cpu_clock(this) - time;
  
--static inline int task_running(struct rq *rq, struct task_struct *p)
-+static inline int task_on_cpu(struct rq *rq, struct task_struct *p)
- {
- #ifdef CONFIG_SMP
- 	return p->on_cpu;
+ 		/*
