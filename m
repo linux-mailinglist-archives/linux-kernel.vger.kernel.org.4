@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A64C5B3078
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91B75B3084
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiIIHh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S231531AbiIIHhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiIIHgG (ORCPT
+        with ESMTP id S231452AbiIIHgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:36:06 -0400
+        Fri, 9 Sep 2022 03:36:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF35D5725
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA83D021E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D5F61EE6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3ED61EE1
         for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6B0C43152;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512EFC43153;
         Fri,  9 Sep 2022 07:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1662708894;
-        bh=V9KyA9AdtH65sc81jKgwrbI3vWcp+kOGuvKUr/NRIJU=;
+        bh=zi8sWCWjHVPPumC67pt3VnnXclezbQDo0fx8bRzzovM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rPP0jNtpiBOm+iZLcauXcSqCwp8RiTYzqKat17WjXrQGxPsMprvNfdSw8nF6CLkif
-         xuw5e5ZFRH82ZjpdbChpVmfs2nchrA0wlJS+Jc0awDokM/v3MRpqyP/6wYvpcDPUC7
-         dkENVaoUnuzCHXnwbtpG1c5wfKNY7QUgsF/lA1G1HdwuJxQZUWIUYP7EBFJq5qYvkT
-         xSFu4/qWN6KLJOjZqqX7pzBLFluWNmTLfPRBabER2hP+VLM42bYUcN9AB99QLPa4/I
-         +UD7puG4VXEXZbE+57ABkCaM6lbzWwb478qGP3XcyK06rxX/zWZgwWOU2+FWmQwIi0
-         gpBm7ppPiafEw==
+        b=sz04HTxS8dwSC+YbXzxOQ+iIpKxhCeohwS1lt/uStyE3RRW2bO8rH4OSnauKQNBdx
+         mGeGBR8PeEkRQQBS8Z+CJEY0ts+ojyaKvfB6oNOxKcbV8thb78nDbvN08fXeYVKOyD
+         K8Gm+VJchFTYkJU/EW/8AHE2AllwUf84dJRaPTUlbuvYxjT1ccxy2S0SpOq+m+9w0H
+         a2QNGQu2ErB2YaWto43XSjgxVDOduqM5OK/Q2nBCejZ8ako9u6Nlb61WpMW9usefXp
+         V4ANauXNb/xeiNQFfcnuW5D473ZtrpjnLnI6B6AD6G+8o7WIflWk3HauyyH8Y34l2u
+         PU3GaPwIXezuw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oWYXG-007FGN-7l;
+        id 1oWYXG-007FGR-9O;
         Fri, 09 Sep 2022 09:34:46 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Juha-Pekka=20Heikkil=C3=A4?= 
+        <juha-pekka.heikkila@intel.com>,
         "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         Imre Deak <imre.deak@intel.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 12/37] drm/i915: intel_dp_link_training.c: fix kernel-doc markup
-Date:   Fri,  9 Sep 2022 09:34:19 +0200
-Message-Id: <9083eab5fec72053b378512888146cc15c5fbcad.1662708705.git.mchehab@kernel.org>
+Subject: [PATCH v3 13/37] drm/i915: intel_fb: fix a kernel-doc issue with Sphinx
+Date:   Fri,  9 Sep 2022 09:34:20 +0200
+Message-Id: <abfceecf956216985b8e107909ba2bf95fe9adaa.1662708705.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
 References: <cover.1662708705.git.mchehab@kernel.org>
@@ -68,13 +70,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return code table is not properly marked, causing warnings
-and being badly parsed by Sphinx:
+We can't use %foo[<something>] as this produces a bad markup.
+Use instead, the emphasis markup directly.
 
-    Documentation/gpu/i915:130: ./drivers/gpu/drm/i915/display/intel_dp_link_training.c:183: WARNING: Block quote ends without a blank line; unexpected unindent.
-    Documentation/gpu/i915:130: ./drivers/gpu/drm/i915/display/intel_dp_link_training.c:186: WARNING: Definition list ends without a blank line; unexpected unindent.
-
-Use table markups to fix it.
+Fix this issue:
+	Documentation/gpu/i915:136: ./drivers/gpu/drm/i915/display/intel_fb.c:280: WARNING: Inline strong start-string without end-string.
 
 Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -83,28 +83,22 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/display/intel_dp_link_training.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/i915/display/intel_fb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dp_link_training.c b/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-index d213d8ad1ea5..27c3b9f39c8b 100644
---- a/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-@@ -177,12 +177,14 @@ static int intel_dp_init_lttpr(struct intel_dp *intel_dp, const u8 dpcd[DP_RECEI
-  * transparent mode link training mode.
+diff --git a/drivers/gpu/drm/i915/display/intel_fb.c b/drivers/gpu/drm/i915/display/intel_fb.c
+index eefa33c555ac..ba413e38033d 100644
+--- a/drivers/gpu/drm/i915/display/intel_fb.c
++++ b/drivers/gpu/drm/i915/display/intel_fb.c
+@@ -276,7 +276,7 @@ lookup_format_info(const struct drm_format_info formats[],
+  * @cmd: FB add command structure
   *
   * Returns:
-+ * ====  =====================================================================
-  *   >0  if LTTPRs were detected and the non-transparent LT mode was set. The
-  *       DPRX capabilities are read out.
-  *    0  if no LTTPRs or more than 8 LTTPRs were detected or in case of a
-  *       detection failure and the transparent LT mode was set. The DPRX
-  *       capabilities are read out.
-  *   <0  Reading out the DPRX capabilities failed.
-+ * ====  =====================================================================
+- * Returns the format information for @cmd->pixel_format specific to @cmd->modifier[0],
++ * Returns the format information for @cmd->pixel_format specific to ``cmd->modifier[0]``,
+  * or %NULL if the modifier doesn't override the format.
   */
- int intel_dp_init_lttpr_and_dprx_caps(struct intel_dp *intel_dp)
- {
+ const struct drm_format_info *
 -- 
 2.37.3
 
