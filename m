@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB375B3678
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071A95B367B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiIILhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S230494AbiIILhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiIILhH (ORCPT
+        with ESMTP id S229550AbiIILh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:37:07 -0400
+        Fri, 9 Sep 2022 07:37:29 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B712ED9B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:37:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CE1135D52
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662723425;
+        s=mimecast20190719; t=1662723447;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f81NbfEEf1+GjsVhdmRQYXxmtitfbsq8j6gFgnQBrqo=;
-        b=MLR+4fi1496VYYzBdpA3bg+xeePl4kIdE5JD+6WcEWhLmvhjc49DMzhhNOYOjEVJPkXnd7
-        CEM8Zq9WdEEq9/vruVFctKXPFOkJPEroqelY9/tycgm61Eo1EvDUffOElKy53GimjZZLEC
-        LOJZGES8Q6crmkaw9n0wQEJcsRaRxVY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rmn7xPeaGEOUt1FeZIgwphGHIp83y3fKQu5eVjeuDCc=;
+        b=M0NwyFIFgs4m41QlVF/AZX2Fq/UgppPmy/fk0QSNM1WosT7bg93ZdJT7X8sjxpmmH4r+0f
+        pNZvSlSeLgK01gmKGsXz6upI6bIcz81c9hCJaGdPTccdpcABLCxucsnY92gN8AbPLddCfH
+        WWxv/ftQmRTJyLEnMT1x2Z3plBG6TJQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-167-rAnBujGyNg28coblZ8LEhA-1; Fri, 09 Sep 2022 07:37:04 -0400
-X-MC-Unique: rAnBujGyNg28coblZ8LEhA-1
-Received: by mail-wm1-f69.google.com with SMTP id i129-20020a1c3b87000000b003b33e6160bdso1013499wma.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:37:04 -0700 (PDT)
+ us-mta-55-OkH5NflfMCaqWowuxs-cmw-1; Fri, 09 Sep 2022 07:37:26 -0400
+X-MC-Unique: OkH5NflfMCaqWowuxs-cmw-1
+Received: by mail-wm1-f71.google.com with SMTP id i129-20020a1c3b87000000b003b33e6160bdso1013914wma.7
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:37:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=f81NbfEEf1+GjsVhdmRQYXxmtitfbsq8j6gFgnQBrqo=;
-        b=ys3gW3zAW30FowopVxuvLtXwGtVr4qxfNtmhghoFwK4svZLL7rSEgjvxaEvA4TkxcL
-         2d7dq3YRpeojAIjmi7smExUlidVeUk7S1AwnJ7P1BIAn80ioOyXTC1apVVEpz2wcJq+j
-         zhucMCkrTqmGyQc5pPeXI44g6lEuJeSIBPp4hYA2Hdo54UyOKxmiSplq1K5X7iQZwfly
-         /KLMFt+21FoA4nsSiyinXThexTJlUBDMnlW9STxl56OW0UraLlG46QY9/x/l25lOvUvq
-         O7aWe8CxAIisy6EM/RW7jkjXDzqmldS4ak1BE4gH0uoKVErb9AeHEBbStLV0Vo/RcL76
-         wOUw==
-X-Gm-Message-State: ACgBeo0RJnVREiiuOzdESZLYE9+buWKzHipV2a3ycQYxdm8JLYCMCR1a
-        xAyqevygc8ahUWz7zFjJGv/lbKqHYBCqw+tA+PLA7eOBPHVK3PUmPxL7mdWHxZa5T1aHxY/Rxxd
-        Hd9gYNKkEY6h9PvihoOLX8U0F
-X-Received: by 2002:a05:600c:216:b0:3a6:60e1:2726 with SMTP id 22-20020a05600c021600b003a660e12726mr4956988wmi.182.1662723423140;
-        Fri, 09 Sep 2022 04:37:03 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4IC6GYPzJeHHs7qdQyJ8giBvMIBwMkEOoEec1/ZAwHrSN1UuFqOR70IDWzKzC+W6+sE9qpgA==
-X-Received: by 2002:a05:600c:216:b0:3a6:60e1:2726 with SMTP id 22-20020a05600c021600b003a660e12726mr4956973wmi.182.1662723422848;
-        Fri, 09 Sep 2022 04:37:02 -0700 (PDT)
+        bh=rmn7xPeaGEOUt1FeZIgwphGHIp83y3fKQu5eVjeuDCc=;
+        b=fSGT7MXPDO2ZzjNenaiOIA+5MA/XgM06pEZ2wdDz9U/SoYj1PsBZZBFXqHHWQ+y/FH
+         4tdz2eVEd5a5vM7Ql+P6BolRMDDVxUJZn/Ze8iVLSFWFc1VqKAdF85o8t+JhLtX0nQJb
+         OA21VHc0lWDzVBQssEHAWxCeM/nJIx85wvbFN9a5HLeo3nUSQUmrMGUDjrvu1XgD+BVh
+         impcKddRNpORoxTxogudhvYxAbBiIPCTA7EvUhSsv3kdSMThoHm/Juatzj4BMUeTUgCr
+         G8MhLl7k/3UzTuRYMkl9oWCze56IiGPA8YM7jbfd1KGZ8ngG3OEuaez309NppDHthrmk
+         CQJw==
+X-Gm-Message-State: ACgBeo13lVmF9DAnHfIw3+pTQ3Wz+M4yi6QFZsn6rioIEkNVDfTe6SAX
+        CchcXYwUMxTYFuxgUUQoUdoBCMWFP+5AMJVwq2VoSmv9DjcT/KvoT79flm/Bc62Nl/AYxxjrUHk
+        TZ7MplWM3h6njgg0kNsN3CkEO
+X-Received: by 2002:adf:fb46:0:b0:228:6443:c934 with SMTP id c6-20020adffb46000000b002286443c934mr8122917wrs.431.1662723445230;
+        Fri, 09 Sep 2022 04:37:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7yHVrKh63b9uyZ7+DQ+CvKaM7ehysVEY8HPVVovIGOLYxSqT/RanvllDyoK5CcnfFkPoz0vw==
+X-Received: by 2002:adf:fb46:0:b0:228:6443:c934 with SMTP id c6-20020adffb46000000b002286443c934mr8122905wrs.431.1662723444925;
+        Fri, 09 Sep 2022 04:37:24 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05600c4e8a00b003b31fc77407sm467994wmq.30.2022.09.09.04.37.01
+        by smtp.gmail.com with ESMTPSA id u12-20020a5d468c000000b00228c375d81bsm324083wrq.2.2022.09.09.04.37.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 04:37:02 -0700 (PDT)
-Message-ID: <d20088b4-641f-2c33-7276-2eabc2833eb0@redhat.com>
-Date:   Fri, 9 Sep 2022 13:37:01 +0200
+        Fri, 09 Sep 2022 04:37:24 -0700 (PDT)
+Message-ID: <b2181a4c-229f-8da6-d66a-9ccf6bab0821@redhat.com>
+Date:   Fri, 9 Sep 2022 13:37:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH 14/16] mm/page_alloc: use costly_order in
- WARN_ON_ONCE_GFP()
+Subject: Re: [PATCH 15/16] mm/page_alloc: remove obsolete
+ gfpflags_normal_context()
 Content-Language: en-US
 To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
 Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-15-linmiaohe@huawei.com>
+ <20220909092451.24883-16-linmiaohe@huawei.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20220909092451.24883-15-linmiaohe@huawei.com>
+In-Reply-To: <20220909092451.24883-16-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,27 +84,50 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 09.09.22 11:24, Miaohe Lin wrote:
-> There's no need to check whether order > PAGE_ALLOC_COSTLY_ORDER again.
-> Minor readability improvement.
+> Since commit dacb5d8875cc ("tcp: fix page frag corruption on page
+> fault"), there's no caller of gfpflags_normal_context(). Remove it
+> as this helper is strictly tied to the sk page frag usage and there
+> won't be other user in the future.
 > 
 > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->   mm/page_alloc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   include/linux/gfp.h | 23 -----------------------
+>   1 file changed, 23 deletions(-)
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 63ad25e86010..262e8972e019 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5272,7 +5272,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
->   		 * so that we can identify them and convert them to something
->   		 * else.
->   		 */
-> -		WARN_ON_ONCE_GFP(order > PAGE_ALLOC_COSTLY_ORDER, gfp_mask);
-> +		WARN_ON_ONCE_GFP(costly_order, gfp_mask);
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index ea6cb9399152..ef4aea3b356e 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -36,29 +36,6 @@ static inline bool gfpflags_allow_blocking(const gfp_t gfp_flags)
+>   	return !!(gfp_flags & __GFP_DIRECT_RECLAIM);
+>   }
 >   
->   		/*
->   		 * Help non-failing allocations by giving them access to memory
+> -/**
+> - * gfpflags_normal_context - is gfp_flags a normal sleepable context?
+> - * @gfp_flags: gfp_flags to test
+> - *
+> - * Test whether @gfp_flags indicates that the allocation is from the
+> - * %current context and allowed to sleep.
+> - *
+> - * An allocation being allowed to block doesn't mean it owns the %current
+> - * context.  When direct reclaim path tries to allocate memory, the
+> - * allocation context is nested inside whatever %current was doing at the
+> - * time of the original allocation.  The nested allocation may be allowed
+> - * to block but modifying anything %current owns can corrupt the outer
+> - * context's expectations.
+> - *
+> - * %true result from this function indicates that the allocation context
+> - * can sleep and use anything that's associated with %current.
+> - */
+> -static inline bool gfpflags_normal_context(const gfp_t gfp_flags)
+> -{
+> -	return (gfp_flags & (__GFP_DIRECT_RECLAIM | __GFP_MEMALLOC)) ==
+> -		__GFP_DIRECT_RECLAIM;
+> -}
+> -
+>   #ifdef CONFIG_HIGHMEM
+>   #define OPT_ZONE_HIGHMEM ZONE_HIGHMEM
+>   #else
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 
