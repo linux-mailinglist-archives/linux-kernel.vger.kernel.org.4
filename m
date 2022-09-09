@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9B25B32A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56F95B32AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiIIJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S231960AbiIIJB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiIIJAq (ORCPT
+        with ESMTP id S230098AbiIIJAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 05:00:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55615F10D4;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5559B9C1E5;
         Fri,  9 Sep 2022 02:00:32 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 09:00:28 -0000
+Date:   Fri, 09 Sep 2022 09:00:29 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662714029;
+        s=2020; t=1662714030;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=05YG9MvHh0j7AEAuQ44oyynnYp17xNRkIy236iobukM=;
-        b=Qp6SULMipbrbctlJe7DVDZDOi2NdNf5c68neGma4sSWysYMb9slY0Ju1xyZd4UszRHwCLh
-        NHf9L+thVD5MxaNd1phVyiE+SAWt8xkXigzPnxZmKAw8G9eK+wO/8xoY5FhEvcL5+p0ptm
-        EbnEwsaAvu0CYFp+JyRbuiyg6UZrabqhykfXv6L00c82JwaheAKMPiaopDdVMA6X9G9h6N
-        6ZA58fjzhH/QCoCIAVal/LbAA/SFNJZvXrugSlZM0IIba1Sv2HhOrHqKVoqDiBGVJ0mqiJ
-        JBiTlT0Zk2U6BRVFrKLIwIpIPNnFRZtW2Wme7h/UrGHH++PaNhS1Pg3sIAieuA==
+        bh=WtBZmUlJ1zGyVnUzqaSse8f7Z2iX+tQdKbkOtsz7jV4=;
+        b=ZvaTfgX+MdLNEuPGApVRlI3b/E+WysomnAGrrXwy+1PWhq6AEejp7GUCg5c8a76DFOC1kt
+        NGJk0oq/9Cc/+sGGF8uvP2SybdCdk++TuXwHwqTTrKSOPQ5Xo73CENZnF3uOA4cGJHGOKr
+        eBS11ZGWqInEJSV+Ez2qxeRhVm64+VP9DUhLY24JZgVp4ERG5hMv+NWEs3GpJ/o4T/0wyD
+        hpscHc2esQ0CGK6SnNtFPpOFsOFlGEnBaoO/ilItJGPfnaLuJ562IW4xkYjPCwPPuEkdEq
+        epBAXkfkqF0RfVN+T+BvSTQJxI6okzRoTXdV3juMzKxHUWukP1UIQuuET4t3Pg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662714029;
+        s=2020e; t=1662714030;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=05YG9MvHh0j7AEAuQ44oyynnYp17xNRkIy236iobukM=;
-        b=FcZH15SfJvc/CjXlbYKqM7qdLaY4vlb1bcUQ8OIgfW5xRY0PCNTLvGVvIrd0JrxJkHPIzK
-        J4OcKseR9Rb5JTCw==
+        bh=WtBZmUlJ1zGyVnUzqaSse8f7Z2iX+tQdKbkOtsz7jV4=;
+        b=ZH93cRG+c4xwGwXugxCehWdOWESNXnLlb/10YuxGSCtOCLkRszd/jxHxfRnbgEeqGrdbwE
+        Z3kRDJQmvjNbWICg==
 From:   "tip-bot2 for Abel Wu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Default to false in test_idle_cores()
+Subject: [tip: sched/core] sched/fair: Remove useless check in select_idle_core()
 Cc:     Abel Wu <wuyun.abel@bytedance.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Don <joshdon@google.com>,
         Mel Gorman <mgorman@techsingularity.net>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220907112000.1854-5-wuyun.abel@bytedance.com>
-References: <20220907112000.1854-5-wuyun.abel@bytedance.com>
+In-Reply-To: <20220907112000.1854-4-wuyun.abel@bytedance.com>
+References: <20220907112000.1854-4-wuyun.abel@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <166271402832.401.6641123344828384147.tip-bot2@tip-bot2>
+Message-ID: <166271402944.401.1372807563306162963.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,101 +68,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     398ba2b0cc0a43964fe3d2dd19cb2a478f1f220b
-Gitweb:        https://git.kernel.org/tip/398ba2b0cc0a43964fe3d2dd19cb2a478f1f220b
+Commit-ID:     8eeeed9c4a791f0d1f2ea830eb75a4246c117ae2
+Gitweb:        https://git.kernel.org/tip/8eeeed9c4a791f0d1f2ea830eb75a4246c117ae2
 Author:        Abel Wu <wuyun.abel@bytedance.com>
-AuthorDate:    Wed, 07 Sep 2022 19:19:59 +08:00
+AuthorDate:    Wed, 07 Sep 2022 19:19:58 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 07 Sep 2022 21:53:47 +02:00
+CommitterDate: Wed, 07 Sep 2022 21:53:46 +02:00
 
-sched/fair: Default to false in test_idle_cores()
+sched/fair: Remove useless check in select_idle_core()
 
-It's uncertain whether idle cores exist or not if shared sched-
-domains are not ready, so returning "no idle cores" usually
-makes sense.
+The function select_idle_core() only gets called when has_idle_cores
+is true which can be possible only when sched_smt_present is enabled.
 
-While __update_idle_core() is an exception, it checks status
-of this core and set hint to shared sched-domain if necessary.
-So the whole logic of this function depends on the existence
-of shared sched-domain, and can certainly bail out early if
-it is not available.
-
-It's somehow a little tricky, and as Josh suggested that it
-should be transient while the domain isn't ready. So remove
-the self-defined default value to make things more clearer.
+This change also aligns select_idle_core() with select_idle_smt() in
+the way that the caller do the check if necessary.
 
 Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Josh Don <joshdon@google.com>
 Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Link: https://lore.kernel.org/r/20220907112000.1854-5-wuyun.abel@bytedance.com
+Link: https://lore.kernel.org/r/20220907112000.1854-4-wuyun.abel@bytedance.com
 ---
- kernel/sched/fair.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ kernel/sched/fair.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 03ce650..23b020c 100644
+index 1ad79aa..03ce650 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -1588,11 +1588,11 @@ numa_type numa_classify(unsigned int imbalance_pct,
- 
- #ifdef CONFIG_SCHED_SMT
- /* Forward declarations of select_idle_sibling helpers */
--static inline bool test_idle_cores(int cpu, bool def);
-+static inline bool test_idle_cores(int cpu);
- static inline int numa_idle_core(int idle_core, int cpu)
- {
- 	if (!static_branch_likely(&sched_smt_present) ||
--	    idle_core >= 0 || !test_idle_cores(cpu, false))
-+	    idle_core >= 0 || !test_idle_cores(cpu))
- 		return idle_core;
- 
- 	/*
-@@ -6271,7 +6271,7 @@ static inline void set_idle_cores(int cpu, int val)
- 		WRITE_ONCE(sds->has_idle_cores, val);
- }
- 
--static inline bool test_idle_cores(int cpu, bool def)
-+static inline bool test_idle_cores(int cpu)
- {
- 	struct sched_domain_shared *sds;
- 
-@@ -6279,7 +6279,7 @@ static inline bool test_idle_cores(int cpu, bool def)
- 	if (sds)
- 		return READ_ONCE(sds->has_idle_cores);
- 
--	return def;
-+	return false;
- }
- 
- /*
-@@ -6295,7 +6295,7 @@ void __update_idle_core(struct rq *rq)
+@@ -6321,9 +6321,6 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
+ 	bool idle = true;
  	int cpu;
  
- 	rcu_read_lock();
--	if (test_idle_cores(core, true))
-+	if (test_idle_cores(core))
- 		goto unlock;
- 
+-	if (!static_branch_likely(&sched_smt_present))
+-		return __select_idle_cpu(core, p);
+-
  	for_each_cpu(cpu, cpu_smt_mask(core)) {
-@@ -6367,9 +6367,9 @@ static inline void set_idle_cores(int cpu, int val)
- {
- }
- 
--static inline bool test_idle_cores(int cpu, bool def)
-+static inline bool test_idle_cores(int cpu)
- {
--	return def;
-+	return false;
- }
- 
- static inline int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
-@@ -6608,7 +6608,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 		return target;
- 
- 	if (sched_smt_active()) {
--		has_idle_core = test_idle_cores(target, false);
-+		has_idle_core = test_idle_cores(target);
- 
- 		if (!has_idle_core && cpus_share_cache(prev, target)) {
- 			i = select_idle_smt(p, prev);
+ 		if (!available_idle_cpu(cpu)) {
+ 			idle = false;
