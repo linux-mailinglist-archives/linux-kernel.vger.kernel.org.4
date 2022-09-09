@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A20E5B40A0
+	by mail.lfdr.de (Postfix) with ESMTP id B1FCF5B40A1
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiIIU0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S231745AbiIIU0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiIIU0Q (ORCPT
+        with ESMTP id S232254AbiIIU0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 16:26:16 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8A5128956;
-        Fri,  9 Sep 2022 13:25:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1455F0AB0;
+        Fri,  9 Sep 2022 13:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662755141; x=1694291141;
+  t=1662755142; x=1694291142;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=v8yPnByOxolH3y3Ja7dBlrus/vQe6rAVnEPjft+iu64=;
-  b=JFCjI94oNcjSDjOoXH3afRhFP/QZ4oSYxbzZ3PHJfAAobRXWdDtPwOsK
-   KOJ3vHeUVenqQsX+q1p05GrX/GlpALoaN5YYoUiiRiP29P03BlELkAKwr
-   bevDNTP8BQmVNfGOsPE4AzVibo+/8gHCznMAQ++BFHRhb201VAR/bOJsT
-   R+O+jBuHp2c8dwxn9uyrXg2OAeH9e9YmDcSp/VLzED0GOdaJvR3uxmyZs
-   qw7psI9uK+wKZqnTmv0S1+RqYshJv4uWasNQVDkfvexXUqS3pvkNjQfg/
-   fhbBdsF1RQSHkmhzFf92pvV44FT1i2STUhMXZJXlzmVEcb+sLppUyXuZ6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280584700"
+  bh=1XY8cQGeld5MP2iyj2lZROHf1+xibPBu6JwFM5Lnkew=;
+  b=IyOOsUXeDdTcKrlq5nlEvwK+W2jjGdgQGKHtwnkXea6xgk58/uPL8MYi
+   6d3Wj6cjQXa22B+XfllwcyCT6ekNiWr/PZm8RvnP3WOXUziD/9maAjnF5
+   NekCrlRE1HtQwPyaSoK73Ss/5JCkD0L9kAw5VukE8yM71bS+NkRDIq1nB
+   jDrfWlUBV0y7UHIw75ZOU2qTpD5xYNz+GhaHE2QIt/eYY6heZf1yXOF8k
+   oUa71DmXMMfIgh7pTNcJsOwrV8rGuUk+7bRHbWxt6LC83Wf4GKwzgDR4v
+   xguNsL8gBI8E52/sWOxwsHLey3z2puovK7FdtMlbqDgqiyy1vaoMG3QU5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280584702"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="280584700"
+   d="scan'208";a="280584702"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:25:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="611162996"
+   d="scan'208";a="611163001"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2022 13:25:35 -0700
+  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2022 13:25:36 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com
@@ -45,9 +45,9 @@ Cc:     hpa@zytor.com, corbet@lwn.net, bagasdotme@gmail.com,
         tony.luck@intel.com, yang.zhong@intel.com,
         linux-doc@vger.kernel.org, linux-man@vger.kernel.org,
         linux-kernel@vger.kernel.org, chang.seok.bae@intel.com
-Subject: [PATCH v4 2/4] x86/arch_prctl: Add AMX feature numbers as ABI constants
-Date:   Fri,  9 Sep 2022 13:15:38 -0700
-Message-Id: <20220909201540.17705-3-chang.seok.bae@intel.com>
+Subject: [PATCH v4 3/4] Documentation/x86: Add the AMX enabling example
+Date:   Fri,  9 Sep 2022 13:15:39 -0700
+Message-Id: <20220909201540.17705-4-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909201540.17705-1-chang.seok.bae@intel.com>
 References: <20220909201540.17705-1-chang.seok.bae@intel.com>
@@ -61,35 +61,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMX state is dynamically enabled by the architecture-specific prctl().
-Expose the state components as ABI constants. They become handy not to be
-looked up from the architecture specification.
+Explain steps to enable the dynamic feature with a code example.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 ---
-Changes from v2:
-* Add as a new patch (Tony Luck).
----
- arch/x86/include/uapi/asm/prctl.h | 3 +++
- 1 file changed, 3 insertions(+)
+Changes from v1:
+* Update the description without mentioning CPUID & XGETBV (Dave Hansen).
 
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 500b96e71f18..f298c778f856 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -16,6 +16,9 @@
- #define ARCH_GET_XCOMP_GUEST_PERM	0x1024
- #define ARCH_REQ_XCOMP_GUEST_PERM	0x1025
+Changes from v2:
+* Massage sentences (Bagas Sanjaya).
+* Adjust the example with the (future) prctl.h.
+---
+ Documentation/x86/xstate.rst | 55 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/Documentation/x86/xstate.rst b/Documentation/x86/xstate.rst
+index 2577b28ad942..f7aad2241d32 100644
+--- a/Documentation/x86/xstate.rst
++++ b/Documentation/x86/xstate.rst
+@@ -78,6 +78,61 @@ the handler allocates a larger xstate buffer for the task so the large
+ state can be context switched. In the unlikely cases that the allocation
+ fails, the kernel sends SIGSEGV.
  
-+#define ARCH_XCOMP_TILECFG		17
-+#define ARCH_XCOMP_TILEDATA		18
++AMX TILE_DATA enabling example
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
- #define ARCH_MAP_VDSO_X32		0x2001
- #define ARCH_MAP_VDSO_32		0x2002
- #define ARCH_MAP_VDSO_64		0x2003
++Below is the example of how userspace applications enable
++TILE_DATA dynamically:
++
++  1. The application first needs to query the kernel for AMX
++     support::
++
++        #include <asm/prctl.h>
++        #include <sys/syscall.h>
++        #include <stdio.h>
++        #include <unistd.h>
++
++        #ifndef ARCH_GET_XCOMP_SUPP
++        #define ARCH_GET_XCOMP_SUPP  0x1021
++        #endif
++
++        #ifndef ARCH_XCOMP_TILECFG
++        #define ARCH_XCOMP_TILECFG   17
++        #endif
++
++        #ifndef ARCH_XCOMP_TILEDATA
++        #define ARCH_XCOMP_TILEDATA  18
++        #endif
++
++        #define MASK_XCOMP_TILE      ((1 << ARCH_XCOMP_TILECFG) | \
++                                      (1 << ARCH_XCOMP_TILEDATA))
++
++        unsigned long features;
++        long rc;
++
++        ...
++
++        rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
++
++        if (!rc && (features & MASK_XCOMP_TILE) == MASK_XCOMP_TILE)
++            printf("AMX is available.\n");
++
++  2. After that, determining support for AMX, an application must
++     explicitly ask permission to use it::
++
++        #ifndef ARCH_REQ_XCOMP_PERM
++        #define ARCH_REQ_XCOMP_PERM  0x1023
++        #endif
++
++        ...
++
++        rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, ARCH_XCOMP_TILEDATA);
++
++        if (!rc)
++            printf("AMX is ready for use.\n");
++
++Note this example does not include the sigaltstack preparation.
++
+ Dynamic features in signal frames
+ ---------------------------------
+ 
 -- 
 2.17.1
 
