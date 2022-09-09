@@ -2,194 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F17D5B3A30
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12EE5B3A07
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiIINwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S229601AbiIINy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiIINvl (ORCPT
+        with ESMTP id S230264AbiIINyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:51:41 -0400
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1B97521;
-        Fri,  9 Sep 2022 06:51:30 -0700 (PDT)
-Received: from robin.home.jannau.net (p54acc2ba.dip0.t-ipconnect.de [84.172.194.186])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 4A67826EFF3;
-        Fri,  9 Sep 2022 15:51:08 +0200 (CEST)
-From:   Janne Grunau <j@jannau.net>
-To:     asahi@lists.linux.dev
-Cc:     Mark Kettenis <kettenis@openbsd.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fri, 9 Sep 2022 09:54:45 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB95FCC;
+        Fri,  9 Sep 2022 06:54:39 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1662731675; bh=vvgm+GqZsmNcWfwWCumfisqYaU3KbPkkcPy5f1+JRsw=;
+        h=From:To:Cc:Subject:Date;
+        b=ik+mdjObq086ky4rULYWxtQ2Myx3k5g3QjA05uzvdcWTyisZsJXvfIy8VSneJwOVu
+         jKHxKkeGroY6LtViBsL1/1mkDu8Qls/mDEx6P/fGMSOOrSqopSxeoNHbjDXw0rMCLs
+         WBrTKlv2dagBj+RpfKz6s88bzz5LWebeWdkFrumI=
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 10/10] arm64: dts: apple: t600x: Add MCA and its support
-Date:   Fri,  9 Sep 2022 15:51:03 +0200
-Message-Id: <20220909135103.98179-11-j@jannau.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220909135103.98179-1-j@jannau.net>
-References: <20220909135103.98179-1-j@jannau.net>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Matt Flax <flatmax@flatmax.com>,
+        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Subject: [PATCH 00/10] Support for CS42L83 on Apple machines
+Date:   Fri,  9 Sep 2022 15:53:24 +0200
+Message-Id: <20220909135334.98220-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MCA I2S transceiver and its supporting ADMAC and NCO nodes.
+Hi all,
 
-Signed-off-by: Janne Grunau <j@jannau.net>
----
+there's a CS42L83 headphone jack codec found in Apple computers (in the
+recent 'Apple Silicon' ones as well as in earlier models, one example
+[1]). The part isn't publicly documented, but it appears almost
+identical to CS42L42, for which we have a driver in kernel. This series
+adapts the CS42L42 driver to the new part, and makes one change in
+anticipation of a machine driver for the Apple computers.
 
- arch/arm64/boot/dts/apple/t600x-common.dtsi   |  9 +++
- arch/arm64/boot/dts/apple/t600x-die0.dtsi     | 62 +++++++++++++++++++
- .../arm64/boot/dts/apple/t600x-j314-j316.dtsi |  4 ++
- arch/arm64/boot/dts/apple/t600x-j375.dtsi     |  4 ++
- 4 files changed, 79 insertions(+)
+Patch 1 adds new compatible to the cs42l42 schema.
 
-diff --git a/arch/arm64/boot/dts/apple/t600x-common.dtsi b/arch/arm64/boot/dts/apple/t600x-common.dtsi
-index e29b88e2c853..f5fac1926a25 100644
---- a/arch/arm64/boot/dts/apple/t600x-common.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-common.dtsi
-@@ -125,4 +125,13 @@ clkref: clock-ref {
- 		clock-output-names = "clkref";
- 	};
- 
-+	/*
-+	 * This is a fabulated representation of the input clock
-+	 * to NCO since we don't know the true clock tree.
-+	 */
-+	nco_clkref: clock-ref-nco {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-output-names = "nco_ref";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index 2d66eead8aee..639c90e108a7 100644
---- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -7,6 +7,13 @@
-  */
- 
- 
-+	nco: clock-controller@28e03c000 {
-+		compatible = "apple,t6000-nco", "apple,nco";
-+		reg = <0x2 0x8e03c000 0x0 0x14000>;
-+		clocks = <&nco_clkref>;
-+		#clock-cells = <1>;
-+	};
-+
- 	aic: interrupt-controller@28e100000 {
- 		compatible = "apple,t6000-aic", "apple,aic2";
- 		#interrupt-cells = <4>;
-@@ -46,6 +53,24 @@ wdt: watchdog@2922b0000 {
- 		interrupts = <AIC_IRQ 0 631 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-+	dart_sio_0: iommu@39b004000 {
-+		compatible = "apple,t6000-dart";
-+		reg = <0x3 0x9b004000 0x0 0x4000>;
-+		interrupt-parent = <&aic>;
-+		interrupts = <AIC_IRQ 0 1130 IRQ_TYPE_LEVEL_HIGH>;
-+		#iommu-cells = <1>;
-+		power-domains = <&ps_sio_cpu>;
-+	};
-+
-+	dart_sio_1: iommu@39b008000 {
-+		compatible = "apple,t6000-dart";
-+		reg = <0x3 0x9b008000 0x0 0x8000>;
-+		interrupt-parent = <&aic>;
-+		interrupts = <AIC_IRQ 0 1130 IRQ_TYPE_LEVEL_HIGH>;
-+		#iommu-cells = <1>;
-+		power-domains = <&ps_sio_cpu>;
-+	};
-+
- 	i2c0: i2c@39b040000 {
- 		compatible = "apple,t6000-i2c", "apple,i2c";
- 		reg = <0x3 0x9b040000 0x0 0x4000>;
-@@ -145,6 +170,43 @@ serial0: serial@39b200000 {
- 		status = "disabled";
- 	};
- 
-+	admac: dma-controller@39b400000 {
-+		compatible = "apple,t6000-admac", "apple,admac";
-+		reg = <0x3 0x9b400000 0x0 0x34000>;
-+		#dma-cells = <1>;
-+		dma-channels = <16>;
-+		interrupts-extended = <0>,
-+				      <&aic AIC_IRQ 0 1118 IRQ_TYPE_LEVEL_HIGH>,
-+				      <0>,
-+				      <0>;
-+		iommus = <&dart_sio_0 2>, <&dart_sio_1 2>;
-+		power-domains = <&ps_sio_adma>;
-+	};
-+
-+	mca: mca@39b600000 {
-+		compatible = "apple,t6000-mca", "apple,mca";
-+		reg = <0x3 0x9b600000 0x0 0x10000>,
-+		      <0x3 0x9b500000 0x0 0x20000>;
-+		clocks = <&nco 0>, <&nco 1>, <&nco 2>, <&nco 3>;
-+		dmas = <&admac 0>, <&admac 1>, <&admac 2>, <&admac 3>,
-+		       <&admac 4>, <&admac 5>, <&admac 6>, <&admac 7>,
-+		       <&admac 8>, <&admac 9>, <&admac 10>, <&admac 11>,
-+		       <&admac 12>, <&admac 13>, <&admac 14>, <&admac 15>;
-+		dma-names = "tx0a", "rx0a", "tx0b", "rx0b",
-+			    "tx1a", "rx1a", "tx1b", "rx1b",
-+			    "tx2a", "rx2a", "tx2b", "rx2b",
-+			    "tx3a", "rx3a", "tx3b", "rx3b";
-+		interrupt-parent = <&aic>;
-+		interrupts = <AIC_IRQ 0 1112 IRQ_TYPE_LEVEL_HIGH>,
-+			     <AIC_IRQ 0 1113 IRQ_TYPE_LEVEL_HIGH>,
-+			     <AIC_IRQ 0 1114 IRQ_TYPE_LEVEL_HIGH>,
-+			     <AIC_IRQ 0 1115 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&ps_audio_p>, <&ps_mca0>, <&ps_mca1>,
-+				<&ps_mca2>, <&ps_mca3>;
-+		resets = <&ps_audio_p>;
-+		#sound-dai-cells = <1>;
-+	};
-+
- 	pcie0_dart_0: dart@581008000 {
- 		compatible = "apple,t6000-dart";
- 		reg = <0x5 0x81008000 0x0 0x4000>;
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index 8079200aeb12..34906d522f0a 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -76,6 +76,10 @@ hpm5: usb-pd@3a {
- 	};
- };
- 
-+&nco_clkref {
-+	clock-frequency = <1068000000>;
-+};
-+
- /* PCIe devices */
- &port00 {
- 	/* WLAN */
-diff --git a/arch/arm64/boot/dts/apple/t600x-j375.dtsi b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-index c5444cb34389..216f0a952dff 100644
---- a/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-@@ -77,6 +77,10 @@ hpm3: usb-pd@3c {
- 	};
- };
- 
-+&nco_clkref {
-+	clock-frequency = <1068000000>;
-+};
-+
- /* PCIe devices */
- &port00 {
- 	/* WLAN */
+Patches 2 to 7 are taken from Richard's recent series [2] adding
+soundwire support to cs42l42. They are useful refactorings to build on
+in later patches, and also this way our work doesn't diverge. I made
+one fix: I added a call of common_remove at the end of i2c_probe should
+the cs42l42_init call fail (both before and after the split to
+cs42l42-i2c.c). Also s/Soundwire/SoundWire/ in the changelogs.
+
+Patch 8 exports some regmap-related symbols from cs42l42.c so they can
+be used to create cs42l83 regmap in cs42l83-i2c.c later.
+
+Patch 9 is the cs42l83 support proper.
+
+Patch 10 implements 'set_bclk_ratio' on the cs42l42 core. This will be
+called by the upcoming ASoC machine driver for 'Apple Silicon' Macs.
+(We have touched on this change to be made in earlier discussion, see
+ [3] and replies.)
+
+Best,
+Martin
+
+[1] https://www.ifixit.com/Teardown/MacBook+Pro+13-Inch+Touch+Bar+2018+Teardown/111384
+[2] https://lore.kernel.org/alsa-devel/20220819125230.42731-1-rf@opensource.cirrus.com/T/#mc05cc6898be2c23fe2e7c8bb4ea4e4a00c1912a7
+[3] https://lore.kernel.org/asahi/8961DDD2-93FF-4A18-BCA2-90FCE298F517@cutebit.org/
+
+
+Martin Povišer (5):
+  ASoC: dt-bindings: cs42l42: Add 'cs42l83' compatible
+  ASoC: cs42l42: Split probe() and remove() into stages
+  ASoC: cs42l42: Export regmap elements to the core namespace
+  ASoC: cs42l83: Extend CS42L42 support to new part
+  ASoC: cs42l42: Implement 'set_bclk_ratio'
+
+Richard Fitzgerald (5):
+  ASoC: cs42l42: Add bitclock frequency argument to cs42l42_pll_config()
+  ASoC: cs42l42: Use cs42l42->dev instead of &i2c_client->dev
+  ASoC: cs42l42: Split cs42l42_resume into two functions
+  ASoC: cs42l42: Pass component and dai defs into common probe
+  ASoC: cs42l42: Split I2C identity into separate module
+
+ .../bindings/sound/cirrus,cs42l42.yaml        |   1 +
+ MAINTAINERS                                   |   1 +
+ include/sound/cs42l42.h                       |   1 +
+ sound/soc/codecs/Kconfig                      |  15 +-
+ sound/soc/codecs/Makefile                     |   6 +-
+ sound/soc/codecs/cs42l42-i2c.c                | 112 ++++++++
+ sound/soc/codecs/cs42l42.c                    | 256 +++++++++---------
+ sound/soc/codecs/cs42l42.h                    |  24 +-
+ sound/soc/codecs/cs42l83-i2c.c                | 248 +++++++++++++++++
+ 9 files changed, 538 insertions(+), 126 deletions(-)
+ create mode 100644 sound/soc/codecs/cs42l42-i2c.c
+ create mode 100644 sound/soc/codecs/cs42l83-i2c.c
+
 -- 
-2.35.1
+2.33.0
 
