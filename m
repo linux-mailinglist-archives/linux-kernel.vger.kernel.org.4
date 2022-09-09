@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F215B357D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6725B3575
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiIIKpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S230266AbiIIKp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 06:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiIIKpS (ORCPT
+        with ESMTP id S230236AbiIIKpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:45:18 -0400
+        Fri, 9 Sep 2022 06:45:16 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7414E861
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:45:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEADB4B484
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662720316;
+        s=mimecast20190719; t=1662720313;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ga0KXbfsZxBvniEYK+V0PLuE8LBCeWPj6GbvQKqhHp4=;
-        b=gPghUKmjylZ64Bt+8yUyjb3XYxe+v2BrIzPHGqiBssyNFrfirzZXo7SZtAuXMp+dTMqTsF
-        zmSrW5zYS2iA3A9p4mByKBKyEHT3o2rH6Eo0P7q4JFf6vL5mb6aosLfLmXwMJ77tEHH+JQ
-        qMgGFvtY2IlXXeWDpjMcek1M/b7FNBc=
+        bh=4DkIOa4ss6n0l+Uwq2rxErjUkkNwBYbVflsNmqJrnW0=;
+        b=ekEpNkodtiVDPpOj+oL7FcXwzntcLwWEn5eBNHY+AUt+YbX1M/inAnbVVL2/2EjedUCmXW
+        5eoxRnIIvex5Obe3l1xSE1++jAC8Bm/Y8L7E6BKHf0f7hDW8lKyaVmgfkX96SjGiNwFsWI
+        bk5dbqLC5lAyxtl3Rs/sDamiLDN/Wuc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-up2WwOObMYGsMZmYRXOhfQ-1; Fri, 09 Sep 2022 06:45:12 -0400
-X-MC-Unique: up2WwOObMYGsMZmYRXOhfQ-1
+ us-mta-65-mP8g3QoaPCyRCIhg2g8B6A-1; Fri, 09 Sep 2022 06:45:12 -0400
+X-MC-Unique: mP8g3QoaPCyRCIhg2g8B6A-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7144A802E5D;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC66B80029D;
         Fri,  9 Sep 2022 10:45:11 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DFA940D282E;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A63D40D282E;
         Fri,  9 Sep 2022 10:45:11 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
@@ -53,9 +53,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [RFC PATCH 5/9] kvm_main.c: split __kvm_set_memory_region logic in kvm_check_mem and kvm_prepare_batch
-Date:   Fri,  9 Sep 2022 06:45:02 -0400
-Message-Id: <20220909104506.738478-6-eesposit@redhat.com>
+Subject: [RFC PATCH 6/9] kvm_main.c: simplify change-specific callbacks
+Date:   Fri,  9 Sep 2022 06:45:03 -0400
+Message-Id: <20220909104506.738478-7-eesposit@redhat.com>
 In-Reply-To: <20220909104506.738478-1-eesposit@redhat.com>
 References: <20220909104506.738478-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -71,190 +71,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just a function split. No functional change intended,
-except for the fact that kvm_prepare_batch() does not
-immediately call kvm_set_memslot() if batch->change is
-KVM_MR_DELETE, but delegates the caller (__kvm_set_memory_region).
+Instead of replacing the memslot in the inactive slots and
+activate for each "change" specific function (NEW, MOVE, DELETE, ...),
+make kvm_set_memslot() replace the memslot in current inactive list
+and swap the lists, and then kvm_finish_memslot just takes care of
+updating the new inactive list (was active).
+
+We can generalize here the pre-swap replacement with
+replace(old, new) because even if in a DELETE or MOVE operation,
+old will always stay in the inactive list (used by kvm_replace_memslot).
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- virt/kvm/kvm_main.c | 120 +++++++++++++++++++++++++++++---------------
- 1 file changed, 79 insertions(+), 41 deletions(-)
+ virt/kvm/kvm_main.c | 44 +++++++++++++++++++++++---------------------
+ 1 file changed, 23 insertions(+), 21 deletions(-)
 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 17f07546d591..9d917af30593 100644
+index 9d917af30593..6b73615891f0 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -1927,19 +1927,9 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
- 	return false;
- }
- 
--/*
-- * Allocate some memory and give it an address in the guest physical address
-- * space.
-- *
-- * Discontiguous memory is allowed, mostly for framebuffers.
-- * This function takes also care of initializing batch->new/old/invalid/change
-- * fields.
-- *
-- * Must be called holding kvm->slots_lock for write.
-- */
--int __kvm_set_memory_region(struct kvm *kvm,
--			    const struct kvm_userspace_memory_region *mem,
--			    struct kvm_internal_memory_region_list *batch)
-+static int kvm_prepare_batch(struct kvm *kvm,
-+			     const struct kvm_userspace_memory_region *mem,
-+			     struct kvm_internal_memory_region_list *batch)
+@@ -1747,34 +1747,26 @@ static void kvm_invalidate_memslot(struct kvm *kvm,
+ static void kvm_create_memslot(struct kvm *kvm,
+ 			       struct kvm_memory_slot *new)
  {
- 	struct kvm_memory_slot *old, *new;
- 	struct kvm_memslots *slots;
-@@ -1947,34 +1937,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
- 	unsigned long npages;
- 	gfn_t base_gfn;
- 	int as_id, id;
--	int r;
--
--	r = check_memory_region_flags(mem);
--	if (r)
--		return r;
+-	/* Add the new memslot to the inactive set and activate. */
++	/* Update inactive slot (was active) by adding the new slot */
+ 	kvm_replace_memslot(kvm, NULL, new);
+-	kvm_activate_memslot(kvm, NULL, new);
+ }
  
- 	as_id = mem->slot >> 16;
- 	id = (u16)mem->slot;
+ static void kvm_delete_memslot(struct kvm *kvm,
+-			       struct kvm_memory_slot *old,
+ 			       struct kvm_memory_slot *invalid_slot)
+ {
+-	/*
+-	 * Remove the old memslot (in the inactive memslots) by passing NULL as
+-	 * the "new" slot, and for the invalid version in the active slots.
+-	 */
+-	kvm_replace_memslot(kvm, old, NULL);
+-	kvm_activate_memslot(kvm, invalid_slot, NULL);
++	/* Update inactive slot (was active) by removing the invalid slot */
++	kvm_replace_memslot(kvm, invalid_slot, NULL);
+ }
  
--	/* General sanity checks */
--	if ((mem->memory_size & (PAGE_SIZE - 1)) ||
--	    (mem->memory_size != (unsigned long)mem->memory_size))
--		return -EINVAL;
--	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
--		return -EINVAL;
--	/* We can read the guest memory with __xxx_user() later on. */
--	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
--	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)) ||
--	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
--			mem->memory_size))
--		return -EINVAL;
--	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
--		return -EINVAL;
--	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
--		return -EINVAL;
--	if ((mem->memory_size >> PAGE_SHIFT) > KVM_MEM_MAX_NR_PAGES)
--		return -EINVAL;
--
- 	slots = __kvm_memslots(kvm, as_id);
- 
+ static void kvm_move_memslot(struct kvm *kvm,
+-			     struct kvm_memory_slot *old,
+ 			     struct kvm_memory_slot *new,
+ 			     struct kvm_memory_slot *invalid_slot)
+ {
  	/*
-@@ -1993,7 +1959,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+-	 * Replace the old memslot in the inactive slots, and then swap slots
+-	 * and replace the current INVALID with the new as well.
++	 * Update inactive slot (was active) by removing the invalid slot
++	 * and adding the new one.
+ 	 */
+-	kvm_replace_memslot(kvm, old, new);
+-	kvm_activate_memslot(kvm, invalid_slot, new);
++	kvm_replace_memslot(kvm, invalid_slot, new);
+ }
  
- 		batch->change = KVM_MR_DELETE;
- 		batch->new = NULL;
--		return kvm_set_memslot(kvm, batch);
-+		return 0;
- 	}
+ static void kvm_update_flags_memslot(struct kvm *kvm,
+@@ -1782,12 +1774,10 @@ static void kvm_update_flags_memslot(struct kvm *kvm,
+ 				     struct kvm_memory_slot *new)
+ {
+ 	/*
+-	 * Similar to the MOVE case, but the slot doesn't need to be zapped as
+-	 * an intermediate step. Instead, the old memslot is simply replaced
+-	 * with a new, updated copy in both memslot sets.
++	 * Update inactive slot (was active) by removing the old slot
++	 * and adding the new one.
+ 	 */
+ 	kvm_replace_memslot(kvm, old, new);
+-	kvm_activate_memslot(kvm, old, new);
+ }
  
- 	base_gfn = (mem->guest_phys_addr >> PAGE_SHIFT);
-@@ -2020,7 +1986,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
- 		else if (mem->flags != old->flags)
- 			change = KVM_MR_FLAGS_ONLY;
- 		else /* Nothing to change. */
--			return 0;
-+			return 1;
- 	}
+ /*
+@@ -1880,9 +1870,9 @@ static void kvm_finish_memslot(struct kvm *kvm,
+ 	if (change == KVM_MR_CREATE)
+ 		kvm_create_memslot(kvm, new);
+ 	else if (change == KVM_MR_DELETE)
+-		kvm_delete_memslot(kvm, old, invalid_slot);
++		kvm_delete_memslot(kvm, invalid_slot);
+ 	else if (change == KVM_MR_MOVE)
+-		kvm_move_memslot(kvm, old, new, invalid_slot);
++		kvm_move_memslot(kvm, new, invalid_slot);
+ 	else if (change == KVM_MR_FLAGS_ONLY)
+ 		kvm_update_flags_memslot(kvm, old, new);
+ 	else
+@@ -1903,12 +1893,24 @@ static void kvm_finish_memslot(struct kvm *kvm,
+ static int kvm_set_memslot(struct kvm *kvm,
+ 			   struct kvm_internal_memory_region_list *batch)
+ {
+-	int r;
++	int r, as_id;
  
- 	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
-@@ -2041,12 +2007,81 @@ int __kvm_set_memory_region(struct kvm *kvm,
- 
- 	batch->new = new;
- 	batch->change = change;
-+	return 0;
-+}
-+
-+static int kvm_check_mem(const struct kvm_userspace_memory_region *mem)
-+{
-+	int as_id, id;
-+
-+	as_id = mem->slot >> 16;
-+	id = (u16)mem->slot;
-+
-+	/* General sanity checks */
-+	if ((mem->memory_size & (PAGE_SIZE - 1)) ||
-+	    (mem->memory_size != (unsigned long)mem->memory_size))
-+		return -EINVAL;
-+	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
-+		return -EINVAL;
-+	/* We can read the guest memory with __xxx_user() later on. */
-+	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
-+	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)) ||
-+	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
-+			mem->memory_size))
-+		return -EINVAL;
-+	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
-+		return -EINVAL;
-+	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
-+		return -EINVAL;
-+	if ((mem->memory_size >> PAGE_SHIFT) > KVM_MEM_MAX_NR_PAGES)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int kvm_check_memory_region(struct kvm *kvm,
-+				const struct kvm_userspace_memory_region *mem,
-+				struct kvm_internal_memory_region_list *batch)
-+{
-+	int r;
-+
-+	r = check_memory_region_flags(mem);
-+	if (r)
-+		return r;
- 
--	r = kvm_set_memslot(kvm, batch);
-+	r = kvm_check_mem(mem);
+ 	r = kvm_prepare_memslot(kvm, batch);
  	if (r)
--		kfree(new);
-+		return r;
-+
-+	r = kvm_prepare_batch(kvm, mem, batch);
-+	if (r && batch->new)
-+		kfree(batch->new);
-+
- 	return r;
- }
-+
-+/*
-+ * Allocate some memory and give it an address in the guest physical address
-+ * space.
-+ *
-+ * Discontiguous memory is allowed, mostly for framebuffers.
-+ * This function takes also care of initializing batch->new/old/invalid/change
-+ * fields.
-+ *
-+ * Must be called holding kvm->slots_lock for write.
-+ */
-+int __kvm_set_memory_region(struct kvm *kvm,
-+			    const struct kvm_userspace_memory_region *mem,
-+			    struct kvm_internal_memory_region_list *batch)
-+{
-+	int r;
-+
-+	r = kvm_check_memory_region(kvm, mem, batch);
-+	if (r)
-+		return r;
-+
-+	return kvm_set_memslot(kvm, batch);
-+}
- EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+ 		return r;
  
- static int kvm_set_memory_region(struct kvm *kvm,
-@@ -2061,6 +2096,9 @@ static int kvm_set_memory_region(struct kvm *kvm,
- 	mutex_lock(&kvm->slots_lock);
- 	r = __kvm_set_memory_region(kvm, mem, batch);
- 	mutex_unlock(&kvm->slots_lock);
-+	/* r == 1 means empty request, nothing to do but no error */
-+	if (r == 1)
-+		r = 0;
- 	return r;
- }
++	/*
++	 * if change is DELETE or MOVE, invalid is in active memslots
++	 * and old in inactive, so replace old with new.
++	 */
++	kvm_replace_memslot(kvm, batch->old, batch->new);
++
++	/* either old or invalid is the same, since invalid is old's copy */
++	as_id = kvm_memslots_get_as_id(batch->old, batch->new);
++
++	/* releases kvm->slots_arch_lock */
++	kvm_swap_active_memslots(kvm, as_id);
++
+ 	kvm_finish_memslot(kvm, batch);
  
+ 	return 0;
 -- 
 2.31.1
 
