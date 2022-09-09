@@ -2,145 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7FC5B3D7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E978D5B3D7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbiIIQwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S229845AbiIIQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiIIQwb (ORCPT
+        with ESMTP id S229774AbiIIQxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:52:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678FEDEC8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:52:30 -0700 (PDT)
+        Fri, 9 Sep 2022 12:53:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A19A7E301
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:53:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662742349;
+        s=mimecast20190719; t=1662742382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PajPt/TC46nKfhgfrV2SJTEfYUdbGNiCND1AO7d5Qf8=;
-        b=Dswb32OIjxwhoF7nP6a9grFJMfKCicISr0Z8Fg8N+cgFSY4zhGDkINipFc8G+2GTKNb/ud
-        QI599wCI/4HKFGvGaLv61sZMVsAa4Q5cqGO4hUzNsXfxSIl0pKSq3apP5HcD4ZoDx5bTwz
-        /vF8ZMw0mQGzzUVcB34e7fsCObd8hZo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TgO3N0qP8iuZUQ578O33EC3J9Pns4trql2X/6qLcYJc=;
+        b=dIoogj0vSoyUj7jQ9uo7g1OV7E1nSAo2rAw01NTFI+Vl1paKT0qLinYsMBQsbweJ230GrI
+        hJ38elJaUscgHGjxgva64w1hTj1Kw3pI+xD/xdBH+Y8zj6ZXnkkvtSCmBeGL8SojpnuI5a
+        mkl/5OegyFQcxgpLjZrU3xI3wVNJzoM=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-3HujZFEFOX2-OCqHYWrzRA-1; Fri, 09 Sep 2022 12:52:28 -0400
-X-MC-Unique: 3HujZFEFOX2-OCqHYWrzRA-1
-Received: by mail-wr1-f69.google.com with SMTP id s26-20020adfa29a000000b00228b0cdb116so494614wra.23
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:52:27 -0700 (PDT)
+ us-mta-630-bJkBj7Q3NZKkyENvSaZ14w-1; Fri, 09 Sep 2022 12:53:01 -0400
+X-MC-Unique: bJkBj7Q3NZKkyENvSaZ14w-1
+Received: by mail-pf1-f200.google.com with SMTP id w22-20020a627b16000000b0054109970446so491326pfc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:53:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=PajPt/TC46nKfhgfrV2SJTEfYUdbGNiCND1AO7d5Qf8=;
-        b=vREFDnTfj6gNdWVK2xxRCAJa1l0lr+6LKr/7P3WMK0PZC2giN4yACvFbx73ErFYout
-         rdGD4Z+YU6SfTA9rZd9a1jP3TmEuQuEtKI9PqFQXA42ySp13snOMh7gm4uqrWKfYtGI5
-         wHldwOlBaecLS50U5u06AIwbcsjb9hmxeXJ7jgdsPQ3wcpqtWINj2Mlrc/zXQZiYgDPu
-         fUZsF4wazCSUsdx2ZUDY1sRYRFWIiWf/wcDEeN+t6NzA5I1EJUi6cxxSJVVYbebxLam9
-         VIUEQyyBLMgpFP2RHAAROPpaythMcODZ0c+aFJgxJ4IPg2upHUfbiGzRQIQuh8/+kbJg
-         ktbA==
-X-Gm-Message-State: ACgBeo0ACWp1pf2bnyb19LVflJKQdV0qNvOSYGSPcvcucEVBcl7Fv/Hv
-        n9LxbnqH5/9cUQi+2rfPFQQJReyatdt/QO/7HbY6p3m9hNWF3NXZRG5JRn1mCWu1iV8gGaue/rA
-        Fd5Xl+G3ypeJUFWTaMig5qI3k
-X-Received: by 2002:a5d:5887:0:b0:220:81ca:ec4f with SMTP id n7-20020a5d5887000000b0022081caec4fmr8300758wrf.263.1662742347119;
-        Fri, 09 Sep 2022 09:52:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5RknKv2bcRzLPW8dqcU1t28MvBwm6FSTgg11b29hhDYbaxlAWZcpOhlZvbEhttkqn0VW4Kmg==
-X-Received: by 2002:a5d:5887:0:b0:220:81ca:ec4f with SMTP id n7-20020a5d5887000000b0022081caec4fmr8300750wrf.263.1662742346887;
-        Fri, 09 Sep 2022 09:52:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a846a014c1sm1200646wmr.23.2022.09.09.09.52.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 09:52:26 -0700 (PDT)
-Message-ID: <712acfd4-f7f4-457e-f1a2-ca0f076c6d24@redhat.com>
-Date:   Fri, 9 Sep 2022 18:52:25 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TgO3N0qP8iuZUQ578O33EC3J9Pns4trql2X/6qLcYJc=;
+        b=vYB9zd9rVFJ2Xh7Ut0/HEwR7RYfJcszQ1PUMLU6Df5WferWlrxLZIEZ9MrTSXmzaie
+         2Epcu1gkihQmWg1ehIdwbLPp9Jbrajo2pFlfGJRrwd87IyDWkHkCqh9uORx7sJFRbejU
+         dGOgKBcm7fx6+yU7Wg0wG1jFtyfuSk/UpqIHm/UGWt7Zx4knqR4ehuzWFWFdvfdt2/7v
+         3X6vehel7YEyeZYfrZATsgPUv4li4PiIiqMgIMnsGJdqiy3Da7Bpv9WZEeSEA+o0O9w9
+         7Qtu6qmHGyWRDSDY0sdkPv8PK1PizSuzaHMJqMYE0/R0Ut56uT/M0WPaSyopeI3q7OpK
+         +WPg==
+X-Gm-Message-State: ACgBeo11WKomDaZzfOqu8Xgb37KRHioYhhHxKKeRFtzKrSpFJCG5dRQZ
+        CFV4KxzKFOVOMyY9BwJDnQEG5vqHnzuwUpuHmLzAogsAOoVygB1EGHJ1cjR9oqA0DmfqNSyu3lS
+        fMSQFxz5lKV5ZKlH4QrOz0qRQ2g4R6iAgLY7u+rIA
+X-Received: by 2002:a63:d10b:0:b0:41d:bd7d:7759 with SMTP id k11-20020a63d10b000000b0041dbd7d7759mr12939025pgg.196.1662742379913;
+        Fri, 09 Sep 2022 09:52:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7SM7G0m4RJYj2cNzM3FrNcQUKszjetNj3hFRPDTH9yWCQT63+rSnjg+MtmeGpwn60vLcyxNRP/pbnvQi7VeS0=
+X-Received: by 2002:a63:d10b:0:b0:41d:bd7d:7759 with SMTP id
+ k11-20020a63d10b000000b0041dbd7d7759mr12939005pgg.196.1662742379643; Fri, 09
+ Sep 2022 09:52:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] mm/shuffle: convert module_param_call to module_param_cb
-Content-Language: en-US
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20220909083947.3595610-1-liushixin2@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220909083947.3595610-1-liushixin2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000e506e905e836d9e7@google.com> <YxtrrG8ebrarIqnc@google.com>
+In-Reply-To: <YxtrrG8ebrarIqnc@google.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 9 Sep 2022 18:52:48 +0200
+Message-ID: <CAO-hwJJyrhmzWY4fth5miiHd3QXHvs4KPuPRacyNp8xrTxOucA@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in bpf_verifier_vlog
+To:     sdf@google.com
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, davem@davemloft.net,
+        haoluo@google.com, hawk@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, kuba@kernel.org,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        martin.lau@linux.dev, nathan@kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Networking <netdev@vger.kernel.org>, Song Liu <song@kernel.org>,
+        syzkaller-bugs@googlegroups.com, Tom Rix <trix@redhat.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.09.22 10:39, Liu Shixin wrote:
-> module_param_call is now completely consistent with module_param_cb, so
-> there is no need to keep two macros. Convert module_param_call to
-> module_param_cb since former is obsolete and latter is more kernel-ish.
-> 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->   mm/shuffle.c | 21 ++++++++++-----------
->   1 file changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/shuffle.c b/mm/shuffle.c
-> index c13c33b247e8..fb1393b8b3a9 100644
-> --- a/mm/shuffle.c
-> +++ b/mm/shuffle.c
-> @@ -12,23 +12,22 @@
->   DEFINE_STATIC_KEY_FALSE(page_alloc_shuffle_key);
->   
->   static bool shuffle_param;
-> -static int shuffle_show(char *buffer, const struct kernel_param *kp)
-> -{
-> -	return sprintf(buffer, "%c\n", shuffle_param ? 'Y' : 'N');
-> -}
->   
-> -static __meminit int shuffle_store(const char *val,
-> +static __meminit int shuffle_param_set(const char *val,
->   		const struct kernel_param *kp)
->   {
-> -	int rc = param_set_bool(val, kp);
-> -
-> -	if (rc < 0)
-> -		return rc;
-> -	if (shuffle_param)
-> +	if (param_set_bool(val, kp))
-> +		return -EINVAL;
-> +	if (*(bool *)kp->arg)
->   		static_branch_enable(&page_alloc_shuffle_key);
->   	return 0;
->   }
-> -module_param_call(shuffle, shuffle_store, shuffle_show, &shuffle_param, 0400);
-> +
-> +static const struct kernel_param_ops shuffle_param_ops = {
-> +	.set = shuffle_param_set,
-> +	.get = param_get_bool,
-> +};
-> +module_param_cb(shuffle, &shuffle_param_ops, &shuffle_param, 0400);
->   
->   /*
->    * For two pages to be swapped in the shuffle, they must be free (on a
+On Fri, Sep 9, 2022 at 6:37 PM <sdf@google.com> wrote:
+>
+> On 09/08, syzbot wrote:
+> > Hello,
+>
+> > syzbot found the following issue on:
+>
+> > HEAD commit:    7e18e42e4b28 Linux 6.0-rc4
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1551da55080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f4d613baa509128c
+> > dashboard link:
+> > https://syzkaller.appspot.com/bug?extid=8b2a08dfbd25fd933d75
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+> > Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798cab7080000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ccbdc5080000
+>
+> > Downloadable assets:
+> > disk image:
+> > https://storage.googleapis.com/syzbot-assets/da260c675b46/disk-7e18e42e.raw.xz
+> > vmlinux:
+> > https://storage.googleapis.com/syzbot-assets/58f7bbbaa6ff/vmlinux-7e18e42e.xz
+>
+> > IMPORTANT: if you fix the issue, please add the following tag to the
+> > commit:
+> > Reported-by: syzbot+8b2a08dfbd25fd933d75@syzkaller.appspotmail.com
+>
+> > ------------[ cut here ]------------
+> > verifier log line truncated - local buffer too short
+> > WARNING: CPU: 1 PID: 3604 at kernel/bpf/verifier.c:300
+> > bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
+> > Modules linked in:
+> > CPU: 1 PID: 3604 Comm: syz-executor146 Not tainted 6.0.0-rc4-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 08/26/2022
+> > RIP: 0010:bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
+> > Code: f5 95 3d 0c 31 ff 89 ee e8 06 07 f0 ff 40 84 ed 75 1a e8 7c 0a f0
+> > ff 48 c7 c7 c0 e7 f3 89 c6 05 d4 95 3d 0c 01 e8 fb 4c ae 07 <0f> 0b e8 62
+> > 0a f0 ff 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1
+> > RSP: 0018:ffffc900039bf8a0 EFLAGS: 00010282
+> > RAX: 0000000000000000 RBX: ffff888017a19210 RCX: 0000000000000000
+> > RDX: ffff888021fb1d80 RSI: ffffffff8161f408 RDI: fffff52000737f06
+> > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+> > R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff89f5aba0
+> > R13: 00000000000003ff R14: ffff888017a19214 R15: ffff888012705800
+> > FS:  0000555555cba300(0000) GS:ffff8880b9b00000(0000)
+> > knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000020100000 CR3: 000000001bf9e000 CR4: 0000000000350ee0
+> > Call Trace:
+> >   <TASK>
+> >   __btf_verifier_log+0xbb/0xf0 kernel/bpf/btf.c:1375
+> >   __btf_verifier_log_type+0x451/0x8f0 kernel/bpf/btf.c:1413
+> >   btf_func_proto_check_meta+0x117/0x160 kernel/bpf/btf.c:3905
+> >   btf_check_meta kernel/bpf/btf.c:4588 [inline]
+> >   btf_check_all_metas+0x3c1/0xa70 kernel/bpf/btf.c:4612
+> >   btf_parse_type_sec kernel/bpf/btf.c:4748 [inline]
+>
+> Benjamin, this seems to be coming from BTF loading. Could this be caused
+> by some of your recent activity with things like:
+>
+> commit f9b348185f4d684cc19e6bd9b87904823d5aa5ed
+> Author: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Date:   Tue Sep 6 17:13:01 2022 +0200
+>
+>      bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+>
+> ?
 
+I doubt this commit is the culprit for 2 reasons:
+- BTF_KFUNC_SET_MAX_CNT just sets the size of an internal memory chunk
+where we store kfunc definitions. I don't really see how this could be
+linked to a verifier log being full
+- this commit has been applied on Sep 7, and the first crash in the
+dashboard was from Sep 5. So unless the dates are wrong, I don't think
+this commit creates the crash.
 
-LGTM
+Unfortunately, I am really new into the bpf/btf world, and I have no
+ideas on what could be the cause of that crash. We probably need a
+bisect, but I'll be out next week at plumbers, so can't really work on
+that now.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Cheers,
+Benjamin
 
--- 
-Thanks,
-
-David / dhildenb
+>
+> I haven't looked too deep, maybe you can give it a shot? There is
+> reproducer; should be relatively easy to verify. Thx.
+>
+>
+> >   btf_parse kernel/bpf/btf.c:5031 [inline]
+> >   btf_new_fd+0x939/0x1e70 kernel/bpf/btf.c:6710
+> >   bpf_btf_load kernel/bpf/syscall.c:4314 [inline]
+> >   __sys_bpf+0x13bd/0x6130 kernel/bpf/syscall.c:4998
+> >   __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
+> >   __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
+> >   __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5055
+> >   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7fb092221c29
+> > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89
+> > f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0
+> > ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007fff5b0a6878 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb092221c29
+> > RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000012
+> > RBP: 00007fb0921e5dd0 R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb0921e5e60
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> >   </TASK>
+>
+>
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+>
 
