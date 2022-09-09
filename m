@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4213D5B3466
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C0A5B3473
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiIIJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S232025AbiIIJsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiIIJri (ORCPT
+        with ESMTP id S231805AbiIIJrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:47:38 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C958108704
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:47:37 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id f9so1037784lfr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:47:37 -0700 (PDT)
+        Fri, 9 Sep 2022 05:47:55 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40E7110A96
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:47:52 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id f14so799573lfg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:47:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Ake5tgQqILRJG+4KzZg3Srv4ZA/AFZzVW1hkSSSjZjY=;
-        b=g2RNyj6bsexsTkubyx+Z7ZyQGJ5PURcgkv1goBeGtYsHs+L25aU7jXwb7T3yIAVX+8
-         WtlB5bHVIynC7uF7dnZW4txe7IWChghVAPz4Rt7ZPlYHeHjTf9+2xZyyITTRT6Ru1KvY
-         IHO/4EUcRGShrNFSn4yqsh3UGQ3rY8GQisLXWKbwVUeSYrLrTOSlhoQYIhYNH3xe3R05
-         i8Bk1Qqgh2RQNnZNrtSmwwDWw3U2AGs3iGppGcH2n3GbdXw5bbdTZYNrKW8Wv9LfjHXC
-         BMJAS/bqh8MzYasEL/dr6064yISqfPiTJDvcpPX/beocvwccGi7p33QLe6HHt5/YMb39
-         K7Sg==
+        bh=UC/RYJCZztRm1rSOSADEzcPaiE3TFJT+Z5tiSzE3pIY=;
+        b=WCmQbBQXmbzmKntTlhBu3beHFSwPztkJXCXCJ67r43m8w1qKbsjBoOxnBOvXnb+yby
+         /uznaMglIk86U7Eg5FSBwVrR/3GBhp05MMm0OULZt1dAJ2vQB14/aezAO+SsXSNof1q3
+         WuBOnpkbSIx7npg9Q6bV2W/LPUnsxhBYchUf18XcvUDlsqeFFKPAFpqSjKw/ZrikUXCj
+         ETrMGMzcxOqZbw4UMq5hpq3GPA4qBCxCmACP0Z/UIlTB+CBXunB8ppLUSIc2NJCTaTuN
+         0WcDFvo72dqFU4abnEdkaGayM4+yVAy9MC3Ury3UL7hHVj3B4GmBkPHhVNRINGrf561X
+         Y7Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ake5tgQqILRJG+4KzZg3Srv4ZA/AFZzVW1hkSSSjZjY=;
-        b=pFG5iU7CIp8R9uS9LzdPVKnrJJw231ZfA9H4agPROoQBNJGA4AulVZNhcm8vTuvu/j
-         4UGQT+VgLqNEXmRSVi7SAS7U3HoJXISHl7Bqx2AqmGKC7z6ZhbveMoz1xG8TQFwl+hg4
-         iQF2+5HqyGW5WG/xKPRDYLiwSj1iSitSgAWQ7Yv+8FLte29iWvarKxO9tInosp3c4JAi
-         h/OYKcVaLl/qH0Rj2PJ9t0eGyXpzn66d8RmL9nQmC4+6NwdBpBNhdfhggIwwNHF/Zi55
-         Dwm13bU8GoicuLvXdzY1vMr6b8UvEaapG1d57zb92hA+tNdSCLQU8+Q++UsIyMiapxIx
-         wz3w==
-X-Gm-Message-State: ACgBeo3YhEYo+Fqs7/CVC0R/hFpGmfRhVpaC4nQzX+19pXR6N2AlJPba
-        6HY7LycAzxPsPZTP7teRa+mABQ==
-X-Google-Smtp-Source: AA6agR6xIRiz3h/qc7ldfo5fdSyq9Ly2yfNndxUzi1oYASOsoNu/o8hzGRlKwdn0RR3AOKgcW3z/0w==
-X-Received: by 2002:a05:6512:3b06:b0:498:fa72:c24d with SMTP id f6-20020a0565123b0600b00498fa72c24dmr644600lfv.538.1662716855888;
-        Fri, 09 Sep 2022 02:47:35 -0700 (PDT)
+        bh=UC/RYJCZztRm1rSOSADEzcPaiE3TFJT+Z5tiSzE3pIY=;
+        b=Kj8Ef277FxvQbwExiN5/6yoF7rji6obWPx2aJRHEj2pMY3Qe4uv6fM7TH7qJP85cnd
+         TlrsHwIkl70VQ8X5vN4wj4SmgGi24cs8vEbhJB/O7dDcAa0gikA8fCyqNvE1EL2EvTeI
+         usZS2Zq9IEVV831qVfCJD5mlGGXh691tS+X/hKk7mxyDEtvH2mlhnN0FYcwF2esBkjC7
+         Zysjx4HbtnYgp308yV0+BG4RAyUP7SRBk9xR6etRVIFnIl8HNstHhTRhAThZjmmeDf60
+         dgZbXNAnG2XrlIn6fPOac58lQbLAy29Mw9jUqDuHMnqvmilQFd8kJ/o9pG2zcCtnZH4N
+         N0fw==
+X-Gm-Message-State: ACgBeo2OZES1K8USMpli0gEahW7jNueQj5WTis+AaSyXPsR5w/7offRD
+        KM4ffg6XPJuPbiozyJm6H8P78Q==
+X-Google-Smtp-Source: AA6agR5UqzXXevsvW/zI4AsS16Q/lo64SrrZM1t4RbqlgEun59doiX/cK/9YbSah0ZKU8Ksc2g3yFQ==
+X-Received: by 2002:a05:6512:e98:b0:492:cf3c:8860 with SMTP id bi24-20020a0565120e9800b00492cf3c8860mr4053202lfb.603.1662716870498;
+        Fri, 09 Sep 2022 02:47:50 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id bj33-20020a2eaaa1000000b0026bda31c10fsm8604ljb.61.2022.09.09.02.47.35
+        by smtp.gmail.com with ESMTPSA id x18-20020a056512079200b00498fd423cc3sm4135lfr.295.2022.09.09.02.47.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 02:47:35 -0700 (PDT)
-Message-ID: <4d627150-7097-9394-b550-6610dabbf134@linaro.org>
-Date:   Fri, 9 Sep 2022 12:47:35 +0300
+        Fri, 09 Sep 2022 02:47:50 -0700 (PDT)
+Message-ID: <f1681e74-9c48-320a-6f0c-70518c768b78@linaro.org>
+Date:   Fri, 9 Sep 2022 12:47:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH 14/16] phy: qcom-qmp-pcie-msm8996: shorten function
- prefixes
+Subject: Re: [PATCH 15/16] phy: qcom-qmp-ufs: shorten function prefixes
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -67,9 +66,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20220907110728.19092-1-johan+linaro@kernel.org>
- <20220907110728.19092-15-johan+linaro@kernel.org>
+ <20220907110728.19092-16-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220907110728.19092-15-johan+linaro@kernel.org>
+In-Reply-To: <20220907110728.19092-16-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,9 +90,8 @@ On 07/09/2022 14:07, Johan Hovold wrote:
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  | 93 +++++++++----------
->   1 file changed, 46 insertions(+), 47 deletions(-)
-> 
+>   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 88 ++++++++++++-------------
+>   1 file changed, 43 insertions(+), 45 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
