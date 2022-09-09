@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CF55B3CB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E545B3CBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiIIQML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S230387AbiIIQMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiIIQMG (ORCPT
+        with ESMTP id S230338AbiIIQMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:12:06 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F2811E6C7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:12:00 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id iw17so2282873plb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:12:00 -0700 (PDT)
+        Fri, 9 Sep 2022 12:12:30 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866DA10B00E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:12:29 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id c9so3382225ybf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=eDrfYVwDQC+B+QpEvQ41UIS7OrQEnld5CNSxZdpZPgA=;
-        b=F0wkqBGJL1xYRFxmN2T75z4AIhNt1UbmivRoZwZ3KboiF5oDQtO7ium3Kzq9dCV+3L
-         RP2ICzUpgzxqrq8hUXPMY0eGLmRwA+zAdDYSuZh9GUeWrGuwZqUh08H8pA77P9iEsPGp
-         b6pnj6Rb9wFZ+c+JdoNtMdcrNCB7NeeWChdxumtbo3jnTMvn/m+9Yh9o+8/jqU14NYlo
-         Uq/uY6XTV/gnfIa8IZ92OH+bqS6ePdD+EGQoRQq+nYue9IGW4Px3jClughrHNWAxX7uT
-         XPnuvp8oyCH45KSg9104v6Oi+FYeivUUTm11neuKW+KDrm0old9h/hl2dytqCvmymdak
-         rzBw==
+        bh=4hh2G7MdxNZ+MNcmp102ZgutWolekJca53oozXb1sk4=;
+        b=Qz+PTfYUZ79Xk4WnkdDqNZ4LLUCR8EFVYsF/0fY0lUuEsl2IZGJVTFFrd89L26Oz5t
+         tviGlyIdWFrik28BaRuFfzuXznzHhsJl5HOMC66jw2DryGYXp1mIyshHHWoUXqpWPJN+
+         /6x0NDeafG1PPSym6XJ8bPSiGtE2517SAMZZ9AnTxspCwwhQcdA6k843LDIw/8yFsNcZ
+         a5Rnaiqj1Zbr1RtrNT1Mk2NmNRgK+ybLbCflE2Htc/OZZ1CtP2ZKVyOagC0vKUQgde1Z
+         SYvIrJRQRBevTglXhJiI4YfodtdB1WWv2cIrSQpWLFxSnK/0hooiuIgLalhL8RZnZ6T5
+         kXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=eDrfYVwDQC+B+QpEvQ41UIS7OrQEnld5CNSxZdpZPgA=;
-        b=lKPUrpNPQ8lao1ATlrcQeW6CazEPoPv0PHg1ubK1/ZGiPcK9XwtemSXrBBkPdm8CPX
-         /pRUnDv0I7flU8ErnZdL93ivUlYedhoPgue75L4p+cUJY2LzBh/9rW+r0Roi6TlLsAw4
-         vMhvnZHCXqrH5OYRQFd9p8yr9YdVBFzJOviz+aghcyypjNbGMIhVYMYF2+QVJ0dsXVuq
-         5/V43Zt3mTf3a/qW9hpgma2GR0N7fLAq9fpfuVHrJ0KxP9a1WMFGFhiNcW/PcgOtK09Q
-         aKs6j1Y9Eyh4h25uH95Zl5uAj9aR1IPl/ZcCJqoTVDUKPog5PKzi0f3DLiKNc2BlJof2
-         MrHA==
-X-Gm-Message-State: ACgBeo0AJ27u2gGnp7bLD76i6xfnKG+o9nN4/gFLOLpc+VX+Mkx4Z35O
-        sDa3gLWJ56YWAR2NGVgkrBsFTVEHIwwa1eFwf4G6tQ==
-X-Google-Smtp-Source: AA6agR6o1k8OYU6c3VZsjtmoi4GU+j620+63W9MswFegv3cf067xiW0Q2ntmP7g7tJsYUNwDAHlv3rflaFDJncKmQIQ=
-X-Received: by 2002:a17:902:b410:b0:172:c9d1:7501 with SMTP id
- x16-20020a170902b41000b00172c9d17501mr14547983plr.106.1662739919860; Fri, 09
- Sep 2022 09:11:59 -0700 (PDT)
+        bh=4hh2G7MdxNZ+MNcmp102ZgutWolekJca53oozXb1sk4=;
+        b=DFb1BSTjIyNungzQZ49dMfeiHqLYmdZF4AKjC1XlpnHYGjjftqSAL2Dhh9W1JJtyer
+         U3EdiCmRnvyq14ezI0gMTINLZxUbovdYJ6+7carT+nStNJGPNXskz1apNReOzNJ2prFk
+         kjOkm1JUerKkuzBSrmQ0+r8pkE3FiMR11yVRI/ahhoUC6lN85mnPV41k7GIsj0FIwfdJ
+         EJcPwGgQammf2KLPqKQwRs4eHVelcg2r50j395bY4aD6HKcltOtWR5rSCJe6u6lLsufi
+         J8vTUh2eUViXbVEpqgYR3Ve/IjqglxnH6YACXqM3fTB/+LB8UonWkOLTzeiVPnMUR4t8
+         3DHQ==
+X-Gm-Message-State: ACgBeo3u7R9RpVCcG6taj4X23ICjZ0k0U4QZIN1GTWlpJMp2hi2h4pLc
+        bFChfgK0nwC3/utGGpgsvPQMWiC4PrUnMttTmjVabw==
+X-Google-Smtp-Source: AA6agR6D9Q1KW4KNYp0SHpJ/6Fcy2IRN04G63Erd6aJSK5K6Qex+RENoU//CqGiMsVMEqkzoAOqqrGTYWrT4sPeb+8g=
+X-Received: by 2002:a25:cc8d:0:b0:6a8:40cb:d730 with SMTP id
+ l135-20020a25cc8d000000b006a840cbd730mr12492178ybf.119.1662739948562; Fri, 09
+ Sep 2022 09:12:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907043537.3457014-1-shakeelb@google.com> <20220907043537.3457014-2-shakeelb@google.com>
- <YxqIQOWzrsrPnff3@blackbook>
-In-Reply-To: <YxqIQOWzrsrPnff3@blackbook>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 9 Sep 2022 09:11:48 -0700
-Message-ID: <CALvZod77qUb0XRJh3y3-GQevoKjcwdt-Gtq0u0Tp6zTxBe-4CA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] memcg: extract memcg_vmstats from struct mem_cgroup
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-18-surenb@google.com>
+ <70a7d9cd-e64b-db49-e418-b4de7fcf8692@linux.ibm.com>
+In-Reply-To: <70a7d9cd-e64b-db49-e418-b4de7fcf8692@linux.ibm.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Sep 2022 09:12:17 -0700
+Message-ID: <CAJuCfpGAt3K51JfaEZxUtJc_h5c5Nj6XYQvdF4x+SbC6teFS0g@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 17/28] mm/mmap: prevent pagefault handler from
+ racing with mmu_notifier registration
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -75,27 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 5:26 PM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
+On Fri, Sep 9, 2022 at 7:20 AM Laurent Dufour <ldufour@linux.ibm.com> wrote=
+:
 >
-> Hi.
+> Le 01/09/2022 =C3=A0 19:35, Suren Baghdasaryan a =C3=A9crit :
+> > Pagefault handlers might need to fire MMU notifications while a new
+> > notifier is being registered. Modify mm_take_all_locks to mark all VMAs
+> > as locked and prevent this race with fault handlers that would hold VMA
+> > locks.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/mmap.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index b31cc97c2803..1edfcd384f5e 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -3538,6 +3538,7 @@ static void vm_lock_mapping(struct mm_struct *mm,=
+ struct address_space *mapping)
+> >   *     hugetlb mapping);
+> >   *   - all i_mmap_rwsem locks;
+> >   *   - all anon_vma->rwseml
+> > + *   - all vmas marked locked
 >
-> On Wed, Sep 07, 2022 at 04:35:35AM +0000, Shakeel Butt <shakeelb@google.c=
-om> wrote:
-> > This is a preparatory patch to reduce the memory overhead of memory
-> > cgroup. The struct memcg_vmstats is the largest object embedded into th=
-e
-> > struct mem_cgroup.
-> > This patch extracts struct memcg_vmstats from struct
-> > mem_cgroup to ease the following patches in reducing the size of struct
-> > memcg_vmstats.
+> IIRC, the anon_vma may be locked during the page fault handling, and this
+> happens after the VMA is read lock. I think the same applies to
+> i_mmap_rwsem lock.
 >
-> Is the reason for the extraction just moving things away from the header
-> file?
-> Or is the separate allocation+indirection somehow beneficial wrt, e.g.
-> fragmentation?
->
+> Thus, the VMA should be marked locked first.
 
-The main reason was to move away from the head file. I have not yet
-measured the performance impact of these changes. I am planning to
-rearrange struct mem_cgroup and will do some performance tests after
-that.
+I see. I'll double check and move the locking order. Thanks!
+
+>
+> >   *
+> >   * We can take all locks within these types randomly because the VM co=
+de
+> >   * doesn't nest them and we protected from parallel mm_take_all_locks(=
+) by
+> > @@ -3579,6 +3580,7 @@ int mm_take_all_locks(struct mm_struct *mm)
+> >               if (vma->anon_vma)
+> >                       list_for_each_entry(avc, &vma->anon_vma_chain, sa=
+me_vma)
+> >                               vm_lock_anon_vma(mm, avc->anon_vma);
+> > +             vma_mark_locked(vma);
+> >       }
+> >
+> >       return 0;
+> > @@ -3636,6 +3638,7 @@ void mm_drop_all_locks(struct mm_struct *mm)
+> >       mmap_assert_write_locked(mm);
+> >       BUG_ON(!mutex_is_locked(&mm_all_locks_mutex));
+> >
+> > +     vma_mark_unlocked_all(mm);
+> >       for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
+> >               if (vma->anon_vma)
+> >                       list_for_each_entry(avc, &vma->anon_vma_chain, sa=
+me_vma)
+>
