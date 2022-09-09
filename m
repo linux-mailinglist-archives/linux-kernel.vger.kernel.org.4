@@ -2,135 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573215B3F13
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CB35B3F17
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIISwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
+        id S229751AbiIISw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiIISwO (ORCPT
+        with ESMTP id S229941AbiIISwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:52:14 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769DC133A19
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 11:52:12 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id k9so1260801ils.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 11:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nuX8RHdOBuwR18rb/hIKqVYoCioDbOlB9tjSaWc6TfE=;
-        b=Q7u1GP81wzUd6Q5YRwMiSxpFY8c8++WLzn2hRT3zSDv46zq4SMTlWHT8g4Dx9ul15x
-         cUIvGL6JEmEkw21Tv4+D3qQm91sdLj+xlMrWEIcr8Rer00eeSWnay2EoMNgpCkiWNvyU
-         lM+OMZShB0ulM92Tr3YmHmirOHJIJYrrGod0Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nuX8RHdOBuwR18rb/hIKqVYoCioDbOlB9tjSaWc6TfE=;
-        b=UeaPHyLsK5g+MgHwKOzUmZSpy0Qt+2kHI+UtaFNOBh2cpZa5+fXsEsN0hisX3pSbRK
-         PEXLNWl8e9y95OTZnalF/ryrinZFQK2Z3KfVzF+P4goGGVg+uoCP7pLPuIgP+jXB3l55
-         DjpHEP+DAmkm511k6XIWLmJ9zCpcYkRIK1xypKEd29XG9qaLqedzAXxdCupYqCGO3G8d
-         BBlVn4XPmlXKTmgDKZpiu1FK/Z1rB6lgootnq0m8fYyhu7DScSQptX2LHUGRBSbiGEJ0
-         nglHLngMdcXIXu+4Y7G29nCS2E141fzRaB37dfxxBG7pd3k2GHoLbGoLWiB2w+Pq6ZXZ
-         CmdA==
-X-Gm-Message-State: ACgBeo28dGVNwI+NZVAVD45neAtNo5E+r8eCAK7xk0CGYC5C4Ch4lqgp
-        3J5X0KmYoHQFr5d0NN41W9or14fRIXpK+irWZD2C
-X-Google-Smtp-Source: AA6agR6pzEUW+mqZG3PaEOzTo4gvZqU1ZlYy278KgMLv1t2nzlQQ1rvsnPee+gs2iLrUggjzLXnEv01uqAxMVpnzfQg=
-X-Received: by 2002:a05:6e02:20c2:b0:2f1:d171:8149 with SMTP id
- 2-20020a056e0220c200b002f1d1718149mr4887812ilq.220.1662749531849; Fri, 09 Sep
- 2022 11:52:11 -0700 (PDT)
+        Fri, 9 Sep 2022 14:52:53 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2071.outbound.protection.outlook.com [40.107.101.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B741B133A3A;
+        Fri,  9 Sep 2022 11:52:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EG2z2RIl5DeWxdhE1rpESZElFJVUK6EYFxcZePy3Cr5GuzR+CcjYWw2QXACzfyPBKvmnRGAIJjN2mgJNsB2lYzQCTrXkkgpTXP7Iod1NQxIkBZtqWlGj9kWrKoBgaJ39BBITpDIRvBDj/7ao0bDYdTYX4c2miIj9pyXLhpTbhGEtwZL7RZMRXpmgf6vPxAzZEw7Jk9LYS/zPf+4HZQtDb/jrD152EZ/9OOiRozr1B6eVYQu/23qeTIzxa4Tyk0zZkVTZJygoi1/dvlReGDdGtrP2NNvmRpUk14oZX9MjzwsXoY5VRgho62L5CquXfeqeQE7TppVmnRVY5nWjj/Wgyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=agk8fVLhR/WJGSJAw20SN219bmXFma26UXiF8B8JTmc=;
+ b=lj07E4xbkeDrA2pcrA4JAeTVcOulvKdMei80BQ1Jg1mnlXA0qRH6cvpRGemZ6j/nVJQLOxQXrgO1/eI8Yxsb/rXCj6aG5OWlVZ93RRZJvI2Yp4/l0uwSiEiOzh5TH7yEoYwVlB4gK5Ih/tM/Rb6Ux3msurLNfHt2AjGO2LdSghIROv3cFZkNRpapPuJS0B7UJ+VzFi+Y04BaG7bV85u/xZurvNFPf+k9wa3509L0eYpGYmgieelU86B27Pj+Ulg72QbsKRNgNNNEVZjbFIhYKf5NI4LkhoOuc/KCZWsuKTUqFAYLP4wBtWmFZhOLvFv45rHOJaj2qOokfouGpvNwbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=agk8fVLhR/WJGSJAw20SN219bmXFma26UXiF8B8JTmc=;
+ b=ZR97Ulp1JdK2CqQsbYGnMqFGwFyN+rUK4TX7Qh4BHs1lOwtyXDDrgWmmTTAo+F2oMBD/kglZcCY16f/iwyj5jfBgNNdXLwW5joeuL/JhllcYU7mLh28emCCZRvdCa+fIuqU/IVvPFr6pD7eFKrunX7bviXTWLnpyka1u0Qc2aKk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM4PR12MB6424.namprd12.prod.outlook.com (2603:10b6:8:be::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Fri, 9 Sep
+ 2022 18:52:50 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::8ba:6e9:9e9c:da5]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::8ba:6e9:9e9c:da5%6]) with mapi id 15.20.5612.014; Fri, 9 Sep 2022
+ 18:52:49 +0000
+Message-ID: <82b3b47a-c6f6-5d06-d1d5-3a1c132d80da@amd.com>
+Date:   Fri, 9 Sep 2022 13:52:47 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 4/7] cpufreq: amd_pstate: add AMD pstate EPP support for
+ shared memory type processor
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Jinzhou.Su@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220909164534.71864-1-Perry.Yuan@amd.com>
+ <20220909164534.71864-5-Perry.Yuan@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20220909164534.71864-5-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA9P221CA0021.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:806:25::26) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-References: <20220908170133.1159747-1-abrestic@rivosinc.com> <20220908185006.1212126-1-abrestic@rivosinc.com>
-In-Reply-To: <20220908185006.1212126-1-abrestic@rivosinc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 9 Sep 2022 11:52:01 -0700
-Message-ID: <CAOnJCULmjX9JScQOg4G16tYOeX=nMcvuJOpQM-eExERUb89uww@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: Make mmap() with PROT_WRITE imply PROT_READ
-To:     Andrew Bresticker <abrestic@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        dram <dramforever@live.com>, Ruizhe Pan <c141028@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB6424:EE_
+X-MS-Office365-Filtering-Correlation-Id: 851caf51-42c8-4c23-cbb5-08da92947e3c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5XStpLIv3oVa3M40xJHQHGKRlQyKvK/9Jfyl/5P5Wz4/muJ/0tY1/f7IQ/teLiI+UM+ed82PSiVgEjkhOGXTseu0gjyX+mgP2WfoNnaENG1VuiPw3cHzEIKJtVxuIcWOHxesk5edsRp2Bm8BfVtF2Nj0RfOOlElSctdCs+EtwHlRAoKIxxaf3zdNoyf0LSkmU9yCFC9YKvBf3ysfAiBmEffe1KydIMrfWGzs+1l4m9f8s7kvr5rzJ+AETgGR86x9pO1PHRCABJysCDnGXv0oKnjCZ6L/RVCnAzyCPh3tVbkCU0SU+eUZeXIg1JY7+dWz5fAgG07lr4hJeg2vILqHF6YqdIcI+0S3/hGvGC6/n0/kI7T2fujiY5JxvLVAnOTynPU26gJs3EVQtZ1x466Rxje+aSDEsQSXkJyH2QaQbqGzMAG3y+KcMjZ4zjzRmeinDM49DhZuq2jJvMq41CtXrZInKgt0Fr5jwNuohJmIHiTW6BkJuoZ/IkH9lw/wj+963Hzxp5QyBLPDgMoXnEqe/Sh96E4k80V6I2gLZ5vTgxm/Di2JE/XBkjU0yIChynxcafTXTTqbjkHqqYMcDfSkK1pI9nGHmUgKVolkCtYdKnEgB+t7xJzBj/zFmDrOpWn35ZvI138f0hckSeZXS3XY0eSC3M84hP/weJ0/MdYAH6J+l7pEmP4EEMLrtevGGxcWJiE5OmEVKo6zK/PgP8YNNFJduQRZoqxYKNFnfZ1QxPT5UmpW45Jj3r5RDJyF80NWc+fAhO1/zUtlB3EaetRaYHsYrRwp3i+wymhQMgoLoGc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(38100700002)(31696002)(316002)(5660300002)(8936002)(66556008)(2906002)(4326008)(66476007)(8676002)(66946007)(2616005)(53546011)(6506007)(186003)(41300700001)(478600001)(6486002)(6512007)(86362001)(36756003)(31686004)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlN0VjhadmlzdTV3dDVrOG1jcytmT0tlMkRCOHZYQmVubitPdjlrNkdqUmY3?=
+ =?utf-8?B?QVplamI2Q1lUeTUrR1llRGRlOW5NQWtuUThvalRKdXlhdXNZc2NyWDk5LzBw?=
+ =?utf-8?B?dTNWQnhtWm1qSVlHMkRFVW1pTEtORGJ5REFSUW5SYkw5U3J2TEdkcWVnTHBI?=
+ =?utf-8?B?a0VnWkk2ZkkrL2lBSzJJTDVwMVkycExCVjloT0JBT0x1T1V0QjF0NHFueHhZ?=
+ =?utf-8?B?bzJXd1JwVCtQT1RmYmJJd1AxeTRVU3VyMXVadjNnYUh1SEJlMUNMQ2poRWJX?=
+ =?utf-8?B?bFBoMHF5ZW13UVlWMm5SVzNvTlpERUpEb01VVmJpaE43TkNOU25OR0piVTlW?=
+ =?utf-8?B?QjlBTTJBeEtZRnBpTm5ieVk5a1VFdG5XTmpPOGNKdEdXNW9hUG9ac2FGRVg5?=
+ =?utf-8?B?VzN4RDQxY3Nrdk1xNzAva2pENUE3N1FOL0RlM2VnNDk4MGdGYXlabG5sK3Zu?=
+ =?utf-8?B?WklhZE1NYVNvenVobUN2eFllNXA3aFZrT3dYd2psT1pGWjc5bllRVG9JZXJ1?=
+ =?utf-8?B?T1BTckh5RFczOXpYSXZXQVhCOFNjUUVuNno1UHZOSk00bXlDZXNsdkFUTzVv?=
+ =?utf-8?B?bG15SHJ3amJ3MThZNFRiV3gzRnNKWG1xMlVXSDJqNngwVlJuOHd4OGJYY3B4?=
+ =?utf-8?B?SU1ja3A4bUNtcWNYV0FIRE4xYTd2QWd6eThnR1VPbG9NUzhCVk9ldW4yb28z?=
+ =?utf-8?B?cWtzR1NDYmlpWnRZN3dFNzFVbGxhaVFKaHNMVDZLSG0zZEluMjJlNWZweENr?=
+ =?utf-8?B?a1haVVU5RHNST2RMMjNBc2U3MkxKYkRmdS95VXJRb1puVzJIRWtUY2dPMEZQ?=
+ =?utf-8?B?OHpxeUhiZkZjQUszeUZPUGFNRUdsVzlvUndHcER4TFVtQ000aVcra2JoZnBs?=
+ =?utf-8?B?N21PZXlrcmsyMHp2TDZDNllnUzR1UHNweEhLaHdrTkJwbFNRZEFydWMwWW9m?=
+ =?utf-8?B?Z0hzRTBVVEVFbHRzSm9XZlNWci9LeGRQa1RORVNncW9JWk1nNFBoRE9VTERW?=
+ =?utf-8?B?VWRhVTVxbU1uWnlMcUx6R0xzM1N1b1d0eTA4cnZvMlRPVVdIL0drVDV1bC9i?=
+ =?utf-8?B?bVQzcS90cG5YYVB3djlnYk13ZmY2Qk96NHk4bVoxTUEzblNLUHU3LzRZeGt1?=
+ =?utf-8?B?VjZNb1NObTdjS1gzY0lMMGdMVDF1aGRYM00zUk51Y0k2cUplRlhaSU5WL3Uz?=
+ =?utf-8?B?VmVaNklDM1BhRGlZd2UxUDVySUhGVW9XbS9Vend5eWJ3aVBaeCtLcnNBbW43?=
+ =?utf-8?B?cng3eDVWQ2ZqNkpuOFl3QTRsKy94TkwwanRKa0cxbnlUSWxPR2g3bDdUYmx4?=
+ =?utf-8?B?OWU2N3h2dEJEaXZxaTltK29MaFdWeXozZEUrdkRJZFFEY0VaTk1WWkVubDFE?=
+ =?utf-8?B?NVdOZmZzTTRwVVpQTlg4OC9DVTNnYkU3QTRESWdzWVV3clo0Q3ZvdDhLZDdy?=
+ =?utf-8?B?bkp0R2M2V1dtZEVpWExjYVB4ZDVPcFRTSnZldzRYdmdoREJCendtenhPYjZp?=
+ =?utf-8?B?dkhMcnE3eEZ2dXVuQXBDZXR0LzlMMjRZTy9pbHEzVndVWVNuVkR6ZkVHMk03?=
+ =?utf-8?B?eWdRZkFCbXhtazF2K3NjdG1WRnVhcm1JRk00WmlENkhoSEZDYWhqTEpjaVFq?=
+ =?utf-8?B?ZG52VzRWdzdhS2hpSGI1ejFxc2VFOEJwY1ZINHltVkRxMDJudWY5QTRVTGgx?=
+ =?utf-8?B?ajk4RHg1cHBVVmpmVVQvVnBiN3o0T2tBU1JmY1NGV0VoRnpPV1k5MlVBSUwv?=
+ =?utf-8?B?VTUrU1pTZDN6NWRheGkreDVhb0pCVWdGZzYrdWlwZzFPUjNJYWQzWUVaZ2h0?=
+ =?utf-8?B?QzZUNFk5ckRFeEhwV1pnZVpYUk1uc0l1YmNhTWYvYk9IUFhzbHRmM0hicklr?=
+ =?utf-8?B?bXRjSE0vVnJPam8ydTBnT1NlSXp4OWZHRTg1b1JsU05jalRBbEgwZWkyOFJ4?=
+ =?utf-8?B?TjhvNmhoSzZlRXVZd3lCUHFXYTRhKzNCS0tlVlU4dHNGZVZEREpmNGFCTGYv?=
+ =?utf-8?B?bDFwT0dWZ2ZZNGM3OFRsemhpRzVaTW4rSFpWL1BTVzVNdWlGTm0vVXFVUjI2?=
+ =?utf-8?B?bFo2NEZHUzlFRm5qcGI0S3VOZ1RYSHdENTNwcVJqNlhtVDBNRU5pSFZUMTVa?=
+ =?utf-8?Q?JFbQe4o2/iRUDJTh+3XKUYiLD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 851caf51-42c8-4c23-cbb5-08da92947e3c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 18:52:49.8493
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: crmU8SSwWtSxg+VWM4FptkMz9zS7xEXNOr1Ryz+HA5OAEluxSns8UU99LFPAZf6kJ0zTv4EfeZniPQWL/qqBGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6424
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 11:50 AM Andrew Bresticker <abrestic@rivosinc.com> wrote:
->
-> Commit 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is
-> invalid") made mmap() return EINVAL if PROT_WRITE was set wihtout
-> PROT_READ with the justification that a write-only PTE is considered a
-> reserved PTE permission bit pattern in the privileged spec. This check
-> is unnecessary since RISC-V defines its protection_map such that PROT_WRITE
-> maps to the same PTE permissions as PROT_WRITE|PROT_READ, and it is
-> inconsistent with other architectures that don't support write-only PTEs,
-> creating a potential software portability issue. Just remove the check
-> altogether and let PROT_WRITE imply PROT_READ as is the case on other
-> architectures.
->
-> Note that this also allows PROT_WRITE|PROT_EXEC mappings which were
-> disallowed prior to the aforementioned commit; PROT_READ is implied in
-> such mappings as well.
->
-> Fixes: 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is invalid")
-> Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
+On 9/9/2022 11:45, Perry Yuan wrote:
+> Add Energy Performance Preference support for AMD SOCs which only
+> support the shared memory interface that implemented on Zen2 and Zen3
+> processors, because this type CPU has no MSR supported, it will use
+> ACPI PCC channel to enable EPP and reset desired perf to be zero.
+
+This reads like all Zen2 and Zen3 processors don't have the MSR, but 
+that's not true. How about:
+
+"Add Energy Performance Preference support for AMD SOCs which do not 
+contain a designated MSR for CPPC support. A shared memory interface
+is used for CPPC on these SOCs and the ACPI PCC channel is used to
+enable EPP and reset the desired performance."
+
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
-> v1 -> v2: Update access_error() to account for write-implies-read
-> ---
->  arch/riscv/kernel/sys_riscv.c | 3 ---
->  arch/riscv/mm/fault.c         | 3 ++-
->  2 files changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 571556bb9261..5d3f2fbeb33c 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -18,9 +18,6 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
->         if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
->                 return -EINVAL;
->
-> -       if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
-> -               return -EINVAL;
-> -
->         return ksys_mmap_pgoff(addr, len, prot, flags, fd,
->                                offset >> (PAGE_SHIFT - page_shift_offset));
->  }
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index f2fbd1400b7c..d86f7cebd4a7 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -184,7 +184,8 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
->                 }
->                 break;
->         case EXC_LOAD_PAGE_FAULT:
-> -               if (!(vma->vm_flags & VM_READ)) {
-> +               /* Write implies read */
-> +               if (!(vma->vm_flags & (VM_READ | VM_WRITE))) {
->                         return true;
->                 }
->                 break;
+>   drivers/cpufreq/amd-pstate.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 451295284a26..fff298744a8e 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -133,12 +133,24 @@ static inline int pstate_enable(bool enable)
+>   
+>   static int cppc_enable(bool enable)
+>   {
+> +	struct cppc_perf_ctrls perf_ctrls;
+>   	int cpu, ret = 0;
+>   
+>   	for_each_present_cpu(cpu) {
+>   		ret = cppc_set_enable(cpu, enable);
+>   		if (ret)
+>   			return ret;
+> +
+> +	/* Enable active mode for EPP */
+> +	ret = cppc_set_auto_epp(cpu, enable);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Set zero to desired perf to enable EPP control*/
+> +	perf_ctrls.desired_perf = 0;
+> +	ret = cppc_set_perf(cpu, &perf_ctrls);
+> +	if (ret)
+> +		return ret;
+>   	}
+>   
+>   	return ret;
 
-This should be a separate patch with commit text about VMA permissions.
-
-> --
-> 2.25.1
->
-
-Otherwise, lgtm.
-
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-
--- 
-Regards,
-Atish
