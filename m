@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF555B2EE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA105B2EE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiIIG3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 02:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S230496AbiIIG3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 02:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiIIG3p (ORCPT
+        with ESMTP id S230483AbiIIG26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 02:29:45 -0400
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792F625C4B;
-        Thu,  8 Sep 2022 23:29:40 -0700 (PDT)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-04.nifty.com with ESMTP id 2896NOpK024120;
-        Fri, 9 Sep 2022 15:23:24 +0900
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 2896N4Kd026323;
-        Fri, 9 Sep 2022 15:23:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2896N4Kd026323
+        Fri, 9 Sep 2022 02:28:58 -0400
+X-Greylist: delayed 100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 23:28:57 PDT
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D912ACD9;
+        Thu,  8 Sep 2022 23:28:56 -0700 (PDT)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-07.nifty.com with ESMTP id 2896NZ7G010861;
+        Fri, 9 Sep 2022 15:23:35 +0900
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2896NJ2b016840;
+        Fri, 9 Sep 2022 15:23:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2896NJ2b016840
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662704586;
-        bh=EC6SilsAEK+rN2ggVzG9YNR83SYMtw1PO6ELBTyPU4s=;
+        s=dec2015msa; t=1662704600;
+        bh=M8RU77rFPgb9iCDZlcgmp1AIsNWV2fZAChJbFjqGEXM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z4Iq+sGOHFUbQ0/UZ6nR1ateoXI8KCtspaH8rRWbxDnsNZ6RR/Gt1hExbWQp+fZIk
-         qP/FNEda9rCf+QN7lYnqQn2H65WYwXoQJEUn/llRp7+WEhcI9U7MPsr7tA6uiNnunc
-         /BE4TrWOH+Pql+oAsPouunJxvcDbA3r1sKe9FcEW5qFPGl2h1LM5rByLAGBhT/lJUr
-         cDIYNDy5EmpyyY2mwvHUWZ583ylgzx36N4FuM/+Dit/tcyOWnxlqS66/KYjsjkB01B
-         GQ2rsEzHFQutLYgpP9O+8WuCsoYcxVSiPWP2nKpw+LO5O7J30JphjDaPss0zVPkXF6
-         Kp7aYsgIqHcyQ==
-X-Nifty-SrcIP: [209.85.160.46]
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1280590722dso1563920fac.1;
-        Thu, 08 Sep 2022 23:23:05 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3ALP6yWJODm0PjJTELDrwfddYnW9q51u8e6euEqzO6jK82wHli
-        9+5sJtyqInUGW1DM74Evxm/OTCwPJxh6TIANNI4=
-X-Google-Smtp-Source: AA6agR5a/cn+4VBwsjDFuBjbsWZjwFhx8Xc7NsZw3AX0v4JSYVi3ygeFmt+aOgwOeAX//6OdlS2RMFM5DWeHTCkgSnY=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr3919876oab.287.1662704584434; Thu, 08
- Sep 2022 23:23:04 -0700 (PDT)
+        b=z9ef8H04q8ejPMDdTZVr2QgANUJssDpWr44P8Mqs6YSyAgIK/FjPofKCpmo9coGPW
+         UztnJvygPDhKFnFQ7TjuZJb17kQ4OgKsqc2iGGfJPdUa6kiAjIVQI70gQrYhzRBqnZ
+         j8o3SHCjh1eNQWEVlDKeU1Z5kGq6rvdE1caB6Q9DcucNDrvoVBDQ3afvZ64llg1+ZX
+         Tp50MfrCK62W2PAZInSRCuQZ8+OK2DZYcNmX4bmyHr1VGuvTCxQIMb9Lbxpb76TZmt
+         WIsjVDjdNYYF/LyJWnlQUgHnK+FzjA2gwHEXeFC88qEz78AeYwZIVq24kOnU6uWMzs
+         e8+sL5U3ME5RA==
+X-Nifty-SrcIP: [209.85.160.42]
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1225219ee46so1556100fac.2;
+        Thu, 08 Sep 2022 23:23:20 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1Xuq79pN+VlE0AGlko35nGnLZEEM7oPJ/T8rZlhIEVlN4xRp/t
+        PbbJq3v1I6thI6vt8Zts09y07wtwvwVchu194w4=
+X-Google-Smtp-Source: AA6agR6TkF3ZCXHdyUVvKfeexJcA6/iUO15vrP/nUMylWe8sfgvSiu+88R6kp9AHz26LHLW2L4i7YtsZ/0OFNLM4DXc=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr3955805oab.194.1662704599250; Thu, 08
+ Sep 2022 23:23:19 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
- <20220908104337.11940-5-lukas.bulwahn@gmail.com> <YxnTI927V0hGs+kz@kroah.com>
-In-Reply-To: <YxnTI927V0hGs+kz@kroah.com>
+ <20220908104337.11940-6-lukas.bulwahn@gmail.com> <YxnQ3+0BfbmUbBnH@linux.ibm.com>
+In-Reply-To: <YxnQ3+0BfbmUbBnH@linux.ibm.com>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 9 Sep 2022 15:22:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQmtfdHE3tmT58sLzS+hvQjNPADWnZE=SiOKRkJPjBq5A@mail.gmail.com>
-Message-ID: <CAK7LNAQmtfdHE3tmT58sLzS+hvQjNPADWnZE=SiOKRkJPjBq5A@mail.gmail.com>
-Subject: Re: [PATCH 4/6] usb: chipidea: make configs for glue drivers visible
- with EXPERT
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Fri, 9 Sep 2022 15:22:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS_u_BkcQ4A34ENdSy=J9KOpgzHS6NSXkGBiVy_7CqPFQ@mail.gmail.com>
+Message-ID: <CAK7LNAS_u_BkcQ4A34ENdSy=J9KOpgzHS6NSXkGBiVy_7CqPFQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] mm: Kconfig: make config SECRETMEM visible with EXPERT
+To:     Mike Rapoport <rppt@linux.ibm.com>
 Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
@@ -61,9 +61,9 @@ Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb <linux-usb@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
         Linux Memory Management List <linux-mm@kvack.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         kernel-janitors@vger.kernel.org,
@@ -78,10 +78,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 8:33 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Sep 8, 2022 at 8:24 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
 >
-> On Thu, Sep 08, 2022 at 12:43:35PM +0200, Lukas Bulwahn wrote:
+> On Thu, Sep 08, 2022 at 12:43:36PM +0200, Lukas Bulwahn wrote:
 > > Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
 > > introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
 > > and just gives that intent a much better name. That has been clearly a good
@@ -110,47 +109,69 @@ On Thu, Sep 8, 2022 at 8:33 PM Greg Kroah-Hartman
 > >     embedded system generally starts with a different set of default values
 > >     compared to kernel builds for all other kind of systems.
 > >
-> > Considering the first purpose, at the point in time where CONFIG_EMBEDDED
-> > was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
-> > become visible throughout all different menus for the kernel configuration.
-> > Over the last decade, this has gradually increased, so that currently, with
-> > CONFIG_EXPERT, roughly 170 more options become visible throughout all
-> > different menus for the kernel configuration. In comparison, currently with
-> > CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
-> > one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
+> > Considering the second purpose, note that already probably arguing that a
+> > kernel build for an embedded system would choose some values differently is
+> > already tricky: the set of embedded systems with Linux kernels is already
+> > quite diverse. Many embedded system have powerful CPUs and it would not be
+> > clear that all embedded systems just optimize towards one specific aspect,
+> > e.g., a smaller kernel image size. So, it is unclear if starting with "one
+> > set of default configuration" that is induced by CONFIG_EMBEDDED is a good
+> > offer for developers configuring their kernels.
 > >
-> > As the numbers suggest, these two levels of enabling the visibility of even
-> > more configuration options---beyond what CONFIG_EXPERT enables---never
-> > evolved to a good solution in the last decade. In other words, this
-> > additional level of visibility of configuration option with CONFIG_EMBEDDED
-> > compared to CONFIG_EXPERT has since its introduction never become really
-> > valuable. It requires quite some investigation to actually understand what
-> > is additionally visible and it does not differ significantly in complexity
-> > compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
-> > other config to show more detailed options beyond CONFIG_EXPERT---is
-> > unlikely to be valuable unless somebody puts significant effort in
-> > identifying how such visibility options can be properly split and creating
-> > clear criteria, when some config option is visible with CONFIG_EXPERT and
-> > when some config option is visible only with some further option enabled
-> > beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
-> > is much more reasonable to simply make those additional seven options that
-> > visible with CONFIG_EMBEDDED, visible with CONFIG_EXPERT, and then remove
-> > CONFIG_EMBEDDED. If anyone spends significant effort in structuring the
-> > visibility of config options, they may re-introduce suitable new config
-> > options simply as they see fit.
+> > Also, the differences of needed user-space features in an embedded system
+> > compared to a non-embedded system are probably difficult or even impossible
+> > to name in some generic way.
 > >
-> > Make the configs for usb chipidea glue drivers visible when CONFIG_EXPERT
-> > is enabled.
+> > So it is not surprising that in the last decade hardly anyone has
+> > contributed changes to make something default differently in case of
+> > CONFIG_EMBEDDED=y.
+> >
+> > Currently, in v6.0-rc4, SECRETMEM is the only config switched off if
+> > CONFIG_EMBEDDED=y.
+> >
+> > As long as that is actually the only option that currently is selected or
+> > deselected, it is better to just make SECRETMEM configurable at build time
+> > by experts using menuconfig instead.
+> >
+> > Make SECRETMEM configurable when EXPERT is set and otherwise default to
+> > yes. Further, SECRETMEM needs ARCH_HAS_SET_DIRECT_MAP.
+> >
+> > This allows us to remove CONFIG_EMBEDDED in the close future.
 > >
 > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+>
 > > ---
-> >  drivers/usb/chipidea/Kconfig | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >  mm/Kconfig | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index ceec438c0741..aa154c20b129 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -1068,7 +1068,13 @@ config IO_MAPPING
+> >       bool
+> >
+> >  config SECRETMEM
+> > -     def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+> > +     default y
+> > +     bool "Enable memfd_secret() system call" if EXPERT
+> > +     depends on ARCH_HAS_SET_DIRECT_MAP
+> > +     help
+> > +       Enable the memfd_secret() system call with the ability to create
+> > +       memory areas visible only in the context of the owning process and
+> > +       not mapped to other processes and other kernel page tables.
+> >
+> >  config ANON_VMA_NAME
+> >       bool "Anonymous VMA name support"
+> > --
+> > 2.17.1
+> >
 >
-> Now queued up in my USB tree, thanks.
->
-> greg k-h
-
+> --
+> Sincerely yours,
+> Mike.
 
 Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
