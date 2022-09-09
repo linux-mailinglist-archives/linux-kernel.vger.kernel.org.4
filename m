@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0495B42C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F015B42D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiIIXHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S231912AbiIIXHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiIIXGs (ORCPT
+        with ESMTP id S231447AbiIIXGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 19:06:48 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C55A115CC4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26DC1153A5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662764798; x=1694300798;
+  t=1662764797; x=1694300797;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=MIecFpx/fYz164sdD9AyklxOPY/JrvhjZ46OYbtFEpc=;
-  b=NVdElGE05XuA+fHb4hVamp7prbShAQZ1Ttf3rnc2F9P7cZfrgVZqsfXD
-   XLUk5Hzyz06rObQzgpYcaOjHlIiZJyoTVEKnuwoIF4cFi7unc2f7zeFoJ
-   1wIIkDw7/Mmnts5x8rR8f/7WN3rES8FaAKtCIIGkAsRD7YVcM8GEM9If3
-   hRd/nDm1uJ2jSJmfydrOX99r04MSBBNw5lCrnLlkIMkj8Qr6fvHAQ/8Y9
-   SvLJHEUwF2zFADViro/0cqifSpSWt29C/YUQTS75l9DZsV9wFd4yxT4ce
-   U6uaO68D4jmb8q0130/MIU7FQLqqXriBCetz6U2AVl4FO7HyEA1vWEJqf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386918"
+  bh=V+XE+HwnTyiz33d+vGV9bfegjagMw1gGclttOzUh/uQ=;
+  b=WFXHjmJXBwuKjp/fIG+G2ARoxUOMZ9rhHBGoy2XnFZ+5XzvWNMHBk+/X
+   8hv9lb/X9OdVpJh/hnqblREa61qviKkxzJx0R989H9WmeH1dkzTQeG2CB
+   X5u+/IdvmBhjlbuuh/ccRag65tJGHxquA8nnhlcaOT6aLy9X/wY403EcV
+   ZrU2CAOgPnZ0qmJWqIO9O1RDoYjOE2NCVSFWaaaXDHDUTnGlhX3RtVurv
+   MkqBlxNEvinFLMJn5g+YykM9xzBZyfHbiQ9UQ8pD0Fm3CbSJbFsKqytEM
+   H/8GuB0HVLfGqNobuiDILL5WC+lrd1cs/6y0tWzq7IrxPoUM5J0SlDcEI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386919"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="298386918"
+   d="scan'208";a="298386919"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="677355019"
+   d="scan'208";a="677355024"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:34 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -56,9 +56,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [RFC PATCH 14/23] thermal: intel: hfi: Update the class of the current task
-Date:   Fri,  9 Sep 2022 16:11:56 -0700
-Message-Id: <20220909231205.14009-15-ricardo.neri-calderon@linux.intel.com>
+Subject: [RFC PATCH 15/23] thermal: intel: hfi: Report per-cpu class-specific performance scores
+Date:   Fri,  9 Sep 2022 16:11:57 -0700
+Message-Id: <20220909231205.14009-16-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
@@ -72,12 +72,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support the interfaces of the scheduler for classes of tasks. If an Intel
-processor supports Intel Thread Director, then it supports classes of
-tasks.
-
-Use the hardware resources that Intel Thread Director provides to assign
-a class to the currently running task.
+Support the arch_get_task_class_score() interface of the scheduler. Use the
+data that Intel Thread Director provides to inform the scheduler the
+performance of a class of tasks when placed on a given CPU.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -93,80 +90,77 @@ Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- arch/x86/include/asm/topology.h   |  8 +++++++
- drivers/thermal/intel/intel_hfi.c | 35 +++++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+ arch/x86/include/asm/topology.h   |  2 ++
+ drivers/thermal/intel/intel_hfi.c | 40 +++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
 diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 458c891a8273..9c6df4fd9414 100644
+index 9c6df4fd9414..2ed234104ef4 100644
 --- a/arch/x86/include/asm/topology.h
 +++ b/arch/x86/include/asm/topology.h
-@@ -227,4 +227,12 @@ void init_freq_invariance_cppc(void);
- #define arch_init_invariance_cppc init_freq_invariance_cppc
+@@ -230,9 +230,11 @@ void init_freq_invariance_cppc(void);
+ #ifdef CONFIG_INTEL_THREAD_DIRECTOR
+ int intel_hfi_has_task_classes(void);
+ void intel_hfi_update_task_class(struct task_struct *curr, bool smt_siblings_idle);
++int intel_hfi_get_task_class_score(int class, int cpu);
+ 
+ #define arch_has_task_classes intel_hfi_has_task_classes
+ #define arch_update_task_class intel_hfi_update_task_class
++#define arch_get_task_class_score intel_hfi_get_task_class_score
  #endif
  
-+#ifdef CONFIG_INTEL_THREAD_DIRECTOR
-+int intel_hfi_has_task_classes(void);
-+void intel_hfi_update_task_class(struct task_struct *curr, bool smt_siblings_idle);
-+
-+#define arch_has_task_classes intel_hfi_has_task_classes
-+#define arch_update_task_class intel_hfi_update_task_class
-+#endif
-+
  #endif /* _ASM_X86_TOPOLOGY_H */
 diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 4bafe6848d5d..f46d9331f912 100644
+index f46d9331f912..1b6072c828ff 100644
 --- a/drivers/thermal/intel/intel_hfi.c
 +++ b/drivers/thermal/intel/intel_hfi.c
-@@ -73,6 +73,17 @@ union cpuid6_edx {
- 	u32 full;
- };
+@@ -205,6 +205,46 @@ void intel_hfi_update_task_class(struct task_struct *curr, bool smt_siblings_idl
  
-+#ifdef CONFIG_INTEL_THREAD_DIRECTOR
-+union hfi_thread_feedback_char_msr {
-+	struct {
-+		u8	classid;
-+		u64	__reserved:55;
-+		u8	valid:1;
-+	} split;
-+	u64 full;
-+};
-+#endif
+ 	curr->class = msr.split.classid;
+ }
 +
- /**
-  * struct hfi_cpu_data - HFI capabilities per CPU
-  * @perf_cap:		Performance capability
-@@ -172,6 +183,30 @@ static struct workqueue_struct *hfi_updates_wq;
- #define HFI_UPDATE_INTERVAL		HZ
- #define HFI_MAX_THERM_NOTIFY_COUNT	16
- 
-+#ifdef CONFIG_INTEL_THREAD_DIRECTOR
-+int intel_hfi_has_task_classes(void)
++static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
++			    struct hfi_cpu_data *hfi_caps, int class)
 +{
-+	return cpu_feature_enabled(X86_FEATURE_ITD);
++	struct hfi_cpu_data *caps;
++
++	/* Find the capabilities of @cpu */
++	caps = hfi_instance->data + index * hfi_features.cpu_stride +
++	       class * hfi_features.class_stride;
++	memcpy(hfi_caps, caps, sizeof(*hfi_caps));
 +}
 +
-+void intel_hfi_update_task_class(struct task_struct *curr, bool smt_siblings_idle)
++int intel_hfi_get_task_class_score(int class, int cpu)
 +{
-+	union hfi_thread_feedback_char_msr msr;
++	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
++	struct hfi_instance *instance;
++	struct hfi_cpu_data caps;
++	unsigned long flags;
++	int cap;
 +
-+	/* We should not be here if ITD is not supported. */
-+	if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-+		pr_warn_once("task classification requested but not supported!");
-+		return;
-+	}
++	if (cpu < 0 || cpu >= nr_cpu_ids)
++		return -EINVAL;
 +
-+	rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
-+	if (!msr.split.valid)
-+		return;
++	if (class == TASK_CLASS_UNCLASSIFIED)
++		return -EINVAL;
 +
-+	curr->class = msr.split.classid;
++	if (class >= (int)hfi_features.nr_classes)
++		return -EINVAL;
++
++	instance = info->hfi_instance;
++	if (!instance)
++		return -ENOENT;
++
++	raw_spin_lock_irqsave(&instance->table_lock, flags);
++	get_one_hfi_cap(instance, info->index, &caps, class);
++	cap = caps.perf_cap;
++	raw_spin_unlock_irqrestore(&instance->table_lock, flags);
++
++	return cap;
 +}
-+#endif /* CONFIG_INTEL_THREAD_DIRECTOR */
-+
+ #endif /* CONFIG_INTEL_THREAD_DIRECTOR */
+ 
  static void get_hfi_caps(struct hfi_instance *hfi_instance,
- 			 struct thermal_genl_cpu_caps *cpu_caps)
- {
 -- 
 2.25.1
 
