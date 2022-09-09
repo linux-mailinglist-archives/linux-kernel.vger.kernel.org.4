@@ -2,85 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCF25B30FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB0B5B30FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiIIHwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S231387AbiIIHvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIIHwD (ORCPT
+        with ESMTP id S230255AbiIIHvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:52:03 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957C4100437
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:48:21 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id i26so1289085lfp.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=XitIxUHJGo2f9DX5GRhObqjIng6zVOJXz69iBessMFU=;
-        b=L97CZRY06nPAVO2OfaqkDh7hDE69MN1yhfPKrXfcLG29+BwLuBPS89NmTsFcq6BkLM
-         10kLmFCJchZbP8QD9J7ylceXflafN8M9uNcjDdQDeaeGDuuqbr4UYLEupTrQh2Svb2vg
-         wVxaRisZMr/mLbhD8iisCVPxegfHisS9A3NKxtEOa6B23egfycllvL0ipWU/G33fUUkm
-         ZbUfmgUWVuglkQ3BT3qcWnYj5wudUnSbZhAYGlBOL/2iAn3/rnTOPKjcrylT8jiGl6bM
-         xnlt33Fb3mMA+ueFAHPm7sOqrKj0xvajGQqeapg93ftiY7FnZSnJ1FjYzPmmrxK9U4G1
-         CIiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XitIxUHJGo2f9DX5GRhObqjIng6zVOJXz69iBessMFU=;
-        b=1q7Z59RJdcxoj/CzF3KvbT/fintcLQrdncFXnCDSKJtncjOV1n54Rn+fKQlTwgtpXe
-         qnVBMtgS/94FAg841oar7LAD2BFNI8C3uFjQajR4PJbPumBAd0h6YO+34aq8FRjYZZmd
-         E2POvsHClQhsIwgnXsnENSzL18x6C7ZH9prHqxNLGh8DKh57cFk6MV9ITs63xJfjK/1l
-         3XkKzYnUOc8HKuMC3XHu+X4Y4pCa+BXy/elGqdOExBQapbE7qPqU6rXX8QvhR8quvD66
-         4WGl55gUHJsDRgGvphQCUfkyOU5jkCEY1FOFGO8OrmEOILNBuC5rSYHMSiy0zmSR91O/
-         r2mA==
-X-Gm-Message-State: ACgBeo3q7ZhfzDUmxI7V5Iktx8ZqejmocpvpqC9lKRkgc+E99cERQfsj
-        jDUxrljkQYSRfwyc7PRyANtBUw==
-X-Google-Smtp-Source: AA6agR6oWc/M0ekNF99Kob9d7A0SBRRl/ljeBywJjwfhhHE1nNwdPQYLTS2m9TW6Fz/bTnAm7lNFuQ==
-X-Received: by 2002:a05:6512:b96:b0:497:9dac:cc22 with SMTP id b22-20020a0565120b9600b004979daccc22mr3678335lfv.687.1662709699352;
-        Fri, 09 Sep 2022 00:48:19 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s3-20020a2e1503000000b00261aecd1c53sm177646ljd.71.2022.09.09.00.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 00:48:18 -0700 (PDT)
-Message-ID: <6ddc3644-ae8b-38bf-346b-1262063ef20c@linaro.org>
-Date:   Fri, 9 Sep 2022 09:48:17 +0200
+        Fri, 9 Sep 2022 03:51:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63899132055;
+        Fri,  9 Sep 2022 00:46:37 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MP7HH4CX3zZcmN;
+        Fri,  9 Sep 2022 15:42:03 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
+ 2022 15:46:34 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH next v4 1/2] i2c: hisi: Add initial device tree support
+Date:   Fri, 9 Sep 2022 15:48:41 +0800
+Message-ID: <20220909074842.281232-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 3/3] clk: qcom: gcc-sdm845: add sdm670 global clock
- data
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Caleb Connolly <caleb@connolly.tech>,
-        Joel Selvaraj <jo@jsfamily.in>
-References: <20220908231224.209020-1-mailingradian@gmail.com>
- <20220908231224.209020-4-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220908231224.209020-4-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,29 +47,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 01:12, Richard Acayan wrote:
-> The Snapdragon 670 adds and removes some clocks, adds new frequencies, and
-> adds a new GPLL (Global Phase-Locked Loop) in reference to SDM845, while
-> also removing some GDSCs. Despite these differences, there are many
-> similarities with SDM670. Add data for SDM670 in the driver for SDM845 to
-> reuse the most of the clock data.
-> 
-> Advantages and disadvantages of this approach:
->  + maintenance applies to both sdm670 and sdm845 by default
->  + less duplicate code (clocks) means smaller distro/pre-built kernels
->    with all drivers enabled
->  - clocks for both SoC's must be compiled if the user wants clocks for one
->    specific SoC (both or none)
->  - additional testing needed for sdm845 devices
-> 
-> Link: https://android.googlesource.com/kernel/msm/+/443bd8d6e2cf54698234c752e6de97b4b8a528bd%5E%21/#F10
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
+The HiSilicon I2C controller can be used on embedded platform, which
+boot from devicetree.
 
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+ drivers/i2c/busses/Kconfig    |  2 +-
+ drivers/i2c/busses/i2c-hisi.c | 19 ++++++++++++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 7284206b278b..6d0fdf48e97d 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+ 
+ config I2C_HISI
+ 	tristate "HiSilicon I2C controller"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to have Hisilicon I2C controller support
+ 	  available on the Kunpeng Server.
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 76c3d8f6fc3c..7a77f306d05f 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -5,6 +5,9 @@
+  * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+  */
+ 
++#ifdef CONFIG_ACPI
++#include <linux/acpi.h>
++#endif
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
+ #include <linux/completion.h>
+@@ -13,6 +16,9 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#ifdef CONFIG_OF
++#include <linux/of.h>
++#endif
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/units.h>
+@@ -483,17 +489,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+ 	{ "HISI03D1", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
++#endif
++
++#ifdef CONFIG_OF
++static const struct of_device_id hisi_i2c_dts_ids[] = {
++	{ .compatible = "hisilicon,hisi-i2c", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
++#endif
+ 
+ static struct platform_driver hisi_i2c_driver = {
+ 	.probe		= hisi_i2c_probe,
+ 	.driver		= {
+ 		.name	= "hisi-i2c",
+-		.acpi_match_table = hisi_i2c_acpi_ids,
++		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
++		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+ 	},
+ };
+ module_platform_driver(hisi_i2c_driver);
+-- 
+2.31.GIT
 
-
-
-Best regards,
-Krzysztof
