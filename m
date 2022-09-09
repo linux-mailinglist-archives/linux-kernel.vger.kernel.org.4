@@ -2,185 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9F05B4186
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF49C5B4189
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbiIIViS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S231200AbiIIVi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiIIViQ (ORCPT
+        with ESMTP id S231339AbiIIViw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:38:16 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3612F3BC7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662759495; x=1694295495;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zmX1nkIl9g5EbZ4VqaIy45vcpqFgs0yn6b4pX+hcM3U=;
-  b=BmSKjemEWHwoe6c93vjnROgbyYTomAySo+vTxdUtSO8H1LDHV464Mz7r
-   O4+olljlHUJFv2kUYy6WtV5b3S39XzH1sWUQNYUeoiPINly+B3rF7tTB8
-   VFQ8hJ6nCSzNQcmEiKyU+fHOf1dybOj0qF3Vr/+l+6K+/NCcFJ+eWrxav
-   JNdQ8zZFJAbPBcAMsQp4hhm7aK6fzdpGdo/lXS7sUqnG5ikCYWcjSW8Nk
-   IUWqZqqf3VGUlDMMuJbY+B+Ffy7FcymfDtD44bUrPnlNQiKaXkKDey+tE
-   54KNVsjhrSJblL8uyxq/FS5EM2gD9yEI+jB7h6wVePc1AUH4gvNZXAdNj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="323791630"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="323791630"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 14:38:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="592757183"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Sep 2022 14:38:13 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWlhQ-0001lX-0D;
-        Fri, 09 Sep 2022 21:38:08 +0000
-Date:   Sat, 10 Sep 2022 05:37:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [vfs-idmapping:fs.posix_acl.vfsuid 15/37] fs/9p/acl.h:29:1: error:
- expected identifier or '('
-Message-ID: <202209100550.85zb3adU-lkp@intel.com>
+        Fri, 9 Sep 2022 17:38:52 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37621365CB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 14:38:50 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso2479485wmr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 14:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2Y+NLNuQyKNaFU6mPTgzkQeYfosTVSCZJmxTb/6tykg=;
+        b=S9fvTRoZDs1adI4sC3PL20INBwJC7nCemJe/AWoDTwEcfdlhgkbeQ39SsyPpbuMjDN
+         rVj+mRn1WT6L0Ojlq1kZzN8OWl+nNhMwBrR7+vfwU/D3QXYA3+ZwnOzrQf6mYAFLjSKs
+         J/P+mrf/AGE3uU4oRTx3+dWzPl+UQfnW/BHvCnvvziTLm5OaWP+0Ha+d2oFsW4chiekM
+         ZxcMhqfKh2Osx3CpVUUXCMb0Px0hkDa/gRrE/MccqDaNC2X00pNm/+7B4E0wK+lzmC8M
+         /5eZN3sut+pyn9MKpdI2ajTtNp9TZeFLfKo6oA0DTH6ccWmsOXF9fMqs4BS8nsUdg1/k
+         ID3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2Y+NLNuQyKNaFU6mPTgzkQeYfosTVSCZJmxTb/6tykg=;
+        b=qXE/y0llmlac/g/2FlnRjfvb3EN9fqUtrOTajdKKNfSE0PJrLn+TZdMwakaqs7sB8E
+         RatO9Kmvk08DE8S7+C4c/jp64Ip+K9xTtobP2mXRCl1wVQyWCxVj0aegnb63qqRVKoo0
+         OyyBj7R4Zd6SWh2z0+aDPaDI0iNmlK6ysEYtW6cnzo2HRa6/oUIKZnvSmuY0uS0jhxxm
+         VSQ1rIejU/aFP211SVtok2LOIkkWWM07XgRbM13Wsey2hXFwJLw4OMAKTLwCi/1GihOc
+         u/LQEZkWdz3KpmgA6BLl3vWYKRfOZ/Nxjjc+zHycU3/l3EVsnPt2FVku6AalOiB3exJt
+         mGIQ==
+X-Gm-Message-State: ACgBeo3DTxH4p1aR01nwTs0qpxe8Fx+UCYRNxckhhQdMeE7ZP6MP9z++
+        ETY8MwNoUJDOHeOEX+w68Ptdop+zolkVM16B4G49+g==
+X-Google-Smtp-Source: AA6agR55Ji109n89/PIZXx7w8Zwy/UxdI6HoxoE5W3L937PCHDl99glgs5wvCTO9sZZ0mnsie1BGFRbQMfSmWlHgRwg=
+X-Received: by 2002:a7b:c416:0:b0:3ab:73e4:c44a with SMTP id
+ k22-20020a7bc416000000b003ab73e4c44amr6512861wmi.147.1662759529003; Fri, 09
+ Sep 2022 14:38:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909180617.374238-1-fmayer@google.com> <202209091432.5FEEE461F7@keescook>
+In-Reply-To: <202209091432.5FEEE461F7@keescook>
+From:   Florian Mayer <fmayer@google.com>
+Date:   Fri, 9 Sep 2022 14:38:37 -0700
+Message-ID: <CAJAyTCBuETy0oY-2tjvKxDDmQCsBdL2d4UU7Fv-ySKZw_S4DNA@mail.gmail.com>
+Subject: Re: [PATCH RESEND] Add sicode to /proc/<PID>/stat.
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git fs.posix_acl.vfsuid
-head:   d37e11d9b40fc35810217121aa3205b7975fd4c6
-commit: c45bf675834bb2d099f0a8375cadeb30f4d915e5 [15/37] 9p: add ->get_dentry_acl() method
-config: arm-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220910/202209100550.85zb3adU-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/commit/?id=c45bf675834bb2d099f0a8375cadeb30f4d915e5
-        git remote add vfs-idmapping https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
-        git fetch --no-tags vfs-idmapping fs.posix_acl.vfsuid
-        git checkout c45bf675834bb2d099f0a8375cadeb30f4d915e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/
+On Fri, 9 Sept 2022 at 14:34, Kees Cook <keescook@chromium.org> wrote:
+>
+> Normally no changes are made to "stat" any more. New additions are made
+> to "status" instead. Could it live there instead?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/9p/vfs_super.c:31:
->> fs/9p/acl.h:29:1: error: expected identifier or '('
-   v9fs_iop_get_dentry_acl(struct user_namespace *mnt_userns,
-   ^
-   fs/9p/acl.h:23:33: note: expanded from macro 'v9fs_iop_get_dentry_acl'
-   #define v9fs_iop_get_dentry_acl NULL
-                                   ^
-   include/linux/stddef.h:8:16: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                  ^
-   In file included from fs/9p/vfs_super.c:31:
->> fs/9p/acl.h:29:1: error: expected ')'
-   fs/9p/acl.h:23:33: note: expanded from macro 'v9fs_iop_get_dentry_acl'
-   #define v9fs_iop_get_dentry_acl NULL
-                                   ^
-   include/linux/stddef.h:8:16: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                  ^
-   fs/9p/acl.h:29:1: note: to match this '('
-   fs/9p/acl.h:23:33: note: expanded from macro 'v9fs_iop_get_dentry_acl'
-   #define v9fs_iop_get_dentry_acl NULL
-                                   ^
-   include/linux/stddef.h:8:15: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                 ^
-   In file included from fs/9p/vfs_super.c:31:
->> fs/9p/acl.h:29:1: error: expected ')'
-   v9fs_iop_get_dentry_acl(struct user_namespace *mnt_userns,
-   ^
-   fs/9p/acl.h:23:33: note: expanded from macro 'v9fs_iop_get_dentry_acl'
-   #define v9fs_iop_get_dentry_acl NULL
-                                   ^
-   include/linux/stddef.h:8:23: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                         ^
-   fs/9p/acl.h:29:1: note: to match this '('
-   fs/9p/acl.h:23:33: note: expanded from macro 'v9fs_iop_get_dentry_acl'
-   #define v9fs_iop_get_dentry_acl NULL
-                                   ^
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^
-   3 errors generated.
-
-
-vim +29 fs/9p/acl.h
-
-     8	
-     9	#ifdef CONFIG_9P_FS_POSIX_ACL
-    10	int v9fs_get_acl(struct inode *inode, struct p9_fid *fid);
-    11	struct posix_acl *v9fs_iop_get_acl(struct inode *inode, int type,
-    12					   bool rcu);
-    13	struct posix_acl *v9fs_iop_get_dentry_acl(struct user_namespace *mnt_userns,
-    14						  struct dentry *dentry, int type);
-    15	int v9fs_acl_chmod(struct inode *inode, struct p9_fid *fid);
-    16	int v9fs_set_create_acl(struct inode *inode, struct p9_fid *fid,
-    17				struct posix_acl *dacl, struct posix_acl *acl);
-    18	int v9fs_acl_mode(struct inode *dir, umode_t *modep,
-    19			  struct posix_acl **dpacl, struct posix_acl **pacl);
-    20	void v9fs_put_acl(struct posix_acl *dacl, struct posix_acl *acl);
-    21	#else
-    22	#define v9fs_iop_get_acl	NULL
-    23	#define v9fs_iop_get_dentry_acl NULL
-    24	static inline int v9fs_get_acl(struct inode *inode, struct p9_fid *fid)
-    25	{
-    26		return 0;
-    27	}
-    28	static inline struct posix_acl *
-  > 29	v9fs_iop_get_dentry_acl(struct user_namespace *mnt_userns,
-    30				struct dentry *dentry, int type)
-    31	{
-    32		return NULL;
-    33	}
-    34	static inline int v9fs_acl_chmod(struct inode *inode, struct p9_fid *fid)
-    35	{
-    36		return 0;
-    37	}
-    38	static inline int v9fs_set_create_acl(struct inode *inode,
-    39					      struct p9_fid *fid,
-    40					      struct posix_acl *dacl,
-    41					      struct posix_acl *acl)
-    42	{
-    43		return 0;
-    44	}
-    45	static inline void v9fs_put_acl(struct posix_acl *dacl,
-    46					struct posix_acl *acl)
-    47	{
-    48	}
-    49	static inline int v9fs_acl_mode(struct inode *dir, umode_t *modep,
-    50					struct posix_acl **dpacl,
-    51					struct posix_acl **pacl)
-    52	{
-    53		return 0;
-    54	}
-    55	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yes, that would also work.
+I put it in stat for consistency because the exit_code is also there
+(and not in status).
