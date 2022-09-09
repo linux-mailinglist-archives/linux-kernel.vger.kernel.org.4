@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4445B33B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6566A5B33D1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbiIIJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S231159AbiIIJZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiIIJWR (ORCPT
+        with ESMTP id S230129AbiIIJZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:22:17 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C279E136CD5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:21:26 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id w8so1635190lft.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5C5lLPWXo2PEugtUTd2/amAX/cOIrsmkGvZKcxLNXv8=;
-        b=FjVvfjC4Qeanl9HJy1Wx0CDHchT64ls67ctXS3tW53xX37jJcTi0bJ0T8efnLOgred
-         dC15271al2nKmj0OGleXVqNIEwnGhWfh7YLZYvONOCHBX1yTnlntuymCC/6jd6WcSYtc
-         FHMsbFGKU/mpAINtvgEPyY++uCrQW47hJ75Sgl206LvZPHbtsmqhOONUoqZmOcE2Cqgk
-         8/C28GxQMxs7S3CMX8zSlWeADy5SNwGkiMMLfHB51glfXKmoL0UDtXw5njLAS/qJWBGG
-         iBCZxpw1Gwf4/zv5RK90wWztLUuvjKfdRwEWLde6spzua/n3Eqz2e6VwAhPmupfNSC8R
-         UL9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5C5lLPWXo2PEugtUTd2/amAX/cOIrsmkGvZKcxLNXv8=;
-        b=dRThmPLzAd7rEJkknoUnPLQmBJEeiQ90tv0z1Sc2lPGj3z6B1qfdTwf5LtoFemlfTL
-         ZeudTpB4aPehn05Qj1s3MZIHKyWyV0qe99cexG2PCEU6JIioFfrD+6fpYlyX3C6oYMjt
-         KDxuSLuBRyGkyySF8+GoCFnsqEG4eBEEH2hpIx/WshMfp87avK3fB784ArIj8gAUGays
-         aJl5xqlY9r2NdUZ2ZoYv3RsCHxzkOZQniMIR2SNZ/Q/EsI+MUe/tyX6Uz2q7yIt2+h9D
-         L5nzfbTHadelled8dN50+0U0qyL8aoTw86QFuhQYp1MHtv9NLYr53zo7+WjtgKvgg2lv
-         98HQ==
-X-Gm-Message-State: ACgBeo096gUElajnpOeSiDVdRpz4v3HZZdnfCLfZb5rOa847w8h2Pz8c
-        Cfblcz9enzyjJblrV/m6O+5opw==
-X-Google-Smtp-Source: AA6agR4yyCDK3ccYh+WDpIf9g7K8b0E/jVJyesR/aOpi2YHy8mnAnvD5r6xvAlgzq4ZTZOOdwrtHWQ==
-X-Received: by 2002:a05:6512:1694:b0:48a:9d45:763f with SMTP id bu20-20020a056512169400b0048a9d45763fmr3886463lfb.662.1662715273122;
-        Fri, 09 Sep 2022 02:21:13 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u23-20020a05651c131700b0026ac8c94022sm207044lja.119.2022.09.09.02.21.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 02:21:12 -0700 (PDT)
-Message-ID: <7370ba1d-472c-b036-4155-f86ca13f9824@linaro.org>
-Date:   Fri, 9 Sep 2022 12:21:12 +0300
+        Fri, 9 Sep 2022 05:25:18 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA389136CC7;
+        Fri,  9 Sep 2022 02:23:51 -0700 (PDT)
+Received: from [10.20.42.105] (unknown [10.20.42.105])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOL7BRtjBU0VAA--.19960S3;
+        Fri, 09 Sep 2022 17:23:08 +0800 (CST)
+Subject: Re: [PATCH V3 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>, chenhuacai@loongson.cn,
+        guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
+        lenb@kernel.org, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20220830030139.29899-1-lvjianmin@loongson.cn>
+ <20220830030139.29899-2-lvjianmin@loongson.cn>
+ <435e1283-9ff6-f089-6436-3c31a178fd60@arm.com>
+ <66baf6f8-0f18-e0a6-4ed4-e2f783497d2d@loongson.cn>
+ <YxrznBoBQycR8xCA@lpieralisi>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <53c47160-ccee-a565-34cf-a7e5143744ed@loongson.cn>
+Date:   Fri, 9 Sep 2022 17:23:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 02/16] phy: qcom-qmp-combo: drop unused defines
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220907110728.19092-1-johan+linaro@kernel.org>
- <20220907110728.19092-3-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220907110728.19092-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YxrznBoBQycR8xCA@lpieralisi>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxBOL7BRtjBU0VAA--.19960S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr1UAr45CF4kCw43ZrW3GFg_yoW8CryUpa
+        48G3W3Gr4Dtrs3Cr4vqw15Zry0vry3Cr4fXrW8Aw1kArn0gr1Svr48J3sYkFWq9a47Gw18
+        ZFs0qas3ZF15AwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
+        0_XrWUJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,77 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 14:07, Johan Hovold wrote:
-> Drop defines and enums that are unused since the QMP driver split.
+
+
+On 2022/9/9 下午4:04, Lorenzo Pieralisi wrote:
+> On Tue, Sep 06, 2022 at 08:40:48PM +0800, Jianmin Lv wrote:
+>>
+>>
+>> On 2022/9/5 下午8:20, Robin Murphy wrote:
+>>> On 2022-08-30 04:01, Jianmin Lv wrote:
+>>>> For DT, of_dma_get_range returns bus_dma_region typed dma regions,
+>>>> which makes multiple dma windows with different offset available
+>>>> for translation between dma address and cpu address.
+>>>>
+>>>> But for ACPI, acpi_dma_get_range doesn't return similar dma regions,
+>>>> causing no path for setting dev->dma_range_map conveniently. So the
+>>>> patch changes acpi_dma_get_range and returns bus_dma_region typed
+>>>> dma regions according to of_dma_get_range.
+>>>>
+>>>> After changing acpi_dma_get_range, acpi_arch_dma_setup is changed for
+>>>> ARM64, where original dma_addr and size are removed as these
+>>>> arguments are now redundant, and pass 0 and U64_MAX for dma_base
+>>>> and size of arch_setup_dma_ops, so this is a simplification consistent
+>>>> with what other ACPI architectures also pass to iommu_setup_dma_ops().
+>>>
+>>> Other than a micro-nit that acpi_dma_get_range() could probably use
+>>> resource_size(),
+>>>
+>>
+>> Ok, thanks, I'll use resource_size() in acpi_dma_get_range().
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 15 ---------------
->   1 file changed, 15 deletions(-)
+> Are you reposting this shortly ? We are almost at -rc5, it would
+> be good if we can proceed promptly.
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 9ce2ab56be4c..838f7e328b55 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -28,16 +28,11 @@
->   #define SW_RESET				BIT(0)
->   /* QPHY_POWER_DOWN_CONTROL */
->   #define SW_PWRDN				BIT(0)
-> -#define REFCLK_DRV_DSBL				BIT(1)
->   /* QPHY_START_CONTROL bits */
->   #define SERDES_START				BIT(0)
->   #define PCS_START				BIT(1)
-> -#define PLL_READY_GATE_EN			BIT(3)
->   /* QPHY_PCS_STATUS bit */
->   #define PHYSTATUS				BIT(6)
-> -#define PHYSTATUS_4_20				BIT(7)
-> -/* QPHY_PCS_READY_STATUS & QPHY_COM_PCS_READY_STATUS bit */
-> -#define PCS_READY				BIT(0)
+> Thanks,
+> Lorenzo
+> 
+Ok, I'll send V4 today.
 
-I think these defines, describing registers and bits, can go to the 
-common header instead.
+Thanks,
+Jianmin
 
-For the rest of the patch:
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
->   
->   /* QPHY_V3_DP_COM_RESET_OVRD_CTRL register bits */
->   /* DP PHY soft reset */
-> @@ -71,8 +66,6 @@
->   #define POWER_DOWN_DELAY_US_MIN			10
->   #define POWER_DOWN_DELAY_US_MAX			11
->   
-> -#define MAX_PROP_NAME				32
-> -
->   /* Define the assumed distance between lanes for underspecified device trees. */
->   #define QMP_PHY_LEGACY_LANE_STRIDE		0x400
->   
-> @@ -115,22 +108,14 @@ struct qmp_phy_init_tbl {
->   
->   /* set of registers with offsets different per-PHY */
->   enum qphy_reg_layout {
-> -	/* Common block control registers */
-> -	QPHY_COM_SW_RESET,
-> -	QPHY_COM_POWER_DOWN_CONTROL,
-> -	QPHY_COM_START_CONTROL,
-> -	QPHY_COM_PCS_READY_STATUS,
->   	/* PCS registers */
->   	QPHY_SW_RESET,
->   	QPHY_START_CTRL,
-> -	QPHY_PCS_READY_STATUS,
->   	QPHY_PCS_STATUS,
->   	QPHY_PCS_AUTONOMOUS_MODE_CTRL,
->   	QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR,
->   	QPHY_PCS_LFPS_RXTERM_IRQ_STATUS,
->   	QPHY_PCS_POWER_DOWN_CONTROL,
-> -	/* PCS_MISC registers */
-> -	QPHY_PCS_MISC_TYPEC_CTRL,
->   	/* Keep last to ensure regs_layout arrays are properly initialized */
->   	QPHY_LAYOUT_SIZE
->   };
-
--- 
-With best wishes
-Dmitry
+>>> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+>>>
+>>> It took me longer than I care to admit to figure out where the implicit
+>>> declaration of struct bus_dma_region in the scope of acpi.h and
+>>> acpi_bus.h comes from, but in the end I guess it's sufficiently
+>>> well-defined by the C spec to be reliable.
+>>>
+>>> Thanks for getting this done!
+>>>
+>>
+>> It's a pleasure!
+>>
+>>
+>>> Robin.
+>>>
+>>
+>> [...]
+>>
+>>
 
