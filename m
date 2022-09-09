@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8105B4054
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED3B5B4056
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiIIUHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S231715AbiIIUI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIIUHb (ORCPT
+        with ESMTP id S229774AbiIIUIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:07:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A32ACCD7D;
-        Fri,  9 Sep 2022 13:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662754050; x=1694290050;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oxcGdpzGuPvSalr55BaYS9QZ2APctMGWYr460kANP7M=;
-  b=cBWQ94VyXEr86Y7l8VWDb0u0scoOJI0lGN2wbtdUfhPj7ukSmjfxQr+z
-   zYSW6i1t+ZUjAi3ccio7sr7K8o1Z7CRXFC1xrbFonvFRpylJFsbdRhVZq
-   Z+DQjrVes0X1NeW5M/XN84lLoRlyPyR620jlcI14fLeb3irRHaWTEnMVJ
-   GsE9peVij9w2AJYe6UGTvgVzRGkJJUiimw8jRkj9NMc0O2qdCswvWvLek
-   yFRyiDscZLU5qMoaK9JrxIRK7QYe97ddyJvCkOkwB0l+D2284dMdWTzbz
-   h80rboLVyxyJgNJQfOrStoHweTdUxc8QXS3cPwPhDMg7DVn4CEGKJkJgh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277294485"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="277294485"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="592731467"
-Received: from hmadupal-mobl1.amr.corp.intel.com (HELO [10.251.6.204]) ([10.251.6.204])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
-Message-ID: <c289f18c-1276-eaa8-739e-4fb530eace91@linux.intel.com>
-Date:   Fri, 9 Sep 2022 13:07:29 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Fri, 9 Sep 2022 16:08:25 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC085BD75D;
+        Fri,  9 Sep 2022 13:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=HA7Uy5oRnhI96bvv26nvlUGrOXxQG8yAcX5TDStsA9A=; b=cQXI/T11+BWlzLJJP5tHVFQR4c
+        5i/eVkQQ575n6Mjw/LImE8yb0QabditV4Od+STVQUKcfiwpvjI/QbcMnxyVk3q8NqlSbtrY9g6oi6
+        vTQndosIgDFTy4/vwMZIWinoCFafOWrQVDzecutDxPEogzlhtfwrdMtplgPYXf3QzhTSJgLmqvw5Q
+        kTjsLp1dTYpLcJdYv+QmwWgdUMyJN8yO5fN00dI+fuqjPpMXVIDcYny5xottm0563fWMOkOou5oi7
+        LYRf6m/nOKpYsSp8kBlRYRxynJQd7WKJNcKN1rrVIKIZs8SDndDspezghmog2yh2F82bdvrnQot+j
+        N1bNmOLg==;
+Received: from [177.215.76.177] (helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oWkIX-00E6gL-52; Fri, 09 Sep 2022 22:08:21 +0200
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, kernel@gpiccoli.net,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Julius Werner <jwerner@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Evan Green <evgreen@chromium.org>
+Subject: [PATCH V4] firmware: google: Test spinlock on panic path to avoid lockups
+Date:   Fri,  9 Sep 2022 17:07:55 -0300
+Message-Id: <20220909200755.189679-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently the gsmi driver registers a panic notifier as well as
+reboot and die notifiers. The callbacks registered are called in
+atomic and very limited context - for instance, panic disables
+preemption and local IRQs, also all secondary CPUs (not executing
+the panic path) are shutdown.
+
+With that said, taking a spinlock in this scenario is a dangerous
+invitation for lockup scenarios. So, fix that by checking if the
+spinlock is free to acquire in the panic notifier callback - if not,
+bail-out and avoid a potential hang.
+
+Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Julius Werner <jwerner@chromium.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+---
 
 
-On 9/9/22 12:41 PM, Dave Hansen wrote:
-> On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
->> +	u8 reserved[7] = {0};
-> ...
->> +	if (!req.reportdata || !req.tdreport || req.subtype ||
->> +		req.rpd_len != TDX_REPORTDATA_LEN ||
->> +		req.tdr_len != TDX_REPORT_LEN ||
->> +		memcmp(req.reserved, reserved, 7))
->> +		return -EINVAL;
-> 
-> Huh, so to look for 0's, you:
-> 
-> 1. Declare an on-stack structure with a hard coded, magic numbered field
->    that has to be zeroed.
-> 2. memcmp() that structure
-> 3. Feed memcmp() with another hard coded magic number
-> 
-> I've gotta ask: did you have any reservations writing this code?  Were
-> there any alarm bells going off saying that something might be wrong?
-> 
-> Using memcmp() itself is probably forgivable.  But, the two magic
-> numbers are pretty mortal sins in my book.  What's going to happen the
-> first moment someone wants to repurpose a reserved byte?  They're going
-> to do:
-> 
-> -	__u8 reserved[7];
-> +	__u8 my_new_byte;
-> +	__u8 reserved[6];
-> 
-> What's going to happen to the code you wrote?  Will it continue to work?
->  Or will the memcmp() silently start doing crazy stuff as it overruns
-> the structure into garbage land?
-> 
-> What's wrong with:
-> 
-> 	memchr_inv(&req.reserved, sizeof(req.reserved), 0)
+Hey folks, new version - V3 available at [0].
 
-I did not consider the hard coding issue. It is a mistake. Your suggestion
-looks better. I will use it.
+@Greg, I think the panic situation is well-described in the commit
+message so I didn't rework that, lemme know if you want to add
+something to the text.
 
+@Evan, I kept your review tag even with the comment change, based on
+the V3 discussion. Lemme know if you want it removed in case you
+disagree with something!
+
+V4:
+* Reworked comment (thanks Andrew, for the suggestion!);
+* Rebased against 6.0-rc4;
+* Included more CCs (Andrew, Petr).
+
+[0] https://lore.kernel.org/linux-kernel/20220819155059.451674-1-gpiccoli@igalia.com/
+
+
+ drivers/firmware/google/gsmi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index adaa492c3d2d..4e2575dfeb90 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -681,6 +681,15 @@ static struct notifier_block gsmi_die_notifier = {
+ static int gsmi_panic_callback(struct notifier_block *nb,
+ 			       unsigned long reason, void *arg)
+ {
++
++	/*
++	 * Panic callbacks are executed with all other CPUs stopped,
++	 * so we must not attempt to spin waiting for gsmi_dev.lock
++	 * to be released.
++	 */
++	if (spin_is_locked(&gsmi_dev.lock))
++		return NOTIFY_DONE;
++
+ 	gsmi_shutdown_reason(GSMI_SHUTDOWN_PANIC);
+ 	return NOTIFY_DONE;
+ }
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.37.2
+
