@@ -2,126 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F0F5B3B02
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED3E5B3B05
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiIIOrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S232075AbiIIOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiIIOrM (ORCPT
+        with ESMTP id S232216AbiIIOr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:47:12 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3CD6F555
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:47:11 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id t14so1320438qkt.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=0Meoqct15xRj+ttJhOvrFrl2KTZE/gRtt0ZRxfx4q28=;
-        b=FEKMTty2fiz0be6vD787nTJ7bIzyI0vfMpLUEDFL/DJZmfbonrmDWePsJih+Mpa60R
-         MXUxDdx4bxlY6rOeD1kJr2pMEkTdgmjW2IdgWFR8jE4eDPkoFl/QtuOFqOoNRZpXFJDr
-         h8Swp6fhGK2MYHmzYtQcFvA7NY/Ot6LgoeuRT+igCGnJkxcNSzPrO/Ta3e8Nagha3Y4A
-         qAlasYsnSmYt8N0zmnR48pMVbGmxJH0tdvEuJtaOiAdPk05aEnvDPIwP8tRTcQB+LK0g
-         XBFy8WpfWrqEaa2DIk+U+lpo7fDtz1j/nX9GD2X89pdjdrcBfuy3iepGHlukzFeWguV1
-         gySA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0Meoqct15xRj+ttJhOvrFrl2KTZE/gRtt0ZRxfx4q28=;
-        b=ziBLKMqQvHr1rONtE0GCOjyhok2va6cdgx7GrNHZAEhgAI8mQXJn4/QJoBVEtuSyXl
-         cw8mptstPDx+NWepxT+wTkHGlbMos1gXv7cSgEvK357vw8tuOTntdBInFMX+Zok5KQSU
-         xRiBNTaqrW+shJf3+wp+RRKxKGdN2lxmP1yceqLyq0DPUPJGhbtdJKSoMCdGHlqRzD1r
-         yeEeo49JrSi482o14jpdZg+QkM4OB821reo4rcGvJxMMNZvqAf9WdxysbSGpNK7y8L66
-         Q207qKN4xzofZI29nn507inEkhCOm4KUZ0ubtGcspR3FjgO+1PJFTC+qX1VBvJj8QA3A
-         qcpQ==
-X-Gm-Message-State: ACgBeo0TG64jSbWiVVhgFtjBE8fxweVUCV2zM1hZvxul/KPpd7xxiu3+
-        Iod+2/BCyxA9uJLhJ0+MWl0=
-X-Google-Smtp-Source: AA6agR4du/JtavrTVKMuCN/jyc63/La941lNhFdbV+iQ1R3vJub5oL2HYBqAWGJEFVbVKwGFbcwIHw==
-X-Received: by 2002:a05:620a:4054:b0:6bb:572:3d45 with SMTP id i20-20020a05620a405400b006bb05723d45mr10256490qko.49.1662734829989;
-        Fri, 09 Sep 2022 07:47:09 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:cd61:d28a:9f90:9dc3])
-        by smtp.gmail.com with ESMTPSA id d17-20020a05620a241100b006bb2bca5741sm529092qkn.93.2022.09.09.07.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 07:47:09 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 07:47:10 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Laight <David.Laight@aculab.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v3 3/4] lib/find_bit: optimize find_next_bit() functions
-Message-ID: <YxtR7tMhXwGEXmbO@yury-laptop>
-References: <20220827175807.4017673-1-yury.norov@gmail.com>
- <20220827175807.4017673-4-yury.norov@gmail.com>
- <xhsmhfsh3b15v.mognet@vschneid.remote.csb>
- <YxjNeqLjGgRPIm+y@yury-laptop>
- <yt9dv8pwspkw.fsf@linux.ibm.com>
+        Fri, 9 Sep 2022 10:47:28 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519711282C5;
+        Fri,  9 Sep 2022 07:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MKCJGQImC5rNFm8xlhIZtRyfnfFLIWT7YCm6bd8rOy4=; b=V7t/u3J6Ot1dGFxPwqjtFrioG5
+        aUDXOgBEA02JPaFLQCHpjqxuZAGyjvQkosJgcg5ACNNRnoUFC/Fga9SOrlzxWVduOtTEZSBA4r7Mc
+        /HpVXTbhmPdCFKOIFGSPxxwPC48OmjgvkqVwpNBpsumxcWpvdG93Borp8oTaN+i0TOgBMG0/FNIgC
+        LZQRe83Je4zqxMmJxL4UNrI4tVdw2NIWOTkw2RsHgkL0PGWHu+VNm8forptW6CQPEuNhznIwNF4uQ
+        g1ijujJNiwIJkz/Nba/NjyfkYvoFOrrmC4zJ8+EyBWtCzPscUliqQbvynCmtrGuPeGq5WPthzMuBk
+        AotoV87Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWfHo-00GqRQ-01; Fri, 09 Sep 2022 14:47:16 +0000
+Date:   Fri, 9 Sep 2022 07:47:15 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Will McVicker <willmcvicker@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target
+ address
+Message-ID: <YxtR8/X4fb9wSYEo@infradead.org>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-3-willmcvicker@google.com>
+ <Yxs/zguOb52tY2C0@infradead.org>
+ <5bfd7d4d-d431-6321-89bc-663dcd36e930@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <yt9dv8pwspkw.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5bfd7d4d-d431-6321-89bc-663dcd36e930@arm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 02:24:31PM +0200, Sven Schnelle wrote:
-> Hi Yury,
+On Fri, Sep 09, 2022 at 02:47:19PM +0100, Robin Murphy wrote:
+> On 2022-09-09 14:29, Christoph Hellwig wrote:
+> > On Thu, Aug 25, 2022 at 06:50:25PM +0000, Will McVicker wrote:
+> > > Since not all devices require a 32-bit MSI address, add support to the
+> > > PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
+> > > allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
+> > > buffering (swiotlb) without risking not being able to get a 32-bit address
+> > > during DMA allocation.
+> > 
+> > Umm.  You can't just disable ZONE_DMA32.  Linux absolutely requires a
+> > 32-bit dma mask to work, it is in fact the implicit default.
 > 
-> Yury Norov <yury.norov@gmail.com> writes:
-> 
-> > On Wed, Sep 07, 2022 at 05:27:08PM +0100, Valentin Schneider wrote:
-> >> On 27/08/22 10:58, Yury Norov wrote:
-> >> > +#define FIND_NEXT_BIT(FETCH, MUNGE, size, start)				\
-> >> > +({										\
-> >> > +	unsigned long mask, idx, tmp, sz = (size), __start = (start);		\
-> >> > +										\
-> >> > +	if (unlikely(__start >= sz))						\
-> >> > +		goto out;							\
-> >> > +										\
-> >> > +	mask = MUNGE(BITMAP_FIRST_WORD_MASK(__start));				\
-> >> > +	idx = __start / BITS_PER_LONG;						\
-> >> > +										\
-> >> > +	for (tmp = (FETCH) & mask; !tmp; tmp = (FETCH)) {			\
-> >> > +		if (idx > sz / BITS_PER_LONG)					\
-> >> 
-> >> Does that want to be
-> >
-> > Yes, I already fixed this.
-> >  
-> >>                 if (idx + 1 >= sz / BITS_PER_LONG)
-> >> 
-> >> ?
-> 
-> Did you push that already? We're still seeing crashes in CI, and the
-> 'idx + 1' doesnt seem to be in next-20220908. Adding it makes the
-> out-of-bound access go away, but the kernel will crash later in the
-> block mq code:
+> Eh, it's behind CONFIG_EXPERT, which makes it enough of a "I think I know
+> what I'm doing and accept responsibility for picking up the pieces if it
+> breaks" thing.
 
-Hi Swen,
-
-I removed the whole series and will resend it with an appropriate fixes
-at the weekend. Hopefully it will disappear in next-20220909 or 10.
-
-Thanks,
-Yury
+Seem like indeed on arm64 there is a way to disable it.  The x86 model
+is to just select it unconditionally, which I think is the right way
+if we don't want to get into completely random failures.
