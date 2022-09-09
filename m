@@ -2,198 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AC25B36E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADC15B3708
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiIIMFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
+        id S231163AbiIIMLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIIMF3 (ORCPT
+        with ESMTP id S229930AbiIIMK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:05:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BCD9C2F8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:05:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Sep 2022 08:10:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6840C0BD8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1796B8234C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:05:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3237BC433D6;
-        Fri,  9 Sep 2022 12:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662725124;
-        bh=fD/g0DQg0xgJk+kfDl2oFiEFPWzKPr+cKnuI/c7MK/8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NKAOtntunZSx/Z0bpCmbfIKVQCRm5ellUA6zno/lCsCchc/WEZXOaylXk6EIbfzKO
-         jvUM5wNhDGlLtpea62G4BR3vTQcHQ430zat/QCGIBEeatyOR5W76kZQbrymeXHcOr7
-         BHfc6OZNY10LwBtOHCg7BjGSlfqen3PKVoqVuaqlBJcBU9xMX/RUzC9Z03fFg6VXQk
-         MQvnrvlXFRt4GmaoZKHHDN0iRGC285n9PRWzP79Ah/TR1bc0E0o1aXlLh+H8sNd3lB
-         fO1hiaFMNpuqUM+BKrpjZbj6ydLmZIrGdEolcOA2bcEfBqUHhaYPijICB+HFvBXvZB
-         lbN+qJHiNWbiA==
-Date:   Fri, 9 Sep 2022 21:05:20 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH v2 0/4] tracing: Have filters and histograms use a call
- table instead of pointers
-Message-Id: <20220909210520.03529972692d3c5776f380ad@kernel.org>
-In-Reply-To: <20220906225313.361552496@goodmis.org>
-References: <20220906225313.361552496@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDW14byz4xG8;
+        Fri,  9 Sep 2022 22:10:03 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <959d77be630b9b46a7458f0fbd41dc3a94ec811a.1661938317.git.christophe.leroy@csgroup.eu>
+References: <959d77be630b9b46a7458f0fbd41dc3a94ec811a.1661938317.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH 1/3] powerpc/32: Drop a stale comment about reservation of gigantic pages
+Message-Id: <166272520935.2076816.18378317029543943017.b4-ty@ellerman.id.au>
+Date:   Fri, 09 Sep 2022 22:06:49 +1000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 18:53:13 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, 31 Aug 2022 11:32:07 +0200, Christophe Leroy wrote:
+> A comment about the reservation of gigantic pages was left in MMU_init()
+> after commit 79cc38ded1e1 ("powerpc/mm/hugetlb: Add support for
+> reserving gigantic huge pages via kernel command line")
+> 
+> Remove it.
+> 
+> 
+> [...]
 
-> While looking at the histogram and filter code, I realized that it's filled
-> with function pointers. With retpolines causing a big slowdown, I thought
-> that was problematic. Thus, I decided to see what would happen if I changed
-> the function pointers into enums, and instead called a single function
-> that did a switch on those enums and called the necessary functions
-> directly. The results were pretty clear.
-> 
-> The first patch was to update the trace event benchmark event to include
-> a integer value "delta" of the delta that it took to complete
-> (it currently only shows the delta as part of a string). By doing
-> so, I could benchmark the histogram and filter logic with it.
-> 
-> Before this series, the histogram with a single filter (to ignore the
-> first event, which has a delta of zero), had:
-> 
-> # event histogram
-> #
-> # trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
-> #
-> 
-> { delta:        129 } hitcount:       2213
-> { delta:        130 } hitcount:     285965
-> { delta:        131 } hitcount:    1146545
-> { delta:        132 } hitcount:    5185432
-> { delta:        133 } hitcount:   19896215
-> { delta:        134 } hitcount:   53118616
-> { delta:        135 } hitcount:   83816709
-> { delta:        136 } hitcount:   68329562
-> { delta:        137 } hitcount:   41859349
-> { delta:        138 } hitcount:   46257797
-> { delta:        139 } hitcount:   54400831
-> { delta:        140 } hitcount:   72875007
-> { delta:        141 } hitcount:   76193272
-> { delta:        142 } hitcount:   49504263
-> { delta:        143 } hitcount:   38821072
-> { delta:        144 } hitcount:   47702679
-> { delta:        145 } hitcount:   41357297
-> { delta:        146 } hitcount:   22058238
-> { delta:        147 } hitcount:    9720002
-> { delta:        148 } hitcount:    3193542
-> { delta:        149 } hitcount:     927030
-> { delta:        150 } hitcount:     850772
-> { delta:        151 } hitcount:    1477380
-> { delta:        152 } hitcount:    2687977
-> { delta:        153 } hitcount:    2865985
-> { delta:        154 } hitcount:    1977492
-> { delta:        155 } hitcount:    2475607
-> { delta:        156 } hitcount:    3403612
-> { delta:        157 } hitcount:    2264011
-> { delta:        158 } hitcount:    1096214
-> { delta:        159 } hitcount:     504653
-> { delta:        160 } hitcount:     218869
-> { delta:        161 } hitcount:     103246
-> [..]
-> 
-> Where the bulk was around 142ns, and the fastest time was 129ns.
-> 
-> After this series:
-> 
-> # event histogram
-> #
-> # trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
-> #
-> 
-> { delta:        103 } hitcount:         60
-> { delta:        104 } hitcount:      16966
-> { delta:        105 } hitcount:     396625
-> { delta:        106 } hitcount:    3223400
-> { delta:        107 } hitcount:   12053754
-> { delta:        108 } hitcount:   20241711
-> { delta:        109 } hitcount:   14850200
-> { delta:        110 } hitcount:    4946599
-> { delta:        111 } hitcount:    3479315
-> { delta:        112 } hitcount:   18698299
-> { delta:        113 } hitcount:   62388733
-> { delta:        114 } hitcount:   95803834
-> { delta:        115 } hitcount:   58278130
-> { delta:        116 } hitcount:   15364800
-> { delta:        117 } hitcount:    5586866
-> { delta:        118 } hitcount:    2346880
-> { delta:        119 } hitcount:    1131091
-> { delta:        120 } hitcount:     620896
-> { delta:        121 } hitcount:     236652
-> { delta:        122 } hitcount:     105957
-> { delta:        123 } hitcount:     119107
-> { delta:        124 } hitcount:      54494
-> { delta:        125 } hitcount:      63856
-> { delta:        126 } hitcount:      64454
-> { delta:        127 } hitcount:      34818
-> { delta:        128 } hitcount:      41446
-> { delta:        129 } hitcount:      51242
-> { delta:        130 } hitcount:      28361
-> { delta:        131 } hitcount:      23926
-> { delta:        132 } hitcount:      22253
-> { delta:        133 } hitcount:      16994
-> { delta:        134 } hitcount:      14970
-> { delta:        135 } hitcount:      13464
-> { delta:        136 } hitcount:      11452
-> { delta:        137 } hitcount:      12212
-> { delta:        138 } hitcount:      12280
-> { delta:        139 } hitcount:       9127
-> { delta:        140 } hitcount:       9553
-> 
-> Where the bulk was around 114ns and the fast time was 103ns.
-> 
-> That's almost a 20% speedup!!!
-> 
-> Changes since v1: https://lore.kernel.org/all/20220823214606.344269352@goodmis.org/
-> 
->  - Fixed combining constants (Masami Hiramatsu)
+Applied to powerpc/next.
 
-This looks good to me and confirmed that the previous issue is solved.
+[1/3] powerpc/32: Drop a stale comment about reservation of gigantic pages
+      https://git.kernel.org/powerpc/c/fc06755e25628ce215e9f75c1207250242dadf42
+[2/3] powerpc/32: Allow fragmented physical memory
+      https://git.kernel.org/powerpc/c/b0e0d68b1c52cb2c46e513011fdd53815cffefb7
+[3/3] powerpc/32: Remove wii_memory_fixups()
+      https://git.kernel.org/powerpc/c/0115953dcebe8858ba3d9997ba48328ebdca593f
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> 
-> Steven Rostedt (Google) (4):
->       tracing: Add numeric delta time to the trace event benchmark
->       tracing/hist: Call hist functions directly via a switch statement
->       tracing: Move struct filter_pred into trace_events_filter.c
->       tracing/filter: Call filter predicate functions directly via a switch statement
-> 
-> ----
->  kernel/trace/trace.h               |  13 --
->  kernel/trace/trace_benchmark.c     |   2 +-
->  kernel/trace/trace_benchmark.h     |   8 +-
->  kernel/trace/trace_events_filter.c | 239 ++++++++++++++++++++++++-----------
->  kernel/trace/trace_events_hist.c   | 246 +++++++++++++++++++++++++------------
->  5 files changed, 343 insertions(+), 165 deletions(-)
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+cheers
