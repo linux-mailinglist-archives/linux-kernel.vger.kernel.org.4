@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787D25B365C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472495B36E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiIIL3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S229876AbiIIMDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiIIL3G (ORCPT
+        with ESMTP id S229599AbiIIMDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:29:06 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BF1139ACD;
-        Fri,  9 Sep 2022 04:29:02 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id lc7so3365715ejb.0;
-        Fri, 09 Sep 2022 04:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :from:to:cc:subject:date;
-        bh=dl2woc6VxZxBG9PRHSyadBOfV8W4AihZHiXdGtwtKZk=;
-        b=qyhZ3Lqk9YmDSbdq46SeszDEhNnUJGy1kd/Eii8q/jkN8+HHZKX7+TfYfrk+Fwsm3l
-         3BCY+AraYvu9CQt1MpnbxXxBfZCqYkMCJ21WYviN8UvEgd2nJyL8MiqHxpa7JN7bPuU5
-         9VDSorxTY96vvzFepULa15xSpzi5p6igLh3beppYZV/70zJFHYnLlBQcWfMU6UZQ/Rtu
-         +vx9Mck6CXhcaZtgXHRWQv4d1PYrBAK4ihh1QCWSE91HrgsT8cEN/nCDKFCnWSorlzPL
-         B/am96bP9BKbNHy+A36SsF59ulpapavktHz5kxkbzb6pcDEjyOB4wkPmUAjCLT+X5VKj
-         lEhw==
+        Fri, 9 Sep 2022 08:03:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A11C0BD8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662724980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wjpmu9u4qwdnH4a30y2Ux10ogI6BAeP5cRwQHpYLzpo=;
+        b=KlrllKT2AAGPOgxtuNNKmhaLlGch/a7vA1A+FF/Cn2PdBWM06kbx8C2RiCK9oinNF0861+
+        oEX6JNkgjZx4UEy2A8TO0O0+csAdxAT0n8B/vqypmHd8xRXeTfqJ5kT5T5YtpsF7lO/pQ8
+        iSxlhv4zPA3M9bGshSPVSqmANRvro3g=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-13-FkpXIslTPT2Ovk1RXIbXWQ-1; Fri, 09 Sep 2022 08:02:57 -0400
+X-MC-Unique: FkpXIslTPT2Ovk1RXIbXWQ-1
+Received: by mail-wr1-f69.google.com with SMTP id s26-20020adfa29a000000b00228b0cdb116so293349wra.23
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 05:02:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dl2woc6VxZxBG9PRHSyadBOfV8W4AihZHiXdGtwtKZk=;
-        b=R6iDqhA4kf+Mn1vYuZ5h2Us7saw4FDzzq0crBTI5UBsxjzNG/X9kYI5hKM4iCkNOCK
-         LuaYvNYD1li5f+nyj2txlb77cnf2yqrv5PYQ9WtSol0scOAjXJkvYY+yIMlEJn4oWb/S
-         BGyDx6n6TyxhjdSo+2flsWe4kPOTleBsxKCgRYcRUswokH6gnAYQ8BhIfusUtKOg+uPn
-         Oc4MSNnePk8PsxVcHJTbTdYpHLT6ulgS9n52waTv0Eaeqq/HWhdkXQy70gFyde9LY0Uu
-         MVwIs3EN7pAOgVSLY4IRkyfW0PVGeNlPSDy639GmUb561jadH504Sl8iiZ8MzfR5bedA
-         4YNQ==
-X-Gm-Message-State: ACgBeo25/0vsZsP/QavkcJGdVmxXc67i+ae+VXAED0JY9xqZ/cAXh2KF
-        Sl7oRecmD1D52XkL+uUSAiQ=
-X-Google-Smtp-Source: AA6agR7txTvJieNQLG2Ek1WmWlvmgJNiEqXiWKf4wl5I9uI/ARQ//cqOjuc+E+gk6Ex8WDZniTl6JA==
-X-Received: by 2002:a17:907:1c1e:b0:741:8abe:320e with SMTP id nc30-20020a1709071c1e00b007418abe320emr9838802ejc.123.1662722940989;
-        Fri, 09 Sep 2022 04:29:00 -0700 (PDT)
-Received: from localhost ([89.40.126.93])
-        by smtp.gmail.com with ESMTPSA id os23-20020a170906af7700b00730860b6c43sm130758ejb.173.2022.09.09.04.29.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 04:29:00 -0700 (PDT)
-Message-ID: <631b237c.170a0220.aed56.04f5@mx.google.com>
-X-Google-Original-Message-ID: <YxtNoWt74SjNbrsF@<DarkDistro>>
-Date:   Fri, 9 Sep 2022 14:28:49 +0000
-From:   Burak Ozdemir <bozdemir@gmail.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: sm750fb: Coding style clean up
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wjpmu9u4qwdnH4a30y2Ux10ogI6BAeP5cRwQHpYLzpo=;
+        b=fIjGM6jUJBuChYgu51RGtzknLpaIoerTBdSM9WOIY6RAvSv3N4XYcN2ZJ7RLXJg2D7
+         LR+E/qoqn/XzPrndnxv8g6Vs7srunrTMNsirbRpxTooF+TcGQzSkg3QnJ6DIQWIYNVRa
+         9nnkaR2WZ/D5JTakCKB/9pnHd/bFz3ZwMHkBop5vQuSSr2CslmxYzqxj3T8hRNwTeClc
+         mer644kR6ggnp+NvtayQlbVgTGqcuALFQdvI5KzJcwuV2yZHL0xTrx567o2HpBBl9HWI
+         PH9BaqJx5tmJZUxnOujwbFCbajrZBtcgnC2f6H28TX6CuUhvouFMtCYRm8sqUkSf2lzn
+         asmA==
+X-Gm-Message-State: ACgBeo3hB0NXksr0Z8E8aPn4TVqAfTXdvUmiQAmWkIFQo3wN0ReJ/Y8R
+        O+CEN1fdgwnipbbRau6xgiogPkr7tdvvkaG0swm6Bx6v/BIQTo29B/Ump5CZ92UymkBMk4sC0i3
+        NzdDfhuN6WEcdSAxEmbMXHQ5X
+X-Received: by 2002:a1c:f016:0:b0:3a8:3d3b:6b8a with SMTP id a22-20020a1cf016000000b003a83d3b6b8amr5210248wmb.168.1662724975935;
+        Fri, 09 Sep 2022 05:02:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5YGR1txRJVt7SxZFEcay9yaUc5SK0hrQEq1QvfrbkkHfUFZZR+VcL1qOlkCh/yv4+j47O4Xw==
+X-Received: by 2002:a1c:f016:0:b0:3a8:3d3b:6b8a with SMTP id a22-20020a1cf016000000b003a83d3b6b8amr5210231wmb.168.1662724975688;
+        Fri, 09 Sep 2022 05:02:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
+        by smtp.gmail.com with ESMTPSA id j8-20020a5d5648000000b00228bf773b1fsm374376wrw.7.2022.09.09.05.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 05:02:55 -0700 (PDT)
+Message-ID: <30566203-bbf6-786e-d4b7-f0003ee35e37@redhat.com>
+Date:   Fri, 9 Sep 2022 14:02:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [GIT PULL] VFIO fix for v6.0-rc5
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220909045225.3a572a57.alex.williamson@redhat.com>
+ <CAHk-=wj3rrkPvPJB_u4qoHK4=PVUuBHKB67f_oZO62EE22pNPQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHk-=wj3rrkPvPJB_u4qoHK4=PVUuBHKB67f_oZO62EE22pNPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to coding style and fix camel casing in function name.
+On 09.09.22 13:53, Linus Torvalds wrote:
+> On Fri, Sep 9, 2022 at 6:52 AM Alex Williamson
+> <alex.williamson@redhat.com> wrote:
+>>
+>> VFIO fix for v6.0-rc5
+>>
+>>   - Fix zero page refcount leak (Alex Williamson)
+> 
+> Ugh. This is disgusting.
+> 
+> Don't get me wrong - I've pulled this, but I think there's some deeper
+> problem that made this patch required.
+> 
+> Why is pin_user_pages_remote() taking a reference to a reserved page?
+> Maybe it just shouldn't (and then obviously we should fix the unpin
+> case to match too).
+> 
+> Adding a few GUP people to the participants for comments.
+> 
+> Anybody?
 
-Signed-off-by: Burak Ozdemir <bozdemir@gmail.com>
----
- drivers/staging/sm750fb/sm750.c        | 2 +-
- drivers/staging/sm750fb/sm750_cursor.c | 2 +-
- drivers/staging/sm750fb/sm750_cursor.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+I mentioned in an offline discussion to Alex that we should teach the 
+pin/unpin interface to not mess with the zeropage at all (i.e., not 
+adjust the refcount and eventually overflow it).
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index 3e09e56d3930..a86222cdcb68 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -120,7 +120,7 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
-+		sm750_hw_cursor_set_size(cursor,
- 					fbcursor->image.width,
- 					fbcursor->image.height);
- 
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2551..d5ef40b8bc8e 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,7 +58,7 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd61ed..edeed2ea4b04 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,7 +5,7 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
- void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
- void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
- void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+We decided that the unbalanced pin/unpin should be fixed independently, 
+such that the refcount handling change on pin/unpin stays GUP internal.
+
+
 -- 
-2.35.1
+Thanks,
+
+David / dhildenb
 
