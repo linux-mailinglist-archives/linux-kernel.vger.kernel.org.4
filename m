@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BECF5B373C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998785B375D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiIIMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S231618AbiIIMMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiIIMKq (ORCPT
+        with ESMTP id S231370AbiIIMK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:10:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AEC12E19D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:16 -0700 (PDT)
+        Fri, 9 Sep 2022 08:10:58 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96616138E66
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:28 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDk5w18z4xcR;
-        Fri,  9 Sep 2022 22:10:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDy0wCbz4xsm;
+        Fri,  9 Sep 2022 22:10:26 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     paulus@samba.org, Liang He <windhl@126.com>,
-        christophe.leroy@csgroup.eu, benh@kernel.crashing.org,
-        mpe@ellerman.id.au
+To:     paulus@samba.org, christophe.leroy@csgroup.eu,
+        Liang He <windhl@126.com>, npiggin@gmail.com, maz@kernel.org,
+        benh@kernel.crashing.org, mpe@ellerman.id.au
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220618024930.4056825-1-windhl@126.com>
-References: <20220618024930.4056825-1-windhl@126.com>
-Subject: Re: [PATCH] powerpc: 8xx: Fix refcount leak bug in tqm8xx_setup
-Message-Id: <166272522623.2076816.13575618880147514212.b4-ty@ellerman.id.au>
-Date:   Fri, 09 Sep 2022 22:07:06 +1000
+In-Reply-To: <20220618041042.4058066-1-windhl@126.com>
+References: <20220618041042.4058066-1-windhl@126.com>
+Subject: Re: [PATCH v2] powerpc: embedded6xx: Fix refcount leak bugs
+Message-Id: <166272522746.2076816.8160630951736110654.b4-ty@ellerman.id.au>
+Date:   Fri, 09 Sep 2022 22:07:07 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Jun 2022 10:49:30 +0800, Liang He wrote:
-> In init_ioports(), of_find_node_by_name() will return a node pointer
-> with refcount incremented. We should use of_node_put() when it is not
-> used anymore.
+On Sat, 18 Jun 2022 12:10:42 +0800, Liang He wrote:
+> In xx_init_xx(), of_find_node_by_type() will return a node pointer
+> with refcount incremented. We should use of_node_put() when it is
+> not used anymore.
 > 
 > 
 
 Applied to powerpc/next.
 
-[1/1] powerpc: 8xx: Fix refcount leak bug in tqm8xx_setup
-      https://git.kernel.org/powerpc/c/edc17890ae8ee475b566079bea2e9ba83fec021d
+[1/1] powerpc: embedded6xx: Fix refcount leak bugs
+      https://git.kernel.org/powerpc/c/6b2d17d514b105ecf486bdf011c444978e633085
 
 cheers
