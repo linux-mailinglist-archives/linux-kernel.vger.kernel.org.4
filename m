@@ -2,149 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD655B3EB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AEC5B3EC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiIISTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S229697AbiIISXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiIISTC (ORCPT
+        with ESMTP id S229514AbiIISXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:19:02 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2139.outbound.protection.outlook.com [40.107.237.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7013356FF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 11:19:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ehSWL+g8xnb3yZvKqED+YkJiyntVoobONAGLjchUqLlMdvjyNCDMy3O63AcHT7nLpbiUCCvbrOHvn0AI3GJmM6srIJzklRwuIz5X+wV3g4e/rSQubL6KxeVBuggqcYH5cCjl9QZ7WPBAUNlS54YRaTNRFK4kClYHu1Xc24B7OpNXBr1+Y9g37jgBjsynWBKp14eTttYiY2bkmcWJeaYPslnTZKVgkrDrYG4K8E/GSWtCUVJu0/UjiT3/R9ca7mV90Mf9SPTnfAC1/oyQALg31l6KcIgj1S2rDyUtWURqbgIn/FjvG2yC9gIUiGFN2bjNRcedAvkZVYemAd4Q0W8KNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qC256N/JxKJg6vSPSxKK87fMdHdYgA/ZqhyUZv4R2tE=;
- b=TTvp8fdlH8l6MLEz2Avgc7+m4fvz3q1vd1vjXNAGIeFg/bmnqW1WI36vO5k1qyynSNf1XcrkXYuwj2NeiUC/nWw0EacuSUV39cU08fv3HWv+PT65NwEur5zDq9SHRlyk3nXhQe9zz9DsA6jLxX+1U/iVehcZ1exVW3nOb1dXwGjvR+wfZWRzy0cdLLMp6atcr90k3brwC6TJvb0NFWfC6DEeQ9AyMbiK9wsyqM6pqhYzigKZj9h9zfn/u6c0fa1cn6OBnI8GVRigkln6NVLDV7Sa+ILMgoT0HGRzWSWlxQLsf7mATU+JET9kEJdaBsvDASM4f3lcvX39ofrK90OV3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Fri, 9 Sep 2022 14:23:00 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0933DFDB91;
+        Fri,  9 Sep 2022 11:23:00 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t6-20020a17090a950600b0020063f8f964so6059478pjo.0;
+        Fri, 09 Sep 2022 11:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qC256N/JxKJg6vSPSxKK87fMdHdYgA/ZqhyUZv4R2tE=;
- b=Fa/nWxs+UA+hAEOlJdP+h94nGPfCfnTOHaFqBklcm7CWI/kaeA04OjIi3oI0ufEeYJD7SsHmEjbzIcS8erdd2LLKBpGbdnnC2NBZA9d2vA+phwCsX8yXgVmRvlHJf7grTBIa2N/g6ijvrpglCA3gcNGybh/6/KLfLCEORQLy1Q8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from MWHPR0101MB2893.prod.exchangelabs.com (2603:10b6:301:33::25) by
- BN0PR01MB6943.prod.exchangelabs.com (2603:10b6:408:16b::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.14; Fri, 9 Sep 2022 18:18:59 +0000
-Received: from MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::94a5:3b31:5b8e:b1f5]) by MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::94a5:3b31:5b8e:b1f5%4]) with mapi id 15.20.5588.018; Fri, 9 Sep 2022
- 18:18:58 +0000
-From:   D Scott Phillips <scott@os.amperecomputing.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] char: misc: Allow minors values up to MINORMASK
-In-Reply-To: <Yxr8d3eCoPPldZU5@kroah.com>
-References: <20220906195213.2370775-1-scott@os.amperecomputing.com>
- <Yxr8d3eCoPPldZU5@kroah.com>
-Date:   Fri, 09 Sep 2022 11:18:54 -0700
-Message-ID: <86k06cza0h.fsf@scott-ph-mail.amperecomputing.com>
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR04CA0024.namprd04.prod.outlook.com
- (2603:10b6:610:52::34) To MWHPR0101MB2893.prod.exchangelabs.com
- (2603:10b6:301:33::25)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kdzvynSrjQXSxRcVhr0A6ulDTMYUYOd9fHLtb7whJ3k=;
+        b=Yb5ALLkeGadLMU/XGuRrx2Zgeuz9W6Me6MiC1B5JUv6cQ0hBtCV+JPH/8X/eq6oGz0
+         x0c2EYTRmmPsEuAGgaJs182HeJe7ky3QLRL2Agt5TsSa5KBDCq4Tw6rZVTI8lA+UFJiM
+         Ag1zQUSVKLNwxCDGMOq9I7gMJsLFSvOAYpZ0MmxTKMePKCXS4s0T1WpGg8cnibHKzyue
+         4rBSORgGEFvpSUsouRfjgnM//HFpTxEoBDere4uIi2B2OHf0zz1g7xjjbnXr5XiDRFx9
+         pUIWmfGfzvNL5xjKpXUPtqefBDfD8K6Pydh9fBfTE0WW5Ygy7yciCP0+JAKFdF15TJ4F
+         MPNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kdzvynSrjQXSxRcVhr0A6ulDTMYUYOd9fHLtb7whJ3k=;
+        b=KScgJhHt5+pI8Bd2hbSw4bAGlmREICEueQRNCrPE/qg3JdaYmHrGQcTFI5WXqnesbi
+         FPFSiqkEaOp3wS3OTVtqxbBLV3y03rBdhck/qiMvW0Bc4f6014HUnLMhMMxJvOKbeBNe
+         z5sHcFCU5UjLyce8mBIdJvSEe2PQuVOtjOYsu90D7P9HQ/8kKAy55QfeAsVZ2J4hw9hp
+         KA8jLLhY2ENZl23Mt/Fy0aED7lfsVqaEjSylfeodRqgTlQ6fI1FWXi061x61k10MSpmQ
+         BBLFkUa9mYkpv52gk/yGMC8lKX5Arcinitiu9RqT4cWpSy+rYTA4Ec/zhSm4bREs7GvF
+         +FfQ==
+X-Gm-Message-State: ACgBeo1g4Fny7oW8Jy0WM8/FFNBT/9D3I0eZZJa8f4PxMvyHPNhmQNXo
+        wyaonuirqZRXRBfaZ3QNco/1afnGxz207hLCSg0gGM/g9wR/SQ==
+X-Google-Smtp-Source: AA6agR4w1P1o4DHbqZqd0ZPicPXJhremQ5j4e4JQ6VLpwGfq/N9au7rfEJ3JycJONwGLKCp/jqy/5ZRls2ldTx9GU8U=
+X-Received: by 2002:a17:90b:4acc:b0:1f5:7f05:12e8 with SMTP id
+ mh12-20020a17090b4acc00b001f57f0512e8mr10702485pjb.92.1662747779460; Fri, 09
+ Sep 2022 11:22:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a0470477-71ea-47e8-b6bf-08da928fc375
-X-MS-TrafficTypeDiagnostic: BN0PR01MB6943:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /xwpXxsPo6DO8mBfISM6it5oxiWFaO00p5XUXNvTbt3gS9Yi0ddFFur42XnXu6JP9JCbhw7p3B3SoVlaM4tShsoKO7cEJZoOzon2tegLL5BndI1GdMq/F4Wxb2zIBjZyRpu8CXvSkxG7KUH7zv/Ry5rmvSIWFHv9zQMSHt0M6epwfUg8GiNUsqz3QN2Y1OQciC5DlG3oxRGpnl+T8Pr8XhFCK30tBb27tSWq9wkhQ9BfWBfUzqGyHPtbyqbNTTUgDu7rP4zZ3tepwuPpVD1QRdvTUanuwHOhNHju/ynPHmLzFxchxHX8Hl/z7wSyQaSZFJr7ShoauaBbkSvs5iH8/JVZzpdiN369L+Ig4iWxYQfWuQDZAadQhn4z0qDwkYvazgrFHw2Tw/+dWFc8Wbb12TNbkfILznI95qRB2UR5CiQPhjg9Ye6N8PhgTGvArcUBvnbTxK+4Y9lAJM8AE39Oo9KnqTDXyzCV/Oj50F+WchTTOh5aOkOi562EME0Jdt+7qn0oupVePyqhx7A8oEZIbprqK4Bokd3HcQmDi0VORd/RA9lsfzibCgVUN88loZtNdRsMBfxtWor9tN6TTnGlL0OWEcssDK4//Ch4AJtVhqI6Jw27hevNzOx5b9BxarK8QxgH9c5m/2PJArK4u86iQsvV+g0Ui2y/raCb+GLBE33qxcEUEBPR6+LKorvAmYCvf7Qth+bRRFQkSYGnNfLSjmZVl2L0ng/n5KZss4nHxfsuR6OCiq8QRFZBTuJeahHq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR0101MB2893.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(346002)(376002)(136003)(366004)(396003)(8936002)(5660300002)(41300700001)(6512007)(52116002)(26005)(6666004)(9686003)(38350700002)(38100700002)(86362001)(6506007)(2906002)(66946007)(83380400001)(478600001)(186003)(8676002)(66476007)(66556008)(6486002)(6916009)(4326008)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P1uVPfjzaa9pShT3ZFK76NlGv4EwYLn0oeMIiYkuTJNkgVXT11zxrOJUU/c5?=
- =?us-ascii?Q?SP5IJWwYigAl2VSk/Lr7pEhuxftrqy31bsZdET9Th2bWU5iVnvo51T/Ks1cA?=
- =?us-ascii?Q?y4ycryYEbpTgc09uYS/PhdJeZnYy5vEhBIRJuZ/zmgBV6rZdTLS50FC3wj5c?=
- =?us-ascii?Q?AiL591tH3yq4OQd6xzMZgMF+kMVbxoF0TLVnMmEarGwU2UaI21WIpG3vb7Pu?=
- =?us-ascii?Q?S/kzWK1YciNHKJ7VOG+FvXUH3nvET9QIINABDArSvK+nEm1FfUga4AUm3IFL?=
- =?us-ascii?Q?qtM9yQnJnCGCPBggNGRkSc+DVO0vbam7SQvJABmZnDWbqO7dM++Rpf4piIYQ?=
- =?us-ascii?Q?FOrNBRMRvrMFK84xm/uQAfSJL1mk15Caj0GTvpKxi+0jZD8zQ3u4azM2d1dI?=
- =?us-ascii?Q?E9n8WutgDAKYek1EqvuKXGP875IhvkuI7ORJqRs2opsfC6NOD5sOMJ2WKI44?=
- =?us-ascii?Q?5fKqXI0y20ITXbRF02PJ7dHg6spS4aUdpjoVvvWF9HWjjb5CnGgnYCEaY/0v?=
- =?us-ascii?Q?JbCzmB5sDOWIqLa3ajzVbtyLkdU7AcaNKkWdLoHmJlc/xTqGSE4sv8VT2JN+?=
- =?us-ascii?Q?cPQKIxXJjnZ25L2yEJNVHYhk9wI2/sKUkMqxXiy+kGH61dVLAN6w1O8O0Mnc?=
- =?us-ascii?Q?Lc7aZomyqFO6QUZA0e1LsZFYjdQ3Nr6wFwfcGYVZjYy3VTBXMDMvJYZ2V90+?=
- =?us-ascii?Q?6oev7afk5uzYJtgzXZmRVkW8Y95fS1sGmbyjD/bfRtPQcgWAd3qgZIHGrTjj?=
- =?us-ascii?Q?bkrvS6GLHPfEebb1egTQp6KkIGo/xM/HnrHa3VUkjcaVih0/NZ0uF+KLaWMb?=
- =?us-ascii?Q?leLACOyJpYk+v0Mwhwkha3qhSotNvxcCnuNHJXMQDMvNUNDLAWPpz5sLn60i?=
- =?us-ascii?Q?zBTpXogblLn/mvkyxmjvXOLRHta4vfBeDITbzBaEBuXomZZmA8Y6UFlTB2Yr?=
- =?us-ascii?Q?4jj3N50qvnLCj5j8Qy4ZD5o7istWsut/s3fOAx68MsAijTvxnO2hC20+HXs2?=
- =?us-ascii?Q?I95HarUVuPLc5t+Z712s92zKOu/oI3oCTDdoVFsIx14W/LxQ9K1VQ06gVgIE?=
- =?us-ascii?Q?CNguRPrOKZZLnrAVPTYLUX+o72yAQLDjGTwjPC4sj7m+pKytNEbbB+X82Rqh?=
- =?us-ascii?Q?mUzTfOKQLRpz3L+5KhuXNzucSXOHds1+OBl/YvGjQAZaOwF1ron8YCp+QSdh?=
- =?us-ascii?Q?8HLRiHAz8qDwtZiK0fHopaFrfOrE1msjHbTzclKjEDJexU/pfd4M1msMAU3z?=
- =?us-ascii?Q?P29RRuwmEPzr4t9m/iFnM2D1jUQ3xUh1hrMt7/lrHAyce5x9kE4e2+7qpSc4?=
- =?us-ascii?Q?p756L98tk9Sg/SajvMU+aNvI7n1TucuRjKn2SLmYfHY4qyO8rs86onrhtMdR?=
- =?us-ascii?Q?xU0PnUJNfKMsOj7uRYAwzjyUFJQYyoSHAOcR+F0LtmcS/ZO1LV/Kzfn/uuOV?=
- =?us-ascii?Q?jzU8PTifN+0bherNh1Hb3cxISo0b1PoYIL5GMbl0QMwlW3a2+kWjazUNPAzY?=
- =?us-ascii?Q?7apXqdL/TOT4t/PQoQ9AQ5Z34p3zs+YoDHjlsAlqik+WTE+wFmiCojOBHgGp?=
- =?us-ascii?Q?9Id2RUf4s8eTx+n65M2QZPl5tAKkU3lXYCwLBVM9nlC46lrC+SzYnWw+cSh3?=
- =?us-ascii?Q?hH1EQX7UpkKpiDUGv1c11HA=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0470477-71ea-47e8-b6bf-08da928fc375
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR0101MB2893.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 18:18:58.6721
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wT3YbX4+ZkuxwvVe5R3w6VOMm6IIPsh0U3Tg8rhl/mEZ1B/QLm1CJCyygPVNRbhjqTYjI7TTUaz+QQVAZVCVWnMuE0ZQ4NZ/0KYpOR8s9ZtROG3N0g4i2pe6yDoS3YyN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6943
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220829210546.755377-1-james.hilliard1@gmail.com> <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Fri, 9 Sep 2022 12:22:47 -0600
+Message-ID: <CADvTj4pF=D7PEBF-LK_sKckRUCq-vd9ZjohpiEgLvORg8UaZyw@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        David Faust <david.faust@oracle.com>
+Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-
-> On Tue, Sep 06, 2022 at 12:52:13PM -0700, D Scott Phillips wrote:
->> For per-cpu coresight_tmc devices, we can end up with hundreds of devices
->> on large systems that all want a dynamic minor number.  Switch the dynamic
->> minors allocator to an ida and add logic to allocate in the ranges [0..127]
->> and [256..MINORMASK]. Allocations start from 127 growing downwards and then
->> increasing from 256, so device numbering for the first 128 devices should
->> be the same as before.
->> 
->> Signed-off-by: D Scott Phillips <scott@os.amperecomputing.com>
->> ---
->>  drivers/char/misc.c | 41 ++++++++++++++++++++++++++++-------------
->>  1 file changed, 28 insertions(+), 13 deletions(-)
+On Fri, Sep 9, 2022 at 12:05 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> So you are adding more logic to the kernel for no change at all?
+> On Mon, Aug 29, 2022 at 2:05 PM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
+> >
+> > The bpf_tail_call_static function is currently not defined unless
+> > using clang >= 8.
+> >
+> > To support bpf_tail_call_static on GCC we can check if __clang__ is
+> > not defined to enable bpf_tail_call_static.
+> >
+> > We need to use GCC assembly syntax when the compiler does not define
+> > __clang__ as LLVM inline assembly is not fully compatible with GCC.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v1 -> v2:
+> >   - drop __BPF__ check as GCC now defines __bpf__
+> > ---
+> >  tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
+> >  1 file changed, 13 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > index 7349b16b8e2f..867b734839dd 100644
+> > --- a/tools/lib/bpf/bpf_helpers.h
+> > +++ b/tools/lib/bpf/bpf_helpers.h
+> > @@ -131,7 +131,7 @@
+> >  /*
+> >   * Helper function to perform a tail call with a constant/immediate map slot.
+> >   */
+> > -#if __clang_major__ >= 8 && defined(__bpf__)
+> > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
+> >  static __always_inline void
+> >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >  {
+> > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >                 __bpf_unreachable();
+> >
+> >         /*
+> > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+> > -        * pointer) and r3 (constant map index) from _different paths_ ending
+> > +        * Provide a hard guarantee that the compiler won't optimize setting r2
+> > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
+> >          * up at the _same_ call insn as otherwise we won't be able to use the
+> >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+> >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+> > @@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >          *
+> >          * Note on clobber list: we need to stay in-line with BPF calling
+> >          * convention, so even if we don't end up using r0, r4, r5, we need
+> > -        * to mark them as clobber so that LLVM doesn't end up using them
+> > -        * before / after the call.
+> > +        * to mark them as clobber so that the compiler doesn't end up using
+> > +        * them before / after the call.
+> >          */
+> > -       asm volatile("r1 = %[ctx]\n\t"
+> > +       asm volatile(
+> > +#ifdef __clang__
+> > +                    "r1 = %[ctx]\n\t"
+> >                      "r2 = %[map]\n\t"
+> >                      "r3 = %[slot]\n\t"
+> > +#else
+> > +                    "mov %%r1,%[ctx]\n\t"
+> > +                    "mov %%r2,%[map]\n\t"
+> > +                    "mov %%r3,%[slot]\n\t"
+> > +#endif
 >
-> Why is this needed?  What changed here except the underlying data
-> structure being used?
+> Hey James,
+>
+> I don't think it's a good idea to have a completely different BPF asm
+> syntax in GCC-BPF vs what Clang is supporting. Note that Clang syntax
+> is also what BPF users see in BPF verifier log and in llvm-objdump
+> output, so that's what BPF users are familiar with.
 
-Hi Greg, the goal of the change I'm proposing here is to increase the
-maximum number of dynamic misc devices from 128 to 1048448. And then the
-motivation is that 128 isn't enough for all the coresight_tmc devices we
-have on the AmpereOne processor, where there are independent coresight
-devices for each cpu. Maybe a clearer commit message to convey that
-would be?:
+Is the difference a BPF specific assembly format deviation or a generic
+deviation in assembler template syntax between GCC/llvm?
+https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
 
- char: misc: Increase the maximum number of dynamic misc devices from 128 to 1048448
-
- On AmpereOne, 128 dynamic misc devices is not enough for the per-cpu
- coresight_tmc devices.  Switch the dynamic minors allocator to an ida
- and add logic to allocate in the ranges [0..127] and
- [256..MINORMASK]. Allocations start from 127 growing downwards and then
- increasing from 256, so device numbering for the first 128 devices
- remain the same as before.
+>
+> This will cause constant and unavoidable maintenance burden both for
+> libraries like libbpf and end users and their BPF apps as well.
+>
+> Given you are trying to make GCC-BPF part of the BPF ecosystem, please
+> think about how to help the ecosystem, move it forward and unify it,
+> not how to branch out and have Clang vs GCC differences everywhere.
+> There is a lot of embedded BPF asm in production applications, having
+> to write something as trivial as `r1 = X` in GCC or Clang-specific
+> ways is a huge burden.
+>
+> As such, we've reverted your patch ([0]). Please add de facto BPF asm
+> syntax support to GCC-BPF and this change won't be necessary.
+>
+>   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=665f5d3577ef43e929d59cf39683037887c351bf
+>
+> >                      "call 12"
+> >                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+> >                      : "r0", "r1", "r2", "r3", "r4", "r5");
+> > --
+> > 2.34.1
+> >
