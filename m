@@ -2,691 +2,549 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7F75B3B26
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133F15B3B27
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbiIIOwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S231697AbiIIOxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiIIOwx (ORCPT
+        with ESMTP id S230208AbiIIOxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:52:53 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2073.outbound.protection.outlook.com [40.107.21.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A60B131EF3;
-        Fri,  9 Sep 2022 07:52:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nz+H/ZAE8LSXaUHkxU7X+baMh4PTpZo7yZgU960PKimlRoW5NOmdSB5jZnHqV62hMYnLDSfF5GLZypDBVvnVn9lQq46FC/Pl5EhRh4w5WwfIUwxmc0/RuRv6giJTqUYo/cnrpC6M51wvHtXAtf0r8AhT0pbLf7NE1NMDxLHrieWubOizLsAqJuDbQymZ1QUH1ec8Dn1OEi7XmQsJ+WVuVjtb6293B2DpFiLqT6CADKS06Var88c6HYs9MZE27WbiwZIKVd2UA5N7qexGBP3WCnkWqKY8s1D+JHGZ/eADkdMLsdfQrOCg91PecAif2DUNedpxM1BFVfDs3hGgwWjdNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U737qaJh4+Uh4EhZ5zzpYT9azAOxE7alZnV2ULQSswc=;
- b=LxQnAhZfdoc1HNufFvRiQnOI07RZzA8bLbeGmAc1do8SkBVO2c8RePokSz6lmF9mF+cQQ95cWznyPwi3/nDNr4ih8MoYPfSFwMVlCUm1YM7yU4mWuKnFHFzybWRAnGE4TEWvWb3tulQv5QUDVi/av8ksjmdwSAxe3Q5BsbqfPi7ZbY7FSG4HhFaGrGtT03CaIYdPzYIidSmkSjPlgJFovQQG3n5R83DW+FUElpXgC4/yIg9mCbB92ptS0MQccmJiIcdbNrzZOHrLd245Iu/EFAnOpfwupDIBsbpdM3LkCX7o/CAUkLuGgjEwCI3PkSDo3oY+ARLXg0Cq0Gcopjks6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U737qaJh4+Uh4EhZ5zzpYT9azAOxE7alZnV2ULQSswc=;
- b=ouC5fjLqBkufWU9HNgekC1Sz+dhY/iw/I01w1hhE5POWOL0X9mLCvdANRJVMqRkXaIterlbcuTm1OjfiUdVxBxCPS/2MOK7uQu/MGCtzjhXIS3RUb1kGQ07rpK0SpICjqhr66av+WJCHD1H/NEbgp6VAMkCRp5g3l82JWwPpwvw=
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
- by AS1PR04MB9407.eurprd04.prod.outlook.com (2603:10a6:20b:4d9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Fri, 9 Sep
- 2022 14:52:45 +0000
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::e5ca:22d0:52e2:15f5]) by AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::e5ca:22d0:52e2:15f5%3]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
- 14:52:45 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
-Subject: RE: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller
- driver
-Thread-Topic: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller
- driver
-Thread-Index: AQHYwmzT0d5rWoxlpEiRJzxdVpfwVa3VJ32AgAIKQSA=
-Date:   Fri, 9 Sep 2022 14:52:45 +0000
-Message-ID: <AM9PR04MB879307CC53696BE7121AA26B88439@AM9PR04MB8793.eurprd04.prod.outlook.com>
-References: <20220907034856.3101570-1-Frank.Li@nxp.com>
-        <20220907034856.3101570-3-Frank.Li@nxp.com> <87fsh2qpq4.wl-maz@kernel.org>
-In-Reply-To: <87fsh2qpq4.wl-maz@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8793:EE_|AS1PR04MB9407:EE_
-x-ms-office365-filtering-correlation-id: 9d39a0f2-22ef-4f99-2f46-08da9272f49e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MB87ZYc5U1LgTBsqQpTX14sqgKVa7WG1DwcziZz47GA4XUhIVYsMDvRFO3a8Q+BfM4bYrtq4KIL4Q7Mv3WSDM2uqGC7vP/TYzUNdKznRsFoXsxa/C4TntXNabDf7fnJ45bkx4iiivfvhVnwagvmqAwkRjDFiDIHzaQ88qj7m6loKfTBptz7VAOCIs9DVUg4pnm7hVyxqYWMgR1m1RcwU3A4B8+DQhH1Q/SfUI1JAmxjLWIG1aDbL/02+vU5YlrocKTxCE2BvYN7Lij8X6NpBUbQMdyF6fBKLassXLvN9gcicAWp2nTx4aLFMWsrIfZXxQl+ZAHBvJf3zlgsmHmkWQ30JSrks+nmM6z9waCDk0GYy8vPug4hINR1MT1cE9sTsw1VYVXmFWvUAbEp5us4DfNkfbalb29fcOqjwngdiWJJswtXQNv900hn/Q/qAGQkn7i7hHwBvZ/mQTNX2Qadg1Ehks/az9VG2Vy+zSEVZ0IpoEe2Yf2STrl/mqAdA2TM3HETjGcruAghY89PLjm/TGuYJzeH+dgHAoDviYgfFwi9zGhiIbMP40E7SLjBL0fX3RAJU0Gu6bjvSdr0+A0N5KYmqwpu/dgZx3U6dBK0ZUl9r2jfqoD7z8ykLVBUgdE6gV9kzQxJC0w2q60ABlVAAPT+jR83YX3HTJMBpMpQh5f9CTCk5NMYDUuXVnWJucIEzdrZ+JQ/bjPEGTIiUaSdr6FYE/+nSmOWs/2aApf96j09Y6RjDJ11ahCJpOYcV8cTjqU9bVAL9djfMur9aVvbnzg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(366004)(136003)(39860400002)(55236004)(6506007)(71200400001)(7696005)(53546011)(9686003)(478600001)(41300700001)(83380400001)(26005)(2906002)(52536014)(7416002)(30864003)(5660300002)(8936002)(44832011)(316002)(55016003)(54906003)(6916009)(186003)(66446008)(66946007)(66556008)(66476007)(76116006)(4326008)(64756008)(8676002)(86362001)(33656002)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TW8Q6aZnf7/ya6xk/ykBncNEXT1uRb+OKp3eavp7pG9JoajptmJMQKCQIFSg?=
- =?us-ascii?Q?TizBCmuoCPVsQ1HtLjXTN1FR5DfwVBz8ztPMibAxw8R8TxA5xwP3mjM33UfO?=
- =?us-ascii?Q?tdppLNSyit5zNmeHilZbJIR7m/Pvx/67X3Xsd4RvX7zjHReOt4pOYxBhA3Cr?=
- =?us-ascii?Q?u4GtNZsZJ6OacBevSQnU5ijUsqMSIPYMhqJybeM7A617Yqb1QzWZAEFo0TSl?=
- =?us-ascii?Q?q/Cg1poTN8Bw6w3oJDdn+da2E2EwxrPdAcxeaZCCkHJZIdFSCYA0Vu27/myV?=
- =?us-ascii?Q?CP4sDTx6fUP0/cSIbOT8RvbDv22fCYbVm2Iai1AFVHUgeGO1OkmM5upmytni?=
- =?us-ascii?Q?qn5bJag+n0XGOJ4yzIWxBJW53bu2xZpnGtK+7nJEI013HUo21+Iq0+nfeg4F?=
- =?us-ascii?Q?Z/hyRaSRVnTvAZd2r2mkZlaFyV5xP1lqEC1hRJdAMHdPpY+IWUieA3P/7r6b?=
- =?us-ascii?Q?8CxcLmLkH6YRoptLQ5QmWqJe9Bnff2VBn/+Zx3DH/tY18ANA4oa44kYU0l2N?=
- =?us-ascii?Q?lo+4PYjkLm5w+Ch1cKFODgpN6HH41HkajkYhet7UZw1O6VF7mNcBQ4hx2Gcb?=
- =?us-ascii?Q?EwlRjZpSNBL+g8lfiyYRVrlYfNLY4qahUXjiAQs4BXGn33UVPLw3ygV43lz1?=
- =?us-ascii?Q?jch2RhIgEcLc8TpSFGbg90WtBQ1YxkbmuF+/1IsWyZa1hFRZfRbhtJgzAUKU?=
- =?us-ascii?Q?98lmvQdTI5SvIsq6RB1L+GVRKsB2lCYhg1YHSb8dLjs556gvX8Vzu7SkDQJp?=
- =?us-ascii?Q?ipXfMMNy2R+eAYrZitHd6S0nm8FqrQEGrCW06ZB9SX5/LrUQdkLDqYB9W0iy?=
- =?us-ascii?Q?Iob98AX9n7N1m6INCMXyT4mGJI8sFx4QQtw9YJiQ7433OGTx0+dXmllP+PGy?=
- =?us-ascii?Q?7ds9GMxHG9HJx0bILL5zGg9MIMRq2eXLXtM/u64B+YcA7xxsqRf/OKz8fQbD?=
- =?us-ascii?Q?N7yeZIpmlaiGmrgLN/0Sp7CzO/04GtTsvspHh9EN5pDRhIIX8B5zPMreLLHs?=
- =?us-ascii?Q?Y3Pvc2KJ4T/ekP6RJxJ+ehO99ukQ5fZWPDDQya1MJqcQytUPupYFbpojukWZ?=
- =?us-ascii?Q?pbcTXcXXpXXr0ws1EJ0VUirHbAuwxzcCBwReH1nTzEFbQIvv8fBtOkdp03mc?=
- =?us-ascii?Q?aAsjW87wImNqOmeMROYCtBwfg5vYFTjh64WCEMJe15VPEZwsVGnxsH7Fh7D2?=
- =?us-ascii?Q?IdgMMpeqwEzMj22uT7Zr7QiBWHONBedwjuaGFY4bFlS/rUVpHZEdHoUnNa8y?=
- =?us-ascii?Q?oh3KT3xVV1zDg7zoaW/UdnllTB8cvH/HqowwjFNY5eQjem0MaCj6mJq8C7M+?=
- =?us-ascii?Q?HPlrswRUVBC+q0vEbREGIYxp//GfYiyx+UfGsd/MtrDLtQbNshDS4HN8WEwh?=
- =?us-ascii?Q?hOJh5QmmAFLqPhHFNRq9fmVQdFkXRc0687l90l13JSF1JK/rQDLcg0Fon+t8?=
- =?us-ascii?Q?anVvAXjVIUx5slT04HwJ1XEVZ8mG3xA/nXcP/h05mFrGiaBLOEww1zwVo2vH?=
- =?us-ascii?Q?yspcLA9V3AbSqbiyuryhiZj3wsWYitOAYGWCG/F7ifcdHUZsTFwrBgKgSYt0?=
- =?us-ascii?Q?rE4kaSMwi7qQ/3vX65I=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 9 Sep 2022 10:53:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B847E131EF7;
+        Fri,  9 Sep 2022 07:53:17 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289CWJ0H028668;
+        Fri, 9 Sep 2022 14:53:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=RPqXYiOYF8RAiEv2rRosqKDLFhJDZ29YB6Ywes1+E3k=;
+ b=amNnkgIPw8rMX7Vxm48ZHOz5kGPbBqQ+YLNNsuvdsgpG17leUjAtZITMdhAuSPOUnZ8n
+ 0aECjLI/cWxCdIHc26Krr/jgZVwIG4FaU6x2lFssKzE2IWZRdu0eTeh7moKq1YGu1Lpr
+ k6i3Pitod5qXpprfG6mJtbJOJQhGoZrtSs1evx8z0nVAcXlnZ4QeLUwtKwbPIbx3tlgu
+ JjrD0ChUAwnIicT9Sco+1Zqt4Y/+5pz6cF6QiHoloeWJ/d5gtFFZBafnhwZFNx1gz73n
+ umBR1vbpvsYjEuyAA1kTM5i/bXlewAmK+Ksgc8Rvo5sMBWfdqdZYKees1Pv6rz6eZvNw iA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfcpbwugk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:53:07 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 289EooZQ003371;
+        Fri, 9 Sep 2022 14:53:06 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jfx7vt0je-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:53:06 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 289Er6js005121;
+        Fri, 9 Sep 2022 14:53:06 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 289Er6tj005120
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:53:06 +0000
+Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 9 Sep 2022
+ 07:53:05 -0700
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] wifi: ath10k: Fix miscellaneous spelling errors
+Date:   Fri, 9 Sep 2022 07:53:00 -0700
+Message-ID: <20220909145300.19223-1-quic_jjohnson@quicinc.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d39a0f2-22ef-4f99-2f46-08da9272f49e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 14:52:45.3811
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XY5+WDj14VVAlTcb+FrbQS4ztykPG9QZ9ajyKHQ7h8JLO50GAsxP1Kt4LSAFHMXJF9V/Bz7eHouuebOK4D1z4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9407
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VGl-_L2N3g-sZ4Iv4EUnUII7SBfs7HNN
+X-Proofpoint-GUID: VGl-_L2N3g-sZ4Iv4EUnUII7SBfs7HNN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090052
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix misspellings flagged by 'codespell'.
 
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/net/wireless/ath/ath10k/bmi.c         |  4 ++--
+ drivers/net/wireless/ath/ath10k/ce.c          |  2 +-
+ drivers/net/wireless/ath/ath10k/core.c        |  2 +-
+ drivers/net/wireless/ath/ath10k/core.h        |  4 ++--
+ drivers/net/wireless/ath/ath10k/coredump.c    |  2 +-
+ drivers/net/wireless/ath/ath10k/coredump.h    |  2 +-
+ drivers/net/wireless/ath/ath10k/debug.c       |  2 +-
+ drivers/net/wireless/ath/ath10k/debugfs_sta.c |  2 +-
+ drivers/net/wireless/ath/ath10k/htt_rx.c      |  2 +-
+ drivers/net/wireless/ath/ath10k/htt_tx.c      |  2 +-
+ drivers/net/wireless/ath/ath10k/hw.c          |  6 +++---
+ drivers/net/wireless/ath/ath10k/mac.c         |  8 ++++----
+ drivers/net/wireless/ath/ath10k/pci.c         |  2 +-
+ drivers/net/wireless/ath/ath10k/pci.h         |  2 +-
+ drivers/net/wireless/ath/ath10k/qmi.c         |  2 +-
+ drivers/net/wireless/ath/ath10k/rx_desc.h     |  2 +-
+ drivers/net/wireless/ath/ath10k/sdio.c        |  2 +-
+ drivers/net/wireless/ath/ath10k/thermal.c     |  2 +-
+ drivers/net/wireless/ath/ath10k/thermal.h     |  2 +-
+ drivers/net/wireless/ath/ath10k/usb.h         |  2 +-
+ drivers/net/wireless/ath/ath10k/wmi-tlv.h     |  4 ++--
+ drivers/net/wireless/ath/ath10k/wmi.c         |  2 +-
+ drivers/net/wireless/ath/ath10k/wmi.h         | 14 +++++++-------
+ 23 files changed, 37 insertions(+), 37 deletions(-)
 
-> -----Original Message-----
-> From: Marc Zyngier <maz@kernel.org>
-> Sent: Thursday, September 8, 2022 2:40 AM
-> To: Frank Li <frank.li@nxp.com>
-> Cc: tglx@linutronix.de; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; kw@linux.com; bhelgaas@google.com; linux-
-> kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-pci@vger.kernel.org; Peng Fan
-> <peng.fan@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
-> jdmason@kudzu.us; kernel@pengutronix.de; festevam@gmail.com; dl-linux-
-> imx <linux-imx@nxp.com>; kishon@ti.com; lorenzo.pieralisi@arm.com;
-> ntb@lists.linux.dev; lznuaa@gmail.com; imx@lists.linux.dev;
-> manivannan.sadhasivam@linaro.org
-> Subject: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driv=
-er
->=20
-> Caution: EXT Email
->=20
-> On Wed, 07 Sep 2022 04:48:54 +0100,
-> Frank Li <Frank.Li@nxp.com> wrote:
-> >
-> > The MU block found in a number of Freescale/NXP SoCs supports
-> generating
-> > IRQs by writing data to a register
-> >
-> > This enables the MU block to be used as a MSI controller, by leveraging
-> > the platform-MSI API
->=20
-> Missing full stop after each sentence.
->=20
-> >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> >  drivers/irqchip/Kconfig          |   9 +
-> >  drivers/irqchip/Makefile         |   1 +
-> >  drivers/irqchip/irq-imx-mu-msi.c | 451
-> +++++++++++++++++++++++++++++++
-> >  3 files changed, 461 insertions(+)
-> >  create mode 100644 drivers/irqchip/irq-imx-mu-msi.c
-> >
-> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> > index 5e4e50122777d..e04c6521dce55 100644
-> > --- a/drivers/irqchip/Kconfig
-> > +++ b/drivers/irqchip/Kconfig
-> > @@ -470,6 +470,15 @@ config IMX_INTMUX
-> >       help
-> >         Support for the i.MX INTMUX interrupt multiplexer.
-> >
-> > +config IMX_MU_MSI
-> > +     bool "i.MX MU work as MSI controller"
->=20
-> Why bool? Doesn't it also work as a module?
->=20
-> > +     default y if ARCH_MXC
->=20
-> Why would this be selected by default?
->=20
-> > +     select IRQ_DOMAIN
-> > +     select IRQ_DOMAIN_HIERARCHY
-> > +     select GENERIC_MSI_IRQ_DOMAIN
-> > +     help
-> > +       MU work as MSI controller to do general doorbell
->=20
-> I'm not sure this is that generic. It really is limited to CPU-to-CPU
-> interrupts.
+diff --git a/drivers/net/wireless/ath/ath10k/bmi.c b/drivers/net/wireless/ath/ath10k/bmi.c
+index 4481ed375f55..af6546572df2 100644
+--- a/drivers/net/wireless/ath/ath10k/bmi.c
++++ b/drivers/net/wireless/ath/ath10k/bmi.c
+@@ -101,7 +101,7 @@ int ath10k_bmi_get_target_info_sdio(struct ath10k *ar,
+ 	cmd.id = __cpu_to_le32(BMI_GET_TARGET_INFO);
+ 
+ 	/* Step 1: Read 4 bytes of the target info and check if it is
+-	 * the special sentinal version word or the first word in the
++	 * the special sentinel version word or the first word in the
+ 	 * version response.
+ 	 */
+ 	resplen = sizeof(u32);
+@@ -111,7 +111,7 @@ int ath10k_bmi_get_target_info_sdio(struct ath10k *ar,
+ 		return ret;
+ 	}
+ 
+-	/* Some SDIO boards have a special sentinal byte before the real
++	/* Some SDIO boards have a special sentinel byte before the real
+ 	 * version response.
+ 	 */
+ 	if (__le32_to_cpu(tmp) == TARGET_VERSION_SENTINAL) {
+diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
+index c45c814fd122..59926227bd49 100644
+--- a/drivers/net/wireless/ath/ath10k/ce.c
++++ b/drivers/net/wireless/ath/ath10k/ce.c
+@@ -1323,7 +1323,7 @@ EXPORT_SYMBOL(ath10k_ce_per_engine_service);
+ /*
+  * Handler for per-engine interrupts on ALL active CEs.
+  * This is used in cases where the system is sharing a
+- * single interrput for all CEs
++ * single interrupt for all CEs
+  */
+ 
+ void ath10k_ce_per_engine_service_any(struct ath10k *ar)
+diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+index d1ac64026cb3..400f332a7ff0 100644
+--- a/drivers/net/wireless/ath/ath10k/core.c
++++ b/drivers/net/wireless/ath/ath10k/core.c
+@@ -3096,7 +3096,7 @@ int ath10k_core_start(struct ath10k *ar, enum ath10k_firmware_mode mode,
+ 		 * enabled always.
+ 		 *
+ 		 * We can still enable BTCOEX if firmware has the support
+-		 * eventhough btceox_support value is
++		 * even though btceox_support value is
+ 		 * ATH10K_DT_BTCOEX_NOT_FOUND
+ 		 */
+ 
+diff --git a/drivers/net/wireless/ath/ath10k/core.h b/drivers/net/wireless/ath/ath10k/core.h
+index d70d7d088a2b..f5de8ce8fb45 100644
+--- a/drivers/net/wireless/ath/ath10k/core.h
++++ b/drivers/net/wireless/ath/ath10k/core.h
+@@ -76,7 +76,7 @@
+ /* The magic used by QCA spec */
+ #define ATH10K_SMBIOS_BDF_EXT_MAGIC "BDF_"
+ 
+-/* Default Airtime weight multipler (Tuned for multiclient performance) */
++/* Default Airtime weight multiplier (Tuned for multiclient performance) */
+ #define ATH10K_AIRTIME_WEIGHT_MULTIPLIER  4
+ 
+ #define ATH10K_MAX_RETRY_COUNT 30
+@@ -857,7 +857,7 @@ enum ath10k_dev_flags {
+ 	/* Disable HW crypto engine */
+ 	ATH10K_FLAG_HW_CRYPTO_DISABLED,
+ 
+-	/* Bluetooth coexistance enabled */
++	/* Bluetooth coexistence enabled */
+ 	ATH10K_FLAG_BTCOEX,
+ 
+ 	/* Per Station statistics service */
+diff --git a/drivers/net/wireless/ath/ath10k/coredump.c b/drivers/net/wireless/ath/ath10k/coredump.c
+index fe6b6f97a916..2d1634a890dd 100644
+--- a/drivers/net/wireless/ath/ath10k/coredump.c
++++ b/drivers/net/wireless/ath/ath10k/coredump.c
+@@ -531,7 +531,7 @@ static const struct ath10k_mem_section qca6174_hw30_sdio_register_sections[] = {
+ 
+ 	{0x40000, 0x400A4},
+ 
+-	/* SI register is skiped here.
++	/* SI register is skipped here.
+ 	 * Because it will cause bus hang
+ 	 *
+ 	 * {0x50000, 0x50018},
+diff --git a/drivers/net/wireless/ath/ath10k/coredump.h b/drivers/net/wireless/ath/ath10k/coredump.h
+index 240d70515088..437b9759f05d 100644
+--- a/drivers/net/wireless/ath/ath10k/coredump.h
++++ b/drivers/net/wireless/ath/ath10k/coredump.h
+@@ -125,7 +125,7 @@ enum ath10k_mem_region_type {
+  * To minimize the size of the array, the list must obey the format:
+  * '{start0,stop0},{start1,stop1},{start2,stop2}....' The values below must
+  * also obey to 'start0 < stop0 < start1 < stop1 < start2 < ...', otherwise
+- * we may encouter error in the dump processing.
++ * we may encounter error in the dump processing.
+  */
+ struct ath10k_mem_section {
+ 	u32 start;
+diff --git a/drivers/net/wireless/ath/ath10k/debug.c b/drivers/net/wireless/ath/ath10k/debug.c
+index 39378e3f9b2b..c861e66ef6bc 100644
+--- a/drivers/net/wireless/ath/ath10k/debug.c
++++ b/drivers/net/wireless/ath/ath10k/debug.c
+@@ -1081,7 +1081,7 @@ static ssize_t ath10k_write_fw_dbglog(struct file *file,
+  * struct available..
+  */
+ 
+-/* This generally cooresponds to the debugfs fw_stats file */
++/* This generally corresponds to the debugfs fw_stats file */
+ static const char ath10k_gstrings_stats[][ETH_GSTRING_LEN] = {
+ 	"tx_pkts_nic",
+ 	"tx_bytes_nic",
+diff --git a/drivers/net/wireless/ath/ath10k/debugfs_sta.c b/drivers/net/wireless/ath/ath10k/debugfs_sta.c
+index 367539f2c370..87a3365330ff 100644
+--- a/drivers/net/wireless/ath/ath10k/debugfs_sta.c
++++ b/drivers/net/wireless/ath/ath10k/debugfs_sta.c
+@@ -498,7 +498,7 @@ static char *get_num_ampdu_subfrm_str(enum ath10k_ampdu_subfrm_num i)
+ {
+ 	switch (i) {
+ 	case ATH10K_AMPDU_SUBFRM_NUM_10:
+-		return "upto 10";
++		return "up to 10";
+ 	case ATH10K_AMPDU_SUBFRM_NUM_20:
+ 		return "11-20";
+ 	case ATH10K_AMPDU_SUBFRM_NUM_30:
+diff --git a/drivers/net/wireless/ath/ath10k/htt_rx.c b/drivers/net/wireless/ath/ath10k/htt_rx.c
+index 8a075a711b71..be02ab27a49b 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_rx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
+@@ -2496,7 +2496,7 @@ static bool ath10k_htt_rx_proc_rx_ind_hl(struct ath10k_htt *htt,
+ 
+ 	/* I have not yet seen any case where num_mpdu_ranges > 1.
+ 	 * qcacld does not seem handle that case either, so we introduce the
+-	 * same limitiation here as well.
++	 * same limitation here as well.
+ 	 */
+ 	if (num_mpdu_ranges > 1)
+ 		ath10k_warn(ar,
+diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
+index a19b0795c86d..bd603feb7953 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_tx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
+@@ -1112,7 +1112,7 @@ int ath10k_htt_tx_fetch_resp(struct ath10k *ar,
+ 	int len = 0;
+ 	int ret;
+ 
+-	/* Response IDs are echo-ed back only for host driver convienence
++	/* Response IDs are echo-ed back only for host driver convenience
+ 	 * purposes. They aren't used for anything in the driver yet so use 0.
+ 	 */
+ 
+diff --git a/drivers/net/wireless/ath/ath10k/hw.c b/drivers/net/wireless/ath/ath10k/hw.c
+index e52e41a70321..6d32b43a4da6 100644
+--- a/drivers/net/wireless/ath/ath10k/hw.c
++++ b/drivers/net/wireless/ath/ath10k/hw.c
+@@ -84,7 +84,7 @@ const struct ath10k_hw_regs qca99x0_regs = {
+ 	.ce5_base_address			= 0x0004b400,
+ 	.ce6_base_address			= 0x0004b800,
+ 	.ce7_base_address			= 0x0004bc00,
+-	/* Note: qca99x0 supports upto 12 Copy Engines. Other than address of
++	/* Note: qca99x0 supports up to 12 Copy Engines. Other than address of
+ 	 * CE0 and CE1 no other copy engine is directly referred in the code.
+ 	 * It is not really necessary to assign address for newly supported
+ 	 * CEs in this address table.
+@@ -120,7 +120,7 @@ const struct ath10k_hw_regs qca4019_regs = {
+ 	.ce5_base_address                       = 0x0004b400,
+ 	.ce6_base_address                       = 0x0004b800,
+ 	.ce7_base_address                       = 0x0004bc00,
+-	/* qca4019 supports upto 12 copy engines. Since base address
++	/* qca4019 supports up to 12 copy engines. Since base address
+ 	 * of ce8 to ce11 are not directly referred in the code,
+ 	 * no need have them in separate members in this table.
+ 	 *      Copy Engine             Address
+@@ -924,7 +924,7 @@ static void ath10k_hw_map_target_mem(struct ath10k *ar, u32 msb)
+ 	ath10k_hif_write32(ar, address, msb);
+ }
+ 
+-/* 1. Write to memory region of target, such as IRAM adn DRAM.
++/* 1. Write to memory region of target, such as IRAM and DRAM.
+  * 2. Target address( 0 ~ 00100000 & 0x00400000~0x00500000)
+  *    can be written directly. See ath10k_pci_targ_cpu_to_ce_addr() too.
+  * 3. In order to access the region other than the above,
+diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
+index e086db920a82..ec8d5b29bc72 100644
+--- a/drivers/net/wireless/ath/ath10k/mac.c
++++ b/drivers/net/wireless/ath/ath10k/mac.c
+@@ -4051,7 +4051,7 @@ static int ath10k_mac_tx(struct ath10k *ar,
+ 		ath10k_tx_h_seq_no(vif, skb);
+ 		break;
+ 	case ATH10K_HW_TXRX_ETHERNET:
+-		/* Convert 802.11->802.3 header only if the frame was erlier
++		/* Convert 802.11->802.3 header only if the frame was earlier
+ 		 * encapsulated to 802.11 by mac80211. Otherwise pass it as is.
+ 		 */
+ 		if (!(info->flags & IEEE80211_TX_CTL_HW_80211_ENCAP))
+@@ -8097,7 +8097,7 @@ static void ath10k_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 
+ /* TODO: Implement this function properly
+  * For now it is needed to reply to Probe Requests in IBSS mode.
+- * Propably we need this information from FW.
++ * Probably we need this information from FW.
+  */
+ static int ath10k_tx_last_beacon(struct ieee80211_hw *hw)
+ {
+@@ -9686,7 +9686,7 @@ static const struct ieee80211_iface_limit ath10k_tlv_if_limit_ibss[] = {
+ 	},
+ };
+ 
+-/* FIXME: This is not thouroughly tested. These combinations may over- or
++/* FIXME: This is not thoroughly tested. These combinations may over- or
+  * underestimate hw/fw capabilities.
+  */
+ static struct ieee80211_iface_combination ath10k_tlv_if_comb[] = {
+@@ -9926,7 +9926,7 @@ int ath10k_mac_register(struct ath10k *ar)
+ 		WLAN_CIPHER_SUITE_BIP_GMAC_128,
+ 		WLAN_CIPHER_SUITE_BIP_GMAC_256,
+ 
+-		/* Only QCA99x0 and QCA4019 varients support GCMP-128, GCMP-256
++		/* Only QCA99x0 and QCA4019 variants support GCMP-128, GCMP-256
+ 		 * and CCMP-256 in hardware.
+ 		 */
+ 		WLAN_CIPHER_SUITE_GCMP,
+diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
+index bf1c938be7d0..3691fcc0ab34 100644
+--- a/drivers/net/wireless/ath/ath10k/pci.c
++++ b/drivers/net/wireless/ath/ath10k/pci.c
+@@ -1244,7 +1244,7 @@ static void ath10k_pci_process_htt_rx_cb(struct ath10k_ce_pipe *ce_state,
+ 	unsigned int nbytes, max_nbytes, nentries;
+ 	int orig_len;
+ 
+-	/* No need to aquire ce_lock for CE5, since this is the only place CE5
++	/* No need to acquire ce_lock for CE5, since this is the only place CE5
+ 	 * is processed other than init and deinit. Before releasing CE5
+ 	 * buffers, interrupts are disabled. Thus CE5 access is serialized.
+ 	 */
+diff --git a/drivers/net/wireless/ath/ath10k/pci.h b/drivers/net/wireless/ath/ath10k/pci.h
+index cf64898b9447..480cd97ab739 100644
+--- a/drivers/net/wireless/ath/ath10k/pci.h
++++ b/drivers/net/wireless/ath/ath10k/pci.h
+@@ -81,7 +81,7 @@ struct ath10k_pci_pipe {
+ 	/* Handle of underlying Copy Engine */
+ 	struct ath10k_ce_pipe *ce_hdl;
+ 
+-	/* Our pipe number; facilitiates use of pipe_info ptrs. */
++	/* Our pipe number; facilitates use of pipe_info ptrs. */
+ 	u8 pipe_num;
+ 
+ 	/* Convenience back pointer to hif_ce_state. */
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index d7e406916bc8..66cb7a1e628a 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -792,7 +792,7 @@ static void ath10k_qmi_event_server_arrive(struct ath10k_qmi *qmi)
+ 		return;
+ 
+ 	/*
+-	 * HACK: sleep for a while inbetween receiving the msa info response
++	 * HACK: sleep for a while between receiving the msa info response
+ 	 * and the XPU update to prevent SDM845 from crashing due to a security
+ 	 * violation, when running MPSS.AT.4.0.c2-01184-SDM845_GEN_PACK-1.
+ 	 */
+diff --git a/drivers/net/wireless/ath/ath10k/rx_desc.h b/drivers/net/wireless/ath/ath10k/rx_desc.h
+index 6ce2a8b1060d..777e53aa69dc 100644
+--- a/drivers/net/wireless/ath/ath10k/rx_desc.h
++++ b/drivers/net/wireless/ath/ath10k/rx_desc.h
+@@ -448,7 +448,7 @@ struct rx_mpdu_end {
+  *     - 4 bytes for WEP
+  *     - 8 bytes for TKIP, AES
+  *  [padding to 4 bytes]
+- *  c) A-MSDU subframe header (14 bytes) if appliable
++ *  c) A-MSDU subframe header (14 bytes) if applicable
+  *  d) LLC/SNAP (RFC1042, 8 bytes)
+  *
+  * In case of A-MSDU only first frame in sequence contains (a) and (b).
+diff --git a/drivers/net/wireless/ath/ath10k/sdio.c b/drivers/net/wireless/ath/ath10k/sdio.c
+index 24283c02a5ef..94291d442d7c 100644
+--- a/drivers/net/wireless/ath/ath10k/sdio.c
++++ b/drivers/net/wireless/ath/ath10k/sdio.c
+@@ -1057,7 +1057,7 @@ static int ath10k_sdio_mbox_proc_pending_irqs(struct ath10k *ar,
+ 
+ out:
+ 	/* An optimization to bypass reading the IRQ status registers
+-	 * unecessarily which can re-wake the target, if upper layers
++	 * unnecessarily which can re-wake the target, if upper layers
+ 	 * determine that we are in a low-throughput mode, we can rely on
+ 	 * taking another interrupt rather than re-checking the status
+ 	 * registers which can re-wake the target.
+diff --git a/drivers/net/wireless/ath/ath10k/thermal.c b/drivers/net/wireless/ath/ath10k/thermal.c
+index 36c9a1364253..cefd97323dfe 100644
+--- a/drivers/net/wireless/ath/ath10k/thermal.c
++++ b/drivers/net/wireless/ath/ath10k/thermal.c
+@@ -98,7 +98,7 @@ static ssize_t ath10k_thermal_show_temp(struct device *dev,
+ 	temperature = ar->thermal.temperature;
+ 	spin_unlock_bh(&ar->data_lock);
+ 
+-	/* display in millidegree celcius */
++	/* display in millidegree celsius */
+ 	ret = snprintf(buf, PAGE_SIZE, "%d\n", temperature * 1000);
+ out:
+ 	mutex_unlock(&ar->conf_mutex);
+diff --git a/drivers/net/wireless/ath/ath10k/thermal.h b/drivers/net/wireless/ath/ath10k/thermal.h
+index 5fdb020f4da3..1f4de9fbf2b3 100644
+--- a/drivers/net/wireless/ath/ath10k/thermal.h
++++ b/drivers/net/wireless/ath/ath10k/thermal.h
+@@ -19,7 +19,7 @@ struct ath10k_thermal {
+ 	/* protected by conf_mutex */
+ 	u32 throttle_state;
+ 	u32 quiet_period;
+-	/* temperature value in Celcius degree
++	/* temperature value in Celsius degree
+ 	 * protected by data_lock
+ 	 */
+ 	int temperature;
+diff --git a/drivers/net/wireless/ath/ath10k/usb.h b/drivers/net/wireless/ath/ath10k/usb.h
+index 34d683e8fc18..48e066ba8162 100644
+--- a/drivers/net/wireless/ath/ath10k/usb.h
++++ b/drivers/net/wireless/ath/ath10k/usb.h
+@@ -26,7 +26,7 @@
+ #define ATH10K_USB_EP_ADDR_APP_DATA_MP_OUT      0x03
+ #define ATH10K_USB_EP_ADDR_APP_DATA_HP_OUT      0x04
+ 
+-/* diagnostic command defnitions */
++/* diagnostic command definitions */
+ #define ATH10K_USB_CONTROL_REQ_SEND_BMI_CMD        1
+ #define ATH10K_USB_CONTROL_REQ_RECV_BMI_RESP       2
+ #define ATH10K_USB_CONTROL_REQ_DIAG_CMD            3
+diff --git a/drivers/net/wireless/ath/ath10k/wmi-tlv.h b/drivers/net/wireless/ath/ath10k/wmi-tlv.h
+index b39c9b78b32b..dbb48d70f2e9 100644
+--- a/drivers/net/wireless/ath/ath10k/wmi-tlv.h
++++ b/drivers/net/wireless/ath/ath10k/wmi-tlv.h
+@@ -1813,7 +1813,7 @@ struct wmi_tlv_pdev_get_temp_cmd {
+ 
+ struct wmi_tlv_pdev_temperature_event {
+ 	__le32 tlv_hdr;
+-	/* temperature value in Celcius degree */
++	/* temperature value in Celsius degree */
+ 	__le32 temperature;
+ 	__le32 pdev_id;
+ } __packed;
+@@ -2548,7 +2548,7 @@ struct nlo_channel_prediction_cfg {
+ 
+ 	/* Preconfigured stationary threshold.
+ 	 * Lesser value means more conservative. Bigger value means more aggressive.
+-	 * Maximum is 100 and mininum is 0.
++	 * Maximum is 100 and minimum is 0.
+ 	 */
+ 	__le32 stationary_threshold;
+ 
+diff --git a/drivers/net/wireless/ath/ath10k/wmi.c b/drivers/net/wireless/ath/ath10k/wmi.c
+index 074d8ba5072a..980d4124fa28 100644
+--- a/drivers/net/wireless/ath/ath10k/wmi.c
++++ b/drivers/net/wireless/ath/ath10k/wmi.c
+@@ -3555,7 +3555,7 @@ static void ath10k_wmi_update_tim(struct ath10k *ar,
+ 	__le32 t;
+ 	u32 v, tim_len;
+ 
+-	/* When FW reports 0 in tim_len, ensure atleast first byte
++	/* When FW reports 0 in tim_len, ensure at least first byte
+ 	 * in tim_bitmap is considered for pvm calculation.
+ 	 */
+ 	tim_len = tim_info->tim_len ? __le32_to_cpu(tim_info->tim_len) : 1;
+diff --git a/drivers/net/wireless/ath/ath10k/wmi.h b/drivers/net/wireless/ath/ath10k/wmi.h
+index 4abd12e78028..6de3cc4640a0 100644
+--- a/drivers/net/wireless/ath/ath10k/wmi.h
++++ b/drivers/net/wireless/ath/ath10k/wmi.h
+@@ -3170,7 +3170,7 @@ struct wmi_start_scan_common {
+ 	/* dwell time in msec on passive channels */
+ 	__le32 dwell_time_passive;
+ 	/*
+-	 * min time in msec on the BSS channel,only valid if atleast one
++	 * min time in msec on the BSS channel,only valid if at least one
+ 	 * VDEV is active
+ 	 */
+ 	__le32 min_rest_time;
+@@ -3196,7 +3196,7 @@ struct wmi_start_scan_common {
+ 	 * and bssid_list
+ 	 */
+ 	__le32 repeat_probe_time;
+-	/* time in msec between 2 consequetive probe requests with in a set. */
++	/* time in msec between 2 consecutive probe requests with in a set. */
+ 	__le32 probe_spacing_time;
+ 	/*
+ 	 * data inactivity time in msec on bss channel that will be used by
+@@ -4397,7 +4397,7 @@ struct wmi_pdev_stats_tx {
+ 	/* wal pdev continuous xretry */
+ 	__le32 pdev_cont_xretry;
+ 
+-	/* wal pdev continous xretry */
++	/* wal pdev continuous xretry */
+ 	__le32 pdev_tx_timeout;
+ 
+ 	/* wal pdev resets  */
+@@ -5240,7 +5240,7 @@ enum wmi_vdev_param {
+ 	 * scheduler.
+ 	 */
+ 	WMI_VDEV_OC_SCHEDULER_AIR_TIME_LIMIT,
+-	/* enable/dsiable WDS for this VDEV  */
++	/* enable/disable WDS for this VDEV  */
+ 	WMI_VDEV_PARAM_WDS,
+ 	/* ATIM Window */
+ 	WMI_VDEV_PARAM_ATIM_WINDOW,
+@@ -5372,7 +5372,7 @@ enum wmi_10x_vdev_param {
+ 	 * scheduler.
+ 	 */
+ 	WMI_10X_VDEV_OC_SCHEDULER_AIR_TIME_LIMIT,
+-	/* enable/dsiable WDS for this VDEV  */
++	/* enable/disable WDS for this VDEV  */
+ 	WMI_10X_VDEV_PARAM_WDS,
+ 	/* ATIM Window */
+ 	WMI_10X_VDEV_PARAM_ATIM_WINDOW,
+@@ -5904,7 +5904,7 @@ enum wmi_sta_ps_param_tx_wake_threshold {
+ enum wmi_sta_ps_param_pspoll_count {
+ 	WMI_STA_PS_PSPOLL_COUNT_NO_MAX = 0,
+ 	/*
+-	 * Values greater than 0 indicate the maximum numer of PS-Poll frames
++	 * Values greater than 0 indicate the maximum number of PS-Poll frames
+ 	 * FW will send before waking up.
+ 	 */
+ 
+@@ -6947,7 +6947,7 @@ struct wmi_echo_ev_arg {
+ };
+ 
+ struct wmi_pdev_temperature_event {
+-	/* temperature value in Celcius degree */
++	/* temperature value in Celsius degree */
+ 	__le32 temperature;
+ } __packed;
+ 
+-- 
+2.37.0
 
-[Frank Li] I think the only limitation is only 4 irq numbers.=20
-The principle CPU to CPU irq is the same as MSI.=20
-
-What's  your preferred help description?
-
->=20
-> > +
-> >  config LS1X_IRQ
-> >       bool "Loongson-1 Interrupt Controller"
-> >       depends on MACH_LOONGSON32
-> > diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-> > index 5d8e21d3dc6d8..870423746c783 100644
-> > --- a/drivers/irqchip/Makefile
-> > +++ b/drivers/irqchip/Makefile
-> > @@ -98,6 +98,7 @@ obj-$(CONFIG_RISCV_INTC)            +=3D irq-riscv-in=
-tc.o
-> >  obj-$(CONFIG_SIFIVE_PLIC)            +=3D irq-sifive-plic.o
-> >  obj-$(CONFIG_IMX_IRQSTEER)           +=3D irq-imx-irqsteer.o
-> >  obj-$(CONFIG_IMX_INTMUX)             +=3D irq-imx-intmux.o
-> > +obj-$(CONFIG_IMX_MU_MSI)             +=3D irq-imx-mu-msi.o
-> >  obj-$(CONFIG_MADERA_IRQ)             +=3D irq-madera.o
-> >  obj-$(CONFIG_LS1X_IRQ)                       +=3D irq-ls1x.o
-> >  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)    +=3D irq-ti-sci-intr.o
-> > diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx=
--mu-
-> msi.c
-> > new file mode 100644
-> > index 0000000000000..82b55f6d87266
-> > --- /dev/null
-> > +++ b/drivers/irqchip/irq-imx-mu-msi.c
-> > @@ -0,0 +1,451 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Freescale MU worked as MSI controller
->=20
-> s/worked/used/
->=20
-> > + *
-> > + * Copyright (c) 2018 Pengutronix, Oleksij Rempel
-> <o.rempel@pengutronix.de>
-> > + * Copyright 2022 NXP
-> > + *   Frank Li <Frank.Li@nxp.com>
-> > + *   Peng Fan <peng.fan@nxp.com>
-> > + *
-> > + * Based on drivers/mailbox/imx-mailbox.c
-> > + */
-> > +#include <linux/clk.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/msi.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/irq.h>
-> > +#include <linux/irqchip/chained_irq.h>
-> > +#include <linux/irqchip.h>
-> > +#include <linux/irqdomain.h>
-> > +#include <linux/of_irq.h>
-> > +#include <linux/of_pci.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/spinlock.h>
-> > +#include <linux/dma-iommu.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/pm_domain.h>
->=20
-> Keep this list in alphabetical order.
->=20
-> > +
-> > +
-> > +#define IMX_MU_CHANS            4
-> > +
-> > +enum imx_mu_xcr {
-> > +     IMX_MU_GIER,
-> > +     IMX_MU_GCR,
-> > +     IMX_MU_TCR,
-> > +     IMX_MU_RCR,
-> > +     IMX_MU_xCR_MAX,
->=20
-> What is this last enum used for?
->=20
-> > +};
-> > +
-> > +enum imx_mu_xsr {
-> > +     IMX_MU_SR,
-> > +     IMX_MU_GSR,
-> > +     IMX_MU_TSR,
-> > +     IMX_MU_RSR,
-> > +};
-> > +
-> > +enum imx_mu_type {
-> > +     IMX_MU_V1 =3D BIT(0),
->=20
-> This is never used. Why?
->=20
-> > +     IMX_MU_V2 =3D BIT(1),
-> > +     IMX_MU_V2_S4 =3D BIT(15),
->=20
-> Same thing.
->=20
-> > +};
-> > +
-> > +/* Receive Interrupt Enable */
-> > +#define IMX_MU_xCR_RIEn(data, x) ((data->cfg->type) & IMX_MU_V2 ?
-> BIT(x) : BIT(24 + (3 - (x))))
-> > +#define IMX_MU_xSR_RFn(data, x) ((data->cfg->type) & IMX_MU_V2 ?
-> BIT(x) : BIT(24 + (3 - (x))))
-> > +
-> > +struct imx_mu_dcfg {
-> > +     enum imx_mu_type type;
-> > +     u32     xTR;            /* Transmit Register0 */
-> > +     u32     xRR;            /* Receive Register0 */
-> > +     u32     xSR[4];         /* Status Registers */
-> > +     u32     xCR[4];         /* Control Registers */
-> > +};
-> > +
-> > +struct imx_mu_msi {
-> > +     spinlock_t                      lock;
-> > +     raw_spinlock_t                  reglock;
->=20
-> Why two locks? Isn't one enough to protect both MSI allocation (which
-> happens once in a blue moon) and register access?
->=20
-> Also, where are these locks initialised?
->=20
-> > +     struct irq_domain               *msi_domain;
-> > +     void __iomem                    *regs;
-> > +     phys_addr_t                     msiir_addr;
-> > +     const struct imx_mu_dcfg        *cfg;
-> > +     unsigned long                   used;
-> > +     struct clk                      *clk;
-> > +};
-> > +
-> > +static void imx_mu_write(struct imx_mu_msi *msi_data, u32 val, u32 off=
-s)
-> > +{
-> > +     iowrite32(val, msi_data->regs + offs);
-> > +}
-> > +
-> > +static u32 imx_mu_read(struct imx_mu_msi *msi_data, u32 offs)
-> > +{
-> > +     return ioread32(msi_data->regs + offs);
-> > +}
-> > +
-> > +static u32 imx_mu_xcr_rmw(struct imx_mu_msi *msi_data, enum
-> imx_mu_xcr type, u32 set, u32 clr)
-> > +{
-> > +     unsigned long flags;
-> > +     u32 val;
-> > +
-> > +     raw_spin_lock_irqsave(&msi_data->reglock, flags);
-> > +     val =3D imx_mu_read(msi_data, msi_data->cfg->xCR[type]);
-> > +     val &=3D ~clr;
-> > +     val |=3D set;
-> > +     imx_mu_write(msi_data, val, msi_data->cfg->xCR[type]);
-> > +     raw_spin_unlock_irqrestore(&msi_data->reglock, flags);
-> > +
-> > +     return val;
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_mask_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_xcr_rmw(msi_data, IMX_MU_RCR, 0,
-> IMX_MU_xCR_RIEn(msi_data, data->hwirq));
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_unmask_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_xcr_rmw(msi_data, IMX_MU_RCR,
-> IMX_MU_xCR_RIEn(msi_data, data->hwirq), 0);
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_ack_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_read(msi_data, msi_data->cfg->xRR + data->hwirq * 4);
-> > +}
-> > +
-> > +static struct irq_chip imx_mu_msi_irq_chip =3D {
-> > +     .name =3D "MU-MSI",
-> > +     .irq_ack =3D irq_chip_ack_parent,
-> > +};
-> > +
-> > +static struct msi_domain_ops imx_mu_msi_irq_ops =3D {
-> > +};
-> > +
-> > +static struct msi_domain_info imx_mu_msi_domain_info =3D {
-> > +     .flags  =3D (MSI_FLAG_USE_DEF_DOM_OPS |
-> MSI_FLAG_USE_DEF_CHIP_OPS),
-> > +     .ops    =3D &imx_mu_msi_irq_ops,
-> > +     .chip   =3D &imx_mu_msi_irq_chip,
-> > +};
-> > +
-> > +static void imx_mu_msi_parent_compose_msg(struct irq_data *data,
-> > +                                       struct msi_msg *msg)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +     u64 addr =3D msi_data->msiir_addr + 4 * data->hwirq;
-> > +
-> > +     msg->address_hi =3D upper_32_bits(addr);
-> > +     msg->address_lo =3D lower_32_bits(addr);
-> > +     msg->data =3D data->hwirq;
-> > +}
-> > +
-> > +static int imx_mu_msi_parent_set_affinity(struct irq_data *irq_data,
-> > +                                const struct cpumask *mask, bool force=
-)
-> > +{
-> > +     return -EINVAL;
-> > +}
-> > +
-> > +static struct irq_chip imx_mu_msi_parent_chip =3D {
-> > +     .name           =3D "MU",
-> > +     .irq_mask       =3D imx_mu_msi_parent_mask_irq,
-> > +     .irq_unmask     =3D imx_mu_msi_parent_unmask_irq,
-> > +     .irq_ack        =3D imx_mu_msi_parent_ack_irq,
-> > +     .irq_compose_msi_msg    =3D imx_mu_msi_parent_compose_msg,
-> > +     .irq_set_affinity =3D imx_mu_msi_parent_set_affinity,
-> > +};
-> > +
-> > +static int imx_mu_msi_domain_irq_alloc(struct irq_domain *domain,
-> > +                                     unsigned int virq,
-> > +                                     unsigned int nr_irqs,
-> > +                                     void *args)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D domain->host_data;
-> > +     unsigned long flags;
-> > +     int pos, err =3D 0;
-> > +
-> > +     WARN_ON(nr_irqs !=3D 1);
-> > +
-> > +     spin_lock_irqsave(&msi_data->lock, flags);
-> > +     pos =3D find_first_zero_bit(&msi_data->used, IMX_MU_CHANS);
-> > +     if (pos < IMX_MU_CHANS)
-> > +             __set_bit(pos, &msi_data->used);
-> > +     else
-> > +             err =3D -ENOSPC;
-> > +     spin_unlock_irqrestore(&msi_data->lock, flags);
-> > +
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     irq_domain_set_info(domain, virq, pos,
-> > +                         &imx_mu_msi_parent_chip, msi_data,
-> > +                         handle_edge_irq, NULL, NULL);
-> > +     return 0;
-> > +}
-> > +
-> > +static void imx_mu_msi_domain_irq_free(struct irq_domain *domain,
-> > +                                    unsigned int virq, unsigned int nr=
-_irqs)
-> > +{
-> > +     struct irq_data *d =3D irq_domain_get_irq_data(domain, virq);
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(d);
-> > +     unsigned long flags;
-> > +
-> > +     spin_lock_irqsave(&msi_data->lock, flags);
-> > +     __clear_bit(d->hwirq, &msi_data->used);
-> > +     spin_unlock_irqrestore(&msi_data->lock, flags);
-> > +}
-> > +
-> > +static const struct irq_domain_ops imx_mu_msi_domain_ops =3D {
-> > +     .alloc  =3D imx_mu_msi_domain_irq_alloc,
-> > +     .free   =3D imx_mu_msi_domain_irq_free,
-> > +};
-> > +
-> > +static void imx_mu_msi_irq_handler(struct irq_desc *desc)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_desc_get_handler_data(desc);
-> > +     struct irq_chip *chip =3D irq_desc_get_chip(desc);
-> > +     u32 status;
-> > +     int i;
-> > +
-> > +     status =3D imx_mu_read(msi_data, msi_data->cfg->xSR[IMX_MU_RSR]);
-> > +
-> > +     chained_irq_enter(chip, desc);
-> > +     for (i =3D 0; i < IMX_MU_CHANS; i++) {
-> > +             if (status & IMX_MU_xSR_RFn(msi_data, i))
-> > +                     generic_handle_domain_irq(msi_data->msi_domain, i=
-);
-> > +     }
-> > +     chained_irq_exit(chip, desc);
-> > +}
-> > +
-> > +static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct
-> device *dev)
-> > +{
-> > +     struct fwnode_handle *fwnodes =3D dev_fwnode(dev);
-> > +     struct irq_domain *parent;
-> > +
-> > +     /* Initialize MSI domain parent */
-> > +     parent =3D irq_domain_create_linear(fwnodes,
-> > +                                         IMX_MU_CHANS,
-> > +                                         &imx_mu_msi_domain_ops,
-> > +                                         msi_data);
-> > +     if (!parent) {
-> > +             dev_err(dev, "failed to create IRQ domain\n");
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
-> > +
-> > +     msi_data->msi_domain =3D platform_msi_create_irq_domain(
-> > +                             fwnodes,
-> > +                             &imx_mu_msi_domain_info,
-> > +                             parent);
->=20
-> nit: move the first argument after the opening bracket (longer lines
-> are fine).
->=20
-> > +
-> > +     if (!msi_data->msi_domain) {
-> > +             dev_err(dev, "failed to create MSI domain\n");
-> > +             irq_domain_remove(parent);
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     irq_domain_set_pm_device(msi_data->msi_domain, dev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/* Register offset of different version MU IP */
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx6sx =3D {
->=20
-> Why doesn't this have a type?
->=20
-> > +     .xTR    =3D 0x0,
-> > +     .xRR    =3D 0x10,
-> > +     .xSR    =3D {0x20, 0x20, 0x20, 0x20},
->=20
-> Since you defined enums for all the register offsets, please be
-> consistent and use them everywhere:
->=20
->         .xSR =3D {
->                 [IMX_MU_SR]     =3D 0x20,
->                 [IMX_MU_GSR]    =3D 0x20,
->                 [...]
->         },
->=20
-> > +     .xCR    =3D {0x24, 0x24, 0x24, 0x24},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx7ulp =3D {
-> > +     .xTR    =3D 0x20,
-> > +     .xRR    =3D 0x40,
-> > +     .xSR    =3D {0x60, 0x60, 0x60, 0x60},
-> > +     .xCR    =3D {0x64, 0x64, 0x64, 0x64},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp =3D {
-> > +     .type   =3D IMX_MU_V2,
-> > +     .xTR    =3D 0x200,
-> > +     .xRR    =3D 0x280,
-> > +     .xSR    =3D {0xC, 0x118, 0x124, 0x12C},
-> > +     .xCR    =3D {0x110, 0x114, 0x120, 0x128},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp_s4 =3D {
-> > +
-> > +     .type   =3D IMX_MU_V2 | IMX_MU_V2_S4,
-> > +     .xTR    =3D 0x200,
-> > +     .xRR    =3D 0x280,
-> > +     .xSR    =3D {0xC, 0x118, 0x124, 0x12C},
-> > +     .xCR    =3D {0x110, 0x114, 0x120, 0x128},
-> > +};
-> > +
-> > +static int __init imx_mu_of_init(struct device_node *dn,
-> > +                              struct device_node *parent,
-> > +                              const struct imx_mu_dcfg *cfg
-> > +                             )
->=20
-> Move closing bracket after 'cfg'.
->=20
-> > +{
-> > +     struct platform_device *pdev =3D of_find_device_by_node(dn);
-> > +     struct device_link *pd_link_a;
-> > +     struct device_link *pd_link_b;
-> > +     struct imx_mu_msi *msi_data;
-> > +     struct resource *res;
-> > +     struct device *pd_a;
-> > +     struct device *pd_b;
-> > +     struct device *dev;
-> > +     int ret;
-> > +     int irq;
-> > +
-> > +     if (!pdev)
-> > +             return -ENODEV;
->=20
-> How can that happen?
->=20
-> > +
-> > +     dev =3D &pdev->dev;
-> > +
-> > +     msi_data =3D devm_kzalloc(&pdev->dev, sizeof(*msi_data), GFP_KERN=
-EL);
-> > +     if (!msi_data)
-> > +             return -ENOMEM;
-> > +
-> > +     msi_data->cfg =3D cfg;
-> > +
-> > +     msi_data->regs =3D devm_platform_ioremap_resource_byname(pdev,
-> "processor-a-side");
-> > +     if (IS_ERR(msi_data->regs)) {
-> > +             dev_err(&pdev->dev, "failed to initialize 'regs'\n");
-> > +             return PTR_ERR(msi_data->regs);
-> > +     }
-> > +
-> > +     res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> "processor-b-side");
-> > +     if (!res)
-> > +             return -EIO;
-> > +
-> > +     msi_data->msiir_addr =3D res->start + msi_data->cfg->xTR;
-> > +
-> > +     irq =3D platform_get_irq(pdev, 0);
-> > +     if (irq <=3D 0)
-> > +             return -ENODEV;
-> > +
-> > +     platform_set_drvdata(pdev, msi_data);
-> > +
-> > +     msi_data->clk =3D devm_clk_get(dev, NULL);
-> > +     if (IS_ERR(msi_data->clk)) {
-> > +             if (PTR_ERR(msi_data->clk) !=3D -ENOENT)
-> > +                     return PTR_ERR(msi_data->clk);
-> > +
-> > +             msi_data->clk =3D NULL;
->=20
-> Why is it acceptable to continue with no clock?
->=20
-> > +     }
-> > +
-> > +     pd_a =3D dev_pm_domain_attach_by_name(dev, "processor-a-side");
-> > +     if (IS_ERR(pd_a))
-> > +             return PTR_ERR(pd_a);
-> > +
-> > +     pd_b =3D dev_pm_domain_attach_by_name(dev, "processor-b-side");
-> > +     if (IS_ERR(pd_b))
-> > +             return PTR_ERR(pd_b);
-> > +
-> > +     pd_link_a =3D device_link_add(dev, pd_a,
-> > +                     DL_FLAG_STATELESS |
-> > +                     DL_FLAG_PM_RUNTIME |
-> > +                     DL_FLAG_RPM_ACTIVE);
-> > +
-> > +     if (!pd_link_a) {
-> > +             dev_err(dev, "Failed to add device_link to mu a.\n");
-> > +             goto err_pd_a;
-> > +     }
-> > +
-> > +     pd_link_b =3D device_link_add(dev, pd_b,
-> > +                     DL_FLAG_STATELESS |
-> > +                     DL_FLAG_PM_RUNTIME |
-> > +                     DL_FLAG_RPM_ACTIVE);
-> > +
-> > +
-> > +     if (!pd_link_b) {
-> > +             dev_err(dev, "Failed to add device_link to mu a.\n");
-> > +             goto err_pd_b;
-> > +     }
-> > +
-> > +     ret =3D imx_mu_msi_domains_init(msi_data, dev);
-> > +     if (ret)
-> > +             goto err_dm_init;
-> > +
-> > +     irq_set_chained_handler_and_data(irq,
-> > +                                      imx_mu_msi_irq_handler,
-> > +                                      msi_data);
-> > +
-> > +     pm_runtime_enable(dev);
->=20
-> Shouldn't you enable the device PM before registering the chained
-> handler?
->=20
->         M.
->=20
-> --
-> Without deviation from the norm, progress is not possible.
