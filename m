@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998785B375D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973F55B373D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiIIMMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S230292AbiIIMLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiIIMK6 (ORCPT
+        with ESMTP id S230374AbiIIMKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:10:58 -0400
+        Fri, 9 Sep 2022 08:10:52 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96616138E66
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9224C138648
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDy0wCbz4xsm;
-        Fri,  9 Sep 2022 22:10:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MPFDp6ytRz4xcf;
+        Fri,  9 Sep 2022 22:10:18 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
 To:     paulus@samba.org, christophe.leroy@csgroup.eu,
-        Liang He <windhl@126.com>, npiggin@gmail.com, maz@kernel.org,
+        Liang He <windhl@126.com>, atrajeev@linux.vnet.ibm.com,
         benh@kernel.crashing.org, mpe@ellerman.id.au
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220618041042.4058066-1-windhl@126.com>
-References: <20220618041042.4058066-1-windhl@126.com>
-Subject: Re: [PATCH v2] powerpc: embedded6xx: Fix refcount leak bugs
-Message-Id: <166272522746.2076816.8160630951736110654.b4-ty@ellerman.id.au>
-Date:   Fri, 09 Sep 2022 22:07:07 +1000
+In-Reply-To: <20220618071353.4059000-1-windhl@126.com>
+References: <20220618071353.4059000-1-windhl@126.com>
+Subject: Re: [PATCH] powerpc: perf: Fix refcount leak bug in imc-pmu.c
+Message-Id: <166272522850.2076816.2773443283064674848.b4-ty@ellerman.id.au>
+Date:   Fri, 09 Sep 2022 22:07:08 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -43,16 +43,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Jun 2022 12:10:42 +0800, Liang He wrote:
-> In xx_init_xx(), of_find_node_by_type() will return a node pointer
-> with refcount incremented. We should use of_node_put() when it is
-> not used anymore.
+On Sat, 18 Jun 2022 15:13:53 +0800, Liang He wrote:
+> In update_events_in_group(), of_find_node_by_phandle() will return
+> a node pointer with refcount incremented. We should use of_node_put()
+> in fail path or when it is not used anymore.
 > 
 > 
 
 Applied to powerpc/next.
 
-[1/1] powerpc: embedded6xx: Fix refcount leak bugs
-      https://git.kernel.org/powerpc/c/6b2d17d514b105ecf486bdf011c444978e633085
+[1/1] powerpc: perf: Fix refcount leak bug in imc-pmu.c
+      https://git.kernel.org/powerpc/c/0dd8d2c8066e672244975c171816fdd9dae87721
 
 cheers
