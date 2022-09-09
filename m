@@ -2,49 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFA45B3133
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7155B3130
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 10:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiIIH77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S230099AbiIIIAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 04:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiIIH7b (ORCPT
+        with ESMTP id S230209AbiIIH7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:59:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39307D0209
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:58:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41656B82379
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CB3C433C1;
-        Fri,  9 Sep 2022 07:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662710334;
-        bh=6xhnRtl6Ev7LTba/OXeCg8kWae5/9VIRoFm8evSTBKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y96IRX4Jm5FrunxjeqibiqRLBNHHa07M87W1QSRh8v45+/rQ4tQE9cVHx02sMnRR5
-         UYhsdQsPskKei8y6Agx6hFpBf5w6tZJbzBwnCkhI3A5qTQCV+e1rKLurmzHX/ih1Is
-         dJWROxdLcvuZupgbMjpa84tTdjHeHBNID+1eoF1c=
-Date:   Fri, 9 Sep 2022 09:58:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH] staging: rtl8192e: Fix return type for implementation of
- ndo_start_xmit
-Message-ID: <YxryPFdWkamNN/Me@kroah.com>
-References: <20220908203243.GA23048@matrix-ESPRIMO-P710>
- <YxrxywN9wDypohyY@kroah.com>
+        Fri, 9 Sep 2022 03:59:43 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4A72CE04
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:59:15 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s10so242512ljp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ffJDJLXz/yzwZQ2DKmnKWl6OWAzq8nCfRYuV0HB+NMk=;
+        b=GeRYE3sSRQAq/+OLNbiJtAOLbM9XV0f00I+m+B6EcfwQiQRVNGpsqR/EurBsI3hn72
+         4gzyR2FD2o7x+p0MfCO6LFryVha/FPHXFj9WroOChVs9nVB3J0jCQpWKwAa3fk9OZ53s
+         Lt3Tvy08r7p6X6wKZxeTOp+kZMjws0t9M6GoFwuhS/GvsmDNXxLhGqHTM3MaTLrFqSq+
+         8Z1oAEfQRJjPy+1ouiNjL0ww2Y1E5mfO56SM2gRBoqILjps8Pf1676Dkn0Hm6h49Jkkj
+         qTo1CQtX+rNHpOIruDVvIdkc85MAd68pRB77sunmTwvGqdlqs5VM+Ty7po+96/+6PeMX
+         rbGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ffJDJLXz/yzwZQ2DKmnKWl6OWAzq8nCfRYuV0HB+NMk=;
+        b=srb7t/pKz4C5BjvNlqRWHneGS6gOyUtqRQMoBbfxs8YJ1gQfwVeenR/JytWzlDhR2/
+         a9nSndQdJ86o+HVr4oi+DzVgL1cH8Tca53dMp/cb9VYeEO+IC19zYLurQLwEBpM0TO8X
+         3iGsuiw95V93KH5vJlHO1V5ywNl0HXfffku2qQUeBvWPQRlKU79dEEAGiiSU2PsvY/2T
+         w3RMLRetsenyliRdzzz/yU6ZlURQVlX7yxlHviHnYwkq++Vv0+M5+lvF2XD1lcsLqjZq
+         /+MlGhNTCCYoAnVmgnSNoK23n44e2F2VNowvEkav63QP7q86hhhs4WNdlGxAbmc5b7O6
+         IHWA==
+X-Gm-Message-State: ACgBeo25I6g9BlYOERPZT3GdatcOxlfLJRL15FeqBNuMsQJAPPs9Db4i
+        hy/mI8o0AUF1dkpKSkE8w7uxakvME8bvog==
+X-Google-Smtp-Source: AA6agR52OFVa+ktPZDO+qgN/DSvk0bsijOkKngfrrvDrXhnk2k1lAmzEHS2UVMO2OlcNveUJ4nn4eA==
+X-Received: by 2002:a2e:b608:0:b0:26a:d179:8ecd with SMTP id r8-20020a2eb608000000b0026ad1798ecdmr2864266ljn.405.1662710353294;
+        Fri, 09 Sep 2022 00:59:13 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c6-20020a19e346000000b0048af4dc964asm177635lfk.73.2022.09.09.00.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 00:59:12 -0700 (PDT)
+Message-ID: <932d68ce-0c14-3fda-8247-f5fe34b2f8b0@linaro.org>
+Date:   Fri, 9 Sep 2022 09:59:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxrxywN9wDypohyY@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: remoteproc: qcom: Convert wcnss
+ documentation to YAML
+Content-Language: en-US
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     bjorn.andersson@linaro.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220908184925.2714098-1-sireeshkodali1@gmail.com>
+ <20220908184925.2714098-3-sireeshkodali1@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220908184925.2714098-3-sireeshkodali1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,33 +84,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 09:56:59AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Sep 08, 2022 at 10:32:43PM +0200, Philipp Hortmann wrote:
-> > CFI (Control Flow Integrity) is a safety feature allowing the system to
-> > detect and react should a potential control flow hijacking occurs. In
-> > particular, the Forward-Edge CFI protects indirect function calls by
-> > ensuring the prototype of function that is actually called matches the
-> > definition of the function hook.
-> > 
-> > Since Linux now supports CFI, it will be a good idea to fix mismatched
-> > return type for implementation of hooks. Otherwise this would get
-> > cought out by CFI and cause a panic.
-> > 
-> > Use enums from netdev_tx_t as return value instead, then change return
-> > type to netdev_tx_t.
-> > 
-> > Suggested-by: Dan Carpenter <error27@gmail.com>
-> > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> > ---
-> > Tested with rtl8192e
-> > Transferred this patch over wlan connection of rtl8192e
-> > ---
-> >  drivers/staging/rtl8192e/rtllib.h    |  2 +-
-> >  drivers/staging/rtl8192e/rtllib_tx.c | 10 +++++-----
-> >  2 files changed, 6 insertions(+), 6 deletions(-)
+On 08/09/2022 20:49, Sireesh Kodali wrote:
+> This is a direct conversion of the existing txt documentation to YAML.
+> It is in preparation for the addition of pronto-v3 to the docs. This
+> patch doesn't document any of the existing subnodes/properties that are
+> not documented in the existing txt file. That is done in a separate
+> patch.
 > 
-> Someone sent the same patch before you did:
-> 	https://lore.kernel.org/r/20220905130053.10731-1-guozihua@huawei.com
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> ---
+>  .../bindings/remoteproc/qcom,wcnss-pil.yaml   | 263 ++++++++++++++++++
+>  1 file changed, 263 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
+> new file mode 100644
+> index 000000000000..bc18139fdb91
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
+> @@ -0,0 +1,263 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/qcom,wcnss-pil.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm WCNSS Peripheral Image Loader
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Ah, but that one did not apply, I'll take this one then...
+Use email from maintainers entry.
+
+> +
+> +description:
+> +  This document defines the binding for a component that loads and boots
+> +  firmware on the Qualcomm WCNSS core.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,riva-pil
+> +      - qcom,pronto-v1-pil
+> +      - qcom,pronto-v2-pil
+> +
+> +  reg:
+> +    maxItems: 3
+> +    description:
+> +      The base address and size of the CCU, DXE and PMU register blocks
+> +
+> +  reg-names:
+> +    items:
+> +      - const: ccu
+> +      - const: dxe
+> +      - const: pmu
+> +
+> +  interrupts:
+> +    minItems: 2
+> +    maxItems: 5
+> +
+> +  interrupt-names:
+> +    minItems: 2
+> +    items:
+> +      - const: wdog
+> +      - const: fatal
+> +      - const: ready
+> +      - const: handover
+> +      - const: stop-ack
+> +
+> +  firmware-name:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Relative firmware image path for the WCNSS core. Defaults to
+> +      "wcnss.mdt".
+> +
+> +  vddpx-supply:
+> +    description:
+> +      PX regulator to be held on behalf of the booting of the WCNSS core
+> +
+> +  vddmx-supply:
+> +    description:
+> +      MX regulator to be held on behalf of the booting of the WCNSS core.
+> +
+> +  vddcx-supply:
+> +    description:
+> +      CX regulator to be held on behalf of the booting of the WCNSS core.
+> +
+> +  power-domains:
+> +    maxItems: 2
+> +
+> +  power-domain-names:
+> +    items:
+> +      - const: cx
+> +      - const: mx
+> +
+> +  qcom,smem-states:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      States used by the AP to signal the WCNSS core that it should shutdown
+> +    items:
+> +      - description: Stop the modem
+> +
+> +  qcom,smem-state-names:
+> +    description: The names of the state bits used for SMP2P output
+> +    items:
+> +      - const: stop
+> +
+> +  memory-region:
+> +    maxItems: 1
+> +    description: reserved-memory for the WCNSS core
+> +
+> +  smd-edge:
+> +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
+> +    description:
+> +      Qualcomm Shared Memory subnode which represents communication edge,
+> +      channels and devices related to the ADSP.
+> +
+> +  iris:
+> +    type: object
+> +    description:
+> +      The iris subnode of the WCNSS PIL is used to describe the attached RF module
+> +      and its resource dependencies.
+> +
+additionalProperties false on this level.
+
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - qcom,wcn3620
+> +          - qcom,wcn3660
+> +          - qcom,wcn3660b
+> +          - qcom,wcn3680
+> +
+> +      clocks:
+> +        minItems: 1
+> +        items:
+> +          - description: XO clock
+> +          - description: RF clock
+> +
+> +      clock-names:
+> +        minItems: 1
+> +        items:
+> +          - const: xo
+> +          - const: rf
+> +
+> +      vddxo-supply:
+> +        description:
+> +          Reference to the regulator to be held on behalf of the booting WCNSS
+> +          core
+> +
+> +      vddrfa-supply:
+> +        description:
+> +          Reference to the regulator to be held on behalf of the booting WCNSS
+> +          core
+> +
+> +      vddpa-supply:
+> +        description:
+> +          Reference to the regulator to be held on behalf of the booting WCNSS
+> +          core
+> +
+> +      vdddig-supply:
+
+Best regards,
+Krzysztof
