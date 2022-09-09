@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FCF5B40A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0657E5B40A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiIIU0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S232333AbiIIU0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiIIU0Q (ORCPT
+        with ESMTP id S232259AbiIIU0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:26:16 -0400
+        Fri, 9 Sep 2022 16:26:17 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1455F0AB0;
-        Fri,  9 Sep 2022 13:25:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576C0128C09;
+        Fri,  9 Sep 2022 13:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1662755142; x=1694291142;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=1XY8cQGeld5MP2iyj2lZROHf1+xibPBu6JwFM5Lnkew=;
-  b=IyOOsUXeDdTcKrlq5nlEvwK+W2jjGdgQGKHtwnkXea6xgk58/uPL8MYi
-   6d3Wj6cjQXa22B+XfllwcyCT6ekNiWr/PZm8RvnP3WOXUziD/9maAjnF5
-   NekCrlRE1HtQwPyaSoK73Ss/5JCkD0L9kAw5VukE8yM71bS+NkRDIq1nB
-   jDrfWlUBV0y7UHIw75ZOU2qTpD5xYNz+GhaHE2QIt/eYY6heZf1yXOF8k
-   oUa71DmXMMfIgh7pTNcJsOwrV8rGuUk+7bRHbWxt6LC83Wf4GKwzgDR4v
-   xguNsL8gBI8E52/sWOxwsHLey3z2puovK7FdtMlbqDgqiyy1vaoMG3QU5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280584702"
+  bh=XqLKA3MmjgworvdcvPYyVZ8zmzETc51MsjZvmPVofAk=;
+  b=XzLCS96C9mf5FjOB1vXos6sTZYwBfzaHvs3ruW91Ln0jBV+DDdqn//Vi
+   pWsyT1NafEwq8G59gUD1P16WAM/47krcPmxu0x92hX7AkJFLfOww2T4i6
+   cZ+r+cazbo2Tcexv0VAlav0EteMhRQioGCxyUE5j6OdYy0YAEJXJ5RMSb
+   7t3Fib8gxo+pEo5t0Qa3698wAvNLYGCFFjK2N0uox9eoWsYfJjKFapjgU
+   ko0/W4m1ShsJVzyRfb0GDbWQzzZ5ui0f2DASIV59Im1MW9nlz1cq/kiAV
+   y4ArWgkWg/V3C2bhePkZTMSZ1S4bjm4MzAoQeLBSjXlZEvVvRZMiOlQc0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280584706"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="280584702"
+   d="scan'208";a="280584706"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:25:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="611163001"
+   d="scan'208";a="611163005"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by orsmga007.jf.intel.com with ESMTP; 09 Sep 2022 13:25:36 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
@@ -45,9 +45,9 @@ Cc:     hpa@zytor.com, corbet@lwn.net, bagasdotme@gmail.com,
         tony.luck@intel.com, yang.zhong@intel.com,
         linux-doc@vger.kernel.org, linux-man@vger.kernel.org,
         linux-kernel@vger.kernel.org, chang.seok.bae@intel.com
-Subject: [PATCH v4 3/4] Documentation/x86: Add the AMX enabling example
-Date:   Fri,  9 Sep 2022 13:15:39 -0700
-Message-Id: <20220909201540.17705-4-chang.seok.bae@intel.com>
+Subject: [PATCH v4 4/4] Documentation/x86: Explain the state component permission for guests
+Date:   Fri,  9 Sep 2022 13:15:40 -0700
+Message-Id: <20220909201540.17705-5-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909201540.17705-1-chang.seok.bae@intel.com>
 References: <20220909201540.17705-1-chang.seok.bae@intel.com>
@@ -61,92 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explain steps to enable the dynamic feature with a code example.
+Commit 980fe2fddcff ("x86/fpu: Extend fpu_xstate_prctl() with guest
+permissions") extends a couple of arch_prctl(2) options for VCPU threads.
+Add description for them.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reviewed-by: Yang Zhong <yang.zhong@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-doc@vger.kernel.org
 ---
 Changes from v1:
-* Update the description without mentioning CPUID & XGETBV (Dave Hansen).
+* Add the reason for the guest options (Dave Hansen).
+* Add a note to allude some VMM policy, i.e. KVM_X86_XCOMP_GUEST_SUPP.
+* Move it in the separate section.
 
-Changes from v2:
-* Massage sentences (Bagas Sanjaya).
-* Adjust the example with the (future) prctl.h.
+Note the correspondent attributes were also proposed for the KVM API. But,
+it was seen as inessential:
+    https://lore.kernel.org/lkml/20220823231402.7839-1-chang.seok.bae@intel.com/
 ---
- Documentation/x86/xstate.rst | 55 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ Documentation/x86/xstate.rst | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/Documentation/x86/xstate.rst b/Documentation/x86/xstate.rst
-index 2577b28ad942..f7aad2241d32 100644
+index f7aad2241d32..fd7b5333bd70 100644
 --- a/Documentation/x86/xstate.rst
 +++ b/Documentation/x86/xstate.rst
-@@ -78,6 +78,61 @@ the handler allocates a larger xstate buffer for the task so the large
- state can be context switched. In the unlikely cases that the allocation
- fails, the kernel sends SIGSEGV.
- 
-+AMX TILE_DATA enabling example
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+@@ -141,3 +141,32 @@ entry if the feature is in its initial configuration.  This differs from
+ non-dynamic features which are always written regardless of their
+ configuration.  Signal handlers can examine the XSAVE buffer's XSTATE_BV
+ field to determine if a features was written.
 +
-+Below is the example of how userspace applications enable
-+TILE_DATA dynamically:
++Dynamic features for virtual machines
++-------------------------------------
 +
-+  1. The application first needs to query the kernel for AMX
-+     support::
++The permission for the guest state component needs to be managed separately
++from the host, as they are exclusive to each other. A coupled of options
++are extended to control the guest permission:
 +
-+        #include <asm/prctl.h>
-+        #include <sys/syscall.h>
-+        #include <stdio.h>
-+        #include <unistd.h>
++-ARCH_GET_XCOMP_GUEST_PERM
 +
-+        #ifndef ARCH_GET_XCOMP_SUPP
-+        #define ARCH_GET_XCOMP_SUPP  0x1021
-+        #endif
++ arch_prctl(ARCH_GET_XCOMP_GUEST_PERM, &features);
 +
-+        #ifndef ARCH_XCOMP_TILECFG
-+        #define ARCH_XCOMP_TILECFG   17
-+        #endif
++ ARCH_GET_XCOMP_GUEST_PERM is a variant of ARCH_GET_XCOMP_PERM. So it
++ provides the same semantics and functionality but for the guest
++ components.
 +
-+        #ifndef ARCH_XCOMP_TILEDATA
-+        #define ARCH_XCOMP_TILEDATA  18
-+        #endif
++-ARCH_REQ_XCOMP_GUEST_PERM
 +
-+        #define MASK_XCOMP_TILE      ((1 << ARCH_XCOMP_TILECFG) | \
-+                                      (1 << ARCH_XCOMP_TILEDATA))
++ arch_prctl(ARCH_REQ_XCOMP_GUEST_PERM, feature_nr);
 +
-+        unsigned long features;
-+        long rc;
++ ARCH_REQ_XCOMP_GUEST_PERM is a variant of ARCH_REQ_XCOMP_PERM. It has the
++ same semantics for the guest permission. While providing a similiar
++ functionality, this comes with a constraint. Permission is frozen when the
++ first VCPU is created. Any attempt to change permission after that point
++ is going to be rejected. So, the permission has to be requested before the
++ first VCPU creation.
 +
-+        ...
-+
-+        rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
-+
-+        if (!rc && (features & MASK_XCOMP_TILE) == MASK_XCOMP_TILE)
-+            printf("AMX is available.\n");
-+
-+  2. After that, determining support for AMX, an application must
-+     explicitly ask permission to use it::
-+
-+        #ifndef ARCH_REQ_XCOMP_PERM
-+        #define ARCH_REQ_XCOMP_PERM  0x1023
-+        #endif
-+
-+        ...
-+
-+        rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, ARCH_XCOMP_TILEDATA);
-+
-+        if (!rc)
-+            printf("AMX is ready for use.\n");
-+
-+Note this example does not include the sigaltstack preparation.
-+
- Dynamic features in signal frames
- ---------------------------------
- 
++Note that some VMMs may have already established a set of supported state
++components. These options are not presumed to support any particular VMM.
 -- 
 2.17.1
 
