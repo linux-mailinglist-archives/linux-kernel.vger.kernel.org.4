@@ -2,135 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECE15B40B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4665B40BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiIIUbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S230174AbiIIUc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiIIUaT (ORCPT
+        with ESMTP id S231342AbiIIUcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:30:19 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CC33CBC1;
-        Fri,  9 Sep 2022 13:30:14 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id b16so4231735edd.4;
-        Fri, 09 Sep 2022 13:30:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kpEcg4wYbPXSLUksqLgqfaDecUEI9K/L7cnxAiNm308=;
-        b=0KvHL1XTK8Ip/MxFjGAxHWC5hwgC29eTgOwGiAP8ZoieD04DAeYCJ73Y7fJqZV8VIE
-         pPSPP1Sze1JQx3uElCXNbJKipGq1eaP4J00z8GeM2bh8PlVRKFJ5CR+XJyKvtv1w2vfo
-         yL/eaCqbwpVwbLPDEuvmIHyR9uqzyG4iE3x2d1k2r+p07xQqBF8P1f92izbbq3oUJe8q
-         hERJcaRfeNKlrBo3A/ZM4vK9gfK0P4vwTHSNWyETk52MLZqNrx5UgWhs2way4TM+B8Km
-         CCmNlf3kX6Itt6e1/IsSxqqTYIkTQBmMO4YN846nxUey6DyDLC4PqfJgelc/SHjkKWke
-         9zqQ==
-X-Gm-Message-State: ACgBeo3Y5PMaJ9jsedplmrukGj0wzV0WlyCVOTvZMdkeT0obcVWHAR1k
-        E+t1/t/RQiliDS3+DJfM64CGnKgKF2RIFHm7GE14Nzu7
-X-Google-Smtp-Source: AA6agR5k1e7Sf8b0Ne7PPtH0lpIFZpZ2n0V3pRe0lMeNNgLcoX3mjLwQkMGyX1uOFkhEXiiwavJRe6aSzpqWaIE+El4=
-X-Received: by 2002:a05:6402:f07:b0:450:bf95:59e9 with SMTP id
- i7-20020a0564020f0700b00450bf9559e9mr7941898eda.46.1662755413210; Fri, 09 Sep
- 2022 13:30:13 -0700 (PDT)
+        Fri, 9 Sep 2022 16:32:06 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BF979A7D;
+        Fri,  9 Sep 2022 13:31:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DuMf1QipLUoRLwdHSjENxCrjcmbn/XBjxl9O53GZTk2BUyRacnG955SI/BWWDSOrru3nGgnAG6gjVU5yuFAwn35uuyDYQ2yYvttYtrpMQBjS2h3zk1+h3L32PKMxI1PjFEJx2FYbhguD6zaYjOCf4CuQ2KmiMIEp6e1+c4R+y0wLY0C7BycSY9nqLpKnh9qsX1A4F7gowIN7nPAThFnHHX5EJOJun/VU+U3KMZ4ZFeXGkab/QsWvQtExlbNSrannZhvarl7rTpUC3xdQajrrzpGtq6JJA9NsuvmUjcA8edCh4YQq4SImbPuo/gFC1dQKv/8hA4PnuTwE3FoVjqL7vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MN7HxcVYGzgmHDNlw/HKW7hxcKSMULlKBDyZFllRvJo=;
+ b=fRWCjCm+/+gnKk4mVccHhQ3BvF0M1q/zRkDmWZ1X3D2fpTH8709f2S0w38/Gtppj8+73F8wG5e0hneHSXh7oOn7d2HcfEGhu+HHOFcp/2A7IkvjfhrOOsH+fVABALaq78irdkfcBEhkTIKd/ae/ogHMx3zZU53+h2dF00XOD20M4H8IosYDx2esE/Fadr9hWTrOlcTDvQPLgR1eCfp2us7C/mIGQhzsi58qyxdfB6GvwBzjpT674B9jLVGcvyd+EoQp+5o21Z6TEJS9uPdqvfh4LMQeVIcgwEN5MZJNw2OLU7+CRz11EfihokPWtD1QDrbTZooUeRSj9rYp2dQmwVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MN7HxcVYGzgmHDNlw/HKW7hxcKSMULlKBDyZFllRvJo=;
+ b=MsVIyxUIkHs4VuyaTKhfVnC5F1t8CkzMlfVpsJJFHZ8OHUJzsW1sM7OA6OGI4iBjxpsXUgwNrANk4k1azmrSCIS+3u/zp7rSgh6yCvKUyy7rxHUenVHJswMuVnwL7Or16oZFt0YalRb9rPG08UAqQhgN7tMY2d+exrcPyO1Lekk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
+ by SA1PR12MB6726.namprd12.prod.outlook.com (2603:10b6:806:255::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Fri, 9 Sep
+ 2022 20:31:07 +0000
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::19c9:3fb4:80b9:cd4d]) by PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::19c9:3fb4:80b9:cd4d%5]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
+ 20:31:07 +0000
+Message-ID: <b0b81d03-840d-bcf2-3593-5fc0079f1e6a@amd.com>
+Date:   Sat, 10 Sep 2022 02:00:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v3 5/6] drm/sched: Use parent fence instead of finished
+Content-Language: en-US
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, Christian.Koenig@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+ <20220909170845.4946-6-Arvind.Yadav@amd.com>
+ <2937dc45-0b62-7c71-b846-942fa91cbb4e@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <2937dc45-0b62-7c71-b846-942fa91cbb4e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0063.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:99::23) To PH7PR12MB6000.namprd12.prod.outlook.com
+ (2603:10b6:510:1dc::15)
 MIME-Version: 1.0
-References: <20220901184709.2179309-1-robh@kernel.org> <CAM9d7chY6T-EAN3BT487MUK0LbfGp27X+2Dd_+S0azgh2GQn9w@mail.gmail.com>
- <CAL_JsqLmszK=NzD_2nYnZG1dD=tU1fKGUtYL-dUG2a497LkEcg@mail.gmail.com>
- <CAM9d7ci0Dn3hAX9dp1UMGK7SN-w1BoRqQz6hk8Oykfaa=LnWwg@mail.gmail.com> <CAL_Jsq+CH13TASeAb5VMa=hXGyAT4bDdGeS2XJj9ym6_WM4HRw@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+CH13TASeAb5VMa=hXGyAT4bDdGeS2XJj9ym6_WM4HRw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 9 Sep 2022 13:30:01 -0700
-Message-ID: <CAM9d7ciFbgK8PfNmNFo37GPkXNhp=2es5StDEG+m+deLTP8Hpw@mail.gmail.com>
-Subject: Re: [PATCH] perf: Ignore format attributes with an unknown
- perf_event_attr field
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6000:EE_|SA1PR12MB6726:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec168d43-f41f-4e05-651d-08da92a23952
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oDsWkSVdSwz5H+ublCff3P01zIXfyFyUkUi+FccE319DaqIJxd9ZaMb0rbP5PIg87HSPaAm1fBgFXbffQdwRV+EnxFIxLCBq8mjSaazhNghR6ley5vmJ4U+20qlS5fIUcAGncElaxlwjAyRs1261bsAUT2+2cbToWIY4Zpir6OIz+sK8zU8RFrlzdrE0VS2UPJioglmuGPoHe3ag7UIbVxJFIi8FLxEa7J/jXosDjlAIRdLuEPGQyvmyuiFooehVzqF1y2DVnPuIl8HfQDwT9H5VQKH4k/1jr5yd3TVku2m34mGEUtbk/U4HgR+DWt4hgZZqitfFM+uRDEFO9jVE+fXqR4R8Y53PxLE8TrQgci9K002d1jcBPDn6Paey+RVxdls7bin8EKa4yPeK99/aCG484L/kuAB8QBLH2vIDUOHxxYMyJsmZ6Mp7CJ2bGzRkUuqxdb3UAXjeMl9rK2od7OPlIculBpCvY1Y+UBmiDfc1VNwzREWRZckhilPYwsAlda5h15xtrl7JavM5gIYqojV8r/8Qmn7dSaf+/iDIDNSdzeOuosYeJxUdt0H7Zrn4zDFXF30HTiNe9eKhmBPeVYaAPLM8mnhpOMljAq4IwHBO7eER2x+nMpErMrFPy8HX3qxm4zFFzlU9Bsw9Pc4ScTvxq/GxcVS051hO1ZdgJAomzI6cnt8VpOEISu5a2KzGlM5y3OrC5OTzi2XCTu3XhcbFrX7+saew6Myq2EvQMwwiYj5rw/a7K1+/in7R+VDEtCuojPo5yeHQF258+B503utzBPZ0XsSJ+pH2ccO2PjS8pQ91iiCopE9uJd3m19GA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(8676002)(36756003)(55236004)(38100700002)(6666004)(41300700001)(53546011)(6486002)(6506007)(921005)(110136005)(316002)(478600001)(8936002)(2906002)(31686004)(31696002)(2616005)(5660300002)(83380400001)(66556008)(66476007)(6512007)(26005)(66946007)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUZoOWo5U3hhYUhjdEUrc3k1R2NCZWRWUUg5ZlBVZjh2d2t4R1BKOWhkcWpI?=
+ =?utf-8?B?OVk4d0I2TnEvL0gzSmQyRmtZbENKdzRwMmFIQ2NnS2thMjh3aDNrcENRL29l?=
+ =?utf-8?B?STB2OWpkV2hLdXpadm5lN2xmTTJIbTVPVzdacVZZY1VrYWdnMVFTdTFSUWNB?=
+ =?utf-8?B?M0V2UE1CMHBoTWx2WFp3aWJIcVU4ZFRzaTM5WHp5K0M5VWFYS0k2Q0RjUy8x?=
+ =?utf-8?B?Vm1RTmRQWmNBN09oaGgyQ0Nyd3UvVDNSZm1lbExCYmptRlJ0WDR2ZDVTelFS?=
+ =?utf-8?B?SC81dCtoU1htNTA5RHVydmxhM2x5b3QvTHZUMm9yZUdpWUNoTUo4UmlqWjNy?=
+ =?utf-8?B?N3UxR0czdnU3dnpuaFJTeVlvRjd2L1Q5QmRJMVQ3M2RZUzhKd1BkWTZRYnpQ?=
+ =?utf-8?B?RTUwZWZvVTA5Q0VDRGp2WXJmR2toK05DQ2pXZXNmaXFFbHZBV0RWMEpFRWhX?=
+ =?utf-8?B?Wkl3aFVYRmFXQmVZQmtoYjVRTXlOT29aMDgzSUI3Z2dpVjRXWEZFZXMvVWJY?=
+ =?utf-8?B?N1plOGZqb0tQdG51ZjhtSFY3SFhVUEdmSVh6dFVLNTlOS0dVbytiNnJkc2Rq?=
+ =?utf-8?B?OGR4T2J2NEJqZG1OZlhVRXZLQU1WekFpd0lpTHVHdlY2dTBkdmZmSWtHeTlu?=
+ =?utf-8?B?VXoyOVNHbnFoTnptTCtQQkwwQlJQaGxYdWRGS253K0dxT25Qd0p5czRyZ1lF?=
+ =?utf-8?B?NWExYXd5RkEyV0VINDR6S1cwY2lFcUtJWC9ONkVZMHlYZ1JBR1ladTVkaE5J?=
+ =?utf-8?B?RytuY2xSMkh0R3ZWc0NycXBHNVdVNWRGSVIwdytNbzdZSFpEcUVET0d5V0FQ?=
+ =?utf-8?B?bFVMQUljbzM3cEhDeUJYWU5YRFFyM00xSDZXQTNrbFNSVWRWdW03MGkyUGJK?=
+ =?utf-8?B?dmhYaXBlRDI5dFRlVFl2L0gwaU9kMC84ZzlhS1dkVnM0ZGxnNTZZbUFpTnUz?=
+ =?utf-8?B?eDAwZXhVdTZBWlJQMTl4VmNmcmxzRE5WbSt4NERPSWozVG8rV015Rk9HQUNE?=
+ =?utf-8?B?V1JKVG5tdkM0VWlDVGR3dVhERUZtL2JRSHNkdE1DaDRmTTloZXBFZTZBM0cr?=
+ =?utf-8?B?QkdVVGZXY243YlBGN0V5WWEwR1k5MEhsd1BmaEt5bWpxQzVCYkxVRVZDZXlp?=
+ =?utf-8?B?bkRPV2VCbVJTZ3ZBRWE4blRYMHVsUnlsY2UxRlluNGhHOW9QV0NSMzdMdmJN?=
+ =?utf-8?B?NkRZc1dmd1dqRHFXRGJMaldRa0lRTFJtNWFKWUd5d2c1di9yeTF6TVY0bXZi?=
+ =?utf-8?B?Y0FkTFprSEppOFR3QWtvcGJMM1ppOHhTN1ZpdUV1dmh1RXVDcUtnVmxJTVpz?=
+ =?utf-8?B?L2Z2ZmIwcis0VVJwR2l4di9hL01EYnhuUmhrb0Fmb0MzNjhBSjFxVTdTRHdU?=
+ =?utf-8?B?NHV2cHJqN3NhRmNCQnlkdXlzdVZFMDVJb0NzY0w0M3paUlRObE5Wc3BWRHhx?=
+ =?utf-8?B?L2dxWGo2aEdnOXNDQzlIOUFsWFlhaXp5R3NmOHFWbmZpQ05QeFRBbUc0Y1F1?=
+ =?utf-8?B?Rk1panRveFFpMGxmdVRvNk1ERnZHQ3Jub2h4NnhNRXhYQ2RDZCs2djRBSWha?=
+ =?utf-8?B?bHZtQ091dys4Uk1RVXZ4SlZyNzBQSEU5WEc3QjFkYTFQa3grd0J2VUdBelg4?=
+ =?utf-8?B?R0pHRW1icm82eGlLcEJFQXpsZ0xxYS9MakR4TEtkQjZ4Q09ENFFEMDFpNUJQ?=
+ =?utf-8?B?QTd1MExYWnZ2QmF5SkNTTUVLWkpBZ3J6YlJicWdpclhtSm9DUzk1MjBEcHhn?=
+ =?utf-8?B?SWNpTDdFNzVPbUpzNjJxeXlaVjVoNkRBaFNtd00xSDV2OGJxTU9FNjVzdHFU?=
+ =?utf-8?B?ckFKNlpMbWExZUdKeEZUR0UrU0wzVm1UN1dJVkVBSjRvYXpoZi9QQVFzSUhX?=
+ =?utf-8?B?eGtYWDQ4YUg3WEs4RjlsN0pKNlh3UitORUNIQTg4cmJ1VjNKWGJrUGt1NXJo?=
+ =?utf-8?B?MVR6anYyMlBjeWd1bXc5SHlDcVdya2lsTWlqT2hzTVZvNkFUcGlpZEt0L1N4?=
+ =?utf-8?B?R3RHMUVscGVBTU5qVW1ZT2xkYzRTNHA4VVpCRENtL0ZnMC8yeVRQRW9Ic2xv?=
+ =?utf-8?B?eXVobEVPV0U3Vm9vdzNJL2g5SEVmZGdRbE9iSFIzbTl0b1RIV1IxbjUwQ2lk?=
+ =?utf-8?Q?hLsjjrOzQu8EwnUTlnRPtXBVk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec168d43-f41f-4e05-651d-08da92a23952
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 20:31:07.4322
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UXD373CwCM7gG8yKQnN5EGDHMCE/gCCYsZMAwBvuU3SVmestcOBuNFNpOGbLkAJEKuFnQKk0NEKr/eI6Rx4KMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6726
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 1:11 PM Rob Herring <robh@kernel.org> wrote:
+
+On 9/9/2022 11:02 PM, Andrey Grodzovsky wrote:
+> What exactly is the scenario which this patch fixes in more detail 
+> please  ?
 >
-> On Tue, Sep 6, 2022 at 1:16 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Fri, Sep 2, 2022 at 8:25 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Fri, Sep 2, 2022 at 1:53 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > On Thu, Sep 1, 2022 at 11:55 AM Rob Herring <robh@kernel.org> wrote:
-> > > > >
-> > > > > If the kernel exposes a new perf_event_attr field in a format attr, perf
-> > > > > will return an error stating the specified PMU can't be found. For
-> > > > > example, a format attr with 'config3:0-63' causes an error if config3 is
-> > > > > unknown to perf. This causes a compatibility issue between a newer
-> > > > > kernel and an older perf tool.
-> > > > >
-> > > > > The addition here makes any attr string up to the ':' ignored, but
-> > > > > still checks the 'bits' portion.
-> > > > >
-> > > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > > > > ---
-> > > > > This is the YACC mud I threw and seems to stick. Maybe there's a better
-> > > > > way to handle this. It doesn't seem like there's a way to do wildcards
-> > > > > (i.e. config.*) in YACC.
-> > > > >
-> > > > > This is needed for this series[1]. Unfortunately the best we do to avoid
-> > > > > the issue is applying this to stable. I think there's some time before
-> > > > > v8.7 h/w is deployed, too.
-> > > >
-> > > > Maybe you could change the format_term rule to take an identifier instead
-> > > > of PP_CONFIG* directly and pass it to perf_pmu__new_format().  Then
-> > > > it could check the string and create an appropriate PERF_PMU_FORMAT_VALUE_*
-> > > > or ignore it according to the PERF_ATTR_SIZE_VER*.
-> > >
-> > > That only moves parsing of configN from YACC to strcmp in C. In doing
-> > > so, we'd be left with just the 'error' token case which seems a bit
-> > > odd (if there's another way to do it, I don't know. yacc is not my
-> > > thing). Is that really better?
-> >
-> > I thought we could do more flexible handling and detailed error reporting
-> > in the C code.  But it could be done in the lex/yacc as well..
-> >
-> > I think the general idea is that we want to run a more recent version of
-> > perf tools than the kernel.  So if it detects the tool is older, it can show
-> > a warning message like:
-> >
-> > "config3 is not in the perf_event_attr.. skipping.
-> >  Maybe you're running on a newer kernel. Please upgrade the perf tool."
+GPU reset issue started after adding [PATCH 6/6].
+
+Root cause -> In drm_sched_get_cleanup_job(), We use the finished fence 
+status bit to check the job status dma_fence_is_signaled(). If a job is 
+signaled (DMA_FENCE_FLAG_SIGNALED_BIT is set), then we cancel the reset 
+worker thread.
+
+After applying [patch 6] now we are checking enable signaling in 
+dma_fence_is_signaled() by checking DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT 
+bit. but signaling is not enabled for the finished fence. As a result, 
+dma_fence_is_signaled() always returns false, and 
+drm_sched_get_cleanup_job() will not cancel the reset worker thread, 
+resulting in the GPU reset.
+
+To Fix the above issue  Christian suggested that we can use 
+parent(hardware) fence instead of finished fence because signaling 
+enabled by the calling of dma_fence_add_callback() for parent fence. As 
+a result, dma_fence_is_signaled() will return the correct fence status 
+and reset worker thread can be cancelled in drm_sched_get_cleanup_job().
+
+~arvind
+
+> Andrey
 >
-> I figured out how to simplify the yacc code and add a warning.
-> However, one thing to note is that we'll always get the warning if any
-> PMU has an unsupported format attr because all the PMUs are scanned.
-
-Right, I think we need to change this behavior.
-
-
-> For example, just this gives a warning even though the SPE PMU is not
-> used:
->
-> perf record -e cycles -- true
->
-> So the warning might be misleading. On the flip side, new additions are rare.
-
-Yeah, we should not warn at parsing, do when it's actually used.
-
-Thanks,
-Namhyung
+> On 2022-09-09 13:08, Arvind Yadav wrote:
+>> Using the parent fence instead of the finished fence
+>> to get the job status. This change is to avoid GPU
+>> scheduler timeout error which can cause GPU reset.
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>
+>> changes in v1,v2 - Enable signaling for finished fence in sche_main()
+>> is removed
+>>
+>> ---
+>>   drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>> b/drivers/gpu/drm/scheduler/sched_main.c
+>> index e0ab14e0fb6b..2ac28ad11432 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>> @@ -829,7 +829,7 @@ drm_sched_get_cleanup_job(struct 
+>> drm_gpu_scheduler *sched)
+>>       job = list_first_entry_or_null(&sched->pending_list,
+>>                          struct drm_sched_job, list);
+>>   -    if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+>> +    if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+>>           /* remove job from pending_list */
+>>           list_del_init(&job->list);
+>>   @@ -841,7 +841,7 @@ drm_sched_get_cleanup_job(struct 
+>> drm_gpu_scheduler *sched)
+>>             if (next) {
+>>               next->s_fence->scheduled.timestamp =
+>> -                job->s_fence->finished.timestamp;
+>> +                job->s_fence->parent->timestamp;
+>>               /* start TO timer for next job */
+>>               drm_sched_start_timeout(sched);
+>>           }
