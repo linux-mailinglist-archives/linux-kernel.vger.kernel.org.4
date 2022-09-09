@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2545B341D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE4B5B3429
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiIIJhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S231741AbiIIJi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiIIJhl (ORCPT
+        with ESMTP id S231620AbiIIJiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:37:41 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C2693202
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:37:39 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id q21so1797478lfo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:37:39 -0700 (PDT)
+        Fri, 9 Sep 2022 05:38:21 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FCD97EDE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:38:16 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u18so1719519lfo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=SXD4yRr2wTLtswQrrWTaQpfDTO4oenQgkAblYwtJOXY=;
-        b=SE7eDe4CxGd7L3exB9DwNRCm+q8otphqU0V+638Si94Svkbhr0bEyeaSqsJ6GZ8xQL
-         0Rz4YQ1jI6VMMdhOrCIeGwlLSk0QwbN0uwZ95R45KuCe2Fvo6plPyJrcJYofo44bLM0S
-         dRvvhFnLD8xTIdUTkdysfM8bAAAsKBE3UwQk4LNrhwayeWFf33tE1yQh3t+NQiLB1qku
-         P2ijAVwvdaqslE/mw4kNSx612PVK+QLWK0CbJUzrcyEzzvvMzNUHqbFse1NSKJWl382O
-         WhZm1lmCHZ1EYUPsIz+PL+p+5o1VqqVGxeNw2p0t71UvcRuxONUxiJTZduxp153TV5Gz
-         t5EQ==
+        bh=JSwEzblR3fhWzgBxSTAfIwU+U86WjgXDoByRzUfVV8k=;
+        b=xc6HNMUXBP+pMU58wN211x4B9/0BQOvwZNSoA19lABQH94ATxm/ucaaixyIDuFiJtO
+         XSw2RvhSZiFm/qjKWpToNJHCbBq2fcVOXTbjhx1jhoj1nN8TgY3DRjIm/4JlVWLaoyQP
+         X6nGBPuO1Omag4pBHqviM0hjpiz/gxYckF1pJX83ZX27nEN+unzsMDYWtxycOW8HtgJ+
+         T46fEFEVLkmZ6QkylccrXQx3o6omJY6BHr8KKLQaEJxt4dyXH/BgR8kqUEbRR4dBh3TY
+         yDyq6ZoK/ui4rrtrxte1/g6Z1oXLSwuxM3rJq9T9veEBp/Try77mzN362wTyDZN01KRX
+         czSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=SXD4yRr2wTLtswQrrWTaQpfDTO4oenQgkAblYwtJOXY=;
-        b=wg507VwAjUcKsOx5yBBQ73YHGvs/K9lrm+JZqyVs7HxZ9g8lqFBXlyJlSZQcge8H7q
-         KswpfNL+0KjLthq2MMsE3w+BIWmXmD1lCBlmocto+Lq8hkUtCNeDQP9InNXLWXbibPxd
-         xFIunhC1KjIdV+vmYnIiENycKqsHW4YPzdNVCq47ks5ruE0vs9s7INS/wBc7HHja999/
-         OQi/ouFGu6UCkeaWVIR+E7rAn3oE4cD6qDy8D/BzLq8S4VABuT66lPbTTbTYJSbtGV9D
-         dHA3Ni75OiWK6hSciU3n0zAWnrhJIiyLk/qH98Y2WkzxU5ZZldnyc5E+vWIGHud+kWWU
-         ENCQ==
-X-Gm-Message-State: ACgBeo23kBF6XcPql2QRod81+uy4EwaLHKwBEaXaTrexoooLPyKwwnpZ
-        wtJ3mdndrPe1kb4JyTuvyQsjmQ==
-X-Google-Smtp-Source: AA6agR4xazgW4nbm1Io8z69hyNYtHUdL9TICI3XSS/+5iekya2PssfTCwUhClbVBFmItzTAdglmeqg==
-X-Received: by 2002:a05:6512:3194:b0:494:716d:34e2 with SMTP id i20-20020a056512319400b00494716d34e2mr3871433lfe.147.1662716258194;
-        Fri, 09 Sep 2022 02:37:38 -0700 (PDT)
+        bh=JSwEzblR3fhWzgBxSTAfIwU+U86WjgXDoByRzUfVV8k=;
+        b=NNuYksJkQIyQH2e+VwsQSCLNPyJqyRd6V4Oek81JIvo8XY18SbgtYL5OGoNxTr2/Eo
+         z4ngpa66ga8NoVjND+IsZko36xOdyk1tkoPwCCX9MIbgWjw7mHbeX9YxlnF3G7+OKIA7
+         mQ+KEVI19zON5XxV7EC11u4W1qtTa4YJGck4TaxOwCa8ZkqLM1RzpBUFyYCZ48N+kbSz
+         bACSjMDr4tbiCcoIIUUNWF23jW1iUOYiAimzJfzK/xX2ew0cCgxL0Lzxu/VcbZbMIbok
+         tVdApxf5PkRw33CFIDTUeW8ShwMM0+u8NMO1BbgJNNYego4hYbYVxK2Qcr+MbcZbbBW7
+         R4uQ==
+X-Gm-Message-State: ACgBeo0d06SugsOgqYppSM28IZW6GK1JxnJzYCiBWGSuc0LYwwyITYHO
+        sOGwQ69fTGiJhtjZGi9i5oknbA==
+X-Google-Smtp-Source: AA6agR4NQYf8/THkyhJ6wAWjtOvtzgin1YbJhxuhdzx9K4OkyEsreaPjW/UACP7UY+bPxSJce9khgg==
+X-Received: by 2002:a05:6512:4014:b0:498:fe3c:d225 with SMTP id br20-20020a056512401400b00498fe3cd225mr436012lfb.198.1662716294357;
+        Fri, 09 Sep 2022 02:38:14 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id n26-20020a2e86da000000b00261e8e4e381sm14607ljj.2.2022.09.09.02.37.37
+        by smtp.gmail.com with ESMTPSA id u26-20020ac243da000000b00498f1eddad0sm11297lfl.122.2022.09.09.02.38.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 02:37:37 -0700 (PDT)
-Message-ID: <10c259b9-00ed-f596-4118-5a57ecef6a4a@linaro.org>
-Date:   Fri, 9 Sep 2022 12:37:37 +0300
+        Fri, 09 Sep 2022 02:38:14 -0700 (PDT)
+Message-ID: <fc18cd9d-554e-6c49-aa77-c55a922a1a56@linaro.org>
+Date:   Fri, 9 Sep 2022 12:38:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH 05/16] phy: qcom-qmp-pcie-msm8996: drop unused runtime PM
+Subject: Re: [PATCH 07/16] phy: qcom-qmp-ufs: drop unused runtime PM
  implementation
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20220907110728.19092-1-johan+linaro@kernel.org>
- <20220907110728.19092-6-johan+linaro@kernel.org>
+ <20220907110728.19092-8-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220907110728.19092-6-johan+linaro@kernel.org>
+In-Reply-To: <20220907110728.19092-8-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,10 +93,6 @@ On 07/09/2022 14:07, Johan Hovold wrote:
 > support for runtime PM").
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  | 37 -------------------
->   1 file changed, 37 deletions(-)
-
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
