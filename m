@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F415B30A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EEA5B3092
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiIIHjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S231782AbiIIHj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiIIHiz (ORCPT
+        with ESMTP id S231687AbiIIHie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:38:55 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2ED4DF07;
-        Fri,  9 Sep 2022 00:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662708956; x=1694244956;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m3YnqdItTBfQHuTJjhU/D3X2vYT7bLo7zCxA7BZS5Gg=;
-  b=ddkUvZ8gAEZdc45JaMhFgdZxyPONLu341eDyd8/EiILhqJQd62dOhFcV
-   mbrzL7j+oFmbBlfVetxwnimJe6zZwYoSzZUZQuUabp9AT3l54na7yU+MZ
-   D7iXigyN0HR8Ok1KqF0bF4BBZVQkU2TThWnlBqIZHYhtdktwYEkYFD1eh
-   HKuKYPWDyopWZRyAhMUUnVvbRSqxQUMfSEsSKKVujOYgMkPvXRR4wBVvd
-   /RJMCMuPBPznOlSpcPpIsDSrblwndLGcuOfR8Cq8Kj+j920zN3fNSctZq
-   FaP8FvRpgau/OjWODsH3v07ustfMzjkAuS8DsS4uF1WSnJaxsDCr8+oAB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="296155491"
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="296155491"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 00:35:16 -0700
-X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
-   d="scan'208";a="645435049"
-Received: from yuyongfe-mobl1.ccr.corp.intel.com (HELO [10.249.174.117]) ([10.249.174.117])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 00:35:11 -0700
-Message-ID: <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com>
-Date:   Fri, 9 Sep 2022 15:34:53 +0800
+        Fri, 9 Sep 2022 03:38:34 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCE011B020;
+        Fri,  9 Sep 2022 00:35:40 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id t65so814500pgt.2;
+        Fri, 09 Sep 2022 00:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=84egTDT1/lAGh+ekFxVhTTrXVTkSlhCJVYW1hdORQu8=;
+        b=NMlJkcQ6a08q1uCn1snYIqPbZSZ82Um4jzZ8T+2UQFz3Pj0jIbG3JcMbMppG6NRJt2
+         sIAW07T5t0eJwaCYoPlzDtvCq1Vgsxt9zgOKa1bnnp1jxCPQaV+YBQnvIsve1jCXDQl+
+         /HTmBVOd1BOvUzWfCgDlVk+pivf83ioAcYX1EIcSYJOOPyFPV240Menio2/3zcA7Ud+R
+         iVllGl4hzohF2O5a/c++/csZ7SZ+xw+c00rIyUckDTxaNV6SafFJ7lFCCzvc3Xe1r45g
+         w+6adFvwc+ae+Wa48ZhEQcb4RymIZ8OqlMW4rKIQzaUwVyS0Wj7JysSI67/h26U3TR0G
+         eabg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=84egTDT1/lAGh+ekFxVhTTrXVTkSlhCJVYW1hdORQu8=;
+        b=s0kZCLclf9cbC7wfOFdNG8V8PgTjbhTOOFRMMRXw8ekBoP3XhU6U8Meekbtk+NSjAw
+         2iXr4fLxr70rNs5Uv52s/OzwI6iemhLPCu1S1x7aZnXb5TEs8xYzDGlXeW3Jc9Ez9tfG
+         TTVszq0R4GWTR51y3AEkaXSoBwRXdcJo4l91IHh73Uk1iNM7PjcItZQUjFMiHOz7H5Nv
+         6ouVnGEN/k8hLJzBFsqIXPRjnSPyPmq9wY/PuetSl9x0c2mMmkvQAFV9zdOpoM/JWaqe
+         YdVowTesoFjEGY1wIxXGnafeTeukqvNqSl5bTCB/9JB2olFMZENTp4PeXuH19p4qLHuZ
+         pqPw==
+X-Gm-Message-State: ACgBeo3Oc9p8u4Zo+2DYXsNrvSnFVV7KICbay846NYx6VTl8i/ecUkNr
+        y052ZdIaxwRNgA19ooYSV+M=
+X-Google-Smtp-Source: AA6agR6hQrmuvCiEu5/BNDodrrIftjxQLHxObdA2P7Rf8jFssdZej+OLUk7VjJEqu+dI4T6/ZmiX/A==
+X-Received: by 2002:a63:5209:0:b0:434:9e1a:bdba with SMTP id g9-20020a635209000000b004349e1abdbamr11316901pgb.297.1662708937563;
+        Fri, 09 Sep 2022 00:35:37 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id ix19-20020a170902f81300b00174e5fe9ce1sm720938plb.159.2022.09.09.00.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 00:35:37 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH V7 0/2] Add ums512 clocks and relative bindings file
+Date:   Fri,  9 Sep 2022 15:34:54 +0800
+Message-Id: <20220909073456.239668-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] net/ncsi: Add Intel OS2BMC OEM command
-To:     Paul Fertser <fercerpav@gmail.com>
-Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220909025716.2610386-1-jiaqing.zhao@linux.intel.com>
- <YxrWPfErV7tKRjyQ@home.paul.comp>
-Content-Language: en-US
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-In-Reply-To: <YxrWPfErV7tKRjyQ@home.paul.comp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-09 13:59, Paul Fertser wrote:
-> Hello,
-> 
-> On Fri, Sep 09, 2022 at 10:57:17AM +0800, Jiaqing Zhao wrote:
->> The Intel OS2BMC OEM NCSI command is used for controlling whether
->> network traffic between host and sideband is allowed or not. By
->> default such traffic is disallowed, meaning that if the device using
->> NCS (usually BMC) does not have extra active connection, it cannot
->> reach the host.
-> 
-> Can you please explain the rationale behind introducing this as a
-> compile-time kernel config option? I can probably imagine how this can
-> make sense as a DT switch (e.g. to describe hardware where there's no
-> other communication channel between the host and BMC) but even this
-> feels far-fetched.
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Previously I submitted a patch to make the NCSI configurable in DT[1], but
-it was not accepted by kernel community. A limitation is that currently NCSI
-is not a standalone device node, it is controlled by "use-ncsi" option in the
-MAC device DT node (like ftgmac100).
+This patchset is add the UMS512 clocks support
 
-Other features like keep phy (also intel-specific oem) also uses kernel option.
-(CONFIG_NCSI_OEM_CMD_KEEP_PHY)
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-[1] https://lore.kernel.org/netdev/20220610165940.2326777-4-jiaqing.zhao@linux.intel.com/T/
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items"
+  list when use the latest dtschema.
 
-> Can you please outline some particular use cases for this feature?
-> 
-It enables access between host and BMC when BMC shares the network connection
-with host using NCSI, like accessing BMC via HTTP or SSH from host. 
+v4 changes:
+  move the syscon bindins from clk to glbreg yaml file by pickup 
+  chunyan's patch for global registers bindings
+  fix the comments from Krzysztof in v3 patchset
+  add the Acked-by: Krzysztof in patch v4 3/4
+  fix the  warning Prefer "GPL" over "GPL v2"
+
+v5 changes:
+  Add review tags.
+  fix the comments in ums512-glbreg.yaml.
+
+v6 changes:
+  No more send the patch 1/4 and 3/4 in V5 for applied by Stephen
+  change GPL to GPL v2 license
+  fix the lack of space in some "{" and "}"
+  add check error for sprd_clk_regmap_init.
+
+v7 changes:
+  Resend the patchset after the cross-tree patch merged
+  use thr absolute path for the mfd refs of patternProperties
+
+Chunyan Zhang (1):
+  dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+
+Cixi Geng (1):
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      |   68 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2202 +++++++++++++++++
+ 4 files changed, 2277 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+
+-- 
+2.34.1
+
