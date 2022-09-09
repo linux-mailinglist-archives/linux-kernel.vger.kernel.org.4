@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C795B3B5D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B335B3B66
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 17:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIIPAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 11:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S230500AbiIIPEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 11:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIIPAk (ORCPT
+        with ESMTP id S229698AbiIIPES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 11:00:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F866D5733;
-        Fri,  9 Sep 2022 08:00:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BD1C165C;
-        Fri,  9 Sep 2022 08:00:43 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6252E3F73D;
-        Fri,  9 Sep 2022 08:00:34 -0700 (PDT)
-Message-ID: <6d1da046-1f14-4204-e0c5-8d5b315e3839@arm.com>
-Date:   Fri, 9 Sep 2022 16:00:27 +0100
+        Fri, 9 Sep 2022 11:04:18 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AE79FAA0;
+        Fri,  9 Sep 2022 08:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662735853;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=Luc36XRm6buQs3XXIJk3KbOcuPIEp2J/433bdIOlqi0=;
+    b=qxYbh3JjvhJQRoySG1IlFuHAPpdsHOwdkfsK86x/jmTm6nJTTC5flrx5ip4zltUJ8f
+    tTr1yYIUMZ8oaIkjPYOQZ1uidUE7HHn2FLnqWFJMOF0ygXxVqKoz/56Gvd1ILMgVdjTn
+    p7nAaqspEluwR74Euc4ec+AfFLYTLCoi/qtGTGkBszOnvXVDZRkyopMSRCDP8noiA8zw
+    IOb5oM3HB6zVDFg5iUiUdFa77Iyd5tAdoJsmb0HWaQyK0AHTaKYz1WJ/DHxZ5jExWbtq
+    7Q0xn3AFBMShlzmVCSYfCEAErnIxg23al+H7YnYUkOmmy1+AsMquDNxt/0CQc0qXexDf
+    YDPA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::923]
+    by smtp.strato.de (RZmta 48.0.2 AUTH)
+    with ESMTPSA id wfa541y89F4CB2f
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 9 Sep 2022 17:04:12 +0200 (CEST)
+Message-ID: <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
+Date:   Fri, 9 Sep 2022 17:04:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target
- address
-Content-Language: en-GB
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Will McVicker <willmcvicker@google.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220825185026.3816331-1-willmcvicker@google.com>
- <20220825185026.3816331-3-willmcvicker@google.com>
- <Yxs/zguOb52tY2C0@infradead.org>
- <5bfd7d4d-d431-6321-89bc-663dcd36e930@arm.com>
- <YxtR8/X4fb9wSYEo@infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YxtR8/X4fb9wSYEo@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
+ bcm_module_init()
+Content-Language: en-US
+To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        mkl@pengutronix.de, edumazet@google.com, kuba@kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
+ <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+ <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+ <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
+ <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
+ <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-09 15:47, Christoph Hellwig wrote:
-> On Fri, Sep 09, 2022 at 02:47:19PM +0100, Robin Murphy wrote:
->> On 2022-09-09 14:29, Christoph Hellwig wrote:
->>> On Thu, Aug 25, 2022 at 06:50:25PM +0000, Will McVicker wrote:
->>>> Since not all devices require a 32-bit MSI address, add support to the
->>>> PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
->>>> allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
->>>> buffering (swiotlb) without risking not being able to get a 32-bit address
->>>> during DMA allocation.
->>>
->>> Umm.  You can't just disable ZONE_DMA32.  Linux absolutely requires a
->>> 32-bit dma mask to work, it is in fact the implicit default.
+
+
+On 09.09.22 05:58, Ziyang Xuan (William) wrote:
 >>
->> Eh, it's behind CONFIG_EXPERT, which makes it enough of a "I think I know
->> what I'm doing and accept responsibility for picking up the pieces if it
->> breaks" thing.
+>>
+>> On 9/8/22 13:14, Ziyang Xuan (William) wrote:
+>>>> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
+>>>>
+>>>> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
+>>>>
+>>>> static int __init packet_init(void)
+>>>> {
+>>>>           int rc;
+>>>>
+>>>>           rc = proto_register(&packet_proto, 0);
+>>>>           if (rc)
+>>>>                   goto out;
+>>>>           rc = sock_register(&packet_family_ops);
+>>>>           if (rc)
+>>>>                   goto out_proto;
+>>>>           rc = register_pernet_subsys(&packet_net_ops);
+>>>>           if (rc)
+>>>>                   goto out_sock;
+>>>>           rc = register_netdevice_notifier(&packet_netdev_notifier);
+>>>>           if (rc)
+>>>>                   goto out_pernet;
+>>>>
+>>>>           return 0;
+>>>>
+>>>> out_pernet:
+>>>>           unregister_pernet_subsys(&packet_net_ops);
+>>>> out_sock:
+>>>>           sock_unregister(PF_PACKET);
+>>>> out_proto:
+>>>>           proto_unregister(&packet_proto);
+>>>> out:
+>>>>           return rc;
+>>>> }
+>>>>
+
+> Yes，all these socket operations need time, most likely, register_netdevice_notifier() and register_pernet_subsys() had been done.
+> But it maybe not for some reasons, for example, cpu# that runs {raw,bcm}_module_init() is stuck temporary,
+> or pernet_ops_rwsem lock competition in register_netdevice_notifier() and register_pernet_subsys().
 > 
-> Seem like indeed on arm64 there is a way to disable it.  The x86 model
-> is to just select it unconditionally, which I think is the right way
-> if we don't want to get into completely random failures.
+> If the condition which I pointed happens, I think my solution can solve.
+> 
 
-IIRC there were reasons for wanting as much ZONE_NORMAL memory as 
-possible; for the embedded folks who are already typically running with 
-"swiotlb=noforce" to save memory because they know their hardware, we 
-may as well let them have the footgun. Distros and other general-purpose 
-configs should rightly not be going anywhere near this.
+No, I don't think so.
 
-Cheers,
-Robin.
+We need to maintain the exact order which is depicted in the af_packet.c 
+code from above as the notifier call references the sock pointer.
+
+Regards,
+Oliver
+
+
