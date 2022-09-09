@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B40D5B368A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FD55B368D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiIILj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S231400AbiIILkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiIILjh (ORCPT
+        with ESMTP id S231378AbiIILjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:39:37 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FC113CB3B;
-        Fri,  9 Sep 2022 04:39:12 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id BB21DC009; Fri,  9 Sep 2022 13:39:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1662723547; bh=Qqwt0vBVIvZRqd4nvturax93UCC/svGIe5vYpDqGjUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I8x667VIoVd4x9lJxLJ2ctVSxhNWHgM1Y07msr8orfCj7UM+xUOAWaecJenfGQ6zW
-         OdIiZ7k5sCBfVYmQC9v1QsisZP3Jdbbknofuh3aHumy55CntwZy0l9OnI462OSkM8j
-         p1iM57/Hnjlyh03YwNnoHA+hz20DWLzx8chUD95G6mSHYpPbxgUBbXqi790q82T43F
-         7CqhLMnj/pDtukAkj3QrmKh4WA0qnpWiMcdaPK+naT5tKdojklaSe9K9NnSD3kqrPU
-         Qp2PcFRXU/efZasoyZG37Wk4Vdjd/cY+Gu2/Pv/U0dnyCAJLXuGJoI+tOH7pUZ5hVC
-         RwvzBHzwo0cKA==
+        Fri, 9 Sep 2022 07:39:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E1102D6D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662723557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4+xQ+u9S0tgyk9MqUu4hGDCqntK9cHlkmBOzSNS1R1w=;
+        b=HoEsXEdch8kIonrmTAs8dxLkXFIWGqiBWHCTlQjE+ZxMujcR/6PSBfHw61sxSlOcs5VefA
+        d/UCq4knrtoUxxLcCa6Yxs8Vw8N8kqXVvzBAYxzjO95pFJLr7mwJXzj1b/Qg35zt9Nz6bh
+        maoy8KUVJPbKler9gFcupe8FOxgxet8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-436-4FGv38smPWOiy7IWwxpKww-1; Fri, 09 Sep 2022 07:39:16 -0400
+X-MC-Unique: 4FGv38smPWOiy7IWwxpKww-1
+Received: by mail-wm1-f69.google.com with SMTP id v189-20020a1cacc6000000b003b461a36bb5so387030wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:39:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=4+xQ+u9S0tgyk9MqUu4hGDCqntK9cHlkmBOzSNS1R1w=;
+        b=ZTqeel5cHmtLU4R+82bK+jT5nOZjrnBHEd+GPATPoYsuQMsg8+f74vcMSdgvAIR5QY
+         469KS+5pIvfwoIiogu1ZbMbE9ozddK3n3HWaDO+s4Zt1a/Pa/35qZLbZ2+Tf+hG1wyF0
+         Pp+4lYLO05+ZwF0SuNtw6zO4nT0p76V2smLp2Sgy6jpS94rXsUI7Cz+G8tRvwdCEZje3
+         Zebt4yX3iy5wNBTbsCrVckrMZFje7E2HP1n1R/brIbKDWZQiaGj4MlxL9ULeCgg/qKJ6
+         suNW9nx1aM37x9yN7V1t+bHZDNiFrOHdE/lwcGzR5Y5xWmbVZ7iNG3TLJQC+rDoeg8rh
+         5nrg==
+X-Gm-Message-State: ACgBeo1FZE2fdMQbHNhwVSUcZ4WLXKHsUDkE5WbE0BvbdIqbrMUoD54M
+        0ftTJoepA7LTxF1xVNwwZRrZuoLGqTkHTKsrvtPrJZnOyeDZUDKysSgG+74gDRs9T56L5FpHC1l
+        d5EqlwRpck+w3SFxBxdBZhktB
+X-Received: by 2002:a05:600c:190a:b0:3a8:43b8:53e3 with SMTP id j10-20020a05600c190a00b003a843b853e3mr5410833wmq.4.1662723551771;
+        Fri, 09 Sep 2022 04:39:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5oSOQCv1rV8+0kKXwGqYxsbmkXFVKOldZ3ZBR0HZyGJjq4rqQ63TIdaJov10te02Vg9N29fQ==
+X-Received: by 2002:a05:600c:190a:b0:3a8:43b8:53e3 with SMTP id j10-20020a05600c190a00b003a843b853e3mr5410821wmq.4.1662723551494;
+        Fri, 09 Sep 2022 04:39:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
+        by smtp.gmail.com with ESMTPSA id k13-20020adfe3cd000000b00228655a5c8fsm308697wrm.28.2022.09.09.04.39.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 04:39:11 -0700 (PDT)
+Message-ID: <1b078b99-a0d8-f1d9-d804-10cd0228d168@redhat.com>
+Date:   Fri, 9 Sep 2022 13:39:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 01/16] mm/page_alloc: ensure kswapd doesn't accidentally
+ go to sleep
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-2-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220909092451.24883-2-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id E802AC009;
-        Fri,  9 Sep 2022 13:38:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1662723546; bh=Qqwt0vBVIvZRqd4nvturax93UCC/svGIe5vYpDqGjUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7VKEWyZuY4lrG8Efk0aJlSk+Z5funJd1NRS4hGL4LhSKjDztUHbT/lR+Zzq8FWud
-         bzWLesLkW5QICabeoXEyLb02g2fKqDEI3TyR8KQQ3rHgToT3f6dZ/GDwGq/FnQTT7+
-         bFl8E8Dre18izlGLezlP3nIFVJ4fyPEsAz7AGeKCSkZBcDMR1ORZiQ4glgsyRJl5W9
-         iN5BB+Dbo8RUBgiP0KW9/2FnS6e3Vzf4Xm2VZz2OTeNgCFz1CLckHKIDnrpkNzJGai
-         +dunyA3IkEAX5G6tDn/mSVSTsIyRa0T6VIxpiQ6ynb1YUhHDvHZIIAJ62U1hyYC2XG
-         LovW+ZdKu5R2w==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id a37b6550;
-        Fri, 9 Sep 2022 11:38:57 +0000 (UTC)
-Date:   Fri, 9 Sep 2022 20:38:42 +0900
-From:   asmadeus@codewreck.org
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] net/9p: add __init/__exit annotations to module
- init/exit funcs
-Message-ID: <YxslwvLFLTdT2R9z@codewreck.org>
-References: <20220909103546.73015-1-xiujianfeng@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220909103546.73015-1-xiujianfeng@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiu Jianfeng wrote on Fri, Sep 09, 2022 at 06:35:46PM +0800:
-> Add missing __init/__exit annotations to module init/exit funcs.
-
-sure, queueing.
-
-FWIW I've checked the others all seem to have it.
-
+On 09.09.22 11:24, Miaohe Lin wrote:
+> If ALLOC_KSWAPD is set, wake_all_kswapds() will be called to ensure
+> kswapd doesn't accidentally go to sleep. But when reserve_flags is
+> set, alloc_flags will be overwritten and ALLOC_KSWAPD is thus lost.
+> Preserve the ALLOC_KSWAPD flag in alloc_flags to ensure kswapd won't
+> go to sleep accidentally.
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Fixes: 0a79cdad5eb2 ("mm: use alloc_flags to record if kswapd can wake")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  net/9p/trans_xen.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   mm/page_alloc.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-> index 41c57d40efb6..b15c64128c3e 100644
-> --- a/net/9p/trans_xen.c
-> +++ b/net/9p/trans_xen.c
-> @@ -511,7 +511,7 @@ static struct xenbus_driver xen_9pfs_front_driver = {
->  	.otherend_changed = xen_9pfs_front_changed,
->  };
->  
-> -static int p9_trans_xen_init(void)
-> +static int __init p9_trans_xen_init(void)
->  {
->  	int rc;
->  
-> @@ -530,7 +530,7 @@ static int p9_trans_xen_init(void)
->  module_init(p9_trans_xen_init);
->  MODULE_ALIAS_9P("xen");
->  
-> -static void p9_trans_xen_exit(void)
-> +static void __exit p9_trans_xen_exit(void)
->  {
->  	v9fs_unregister_trans(&p9_xen_trans);
->  	return xenbus_unregister_driver(&xen_9pfs_front_driver);
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index ba5c9402a5cb..4b97a03fa2dd 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5147,7 +5147,8 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+>   
+>   	reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
+>   	if (reserve_flags)
+> -		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags);
+> +		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags) |
+> +					  (alloc_flags & ALLOC_KSWAPD);
+>   
+>   	/*
+>   	 * Reset the nodemask and zonelist iterators if memory policies can be
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
