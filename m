@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD775B3A42
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCDC5B3A11
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbiIIOBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S232143AbiIIOBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiIIOAX (ORCPT
+        with ESMTP id S231938AbiIIOAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:00:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E607696A;
-        Fri,  9 Sep 2022 07:00:21 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 14:00:19 -0000
+        Fri, 9 Sep 2022 10:00:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617CF7F13B;
+        Fri,  9 Sep 2022 07:00:23 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 14:00:20 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662732020;
+        s=2020; t=1662732021;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vZiCFPj/s8c2noQK7Uibq8m0gp+0ROK/FKslf4sXX7M=;
-        b=pYK/skg7xqhpd6NAn/ORFPlbZpJHZWFSGwXk64SO0ISMRctUhqBefBrJXqpq6PnqfTJL5M
-        2OX+7x6KgRugqlCOWOJmmRN0SQ4nJAYqBpYa2oHPXiIQqVad5Xhsg+acqPnEA1rusfvTzH
-        e9evNa7LQtZuNws0lMfnInXOxQtz8HdYoDpVZuEca5N3GflcfabCrTspBkRdn3ObgINE+l
-        hseF4UaoMl5JGhaP4MRcfwjtecJjHfLn+m3ooUs6jA/YqWwIIXKma7J2eClhfIVqn/QaOm
-        Qq9umXwYoTUrkMANsH2THOQXapIm89Xqmy+aXGHvajnmCEiS9RW8MkpnpYw6Ow==
+        bh=lE5RwnibNt7wQdy94SVqKuvSwCROx+VoFtcIbDqU9Xs=;
+        b=aNtzdobZMEXy6sDn+5AR+RkZdhiwo+49NJbpw1NCHDMzlXqMntFD/7kbEXjfAMR5K0YOeD
+        JaOuDttMug8ocn3y7zJHpBpDTVNXYHkLBZEMo4n2DtqCww9YrJ5UQvyFTn8yiP47Nc/2tP
+        CgnUKS9nGGydvMTpsk/Gb4pb3NwWAd0r4SyLbhI+QTjAUnFrF2I+e1rEoyZ5XCnyZaJq5g
+        PsTafpi+Az2VLYJ5+ZYY/8eZLQcrg2elBlBMkAFdsWo8kFkKGrytfmQeVM1k++E730hxju
+        y1wHqF5FBgn9QDJDa2N8GyWhLOEMhkWUGAeeFHqbxRb9aJwh6kzNjs/xTTLmzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662732020;
+        s=2020e; t=1662732021;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vZiCFPj/s8c2noQK7Uibq8m0gp+0ROK/FKslf4sXX7M=;
-        b=S5zC6Cv8a8OlXIYkumh1tD7BjLoOAf4G++QQVc8wl/3B4KxJUd87xn/9carqwzb+tCQAQo
-        Awlw3SDhgGXuG0Cw==
-From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
+        bh=lE5RwnibNt7wQdy94SVqKuvSwCROx+VoFtcIbDqU9Xs=;
+        b=XqKyDXC13KBCZDZuk/nLTC9GJlgEUgs7VUHlChJoFjiKH0+5aGSZ2zsQ/kgHsv4kyGj29n
+        rbqeatJq1Ro+iEDQ==
+From:   "tip-bot2 for Christophe JAILLET" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/psi] sched/psi: Fix periodic aggregation shut off
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, x86@kernel.org,
+Subject: [tip: sched/psi] devres: Slightly optimize alloc_dr()
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220825164111.29534-2-zhouchengming@bytedance.com>
-References: <20220825164111.29534-2-zhouchengming@bytedance.com>
+In-Reply-To: =?utf-8?q?=3Cd255bd871484e63cdd628e819f929e2df59afb02=2E16583?=
+ =?utf-8?q?52383=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
+References: =?utf-8?q?=3Cd255bd871484e63cdd628e819f929e2df59afb02=2E165835?=
+ =?utf-8?q?2383=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
 MIME-Version: 1.0
-Message-ID: <166273201939.401.5670565753865792420.tip-bot2@tip-bot2>
+Message-ID: <166273202054.401.17562686262553239194.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,109 +69,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/psi branch of tip:
 
-Commit-ID:     c530a3c716b963625e43aa915e0de6b4d1ce8ad9
-Gitweb:        https://git.kernel.org/tip/c530a3c716b963625e43aa915e0de6b4d1ce8ad9
-Author:        Chengming Zhou <zhouchengming@bytedance.com>
-AuthorDate:    Fri, 26 Aug 2022 00:41:02 +08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 09 Sep 2022 11:08:30 +02:00
+Commit-ID:     61742a7cd5b194d2cc52d78de8ec6967634a4cd6
+Gitweb:        https://git.kernel.org/tip/61742a7cd5b194d2cc52d78de8ec6967634a4cd6
+Author:        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+AuthorDate:    Wed, 20 Jul 2022 23:26:36 +02:00
+Committer:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CommitterDate: Thu, 01 Sep 2022 18:17:14 +02:00
 
-sched/psi: Fix periodic aggregation shut off
+devres: Slightly optimize alloc_dr()
 
-We don't want to wake periodic aggregation work back up if the
-task change is the aggregation worker itself going to sleep, or
-we'll ping-pong forever.
+If the gfp flag used for the memory allocation already has __GFP_ZERO,
+then there is no need to explicitly clear the "struct devres_node". It is
+already zeroed.
 
-Previously, we would use psi_task_change() in psi_dequeue() when
-task going to sleep, so this check was put in psi_task_change().
+This saves a few cycles when using devm_zalloc() and co.
 
-But commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-defer task sleep handling to psi_task_switch(), won't go through
-psi_task_change() anymore.
+In the case of devres_alloc() (which calls __devres_alloc_node()), the
+compiler could remove the test and the memset() because it should be able
+to see that the __GFP_ZERO flag is set.
+So this would make the code both faster and smaller.
 
-So this patch move this check to psi_task_switch().
-
-Fixes: 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Link: https://lore.kernel.org/r/20220825164111.29534-2-zhouchengming@bytedance.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/d255bd871484e63cdd628e819f929e2df59afb02.1658352383.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/psi.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/base/devres.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ecb4b4f..39463dc 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -796,7 +796,6 @@ void psi_task_change(struct task_struct *task, int clear, int set)
- {
- 	int cpu = task_cpu(task);
- 	struct psi_group *group;
--	bool wake_clock = true;
- 	void *iter = NULL;
- 	u64 now;
+diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+index 864d0b3..4ab2b50 100644
+--- a/drivers/base/devres.c
++++ b/drivers/base/devres.c
+@@ -117,7 +117,9 @@ static __always_inline struct devres * alloc_dr(dr_release_t release,
+ 	if (unlikely(!dr))
+ 		return NULL;
  
-@@ -806,19 +805,9 @@ void psi_task_change(struct task_struct *task, int clear, int set)
- 	psi_flags_change(task, clear, set);
+-	memset(dr, 0, offsetof(struct devres, data));
++	/* No need to clear memory twice */
++	if (!(gfp & __GFP_ZERO))
++		memset(dr, 0, offsetof(struct devres, data));
  
- 	now = cpu_clock(cpu);
--	/*
--	 * Periodic aggregation shuts off if there is a period of no
--	 * task changes, so we wake it back up if necessary. However,
--	 * don't do this if the task change is the aggregation worker
--	 * itself going to sleep, or we'll ping-pong forever.
--	 */
--	if (unlikely((clear & TSK_RUNNING) &&
--		     (task->flags & PF_WQ_WORKER) &&
--		     wq_worker_last_func(task) == psi_avgs_work))
--		wake_clock = false;
- 
- 	while ((group = iterate_groups(task, &iter)))
--		psi_group_change(group, cpu, clear, set, now, wake_clock);
-+		psi_group_change(group, cpu, clear, set, now, true);
- }
- 
- void psi_task_switch(struct task_struct *prev, struct task_struct *next,
-@@ -854,6 +843,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 
- 	if (prev->pid) {
- 		int clear = TSK_ONCPU, set = 0;
-+		bool wake_clock = true;
- 
- 		/*
- 		 * When we're going to sleep, psi_dequeue() lets us
-@@ -867,13 +857,23 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 				clear |= TSK_MEMSTALL_RUNNING;
- 			if (prev->in_iowait)
- 				set |= TSK_IOWAIT;
-+
-+			/*
-+			 * Periodic aggregation shuts off if there is a period of no
-+			 * task changes, so we wake it back up if necessary. However,
-+			 * don't do this if the task change is the aggregation worker
-+			 * itself going to sleep, or we'll ping-pong forever.
-+			 */
-+			if (unlikely((prev->flags & PF_WQ_WORKER) &&
-+				     wq_worker_last_func(prev) == psi_avgs_work))
-+				wake_clock = false;
- 		}
- 
- 		psi_flags_change(prev, clear, set);
- 
- 		iter = NULL;
- 		while ((group = iterate_groups(prev, &iter)) && group != common)
--			psi_group_change(group, cpu, clear, set, now, true);
-+			psi_group_change(group, cpu, clear, set, now, wake_clock);
- 
- 		/*
- 		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
-@@ -882,7 +882,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 		if (sleep) {
- 			clear &= ~TSK_ONCPU;
- 			for (; group; group = iterate_groups(prev, &iter))
--				psi_group_change(group, cpu, clear, set, now, true);
-+				psi_group_change(group, cpu, clear, set, now, wake_clock);
- 		}
- 	}
- }
+ 	INIT_LIST_HEAD(&dr->node.entry);
+ 	dr->node.release = release;
