@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA415B42D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05AB5B42E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 01:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiIIXHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 19:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
+        id S231806AbiIIXHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 19:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiIIXGs (ORCPT
+        with ESMTP id S231390AbiIIXGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 19:06:48 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0831153A3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07801114A62
         for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 16:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1662764797; x=1694300797;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=CwP0yLdD5IOcRYascjBO09AMkETiFtnfwLcTZhiigTk=;
-  b=DaS/wBndgIPN/GAau4vdQcrvafXwlBCnFCp5CYJOhwm9tTyujm+h3gXp
-   kcXYUgC8nXywmxMIx1+plhr5n5kJlzQE3JVbFk7zHBEjgNSCOqH63NfjB
-   4ueweSP5TD72n61CTWo1lPqBHAExwWIrh+E3dVSOItX9saZfSu9/ynXzg
-   Ozfxljh2XXrKfntAHYIAXWjEBsu3r0I+6JA8eWs4H/MNY1lyvl0+1cO7T
-   TTp0JFQYL2yO1sbQM/CNxaPtFIdrO4uHK5SI4EKMSS+wd18ZOQzUEcAii
-   +EPalVUT3y55U2KYYrovKKL0LDM112C8JTMA9qgmIrvpawc9U4BToVuQm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386916"
+  bh=LMKKoJSc++SQipGow6xAmHfZ+OJ53Vq1cZqxr/xmTAk=;
+  b=Gf1vdqR9oZkA+PNS8Rfo4RMInHjCqcA6gjwsD1Zq6kv9VFVePuuU9uEL
+   p/SuBWOb/ifA8DUcpifex5+ykjH/S8kLv6c2j8k43102ZzCHqUA2OAKcH
+   PLd2n1/GkLX5JPgCuujmN5ZZsPS4tWs5UyBH3LGEIOANV/BSyZ3Pxx84y
+   wdcHI0Fmq+9balmLMEjMX3sWyl6wv6bBir+wIhuzOE2++IOUiKCamGqfk
+   eXmWEiQWZ8dl+t68pBy99amfpuAW95wvQc1cTMvNGLfxUnIVLbmw4k77l
+   8SgDtNWgl8/csS8QxXDkR9Wn30by3zt8h11s2Tpq/zZgpKldqyvuY2AYq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298386917"
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="298386916"
+   d="scan'208";a="298386917"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 16:06:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="677355010"
+   d="scan'208";a="677355016"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga008.fm.intel.com with ESMTP; 09 Sep 2022 16:06:34 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -56,9 +56,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [RFC PATCH 12/23] thermal: intel: hfi: Convert table_lock to use flags-handling variants
-Date:   Fri,  9 Sep 2022 16:11:54 -0700
-Message-Id: <20220909231205.14009-13-ricardo.neri-calderon@linux.intel.com>
+Subject: [RFC PATCH 13/23] x86/cpufeatures: Add the Intel Thread Director feature definitions
+Date:   Fri,  9 Sep 2022 16:11:55 -0700
+Message-Id: <20220909231205.14009-14-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
@@ -72,16 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the table of an HFI instance is only accessed from the HFI
-thermal interrupt handler and from the delayed work that sends the thermal
-netlink event to user space.
+Intel Thread Director (ITD) provides hardware resources to categorize
+the currently running task with a classification value. The classification
+reflects the type of instructions that a task executes.
 
-When using Intel Thread Director to support classes of tasks in the
-scheduler, the HFI table will also be accessed from the timer interrupt
-handler.
-
-As two interrupt handlers will concurrently access the table, update locks
-to use raw_spin_[un]lock_irq[save|restore].
+ITD extends the Hardware Feedback Interface table to provide performance
+and energy efficiency capabilities for each of the supported classes of
+tasks.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -97,60 +94,61 @@ Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
- drivers/thermal/intel/intel_hfi.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/cpufeatures.h       | 1 +
+ arch/x86/include/asm/disabled-features.h | 8 +++++++-
+ arch/x86/kernel/cpu/cpuid-deps.c         | 1 +
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 405495dad0b2..4bafe6848d5d 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -175,9 +175,10 @@ static struct workqueue_struct *hfi_updates_wq;
- static void get_hfi_caps(struct hfi_instance *hfi_instance,
- 			 struct thermal_genl_cpu_caps *cpu_caps)
- {
-+	unsigned long flags;
- 	int cpu, i = 0;
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index ef4775c6db01..d3202d665ac0 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -339,6 +339,7 @@
+ #define X86_FEATURE_HWP_EPP		(14*32+10) /* HWP Energy Perf. Preference */
+ #define X86_FEATURE_HWP_PKG_REQ		(14*32+11) /* HWP Package Level Request */
+ #define X86_FEATURE_HFI			(14*32+19) /* Hardware Feedback Interface */
++#define X86_FEATURE_ITD			(14*32+23) /* Intel Thread Director */
  
--	raw_spin_lock_irq(&hfi_instance->table_lock);
-+	raw_spin_lock_irqsave(&hfi_instance->table_lock, flags);
- 	for_each_cpu(cpu, hfi_instance->cpus) {
- 		struct hfi_cpu_data *caps;
- 		s16 index;
-@@ -199,7 +200,7 @@ static void get_hfi_caps(struct hfi_instance *hfi_instance,
+ /* AMD SVM Feature Identification, CPUID level 0x8000000a (EDX), word 15 */
+ #define X86_FEATURE_NPT			(15*32+ 0) /* Nested Page Table support */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 33d2cd04d254..225657aff476 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -87,6 +87,12 @@
+ # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
+ #endif
  
- 		++i;
- 	}
--	raw_spin_unlock_irq(&hfi_instance->table_lock);
-+	raw_spin_unlock_irqrestore(&hfi_instance->table_lock, flags);
- }
- 
++#ifdef CONFIG_INTEL_THREAD_DIRECTOR
++# define DISABLE_ITD	0
++#else
++# define DISABLE_ITD	(1 << (X86_FEATURE_ITD & 31))
++#endif
++
  /*
-@@ -262,6 +263,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	struct hfi_instance *hfi_instance;
- 	int cpu = smp_processor_id();
- 	struct hfi_cpu_info *info;
-+	unsigned long flags;
- 	u64 new_timestamp;
+  * Make sure to add features to the correct mask
+  */
+@@ -103,7 +109,7 @@
+ #define DISABLED_MASK10	0
+ #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET)
+ #define DISABLED_MASK12	0
+-#define DISABLED_MASK13	0
++#define DISABLED_MASK13	(DISABLE_ITD)
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index c881bcafba7d..f6f8a3cd4f2c 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -78,6 +78,7 @@ static const struct cpuid_dep cpuid_deps[] = {
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
+ 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
++	{ X86_FEATURE_ITD,			X86_FEATURE_HFI       },
+ 	{}
+ };
  
- 	if (!pkg_therm_status_msr_val)
-@@ -298,7 +300,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 		return;
- 	}
- 
--	raw_spin_lock(&hfi_instance->table_lock);
-+	raw_spin_lock_irqsave(&hfi_instance->table_lock, flags);
- 
- 	/*
- 	 * Copy the updated table into our local copy. This includes the new
-@@ -307,7 +309,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	memcpy(hfi_instance->local_table, hfi_instance->hw_table,
- 	       hfi_features.nr_table_pages << PAGE_SHIFT);
- 
--	raw_spin_unlock(&hfi_instance->table_lock);
-+	raw_spin_unlock_irqrestore(&hfi_instance->table_lock, flags);
- 	raw_spin_unlock(&hfi_instance->event_lock);
- 
- 	/*
 -- 
 2.25.1
 
