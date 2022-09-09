@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF4B5B3EFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2B35B3F00
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiIISrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 14:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S229786AbiIISrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIISr1 (ORCPT
+        with ESMTP id S229567AbiIISrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 14:47:27 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF312F73A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 11:47:26 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id g1so2135248iob.13
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 11:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tY2acVbA/Ha3+2EN4QAjkpHBg/SdpbP2hwHDbNpf9bw=;
-        b=ODw3NcxqU5t/spePY1O2k2TkXmXTPzngWZ+jzGxk48CMeQWHZCm43xP09J0X8msJpw
-         RAUkVxddDp2KODf4+zE1ChALe0wbOMml+kErKuzJ/uLWeR04yvJD6RwIfEjgdK2Z0g9Q
-         9o3ic/nQgpcfaq3PozndHUEK3yIhuLu7ebECI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tY2acVbA/Ha3+2EN4QAjkpHBg/SdpbP2hwHDbNpf9bw=;
-        b=ItLxVJKGmzOsICMt0gjWdFYOUuaw8D0uEvA0WsOTlxSbxUnehcKkHI9B0qICgYs1mh
-         RgHgo2X9zjuv8GaO2Vq83/iFJR5ty9pCEy7/pMHguIJMhLYoeg2UVI2yut3IQ49sd+BH
-         qLD1T15h9Il+Lv2AKN80s6SHzpqBFNK7tCJsEOTAzxaUKL8Q26vEzaCrDKiQitDY7PDL
-         N1DN/2cU3T2O8K8yzkf6MWBq5FFXyzjVTmUlBE+0wi4FmZIbp2iYqWmTUOhVFpB/RJrx
-         5asv4v8Z1fZV4ZUOid+9wp0+7TTZwd1EaGu63X6yxVcRC2gcjqVh5nZ5RbBJiQrrKGsL
-         ABBw==
-X-Gm-Message-State: ACgBeo0SVzSELhoj4YGSwAE1W0OpS9nVZZPjZUNKBg62pMNKE7qEWr2L
-        2ih/G001+UQUidTqdaj/x3RplbLhhA2Zgw==
-X-Google-Smtp-Source: AA6agR4WNow9ycTkAeyDChjWKVk46sVJJc7ZqQSj0aAC3p1IvaRiB6h6e0rg4uqPBPuVSX4o+mxkKw==
-X-Received: by 2002:a05:6638:1910:b0:35a:1119:a8bf with SMTP id p16-20020a056638191000b0035a1119a8bfmr972011jal.212.1662749245799;
-        Fri, 09 Sep 2022 11:47:25 -0700 (PDT)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com. [209.85.166.47])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056638050100b00346b96a352bsm438960jar.164.2022.09.09.11.47.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 11:47:23 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id q83so77766iod.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 11:47:23 -0700 (PDT)
-X-Received: by 2002:a05:6602:2d4f:b0:689:5bba:dc99 with SMTP id
- d15-20020a0566022d4f00b006895bbadc99mr7410102iow.7.1662749242176; Fri, 09 Sep
- 2022 11:47:22 -0700 (PDT)
+        Fri, 9 Sep 2022 14:47:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC36130842;
+        Fri,  9 Sep 2022 11:47:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C078C620B7;
+        Fri,  9 Sep 2022 18:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79EC433C1;
+        Fri,  9 Sep 2022 18:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662749265;
+        bh=KQAifQugDA8mdZXeKVOC1h5AUP6dZ+XfBsejVtQVVyQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cgis6XqH+8A4x2sfm5RGxquGi/ap8JDpYGVGSK8HwEdDNx9f5uJzm9g44eIHLEtXb
+         R187VsPfk5yB/JsY5GwlNxySWc4RTCwZVw0feIPS4QQ1GhXcfYpgGS885Bqy5kaRL9
+         avZjnCAVL9s6dAmPYNaoX/y44661Bmk05HgfmWNf6w0v0Y1K1macnFc8tCxGzLk2NZ
+         Coh25f8O/4jRgf/a2IP7k7vp+X8jFEhscUUP0am97p9Fy1xWzsYV77DLii59RlxTCR
+         zIT0JQgHHROtYIFeIYrWFBIrOFofnUerphTtiUFgOsUf0dMPEv7elJPm7Ac23xEY7O
+         DC7lp/fo/BKTQ==
+Date:   Fri, 9 Sep 2022 19:47:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Astrid Rost <astrid.rost@axis.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@axis.com,
+        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
+ times
+Message-ID: <YxuKS7S3/aHtDNMq@sirena.org.uk>
+References: <20220907135827.16209-1-astrid.rost@axis.com>
+ <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
+ <Yxn9o1MVMPnFO3PM@sirena.org.uk>
+ <ac2bcca1-6997-2d17-b1d6-a5e81ced2613@linaro.org>
+ <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
 MIME-Version: 1.0
-References: <20220830231541.1135813-1-rrangel@chromium.org>
- <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YxftNQrRx3fwsobk@google.com> <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
- <98559c23-cc22-3b85-2102-0cc760240804@redhat.com> <CAHQZ30ACZ-1UtgbXwEc+tFRvW-KpDg87Q4nj5Dwysz2BB26yiQ@mail.gmail.com>
- <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Fri, 9 Sep 2022 12:47:11 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
-Message-ID: <CAHQZ30DY9aYBoW303qW+hkegYV0BbKFO6LkCuHKnHNxZ3QoLYw@mail.gmail.com>
-Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set wake_irq
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Jqed1H5o0jXqkowM"
+Content-Disposition: inline
+In-Reply-To: <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
+X-Cookie: FORTH IF HONK THEN
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,115 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It looks like `i2c_acpi_get_irq` and `platform_get_irq_optional` are
-doing pretty much the same thing. Can we replace `i2c_acpi_get_irq`
-and switch over to `platform_get_irq_optional`? Is it possible to get
-a `platform_device` from an `i2c_client`?
 
-On Thu, Sep 8, 2022 at 9:23 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Sep 8, 2022 at 4:40 PM Raul Rangel <rrangel@chromium.org> wrote:
-> >
-> > On Wed, Sep 7, 2022 at 2:12 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On 9/7/22 04:00, Raul Rangel wrote:
-> > > > On Tue, Sep 6, 2022 at 7:00 PM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:
-> > > >>
-> > > >> On Tue, Aug 30, 2022 at 05:15:37PM -0600, Raul E Rangel wrote:
-> > > >>> Device tree already has a mechanism to pass the wake_irq. It does this
-> > > >>> by looking for the wakeup-source property and setting the
-> > > >>> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses at the
-> > > >>> ACPI GpioInt wake flag to determine if the interrupt can be used to wake
-> > > >>> the system. Previously the i2c drivers had to make assumptions and
-> > > >>> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> > > >>> If there is a device with an Active Low interrupt and the device gets
-> > > >>> powered off while suspending, the interrupt line will go low since it's
-> > > >>> no longer powered and wake the system. For this reason we should respect
-> > > >>> the board designers wishes and honor the wake bit defined on the
-> > > >>> GpioInt.
-> > > >>>
-> > > >>> This change does not cover the ACPI Interrupt or IRQ resources.
-> > > >>>
-> > > >>> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > > >>> ---
-> > > >>>
-> > > >>>  drivers/i2c/i2c-core-acpi.c |  8 ++++++--
-> > > >>>  drivers/i2c/i2c-core-base.c | 17 +++++++++++------
-> > > >>>  drivers/i2c/i2c-core.h      |  4 ++--
-> > > >>>  3 files changed, 19 insertions(+), 10 deletions(-)
-> > > >>>
-> > > >>> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> > > >>> index c762a879c4cc6b..cfe82a6ba3ef28 100644
-> > > >>> --- a/drivers/i2c/i2c-core-acpi.c
-> > > >>> +++ b/drivers/i2c/i2c-core-acpi.c
-> > > >>> @@ -182,12 +182,13 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
-> > > >>>  /**
-> > > >>>   * i2c_acpi_get_irq - get device IRQ number from ACPI
-> > > >>>   * @client: Pointer to the I2C client device
-> > > >>> + * @wake_capable: Set to 1 if the IRQ is wake capable
-> > > >>>   *
-> > > >>>   * Find the IRQ number used by a specific client device.
-> > > >>>   *
-> > > >>>   * Return: The IRQ number or an error code.
-> > > >>>   */
-> > > >>> -int i2c_acpi_get_irq(struct i2c_client *client)
-> > > >>> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
-> > > >>>  {
-> > > >>>       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
-> > > >>>       struct list_head resource_list;
-> > > >>> @@ -196,6 +197,9 @@ int i2c_acpi_get_irq(struct i2c_client *client)
-> > > >>>
-> > > >>>       INIT_LIST_HEAD(&resource_list);
-> > > >>>
-> > > >>> +     if (wake_capable)
-> > > >>> +             *wake_capable = 0;
-> > > >>> +
-> > > >>>       ret = acpi_dev_get_resources(adev, &resource_list,
-> > > >>>                                    i2c_acpi_add_resource, &irq);
-> > > >>
-> > > >
-> > > >
-> > > >> You also need to handle "Interrupt(..., ...AndWake)" case here. I would
-> > > >> look into maybe defining
-> > > >>
-> > > >> #define IORESOURCE_IRQ_WAKECAPABLE      (1<<6)
-> > > >>
-> > > >> in include/linux/ioport.h and plumbing it through from ACPI layer.
-> > > >>
-> > > >> Thanks.
-> > > >
-> > > > AFAIK the Intel (Not 100% certain) and AMD IO-APIC's can't actually
-> > > > wake a system from suspend/suspend-to-idle.
-> > >
-> > > That may be true for S3 suspend (it sounds about right) there
-> > > certainly is no way to "arm for wakeup" on the APIC, but with
-> > > s2idle all IRQs which are not explicitly disabled by the OS
-> > > still function normally so there any IRQ can be a wakeup
-> > > source (AFAIK).
->
-> That's true.
->
-> Moreover, even for S3 there are transitions into it and there may be
-> wakeup interrupts taking place during those transitions.  Those may be
-> any IRQs too.
->
-> > > And even with S3 suspend I think some IRQs can act as wakeup,
-> > > but that is configured by the BIOS then and not something which
-> > > linux can enable/disable. E.g IIRC the parent IRQ of the GPIO
-> > > controllers on x86 is an APIC IRQ ...
->
-> It's more about how the system is wired up AFAICS.  Basically, in
-> order to wake up the system from S3, the given IRQ needs to be
-> physically attached to an input that will trigger the platform wakeup
-> logic while in S3.
->
-> > >
-> >
-> > SGTM. I wanted to make sure there was interest before I invested the
-> > time in adding the functionality. Hopefully I can push up a new patch
-> > set tomorrow.
->
-> Sounds good. :-)
+--Jqed1H5o0jXqkowM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Sep 09, 2022 at 10:21:30AM +0200, Krzysztof Kozlowski wrote:
+
+> It's more than one property and many other patch submitters were using
+> this reason as well. As a result, few TXT bindings grew from 5 to 10
+> properties within one year and there was still no conversion to YAML.
+
+> I understand your concerns however I have stronger motivation to do the
+> conversion, than for accepting new features.
+
+For me the metric is proportionality - the amount of extra effort we're
+forcing people to go through should bear some relationship to the change
+they're trying to make.  We can't very well complain that people don't
+upstream things if when they try to do so they have to jump through some
+tangentially related hoops relating to the existing code in order to get
+anything done.  We can and should *ask* people to do additional cleanups
+or whatever but creating requirements that dramatically expand the scope
+of work someone's having to do are a lot of stop energy.
+
+--Jqed1H5o0jXqkowM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMbiksACgkQJNaLcl1U
+h9A7Wgf/ZgdTJKiEDmpaLKTPfTfTsjf1KAym2sQrtDKauo+M6AOHc0PWCDgjnRC1
+04Oi9yEs/3/WdJVIqImjQQEfzEfPH3SLekj4cwKGu1KM4Otog62IqZT2Ms3ZhMRR
+TOBSy0lNibBQmrDehFTTrYusFwZI+Zri5JBpcEksWu7swxM/BKkteB75Xm0uKZo/
+k80IIhTEaY6SBQ+3k/6cgvVJAFIRo1MFkdlOKboL7sZTKKVTE4F4P0Pdr+FlfGel
+mYysNGLILSi4Awk9RaeSyiIcZmNSaW6OlOdaH1rFT3dl0Qx8Co7JGjm0SGkwO9uY
+e6JJht7Nnigw5VzTrwNoX8w19iRlng==
+=tvQB
+-----END PGP SIGNATURE-----
+
+--Jqed1H5o0jXqkowM--
