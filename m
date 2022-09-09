@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC50E5B3418
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B955B341C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiIIJhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S230472AbiIIJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiIIJhU (ORCPT
+        with ESMTP id S230476AbiIIJhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:37:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6CE95ACF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:37:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id f9so1000171lfr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=x8Y3CR3NsRCi8B/rXKSFsQwnh4mKoxTQWWbEyouuflE=;
-        b=RN5XvpZ/B/VR7eGmUkJG7k3fsmmyfy1EQi4hAukLN/ScIYtqSrf2MveBet15oxoig3
-         8OCsPzTi47xYK+sufbtwtSFcSD9tN0rsP7VsYNI4YLg7qpWDuWvjJvkqeftF2YkVnjGx
-         +9uBdTzDXRbg0vWG8+i9gtBbtdrpyXkykWBuLeOSz20HVJT9bmEUk+ZncDr7LW5avU4G
-         JqRP45HEYLKom2cImMryw2Ckzp/Xqx+V8SAA6kyOYrswCkFplY+U3+jsQizvrR58pN0h
-         w4Jr+N1mzhpTHSvJejZSGbP/tV1XCKN3EilosX63LsB1rs/W1Tq1T0Wk/G4EJgXWFhgP
-         bRug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=x8Y3CR3NsRCi8B/rXKSFsQwnh4mKoxTQWWbEyouuflE=;
-        b=lwygZYBq5FW3osMl6GBRpBeUnZpZFxK/WMBdbDcHm58L0/8hujSKPvMonFSbfA+zlG
-         uqF7w2G4fPtAOXNYb/3DMQdBdDdr9xy1uogceAuGPgKEfWyW8wrAoTogJO31J/JySRnU
-         5FmoIIHfdDtQWhtFOiN4YT8lWM3lraqQcflVHtZmrMRvG2IoDUWkeMFs+Rauf+lJPMwp
-         uGX4jnnk1E88AgUVJEu5RFRsdonCSoiISzB0Jw3uGRiORtgoFbGJY+L1ptzOWByyHuLW
-         glIs8LU0Z0yhLysHgPifih1EMSdxadbMGIEv2vY8HIVmOmWZnfUAgNqb595ldGLwyvEf
-         1QeA==
-X-Gm-Message-State: ACgBeo2DVU1fyltZcKn8PRYuUXLazvAod4Cjx6kmEE+Mr7+P5TWE+Nf1
-        EP0hEW1qOp6N9bS6bbbaMYPmLQ==
-X-Google-Smtp-Source: AA6agR4tg4jDITyEd+ydvsYoqEXDelr0wc4PV5xvP7VIfd2Kev1QD0c3wkFIFMxlcvNPq76ds93jsw==
-X-Received: by 2002:a05:6512:3f18:b0:492:ed03:1aa8 with SMTP id y24-20020a0565123f1800b00492ed031aa8mr4535166lfa.515.1662716237850;
-        Fri, 09 Sep 2022 02:37:17 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056512118300b004947f8b6266sm5732lfr.203.2022.09.09.02.37.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 02:37:17 -0700 (PDT)
-Message-ID: <a1a29ffc-f0ee-7b26-f342-b4c99e1443c5@linaro.org>
-Date:   Fri, 9 Sep 2022 12:37:16 +0300
+        Fri, 9 Sep 2022 05:37:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED5797EDE;
+        Fri,  9 Sep 2022 02:37:33 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC1136601657;
+        Fri,  9 Sep 2022 10:37:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662716251;
+        bh=VUIE2ULcIZ7NEXZB53jupjRin58XQGFQ/42Sux2176I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LVuPgSXSB1Q94QcHPkBlwznaWhMhNik57Es0RYRkm5EF2fIW0UG9UhUNf7y3bUWjW
+         19XtHTJyuv5DtMYpHHiWSRFyfu7J/G9DsM1qeU5JZFQhE3tbAhAU4pu4BrIFSIKbH3
+         PAyVB+Nc+p3wXz2Cj6vE6kX++OfbehaS1Esm1mkRF7eODzukX4tRp715gC4C4jrKFz
+         MhN61qfYysiInZ/++gvBhIGMQdYLYKH9JmrQ01J9ntUUPg9QmaPoTby0loyAu+RyWI
+         14GfqhZd6+MsbuxFNp4RzrCGM3Ljy+P+NQZyeGU9Vb0YN/lm/Y6kMSwz44vmPWZ0hL
+         rYYAEmfBAxjHw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     rafael@kernel.org
+Cc:     viresh.kumar@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        matthias.bgg@gmail.com, andrew-sh.cheng@mediatek.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        nfraprado@collabora.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] cpufreq: mediatek: Fix KP and lockups on proc/sram regulators error
+Date:   Fri,  9 Sep 2022 11:37:24 +0200
+Message-Id: <20220909093724.40078-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 04/16] phy: qcom-qmp-pcie: drop unused defines
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220907110728.19092-1-johan+linaro@kernel.org>
- <20220907110728.19092-5-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220907110728.19092-5-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 14:07, Johan Hovold wrote:
-> Drop defines and enums that are unused since the QMP driver split.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 24 ------------------------
->   1 file changed, 24 deletions(-)
-> 
+Function regulator_get_optional() returns a negative error number on
+any kind of regulator_get() failure: failing to check for that in the
+teardown path will lead to a kernel panic due to a call to function
+regulator_disable().
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Besides that, the "proc" regulator does actually provide power to the
+CPU cluster(s): disabling it will produce a lockup on at least some
+SoCs, such as MT8173.
 
+That consideration is also valid for the "sram" regulator, providing
+power to the CPU caches instead, present on some other SoCs, such as
+MT8183, MT8186 (and others).
+
+Resolve both situations and by simply removing the entire faulty
+branches responsible for disabling the aforementioned regulators if
+enabled, keeping in mind that these are enabled (and left enabled)
+by the bootloader before booting the kernel.
+
+Fixes: 4b9ceb757bbb ("cpufreq: mediatek: Enable clocks and regulators")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/cpufreq/mediatek-cpufreq.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 7f2680bc9a0f..d68f16f475a6 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -534,11 +534,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+ 
+ out_free_resources:
+-	if (regulator_is_enabled(info->proc_reg))
+-		regulator_disable(info->proc_reg);
+-	if (info->sram_reg && regulator_is_enabled(info->sram_reg))
+-		regulator_disable(info->sram_reg);
+-
+ 	if (!IS_ERR(info->proc_reg))
+ 		regulator_put(info->proc_reg);
+ 	if (!IS_ERR(info->sram_reg))
+@@ -553,14 +548,10 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 
+ static void mtk_cpu_dvfs_info_release(struct mtk_cpu_dvfs_info *info)
+ {
+-	if (!IS_ERR(info->proc_reg)) {
+-		regulator_disable(info->proc_reg);
++	if (!IS_ERR(info->proc_reg))
+ 		regulator_put(info->proc_reg);
+-	}
+-	if (!IS_ERR(info->sram_reg)) {
+-		regulator_disable(info->sram_reg);
++	if (!IS_ERR(info->sram_reg))
+ 		regulator_put(info->sram_reg);
+-	}
+ 	if (!IS_ERR(info->cpu_clk)) {
+ 		clk_disable_unprepare(info->cpu_clk);
+ 		clk_put(info->cpu_clk);
 -- 
-With best wishes
-Dmitry
+2.37.2
 
