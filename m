@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2F95B3081
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EAE5B3086
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiIIHih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S231569AbiIIHhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiIIHhP (ORCPT
+        with ESMTP id S231486AbiIIHgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:37:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED8612A324
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:36 -0700 (PDT)
+        Fri, 9 Sep 2022 03:36:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881CB1269DD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3D7561EED
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69C4C43160;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA3DFB82388
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE421C43163;
         Fri,  9 Sep 2022 07:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1662708894;
-        bh=EBt7UgSghKjU0MjW/yi1iqfwnhUuumqiRNK1oK1Mhu0=;
+        bh=6FugQNfwCgEw1JJvFTyuVhnI8BeADhszEtptPU10K6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KJ165+GXx180sU6O/tAmqV1j2afwyCLK576k9hhrzaEW/sL7FBEiaALdKGN1f5r4m
-         YWV7NZ0uwXAkG7Rp/KU0bij8+ayuy7Zr34xn/lNoOWu89X5YxpEcVcCFLdqaUerBts
-         bM1tddvHNpufkOpup8BvTQFGeKAaisa2PRg5jOduaAkE12zcjvFrQv/r217fEJ9UGQ
-         8DvmxcOSN0CiYHbHza7o/2W13xqpvx7lkDhOvpTgiPqaLMVSdJSmxA4L/0JLvvOkJb
-         AGCKeV+/WM3LdFCIUidhj/2GC4RcBuRW6XF3P8HRDc3mqUQFeUGrcuTyBez12m9KST
-         DRg+vCr361FDQ==
+        b=swrCzgc5szS9OMZ4zFi1we/qvoXRCW02wZc/BbenhpvmOUwhV5DWd0Tmc5kas7ePr
+         DpIrOPJ59sTXS/Qc5cXvoMBMxfQGgwVnvYuGgiyaCp09wm4eFyO5G2esidN3p/0W88
+         IC96Ga4WUL7o7YmclgJjUZqDVFEQ3mgidLrp5H7u6j04sE5mCQUWIcl0nkbtLvpf9X
+         4iuiOXx0vNA7yH/2ZixDp40ABnwXsUN8HO/qN/+S4byyDO2Wr6BNDKXccjjk1ql3BT
+         tgKu4gds1fbER6hm75LyF7BeCsGV05le8RWMjdf2sAZgKFFVX3w0T+RTrT+gV8R+pu
+         7sWhV1vuNEE5w==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oWYXG-007FGt-NL;
+        id 1oWYXG-007FGx-PN;
         Fri, 09 Sep 2022 09:34:46 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 20/37] drm/i915: dvo_ch7xxx.c: use SPDX header
-Date:   Fri,  9 Sep 2022 09:34:27 +0200
-Message-Id: <a0931ff4061eb54fc2e0ad754e16cc7c2a6170aa.1662708705.git.mchehab@kernel.org>
+Subject: [PATCH v3 21/37] drm/i915: dvo_sil164.c: use SPDX header
+Date:   Fri,  9 Sep 2022 09:34:28 +0200
+Message-Id: <b92bbe9087de47cc43ed0867e00c3113f9c68f4f.1662708705.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
 References: <cover.1662708705.git.mchehab@kernel.org>
@@ -66,7 +66,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This file is licensed with MIT license. Change its license text
+This file is licensed with MIT license.	Change its license text
 to use SPDX.
 
 Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
@@ -76,16 +76,17 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/display/dvo_ch7xxx.c | 33 +++++------------------
- 1 file changed, 6 insertions(+), 27 deletions(-)
+ drivers/gpu/drm/i915/display/dvo_sil164.c | 32 +++++------------------
+ 1 file changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/dvo_ch7xxx.c b/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
-index 1c1fe1f29675..b4d94a565fdb 100644
---- a/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
-+++ b/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
-@@ -1,30 +1,9 @@
+diff --git a/drivers/gpu/drm/i915/display/dvo_sil164.c b/drivers/gpu/drm/i915/display/dvo_sil164.c
+index 0dfa0a0209ff..12974f7c9dc1 100644
+--- a/drivers/gpu/drm/i915/display/dvo_sil164.c
++++ b/drivers/gpu/drm/i915/display/dvo_sil164.c
+@@ -1,30 +1,10 @@
 -/**************************************************************************
--
++// SPDX-License-Identifier: MIT
+ 
 -Copyright © 2006 Dave Airlie
 -
 -All Rights Reserved.
@@ -111,7 +112,6 @@ index 1c1fe1f29675..b4d94a565fdb 100644
 -SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -
 -**************************************************************************/
-+// SPDX-License-Identifier: MIT
 +/*
 + * Copyright © 2006 Dave Airlie
 + *
