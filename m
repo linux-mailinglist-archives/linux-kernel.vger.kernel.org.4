@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FE35B41AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6517C5B41B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 23:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIIVst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S230064AbiIIVxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 17:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiIIVso (ORCPT
+        with ESMTP id S229690AbiIIVxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:48:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF66F22F5;
-        Fri,  9 Sep 2022 14:48:43 -0700 (PDT)
+        Fri, 9 Sep 2022 17:53:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AB870E57;
+        Fri,  9 Sep 2022 14:53:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A112B82320;
-        Fri,  9 Sep 2022 21:48:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBE24C433D7;
-        Fri,  9 Sep 2022 21:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662760120;
-        bh=faNyvVTtA9QVwsXzpsorT5yjPAXHpaEUefjieYo0pkw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=am4GC8KpkI4j3383Gk6HeERUNtmcFd6apwv5DqdmduC0goksOgT1cKBM9Ot+AXhpc
-         VaASEWe62FznItw6PtkoqzKVPaVc+cygdMhM4XO5SNYKSZ4Ql4fZC+IkhYBG7MiS8y
-         HEKaWQlowrMkcPvxfFHRgd2CXU/5DlejtvhGMBywOhSsn5UuK2Sn35f4J5MgWPM9wH
-         mqQMVpqd6+YOMyIIDf9HKZibtdVGCg8W2k4Xp11iPg8+Ojws3MeBHTEmK1lUposUn3
-         y1OejvGmnvC9Gf/99nrdoZp5JXKOPvHoCVMqkT3yT0e+HJbk8iHh0LDsnCfcRnMNmW
-         MHZ7ExdfMmHow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA64BC4166F;
-        Fri,  9 Sep 2022 21:48:40 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 6.0-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1dd06978292c5c1979b79b1a94b4af4d7175d7aa.camel@HansenPartnership.com>
-References: <1dd06978292c5c1979b79b1a94b4af4d7175d7aa.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1dd06978292c5c1979b79b1a94b4af4d7175d7aa.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ce888220d5c7a805e0e155302a318d5d23e62950
-Message-Id: <166276012082.19580.866003150784058636.pr-tracker-bot@kernel.org>
-Date:   Fri, 09 Sep 2022 21:48:40 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A3CC61FF5;
+        Fri,  9 Sep 2022 21:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F78C433D6;
+        Fri,  9 Sep 2022 21:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662760389;
+        bh=0JcE0DLdNzQm3AF+ZqlE39XNCX4d5bRLfNDfq0UT/g4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MBWJF+Ae7WdYf68cBxuz+A7rZmgFkpzsf5z3e0zEWKuLYcSLhPtI2YV1SGKHOY3oC
+         Luy2cPNFoakNi7qC+zQaeo5I81q7yZDg3ogVrDFGH9CAIvXo278uOnjET+AEwkAjdl
+         j/pOtTVmax8W40oStXD8ZsmUhesodTnlrMEBtlAM=
+Date:   Fri, 9 Sep 2022 14:53:08 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2] mm/memcontrol: use kstrtobool for swapaccount param
+ parsing
+Message-Id: <20220909145308.f2f61d6992f00ef6977f833b@linux-foundation.org>
+In-Reply-To: <20220909084647.3598299-1-liushixin2@huawei.com>
+References: <20220909084647.3598299-1-liushixin2@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +60,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 09 Sep 2022 15:42:14 -0400:
+On Fri, 9 Sep 2022 16:46:47 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+> Use kstrtobool which is more powerful to handle all kinds of parameters
+> like 'Yy1Nn0' or [oO][NnFf] for "on" and "off".
+> 
+> ...
+>
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6037,10 +6037,11 @@
+>  			Execution Facility on pSeries.
+>  
+>  	swapaccount=	[KNL]
+> -			Format: [0|1]
+> +			Format: { [oO][Nn]/Y/y/1 | [oO][Ff]/N/n/0 }
+>  			Enable accounting of swap in memory resource
+> -			controller if no parameter or 1 is given or disable
+> -			it if 0 is given (See Documentation/admin-guide/cgroup-v1/memory.rst)
+> +			controller if no parameter or [oO][Nn]/Y/y/1 is given
+> +			or disable it if [oO][Ff]/N/n/0 is given
+> +			(See Documentation/admin-guide/cgroup-v1/memory.rst)
+>  
+>  	swiotlb=	[ARM,IA-64,PPC,MIPS,X86]
+>  			Format: { <int> [,<int>] | force | noforce }
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ce888220d5c7a805e0e155302a318d5d23e62950
+mhocko suggested dropping this change as well.
 
-Thank you!
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 0a1a8a846870..5511c0c120d9 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -7434,10 +7434,10 @@ bool mem_cgroup_swap_full(struct folio *folio)
+>  
+>  static int __init setup_swap_account(char *s)
+>  {
+> -	if (!strcmp(s, "1"))
+> -		cgroup_memory_noswap = false;
+> -	else if (!strcmp(s, "0"))
+> -		cgroup_memory_noswap = true;
+> +	bool res;
+> +
+> +	if (!kstrtobool(s, &res))
+> +		cgroup_memory_noswap = !res;
+>  	return 1;
+>  }
+>  __setup("swapaccount=", setup_swap_account);
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+And I agree.  See, the risk with this patch is that someone will
+develop userspace code which relies upon the new behaviour.  Then when
+someone tries to use that code on an older kernel, whoops, it doesn't
+work.  In other words, we're encouraging development of
+non-backward-compatible userspace code.
+
+Leaving the documentation as it was (just "0|1") will help to prevent
+that situation.
