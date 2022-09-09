@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB46E5B3290
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F54C5B32B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiIIJBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
+        id S231698AbiIIJBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiIIJAj (ORCPT
+        with ESMTP id S231253AbiIIJAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 05:00:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1368011748A;
-        Fri,  9 Sep 2022 02:00:21 -0700 (PDT)
-Date:   Fri, 09 Sep 2022 09:00:19 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367FF4B49C;
+        Fri,  9 Sep 2022 02:00:23 -0700 (PDT)
+Date:   Fri, 09 Sep 2022 09:00:20 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662714020;
+        s=2020; t=1662714021;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6lKvVyE2giGiiOLQjfBfJrQmIodk6B3Hw3wAi2hv1os=;
-        b=VXXJ9MSisk+N2/v7ZYBcMv7PqU1rSIO7eswT+q2mxCxk51Vxalbc3yPLidV7nfl/CYYyH/
-        1PJvIPMcw5yDZC9F9gTK+2Q43y3ekUJlO3vszqUAy8iZ5opoBP2gsTwIQWVN3oCjg8mFjR
-        LkBiPp4gR+T3XGoDiU9PCTKj9OomwcLg+4ixvz/ygyk8zgswmD3b2PemSwTb1IIAirHOSK
-        u+QWm/Uu3pgx5D6jR2rMnOgXLhpWbthFC3eFQLlVwfge/CTr0JOX1fp6jKnsHXYo5UhFy7
-        vYA5mQqcm5p5iL2N496aADlVB3KXn4mCaSH3Pqd9ZxEsZ3+ZXykqwwadN+1XpA==
+        bh=Fr4lyg1zrSz+KpMdOvNbFEn8x3a3A6YtamtKHraJALw=;
+        b=hHLvd/+W7aQGWi8y9fkkW/UL3GGaBWEXD+2xqdYffCWbNaBVw124/ZpIhvrueYPkPJWUmx
+        rOD7ln12zU4cNGCUq4tgA3HB8Vx6L4FcwCbhr4S72lWxG31fPdnEiy0QkquVlN5hwdwwhy
+        cZFBUppgpIOwA0W5A23fq4UUp0iBExVcxupjDI4yYvMnfzPcg2h/QvzSwns62uYq13A9lL
+        8MflK4ufjTsV1jrTKQGtnywPpOIW0a6aTKjJzozXYmJWMpLKPSeXtQC82CyqonI0SU4lp+
+        fUeYgPMUNlc0YGMDOmClT30LtxQo4mKwDjMRSIAKp4dCHrgQjzjBDdaoiw3QwQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662714020;
+        s=2020e; t=1662714021;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6lKvVyE2giGiiOLQjfBfJrQmIodk6B3Hw3wAi2hv1os=;
-        b=h6YB3c7H214zj4TosldEu2mU4TzykkAA4BcVr9I+0np+Bob4UGNEgluTJOyWKzOiFtyxdE
-        dDkJD7B9nOvihXAw==
+        bh=Fr4lyg1zrSz+KpMdOvNbFEn8x3a3A6YtamtKHraJALw=;
+        b=8tBkVt5tobos77F3l2RI68l8RZSKGXD7YXCHg51j9HTFRkGwt7SgU2/VhLJdjmtaoHjk0v
+        Px9ipvHiLEWs7IDA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/wait: Add wait_event_state()
+Subject: [tip: sched/core] sched/completion: Add wait_for_completion_state()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220822114648.989212021@infradead.org>
-References: <20220822114648.989212021@infradead.org>
+In-Reply-To: <20220822114648.922711674@infradead.org>
+References: <20220822114648.922711674@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166271401930.401.6700614770872821071.tip-bot2@tip-bot2>
+Message-ID: <166271402041.401.4778195645762030513.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,60 +67,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     3f884a10ab41efe2d495bf8ec8d443d70c500a60
-Gitweb:        https://git.kernel.org/tip/3f884a10ab41efe2d495bf8ec8d443d70c500a60
+Commit-ID:     929659acea03db6411a32de9037abab9f856f586
+Gitweb:        https://git.kernel.org/tip/929659acea03db6411a32de9037abab9f856f586
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 22 Aug 2022 13:18:21 +02:00
+AuthorDate:    Mon, 22 Aug 2022 13:18:20 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 07 Sep 2022 21:53:49 +02:00
 
-sched/wait: Add wait_event_state()
+sched/completion: Add wait_for_completion_state()
 
 Allows waiting with a custom @state.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220822114648.989212021@infradead.org
+Link: https://lore.kernel.org/r/20220822114648.922711674@infradead.org
 ---
- include/linux/wait.h | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ include/linux/completion.h |  1 +
+ kernel/sched/completion.c  | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 58cfbf8..b926eb9 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -932,6 +932,34 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
- 	__ret;									\
- })
+diff --git a/include/linux/completion.h b/include/linux/completion.h
+index 51d9ab0..62b32b1 100644
+--- a/include/linux/completion.h
++++ b/include/linux/completion.h
+@@ -103,6 +103,7 @@ extern void wait_for_completion(struct completion *);
+ extern void wait_for_completion_io(struct completion *);
+ extern int wait_for_completion_interruptible(struct completion *x);
+ extern int wait_for_completion_killable(struct completion *x);
++extern int wait_for_completion_state(struct completion *x, unsigned int state);
+ extern unsigned long wait_for_completion_timeout(struct completion *x,
+ 						   unsigned long timeout);
+ extern unsigned long wait_for_completion_io_timeout(struct completion *x,
+diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
+index 35f15c2..d57a5c1 100644
+--- a/kernel/sched/completion.c
++++ b/kernel/sched/completion.c
+@@ -204,6 +204,7 @@ EXPORT_SYMBOL(wait_for_completion_io_timeout);
+ int __sched wait_for_completion_interruptible(struct completion *x)
+ {
+ 	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_INTERRUPTIBLE);
++
+ 	if (t == -ERESTARTSYS)
+ 		return t;
+ 	return 0;
+@@ -241,12 +242,23 @@ EXPORT_SYMBOL(wait_for_completion_interruptible_timeout);
+ int __sched wait_for_completion_killable(struct completion *x)
+ {
+ 	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_KILLABLE);
++
+ 	if (t == -ERESTARTSYS)
+ 		return t;
+ 	return 0;
+ }
+ EXPORT_SYMBOL(wait_for_completion_killable);
  
-+#define __wait_event_state(wq, condition, state)				\
-+	___wait_event(wq, condition, state, 0, 0, schedule())
++int __sched wait_for_completion_state(struct completion *x, unsigned int state)
++{
++	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, state);
 +
-+/**
-+ * wait_event_state - sleep until a condition gets true
-+ * @wq_head: the waitqueue to wait on
-+ * @condition: a C expression for the event to wait for
-+ * @state: state to sleep in
-+ *
-+ * The process is put to sleep (@state) until the @condition evaluates to true
-+ * or a signal is received (when allowed by @state).  The @condition is checked
-+ * each time the waitqueue @wq_head is woken up.
-+ *
-+ * wake_up() has to be called after changing any variable that could
-+ * change the result of the wait condition.
-+ *
-+ * The function will return -ERESTARTSYS if it was interrupted by a signal
-+ * (when allowed by @state) and 0 if @condition evaluated to true.
-+ */
-+#define wait_event_state(wq_head, condition, state)				\
-+({										\
-+	int __ret = 0;								\
-+	might_sleep();								\
-+	if (!(condition))							\
-+		__ret = __wait_event_state(wq_head, condition, state);		\
-+	__ret;									\
-+})
++	if (t == -ERESTARTSYS)
++		return t;
++	return 0;
++}
++EXPORT_SYMBOL(wait_for_completion_state);
 +
- #define __wait_event_killable_timeout(wq_head, condition, timeout)		\
- 	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
- 		      TASK_KILLABLE, 0, timeout,				\
+ /**
+  * wait_for_completion_killable_timeout: - waits for completion of a task (w/(to,killable))
+  * @x:  holds the state of this particular completion
