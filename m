@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C8C5B40F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADB05B40C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiIIUpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S230348AbiIIUff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiIIUou (ORCPT
+        with ESMTP id S229788AbiIIUfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:44:50 -0400
-X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 13:44:35 PDT
-Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AD518E3C;
-        Fri,  9 Sep 2022 13:44:28 -0700 (PDT)
-Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.stoffel.org (Postfix) with ESMTPSA id 7A8FB270B5;
-        Fri,  9 Sep 2022 16:34:14 -0400 (EDT)
-Received: by quad.stoffel.org (Postfix, from userid 1000)
-        id 2733AA7E79; Fri,  9 Sep 2022 16:34:14 -0400 (EDT)
+        Fri, 9 Sep 2022 16:35:31 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1C1A1A51;
+        Fri,  9 Sep 2022 13:35:29 -0700 (PDT)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 289KZ99Q017430;
+        Sat, 10 Sep 2022 05:35:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 289KZ99Q017430
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662755709;
+        bh=rH1NP6uWb5FT/e2uz2unz8AGL349fphr8MvxQi9NiSs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VDA1FxXrDxd7dgHP4xK+4mvQiage/NY4J2C9vRyxdTbN2ZKC4lZP5SIi64rdLncc1
+         5428ez4kDdUQCfFIVQ2vxwCv8MO4WOHjQhzxIMc2KFP+x1nZmtMUXRfcru4rTZe5DY
+         Nj1Do/xgz0xEoLP2ISmUP3Du/tG7bSrMCASJM3YQuDzFKW1ermJbqHpkUptLVZY17J
+         yxU1n5q60KIgbTyFQRS2NI1AwrjTgi9IJw1A8ogQ9kXiuoTAwvH0pHxXqH2/o4xaeK
+         G4qpKHaH5VLuVu5q9/5hXyr+E61jASe/kXFeV6PiIUBdhWfVkOonE2xmTPgiEFgqe6
+         W095btzBJFPBA==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127f5411b9cso6942616fac.4;
+        Fri, 09 Sep 2022 13:35:09 -0700 (PDT)
+X-Gm-Message-State: ACgBeo26r1ngucz1QrQO0xqbBSdu4mSFuSefkYAsLf34v1nz/hHs1Oq/
+        3YDSRRJ6UMY2OP013BeslmmEPSdBxqaRNcoxNlQ=
+X-Google-Smtp-Source: AA6agR6dL09UltxzlxRkGBfGKrUUYZ2bafO2jfFPKuEOiCf04AJFdBbWcLrwkKb2VeRhUwPR42iE5Q+EoGneHl3m+O8=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr5903018oab.287.1662755708354; Fri, 09
+ Sep 2022 13:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25371.41798.87576.861659@quad.stoffel.home>
-Date:   Fri, 9 Sep 2022 16:34:14 -0400
-From:   "John Stoffel" <john@stoffel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
-        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
-        fweimer@redhat.com, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-Reply-To: <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-        <20220907125211.GB17729@fieldses.org>
-        <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-        <20220907135153.qvgibskeuz427abw@quack3>
-        <166259786233.30452.5417306132987966849@noble.neil.brown.name>
-        <20220908083326.3xsanzk7hy3ff4qs@quack3>
-        <YxoIjV50xXKiLdL9@mit.edu>
-        <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
-        <20220908155605.GD8951@fieldses.org>
-        <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
-        <20220908182252.GA18939@fieldses.org>
-        <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1662030659-21558-1-git-send-email-tangyouling@loongson.cn>
+In-Reply-To: <1662030659-21558-1-git-send-email-tangyouling@loongson.cn>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 10 Sep 2022 05:34:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARn=v=ugnvYAeq2rfWyStZKkWQcbaaxSJdxrdHE20X31w@mail.gmail.com>
+Message-ID: <CAK7LNARn=v=ugnvYAeq2rfWyStZKkWQcbaaxSJdxrdHE20X31w@mail.gmail.com>
+Subject: Re: [PATCH] mksysmap: Fix the mismatch of 'L0' symbols in System.map
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        loongarch@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Xuerui Wang <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Jeff" == Jeff Layton <jlayton@kernel.org> writes:
+On Thu, Sep 1, 2022 at 8:11 PM Youling Tang <tangyouling@loongson.cn> wrote:
+>
+> When System.map was generated, the kernel used mksysmap to filter the
+> kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
+>
+> $ cat System.map | grep L0
+> 9000000000221540 t L0
+>
+> The L0 symbol exists in System.map, but not in .tmp_System.map. When
+> "cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
+> data" error message in link-vmlinux.sh script.
+>
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> ---
+>  scripts/mksysmap | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/mksysmap b/scripts/mksysmap
+> index 9aa23d15862a..ad8bbc52267d 100755
+> --- a/scripts/mksysmap
+> +++ b/scripts/mksysmap
+> @@ -41,4 +41,4 @@
+>  # so we just ignore them to let readprofile continue to work.
+>  # (At least sparc64 has __crc_ in the middle).
+>
+> -$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
+> +$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
+> --
+> 2.36.1
+>
 
-> On Thu, 2022-09-08 at 14:22 -0400, J. Bruce Fields wrote:
->> On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
->> > Yeah, ok. That does make some sense. So we would mix this into the
->> > i_version instead of the ctime when it was available. Preferably, we'd
->> > mix that in when we store the i_version rather than adding it afterward.
->> > 
->> > Ted, how would we access this? Maybe we could just add a new (generic)
->> > super_block field for this that ext4 (and other filesystems) could
->> > populate at mount time?
->> 
->> Couldn't the filesystem just return an ino_version that already includes
->> it?
->> 
 
-> Yes. That's simple if we want to just fold it in during getattr. If we
-> want to fold that into the values stored on disk, then I'm a little less
-> clear on how that will work.
+Applied to linux-kbuild/fixes.
+Thanks.
 
-I wonder if this series should also include some updates to the
-various xfstests to hopefully document in code what this statx() call
-will do in various situations.  Or at least document how to test it in
-some manner?  Especially since it's layers on top of layers to make
-this work. 
 
-My assumption is that if the underlying filesystem doesn't support the
-new values, it just returns 0 or c_time?
 
-John
+-- 
+Best Regards
+Masahiro Yamada
