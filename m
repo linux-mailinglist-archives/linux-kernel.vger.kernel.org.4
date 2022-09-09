@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441975B3A0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A6C5B3A2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiIINwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S231987AbiIINwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiIINvi (ORCPT
+        with ESMTP id S231825AbiIINvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Sep 2022 09:51:38 -0400
 Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D77142D82;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B2142D8F;
         Fri,  9 Sep 2022 06:51:24 -0700 (PDT)
 Received: from robin.home.jannau.net (p54acc2ba.dip0.t-ipconnect.de [84.172.194.186])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 6252C26EFF1;
+        by soltyk.jannau.net (Postfix) with ESMTPSA id CF35A26EFF2;
         Fri,  9 Sep 2022 15:51:07 +0200 (CEST)
 From:   Janne Grunau <j@jannau.net>
 To:     asahi@lists.linux.dev
 Cc:     Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Hector Martin <marcan@marcan.st>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Sven Peter <sven@svenpeter.dev>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 08/10] arm64: dts: apple: Add J375 devicetrees
-Date:   Fri,  9 Sep 2022 15:51:01 +0200
-Message-Id: <20220909135103.98179-9-j@jannau.net>
+Subject: [RFC PATCH 09/10] arm64: dts: apple: t8103: Add MCA and its support
+Date:   Fri,  9 Sep 2022 15:51:02 +0200
+Message-Id: <20220909135103.98179-10-j@jannau.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220909135103.98179-1-j@jannau.net>
 References: <20220909135103.98179-1-j@jannau.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -44,232 +46,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are the Mac Studio devices with M1 Max (t6001) and
-M1 Ultra (t6002).
+From: Martin PoviÅ¡er <povik+lin@cutebit.org>
 
+Add the MCA I2S transceiver node and its supporting NCO, ADMAC nodes.
+
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 Signed-off-by: Janne Grunau <j@jannau.net>
 ---
 
- arch/arm64/boot/dts/apple/Makefile        |   2 +
- arch/arm64/boot/dts/apple/t6001-j375c.dts |  18 ++++
- arch/arm64/boot/dts/apple/t6002-j375d.dts |  50 ++++++++++
- arch/arm64/boot/dts/apple/t600x-j375.dtsi | 115 ++++++++++++++++++++++
- 4 files changed, 185 insertions(+)
- create mode 100644 arch/arm64/boot/dts/apple/t6001-j375c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6002-j375d.dts
- create mode 100644 arch/arm64/boot/dts/apple/t600x-j375.dtsi
+ arch/arm64/boot/dts/apple/t8103-jxxx.dtsi |  4 ++
+ arch/arm64/boot/dts/apple/t8103.dtsi      | 73 +++++++++++++++++++++++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/apple/Makefile b/arch/arm64/boot/dts/apple/Makefile
-index b021931b0a17..5a7506ff5ea3 100644
---- a/arch/arm64/boot/dts/apple/Makefile
-+++ b/arch/arm64/boot/dts/apple/Makefile
-@@ -8,3 +8,5 @@ dtb-$(CONFIG_ARCH_APPLE) += t6000-j314s.dtb
- dtb-$(CONFIG_ARCH_APPLE) += t6001-j314c.dtb
- dtb-$(CONFIG_ARCH_APPLE) += t6000-j316s.dtb
- dtb-$(CONFIG_ARCH_APPLE) += t6001-j316c.dtb
-+dtb-$(CONFIG_ARCH_APPLE) += t6001-j375c.dtb
-+dtb-$(CONFIG_ARCH_APPLE) += t6002-j375d.dtb
-diff --git a/arch/arm64/boot/dts/apple/t6001-j375c.dts b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-new file mode 100644
-index 000000000000..62ea437b58b2
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ * Mac Studio (M1 Max, 2022)
-+ *
-+ * target-type: J375c
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
+diff --git a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
+index fe2ae40fa9dd..503a1b243efa 100644
+--- a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
++++ b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
+@@ -76,3 +76,7 @@ wifi0: network@0,0 {
+ 		local-mac-address = [00 00 00 00 00 00];
+ 	};
+ };
 +
-+/dts-v1/;
-+
-+#include "t6001.dtsi"
-+#include "t600x-j375.dtsi"
-+
-+/ {
-+	compatible = "apple,j375c", "apple,t6001", "apple,arm-platform";
-+	model = "Apple Mac Studio (M1 Max, 2022)";
++&nco_clkref {
++	clock-frequency = <900000000>;
 +};
-diff --git a/arch/arm64/boot/dts/apple/t6002-j375d.dts b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-new file mode 100644
-index 000000000000..3365429bdc8b
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ * Mac Studio (M1 Ultra, 2022)
-+ *
-+ * target-type: J375d
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+/dts-v1/;
-+
-+#include "t6002.dtsi"
-+#include "t600x-j375.dtsi"
-+
-+/ {
-+	compatible = "apple,j375d", "apple,t6002", "apple,arm-platform";
-+	model = "Apple Mac Studio (M1 Ultra, 2022)";
-+};
-+
-+/* USB Type C */
-+&i2c0 {
-+	/* front-right */
-+	hpm4: usb-pd@39 {
-+		compatible = "apple,cd321x";
-+		reg = <0x39>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
+diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
+index 51a63b29d404..51bc901482db 100644
+--- a/arch/arm64/boot/dts/apple/t8103.dtsi
++++ b/arch/arm64/boot/dts/apple/t8103.dtsi
+@@ -116,6 +116,16 @@ clkref: clock-ref {
+ 		clock-output-names = "clkref";
+ 	};
+ 
++	/*
++	 * This is a fabulated representation of the input clock
++	 * to NCO since we don't know the true clock tree.
++	 */
++	nco_clkref: clock-ref-nco {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-output-names = "nco_ref";
 +	};
 +
-+	/* front-left */
-+	hpm5: usb-pd@3a {
-+		compatible = "apple,cd321x";
-+		reg = <0x3a>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
-+	};
-+};
-+
-+/* delete unused always-on power-domains on die 1 */
-+
-+/delete-node/ &ps_atc2_usb_aon_die1;
-+/delete-node/ &ps_atc2_usb_die1;
-+
-+/delete-node/ &ps_atc3_usb_aon_die1;
-+/delete-node/ &ps_atc3_usb_die1;
-+
-+/delete-node/ &ps_disp0_cpu0_die1;
-+/delete-node/ &ps_disp0_fe_die1;
-diff --git a/arch/arm64/boot/dts/apple/t600x-j375.dtsi b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-new file mode 100644
-index 000000000000..c5444cb34389
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-@@ -0,0 +1,115 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ * Mac Studio (2022)
-+ *
-+ * This file contains the parts common to J375 devices with both t6001 and t6002.
-+ *
-+ * target-type: J375c / J375d
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+/dts-v1/;
-+
-+/ {
-+	aliases {
-+		serial0 = &serial0;
-+		wifi0 = &wifi0;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "serial0";
-+
-+		framebuffer0: framebuffer@0 {
-+			compatible = "apple,simple-framebuffer", "simple-framebuffer";
-+			reg = <0 0 0 0>; /* To be filled by loader */
-+			/* Format properties will be added by loader */
-+			status = "disabled";
+ 	soc {
+ 		compatible = "simple-bus";
+ 		#address-cells = <2>;
+@@ -124,6 +134,15 @@ soc {
+ 		ranges;
+ 		nonposted-mmio;
+ 
++		dart_sio: iommu@235004000 {
++			compatible = "apple,t8103-dart";
++			reg = <0x2 0x35004000 0x0 0x4000>;
++			interrupt-parent = <&aic>;
++			interrupts = <AIC_IRQ 635 IRQ_TYPE_LEVEL_HIGH>;
++			#iommu-cells = <1>;
++			power-domains = <&ps_sio_cpu>;
 +		};
-+	};
 +
-+	memory@10000000000 {
-+		device_type = "memory";
-+		reg = <0x100 0 0x2 0>; /* To be filled by loader */
-+	};
-+};
+ 		i2c0: i2c@235010000 {
+ 			compatible = "apple,t8103-i2c", "apple,i2c";
+ 			reg = <0x2 0x35010000 0x0 0x4000>;
+@@ -219,6 +238,60 @@ serial2: serial@235208000 {
+ 			status = "disabled";
+ 		};
+ 
++		admac: dma-controller@238200000 {
++			compatible = "apple,t8103-admac", "apple,admac";
++			reg = <0x2 0x38200000 0x0 0x34000>;
++			dma-channels = <24>;
++			interrupts-extended = <0>,
++					      <&aic AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>,
++					      <0>,
++					      <0>;
++			#dma-cells = <1>;
++			iommus = <&dart_sio 2>;
++			power-domains = <&ps_sio_adma>;
++		};
 +
-+&serial0 {
-+	status = "okay";
-+};
++		mca: i2s@238400000 {
++			compatible = "apple,t8103-mca", "apple,mca";
++			reg = <0x2 0x38400000 0x0 0x18000>,
++			      <0x2 0x38300000 0x0 0x30000>;
 +
-+/* USB Type C */
-+&i2c0 {
-+	hpm0: usb-pd@38 {
-+		compatible = "apple,cd321x";
-+		reg = <0x38>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
-+	};
++			interrupt-parent = <&aic>;
++			interrupts = <AIC_IRQ 619 IRQ_TYPE_LEVEL_HIGH>,
++				     <AIC_IRQ 620 IRQ_TYPE_LEVEL_HIGH>,
++				     <AIC_IRQ 621 IRQ_TYPE_LEVEL_HIGH>,
++				     <AIC_IRQ 622 IRQ_TYPE_LEVEL_HIGH>,
++				     <AIC_IRQ 623 IRQ_TYPE_LEVEL_HIGH>,
++				     <AIC_IRQ 624 IRQ_TYPE_LEVEL_HIGH>;
 +
-+	hpm1: usb-pd@3f {
-+		compatible = "apple,cd321x";
-+		reg = <0x3f>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
-+	};
++			resets = <&ps_audio_p>;
++			clocks = <&nco 0>, <&nco 1>, <&nco 2>,
++				 <&nco 3>, <&nco 4>, <&nco 4>;
++			power-domains = <&ps_audio_p>, <&ps_mca0>, <&ps_mca1>,
++					<&ps_mca2>, <&ps_mca3>, <&ps_mca4>, <&ps_mca5>;
++			dmas = <&admac 0>, <&admac 1>, <&admac 2>, <&admac 3>,
++			       <&admac 4>, <&admac 5>, <&admac 6>, <&admac 7>,
++			       <&admac 8>, <&admac 9>, <&admac 10>, <&admac 11>,
++			       <&admac 12>, <&admac 13>, <&admac 14>, <&admac 15>,
++			       <&admac 16>, <&admac 17>, <&admac 18>, <&admac 19>,
++			       <&admac 20>, <&admac 21>, <&admac 22>, <&admac 23>;
++			dma-names = "tx0a", "rx0a", "tx0b", "rx0b",
++				"tx1a", "rx1a", "tx1b", "rx1b",
++				"tx2a", "rx2a", "tx2b", "rx2b",
++				"tx3a", "rx3a", "tx3b", "rx3b",
++				"tx4a", "rx4a", "tx4b", "rx4b",
++				"tx5a", "rx5a", "tx5b", "rx5b";
 +
-+	hpm2: usb-pd@3b {
-+		compatible = "apple,cd321x";
-+		reg = <0x3b>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
-+	};
++			#sound-dai-cells = <1>;
++		};
 +
-+	hpm3: usb-pd@3c {
-+		compatible = "apple,cd321x";
-+		reg = <0x3c>;
-+		interrupt-parent = <&pinctrl_ap>;
-+		interrupts = <174 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "irq";
-+	};
-+};
++		nco: clock-controller@23b044000 {
++			compatible = "apple,t8103-nco", "apple,nco";
++			reg = <0x2 0x3b044000 0x0 0x14000>;
++			clocks = <&nco_clkref>;
++			#clock-cells = <1>;
++		};
 +
-+/* PCIe devices */
-+&port00 {
-+	/* WLAN */
-+	bus-range = <1 1>;
-+	wifi0: wifi@0,0 {
-+		reg = <0x10000 0x0 0x0 0x0 0x0>;
-+		/* To be filled by the loader */
-+		local-mac-address = [00 10 18 00 00 10];
-+	};
-+};
-+
-+&port01 {
-+	/* SD card reader */
-+	bus-range = <2 2>;
-+	sdhci0: mmc@0,0 {
-+		compatible = "pci17a0,9755";
-+		reg = <0x20000 0x0 0x0 0x0 0x0>;
-+		cd-inverted;
-+		wp-inverted;
-+	};
-+};
-+
-+&port02 {
-+	/* 10 Gbit Ethernet */
-+	bus-range = <3 3>;
-+	ethernet0: ethernet@0,0 {
-+		reg = <0x30000 0x0 0x0 0x0 0x0>;
-+		/* To be filled by the loader */
-+		local-mac-address = [00 10 18 00 00 00];
-+	};
-+};
-+
-+&port03 {
-+	/* USB xHCI */
-+	bus-range = <4 4>;
-+};
+ 		aic: interrupt-controller@23b100000 {
+ 			compatible = "apple,t8103-aic", "apple,aic";
+ 			#interrupt-cells = <3>;
 -- 
 2.35.1
 
