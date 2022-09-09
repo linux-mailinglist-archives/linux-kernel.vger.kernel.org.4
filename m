@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A0B5B2F84
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E1C5B2F7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiIIHLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S231213AbiIIHL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiIIHLK (ORCPT
+        with ESMTP id S231271AbiIIHLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:11:10 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D684AA221A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:11:09 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bx38so744944ljb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 00:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=y0DoW8vregXVH+TM9mSXdMASvPMT9wSQ3N08H3J6evs=;
-        b=w290wK8hnQpSbBmI3NNQEyLEA0IUA1o7Yh2KDXNLksO9NzSUKeKrwKdCpZcrSqzj+u
-         iM0CFYgP/r4t74k4pGZEg05CgZcSA1y5VZWab4+viW0PdL6vzWGGi8raEZun5V4UrjK1
-         wYjdB5iYfKMNW/kj/4am9xtzGvglsW57d4gXgUeEleLJgUcY9xGarD/KCq1TEBCNmFQZ
-         jj/MRGOPYfZDTND/SumPuDpt/Sv4AJLgpxC9NkbcX+vyjdZaKdzAlnVkPK9ymxWBBhMG
-         6C1I2qGyG9dSrMd5y6LSPnz1PpwE4Z+dxZ+0ZAvaGA8aHT/0q/AB5iQ+e1BoLYnC/h5h
-         qT7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=y0DoW8vregXVH+TM9mSXdMASvPMT9wSQ3N08H3J6evs=;
-        b=sv4eq6eRW8KJ7o6QCd05LYH5plTBgcS/X3Uele41exckNqDETzCL2J4wPc+qD7WToa
-         J7cove+rs095XIkRCtsrTOyotjlkUnECANpT4N85GYeUxNqc53HQfDrINQpwBHaLpv6B
-         fNhu5Fe09CaoRRDmmVU7xtY/Tvx+yt3X4WOoxJn7+tEJi6bmyHJFmjM30Y4Deu771HaH
-         /vr+CdXfMQdN+O0NWxS6TbEPGXmN8KjU7yvc7wkRN6LOhapCHgpwxLkvMXn3Rc9ZIYLl
-         c8g/kUqmVL593cIRmaRvEKg0k07/6iocuDWkgO1Y4jvJcvDHcEbpLtxxkjxKXgQwGsRJ
-         ivpA==
-X-Gm-Message-State: ACgBeo2JcM9cEa0SU57mAVnepb4HBEjLxPnZqdYVak+9jEuVOktaZDE0
-        SgFWzSuqTfGODS7Pqoy5z+eLw5nDuRbTuQ==
-X-Google-Smtp-Source: AA6agR5cskGKF9Nq7MxQL8NV1peMGWdlaRakuhFzDBcuIUAY5U+RObocA3dShuBgZsktmyl+JKAROw==
-X-Received: by 2002:a2e:aa13:0:b0:264:eb98:b7fd with SMTP id bf19-20020a2eaa13000000b00264eb98b7fdmr3379497ljb.26.1662707468235;
-        Fri, 09 Sep 2022 00:11:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q30-20020ac2511e000000b004979ec19387sm142439lfb.305.2022.09.09.00.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 00:11:07 -0700 (PDT)
-Message-ID: <87307ae4-a320-5880-1333-6ea700b61ca7@linaro.org>
-Date:   Fri, 9 Sep 2022 09:11:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: mediatek: mt8188: Add binding for MM
- & INFRA IOMMU
-Content-Language: en-US
-To:     "Chengci.Xu" <chengci.xu@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220831125502.7818-1-chengci.xu@mediatek.com>
- <20220831125502.7818-2-chengci.xu@mediatek.com>
- <2e575ed1-b82c-c7bd-3ddf-ccb6022b2461@linaro.org>
- <c09f262422dd6cd0bf2147870a109bd2ede36d4f.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c09f262422dd6cd0bf2147870a109bd2ede36d4f.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Sep 2022 03:11:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D8FAF0E3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:11:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F35D21F8C7;
+        Fri,  9 Sep 2022 07:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662707480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=msI5VePEIl5qbYHxuDVF0R26A8rzImNR5KL5GmNXoTw=;
+        b=wEEO713dTNUYEwFotSOs1nQBnPmyWP0N8pXOw4QQgUxz/rjULfB0c0/AiP5zMkdL862/My
+        PN87PFZHCufiAKuZg5BUN3wyFycCqlFr8EZrtXJ9uNLA50KvpYopkywgupRY6fFhnAH3Jl
+        4z6A+1mmRj58FbK0t/FYR7B0OmeDL0c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662707480;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=msI5VePEIl5qbYHxuDVF0R26A8rzImNR5KL5GmNXoTw=;
+        b=azGr3ZPQ/fANvZUJdkeyqhBdFjv8XsG7JVssczWVdvAOHf5SodjYASfz337Iv5zschyMXL
+        8/hN8EScm6S3nUCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C64CB13A93;
+        Fri,  9 Sep 2022 07:11:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +d+1LxfnGmMdKgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 09 Sep 2022 07:11:19 +0000
+Date:   Fri, 09 Sep 2022 09:11:19 +0200
+Message-ID: <87a679dnu0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     <perex@perex.cz>, <tiwai@suse.com>, <rdunlap@infradead.org>,
+        <bunk@kernel.org>, <bunk@stusta.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sound: oss: dmasound: remove software_input_volume declaration
+In-Reply-To: <20220909061126.1129585-1-cuigaosheng1@huawei.com>
+References: <20220909061126.1129585-1-cuigaosheng1@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 05:20, Chengci.Xu wrote:
->>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
->>
->> Why do you license it under BSD-3 clause?
->>
+On Fri, 09 Sep 2022 08:11:26 +0200,
+Gaosheng Cui wrote:
 > 
-> A mediatek internal wiki suggest me use "BSD-3-Clause" without detial
-> reason. May be it is not suitable for this file.
+> expand_read_bal has been removed since commit fc37449f7959 ("The
+> next round of scheduled OSS code removal").
 > 
-> If you don't approve of this, I can change this license to "GPL-2.0-
-> only OR BSD-2-Clause", which is perferred by DT bindings file according
-> to "submitting-patches.rst". 
+> software_input_volume has been removed since
+> commit 0a1b42db4bf9 ("sound: sound/oss/dmasound/: cleanups").
 > 
-> Do you think "BSD-2-Clause" is OK? Or could you kindly share me another
-> proper license?
+> so remove the declare for them from header file.
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 
-Please switch to "GPL-2.0-only OR BSD-2-Clause", which is preferred for
-bindings.
+Applied, thanks.
 
 
-Best regards,
-Krzysztof
+Takashi
