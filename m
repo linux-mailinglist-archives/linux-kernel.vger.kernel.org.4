@@ -2,78 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69A05B2FEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B875B30BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 09:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbiIIHem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 03:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
+        id S231562AbiIIHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 03:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiIIHeb (ORCPT
+        with ESMTP id S231561AbiIIHis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:34:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4855838BC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:34:26 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 9 Sep 2022 03:38:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4812A322
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 00:35:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ECB6B6601FAE;
-        Fri,  9 Sep 2022 08:34:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662708864;
-        bh=M/ImFX4OghN1Sdqc5u8HRD4U/spLXlNjoEztoXxxE1Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VV7I4GacRYbbGnJOBZylhdmQ1mJ6FLW8Y6tKEVxsS55KjFuXLa7WJtZmjBtAr+3Rm
-         ynGCagswN0JNdNnlv0NXuw6bHi/zQNMyw99Fc8DCwcOEGopnKhHKt9Ocms+Hnocb2Q
-         9g9HncPI5Ix4eMLFq0NpB3XkEaFO1EmW2k0eDTcWkjnWqrHpKqph5bEAtBuUbkAs5J
-         YvSiorEW0+3GmQV3xD+Rz/4KvrOsYEF8+RyYIT0HKzAP6mG+kWuMVBSKsORkO9vXEM
-         fpRTGYStE11oPnoAQ6D5zrTHCP/qg9A8zQClAiwwWSNP4ghCWP0ELwhu4ZcTRVPi5a
-         1xUgOsMa+COsw==
-Message-ID: <be60c122-2c01-5963-0b49-9f55806f787d@collabora.com>
-Date:   Fri, 9 Sep 2022 09:34:21 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B807961EEC
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5607CC43155;
+        Fri,  9 Sep 2022 07:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662708894;
+        bh=hPJyo0qjU0Uc3jjVEpQnaCCuGiOy/ZYgm+ayReL6nYY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GUkrKoUMHBjKOBPut6em4vX1lYtFqP9w+WcFIiFbKNc95MAW+G+tmWTKDaVL19mDN
+         V8oLKKtidcUEGlv+Uehoi9YDRMGK3r7ZQ4BcbjyOLtwdLz4+e7PfjjZdFOq/p/fw9h
+         E1w4SViUYEOBFFW+1AOABlDUbP1HfzLN7ZWwP0lIUYTUoUJOw4UQIMdEAgT2qxY/gN
+         2P58UxPDi9kQ4Z+diPsU7yXInXotHyQhnxqY6W04Lje5KYS+x5vjBn5fDgbeJxwHz5
+         XQudODSGzr9SybDQBfUeMsR2D4WJ3gHH7w/UxmtJkU+T8P6kzOV/m3OjZhyLRZ47p6
+         RpQQtZXpnBvPw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1oWYXG-007FGV-Ay;
+        Fri, 09 Sep 2022 09:34:46 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 14/37] drm/i915: skl_scaler: fix return value kernel-doc markup
+Date:   Fri,  9 Sep 2022 09:34:21 +0200
+Message-Id: <76f459e7da40f4415cd6136ac7f984c206561a04.1662708705.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1662708705.git.mchehab@kernel.org>
+References: <cover.1662708705.git.mchehab@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 01/10] ASoC: mediatek: mt8192: Allow setting shared clocks
- from machine driver
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220908161154.648557-1-nfraprado@collabora.com>
- <20220908161154.648557-2-nfraprado@collabora.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220908161154.648557-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/09/22 18:11, Nícolas F. R. A. Prado ha scritto:
-> Add a new function to configure the shared clock between two i2s ports,
-> and export it. This will allow the clock sharing to be set from the
-> machine driver instead of the devicetree.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+The way it is, it produces this warning:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+	Documentation/gpu/i915:150: ./drivers/gpu/drm/i915/display/skl_scaler.c:213: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-[For MT8192 Asurada]
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Use list markups to suppress the warning.
+
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
+
+ drivers/gpu/drm/i915/display/skl_scaler.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/display/skl_scaler.c b/drivers/gpu/drm/i915/display/skl_scaler.c
+index 4092679be21e..59099f793d3e 100644
+--- a/drivers/gpu/drm/i915/display/skl_scaler.c
++++ b/drivers/gpu/drm/i915/display/skl_scaler.c
+@@ -208,9 +208,9 @@ int skl_update_scaler_crtc(struct intel_crtc_state *crtc_state)
+  * @crtc_state: crtc's scaler state
+  * @plane_state: atomic plane state to update
+  *
+- * Return
+- *     0 - scaler_usage updated successfully
+- *    error - requested scaling cannot be supported or other error condition
++ * Return:
++ * * 0 - scaler_usage updated successfully
++ * * error - requested scaling cannot be supported or other error condition
+  */
+ int skl_update_scaler_plane(struct intel_crtc_state *crtc_state,
+ 			    struct intel_plane_state *plane_state)
+-- 
+2.37.3
 
