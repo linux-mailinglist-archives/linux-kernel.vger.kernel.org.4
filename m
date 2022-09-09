@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BAB5B3E6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645295B3E6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 20:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiIIR7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S229953AbiIISAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 14:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiIIR6l (ORCPT
+        with ESMTP id S229583AbiIIR77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:58:41 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09469146D04;
-        Fri,  9 Sep 2022 10:57:08 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id bh13so2272351pgb.4;
-        Fri, 09 Sep 2022 10:57:07 -0700 (PDT)
+        Fri, 9 Sep 2022 13:59:59 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3290A138679
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:58:41 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id lc7so5873433ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 10:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=oRK9XtWqfauasrSqs9Bvo7rEqJema0+dTVJMCkyrs+E=;
-        b=khxs6iwgzmX5GSvyHGYmf4oiAn9d9VQqcixcxeMJlMBhdqopM0IBmCZsMq7ply5ll3
-         Rosx1JlYWx7PE2xVoD0yTm/qWm3khCFs8hNqcqfotzUazQx4X6Nqv40ubpis5Y+CYzbD
-         946jhr8LjZiCXQ/3AgDWATMxiIWciHQT9Z461Ir3BtAWvJ7s8BD0m2+JibQ7pQzKMQPS
-         mESe8mTTbwUk835KlEod/FQQOyYWas/MNg9DYw2ICoRvpVCDqZMUQfTudTbk1vGSW1vt
-         571QE5I5REv0U57YDF3XAh+FHw3z+DGQLiEYM+sjCi27bD+Dyf/DkHA1N2iR5yF6+68K
-         WcPQ==
+         :from:to:cc:subject:date;
+        bh=Srs+1Vi4RvFdDPhBXtmUnH/GIvlrSvvrVz/Ri5d6Vsw=;
+        b=IjHjg30W1/4+4nPBc9ElLosn7TuaI/MmuB2RBNBmaA5eRnvprGCC+dO6Kle57P/F5+
+         vfrWkLL60P0/KRj+j6YNfeF1Z32MwH1X6K0BTHge6nZ/4opfxeudnTi9ArlQLC9fbp8/
+         3Rq/SCOiXOr5/R1JVrLVEQH8WnpidIIs7J6ImhFRVvA7Ekzk3USEeIAlDDcfxuYRSTL8
+         C7cyW26vZ6fUAjmfGDAcUPHcJFt06xd57+pJOV1s2iRmaPGW5uze43fERyD5s/grPwy1
+         rYxzP1gnwzpeObWIsXGSXgVAZhjEsSQYA8YfmWV5rkfkIlts+48HKc/n+BPxObGO8WN+
+         TzBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=oRK9XtWqfauasrSqs9Bvo7rEqJema0+dTVJMCkyrs+E=;
-        b=Yvub5BaPiUpDtjgU8DgckCB0LvbVuDtUVlbKTdzjxl/qCx7gYblEEzdmQ1IMue9X3d
-         1TMC+ZxysHfixAE1oXayhYr/bKLpdydx/HWf41gXLEST4rpztg1FBBHl4pElb3gHwf8N
-         AuG9eqMvwDfOkP8Gn7NcvcDTkYUxNMBf0MW6WM8nbZmza2hj7NUYH8Q4+NNBEdwy+ISE
-         oiVSiP9OS04Irw9BamdGErLztd6m5YiwUmYA77etrlj/Kt1AaRztsB0EBSnAZQck2B/6
-         BNrp/AUxSRFKtmTuHNbMoGD8pahVTw7aWdzLTY1+I9r7pTPfb2/Xg+nOu4APuS0dQzpL
-         IUjw==
-X-Gm-Message-State: ACgBeo2YeaYr84LMMDjthjlmdIJYvwnu8BNb7bnH9WHWw/QOFoCPzGL9
-        pMKDrRl/dxwUqvn0nC34Aw00mWlmasO0CQ==
-X-Google-Smtp-Source: AA6agR6IF25SC/qnMvJ49Eimtq5GY2oNq0+HShl+pa0lv2Aco2awoDabC4QEVnAP75/lhq2yFmgvRA==
-X-Received: by 2002:a63:2b48:0:b0:434:eb45:9c6a with SMTP id r69-20020a632b48000000b00434eb459c6amr11697853pgr.508.1662746214742;
-        Fri, 09 Sep 2022 10:56:54 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l72-20020a63914b000000b00419ab8f8d2csm814537pge.20.2022.09.09.10.56.53
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Srs+1Vi4RvFdDPhBXtmUnH/GIvlrSvvrVz/Ri5d6Vsw=;
+        b=Jqv/AK9rRu3Vq90v1DkN0NKjT8aP7gajxPRW/ASBy/BiPQR71yumgOA4Jq4lCpaYLQ
+         jM+4XbLO4t8jB168TG2WTT6P270wrZ8+dTW3255JadJiSA23r6XM23syrsM8mWaIKl9b
+         9HHnfdFqbqH7bTafHfJUUuHWNTwTs/4eKd184rGBO4psv5NB9v80S9HAm+KC2qjbFCJS
+         LS8bZqDSmekhqcW+xhLsX3x8BPyd7PvcQKlyDgdHjNAvzB2IyJv1pTu/Oa2kCgc7mEll
+         EP45tR8LeeOXCZRaoSEX8/L2mEcvm9li0oFtZcYDzUY33Oa+Fc7L7ao7dIwZ8ySpYe5+
+         lAJg==
+X-Gm-Message-State: ACgBeo1AYmYpUcYzz3J32a/m6g0c99BvXYbp8WDNJPRn0dbSEFHYhVA+
+        VjQL42Ij1WI0hdGxVHUnzk15zbp7aKo=
+X-Google-Smtp-Source: AA6agR7TaPPvNfsU2NfZNZFJSIqc6mYLalbQSr1rzrRdspSrZqkF7WXVD46+dKnewuhFIDS0be14IA==
+X-Received: by 2002:a17:907:3e8b:b0:741:9c2e:1afb with SMTP id hs11-20020a1709073e8b00b007419c2e1afbmr10633629ejc.701.1662746319579;
+        Fri, 09 Sep 2022 10:58:39 -0700 (PDT)
+Received: from [192.168.1.103] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id t11-20020aa7d4cb000000b0044e8774914esm739666edr.35.2022.09.09.10.58.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 10:56:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <63ba9b53-b4f8-9e35-0bbd-aa84680e795c@roeck-us.net>
-Date:   Fri, 9 Sep 2022 10:56:52 -0700
+        Fri, 09 Sep 2022 10:58:38 -0700 (PDT)
+Message-ID: <2b19f1b0-0916-9fe7-99a4-33d0c626b7c3@gmail.com>
+Date:   Fri, 9 Sep 2022 19:58:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/1] hwmon: (asus-ec-sensors) autoload module via DMI
- data
+Subject: Re: [PATCH v3 0/2] use memset to make code clearer
 Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220909155654.123398-1-eugene.shalygin@gmail.com>
- <20220909155654.123398-2-eugene.shalygin@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220909155654.123398-2-eugene.shalygin@gmail.com>
+To:     Nam Cao <namcaov@gmail.com>, forest@alittletooquiet.net,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <cover.1662724786.git.namcaov@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1662724786.git.namcaov@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 08:56, Eugene Shalygin wrote:
-> Replace autoloading data based on the ACPI EC device with the DMI
-> records for motherboards models. The ACPI method created a bug that when
-> this driver returns error from the probe function because of the
-> unsupported motherboard model, the ACPI subsystem concludes
-> that the EC device does not work properly.
+On 9/9/22 14:17, Nam Cao wrote:
+> Re-write some code using memset to make it more obvious. Also remove an
+> unnecessary volatile qualifier, because compiler complains about passing
+> volatile pointer to memset.
 > 
-> Fixes: 5cd29012028d
+> V3: get rid of "volatile" entirely, instead of just casting it away.
+> V2: re-write commit message because previous message describes a
+> non-existent problem.
+> 
+> Nam Cao (2):
+>    staging: vt6655: remove unnecessary volatile qualifier
+>    staging: vt6655: use memset to make code clearer
+> 
+>   drivers/staging/vt6655/desc.h        | 2 +-
+>   drivers/staging/vt6655/device_main.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Please include the bug text in the future.
-
-> Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216412
-> Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2121844
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-
-Applied.
-
-Thanks,
-Guenter
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
