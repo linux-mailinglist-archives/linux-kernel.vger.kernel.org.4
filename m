@@ -2,317 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321605B40F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719A45B40FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiIIUpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S229566AbiIIUp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiIIUoz (ORCPT
+        with ESMTP id S231756AbiIIUpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:44:55 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60161F61F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:44:51 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id i1so2916938vsc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 13:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vNti+T8KdfeUbPCsgvNipWCAd23AlZaiYSX0mU/iJEY=;
-        b=e/+fJVZriw6O2R662XaZhAb7hINqQY3Bcv0IJ/NrypmS5hxFIG1BfkNkva1t9FOGV1
-         BoIs36Zmo/2s6IlJBQKBFDseUYifKGnKUvP5YBtfbuvQZHLimB92szWtoKQ5ik/556Rz
-         5zkYgyXf2Wao95z3LvxFoAhjYt/K3jGajgqzFxFAkziwZi2/khe8ng6YyCzvmOayeOux
-         H8GzioC1IDENqDnOU+Cz+s5CGJLh4YgLTx1e6i9/WEPbt/Cz5vTwwSkapkFWd3JtATKq
-         avOdZmeR32ZvXMQVoISu5/6EdghhgTWIRJx6QGx5fhoLAbv7p/bvJYBpAbOyDhPlscLu
-         Ojtg==
+        Fri, 9 Sep 2022 16:45:30 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C43DE5827;
+        Fri,  9 Sep 2022 13:45:26 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1279948d93dso6957477fac.10;
+        Fri, 09 Sep 2022 13:45:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vNti+T8KdfeUbPCsgvNipWCAd23AlZaiYSX0mU/iJEY=;
-        b=FTAdQrFx1nx4fiMH0HqsJHAyNribXCMk+1VUs03cRIpqvSxfhncooWh1L5dFiAQ+Rl
-         Sh4P2XDjPYzPnevr9+iZY24GewuxEPRgU1bkDgebMHT8i95i+ntMcBN8/9FIPXhVwTbY
-         pbAIZApeB4X8yxQNWu4KBXkvH8BkNF9xcM9zckNNqegHDbvJbvBlXM8BZHUt6g0gokqZ
-         xCFKxrHhU1sRzY4Qj0oq7RSXFcqLCeLhb/I8jel8TcdrSTG3+SH3imEFy3GpeIVtfqEO
-         qGETkfPVw0vqQG8NO7BGKw43lYdIe3K2WgZ9XHj28sKpZ7TvJQRGCxFtpVnWQWplcUZL
-         16Qg==
-X-Gm-Message-State: ACgBeo0bEq8zTW1zAtfXFtxWmfL+YpbIfW5w7c3sKKiRHGM72dk3iQgE
-        8YJqSw4ZU3cRPWxoEeoPN6NQRXqMCXb707xYznk=
-X-Google-Smtp-Source: AA6agR7KWk+cWS4XN1yruX0hsk3H+o6x1VgWSHBVGtpUP44GHpQKTBK4PDhhVF+zwznL5K77mxpnW6ZZxQeQLnh4ZAQ=
-X-Received: by 2002:a05:6102:3a4c:b0:398:3098:a301 with SMTP id
- c12-20020a0561023a4c00b003983098a301mr3964922vsu.74.1662756289685; Fri, 09
- Sep 2022 13:44:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=wJHPlwUtvZUMl13qkXUAr67z5VRLYGwRp7OVgCggcQ8=;
+        b=SWtryOq2AxWUM1vWmaOoeQ9AmOJgGD6iaG3IneNHL31AJzBrc168A/aOLCqAOp6WWq
+         jxJmNJp3PZSa7WdVYPfzqKE9ge4yRa27lV1UxPlPGJezaMaCc+oiuBTHAuCPzBUfEyMz
+         I0W/bduiSIyvYiF/9r/HGCFHQFhoT9Y0yuf+sKKw2x+GB+F8VAYpnWocgVG2gw+2CYU3
+         ByRaxq7mM9kO+Jh1vpbjI+wn5GzR8vrQoZe8lAu2AVuxvat0HJqpljWQaZbSscjV1srk
+         u89YyLCaNCBns5vrJrB0x0OP0lh5j7dIWRhPMnc8rkD0jE7QwIAdBcYXFQ82qhcfMfQm
+         P12g==
+X-Gm-Message-State: ACgBeo2C38ua8nRMHA52U/XH3A7LYRUiofSsnlTVrHlbRiaIRvNhk+yT
+        376QWJDaG63lPpL1v848fQ==
+X-Google-Smtp-Source: AA6agR72dTUvUYth3SpEr5goOZl3+nCyxA8MljUI5f9EQmBiFXK73tYkzF5DmGOuvPjZj42APSiY5A==
+X-Received: by 2002:a05:6871:a4:b0:127:2ef5:f66e with SMTP id u36-20020a05687100a400b001272ef5f66emr5879727oaa.213.1662756325737;
+        Fri, 09 Sep 2022 13:45:25 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id a4-20020a9d5c84000000b006370b948974sm213742oti.32.2022.09.09.13.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 13:45:25 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] perf: Skip and warn on unknown format 'configN' attrs
+Date:   Fri,  9 Sep 2022 15:45:09 -0500
+Message-Id: <20220909204509.2169512-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220904214134.408619-1-jim.cromie@gmail.com> <20220904214134.408619-18-jim.cromie@gmail.com>
- <2d3846cb-ff9a-3484-61a8-973799727d8f@akamai.com>
-In-Reply-To: <2d3846cb-ff9a-3484-61a8-973799727d8f@akamai.com>
-From:   jim.cromie@gmail.com
-Date:   Fri, 9 Sep 2022 14:44:23 -0600
-Message-ID: <CAJfuBxzM=KKPbcks-aQLAJM0QVd5sjL-CucYbyFbeG5sgoCVjg@mail.gmail.com>
-Subject: Re: [PATCH v6 17/57] dyndbg: validate class FOO by checking with module
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>, robdclark@gmail.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 12:19 PM Jason Baron <jbaron@akamai.com> wrote:
->
->
->
-> On 9/4/22 17:40, Jim Cromie wrote:
-> > Add module-to-class validation:
-> >
-> >   #> echo class DRM_UT_KMS +p > /proc/dynamic_debug/control
-> >
-> > If a query has "class FOO", then ddebug_find_valid_class(), called
-> > from ddebug_change(), requires that FOO is known to module X,
-> > otherwize the query is skipped entirely for X.  This protects each
-> > module's class-space, other than the default:31.
-> >
-> > The authors' choice of FOO is highly selective, giving isolation
-> > and/or coordinated sharing of FOOs.  For example, only DRM modules
-> > should know and respond to DRM_UT_KMS.
-> >
-> > So this, combined with module's opt-in declaration of known classes,
-> > effectively privatizes the .class_id space for each module (or
-> > coordinated set of modules).
-> >
-> > Notes:
-> >
-> > For all "class FOO" queries, ddebug_find_valid_class() is called, it
-> > returns the map matching the query, and sets valid_class via an
-> > *outvar).
-> >
-> > If no "class FOO" is supplied, valid_class = _CLASS_DFLT.  This
-> > insures that legacy queries do not trample on new class'd callsites,
-> > as they get added.
->
->
-> Hi Jim,
->
-> I'm wondering about the case where we have a callsite which is marked
-> as 'class foo', but the query string is done by say module and file, so:
->
-> # echo "module bar file foo.c +p" > /proc/dynamic_debug_control
->
-> With the proposed code, I think this ends up not enabling anything right?
+If the kernel exposes a new perf_event_attr field in a format attr, perf
+will return an error stating the specified PMU can't be found. For
+example, a format attr with 'config3:0-63' causes an error as config3 is
+unknown to perf. This causes a compatibility issue between a newer
+kernel with older perf tool.
 
-correct - the only way to enable :    pr_debug_cls(CL_FOO, " ...")
-is
-   echo class CL_FOO +p > control
+Before this change with a kernel adding 'config3' I get:
 
-1st, existing dyndbg query uses, whether ad-hoc or scripted,
-were not written in anticipation of new / classified subsystems.
+$ perf record -e arm_spe// -- true
+event syntax error: 'arm_spe//'
+                     \___ Cannot find PMU `arm_spe'. Missing kernel support?
+Run 'perf list' for a list of valid events
 
-2nd, new class users dont want to sit in coach. no damn legroom.
+ Usage: perf record [<options>] [<command>]
+    or: perf record [<options>] -- <command> [<options>]
 
-3rd, consider DRM, which already has drm.debug
-ie:  /sys/module/drm/parameters/debug
-and prefers it, at least by inertia.
-protecting these new class'd callsites (3-5k of them)
-from casual (unintended) manipulations of the kernel-wide
-dyndbg state seems prudent, and a usability win.
+    -e, --event <event>   event selector. use 'perf list' to list
+available events
 
-Not everyone will use module bar, requiring "class foo"
-guarantees that changes are intentional.
+After this change, I get:
 
+$ perf record -e arm_spe// -- true
+WARNING: format 'inv_event_filter' requires 'config3' which is not supported by this version of perf!
+[ perf record: Woken up 2 times to write data ]
+[ perf record: Captured and wrote 0.091 MB perf.data ]
 
+To support unknown configN formats, rework the YACC implementation to
+pass any config[0-9]+ format to perf_pmu__new_format() to handle with a
+warning.
 
-> Because valid class is set to _DPRINTK_CLASS_DFLT and then:
-> 'dp->class_id != valid_class' is true?
->
-> This seems confusing to me as a user as this doesn't work like the
-> other queries....so maybe we should only do the
-> 'dp->class_id != valid_class' check *if* query->class_string is set,
-> see below.
->
+Note that the user will get the warning if *any* PMU has an unsupported
+format attr even if that PMU isn't used. This is because perf tool scans
+all the PMUs.
 
-Could you clarify whether you think this is a logic error
-or a frame-of-reference difference as elaborated above ?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Rework YACC code to handle configN formats in C code
+ - Add a warning when an unknown configN attr is found
 
-ISTM theres a place for a well-worded paragraph in doc
-about the class distinction, perhaps a whole for-authors section.
+v1: https://lore.kernel.org/all/20220901184709.2179309-1-robh@kernel.org/
+---
+ tools/perf/util/pmu.c |  6 ++++++
+ tools/perf/util/pmu.l |  2 --
+ tools/perf/util/pmu.y | 15 ++++-----------
+ 3 files changed, 10 insertions(+), 13 deletions(-)
 
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 89655d53117a..6757db7d559c 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1475,6 +1475,12 @@ int perf_pmu__new_format(struct list_head *list, char *name,
+ {
+ 	struct perf_pmu_format *format;
+ 
++	if (config > PERF_PMU_FORMAT_VALUE_CONFIG2) {
++		pr_warning("WARNING: format '%s' requires 'config%d' which is not supported by this version of perf!\n",
++			   name, config);
++		return 0;
++	}
++
+ 	format = zalloc(sizeof(*format));
+ 	if (!format)
+ 		return -ENOMEM;
+diff --git a/tools/perf/util/pmu.l b/tools/perf/util/pmu.l
+index a15d9fbd7c0e..58b4926cfaca 100644
+--- a/tools/perf/util/pmu.l
++++ b/tools/perf/util/pmu.l
+@@ -27,8 +27,6 @@ num_dec         [0-9]+
+ 
+ {num_dec}	{ return value(10); }
+ config		{ return PP_CONFIG; }
+-config1		{ return PP_CONFIG1; }
+-config2		{ return PP_CONFIG2; }
+ -		{ return '-'; }
+ :		{ return ':'; }
+ ,		{ return ','; }
+diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
+index bfd7e8509869..283efe059819 100644
+--- a/tools/perf/util/pmu.y
++++ b/tools/perf/util/pmu.y
+@@ -20,7 +20,7 @@ do { \
+ 
+ %}
+ 
+-%token PP_CONFIG PP_CONFIG1 PP_CONFIG2
++%token PP_CONFIG
+ %token PP_VALUE PP_ERROR
+ %type <num> PP_VALUE
+ %type <bits> bit_term
+@@ -47,18 +47,11 @@ PP_CONFIG ':' bits
+ 				      $3));
+ }
+ |
+-PP_CONFIG1 ':' bits
++PP_CONFIG PP_VALUE ':' bits
+ {
+ 	ABORT_ON(perf_pmu__new_format(format, name,
+-				      PERF_PMU_FORMAT_VALUE_CONFIG1,
+-				      $3));
+-}
+-|
+-PP_CONFIG2 ':' bits
+-{
+-	ABORT_ON(perf_pmu__new_format(format, name,
+-				      PERF_PMU_FORMAT_VALUE_CONFIG2,
+-				      $3));
++				      $2,
++				      $4));
+ }
+ 
+ bits:
+-- 
+2.34.1
 
-
->
->
-> >
-> > Also add a new column to control-file output, displaying non-default
-> > class-name (when found) or the "unknown _id:", if it has not been
-> > (correctly) declared with one of the declarator macros.
-> >
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> > ---
-> >  lib/dynamic_debug.c | 76 ++++++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 68 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> > index b71efd0b491d..db96ded78c3f 100644
-> > --- a/lib/dynamic_debug.c
-> > +++ b/lib/dynamic_debug.c
-> > @@ -56,6 +56,7 @@ struct ddebug_query {
-> >       const char *module;
-> >       const char *function;
-> >       const char *format;
-> > +     const char *class_string;
-> >       unsigned int first_lineno, last_lineno;
-> >  };
-> >
-> > @@ -136,15 +137,33 @@ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
-> >                       fmtlen--;
-> >       }
-> >
-> > -     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u\n",
-> > -              msg,
-> > -              query->function ?: "",
-> > -              query->filename ?: "",
-> > -              query->module ?: "",
-> > -              fmtlen, query->format ?: "",
-> > -              query->first_lineno, query->last_lineno);
-> > +     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u class=%s\n",
-> > +               msg,
-> > +               query->function ?: "",
-> > +               query->filename ?: "",
-> > +               query->module ?: "",
-> > +               fmtlen, query->format ?: "",
-> > +               query->first_lineno, query->last_lineno, query->class_string);
-> >  }
-> >
-> > +static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
-> > +                                                       const char *class_string, int *class_id)
-> > +{
-> > +     struct ddebug_class_map *map;
-> > +     int idx;
-> > +
-> > +     list_for_each_entry(map, &dt->maps, link) {
-> > +             idx = match_string(map->class_names, map->length, class_string);
-> > +             if (idx >= 0) {
-> > +                     *class_id = idx + map->base;
-> > +                     return map;
-> > +             }
-> > +     }
-> > +     *class_id = -ENOENT;
-> > +     return NULL;
-> > +}
-> > +
-> > +#define __outvar /* filled by callee */
-> >  /*
-> >   * Search the tables for _ddebug's which match the given `query' and
-> >   * apply the `flags' and `mask' to them.  Returns number of matching
-> > @@ -159,6 +178,8 @@ static int ddebug_change(const struct ddebug_query *query,
-> >       unsigned int newflags;
-> >       unsigned int nfound = 0;
-> >       struct flagsbuf fbuf, nbuf;
-> > +     struct ddebug_class_map *map = NULL;
-> > +     int __outvar valid_class;
-> >
-> >       /* search for matching ddebugs */
-> >       mutex_lock(&ddebug_lock);
-> > @@ -169,9 +190,22 @@ static int ddebug_change(const struct ddebug_query *query,
-> >                   !match_wildcard(query->module, dt->mod_name))
-> >                       continue;
-> >
-> > +             if (query->class_string) {
-> > +                     map = ddebug_find_valid_class(dt, query->class_string, &valid_class);
-> > +                     if (!map)
-> > +                             continue;
->
-> So remove the else here.
->
-> > +             } else {
-> > +                     /* constrain query, do not touch class'd callsites */
-> > +                     valid_class = _DPRINTK_CLASS_DFLT;
-> > +             }
-> > +
-> >               for (i = 0; i < dt->num_ddebugs; i++) {
-> >                       struct _ddebug *dp = &dt->ddebugs[i];
-> >
-> > +                     /* match site against query-class */
-> > +                     if (dp->class_id != valid_class)
->
-> And then make this: if (query->class_string && (dp->class_id != valid_class))
->
-> thoughts?
->
->
-> > +                             continue;
-> > +>                    /* match against the source filename */
-> >                       if (query->filename &&
-> >                           !match_wildcard(query->filename, dp->filename) &&
-> > @@ -420,6 +454,8 @@ static int ddebug_parse_query(char *words[], int nwords,
-> >               } else if (!strcmp(keyword, "line")) {
-> >                       if (parse_linerange(query, arg))
-> >                               return -EINVAL;
-> > +             } else if (!strcmp(keyword, "class")) {
-> > +                     rc = check_set(&query->class_string, arg, "class");
-> >               } else {
-> >                       pr_err("unknown keyword \"%s\"\n", keyword);
-> >                       return -EINVAL;
-> > @@ -854,6 +890,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
-> >       return dp;
-> >  }
-> >
-> > +#define class_in_range(class_id, map)                                        \
-> > +     (class_id >= map->base && class_id < map->base + map->length)
-> > +
-> > +static const char *ddebug_class_name(struct ddebug_iter *iter, struct _ddebug *dp)
-> > +{
-> > +     struct ddebug_class_map *map;
-> > +
-> > +     list_for_each_entry(map, &iter->table->maps, link)
-> > +             if (class_in_range(dp->class_id, map))
-> > +                     return map->class_names[dp->class_id - map->base];
-> > +
-> > +     return NULL;
-> > +}
-> > +
-> >  /*
-> >   * Seq_ops show method.  Called several times within a read()
-> >   * call from userspace, with ddebug_lock held.  Formats the
-> > @@ -865,6 +915,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
-> >       struct ddebug_iter *iter = m->private;
-> >       struct _ddebug *dp = p;
-> >       struct flagsbuf flags;
-> > +     char const *class;
-> >
-> >       if (p == SEQ_START_TOKEN) {
-> >               seq_puts(m,
-> > @@ -877,7 +928,16 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
-> >                  iter->table->mod_name, dp->function,
-> >                  ddebug_describe_flags(dp->flags, &flags));
-> >       seq_escape_str(m, dp->format, ESCAPE_SPACE, "\t\r\n\"");
-> > -     seq_puts(m, "\"\n");
-> > +     seq_puts(m, "\"");
-> > +
-> > +     if (dp->class_id != _DPRINTK_CLASS_DFLT) {
-> > +             class = ddebug_class_name(iter, dp);
-> > +             if (class)
-> > +                     seq_printf(m, " class:%s", class);
-> > +             else
-> > +                     seq_printf(m, " class unknown, _id:%d", dp->class_id);
-> > +     }
-> > +     seq_puts(m, "\n");
-> >
-> >       return 0;
-> >  }
