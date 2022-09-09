@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23D35B2F3F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0859A5B2F3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 08:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiIIGqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 02:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S230012AbiIIGpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 02:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIIGqL (ORCPT
+        with ESMTP id S229686AbiIIGpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 02:46:11 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFE9B113C7F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 23:46:08 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 73E231E80D5E;
-        Fri,  9 Sep 2022 14:44:37 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KCJdTlgd51AI; Fri,  9 Sep 2022 14:44:34 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4EE7A1E80D06;
-        Fri,  9 Sep 2022 14:44:34 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] ASoC: mediatek: mt6359: fix platform_get_irq error checking
-Date:   Fri,  9 Sep 2022 14:45:11 +0800
-Message-Id: <20220909064511.22343-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Sep 2022 02:45:36 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30152D1EB;
+        Thu,  8 Sep 2022 23:45:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q63so696817pga.9;
+        Thu, 08 Sep 2022 23:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=I8PBnVuso42Lf8DghkrkORINCJIw/NNGEd7qLTShBCg=;
+        b=iQHsq+0XUdDC87Uor3v4Ubs/wKzsrooqcujwFitg3OmdhmV3vYfO6ub0M4jPd0ayoO
+         QseC5lwBTc/LOY/nhOqfYzqI2HQKZNYbsYrX+C3AKm+zfhoZY9dIyi+mNLd1kDTBfjs2
+         rct+3E77H1PsgFwL7ftthrxt2t7lPDL1Qkf87EqYKQBhtSgXKVfdmH0xe/MLKu9nyTUH
+         ZHY4lo0NKtYYulw67Lpy0jnQuyiOVx2uLQijw2e62LeukbM5r3a9nWdxiGJGERTH6R7u
+         NwtetV8aRMLUdjizlSbQ9w2am0FRlz3tPCcFddR+g+BYASked3OpdqSkAxKuiXOBGIIS
+         PP8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=I8PBnVuso42Lf8DghkrkORINCJIw/NNGEd7qLTShBCg=;
+        b=XeznjGjTr7pedtg9fTej/aamz1arFqyp2SoCDUPDRsRfcR9MIKnhzwxbQhdzbqMxCa
+         A8HTBQMtZZ0sX79G3C6gW+zahb/vBmnbtpY2xsCXMlTNTe+DCcAmcKVG+D2u8M1Cj1Vn
+         0OnyaXHZJXayezkUab9xUFF+hpFxy/e4UPoBw8HlbUok95YTKm6fhGrReUIJofKI6Xj1
+         yyhESQdysrB4b/3RwrcHasd5SqbQgXCtR5P0fwPN5IDlo0658kNGBgGU4dBL3oJYg3FT
+         xKHVk7fAUPh0BSGgKpJOI80AVGBgM3qgCF0M9zxYhZ7MqdoHYKFRjWa91amoq0LA+TyH
+         WIwA==
+X-Gm-Message-State: ACgBeo0PM0pT6FuQrQreqXIzbIkAcGy6gUiOdGjxzdkcvEAtoKLPsb8+
+        6cThhft7c0aAF0CT6g7f/7c=
+X-Google-Smtp-Source: AA6agR5yAGcbTXNwHYAqHZABOLzG1u6FcbM2Kb1e0v0KLxRBtnzzpHmIcaHUTJiuhR6YQNp1FEzG/w==
+X-Received: by 2002:a63:a1f:0:b0:434:dd36:c639 with SMTP id 31-20020a630a1f000000b00434dd36c639mr10668967pgk.165.1662705934547;
+        Thu, 08 Sep 2022 23:45:34 -0700 (PDT)
+Received: from localhost ([2406:7400:63:83c4:f166:555c:90a1:a48d])
+        by smtp.gmail.com with ESMTPSA id t128-20020a625f86000000b0052d2b55be32sm805403pfb.171.2022.09.08.23.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 23:45:34 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 12:15:28 +0530
+From:   "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fsnotify: remove unused declaration
+Message-ID: <20220909064528.vbjafykgbm7kt35q@riteshh-domain>
+References: <20220909033828.993889-1-cuigaosheng1@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909033828.993889-1-cuigaosheng1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platform_get_irq() function returns negative error codes on error,
-fix the checking.
+On 22/09/09 11:38AM, Gaosheng Cui wrote:
+> fsnotify_alloc_event_holder() and fsnotify_destroy_event_holder()
+> has been removed since commit 7053aee26a35 ("fsnotify: do not share
+> events between notification groups"), so remove it.
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- sound/soc/codecs/mt6359-accdet.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+It's a 2014 commit. Nice spotting. 
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
-diff --git a/sound/soc/codecs/mt6359-accdet.c b/sound/soc/codecs/mt6359-accdet.c
-index c190628e2905..b70aac5075ad 100644
---- a/sound/soc/codecs/mt6359-accdet.c
-+++ b/sound/soc/codecs/mt6359-accdet.c
-@@ -965,7 +965,7 @@ static int mt6359_accdet_probe(struct platform_device *pdev)
- 	mutex_init(&priv->res_lock);
- 
- 	priv->accdet_irq = platform_get_irq(pdev, 0);
--	if (priv->accdet_irq) {
-+	if (priv->accdet_irq > 0) {
- 		ret = devm_request_threaded_irq(&pdev->dev, priv->accdet_irq,
- 						NULL, mt6359_accdet_irq,
- 						IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-@@ -979,7 +979,7 @@ static int mt6359_accdet_probe(struct platform_device *pdev)
- 
- 	if (priv->caps & ACCDET_PMIC_EINT0) {
- 		priv->accdet_eint0 = platform_get_irq(pdev, 1);
--		if (priv->accdet_eint0) {
-+		if (priv->accdet_eint0 > 0) {
- 			ret = devm_request_threaded_irq(&pdev->dev,
- 							priv->accdet_eint0,
- 							NULL, mt6359_accdet_irq,
-@@ -994,7 +994,7 @@ static int mt6359_accdet_probe(struct platform_device *pdev)
- 		}
- 	} else if (priv->caps & ACCDET_PMIC_EINT1) {
- 		priv->accdet_eint1 = platform_get_irq(pdev, 2);
--		if (priv->accdet_eint1) {
-+		if (priv->accdet_eint1 > 0) {
- 			ret = devm_request_threaded_irq(&pdev->dev,
- 							priv->accdet_eint1,
- 							NULL, mt6359_accdet_irq,
--- 
-2.11.0
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  fs/notify/fsnotify.h | 4 ----
+>  1 file changed, 4 deletions(-)
 
+
+> 
+> diff --git a/fs/notify/fsnotify.h b/fs/notify/fsnotify.h
+> index 87d8a50ee803..fde74eb333cc 100644
+> --- a/fs/notify/fsnotify.h
+> +++ b/fs/notify/fsnotify.h
+> @@ -76,10 +76,6 @@ static inline void fsnotify_clear_marks_by_sb(struct super_block *sb)
+>   */
+>  extern void __fsnotify_update_child_dentry_flags(struct inode *inode);
+>  
+> -/* allocate and destroy and event holder to attach events to notification/access queues */
+> -extern struct fsnotify_event_holder *fsnotify_alloc_event_holder(void);
+> -extern void fsnotify_destroy_event_holder(struct fsnotify_event_holder *holder);
+> -
+>  extern struct kmem_cache *fsnotify_mark_connector_cachep;
+>  
+>  #endif	/* __FS_NOTIFY_FSNOTIFY_H_ */
+> -- 
+> 2.25.1
+> 
