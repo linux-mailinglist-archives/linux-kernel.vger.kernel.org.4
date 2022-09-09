@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0657E5B40A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD5E5B4072
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 22:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiIIU0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 16:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S232043AbiIIUVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 16:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiIIU0R (ORCPT
+        with ESMTP id S231715AbiIIUVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:26:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576C0128C09;
-        Fri,  9 Sep 2022 13:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662755142; x=1694291142;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=XqLKA3MmjgworvdcvPYyVZ8zmzETc51MsjZvmPVofAk=;
-  b=XzLCS96C9mf5FjOB1vXos6sTZYwBfzaHvs3ruW91Ln0jBV+DDdqn//Vi
-   pWsyT1NafEwq8G59gUD1P16WAM/47krcPmxu0x92hX7AkJFLfOww2T4i6
-   cZ+r+cazbo2Tcexv0VAlav0EteMhRQioGCxyUE5j6OdYy0YAEJXJ5RMSb
-   7t3Fib8gxo+pEo5t0Qa3698wAvNLYGCFFjK2N0uox9eoWsYfJjKFapjgU
-   ko0/W4m1ShsJVzyRfb0GDbWQzzZ5ui0f2DASIV59Im1MW9nlz1cq/kiAV
-   y4ArWgkWg/V3C2bhePkZTMSZ1S4bjm4MzAoQeLBSjXlZEvVvRZMiOlQc0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280584706"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="280584706"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:25:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="611163005"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2022 13:25:36 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     hpa@zytor.com, corbet@lwn.net, bagasdotme@gmail.com,
-        tony.luck@intel.com, yang.zhong@intel.com,
-        linux-doc@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com
-Subject: [PATCH v4 4/4] Documentation/x86: Explain the state component permission for guests
-Date:   Fri,  9 Sep 2022 13:15:40 -0700
-Message-Id: <20220909201540.17705-5-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220909201540.17705-1-chang.seok.bae@intel.com>
-References: <20220909201540.17705-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Sep 2022 16:21:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D97EAB4F8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 13:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662754900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kTmFwjHdd6+ItQzjjW7E8XOZYRWV20W1ZUoai6+hbpY=;
+        b=b+FPzFCfTHIittWhMxlw/I2J1nVKS41Yww3CgpTBaU4q2aX/nam6xPp/tLittdnp0fqfqm
+        Mc5ZLB1tYVv5ALWEvljdzYvZk77qkW0ujojENIoedPPJ4bokUprhV0qOefcnlxDL6TKGmU
+        JyVjCIEky9AZabkwsIWdYmW6GDHu8Tw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-5xGWCX6yMJKi2CGIFnYV_w-1; Fri, 09 Sep 2022 16:21:36 -0400
+X-MC-Unique: 5xGWCX6yMJKi2CGIFnYV_w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4CAA101A56D;
+        Fri,  9 Sep 2022 20:21:35 +0000 (UTC)
+Received: from emerald.lyude.net (unknown [10.22.18.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 853AE492C3B;
+        Fri,  9 Sep 2022 20:21:35 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     linux-input@vger.kernel.org
+Cc:     Mark Pearson <mpearson@lenovo.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthew Haughton <snafu109@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Input: synaptics: Enable InterTouch for the ThinkPad P1 G3
+Date:   Fri,  9 Sep 2022 16:21:26 -0400
+Message-Id: <20220909202127.141761-1-lyude@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 980fe2fddcff ("x86/fpu: Extend fpu_xstate_prctl() with guest
-permissions") extends a couple of arch_prctl(2) options for VCPU threads.
-Add description for them.
+Noticed this while trying to debug some unrelated issues: this laptop has
+the ability to use rmi4 but doesn't by default. So let's fix that.
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-Reviewed-by: Yang Zhong <yang.zhong@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
+Tested locally, including mouse buttons, on my ThinkPad P1 G3. This might
+also enable the X1 Extreme G3, but I don't have such a system to test
+locally (presumably Mark can chime in if that's the case).
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Mark Pearson <mpearson@lenovo.com>
 ---
-Changes from v1:
-* Add the reason for the guest options (Dave Hansen).
-* Add a note to allude some VMM policy, i.e. KVM_X86_XCOMP_GUEST_SUPP.
-* Move it in the separate section.
+ drivers/input/mouse/synaptics.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Note the correspondent attributes were also proposed for the KVM API. But,
-it was seen as inessential:
-    https://lore.kernel.org/lkml/20220823231402.7839-1-chang.seok.bae@intel.com/
----
- Documentation/x86/xstate.rst | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/Documentation/x86/xstate.rst b/Documentation/x86/xstate.rst
-index f7aad2241d32..fd7b5333bd70 100644
---- a/Documentation/x86/xstate.rst
-+++ b/Documentation/x86/xstate.rst
-@@ -141,3 +141,32 @@ entry if the feature is in its initial configuration.  This differs from
- non-dynamic features which are always written regardless of their
- configuration.  Signal handlers can examine the XSAVE buffer's XSTATE_BV
- field to determine if a features was written.
-+
-+Dynamic features for virtual machines
-+-------------------------------------
-+
-+The permission for the guest state component needs to be managed separately
-+from the host, as they are exclusive to each other. A coupled of options
-+are extended to control the guest permission:
-+
-+-ARCH_GET_XCOMP_GUEST_PERM
-+
-+ arch_prctl(ARCH_GET_XCOMP_GUEST_PERM, &features);
-+
-+ ARCH_GET_XCOMP_GUEST_PERM is a variant of ARCH_GET_XCOMP_PERM. So it
-+ provides the same semantics and functionality but for the guest
-+ components.
-+
-+-ARCH_REQ_XCOMP_GUEST_PERM
-+
-+ arch_prctl(ARCH_REQ_XCOMP_GUEST_PERM, feature_nr);
-+
-+ ARCH_REQ_XCOMP_GUEST_PERM is a variant of ARCH_REQ_XCOMP_PERM. It has the
-+ same semantics for the guest permission. While providing a similiar
-+ functionality, this comes with a constraint. Permission is frozen when the
-+ first VCPU is created. Any attempt to change permission after that point
-+ is going to be rejected. So, the permission has to be requested before the
-+ first VCPU creation.
-+
-+Note that some VMMs may have already established a set of supported state
-+components. These options are not presumed to support any particular VMM.
+diff --git a/drivers/input/mouse/synaptics.c b/drivers/input/mouse/synaptics.c
+index 434d48ae4b12..9ad03a592ceb 100644
+--- a/drivers/input/mouse/synaptics.c
++++ b/drivers/input/mouse/synaptics.c
+@@ -182,6 +182,7 @@ static const char * const smbus_pnp_ids[] = {
+ 	"LEN0099", /* X1 Extreme Gen 1 / P1 Gen 1 */
+ 	"LEN009b", /* T580 */
+ 	"LEN0402", /* X1 Extreme Gen 2 / P1 Gen 2 */
++	"LEN040f", /* P1 Gen 3 */
+ 	"LEN200f", /* T450s */
+ 	"LEN2044", /* L470  */
+ 	"LEN2054", /* E480 */
 -- 
-2.17.1
+2.37.2
 
