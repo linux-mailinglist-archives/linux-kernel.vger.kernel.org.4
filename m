@@ -2,149 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257A85B3660
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4935B3663
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiIILb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S230063AbiIILb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiIILb0 (ORCPT
+        with ESMTP id S229942AbiIILbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:31:26 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFEC12D566;
-        Fri,  9 Sep 2022 04:31:25 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 028BB2B059B4;
-        Fri,  9 Sep 2022 07:31:23 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 09 Sep 2022 07:31:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1662723083; x=
-        1662726683; bh=5R1+DzB9xgEFDOh7VH5ISCJa4USSB/0TKRv6qwq5aCg=; b=T
-        Tf1IDbyUmCDbKUYkNGUms/JSr9K9APixQZoocBSfKXoWdTOvLONAqVJBeuvTpVPj
-        604W5qI94BbXj1Qz+1XTDidt1AkjeT2BXZ8jHVPdXopgkkNgCR/2Jx5HFqEgI8Tb
-        IDAYBYybd1fzdXaPVBQ3bioIOLraspTk2Qft65sYJ7teAOlVZ0moAWJAW346m9qR
-        I5rMMIANdDLC/Br0cjaOmvzbIKIZyKwkC/sDQUO7GlhZ/ARtIZinMegR6caxCmqS
-        nFVfhY0PkPsFUpc2BlkBfCi129QPzCZu77bhT8EvV8sqj1yHN0ey4afUqq7We6VJ
-        9oxcUHdZ/Rp0KIgjoeHIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662723083; x=
-        1662726683; bh=5R1+DzB9xgEFDOh7VH5ISCJa4USSB/0TKRv6qwq5aCg=; b=k
-        BuWlqU4+q+x1e4kqx4F8sfl/YuKcSk/mo7hxja6co+MKhQj8QNQDDF7SiZC5A15S
-        J8E8hetQXvn7TonIzmkGjzjIcmjHmB19iYABEtxzSb4Tfo6050H8PnQbq8s4lyT5
-        LdASqRqL5es8J0Uwktw+DFUlNOzivrLTBXodYG6fo+Q4m4rt4hCB+IVnVnBlUxdj
-        V0m8rAB7pYYz74l/zfJItCwQZa8HXlrhXamnqY2j/lvz9IoX5FpYmRc4ms1TkWHE
-        dPQXDC7k40lhSPOs6IcGwmPw18+BlSuModslE1kDDUkYRnXAdg+ZlHm4A9HWg1hg
-        auXEweyXhmTgBj5TNy7pQ==
-X-ME-Sender: <xms:CiQbYyE4J5hpWHgf1_d67VINqIJPxK5JXcvFaZK3KVs0RgoyDkDo-Q>
-    <xme:CiQbYzWogqknTkRAWUzlAYTAzeno3C6_uxPHND4zx-ezsNig4m9dUku-kkLQw6Diz
-    zGhhGFqYiplR_pAuOI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:CiQbY8KU_Y2bpM4TB3y0WKTLRv0dy0UpHIoCwCU4J1BDc8UlZ4hoiA>
-    <xmx:CiQbY8EOWuyo7qH68WnYe1-9KRowyJVYkmA2hUFeq1k4EUffS1KYgg>
-    <xmx:CiQbY4Vyyb-4p3Odiat9bBlvEGl8Pzz8ZjArhvwdDw8XkPDuGhHDsw>
-    <xmx:CyQbY6LnxmpSbZxx0KpifBzD9yUE_hMgWUYe1Ya5eqwTZZgzROA-eIoxEE0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D99EBB60086; Fri,  9 Sep 2022 07:31:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <4b33bffc-2b6d-46b4-9f1d-d18e55975a5a@www.fastmail.com>
-In-Reply-To: <2379456e-4f18-d619-10bf-022327de0463@csgroup.eu>
-References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
- <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
- <2379456e-4f18-d619-10bf-022327de0463@csgroup.eu>
-Date:   Fri, 09 Sep 2022 13:31:02 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-Cc:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of creating a
- PPC dependency
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Sep 2022 07:31:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4849712D559
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662723114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F2oeKJx7G2NhC1w+c8eq8auddLUonMGciT45UzuZW/c=;
+        b=QwHfF4nUkclSNwriH6nWVgWArpX9w/Fq8aGVdKTpt7zJquvvnwsYCbStpfB1xOpbjXL6J0
+        ZtV717sPZfD3n9lRZX7ioR8WZ1zAYiQqHX0AgjNtw5lWi47mySEGvliQdMd745Y0fSdUqi
+        li/h4zBJwveVB1v+jd1jxZZbQycaqlM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-70-gohRjwtqPXyZyW6Q3k2FRQ-1; Fri, 09 Sep 2022 07:31:53 -0400
+X-MC-Unique: gohRjwtqPXyZyW6Q3k2FRQ-1
+Received: by mail-wm1-f70.google.com with SMTP id bg2-20020a05600c3c8200b003b33080cff8so1071666wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:31:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=F2oeKJx7G2NhC1w+c8eq8auddLUonMGciT45UzuZW/c=;
+        b=QqQU6x53jkSLHFoWrysZHGhe35QrSeOi3n+Q4xYodyAOzngoFNsFVPenKzSmPXrl4e
+         hmeSZ+D4mqoUMmz5oaPg2xRxd4fxjLSF6qh3PAQpnAbgPCG2QRxIjPVYVu818sPeHRgD
+         kO8IfgMBN2jmF7PDmRL5p4bH+aK7Y3B13Ahj/GNGQHD5dv8Byz1TmNEsCVCD4N/hbS8H
+         e2/hrjJ6xWxbgJbSXE3xxZ5mH8oRg7lhDEDCe4+Ujua2esgXK5JEIuv2/AJgJYybeb4d
+         ABznzy4eLZIzeqYnmVTe44+xkNd5pBOW5a06P3yM3dlucpbFx2lZKIPz8b6yUdEIf+la
+         I76Q==
+X-Gm-Message-State: ACgBeo3prZlL2q1LrMQqMXBzFGFX+nTFTRk5tLxM5CeBmOJgvzEEdIB0
+        F7LD3QXyAv3k/k5zomz5kQHtJ4VMEjdKZlGpHTeefVUjUWQZsswrHIpRHpKe65NKZMXghebd68n
+        OzNTfXUK8dLe0HwGuzi+ejduq
+X-Received: by 2002:a05:600c:5106:b0:3a8:411c:7366 with SMTP id o6-20020a05600c510600b003a8411c7366mr5143741wms.204.1662723112174;
+        Fri, 09 Sep 2022 04:31:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4QJQF19h8ckQdSAMcJvVPq2I7tGt7Zut0J/2lOWjNSEOrT6l2tVEyQ/4I7Omip4It4QstTNg==
+X-Received: by 2002:a05:600c:5106:b0:3a8:411c:7366 with SMTP id o6-20020a05600c510600b003a8411c7366mr5143728wms.204.1662723111895;
+        Fri, 09 Sep 2022 04:31:51 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
+        by smtp.gmail.com with ESMTPSA id j24-20020a05600c1c1800b003a8434530bbsm494211wms.13.2022.09.09.04.31.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 04:31:51 -0700 (PDT)
+Message-ID: <270fbfd7-bf16-e3cc-85c3-21acd0587d94@redhat.com>
+Date:   Fri, 9 Sep 2022 13:31:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 09/16] mm/page_alloc: use local variable zone_idx directly
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-10-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220909092451.24883-10-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022, at 1:19 PM, Christophe Leroy wrote:
-> Le 09/09/2022 =C3=A0 13:09, Arnd Bergmann a =C3=A9crit=C2=A0:
->> On Fri, Sep 9, 2022, at 11:03 AM, Lukas Bulwahn wrote:
->>=20
->> I don't see a single powerpc machine that creates a
->>   name=3D"pata_platform" platform_device. I suspect this was
->> only needed bwfore 2007 commit 9cd55be4d223 ("[POWERPC] pasemi:
->> Move electra-ide to pata_of_platform"), so the "|| PPC"
->> bit should just get removed without adding the HAVE_PATA_PLATFORM
->> bit.
->
-> But that was added in 2008 by commit 61f7162117d4 ("libata:=20
-> pata_of_platform: OF-Platform PATA device driver")
+On 09.09.22 11:24, Miaohe Lin wrote:
+> Use local variable zone_idx directly since it holds the exact value of
+> zone_idx(). No functional change intended.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   mm/page_alloc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 94baf33da865..3417232afa45 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6878,7 +6878,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
+>   	unsigned long start = jiffies;
+>   	int nid = pgdat->node_id;
+>   
+> -	if (WARN_ON_ONCE(!pgmap || zone_idx(zone) != ZONE_DEVICE))
+> +	if (WARN_ON_ONCE(!pgmap || zone_idx != ZONE_DEVICE))
+>   		return;
+>   
+>   	/*
 
-Ah, I see. In that case, I think we should probably just always
-allow PATA_OF_PLATFORM to be enabled regardless of
-HAVE_PATA_PLATFORM, something like
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index 1c9f4fb2595d..c93d97455744 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1102,8 +1102,7 @@ config PATA_PCMCIA
- 	  If unsure, say N.
-=20
- config PATA_PLATFORM
--	tristate "Generic platform device PATA support"
--	depends on EXPERT || PPC || HAVE_PATA_PLATFORM
-+	tristate "Generic platform device PATA support" if EXPERT || HAVE_PATA=
-_PLATFORM
- 	help
- 	  This option enables support for generic directly connected ATA
- 	  devices commonly found on embedded systems.
-@@ -1112,7 +1111,8 @@ config PATA_PLATFORM
-=20
- config PATA_OF_PLATFORM
- 	tristate "OpenFirmware platform device PATA support"
--	depends on PATA_PLATFORM && OF
-+	depends on OF
-+	select PATA_PLATFORM
- 	help
- 	  This option enables support for generic directly connected ATA
- 	  devices commonly found on embedded systems with OpenFirmware
+-- 
+Thanks,
 
-and then also drop the "select HAVE_PATA_PLATFORM" from
-arm64 and arm/versatile.
+David / dhildenb
 
-Or we can go one step further, and either split out the
-'pata_platform_driver' into a separate file from
-'__pata_platform_probe', or merge pata_of_platform.c
-back into pata_platform.c.
-
-      Arnd
