@@ -2,132 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AABF5B3DFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E355B3E00
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiIIRbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 13:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
+        id S231563AbiIIRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 13:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiIIRbg (ORCPT
+        with ESMTP id S230171AbiIIRc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 13:31:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB31125193
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 10:31:33 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y3so5666585ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 10:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=KBKK7iFKML2I5N/b2jqG9ifqUfWsm45jjFjrGgVshBE=;
-        b=CXT/bIwlhl3oInco0vLlYWMvsALVMY9M2FFs4ZDXwEhUp9cwFSr3qLXyM2A+PlY/oH
-         QIaE74MiTVwaYm8RgF/qWf8673QmZ8EmkBBjgtZa+scTL6LUJcfaNm7daNXdKNoc2HG+
-         VPdeoQYnifePI1QUxmFiFUeL8+KaUePebSlJlE33OVrz8vBaDl7FYiMcpy168xGHp9Ty
-         Bq3xS/48JbXF4YyrRX+Oczyl7jPMGuNSmszRoVFM30rA9hVr1n6owsQryJsAV3Gi+78L
-         64jMueQqe/Kbms0DqG6Q+nMhJV4HRwWT7ATbXXs5zp17fkDFoQMnagvScpFPIw/nXdn4
-         D+Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KBKK7iFKML2I5N/b2jqG9ifqUfWsm45jjFjrGgVshBE=;
-        b=Jm4YL451CHab6HWUpDvH5rsDxBMBbJntnqY4EDGixqofKtXqJDfLfdIdAOwpgUVaHi
-         NthV8L9zO+ouSDxTRYtuZstQpqa//STBLs4XUDubDaIz5krR8hf8iJ4F5x5HVBV/E/F+
-         qqhorW2GDY2qqvWAlJ835PPNCfU+aVe1lj6U1uUUClk5QMcvqpOr9vurj9C7oQpWU4i6
-         OQL99x4zeWr6TdO6AYy0wU252F3aSidx3VXQqObNffen8Z2Qfrv9VRyoMPEN2+zf5umb
-         6ka7JteUImH4uy5vlB77w1U86/U56H9lFnvW79d3O5ehn0kWHB7fhZEiHxQSGgJh4xyv
-         iD0g==
-X-Gm-Message-State: ACgBeo3XK1+qc25Mmt1k8XLnDFh7jYclEl9FhLESm5pjHLQCJBOIOzx4
-        RoMT4wFyy3ZmB7q+lCY8KIs=
-X-Google-Smtp-Source: AA6agR7TS68ddeStQHKwymQaHg9a7RjDpF0riStmq2Xv/AAK1a36h+wA34hUefwEk/nMQoLUbLj3sw==
-X-Received: by 2002:a17:907:7292:b0:733:1965:3176 with SMTP id dt18-20020a170907729200b0073319653176mr10437381ejc.318.1662744691733;
-        Fri, 09 Sep 2022 10:31:31 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f3e:6a99:2499:da3b:c93f:9b48? (p200300c78f3e6a992499da3bc93f9b48.dip0.t-ipconnect.de. [2003:c7:8f3e:6a99:2499:da3b:c93f:9b48])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b0073c80d008d5sm531354ejk.122.2022.09.09.10.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 10:31:31 -0700 (PDT)
-Message-ID: <659ff470-a912-4f35-6cbe-e3f49ba29dc8@gmail.com>
-Date:   Fri, 9 Sep 2022 19:31:29 +0200
-MIME-Version: 1.0
+        Fri, 9 Sep 2022 13:32:57 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCB1130D03;
+        Fri,  9 Sep 2022 10:32:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ei4akZUCkSOMnopBqy8cJnwJLaw3IFIzTdgJKRLra1rLh2LwL7pVM+PvSLgyDRfITQoMTXEpAR/BEYCSW6/umjM1L7QClwgUa+IiuZT+L0nxyxzac/On0sT1NDpl58b8Mo/VC5Wa326C0uLB7uOg9K565MANO/rhX/mqqqqeUngClWg40M1NCTCD68cTcPey8briwPpQpaB8JIpU4hYCR/fAZwwCw9AT7zO0De5Verw9Lkw79qLH1Oc8KI1B2DZ4pqfWsyobjW6yakw6wf7Vd9lpo19AnddLBZaGCZSfuqV2kELiBL8Hy1dJXxSyl9zH2mqCp8/7c2Jj5t34Ov622A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GGXpud9UCNw3G7+HiXOSZncEj92fpilV7WnD5W5XGZw=;
+ b=VMentbY/WWdNIDf4VsK55rLideSXaMnGL2Py4fiN2eGC0sXulgsXAGyuPS5/rRkEsvXeyDPUjyPEDNIr9XRZqR1OV/suCdkG6iNUtUO7VhNQsGgCB0vJFkop+wCmOsKBDIsRjpJ1an0yVzcSUM/UsZrzNov0SzGXAo2HnBlTWZqBwMR9tWtIfEVasrCvprLSNcNe0afzpH9Zo9V7yo9bIm1ybA6NqSCD62yD6v/loHE7Bcxf2YS5+s78RPYsX7ISl2N5AKU+DPvNHr12XIkklU15ovVyOxSc2iMugaoYxYcnJTs/9fjqwJZjSXFb1KlKEBmOV2vEg7yBFqkzm+Lt8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GGXpud9UCNw3G7+HiXOSZncEj92fpilV7WnD5W5XGZw=;
+ b=krGxL0zMt4JfiGQ7WXx+CjbgHnn9bHW2tlisNk6TGUqVlhzon7B/78hHdL1J1Sssf/qmjYe4D48e8K4v5NzjxNK2y6r74YHkpUthY+tREhzWATxxNHaTwiOVESJTCs8jFn2nlWBFTR/hZegSN3jTf0EzpMxlXFjsbCOhsdVFPrQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
+ by MN2PR12MB4375.namprd12.prod.outlook.com (2603:10b6:208:24f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Fri, 9 Sep
+ 2022 17:32:53 +0000
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::80ca:c97:d395:1acf]) by DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::80ca:c97:d395:1acf%6]) with mapi id 15.20.5612.016; Fri, 9 Sep 2022
+ 17:32:53 +0000
+Message-ID: <2937dc45-0b62-7c71-b846-942fa91cbb4e@amd.com>
+Date:   Fri, 9 Sep 2022 13:32:51 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4] staging: r8188eu: fix potential memory leak in
- rtw_os_xmit_resource_alloc()
+Subject: Re: [PATCH v3 5/6] drm/sched: Use parent fence instead of finished
 Content-Language: en-US
-To:     xkernel.wang@foxmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <tencent_7705902B66DA5C1C0E3E8ACBF077A5C3FF07@qq.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <tencent_7705902B66DA5C1C0E3E8ACBF077A5C3FF07@qq.com>
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, Christian.Koenig@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+ <20220909170845.4946-6-Arvind.Yadav@amd.com>
+From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+In-Reply-To: <20220909170845.4946-6-Arvind.Yadav@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT1PR01CA0059.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2e::28) To DM5PR12MB1947.namprd12.prod.outlook.com
+ (2603:10b6:3:111::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1947:EE_|MN2PR12MB4375:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61905350-805d-4f56-bc69-08da92895398
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p6diCgmJCOBNpO4+ed2ZNyh6JZ0WthnDBinATnhuZ7OmHyfIYK9HBj7AU2Bh77u94ia414y47xgb66k6uWYYN1KpuNGyd1BaLkQXplE5IHqBps6fNl2YFNAZmdTHcF+wa+EKd/jIgm5NtZJUmTyZEYsLI6t2s7kzE2YTOY/1V5bzludvjIk8S16oUPkWvmwuSmFk0lpzp2VMeWzJsW0ZD93IGS6jlUVXFjakkEV2FJOuXpWuMtSnfnxwWC0SkLjpA/b1dcMfzwA2zgiMmfL5t4AZfKQlce/LC8eEXQm5ZEhfKWroGtqIq11f0wfP8DMRx3QKjuyaBvjm6MPUEZJFwJ6kwCBGSM/78r4kzLmmKzUssjUh6kmek5+Wtf7WyX7UVG4BriyD2/uH0PPGmLe5DTjejYOTZ6Ydt1ywhnh6XMd0Y0QxWX3jUTohxc4oCJp0KE6xwiThxi6fRwtKGHpZYy62RxY99G3sO+Z11eOXbePmG9NP5XiFc/2yG31K79ivcVvv4OMOAwEFXjOpLUf2bdxCoof8w9JVV4zyw+u3HNxezQJppL92w+sAI3F1EHZJPWTGM67yWURnyGxQeoOk3nMM5qyPZlN8iYsK4AUq2iur9+oDtpTOUh6ixAW/IVuxYGZ+gxh1K6suZGI4UEQlau1bEeD2lZPJZlz/ZLlY6Gwrqw6bjSNKlr5DbYyMvvtLyal2/9dZrMrcjAxTfuEDGoeTE2E6XyBuVFo+FUe+oGizLf8ToUAWkP1Y2jhGM9mV+FE6jLfLtz/n6AvxewT3xrW+iYyJc4YqJbQdvZldzcIsnl+wOVCXM/S4c9JcZ7y2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(376002)(39860400002)(136003)(366004)(31696002)(5660300002)(66556008)(66476007)(31686004)(38100700002)(86362001)(921005)(83380400001)(2616005)(186003)(53546011)(6506007)(6486002)(6512007)(41300700001)(478600001)(8936002)(36756003)(66946007)(316002)(44832011)(8676002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlloTjgrS25NRnNOOVFDMWdtUjM5SG1PS1A2L2w0WWN0UHVpVlVDKzlIZWZz?=
+ =?utf-8?B?UGlrWXlWWGlUbnhpSGhuMU1YQ0paV1pVYXNQUkluWDJNUEk5elFYT2tZNG9E?=
+ =?utf-8?B?RlNxQjlOVlIyNTBReDZCS1lYb05HcHBEbjl1UFZTZFFqYWJENlRiMEZvVGp3?=
+ =?utf-8?B?MkU4MkRCUHR1aWw0aCtteXNvS1VLMXIvVXArZVFicHJMNTRhYTYvdTZOSkda?=
+ =?utf-8?B?YWxZWktJR3Z1NTJSeDBPMVBUNXptUFJDY1BzVzVkYVdFUG0wRE5xRHdCb3F2?=
+ =?utf-8?B?TUVvbkljZ3d3cE9iRzkrSGwrNGhvYksrQnpMTFVJYW4zMlJQbDFucys2N2hX?=
+ =?utf-8?B?UEIxOVVEc0NDSlF6WFZmVEh0MnJidXRHSnh3UVNOVTd6Vms1YmVVZnp3NEVF?=
+ =?utf-8?B?U1lZQ1MyQklicDFWLzdFK2k1bTJEZUtVbFlxQWtVcmdMRGtzODM2eWtvVFZ2?=
+ =?utf-8?B?blkzSXVvTVo4bVBCOU9paUV5SDlabFJCOGNGT2RFNXFMa3V0TUsyTE16MDRl?=
+ =?utf-8?B?WTh3RUR5RFVPMXZsZ0JXelgxOGVUQmhGZW1DbUROYW5HcEgrRVFmVzV5SHA1?=
+ =?utf-8?B?T0V1RmpzTVNhV253d1R5QU43QkRHTUsvNitCTDltSTVmUExQU3NyN0NjZ0tJ?=
+ =?utf-8?B?QWpOQlVhODRkMmNheXBQSGpWajk5TisreGl0ZGNKWVBIa0c0bnhLQzFzdkhz?=
+ =?utf-8?B?WXEydlR1VzBTWFBndFluRkg3TkVIcFZscStsQ09CMDlzdElQTlBIS0hISys2?=
+ =?utf-8?B?ZjVJRHkvdlNVU0R4NjNlY1UwZVlTRCt3UlU0YlIrNkdxbmNVYStmc0c5dnFR?=
+ =?utf-8?B?QytHY3VicWFqUjVXa3NNZ3RPV1RVUlFQaXU2TFZEUTN2VFY3RkxlWjVJOHN4?=
+ =?utf-8?B?byt0Q2FsbW5GQVNsQlJKdC9VRm10bjg2NWo4V0tYTEswR2EvUkFVNlRLaWdY?=
+ =?utf-8?B?RHpJNU5qZVF3WWNVb0tDRFNmV00yUEtRb3psYzRrRDE5Y3UzN1J1Ry91SkRL?=
+ =?utf-8?B?OUZVQXlRSVJvd0x6dDhDSE9hTGdlNlgrZkx0cVM4K3psSmdCc3hhb3hkcHM4?=
+ =?utf-8?B?RlVTTTRyZjh5TU1tcUh4U1hRbWRMOXhrSW1mV2lmRzYzdnUrZ3d3b2Z4anAr?=
+ =?utf-8?B?NE1CbXhTaXFDTERnSG9yUUVuVzRmTC9SdFovUWNTeHZQNXQrSFQ0R0NVS3hn?=
+ =?utf-8?B?aFRTMUVtK0svQzkyKzh6WHRhYmZMMnVQTUVPUy9lT0lWMjBvRDM4bFMyRTJ5?=
+ =?utf-8?B?WlRyVVFvd21KVzhSc2N6bHNnelA1c2lYM3dFTDMvTHlIb0VUb3U1TzVGODkx?=
+ =?utf-8?B?TE1JODNtL0lFNGlsWEFJZE1jUk9uMEloZi92M3dqayt2MEc3aE8vaVJ6WmRX?=
+ =?utf-8?B?WjZvYW1IeFhXdVMvUFQrRGRZZHZFU0dWS2p2dDVzR0NENm9CcndHdlpPNHBh?=
+ =?utf-8?B?Y29HdkF0SlNZZEZ2U3VPcExBOExDMHlzV0NqdnlNNTBjYzErVVc2Q3J1NU84?=
+ =?utf-8?B?OXQ5aDhKaFVveG5IaHpYZ1gvUE1CQnp1TjE4SVF6Z1UvNjk0Q0dxVkZaMmJD?=
+ =?utf-8?B?RmlhMkpaeFBNOHAzdnlJT3hhYzZ0YTBYSnZ5WE5MNG1nU043TkR5YWxzSzRu?=
+ =?utf-8?B?eEszMGJrWnZ0LzFhRmEyTHNUUTNscFF2VWl3SW0wY2w2cVVVS3lLNlV3Y1px?=
+ =?utf-8?B?SlhhaUkrK0pudzNkZ2d0c09lVVdIdTVkU3NYbDFzQTRpcStLckdSVnVCaFRM?=
+ =?utf-8?B?Q05FWGxxWHFVMVF6WkpiVzRObjZwL1BaQUkvQTJtMVIzUEZLcklsYVBQN2t0?=
+ =?utf-8?B?bzVLUEtucDJOQmJSSEoySEFaTWo5bUN3YUdHUG5CNExnU2pnRGNUbHRXaXdw?=
+ =?utf-8?B?WmpJcTVyYjgwUWdXeFc5UEFlS3pUMU43NWtIVm42TDRDSnpUeGQ1M1dLMms4?=
+ =?utf-8?B?eWZGZUlZbGI5OFJHOTZReDhtVVJCbHFJQ3E2bTJFOTVEQjdNcGlNOGVyempk?=
+ =?utf-8?B?Umk4bm0rWHFkWEIxazVIUjlnY1pCNE4xU1lPaUhpaXNoY2pXZjI5Z0gxRld4?=
+ =?utf-8?B?QmFQUm9ycVN0REZyZ09odmw0SnRrd09wWEZVeHNPNzJLVHljaVJRcGRwMDJZ?=
+ =?utf-8?B?NDQzRStzT1lPMWFINml0NnhHRzVnQ2JQb2FDeW9OUEdIT3h0Z3JFWkpBVnBY?=
+ =?utf-8?Q?zxM8cj5PvJIsB/SR41H+d9lPkJhn7kB0cwK4oPtTnjXR?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61905350-805d-4f56-bc69-08da92895398
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 17:32:53.8602
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yeeEc/KHxXSBua6SMtPfnOxbHCV0fD5uldYIKQopCHpASCsQgiBPv38a1EubwXtMAg8dGFNHwnuTGb5y0a/5xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4375
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 13:44, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
-> 
-> In rtw_os_xmit_resource_alloc(), if usb_alloc_urb() fails, then the
-> memory `pxmitbuf_pallocated_buf` which is allocated by kzalloc() is not
-> properly released before returning.
-> 
-> So this patch add kfree() on the above error path to release it. As there
-> is no proper device to test with, no runtime testing was performed.
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+What exactly is the scenario which this patch fixes in more detail please  ?
+
+Andrey
+
+On 2022-09-09 13:08, Arvind Yadav wrote:
+> Using the parent fence instead of the finished fence
+> to get the job status. This change is to avoid GPU
+> scheduler timeout error which can cause GPU reset.
+>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 > ---
-> ChangeLog:
-> v1->v2 update the description.
-> v2->v3 rebase.
-> v3->v4 update the description.
->   drivers/staging/r8188eu/os_dep/xmit_linux.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> index 89a598a..f25099d 100644
-> --- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> +++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> @@ -75,8 +75,10 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
->   	pxmitbuf->dma_transfer_addr = 0;
+>
+> changes in v1,v2 - Enable signaling for finished fence in sche_main()
+> is removed
+>
+> ---
+>   drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index e0ab14e0fb6b..2ac28ad11432 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -829,7 +829,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>   	job = list_first_entry_or_null(&sched->pending_list,
+>   				       struct drm_sched_job, list);
 >   
->   	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!pxmitbuf->pxmit_urb)
-> +	if (!pxmitbuf->pxmit_urb) {
-> +		kfree(pxmitbuf->pallocated_buf);
->   		return _FAIL;
-> +	}
+> -	if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+> +	if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+>   		/* remove job from pending_list */
+>   		list_del_init(&job->list);
 >   
->   	return _SUCCESS;
->   }
-
-Hi,
-
-I cannot apply your patch:
-
-kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ cat 
-~/Downloads/\[PATCH\ v4\]\ staging\ r8188eu\ fix\ potential\ memory\ 
-leak\ in\ rtw_os_xmit_resource_alloc\(\).eml | git am
-Applying: staging: r8188eu: fix potential memory leak in 
-rtw_os_xmit_resource_alloc()
-error: drivers/staging/r8188eu/os_dep/xmit_linux.c: does not exist in index
-Patch failed at 0001 staging: r8188eu: fix potential memory leak in 
-rtw_os_xmit_resource_alloc()
-
-branch: staging-next
-repository: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-
-Sorry
-
-Bye Philipp
+> @@ -841,7 +841,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>   
+>   		if (next) {
+>   			next->s_fence->scheduled.timestamp =
+> -				job->s_fence->finished.timestamp;
+> +				job->s_fence->parent->timestamp;
+>   			/* start TO timer for next job */
+>   			drm_sched_start_timeout(sched);
+>   		}
