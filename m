@@ -2,128 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7715B33C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0065B33C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiIIJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S232196AbiIIJXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbiIIJVO (ORCPT
+        with ESMTP id S231747AbiIIJW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:21:14 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BA0FA69C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 02:21:01 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id l12so1085838ljg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 02:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Yb2tg6NLcz0SjyT+zhbpZCCAWG7Bnyw4PloKDdxoVAU=;
-        b=f/7QeSSps5TESCFk8jMvoH4gZ+ybCQsYE2/4pGB5NK22t1fLqB1HRBruOnRDqC1/9o
-         vvoHjMR8vSLvEHyJqvYJHtLNAwICFDq2lY0is6u1vshVHoEZPh9ILUitiMVr33ns9uUk
-         F77D9r3kykYxlkVNFYJaUt4y1UnzFy5GkAzzF+bS6glstvqVK3J1OKf7JF/yDCTSRLPV
-         X510QS+7XE7FZYFtroemve6D2B5qJC60i4mrxhK2JLES6Cvg/V0Io177YdJLT/HQddsc
-         /O5I0WWlYxMxzKqitQIhOK0f6H2dKfDwX06mNtjUwMRCCnTGjkIQbEcCTeNH9o5m4kdu
-         Iorw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Yb2tg6NLcz0SjyT+zhbpZCCAWG7Bnyw4PloKDdxoVAU=;
-        b=PPUD9M0K1KaUCtjG3JwSixrGYR0yEfS7TzdKFWeRHGSGvjRhcm4ePjoc1+OUqzhPoJ
-         +mt/4IS4ZGxy4gGIE0t+WQtLnRVx7BiZRWeElRoxip3QaLPEfVNCCSg7FnzMZG6DhXjd
-         IDZvZslQd3za5j8ILtGbvRzyCUFo1lH1bQMkUmtE6ACmwyiRdeIbGNhYspFRlVan0r/9
-         YVpC3d42fb1TxnzUQV9Ls+J2UsyFprG2B+oAEzvmjOb9AIJ7ilmFEnIsSLTQgFPf5I88
-         BMB01ceu2/bBPrsSHQttf1I5WpEuGqcAi9nQjhiAnioYEH00moxHDVbk5MeiQiV/l6cs
-         BaPw==
-X-Gm-Message-State: ACgBeo2yuo2JKXc7LLGddvSZlHlzTJqW+GNH0rPOsDZylapcJI0glJnX
-        aMJnYnK89f+ziQNppAHMWyWDyg==
-X-Google-Smtp-Source: AA6agR4L8LIUifZts/uFRSogq6G/TlU4lexPTUJbQgl5rZWDaWwSt/lS1G4J1EhJjypzzo4lvAyZmQ==
-X-Received: by 2002:a2e:a234:0:b0:26a:a85e:f782 with SMTP id i20-20020a2ea234000000b0026aa85ef782mr3625115ljm.74.1662715259166;
-        Fri, 09 Sep 2022 02:20:59 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s6-20020a056512214600b00498fe38ea0fsm2170lfr.174.2022.09.09.02.20.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 02:20:58 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 9 Sep 2022 05:22:57 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34029133A26;
+        Fri,  9 Sep 2022 02:22:13 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id CEB3E5C00B5;
+        Fri,  9 Sep 2022 05:21:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 09 Sep 2022 05:21:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
+        :content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1662715289; x=1662801689; bh=jlANohku92U8A5fXUAUP9klL/
+        FT+qyLMucoExzq9De0=; b=GUh0Znt7Rknaii71ptm8Vb/kfeZHYTXOMU9AskwCK
+        vXuyw+pxAG/NaglHzxqXUd6OiBHLPycqTFEF7Du11efgq+UwaV1ebFw2heR2bKrf
+        9svY0DzfBc1jWT4MB1RzOKw1+tL6yHc4gy0yiym7ExbcKW8qiRXM0NIjMS5tcaMe
+        fXgtrDzVgd9vL8c+R8mHCM6OVqMQnsFrs0n51Jk+IxPiHovJYWW+DdzMbFUQ7jRB
+        U9SJm5dYcGfX4B2C4fhjuDnSqyHVZkV4ixDrR0vb3/sCy1I/WF06JUZt5wti5Rhu
+        yVnge3E1kcIR3QDwakfuXeGAtItZ/Y1yM2wyk2qdvA6UA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1662715289; x=1662801689; bh=jlANohku92U8A5fXUAUP9klL/FT+qyLMuco
+        Exzq9De0=; b=Rp6jgHj8TIHXr7ZBB69+wH5e0+YfEd51ySRPELnkIp4oSylrvCM
+        KteZtxVSI8RHTgE08QJ/1r9ivsUPrj5CFeX71ZCIx6jMwo6iIMmVMU2xyJHMuNSH
+        swxSvORj9hy16kjQQFqGP3cVdubpa4OlWvH5c7LTy1+nKJjc4gmdjGguWt7usI07
+        6I2dvjyhrJIzVRzoiAiPr+Jtqk0/20ngRQwmcLKu3yScjuuBxTXcnnOEx3w3mgu7
+        6h+bYPYF7NE5e/Ym1Az0T4ASqc4wX3zCFCGrECy3+5u73tGL+cMWc42Ao12nJm62
+        Mpoj+zeLrCXCw2YrZZUM8x9rCje3bmv5BVg==
+X-ME-Sender: <xms:mAUbYw5rB1tMF3Ev_eiP6XbcyTrgAleHSXwQVd5D9PjPlwLaBrpqqQ>
+    <xme:mAUbYx5FNYnPW3okXRkRgGoi-p1ivdA9FAAibOeN-Giz0RefA0vtgwUPDoTC30WJB
+    UXYs11JKpRIdmxZmQ>
+X-ME-Received: <xmr:mAUbY_e5z_qaz6i9dD4TdU1o0gRZ-Lwnm_mTaY8WIYwibDSpuEK8ehg6BfdCYQ3skG9XTUT7_aKeYDaApQ0Gl2uq6R9gdH3QO61u_PU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedthedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepnfhorhgvnhii
+    uceurghuvghruceoohhssheslhhmsgdrihhoqeenucggtffrrghtthgvrhhnpedugfeltd
+    eiheejvdefhfeigffgteffgeelgeejleeuleehvefhgfdtheejudeftdenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
+X-ME-Proxy: <xmx:mAUbY1KEHVJGPGn6XWkiDnmg3XTmEPla8nhAHL41F8mOkGRZMTwlRg>
+    <xmx:mAUbY0LHTs9W8OSvP5V0e773qAeRQr7CcHMlo4ZGkvN4GUBrsImA9Q>
+    <xmx:mAUbY2y_TnnGfgm_OR9IQ_VK53dhpGBtyRhIzIXPOtaP2xNIXhzrfw>
+    <xmx:mQUbY2C_f-44XBSsaIq-eZV8K4J-pLZOxu1zvw5hkGnxJ6Zr3fcMLA>
+Feedback-ID: icd3146c6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Sep 2022 05:21:27 -0400 (EDT)
+From:   Lorenz Bauer <oss@lmb.io>
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc:     Lorenz Bauer <oss@lmb.io>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 15/15] ARM: dts: qcom: msm8226: switch TCSR mutex to MMIO
-Date:   Fri,  9 Sep 2022 11:20:35 +0200
-Message-Id: <20220909092035.223915-16-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH bpf] bpf: btf: fix truncated last_member_type_id in btf_struct_resolve
+Date:   Fri,  9 Sep 2022 09:21:07 +0000
+Message-Id: <20220909092107.3035-1-oss@lmb.io>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
-References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TCSR mutex bindings allow device to be described only with address
-space (so it uses MMIO, not syscon regmap).  This seems reasonable as
-TCSR mutex is actually a dedicated IO address space and it also fixes DT
-schema checks:
+When trying to finish resolving a struct member, btf_struct_resolve
+saves the member type id in a u16 temporary variable. This truncates
+the 32 bit type id value if it exceeds UINT16_MAX.
 
-  qcom-msm8226-samsung-s3ve3g.dtb: hwlock: 'reg' is a required property
-  qcom-msm8226-samsung-s3ve3g.dtb: hwlock: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
+As a result, structs that have members with type ids > UINT16_MAX and
+which need resolution will fail with a message like this:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    [67414] STRUCT ff_device size=120 vlen=12
+        effect_owners type_id=67434 bits_offset=960 Member exceeds struct_size
+
+Fix this by changing the type of last_member_type_id to u32.
+
+Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
+Signed-off-by: Lorenz Bauer <oss@lmb.io>
 ---
- arch/arm/boot/dts/qcom-msm8226.dtsi | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index 0b5effdb269a..efb5d1edc3a8 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -44,13 +44,6 @@ scm {
- 		};
- 	};
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7e64447659f3..36fd4b509294 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3128,7 +3128,7 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+ 	if (v->next_member) {
+ 		const struct btf_type *last_member_type;
+ 		const struct btf_member *last_member;
+-		u16 last_member_type_id;
++		u32 last_member_type_id;
  
--	tcsr_mutex: hwlock {
--		compatible = "qcom,tcsr-mutex";
--		syscon = <&tcsr_mutex_block 0 0x80>;
--
--		#hwlock-cells = <1>;
--	};
--
- 	reserved-memory {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
-@@ -508,9 +501,10 @@ rpm_msg_ram: memory@fc428000 {
- 			reg = <0xfc428000 0x4000>;
- 		};
- 
--		tcsr_mutex_block: syscon@fd484000 {
--			compatible = "syscon";
--			reg = <0xfd484000 0x2000>;
-+		tcsr_mutex: hwlock@fd484000 {
-+			compatible = "qcom,msm8226-tcsr-mutex", "qcom,tcsr-mutex";
-+			reg = <0xfd484000 0x1000>;
-+			#hwlock-cells = <1>;
- 		};
- 	};
- 
+ 		last_member = btf_type_member(v->t) + v->next_member - 1;
+ 		last_member_type_id = last_member->type;
 -- 
 2.34.1
 
