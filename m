@@ -2,287 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0834C5B3A63
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C2D5B3A57
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiIIOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S232102AbiIIOH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbiIIOGQ (ORCPT
+        with ESMTP id S230434AbiIIOHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:06:16 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9621475C7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:04:16 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id z23so1977669ljk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 07:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=HTiwWhAENNhIdLAnL0q1JuTZt3PgfN9bElkee4uC7PM=;
-        b=fp9SeIEauOO6gv+bXrgAEGstp67oasZqo97ba10K89jiblfRCJKkRtqAhDdHq7ux3+
-         bgtec+hVMUKvJhHWbaSkMUN0qnPxHQtA9U2qlBAygm+FvnCtbMLxp5Oqvri9y+KqDXHH
-         yWpjFdYMeVWl3tFEaCQZwGMJUZyXMIg8mvf7Eo27KfAFL3K9eM/JkT6jEZH653Lw9Kt7
-         onA8t6bG2Kd+7H//eaahCzr3Uf+T6m8+P+GXedU7M8G3bJtzttE9mXWV1zIqCQgtfRTO
-         RCKi5cxpN0XpmJwB8J/5T0loAKzozsx/sjhFkvnFNDQniOkSms/In4bstTiYXefgz8kT
-         yzsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HTiwWhAENNhIdLAnL0q1JuTZt3PgfN9bElkee4uC7PM=;
-        b=WeZHGAm/rAJ6YhQBYNmMPAdX3Z/sNEmt/F1+nTM1KuYjlu/OTHMsbbBtCivvEl2Fhy
-         zArjTBQLOUAjhOzOxBYaXg1n6TvWWezyeNl9xAVHGu7D0iDF6PO+YU1Bf74Fl+0+B0ih
-         louiHklVbWUZZUFJlM0TuJOq3ySRssUB4U9j/imwP84nJtfjG8lKZR1WhwQc9rBoUlPc
-         QIRdrdio1vjuAJ7mVeycIHdQHGuhdE7pp3ZCDMRINu9kdQH1tA88kb9tEWvquiXXGud5
-         97N2cEUqLvgVV5rMCilqvbPwN+qJ7/vgmf+Dh0d4jMUd/3SAQ3wM4L3np6/jJLNpF0e4
-         yWEA==
-X-Gm-Message-State: ACgBeo1zz/UzFChO5jrJpooQrKqN1+VVOimmIwsoto8AF0HWuBSaYU20
-        hI87/06FjQqbImJ1NIeLyfDaGgLrCniWFim6JAQTjw==
-X-Google-Smtp-Source: AA6agR7RBA9XwnQM5IKRnQ3zR1VpLxmB/kqlLu/OeejID0BHrlgvln7NMOT9Fn4QicXBD8nFwzPphRVgW0OVfA323cQ=
-X-Received: by 2002:a05:651c:23b:b0:26a:66fe:47e6 with SMTP id
- z27-20020a05651c023b00b0026a66fe47e6mr3822438ljn.17.1662732223154; Fri, 09
- Sep 2022 07:03:43 -0700 (PDT)
+        Fri, 9 Sep 2022 10:07:24 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46687EE98E;
+        Fri,  9 Sep 2022 07:05:31 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2895WqtD024173;
+        Fri, 9 Sep 2022 07:05:30 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=mv97ZkEXj6IbwdhIALlrBjL4xyJ/+8J8Fa1tjanYwsg=;
+ b=MgN3pxoD2fApR8wFcBfL52tk+XxxaIXzkGXizIehbxDtdXTJbWfFdDt+V7SmDDpRZ9cc
+ O5LhkTakpb8Tswa6AV5UOC+Hc4vpCbCA6FrwQ+cI8Rfq2XGb67t2R7MNw+9BaOt1Nkge
+ LxQBjA2n5h3zALklKgrgqfG4Cu+iif9hjrw= 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3jfu2wbc17-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 07:05:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k1lh4pQyN647riOfiADgbTQXnJN75zyFcuzYQvKHOMOIg1bMUHvw4GXbS/HpHgNrn7ZWY6GCfYRM4SuqBy6oegcQ5vGHf9KYIR+dMDh7Poase4U+myyZ+jBjZIt2EoS7hFosGQ7VDImF8DeUTCpLifyezv7KoJjPygh01YNqx8dKlh7DrOZ3QwZof1p8JvtD6UUOQgTsUHYyyl06T4s1DyU0CBIq2cElzJ1ijBY71PtIFs4Mpb7TiBvYlOljNPfShYqvgPdFhf74qozGh2jxwJhfpIHodIDB7QJYtgUXotGKhRh60fMuzx/LSaGHXH1l5eyjjZW4EeBa3zNMhtNkTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mv97ZkEXj6IbwdhIALlrBjL4xyJ/+8J8Fa1tjanYwsg=;
+ b=OBAicUVDZ22iP5CT/PU7f5tqLimYSi1PVKJZBMblp+LToIDhLaowpS0Zhamp3IN5p1q0w45KSgeWhzQOUmC74/pwiub9q90qzZA/hM9W3sMKkSCJWYWFkC03lWdGHfPuA3od6S7rpPQZeasbZ1RtMp6vuHzsvK7Os1tQjKzp3LcJTyHggQvUQOIfbgEcHLsZp31c213rkLUr7a/T6O5FwzSBU8BA00NiMo9djoJ+jqCbJ7VaB3iu8R/3dBd42aAQfWFKDHPgGSeorRSLiCDceiORmBdl3bs1Td2tmNNTl5NAu89zZbBkqVDJSZhYHMe6+tiqgiQymgpHtxCMhZGYPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DM5PR15MB1852.namprd15.prod.outlook.com (2603:10b6:4:4f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Fri, 9 Sep
+ 2022 14:05:27 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::2374:1d5c:fd6e:a28c]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::2374:1d5c:fd6e:a28c%9]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
+ 14:05:27 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+CC:     bpf <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Song Liu <song@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH v5 bpf-next 2/4] ftrace: Allow IPMODIFY and DIRECT ops on
+ the same function
+Thread-Topic: [PATCH v5 bpf-next 2/4] ftrace: Allow IPMODIFY and DIRECT ops on
+ the same function
+Thread-Index: AQHYm866tO7bjERJHkCJyhnS5ItUtq3XT0KAgAAjiQA=
+Date:   Fri, 9 Sep 2022 14:05:27 +0000
+Message-ID: <B59F0FD0-FA3E-4A8B-B588-8F9AA8AC602A@fb.com>
+References: <20220720002126.803253-1-song@kernel.org>
+ <20220720002126.803253-3-song@kernel.org>
+ <1662724350.8os86rhyxk.naveen@linux.ibm.com>
+In-Reply-To: <1662724350.8os86rhyxk.naveen@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|DM5PR15MB1852:EE_
+x-ms-office365-filtering-correlation-id: f544f86d-38bc-418f-68a4-08da926c590a
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KwxqsjTJ6tkbe3aEQMDXNkuixMlmotlmn46EEVjTJ4Vj5ziU2Qj5PlHOfFGpzoNZcTeUEuso4Wacwnd+ef6XMrUi+RvyXPE/R2KuNm1j7ILG4a+bnjE6cXIRFXN+lOVjVtDqHFeR4qOYzSHMvQseSc8HytQ8gv6lV8p8cMn0U3b3KnWwmpVtc29+T4DGGhxMt/7+Ye1PyGULy39cgNvCSLNDUahIflJGu0KosddquCBi71cBVd1qP6k4Je35sSlhRIwWNjdjBZJiM7Rsng7EJL0UwhY9jbuYF24wJFXddZxziFNusJHu6STWwKFXsc8zPuouBn57gPmydn1YEQjP1i44PzlGMI6vlwZTDBIc/dVxnSC7o4811fzfmexkfJGEZVqseUWYOQyss3KoXGujUBPbNuTx/Fe8iTKx9jpVoIMPHerc9dgiWYMe4KOfBjzC2gbS4nc0zOOeFeRSft6GOiIGtIlj38qPinZsXU2NV/ODogLSdlr7SieQny4tdqrsDSwbfGEEWsacHR9uM5PU6qTln3m1YAAoH2Dx+53CS3xdX8wLLrZzHo2Si3bqUZqvSbsAyoroQxLoToPtzCEGRCuTNZTyf6jx/Kc2+CJbIHHiCBVaTe38aRUKgeCOVXZDFsXJt6ZZ0xY6vtrcgJXgxfpPVeHCsElXtZQkZj/f5IwI9TIJXabSUS1uEcEcGQj7lMIZK2p8gRzWAQs7kRWQRV+NmvODfb/jossYh4F8yaW//me13rgiVrJXSDaoUp/pwbewvmB/bORYPdgfNuSCNAcHuFsC+nDpsbBCpvChtfQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(2616005)(6506007)(41300700001)(53546011)(122000001)(8936002)(38100700002)(5660300002)(6512007)(36756003)(83380400001)(33656002)(2906002)(186003)(71200400001)(86362001)(6486002)(66946007)(66446008)(66556008)(64756008)(478600001)(66476007)(76116006)(6916009)(316002)(91956017)(4326008)(8676002)(54906003)(38070700005)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aj5LNa/x2CXGYntE6/8/yyaZDpusr4cov05NTg0kqB8xBtXvF55k/rXD/HqN?=
+ =?us-ascii?Q?R++QgUYcdfiw9oMIo4dLQdQ0/q6nzYqQBHyhgddqiphYPvShxezxMY6a7Po9?=
+ =?us-ascii?Q?FsmYY9HaePJcsXPYsAn6K/hi4jMuW7aHg8qetAoD0oDSkbRJ+WWnXkoz3/+/?=
+ =?us-ascii?Q?W6e6QveRFng1WTp6LlmQ5hPreDjVCkUj5n6pn9PLoXjBL8RGCFdhuVjaNyTO?=
+ =?us-ascii?Q?knkoOxZmoCqH2WWxbddOJvxV7L2LKHbp35QyMC9e+03nlTssNahNVxz1bhOB?=
+ =?us-ascii?Q?f9swcvDC++ZHnjKeSLdo1DRwtoTQZtZaEcc/fjGAdIMq6b7KgVrImz8Xul+d?=
+ =?us-ascii?Q?HtlueEC8eb6/OY4dTV722vE6q0x+QCjITpUkrHzuoEPwdD0GwD/PVyXli9/r?=
+ =?us-ascii?Q?71XtwWHHPWD6No8qKFxSZciB33eclrpGOVo8c/hzK1A6cPXeEk/A9OvYhk0m?=
+ =?us-ascii?Q?YJLLZSQ3kpw2FiRSZIsi2eeb/dWh1xCxmpHzDBnQMwb+tgV6zB0uMMYsS/El?=
+ =?us-ascii?Q?TbMjQljmPwAArkg3GPo2zADQ5f0fhQHZpnHs/jPTAaJBDb3XiUwhHHl0gQz/?=
+ =?us-ascii?Q?6CSeFlz7BsGWZhhxWWnCK3yGLvvtWEB755hgvQRshW81tTMVnLAXtDTwlo73?=
+ =?us-ascii?Q?L2kSlu2PM8YKY19+lpMeiBsrKLfnj/ZVv6x6vNl6MwkmBDgDfgrBnksLh9Jf?=
+ =?us-ascii?Q?HC213xQXQlqI5Bf756iaVTGl8As4EmVJr+qvWmqk+r2vn1SetRmJbNCgcX0g?=
+ =?us-ascii?Q?e5S/Mcol/TRmXwUSXDTGfyEh/crr+pBb0Lql8Ic27POHy3o10BvUU26Xs/dI?=
+ =?us-ascii?Q?PDjwRq2KRjzCR4Xyu5e+ynq3O7QSNlUx5TED77/7m3+0F/3F2Gn4HT5oos77?=
+ =?us-ascii?Q?S70ZCA0aFCyYRCGUivsE0BjRhuJKlaCdzdtpX521dK9CeHGbThLkW5G6P2ra?=
+ =?us-ascii?Q?x9F3la8qwiUq+3CPZ5F2waf4pxaHl3gSXWZ7hgVHSGUbPDzN8Scjt0K/4SVH?=
+ =?us-ascii?Q?apDL45Iq15HGSc9zDffrqKj1/xYvIwSADxp9objxl286DY0y9lVV45o7OKvS?=
+ =?us-ascii?Q?qzKeMWGHmqVWzWcITDdR1TS19IkMgvDIeDMI3n2Ugs6pCmF7wEQCGWOG+wBy?=
+ =?us-ascii?Q?xn9TvxwSidyZtMVNt3rIzOroxz9zWIcje2BKU5iyEcf3MP3JcZSyVaH9DzKK?=
+ =?us-ascii?Q?ZmOzBe9oCBIU0xvrmPU13jStxLYGDR2brFSRZ6i0hLfMgiVpG3EqNx+4D1PL?=
+ =?us-ascii?Q?TByQPSUG9ezHfRX1uqIhsjjSl/MGj8Yltlyqaf7OTiZEzAsZwjotDtmxzkeJ?=
+ =?us-ascii?Q?ayQ3QF43QHvy6/98iTZfi/ioLFwHyTFXp6jzODQtFovTtMIRoHZP+KU7rfGH?=
+ =?us-ascii?Q?GlFBG/9hM0qEe4Wx5JtRU3XR9Vl+TlOXwT3cbhJGc6dMuyDk5hCb9Wf8x5IG?=
+ =?us-ascii?Q?n+KSYReLwHLyMOip1PLub/gqsPHtValVx/RJ50LFK4UPU7uhGv3eYfi3Ig3w?=
+ =?us-ascii?Q?RxrQYO3VKLefJyuWIvEFgf6yB9yjxYenJDPaTyUtOD3YqkElwyfkeFNwzyGT?=
+ =?us-ascii?Q?OdESlMtRxfXxbjRdhWSIXNgCMqi4XkksCr2H4qbrrTzH1E+CZVpSUqCJQHnB?=
+ =?us-ascii?Q?mziKGWXQtQLgWkuixBU73m4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <496508A65D46D1429280C192B4304661@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220825122726.20819-1-vincent.guittot@linaro.org>
- <20220825122726.20819-5-vincent.guittot@linaro.org> <Yxsf/5ErmVoKFucb@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yxsf/5ErmVoKFucb@hirez.programming.kicks-ass.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 9 Sep 2022 16:03:31 +0200
-Message-ID: <CAKfTPtAo=PzN1MDyqGW17zimxYLE08TMFMAhhY6YuGNBvvfusw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sched/fair: limit sched slice duration
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f544f86d-38bc-418f-68a4-08da926c590a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 14:05:27.3699
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KCDA+rPlGTGjiL3k/Vw8nOGrCa8Nsv5zdgEkUjVw5DjGF3glYvrV3D+1NMeFqGaCOSCo3jznmy3713/kwg4fOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1852
+X-Proofpoint-ORIG-GUID: 0AWqwpQ3-RpR-fe_rXCanv-c45vc93-D
+X-Proofpoint-GUID: 0AWqwpQ3-RpR-fe_rXCanv-c45vc93-D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sept 2022 at 13:14, Peter Zijlstra <peterz@infradead.org> wrote:
->
->
-> Picked up the first three.
->
-> On Thu, Aug 25, 2022 at 02:27:26PM +0200, Vincent Guittot wrote:
-> > In presence of a lot of small weight tasks like sched_idle tasks, normal
-> > or high weight tasks can see their ideal runtime (sched_slice) to increase
-> > to hundreds ms whereas it normally stays below sysctl_sched_latency.
-> >
-> > 2 normal tasks running on a CPU will have a max sched_slice of 12ms
-> > (half of the sched_period). This means that they will make progress
-> > every sysctl_sched_latency period.
-> >
-> > If we now add 1000 idle tasks on the CPU, the sched_period becomes
->
-> Surely people aren't actually having that many runnable tasks and this
-> is a device for the argument?
->
-> > 3006 ms and the ideal runtime of the normal tasks becomes 609 ms.
-> > It will even become 1500ms if the idle tasks belongs to an idle cgroup.
-> > This means that the scheduler will look for picking another waiting task
-> > after 609ms running time (1500ms respectively). The idle tasks change
-> > significantly the way the 2 normal tasks interleave their running time
-> > slot whereas they should have a small impact.
-> >
-> > Such long sched_slice can delay significantly the release of resources
-> > as the tasks can wait hundreds of ms before the next running slot just
-> > because of idle tasks queued on the rq.
-> >
-> > Cap the ideal_runtime to sysctl_sched_latency when comparing to the next
-> > waiting task to make sure that tasks will regularly make progress and will
-> > not be significantly impacted by idle/background tasks queued on the rq.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >
-> > While studying the problem, I have also considered to substract
-> > cfs.idle_h_nr_running before computing the sched_slice but we can have
-> > quite similar problem with low weight bormal task/cgroup so I have decided
-> > to keep this solution.
->
-> That ^... my proposal below has the same problem.
->
-> This:
->
-> > Also, this solution doesn't completly remove the impact of idle tasks
-> > in the scheduling pattern but cap the running slice of a task to a max
-> > value of 2*sysctl_sched_latency.
->
-> I'm failing to see how.
 
-The 1st part of  check_preempt_tick ensures that we wait at least
-sysctl_sched_min_granularity but not more than ideal_runtime before
-possibly picking another entity.
 
-Once both conditions above tested, we check that the vruntime diff
-with the 1st pending entity is not larger than a sysctl_sched_latency.
+> On Sep 9, 2022, at 4:58 AM, Naveen N. Rao <naveen.n.rao@linux.ibm.com> wrote:
+> 
+> Song Liu wrote:
 
-Normally sched_slice should return an ideal_runtime value less than
-sysctl_sched_latency. But we also want to provide a minimum runtime to
-all tasks  so we increase the sched_period when the number of tasks
-increases too much.
+[...]
 
-The case described above is a corner case because of the large
-difference between the tasks' prio.
+>> +
+>> /**
+>>  * register_ftrace_function - register a function for profiling
+>>  * @ops:	ops structure that holds the function for profiling.
+>> @@ -8018,14 +8206,15 @@ int register_ftrace_function(struct ftrace_ops *ops)
+>> {
+>> 	int ret;
+>> -	ftrace_ops_init(ops);
+>> -
+>> -	mutex_lock(&ftrace_lock);
+>> -
+>> -	ret = ftrace_startup(ops, 0);
+>> +	lock_direct_mutex();
+> 
+> Trying to enable ftrace direct on powerpc, this is resulting in a hung task when testing samples/ftrace/ftrace-direct-modify.c
+> 
+> Essentially, the sample calls modify_ftrace_direct(), which grabs direct_mutex before calling ftrace_modify_direct_caller()->register_ftrace_function().
+> 
 
-Now, let assume that we have only 1 normal task and 1000 idle tasks, I
-don't see any problem with providing a large ideal runtime for this
-normal task. The problem comes when you have at least 2 normal tasks
-as we don't expect the other normal task to wait for several hundreds
-of ms before running.
+Thanks for the report. Would the following change fix the issue?
 
-That's why the comparison is done against the diff of vruntime; idle
-task running for a 4ms tick will increase its vruntime with + 1366ms
-which is comparable with the slice duration of the normal task. On the
-other side, a 4ms tick will increase the vruntime of a nice 0 task to
-4ms only. So the vruntime diff will quickly move above the
-sysctl_sched_latency.
+Song
 
-That being said, it doesn't completely fix the case of 2 nice -20 task runnings
+diff --git i/kernel/trace/ftrace.c w/kernel/trace/ftrace.c
+index bc921a3f7ea8..2f1e6cfa834e 100644
+--- i/kernel/trace/ftrace.c
++++ w/kernel/trace/ftrace.c
+@@ -5496,7 +5496,7 @@ int __weak ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
+        if (ret)
+                goto out_lock;
 
->
-> >  kernel/sched/fair.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 260a55ac462f..96fedd0ab5fa 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4599,6 +4599,8 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >       if (delta < 0)
-> >               return;
->
-> (I'm thinking that early return is a bit pointless, a negative value
-> won't be larger than ideal_time anyway)
+-       ret = register_ftrace_function(&stub_ops);
++       ret = register_ftrace_function_nolock(&stub_ops);
+        if (ret) {
+                ftrace_set_filter_ip(&stub_ops, ip, 1, 0);
+                goto out_lock;
 
-yes
+> 
+> - Naveen
+> 
+> 
+>> +	ret = prepare_direct_functions_for_ipmodify(ops);
+>> +	if (ret < 0)
+>> +		goto out_unlock;
+>> -	mutex_unlock(&ftrace_lock);
+>> +	ret = register_ftrace_function_nolock(ops);
+>> +out_unlock:
+>> +	unlock_direct_mutex();
+>> 	return ret;
+>> }
+>> EXPORT_SYMBOL_GPL(register_ftrace_function);
+>> @@ -8044,6 +8233,7 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
+>> 	ret = ftrace_shutdown(ops, 0);
+>> 	mutex_unlock(&ftrace_lock);
+>> +	cleanup_direct_functions_after_ipmodify(ops);
+>> 	return ret;
+>> }
+>> EXPORT_SYMBOL_GPL(unregister_ftrace_function);
+>> -- 
+>> 2.30.2
 
->
-> > +     ideal_runtime =  min_t(u64, ideal_runtime, sysctl_sched_latency);
-> > +
->
-> (superfluous whitespace -- twice, once after the = once this whole extra
-> line)
-
-sorry for that...
-
->
-> >       if (delta > ideal_runtime)
-> >               resched_curr(rq_of(cfs_rq));
-> >  }
->
-> Urgghhhh..
->
-> so delta is in vtime here, while sched_latency is not, so the heavier
-> the queue, the larger this value becomes.
->
-> Given those 1000 idle tasks, rq-weight would be around 2048; however due
-> to nr_running being insane, sched_slice() ends up being something like:
-
-rq weight will be 1000*3+2*1024=5048
-sched_period becomes 1002 * min_gran = 3006ms
-
-idle task got a slice of weight(3) * (1002 min_gran) / 5048 =
-3002/5048 * min_gran
-
-normal task got a slice of weight(1024) * (1002 min_gran) / 5048 =
-1024*1002*5048 * min_gran ~ 200 min_gran
-
-if the 1000 task are in a idle sched group, that even worth because
-the rq weight decrease to 3+2*1024 = 2051 and the slice increase to
-500 min_gran
-
-note that if we use 2 tasks nice -20 and 1000 tasks with nice 19 we
-have similar slice duration (around 500 min_gran) so we can't really
-rely on idle_nr_running
-
->
->   1000 * min_gran * 2 / 2048
->
-> which is around ~min_gran and so won't come near to latency.
->
->
-> since we already have idle_min_gran; how about something like this?
-
-the idl_min gran will divide by 4 the sched_slice which can still
-remain quite high
-
-The main problem with my proposal is that task with negative nice prio
-can still get larger sched_slice because vruntime increases slower
-than  real time
-
->
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index efceb670e755..8dd18fc0affa 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -706,12 +706,14 @@ static inline u64 calc_delta_fair(u64 delta, struct sched_entity *se)
->   *
->   * p = (nr <= nl) ? l : l*nr/nl
->   */
-> -static u64 __sched_period(unsigned long nr_running)
-> +static u64 __sched_period(unsigned long nr_running, unsigned long nr_idle)
->  {
-> -       if (unlikely(nr_running > sched_nr_latency))
-> -               return nr_running * sysctl_sched_min_granularity;
-> -       else
-> -               return sysctl_sched_latency;
-> +       u64 period = 0;
-> +
-> +       period += nr_running * sysctl_sched_min_granularity;
-> +       period += nr_idle    * sysctl_sched_idle_min_granularity;
-> +
-> +       return max_t(u64, period, sysctl_sched_latency);
->  }
->
->  static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq);
-> @@ -724,15 +726,25 @@ static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq);
->   */
->  static u64 sched_slice(struct cfs_rq *cfs_rq, struct sched_entity *se)
->  {
-> -       unsigned int nr_running = cfs_rq->nr_running;
-> +       unsigned int nr_idle = cfs_rq->idle_nr_running;
-> +       unsigned int nr_running = cfs_rq->nr_running - nr_idle;
->         struct sched_entity *init_se = se;
->         unsigned int min_gran;
->         u64 slice;
->
-> -       if (sched_feat(ALT_PERIOD))
-> -               nr_running = rq_of(cfs_rq)->cfs.h_nr_running;
-> +       if (sched_feat(ALT_PERIOD)) {
-> +               nr_idle = rq_of(cfs_rq)->cfs.idle_h_nr_running;
-> +               nr_running = rq_of(cfs_rq)->cfs.h_nr_running - nr_idle;
-> +       }
-> +
-> +       if (!se->on_rq) {
-> +               if (se_is_idle(se))
-> +                       nr_idle++;
-> +               else
-> +                       nr_running++;
-> +       }
->
-> -       slice = __sched_period(nr_running + !se->on_rq);
-> +       slice = __sched_period(nr_running, nr_idle);
->
->         for_each_sched_entity(se) {
->                 struct load_weight *load;
->
->
-> This changes how the compute the period depending on the composition. It
-> suffers the exact same problem you had earlier though in that it doesn't
-> work for the other low-weight cases. But perhaps we can come up with a
-> better means of computing the period that *does* consider them?
->
-> As said before;... urgh! bit of a sticky problem this.
