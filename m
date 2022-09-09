@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E746C5B3877
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3FB5B3870
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIINES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S230292AbiIINAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiIINDV (ORCPT
+        with ESMTP id S230167AbiIINAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:03:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212E0B8F1E;
-        Fri,  9 Sep 2022 06:03:20 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MPGKV3mW2zlVqb;
-        Fri,  9 Sep 2022 20:59:26 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 21:03:18 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 21:03:17 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 8/8] kallsyms: Add self-test facility
-Date:   Fri, 9 Sep 2022 21:00:16 +0800
-Message-ID: <20220909130016.727-9-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220909130016.727-1-thunder.leizhen@huawei.com>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
+        Fri, 9 Sep 2022 09:00:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749D87F13A;
+        Fri,  9 Sep 2022 06:00:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D10DBB824EF;
+        Fri,  9 Sep 2022 13:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7632C433D7;
+        Fri,  9 Sep 2022 13:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662728433;
+        bh=TEWPiApm1m17MjS+y0T4ct2AJ4Ym+z+ovyYjPm3aSB4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=en/ao+AbVLosPNC01LLk//D/wY9IZlT9yzu6E6mlIM0l2gp6BJP18zCvpxsyBtEmO
+         0QWT46F+x5t3wkF86QW7a0BsBJeYFcwRotOo+TFRyO1DSDuXyNmhh8W4CTVpnaS7w6
+         FjWtZM44NaVHMoaUyS7aCwAryusJb21F/ePWZuDehJvmTmv1zoDI8YWIutsB1jtKF6
+         i/krX9reHIfUaePNPsubCJhbS8vCC8dwgGs/CYoeOyb3vDZFfz10VYgsbukMo4A/1l
+         P0r3G2b5wKTW/8PfM3Y0h2fibmQIQu4OeK/D2nic4jeqxXFd+BnFxMElGDyMffmjYJ
+         F9oRmerLWZ5cw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     hughd@google.com
+Cc:     viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH] tmpfs: add support for an i_version counter
+Date:   Fri,  9 Sep 2022 09:00:31 -0400
+Message-Id: <20220909130031.15477-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,323 +54,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some test cases to test the function and performance of some kallsyms
-interfaces, such as kallsyms_lookup_name. It also calculates the
-compression rate of the kallsyms compression algorithm for the current
-symbol set.
+NFSv4 mandates a change attribute to avoid problems with timestamp
+granularity, which Linux implements using the i_version counter. This is
+particularly important when the underlying filesystem is fast.
 
-Start self-test automatically after system startup.
+Give tmpfs an i_version counter. Since it doesn't have to be persistent,
+we can just turn on SB_I_VERSION and sprinkle some inode_inc_iversion
+calls in the right places.
 
-Example of output content: (prefix 'kallsyms_selftest:' is omitted)
-start
-There are 174101 symbols in total:
- --------------------------------------------------------------
-|           |  compressed size  |  original size  |  ratio(%)  |
-|--------------------------------------------------------------|
-|  no  '\0' |        1785569    |       3750649   |   47.60    |
-| with '\0' |        1959670    |       3924750   |   49.93    |
- --------------------------------------------------------------
+Also, while there is no formal spec for xattrs, most implementations
+update the ctime on setxattr. Fix shmem_xattr_handler_set to update the
+ctime and bump the i_version appropriately.
 
-kallsyms_lookup_name() looked up 174101 symbols
-The time spent on each symbol is (ns): min=5350, max=985150, avg=295517
-kallsyms_on_each_symbol() lookup vmap: 15806120 ns
-kallsyms_on_each_symbol() traverse vmap: 15817140 ns
-kallsyms_on_each_match_symbol() lookup vmap: 32840 ns
-kallsyms_on_each_match_symbol() traverse vmap: 567370 ns
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- init/Kconfig               |  13 ++
- kernel/Makefile            |   1 +
- kernel/kallsyms_selftest.c | 243 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 257 insertions(+)
- create mode 100644 kernel/kallsyms_selftest.c
+ fs/posix_acl.c |  3 +++
+ mm/shmem.c     | 31 ++++++++++++++++++++++++++++---
+ 2 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 532362fcfe31fd3..2fcace3b9f063bf 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1716,6 +1716,19 @@ config KALLSYMS
- 	  symbolic stack backtraces. This increases the size of the kernel
- 	  somewhat, as all symbols have to be loaded into the kernel image.
+diff --git a/fs/posix_acl.c b/fs/posix_acl.c
+index 5af33800743e..efb88a5e59f9 100644
+--- a/fs/posix_acl.c
++++ b/fs/posix_acl.c
+@@ -24,6 +24,7 @@
+ #include <linux/user_namespace.h>
+ #include <linux/namei.h>
+ #include <linux/mnt_idmapping.h>
++#include <linux/iversion.h>
  
-+config KALLSYMS_SELFTEST
-+	bool "Test the function and performance of some interfaces in kallsyms"
-+	depends on KALLSYMS
-+	default n
-+	help
-+	  Test the function and performance of some interfaces, such as
-+	  kallsyms_lookup_name. It also calculates the compression rate of the
-+	  kallsyms compression algorithm for the current symbol set.
-+
-+	  Start self-test automatically after system startup. Suggest executing
-+	  "dmesg | grep kallsyms_selftest" to collect test results. "finish" is
-+	  displayed in the last line, indicating that the test is complete.
-+
- config KALLSYMS_ALL
- 	bool "Include all symbols in kallsyms"
- 	depends on DEBUG_KERNEL && KALLSYMS
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 318789c728d3290..122a5fed457bd98 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -68,6 +68,7 @@ endif
- obj-$(CONFIG_UID16) += uid16.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-+obj-$(CONFIG_KALLSYMS_SELFTEST) += kallsyms_selftest.o
- obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
- obj-$(CONFIG_CRASH_CORE) += crash_core.o
- obj-$(CONFIG_KEXEC_CORE) += kexec_core.o
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-new file mode 100644
-index 000000000000000..d89d6b2f5dd763e
---- /dev/null
-+++ b/kernel/kallsyms_selftest.c
-@@ -0,0 +1,243 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Test the function and performance of kallsyms
-+ *
-+ * Copyright (C) Huawei Technologies Co., Ltd., 2022
-+ *
-+ * Authors: Zhen Lei <thunder.leizhen@huawei.com> Huawei
-+ */
-+
-+#define pr_fmt(fmt) "kallsyms_selftest: " fmt
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kallsyms.h>
-+#include <linux/kthread.h>
-+#include <linux/sched/clock.h>
-+#include <linux/vmalloc.h>
-+
-+#include "kallsyms_internal.h"
-+
-+
-+struct test_stat {
-+	int min;
-+	int max;
-+	int cnt;
-+	u64 sum;
-+	unsigned long addr;
-+};
-+
-+
-+static int match_symbol(void *data, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	stat->cnt++;
-+	stat->addr = addr;
-+
-+	if (stat->cnt == stat->max)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_on_each_match_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	stat.cnt = 0;
-+	stat.max = 1;
-+	stat.addr = 0;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_match_symbol(match_symbol, "vmap", &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	if (stat.addr != (unsigned long)vmap || stat.cnt != 1) {
-+		pr_info("kallsyms_on_each_match_symbol() test failed\n");
-+		return;
+ static struct posix_acl **acl_by_type(struct inode *inode, int type)
+ {
+@@ -1073,6 +1074,8 @@ int simple_set_acl(struct user_namespace *mnt_userns, struct inode *inode,
+ 	}
+ 
+ 	inode->i_ctime = current_time(inode);
++	if (IS_I_VERSION(inode))
++		inode_inc_iversion(inode);
+ 	set_cached_acl(inode, type, acl);
+ 	return 0;
+ }
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 42e5888bf84d..84c1b7bf47ec 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -38,6 +38,7 @@
+ #include <linux/hugetlb.h>
+ #include <linux/fs_parser.h>
+ #include <linux/swapfile.h>
++#include <linux/iversion.h>
+ #include "swap.h"
+ 
+ static struct vfsmount *shm_mnt;
+@@ -1043,6 +1044,7 @@ void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
+ {
+ 	shmem_undo_range(inode, lstart, lend, false);
+ 	inode->i_ctime = inode->i_mtime = current_time(inode);
++	inode_inc_iversion(inode);
+ }
+ EXPORT_SYMBOL_GPL(shmem_truncate_range);
+ 
+@@ -1087,6 +1089,8 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+ 	struct inode *inode = d_inode(dentry);
+ 	struct shmem_inode_info *info = SHMEM_I(inode);
+ 	int error;
++	bool update_mtime = false;
++	bool update_ctime = true;
+ 
+ 	error = setattr_prepare(&init_user_ns, dentry, attr);
+ 	if (error)
+@@ -1107,7 +1111,9 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+ 			if (error)
+ 				return error;
+ 			i_size_write(inode, newsize);
+-			inode->i_ctime = inode->i_mtime = current_time(inode);
++			update_mtime = true;
++		} else {
++			update_ctime = false;
+ 		}
+ 		if (newsize <= oldsize) {
+ 			loff_t holebegin = round_up(newsize, PAGE_SIZE);
+@@ -1127,6 +1133,12 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+ 	setattr_copy(&init_user_ns, inode, attr);
+ 	if (attr->ia_valid & ATTR_MODE)
+ 		error = posix_acl_chmod(&init_user_ns, inode, inode->i_mode);
++	if (!error && update_ctime) {
++		inode->i_ctime = current_time(inode);
++		if (update_mtime)
++			inode->i_mtime = inode->i_ctime;
++		inode_inc_iversion(inode);
 +	}
-+	pr_info("kallsyms_on_each_match_symbol() lookup vmap: %lld ns\n", t1 - t0);
-+
-+	stat.cnt = 0;
-+	stat.max = INT_MAX;
-+	stat.addr = 0;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_match_symbol(match_symbol, "vmap", &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	if (stat.addr != (unsigned long)vmap || stat.cnt != 1) {
-+		pr_info("kallsyms_on_each_match_symbol() test failed\n");
-+		return;
+ 	return error;
+ }
+ 
+@@ -2901,6 +2913,7 @@ shmem_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+ 		error = 0;
+ 		dir->i_size += BOGO_DIRENT_SIZE;
+ 		dir->i_ctime = dir->i_mtime = current_time(dir);
++		inode_inc_iversion(dir);
+ 		d_instantiate(dentry, inode);
+ 		dget(dentry); /* Extra count - pin the dentry in core */
+ 	}
+@@ -2976,6 +2989,7 @@ static int shmem_link(struct dentry *old_dentry, struct inode *dir, struct dentr
+ 
+ 	dir->i_size += BOGO_DIRENT_SIZE;
+ 	inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
++	inode_inc_iversion(dir);
+ 	inc_nlink(inode);
+ 	ihold(inode);	/* New dentry reference */
+ 	dget(dentry);		/* Extra pinning count for the created dentry */
+@@ -2993,6 +3007,7 @@ static int shmem_unlink(struct inode *dir, struct dentry *dentry)
+ 
+ 	dir->i_size -= BOGO_DIRENT_SIZE;
+ 	inode->i_ctime = dir->i_ctime = dir->i_mtime = current_time(inode);
++	inode_inc_iversion(dir);
+ 	drop_nlink(inode);
+ 	dput(dentry);	/* Undo the count from "create" - this does all the work */
+ 	return 0;
+@@ -3082,6 +3097,8 @@ static int shmem_rename2(struct user_namespace *mnt_userns,
+ 	old_dir->i_ctime = old_dir->i_mtime =
+ 	new_dir->i_ctime = new_dir->i_mtime =
+ 	inode->i_ctime = current_time(old_dir);
++	inode_inc_iversion(old_dir);
++	inode_inc_iversion(new_dir);
+ 	return 0;
+ }
+ 
+@@ -3134,6 +3151,7 @@ static int shmem_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+ 	}
+ 	dir->i_size += BOGO_DIRENT_SIZE;
+ 	dir->i_ctime = dir->i_mtime = current_time(dir);
++	inode_inc_iversion(dir);
+ 	d_instantiate(dentry, inode);
+ 	dget(dentry);
+ 	return 0;
+@@ -3204,6 +3222,7 @@ static int shmem_fileattr_set(struct user_namespace *mnt_userns,
+ 
+ 	shmem_set_inode_flags(inode, info->fsflags);
+ 	inode->i_ctime = current_time(inode);
++	inode_inc_iversion(inode);
+ 	return 0;
+ }
+ 
+@@ -3267,9 +3286,15 @@ static int shmem_xattr_handler_set(const struct xattr_handler *handler,
+ 				   size_t size, int flags)
+ {
+ 	struct shmem_inode_info *info = SHMEM_I(inode);
++	int err;
+ 
+ 	name = xattr_full_name(handler, name);
+-	return simple_xattr_set(&info->xattrs, name, value, size, flags, NULL);
++	err = simple_xattr_set(&info->xattrs, name, value, size, flags, NULL);
++	if (!err) {
++		inode->i_ctime = current_time(inode);
++		inode_inc_iversion(inode);
 +	}
-+	pr_info("kallsyms_on_each_match_symbol() traverse vmap: %lld ns\n", t1 - t0);
-+}
-+
-+static int find_symbol(void *data, const char *name,
-+		       struct module *mod, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	if (strcmp(name, "vmap") == 0) {
-+		stat->cnt++;
-+		stat->addr = addr;
-+	}
-+
-+	if (stat->cnt == stat->max)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_on_each_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	stat.cnt = 0;
-+	stat.sum = 1;
-+	stat.addr = 0;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_symbol(find_symbol, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	if (stat.addr != (unsigned long)vmap || stat.cnt != 1) {
-+		pr_info("kallsyms_on_each_symbol() test failed\n");
-+		return;
-+	}
-+	pr_info("kallsyms_on_each_symbol() lookup vmap: %lld ns\n", t1 - t0);
-+
-+	stat.cnt = 0;
-+	stat.max = INT_MAX;
-+	stat.addr = 0;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_symbol(find_symbol, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	if (stat.addr != (unsigned long)vmap || stat.cnt != 1) {
-+		pr_info("kallsyms_on_each_symbol() test failed\n");
-+		return;
-+	}
-+	pr_info("kallsyms_on_each_symbol() traverse vmap: %lld ns\n", t1 - t0);
-+}
-+
-+static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
-+{
-+	u64 t0, t1, t;
-+	unsigned long flags;
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	(void)kallsyms_lookup_name(name);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+
-+	t = t1 - t0;
-+	if (t < stat->min)
-+		stat->min = t;
-+
-+	if (t > stat->max)
-+		stat->max = t;
-+
-+	stat->cnt++;
-+	stat->sum += t;
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_lookup_name(void)
-+{
-+	struct test_stat stat;
-+
-+	stat.min = INT_MAX;
-+	stat.max = 0;
-+	stat.cnt = 0;
-+	stat.sum = 0;
-+	kallsyms_on_each_symbol(lookup_name, &stat);
-+	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.cnt);
-+	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
-+		stat.min, stat.max, stat.sum / stat.cnt);
-+
-+	stat.addr = kallsyms_lookup_name("vmap");
-+	if (stat.addr != (unsigned long)vmap)
-+		pr_info("kallsyms_lookup_name() test failed\n");
-+}
-+
-+static int stat_symbol_len(void *data, const char *name,
-+			   struct module *mod, unsigned long addr)
-+{
-+	*(u32 *)data += strlen(name);
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_compression_ratio(void)
-+{
-+	int i;
-+	const u8 *name;
-+	u32 pos;
-+	u32 ratio, total_size, total_len = 0;
-+
-+	kallsyms_on_each_symbol(stat_symbol_len, &total_len);
-+
-+	pos = kallsyms_num_syms - 1;
-+	name = &kallsyms_names[kallsyms_markers[pos >> 8]];
-+	for (i = 0; i <= (pos & 0xff); i++)
-+		name = name + (*name) + 1;
-+
-+	/* The length and string terminator are not counted */
-+	total_size = (name - kallsyms_names) - (kallsyms_num_syms * 2);
-+	pr_info("There are %d symbols in total:\n", kallsyms_num_syms);
-+	pr_info(" --------------------------------------------------------------\n");
-+	pr_info("|           |  compressed size  |  original size  |  ratio(%%)  |\n");
-+	pr_info("|--------------------------------------------------------------|\n");
-+	ratio = 10000ULL * total_size / total_len;
-+	pr_info("|  no  '\\0' |     %10d    |    %10d   |   %2d.%-2d    |\n",
-+			total_size, total_len, ratio / 100, ratio % 100);
-+	total_size += kallsyms_num_syms;
-+	total_len  += kallsyms_num_syms;
-+	ratio = 10000ULL * total_size / total_len;
-+	pr_info("| with '\\0' |     %10d    |    %10d   |   %2d.%-2d    |\n",
-+			total_size, total_len, ratio / 100, ratio % 100);
-+	pr_info(" --------------------------------------------------------------\n");
-+	pr_info("\n");
-+}
-+
-+static int test_entry(void *p)
-+{
-+	do {
-+		schedule_timeout(5 * HZ);
-+	} while (system_state != SYSTEM_RUNNING);
-+
-+	pr_info("start\n");
-+	test_kallsyms_compression_ratio();
-+	test_kallsyms_lookup_name();
-+	test_kallsyms_on_each_symbol();
-+	test_kallsyms_on_each_match_symbol();
-+	pr_info("finish\n");
-+
-+	return 0;
-+}
-+
-+static int __init kallsyms_test_init(void)
-+{
-+	struct task_struct *t;
-+
-+	t = kthread_create(test_entry, NULL, "kallsyms_test");
-+	if (IS_ERR(t)) {
-+		pr_info("Create kallsyms selftest task failed\n");
-+		return PTR_ERR(t);
-+	}
-+	kthread_bind(t, 0);
-+	wake_up_process(t);
-+
-+	return 0;
-+}
-+late_initcall(kallsyms_test_init);
++	return err;
+ }
+ 
+ static const struct xattr_handler shmem_security_xattr_handler = {
+@@ -3732,7 +3757,7 @@ static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
+ 		sb->s_flags |= SB_NOUSER;
+ 	}
+ 	sb->s_export_op = &shmem_export_ops;
+-	sb->s_flags |= SB_NOSEC;
++	sb->s_flags |= SB_NOSEC | SB_I_VERSION;
+ #else
+ 	sb->s_flags |= SB_NOUSER;
+ #endif
 -- 
-2.25.1
+2.37.3
 
