@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9319D5B3D66
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2305A5B3D76
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiIIQtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
+        id S231348AbiIIQvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiIIQsf (ORCPT
+        with ESMTP id S231935AbiIIQvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:48:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF41B147392;
-        Fri,  9 Sep 2022 09:48:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EF936206C;
-        Fri,  9 Sep 2022 16:48:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DC4C433D7;
-        Fri,  9 Sep 2022 16:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662742091;
-        bh=ge3azleKQIYkuBpckfP09X8CM/yhfPnFKDBRDnymxcA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eDV9HYWYLd1v1kgyhgCQejDbaPW92W0Utf0XCxm2+tvUKsJhAKOvjGG1YLDluFZbU
-         nhLs5YTc49Wyd9uA15+OBxrjarumGAZXjzB3pWodWArcTnJNyq9lY90CWzTlu2yOgq
-         ql2CH3aU35iOya3eebqIkozYrEVrKFvBl6nd5qo2/D89qeUpWuPXfMNgKOKo7Zl8MW
-         7adx0uI2zeiFhIqhlqXdDB/3JsVp4R3JOzgjWbM7pujYjomxKF0KLWY1/gpf6Sf2Ub
-         s02wtbv69TC8gyqE9AdCXqwSS8ZQG+Vqcz2ZnihiQDksM3YF+9r7Ck7hCu6kkUXSQ6
-         R+/vefyXp2R/A==
-Date:   Fri, 9 Sep 2022 09:48:09 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@suse.de>, X86 ML <x86@kernel.org>
-Subject: Re: [PATCH] x86,retpoline: Be sure to emit INT3 after JMP *%\reg
-Message-ID: <20220909164809.k5vkeujwpvywkpmt@treble>
-References: <166260087224.759381.4170102827490658262.stgit@devnote2>
- <166260088298.759381.11727280480035568118.stgit@devnote2>
- <20220908050855.w77mimzznrlp6pwe@treble>
- <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
- <Yxm+QkFPOhrVSH6q@hirez.programming.kicks-ass.net>
- <CAADnVQKWTaXFqYri9VG3ux-CJEBsjAP5PetH6Q1ccS8HoeP28g@mail.gmail.com>
- <Yxr2TaWaN8VjJ60D@hirez.programming.kicks-ass.net>
+        Fri, 9 Sep 2022 12:51:13 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3EA3D582
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:50:51 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id p5so2522495ljc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=O9FowbIs62g6VcoOUNjt1bKmyMiLJOoWtlkCshtX0Fg=;
+        b=HxfxZkCrYWrP5oC/dAO7XCw0lY9M6rHKMudvwSVsQfpO6bWusxC2iZUY2+gi4OXpWw
+         JifIGrWiP4kq1vy0hBAx8QYqpa8LqeEkqtnQj63e/E/Ncx7+QIWkfsL/xgRKpJVv5awB
+         O7q1TIIYjXLqu/seLPO3qOjB7rFZog+yeHdEe88EoKtKrrKVj9kQ20IL6FBcwAGZ3zwL
+         WZangDDIiz75B563jQ2ITB3lxszPM+JvDTQdWqthTOhGqPfaf/ekpTQ49GjsxKCqBy6N
+         gNjZlQ1bsD7ESAacfi5s4RMwMgoWvAXSm7is8Em53Ij3SMnTRLIMt+0DUJZplHB6jHfV
+         lXMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=O9FowbIs62g6VcoOUNjt1bKmyMiLJOoWtlkCshtX0Fg=;
+        b=C/x/nFDbhXI8p0O6LI34946Odozm/C+vQgGcsJfVh3Ba4PNOg7qTCPCOQvLi9heNoR
+         nGQ0HkoeeA8CUtw+Nfqd4USTJ0viyoqz3qY/g8bkcZCaDvM712ge9Un5n6rYSI+KTu0N
+         wO4w8Z6FT4TbAH1HWhKrmovv+zzAqSO82yszNDNwj+aGtjN6FFQkQBCXmHmvknDSgJI8
+         asSIckEnTi6VcyDtK6MaM84MmPVPLU6lPUj8wjmA9lSRMktS2M8WGfwHOMAhSBqrguFC
+         /+wKDtvFQzQ4SjPiyKKhOciN8ESlkjKVC276PK7eGO5pfwboEAJ1jB4eYGIcLROGFH7v
+         xjRw==
+X-Gm-Message-State: ACgBeo0QRIUOsSQ45ez1t6ZB4uOWw46CmbQ+FgaUWFi7FaQ1I17cZq+Q
+        TqLAl/P7HAdn5IqdCxPoYndYFQ==
+X-Google-Smtp-Source: AA6agR7nLZO3mdmBv9Mmtc1qPnXOMQHqwzHQeSIz2JK3SZX4Ex5MDsmolP63sATF1fuETKuLJilslw==
+X-Received: by 2002:a05:651c:1044:b0:26b:ece0:b1f3 with SMTP id x4-20020a05651c104400b0026bece0b1f3mr100866ljm.526.1662742249694;
+        Fri, 09 Sep 2022 09:50:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m13-20020a056512358d00b00497ad9ae486sm151829lfr.62.2022.09.09.09.50.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 09:50:49 -0700 (PDT)
+Message-ID: <2a5fe53e-4bc2-c2f5-44d1-3cb7bd0c71ef@linaro.org>
+Date:   Fri, 9 Sep 2022 18:50:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yxr2TaWaN8VjJ60D@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] regulator: qcom_rpm: Fix circular deferral regression
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20220909112529.239143-1-linus.walleij@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220909112529.239143-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,19 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 10:16:13AM +0200, Peter Zijlstra wrote:
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -419,7 +419,9 @@ static void emit_indirect_jump(u8 **ppro
->  		OPTIMIZER_HIDE_VAR(reg);
->  		emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
->  	} else {
-> -		EMIT2(0xFF, 0xE0 + reg);
-> +		EMIT2(0xFF, 0xE0 + reg);	/* jmp *%\reg */
-> +		if (IS_ENABLED(CONFIG_RETPOLINE) || IS_ENABLED(CONFIG_SLS))
-> +			EMIT1(0xCC);		/* int3 */
->  	}
+On 09/09/2022 13:25, Linus Walleij wrote:
+> On recent kernels, the PM8058 L16 (or any other PM8058 LDO-regulator)
+> does not come up if they are supplied by an SMPS-regulator. This
+> is not very strange since the regulators are registered in a long
+> array and the L-regulators are registered before the S-regulators,
+> and if an L-regulator defers, it will never get around to registering
+> the S-regulator that it needs.
+> 
+> See arch/arm/boot/dts/qcom-apq8060-dragonboard.dts:
+> 
+> pm8058-regulators {
+>     (...)
+>     vdd_l13_l16-supply = <&pm8058_s4>;
+>     (...)
+> 
+> Ooops.
+> 
+> Fix this by moving the PM8058 S-regulators first in the array.
+> 
+> Do the same for the PM8901 S-regulators (though this is currently
+> not causing any problems with out device trees) so that the pattern
+> of registration order is the same on all PMnnnn chips.
+> 
+> Fixes: 087a1b5cdd55 ("regulator: qcom: Rework to single platform device")
+> Cc: stable@vger.kernel.org
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/regulator/qcom_rpm-regulator.c | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/regulator/qcom_rpm-regulator.c b/drivers/regulator/qcom_rpm-regulator.c
+> index 7f9d66ac37ff..3c41b71a1f52 100644
+> --- a/drivers/regulator/qcom_rpm-regulator.c
+> +++ b/drivers/regulator/qcom_rpm-regulator.c
+> @@ -802,6 +802,12 @@ static const struct rpm_regulator_data rpm_pm8018_regulators[] = {
+>  };
+>  
+>  static const struct rpm_regulator_data rpm_pm8058_regulators[] = {
+> +	{ "s0",   QCOM_RPM_PM8058_SMPS0,  &pm8058_smps, "vdd_s0" },
+> +	{ "s1",   QCOM_RPM_PM8058_SMPS1,  &pm8058_smps, "vdd_s1" },
+> +	{ "s2",   QCOM_RPM_PM8058_SMPS2,  &pm8058_smps, "vdd_s2" },
+> +	{ "s3",   QCOM_RPM_PM8058_SMPS3,  &pm8058_smps, "vdd_s3" },
+> +	{ "s4",   QCOM_RPM_PM8058_SMPS4,  &pm8058_smps, "vdd_s4" },
+> +
 
-Hm, if you have retpolines disabled at runtime, why would you want this.
+Would be great to have here a comment like "S-regulators (being used as
+supplies) must come before the rest".
 
--- 
-Josh
+Same also in second table.
+
+We like to re-order some things from time to time and no one would think
+about checking Git history for any issues with it.
+
+Best regards,
+Krzysztof
