@@ -2,150 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8B65B3AC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC75B3AD4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbiIIOgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S231961AbiIIOjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiIIOgl (ORCPT
+        with ESMTP id S231759AbiIIOjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:36:41 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2079.outbound.protection.outlook.com [40.107.20.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4938128C20;
-        Fri,  9 Sep 2022 07:36:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kxcz/OpRBQFY6LImGGSlPsDOI34NL8TmhrMUejazQhLJLJFDehIhLqwi9YSPgHuPFq9w2FaA5PdFxDrews7nsMjlm5FlhFV6ZujaA5tnP6trlqaVvPNpOQLiHk4cK5+54VN3eDYSX1fZXittBUCyIk52tvaJxyktjGftVEGo48NkLWHD9ZZNsoqMijuvDeM08/FBO6nbO4n0XlvP7KOhlervaOP7TbU7l3sbgQDtZL4x9LBBRnVs3aKzrpcDvKIG+MbEgpoiWL0y3GQrmDFaxdR/L7PErrDVSjQ470HGjQAAcQp9v+zZ17KYnLEvEfSdP6xnL9cNaBTr/mKZc2rxkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8h13pN17nwKkosapmrQb8KrrX6dM0ZhQARIxWDr/YAE=;
- b=AOvqSGAyYJyL1HlDeaSynnd5LzzL/d5A1MusC8UdId5hNAd+af4suCilZ2aheN8t40IufcxMc99i/wDgv6ftKklubnTwLO7xXoUPBZewzXJE3VYfIIXdS6PBCtcCKSZbxnhJ7lRxUO/Ao+GbYYoLcY31sRTb7+L1LDezSbmBripweGJwoeHN1+F84R5/upPce5k12spAlnJIobFkF4mfR39RDEKJ+d31/MwwFArRr5A31fbrgcP2JnhKBMF6ClMRGWR0Euxt8jxUZlaydo9ZKCCT08bhMTkHo5D8k6nPFIVW4kPlTS1FVEYLi7dg5cSsfscHuYcX1YF0k0G9cjHFqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8h13pN17nwKkosapmrQb8KrrX6dM0ZhQARIxWDr/YAE=;
- b=UQmKp883fhB9IO6dntBzUscVOKW+IhXLJjIuTmbwVRQ9G4Au9wL51/FVuCHFRdhAqMq1B2Ui2ZjZYr1bi3VUZq8Ty/5jr7e/B+2tii57k2ZX2Rw99ZASjuXKgvOmPyCUK6hWjCPyLfnYv+K3PgUehLrrmgMpJGeX+8nnC8cz2Wo=
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5)
- by DBBPR04MB7802.eurprd04.prod.outlook.com (2603:10a6:10:1f0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Fri, 9 Sep
- 2022 14:36:37 +0000
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::950d:bfe8:d27f:8981]) by AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::950d:bfe8:d27f:8981%6]) with mapi id 15.20.5612.020; Fri, 9 Sep 2022
- 14:36:37 +0000
-From:   Claudiu Manoil <claudiu.manoil@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next 2/2] net: enetc: expose some standardized ethtool
- counters
-Thread-Topic: [PATCH net-next 2/2] net: enetc: expose some standardized
- ethtool counters
-Thread-Index: AQHYxECk5ZldNY/NRU2E4Z4g0qMhsa3XKk7w
-Date:   Fri, 9 Sep 2022 14:36:36 +0000
-Message-ID: <AM9PR04MB8397A3D2CDD3217201AD6CA196439@AM9PR04MB8397.eurprd04.prod.outlook.com>
-References: <20220909113800.55225-1-vladimir.oltean@nxp.com>
- <20220909113800.55225-3-vladimir.oltean@nxp.com>
-In-Reply-To: <20220909113800.55225-3-vladimir.oltean@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8397:EE_|DBBPR04MB7802:EE_
-x-ms-office365-filtering-correlation-id: a7c2e422-ac28-4e84-55b4-08da9270b35b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DU/1a5I/aVLQtdAsuKsPqWtfw0qe1ql7eax7NZvjAIcJidZ8KCs7fnbOahwHNm3vLYg7/QzFJFcEfMEwQhT1zd0gDIv9YZQLoWdPAwGceB+ts4fPtamuUbSW8L43oopq+ptwVEZf0cF6hUuiGSeEcvvimGPXTNSJQMds/NtLbkXeGHRjLRoxgiXlXJm3zwmcUbfAaI+nE2XqU1fyQhmxmZYeaHYqN46v1ZdVhEt3CHIHVksxGUTaYgVpIzvqPAZhmthLx72PJHuxdtIGdhGcpeLjmTDaSepGr/tGe1HyZBmcB7OiKxnKMe0R8xuGOxVAPQzJu/Dp2a6/pVBDLl3JbjB5hNQzrttfFMbsR+N37ZlzvUjq3pTqSwswnQ/7iW2a0bHmw3feJbhH5XvMXQhzI4vdsVy1702JJMazgWGC57j4qhmZlkiLBNfB6uz1FfAkkpYUVuxUoaPWGCRwYC5qPjimua1J8GT4bCHELcKBVzJg2EeS9dWP0/GPsKZtoJ9iMmYa6ve3A3eNYhuhrMI25p+pcQ0pazMQiQkA/gsK+0H6UAI+ffw55IykEj2jWjdYblOdNCr0T5HqKZETbIwfjUXUJPczE6pS+wvtJhdu6VNLmCPKdaT9OeQZ1XbNAV1mmVC8OhkqcP9vO/Cks244yJ5IZNcR1lqR9tIV/62SWDNkFUecuyQ9gMLLbsFt47suVE7s9+Ni3+v4LQhk0dXh530w2SHH7w0JVOVND7Tqx9au5oSMFwykgMtAJy6nR0wFf2/+H3Pn3of20tZbzefu6w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8397.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(39860400002)(366004)(376002)(66556008)(64756008)(66446008)(66476007)(52536014)(38100700002)(122000001)(5660300002)(86362001)(38070700005)(83380400001)(186003)(53546011)(6506007)(9686003)(7696005)(41300700001)(26005)(71200400001)(478600001)(316002)(8936002)(66946007)(33656002)(76116006)(55016003)(8676002)(4326008)(54906003)(110136005)(4744005)(44832011)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zUWpD8Mze2h9Bu7GhvL6BJeuSF3edWuH38Ktgzuv4GTK2QQ7SYt3dg5Jm9t9?=
- =?us-ascii?Q?WP1oUsGAStUd4QcRInt99acLLvk53rtTYK0zDGCr+novZWwHDA2ZUF0l0fEV?=
- =?us-ascii?Q?x9aHdOHlhgUbGm6sTcH7V3tO5LXuO+mvpwYWlw5A8CqrmoQSLHlvoIeMz6hN?=
- =?us-ascii?Q?8qMllqHT5IxV0bvNBgbxQoG+RY6E+unY7XE1Kh89hzD0s4RDjWTXBxeRHYgn?=
- =?us-ascii?Q?33fMON7DhHsVV07iyeGkXkOPmFBpXt/056Cdmu8MvGXX1n5jj86qVk/0gQm6?=
- =?us-ascii?Q?iOqkJD29E0Ooa/kHUf5TLDNYz/VjYtsZJ2HX4kirzn96aYqQh3M1SL/CGu+r?=
- =?us-ascii?Q?tVDjHvwULZt6q9w2wqZRyQsjOQd7KTh5fhq8SUEgEtxIZrQScsHha1j038jb?=
- =?us-ascii?Q?cPije+vxLpqerpmPIzVk/5rCSC/hNQ4svnmS1/vqjQp4zZFgGNuFbEB3zKJ8?=
- =?us-ascii?Q?WeKXcMUhNN7S3EyDJ0Ycz/bLdGBVwf3oKSeetx2SV3FEMQlmcT0eDtDbK8kV?=
- =?us-ascii?Q?8o2/nkvgykOTsKznv22LqtGPJSnZSAbU+BFF+gpDljx+5Z/iTYsSaSOZGE2d?=
- =?us-ascii?Q?0Wmn9OOF4kEhL6a7Tsle8I90aZgxq00CqylgNPfFNcHfwDeiExAK3qbT5BY3?=
- =?us-ascii?Q?xMX1qZqSvzHsm5RtUKq4kdoad+D/F6EgxR3EaUB6X+mr4w2RWqaQuJDzP/pm?=
- =?us-ascii?Q?BdQ+dZxUhrMJ0F/HYXUKHP5ZoyfYb5aH2j319LF5RkJgyzIC+zvgolq4EUbu?=
- =?us-ascii?Q?xvVUObve0a05fIWwHM323j8F9ZEydmekTDT7krFMBMpMimrqsFsf66294tYG?=
- =?us-ascii?Q?GFZiQlhRem8+CCd+p5ZOkWZhnlQF8ItrAIjelYTsZiS2dwYdAKoIsGQm2XU5?=
- =?us-ascii?Q?zZEcp9Lqj3sqTSnTuNWG4bUROSQnBEsyyc39Xtanm1VvXCED7BoJo7pz5tnj?=
- =?us-ascii?Q?oEzPAynS/H/5NuC3YKmFAZQaZhHEEUPdxBjjjd2UZCRNttcR8UaqF/DarLnJ?=
- =?us-ascii?Q?6GSfXv1X06b4aKazAQLZyJ3F+0x4Lztt/SOCes1UeIBgzXrEo4ec+Wq1CQYY?=
- =?us-ascii?Q?x5Y/bqMOtqOt372mT7zwSwz2rR4Cj5H5mc/cKdJ8HBSl8FdTXO0pvCLa/pMP?=
- =?us-ascii?Q?mGlb9ebSGdRBPg+Fey2gn/I5m976bKa/2NWiLtzMh31yE2Ji9LIUFsfmHUAn?=
- =?us-ascii?Q?/PjBM3a9zEyrdmjaPFzca8tC40puoXsrdpd8u/bPewFg1tbyp8FOgK6pdB4m?=
- =?us-ascii?Q?Wcv/tlfEDDkYRiZ/+alEdrIh0V3wMJ71EASilnumPSaXGgMVmUU7kABP8OoU?=
- =?us-ascii?Q?RFCaotmL8g+SVihZiyyCDL8gGqjcOa+eFkgZ7gDMj9P1mRgv9HU4qM/VLfYA?=
- =?us-ascii?Q?YBIGR0AA4CUXVCF+7aUov3ZQn5r3efKYyXXhcrz5JanLCMAfmwZwzU2BSb8e?=
- =?us-ascii?Q?icjWKzv06Nn49q9qs9ddr8AvKxeoJouutfbwyGtsbOedwIk/CqH0Rq8VoosW?=
- =?us-ascii?Q?mgGogKiNeXin8kqvrJJ/QoATQoeg/5oh9rJa1rSRnBI9wKS6g+XrUDPq1hVg?=
- =?us-ascii?Q?rTt4MYbDtmhOReaWhbZMTz8k2eMX/JBcENIIJUHr?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 9 Sep 2022 10:39:02 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB6A131ED5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 07:39:00 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289DIbb7018352;
+        Fri, 9 Sep 2022 14:38:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8CTwBYWOdFlP4FwLmxHtfRQS81v6onzfClpL7+y63HE=;
+ b=bk0wG4ZLPuUWpg3aQ7l92xo9RfB3B5qwdidqVOXZp8vboS3GzzANaz7m4tpv0rMOikWi
+ z+J1rCj6P7QdhAa7Yqj3x9psaPTagmngB02r82PnaW8ezOiaArAsxjK2m9N4fnZL2+g+
+ a/X8NThPe4tMRFrWwLzn/a/ZKuVEzYhQkuu0XGn0iiwJNKs8dGf1DdoafnNrSDMKUbXn
+ Ixz5Qq7Gl9N/IrJC1wxvWiQoYy6gmkuacVI39CiJXd4ApcBhh2hRqNwKgZPGqAFxXnkv
+ LfsUwh7P6OKfDSDA0qUlK86BXOs4EwbOrNNrPyh1hU0O+x+gFM3zpRZ+ykahbCRar9kp /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg5exm0c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:38:34 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 289DOmT2020042;
+        Fri, 9 Sep 2022 14:38:33 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg5exm0bc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:38:33 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 289EM0XG006289;
+        Fri, 9 Sep 2022 14:38:31 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3jbxj8x16f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 14:38:31 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 289EcSPV40698192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Sep 2022 14:38:28 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 818724203F;
+        Fri,  9 Sep 2022 14:38:28 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 733AD42042;
+        Fri,  9 Sep 2022 14:38:27 +0000 (GMT)
+Received: from [9.145.83.17] (unknown [9.145.83.17])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  9 Sep 2022 14:38:27 +0000 (GMT)
+Message-ID: <630714df-dec1-4a41-6af3-380181d11669@linux.ibm.com>
+Date:   Fri, 9 Sep 2022 16:38:27 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8397.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7c2e422-ac28-4e84-55b4-08da9270b35b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 14:36:36.8977
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ea3M9pE6jXjujyhhBvoGqEGpGAd/sp8bVAP/uqeMDcLYxauJB1NE21QE0INy1jRXfFPm+FxHYu/3mUem5Xt0cw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7802
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [RFC PATCH RESEND 21/28] mm: introduce find_and_lock_anon_vma to
+ be used from arch-specific code
+Content-Language: fr
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-22-surenb@google.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20220901173516.702122-22-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: IcRKhDOEa6Ts-ePGWWJKeMBqdv8Loc-W
+X-Proofpoint-GUID: 0Yk3VPJJRdSVQygJF41M58APoGFE1EH4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=601 phishscore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0 bulkscore=0
+ clxscore=1015 malwarescore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209090051
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Sent: Friday, September 9, 2022 2:38 PM
-> To: netdev@vger.kernel.org
-> Cc: David S. Miller <davem@davemloft.net>; Eric Dumazet
-> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>; Xiaoliang Yang <xiaoliang.yang_1@nxp.com>; Claudiu
-> Manoil <claudiu.manoil@nxp.com>; Richie Pearn <richard.pearn@nxp.com>;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH net-next 2/2] net: enetc: expose some standardized ethtoo=
-l
-> counters
->=20
-> Structure the code in such a way that it can be reused later for the
-> pMAC statistics, by just changing the "mac" argument to 1.
->=20
-> Usage:
-> ethtool --include-statistics --show-pause eno2
-> ethtool -S eno0 --groups eth-mac
-> ethtool -S eno0 --groups eth-ctrl
-> ethtool -S eno0 --groups rmon
->=20
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Le 01/09/2022 à 19:35, Suren Baghdasaryan a écrit :
+> Introduce find_and_lock_anon_vma function to lookup and lock an anonymous
+> VMA during page fault handling. When VMA is not found, can't be locked
+> or changes after being locked, the function returns NULL. The lookup is
+> performed under RCU protection to prevent the found VMA from being
+> destroyed before the VMA lock is acquired. VMA lock statistics are
+> updated according to the results.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  include/linux/mm.h |  3 +++
+>  mm/memory.c        | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 48 insertions(+)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 7c3190eaabd7..a3cbaa7b9119 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -684,6 +684,9 @@ static inline void vma_assert_no_reader(struct vm_area_struct *vma)
+>  		      vma);
+>  }
+>  
+> +struct vm_area_struct *find_and_lock_anon_vma(struct mm_struct *mm,
+> +					      unsigned long address);
+> +
+>  #else /* CONFIG_PER_VMA_LOCK */
+>  
+>  static inline void vma_init_lock(struct vm_area_struct *vma) {}
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 29d2f49f922a..bf557f7056de 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5183,6 +5183,51 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>  }
+>  EXPORT_SYMBOL_GPL(handle_mm_fault);
+>  
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +static inline struct vm_area_struct *find_vma_under_rcu(struct mm_struct *mm,
+> +							unsigned long address)
+> +{
+> +	struct vm_area_struct *vma = __find_vma(mm, address);
+> +
+> +	if (!vma || vma->vm_start > address)
+> +		return NULL;
+> +
+> +	if (!vma_is_anonymous(vma))
+> +		return NULL;
+> +
 
-Reviewed-by: Claudiu Manoil <claudiu.manoil@nxp.com>
+It looks to me more natural to first check that the VMA is part of the RB
+tree before try read locking it.
+
+> +	if (!vma_read_trylock(vma)) {
+> +		count_vm_vma_lock_event(VMA_LOCK_ABORT);
+> +		return NULL;
+> +	}
+> +
+> +	/* Check if the VMA got isolated after we found it */
+> +	if (RB_EMPTY_NODE(&vma->vm_rb)) {
+> +		vma_read_unlock(vma);
+> +		count_vm_vma_lock_event(VMA_LOCK_MISS);
+> +		return NULL;
+> +	}
+> +
+> +	return vma;
+> +}
+> +
+> +/*
+> + * Lookup and lock and anonymous VMA. Returned VMA is guaranteed to be stable
+> + * and not isolated. If the VMA is not found of is being modified the function
+> + * returns NULL.
+> + */
+> +struct vm_area_struct *find_and_lock_anon_vma(struct mm_struct *mm,
+> +					      unsigned long address)
+> +{
+> +	struct vm_area_struct *vma;
+> +
+> +	rcu_read_lock();
+> +	vma = find_vma_under_rcu(mm, address);
+> +	rcu_read_unlock();
+> +
+> +	return vma;
+> +}
+> +#endif /* CONFIG_PER_VMA_LOCK */
+> +
+>  #ifndef __PAGETABLE_P4D_FOLDED
+>  /*
+>   * Allocate p4d page table.
+
