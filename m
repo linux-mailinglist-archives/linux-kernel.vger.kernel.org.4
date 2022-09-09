@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CCB5B3ADB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327A45B3ADE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 16:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiIIOkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 10:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S231722AbiIIOlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 10:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiIIOj5 (ORCPT
+        with ESMTP id S230108AbiIIOlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 10:39:57 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D639F2DAB9;
-        Fri,  9 Sep 2022 07:39:52 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-12803ac8113so4383119fac.8;
-        Fri, 09 Sep 2022 07:39:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ftf0UiBiLz6oFjDNarvElWVwFaQsvk8ZXx/a/CGTdUA=;
-        b=glcYjFQn/spcxFV3Xbqgd1TpuMc+lKgGTMDl/afa5uuSuN9Hqk3gsmqQ/a71Z+Zzin
-         vxsJXgeltKUv0GrQNHv+yS9IHGJHVAkKzscA+99dS32t25oaA5oN9S5lKTA8yMrnRcdX
-         S3qJHTgamA1onWuW/VWt58hnEwLyZ2z7mKuLIl/NpH6cbUB4Ni5Z56p39u0bJu0ZoW+Z
-         +WH0YTyxL1XQMyPRJpUNwGQhrCbAZYL/pe2B49iJBTSRoTsRsXUor9qF0nJAa2lESmr3
-         dBuJMPeu19jEYJCEyr1G4gKOz00fv2ieRH0vylSGv4QMuayTjyF05u7JJmtYuOdClunY
-         hvjA==
-X-Gm-Message-State: ACgBeo12AK38bKgxJ8W0Zy66aZGTo7J0Van8MAz9sMVJuVPzEO5RwUfD
-        9eGn6PWAL/0+b8BjUofqCg==
-X-Google-Smtp-Source: AA6agR5sH9jO7ewRPhu2gd//ThcK3OpubXNqMdFFa9cMj5yim/Bj6Us12fZJ2x/42Jw0BfKu1F4DjA==
-X-Received: by 2002:a05:6808:152a:b0:344:c8d1:27e1 with SMTP id u42-20020a056808152a00b00344c8d127e1mr3922484oiw.294.1662734391944;
-        Fri, 09 Sep 2022 07:39:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 19-20020a9d0113000000b006391bdbb361sm340925otu.31.2022.09.09.07.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 07:39:51 -0700 (PDT)
-Received: (nullmailer pid 1025314 invoked by uid 1000);
-        Fri, 09 Sep 2022 14:39:50 -0000
-Date:   Fri, 9 Sep 2022 09:39:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: convert to YAML
-Message-ID: <20220909143950.GA992904-robh@kernel.org>
-References: <20220103074348.6039-1-luca.weiss@fairphone.com>
+        Fri, 9 Sep 2022 10:41:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77FC1A83D;
+        Fri,  9 Sep 2022 07:41:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86240B824F3;
+        Fri,  9 Sep 2022 14:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35409C433D7;
+        Fri,  9 Sep 2022 14:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662734491;
+        bh=pDF6CD/WdtmLsC5f7nZVdUYpLF0DXSpD2lwT2UkCrHY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Oye9TXCjm6FroeQGIcG7qdbbL0U64P7kPBp4KY5PBN94fUjKiZSK3VrYbtkDs56+c
+         cUYmbzImBsa68VC1BkH1AT5Wk3O1rjaybNE1caG4P55HBRKY+14zVAnFNvv6Ctu9qJ
+         LIS4ikbUMrDIN1h5+fEQQPM4/agCpcxsKn8QNkMd+Wd66Tp8NKLT+khEUoZ2cxxhdc
+         VDFKbsm2LkcjJIGSFLTvs6L9sAY9DEqhuSB+Iq+DqyqgmC4rAdr8URTqAarsUYA5k+
+         cwJ1bQYVRazwfXV7XoBUtav2PbgkBJ1F/2mXQYzurVQVDtPZRp8cn33cj3xYRfRxnx
+         0mIHvlpVXeypg==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-11eab59db71so4358006fac.11;
+        Fri, 09 Sep 2022 07:41:31 -0700 (PDT)
+X-Gm-Message-State: ACgBeo17jQ2B9CJWAinuND6nFqvuPyrM2HDAAcyWKDC4Fvwjm7CvQYdz
+        GiUTYImR6+vLQf0iAzU2ulma9eApzqxSvGX6iwc=
+X-Google-Smtp-Source: AA6agR6+EQnoPxBIvpImza/d4R+Tj6tPh6AhtM51xa7vMyTem/ovG9YHmMcMxgIsmKqH6tk8zsP+oa3W3g3Lza7BVEM=
+X-Received: by 2002:a05:6870:32d2:b0:127:f0b4:418f with SMTP id
+ r18-20020a05687032d200b00127f0b4418fmr5404709oac.22.1662734490372; Fri, 09
+ Sep 2022 07:41:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103074348.6039-1-luca.weiss@fairphone.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220908161516.4361-1-logang@deltatee.com>
+In-Reply-To: <20220908161516.4361-1-logang@deltatee.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 9 Sep 2022 07:41:17 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7HrBNr9JZZoia_UyPyUG3yd_Kbb=F+P2F7iLmF0SvGKw@mail.gmail.com>
+Message-ID: <CAPhsuW7HrBNr9JZZoia_UyPyUG3yd_Kbb=F+P2F7iLmF0SvGKw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] A couple more bug fixes
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 08:43:48AM +0100, Luca Weiss wrote:
-> Convert the PDC interrupt controller bindings to YAML.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> Changes since v1:
-> * Adjust description of second reg-name as suggested by Maulik Shah
-> 
-> @Rob Herring: Hope it's ok to keep your R-b given the above changes
-> 
-> This patch depends on the following patch, which fixed sm8250 & sm8350
-> compatibles and adds sm6350.
-> https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.weiss@fairphone.com/
-> 
->  .../interrupt-controller/qcom,pdc.txt         | 77 -----------------
->  .../interrupt-controller/qcom,pdc.yaml        | 86 +++++++++++++++++++
->  2 files changed, 86 insertions(+), 77 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+On Thu, Sep 8, 2022 at 9:15 AM Logan Gunthorpe <logang@deltatee.com> wrote:
+>
+> Hey,
+>
+> The first two patches are a resend of the two sent earlier with tags
+> collected and a couple minor typos fixed.
+>
+> The third patch fixes the deadlock issue I brought up in another email.
+>
+> These patches are based on the current md/md-next branch (526bd69b9d3).
+>
+> Thanks,
+>
+> Logan
 
-In checking top compatibles without schemas[1][2], I found this. Now 
-applied with sm8150 compatible which was the only change since this.
+Applied to md-next. Thanks!
 
-Rob
+Song
 
-[1] https://gitlab.com/robherring/linux-dt/-/jobs/3005191129
-[2] https://gitlab.com/robherring/linux-dt/-/jobs/3005191129/artifacts/file/all-compatible-warnings.log
+>
+> --
+>
+> David Sloan (1):
+>   md/raid5: Remove unnecessary bio_put() in raid5_read_one_chunk()
+>
+> Logan Gunthorpe (2):
+>   md: Remove extra mddev_get() in md_seq_start()
+>   md/raid5: Wait for MD_SB_CHANGE_PENDING in raid5d
+>
+>  drivers/md/md.c    | 1 -
+>  drivers/md/raid5.c | 5 ++++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+>
+> base-commit: 526bd69b9d330eed1db59b2cf6a7d18caf866847
+> --
+> 2.30.2
