@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E0B5B34CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AD65B34CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 12:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiIIKFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 06:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S229976AbiIIKGp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Sep 2022 06:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiIIKEt (ORCPT
+        with ESMTP id S229962AbiIIKGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:04:49 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BABE266E;
-        Fri,  9 Sep 2022 03:04:46 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 11:04:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662717884;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xAYIHP+5okh1OBy0npVyjWSJCHPvarSH75P9UOmP2gY=;
-        b=Xc4YtLmnMk9UMIltU2T6jAMcxCVLjBTM6REusu7WFdxNshnChTBrhcb7ICp6jdLMTCmKwm
-        9w0kU7AqzOeD5t2eWDxeP3ew40EYNzn/C7oDpICH04pNMes3iaQJBedEW7zAv+E5be5Ndc
-        cuJg4M4g8qPjMkt3n4MrAXyJ734Mbj4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/14] KVM: arm64: Tear down unlinked stage-2 subtree
- after break-before-make
-Message-ID: <YxsPtT6DXxl2q/OG@google.com>
-References: <20220830194132.962932-1-oliver.upton@linux.dev>
- <20220830194132.962932-3-oliver.upton@linux.dev>
- <Yxdaw1qng/Or0LLA@google.com>
+        Fri, 9 Sep 2022 06:06:39 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D908B03
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:06:36 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-135-vA_9hz_UMB--kDxjteYY_w-1; Fri, 09 Sep 2022 11:06:34 +0100
+X-MC-Unique: vA_9hz_UMB--kDxjteYY_w-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 9 Sep
+ 2022 11:06:32 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 9 Sep 2022 11:06:32 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'adobriyan@gmail.com'" <adobriyan@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: procfs readlink after unshare() in a chroot() reports the full path
+Thread-Topic: procfs readlink after unshare() in a chroot() reports the full
+ path
+Thread-Index: AdjEMqjMb0GR/+CiSFubzc4Cg1EybA==
+Date:   Fri, 9 Sep 2022 10:06:32 +0000
+Message-ID: <12add75b103b412494487518c408fe0b@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxdaw1qng/Or0LLA@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:35:47PM +0000, Quentin Perret wrote:
-> Hi Oliver,
-> 
-> On Tuesday 30 Aug 2022 at 19:41:20 (+0000), Oliver Upton wrote:
-> >  static int stage2_map_walk_table_pre(u64 addr, u64 end, u32 level,
-> >  				     kvm_pte_t *ptep,
-> >  				     struct stage2_map_data *data)
-> >  {
-> > -	if (data->anchor)
-> > -		return 0;
-> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-> > +	kvm_pte_t *childp = kvm_pte_follow(*ptep, mm_ops);
-> > +	struct kvm_pgtable *pgt = data->mmu->pgt;
-> > +	int ret;
-> >  
-> >  	if (!stage2_leaf_mapping_allowed(addr, end, level, data))
-> >  		return 0;
-> >  
-> > -	data->childp = kvm_pte_follow(*ptep, data->mm_ops);
-> >  	kvm_clear_pte(ptep);
-> >  
-> >  	/*
-> > @@ -782,8 +786,13 @@ static int stage2_map_walk_table_pre(u64 addr, u64 end, u32 level,
-> >  	 * individually.
-> >  	 */
-> >  	kvm_call_hyp(__kvm_tlb_flush_vmid, data->mmu);
-> > -	data->anchor = ptep;
-> > -	return 0;
-> > +
-> > +	ret = stage2_map_walk_leaf(addr, end, level, ptep, data);
-> > +
-> > +	mm_ops->put_page(ptep);
-> > +	mm_ops->free_removed_table(childp, level + 1, pgt);
-> 
-> By the look of it, __kvm_pgtable_visit() has saved the table PTE on the
-> stack prior to calling the TABLE_PRE callback, and it then uses the PTE
-> from its stack and does kvm_pte_follow() to find the childp, and walks
-> from there. Would that be a UAF now?
+The readlink calls in procfs (eg for /proc/self/fd/0) returns
+the full pathname if unshare() is called inside a chroot.
 
-Sure would, I suppose the actual UAF is hidden by the use of RCU later
-in the series. Nonetheless, I'm going to adopt David's suggestion of
-just rereading the PTE which should tidy this up.
+The program below reproduces this when run with stdin
+redirected to a file in the current directory.
 
-Thanks for catching this.
+This sequence is used by 'ip netns exec' so isn't actually
+that unusual.
 
---
-Best,
-Oliver
+	David
+
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <sched.h>
+
+static void print_link(const char *where, int fd)
+{
+        char buf[256];
+
+        printf("%s: %.*s\n", where, (int)readlinkat(fd, "", buf, sizeof buf), buf);
+}
+
+int main(int argc, char **argv)
+{
+        int link_fd = open("/proc/self/fd/0", O_PATH | O_NOFOLLOW);
+
+        print_link("initial", link_fd);
+        if (chroot("."))
+                return 1;
+        print_link("after chroot", link_fd);
+        if (unshare(CLONE_NEWNS))
+                return 2;
+        print_link("after unshare", link_fd);
+        return 0;
+}
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
