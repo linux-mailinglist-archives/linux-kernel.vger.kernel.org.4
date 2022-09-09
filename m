@@ -2,178 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274195B391F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4036F5B3930
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiIINgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S231154AbiIINiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIINgS (ORCPT
+        with ESMTP id S229598AbiIINiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:36:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FC9129C6D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 06:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662730574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r+j5NRBRWTe4dwiHyAiQIy4Dst2HaG54q1byj2vgh9A=;
-        b=cRagtOr7fsMrTdHyBAlsC9Zd3n0yeBcLIfkYYHUSTzgQckqFNOnXUavFvOn4FBgRCpk6f6
-        QmcfG5Yf1BEsXRlO+mcEqR3We/68lfn+oa9exTVgB591Bul9b01x74dTb5BrkT+1sX4xII
-        5gzGXzDa5FuTieWIQ9N1o4saneV3c6A=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-160-sMbz1FYkOvWtcv2MYdgS_A-1; Fri, 09 Sep 2022 09:36:13 -0400
-X-MC-Unique: sMbz1FYkOvWtcv2MYdgS_A-1
-Received: by mail-pf1-f198.google.com with SMTP id f16-20020aa782d0000000b0053e242136bfso1114845pfn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 06:36:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=r+j5NRBRWTe4dwiHyAiQIy4Dst2HaG54q1byj2vgh9A=;
-        b=5n6eaf+cuTXnGltLkZwIsDx+kY5XdR1VayUYG2X4wY/OqI7k+oUN0zfVk0H1C9dqGm
-         5diOCUVoSHG3JF7oSEHo70UNoDYJS3MgxKkOVp/hGRSWabcD2uXglUk+j8ykdBgTSRLL
-         lArGYvHS81PEx8rxKzIfhLdX8FVbyU09XukExj5wzuE3zNDWATYzJwJ6SitXccaNIKt6
-         3qkdiRcIb0+aUdI0T5bhngH/aLceyh5tXhSjGHJIl66frFhUuJCG63zHFlkQj4stPxKK
-         nhRHt4t4ps66EnvvV2sTNgawaMPh4eIjK45lm9RGlGEuXlSTQEy9BXjaesgGs3dHafZi
-         SI2w==
-X-Gm-Message-State: ACgBeo3F7RBEJT3UQPXruh60CHokXwL7d/tmhzPBrT/zsdzPUSJexk9x
-        L6WC81SeJa7EBNyEjAdQ9rnOefk40ZGib2I294bcUhrdt7sxV+AyPPrq5yf9G26qIKTc2q8vt5M
-        hDi5dV8+0dWpquadHX1JcA4boTWjIns3buAb2b8w0
-X-Received: by 2002:a63:f74c:0:b0:42b:77c2:ce7c with SMTP id f12-20020a63f74c000000b0042b77c2ce7cmr12592092pgk.473.1662730571985;
-        Fri, 09 Sep 2022 06:36:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5SuJp+5hF11ORlTCZwHRZ31liJYmxmCrru4MNb9MY8mX5OINDPGCydElCCxBRT4j/66jaTrmZy9iz49jm7DGI=
-X-Received: by 2002:a63:f74c:0:b0:42b:77c2:ce7c with SMTP id
- f12-20020a63f74c000000b0042b77c2ce7cmr12592074pgk.473.1662730571756; Fri, 09
- Sep 2022 06:36:11 -0700 (PDT)
+        Fri, 9 Sep 2022 09:38:09 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222C512B294;
+        Fri,  9 Sep 2022 06:38:08 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289DAOwH030782;
+        Fri, 9 Sep 2022 09:37:50 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jf8yc3ppk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 09:37:49 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 289DbmFU042441
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 9 Sep 2022 09:37:48 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from ibrahim-vm.ad.analog.com ([10.158.19.28])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 289DbUuj018872;
+        Fri, 9 Sep 2022 09:37:33 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/4] hwmon: Add max31760 fan speed controller
+Date:   Fri, 9 Sep 2022 16:37:14 +0300
+Message-ID: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxn5VDzJMUxSKz0Z@fedora> <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
-In-Reply-To: <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Fri, 9 Sep 2022 10:36:00 -0300
-Message-ID: <CAAq0SUk9_DS4T5_uAg+3re7=wrGXMkiXgw_oPsWfrmgY79P=2g@mail.gmail.com>
-Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport support
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 2qJPxa8D7yW71o9WLeWB5S7bfn2LySoI
+X-Proofpoint-ORIG-GUID: 2qJPxa8D7yW71o9WLeWB5S7bfn2LySoI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=899
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090047
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 8:45 PM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
->
->
-> On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
-> >> +#ifdef DEBUG
-> >> +static void print_array_hex(const char *title, const char *prefix_str,
-> >> +            const void *buf, int len)
-> >> +{
-> >> +    const __u8 *ptr = buf;
-> >> +    int i, rowsize = HEX_DUMP_SIZE;
-> >> +
-> >> +    if (!len || !buf)
-> >> +            return;
-> >> +
-> >> +    printf("\t\t%s", title);
-> >> +
-> >> +    for (i = 0; i < len; i++) {
-> >> +            if (!(i % rowsize))
-> >> +                    printf("\n%s%.8x:", prefix_str, i);
-> >> +            printf(" %.2x", ptr[i]);
-> >> +    }
-> >> +
-> >> +    printf("\n");
-> >> +}
-> >> +#endif
-> >> +
-> >> +TEST(verify_report)
-> >> +{
-> >> +    __u8 reportdata[TDX_REPORTDATA_LEN];
-> >> +    struct tdreport tdreport;
-> >> +    struct tdx_report_req req;
-> >> +    int devfd, i;
-> >> +
-> >> +    devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
-> >> +
-> >> +    ASSERT_LT(0, devfd);
-> >> +
-> >> +    /* Generate sample report data */
-> >> +    for (i = 0; i < TDX_REPORTDATA_LEN; i++)
-> >> +            reportdata[i] = i;
-> >> +
-> >> +    /* Initialize IOCTL request */
-> >> +    req.subtype     = 0;
-> >> +    req.reportdata  = (__u64)reportdata;
-> >> +    req.rpd_len     = TDX_REPORTDATA_LEN;
-> >> +    req.tdreport    = (__u64)&tdreport;
-> >> +    req.tdr_len     = sizeof(tdreport);
-> >> +
-> >> +    /* Get TDREPORT */
-> >> +    ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-> >> +
-> >> +#ifdef DEBUG
-> >> +    print_array_hex("\n\t\tTDX report data\n", "",
-> >> +                    reportdata, sizeof(reportdata));
-> >> +
-> >> +    print_array_hex("\n\t\tTDX tdreport data\n", "",
-> >> +                    &tdreport, sizeof(tdreport));
-> >> +#endif
-> > You can unconditionally define print_array_hex, and
-> > use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
-> > will get rid of the unused code when DEBUG is not defined
-> > as expected, but you get the parser to validate it
-> > independent of the definition of DEBUG.
->
-> Currently, DEBUG is a macro, so we cannot use if (DEBUG) directly.
-> You are suggesting to change DEBUG to a variable? Any reason to
-> make this change? I think both changes are functionally similar.
-> So I am wondering why to make this change?
->
+changes in v8:
+  - use sizeof(*)
+  - use DEFINE_SIMPLE_DEV_PM_OPS
+  - remove __maybe_unused
+  - remove of_match_ptr
+  - dt-bindings: style fixes
 
-My thought is always to define DEBUG. If in debug mode it is defined
-to 1; otherwise to 0.
-Then, you can use `if (DEBUG)` instead of `#ifdef DEBUG`. But the
-former will always check the syntax of the debug code,
-independent of the value of DEBUG, and the compiler will generate the
-same code. The GNU coding standard [1] explains that
-better than I do.
+changes in v7:
+  - make max31760_read_string static
 
-[1] https://www.gnu.org/prep/standards/standards.html#Conditional-Compilation
+changes in v6:
+  - update description of hwmon documentation
+  - add hwmon documentation to index.rst
 
-> >
->
-> --
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
->
+changes in v5:
+  - add dt-bindings documentation
+  - add maintainer
+
+changes in v4:
+  - use sysfs_emit instead of sprintf
+  - use kstrtou8 for pwm
+  - use closest match for pwm1_auto_point_temp_hyst
+
+changes in v3:
+  - add regmap cache
+  - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+  - add pwm1_auto_point_temp_hyst attribute
+
+changes in v2:
+  - remove pulse_per_rev variable in tach_to_rpm
+  - remove temperature max_hyst and crit_hyst
+  - strict value checking for fan_enable and pwm_enable
+  - do not clamp pwm value for Look-up table
+  - add sysfs_attr_init call
+  - add documentation
+
+
+Ibrahim Tilki (4):
+  drivers: hwmon: Add max31760 fan speed controller driver
+  docs: hwmon: add max31760 documentation
+  dt-bindings: hwmon: Add bindings for max31760
+  MAINTAINERS: Add maintainer for hwmon/max31760
+
+ .../bindings/hwmon/adi,max31760.yaml          |  44 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31760.rst              |  77 +++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31760.c                      | 596 ++++++++++++++++++
+ 7 files changed, 740 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+ create mode 100644 Documentation/hwmon/max31760.rst
+ create mode 100644 drivers/hwmon/max31760.c
+
+-- 
+2.36.1
 
