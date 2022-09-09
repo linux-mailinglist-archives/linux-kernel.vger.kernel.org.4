@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04CA5B3434
+	by mail.lfdr.de (Postfix) with ESMTP id 0E09A5B3432
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 11:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiIIJkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 05:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S231749AbiIIJkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 05:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiIIJka (ORCPT
+        with ESMTP id S231696AbiIIJke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:40:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108E39C525;
-        Fri,  9 Sep 2022 02:40:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Sep 2022 05:40:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BE6B533C;
+        Fri,  9 Sep 2022 02:40:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9845261F6A;
-        Fri,  9 Sep 2022 09:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A696C433C1;
-        Fri,  9 Sep 2022 09:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662716425;
-        bh=HsfqPASjnakS+xsqfPpAn2Do0sUbq2U9xY/KUbbjIP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Np7qYKPDxkWRV3AzIEX0EEInSZkDu8nyjOKt/thmwV20qBJ/XehbSQ6RAFNU59mRz
-         uIaN745OjFy8eeLD3llQbNIMMzzk93bzsvg8Ls+StIWbB0lsbujcMsfeQW0xO/odEb
-         cVASnbjfzCf/mnDTH+NxBLvJcU0ZCdtWyY2YmnwPRZ8Mypx2gzn2xFFcncu/YIY7X5
-         F5faa52aFffAWRL/lOvU/lbc0yTJY3ZVrocrHLme32ptHBRTzjBfoOrBJYk8SC40mx
-         gTzi+PGBo/WpCGibrG3zzCmh8Al0eTOlddTf3OG55JThKJUSZlkx4pnphVospe5Yhk
-         cwxQVw9xK0u8A==
-Date:   Fri, 9 Sep 2022 10:40:10 +0100
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     bvanassche@acm.org, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org, target-devel@vger.kernel.org,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A9C11F8A6;
+        Fri,  9 Sep 2022 09:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662716427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4NzTsWb7AkhKdCbXpx+cD91GgK4NEaTd8ZxVSs4tEis=;
+        b=2SGa8HQOukQZYio7zu/9Tb+ApVHmmUeBlyeaOFe5NqTRBrhyqP/72elQqDBFV3KgjiEwE7
+        ZFFRxzVq3e5RHZJMjTu6ylCFfyqSklHqgoVJs63JrOu5yTf07pfO4RjtFYvRD/dURF1JdE
+        PR5LattLuO1K0LoAZas6Z94WYiKssUs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662716427;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4NzTsWb7AkhKdCbXpx+cD91GgK4NEaTd8ZxVSs4tEis=;
+        b=BDyzX9eTfwC7PnS53Nml/LZKewOISHJBCXFTVpQWfuqeyOSpPXD2Oof1gJpnTqwOQXKsLO
+        FO2/T62GerjRLRAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DEBE13A93;
+        Fri,  9 Sep 2022 09:40:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3HDNGgsKG2PVZQAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 09 Sep 2022 09:40:27 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F41E8A0684; Fri,  9 Sep 2022 11:40:26 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 11:40:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] infiniband: ulp: srpt: Use flex array destination for
- memcpy()
-Message-ID: <YxsJ+n8RjpBIpGKo@work>
-References: <20220909022943.8896-1-hbh25y@gmail.com>
+Subject: Re: [PATCH] fsnotify: remove unused declaration
+Message-ID: <20220909094026.zh2ugriphnq3qgfj@quack3>
+References: <20220909033828.993889-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909022943.8896-1-hbh25y@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220909033828.993889-1-cuigaosheng1@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 10:29:43AM +0800, Hangyu Hua wrote:
-> In preparation for FORTIFY_SOURCE performing run-time destination buffer
-> bounds checking for memcpy(), specify the destination output buffer
-> explicitly, instead of asking memcpy() to write past the end of what looked
-> like a fixed-size object.
+On Fri 09-09-22 11:38:28, Gaosheng Cui wrote:
+> fsnotify_alloc_event_holder() and fsnotify_destroy_event_holder()
+> has been removed since commit 7053aee26a35 ("fsnotify: do not share
+> events between notification groups"), so remove it.
 > 
-> Notice that srp_rsp[] is a pointer to a structure that contains
-> flexible-array member data[]:
-> 
-> struct srp_rsp {
-> 	...
-> 	__be32	sense_data_len;
-> 	__be32	resp_data_len;
-> 	u8	data[];
-> };
-> 
-> link: https://github.com/KSPP/linux/issues/201
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Thanks! I've added the patch to my tree.
 
-Thanks
---
-Gustavo
+								Honza
 
 > ---
->  drivers/infiniband/ulp/srpt/ib_srpt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/notify/fsnotify.h | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
-> index 21cbe30d526f..8c29e14150d3 100644
-> --- a/drivers/infiniband/ulp/srpt/ib_srpt.c
-> +++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
-> @@ -1421,7 +1421,7 @@ static int srpt_build_cmd_rsp(struct srpt_rdma_ch *ch,
+> diff --git a/fs/notify/fsnotify.h b/fs/notify/fsnotify.h
+> index 87d8a50ee803..fde74eb333cc 100644
+> --- a/fs/notify/fsnotify.h
+> +++ b/fs/notify/fsnotify.h
+> @@ -76,10 +76,6 @@ static inline void fsnotify_clear_marks_by_sb(struct super_block *sb)
+>   */
+>  extern void __fsnotify_update_child_dentry_flags(struct inode *inode);
 >  
->  		srp_rsp->flags |= SRP_RSP_FLAG_SNSVALID;
->  		srp_rsp->sense_data_len = cpu_to_be32(sense_data_len);
-> -		memcpy(srp_rsp + 1, sense_data, sense_data_len);
-> +		memcpy(srp_rsp->data, sense_data, sense_data_len);
->  	}
+> -/* allocate and destroy and event holder to attach events to notification/access queues */
+> -extern struct fsnotify_event_holder *fsnotify_alloc_event_holder(void);
+> -extern void fsnotify_destroy_event_holder(struct fsnotify_event_holder *holder);
+> -
+>  extern struct kmem_cache *fsnotify_mark_connector_cachep;
 >  
->  	return sizeof(*srp_rsp) + sense_data_len;
+>  #endif	/* __FS_NOTIFY_FSNOTIFY_H_ */
 > -- 
-> 2.34.1
+> 2.25.1
 > 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
