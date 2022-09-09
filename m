@@ -2,125 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A938E5B39A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB1C5B399D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbiIINsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 09:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S231757AbiIINtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 09:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiIINsZ (ORCPT
+        with ESMTP id S231704AbiIINs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:48:25 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB7563F2A;
-        Fri,  9 Sep 2022 06:48:04 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3450990b0aeso19358197b3.12;
-        Fri, 09 Sep 2022 06:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=XNsL7A+ParoI+QQ6Xv0iUaI58zw0NLxrSar+h7dj9ic=;
-        b=i8dShfjNLy/UDAtFho8YmRkq1V+zKZO4FEer5IpuaPzN+RjDGfNg25NdaItiA/MSoV
-         V8LvnyIrToatsgR6HAKhGcsJ3d7IwRejPtekRmTdQHjMNpHgdR2cV1FAWntCBnQQc774
-         yefztNDXms4lJvs6hEjLXAx9nbMtT48CwKxCIhgjsnMFA3vxrk2mYnr8a2Z+OZJO+kmA
-         89icyrnUwNgkN/jai7x197eRbTqkDarA5nN7fk6Vgff4SZNlYFyAdm4iREQ/B2KYiVWQ
-         Bz/YjR6CRhzhSrdDNqvy/orVECVCU+adILNIVcrhsULO4TnBelUNNKPmtMK95FTRTxLt
-         fjoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XNsL7A+ParoI+QQ6Xv0iUaI58zw0NLxrSar+h7dj9ic=;
-        b=77hANl7MoFEEJeQnV4iAmEv0AHSV5vMTRtXCzeNe9GraRal0lrUAtEVJ5OvqUSSYBt
-         9VAPt6UYDmHBkPSWv8qJPDVh0hqvw1BSMcOgzwUwMiRHZgmmJuYDtVBL+hUrP1xH8GFk
-         8sNvhluiAEK+SI3Rme6xzq6lXFr4UHjoeMx10LAR+4kOcmuFhiC3LK2JY972YqvArooh
-         JVBIsNL0rFnHKHLPDHU7KGh+M6ReyeLAi5WVUBmt1VCpQnbsm9602GjdEp1GDlJ6JjJO
-         Vj3CaH5mH04KnxBpS1uJNOHUaL13//M/KTdcR3B0lnMW3UaZgCdibz0PoK6De/pcFJ7U
-         DJhg==
-X-Gm-Message-State: ACgBeo1B0sR/hZiLoSSOUtBrVOmqH2GgMv1rlxT6wRQNdxOHxuI5gJci
-        67qvym4qDSgUGzqVWcx7cuncQ8ghYCjTGp16fso=
-X-Google-Smtp-Source: AA6agR6FOqzzU7JQSMz01Q6u6UiAUpMuFACh7Mr4F/7w2ukrPXLqBzqyG7GfefRz6A8DXYVTHr6nnEOhflXbaHwH/3A=
-X-Received: by 2002:a0d:d441:0:b0:345:83ae:9330 with SMTP id
- w62-20020a0dd441000000b0034583ae9330mr11962783ywd.97.1662731283363; Fri, 09
- Sep 2022 06:48:03 -0700 (PDT)
+        Fri, 9 Sep 2022 09:48:26 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA9F13FA60;
+        Fri,  9 Sep 2022 06:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662731290; x=1694267290;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gVCktcqq3A41wGPac5aRvOoq0o2bmTIW5G5cmGK/l78=;
+  b=U9VeqX+QU2clmMw3rvCgWjhI8QzfSkSqldLPNTUDaBVRyC70QexawvtL
+   nRFrz9MK6vHo/+dcYtsVPNBCKWx+h2/WCsZrwps0kgq6Oi7UgjnDNOr7F
+   1T6WZOoh/7dqCsglz5p2k7I7YdWiEXBAqsiScxbYm6SeIFaKwVAnVQ9eX
+   9fN2V1wCL5iavHs/U3rPA3DIVBL8YTGzIgiDwfocPROcG8cPjkCrONNHt
+   gFzK4qbByCDFmJxUI6wu5D4vWazhuQA8w0Bs52gFVcmSS4t0qH6Mkf+iu
+   4B9fLcVyhDOmHWc2MLfsIC2ONGzqHFUgpev0Uw9N7C+mer9AmlsgBbJRX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277864920"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="277864920"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:48:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="566371587"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:48:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oWeMW-00AaAX-2Q;
+        Fri, 09 Sep 2022 16:48:04 +0300
+Date:   Fri, 9 Sep 2022 16:48:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
+Message-ID: <YxtEFNdgzmpbN94s@smile.fi.intel.com>
+References: <20220909121329.42004-1-brgl@bgdev.pl>
+ <20220909121329.42004-3-brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20220908141210.1375828-1-zhiguangni01@zhaoxin.com> <YxoPS5OCup1h8QD4@google.com>
-In-Reply-To: <YxoPS5OCup1h8QD4@google.com>
-From:   Liam Ni <zhiguangni01@gmail.com>
-Date:   Fri, 9 Sep 2022 21:47:53 +0800
-Message-ID: <CACZJ9cVSYtda7oyJnMmNDtfZotXZu+0i-c8G8onLqj4sPDkCRg@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM:x86: Clean up ModR/M "reg" initialization in reg
- op decoding
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
-        pbonzini@redhat.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909121329.42004-3-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sept 2022 at 23:50, Sean Christopherson <seanjc@google.com> wrote=
-:
->
-> On Thu, Sep 08, 2022, Liam Ni wrote:
-> > From: Liam Ni <zhiguangni01@gmail.com>
-> >
-> > Refactor decode_register_operand() to get the ModR/M register if and
-> > only if the instruction uses a ModR/M encoding to make it more obvious
-> > how the register operand is retrieved.
-> >
-> > Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
-> > ---
->
-> Pushed to branch `for_paolo/6.1` at:
->
->     https://github.com/sean-jc/linux.git
->
-> with the below nit sqaushed.  Unless you hear otherwise, it will make its=
- way to
-> kvm/queue "soon".
->
-> Note, the commit IDs are not guaranteed to be stable.
->
-> >  arch/x86/kvm/emulate.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > index f092c54d1a2f..879b52af763a 100644
-> > --- a/arch/x86/kvm/emulate.c
-> > +++ b/arch/x86/kvm/emulate.c
-> > @@ -1137,9 +1137,11 @@ static int em_fnstsw(struct x86_emulate_ctxt *ct=
-xt)
-> >  static void decode_register_operand(struct x86_emulate_ctxt *ctxt,
-> >                                   struct operand *op)
-> >  {
-> > -     unsigned reg =3D ctxt->modrm_reg;
-> > +     unsigned int reg;
-> >
-> > -     if (!(ctxt->d & ModRM))
-> > +     if ((ctxt->d & ModRM))
->
-> Only need one set of parentheses.
++Cc: Kees
 
-Sorry=EF=BC=8C  Should I prepare a new patch?
+On Fri, Sep 09, 2022 at 02:13:29PM +0200, Bartosz Golaszewski wrote:
+> It's useful for user-space to be able to know the PIDs of processes
+> holding GPIO lines in case they have the permissions and need to kill
+> them.
+> 
+> Extend the gpio_v2_line_info structure with the consumer_pid field
+> that's set to the PID of the user-space process or 0 if the user lives
+> in the kernel.
 
->
-> > +             reg =3D ctxt->modrm_reg;
-> > +     else
-> >               reg =3D (ctxt->b & 7) | ((ctxt->rex_prefix & 1) << 3);
-> >
-> >       if (ctxt->d & Sse) {
-> > --
-> > 2.34.1
-> >
+I'm wondering if there is any security implications and this PID
+can be abused.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
