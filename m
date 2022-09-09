@@ -2,77 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D085B403B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5AC5B403F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 21:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiIITyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 15:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S231778AbiIITzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 15:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiIITyl (ORCPT
+        with ESMTP id S231601AbiIITzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 15:54:41 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8C62AC5E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 12:54:38 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso2607539pjm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 12:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=LJJdFi2ecBcRn9IXcpTHXs4bj0qF/hqY7vmKvWdg1Iw=;
-        b=aPZeTrdFkdDTN+VMFjPxKGe5Wk8KeSAFn5sv+SfbrJj3UrVrXyAUE9ejcpWYlCsBPW
-         F4p6jxMTwQHpvK76ulypduXTXcnq7l9pLvoKfzlDwuz1jOMPHWkSF8wBJfN9/sGOPCUZ
-         c7U8OM7HX6m8jqeZLpjRjnrlRh/asO4FhL3yyKwRWzPIqG+P0QWZDXkiIAUhVr2Ij+wm
-         rAR/1w6PY/cMjEAAg+daoc8EFijBDY5vsNAAbr/B2LGM2T9YvDs6Dnac7yB1Kg/9yJx9
-         yfE79njhDatv/nE0ZID0u22nPsx9Shm9008V6gU5QEBzNFWlrtKnSE93uZgCdMa6pWm5
-         sabg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=LJJdFi2ecBcRn9IXcpTHXs4bj0qF/hqY7vmKvWdg1Iw=;
-        b=nd9HMhvrroWgbS1wuM8/EKCZYHhYPmTPmWun2DtZfz8rw5dVkfgGrGb244l/67t738
-         /QtiNkb0CROkab+6YoPqpda8UEQvSeqlW3pflB1ZuQEAaybRlrp/BYgULYt8Cz841w9X
-         47jSCOL/8wSkEaeIzp0ZWXTXbCh7qYygVrNzsIWWFsU4ACezSOjZorTbqTFLiIvbZnIP
-         b9QgMv/ihfY+FzDsqX0yKxo45rSB9TVXektAaqFe5y/FghiBzuVJY8UIANm+moyYiEmP
-         6D+ZkrViwbh3M/xW5mL38zIzAPAIPY/Atf+v8H1xgx7SGElarurmMCQ2oUzZh4qwfVG9
-         hykQ==
-X-Gm-Message-State: ACgBeo3LGX0Z4Q8f8adaLamVnXdlL64Bxr0CkG+L6imTe0hzaHGSG4Bb
-        NONyq97sCL9qKG56ap1h8vkPNmDHZ1pK3gpaDrZYDNRQ/UjbZg==
-X-Google-Smtp-Source: AA6agR5brBqTkNPDWN7S0nIvG8nuP3AQDrXvf1qOvHvVKNsDqAT4f4QZhIyMKddJA9PbFCmQu1tqcRuKW72uWCPL+xs=
-X-Received: by 2002:a17:902:cec4:b0:176:be0f:5c79 with SMTP id
- d4-20020a170902cec400b00176be0f5c79mr15605869plg.40.1662753277621; Fri, 09
- Sep 2022 12:54:37 -0700 (PDT)
+        Fri, 9 Sep 2022 15:55:02 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061a.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::61a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E6745981;
+        Fri,  9 Sep 2022 12:54:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EyTLQyDOAjSVT+MxlOFXtRfW8EF8dcbSizejAEXF4htiRTr3KuOwXoyLN5t3VCt+fBUgmpScn/1PuZmdSbBN6GtKD66VXaMFcBEPIwTGYukpGB/hf0MSfIYl7tMGUM38HU0WTyTMSQVkEQ9TGQ0KpykrODGYxhgjSglPlypWtndmPcOv6DP5bPG60a9Wopzp9IsdBF7pjY5t0zgpI2GW40Ol5jQmkHqiK/154KDOLUYaYbbSPd1OHVf9KpujC6SqZHE2Sr8UbZwMfHSrGQI4wngWnWzl3OwkMtBoZP18hpIdeLio00CcKLvE38SdEBMKSV2PomS4VL5yqQsRZPk2rQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YnSsIv8C6DvIxJfzUP//+hnjnMdWa6NfPQ1tD9Xw0I0=;
+ b=isjpjbAKJxsdNQcEIfJEMtf6TF+YC3OqW3EI7/7KTYeXWiUzic2XVfLqAoy0H4WfYnytOxTgOQBysrvdwPw/KKU0w5xZrByUKUovodhiiNXH99dvjqlXTRh9TcYYabh1c0wNZCS+d66kybWA22wQfs5hvkWD4qDvurZszE8Xu+S5gq72rjHs5W4+hlEHUzvikyY44v09QcRR+MKbUop0jjwgd8kWmCeDAxotWyz1mKPMhmE0cB8unCjVF9AzMBL2KpBUGM18lcAUhmtrdF654benHA729qjwiTtXktUeVvQ953Z+C2TUb2y/3+/NBhwtig9QzY/z8Q7TkyJdutlRvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YnSsIv8C6DvIxJfzUP//+hnjnMdWa6NfPQ1tD9Xw0I0=;
+ b=0Yo6Y7nPDtsvzx5NoJbjF/qv/4qZwTOPqKfZwG3x4N7rIeCA1EyaWg8OMFIPm+pCHssk075SFZsIVZxxUPRGHqqKNyjeaQ4lr3JiXFtRsagQwrIQd/rWVwE2mIY4UiTXItyWVCL8RbqMMuHu7AEOPEQB5YYqgtOOPnsb5SkOhgQ=
+Received: from MW4PR03CA0199.namprd03.prod.outlook.com (2603:10b6:303:b8::24)
+ by BL3PR12MB6377.namprd12.prod.outlook.com (2603:10b6:208:3b0::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Fri, 9 Sep
+ 2022 19:54:54 +0000
+Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b8:cafe::a1) by MW4PR03CA0199.outlook.office365.com
+ (2603:10b6:303:b8::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.18 via Frontend
+ Transport; Fri, 9 Sep 2022 19:54:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.13 via Frontend Transport; Fri, 9 Sep 2022 19:54:54 +0000
+Received: from ruby-95f9host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 9 Sep
+ 2022 14:54:52 -0500
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC:     <pbonzini@redhat.com>, <jon.grimm@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH] KVM: x86: Un-inhibit APICv/AVIC when switching to x2APIC mode
+Date:   Fri, 9 Sep 2022 14:54:42 -0500
+Message-ID: <20220909195442.7660-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Satay Epic <satayepic@gmail.com>
-Date:   Fri, 9 Sep 2022 14:54:25 -0500
-Message-ID: <CADohWC--Wb31Mvw0U4q23VNLVK12pyLHx6GrRYGO6mP+nJEo7g@mail.gmail.com>
-Subject: Report guest steal time in host
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT045:EE_|BL3PR12MB6377:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc8c217d-83ec-4c7b-cd1a-08da929d2a60
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /AOz/IYAfs/qs8qp6Fr9d4w8Aa/w1IMt0H+M3HCmz2QpCB4r+ILrTjnEz0R8OnJ0rmSpRoJOuB1MHwDyT/onQLeDI3C9evmXhAcZrfw03AzzKSOXXOrIXZ+ffB1f5OBGD1fwzoFlPU6rbKdPbxDO8Bs9zk5x7gqTZ3Si5ipS+UPXIGUJmBwnNZh9lncE6Uospb1j/QUoLJPbFqklkDV7hRNEQqYe17LGrL9nC9y2zSGVgRSyl7TMXmJVEiMAYxdL7Vjm5E+CoyKlYC5hF2ki/y2WmHRbqAEOBxCl1Y+76HTZpkELmQSqztsXUsR7r6HoKePaleX/fSR/Bv0EUBb+pI8ARka1WX5L73pi2woox85heJD58eofHGa10u5doR2zfrgSJVGs2EjKW+dL5cmkYJYyQSUu7av5/r5ErXczMFZixd4BH+PDF5wtf1Qmc1Zv7q9cJHcKa0aOa/XAM25oKetveYzOTEpDa0LFfXXLIl6fzkJQbt+1PbFDkFwzPq1MkL19r3CRllRK29xhRPs8uyticTJB9y2Rasyunnrap4u1jVe0a8A945a112fNVtXug1Qgq/+Ihsxi+PjpBqIPfcpi4XiA31o6dKJcIMrK4++CjPVwq4lS1OdKqnT0vUo0zJULKZ36BelHN2lRO1mQ9iEImfLxcWfgrGgVGyFq9NnlLwbnSjVrtKpt5TsKzYona7AQY3cvh8T/kKj4VA+3Fk37HegBEE3vNSje+w7qc0tV9y9feqkarA1ftWyEGmrIc9Talyiq9BzTchmUuJzfiWj3BuyBNI9sNvETxB50jbMzcqydmEireMYqGCz57w/N
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(39860400002)(346002)(36840700001)(46966006)(40470700004)(70586007)(8936002)(36860700001)(5660300002)(44832011)(2906002)(83380400001)(70206006)(40460700003)(36756003)(478600001)(40480700001)(8676002)(82740400003)(4326008)(47076005)(316002)(110136005)(54906003)(6666004)(82310400005)(426003)(16526019)(26005)(41300700001)(2616005)(1076003)(86362001)(356005)(336012)(186003)(7696005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 19:54:54.2823
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc8c217d-83ec-4c7b-cd1a-08da929d2a60
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6377
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Currently, kvm_lapic_xapic_id_updated() checks if the xAPIC ID in
+the APIC_ID register differs from the vcpu ID. If so it inhibits
+APICv/AVIC.
 
-I came across these patches which help with the subject here -
-https://www.spinics.net/lists/kvm/msg116517.html
-However, I don't see the CPU steal info on a KVM hypervisor running
-RHEL 8 or CentOS7 (x86_64).So this patch never made to the upstream or
-was added to these distributions for some reason I guess.
+However, for vcpu 256 and above, the 8-bit xAPIC ID field in the APIC_ID
+register cannot support 32-bit x2APIC ID causing the kvm_xapic_id()
+to return invalid ID and fail the comparison with the vcpu ID.
+This causes APICv/AVIC inhibition for VM with more than 256 vcpus
+due to APIVC_INHIBIT_REASON_APIC_ID_MODIFIED.
 
-I would like to get the guest CPU steal info from the hypervisor
-instead of from the guest.
+In this case, when guest switch to x2APIC mode, KVM needs to clear
+APIVC_INHIBIT_REASON_APIC_ID_MODIFIED.
 
-Does anyone know or have any idea about this ?
+Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+---
+ arch/x86/kvm/lapic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 9dda989a1cf0..750d385b770e 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -374,6 +374,7 @@ static inline void kvm_apic_set_x2apic_id(struct kvm_lapic *apic, u32 id)
+ 	kvm_lapic_set_reg(apic, APIC_ID, id);
+ 	kvm_lapic_set_reg(apic, APIC_LDR, ldr);
+ 	atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
++	kvm_clear_apicv_inhibit(apic->vcpu->kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+ }
+ 
+ static inline int apic_lvt_enabled(struct kvm_lapic *apic, int lvt_type)
+-- 
+2.34.1
+
