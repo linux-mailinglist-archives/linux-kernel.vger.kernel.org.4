@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C931F5B4266
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD915B4204
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiIIWQN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Sep 2022 18:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S230165AbiIIWBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 18:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIIWQK (ORCPT
+        with ESMTP id S232117AbiIIWBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:16:10 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B8D6BA6;
-        Fri,  9 Sep 2022 15:16:06 -0700 (PDT)
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 43AD740CC1;
-        Fri,  9 Sep 2022 22:16:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id F18B220028;
-        Fri,  9 Sep 2022 22:16:01 +0000 (UTC)
-Message-ID: <9f9a0740aef282d30af8fa02ca7c6479e80aa9a0.camel@perches.com>
-Subject: Re: [PATCH v4] checkpatch: warn for non-standard fixes tag style
-From:   Joe Perches <joe@perches.com>
-To:     "niklas.soderlund@corigine.com" <niklas.soderlund@corigine.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
-        "apw@canonical.com" <apw@canonical.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "louis.peens@corigine.com" <louis.peens@corigine.com>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>,
-        "oss-drivers@corigine.com" <oss-drivers@corigine.com>
-In-Reply-To: <Yxrt1aa60xY0H7j0@oden.dyn.berto.se>
-References: <20220908164434.122106-1-niklas.soderlund@corigine.com>
-         <3275d886491dc934e3277cde9cc766b0ce0886ea.camel@toradex.com>
-         <Yxrt1aa60xY0H7j0@oden.dyn.berto.se>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-Date:   Fri, 09 Sep 2022 10:57:10 -0700
+        Fri, 9 Sep 2022 18:01:42 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB539F1AD;
+        Fri,  9 Sep 2022 15:01:32 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z97so4495985ede.8;
+        Fri, 09 Sep 2022 15:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=NmRnkF/b4urbMwNGs+O/IXW2teRNRXDeqTuXV1ih1+E=;
+        b=T913G/OwVTc6zJHTucTLdGC3/1L6OaWQQgTlxwoLmdOWRj+HhCfMwgTVNdXXMjeQ99
+         3bbHk2ooY+VF8lYwPmn/40Nnpz66YekmDkprhbv9+s81ol8lziIHWgVCUPMuRw32KVDF
+         EdNcdgFMuOLVne5hmxU10uHbTtDjnxZ1mQ270druo+8KBMZRGvQ8T3f9Yz+EU/deG8uP
+         ZJ1j+UZg2VsDMDP1DreWF0aCxBSefgK9lpeYIgJePdnv03fufzR5bHG8kMW0hM+W6OBh
+         6+hu+kI1jlITROO5mwRYXtWc38GxgtXNmK7jggQbBThXkOK9mqtEgB6pEzByudNtTuzc
+         eBeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=NmRnkF/b4urbMwNGs+O/IXW2teRNRXDeqTuXV1ih1+E=;
+        b=H8SHh35+XBCW0cdhgMmwSUxEvGGaDjJ90ZiohbtwmCWbP+Ph3xnwQqSPMA2OD11SMv
+         NvbHklbfl5FFe94xirGEJtU83FqY4EwExcLKBPMwwo2gv9JdWzzFRSvYea0L5yiKye+z
+         ORS0FiAMh8hIfqFElJudA6XdITsovdAdrKJpCuZB4uRS54aNT5CQw5M1N/d5kZyaojvd
+         LID0j1WqwoiJwHSfeVJ/CsFaiOT8H3tRkIc5wAsvV+uilDpejpgIzBaJpwsD/YW4p/4y
+         kRbYMk8z26CHTvfdx8e6qMlFQ4YiQSwMSEawhCbCv7cRvaCmhnpfo4Qw0gW1q2ceqlJ0
+         758Q==
+X-Gm-Message-State: ACgBeo0mXtDu7ll1ekZgbxf0f2S7xMXFKoXpiZ4Ieoqd/Pbjub9ER24+
+        ZQshrs5q6Kl+udEbIKNZ9PQ=
+X-Google-Smtp-Source: AA6agR74AD/MIEsTUlaY2NmRHF+g7QaChAq+nYds+c0GE5UUrhGZiF/SHGbNr3Ib4ayILOCg5oaFxQ==
+X-Received: by 2002:a05:6402:5409:b0:44f:1e05:1e8 with SMTP id ev9-20020a056402540900b0044f1e0501e8mr11804087edb.373.1662760890827;
+        Fri, 09 Sep 2022 15:01:30 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0073d83f80b05sm804688eja.94.2022.09.09.15.01.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 15:01:30 -0700 (PDT)
+Message-ID: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
+Date:   Sat, 10 Sep 2022 00:01:28 +0200
 MIME-Version: 1.0
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: F18B220028
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: m91rttnmjcyc9hp6u7nq9q8fgs9shggn
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX181w+JFSHc52oJAFzxomZOE5ihG4vTbwGs=
-X-HE-Tag: 1662761761-371326
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 01/11] dt-bindings: serial: rockchip: add
+ rockchip,rk3128-uart
+To:     kever.yang@rock-chips.com
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20220909212543.17428-1-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-09 at 09:40 +0200, niklas.soderlund@corigine.com wrote:
-> On 2022-09-08 17:49:14 +0000, Philippe Schenker wrote:
-> > Thanks for adding me to cc. I will also add Stephen, as he also sent
-> > some comments on my submission the exact same problem. I'm supportive of
-> > your code as it has the nice advantage of suggesting the right format of
-> > the tag if it might be wrong. However it seems lot of stuff is slightly
-> > duplicated and lots of lines could be left away simplifying it greatly.
+Add rockchip,rk3128-uart compatible string.
 
-It's not very possible to reduce the line count here.
-I mentioned the same thing in my first reply.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > > +# Check Fixes: styles is correct
-> > > +               if (!$in_header_lines && $line =~ /^fixes:?/i) {
-> > 
-> > I would check all lines that start with fixes, even if there is
-> > whitespace in front (and then failing later on...)
-> > 
-> > if (!$in_header_lines && $line =~ /^\s*fixes:?/i) {
-
-I think that's a poor idea.
-
-You should really review git history for lines that start with fixes
-and look at the number of false positives that would give.
-
-Try this grep:
-
-$ git log -100000 --no-merges --grep="^\s*fixes" -i --format=email -P | \
-  grep -P -i "^\s*fixes)" | \
-  grep -P -v "^Fixes: [0-9a-f]{12,}'
-[...]
-
-That is a greater than 10% false positive rate.
-
-I think it's better to make sure that there is a likely SHA1 of some
-minimum length after the fixes line.
-
-And a relatively common defect is to have the word "commit" after fixes.
-
-e.g.:
-
-Fixes commit 554c0a3abf216 ("staging: Add rtl8723bs sdio wifi driver").
-Fixes commit a2c60d42d97c ("Add files for new driver - part 16").
-
-So maybe:
-
-	if (!$in_header_lines &&
-	    $line =~ /^\s*fixes:?\s*(?:commit\s*)?[0-9a-f]{5,}\b/i)
-
-
+diff --git a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+index dc74643ae..b9c2287c5 100644
+--- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+@@ -26,6 +26,7 @@ properties:
+               - rockchip,rk1808-uart
+               - rockchip,rk3036-uart
+               - rockchip,rk3066-uart
++              - rockchip,rk3128-uart
+               - rockchip,rk3188-uart
+               - rockchip,rk3288-uart
+               - rockchip,rk3308-uart
+-- 
+2.20.1
 
