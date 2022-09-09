@@ -2,141 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E545B3CBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D7F5B3CC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 18:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiIIQMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 12:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S231348AbiIIQNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 12:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiIIQMa (ORCPT
+        with ESMTP id S229825AbiIIQNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:12:30 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866DA10B00E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 09:12:29 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id c9so3382225ybf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 09:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=4hh2G7MdxNZ+MNcmp102ZgutWolekJca53oozXb1sk4=;
-        b=Qz+PTfYUZ79Xk4WnkdDqNZ4LLUCR8EFVYsF/0fY0lUuEsl2IZGJVTFFrd89L26Oz5t
-         tviGlyIdWFrik28BaRuFfzuXznzHhsJl5HOMC66jw2DryGYXp1mIyshHHWoUXqpWPJN+
-         /6x0NDeafG1PPSym6XJ8bPSiGtE2517SAMZZ9AnTxspCwwhQcdA6k843LDIw/8yFsNcZ
-         a5Rnaiqj1Zbr1RtrNT1Mk2NmNRgK+ybLbCflE2Htc/OZZ1CtP2ZKVyOagC0vKUQgde1Z
-         SYvIrJRQRBevTglXhJiI4YfodtdB1WWv2cIrSQpWLFxSnK/0hooiuIgLalhL8RZnZ6T5
-         kXxw==
+        Fri, 9 Sep 2022 12:13:49 -0400
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB7B113C79;
+        Fri,  9 Sep 2022 09:13:48 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id fs14so1956369pjb.5;
+        Fri, 09 Sep 2022 09:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=4hh2G7MdxNZ+MNcmp102ZgutWolekJca53oozXb1sk4=;
-        b=DFb1BSTjIyNungzQZ49dMfeiHqLYmdZF4AKjC1XlpnHYGjjftqSAL2Dhh9W1JJtyer
-         U3EdiCmRnvyq14ezI0gMTINLZxUbovdYJ6+7carT+nStNJGPNXskz1apNReOzNJ2prFk
-         kjOkm1JUerKkuzBSrmQ0+r8pkE3FiMR11yVRI/ahhoUC6lN85mnPV41k7GIsj0FIwfdJ
-         EJcPwGgQammf2KLPqKQwRs4eHVelcg2r50j395bY4aD6HKcltOtWR5rSCJe6u6lLsufi
-         J8vTUh2eUViXbVEpqgYR3Ve/IjqglxnH6YACXqM3fTB/+LB8UonWkOLTzeiVPnMUR4t8
-         3DHQ==
-X-Gm-Message-State: ACgBeo3u7R9RpVCcG6taj4X23ICjZ0k0U4QZIN1GTWlpJMp2hi2h4pLc
-        bFChfgK0nwC3/utGGpgsvPQMWiC4PrUnMttTmjVabw==
-X-Google-Smtp-Source: AA6agR6D9Q1KW4KNYp0SHpJ/6Fcy2IRN04G63Erd6aJSK5K6Qex+RENoU//CqGiMsVMEqkzoAOqqrGTYWrT4sPeb+8g=
-X-Received: by 2002:a25:cc8d:0:b0:6a8:40cb:d730 with SMTP id
- l135-20020a25cc8d000000b006a840cbd730mr12492178ybf.119.1662739948562; Fri, 09
- Sep 2022 09:12:28 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MadgPW3bIWnxdQfPPdsGGoJAqevbbigFAqjHQW6xs94=;
+        b=wqbj3f595hULA10GcnqdI+/wbiOL01RQ7aXYAO7QeWtqf8Lvx5MKWBtUDLYeCY7Ulm
+         peJfFyCT/RbdDRPPa9S4wdOaI6eQ52bYIH5zdMsuhPLJy0WG8mbCTLHv67yFgTS5zhNA
+         dzA2ZKp7s9ub0qzWRb+Ai3STevtf6T/IN/pGlAKvHh6DnKVq5KkbyGccJ357qZEUL8k7
+         cZroO5PEkD8s1QKzcw6pthSOR61Ck2anU4g/cWvCoajN/9fUsD0sTqtpDoq70pJZgHK1
+         LzdcYZ/A6kjxLn8T4RKcrKi9OePXbefOY8j6kfiFX+EE90vCDWgjorI1DSX4oipDSp3H
+         Fqgg==
+X-Gm-Message-State: ACgBeo2sXyOdoleNx26JUCG88mJ38rCkVhBTvNFoXlLDKjpv5VVeYqh8
+        dM1Zp8cX2qgr8WoZCW3ksLAgsuo5dR0=
+X-Google-Smtp-Source: AA6agR4f0EXjtVe/wdPN2qgBLJybBWStezFCoV4aQts6Slx94J0FjuqxmV5yjOLvv3PoAUAs5X6bVg==
+X-Received: by 2002:a17:90b:1e0c:b0:1f5:4e52:4866 with SMTP id pg12-20020a17090b1e0c00b001f54e524866mr10650864pjb.230.1662740027435;
+        Fri, 09 Sep 2022 09:13:47 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id g14-20020aa79dce000000b00540ad46bc1dsm699614pfq.157.2022.09.09.09.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 09:13:46 -0700 (PDT)
+Message-ID: <253db188-04d2-6bea-4d4f-33371bfae929@acm.org>
+Date:   Fri, 9 Sep 2022 09:13:44 -0700
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-18-surenb@google.com>
- <70a7d9cd-e64b-db49-e418-b4de7fcf8692@linux.ibm.com>
-In-Reply-To: <70a7d9cd-e64b-db49-e418-b4de7fcf8692@linux.ibm.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 9 Sep 2022 09:12:17 -0700
-Message-ID: <CAJuCfpGAt3K51JfaEZxUtJc_h5c5Nj6XYQvdF4x+SbC6teFS0g@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 17/28] mm/mmap: prevent pagefault handler from
- racing with mmu_notifier registration
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        kernel-team@android.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] infiniband: ulp: srpt: Use flex array destination for
+ memcpy()
+To:     Hangyu Hua <hbh25y@gmail.com>, jgg@ziepe.ca, leon@kernel.org,
+        gustavoars@kernel.org
+Cc:     linux-rdma@vger.kernel.org, target-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909022943.8896-1-hbh25y@gmail.com>
+Content-Language: en-US
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220909022943.8896-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 7:20 AM Laurent Dufour <ldufour@linux.ibm.com> wrote=
-:
->
-> Le 01/09/2022 =C3=A0 19:35, Suren Baghdasaryan a =C3=A9crit :
-> > Pagefault handlers might need to fire MMU notifications while a new
-> > notifier is being registered. Modify mm_take_all_locks to mark all VMAs
-> > as locked and prevent this race with fault handlers that would hold VMA
-> > locks.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  mm/mmap.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index b31cc97c2803..1edfcd384f5e 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -3538,6 +3538,7 @@ static void vm_lock_mapping(struct mm_struct *mm,=
- struct address_space *mapping)
-> >   *     hugetlb mapping);
-> >   *   - all i_mmap_rwsem locks;
-> >   *   - all anon_vma->rwseml
-> > + *   - all vmas marked locked
->
-> IIRC, the anon_vma may be locked during the page fault handling, and this
-> happens after the VMA is read lock. I think the same applies to
-> i_mmap_rwsem lock.
->
-> Thus, the VMA should be marked locked first.
+On 9/8/22 19:29, Hangyu Hua wrote:
+> In preparation for FORTIFY_SOURCE performing run-time destination buffer
+> bounds checking for memcpy(), specify the destination output buffer
+> explicitly, instead of asking memcpy() to write past the end of what looked
+> like a fixed-size object.
 
-I see. I'll double check and move the locking order. Thanks!
-
->
-> >   *
-> >   * We can take all locks within these types randomly because the VM co=
-de
-> >   * doesn't nest them and we protected from parallel mm_take_all_locks(=
-) by
-> > @@ -3579,6 +3580,7 @@ int mm_take_all_locks(struct mm_struct *mm)
-> >               if (vma->anon_vma)
-> >                       list_for_each_entry(avc, &vma->anon_vma_chain, sa=
-me_vma)
-> >                               vm_lock_anon_vma(mm, avc->anon_vma);
-> > +             vma_mark_locked(vma);
-> >       }
-> >
-> >       return 0;
-> > @@ -3636,6 +3638,7 @@ void mm_drop_all_locks(struct mm_struct *mm)
-> >       mmap_assert_write_locked(mm);
-> >       BUG_ON(!mutex_is_locked(&mm_all_locks_mutex));
-> >
-> > +     vma_mark_unlocked_all(mm);
-> >       for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
-> >               if (vma->anon_vma)
-> >                       list_for_each_entry(avc, &vma->anon_vma_chain, sa=
-me_vma)
->
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
