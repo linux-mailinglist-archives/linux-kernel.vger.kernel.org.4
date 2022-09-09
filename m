@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6315B3654
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46485B3653
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 13:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIIL16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 07:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S230226AbiIIL1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 07:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiIIL1z (ORCPT
+        with ESMTP id S229601AbiIIL1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 07:27:55 -0400
-X-Greylist: delayed 100478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 04:27:53 PDT
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C6112F20E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1662722871;
-        bh=2y+E7kwgOLvUCg8rZ1hu5N2W5Q7xogjD9EgNDXRSFgQ=;
-        h=From:To:Cc:Subject:Date;
-        b=maowJbkYaU/OLMUDwdsaJqko1eyHym2/qi3R+vQf/yTgdyrxivoHcB1+m6dfO2tKR
-         P5k82tMrGFnpbZV7iHVDNT+xm2LLB7Djd5KoE6Dr88FpinRW78yP4cHnrzneHi/PKt
-         DrH4AvESg1Imt1g0PTj+GwJ8UGL/zbpkQ8iJDTSc=
-Received: from localhost.localdomain ([59.172.176.188])
-        by newxmesmtplogicsvrsza31.qq.com (NewEsmtp) with SMTP
-        id 6F02267D; Fri, 09 Sep 2022 19:27:48 +0800
-X-QQ-mid: xmsmtpt1662722868t7cygl1kz
-Message-ID: <tencent_2B7931B79BA38E22205C5A09EFDF11E48805@qq.com>
-X-QQ-XMAILINFO: OZZSS56D9fAjyTeMrtXPTfR8bd40mbNu/dfdSaPxtBQ7PuE3t15CErBk3S5klq
-         WwXGkl6UnqT2pia9oUpAt8Ivo0P64Pdr3YyYkUQH4MZO/VN2XKSStOz6PiChI7eBu1ozqF3oGpw1
-         +y19JPK2s4FPKg67gCwxSTP3LOrjzKXu+k1hdzN7Su7cAxv5NnMkJQaltlFdmeQoV3f9hmFwxApm
-         IOg5b6TRs55JlY/G6fWgtNNPFKol669lSQtSYOP0YrZmePE+JVbuQRV31Sn8W1FwdvzoCw5bzgi/
-         7RhaV2KxyrpROBJwvL+lfxgOXyO/TTt1/pQHd7LXOvuoMAEAHcFISXBKGy13mCgE1hopzQ2WhKav
-         AIZiROfvzGAnn3rqtjR25/7aLc0E4/SZu+shoTllgo4IdIGaizKPwjamSHGK/PeQTlnl0v3GW18x
-         BSpdeTxfmvEmVgPXOoqsBlFivaWeZlL9BHyRDHS8mpYrnaJE+FxUpaQ009j8/HTQNet2u7JUuKdp
-         WkziXmmjGB0QcnSC8rQZAaJpSu6oBzM2HGI+c8xfnvrs3BSvUIP9uskBe0LdAknA8AqxygLGYtAx
-         ad7jns4IddTI16KK0HhpnTFAChaqNdZU86ChJFXGm/9hDSKvrv/UdhklScBGuf3tb75Pi9KWbfEg
-         vImUkFrcUw5g54sKgi3Cq0eYlODgpvj3Guv4RcGl7y+byMqorgosTndsZzV+m5U2AEtWLQ72Iraz
-         0FE2+8CUYOrKhxqG2xi1W5zXfr2WmKAAHUi9KPcJ69q/dgRGBTIPI0gSC5aaPj/fsMyhJBYhjIfM
-         tFgi2vgiGQmlpmJ8pZjDPnrp9w3FNRF0ZVln3KW2yGuqudmvr5v/Zc4MQ/g4IrGSK/FE9Ks70dA5
-         mTnDKROXM6QbZFmxKIpY50iSZFuK2o+3Bz2nTjM9NU2HyWGatW7qJfShi1f66RKSTHEn0XHOrVp+
-         UtO0/aG8QwkqZs15QfwSeb0qiBX4feOFbQx6rTEkMnzROwIIVPxRg6A18dVRfjbsLj7pOqVrtcF9
-         2GV3c0lA==
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v4] staging: rtl8723bs: fix a potential memory leak in rtw_init_cmd_priv()
-Date:   Fri,  9 Sep 2022 19:27:21 +0800
-X-OQ-MSGID: <20220909112721.3571-1-xkernel.wang@foxmail.com>
+        Fri, 9 Sep 2022 07:27:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2344CE903F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 04:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662722850;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wfYy6ZeUFGo0evauzx0o3lnmHqWq7O1ZHI0jQhIckQ=;
+        b=fD2ZVx5vrb7o7MbOWm7FAYxniulNWlx7tLQV1AXvcNFLkaTdIM6TwMw7BPIzC3i7Rqmt9j
+        sv7NZCYNs5mfqFzd2Kq/VUeXYHP3xlikRbtECnrPXz3XcFjPPAv6tMA64Lgqs+g7C7pqGF
+        pen1u5x7RPnjheuCCrhDVXfhjgEAmyM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-538-MYc_tg8lNFWmx8XRel8ewQ-1; Fri, 09 Sep 2022 07:27:29 -0400
+X-MC-Unique: MYc_tg8lNFWmx8XRel8ewQ-1
+Received: by mail-wm1-f71.google.com with SMTP id i66-20020a1c3b45000000b003b339a8556eso715951wma.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 04:27:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=+wfYy6ZeUFGo0evauzx0o3lnmHqWq7O1ZHI0jQhIckQ=;
+        b=T6few50ho2hzPenjXkbHIkbvgv1eyzGAfhNAOtRSHHwqFvlTjW2M6JxJ2bKySoFksx
+         6spM3+ofn7K6v3OYfwUIBRGfFkOSqSIcibwPcA6uX2ygajrFU20lJdYF88LYQ4Un+RVO
+         H8IUGwX+I3nADVrdiHJos1vqWTIon/qAgf8yUt7a7synTe58vKRucDXht8MdtFIfNzfj
+         YXMoyVJo3x4iNlvWXcU9DdUJVOjh3xCBs9TJ7TITnUnMUAIJ+8trTgTlkiLiSwctK6RM
+         ef+3TFumEl3DfJm/p1AtbkI+sclYCGDQ5bAI38ZKyAzw17jzNhGCDsETVpsGZHzxVaWP
+         Ek2A==
+X-Gm-Message-State: ACgBeo3jET/yBPloxiGtxtQ9Ti6WctJkTZ7SogaX58ZC7kNNdzvHv2dl
+        oSrUmbF6QSGDJQFeDNb5bOT6lPV2VcN8gVl9NLG9SPvEanCHk6k1hlaK9guGW1cFmyHOwqURQLJ
+        z3fPyi5UxsrrN3Nv477y7VqZM
+X-Received: by 2002:a5d:4e0a:0:b0:228:a2d7:f474 with SMTP id p10-20020a5d4e0a000000b00228a2d7f474mr7680974wrt.286.1662722848119;
+        Fri, 09 Sep 2022 04:27:28 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4gaaUiKkxNMVR9UES/pb1gukqOYoJZGBneYbkpS1MRHWiLR5yBTYRJnq/SoGI6M6S4T8cElw==
+X-Received: by 2002:a5d:4e0a:0:b0:228:a2d7:f474 with SMTP id p10-20020a5d4e0a000000b00228a2d7f474mr7680961wrt.286.1662722847884;
+        Fri, 09 Sep 2022 04:27:27 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
+        by smtp.gmail.com with ESMTPSA id k36-20020a05600c1ca400b003a5260b8392sm526951wms.23.2022.09.09.04.27.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 04:27:27 -0700 (PDT)
+Message-ID: <d40e79f8-6295-78ec-1077-7abd52cec3d1@redhat.com>
+Date:   Fri, 9 Sep 2022 13:27:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 04/16] mm/page_alloc: remove obsolete comment in
+ zone_statistics()
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     osalvador@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-5-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220909092451.24883-5-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On 09.09.22 11:24, Miaohe Lin wrote:
+> Since commit 43c95bcc51e4 ("mm/page_alloc: reduce duration that IRQs
+> are disabled for VM counters"), zone_statistics() is not called with
+> interrupts disabled. Update the corresponding comment.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   mm/page_alloc.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 2deac2fe3372..c81f06d8a4f5 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3671,8 +3671,6 @@ void __putback_isolated_page(struct page *page, unsigned int order, int mt)
+>   
+>   /*
+>    * Update NUMA hit/miss statistics
+> - *
+> - * Must be called with interrupts disabled.
+>    */
+>   static inline void zone_statistics(struct zone *preferred_zone, struct zone *z,
+>   				   long nr_account)
 
-In rtw_init_cmd_priv(), if `pcmdpriv->rsp_allocated_buf` is allocated
-in failure, then `pcmdpriv->cmd_allocated_buf` will be not properly
-released. Besides, considering there are only two error paths and the
-first one can directly return, so we do not need implicitly jump to the
-`exit` tag to execute the error handler.
 
-So this patch added `kfree(pcmdpriv->cmd_allocated_buf);` on the error
-path to release the resource and simplified the return logic of
-rtw_init_cmd_priv(). As there is no proper device to test with, no runtime
-testing was performed.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-ChangeLog:
-v1->v2 update the description.
-v2->v3 update the description.
-v3->v4 remove trailing whitespace and restore unnecessary changes.
- drivers/staging/rtl8723bs/core/rtw_cmd.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-index e909dcc..bd51233 100644
---- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-@@ -161,8 +161,6 @@ static struct cmd_hdl wlancmds[] = {
- 
- int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
- {
--	int res = 0;
--
- 	init_completion(&pcmdpriv->cmd_queue_comp);
- 	init_completion(&pcmdpriv->terminate_cmdthread_comp);
- 
-@@ -175,18 +173,16 @@ int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
- 
- 	pcmdpriv->cmd_allocated_buf = rtw_zmalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
- 
--	if (!pcmdpriv->cmd_allocated_buf) {
--		res = -ENOMEM;
--		goto exit;
--	}
-+	if (!pcmdpriv->cmd_allocated_buf)
-+		return -ENOMEM;
- 
- 	pcmdpriv->cmd_buf = pcmdpriv->cmd_allocated_buf  +  CMDBUFF_ALIGN_SZ - ((SIZE_PTR)(pcmdpriv->cmd_allocated_buf) & (CMDBUFF_ALIGN_SZ-1));
- 
- 	pcmdpriv->rsp_allocated_buf = rtw_zmalloc(MAX_RSPSZ + 4);
- 
- 	if (!pcmdpriv->rsp_allocated_buf) {
--		res = -ENOMEM;
--		goto exit;
-+		kfree(pcmdpriv->cmd_allocated_buf);
-+		return -ENOMEM;
- 	}
- 
- 	pcmdpriv->rsp_buf = pcmdpriv->rsp_allocated_buf  +  4 - ((SIZE_PTR)(pcmdpriv->rsp_allocated_buf) & 3);
-@@ -196,8 +192,8 @@ int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
- 	pcmdpriv->rsp_cnt = 0;
- 
- 	mutex_init(&pcmdpriv->sctx_mutex);
--exit:
--	return res;
-+
-+	return 0;
- }
- 
- static void c2h_wk_callback(struct work_struct *work);
 -- 
+Thanks,
+
+David / dhildenb
+
