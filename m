@@ -2,205 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CE95B3777
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8535B3776
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiIIMNS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Sep 2022 08:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S229566AbiIIMOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiIIMMv (ORCPT
+        with ESMTP id S230505AbiIIMOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:12:51 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA843A160
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:10:54 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oWcqS-0005AW-Cz; Fri, 09 Sep 2022 14:10:52 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        mchitale@ventanamicro.com
-Subject: Re: [PATCH v2 2/4] riscv: Introduce support for defining instructions
-Date:   Fri, 09 Sep 2022 14:10:51 +0200
-Message-ID: <2513607.d7IHhHJzqS@diego>
-In-Reply-To: <CAK9=C2VM8NB1+gf9w+QQ6pzoC0O68WFRZkt8xCphGVtPUWS4NQ@mail.gmail.com>
-References: <20220831172500.752195-1-ajones@ventanamicro.com> <3006889.o7ts2hSHzF@diego> <CAK9=C2VM8NB1+gf9w+QQ6pzoC0O68WFRZkt8xCphGVtPUWS4NQ@mail.gmail.com>
+        Fri, 9 Sep 2022 08:14:22 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEA213FA7F;
+        Fri,  9 Sep 2022 05:12:11 -0700 (PDT)
+Received: from letrec.thunk.org (guestnat-104-133-160-102.corp.google.com [104.133.160.102] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 289CB71n002170
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Sep 2022 08:11:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1662725472; bh=rkVib4zKXNES9ZZ4tMSEKXn2YQ6HSV5vUTDr92XDkhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=GUfSWT2qQ/AJie7hxQCJZt8BAL8wLB2wXXt3lpNzwVcJDfxeA3n4X9UaHMr+LKaji
+         zb8pN4awcYOraVhbePEtz4sCuIcEMxDO2V92UeCIRI87pI75/6Euq2NTZWvCPaRsmz
+         DlR2DlvtPX7EziCMExCNHJHLF80Kja7xArncG3AABgQbBA7F8u2okXCFadky2FAyPZ
+         ZEVZ5zWSVzlIFf8gSeITjbPkBF1rXnXYwy3TAT0rzEQUsrD4xD5MFcwTetP4Z+bsqn
+         5hn1WHr+o8drixmoUTatgnnzVOC8xFKnKtCU1Rq9PX4TQiWPhk9jx/EanCDjjweVSe
+         56cLzlKnr1a1Q==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id CD6C38C2B49; Fri,  9 Sep 2022 08:11:06 -0400 (EDT)
+Date:   Fri, 9 Sep 2022 08:11:06 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <YxstWiu34TfJ6muW@mit.edu>
+References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+ <20220907125211.GB17729@fieldses.org>
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+ <20220907135153.qvgibskeuz427abw@quack3>
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+ <20220908083326.3xsanzk7hy3ff4qs@quack3>
+ <YxoIjV50xXKiLdL9@mit.edu>
+ <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+ <20220908155605.GD8951@fieldses.org>
+ <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 9. September 2022, 13:23:47 CEST schrieb Anup Patel:
-> On Thu, Sep 8, 2022 at 9:20 PM Heiko Stübner <heiko@sntech.de> wrote:
-> >
-> > Am Mittwoch, 31. August 2022, 19:24:58 CEST schrieb Andrew Jones:
-> > > When compiling with toolchains that haven't yet been taught about
-> > > new instructions we need to encode them ourselves. Create a new file
-> > > where support for instruction definitions will evolve. We initiate
-> > > the file with a macro called INSN_R(), which implements the R-type
-> > > instruction encoding. INSN_R() will use the assembler's .insn
-> > > directive when available, which should give the assembler a chance
-> > > to do some validation. When .insn is not available we fall back to
-> > > manual encoding.
-> > >
-> > > Not only should using instruction encoding macros improve readability
-> > > and maintainability of code over the alternative of inserting
-> > > instructions directly (e.g. '.word 0xc0de'), but we should also gain
-> > > potential for more optimized code after compilation because the
-> > > compiler will have control over the input and output registers used.
-> > >
-> > > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> > > Reviewed-by: Anup Patel <anup@brainfault.org>
-> > > ---
-> > >  arch/riscv/Kconfig                |  3 ++
-> > >  arch/riscv/include/asm/insn-def.h | 86 +++++++++++++++++++++++++++++++
-> > >  2 files changed, 89 insertions(+)
-> > >  create mode 100644 arch/riscv/include/asm/insn-def.h
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index ed66c31e4655..f8f3b316b838 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -227,6 +227,9 @@ config RISCV_DMA_NONCOHERENT
-> > >       select ARCH_HAS_SETUP_DMA_OPS
-> > >       select DMA_DIRECT_REMAP
-> > >
-> > > +config AS_HAS_INSN
-> > > +     def_bool $(as-instr,.insn r 51$(comma) 0$(comma) 0$(comma) t0$(comma) t0$(comma) zero)
-> > > +
-> > >  source "arch/riscv/Kconfig.socs"
-> > >  source "arch/riscv/Kconfig.erratas"
-> > >
-> > > diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
-> > > new file mode 100644
-> > > index 000000000000..2dcd1d4781bf
-> > > --- /dev/null
-> > > +++ b/arch/riscv/include/asm/insn-def.h
-> > > @@ -0,0 +1,86 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > +
-> > > +#ifndef __ASM_INSN_DEF_H
-> > > +#define __ASM_INSN_DEF_H
-> > > +
-> > > +#include <asm/asm.h>
-> > > +
-> > > +#define INSN_R_FUNC7_SHIFT           25
-> > > +#define INSN_R_RS2_SHIFT             20
-> > > +#define INSN_R_RS1_SHIFT             15
-> > > +#define INSN_R_FUNC3_SHIFT           12
-> > > +#define INSN_R_RD_SHIFT                       7
-> > > +#define INSN_R_OPCODE_SHIFT           0
-> > > +
-> > > +#ifdef __ASSEMBLY__
-> > > +
-> > > +#ifdef CONFIG_AS_HAS_INSN
-> > > +
-> > > +     .macro insn_r, opcode, func3, func7, rd, rs1, rs2
-> > > +     .insn   r \opcode, \func3, \func7, \rd, \rs1, \rs2
-> > > +     .endm
-> > > +
-> > > +#else
-> > > +
-> > > +#include <asm/gpr-num.h>
-> > > +
-> > > +     .macro insn_r, opcode, func3, func7, rd, rs1, rs2
-> > > +     .4byte  ((\opcode << INSN_R_OPCODE_SHIFT) |             \
-> > > +              (\func3 << INSN_R_FUNC3_SHIFT) |               \
-> > > +              (\func7 << INSN_R_FUNC7_SHIFT) |               \
-> > > +              (.L__gpr_num_\rd << INSN_R_RD_SHIFT) |         \
-> > > +              (.L__gpr_num_\rs1 << INSN_R_RS1_SHIFT) |       \
-> > > +              (.L__gpr_num_\rs2 << INSN_R_RS2_SHIFT))
-> > > +     .endm
-> > > +
-> > > +#endif
-> > > +
-> > > +#define INSN_R(...)  insn_r __VA_ARGS__
-> > > +
-> > > +#else /* ! __ASSEMBLY__ */
-> > > +
-> > > +#ifdef CONFIG_AS_HAS_INSN
-> > > +
-> > > +#define INSN_R(opcode, func3, func7, rd, rs1, rs2)   \
-> > > +     ".insn  r " opcode ", " func3 ", " func7 ", " rd ", " rs1 ", " rs2 "\n"
-> > > +
-> > > +#else
-> > > +
-> > > +#include <linux/stringify.h>
-> > > +#include <asm/gpr-num.h>
-> > > +
-> > > +#define DEFINE_INSN_R                                                        \
-> > > +     __DEFINE_ASM_GPR_NUMS                                           \
-> > > +"    .macro insn_r, opcode, func3, func7, rd, rs1, rs2\n"            \
-> > > +"    .4byte  ((\\opcode << " __stringify(INSN_R_OPCODE_SHIFT) ") |"  \
-> > > +"             (\\func3 << " __stringify(INSN_R_FUNC3_SHIFT) ") |"    \
-> > > +"             (\\func7 << " __stringify(INSN_R_FUNC7_SHIFT) ") |"    \
-> > > +"             (.L__gpr_num_\\rd << " __stringify(INSN_R_RD_SHIFT) ") |"    \
-> > > +"             (.L__gpr_num_\\rs1 << " __stringify(INSN_R_RS1_SHIFT) ") |"  \
-> > > +"             (.L__gpr_num_\\rs2 << " __stringify(INSN_R_RS2_SHIFT) "))\n" \
-> > > +"    .endm\n"
-> > > +
-> > > +#define UNDEFINE_INSN_R                                                      \
-> > > +"    .purgem insn_r\n"
-> > > +
-> > > +#define INSN_R(opcode, func3, func7, rd, rs1, rs2)                   \
-> > > +     DEFINE_INSN_R                                                   \
-> > > +     "insn_r " opcode ", " func3 ", " func7 ", " rd ", " rs1 ", " rs2 "\n" \
-> > > +     UNDEFINE_INSN_R
-> > > +
-> > > +#endif
-> > > +
-> > > +#endif /* ! __ASSEMBLY__ */
-> > > +
-> > > +#define OPCODE(v)    __ASM_STR(v)
-> > > +#define FUNC3(v)     __ASM_STR(v)
-> > > +#define FUNC7(v)     __ASM_STR(v)
-> > > +#define RD(v)                __ASM_STR(v)
-> > > +#define RS1(v)               __ASM_STR(v)
-> > > +#define RS2(v)               __ASM_STR(v)
-> >
-> > you might want some sort of prefix here
-> >         RISCV_RS1(v) ?
-> >
-> > While trying to adapt this for the cmo stuff I ran into the issue
-> > of bpf complaining that "IMM" is already defined there.
-> >
-> > And names above are generic enough that these also
-> > might conflict with other stuff.
+On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
 > 
-> I have updated the KVM RISC-V queue to use the "RV_" prefix
-> in macro names.
+> Ted, how would we access this? Maybe we could just add a new (generic)
+> super_block field for this that ext4 (and other filesystems) could
+> populate at mount time?
 
-that is great to hear. Thanks a lot for doing that.
+Yeah, I was thinking about just adding it to struct super, with some
+value (perhaps 0 or ~0) meaning that the file system didn't support
+it.  If people were concerned about struct super bloat, we could also
+add some new function to struct super_ops that would return one or
+more values that are used rarely by most of the kernel code, and so
+doesn't need to be in the struct super data structure.  I don't have
+strong feelings one way or another.
 
-Heiko
+On another note, my personal opinion is that at least as far as ext4
+is concerned, i_version on disk's only use is for NFS's convenience,
+and so I have absolutely no problem with changing how and when
+i_version gets updated modulo concerns about impacting performance.
+That's one of the reasons why being able to update i_version only
+lazily, so that if we had, say, some workload that was doing O_DIRECT
+writes followed by fdatasync(), there wouldn't be any obligation to
+flush the inode out to disk just because we had bumped i_version
+appeals to me.
 
-> > > +#define __REG(v)     __ASM_STR(x ## v)
-> > > +#define __RD(v)              __REG(v)
-> > > +#define __RS1(v)     __REG(v)
-> > > +#define __RS2(v)     __REG(v)
-> > > +
-> > > +#endif /* __ASM_INSN_DEF_H */
-> > >
-> >
-> >
-> >
-> >
-> 
+But aside from that, I don't consider when i_version gets updated on
+disk, especially what the semantics are after a crash, and if we need
+to change things so that NFS can be more performant, I'm happy to
+accomodate.  One of the reasons why we implemented the ext4 fast
+commit feature was to improve performance for NFS workloads.
 
+I know some XFS developers have some concerns here, but I just wanted
+to make it be explicit that (a) I'm not aware of any users who are
+depending on the i_version on-disk semantics, and (b) if they are
+depending on something which as far as I'm concerned in an internal
+implementation detail, we've made no promises to them, and they can
+get to keep both pieces.  :-)  This is especially since up until now,
+there is no supported, portable userspace interface to make i_version
+available to userspace.
 
+Cheers,
 
-
+					- Ted
