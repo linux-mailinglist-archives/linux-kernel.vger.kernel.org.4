@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC365B41EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF265B41F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 00:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiIIV7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 17:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S232023AbiIIWBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 18:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiIIV7w (ORCPT
+        with ESMTP id S229751AbiIIWBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:59:52 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1562B245;
-        Fri,  9 Sep 2022 14:59:49 -0700 (PDT)
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 289LxaGs001263;
-        Sat, 10 Sep 2022 06:59:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 289LxaGs001263
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662760777;
-        bh=qJ2xNANFGAA/u/uDw9DaUYVB6Q16K2/fBd9dXrsPcNY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r4EwVh2luXtYErjnUICPEoNsg1wkLrw1g7D9ahitEB0HkdC/jYOr3+TjNI/Ck9Zmy
-         l4/VTbJ5zagGGkj7Bu9U6HyZsXsPkrPwZSa9rjU6XE6zyuJiMeVebXObkd7eSPqvRE
-         LVm1cmZceJu3R9Q3ZVj/8IAJWRqbIjrFxCOT50AsRSQ503g3MWI+OyHHoy5Ht0Dk7E
-         iAZISxeMbOq4nQc5H46znlWHTQiL046MscL9UnV9b0XNNuVVcXyd0IdzLz3CS8GDzl
-         bHpM3dTQDwSuUbK5e85Hp+xZE8urta3P6XaXYCb9jU1eIToOAuH8kdilegGPFazJNV
-         XqAIol6DApwYQ==
-X-Nifty-SrcIP: [209.85.161.41]
-Received: by mail-oo1-f41.google.com with SMTP id z23-20020a4ad1b7000000b0044931ffdcafso488592oor.4;
-        Fri, 09 Sep 2022 14:59:37 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1vHXVCm4NiNYkPpcbdtsL8NqJCrtEpUhIonOfhbjb/U3uFQOIs
-        /+lwf1D/F+/Yj6eXFxSwhENYMdXxb6178XbQtIw=
-X-Google-Smtp-Source: AA6agR72P3R97llgZiBPvMKMBd85181rfh9FbVRqi/ZZxrmTbOjBMXr/bhgI9jBCYkdfKfxC2nnzR7CajL6bHAWUM1A=
-X-Received: by 2002:a4a:9789:0:b0:451:437b:cc58 with SMTP id
- w9-20020a4a9789000000b00451437bcc58mr5606771ooi.96.1662760776232; Fri, 09 Sep
- 2022 14:59:36 -0700 (PDT)
+        Fri, 9 Sep 2022 18:01:04 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E3C144969;
+        Fri,  9 Sep 2022 15:01:03 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id lc7so7229945ejb.0;
+        Fri, 09 Sep 2022 15:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=BKCyjdc9y8jyZoNI0vZvSlCBXggxKRCrFRR6O6ctF+w=;
+        b=iOMkKAyZEmwtbu4LUS927kV1V1ohVFL8tTMhjnHGf51srGxC3EyXBFcD6yL09+ncjj
+         qID+niTIpLJob8iV0ZpTosx/Lzal4h1bYKDwO5KuaKeho+EF6hhtb9T1o8JcysOCc/uI
+         nFN01b3iKP6X8eLEWsg4jBzVF8ksHYEOmxX+ochFPe02jgedQZLnjUrssAEBbG6ADase
+         SuUohINaiD96DNsEpr05A4i9zSR6E9An+kHuRgE5TuWS7MSJc57ZgscY7ZrwVbqiEpNY
+         4U9dgQY/8ywa7hMaLhHTpdQ3OhewmIJG/lrcR2gDWZZ0NM/ASt1mJJOTrAvrIIsHjUHE
+         WZzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=BKCyjdc9y8jyZoNI0vZvSlCBXggxKRCrFRR6O6ctF+w=;
+        b=Mvr+LFirTPd2uS6wLGknlf8o4PO3lJrgV+wdy/QzsrRdfAJTbvxb6rT5fVedvGMmPD
+         eVhL97ECekS+8DKlB5PdmJOGZ5jbml+mZAyud9UIxh2Uvi/Mx07gQJWKcmPeJvfoZZf2
+         xIqs26aVahpcV/halK3wt+yIUyvJGvclBanSdKsJK8HMSOn9oiGlDO1P1PL/3boTfhjI
+         5K+NogwVK6vi2VXvWz6buhdfDU4MOMuaXCpI1VdIrt2r3Kv5TJGgSKkzRWOrE3gXNApf
+         pv0ndem86hqP2UBsLq5iyR1/KpfksKIS7DW6qbD+cONjn8xgHp7Zx8klkK1Y9Walq68O
+         urZg==
+X-Gm-Message-State: ACgBeo3UIQ2E1AkB2d7BSA8btHpvaQVh4+mOcMcVkIUdKhUMzIiCf+ED
+        12jcH8L0JAB7onh8ixByW10=
+X-Google-Smtp-Source: AA6agR503tkKhQAd5Imgm4BPLKzov2ax/W4FLtg+tbq9EVWiAyuvxJRq+pRJaeUnfeqG3X9/MdTZ8Q==
+X-Received: by 2002:a17:907:6d05:b0:73d:8092:91ea with SMTP id sa5-20020a1709076d0500b0073d809291eamr11258913ejc.280.1662760862538;
+        Fri, 09 Sep 2022 15:01:02 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id kx25-20020a170907775900b0073d70df6e56sm797592ejc.138.2022.09.09.15.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 15:01:02 -0700 (PDT)
+Message-ID: <3ed145c6-f400-ee75-ccac-894b0a0d15d2@gmail.com>
+Date:   Sat, 10 Sep 2022 00:01:00 +0200
 MIME-Version: 1.0
-References: <20220907045907.484043-1-ndesaulniers@google.com> <20220907045907.484043-4-ndesaulniers@google.com>
-In-Reply-To: <20220907045907.484043-4-ndesaulniers@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 10 Sep 2022 06:59:00 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARe+iZBB9OkkpOTGxi+GwTnk8pigjd3KYHR-ZGoyiZEAw@mail.gmail.com>
-Message-ID: <CAK7LNARe+iZBB9OkkpOTGxi+GwTnk8pigjd3KYHR-ZGoyiZEAw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        X86 ML <x86@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 00/11] Add more Rockchip rk3128 compatible strings
+To:     kever.yang@rock-chips.com
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 1:59 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> cc-ifversion is GCC specific. Replace it with compiler specific
-> variants. Update the users of cc-ifversion to use these new macros.
+Mainline U-boot has some support for legacy Rockchip SoC rk3128.
+The rk3128.dtsi file is in need for some upgrading.
+To verify the nodes more Rockchip rk3128 compatible strings are needed.
 
+Not tested with hardware.
+No intent to port drivers or dts files to Linux for now without physical board.
+So pure for the bindings. 
 
+https://lore.kernel.org/u-boot/421195e1-472c-f337-e87a-b0b6d520b808@gmail.com/T/#u
 
-Now, this is independent of the rest of this series.
+Johan Jonker (11):
+  dt-bindings: serial: rockchip: add rockchip,rk3128-uart
+  dt-bindings: i2c: rockchip: add rockchip,rk3128-i2c
+  dt-bindings: pwm: rockchip: add rockchip,rk3128-pwm
+  dt-bindings: mmc: rockchip: add rockchip,rk3128-dw-mshc
+  dt-bindings: spi: rockchip: add rockchip,rk3128-spi
+  dt-bindings: usb: dwc2: rockchip: add rockchip,rk3128-usb
+  dt-bindings: watchdog: rockchip: add rockchip,rk3128-wdt
+  dt-bindings: arm: rockchip: pmu: add rockchip,rk3128-pmu
+  dt-bindings: phy: phy-rockchip-inno-usb2: add rockchip,rk3128-usb2phy
+  dt-bindings: soc: rockchip: grf: add rockchip,rk3128-grf
+  dt-bindings: mtd: rockchip: add rockchip,rk3128-nfc
 
+ Documentation/devicetree/bindings/arm/rockchip/pmu.yaml       | 2 ++
+ Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml           | 1 +
+ Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml   | 1 +
+ .../devicetree/bindings/mtd/rockchip,nand-controller.yaml     | 4 +++-
+ .../devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml       | 1 +
+ Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml       | 1 +
+ .../devicetree/bindings/serial/snps-dw-apb-uart.yaml          | 1 +
+ Documentation/devicetree/bindings/soc/rockchip/grf.yaml       | 2 ++
+ Documentation/devicetree/bindings/spi/spi-rockchip.yaml       | 1 +
+ Documentation/devicetree/bindings/usb/dwc2.yaml               | 1 +
+ Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml   | 1 +
+ 11 files changed, 15 insertions(+), 1 deletion(-)
 
+-- 
+2.20.1
 
-Can you rebase this on top of Linus' tree
-so that you use clean up
-b0839b281c427e844143dba3893e25c83cdd6c17
-
-Otherwise, clang-min-version will not get any users.
-
-
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
