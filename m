@@ -2,125 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0A45B385C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 14:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC5C5B3862
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 15:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiIIM57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 08:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S231773AbiIIM6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 08:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiIIM54 (ORCPT
+        with ESMTP id S231451AbiIIM6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:57:56 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFB517AB2;
-        Fri,  9 Sep 2022 05:57:50 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w8so2501133lft.12;
-        Fri, 09 Sep 2022 05:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=S4/m6aJI9RYrEBxRHv4vOa1BDy2/J11xb+qcIeUTq4Y=;
-        b=chKaoVYxLtYqjBSP/4q/+lWZ9IYwPzQcFdhYdydTIMSaWWVpK3WfDTZ3vIs5phQ0my
-         5/06w6DKnzHyBdoxAD9virgcWldBdte6NXVJN+HbA9SiDJrYYMAJIsoclGROWSp1nNhN
-         iZlk/7Dsoh8XVES3v7+Q2G+n/LdLku+D8U1GNeO1W4KP7RTn+kzuLp2f4ZLCNuQl2p/3
-         3WLnqgR7gr3lQ7AWe5bQZpw3R1c9hvN2X2zfKJvwxTYWnAvoRCiMXY4w/fxJ46oaQZ8y
-         iLCnyZc16O4uJ3+eZ63mwvU+zsBCg7oPLG5Mx95ebgjeL0GBC+iCQyVJJhAKcsG6AAP0
-         nkoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S4/m6aJI9RYrEBxRHv4vOa1BDy2/J11xb+qcIeUTq4Y=;
-        b=PdDou3eyx0xHSU8FFFXRs76i/B4VV8BHuPIb9FzYzUI6aKEZBw92uS29+juGoxGIGu
-         aUxVqwWWOaD37BSnqvbd35a2jUSEa0nER79ikBstHMrAG84rP8qB9dhbe6kx7VqWi967
-         f7z3m43SXxvOnJ3jHdPR9N6R1CCkDHQkWc2DzuqUsVZOdUK9LA1eQvGBKboz0xJMwaRv
-         AcLyMmwgLmpQyEg0ADOR3XCYcLfcs/6Nf64WZ6GttczcXy99USaruCoQvK7iTxmKgSCI
-         2dSJMoCikIxpAmgXj6Hh0Qe9+pf5o1nJ0fYabPztVcfDUDRgN7RAEE2CoV43vbqcXQ4R
-         2shw==
-X-Gm-Message-State: ACgBeo02zy7sUfktIGaogUQyQGhHKWhvHVEMcrJnR531Ton1BVeIPKhP
-        q+yrWPmZ6masWPAOonamzdI=
-X-Google-Smtp-Source: AA6agR7Sz7rXYWYQKDSTMczmekU48EdA1TJUJPL7yFZTbw7xckVNXhdmOUhAsNxxA8z/6IZjCaHcgg==
-X-Received: by 2002:a05:6512:ad3:b0:492:d78f:2c09 with SMTP id n19-20020a0565120ad300b00492d78f2c09mr4126789lfu.99.1662728268489;
-        Fri, 09 Sep 2022 05:57:48 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id f29-20020a05651c03dd00b002688cceee17sm64429ljp.131.2022.09.09.05.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 05:57:47 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 15:57:45 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC
- support
-Message-ID: <20220909125745.42myr3zwwbfn2tea@mobilestation>
-References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
- <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
- <20220830180028.GA1758236-robh@kernel.org>
+        Fri, 9 Sep 2022 08:58:16 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6E612EDB5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:58:13 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1EA0EDD;
+        Fri,  9 Sep 2022 14:58:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662728291;
+        bh=xZE/ULnaE8gHZyDMtXBvtajaMHf/HkDKqUGVh12Fz+w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=wJ/oohFEKz/CiEZ/GmeHmIwxb2UYdipO8+tblKR+blponZwZfDP2XbXwQyRz8YZ2B
+         s4ETAnxEnNokPoS/vHdfPGnajIThS/FkKQlly55joPfaM9XoqBYx1Ngq5oXqYENs5+
+         7Rruq4W5SubQmC8JXk2S5ucp0fg6F0rvXvYrXK/Y=
+Message-ID: <6c073c53-a8ed-7654-4fdc-460015a60537@ideasonboard.com>
+Date:   Fri, 9 Sep 2022 15:58:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830180028.GA1758236-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm: omapdrm: dss: replace ternary operator with max()
+Content-Language: en-US
+To:     Guo Zhengkui <guozhengkui@vivo.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:DRM DRIVERS FOR TI OMAP" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+References: <20220517050208.121488-1-guozhengkui@vivo.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220517050208.121488-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-Sorry for missing your message. It has kind of got lost among the
-Krzysztof' comments.
-
-On Tue, Aug 30, 2022 at 01:00:28PM -0500, Rob Herring wrote:
-> On Mon, Aug 22, 2022 at 10:19:45PM +0300, Serge Semin wrote:
-> > Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
-> > with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
-> > are individual IRQs for each ECC and DFI events.The dedicated scrubber
-> > clock source is absent since it's fully synchronous to the core clock.
-> > In addition to that the DFI-DDR PHY CSRs can be accessed via a separate
-> > registers space.
+On 17/05/2022 08:02, Guo Zhengkui wrote:
+> Fix the following coccicheck warning:
 > 
-
-> Are you sure the phy and dfi irq shouldn't be a separate device?
-
-I am sure that the DFI IRQ is a part of the DW uMCTl2 DDR controller
-specification. The DFI interface has a special signal called
-"dfi_alert_n". It is supposed to be supplied to the DDR controller
-from the DDR PHY. The signal state indicates the CRC/Parity errors
-detected on the address/command sent to the PHY/SDRAM side. Aside with
-some other statuses the signal state is reflected in the DW uMCTL2
-CRCPARSTAT register. The CSR state in its turn is then sent out via
-the corresponding output wire (dfi_err_int) up to the IRQ controller.
-So to speak there is no doubts the DFI errors IRQ is a part of the DW
-uMCTL2 DDRC IRQs interface.
-
-Regarding the PHY CSR space. You are right. It is a separate device
-indeed. I'll drop the PHY CSR region from here.
-
--Sergey
-
+> drivers/gpu/drm/omapdrm/dss/dispc.c:2454:21-22: WARNING opportunity for max()
 > 
-> Rob
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>   drivers/gpu/drm/omapdrm/dss/dispc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/omapdrm/dss/dispc.c b/drivers/gpu/drm/omapdrm/dss/dispc.c
+> index c4de142cc85b..0ee344ebcd1c 100644
+> --- a/drivers/gpu/drm/omapdrm/dss/dispc.c
+> +++ b/drivers/gpu/drm/omapdrm/dss/dispc.c
+> @@ -2451,7 +2451,7 @@ static int dispc_ovl_calc_scaling_44xx(struct dispc_device *dispc,
+>   
+>   	*decim_x = DIV_ROUND_UP(width, in_width_max);
+>   
+> -	*decim_x = *decim_x > decim_x_min ? *decim_x : decim_x_min;
+> +	*decim_x = max(*decim_x, decim_x_min);
+>   	if (*decim_x > *x_predecim)
+>   		return -EINVAL;
+>   
+
+Thanks, applying to drm-misc.
+
+  Tomi
