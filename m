@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333F85B44DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 09:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AC75B44F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 09:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiIJHGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 03:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S229464AbiIJHqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 03:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiIJHG2 (ORCPT
+        with ESMTP id S229456AbiIJHq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 03:06:28 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9806DA50D9
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:06:27 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id a4-20020a056e0208a400b002e4621942dfso2866128ilt.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:06:27 -0700 (PDT)
+        Sat, 10 Sep 2022 03:46:27 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C6A71990
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z25so6516534lfr.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
+        b=CPmvcoQIYyMAF4zt3FXqNSoDD7DiPiOGlYdVcymhCh+IKdlIs7rTLSuAVlx/fnmLcu
+         96NZnumm1CF84Z+2pYGPbjiWAkif5ly3iN0Kwrq0KeWNsLda90xz+GV8V1yK9ItJ4vG2
+         B1EJuY2n5/0kLF9US3rV3/w1AZwY4XPQxshrXFoNm8pI/hSdNgeek9/L11NVXvSYTWgU
+         2fK6mTHrRrlrabBghWT0dudUvkei0lR0po0ax3jU4MditiLLlY72FydbDtgkVbMNSil7
+         27Nm3kr9NLe4oefhueLn2QCXYfMY0dphxyDHblNj7RHUwh5Jd3gLvlwaOrkHot8uTUZQ
+         Yt0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=XP1LI8NcKR+9TVUxI4qqPfuHZdM2tMsbF2kgKFjeSss=;
-        b=z2yyrtJDl5iPIciOcpkQMtr9z+NzgM4jv9IvgSPbGxUtflpdphskPG1jd4D4TFZEUe
-         c7eydB5tmHO5CoKUQgIwgz6p0jW1joYz4ogMAudx6LyMYI7eXpsXySoA8YHUPWusTcOa
-         uaEzuTzsdcG5dT3ONTf8UX1DZBZBVgtLVx3INWL/yFGVT4yANWhBpsxGAUO6KndjG//R
-         ANmnGMfjXXeh4w3UN3gdIQg4ckYXR/E8j+xeR8mtgBhl1VcvdWDMTMOVM9Z/526Kqxpz
-         NvNxn5yzMfv5pD3ZU/P80hORTppHaNWs6xb765lwSFl/KCg0Hc+ySsDPS8lMO27z31QU
-         lTRw==
-X-Gm-Message-State: ACgBeo2qrWC34khRd8GoZTh7I8ksYHuITBATFP5qbkWV1ThqgZjd9fJa
-        20VxmI/DuE1vRESNeHx1oBLcetcP+xWp1VJzU6JalnQGtFSp
-X-Google-Smtp-Source: AA6agR67gVP7MlrDhVaHS9c4FIkpzJwKgUpUNVTNDZdE0CQtoKI+V5pi0hvdqXsvcVXHYTh8cegg//vFgM8fXPsV5xMG8Bx2fsb4
+        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
+        b=qtY5bMLAQwLFOHq4kEQTIANCpvy/v78+IiNBUjIcBZ2IsqjHe6hMldfVIZD/uH2lEc
+         ANTL+rumiOAfKFRqqeu61fgL1hGTdsJfFRJW3TA+DNAZSMhx88Mb1Sjzm1V0gdsHZjpv
+         tNTv94KUP4/0HAZn/fmPZOBsPZhhnrufRBO5XcNlFW/iSCFlOWDWFVIQFe+n2FdTNKd3
+         DGbhgE3RSmRpO/fdVujFwfIK+5ynifh3ds38hDPOOlUY4REbdRTK/1QybM9iS7DMTL+h
+         /HYmFtKkMfJVAlJOmxIFf21f2WVfz+ofaZHzRZbJpXiIWcnHtPyGJ/0pq+NFvyN/vpfy
+         motQ==
+X-Gm-Message-State: ACgBeo2VKrJ8QsFkST4Ncaa9212k2YpWH2pDZQD+pNrkA5NknAA085Kj
+        iwnDpIlUQKmlnVPDCafNNwwaJw==
+X-Google-Smtp-Source: AA6agR75ZEPrL/yKL8ezMsVKnuKBIXSz81lwLCFZHWoLKO6Bsf7yB53ADVYs4VBVxujyrIqJgj0K/g==
+X-Received: by 2002:ac2:4f03:0:b0:496:272:625d with SMTP id k3-20020ac24f03000000b004960272625dmr5369172lfr.303.1662795983686;
+        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05651c124c00b0026bda31c10fsm201998ljh.61.2022.09.10.00.46.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
+Message-ID: <e8b33710-db07-bde4-e1d1-d42c05b87d6b@linaro.org>
+Date:   Sat, 10 Sep 2022 09:46:21 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1493:b0:34c:d98:e49c with SMTP id
- j19-20020a056638149300b0034c0d98e49cmr8963836jak.86.1662793586979; Sat, 10
- Sep 2022 00:06:26 -0700 (PDT)
-Date:   Sat, 10 Sep 2022 00:06:26 -0700
-In-Reply-To: <0000000000002709ae05e5b6474c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001639b405e84d4d31@google.com>
-Subject: Re: [syzbot] INFO: task hung in __filemap_get_folio
-From:   syzbot <syzbot+0e9dc403e57033a74b1d@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 11/11] dt-bindings: mtd: rockchip: add
+ rockchip,rk3128-nfc
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,87 +90,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 10/09/2022 00:01, Johan Jonker wrote:
+> Add rockchip,rk3128-nfc compatible string.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e05825080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
-dashboard link: https://syzkaller.appspot.com/bug?extid=0e9dc403e57033a74b1d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116a3953080000
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0e9dc403e57033a74b1d@syzkaller.appspotmail.com
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-INFO: task syz-executor.3:5563 blocked for more than 143 seconds.
-      Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.3  state:D
- stack:26944 pid:5563  ppid:3713   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5197 [inline]
- __schedule+0xae5/0x52c0 kernel/sched/core.c:6509
- schedule+0xda/0x1b0 kernel/sched/core.c:6585
- io_schedule+0xba/0x130 kernel/sched/core.c:8729
- folio_wait_bit_common+0x49f/0xa20 mm/filemap.c:1295
- __folio_lock mm/filemap.c:1658 [inline]
- folio_lock include/linux/pagemap.h:939 [inline]
- folio_lock include/linux/pagemap.h:935 [inline]
- __filemap_get_folio+0xc6d/0xed0 mm/filemap.c:1930
- truncate_inode_pages_range+0x37c/0x1510 mm/truncate.c:378
- ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1741
- evict+0x2ed/0x6b0 fs/inode.c:666
- iput_final fs/inode.c:1749 [inline]
- iput.part.0+0x55d/0x810 fs/inode.c:1775
- iput+0x58/0x70 fs/inode.c:1765
- ntfs_fill_super+0x2309/0x37f0 fs/ntfs3/super.c:1278
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f62c488a8fa
-RSP: 002b:00007fff05d56558 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f62c488a8fa
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fff05d565b0
-RBP: 00007fff05d565f0 R08: 00007fff05d565f0 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007fff05d565b0 R15: 000000002007aa80
- </TASK>
-NMI backtrace for cpu 1
-CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x46/0x14f lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x206/0x250 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:227 [inline]
- watchdog+0xcf7/0xfd0 kernel/hung_task.c:384
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 2973 Comm: udevd Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0033:0x7f2aff58ebf8
-Code: f8 c5 fa 7e 0f c5 fa 7e 16 c5 e9 74 d1 c5 f9 d7 c2 2d ff ff 00 00 0f 85 06 ff ff ff c3 0f 1f 44 00 00 c5 fa 6f 16 c5 e9 74 17 <c5> f9 d7 c2 2d ff ff 00 00 0f 85 e9 fe ff ff 48 8d 7c 17 f0 48 8d
-RSP: 002b:00007fff5dda79e8 EFLAGS: 00000206
-RAX: 0000000000000007 RBX: 000055e68d0e4a70 RCX: 0000000000000000
-RDX: 000000000000001c RSI: 000055e68d0e44b4 RDI: 000055e68cdc2e44
-RBP: 000055e68cdc3380 R08: 000000000000001c R09: 000000000000001c
-R10: 0000000000000002 R11: 0000000000000020 R12: 0000000000003a94
-R13: 0000000000000703 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f2aff8ae840 GS:  0000000000000000
 
+Best regards,
+Krzysztof
