@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B5E5B4448
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 07:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531FD5B444A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 07:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiIJFgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 01:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S229796AbiIJFhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 01:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiIJFgd (ORCPT
+        with ESMTP id S229760AbiIJFhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 01:36:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9B09877D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 22:36:31 -0700 (PDT)
+        Sat, 10 Sep 2022 01:37:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2F298A50;
+        Fri,  9 Sep 2022 22:37:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7A836097C
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 05:36:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0919C433C1;
-        Sat, 10 Sep 2022 05:36:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE377B82620;
+        Sat, 10 Sep 2022 05:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E00C433D6;
+        Sat, 10 Sep 2022 05:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662788190;
-        bh=MhHDDT4ENasb4odd4tIu3aDa2mJibAA7zIz/n+Uw8jI=;
+        s=korg; t=1662788222;
+        bh=GcfovSsO1w2ypJbXHu2NgEqfyyisK/514JVnO07ymD8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MjetwlTdcEyI5RXHv8u2aFGo8yYC3YdTOH0B7zHnAu4O6FYVgotJzICM7KrwwXHxV
-         WOcUW7xhSdsBDHW0gZE1e6mJkB4nnNccF/guIhdGAXqAYIWZn33e2PV9dib0SquTtw
-         pGrIgy3T/5oYBW2vaiyO7+Md2j65UacLf8/f9gxM=
-Date:   Sat, 10 Sep 2022 07:36:52 +0200
+        b=bC8dLl3p+QnSqQYHHy5zrYEd9Ow54Pf96JEjZ3H7+mP5csdgrOiIylFzHzr07ZVEz
+         MXNa9C7oqg72aUaK3tGU2YlrVNO4G7sJ8dtvVFcuds0+eDFeWhmwq2RqfZVM/DjlX5
+         tVf/t++ywjVTH0bK11oei+3ZUg7eN/1Om7yT0AE4=
+Date:   Sat, 10 Sep 2022 07:37:25 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Burak Ozdemir <bozdemir@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: pi433: Fix string form declaration
-Message-ID: <YxwidHdwPz2yUAP4@kroah.com>
-References: <631b5aa8.170a0220.9378b.124a@mx.google.com>
- <YxuASm/KA6iFrKu4@kroah.com>
- <CACAQkfXH4smoY2v28DOZ_0uf_2=e8iEDSFbEbTMhU0JPuteOPw@mail.gmail.com>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: sm750fb: Coding style clean up
+Message-ID: <YxwilRPLnSoWkEYV@kroah.com>
+References: <631ba548.050a0220.a64b3.5471@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACAQkfXH4smoY2v28DOZ_0uf_2=e8iEDSFbEbTMhU0JPuteOPw@mail.gmail.com>
+In-Reply-To: <631ba548.050a0220.a64b3.5471@mx.google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,28 +53,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 10:50:57PM +0000, Burak Ozdemir wrote:
-> I have been  analyzing todo tasks from `Kernel Janitors Projects` and saw
-> the following task
+On Fri, Sep 09, 2022 at 11:42:31PM +0000, Burak Ozdemir wrote:
+> From: Burak OZDEMIR <bozdemir@gmail.com>
 > 
-> From: Jeff Garzik
+> Adhere to coding style and fix camel casing in function name.
 > 
-> 1) The string form
->         [const] char *foo = "blah";
-> creates two variables in the final assembly output, a static string, and a
-> char pointer to the static string. The alternate string form
->         [const] char foo[] = "blah";
-> is better because it declares a single variable.
+> Signed-off-by: Burak Ozdemir <bozdemir@gmail.com>
+> ---
+>  drivers/staging/sm750fb/sm750.c        | 2 +-
+>  drivers/staging/sm750fb/sm750_cursor.c | 2 +-
+>  drivers/staging/sm750fb/sm750_cursor.h | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> That's why I changed that char * to static const[].
+> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+> index 3e09e56d3930..a86222cdcb68 100644
+> --- a/drivers/staging/sm750fb/sm750.c
+> +++ b/drivers/staging/sm750fb/sm750.c
+> @@ -120,7 +120,7 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+>  
+>  	sm750_hw_cursor_disable(cursor);
+>  	if (fbcursor->set & FB_CUR_SETSIZE)
+> -		sm750_hw_cursor_setSize(cursor,
+> +		sm750_hw_cursor_set_size(cursor,
+>  					fbcursor->image.width,
+>  					fbcursor->image.height);
+>  
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+> index 43e6f52c2551..d5ef40b8bc8e 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.c
+> +++ b/drivers/staging/sm750fb/sm750_cursor.c
+> @@ -58,7 +58,7 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+>  	poke32(HWC_ADDRESS, 0);
+>  }
+>  
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+>  {
+>  	cursor->w = w;
+>  	cursor->h = h;
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+> index b59643dd61ed..edeed2ea4b04 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.h
+> +++ b/drivers/staging/sm750fb/sm750_cursor.h
+> @@ -5,7 +5,7 @@
+>  /* hw_cursor_xxx works for voyager,718 and 750 */
+>  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+>  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
+>  void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+>  void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+>  void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -- 
+> 2.35.1
+> 
 
-I'm sorry, but I have no context here at all for what this is in
-response to.
+Hi,
 
-Remember, some of us get hundreds of changes each day to review, and we
-have the short-term memory of a squirrel.  Always include proper context
-in an email message so that we know what is going on.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
