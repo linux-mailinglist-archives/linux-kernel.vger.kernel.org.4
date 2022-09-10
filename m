@@ -2,80 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0BE5B45FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 13:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDE45B45FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 13:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiIJLAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 07:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S229589AbiIJLBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 07:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIJLAP (ORCPT
+        with ESMTP id S229527AbiIJLBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 07:00:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A9303C1;
-        Sat, 10 Sep 2022 04:00:13 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28AAVUmI029080;
-        Sat, 10 Sep 2022 11:00:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=BYq2Yzlbmcp890FD5E8AWx2DvgLgZmzL7hQQrObUyDc=;
- b=NqR0WkwzlvjdwyF2cOIJaLgqzT58XRYkrW8o9ugHXj2Xu1o9JczysM9uNJdkfPYGOmR1
- SC8fvuEpBG66MJtAPhfWRV1yBbWeKeouv9nSkAF/K3D88V+jm7IbIlzOIiaRjiER+uZ2
- JseRc2obofwWTps9in5aScBtOBgyRIlkMsYgBpclR+iVKPZGNf2WMlOOGIywesUTcO86
- L9VZqkdgdjfweL/0DB9o64kseTSqvgKxmrl6OOz/dFMR9em6ntib9SUCAXAeW+66WcWe
- R3NoVcPt+f1ykgjoERzl1AxgZIlF0yjTnHEwbzuUb2iTuYe9cvlGfe1ZL4nigpwkvVDC sw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jgrwf8d95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 11:00:12 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28AApo2P021978;
-        Sat, 10 Sep 2022 11:00:10 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3jgj7907yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 11:00:09 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28AB06P836176304
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Sep 2022 11:00:06 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CE53AE04D;
-        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41FC3AE051;
-        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
-Received: from localhost (unknown [9.171.12.48])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
-Date:   Sat, 10 Sep 2022 13:00:04 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 6.0-rc5
-Message-ID: <your-ad-here.call-01662807604-ext-8310@work.hours>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: PwcoFUXw82O5XkcsDqdHgZokFlbBX7cZ
-X-Proofpoint-ORIG-GUID: PwcoFUXw82O5XkcsDqdHgZokFlbBX7cZ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sat, 10 Sep 2022 07:01:37 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0AA25296;
+        Sat, 10 Sep 2022 04:01:36 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 212995C005B;
+        Sat, 10 Sep 2022 07:01:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 10 Sep 2022 07:01:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
+        :content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1662807693; x=1662894093; bh=GGvzW4XEE8JXbLXeOzJ15+Q8I
+        rPiWoJd4ry0fE29yYg=; b=jYvfnnIzQmJGhCigy86mDPQyoHqUr2xAjdVDxvJDn
+        f0WxyLtD7Is/CPpqIRUVDYjaQMy23/6A7vPWeYoW37rbWq8DLfILuM7nqf7Wdw1o
+        U2DfJgwCfkcVY9D4fSc1b27y92Ljd0VO6NKNJSw+5JhlBYgTw8+rP9GN9V1dHZkD
+        0MVsEpOZ9mTv810isKexPCHbQqTXL9vojZCGA449oGamkqhWOkE/0QnCKRhgVJjv
+        2CfuHifOE5RCVn9ZAEeUPBZpmQ4B5Jhwv2wufZG86gZSFCj3Cl442Jfdgi0ny8Wf
+        Thx72MraCgt7YtCa18y6rV2WxQxfVmtG1LoGfWC81GiXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1662807693; x=1662894093; bh=GGvzW4XEE8JXbLXeOzJ15+Q8IrPiWoJd4ry
+        0fE29yYg=; b=S74dNaQunza+6NIFv4M4blEJWvvv1QCJjuAh+5jgs6V5CY46cGN
+        kB3QgUUThQwS6CCBjDgzr12DtQ10DvRXTAs54biOXPbAyHZdkCHetU50hsf5NIIy
+        ih5RpJkS7B/RGCJsE7YJXDte17WUFO1Y6FvcpoCZ3x21K2MxGCVEUw8plWxu3QWl
+        L7EeSxXg/waC0D+NbrCu42qfJWOE6Zj8ek8qW3WqJnIS+VKwalSmz6lT0ysN3kOD
+        KQ1bD+7sDBmSiZG4XSE5KLuU5jFXWu+efncy2foZLTmi5gby5RiNyw3RrCERpeOr
+        g8bA9P2NJmsdKNe32kEiP1IqtZU1fNIDnsQ==
+X-ME-Sender: <xms:jG4cY090U7Xy1qal6CX_h1HZLd8aBQfD3pfdE_WjizlC3Si6DiC0Jw>
+    <xme:jG4cY8ub0TFB0c4pCBpJj7p49Xo0soE-wLQAmt82Huv7fJjmpgAo_MqYtoV3U_A6h
+    V5AybbmUkf-S76rdg>
+X-ME-Received: <xmr:jG4cY6APvCjr6K4KjL7TpVY4mexRNaFkwYe3xYApEHpOxwSjqyMphdg1A7IFd__8tzh-4Tps5f6pPI3CcdOSxkCvqndXhCaCYDr0RWA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtjedgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepnfhorhgvnhii
+    uceurghuvghruceoohhssheslhhmsgdrihhoqeenucggtffrrghtthgvrhhnpedugfeltd
+    eiheejvdefhfeigffgteffgeelgeejleeuleehvefhgfdtheejudeftdenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
+X-ME-Proxy: <xmx:jG4cY0fTf7oCEPU_aUq8PQAYiGSwxERMOWmcVVOcqDNVZTpXUFtcMA>
+    <xmx:jG4cY5OD9tMqU8E_qHaSANddtMMBM7bqES4b_cW7Vogr3YMuju9qVA>
+    <xmx:jG4cY-mzlgD-qlZ2K4RNA7CzsqNKc9gu8dqjTHafcVjPZBuvwQsFXQ>
+    <xmx:jW4cY9lmg03Do_wIm9kr9V34Aa-b0VbcaoqZ0Om9m0f0fjHh9MXU4A>
+Feedback-ID: icd3146c6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 10 Sep 2022 07:01:30 -0400 (EDT)
+From:   Lorenz Bauer <oss@lmb.io>
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc:     Lorenz Bauer <oss@lmb.io>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: btf: fix truncated last_member_type_id in btf_struct_resolve
+Date:   Sat, 10 Sep 2022 11:01:20 +0000
+Message-Id: <20220910110120.339242-1-oss@lmb.io>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-10_04,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 bulkscore=0 mlxlogscore=802 suspectscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209100038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,37 +88,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+When trying to finish resolving a struct member, btf_struct_resolve
+saves the member type id in a u16 temporary variable. This truncates
+the 32 bit type id value if it exceeds UINT16_MAX.
 
-please pull s390 changes for 6.0-rc5.
+As a result, structs that have members with type ids > UINT16_MAX and
+which need resolution will fail with a message like this:
 
-Thank you,
-Vasily
+    [67414] STRUCT ff_device size=120 vlen=12
+        effect_owners type_id=67434 bits_offset=960 Member exceeds struct_size
 
-The following changes since commit 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c:
+Fix this by changing the type of last_member_type_id to u32.
 
-  s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages (2022-08-30 21:57:07 +0200)
+Fixes: a0791f0df7d2 ("bpf: fix BTF limits")
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Lorenz Bauer <oss@lmb.io>
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-are available in the Git repository at:
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7e64447659f3..36fd4b509294 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3128,7 +3128,7 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+ 	if (v->next_member) {
+ 		const struct btf_type *last_member_type;
+ 		const struct btf_member *last_member;
+-		u16 last_member_type_id;
++		u32 last_member_type_id;
+ 
+ 		last_member = btf_type_member(v->t) + v->next_member - 1;
+ 		last_member_type_id = last_member->type;
+-- 
+2.34.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.0-4
-
-for you to fetch changes up to 8d96bba75a43ba564bf8732e955d9f519d2bbaec:
-
-  s390/smp: enforce lowcore protection on CPU restart (2022-09-07 14:04:01 +0200)
-
-----------------------------------------------------------------
-s390 updates for 6.0-rc5
-
-- Fix absolute zero lowcore corruption on kdump when CPU0 is offline.
-
-- Fix lowcore protection setup for offline CPU restart.
-
-----------------------------------------------------------------
-Alexander Gordeev (2):
-      s390/boot: fix absolute zero lowcore corruption on boot
-      s390/smp: enforce lowcore protection on CPU restart
-
- arch/s390/kernel/nmi.c   | 2 +-
- arch/s390/kernel/setup.c | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
