@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231615B470D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2D25B4720
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiIJOyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 10:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S229708AbiIJOyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 10:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIJOyB (ORCPT
+        with ESMTP id S229464AbiIJOyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 10:54:01 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F8843E42;
-        Sat, 10 Sep 2022 07:53:57 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1279948d93dso11436622fac.10;
-        Sat, 10 Sep 2022 07:53:57 -0700 (PDT)
+        Sat, 10 Sep 2022 10:54:04 -0400
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9B743E46;
+        Sat, 10 Sep 2022 07:53:59 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso2912513otb.6;
+        Sat, 10 Sep 2022 07:53:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=85ahIlvo8IWoFxRTWFFF8AdVN61dvRZSed2EwF8yXgA=;
-        b=Me5looYt1KHtSnJ0a58pVR+U/ZXf0kUU6rcJVY7ZG9+o9AT+T1gzDWhFLCbpzS2GM/
-         I9CNZjidJO6r+lYWK0jIYxKlXOjUH/djQsnQ70EmJkV8x+1frdgXRk/e59EqIGVbkpGT
-         VWQS2ynVuccYlMr086DFBY+9DuQ0oDMhK/IDgKT0JaVblQNzwjv1GfdHyTYryEH/XHcN
-         q9kPKFo5kBmJK/kb/W+bNLxVKreu4yFG2cURiL+wY31xxScaLNHTiix2i9hiG31X/S+W
-         w/PboYpNV7KBOngr16XX7V+OerKmeJHZCCRmqG7wO8J1umA/i0kq1q6rrQPFMslvXEBM
-         Ncsg==
-X-Gm-Message-State: ACgBeo1+AZafWpWtv5IHwoIkw2Zbyw5WTydjwFC1Hr05WDxpeQXZwkNl
-        D89c1+8bxrcUPgie7u1qHw==
-X-Google-Smtp-Source: AA6agR6kT6NFsonaHXPp4wpmeYYYkkqwuksA7+CErrbYE2vW+nLoubjG+79eHSGEFoGioIpoRwr0qw==
-X-Received: by 2002:a05:6870:58a6:b0:127:86d4:6707 with SMTP id be38-20020a05687058a600b0012786d46707mr7387223oab.88.1662821636301;
-        Sat, 10 Sep 2022 07:53:56 -0700 (PDT)
+        bh=pILdS+ykma6wojNncurew9VCgVoLwIUCOBAwYVFiN38=;
+        b=yGnDD1ao4GEMx7N1JzK9EuWwA8OyCnBor8z+SK8YXTLojH/t1HKB5T7Mf+4DH1vrtZ
+         NC5Z8oFkw3TXK5deXvNA0V4IuGdeDz+siQKlKgpP/gVipYRJiG4/Kzr+RHLzHHOqfziH
+         I3mlUDkjvBW9lW7KWAdCxUL+y4oKYfSYUIf5S0KsDVu4WcQc20TJOueC7BiSI1GIXmdz
+         SOH7dILLJAtzAUdVmTj1ZnxAHZ78y4Xax+4qF9WhRI73rgEx0Eby8bXSwRpUCjWyADH7
+         YMq/Sdd4bhW4bCyn4GsgH5WS+sstkeSdEyDQmZlCG6kljf8mWgwjk0F196wczxvoLkeK
+         USmA==
+X-Gm-Message-State: ACgBeo0buclPv/mHWoij3+Y9OgTRlhAo17ldJ26Fl6RAeQ68KdG3SJDH
+        Bz+25gLPZfijdXDkSwt6fA==
+X-Google-Smtp-Source: AA6agR6uLUKNbC4IvKC2wLt/j2kzd2cW1yheQpUF3UEh3yZ8k9afTPnXNhIXR5NohpsvuQZfDM3fvw==
+X-Received: by 2002:a05:6830:1496:b0:639:648a:55f4 with SMTP id s22-20020a056830149600b00639648a55f4mr7242714otq.370.1662821638995;
+        Sat, 10 Sep 2022 07:53:58 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056808020200b00344f28a7a4csm1251362oie.22.2022.09.10.07.53.55
+        by smtp.gmail.com with ESMTPSA id x2-20020a056870b40200b0012b298699dbsm2159608oap.1.2022.09.10.07.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 07:53:55 -0700 (PDT)
-Received: (nullmailer pid 34694 invoked by uid 1000);
+        Sat, 10 Sep 2022 07:53:58 -0700 (PDT)
+Received: (nullmailer pid 34701 invoked by uid 1000);
         Sat, 10 Sep 2022 14:53:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Hugues Fruchet <hugues.fruchet@foss.st.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Philippe CORNU <philippe.cornu@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220909165959.5899-2-hugues.fruchet@foss.st.com>
-References: <20220909165959.5899-1-hugues.fruchet@foss.st.com> <20220909165959.5899-2-hugues.fruchet@foss.st.com>
-Subject: Re: [PATCH 1/5] dt-bindings: media: add bindings for dcmipp driver
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, richard@nod.at,
+        thierry.reding@gmail.com, linux-rockchip@lists.infradead.org,
+        philipp.tomsich@vrull.eu, vigneshr@ti.com, wim@linux-watchdog.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        miquel.raynal@bootlin.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-serial@vger.kernel.org, robh+dt@kernel.org, kishon@ti.com,
+        linux-spi@vger.kernel.org, vkoul@kernel.org,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        kever.yang@rock-chips.com, zhangqing@rock-chips.com,
+        linux-kernel@vger.kernel.org, broonie@kernel.org,
+        linux@roeck-us.net, gregkh@linuxfoundation.org,
+        ulf.hansson@linaro.org, linux-watchdog@vger.kernel.org,
+        jamie@jamieiles.com, sjg@chromium.org,
+        u.kleine-koenig@pengutronix.de, heiko@sntech.de,
+        linux-mmc@vger.kernel.org
+In-Reply-To: <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+References: <20220909212543.17428-1-jbx6244@gmail.com> <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add rockchip,rk3128-pwm
 Date:   Sat, 10 Sep 2022 09:53:55 -0500
-Message-Id: <1662821635.155935.34693.nullmailer@robh.at.kernel.org>
+Message-Id: <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -67,39 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 18:59:55 +0200, Hugues Fruchet wrote:
-> From: Alain Volmat <alain.volmat@foss.st.com>
+On Sat, 10 Sep 2022 00:02:22 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-pwm compatible string.
 > 
-> Add the yaml binding for the DCMIPP driver.
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 > ---
->  .../bindings/media/st,stm32-dcmipp.yaml       | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+>  Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/st,stm32-dcmipp.example.dtb: dcmipp@5a000000: port:endpoint: Unevaluated properties are not allowed ('pclk-max-frequency' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
+pwm@10280000: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+pwm@10280010: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+pwm@10280020: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
 
-pip3 install dtschema --upgrade
+pwm@10280030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
 
-Please check and re-submit.
+pwm@20040000: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
+
+pwm@20040010: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
+
+pwm@20040020: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
+
+pwm@20040030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rv1108-elgin-r1.dtb
+	arch/arm/boot/dts/rv1108-evb.dtb
+
+pwm@ff1b0030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-a1.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-evb.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-rock64.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dtb
+	arch/arm64/boot/dts/rockchip/rk3328-roc-pc.dtb
 
