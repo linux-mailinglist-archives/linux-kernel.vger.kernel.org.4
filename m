@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC905B4456
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 07:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5094C5B4465
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 08:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiIJFrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 01:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S229607AbiIJG10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 02:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiIJFrS (ORCPT
+        with ESMTP id S229550AbiIJG1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 01:47:18 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB113AF0F4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 22:47:16 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id j26so3030341wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 22:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ZJI6ORqG8zxYZu2zKJ+oG09ScvKO2aVfOsuZsiN3680=;
-        b=Tu4qy0kztYakM/miHZmmtYGaP6yE/1FKs+DVQGKEDmxX8KIBR+z+Y4HBEpDEkbovDx
-         8x03b0EGqV8EYTxYzSRizirJu4gKavtWL+KA9HlhPEC6bw+K+/KOUZVQEq088NMKmY+a
-         9gvwrRxw/Mru3kyFW1BpdhNM6hXBMbWM6GxM+7ll+wClmzQ25YGX3SX8v28s8xObPM2l
-         Pidh/LTTzotago3eA1OPeh0cx+4F1RZOPFDD71+HT6XBuXaB4O2v0tKPfyfGf51ZF0u9
-         mKthTKE15winScuboCo0lS0rlb1nLwVtSIWxxiiVEk/3nEsw326teN7TV9LhJpfT2vam
-         bAXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZJI6ORqG8zxYZu2zKJ+oG09ScvKO2aVfOsuZsiN3680=;
-        b=BbfZAasUoILV0lqvLSB/A7/HulFWBc4GRVzi0ik+WPB/CWKU2RBo8RvrlZAu1Nx3yl
-         vS9l4E4iGgz0+Z+3LgpitLrLDeomyThwA8rbYORYdofAPNpvspRsjudcOHGMe8ciKxSK
-         ZwpaMOuyxPyh26Ik6aWHznAQbgoYazCngrFIVkS5hGCUNn1xS3+Es0COgP6BZni5gDaB
-         RNAutTVX9QDRecZ8V84zMCVCXNZ62EXyAVWVQaC+ScLpeL26VbJelUAm1kk5jHdKFh3S
-         wekd26pPLIHtCudwWJDxyj0F1GK32HMI9iEVv3W+I0stjSGPkY4MlRQYyh7drgDMMhKj
-         nbRA==
-X-Gm-Message-State: ACgBeo1gd4PU8J60CyNGTRMITRJYTgVveeRf4jtv4pRGY0O3BNakAfSy
-        FBYKBFY5xn8qDO0GDy2F26nh
-X-Google-Smtp-Source: AA6agR7ARJ5rUJ37hddKyqCD7uYAdH5V0KMU435NKXHX5xqcvZ5yr7uJS+/TIDXKb4GdrTCF/XJaGg==
-X-Received: by 2002:a1c:f20d:0:b0:3a8:4176:139b with SMTP id s13-20020a1cf20d000000b003a84176139bmr7109594wmc.177.1662788835406;
-        Fri, 09 Sep 2022 22:47:15 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.182.47])
-        by smtp.gmail.com with ESMTPSA id c4-20020adffb44000000b0022a2c600d5csm2031039wrs.55.2022.09.09.22.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 22:47:15 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gustavo.pimentel@synopsys.com, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Frank Li <Frank.Li@nxp.com>
-Subject: [PATCH v2] dmaengine: dw-edma: Remove runtime PM support
-Date:   Sat, 10 Sep 2022 11:17:00 +0530
-Message-Id: <20220910054700.12205-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 10 Sep 2022 02:27:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974E49DFB4;
+        Fri,  9 Sep 2022 23:27:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3196060C66;
+        Sat, 10 Sep 2022 06:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730C7C433D7;
+        Sat, 10 Sep 2022 06:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662791241;
+        bh=GXAqaX6S5isTiZevwTGC5NS6o9x12/MY1+Xsels5fyY=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=lLL3kBYo9Krm21ps6ucufzFryCtpdVR/tx8NS2P5vV+nm3W5ZYrTFqAb1n5ZayT/N
+         2jm1lz6nimtPoVCz7/IzDLBNU+3KmbRwJLnGBipLCcg/wY6qBIH2/qjrt6GSZafnel
+         uFgOtR7c5oDco1ht0lLVaZMh6eLkK1d/p1oDhiKG+ttsr8rq4yn27n1uaS5x+Dxmq0
+         M5/LvQlzGOBSVzTr3WPBCeVBQfWmdOCNxkTJVlO32Sculj3kwoqFde+j6U9aj2NHxd
+         e2QQ3yR31iMJ9xgv6acI3S8H3zeABvEDwW0WK4XgmuhwtiUHkRLmhMoojZ7UygSofl
+         jR/WZa+xhla9w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] ath11k: mhi: fix potential memory leak in
+ ath11k_mhi_register()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220907073704.58806-1-niejianglei2021@163.com>
+References: <20220907073704.58806-1-niejianglei2021@163.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166279123716.2050.14052144817465731004.kvalo@kernel.org>
+Date:   Sat, 10 Sep 2022 06:27:19 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,96 +59,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the dw-edma driver enables the runtime_pm for parent device
-(chip->dev) and increments/decrements the refcount during alloc/free
-chan resources callbacks.
+Jianglei Nie <niejianglei2021@163.com> wrote:
 
-This leads to a problem when the eDMA driver has been probed, but the
-channels were not used. This scenario can happen when the DW PCIe driver
-probes eDMA driver successfully, but the PCI EPF driver decides not to
-use eDMA channels and use iATU instead for PCI transfers.
+> mhi_alloc_controller() allocates a memory space for mhi_ctrl. When gets
+> some error, mhi_ctrl should be freed with mhi_free_controller(). But
+> when ath11k_mhi_read_addr_from_dt() fails, the function returns without
+> calling mhi_free_controller(), which will lead to a memory leak.
+> 
+> We can fix it by calling mhi_free_controller() when
+> ath11k_mhi_read_addr_from_dt() fails.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-In this case, the underlying device would be runtime suspended due to
-pm_runtime_enable() in dw_edma_probe() and the PCI EPF driver would have
-no knowledge of it.
+Patch applied to ath-next branch of ath.git, thanks.
 
-Ideally, the eDMA driver should not be the one doing the runtime PM of
-the parent device. The responsibility should instead belong to the client
-drivers like PCI EPF.
+43e7c3505ec7 wifi: ath11k: mhi: fix potential memory leak in ath11k_mhi_register()
 
-So let's remove the runtime PM support from eDMA driver.
-
-Cc: Serge Semin <fancer.lancer@gmail.com>
-Cc: Frank Li <Frank.Li@nxp.com>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
-
-Changes in v2:
-
- - Added review tag from Sergey
- - Rebased on top of v6.0.0-rc1
-
- drivers/dma/dw-edma/dw-edma-core.c | 12 ------------
- 1 file changed, 12 deletions(-)
-
-diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-index 07f756479663..c54b24ff5206 100644
---- a/drivers/dma/dw-edma/dw-edma-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-core.c
-@@ -9,7 +9,6 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
--#include <linux/pm_runtime.h>
- #include <linux/dmaengine.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -682,15 +681,12 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
- 	if (chan->status != EDMA_ST_IDLE)
- 		return -EBUSY;
- 
--	pm_runtime_get(chan->dw->chip->dev);
--
- 	return 0;
- }
- 
- static void dw_edma_free_chan_resources(struct dma_chan *dchan)
- {
- 	unsigned long timeout = jiffies + msecs_to_jiffies(5000);
--	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
- 	int ret;
- 
- 	while (time_before(jiffies, timeout)) {
-@@ -703,8 +699,6 @@ static void dw_edma_free_chan_resources(struct dma_chan *dchan)
- 
- 		cpu_relax();
- 	}
--
--	pm_runtime_put(chan->dw->chip->dev);
- }
- 
- static int dw_edma_channel_setup(struct dw_edma *dw, bool write,
-@@ -977,9 +971,6 @@ int dw_edma_probe(struct dw_edma_chip *chip)
- 	if (err)
- 		goto err_irq_free;
- 
--	/* Power management */
--	pm_runtime_enable(dev);
--
- 	/* Turn debugfs on */
- 	dw_edma_v0_core_debugfs_on(dw);
- 
-@@ -1009,9 +1000,6 @@ int dw_edma_remove(struct dw_edma_chip *chip)
- 	for (i = (dw->nr_irqs - 1); i >= 0; i--)
- 		free_irq(chip->ops->irq_vector(dev, i), &dw->irq[i]);
- 
--	/* Power management */
--	pm_runtime_disable(dev);
--
- 	/* Deregister eDMA device */
- 	dma_async_device_unregister(&dw->wr_edma);
- 	list_for_each_entry_safe(chan, _chan, &dw->wr_edma.channels,
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20220907073704.58806-1-niejianglei2021@163.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
