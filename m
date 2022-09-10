@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FE25B45EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 12:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEF85B45EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 12:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiIJKh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 06:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S229521AbiIJKiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 06:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIJKhZ (ORCPT
+        with ESMTP id S229455AbiIJKiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 06:37:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDFC5FAC4;
-        Sat, 10 Sep 2022 03:37:24 -0700 (PDT)
+        Sat, 10 Sep 2022 06:38:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51815FAC4;
+        Sat, 10 Sep 2022 03:38:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB5F460B8E;
-        Sat, 10 Sep 2022 10:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27DA5C433D6;
-        Sat, 10 Sep 2022 10:37:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9028CB80818;
+        Sat, 10 Sep 2022 10:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7BCC433D6;
+        Sat, 10 Sep 2022 10:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662806243;
-        bh=u+iiKE9xuuR/APEqcuiOzyZ2v9Now6W6ICb6kbPAA6s=;
+        s=k20201202; t=1662806278;
+        bh=0Rg6JODttaCHsDzPYf7S5nHps/8JMscTFKIvSAVrezE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P6ovhGDc9M5BNH3Hr3g1ukPCnDsymVrsZ0jVaK6u8VMbAVcRqF0XRSJ0X0OCc7h38
-         +504J8x1MyNZyvn14p4XF1TT2Tnpi8F99HFyn8KWRJWNIAuW+mR/tGFxui5WzQSGVM
-         k0cAKfsmAfTTrb9D1JTGf34n01ec6kqYbz3ZUD7PMsvCWQXI4GsN6Aqrb8uFxKgery
-         Fc8RGDtE+52j5S4BZsJLk8W6KVQoY69yFoAr4x6sXhe4lcI+itCYKbUjK5rRE5ASm0
-         uOL26YqCFoh6VyqYDe411TB0m4J5cKPhpLbgzSSwfiL0GfBw5RfRUV+29KNrNehGg/
-         E+z9VIc8PJC8Q==
+        b=sINsWlhEzQs8VhtVhEsw5us9hzX4fsAEkiwc0gUpbqGBIU0MMIUw1W5cAl9lQdxnc
+         YLBE6PWBXZlXFxZCiG5GEIAtmcFUFLX3WRMsvVdj+xVI2fK1TJNMEIeOwfJosZrZNt
+         i0Su6J+gP5TWYR3XSEmyM+rcsgAMWNcTzp0S0ov5+8Ek30A4XoFy4D8hQMfSzqBg7M
+         uJboGDPawsTiBoe6uXcRmGTbXzUl2FLfYv0pWHz1tGC/7d4D3oPjMsVY3gAK8/UQXk
+         GcPyqXH9k5ILxDXI/2Ai/Qa5G2mNXzpJMoinBft6Yf9LX0VaaEO4nFbyRTPFdMTZgD
+         8Lu0Ju2Knbl1Q==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oWxrV-009OJX-49;
-        Sat, 10 Sep 2022 11:37:21 +0100
-Date:   Sat, 10 Sep 2022 11:37:20 +0100
-Message-ID: <874jxfqzvj.wl-maz@kernel.org>
+        id 1oWxs4-009OJs-4c;
+        Sat, 10 Sep 2022 11:37:56 +0100
+Date:   Sat, 10 Sep 2022 11:37:55 +0100
+Message-ID: <8735czqzuk.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Janne Grunau <j@jannau.net>
 Cc:     asahi@lists.linux.dev, Mark Kettenis <kettenis@openbsd.org>,
@@ -51,10 +51,10 @@ Cc:     asahi@lists.linux.dev, Mark Kettenis <kettenis@openbsd.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 01/10] dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
-In-Reply-To: <20220909135103.98179-2-j@jannau.net>
+Subject: Re: [RFC PATCH 03/10] dt-bindings: apple,aic2: Add CPU PMU per-cpu pseudo-interrupts
+In-Reply-To: <20220909135103.98179-4-j@jannau.net>
 References: <20220909135103.98179-1-j@jannau.net>
-        <20220909135103.98179-2-j@jannau.net>
+        <20220909135103.98179-4-j@jannau.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -74,31 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 14:50:54 +0100,
+On Fri, 09 Sep 2022 14:50:56 +0100,
 Janne Grunau <j@jannau.net> wrote:
 > 
-> Fixes: dba07ad11384 ("dt-bindings: apple,aic: Add affinity description for per-cpu pseudo-interrupts")
+> Advertise the two pseudo-interrupts that tied to the two PMU
+> flavours present in the Apple M1 Pro/Max/Ultra SoC.
+> 
+> We choose the expose two different pseudo-interrupts to the OS
+> as the e-core PMU is obviously different from the p-core one,
+> effectively presenting two different devices.
+> 
+> Imported from "apple,aic".
+> 
 > Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
-> 
->  .../devicetree/bindings/interrupt-controller/apple,aic.yaml     | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> index 85c85b694217..e18107eafe7c 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> @@ -96,7 +96,7 @@ properties:
->                Documentation/devicetree/bindings/arm/cpus.yaml).
->  
->          required:
-> -          - fiq-index
-> +          - apple,fiq-index
->            - cpus
->  
->  required:
-
-With a commit message added,
 
 Acked-by: Marc Zyngier <maz@kernel.org>
 
