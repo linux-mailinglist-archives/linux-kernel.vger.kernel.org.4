@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6D35B47B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 19:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9821D5B47B4
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 19:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiIJRVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 13:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S229456AbiIJRXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 13:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIJRVM (ORCPT
+        with ESMTP id S229586AbiIJRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 13:21:12 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761143FA2C;
-        Sat, 10 Sep 2022 10:20:59 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28AEkFqS024557;
-        Sat, 10 Sep 2022 13:20:41 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jgqg5a0me-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 13:20:41 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 28AHKe3W056522
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 10 Sep 2022 13:20:40 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 10 Sep 2022 13:20:39 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 10 Sep 2022 13:20:32 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Sat, 10 Sep 2022 13:20:32 -0400
-Received: from ibrahim-vm.scloud.analog.com ([10.158.19.28])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 28AHJwcJ025933;
-        Sat, 10 Sep 2022 13:20:24 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 4/4] MAINTAINERS: Add maintainer for hwmon/max31760
-Date:   Sat, 10 Sep 2022 20:19:45 +0300
-Message-ID: <20220910171945.48088-5-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
-References: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
+        Sat, 10 Sep 2022 13:23:46 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861343DBD7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 10:23:45 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id y29so5698914ljq.7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 10:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tch2kJ0ZwAAXIt3jghe1P/fhOA5CPdnSXzRIDQkAtls=;
+        b=Z+y46nV1JqDcHlrPOu9G6oFT1l7slb6F/w6nKae0EmGOLBit1p2Kd+LG00eRLH9g/K
+         PF6jQRw6AzAJbMYrzpFEPV72m2AgsJCVlEJIJiJoWxka2cSYyiTxnl/eCV//bKoygx8X
+         sizZlQE3mcgNbwr787gn0QOsVi9LYhtMtlIbo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tch2kJ0ZwAAXIt3jghe1P/fhOA5CPdnSXzRIDQkAtls=;
+        b=R8D/P+CokFHeJeQ+P4EVbqlJUIEOz8a5uh+Ce5jdGLEzTKk+OAd+3aQEu2QAwYe1VZ
+         Qur6ZupkVd6EmKmTRBy8zTHeOnmE/0+ncnqcLaAVmHQvX/5HrSpCa192kuTjQvUWnIr1
+         4ZHcmzsr90D9R3l3drq8ituewnUd8SGHv302oq0z7+ZD9vNL1ALNVgH06WL5qyNQinqx
+         K/61FnYb2Zlzgrzs+wTXJq6kTJrE7ypC+oU2KsJWAHZmZNRSdK/ZgCvYp0yasV824zD/
+         a9tsBgqec7iP7xtwuymvu1yck3t6+HUfdnKQ3fiZVn6hsCDZ9ks7s7RUu4vmbfWLkgxI
+         wdUg==
+X-Gm-Message-State: ACgBeo2u1vIdKOUgaFVFpiLYMh+DyKTaIZ58Bxa6GKmSFHQDXjD8S+50
+        WGIHTeq+jfBKb4tt+Ne84FDREGMYIzz7L1bhChU=
+X-Google-Smtp-Source: AA6agR7/PGwZP8gWbq/5B+59TZVZl9bZnVKcENS32rIH/gZCRIWt5VBtNXxXyszjiQvutvy4Q47Cpw==
+X-Received: by 2002:a2e:bf01:0:b0:25f:df1a:f39d with SMTP id c1-20020a2ebf01000000b0025fdf1af39dmr6003468ljr.365.1662830623571;
+        Sat, 10 Sep 2022 10:23:43 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id p4-20020ac24ec4000000b004948ddb4e4dsm311139lfr.301.2022.09.10.10.23.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 10:23:42 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id s10so5076801ljp.5
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 10:23:42 -0700 (PDT)
+X-Received: by 2002:a2e:9e11:0:b0:268:c7d0:9662 with SMTP id
+ e17-20020a2e9e11000000b00268c7d09662mr5272320ljk.309.1662830622007; Sat, 10
+ Sep 2022 10:23:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: QGhHyAxNJvw4puZigJI9DQjsAbXOT9nf
-X-Proofpoint-ORIG-GUID: QGhHyAxNJvw4puZigJI9DQjsAbXOT9nf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-10_08,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=697 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209100063
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220626201712.18064-1-ubizjak@gmail.com> <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
+ <CAFULd4bM0=oNvp5VAfHa59nBK3=f++PR3EB2B-Zds1ae+14dfA@mail.gmail.com>
+In-Reply-To: <CAFULd4bM0=oNvp5VAfHa59nBK3=f++PR3EB2B-Zds1ae+14dfA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 10 Sep 2022 13:23:25 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wiEQeRuAwHYOS6oBmewLBXg6Nd6xMPmMz2E75f660TDSA@mail.gmail.com>
+Message-ID: <CAHk-=wiEQeRuAwHYOS6oBmewLBXg6Nd6xMPmMz2E75f660TDSA@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
+ for X86_CMPXCHG64
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add maintainer for hwmon/max31760 driver
+On Sat, Sep 10, 2022 at 2:28 AM Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> May I consider this message as a formal Acked-by: for the patch? I'll
+> resubmit the patch with a commit message updated to reference
+> lockref_put_not_zero instead of the removed lockref_get_or_lock.
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Sure, sounds good to me.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b827..78ab41c92 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1334,6 +1334,15 @@ F:	drivers/iio/amplifiers/hmc425a.c
- F:	drivers/staging/iio/*/ad*
- X:	drivers/iio/*/adjd*
- 
-+ANALOG DEVICES INC MAX31760 DRIVER
-+M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+S:	Maintained
-+W:	http://wiki.analog.com/
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-+F:	Documentation/hwmon/max31760.rst
-+F:	drivers/hwmon/max31760.c
-+
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
--- 
-2.36.1
+It would be particularly nice if you can also see any change in
+performance numbers - but that simply may not be possible.
 
+32-bit x86 tends to also be very low core count, so the whole lockref
+thing may or may not be measurable (no practical contention on the
+lock), but the code certainly seems to get better.
+
+             Linus
