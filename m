@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FA95B4633
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BCB5B4634
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 14:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIJMfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 08:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S229659AbiIJMiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 08:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJMfs (ORCPT
+        with ESMTP id S229561AbiIJMiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 08:35:48 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CD45040;
-        Sat, 10 Sep 2022 05:35:47 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a14so3018178ljj.8;
-        Sat, 10 Sep 2022 05:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ylankE0Ntcy0fsfQcuqcC6SNPzukIG6CjHTnu9Jh3Qw=;
-        b=m0j2q/wOOyX3sBYygCXuf0GnAJujmOFo7EMdTErAa7sxWkqNTWnaVnXVBgbItew1PR
-         H1ZpKn6ij5A7tzWhxS1U+LBe2qbuh141TFxjZQl7aSI4dsknFOr5w8B78TVDLILswE20
-         J2UM+cmXt9JvaoIfSVuU03E4eHlWjzQWEoosHlGodaDN38+9O1w05ghVJzSZgANOI4MZ
-         Bk09wNS7slZRxakCNeRyA1SUiG0q0C/DN8ZPOzbeWFs9rhUE/hluKrath+zb1leShmtf
-         uNRN+Mx+KOIo4YMVbAl0alNUQHkfzQ/J1qo2wTY9+f/NnI1mD5iW9jqwgn4WJjyG6AeN
-         Z7wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ylankE0Ntcy0fsfQcuqcC6SNPzukIG6CjHTnu9Jh3Qw=;
-        b=T3UZV1ohQsWwsE+ti+0hZ9O5UqYq4UyH+BnluWzmOuBeNDHtxpFmSM9zi/RlMVm9yn
-         6d3ozLrFolxohCiql59b2WDGuttoPhp64VcNVhEG6g7JWJNSxv81pCCmISdikjdB7IXu
-         Y1YsOin8dkqbUvZfDlIssMn415WYF1O1qsGxH/mIYUNNpniUppYfFDjKod87T1j28zF/
-         ZZ2PNiLuUSwetq+KrEM/Y7X8jjmw2FUZCZ9zOrUfe2gqkinTx6GSZIIgzvzPMFf2wq/P
-         W9CAkBMvfAParGDhwGHiKKp/vLcui48i6c0T2h3G+Q58pTZtmbkFxlXPLp4Cf7R/9uMb
-         DGyQ==
-X-Gm-Message-State: ACgBeo3sib1eBwMnaCCnnDglHqdnC+DH9kmuun8F1if4kZEjRZY1b47/
-        ZrzOLfsDcvqcWSDMSwQJxmU=
-X-Google-Smtp-Source: AA6agR7AEhYcjxJXjLPhbXBdf+MXAQzDChKDVE1xSxa0FIjE57ci1fPhV4Eba3gXLB1Lx6IGlLnRaA==
-X-Received: by 2002:a05:651c:2d0:b0:25e:6c94:59d5 with SMTP id f16-20020a05651c02d000b0025e6c9459d5mr5644442ljo.488.1662813345560;
-        Sat, 10 Sep 2022 05:35:45 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id a19-20020a056512201300b0048a757d1303sm243827lfb.217.2022.09.10.05.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 05:35:44 -0700 (PDT)
-Date:   Sat, 10 Sep 2022 15:35:42 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
- log-buffer
-Message-ID: <20220910123542.tzxg2blegw55z5fj@mobilestation>
-References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
- <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
- <20220910053045.GA23052@lst.de>
+        Sat, 10 Sep 2022 08:38:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845F032AB4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 05:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662813486; x=1694349486;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4mY4vCUpQvSoyqu3KWsonVuhhpBXFmmybY/r80KfUb8=;
+  b=Bf5nuh4HJES4vzqzL6MsGKuH2BdIsXqUNQLRuTr2uzigqDuuWpToNlsY
+   iWMECWidCsPjIqWXihX18qrUC8ACyo5ysZw9IcpkkRjyFzt0THFqp/3oK
+   vvGJcMJFeNrs7fgMwCpplJpg5EC19a8KORN1teDFietAoFcHNh6eFHw6e
+   t71ossm/Xk4dQ/qKqj5Kps4nWg1Pl4ov5yqkHkpTl2+Czws/b7W/MVnd7
+   E6i+9l7njKfJoLPRzZpIsDEApZA20IK8sJypiI6RfM8qadOFATf/LdpLN
+   Ju9uACSA2y9FohTZGItlg2gTm7OhIRYyQWHnMc/goXSmPnTqu7lfGDBl+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="298975626"
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="298975626"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 05:38:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="645878241"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 10 Sep 2022 05:38:04 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWzkK-00007P-1A;
+        Sat, 10 Sep 2022 12:38:04 +0000
+Date:   Sat, 10 Sep 2022 20:37:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [spandruvada:idle-inject 5/6] include/linux/idle_inject.h:14:56:
+ warning: 'struct cpumask' declared inside parameter list will not be visible
+ outside of this definition or declaration
+Message-ID: <202209102039.HdOycA8x-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220910053045.GA23052@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 07:30:45AM +0200, Christoph Hellwig wrote:
-> I think this will work, but unless we have to I'd generally prefer
-> to just split dta that is DMAed into into a separate allocation.
-> That is, do a separate kmalloc for the nvme_smart_log structure.
+tree:   https://github.com/spandruvada/linux-kernel idle-inject
+head:   b950e6ec430b3996d5b58f365d094200e106878f
+commit: c2ad2f95377b388ffe18d80edf2fc076c83f5b63 [5/6] thermal/drivers/intel_cpu_idle_cooling: Introduce Intel cpu idle cooling driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220910/202209102039.HdOycA8x-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/spandruvada/linux-kernel/commit/c2ad2f95377b388ffe18d80edf2fc076c83f5b63
+        git remote add spandruvada https://github.com/spandruvada/linux-kernel
+        git fetch --no-tags spandruvada idle-inject
+        git checkout c2ad2f95377b388ffe18d80edf2fc076c83f5b63
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/thermal/intel/
 
-Well, both approaches will solve the denoted problem. I am just
-wondering why do you think that the kmalloc-ed buffer is more
-preferable? IMO it is a bit less suitable since increases the memory
-granularity - two kmalloc's instead of one. Moreover it makes the code
-a bit more complex for the same reason of having two mallocs and two
-frees. Meanwhile using the ____cacheline_aligned qualifier to prevent
-the noncoherent DMA problem is a standard approach.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-What would be the best solution if we had a qualifier like this:
-#ifdef CONFIG_DMA_NONCOHERENT
-#define ____dma_buffer ____cacheline_aligned
-#else
-#define ____dma_buffer
-#endif
-and used it instead of the direct ____cacheline_aligned utilization.
+All warnings (new ones prefixed by >>):
 
--Sergey
+   In file included from drivers/thermal/intel/intel_cpu_idle_cooling.c:14:
+>> include/linux/idle_inject.h:14:56: warning: 'struct cpumask' declared inside parameter list will not be visible outside of this definition or declaration
+      14 | struct idle_inject_device *idle_inject_register(struct cpumask *cpumask,
+         |                                                        ^~~~~~~
+   drivers/thermal/intel/intel_cpu_idle_cooling.c:21:10: fatal error: asm/cpu_device_id.h: No such file or directory
+      21 | #include <asm/cpu_device_id.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-> 
-> Guenter, is this ok with you?
+
+vim +14 include/linux/idle_inject.h
+
+88763a5cf80ca5 Daniel Lezcano      2018-06-26  13  
+d3e687037f4c8d Srinivas Pandruvada 2022-09-07 @14  struct idle_inject_device *idle_inject_register(struct cpumask *cpumask,
+d3e687037f4c8d Srinivas Pandruvada 2022-09-07  15  						int (*idle_inject_begin)(unsigned int cpu, unsigned int idle_duration, unsigned int run_duration),
+d3e687037f4c8d Srinivas Pandruvada 2022-09-07  16  						void (*idle_inject_end)(unsigned int cpu));
+88763a5cf80ca5 Daniel Lezcano      2018-06-26  17  
+
+:::::: The code at line 14 was first introduced by commit
+:::::: d3e687037f4c8d5ab6c71c645e3bb55b2e3fc3c7 powercap: idle_inject: Add begin/end callbacks
+
+:::::: TO: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+:::::: CC: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
