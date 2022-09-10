@@ -2,114 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C2E5B47DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879845B47E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiIJSJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 14:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229527AbiIJSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 14:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIJSJX (ORCPT
+        with ESMTP id S229541AbiIJSL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 14:09:23 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441364A83E;
-        Sat, 10 Sep 2022 11:09:22 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id a14so3678965ljj.8;
-        Sat, 10 Sep 2022 11:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=KS4TP2ze3jkqEm4agkQq4ZcaXK2TLvPAvVTwXaoewAE=;
-        b=aaJ9jnC2m2QxfJ1x4hvagtBftMmxZMeEd7klq9aX0U2pGVAJfB6cNu0ywEgjmbCQa1
-         nK/oe3TerCKLpE0H/l+SXyI5c9SNFCsaC1ejkM7w+FwdkeoJIF2z0/Qk/RIrEMtqiruw
-         rX+887c6mE9Rj8lkPClsFcsr39JMz/SLgpwD+fqqz/MjTEn1cHOI/N645P+k7M97H9Fb
-         Mmi4PJP5ShmhauUID1qpIsa7vvio0KsG6Z0yf83EblCl1IN3NIo90ln2XavI2a8tmzJ/
-         1kErlJahBP69D8NmfJI+zy6VDqryxvqDFh5IkkoFU84p24gcHEijAbrPf+oNi05Urie9
-         CvNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=KS4TP2ze3jkqEm4agkQq4ZcaXK2TLvPAvVTwXaoewAE=;
-        b=dPmjGmPVhuoNFUB3NjRHXHVVNt1qpLiT1DURBwf6isg2A3JrXwFx/XlBFOENsN1q/F
-         opZsfQf0FRgjlbHMjyL6YbUgGtuBNwNhEs6Bil2nJpix8sAjumQtvgycJbxkgr94JtHa
-         TXjTMpWM/8qOO8SLAu4Ey0HIEIzR01/v9O5NijxgXPKGbMgyQqlhhOQHvpxrI4Y/UGZ8
-         q4dGGZ1m+BYruJ065uFfdaLR1cj3jw4YAJicbce2+XGegcCMQU7NXMkaH9dhXRKGTfNq
-         kzLlZJ8OWKoh/1TJSnA0az9/H5O2Y4ZN5y9YiqvJMX496usafvih8yZLoP8VOQX2HcCs
-         5p4Q==
-X-Gm-Message-State: ACgBeo3Enx7LGly2a7qPC8hjUYFhMqB+weDTxbmY/vMGLEZoCmWaaUdu
-        jb81nr1VnO2peFhtvoNNkLE=
-X-Google-Smtp-Source: AA6agR5r30odkaE5DK7PIWzQ2ruiFG4YP1rMHOV27OWfASoPKQuDfLBKQ0OjTKlnHWOk5VfhAtqUlQ==
-X-Received: by 2002:a2e:700e:0:b0:26b:fadf:87b2 with SMTP id l14-20020a2e700e000000b0026bfadf87b2mr612116ljc.520.1662833360099;
-        Sat, 10 Sep 2022 11:09:20 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512229100b00498fc3d4d15sm325984lfu.190.2022.09.10.11.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 11:09:19 -0700 (PDT)
-Date:   Sat, 10 Sep 2022 21:09:17 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
- log-buffer
-Message-ID: <20220910180917.plhtjt3lp7b6wlb5@mobilestation>
-References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
- <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
- <20220910053045.GA23052@lst.de>
- <20220910123542.tzxg2blegw55z5fj@mobilestation>
+        Sat, 10 Sep 2022 14:11:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9394F4AD58;
+        Sat, 10 Sep 2022 11:11:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 539F92282E;
+        Sat, 10 Sep 2022 18:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662833485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UCnH+5b7J8QcaxQduLbCitDQV4To+pDJ7A+kcfIag4=;
+        b=N9qDJgkljr8gasfl+S4Ju1yVDMHRlWge1MRHhQsisvYEMSkOHAfNtruTbmNKnGDqm6BJh9
+        62xKP6XS3dsUDafzOwckgQmdIcu4kHcLD7qTUSjV20jO05nt1OnL2aozxhHYf7a1fzOwp5
+        Epi6uPQc/WbdXDbLubEIsmFGqGHuqXI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662833485;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UCnH+5b7J8QcaxQduLbCitDQV4To+pDJ7A+kcfIag4=;
+        b=lFRwSMUgedQGMsJ0NuCBHpIV6bZ0A42eIAlRf8B4ZGDrzjbUS2kia2t1FT3v0sgOuaUwos
+        1oxA4Y3vPJmFQKCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23696133B7;
+        Sat, 10 Sep 2022 18:11:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fn/HB03THGNZBgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sat, 10 Sep 2022 18:11:25 +0000
+Message-ID: <14302178-c797-8635-4325-070f78b7f805@suse.de>
+Date:   Sat, 10 Sep 2022 20:11:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910123542.tzxg2blegw55z5fj@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
+ VMs
+Content-Language: en-US
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com
+References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------n3RoxP0YamBvEOHUprK5slXD"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 03:35:45PM +0300, Serge Semin wrote:
-> On Sat, Sep 10, 2022 at 07:30:45AM +0200, Christoph Hellwig wrote:
-> > I think this will work, but unless we have to I'd generally prefer
-> > to just split dta that is DMAed into into a separate allocation.
-> > That is, do a separate kmalloc for the nvme_smart_log structure.
-> 
-> Well, both approaches will solve the denoted problem. I am just
-> wondering why do you think that the kmalloc-ed buffer is more
-> preferable? IMO it is a bit less suitable since increases the memory
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------n3RoxP0YamBvEOHUprK5slXD
+Content-Type: multipart/mixed; boundary="------------yyhwzZbDnmmgJCE0ens3rj6y";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Saurabh Sengar <ssengar@linux.microsoft.com>, ssengar@microsoft.com,
+ drawat.floss@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+ linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, mikelley@microsoft.com
+Message-ID: <14302178-c797-8635-4325-070f78b7f805@suse.de>
+Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
+ VMs
+References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
 
-> granularity - two kmalloc's instead of one. Moreover it makes the code
-  ^
-  `-- I meant fragmentation of course...
+--------------yyhwzZbDnmmgJCE0ens3rj6y
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> a bit more complex for the same reason of having two mallocs and two
-> frees. Meanwhile using the ____cacheline_aligned qualifier to prevent
-> the noncoherent DMA problem is a standard approach.
-> 
-> What would be the best solution if we had a qualifier like this:
-> #ifdef CONFIG_DMA_NONCOHERENT
-> #define ____dma_buffer ____cacheline_aligned
-> #else
-> #define ____dma_buffer
-> #endif
-> and used it instead of the direct ____cacheline_aligned utilization.
-> 
-> -Sergey
-> 
-> > 
-> > Guenter, is this ok with you?
+SGkNCg0KQW0gMDkuMDkuMjIgdW0gMTY6NDMgc2NocmllYiBTYXVyYWJoIFNlbmdhcjoNCj4g
+aHlwZXJ2X3NldHVwX3ZyYW0gdHJpZXMgdG8gcmVtb3ZlIGNvbmZsaWN0aW5nIGZyYW1lYnVm
+ZmVyIGJhc2VkIG9uDQo+ICdzY3JlZW5faW5mbycuIEFzIG9ic2VydmVkIGluIHBhc3QgZHVl
+IHRvIHNvbWUgYnVnIG9yIHdyb25nIHNldHRpbmcNCj4gaW4gZ3J1YiwgdGhlICdzY3JlZW5f
+aW5mbycgZmllbGRzIG1heSBub3QgYmUgc2V0IGZvciBHZW4xLCBhbmQgaW4gc3VjaA0KPiBj
+YXNlcyBkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycyB3aWxs
+IG5vdCBkbyBhbnl0aGluZw0KPiB1c2VmdWwuDQo+IEZvciBHZW4xIFZNcywgaXQgc2hvdWxk
+IGFsd2F5cyBiZSBwb3NzaWJsZSB0byBnZXQgZnJhbWVidWZmZXINCj4gY29uZmxpY3QgcmVt
+b3ZlZCB1c2luZyBQQ0kgZGV2aWNlIGluc3RlYWQuDQo+IA0KPiBGaXhlczogYTBhYjVhYmNl
+ZDU1ICgiZHJtL2h5cGVydiA6IFJlbW92aW5nIHRoZSByZXN0cnVjdGlvbiBvZiBWUkFNIGFs
+bG9jYXRpb24gd2l0aCBQQ0kgYmFyIHNpemUiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBTYXVyYWJo
+IFNlbmdhciA8c3NlbmdhckBsaW51eC5taWNyb3NvZnQuY29tPg0KPiAtLS0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1fZHJ2LmMgfCAyNCArKysrKysrKysrKysr
+KysrKysrKy0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNCBk
+ZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vaHlwZXJ2
+L2h5cGVydl9kcm1fZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1f
+ZHJ2LmMNCj4gaW5kZXggNmQxMWU3OTM4YzgzLi5iMGNjOTc0ZWZhNDUgMTAwNjQ0DQo+IC0t
+LSBhL2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlwZXJ2X2RybV9kcnYuYw0KPiArKysgYi9k
+cml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1fZHJ2LmMNCj4gQEAgLTczLDEyICs3
+MywyOCBAQCBzdGF0aWMgaW50IGh5cGVydl9zZXR1cF92cmFtKHN0cnVjdCBoeXBlcnZfZHJt
+X2RldmljZSAqaHYsDQo+ICAgCQkJICAgICBzdHJ1Y3QgaHZfZGV2aWNlICpoZGV2KQ0KPiAg
+IHsNCj4gICAJc3RydWN0IGRybV9kZXZpY2UgKmRldiA9ICZodi0+ZGV2Ow0KPiArCXN0cnVj
+dCBwY2lfZGV2ICpwZGV2Ow0KPiAgIAlpbnQgcmV0Ow0KPiAgIA0KPiAtCWRybV9hcGVydHVy
+ZV9yZW1vdmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKHNjcmVlbl9pbmZvLmxmYl9iYXNl
+LA0KPiAtCQkJCQkJICAgICBzY3JlZW5faW5mby5sZmJfc2l6ZSwNCj4gLQkJCQkJCSAgICAg
+ZmFsc2UsDQo+IC0JCQkJCQkgICAgICZoeXBlcnZfZHJpdmVyKTsNCj4gKwlpZiAoZWZpX2Vu
+YWJsZWQoRUZJX0JPT1QpKSB7DQo+ICsJCWRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3Rp
+bmdfZnJhbWVidWZmZXJzKHNjcmVlbl9pbmZvLmxmYl9iYXNlLA0KPiArCQkJCQkJCSAgICAg
+c2NyZWVuX2luZm8ubGZiX3NpemUsDQoNClVzaW5nIHNjcmVlbl9pbmZvIGhlcmUgc2VlbXMg
+d3JvbmcgaW4gYW55IGNhc2UuIFlvdSB3YW50IHRvIHJlbW92ZSB0aGUgDQpmcmFtZWJ1ZmZl
+ciBkZXZpY2VzIHRoYXQgY29uZmxpY3Qgd2l0aCB5b3VyIGRyaXZlciwgd2hpY2ggbWlnaHQg
+YmUgDQp1bnJlbGF0ZWQgdG8gc2NyZWVuX2luZm8uIEFGQUlDVCB0aGUgY29ycmVjdCBzb2x1
+dGlvbiB3b3VsZCBhbHdheXMgDQpyZXRyaWV2ZSB0aGUgUENJIGRldmljZSBmb3IgcmVtb3Zh
+bCAoaS5lLiwgYWx3YXlzIGRvIHRoZSBlbHNlIGJyYW5jaCkuDQoNCkJlc3QgcmVnYXJkDQpU
+aG9tYXMNCg0KPiArCQkJCQkJCSAgICAgZmFsc2UsDQo+ICsJCQkJCQkJICAgICAmaHlwZXJ2
+X2RyaXZlcik7DQo+ICsJfSBlbHNlIHsNCj4gKwkJcGRldiA9IHBjaV9nZXRfZGV2aWNlKFBD
+SV9WRU5ET1JfSURfTUlDUk9TT0ZULCBQQ0lfREVWSUNFX0lEX0hZUEVSVl9WSURFTywgTlVM
+TCk7DQo+ICsJCWlmICghcGRldikgew0KPiArCQkJZHJtX2VycihkZXYsICJVbmFibGUgdG8g
+ZmluZCBQQ0kgSHlwZXItViB2aWRlb1xuIik7DQo+ICsJCQlyZXR1cm4gLUVOT0RFVjsNCj4g
+KwkJfQ0KPiArDQo+ICsJCXJldCA9IGRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3Rpbmdf
+cGNpX2ZyYW1lYnVmZmVycyhwZGV2LCAmaHlwZXJ2X2RyaXZlcik7DQo+ICsJCXBjaV9kZXZf
+cHV0KHBkZXYpOw0KPiArCQlpZiAocmV0KSB7DQo+ICsJCQlkcm1fZXJyKGRldiwgIk5vdCBh
+YmxlIHRvIHJlbW92ZSBib290IGZiXG4iKTsNCj4gKwkJCXJldHVybiByZXQ7DQo+ICsJCX0N
+Cj4gKwl9DQo+ICAgDQo+ICAgCWh2LT5mYl9zaXplID0gKHVuc2lnbmVkIGxvbmcpaHYtPm1t
+aW9fbWVnYWJ5dGVzICogMTAyNCAqIDEwMjQ7DQo+ICAgDQoNCi0tIA0KVGhvbWFzIFppbW1l
+cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
+b25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJt
+YW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZv
+IFRvdGV2DQo=
+
+--------------yyhwzZbDnmmgJCE0ens3rj6y--
+
+--------------n3RoxP0YamBvEOHUprK5slXD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMc00wFAwAAAAAACgkQlh/E3EQov+C5
+1g//crmmOE4lqZdtNDgRfZACe1ffCyw4RK1uKp6Ag08jwd0Cp9KOUSokkNULTqYxGU1iM4zaxRgp
+5k9nlqAaaRTaNKsNdQc/8XXbtKzk+QSLySo0p3aVz/lPYlGYma5p4htjZrRj9yIT4DppZFLkSuTz
+wTnQOBwU7v77t5GeaNV3a/wdwnn4xJ49rpetKERtjtIZHdARMdhvK6z4seeFfMysOb2PcznlOhB2
++/eW5+uU4f3uwe0YSoy5ihVOta/IYwO87zOgMEqaqYnHK1PozLEAndxGl5E69wc1JF0UxGffOdxB
+dhow7adOUuvbqih+E31WshS616sWzczEJNNODs5V4o4pYWlh3VLS2FKjA3wgpSN8Tb69sbyrv1OL
+5aIitRybyPPHMED9BtE8x9H3ILUoiBJ+RQJ3b1lH12U3pKZapOx/ZvtlRCZeYj6JyjoHZrt0TN6J
+u634IMQcH1Q/V5qtPya/ej/RCuFtYqKT2WuEen0OKvOI2NPN+soYpAusHk3X6KdGxLsvmFlYbVw2
+JOvofL4Igc8Oecr871p68Z2rf1zo8w2wgtaiVlxWJlkXiJnnaAuPKnP5BaCBMWeI+uXdh8wueZD9
+lL1G62wDY04XN2sHfUOrUaJQR+y7MIAr+kqWOnJmveBVtbd0xOmAZeIBFM8IfeBBWsaNOtHNTjxG
+3Gs=
+=el/k
+-----END PGP SIGNATURE-----
+
+--------------n3RoxP0YamBvEOHUprK5slXD--
