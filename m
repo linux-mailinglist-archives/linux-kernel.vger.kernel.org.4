@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C015B45A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 11:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7F95B45AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 11:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiIJJT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 05:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S229541AbiIJJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 05:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiIJJTe (ORCPT
+        with ESMTP id S229437AbiIJJaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 05:19:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F02ED7D;
-        Sat, 10 Sep 2022 02:18:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EB50B80066;
-        Sat, 10 Sep 2022 09:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BEAC4314C;
-        Sat, 10 Sep 2022 09:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662801478;
-        bh=HGThmz2kdpZLbH5ZdT+4zlH5sl6WAOA/3pwhDNqZIbA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TGxQpxA+0rDEwqf0D/VjU10YH9+YYMHHE6WcmIJq2Zxsuv1mdsZRvqbeW8OItWT0V
-         KTmRTHD2+fYKqsQywCxS3tNFR4lTfKjhxL6ONCPaS10dcyYbr4fKkGZ4krg0SspcWR
-         fOqfyCTeI1Gszwkq0zC+z0xIjNNonmPYYaSX1/mwIJzik6Xigw7Ly4IdR+tHTT5QgP
-         nF5LmV4f66OevPkMO/apJuiCWMB8TmOf2KJaK7CJArBSdu+9xp5YCrKboQXfD/ER32
-         sjHISJzFejSXXWreoy3Hme9dw2l47q1Cl7QIwY63OBv/+zN+1Is7fcyq0Y2pnc79Kk
-         RWBcBBRjRVV0A==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1278624b7c4so10170851fac.5;
-        Sat, 10 Sep 2022 02:17:57 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3+++2hyKWt5wgvTsUAfSXkgapR92xpP0kBddxR2/QGG4zeOsbc
-        e0Fsj1UDQZLR1OhXZFNcBZfqqsy8TapDaF/yWXI=
-X-Google-Smtp-Source: AA6agR5ljS5jux9vYvs3d5lajECfg2pY1US7JHgjNigOsBR2XljS39jtvb510F8+GsznBLG/AVBR45wNgnWOxIuJZeU=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr135196oao.112.1662801476887; Sat, 10
- Sep 2022 02:17:56 -0700 (PDT)
+        Sat, 10 Sep 2022 05:30:00 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B162A26A;
+        Sat, 10 Sep 2022 02:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662802198; x=1694338198;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5wlmV5aE837AvNzf0l+rcscxCvhVzY75vCwNE7YMGt0=;
+  b=jX4MJYfrfmOSGKPJw9dhTW60TfFg9i5VZZvtulzhYvJtHdHLJc5VuyI7
+   WHExgfPvtblQnB9nBtxg6MedJCXEbKOAAWx2BqNLHhSXDNc6CHAspudvt
+   ykLRvb9RBgGWIxNzlsKttkEESq4RPeO52cZ5Bfy9XrJ2dybvsvTJXx2lu
+   766bJOA/5fSHwNGONv3diKMQkR7Gt/UdkzIC1s2nEZz5n8/+LpRA/Vi8h
+   jOXhtQurf9uKVJmmgabj7UZ7EAgUktmAcGb36uKDxMwyag/KGhRoU0V2x
+   mQg+0oJ6N4YAf571sAITS5ETyhv90rbfQSz+v4fm/eHDBNxv0eZuhfLrn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277363710"
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="277363710"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 02:29:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="757863952"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Sep 2022 02:29:55 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWwoA-0002MH-0y;
+        Sat, 10 Sep 2022 09:29:50 +0000
+Date:   Sat, 10 Sep 2022 17:29:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] pci_ids: Add the various Microsoft PCI device IDs
+Message-ID: <202209101746.0OMdsFGk-lkp@intel.com>
+References: <1662749425-3037-3-git-send-email-eahariha@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-5-guoren@kernel.org>
- <Yxmaz7wJPEBQ7Vki@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yxmaz7wJPEBQ7Vki@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 10 Sep 2022 17:17:44 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSs4Ycu52DH6NUzdMXQGMT51XU6x-fgQ-_OpRne+vkTqQ@mail.gmail.com>
-Message-ID: <CAJF2gTSs4Ycu52DH6NUzdMXQGMT51XU6x-fgQ-_OpRne+vkTqQ@mail.gmail.com>
-Subject: Re: [PATCH V4 4/8] riscv: traps: Add noinstr to prevent
- instrumentation inserted
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662749425-3037-3-git-send-email-eahariha@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 3:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Sep 07, 2022 at 10:25:02PM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Without noinstr the compiler is free to insert instrumentation (think
-> > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> > yet ready to run this early in the entry path, for instance it could
-> > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> >
-> > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/kernel/traps.c | 8 ++++----
-> >  arch/riscv/mm/fault.c     | 2 +-
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index 635e6ec26938..3ed3dbec250d 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -97,7 +97,7 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
-> >  #define __trap_section
-> >  #endif
-> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
-> > -asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> > +asmlinkage __visible __trap_section void noinstr name(struct pt_regs *regs)  \
->
-> But now you have __trap_section and noinstr both adding a section
-> attribute.
+Hi Easwar,
 
-Oops, thx for correcting. Here is my solution.
+Thank you for the patch! Yet something to improve:
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 635e6ec26938..eba744caa711 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -92,9 +92,11 @@ static void do_trap_error(struct pt_regs *regs, int
-signo, int code,
- }
+[auto build test ERROR on next-20220909]
+[cannot apply to drm-misc/drm-misc-next helgaas-pci/next linus/master v6.0-rc4 v6.0-rc3 v6.0-rc2 v6.0-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
--#define __trap_section         __section(".xip.traps")
-+#define __trap_section                                                 \
-+       noinline notrace __attribute((__section__(".xip.traps")))       \
-+       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
- #else
--#define __trap_section
-+#define __trap_section noinstr
- #endif
+url:    https://github.com/intel-lab-lkp/linux/commits/Easwar-Hariharan/hv-Use-PCI_VENDOR_ID_MICROSOFT-for-better-discoverability/20220910-035101
+base:    9a82ccda91ed2b40619cb3c10d446ae1f97bab6e
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220910/202209101746.0OMdsFGk-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/68683df33cefc1108eaa8a0a2857e2f2148231d1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Easwar-Hariharan/hv-Use-PCI_VENDOR_ID_MICROSOFT-for-better-discoverability/20220910-035101
+        git checkout 68683df33cefc1108eaa8a0a2857e2f2148231d1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/hv/vmbus_drv.c: In function 'vmbus_reserve_fb':
+>> drivers/hv/vmbus_drv.c:2278:39: error: 'PCI_DEVICE_ID_HYPERV_VIDEO' undeclared (first use in this function); did you mean 'PCI_DEVICE_ID_NS_GX_VIDEO'?
+    2278 |                                       PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       PCI_DEVICE_ID_NS_GX_VIDEO
+   drivers/hv/vmbus_drv.c:2278:39: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +2278 drivers/hv/vmbus_drv.c
+
+7f163a6fd957a8 Jake Oshins      2015-08-05  2265  
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2266  static void vmbus_reserve_fb(void)
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2267  {
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2268  	resource_size_t start = 0, size;
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2269  	struct pci_dev *pdev;
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2270  
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2271  	if (efi_enabled(EFI_BOOT)) {
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2272  		/* Gen2 VM: get FB base from EFI framebuffer */
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2273  		start = screen_info.lfb_base;
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2274  		size = max_t(__u32, screen_info.lfb_size, 0x800000);
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2275  	} else {
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2276  		/* Gen1 VM: get FB base from PCI */
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2277  		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27 @2278  				      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2279  		if (!pdev)
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2280  			return;
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2281  
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2282  		if (pdev->resource[0].flags & IORESOURCE_MEM) {
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2283  			start = pci_resource_start(pdev, 0);
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2284  			size = pci_resource_len(pdev, 0);
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2285  		}
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2286  
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2287  		/*
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2288  		 * Release the PCI device so hyperv_drm or hyperv_fb driver can
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2289  		 * grab it later.
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2290  		 */
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2291  		pci_dev_put(pdev);
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2292  	}
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2293  
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2294  	if (!start)
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2295  		return;
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2296  
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2297  	/*
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2298  	 * Make a claim for the frame buffer in the resource tree under the
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2299  	 * first node, which will be the one below 4GB.  The length seems to
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2300  	 * be underreported, particularly in a Generation 1 VM.  So start out
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2301  	 * reserving a larger area and make it smaller until it succeeds.
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2302  	 */
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2303  	for (; !fb_mmio && (size >= 0x100000); size >>= 1)
+2a8a8afba0c305 Vitaly Kuznetsov 2022-08-27  2304  		fb_mmio = __request_region(hyperv_mmio, start, size, fb_mmio_name, 0);
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2305  }
+6d146aefbaa5c5 Jake Oshins      2016-04-05  2306  
 
 -- 
-Best Regards
- Guo Ren
+0-DAY CI Kernel Test Service
+https://01.org/lkp
