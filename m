@@ -2,101 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C955B4375
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 02:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8D45B437C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 03:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiIJAye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 20:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S230070AbiIJBEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 21:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiIJAy3 (ORCPT
+        with ESMTP id S229563AbiIJBEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 20:54:29 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC5EC73
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 17:54:26 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n17-20020a05600c3b9100b003b3235574dbso2833706wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 17:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9Ztwre21GCjHUMNtK/HGLGU0r9pbtZVuDPqXh18HLmU=;
-        b=Mycs5Q3nWJwijGxU5dJJMM01xHs05pLw7B8pR5B/w2Sga1p/Vkn3ykACVn7m4cco4Y
-         Lzpl2NzhpySPA9DAxpqeJu4wuD7mxytxVBkLNlsBkczu5Ym3zaQDomXSiKW5gYGwjQjz
-         8tgj8d/DDFQ1Hh2CrRHJbYaPp2yM9P3/nY/PLkTVBVTG+Z7DoCHLSjOYg1mqLwk2McCA
-         ezyVNKK0ntE2GlCknqPhS+Eum/A7nOHAzrLYZn4G1eJK3KYLtDQNUG7oIwvmCSuErgCB
-         qXvueN8T2ZHCeBZY7YeS6aUpe39VTTTTOy86gAGBRLLQ1fznPs4nxzOkUTGa6yosX91c
-         qBtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9Ztwre21GCjHUMNtK/HGLGU0r9pbtZVuDPqXh18HLmU=;
-        b=FQr9eZFVGqWAh56rct73NmlM3K0l5Tt0UuOA4rAwfErlxdSoHRugh9btCM8//lc7Ku
-         VPyWTfQMS5gscH4rosY2WBepY3BO7UZlS3dtaB+yr/W33EotSPnBLcbZ7ztHPg5/Jhwv
-         3Zxx9uZlpuD3u4d8zoQ0YRsDY67Gh4j2rCgvk2NxBMMfL4Ixo1yBLN9SfOyxQZu/z13L
-         lAoTpAju4xwu3zX4z0NLCUsHQClu7diAZ7UVjV1Vafan9B2gqebDs2mOPoBpNkeEFFiS
-         mEKioX8dGu6/Mb+l/SaTFrQfVgFyYxfivOGWujt6J7YhSVip3s44OjxZX1T5y3gjupEF
-         87LA==
-X-Gm-Message-State: ACgBeo3BYjfoZqpXHHfRb/JmM5oqpgaofSs1MFc5dVik1cZ2F/Bwp6BL
-        Vq6EKROzITdaIZsskVEq08ounbsV14xXz51PyUrUJA==
-X-Google-Smtp-Source: AA6agR624o4oCcwoh88uEPgDcPoWpagjQc6CQZxPjnCtqdVZOBRCA8B81UqdQFycSdMhGHLLv/+SvTT389qF5e33GlQ=
-X-Received: by 2002:a05:600c:2202:b0:3b4:6189:fc6a with SMTP id
- z2-20020a05600c220200b003b46189fc6amr2788680wml.171.1662771264775; Fri, 09
- Sep 2022 17:54:24 -0700 (PDT)
+        Fri, 9 Sep 2022 21:04:35 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EC7DF5E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 18:04:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPCsG6y_1662771868;
+Received: from 192.168.1.6(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPCsG6y_1662771868)
+          by smtp.aliyun-inc.com;
+          Sat, 10 Sep 2022 09:04:29 +0800
+Message-ID: <a8514371-9cf4-1d99-5266-84db9ce6fa13@linux.alibaba.com>
+Date:   Sat, 10 Sep 2022 09:04:28 +0800
 MIME-Version: 1.0
-References: <20220907003630.1115439-1-eugenis@google.com>
-In-Reply-To: <20220907003630.1115439-1-eugenis@google.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Fri, 9 Sep 2022 17:54:13 -0700
-Message-ID: <CAMn1gO4X93khAqOOvCJjWmm410rv8S5847GfsPckJwqtLSzc-Q@mail.gmail.com>
-Subject: Re: [PATCH v4] arm64: mte: move register initialization to C
-To:     Evgenii Stepanov <eugenis@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [PATCH] mm/damon/sysfs: change few functions execute order
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220908151042.239189ddb1635c0f598c6fd2@linux-foundation.org>
+ <20220908221653.131120-1-sj@kernel.org>
+ <20220909154434.5870e33657a11d53320861e7@linux-foundation.org>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20220909154434.5870e33657a11d53320861e7@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 5:36 PM Evgenii Stepanov <eugenis@google.com> wrote:
->
-> If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
-> CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
-> in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
-> in fact implement FEAT_MTE2, setting the system register like this may
-> lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
-> in the C function cpu_enable_mte which is called based on the sanitized
-> version of the system register.
->
-> There is no need for the rest of the MTE-related system register
-> initialization to happen from assembly, with the exception of TCR_EL1,
-> which must be set to include at least TBI1 because the secondary CPUs
-> access KASan-allocated data structures early. Therefore, make the TCR_EL1
-> initialization unconditional and move the rest of the initialization to
-> cpu_enable_mte so that we no longer have a dependency on the unsanitized
-> ID register value.
 
-Moving the register initialization to C also fixes a bug where the
-kernel's zeroing of TFSR_EL1 has no practical effect when the kernel
-is started in VHE mode because the register is currently being zeroed
-prior to the kernel enabling the redirect of TFSR_EL2 to TFSR_EL1 when
-it enables VHE. As a result, without this patch it is possible to get
-a spurious KASAN error report if TFSR_EL2 is non-zero out of reset.
+在 2022/9/10 上午6:44, Andrew Morton 写道:
+> On Thu,  8 Sep 2022 22:16:53 +0000 SeongJae Park <sj@kernel.org> wrote:
+>
+>> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Cool.  I rewrote the changelog significantly:
 
-Peter
+Thanks for all of your hard work and detailed review !
+
+>
+> From: Xin Hao <xhao@linux.alibaba.com>
+> Subject: mm/damon/sysfs: change few functions execute order
+> Date: Thu, 8 Sep 2022 16:19:32 +0800
+>
+> There's no need to run container_of() as early as we do.
+>
+> The compiler figures this out, but the resulting code is more readable.
+>
+> Link: https://lkml.kernel.org/r/20220908081932.77370-1-xhao@linux.alibaba.com
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>
+>   mm/damon/sysfs.c |   24 ++++++++++++++----------
+>   1 file changed, 14 insertions(+), 10 deletions(-)
+>
+> --- a/mm/damon/sysfs.c~mm-damon-sysfs-change-few-functions-execute-order
+> +++ a/mm/damon/sysfs.c
+> @@ -1031,8 +1031,7 @@ static ssize_t nr_schemes_show(struct ko
+>   static ssize_t nr_schemes_store(struct kobject *kobj,
+>   		struct kobj_attribute *attr, const char *buf, size_t count)
+>   {
+> -	struct damon_sysfs_schemes *schemes = container_of(kobj,
+> -			struct damon_sysfs_schemes, kobj);
+> +	struct damon_sysfs_schemes *schemes;
+>   	int nr, err = kstrtoint(buf, 0, &nr);
+>   
+>   	if (err)
+> @@ -1040,6 +1039,8 @@ static ssize_t nr_schemes_store(struct k
+>   	if (nr < 0)
+>   		return -EINVAL;
+>   
+> +	schemes = container_of(kobj, struct damon_sysfs_schemes, kobj);
+> +
+>   	if (!mutex_trylock(&damon_sysfs_lock))
+>   		return -EBUSY;
+>   	err = damon_sysfs_schemes_add_dirs(schemes, nr);
+> @@ -1237,8 +1238,7 @@ static ssize_t nr_regions_show(struct ko
+>   static ssize_t nr_regions_store(struct kobject *kobj,
+>   		struct kobj_attribute *attr, const char *buf, size_t count)
+>   {
+> -	struct damon_sysfs_regions *regions = container_of(kobj,
+> -			struct damon_sysfs_regions, kobj);
+> +	struct damon_sysfs_regions *regions;
+>   	int nr, err = kstrtoint(buf, 0, &nr);
+>   
+>   	if (err)
+> @@ -1246,6 +1246,8 @@ static ssize_t nr_regions_store(struct k
+>   	if (nr < 0)
+>   		return -EINVAL;
+>   
+> +	regions = container_of(kobj, struct damon_sysfs_regions, kobj);
+> +
+>   	if (!mutex_trylock(&damon_sysfs_lock))
+>   		return -EBUSY;
+>   	err = damon_sysfs_regions_add_dirs(regions, nr);
+> @@ -1440,8 +1442,7 @@ static ssize_t nr_targets_show(struct ko
+>   static ssize_t nr_targets_store(struct kobject *kobj,
+>   		struct kobj_attribute *attr, const char *buf, size_t count)
+>   {
+> -	struct damon_sysfs_targets *targets = container_of(kobj,
+> -			struct damon_sysfs_targets, kobj);
+> +	struct damon_sysfs_targets *targets;
+>   	int nr, err = kstrtoint(buf, 0, &nr);
+>   
+>   	if (err)
+> @@ -1449,6 +1450,8 @@ static ssize_t nr_targets_store(struct k
+>   	if (nr < 0)
+>   		return -EINVAL;
+>   
+> +	targets = container_of(kobj, struct damon_sysfs_targets, kobj);
+> +
+>   	if (!mutex_trylock(&damon_sysfs_lock))
+>   		return -EBUSY;
+>   	err = damon_sysfs_targets_add_dirs(targets, nr);
+> @@ -1962,8 +1965,7 @@ static ssize_t nr_contexts_show(struct k
+>   static ssize_t nr_contexts_store(struct kobject *kobj,
+>   		struct kobj_attribute *attr, const char *buf, size_t count)
+>   {
+> -	struct damon_sysfs_contexts *contexts = container_of(kobj,
+> -			struct damon_sysfs_contexts, kobj);
+> +	struct damon_sysfs_contexts *contexts;
+>   	int nr, err;
+>   
+>   	err = kstrtoint(buf, 0, &nr);
+> @@ -1973,6 +1975,7 @@ static ssize_t nr_contexts_store(struct
+>   	if (nr < 0 || 1 < nr)
+>   		return -EINVAL;
+>   
+> +	contexts = container_of(kobj, struct damon_sysfs_contexts, kobj);
+>   	if (!mutex_trylock(&damon_sysfs_lock))
+>   		return -EBUSY;
+>   	err = damon_sysfs_contexts_add_dirs(contexts, nr);
+> @@ -2737,8 +2740,7 @@ static ssize_t nr_kdamonds_show(struct k
+>   static ssize_t nr_kdamonds_store(struct kobject *kobj,
+>   		struct kobj_attribute *attr, const char *buf, size_t count)
+>   {
+> -	struct damon_sysfs_kdamonds *kdamonds = container_of(kobj,
+> -			struct damon_sysfs_kdamonds, kobj);
+> +	struct damon_sysfs_kdamonds *kdamonds;
+>   	int nr, err;
+>   
+>   	err = kstrtoint(buf, 0, &nr);
+> @@ -2747,6 +2749,8 @@ static ssize_t nr_kdamonds_store(struct
+>   	if (nr < 0)
+>   		return -EINVAL;
+>   
+> +	kdamonds = container_of(kobj, struct damon_sysfs_kdamonds, kobj);
+> +
+>   	if (!mutex_trylock(&damon_sysfs_lock))
+>   		return -EBUSY;
+>   	err = damon_sysfs_kdamonds_add_dirs(kdamonds, nr);
+> _
