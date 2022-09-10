@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC5D5B4369
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 02:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D815B436F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 02:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiIJAas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 20:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S229893AbiIJAoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 20:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiIJAaq (ORCPT
+        with ESMTP id S229690AbiIJAoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 20:30:46 -0400
-X-Greylist: delayed 147375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Sep 2022 17:30:44 PDT
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DD1476DC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 17:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1662769841;
-        bh=Gxe4Ta6FyNOxbWEOTIgsuOptukjbQJHOFt7dTlu1cvI=;
-        h=From:To:Cc:Subject:Date;
-        b=B+Pladviuc6alJfDptP/HQvYgsHwtU2CK2XORbkeK6KLNPegBzyGZGzWxvwLGgzEH
-         qQk0oLu3gbBsmnSymGUnz5u1B6YSEXYWRX+tHPSz7KstJQHM+NZUklPGJkt7/G+ZDh
-         fGjCFVtjnA7EPuwAAtxCnWCeY2oEJv+gkqrNbw2M=
-Received: from localhost.localdomain ([113.57.80.61])
-        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
-        id 7A61F29D; Sat, 10 Sep 2022 08:30:38 +0800
-X-QQ-mid: xmsmtpt1662769838tjjkb9w73
-Message-ID: <tencent_DD1047278567B897D2CF7F13483573596E06@qq.com>
-X-QQ-XMAILINFO: NsEIGfsQmVV+dk0z9nw0FtMWluIhdB6raiTdWZ31XpUDORHhTdNn5KJB3TTmky
-         d1iC87h8mPEg4ns+z1URGAVD9MAFvV85Ng/vuAXjlgbWKgwQtofMqAjyBOK6UU1k03d0mDMhP+/v
-         EBKrzDImfGI3TZ0tGrSuvrtIdcMcFhMtXppLiOpdftY+Lk65q/2/tzxlbKGFsZEdOPPEcG1PHKVA
-         TNMs7TU/5MEHu3BeKEjjVzMCyXjtSKm+8NT18xD2RZAN8gBYaO1XZwf/DyxPet4fVvPOGcOPOX7U
-         j9zFi7LK+7SYpBmW07Isq4BisB40E746zYJTjglMiU1RJtGBMGk1MPLOo6ndLZWQx6kQu13+njRF
-         +ZCknKOt4LToWiwEdNoajU28OF85RTyBbLmQdOGA4cZ58diTehqGI9bfCxK3xtBmHqTy6KxbZ0FX
-         lGsRF9y2t2F0jRqG26Fr14vspMRTIz8za+Vxj+W2J3mQueuGSdCVFGxlqc49oso1gYKO6A/1Ks9a
-         W4DUuFy5Z0ddYLK6HHnM31uC756ZF0ea2Ace9X6jZb824AY8Ho5cx8JPkpkHt3UX19gDlc58wY/N
-         G6QTMQl6JrWw8JSsKrwbNDcA/RY/cyVDVCxwEnR9D3Zld83UElOZf1AgQ02ZXNHmkBGq1AP6WJaJ
-         l9ebz4qk5cu4itiy8IeSctRW65RaeXudmM7WkWSSnGMsqOhU/ApfnrDNg7QTVGFi8v5JZ4U/gBXm
-         ZFcT3dCArtyvX80ZQMYXYdtOyWCscjho9xpy70ATEcqyofEDlLPR1f4qZ4ncIDKKorKBo7R1pLy1
-         h8vrhXtvEGa6eCXlB2rO6vPt0N4HM0PH5HewxYmEhfg8wUnuRAoNthRCOz/lv/1XQXJToq8/x/dP
-         g1sSFioyU/OY0eDLt4rkVdq46ywn6GVwk1p9LA+mKUVM4IwykaB/pHVRlXGlVbdWdyrM0vAVEcvQ
-         XIo3c1f1UW865YDPGJmmAuuy7F541fvMYkKdnqfSWelM9+657XvsicIepRVfZNIEuEr7mcYLcN8O
-         5qMg0YmLtI4viaM3f+JQ94jt8gLCOzR6oS3UeeKBj1PTmlXiWxfDlllumenpM=
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: r8188eu: add kfree() on an error path of rtw_xmit_resource_alloc()
-Date:   Sat, 10 Sep 2022 08:29:56 +0800
-X-OQ-MSGID: <20220910002956.3975-1-xkernel.wang@foxmail.com>
+        Fri, 9 Sep 2022 20:44:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AC2FC652;
+        Fri,  9 Sep 2022 17:44:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gh9so7814272ejc.8;
+        Fri, 09 Sep 2022 17:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JIgqb5b60C8SmDMIEm+s+7Z4AskuEzxdfRuYH/CGCZE=;
+        b=KjT2/7h4lMbloMYZZWErBlgfsEJzqgWBEH3BP6COYgwI1mG3PsjVp+CvvAs5Cz+fbS
+         OXxEz0jUY3VZm2oZ4Ln5vXloM809c2PDIUI+tt1QraYNHo8jv1tWISzhWUxrosvYE5zZ
+         L6slugx6ZYCXiGwX/eP+DCh1R4nawgR6mIS5sW1AU5aatw03k5VggnzF9F7WnIlSGGDz
+         0tcCVtZ9f3ZoFCayp6vAt/Po0HY36kQhZjhV3PtEv6JnkUNbRGN1piPxlQPrQcv7VzeQ
+         SvArKEoN5SxR9+kAKX14haT6V5dM4KFnOQgktMq66mLNvdsLRU3k+xwGxiMgNN4NjVS0
+         oj9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JIgqb5b60C8SmDMIEm+s+7Z4AskuEzxdfRuYH/CGCZE=;
+        b=5tvJ8TXOAxmQJ/rYYrReJ1RY/Vi5AA2T64x9QLauyEsRNKadIMk4ql1+g6/iPyGhtl
+         52CRdNUhDSWlpXCHH25zlY3G3nVZs658/OAwiwRxZDiduivExsjdrGXP9vLydfdfGqX2
+         nh0S2vLfzbdExAyMOLMCXaBPT3emIQ4zlu98DUTBvVLCF4PLX03wsctTEBLKTv2FCO8A
+         UOKkcg7mZItmiKR+SpDKFSFs828ivXlsX+PKRGZleqtsKGOE0jvr+10VMgCpgCtxQpeA
+         GWD9T4KykYNa/xEtAMAKWxlDJT1ZtdAkk2qNVMKlx9U4WD3CUXHcKSI+ddkv6YH2zPXP
+         0keQ==
+X-Gm-Message-State: ACgBeo1Aw0OU2LDff8qHv+AiJO1PL59LrAxe9o1Jr4IY5pWic4EQytrA
+        PJARIz5/L+PAIU+6AF4TCBG8V8bMM6ccvEnkqJA=
+X-Google-Smtp-Source: AA6agR7ZqKSHRNZnLs+LbXYkv/LNJ06v615sK2byxFJ6sF/4qxG1bzhnUcSFnWQH09ZZu7cz60xrhxBuVfkxDZuziTI=
+X-Received: by 2002:a17:906:8454:b0:772:7b02:70b5 with SMTP id
+ e20-20020a170906845400b007727b0270b5mr8878137ejy.114.1662770651341; Fri, 09
+ Sep 2022 17:44:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <94275aa1e5af4efea53f322f91b27380@huawei.com>
+In-Reply-To: <94275aa1e5af4efea53f322f91b27380@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 9 Sep 2022 17:44:00 -0700
+Message-ID: <CAEf4BzZw8R1UH4R_FmeAVAXAALmh0ETtMVkOKytvDTs_GxqbLg@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: Clean up legacy bpf maps declaration in bpf_helpers
+To:     "Liuxin(EulerOS)" <liuxin350@huawei.com>
+Cc:     "andrii@kernel.org" <andrii@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "854182924@qq.com" <854182924@qq.com>,
+        "Yanan (Euler)" <yanan@huawei.com>,
+        "Wuchangye (EulerOS)" <wuchangye@huawei.com>,
+        Xiesongyang <xiesongyang@huawei.com>,
+        "zhudi (E)" <zhudi2@huawei.com>,
+        "kongweibin (A)" <kongweibin2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Tue, Sep 6, 2022 at 7:51 PM Liuxin(EulerOS) <liuxin350@huawei.com> wrote:
+>
+> Legacy bpf maps declaration were no longer supported in Libbpf 1.0, so it was time to remove the definition of bpf_map_def in bpf_helpers.h.
 
-In rtw_xmit_resource_alloc(), if usb_alloc_urb() fails, then the memory
-`pxmitbuf->pallocated_buf` which is allocated by kzalloc() is not properly
-released before returning.
+please make sure that commit log lines are wrapped at <80 characters
+>
+> LINK:[1] https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0
 
-So this patch adds kfree() on the above error path to release it. As there
-is no proper device to test with, no runtime testing was performed.
+don't add "LINK", just two spaces and then [0] and then refer to it
+from the above as "supported in Libbpf 1.0 ([0])"
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/r8188eu/core/rtw_xmit.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 67f9c05..9c39d08 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -44,8 +44,10 @@ static int rtw_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *px
- 	pxmitbuf->dma_transfer_addr = 0;
- 
- 	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!pxmitbuf->pxmit_urb)
-+	if (!pxmitbuf->pxmit_urb) {
-+		kfree(pxmitbuf->pallocated_buf);
- 		return _FAIL;
-+	}
- 
- 	return _SUCCESS;
- }
--- 
+>
+> Acked-by: Song Liu <song@kernel.org>
+> Signed-off-by: Xin Liu<liuxin350@huawei.com>
+
+space after name and before opening < is missing
+
+> ---
+> Changes in v2:
+>     - Fix strange signatures
+>
+
+It looks good overall, but your patch doesn't apply. Please make sure
+you base it on top of bpf-next's master and you use git send-email
+which won't clobber the patch. Thanks.
+
+> V1: https://lore.kernel.org/bpf/CAPhsuW7Em6q5hqiKWEZpJOaU5DTrZE+BPPHq+Chyz0-+-yQ_ZA@mail.gmail.com/T/#t
+>
+> tools/lib/bpf/bpf_helpers.h | 12 ------------
+> 1 file changed, 12 deletions(-)
+>
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h index 867b73483..9cad13e7f 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -167,18 +167,6 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot) } #endif
+>
+> -/*
+> - * Helper structure used by eBPF C program
+> - * to describe BPF map attributes to libbpf loader
+> - */
+> -struct bpf_map_def {
+> -       unsigned int type;
+> -       unsigned int key_size;
+> -       unsigned int value_size;
+> -       unsigned int max_entries;
+> -       unsigned int map_flags;
+> -} __attribute__((deprecated("use BTF-defined maps in .maps section")));
+> -
+> enum libbpf_pin_type {
+>         LIBBPF_PIN_NONE,
+>         /* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
+> --
+> 2.33.0
