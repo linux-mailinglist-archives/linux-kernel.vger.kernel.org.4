@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4E55B47C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 19:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAC95B47CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 19:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiIJRum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 13:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S229544AbiIJR7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 13:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiIJRuj (ORCPT
+        with ESMTP id S229451AbiIJR7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 13:50:39 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1800303F8;
-        Sat, 10 Sep 2022 10:50:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso2665494wma.1;
-        Sat, 10 Sep 2022 10:50:36 -0700 (PDT)
+        Sat, 10 Sep 2022 13:59:22 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C554199A;
+        Sat, 10 Sep 2022 10:59:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id go6so121827pjb.2;
+        Sat, 10 Sep 2022 10:59:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=bTW0f8SBzm5P1sArHECp6CqlKNFqaNycgKPMDOk99yk=;
-        b=JaFiZNv2CzRiz7KsyvbzgZ6haMdzKOnfvuusFTAgyszlPsad1bChM28cudQzJ1D4HQ
-         dHXkKt21uO/HZ5FBfZfsTYUVMEreA1U8bQzljdQ6QO1hiWNNIxSNeWmBPcY1DIg0Wp+0
-         3siLgASb8gCp41JQFqQ4hwnKWxqww4T103uYg68Uj7zE44yWqRvreJ3gAHpsVazM9RkZ
-         yHs4a8qENZ45i3gj5wOFtqcvJd5Xj9jh/wTn4rIJy65JLvabeXdmRW9Ar75VazOOJyfp
-         wgjUGgtg6Su6So8WGGjECuIQU5Em/mykuHLbQ9DaB7LGZDtG3OQmCVD6ejIm2cad91dD
-         sOYg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=9LVUrGmgg5NlXwKIeiUGY0pBFtC3Dd7Xv1rjO/T4Xds=;
+        b=nnsbvU4xT1jL/likGEbVZ8DRFDzCbfse76m0FvZSSTskw6aq70/qtBkDwC8poGl/0W
+         04kWcA5DnWQN2RC+CqYP9h09n0DCCGElrI/Tp+Sd8sHXPUF50geQOzNHXDVGT41gmLmr
+         nQjSP4GQyYQnifQT2HL6seGBx2ab5K36CjBwGh8FHN0/TiPgIN+/Jx8z/RTV5tT1buL0
+         5PUXVJ0PRaY+UbR0CVbViITfXmEmn+Hxs1ZoP0biUOyAQrKQ+tWV1XKHeiZtEHL/ia3T
+         u7znD9H5y/dcC+bcl26vM8DMUJCWgGGXKsR4Z83e5oF3KjQ8vh9GbVEfsJ40rGFBwoLu
+         0Taw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=bTW0f8SBzm5P1sArHECp6CqlKNFqaNycgKPMDOk99yk=;
-        b=iGYsF5SRK9/aiXV6SHK7UvIwOK7GgQqhlxTdOvxr1Fw4oudhu+OCP2iiPKh2PKzjVK
-         SLES0oTTcsJWPKbqWN9CElgyfwnT55ATj3Zjp9vfQZUhS7peBZzcy9ek0cMsx1Ur0c4I
-         PIZZL/9AqzSF5LkYPv7FkN/5/zjklTZPJ/EPUf5vtN+K768q0o8vW4DIMHm37IQLMdls
-         QTDDu4epRLf3OHks5KFdc61gfMjFvZHxN6Ae2coUgSJORzXTpIsA4x6JoR5SWixp4/8l
-         zFO/s1slPk4TY8zEPfQDLmqxzcvNp8iCBKUmSWftxz5pCoJkO4ES1dzNLqZVwhhI6NHL
-         hT7g==
-X-Gm-Message-State: ACgBeo063lznxopXQKHI7wxNAeAeyyp0w9lKKDC2N6UgNGXs5l2/Nsyw
-        fsglZoffJshELwJ7qs/up5SpEx8wB/z7qg==
-X-Google-Smtp-Source: AA6agR5xTg7tMHgB7v3m2n+V1m/EiQSqmu//lN9+qJjzrIuoJDS7YDE+v8xte+XY2SkiWPb5dP2IFg==
-X-Received: by 2002:a05:600c:4f4f:b0:3a5:a530:4fd7 with SMTP id m15-20020a05600c4f4f00b003a5a5304fd7mr9161667wmq.36.1662832234926;
-        Sat, 10 Sep 2022 10:50:34 -0700 (PDT)
-Received: from nz.home (host81-129-83-151.range81-129.btcentralplus.com. [81.129.83.151])
-        by smtp.gmail.com with ESMTPSA id l1-20020a05600002a100b00228d183f9c2sm3384957wry.89.2022.09.10.10.50.34
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9LVUrGmgg5NlXwKIeiUGY0pBFtC3Dd7Xv1rjO/T4Xds=;
+        b=WLKbIOnKRHtAlP4dSYDEFVi/0iz2osVcqbrzRzztV0H5sddMikyLSqkprmKVeZkNmX
+         YsRqwkGLZCNJ6dZov0sNpULCFEPIkuXDw+UUHtPqkZESeL7Kxm/KieF+aaKGZTucxlbS
+         ndm4+s+JhIuUHN6FVUZYYJRjrPGo6U0l5JNg0kfs2GZ+r5cvafUnNQI72g3tZWQSmbF8
+         duxFcrKKpT5t/U5dGOS8g3j7V9BaBu+KLrUKlLzponzAioOLmvVxIRWclu6HADOCI5Ay
+         NvNWtMB59F7ssINoAc4Qk+xlQ5W+rh5WT3Fx3WnGONjHyTmvfMohZ2Zuwt1wYdMGtavh
+         Z8ZQ==
+X-Gm-Message-State: ACgBeo0zQe6c1Ir/bAKkQG9WtjgnIvgRAWteS8f0pWU0uTJHVobKdIBw
+        5OBmtKhH0ORW1aTP4Qr7qVs=
+X-Google-Smtp-Source: AA6agR6zuXYJLLRcg2B7OauT2NV/oypYC2K4jk3k6YC4e2wK/GYIk6d8jdXjt4kKHTZTfGc3hWMLoQ==
+X-Received: by 2002:a17:90a:d343:b0:1fd:b437:7ae9 with SMTP id i3-20020a17090ad34300b001fdb4377ae9mr16285600pjx.73.1662832761350;
+        Sat, 10 Sep 2022 10:59:21 -0700 (PDT)
+Received: from localhost ([192.55.55.56])
+        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b00176d4b093e1sm2635869plg.16.2022.09.10.10.59.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 10:50:34 -0700 (PDT)
-Received: by nz.home (Postfix, from userid 1000)
-        id 6B5D16B65C6E1; Sat, 10 Sep 2022 18:50:33 +0100 (BST)
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Sergei Trofimovich <slyich@gmail.com>,
-        =?UTF-8?q?=C3=89meric=20Maschino?= <emeric.maschino@gmail.com>,
-        linux-ia64@vger.kernel.org,
-        matoro <matoro_mailinglist_kernel@matoro.tk>
-Subject: [PATCH v3] ia64: fix clock_getres(CLOCK_MONOTONIC) to report ITC frequency
-Date:   Sat, 10 Sep 2022 18:50:19 +0100
-Message-Id: <20220910175019.3871273-1-slyich@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220820151438.d55718d341df99d5747caebb@linux-foundation.org>
-References: <20220820151438.d55718d341df99d5747caebb@linux-foundation.org>
+        Sat, 10 Sep 2022 10:59:20 -0700 (PDT)
+Date:   Sat, 10 Sep 2022 10:59:19 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Yuan Yao <yuan.yao@linux.intel.com>, isaku.yamahata@gmail.com,
+        Kai Huang <kai.huang@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4 09/26] KVM: Do processor compatibility check on resume
+Message-ID: <20220910175919.GB699006@ls.amr.corp.intel.com>
+References: <cover.1662679124.git.isaku.yamahata@intel.com>
+ <1c302387e21e689f103bf954f355cf49f73d1e82.1662679124.git.isaku.yamahata@intel.com>
+ <YxqhtH2nOwfFV2zm@gao-cwp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YxqhtH2nOwfFV2zm@gao-cwp>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,91 +83,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clock_gettime(CLOCK_MONOTONIC, &tp) is very precise on ia64 as it uses
-ITC (similar to rdtsc on x86). It's not quite a hrtimer as it is a few
-times slower than 1ns. Usually 2-3ns.
+On Fri, Sep 09, 2022 at 10:15:16AM +0800,
+Chao Gao <chao.gao@intel.com> wrote:
 
-clock_getres(CLOCK_MONOTONIC, &res) never reflected that fact and
-reported 0.04s precision (1/HZ value).
+> On Thu, Sep 08, 2022 at 04:25:25PM -0700, isaku.yamahata@intel.com wrote:
+> >From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> >So far the processor compatibility check is not done on resume. It should
+> >be done.  The resume is called for resuming from S3/S4.  CPUs can be
+> >replaced or the kernel can resume from S4 on a different machine.  So
+> 
+> Are they valid cases handled by other kernel components? Trying to
+> handle them in KVM only doesn't help as kernel is likely to fail
+> somewhere else.
 
-In https://bugs.gentoo.org/596382 gstreamer's test suite failed loudly
-when it noticed precision discrepancy.
-
-Before the change:
-
-    clock_getres(CLOCK_MONOTONIC, &res) reported 250Hz precision.
-
-After the change:
-
-    clock_getres(CLOCK_MONOTONIC, &res) reports ITC (400Mhz) precision.
-
-The patch is based on matoro's fix. I added a bit of explanation why we
-need to special-case arch-specific clock_getres().
-
-CC: Émeric Maschino <emeric.maschino@gmail.com>
-CC: linux-ia64@vger.kernel.org
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: matoro <matoro_mailinglist_kernel@matoro.tk>
-Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
----
-Change since v2:
-- Moved matoro to CC
-Change since v1:
-- No code or in-code comment change
-- CCed Émeric
-- Added matoro's S-O-B the way matoro comfortable with
-- Fixed Subject typo s/clock_getre/clock_getres/
- arch/ia64/kernel/sys_ia64.c           | 26 ++++++++++++++++++++++++++
- arch/ia64/kernel/syscalls/syscall.tbl |  2 +-
- 2 files changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/arch/ia64/kernel/sys_ia64.c b/arch/ia64/kernel/sys_ia64.c
-index e14db25146c2..d5d47eb4608e 100644
---- a/arch/ia64/kernel/sys_ia64.c
-+++ b/arch/ia64/kernel/sys_ia64.c
-@@ -166,3 +166,29 @@ ia64_mremap (unsigned long addr, unsigned long old_len, unsigned long new_len, u
- 		force_successful_syscall_return();
- 	return addr;
- }
-+
-+asmlinkage long
-+ia64_clock_getres(const clockid_t which_clock, struct __kernel_timespec __user *tp)
-+{
-+	/*
-+	 * ia64's clock_gettime() syscall is implemented as a vdso call
-+	 * fsys_clock_gettime(). Currently it handles only
-+	 * CLOCK_REALTIME and CLOCK_MONOTONIC. Both are based on
-+	 * 'ar.itc' counter which gets incremented at a constant
-+	 * frequency. It's usually 400MHz, ~2.5x times slower than CPU
-+	 * clock frequency. Which is almost a 1ns hrtimer, but not quite.
-+	 *
-+	 * Let's special-case these timers to report correct precision
-+	 * based on ITC frequency and not HZ frequency for supported
-+	 * clocks.
-+	 */
-+	switch (which_clock) {
-+		case CLOCK_REALTIME:
-+		case CLOCK_MONOTONIC:
-+			s64 tick_ns = DIV_ROUND_UP(NSEC_PER_SEC, local_cpu_data->itc_freq);
-+			struct timespec64 rtn_tp = ns_to_timespec64(tick_ns);
-+			return put_timespec64(&rtn_tp, tp);
-+	}
-+
-+	return sys_clock_getres(which_clock, tp);
-+}
-diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-index 78b1d03e86e1..72c929d9902b 100644
---- a/arch/ia64/kernel/syscalls/syscall.tbl
-+++ b/arch/ia64/kernel/syscalls/syscall.tbl
-@@ -240,7 +240,7 @@
- 228	common	timer_delete			sys_timer_delete
- 229	common	clock_settime			sys_clock_settime
- 230	common	clock_gettime			sys_clock_gettime
--231	common	clock_getres			sys_clock_getres
-+231	common	clock_getres			ia64_clock_getres
- 232	common	clock_nanosleep			sys_clock_nanosleep
- 233	common	fstatfs64			sys_fstatfs64
- 234	common	statfs64			sys_statfs64
+I guess no.  Actually without the compatibility check, kvm_resume() tries to
+enable it by calling hardware_enable_nolock().  The real effect on error case of
+this patch is to print out (potentially) more helpful message gracefully by
+check_processor_compatibility instead of error message of haredware_enable.
 -- 
-2.37.2
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
