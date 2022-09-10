@@ -2,178 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11785B4A52
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 23:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063425B4A5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 23:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiIJVjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 17:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S229770AbiIJVnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 17:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiIJViz (ORCPT
+        with ESMTP id S229952AbiIJVnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 17:38:55 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECDF5A896
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:32:53 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f11so8637775lfa.6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dKuWr+7sFYqC4a6p2wuZ9+beEh0+LI5Ezol+4b3ZVAM=;
-        b=aKVOBGiDsjP+bSXE/j9+8NcwX5xyWndNrR9GocIhv0td/3nc8c7bcqYrBbzPRGPmMp
-         o0gWqyXgzz2V7gE9DTo+w8cSQQlU/ws36m/6v9ptbwvKbhUvvAjN7rY2h3g4V/dxHzZx
-         Q5WtVRADG0Dl1nDCX4rWxhcOBxCDt4fXplKrU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dKuWr+7sFYqC4a6p2wuZ9+beEh0+LI5Ezol+4b3ZVAM=;
-        b=GNuo21emZX+ytqrFJ6FeXH0uD51xCQWWtBHcNtm6W4iS0UBdyYzFVXYgAS1J8k9M//
-         K61P42rk2XEE2sxY6S/OQWgim/iPIlm2LO3t+6vD/0JOuKxzAk+fBIEyVpGdC42VIH5n
-         kP6q7tKG5H8RdPF+PFtP+WPMr/uHyxIl8equudBS1G/xsDsqosGJrqvxNoiM5xYx+qQI
-         7P43JGW1sb4/SAoK45grmZIPxTDStYKi9N4t9cYzcuETu4g5Ihgm98kHtKkDiTMoalXP
-         yluHVcqp8InLcwyNkD0szH3kWqZpM82a5Dxjqf+waY0sDMwhRZr62JVWtVYtLRzRT093
-         SsWQ==
-X-Gm-Message-State: ACgBeo06cauOXS4TTzL2cmVOkuvLoBlpg26SVGQ3MdQ/uxaImro7DE2+
-        sJkAFoGE67PnZ2g1o0bVcapDLKdeU0JaJb9R
-X-Google-Smtp-Source: AA6agR74/nKzAZrynhOUmvtp0wb2S4np7VsLWAQrL/KE1hz5698n2zS0E68cxLtNJGQpF3b7BIZFhg==
-X-Received: by 2002:a05:6512:1282:b0:492:cdcc:cbce with SMTP id u2-20020a056512128200b00492cdcccbcemr6279503lfs.16.1662845568295;
-        Sat, 10 Sep 2022 14:32:48 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b0025e4ab170e0sm474202ljb.3.2022.09.10.14.32.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 14:32:47 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id q21so8731744lfo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:32:47 -0700 (PDT)
-X-Received: by 2002:a05:6512:eaa:b0:497:a1ed:6fa5 with SMTP id
- bi42-20020a0565120eaa00b00497a1ed6fa5mr6126107lfb.108.1662845567245; Sat, 10
- Sep 2022 14:32:47 -0700 (PDT)
+        Sat, 10 Sep 2022 17:43:20 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B57DF55
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:43:08 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MQ5vH288sz9s7P;
+        Sat, 10 Sep 2022 21:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1662846187; bh=YZ1CV53MgNxyA+1WqttmM414irZhulFneEeEfgK0GIQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Zfa6QQtz/nJrucmNJcVpJG4BGH/neZ9ti2BHM8Y4r//J02cbJ/mweZMxpVCN4mTgJ
+         wSdGrzPKcJ/LOlMv+9gFY9vgE5YqQkICVHcsCQc3nwhOluFyVnd8L6ptcqwWrtc86x
+         nCrvHy1abaVFlggKp3si2ZkqeBPROjlaFRkGStzw=
+X-Riseup-User-ID: 27751C35CCB32B8A0AEEC2461F645C9C9113993094DA06D6853DD8D97990F8ED
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MQ5v63xHpz5vXJ;
+        Sat, 10 Sep 2022 21:42:58 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        michal.winiarski@intel.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH v4 1/2] drm/tests: Split drm_framebuffer_create_test into parameterized tests
+Date:   Sat, 10 Sep 2022 18:42:38 -0300
+Message-Id: <20220910214239.70432-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-References: <CAHk-=wiqix9N5P0BXrSSOXjPZxMh=wDDRJ3sgf=hutoTUx0nZQ@mail.gmail.com>
- <20220905125637.GA2630968@roeck-us.net> <CAHk-=whh=0FG6r_YJ4_1pq07b=bqN8gTExU5T_ys-SVn0CRDtQ@mail.gmail.com>
- <752fba06-8ccc-d1e7-68d8-f141eece1230@roeck-us.net>
-In-Reply-To: <752fba06-8ccc-d1e7-68d8-f141eece1230@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 10 Sep 2022 17:32:30 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eheb3A9WHw@mail.gmail.com>
-Message-ID: <CAHk-=wj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eheb3A9WHw@mail.gmail.com>
-Subject: Re: Linux 6.0-rc4
-To:     Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's bring in the guilty party and related people..
+The igt_check_drm_framebuffer_create is based on a loop that executes
+tests for all createbuffer_tests test cases. This could be better
+represented by parameterized tests, provided by KUnit.
 
-It looks like b353b241f1eb9 ("net: fec: Use a spinlock to guard
-`fep->ptp_clk_on`") is not sufficient to fix the problems caused by
-f79959220fa5 ("fec: Restart PPS after link state change"), and in fact
-just causes more issues.
+So, convert the igt_check_drm_framebuffer_create into parameterized tests.
 
-By now I suspect that both of those just have to be reverted.
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-mairacanal@riseup.net/
+- Use .init for mock_drm_device instead of a global variable. (Michał Winiarski)
+- Add Michał's Reviewed-by tag.
 
-Hmm?
+v2 -> v3: https://lore.kernel.org/dri-devel/20220901124210.591994-1-mairacanal@riseup.net/
+- Add David's Reviewed-by tag.
 
-              Linus
+v3 -> v4: https://lore.kernel.org/dri-devel/20220907200247.89679-1-mairacanal@riseup.net/
+- No changes.
+---
+ drivers/gpu/drm/tests/drm_framebuffer_test.c | 45 ++++++++++++--------
+ 1 file changed, 27 insertions(+), 18 deletions(-)
 
-On Sat, Sep 10, 2022 at 2:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 9/10/22 10:44, Linus Torvalds wrote:
-> >
-> >> Revert "fec: Restart PPS after link state change"
-> >>      revert f79959220fa5
-> >>      Rationale:
-> >>          The patch results in various tracebacks and crashes.
-> >
-> > Hmm. No revert, but does commit b353b241f1eb ("net: fec: Use a
-> > spinlock to guard `fep->ptp_clk_on`") fix it?
-> >
->
-> No. The m68k crash is still there as of v6.0-rc4-284-gce888220d5c7. The above patch
-> changes fec_enet_clk_enable(), but the crash is elsewhere - or at least now it is
-> elsewhere.
->
-> *** ILLEGAL INSTRUCTION ***   FORMAT=4
-> Current process id is 1
-> BAD KERNEL TRAP: 00000000
-> PC: [<00000000>] 0x0
-> SR: 2704  SP: (ptrval)  a2: 40829628
-> d0: 00002700    d1: 00000000    d2: 40829420    d3: 00000000
-> d4: 00000000    d5: 402e81aa    a0: 00000000    a1: 00000012
-> Process swapper (pid: 1, task=(ptrval))
-> Frame format=4 eff addr=400681c2 pc=00000000
-> Stack from 40831cf0:
->          40829420 00000000 40832000 402e81aa 40bae000 00000008 40829420 40829000
->          401b0e44 40829628 40829420 00000000 40831e0c 00000200 401dce0a 40884a50
->          401b14d6 40829598 4082970e 40347ee0 401ad2d6 40829420 40347eea 00000000
->          40831e0c 402e81aa 40bae000 00000008 40347ee0 40829000 fffffff8 4082944e
->          40829000 408294bb 00000002 00000000 00000000 00000000 00000000 00000000
->          00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> Call Trace: [<401b0e44>] fec_ptp_gettime+0x28/0x68
->   [<401dce0a>] __alloc_skb+0xb0/0x24c
->   [<401b14d6>] fec_ptp_save_state+0x12/0x3e
->   [<401ad2d6>] fec_restart+0x5a/0x770
->   [<401ae4c0>] fec_probe+0x732/0xcee
-> ...
->
-> On top of that, I now also see
->
-> [   22.043994] BUG: sleeping function called from invalid context at drivers/clk/imx/clk-pllv3.c:68
-> [   22.044249] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 272, name: ip
-> [   22.044395] preempt_count: 1, expected: 0
-> [   22.044485] 3 locks held by ip/272:
-> [   22.044571]  #0: c1af1ce0 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0xbc/0x8f0
-> [   22.044792]  #1: c40dc8e8 (&fep->tmreg_lock){....}-{2:2}, at: fec_enet_clk_enable+0x58/0x250
-> [   22.045011]  #2: c1a71af8 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0xc/0xd4
-> [   22.045217] irq event stamp: 1460
-> [   22.045295] hardirqs last  enabled at (1459): [<c1084cd8>] _raw_spin_unlock_irqrestore+0x50/0x64
-> [   22.045454] hardirqs last disabled at (1460): [<c1084a98>] _raw_spin_lock_irqsave+0x64/0x68
-> [   22.045623] softirqs last  enabled at (1444): [<c0e77268>] __dev_change_flags+0xa8/0x254
-> [   22.045784] softirqs last disabled at (1442): [<c0e77238>] __dev_change_flags+0x78/0x254
-> [   22.045944] CPU: 0 PID: 272 Comm: ip Tainted: G        W        N 6.0.0-rc4-00286-gb260ebd186c0 #1
-> [   22.046113] Hardware name: Freescale i.MX7 Dual (Device Tree)
-> [   22.046235]  unwind_backtrace from show_stack+0x10/0x14
-> [   22.046360]  show_stack from dump_stack_lvl+0x68/0x90
-> [   22.046477]  dump_stack_lvl from __might_resched+0x17c/0x284
-> [   22.046604]  __might_resched from clk_pllv3_wait_lock+0x4c/0xcc
-> [   22.046735]  clk_pllv3_wait_lock from clk_core_prepare+0xc4/0x328
-> [   22.046866]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.046992]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047118]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047243]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047368]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047493]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047618]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047744]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047868]  clk_core_prepare from clk_core_prepare+0x50/0x328
-> [   22.047992]  clk_core_prepare from clk_prepare+0x20/0x30
-> [   22.048110]  clk_prepare from fec_enet_clk_enable+0x68/0x250
-> [   22.048235]  fec_enet_clk_enable from fec_enet_open+0x3c/0x3b8
-> [   22.048360]  fec_enet_open from __dev_open+0xec/0x1ac
-> [   22.048476]  __dev_open from __dev_change_flags+0x1bc/0x254
-> [   22.048603]  __dev_change_flags from dev_change_flags+0x14/0x44
-> [   22.048730]  dev_change_flags from devinet_ioctl+0x88c/0x8f0
-> [   22.048854]  devinet_ioctl from inet_ioctl+0x194/0x258
-> [   22.048971]  inet_ioctl from sock_ioctl+0x4b0/0x5cc
-> [   22.049083]  sock_ioctl from sys_ioctl+0x548/0xf18
-> [   22.049198]  sys_ioctl from ret_fast_syscall+0x0/0x1c
->
-> in various arm boot tests. This is new since -rc4.
->
-> Guenter
+diff --git a/drivers/gpu/drm/tests/drm_framebuffer_test.c b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+index ec7a08ba4056..6b6f6ff4f591 100644
+--- a/drivers/gpu/drm/tests/drm_framebuffer_test.c
++++ b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+@@ -25,7 +25,7 @@ struct drm_framebuffer_test {
+ 	const char *name;
+ };
+ 
+-static struct drm_framebuffer_test createbuffer_tests[] = {
++static const struct drm_framebuffer_test drm_framebuffer_create_cases[] = {
+ { .buffer_created = 1, .name = "ABGR8888 normal sizes",
+ 	.cmd = { .width = 600, .height = 600, .pixel_format = DRM_FORMAT_ABGR8888,
+ 		 .handles = { 1, 0, 0 }, .pitches = { 4 * 600, 0, 0 },
+@@ -330,43 +330,52 @@ static struct drm_mode_config_funcs mock_config_funcs = {
+ 	.fb_create = fb_create_mock,
+ };
+ 
+-static struct drm_device mock_drm_device = {
+-	.mode_config = {
++static int drm_framebuffer_test_init(struct kunit *test)
++{
++	struct drm_device *mock;
++
++	mock = kunit_kzalloc(test, sizeof(*mock), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, mock);
++
++	mock->mode_config = (struct drm_mode_config) {
+ 		.min_width = MIN_WIDTH,
+ 		.max_width = MAX_WIDTH,
+ 		.min_height = MIN_HEIGHT,
+ 		.max_height = MAX_HEIGHT,
+ 		.funcs = &mock_config_funcs,
+-	},
+-};
++	};
+ 
+-static int execute_drm_mode_fb_cmd2(struct drm_mode_fb_cmd2 *r)
++	test->priv = mock;
++	return 0;
++}
++
++static void drm_test_framebuffer_create(struct kunit *test)
+ {
++	const struct drm_framebuffer_test *params = test->param_value;
++	struct drm_device *mock = test->priv;
+ 	int buffer_created = 0;
+ 
+-	mock_drm_device.dev_private = &buffer_created;
+-	drm_internal_framebuffer_create(&mock_drm_device, r, NULL);
+-	return buffer_created;
++	mock->dev_private = &buffer_created;
++	drm_internal_framebuffer_create(mock, &params->cmd, NULL);
++	KUNIT_EXPECT_EQ(test, params->buffer_created, buffer_created);
+ }
+ 
+-static void igt_check_drm_framebuffer_create(struct kunit *test)
++static void drm_framebuffer_test_to_desc(const struct drm_framebuffer_test *t, char *desc)
+ {
+-	int i = 0;
+-
+-	for (i = 0; i < ARRAY_SIZE(createbuffer_tests); i++) {
+-		KUNIT_EXPECT_EQ_MSG(test, createbuffer_tests[i].buffer_created,
+-				    execute_drm_mode_fb_cmd2(&createbuffer_tests[i].cmd),
+-		     "Test %d: \"%s\" failed\n", i, createbuffer_tests[i].name);
+-	}
++	strcpy(desc, t->name);
+ }
+ 
++KUNIT_ARRAY_PARAM(drm_framebuffer_create, drm_framebuffer_create_cases,
++		  drm_framebuffer_test_to_desc);
++
+ static struct kunit_case drm_framebuffer_tests[] = {
+-	KUNIT_CASE(igt_check_drm_framebuffer_create),
++	KUNIT_CASE_PARAM(drm_test_framebuffer_create, drm_framebuffer_create_gen_params),
+ 	{ }
+ };
+ 
+ static struct kunit_suite drm_framebuffer_test_suite = {
+ 	.name = "drm_framebuffer",
++	.init = drm_framebuffer_test_init,
+ 	.test_cases = drm_framebuffer_tests,
+ };
+ 
+-- 
+2.37.3
+
