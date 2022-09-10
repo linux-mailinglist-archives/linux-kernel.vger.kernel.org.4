@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2525B48B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 22:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504205B48D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 22:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiIJT7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 15:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S229693AbiIJUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 16:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiIJT5y (ORCPT
+        with ESMTP id S229560AbiIJUaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 15:57:54 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BDCC49B49;
-        Sat, 10 Sep 2022 12:57:32 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id E4F25DA8;
-        Sat, 10 Sep 2022 23:01:01 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com E4F25DA8
+        Sat, 10 Sep 2022 16:30:00 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147818E30
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 13:29:59 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id b21so4909288plz.7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 13:29:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662840061;
-        bh=2UfJcOKW2OlCpYF3e9k7H5AeuHeixk7MbgbcV4mzR8M=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=Yj1BiRqxaYjw9HyNECKVsHUz+eht4mmrIZVquyk0CNeILD+vLwIFTb1w0d7G72Dtp
-         2931nuYHqFTXn0RX2w05k8pqPmAIwNKka0kTin4mJg+epYwvSWAxx9oHfIC8QXKnDg
-         VM8nWpgs4hrcQLfrx2FsuwOPfkOwu2zGO6Hc/M8c=
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:57:11 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 15/15] EDAC/synopsys: Add Baikal-T1 DDRC support
-Date:   Sat, 10 Sep 2022 22:56:59 +0300
-Message-ID: <20220910195659.11843-16-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3OB7lD9IsLsjTT/Zgb3BM7QAVB4ydEQ1DyuFepEmj3Y=;
+        b=TVDUx2hQxcx9YajRsRQPfI7VgRkyHwrlZO7cYvz2u9rl2snFvvYnJDWLoDS/05E4wo
+         X9wuFpyUvGUltIm1E7ICSuu9RUXxc8IZuhn5L+JsWkrR4NZOImmhUW4EP0T+uugqNzrk
+         pj0oORzIA08UTdpvjwXpB1Z0OqsgbJBNXYJFmLLAeWia2raNI40zAiXN0D+xsp9QZ5p/
+         K72iwJKgPs8GEx00FnC5uf6BRvwUqTvl9SVqVcOgBA0a73PvMA7ltX3imPKfo6GFVKaa
+         pdS8B8DF0g0qghIYChRm/Wx6drgajTXiptCZ4zF/uCxPD6xwQ1H2w7ARfL8jIJgxK0sH
+         iRPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3OB7lD9IsLsjTT/Zgb3BM7QAVB4ydEQ1DyuFepEmj3Y=;
+        b=4Vj7BzOLzf7A33JQvSvFjq7INeQ4HV6Ux0dNkA9WB7y8wbSyCt9h5teEyQwHjf5ENH
+         o9Bngn+uEkwiCSGnZ+n7j2Kyze4+wmdv3Dl8wllq0sMlu3xWo9r7pHFacpMC21BP5qtj
+         vZBEc7+8/XEiHrPzIj2vewS7PeXVWFWpQP0MZfqWy+dDG3a40Kqu1pmCRL3rtqEAVZMC
+         h9XuxDgMD2UHvLqAZpiEA+310oDKghPaDtdB7Nt6u+UArOe+liJd2t5mkFCJLgoD7MWF
+         ohF5aM37zyQYV5qXev7Xna4JM6nRPIoFQwtXODyaJdDGoKJuJR2xMBMqeyzjLkV+J17u
+         1Tng==
+X-Gm-Message-State: ACgBeo1C/21bTWeIWAR2ATyYbiuTGUbNm4mXFVIPIcYKm34CXemHosuY
+        3dhbnSpRKiXKFxnUD19/uXhmYm61JjyUfNPjlu9WqQ==
+X-Google-Smtp-Source: AA6agR4zLIlTlZe/0RVmVx49oJdfG1mYQvJFbdLFr1vOKxT2ZifJrd7mtQ4FR3csW9F0zYw8Ux112gEewoiKIAkMYcM=
+X-Received: by 2002:a17:902:d505:b0:176:96f1:2e61 with SMTP id
+ b5-20020a170902d50500b0017696f12e61mr19227932plg.73.1662841799269; Sat, 10
+ Sep 2022 13:29:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000005ed86405e846585a@google.com> <20220910020633.2620505-1-eadavis@sina.com>
+In-Reply-To: <20220910020633.2620505-1-eadavis@sina.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Sat, 10 Sep 2022 13:29:47 -0700
+Message-ID: <CAKH8qBt_8mEA_2Bn=z9o-rntov8nPa=sH93R8-+zM99u+qP6Fg@mail.gmail.com>
+Subject: Re: [PATCH] kernel/bpf: htab_map_alloc() exit by free_map_locked
+ logic issue
+To:     eadavis@sina.com
+Cc:     syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, netdev@vger.kernel.org, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        eadivs <eadivs@sina.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baikal-T1 SoC is equipped with the DW uMCTl2 DDRC of v2.61a with 32-bit
-DQ-bus accepting DDR2/DDR3 SDRAMs of up to 2 ranks, 1:2 HIF/SDRAM clocks
-rate ratio, HIF interface burst length of 8 Full DQ-bus words, 40-bit
-System/Application address width and 128-bits data width, 3 System address
-regions with block size 256MB. There is SEC/DED ECC capability with Scrub
-(RMW) and Scrubber features.
+On Fri, Sep 9, 2022 at 7:07 PM <eadavis@sina.com> wrote:
+>
+> From: eadivs <eadivs@sina.com>
+>
+> syzbot is reporting WARNING: ODEBUG bug in htab_map_alloc(), the
+> loop exits without reaching length HASHTAB_MAP_LOCK_COUNT, and
+> the loop continues HASHTAB_MAP_LOCK_COUNT times in label
+> free_map_locked.
 
-Since the Baikal-T1 DDR controller is capable of the ECC let's add it to
-the DW uMCTL2 DDRC EDAC driver. The most of the parameters above will be
-autodetected except HIF burst length and SAR block size, which will be set
-by means of the Baikal-T1-specific initialization method. The controller
-compatible string "baikal,bt1-ddrc" will be used to attach the driver to
-the kernel device. It's chosen in accordance with the just updated
-DT-bindings.
+Please use [PATCH bpf] vs [PATCH bpf-next] in subject to indicate
+which tree you're targeting.
+Also, it seems your email hasn't reached the mailing list for some reason.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/edac/synopsys_edac.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Are you sure that the issue is due to HASHTAB_MAP_LOCK_COUNT? The code
+seems fine as is; unconditionally calling free on NULL shouldn't be an
+issue.
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 0a00e80ddeb9..24cd8f23242a 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -1342,6 +1342,20 @@ static int zynqmp_init_plat(struct snps_edac_priv *priv)
- 	return 0;
- }
- 
-+/*
-+ * bt1_init_plat - Baikal-T1-specific platform initialization.
-+ * @priv:	DDR memory controller private data.
-+ *
-+ * Return: always zero.
-+ */
-+static int bt1_init_plat(struct snps_edac_priv *priv)
-+{
-+	priv->info.hif_burst_len = SNPS_DDR_BL8;
-+	priv->sys_app_map.minsize = DDR_MIN_SARSIZE;
-+
-+	return 0;
-+}
-+
- /**
-  * snps_get_dtype - Return the controller memory width.
-  * @mstr:	Master CSR value.
-@@ -2470,6 +2484,7 @@ static int snps_mc_remove(struct platform_device *pdev)
- 
- static const struct of_device_id snps_edac_match[] = {
- 	{ .compatible = "xlnx,zynqmp-ddrc-2.40a", .data = zynqmp_init_plat },
-+	{ .compatible = "baikal,bt1-ddrc", .data = bt1_init_plat },
- 	{ .compatible = "snps,ddrc-3.80a" },
- 	{ }
- };
--- 
-2.37.2
+ htab_map_alloc+0xc76/0x1620 kernel/bpf/hashtab.c:632
 
+Which, if I'm looking at the function is:
+bpf_map_area_free(htab);
+
+?
+
+> Link: https://syzkaller.appspot.com/bug?extid=5d1da78b375c3b5e6c2b
+> Reported-by: syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com
+> Signed-off-by: eadivs <eadivs@sina.com>
+> ---
+>  kernel/bpf/hashtab.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 65877967f414..f5381e1c00a6 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -473,7 +473,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+>         bool percpu_lru = (attr->map_flags & BPF_F_NO_COMMON_LRU);
+>         bool prealloc = !(attr->map_flags & BPF_F_NO_PREALLOC);
+>         struct bpf_htab *htab;
+> -       int err, i;
+> +       int err, i, j = HASHTAB_MAP_LOCK_COUNT;
+>
+>         htab = kzalloc(sizeof(*htab), GFP_USER | __GFP_ACCOUNT);
+>         if (!htab)
+> @@ -523,8 +523,10 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+>                                                            sizeof(int),
+>                                                            sizeof(int),
+>                                                            GFP_USER);
+> -               if (!htab->map_locked[i])
+> +               if (!htab->map_locked[i]) {
+> +                       j = i;
+>                         goto free_map_locked;
+> +               }
+>         }
+>
+>         if (htab->map.map_flags & BPF_F_ZERO_SEED)
+> @@ -554,7 +556,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+>  free_prealloc:
+>         prealloc_destroy(htab);
+>  free_map_locked:
+> -       for (i = 0; i < HASHTAB_MAP_LOCK_COUNT; i++)
+> +       for (i = 0; i < j; i++)
+>                 free_percpu(htab->map_locked[i]);
+>         bpf_map_area_free(htab->buckets);
+>  free_htab:
+> --
+> 2.37.2
+>
