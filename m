@@ -2,111 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E274B5B4A27
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 23:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CFB5B4A4C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 23:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiIJV1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 17:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S229947AbiIJVfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 17:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiIJV00 (ORCPT
+        with ESMTP id S230505AbiIJVfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 17:26:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E8E4F649;
-        Sat, 10 Sep 2022 14:21:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 404B3CE0AF6;
-        Sat, 10 Sep 2022 21:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDDBBC433D6;
-        Sat, 10 Sep 2022 21:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662844796;
-        bh=uASbzskNgxAg+HPPH5Q5UI7OXq1oofkIiy+UyhNuo7s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Riu56QS0EbzU/Or8GA0j4DmcdLOLYskvb3HphiPZkx5YPxmX5fP63lNFNtx1Zit3i
-         clPVwEY/Ybu+95dP/DVXQmdPmahjEGgn1ffgqS/QjD2tYYeFj5J66Rksz3GWxs9cgy
-         ZLLjEzT5hh0Pv1zJdCrUNWb9LIDcIRuOv7cTi9Pih/Vly6ZsF2VbUxMxsWLLz+8lKJ
-         daDW1FD5NNwTQc5MutsyerHHDk00ncKDmaqdyku37A/u4D78xuukxD/Iwr9AB6C1u8
-         2bFigGxjEYyTS8DUYSaADx5yc/BrFU837sWp74JhOavfTgiqv8xgqCj6PQCIvhqYki
-         SSwwyYkD0d8vg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, jlee@suse.com,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 5/5] platform/x86: acer-wmi: Acer Aspire One AOD270/Packard Bell Dot keymap fixes
-Date:   Sat, 10 Sep 2022 17:19:47 -0400
-Message-Id: <20220910211947.71066-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220910211947.71066-1-sashal@kernel.org>
-References: <20220910211947.71066-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 10 Sep 2022 17:35:19 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5249B1A047
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:29:45 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id s16-20020a170902ea1000b00176cf52a348so3471908plg.3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
+        b=ONMGnunKNz4gp6pmKkYtXjmszONPlJmgdmvIFMNIH+l1kH1hr624Pikj7usUwyBpKa
+         jdsHPH0YixHNFhP/yHhRREK/X8wkkfqH6qk8dp5aGV6QebWO+f6XMb2QvPYteCi4E4Uc
+         T8M/1/I05+yqj5lcEBqf6Xk3mm1+GqkhSuJGBcWXiIU6f3W+6QjI9nzceAR+tOPaenBz
+         UTSW3y14Yxlk4TNZ/Wl7n2dP7gYAOGOoyxN1CHYmrWybYD+5sZdz4CQLci8yoJ9emYSc
+         Nctku8l/YvfTuqjQV/j26hSEz3mpU5iS7q0UtrBp4MSk+XbJ2haQ1nySY5D37C0eYdQx
+         +vRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
+        b=UfbdHQZwSQ8FQkzFz3aYOp81SombHH8pWUqXvHtNKE4oREa2YvXsm984P1LjdviiwL
+         7BjUH1k+JrZotLrBxWqJF4ohfum6m7MPNHKfzl1jki8eFMACVKv68/5DwNtEUH3fmZv4
+         kj5Hfcbqt1Xd5ip7MSB7WN/VrdrRXudkaqZf1ze+ZvU4CHhwfa+pZhw7ruoKwZ7KRys3
+         MLZVY96fiC+fJfpNl2o+Efa39xuCKm7bG5/3V4fpUiugl7WxbUFYVmL/UTmTYEKywnoX
+         +CzYhe0Hg4YFDnsiGSdilhIBd5jc72uqv9Vev1BRVrZb6nzY5ICjfo+j5aIH1boMUIW3
+         4l9A==
+X-Gm-Message-State: ACgBeo20AAV6qXlViPRRAHK5b8PQLSgoKuL7ypCoFnFpyK2sGsP4YkAY
+        9m1sJTdBfh+jG2hiYSrm7k77l076k0313A==
+X-Google-Smtp-Source: AA6agR4gR+/yHl1fMdZOru1FjRTOUUGrDSviK2l/4Yh1aEqbh8B3ViYymnNaCdL+DMqLzyFefh9vmEOz/DnoEA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:902:bd48:b0:172:bb9d:d6d5 with SMTP
+ id b8-20020a170902bd4800b00172bb9dd6d5mr19190501plx.59.1662845297768; Sat, 10
+ Sep 2022 14:28:17 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 05:28:02 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220910212804.670622-1-davidgow@google.com>
+Subject: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>
+Cc:     Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+When writing tests, it'd often be very useful to be able to intercept
+calls to a function in the code being tested and replace it with a
+test-specific stub. This has always been an obviously missing piece of
+KUnit, and the solutions always involve some tradeoffs with cleanliness,
+performance, or impact on non-test code. See the folowing document for
+some of the challenges:
+https://kunit.dev/mocking.html
 
-[ Upstream commit c3b82d26bc85f5fc2fef5ec8cce17c89633a55a8 ]
+This series consists of two prototype patches which add support for this
+sort of redirection to KUnit tests:
 
-2 keymap fixes for the Acer Aspire One AOD270 and the same hardware
-rebranded as Packard Bell Dot SC:
+1: static_stub: Any function which might want to be intercepted adds a
+call to a macro which checks if a test has redirected calls to it, and
+calls the corresponding replacement.
 
-1. The F2 key is marked with a big '?' symbol on the Packard Bell Dot SC,
-this sends WMID_HOTKEY_EVENTs with a scancode of 0x27 add a mapping
-for this.
+2: ftrace_stub: Functions are intercepted using ftrace.
+This doesn't require adding a new prologue to each function being
+replaced, but does have more dependencies (which restricts it to a small
+number of architectures, not including UML), and doesn't work well with
+inline functions.
 
-2. Scancode 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate
-input event with the "Video Bus" input device events. But on these devices
-the "Video Bus" does not send events for this key. Map 0x61 to KEY_UNKNOWN
-instead of using KE_IGNORE so that udev/hwdb can override it on these devs.
+The API for both implementations is very similar, so it should be easy
+to migrate from one to the other if necessary.  Both of these
+implementations restrict the redirection to the test context: it is
+automatically undone after the KUnit test completes, and does not affect
+calls in other threads. If CONFIG_KUNIT is not enabled, there should be
+no overhead in either implementation.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220829163544.5288-1-hdegoede@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Does either (or both) of these features sound useful, and is this
+sort-of API the right model? (Personally, I think there's a reasonable
+scope for both.) Is anything obviously missing or wrong? Do the names,
+descriptions etc. make any sense?
+
+Note that these patches are definitely still at the "prototype" level,
+and things like error-handling, documentation, and testing are still
+pretty sparse. There is also quite a bit of room for optimisation.
+These'll all be improved for v1 if the concept seems good.
+
+We're going to be talking about this again at LPC, so it's worth having
+another look before then if you're interested and/or will be attending:
+https://lpc.events/event/16/contributions/1308/
+
+Cheers,
+-- David
+
 ---
- drivers/platform/x86/acer-wmi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/acer-wmi.c b/drivers/platform/x86/acer-wmi.c
-index ec3cbb7844bce..c10b97c91f3cc 100644
---- a/drivers/platform/x86/acer-wmi.c
-+++ b/drivers/platform/x86/acer-wmi.c
-@@ -105,6 +105,7 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_KEY, 0x22, {KEY_PROG2} },    /* Arcade */
- 	{KE_KEY, 0x23, {KEY_PROG3} },    /* P_Key */
- 	{KE_KEY, 0x24, {KEY_PROG4} },    /* Social networking_Key */
-+	{KE_KEY, 0x27, {KEY_HELP} },
- 	{KE_KEY, 0x29, {KEY_PROG3} },    /* P_Key for TM8372 */
- 	{KE_IGNORE, 0x41, {KEY_MUTE} },
- 	{KE_IGNORE, 0x42, {KEY_PREVIOUSSONG} },
-@@ -118,7 +119,13 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_IGNORE, 0x48, {KEY_VOLUMEUP} },
- 	{KE_IGNORE, 0x49, {KEY_VOLUMEDOWN} },
- 	{KE_IGNORE, 0x4a, {KEY_VOLUMEDOWN} },
--	{KE_IGNORE, 0x61, {KEY_SWITCHVIDEOMODE} },
-+	/*
-+	 * 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate input event
-+	 * with the "Video Bus" input device events. But sometimes it is not
-+	 * a dup. Map it to KEY_UNKNOWN instead of using KE_IGNORE so that
-+	 * udev/hwdb can override it on systems where it is not a dup.
-+	 */
-+	{KE_KEY, 0x61, {KEY_UNKNOWN} },
- 	{KE_IGNORE, 0x62, {KEY_BRIGHTNESSUP} },
- 	{KE_IGNORE, 0x63, {KEY_BRIGHTNESSDOWN} },
- 	{KE_KEY, 0x64, {KEY_SWITCHVIDEOMODE} },	/* Display Switch */
+Changes since RFC v1:
+https://lore.kernel.org/lkml/20220318021314.3225240-1-davidgow@google.com/
+- Fix some typos (thanks Daniel)
+- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+- Use ftrace_instruction_pointer_set() in place of kernel livepatch,
+  which seems to have disappeared:
+  https://lore.kernel.org/lkml/0a76550d-008d-0364-8244-4dae2981ea05@csgroup.eu/T/
+- Fix a copy-paste name error in the resource finding function.
+- Rebase on top of torvalds/master, as it wasn't applying cleanly.
+
+Note that the Kernel Livepatch -> ftrace change seems to allow more
+architectures to work, but while they compile, there still seems to be
+issues. So, this will compile on (e.g.) arm64, but fails:
+$ ./tools/testing/kunit/kunit.py run 'example*' --kunitconfig lib/kunit/stubs_example.kunitconfig --arch arm64 --make_options LLVM=1
+[05:00:13] # example_ftrace_stub_test: initializing
+[05:00:13] # example_ftrace_stub_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:179
+[05:00:13] Expected add_one(1) == 0, but
+[05:00:13] add_one(1) == 2 
+[05:00:13] not ok 6 - example_ftrace_stub_test                                                                                                                                                                                              
+[05:00:13] [FAILED] example_ftrace_stub_test                                                                                                                                                                                                
+
+
+
+Daniel Latypov (1):
+  kunit: expose ftrace-based API for stubbing out functions during tests
+
+David Gow (1):
+  kunit: Expose 'static stub' API to redirect functions
+
+ include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
+ include/kunit/static_stub.h         | 106 +++++++++++++++++++++
+ lib/kunit/Kconfig                   |  11 +++
+ lib/kunit/Makefile                  |   5 +
+ lib/kunit/ftrace_stub.c             | 137 ++++++++++++++++++++++++++++
+ lib/kunit/kunit-example-test.c      |  63 +++++++++++++
+ lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
+ lib/kunit/stubs_example.kunitconfig |  10 ++
+ 8 files changed, 541 insertions(+)
+ create mode 100644 include/kunit/ftrace_stub.h
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/ftrace_stub.c
+ create mode 100644 lib/kunit/static_stub.c
+ create mode 100644 lib/kunit/stubs_example.kunitconfig
+
 -- 
-2.35.1
+2.37.2.789.g6183377224-goog
 
