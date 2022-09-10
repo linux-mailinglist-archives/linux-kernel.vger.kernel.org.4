@@ -2,49 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9E25B4774
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 18:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F5F5B4783
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 18:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIJQRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 12:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S229488AbiIJQc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 12:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIJQRa (ORCPT
+        with ESMTP id S229527AbiIJQcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 12:17:30 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F3348EA4;
-        Sat, 10 Sep 2022 09:17:29 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-324ec5a9e97so52275347b3.7;
-        Sat, 10 Sep 2022 09:17:29 -0700 (PDT)
+        Sat, 10 Sep 2022 12:32:23 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD624A83E;
+        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id f131so6899551ybf.7;
+        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=03ngtYqYEXolKu6SgaLeTLYIPRaT5PUq8tMj9qg+G+I=;
-        b=VahRpgtK1G6BOqLEK+b+GueRalhAh9l5kapJYSE3U/V26pWHsZSt8cVEWRUUiUJc9l
-         SAD2tNpCe5rqfPXAw1hQRGexVRhSRiEIvrNykfcNEx+FPlC90zhIZ3Ir+WLJ5qu9PvQW
-         Ck9CfXDB6+fAibaLRIsa9/7VmUZioRQKnVGovIg6SI9Abxi2JCJSTR34LJlYD9OT5Ooa
-         uw9pRqeJYqNAbVeaffJzxpV1FeX5nFY4tjUAbLT/kPVKWCRlMlvESp0ymu93VytIGq2M
-         Spd55bP1Gg2K8AFlULwCRZNecTcwpmBIS3vEIFSASoR+ldWU8zkoujv4ERQCG6k9iy/0
-         Mxrw==
-X-Gm-Message-State: ACgBeo2WBKdurp+ejJywIYXXjW9mADLzmcXaE2jufV0i+0Q01DB58vPI
-        N0I8Db9QhQ0t2xZQjGwdMIiV/LCEJCPnPciSnKUFj03BAVE=
-X-Google-Smtp-Source: AA6agR6v62pnEPxkAGr4xlxx7njz6TcGp5QQC3n1gAUT4PKCiUpCdOOVfffdXLpLRmac2uOMJ64ECiF6X/j2Pt6Y33c=
-X-Received: by 2002:a0d:cdc2:0:b0:335:debd:2b3d with SMTP id
- p185-20020a0dcdc2000000b00335debd2b3dmr15704201ywd.19.1662826648749; Sat, 10
- Sep 2022 09:17:28 -0700 (PDT)
+        bh=GkMFjVtDr0W10OJLyjB1PHKjRI7ZFioNTd0VYLRMl94=;
+        b=ThoRLvkIbjrCWL0q+TFVOHf3eGbii09QgZZ8+fnloYa65GmvZoYZxXRfi4dIf/o3/X
+         CHxXNCVetlaCzlNPH7RHeluIxXBW9UaWGxJbq44/RtWKjnWMdCJeIjeGpTxtZk7sC3XY
+         FC1+bATa/yirJyG/f0TfPtNbPuBdAW51Y4xNJXJOabOT0rud7KCnxWelfVT3WcqdnVvi
+         S/MvEcHpaC+v+YF47p1//uEddmEbtpH4EW44HoPAx6nua0qW6qe+AO4eBtEhW/IhMKDt
+         EtzYW5sIUxU/qV5nqC5OKkZTZ9vMESj0n6S0HZwEROc08lB3wnnH38cngZo5+KpEIQns
+         iUaQ==
+X-Gm-Message-State: ACgBeo09Bstel6aHIS4x5EoDtJZ7DCW8jizVZ0Jd0dyvtaTwHiRyqD8t
+        l7KDxBTL2gsd8LWoF2CLf5zUIJz+v4ZKxTCZ4bs=
+X-Google-Smtp-Source: AA6agR4n7pXTzaWGoZwbXMPbML7j3aWjxBABW4Ue2CuqwFbK1YnZzMiGo3Y8jNXuTBWAX9gMGWr6mCabLDZaslxS/Ik=
+X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
+ v12-20020a252f0c000000b006a8f23012edmr15745127ybv.633.1662827541557; Sat, 10
+ Sep 2022 09:32:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220902074144.2209674-1-floridsleeves@gmail.com>
-In-Reply-To: <20220902074144.2209674-1-floridsleeves@gmail.com>
+References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com> <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
+In-Reply-To: <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 10 Sep 2022 18:17:17 +0200
-Message-ID: <CAJZ5v0jXjmgV8vAVgJzVfmPKFXOPbeXYojxOnqKQu4wukFSt-A@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers/acpi/acpi_video: check return value of acpi_get_parent()
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+Date:   Sat, 10 Sep 2022 18:32:10 +0200
+Message-ID: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,52 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 9:42 AM Li Zhong <floridsleeves@gmail.com> wrote:
+On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Check return status of acpi_get_parent() to confirm whether it fails.
+> On Thu, Sep 08, 2022 at 04:29:02PM +0300, Andy Shevchenko wrote:
+> > This series is about unification on how we handle ACPI _UID when
+> > it's known to be an integer-in-the-string.
+> >
+> > The idea of merging either all via ACPI tree, or taking ACPI stuff
+> > for the v6.1 while the rest may be picked up later on by respective
+> > maintainers separately
 >
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  drivers/acpi/acpi_video.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+> >(currently all depends on Wolfram, other
+> > patches have got the tags from the maintainers).
 >
-> diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
-> index 5cbe2196176d..5fca9a39b1a4 100644
-> --- a/drivers/acpi/acpi_video.c
-> +++ b/drivers/acpi/acpi_video.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
-> +       // SPDX-License-Identifier: GPL-2.0-or-later
+> I stand corrected, the perf patch is not tagged yet.
+>
+> > Partially compile-tested (x86-64).
 
-This change surely is not intended?
+Tentatively applied as 6.1 material.
 
->  /*
->   *  video.c - ACPI Video Driver
->   *
-> @@ -1753,6 +1753,7 @@ static void acpi_video_dev_register_backlight(struct acpi_video_device *device)
->         int result;
->         static int count;
->         char *name;
-> +       acpi_status status;
->
->         result = acpi_video_init_brightness(device);
->         if (result)
-> @@ -1766,8 +1767,9 @@ static void acpi_video_dev_register_backlight(struct acpi_video_device *device)
->                 return;
->         count++;
->
-> -       acpi_get_parent(device->dev->handle, &acpi_parent);
-> -
-> +       status = acpi_get_parent(device->dev->handle, &acpi_parent);
-> +       if (ACPI_FAILURE(status))
-> +               return;
+If there are updates, we'll make changes as they go.
 
-But device->dev->handle is known to be valid, so the only case in
-which acpi_get_parent() above can fail is when the given namespace
-object has no parent, in which case acpi_parent will be NULL, so that
-should be caught my the check below, shouldn't it?
-
->         pdev = acpi_get_pci_dev(acpi_parent);
->         if (pdev) {
->                 parent = &pdev->dev;
-> --
+Thanks!
