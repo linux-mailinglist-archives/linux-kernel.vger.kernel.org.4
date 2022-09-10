@@ -2,202 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41B45B43A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 03:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3295B43AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 03:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiIJBh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 21:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S229601AbiIJBjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 21:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiIJBh1 (ORCPT
+        with ESMTP id S229599AbiIJBjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 21:37:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CA77B7BE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 18:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662773845; x=1694309845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HM4gATmp1s6shVM9+XdfzJPDKTDVkoUU2CxEiQTnkSE=;
-  b=nxdo1M6oVXTWuSPSJl5GnCz8jZCeSvU3C21YraoXUgf9ThMwx6sjkmbc
-   3M6SRsy05h4AohOTpKXutaJsCGHoJMadPCKJL7Jt6hc1e9fGX925vxo1Q
-   5iViBVH2I3kmp7StTAkClNGXjOrmzHebDjeo6TqEKaMkKJzSXQixxJVR1
-   0XvL+dgALUzeGJn5czy991TAMfmsujNSxSMukXj6k642a45HUCkGJeN8e
-   MX8lrkUzYmLBcv8LcsfNui7FJCvvvzNPAimwofav8VjvhuOfLXbYTtGJj
-   vBQ8E30yRNro7cHH+WwBiyttB1gzabbDagRXppryndJ0mBQKHwYFuo/5y
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277996655"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="277996655"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 18:37:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="860593642"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Sep 2022 18:37:21 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWpQu-0001y3-2j;
-        Sat, 10 Sep 2022 01:37:20 +0000
-Date:   Sat, 10 Sep 2022 09:37:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiebin Sun <jiebin.sun@intel.com>, akpm@linux-foundation.org,
-        vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
-        legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, tim.c.chen@intel.com, feng.tang@intel.com,
-        ying.huang@intel.com, tianyou.li@intel.com, wangyang.guo@intel.com,
-        jiebin.sun@intel.com
-Subject: Re: [PATCH v5 1/2] percpu: Add percpu_counter_add_local and
- percpu_counter_sub_local
-Message-ID: <202209100911.HBo9ZqIU-lkp@intel.com>
-References: <20220909203636.2652466-2-jiebin.sun@intel.com>
+        Fri, 9 Sep 2022 21:39:39 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD5FD36;
+        Fri,  9 Sep 2022 18:39:38 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id x1so3341295plv.5;
+        Fri, 09 Sep 2022 18:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=+HyY6MoZcN0FsKJ3qyqHucj5l+tGou55KVTzAQ3Bdi8=;
+        b=oYfb1vg+Kct23PhbzI75hD7wq0paEq8bOjhP7a39L3EHazFeRyHJdcOXIAqxCEsMvA
+         8PxFjgViFtOxjlQcHRC3NW7z3rO81TfLCVEbRJk/Kr55PCDZcjoPZkzC4OdpfkbXb7nj
+         cQgkdRqQYPWte2dIA8jQUFYWrm/jHWOyrE4kJQexSc0WO2hlU8+11LwohMJNbWhY3Cur
+         Vw6KdvjKfOwJPiUYfWJ5p+pOOdQc+zs23J0sodSQCKivoJ4+I0NSxBam9yHej9t/kbVh
+         V6AYVCQrdoQUC15Tr58FdCocNJHPkNQf30U6Xxr0b9A1YVvdATGDJ7DaTrbvIVdZxQV6
+         /1iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+HyY6MoZcN0FsKJ3qyqHucj5l+tGou55KVTzAQ3Bdi8=;
+        b=TOgJFjQ9iRZ4bMnsJQQ8IQNkjLnOCTVfAvyjIuzlAsf5YRpONMKdh4U9cuAQiOmvXu
+         KFuPQvK9U1Wa5MKU1y1klMwmd2tPLhJw1dKzLLsOV2pbCdKb/m35HxjkBLMWHlwTjGe/
+         aEA7BivTXFlpncTKwMh+Dkj2DGiqmvwHgSI9NVsIxxvC/KZ5pDxtNUolNo2/+vw4OY7t
+         XU/oV4dE/6pZCA4Qw6iVxmK3FUVBRVMpX+peGO38ozD6GRhx6i0QQYCUUFwfA2aw/MIV
+         xEi3eO3B085v6dljJh5pKqWPVtbpGNrGJnGlU4QfzVbaBxKUIFmIZR6q/19R8JiQBHF0
+         h2Rg==
+X-Gm-Message-State: ACgBeo2X/JiaxHCE83WV7xF0L75cfc18A2x5BCxpRFqgBYR3qVHx9hDZ
+        HT4dgfHszxEG75P6+Rq2EkCd8VCjalNl3g==
+X-Google-Smtp-Source: AA6agR6lRSG1wvLOOC+rgQ59lwfkWh29IBcT8P0r1RooVwxOiv+zbZOqCwoOHzL0TLU/D2WrTFA+2A==
+X-Received: by 2002:a17:90a:1f49:b0:202:7a55:558f with SMTP id y9-20020a17090a1f4900b002027a55558fmr8501511pjy.108.1662773977401;
+        Fri, 09 Sep 2022 18:39:37 -0700 (PDT)
+Received: from localhost ([192.55.55.56])
+        by smtp.gmail.com with ESMTPSA id n10-20020a65488a000000b0041a6638b357sm1149185pgs.72.2022.09.09.18.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 18:39:36 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 18:39:35 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        John Garry <john.garry@huawei.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Qi Liu <liuqi115@huawei.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        Chao Gao <chao.gao@intel.com>
+Subject: Re: [PATCH v4 23/26] RFC: KVM: powerpc: Move processor compatibility
+ check to hardware setup
+Message-ID: <20220910013935.GA699006@ls.amr.corp.intel.com>
+References: <cover.1662679124.git.isaku.yamahata@intel.com>
+ <b348201517333f52c570f359e0d94bc9d5afc4f2.1662679124.git.isaku.yamahata@intel.com>
+ <ee18616b-e657-7c10-5224-d9b18dbb9ea7@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220909203636.2652466-2-jiebin.sun@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee18616b-e657-7c10-5224-d9b18dbb9ea7@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiebin,
+On Fri, Sep 09, 2022 at 05:55:14AM +0000,
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-Thank you for the patch! Yet something to improve:
+> 
+> 
+> Le 09/09/2022 à 01:25, isaku.yamahata@intel.com a écrit :
+> > [Vous ne recevez pas souvent de courriers de isaku.yamahata@intel.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
+> > 
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > Move processor compatibility check from kvm_arch_processor_compat() into
+> > kvm_arch_hardware_setup().  The check does model name comparison with a
+> > global variable, cur_cpu_spec.  There is no point to check it at run time
+> > on all processors.
+> > 
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: Fabiano Rosas <farosas@linux.ibm.com>
+> > ---
+> >   arch/powerpc/kvm/powerpc.c | 13 +++++++++++--
+> >   1 file changed, 11 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> > index 7b56d6ccfdfb..7e3a6659f107 100644
+> > --- a/arch/powerpc/kvm/powerpc.c
+> > +++ b/arch/powerpc/kvm/powerpc.c
+> > @@ -444,12 +444,21 @@ int kvm_arch_hardware_enable(void)
+> > 
+> >   int kvm_arch_hardware_setup(void *opaque)
+> >   {
+> > -       return 0;
+> > +       /*
+> > +        * kvmppc_core_check_processor_compat() checks the global variable.
+> > +        * No point to check on all processors or at runtime.
+> > +        * arch/powerpc/kvm/book3s.c: return 0
+> > +        * arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
+> > +        * arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
+> > +        *                            strcmp(cur_cpu_spec->cpu_name, "e5500")
+> > +        *                            strcmp(cur_cpu_spec->cpu_name, "e6500")
+> > +        */
+> 
+> This explanation shouldn't be in the code. The content of other file may 
+> change in the future, the files may be renamed or deleted, new files may 
+> be added. And there is no added value with that comment.
+> 
+> That detailed explanation should go in the commit message.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.0-rc4 next-20220909]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220910/202209100911.HBo9ZqIU-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/44e7288c01b9b125c7a5f97591ca26ffd90e3385
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
-        git checkout 44e7288c01b9b125c7a5f97591ca26ffd90e3385
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 prepare
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from include/linux/sched/user.h:7,
-                    from include/linux/cred.h:17,
-                    from include/linux/sched/signal.h:10,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/cgroup.h:17,
-                    from include/linux/memcontrol.h:13,
-                    from include/linux/swap.h:9,
-                    from include/linux/suspend.h:5,
-                    from arch/x86/kernel/asm-offsets.c:13:
-   include/linux/percpu_counter.h: In function 'percpu_counter_sub_local':
->> include/linux/percpu_counter.h:176:9: error: implicit declaration of function 'percpu_counter_sub'; did you mean 'percpu_counter_set'? [-Werror=implicit-function-declaration]
-     176 |         percpu_counter_sub(fbc, amount);
-         |         ^~~~~~~~~~~~~~~~~~
-         |         percpu_counter_set
-   include/linux/percpu_counter.h: At top level:
->> include/linux/percpu_counter.h:229:20: warning: conflicting types for 'percpu_counter_sub'; have 'void(struct percpu_counter *, s64)' {aka 'void(struct percpu_counter *, long long int)'}
-     229 | static inline void percpu_counter_sub(struct percpu_counter *fbc, s64 amount)
-         |                    ^~~~~~~~~~~~~~~~~~
->> include/linux/percpu_counter.h:229:20: error: static declaration of 'percpu_counter_sub' follows non-static declaration
-   include/linux/percpu_counter.h:176:9: note: previous implicit declaration of 'percpu_counter_sub' with type 'void(struct percpu_counter *, s64)' {aka 'void(struct percpu_counter *, long long int)'}
-     176 |         percpu_counter_sub(fbc, amount);
-         |         ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1206: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +176 include/linux/percpu_counter.h
-
-   171	
-   172	/* no smp percpu_counter_sub_local is the same with percpu_counter_sub */
-   173	static inline void
-   174	percpu_counter_sub_local(struct percpu_counter *fbc, s64 amount)
-   175	{
- > 176		percpu_counter_sub(fbc, amount);
-   177	}
-   178	
-   179	static inline void
-   180	percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount, s32 batch)
-   181	{
-   182		percpu_counter_add(fbc, amount);
-   183	}
-   184	
-   185	static inline s64 percpu_counter_read(struct percpu_counter *fbc)
-   186	{
-   187		return fbc->count;
-   188	}
-   189	
-   190	/*
-   191	 * percpu_counter is intended to track positive numbers. In the UP case the
-   192	 * number should never be negative.
-   193	 */
-   194	static inline s64 percpu_counter_read_positive(struct percpu_counter *fbc)
-   195	{
-   196		return fbc->count;
-   197	}
-   198	
-   199	static inline s64 percpu_counter_sum_positive(struct percpu_counter *fbc)
-   200	{
-   201		return percpu_counter_read_positive(fbc);
-   202	}
-   203	
-   204	static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
-   205	{
-   206		return percpu_counter_read(fbc);
-   207	}
-   208	
-   209	static inline bool percpu_counter_initialized(struct percpu_counter *fbc)
-   210	{
-   211		return true;
-   212	}
-   213	
-   214	static inline void percpu_counter_sync(struct percpu_counter *fbc)
-   215	{
-   216	}
-   217	#endif	/* CONFIG_SMP */
-   218	
-   219	static inline void percpu_counter_inc(struct percpu_counter *fbc)
-   220	{
-   221		percpu_counter_add(fbc, 1);
-   222	}
-   223	
-   224	static inline void percpu_counter_dec(struct percpu_counter *fbc)
-   225	{
-   226		percpu_counter_add(fbc, -1);
-   227	}
-   228	
- > 229	static inline void percpu_counter_sub(struct percpu_counter *fbc, s64 amount)
-   230	{
-   231		percpu_counter_add(fbc, -amount);
-   232	}
-   233	
-
+Ok, will move the comment into the commit message.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Isaku Yamahata <isaku.yamahata@gmail.com>
