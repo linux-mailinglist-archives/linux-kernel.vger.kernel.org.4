@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3F55B447B
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 08:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6D45B447F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 08:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiIJGbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 02:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S229953AbiIJGbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 02:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiIJGbO (ORCPT
+        with ESMTP id S229955AbiIJGb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 02:31:14 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1CD9FAAD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 23:31:11 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id c11so6546829wrp.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 23:31:11 -0700 (PDT)
+        Sat, 10 Sep 2022 02:31:29 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B614A026C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 23:31:20 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso3223965wmq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 23:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=gbwg87hG3tf6Wqw8hsoPn0QdO74QME7etMAVFms+/pw=;
-        b=KwtvUurXbeHO6LN5XkdbNw+CFAxApERtegitBPv/R/BdNUucdsg3cCdZdJ+a9zF5ew
-         5sT0qI05Pl3tCASlfLDWc4LTQ4+5AQ1nACHtoksFaJbnnpIPpX0xtRJxOI6IKx4B+tJ2
-         ncT3+L/of2l+IMrhCQEei8RItm5+EdUkJkD21CuEQmp+MOHc7ozr03Kb+IJsFU97ruUU
-         dZ03pbLu6L5jW6n5mcXdn+MdvPP2r5PauSmG3bDJmXybZm6TqPa/708M/dVLvTzMZlZA
-         A5xMOZOsyn0QN1bN/RQQeotLmXt8VwH8QRYcgcZ4+Mk8Swa3AHJ6WQMbt5dnJHz96lMZ
-         XH+g==
+        bh=26/uwpg877kUcP36OEZ2fnl1A+0pDTFxJzbD+WiV7CI=;
+        b=FzZlz3yNsH4nAO27cG6JX1X9/Iz0rM4otNc9g1k1HgNBlCE+6JbdeMYLRfXWaTSMyK
+         gbqW/ur2AeaieoW1gQOP/+3C9v1ASV+Wy7tserxclG4ChCwGMh1zm3NDij6Vb7o9YP5Z
+         Lw1x10Bttln8pfggX+nIG8ifmnh+TYK7lx6fLSMAk8FvUwMt2E95Gdc5zUSRMybCN89V
+         bYLovBm89Pk2bqvoZvv4CucYi1WchYDloA0dyg1ZSUsxtCgyU8D60Bm6KyDEEacjP5xP
+         BptD0pwfJ8YxkAmAnPQzUQcTL3P8z+NuOh+YsD+dS6JaL5BT3AwsWizHUhvy4rXUccYv
+         6a6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=gbwg87hG3tf6Wqw8hsoPn0QdO74QME7etMAVFms+/pw=;
-        b=7dF440bXeAkYsI+a2Bz5RMoh6MCTgLoWKGFvmPD3kHOcsXE5bd8P2cmCm+Ewc7A3Hh
-         R7eoka3dhljWAGHbtI9GDgDdJLFV+wAajLa7pAj6uU7U2GgZXLtOCf0urpRCs80PZij6
-         KeMZLPMYHwa+Kof3wY0wXQf0Eg3+/MuC0uVWqAR/1OimfplgQkS/U+md0Or6TZaxWA7p
-         Ud/5K4eVaP5w2uJdMNN7HcKg0+CqC6IGJnxvHHN+q5C6TxZ1ZJEUWPF8b3aJfSAQ9ZwW
-         McyC618LLPU6w6+avn7misZzOl9PS08dC5TTKsrB58VYjdCRmwX28Gtk4L1XzRKyZjNR
-         4nRA==
-X-Gm-Message-State: ACgBeo2vbdRDBaXg2KtT4nF/CvuuaPzDMm29JD1XrOTkYPB0su9l+7+V
-        NZ1UdcY+lsJKxqcqWfMXiOnE
-X-Google-Smtp-Source: AA6agR5ydCjDmuydp4TsC7dOTrPwX4Vdzi7U/ldbEVD9S451Y42QFo5vu9Y81QWIEeKYvZnWCtHnGA==
-X-Received: by 2002:a5d:64a4:0:b0:226:df7c:2e5d with SMTP id m4-20020a5d64a4000000b00226df7c2e5dmr9730168wrp.416.1662791470430;
-        Fri, 09 Sep 2022 23:31:10 -0700 (PDT)
+        bh=26/uwpg877kUcP36OEZ2fnl1A+0pDTFxJzbD+WiV7CI=;
+        b=VRXDnFQIJk1WkYJFUJToRBIP/U1ZbjgwTdk3LSFyH+9Gcsg+AezZWjmGavcVdISrRC
+         iVkXvTTtzHsMAZQ1qBUF8pN8tZPUOeKQPHKKdkqDfnup5QnaMCKciyqz2dPtnqyDHWCK
+         sQkkLO/uf9KwOTcz1H40gvrkdY87tuKAfwaPf/tyUlLWDkAPQ/w2xdwVXPIUzh6GMjtp
+         l7AIqMrAA5ClNzggtVvG26lNCIAK3q+V/m9YBYWQeXA2/+ziODuLYavv581UkRYpDQZe
+         8VhqB7cVkt7WZp2BuXE7XHMERjsNIHaJuCW1GUCUCUNpjy42HRD8IXruB6a95rIkqu3b
+         /ycQ==
+X-Gm-Message-State: ACgBeo1qYk79R0P9+rtCey3cB+/d5Y1vLMKE2uv5ry7ug7JO6a6wC0lT
+        6K3/ETtPDoh5ABw7M6pPv8ok
+X-Google-Smtp-Source: AA6agR5LbQPl/dPMENW2aVEm2V9TO+13LfZuyRgQjOOawU1iK1bAd1yQqUsB+Mr+LVMQnM0AfbYFag==
+X-Received: by 2002:a7b:c34b:0:b0:3a6:8516:a729 with SMTP id l11-20020a7bc34b000000b003a68516a729mr7702925wmj.83.1662791478442;
+        Fri, 09 Sep 2022 23:31:18 -0700 (PDT)
 Received: from localhost.localdomain ([117.217.182.47])
-        by smtp.gmail.com with ESMTPSA id n16-20020a05600c4f9000b003a5c7a942edsm2828122wmq.28.2022.09.09.23.31.03
+        by smtp.gmail.com with ESMTPSA id n16-20020a05600c4f9000b003a5c7a942edsm2828122wmq.28.2022.09.09.23.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 23:31:09 -0700 (PDT)
+        Fri, 09 Sep 2022 23:31:17 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
 Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
@@ -57,9 +57,9 @@ Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         dmitry.baryshkov@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 01/12] PCI: qcom-ep: Add kernel-doc for qcom_pcie_ep structure
-Date:   Sat, 10 Sep 2022 12:00:34 +0530
-Message-Id: <20220910063045.16648-2-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 02/12] PCI: qcom-ep: Do not use hardcoded clks in driver
+Date:   Sat, 10 Sep 2022 12:00:35 +0530
+Message-Id: <20220910063045.16648-3-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220910063045.16648-1-manivannan.sadhasivam@linaro.org>
 References: <20220910063045.16648-1-manivannan.sadhasivam@linaro.org>
@@ -75,41 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add kernel-doc for qcom_pcie_ep structure.
+Generally, device drivers should just rely on the platform data like
+devicetree to supply the clocks required for the functioning of the
+peripheral. There is no need to hardcode the clk info in the driver.
+So get rid of the static clk info and obtain the platform supplied
+clks.
+
+The total number of clocks supplied is obtained using the
+devm_clk_bulk_get_all() API and used for the rest of the clk_bulk_ APIs.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/pci/controller/dwc/pcie-qcom-ep.c | 33 +++++++++--------------
+ 1 file changed, 13 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 9f92d53da81a..27b7c9710b5f 100644
+index 27b7c9710b5f..34c498d581de 100644
 --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -140,6 +140,23 @@ static struct clk_bulk_data qcom_pcie_ep_clks[] = {
- 	{ .id = "slave_q2a" },
+@@ -130,16 +130,6 @@ enum qcom_pcie_ep_link_status {
+ 	QCOM_PCIE_EP_LINK_DOWN,
  };
  
-+/**
-+ * struct qcom_pcie_ep - Qualcomm PCIe Endpoint Controller
-+ * @pci: Designware PCIe controller struct
-+ * @parf: Qualcomm PCIe specific PARF register base
-+ * @elbi: Designware PCIe specific ELBI register base
-+ * @perst_map: PERST regmap
-+ * @mmio_res: MMIO region resource
-+ * @core_reset: PCIe Endpoint core reset
-+ * @reset: PERST# GPIO
-+ * @wake: WAKE# GPIO
-+ * @phy: PHY controller block
-+ * @perst_en: Flag for PERST enable
-+ * @perst_sep_en: Flag for PERST separation enable
-+ * @link_status: PCIe Link status
-+ * @global_irq: Qualcomm PCIe specific Global IRQ
-+ * @perst_irq: PERST# IRQ
-+ */
- struct qcom_pcie_ep {
- 	struct dw_pcie pci;
+-static struct clk_bulk_data qcom_pcie_ep_clks[] = {
+-	{ .id = "cfg" },
+-	{ .id = "aux" },
+-	{ .id = "bus_master" },
+-	{ .id = "bus_slave" },
+-	{ .id = "ref" },
+-	{ .id = "sleep" },
+-	{ .id = "slave_q2a" },
+-};
+-
+ /**
+  * struct qcom_pcie_ep - Qualcomm PCIe Endpoint Controller
+  * @pci: Designware PCIe controller struct
+@@ -151,6 +141,8 @@ static struct clk_bulk_data qcom_pcie_ep_clks[] = {
+  * @reset: PERST# GPIO
+  * @wake: WAKE# GPIO
+  * @phy: PHY controller block
++ * @clks: PCIe clocks
++ * @num_clks: PCIe clocks count
+  * @perst_en: Flag for PERST enable
+  * @perst_sep_en: Flag for PERST separation enable
+  * @link_status: PCIe Link status
+@@ -170,6 +162,9 @@ struct qcom_pcie_ep {
+ 	struct gpio_desc *wake;
+ 	struct phy *phy;
  
++	struct clk_bulk_data *clks;
++	int num_clks;
++
+ 	u32 perst_en;
+ 	u32 perst_sep_en;
+ 
+@@ -244,8 +239,7 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+ {
+ 	int ret;
+ 
+-	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				      qcom_pcie_ep_clks);
++	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -266,8 +260,7 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+ err_phy_exit:
+ 	phy_exit(pcie_ep->phy);
+ err_disable_clk:
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				   qcom_pcie_ep_clks);
++	clk_bulk_disable_unprepare(pcie_ep->num_clks, pcie_ep->clks);
+ 
+ 	return ret;
+ }
+@@ -276,8 +269,7 @@ static void qcom_pcie_disable_resources(struct qcom_pcie_ep *pcie_ep)
+ {
+ 	phy_power_off(pcie_ep->phy);
+ 	phy_exit(pcie_ep->phy);
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				   qcom_pcie_ep_clks);
++	clk_bulk_disable_unprepare(pcie_ep->num_clks, pcie_ep->clks);
+ }
+ 
+ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
+@@ -495,10 +487,11 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
+ 		return ret;
+ 	}
+ 
+-	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(qcom_pcie_ep_clks),
+-				qcom_pcie_ep_clks);
+-	if (ret)
+-		return ret;
++	pcie_ep->num_clks = devm_clk_bulk_get_all(dev, &pcie_ep->clks);
++	if (pcie_ep->num_clks < 0) {
++		dev_err(dev, "Failed to get clocks\n");
++		return pcie_ep->num_clks;
++	}
+ 
+ 	pcie_ep->core_reset = devm_reset_control_get_exclusive(dev, "core");
+ 	if (IS_ERR(pcie_ep->core_reset))
 -- 
 2.25.1
 
