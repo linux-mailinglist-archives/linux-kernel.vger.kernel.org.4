@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2515B4859
+	by mail.lfdr.de (Postfix) with ESMTP id CE1405B485A
 	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 21:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIJTsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 15:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S229577AbiIJTuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 15:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiIJTsK (ORCPT
+        with ESMTP id S229459AbiIJTuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 15:48:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5032167F7;
-        Sat, 10 Sep 2022 12:48:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y3so11601940ejc.1;
-        Sat, 10 Sep 2022 12:48:07 -0700 (PDT)
+        Sat, 10 Sep 2022 15:50:20 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32EB229C86;
+        Sat, 10 Sep 2022 12:50:19 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 1FB2BDA3;
+        Sat, 10 Sep 2022 22:54:09 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 1FB2BDA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=0gpqeUaUdq1jgASkshCgKRmA+Q1+uZQMqt4GLBoHHR4=;
-        b=SwwucSHlXm0YPfeeC4lZlFZ0Z+dOmRGPQkOla56HWKeyOlplorH3zvOV9tOGT3pmgF
-         kvpEpOd9jdcY25oRmAec19MKAehbtwqF4/ycOuVjaXqSGUzfJjVbCgHtOEu8FWujUIjs
-         /+Ivfh5ZGXeZ49lkWrMCSrY4sTUIgDrBmCrCD6IxYuOi59VWv+BNdWe1YHSTBkGmJFlB
-         2KyDVNOxbX4/G+lsR/g5/JKfn3SO7sjiVWxOB9kWgl5iX8/MwMUDSNolWdwZRplv3cFY
-         Gm+wmG0ZHynL0mG0Hp8Zb+4VDdU3o9bt1dTGa74Gp8Mvghr7eTk8gV9x+g2zYihY4txV
-         ibhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0gpqeUaUdq1jgASkshCgKRmA+Q1+uZQMqt4GLBoHHR4=;
-        b=w/TG74Ztig6K/oRVPqSkPXakdOUS4gWyu2QKlJnOJMeFo4jNTU/QJ5TYzvd+BJ+6Xr
-         FIkuMHFup9oXQokbDNlIwhm7BL0XWYWEOfMxE3cySFoBO8rhfsRPtwJ8QCg+b9Io/3Ik
-         EPh4/vGTzKPq6fnO9AYi0NXPJqDorMlEhHqOS5TdvLQwaRmu2fdYdTTQtuK6qHPdzFPC
-         29s4KLaxFVaeiF4VWRdkKf7mfQNBqpi1a8aTVQtSbEpOXUIh54Mh5PrNnGESr3gLJkO2
-         2wMV1bhRQhDGP9c5vYkV/BKL0zdf9C0gFrdpIFI74g6ovzVUm6AW/wg3Xf2lFq1euFQp
-         TXaQ==
-X-Gm-Message-State: ACgBeo3os0pTc6LAHqXMsfTI2nXJeLfS5Kbk/6x8cxNPusvb3qLgWTMQ
-        bstN/d7N9g9KmqOToDsg+6M=
-X-Google-Smtp-Source: AA6agR7X+LQPt9/yXz/e+j2Vs+LXI3PFWRHgchsO6YkfGoeC9fg48fhlEHAuSGAbjlI8W1ZTcSuhuA==
-X-Received: by 2002:a17:907:728c:b0:730:c005:5d93 with SMTP id dt12-20020a170907728c00b00730c0055d93mr14059967ejc.265.1662839286227;
-        Sat, 10 Sep 2022 12:48:06 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id ly9-20020a170906af4900b0073dde62713asm2090628ejb.89.2022.09.10.12.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 12:48:05 -0700 (PDT)
-Message-ID: <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
-Date:   Sat, 10 Sep 2022 21:48:04 +0200
+        d=baikalelectronics.ru; s=mail; t=1662839649;
+        bh=IweD942MZOoOOu0jp63XfXx5pfgiid/lLTQ1w8nMtAA=;
+        h=From:To:CC:Subject:Date:From;
+        b=GM5HEI9skOQnX4tiaB39FSS7wLES1qu9zsdItmUc4NrevXtmw3+4jjIrJWlNE8+O1
+         mQZATfJ8ZP5nwQOxEkXjC6B2m+ZWWOC0ehJRjV/cGlHQcTW4wKSocAdsn8LzqXBLd1
+         4UaBTj7kE/G3jdLT4MW2XRtfCnb5vRgw5xdwpbRk=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:50:18 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v2 00/18] EDAC/synopsys: Add generic DDRC info and address mapping
+Date:   Sat, 10 Sep 2022 22:49:49 +0300
+Message-ID: <20220910195007.11027-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
- rockchip,rk3128-pwm
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de
-Cc:     linux-rockchip@lists.infradead.org, philipp.tomsich@vrull.eu,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        kever.yang@rock-chips.com, zhangqing@rock-chips.com,
-        linux-kernel@vger.kernel.org, heiko@sntech.de
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
- <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,84 +62,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduced CC.
+This patchset is a second one in the series created in the framework of my
+Baikal-T1 DDRC-related work:
 
-Hi Rob,
+[1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-edac/20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru
+[2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
+Link: ---you are looking at it---
+[3: In-progress] EDAC/synopsys: Add generic resources and Baikal-T1 support
+Link: https://lore.kernel.org/linux-edac/20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru
 
-The rk3328 and rv1108 PWM interrupt is chaired between blocks I think.
-For rv1108 the same interrupt is used for all PWM nodes.
-For rk3328 only added to one PWM node.
-Currently not in use in a Linux drivers??
+Note the patchsets above must be merged in the same order as they are
+placed in the list in order to prevent conflicts. Nothing prevents them
+from being reviewed synchronously though. Any tests are very welcome.
+Thanks in advance.
 
-No consensus yet...on removing or parent node, so it stays as it is...
-Maybe if you have ideas things will change. ;)
+The second patchset mainly concerns converting the DW uMCTL2 DDRC driver
+to being more generic so later it would be extended with our DDR
+controller support and further with the new DW uMCTL2 DDRC IP-core
+compilations.
 
-Johan
+The series starts with the Error-injection functionality movement to
+DebugFS. Indeed the Debug-parts should be in the dedicated DebugFS. SysFS
+is not a place for it, moreover seeing later we'll add some more debug
+nodes.
 
-===
+Afterwards even though it isn't advertised but even at this stage the DW
+uMCTL2 DDRC driver supports a bit more DDR protocols than it actually
+specifies in the mem_ctrl_info.mtype_cap field. So first we suggest to
+extend the MCI core memory types enumeration with LPDDR (mDDR) and LPDDR2,
+which support can be enabled in the DW uMCTL2 DDR controller. Second we
+need to make sure all the possible DDR protocol types are correctly
+detected during the DW uMCTL DDRC probe procedure.
 
-See discussion:
-https://lore.kernel.org/linux-rockchip/20b7c702-9412-93b4-3174-e8633bc413d7@gmail.com/ 
+Then a bit painful patch goes. Alas we have to deviate the driver from the
+EDAC standard private data allocation/initialization pattern. Since we are
+going to add the DW uMCTL2 IP-core specific parameters detection procedure
+and later on implement additional platform resources requests there is no
+other choice but to allocate the driver private data at the early stage of
+the device probe procedure even before it's possible to allocate the MCI
+descriptor. The DW uMCTL2 DDRC platform resources and configuration info
+will be then utilized to properly allocate and initialize the
+mem_ctrl_info structure instance.
 
-On 9/10/22 16:53, Rob Herring wrote:
-> On Sat, 10 Sep 2022 00:02:22 +0200, Johan Jonker wrote:
->> Add rockchip,rk3128-pwm compatible string.
->>
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
->>  1 file changed, 1 insertion(+)
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> pwm@10280000: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@10280010: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@10280020: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@10280030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@20040000: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@20040010: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@20040020: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@20040030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-> 	arch/arm/boot/dts/rv1108-evb.dtb
-> 
-> pwm@ff1b0030: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-a1.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-evb.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-rock64.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dtb
-> 	arch/arm64/boot/dts/rockchip/rk3328-roc-pc.dtb
-> 
+Third patch in the series is very important. It provides the DW uMCTL2
+DDRC parameters detection procedure. The DDRC and ECC parameters detected
+at this stage will be then utilized to make the driver working with much
+wider set of the DW uMCTL2 revisions and configurations. In particular
+from now the driver will retrieve the next DDRC info at the probe stage:
+ECC type, SDRAM protocol (DDR type), Full and actual DQ-bus width, SDRAM
+and HIF burst length, Core/SDRAM frequency ration, number of SDRAM ranks.
+The DDRC parameters structure will be extended with some more fields later
+in this and the next patchset. The provided private DDRC parameters
+infrastructure can be utilized to implement the platform-specific
+capabilities so the platform data and its quirks are replaced with it.
+
+The detected at the probe stage DW uMCTL2 DDRC parameters can be now used
+to implement the configuration specific functionality. In particular first
+we introduce the conditional ADDRMAP* CSRs mapping since some of these
+CSRs and their fields are left unused by the controller in some cases.
+Secondly actual DIMM ECC errors grain, ECC corrected bit, full data
+pattern and syndrome are determined based on the DDRC parameters.
+
+Afterwards goes a series of the patches which introduce an interface to
+generically determine the system address based on the SDRAM address and
+vice-versa. Thus we'll be able to report actual PFN and offset in case of
+the corrected and uncorrected errors. So first we get to convert the
+currently available HIF/SDRAM mapping table utilized for the
+errors-injection functionality into a more generic Sys<->SDRAM address
+translation interface. Secondly we suggest to conform the SDRAM column
+address mapping detection algorithm with what is defined in the DW uMCTL2
+DDRC hw reference manual. After adding a handy DebugFS node to read the
+HIF/SDRAM mapping and the system address regions support we finally
+introduce the erroneous page-frame/offset reporting to the MCI core. Since
+the full SDRAM address mapping is now always available we suggest to use
+it for the attached memory size calculation, which is a more correct
+approach rather than the si_meminfo()-based one.
+
+Link: https://lore.kernel.org/linux-edac/20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru
+Changelog v2:
+- Rebase onto the latest version of the patchset:
+[PATCH v2 00/19] EDAC/mc/synopsys: Various fixes and cleanups
+- Just resend.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+Cc: Manish Narani <manish.narani@xilinx.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Robert Richter <rric@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (18):
+  EDAC/synopsys: Convert sysfs nodes to debugfs ones
+  EDAC/mc: Extend memtypes with LPDDR(mDDR) and LPDDR2
+  EDAC/synopsys: Extend memtypes supported by controller
+  EDAC/synopsys: Detach private data from mci instance
+  EDAC/synopsys: Add DDRC basic parameters infrastructure
+  EDAC/synopsys: Convert plat-data to plat-init function
+  EDAC/synopsys: Parse ADDRMAP[7-8] CSRs for (LP)DDR4 only
+  EDAC/synopsys: Parse ADDRMAP[0] CSR for multi-ranks case only
+  EDAC/synopsys: Set actual DIMM ECC errors grain
+  EDAC/synopsys: Get corrected bit position
+  EDAC/synopsys: Read full data pattern on errors
+  EDAC/synopsys: Read data syndrome on errors
+  EDAC/synopsys: Introduce System/SDRAM address translation interface
+  EDAC/synopsys: Simplify HIF/SDRAM column mapping get procedure
+  EDAC/synopsys: Add HIF/SDRAM mapping debugfs node
+  EDAC/synopsys: Add erroneous page-frame/offset reporting
+  EDAC/synopsys: Add system address regions support
+  EDAC/synopsys: Add mapping-based memory size calculation
+
+ drivers/edac/edac_mc.c       |    2 +
+ drivers/edac/synopsys_edac.c | 1772 ++++++++++++++++++++++++----------
+ include/linux/edac.h         |    6 +
+ 3 files changed, 1291 insertions(+), 489 deletions(-)
+
+-- 
+2.37.2
+
