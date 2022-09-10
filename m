@@ -2,81 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F241A5B4693
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B5C5B4696
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIJOQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 10:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S229566AbiIJOUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 10:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIJOQJ (ORCPT
+        with ESMTP id S229549AbiIJOUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 10:16:09 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FD451414
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 07:16:03 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id X1H3opcNk9RnzX1H3odu7c; Sat, 10 Sep 2022 16:16:01 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Sep 2022 16:16:01 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH] PM / devfreq: rockchip-dfi: Fix an error message
-Date:   Sat, 10 Sep 2022 16:15:56 +0200
-Message-Id: <47627a29a443aedf3b36a4f72b3e1ad89933a0ea.1662819332.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 10 Sep 2022 10:20:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51365208F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 07:20:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4795060C59
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:20:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03B6C433D6;
+        Sat, 10 Sep 2022 14:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662819637;
+        bh=jtLoTUmzkJ28HBfAIdRhrITf/Pt98gaT25ffER4L1Zg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y2L6TAeE7bTtjKAjjbCb02y30jqC4k746YIQuIYasaKbR3Nhwt/2GroO/mWwCmAJV
+         Jr6WbYaecTzQboH2+lwF/B+IMRbaJJ8p8xFc8TYEE2OoOgnwUJw8parus0Up5F9eZo
+         KUel8MVI6oqnx3DbWRnZrZ1dvNKvkWtetIBxPWlJ5VH9hvCnzaXHEg2MxiKpIWV5Cn
+         FmpsrIxyVnKZTLh8bW8r4xSl/q5dk4IvVFNihUGawMvcq8hdhpzB0KoaZ3354BzVaO
+         i+Xi3DSchx2ShW39yEJKhRTV9dlNwDJBtgs0A0bLHG+m0e/R2JzGc/lcjUqieERwqz
+         hbUetZ+gXip9g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oX1LX-009PO7-Bn;
+        Sat, 10 Sep 2022 15:20:35 +0100
+Date:   Sat, 10 Sep 2022 15:20:35 +0100
+Message-ID: <871qsjqpjg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2] KVM: arm64: Only set KVM_MODE_PROTECTED if is_hyp_mode_available()
+In-Reply-To: <20220910134342.GA959@willie-the-truck>
+References: <20220909144552.3000716-1-quic_eberman@quicinc.com>
+        <Yxt3wmXYYbWraXrd@arm.com>
+        <05057e2a-1a85-69ba-ffcd-584d4090467a@quicinc.com>
+        <878rmrr3xw.wl-maz@kernel.org>
+        <20220910134342.GA959@willie-the-truck>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: will@kernel.org, quic_eberman@quicinc.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a typo in the message. The clock name should be 'pclk_ddr_mon'.
-Fix it.
+On Sat, 10 Sep 2022 14:43:44 +0100,
+Will Deacon <will@kernel.org> wrote:
+> 
+> On Sat, Sep 10, 2022 at 10:09:31AM +0100, Marc Zyngier wrote:
+> > On Fri, 09 Sep 2022 18:55:18 +0100,
+> > Elliot Berman <quic_eberman@quicinc.com> wrote:
+> > > 
+> > > 
+> > > 
+> > > On 9/9/2022 10:28 AM, Catalin Marinas wrote:
+> > > > On Fri, Sep 09, 2022 at 07:45:52AM -0700, Elliot Berman wrote:
+> > > >> Do not switch kvm_mode to KVM_MODE_PROTECTED if hypervisor mode is not
+> > > >> available. This prevents "Protected KVM" cpu capability being reported
+> > > >> when Linux is booting in EL1 and would not have KVM enabled.
+> > > >> 
+> > > >> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > >> ---
+> > > >>   arch/arm64/kvm/arm.c | 4 +++-
+> > > >>   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > >> 
+> > > >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > >> index 8fe73ee5fa84..861f4b388879 100644
+> > > >> --- a/arch/arm64/kvm/arm.c
+> > > >> +++ b/arch/arm64/kvm/arm.c
+> > > >> @@ -2272,7 +2272,9 @@ static int __init early_kvm_mode_cfg(char *arg)
+> > > >>   		return -EINVAL;
+> > > >>     	if (strcmp(arg, "protected") == 0) {
+> > > >> -		if (!is_kernel_in_hyp_mode())
+> > > >> +		if (!is_hyp_mode_available())
+> > > >> +			kvm_mode = KVM_MODE_DEFAULT;
+> > > > 
+> > > > I think kvm_mode is already KVM_MODE_DEFAULT at this point. You may want
+> > > > to print a warning instead.
+> > > > 
+> > > 
+> > > Does it make sense to print warning for kvm-arm.mode=nvhe as well?
+> > 
+> > In general, specifying a kvm-arm.mode when no hypervisor mode is
+> > available should be reported as a warning.
+> 
+> As long as this is pr_warn() rather than WARN() then I agree. Otherwise,
+> kernels with a kvm-arm.mode hardcoded in CONFIG_CMDLINE (e.g. Android's
+> GKI) will make for noisy guests.
 
-While at it, switch to dev_err_probe() which is less verbose, filters
--EPROBE_DEFER, and log the error code in a human readable way.
+Indeed, pr_warn() is what I had in mind. A WARN() would be pretty
+overkill, as there is nothing majorly wrong with booting at EL1, just
+an impossibility to honour the request from the command line.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This looks like a cut'n'paste typo from drivers/devfreq/rk3399_dmc.c
----
- drivers/devfreq/event/rockchip-dfi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+	M.
 
-diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 9a88faaf8b27..39ac069cabc7 100644
---- a/drivers/devfreq/event/rockchip-dfi.c
-+++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -189,10 +189,9 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
- 		return PTR_ERR(data->regs);
- 
- 	data->clk = devm_clk_get(dev, "pclk_ddr_mon");
--	if (IS_ERR(data->clk)) {
--		dev_err(dev, "Cannot get the clk dmc_clk\n");
--		return PTR_ERR(data->clk);
--	}
-+	if (IS_ERR(data->clk))
-+		return dev_err_probe(dev, PTR_ERR(data->clk),
-+				     "Cannot get the clk pclk_ddr_mon\n");
- 
- 	/* try to find the optional reference to the pmu syscon */
- 	node = of_parse_phandle(np, "rockchip,pmu", 0);
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
