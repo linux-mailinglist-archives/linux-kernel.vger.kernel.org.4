@@ -2,155 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CA15B453C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51C55B453B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIJI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 04:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S229550AbiIJI0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 04:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIJI0x (ORCPT
+        with ESMTP id S229451AbiIJI0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 04:26:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7488E0FB
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:26:52 -0700 (PDT)
+        Sat, 10 Sep 2022 04:26:52 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A03856B83
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662798412; x=1694334412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=edMros1zwKMDUZOarHjJXHIlnGh4LxkLP40pazDgUw8=;
-  b=BkRO2DHnhv7TIC8MNAwweJRwqQ0xDfvTQNkcZRAo8//kaXcO2jgrSx4G
-   NSGvfOezMEAmQG/wx4uzgH5XyRuvbf+YwqYoOYvSL7GLY44Z5fcOaIj6y
-   AeIka3r6CS9z/a433OvCLtkJ+voLfiQ+CNFBdh6z+bb/UnWGGujm3xmDm
-   g7Bi4Uxg6zJ3Q7SQByM7BziNE8ZGexThI2X78/T82f9IBJns1VlCtO58O
-   1v02G5Fo2nONRFNgeypjYW+JOVH8NseRrRQPwHODQww5eERXlKI4wmLJG
-   TFZrve/tqNFc6Z5OY2GrmcJtvPF6ee4R12sbGhpBExaXit4xwNRS9w/rR
+  t=1662798411; x=1694334411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/8ljAVmxjMrw220kT17XocVDhRfU3GdakOMIPKvIUAc=;
+  b=DZ1zy1rSVKIR3oqU9/k87xkBQyvjO0b6vrs+uHLglDtAI1NQGD8r2QJG
+   PqV1he87VOGvpkl4bKjSSC3P8Cw2XkeNtFOFZHfBwHqBePx1YDFwBo1FS
+   B6G4hSSLVvza6IAgI0N1QR1nXKEgESjhP7HwSEwxfuu0+xeEZnfW921aV
+   v2k+6piXnBVeACsGQgAuokSBk67GNh2T0MFPD5k0qhFO8P9gCA5jd94b/
+   TloZMB3/m7PByC0wQC9oqyaxitkoA0ktaKh0gUzgYANdGGnsbPTJHzdkw
+   bhdj2uNu9Ji2/3b5KES7Rc1vvJS5DllpvNxOErCzsEfv0Lr/cKhWs9+E4
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298961468"
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="297625647"
 X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="298961468"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 01:26:49 -0700
+   d="scan'208";a="297625647"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 01:26:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="791054441"
+   d="scan'208";a="677459412"
 Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Sep 2022 01:26:47 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 10 Sep 2022 01:26:47 -0700
 Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oWvp8-0002JZ-1p;
+        id 1oWvp8-0002JX-1m;
         Sat, 10 Sep 2022 08:26:46 +0000
-Date:   Sat, 10 Sep 2022 16:26:16 +0800
+Date:   Sat, 10 Sep 2022 16:26:18 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:tp_fix 1/1] include/linux/rcupdate.h:707: undefined
- reference to `bpf_prog_inc_misses_counter'
-Message-ID: <202209101652.Q0TCRc8T-lkp@intel.com>
+To:     Jiebin Sun <jiebin.sun@intel.com>, akpm@linux-foundation.org,
+        vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
+        legion@kernel.org, manfred@colorfullife.com,
+        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
+Subject: Re: [PATCH v5 1/2] percpu: Add percpu_counter_add_local and
+ percpu_counter_sub_local
+Message-ID: <202209101659.cvalTsSU-lkp@intel.com>
+References: <20220909203636.2652466-2-jiebin.sun@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220909203636.2652466-2-jiebin.sun@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git tp_fix
-head:   1d5150ae30634ba3ff98b5ac0489f44375acca56
-commit: 1d5150ae30634ba3ff98b5ac0489f44375acca56 [1/1] bpf: Prevent bpf program recursion for raw tracepoint probes
-config: riscv-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220910/202209101652.Q0TCRc8T-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+Hi Jiebin,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.0-rc4 next-20220909]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r041-20220909 (https://download.01.org/0day-ci/archive/20220910/202209101659.cvalTsSU-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1d5150ae30634ba3ff98b5ac0489f44375acca56
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf tp_fix
-        git checkout 1d5150ae30634ba3ff98b5ac0489f44375acca56
+        # https://github.com/intel-lab-lkp/linux/commit/44e7288c01b9b125c7a5f97591ca26ffd90e3385
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
+        git checkout 44e7288c01b9b125c7a5f97591ca26ffd90e3385
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   riscv32-linux-ld: kernel/bpf/trampoline.o: in function `rcu_read_lock':
->> include/linux/rcupdate.h:707: undefined reference to `bpf_prog_inc_misses_counter'
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/cred.h:17:
+   In file included from include/linux/sched/user.h:7:
+>> include/linux/percpu_counter.h:176:2: error: call to undeclared function 'percpu_counter_sub'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           percpu_counter_sub(fbc, amount);
+           ^
+   include/linux/percpu_counter.h:176:2: note: did you mean 'percpu_counter_set'?
+   include/linux/percpu_counter.h:136:20: note: 'percpu_counter_set' declared here
+   static inline void percpu_counter_set(struct percpu_counter *fbc, s64 amount)
+                      ^
+   include/linux/percpu_counter.h:229:20: error: static declaration of 'percpu_counter_sub' follows non-static declaration
+   static inline void percpu_counter_sub(struct percpu_counter *fbc, s64 amount)
+                      ^
+   include/linux/percpu_counter.h:176:2: note: previous implicit declaration is here
+           percpu_counter_sub(fbc, amount);
+           ^
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:117: arch/hexagon/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1206: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:222: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +707 include/linux/rcupdate.h
+vim +/percpu_counter_sub +176 include/linux/percpu_counter.h
 
-c3ac7cf1847a4e Paul E. McKenney          2015-09-10  654  
-^1da177e4c3f41 Linus Torvalds            2005-04-16  655  /**
-ca5ecddfa8fcbd Paul E. McKenney          2010-04-28  656   * rcu_read_lock() - mark the beginning of an RCU read-side critical section
-^1da177e4c3f41 Linus Torvalds            2005-04-16  657   *
-9b06e818985d13 Paul E. McKenney          2005-05-01  658   * When synchronize_rcu() is invoked on one CPU while other CPUs
-^1da177e4c3f41 Linus Torvalds            2005-04-16  659   * are within RCU read-side critical sections, then the
-9b06e818985d13 Paul E. McKenney          2005-05-01  660   * synchronize_rcu() is guaranteed to block until after all the other
-^1da177e4c3f41 Linus Torvalds            2005-04-16  661   * CPUs exit their critical sections.  Similarly, if call_rcu() is invoked
-^1da177e4c3f41 Linus Torvalds            2005-04-16  662   * on one CPU while other CPUs are within RCU read-side critical
-^1da177e4c3f41 Linus Torvalds            2005-04-16  663   * sections, invocation of the corresponding RCU callback is deferred
-^1da177e4c3f41 Linus Torvalds            2005-04-16  664   * until after the all the other CPUs exit their critical sections.
-^1da177e4c3f41 Linus Torvalds            2005-04-16  665   *
-1893afd6340911 Paul E. McKenney          2021-04-29  666   * In v5.0 and later kernels, synchronize_rcu() and call_rcu() also
-1893afd6340911 Paul E. McKenney          2021-04-29  667   * wait for regions of code with preemption disabled, including regions of
-1893afd6340911 Paul E. McKenney          2021-04-29  668   * code with interrupts or softirqs disabled.  In pre-v5.0 kernels, which
-1893afd6340911 Paul E. McKenney          2021-04-29  669   * define synchronize_sched(), only code enclosed within rcu_read_lock()
-1893afd6340911 Paul E. McKenney          2021-04-29  670   * and rcu_read_unlock() are guaranteed to be waited for.
-1893afd6340911 Paul E. McKenney          2021-04-29  671   *
-^1da177e4c3f41 Linus Torvalds            2005-04-16  672   * Note, however, that RCU callbacks are permitted to run concurrently
-77d8485a8b5416 Paul E. McKenney          2010-07-08  673   * with new RCU read-side critical sections.  One way that this can happen
-^1da177e4c3f41 Linus Torvalds            2005-04-16  674   * is via the following sequence of events: (1) CPU 0 enters an RCU
-^1da177e4c3f41 Linus Torvalds            2005-04-16  675   * read-side critical section, (2) CPU 1 invokes call_rcu() to register
-^1da177e4c3f41 Linus Torvalds            2005-04-16  676   * an RCU callback, (3) CPU 0 exits the RCU read-side critical section,
-^1da177e4c3f41 Linus Torvalds            2005-04-16  677   * (4) CPU 2 enters a RCU read-side critical section, (5) the RCU
-^1da177e4c3f41 Linus Torvalds            2005-04-16  678   * callback is invoked.  This is legal, because the RCU read-side critical
-^1da177e4c3f41 Linus Torvalds            2005-04-16  679   * section that was running concurrently with the call_rcu() (and which
-^1da177e4c3f41 Linus Torvalds            2005-04-16  680   * therefore might be referencing something that the corresponding RCU
-^1da177e4c3f41 Linus Torvalds            2005-04-16  681   * callback would free up) has completed before the corresponding
-^1da177e4c3f41 Linus Torvalds            2005-04-16  682   * RCU callback is invoked.
-^1da177e4c3f41 Linus Torvalds            2005-04-16  683   *
-^1da177e4c3f41 Linus Torvalds            2005-04-16  684   * RCU read-side critical sections may be nested.  Any deferred actions
-^1da177e4c3f41 Linus Torvalds            2005-04-16  685   * will be deferred until the outermost RCU read-side critical section
-^1da177e4c3f41 Linus Torvalds            2005-04-16  686   * completes.
-^1da177e4c3f41 Linus Torvalds            2005-04-16  687   *
-9079fd7c2e06a9 Paul E. McKenney          2010-08-07  688   * You can avoid reading and understanding the next paragraph by
-9079fd7c2e06a9 Paul E. McKenney          2010-08-07  689   * following this rule: don't put anything in an rcu_read_lock() RCU
-90326f0521a880 Sebastian Andrzej Siewior 2019-10-15  690   * read-side critical section that would block in a !PREEMPTION kernel.
-9079fd7c2e06a9 Paul E. McKenney          2010-08-07  691   * But if you want the full story, read on!
-9079fd7c2e06a9 Paul E. McKenney          2010-08-07  692   *
-b3e627d3d5092a Lai Jiangshan             2019-10-15  693   * In non-preemptible RCU implementations (pure TREE_RCU and TINY_RCU),
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  694   * it is illegal to block while in an RCU read-side critical section.
-01b1d88b09824b Thomas Gleixner           2019-07-26  695   * In preemptible RCU implementations (PREEMPT_RCU) in CONFIG_PREEMPTION
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  696   * kernel builds, RCU read-side critical sections may be preempted,
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  697   * but explicit blocking is illegal.  Finally, in preemptible RCU
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  698   * implementations in real-time (with -rt patchset) kernel builds, RCU
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  699   * read-side critical sections may be preempted and they may also block, but
-ab74fdfd4e11ec Paul E. McKenney          2014-05-04  700   * only when acquiring spinlocks that are subject to priority inheritance.
-^1da177e4c3f41 Linus Torvalds            2005-04-16  701   */
-6da9f775175e51 Waiman Long               2019-05-21  702  static __always_inline void rcu_read_lock(void)
-bc33f24bdca8b6 Paul E. McKenney          2009-08-22  703  {
-bc33f24bdca8b6 Paul E. McKenney          2009-08-22  704  	__rcu_read_lock();
-bc33f24bdca8b6 Paul E. McKenney          2009-08-22  705  	__acquire(RCU);
-d8ab29f8be918b Paul E. McKenney          2011-10-07  706  	rcu_lock_acquire(&rcu_lock_map);
-f78f5b90c4ffa5 Paul E. McKenney          2015-06-18 @707  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
-bde23c6892878e Heiko Carstens            2012-02-01  708  			 "rcu_read_lock() used illegally while idle");
-bc33f24bdca8b6 Paul E. McKenney          2009-08-22  709  }
-^1da177e4c3f41 Linus Torvalds            2005-04-16  710  
-
-:::::: The code at line 707 was first introduced by commit
-:::::: f78f5b90c4ffa559e400c3919a02236101f29f3f rcu: Rename rcu_lockdep_assert() to RCU_LOCKDEP_WARN()
-
-:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+   171	
+   172	/* no smp percpu_counter_sub_local is the same with percpu_counter_sub */
+   173	static inline void
+   174	percpu_counter_sub_local(struct percpu_counter *fbc, s64 amount)
+   175	{
+ > 176		percpu_counter_sub(fbc, amount);
+   177	}
+   178	
 
 -- 
 0-DAY CI Kernel Test Service
