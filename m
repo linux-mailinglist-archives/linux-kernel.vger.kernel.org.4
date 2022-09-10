@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD915B45F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 12:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BE85B45F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 12:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiIJKyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 06:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S229569AbiIJKzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 06:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIJKyn (ORCPT
+        with ESMTP id S229561AbiIJKzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 06:54:43 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE0FDF99
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 03:54:40 -0700 (PDT)
+        Sat, 10 Sep 2022 06:55:05 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B76522B30
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 03:55:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HumKqN8dKiC92tjduLHaiS08BJmTegfUTQhqoDc2We/ZNxK7d/mniMmIVmB2g3VU2gSZat1OqPVZk0SCV3H5VZWkW/TutwCJp7Qk2ryLhncTp03Vq/GpmchFlkPFuftgBzKPu3b4aZHUVCj+POKoYdeSdBycdC8S7DFzjExLoR9yhGMtxVnjGkY5EY3muAtOmE7pIG+7f75dWS0mNAmo6hI22+yhGwK9+Yh38vJ0QQSQRiA8kwA66jto5ZIL+UTwhWuodr8AlzefBsAhIWBPZS94ThxQRggHdNw40hvhY4RCTFwQpCSxjv26RGGXDVx0wY7Dn42Pwg0buZbRwyya7g==
+ b=PgCIhvbxs1XKRL1sSNEczaP5nmYwPyMWrDr7tgZe7ex9chmMOrZMzekJnOCH1en8Dbt0OIbKDn+/inPpVChR3UcUvGJkncLQFfTTjRChVFTSJqiY7gFpNn6J4vMDA6VpAg0Q+GhzSjfwbEI4IzQTvWuUPmMm6LwP4M/Gs+v93CMGn34jJByme2X5lPykixz/zoX9Vj/X2SgrYdmhx+eisBLFg8kcTWdpUXP3YhRPlws38OO2zEmknPllO6e+yFEtdnXTFSySDhL8FpskEqKk5bbEBFrZt8pdkOBurDGaOgwoR4B36nFJWMUZx20TJNZHKTIk47NXEVd6pk94ZQwopg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ulG8kJYPeTFTgoE8ugNXZPJcGjjkZCu97EVgyc/ztfE=;
- b=Vf3e6AW8jSpfDhztvf9apjWHQuo/hl74uO9RMxi0EqP1HP69IGnml1BrJGjw6w8SRLGqd7bfUZ7/wK6k+VRMyCwOrvtGlR7nwhLW4acQfAVEkDr5nyKsHUmx1QW8BMrOjJ2oWDFvlbkGen2P7AgJR3CqTZrLQ1K49wpeMOOuoWmqDoQj2EClAp1Duy7ZtPe+fbPoI+t9iEDGJCN//bqFXdqkUHZ4Pbs6wbKL/e7yqxlXkPbMDZWbDJxCC1Xc2WzSc46S9e8Gbi8FPe+cJiFQsbxVj54bhOFPB+YbhTEEd8gRrgy/Wbs+D+/cZuoqVoJHKYORO1deNc9dnBtW3NjWsg==
+ bh=mGwFg3aZaN8m5w++6OxvSrlMJ3pjF4/mPPFOhSsc9uE=;
+ b=CWkb5iKG9mcKmre1P9tN9913JqcuHOHgHJ30nY7nP/ifh+1BYlJH6Jkc6mEKMw2AG+ZtdjMhm2HRFL1AKXUjaogC7jhASYNz3QVB0fCtbXprA2eqan9gCmJ61kpk2iBU4bHxrQBTbnR9HNxSLiESeKDXD2ZaO4O+7QYND4ntL4QOGsyfKrb2uJTaatw6VRaoL24hf7NS6vzqjgw1MUwraqP1NcThj1fwpgdknldHyMEW6S/AQIxczYy5drgPsHN/C2FVRsixHBE6hwa9s7lj5OhAW1ksHYPDIg/L7Qfag6DQU3Os6uiuV/RdnohPLc2p3CxHcbXx259ieSs5+NItzg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ulG8kJYPeTFTgoE8ugNXZPJcGjjkZCu97EVgyc/ztfE=;
- b=B2QVqrJKNK7Ou6RVGuN1hZUpfVyZT5lx0QrZYVd1UFjgMSmA8sjqlBeloeIo2ZIwreCGIyEJFDv0HdH9qm+Oz/qLMs5RQpAtL8+rIBOxd9XsewwYq85XIUb9zjfCPTRiuCL7lCVpTEA2UiFucz7M7OR50o/Lw8vWpJH7TwizFeA=
-Received: from DM6PR11CA0058.namprd11.prod.outlook.com (2603:10b6:5:14c::35)
- by PH7PR12MB6442.namprd12.prod.outlook.com (2603:10b6:510:1fa::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Sat, 10 Sep
- 2022 10:54:38 +0000
-Received: from DM6NAM11FT106.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:14c:cafe::ad) by DM6PR11CA0058.outlook.office365.com
- (2603:10b6:5:14c::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
- Transport; Sat, 10 Sep 2022 10:54:37 +0000
+ bh=mGwFg3aZaN8m5w++6OxvSrlMJ3pjF4/mPPFOhSsc9uE=;
+ b=CfRWhaExr+z4NiEMk9WUzwPK4yoPA0IhGLEHYkTnKWLRTQv90EpPlPAWkNWvsgb+xKbxNhoeEbiTYWbc0HvRFPPo8S4qSX8NYgMKSeEYv8VJt88ik2m2gjHa7OODF8cRE9ar/yDz7DzQtay8cjSCgzYYAqzl+GKULHk3t73DuE0=
+Received: from DS7PR06CA0029.namprd06.prod.outlook.com (2603:10b6:8:54::29) by
+ CH0PR12MB5203.namprd12.prod.outlook.com (2603:10b6:610:ba::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.12; Sat, 10 Sep 2022 10:55:02 +0000
+Received: from DM6NAM11FT097.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::d2) by DS7PR06CA0029.outlook.office365.com
+ (2603:10b6:8:54::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.18 via Frontend
+ Transport; Sat, 10 Sep 2022 10:55:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT106.mail.protection.outlook.com (10.13.172.229) with Microsoft SMTP
+ DM6NAM11FT097.mail.protection.outlook.com (10.13.172.72) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Sat, 10 Sep 2022 10:54:37 +0000
+ 15.20.5612.13 via Frontend Transport; Sat, 10 Sep 2022 10:55:01 +0000
 Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 10 Sep
- 2022 05:54:30 -0500
+ 2022 05:54:55 -0500
 From:   K Prateek Nayak <kprateek.nayak@amd.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <aubrey.li@linux.intel.com>, <efault@gmx.de>,
@@ -64,9 +63,9 @@ CC:     <aubrey.li@linux.intel.com>, <efault@gmx.de>,
         <valentin.schneider@arm.com>, <vincent.guittot@linaro.org>,
         <wuyun.abel@bytedance.com>, <wyes.karny@amd.com>,
         <yu.c.chen@intel.com>, <yangyicong@huawei.com>
-Subject: [PATCH 2/5] prctl: Add interface and helper functions to set hints
-Date:   Sat, 10 Sep 2022 16:23:23 +0530
-Message-ID: <20220910105326.1797-3-kprateek.nayak@amd.com>
+Subject: [PATCH 3/5] sched/fair: Add support for hints in the subsequent wakeup path
+Date:   Sat, 10 Sep 2022 16:23:24 +0530
+Message-ID: <20220910105326.1797-4-kprateek.nayak@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220910105326.1797-1-kprateek.nayak@amd.com>
 References: <20220910105326.1797-1-kprateek.nayak@amd.com>
@@ -78,23 +77,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT106:EE_|PH7PR12MB6442:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f505895-8a97-440c-e6e8-08da931adae5
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT097:EE_|CH0PR12MB5203:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d245d28-0bbd-4945-4e2b-08da931ae956
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7+EUIFrC7enGeky+N0fdyqKc4JX3Qd+oHdXBaBIU8i5e2ncWPFBrFm7UNgcDHpbDBeq19dOIRUX8veMECD7xX8+aLESR0Y9DjmmiUeu9bgnukAFqY0N1BJamcGOgN8u0RdDi1rKxrdCkB1kfItCKUUrgK2POUPkD6ZYfSCTkdYK//7xRY5dLBiJ7tfZAskcc5pn0KT5c8DVYKW+K2+R+kr2bwKhD85xTQclNCuILvmJxNhvIYdpHWv8LXh+LvNiYvGhitih3tH35gnbYvymRqTmGg2+MVt1WXYc2wkSiAEdbavPrVkLVx1tVia+i8LZksd3ZoH7M56/kTaMJquvMuowR864b1o7anLMlORypOIzn500lnXq1FzfCyf7EzZ/o0vrtviSUWNpAksHBmQ6m0sCSJBCIz+cdyKSJgHLRPyRlEJZVNcCKGTMVvJfy2oJyZrsMxCa6yw6IYLHIGLxcSf9OM/Waz+sVuqvSbnDuJ5LeY0fdPOQB7WjZwvnWUm1Gj7xDl4nhfJlInNwaU60RD/WVHJuoo+Na1IMsHc5CMjGom4cpjVzAVw+stj2naXietV0ayeaWRlIPLHiSlzi8GmVH9MlbFsyCiMaYAuMdcMeim+50hKxQryAMly8yc6DvUBOxE66FEPrJ0datD4cbE4F4vlqNjmPcTHbmyFMR5rU3anZ8uzqMPRtLiKgg/3/9X/VbutuiGiyTq8SVJ4NYGhWCjkdVOsfFDqLTTWEWbInvQO8o+mRFAIMIz+d35X3K+Ojw9xSMonVTvqH/vPRiPjBMtk2We76G9GgWotGREbDGdNfxgKps0yUUKoMinYbQOW3Sj/98q+7OUv+r3QfvBuIaO6k5vfLomZlWrXy+P08=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(39860400002)(36840700001)(40470700004)(46966006)(4326008)(86362001)(8676002)(70586007)(426003)(2906002)(83380400001)(70206006)(478600001)(47076005)(336012)(40460700003)(6666004)(1076003)(186003)(26005)(8936002)(16526019)(7416002)(2616005)(36756003)(41300700001)(81166007)(82310400005)(356005)(82740400003)(7696005)(316002)(54906003)(5660300002)(6916009)(40480700001)(36860700001)(121494005)(557034005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iU+33jNXNMIpSMaqQ+Xle8+yVtSbWL2WF9bg5OtS0kceE53rpUsa7Nm2Lkp2BJWmPvNf9YEX5QDi9/Ywtc9r4IBAtWCKJEO6RtQO3gEMhEC7bZ+h/dBdts4inHpQZVwmgWNzdVb90Yldz6a56G+b1JX7Lz8hDTMG7CB9xYo3MnTE2Cmv9/vEcvF2N6CLhP8C0ASGjCTcOBFui4ofT9WxicdbL4vcNe0CWxmydgInxCFagCsKJ9JTjE1idVlGhSgU2KFpD7mIKFrEu9NA+paA+FtvkNSUWjctWhV7FvSCUP3oKzdTBcsc6ZCv5wzoavdTinZ3bzTTCVquh9TtDhK+pHf+SQDUUkBsL9CBhAEUBXwLaT5WIZ3YnrhIJrqpmtwxebkCS97G4FajakQ3yT2Vp9IE6ueXJhSqJ1AYdidzKJqMhglIBjEgT1Z4AkoAurhCh2laoYPxb7lxYQQiIF2mgV1+dFQzr2/Lx63HLKEI7GUv+GGEgoLNsW01MPa6ESUfs0TaS9QNTWLTp0In+gHdDfX4yrM75TzBWDupym5mHFcqfSyala2gIo3KZ8uJ7BZxkVWkzODNl9Kjg2g9GUgC/ChNl30psQrhwqULE7f55GyMswp6Bu5BS7dVpMt/31zCAf2D9d5bJF5XCRucF4Y1Q/2eQgS43fBX002AFdpvTz04KN8pdIDtxW4JT00bBbE1pLPPG2ab84cYv6a0QzgAc2Uf8LhEjXhDkko0uLS8MLcZhLuV9TyltkrKOTCDOqKnX+nDzGXTTRlGa3rYn36HzUJ14woQ4rqDkDx4c4Bx7QpKsZicjFMahGJeP0AEWa7R
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(39860400002)(40470700004)(36840700001)(46966006)(5660300002)(336012)(16526019)(2906002)(47076005)(426003)(36756003)(83380400001)(41300700001)(1076003)(186003)(36860700001)(8936002)(7416002)(2616005)(70586007)(7696005)(26005)(82740400003)(70206006)(82310400005)(8676002)(4326008)(6666004)(316002)(6916009)(54906003)(40480700001)(81166007)(86362001)(356005)(40460700003)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2022 10:54:37.5873
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2022 10:55:01.8589
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f505895-8a97-440c-e6e8-08da931adae5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d245d28-0bbd-4945-4e2b-08da931ae956
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT106.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT097.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6442
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5203
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -105,207 +104,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hints are low-level knobs that can influence task placement decisions
-at various scheduler decision points.
+Hints are adhered to as long as there are idle cores in the target MC
+domain. Beyond that, the default behavior is followed.
 
-- Design of wakeup hints
+- Hinting flow in the wakeup path
 
-Hints are of two kinds:
+Following is the flow with wakeup hints:
 
-    o fork time hints: These hints influence initial placement. It is
-      observed that a correct initial placement can have a long lasting
-      effect on workload performance. These hints override scheduler
-      behavior when the system is not heavily loaded to overlook any
-      pre-configured bias in scheduler (such as NUMA Imbalance) and
-      place tasks in a way user finds beneficial.
-      These hints are of the form PR_SCHED_HINT_FORK_* namely:
-      	- PR_SCHED_HINT_FORK_AFFINE
-      	- PR_SCHED_HINT_FORK_SPREAD
+o Check if the task has a wakeup hint set and whether the current
+  CPU and the CPU where the task previously ran are on two different
+  LLCs. If either is false, bail out and follow the default logic.
+o Check whether the previous CPU or the current CPU is the desired
+  CPU according to the set hint.
+o Test for idle cores in the MC domain of the hinted CPU.
+o If yes, set the desired CPU as the target for wakeup. The scheduler
+  will then look for an idle CPU withing the MC domain of the target.
+o If test_idle_cores returns false, follow the default wakeup path.
 
-    o wakeup hints: These hints target a specific MC Domain during
-      wakeup. The user can choose to bias the placement towards waker's
-      LLC if we believe the waker-wakee follow a producer-consumer
-      pattern. The user can also choose to bias the placement towards
-      the MC domain where the tasks previously ran if we believe waker's
-      signaling is just for synchronization and the wakee will continue
-      to consume the data, it produced during its last run.
-      These hints are of the form PR_SCHED_HINT_WAKE_* namely:
-        - PR_SCHED_HINT_WAKE_AFFINE
-      	- PR_SCHED_HINT_WAKE_HOLD
+PR_SCHED_HINT_WAKE_AFFINE will favor an affine wakeup if the MC where
+the waker is running advertises idle core. PR_SCHED_HINT_WAKE_HOLD will
+bias the wakeup to MC domain where the task previously ran.
 
-Only one hint of each type can be set at once currently. Failure to do
-so will lead to prctl() call returning -EINVAL.
+- Results
 
-- API Design
+Following are results from running hackbench with only wakeup hints on a
+dual socket Zen3 system in NPS1 mode:
 
-An example of setting hint PR_SCHED_HINT_FORK_AFFINE and
-PR_SCHED_HINT_WAKE_AFFINE for the current running process is a follows:
+o Hackbench
 
-	#include <sys/prctl.h>
+  Test:                   tip                     no-hint             wake_affine         wake_hold
+   1-groups:         4.31 (0.00 pct)         4.46 (-3.48 pct)       4.20 (2.55 pct)    4.11 (4.64 pct)
+   2-groups:         4.93 (0.00 pct)         4.85 (1.62 pct)        4.74 (3.85 pct)    5.15 (-4.46 pct)
+   4-groups:         5.38 (0.00 pct)         5.35 (0.55 pct)        5.04 (6.31 pct)    4.54 (15.61 pct)
+   8-groups:         5.59 (0.00 pct)         5.49 (1.78 pct)        5.39 (3.57 pct)    5.71 (-2.14 pct)
+  16-groups:         7.18 (0.00 pct)         7.38 (-2.78 pct)       7.24 (-0.83 pct)   7.76 (-8.07 pct)
 
-	prctl(PR_SCHED_HINT /* prctl() cmd */,
-	      PR_SCHED_HINT_WAKE_AFFINE | PR_SCHED_HINT_FORK_AFFINE /* Hints */,
-	      0 /* pid of task to set hint for. pid 0 sets hint current task */,
-	      0, 0);
+As we can observe, the hint PR_SCHED_HINT_WAKE_AFFINE helps performance
+across all hackbench configurations. PR_SCHED_HINT_WAKE_HOLD does not
+show any consistent behavior and can lead to unpredictable behavior in
+hackbench.
 
-The above command sets PR_SCHED_HINT_WAKE_AFFINE and
-PR_SCHED_HINT_FORK_AFFINE for the task calling the prctl(). For a hint
-to be set, the task should be ftrace-able.
+- Shortcomings
 
-As hints can be inherited by childern, one can wrap the runner script
-with a hint to avail the benefits and need not change the workload.
+In schbench, the delay to indicate that no idle core is available in
+target MC domain leads to pileup and severe degradation in p99 latency
+
+o schbench
+
+   workers:     tip                     no-hint                 wake_affine		     wake_hold
+    1:      37.00 (0.00 pct)        38.00 (-2.70 pct)        18.00 (51.35 pct)      	 32.00 (13.51 pct)
+    2:      39.00 (0.00 pct)        36.00 (7.69 pct)         18.00 (53.84 pct)      	 36.00 (7.69 pct)
+    4:      41.00 (0.00 pct)        41.00 (0.00 pct)         21.00 (48.78 pct)      	 33.00 (19.51 pct)
+    8:      53.00 (0.00 pct)        54.00 (-1.88 pct)        31.00 (41.50 pct)      	 51.00 (3.77 pct)
+   16:      73.00 (0.00 pct)        74.00 (-1.36 pct)      2636.00 (-3510.95 pct)   	 75.00 (-2.73 pct)
+   32:     116.00 (0.00 pct)       124.00 (-6.89 pct)     15696.00 (-13431.03 pct)      124.00 (-6.89 pct)
+   64:     217.00 (0.00 pct)       215.00 (0.92 pct)      15280.00 (-6941.47 pct)       224.00 (-3.22 pct)
+  128:     477.00 (0.00 pct)       440.00 (7.75 pct)      14800.00 (-3002.72 pct)       493.00 (-3.35 pct)
+  256:     1062.00 (0.00 pct)      1026.00 (3.38 pct)     15696.00 (-1377.96 pct)      1026.00 (3.38 pct)
+  512:     47552.00 (0.00 pct)     47168.00 (0.80 pct)    60736.00 (-27.72 pct)       49856.00 (-4.84 pct)
+
+Wake hold seems to still do well by reducing the larger latency samples
+that we observe during task migration.
+
+- Potential Solution
+
+One potential solution is to atomically read nr_busy_cpus member of
+sched_domain_shared struct but the performance impact of this is yet to
+be evaluated in the wakeup path.
 
 Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
 ---
- include/linux/sched.h      |  1 +
- include/uapi/linux/prctl.h |  8 ++++
- kernel/sched/core.c        | 81 ++++++++++++++++++++++++++++++++++++++
- kernel/sys.c               |  5 +++
- 4 files changed, 95 insertions(+)
+ kernel/sched/fair.c | 43 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index fc953c9e956a..84a630d7c529 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2405,5 +2405,6 @@ static inline void sched_core_fork(struct task_struct *p) { }
- #endif
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index efceb670e755..90e523cd8de8 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -51,6 +51,8 @@
  
- extern void sched_set_stop_task(int cpu, struct task_struct *stop);
-+extern int sched_set_hint(unsigned int hint, pid_t pid);
- 
- #endif
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index a5e06dcbba13..0a5dd42f1eab 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -284,4 +284,12 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-+/* Hint the scheduler of the expected task behavior */
-+#define PR_SCHED_HINT			65
-+# define PR_SCHED_HINT_DEFAULT		0
-+# define PR_SCHED_HINT_FORK_AFFINE	(1U << 0) /* Initial placement close to forking CPU */
-+# define PR_SCHED_HINT_FORK_SPREAD	(1U << 1) /* Initial placement biased towards idlest group */
-+# define PR_SCHED_HINT_WAKE_AFFINE	(1U << 2) /* Subsequent wakeup target waker's MC domain */
-+# define PR_SCHED_HINT_WAKE_HOLD	(1U << 3) /* Subsequent wakeup target last run's MC domain */
-+
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 7d289d87acf7..60bee250d7b4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -71,6 +71,7 @@
- # endif
- #endif
+ #include <linux/sched/cond_resched.h>
  
 +#include <uapi/linux/prctl.h>
- #include <uapi/linux/sched/types.h>
++
+ #include "sched.h"
+ #include "stats.h"
+ #include "autogroup.h"
+@@ -7031,6 +7033,10 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ 	int want_affine = 0;
+ 	/* SD_flags and WF_flags share the first nibble */
+ 	int sd_flag = wake_flags & 0xF;
++	bool use_hint = false;
++	unsigned int task_hint = READ_ONCE(p->hint);
++	unsigned int wakeup_hint = task_hint &
++		(PR_SCHED_HINT_WAKE_AFFINE | PR_SCHED_HINT_WAKE_HOLD);
  
- #include <asm/switch_to.h>
-@@ -7323,6 +7324,86 @@ static void __setscheduler_params(struct task_struct *p,
- 	set_load_weight(p, true);
- }
+ 	/*
+ 	 * required for stable ->cpus_allowed
+@@ -7046,6 +7052,37 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ 			new_cpu = prev_cpu;
+ 		}
  
-+/*
-+ * Check whether the hints are valid and clear.
-+ * Returns 0 if the hints are invalid of if
-+ * the set hints are ambiguous and can lead to
-+ * inconsistent behavior.
-+ * Returns 1 for valid hint.
-+ */
-+static int valid_hint(unsigned int hint) {
-+	if (!hint)
-+		return 1;
++		/*
++		 * Handle the case where a hint is set and the current CPU
++		 * and the previous CPU where task ran don't share caches.
++		 */
++		if (wakeup_hint && !cpus_share_cache(cpu, prev_cpu)) {
++			/*
++			 * Start by assuming the hint is PR_SCHED_HINT_WAKE_AFFINE
++			 * setting the target_cpu to the current CPU.
++			 */
++			int target_cpu = cpu;
 +
-+	/*
-+	 * Largest value of hint can be calculated by setting the hints
-+	 * with the largest numeric value in each independent category.
-+	 */
-+	if (hint > (PR_SCHED_HINT_WAKE_HOLD | PR_SCHED_HINT_FORK_SPREAD))
-+		return 0;
++			/*
++			 * If the hint is PR_SCHED_HINT_WAKE_HOLD
++			 * change target_cpu to the prev_cpu.
++			 */
 +
-+	/*
-+	 * Only one of the fork time hints must be
-+	 * set. Consistent behavior cannot be
-+	 * guarenteed with conflicting hints.
-+	 */
-+	if ((hint & PR_SCHED_HINT_FORK_AFFINE) &&
-+	    (hint & PR_SCHED_HINT_FORK_SPREAD))
-+		return 0;
++			if (wakeup_hint & PR_SCHED_HINT_WAKE_HOLD)
++				target_cpu = prev_cpu;
 +
-+	/*
-+	 * Only one of the wakeup hints must be
-+	 * set for the same reason stated above.
-+	 */
-+	if ((hint & PR_SCHED_HINT_WAKE_AFFINE) &&
-+	    (hint & PR_SCHED_HINT_WAKE_HOLD))
-+		return 0;
-+
-+	return 1;
-+}
-+
-+/* Called from prctl interface: PR_SCHED_HINT */
-+int sched_set_hint(unsigned int hint, pid_t pid)
-+{
-+	struct task_struct *task;
-+	int err = 0;
-+
-+	/*
-+	 * Make sure hint is valid and the user has not
-+	 * requested for conflicting behavior at any
-+	 * given decision point.
-+	 */
-+	if (!valid_hint(hint))
-+		return -EINVAL;
-+
-+	rcu_read_lock();
-+	if (pid == 0) {
-+		task = current;
-+	} else {
-+		task = find_task_by_vpid(pid);
-+		if (!task) {
-+			rcu_read_unlock();
-+			return -ESRCH;
++			/*
++			 * If a wakeup hint is set, try to bias the
++			 * task placement towards the preferred node
++			 * as long as there is an idle core in the
++			 * targetted LLC.
++			 */
++			if (test_idle_cores(target_cpu, false)) {
++				use_hint = true;
++				new_cpu = target_cpu;
++			}
 +		}
-+	}
-+	get_task_struct(task);
-+	rcu_read_unlock();
 +
-+	/*
-+	 * Check if this process has the right to modify the specified
-+	 * process. Use the regular "ptrace_may_access()" checks.
-+	 */
-+	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
-+		err = -EPERM;
-+		goto out;
-+	}
-+
-+	WRITE_ONCE(task->hint, hint);
-+out:
-+	put_task_struct(task);
-+	return err;
-+}
-+
- /*
-  * Check the target process has a UID that matches the current process's:
-  */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index b911fa6d81ab..505ceea548bd 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2623,6 +2623,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 	case PR_SET_VMA:
- 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
-+	case PR_SCHED_HINT:
-+		if (arg4 || arg5)
-+			return -EINVAL;
-+		error = sched_set_hint(arg2, arg3);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
+ 		want_affine = !wake_wide(p) && cpumask_test_cpu(cpu, p->cpus_ptr);
+ 	}
+ 
+@@ -7057,7 +7094,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ 		 */
+ 		if (want_affine && (tmp->flags & SD_WAKE_AFFINE) &&
+ 		    cpumask_test_cpu(prev_cpu, sched_domain_span(tmp))) {
+-			if (cpu != prev_cpu)
++			/*
++			 * In case it is optimal to follow the hints,
++			 * do not re-evaluate the target CPU.
++			 */
++			if (cpu != prev_cpu && !use_hint)
+ 				new_cpu = wake_affine(tmp, p, cpu, prev_cpu, sync);
+ 
+ 			sd = NULL; /* Prefer wake_affine over balance flags */
 -- 
 2.25.1
 
