@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504205B48D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 22:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECB75B48D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 22:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiIJUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 16:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S229689AbiIJUlj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Sep 2022 16:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiIJUaA (ORCPT
+        with ESMTP id S229516AbiIJUlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 16:30:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147818E30
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 13:29:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id b21so4909288plz.7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 13:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3OB7lD9IsLsjTT/Zgb3BM7QAVB4ydEQ1DyuFepEmj3Y=;
-        b=TVDUx2hQxcx9YajRsRQPfI7VgRkyHwrlZO7cYvz2u9rl2snFvvYnJDWLoDS/05E4wo
-         X9wuFpyUvGUltIm1E7ICSuu9RUXxc8IZuhn5L+JsWkrR4NZOImmhUW4EP0T+uugqNzrk
-         pj0oORzIA08UTdpvjwXpB1Z0OqsgbJBNXYJFmLLAeWia2raNI40zAiXN0D+xsp9QZ5p/
-         K72iwJKgPs8GEx00FnC5uf6BRvwUqTvl9SVqVcOgBA0a73PvMA7ltX3imPKfo6GFVKaa
-         pdS8B8DF0g0qghIYChRm/Wx6drgajTXiptCZ4zF/uCxPD6xwQ1H2w7ARfL8jIJgxK0sH
-         iRPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3OB7lD9IsLsjTT/Zgb3BM7QAVB4ydEQ1DyuFepEmj3Y=;
-        b=4Vj7BzOLzf7A33JQvSvFjq7INeQ4HV6Ux0dNkA9WB7y8wbSyCt9h5teEyQwHjf5ENH
-         o9Bngn+uEkwiCSGnZ+n7j2Kyze4+wmdv3Dl8wllq0sMlu3xWo9r7pHFacpMC21BP5qtj
-         vZBEc7+8/XEiHrPzIj2vewS7PeXVWFWpQP0MZfqWy+dDG3a40Kqu1pmCRL3rtqEAVZMC
-         h9XuxDgMD2UHvLqAZpiEA+310oDKghPaDtdB7Nt6u+UArOe+liJd2t5mkFCJLgoD7MWF
-         ohF5aM37zyQYV5qXev7Xna4JM6nRPIoFQwtXODyaJdDGoKJuJR2xMBMqeyzjLkV+J17u
-         1Tng==
-X-Gm-Message-State: ACgBeo1C/21bTWeIWAR2ATyYbiuTGUbNm4mXFVIPIcYKm34CXemHosuY
-        3dhbnSpRKiXKFxnUD19/uXhmYm61JjyUfNPjlu9WqQ==
-X-Google-Smtp-Source: AA6agR4zLIlTlZe/0RVmVx49oJdfG1mYQvJFbdLFr1vOKxT2ZifJrd7mtQ4FR3csW9F0zYw8Ux112gEewoiKIAkMYcM=
-X-Received: by 2002:a17:902:d505:b0:176:96f1:2e61 with SMTP id
- b5-20020a170902d50500b0017696f12e61mr19227932plg.73.1662841799269; Sat, 10
- Sep 2022 13:29:59 -0700 (PDT)
+        Sat, 10 Sep 2022 16:41:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FFE12AD1;
+        Sat, 10 Sep 2022 13:41:33 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MQ4Vr3M0Qz67KX0;
+        Sun, 11 Sep 2022 04:40:20 +0800 (CST)
+Received: from lhrpeml100004.china.huawei.com (7.191.162.219) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 10 Sep 2022 22:41:31 +0200
+Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
+ lhrpeml100004.china.huawei.com (7.191.162.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 10 Sep 2022 21:41:30 +0100
+Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
+ lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2375.031;
+ Sat, 10 Sep 2022 21:41:30 +0100
+From:   Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
+ Models"
+Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAGhxQA==
+Date:   Sat, 10 Sep 2022 20:41:30 +0000
+Message-ID: <e8b6b7222a894984b4d66cdcc6435efe@huawei.com>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
+ <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
+ <674d0fda790d4650899e2fcf43894053@huawei.com>
+ <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
+ <YxynQmEL6e194Wuw@rowland.harvard.edu>
+In-Reply-To: <YxynQmEL6e194Wuw@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.132.83]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <0000000000005ed86405e846585a@google.com> <20220910020633.2620505-1-eadavis@sina.com>
-In-Reply-To: <20220910020633.2620505-1-eadavis@sina.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Sat, 10 Sep 2022 13:29:47 -0700
-Message-ID: <CAKH8qBt_8mEA_2Bn=z9o-rntov8nPa=sH93R8-+zM99u+qP6Fg@mail.gmail.com>
-Subject: Re: [PATCH] kernel/bpf: htab_map_alloc() exit by free_map_locked
- logic issue
-To:     eadavis@sina.com
-Cc:     syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, netdev@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        eadivs <eadivs@sina.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,71 +80,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 7:07 PM <eadavis@sina.com> wrote:
->
-> From: eadivs <eadivs@sina.com>
->
-> syzbot is reporting WARNING: ODEBUG bug in htab_map_alloc(), the
-> loop exits without reaching length HASHTAB_MAP_LOCK_COUNT, and
-> the loop continues HASHTAB_MAP_LOCK_COUNT times in label
-> free_map_locked.
+> You were quoting Jonas here, right?  The email doesn't make this obvious
+> because it doesn't have two levels of "> > " markings.
 
-Please use [PATCH bpf] vs [PATCH bpf-next] in subject to indicate
-which tree you're targeting.
-Also, it seems your email hasn't reached the mailing list for some reason.
+Yes, I was quoting Jonas. 
+It seems my mail client did not format the email correctly and I did not notice.
+Sorry for that.
 
-Are you sure that the issue is due to HASHTAB_MAP_LOCK_COUNT? The code
-seems fine as is; unconditionally calling free on NULL shouldn't be an
-issue.
+> In general, _no_ two distinct relations in the LKMM have the same propagation
+> properties.  If wmb always behaved the same way as mb, we wouldn't use two
+> separate words for them.
 
- htab_map_alloc+0xc76/0x1620 kernel/bpf/hashtab.c:632
+I understand that relations with different names are intended to be different.
+What I meant was 
+	"wmb gives weaker propagation guarantees than mb and because of this, liveness of qspinlock is not guaranteed in LKMM" 
 
-Which, if I'm looking at the function is:
-bpf_map_area_free(htab);
+> 
+> > The claim is based on these relations from the memory model
+> >
+> > let strong-fence = mb | gp
+> > ...
+> > let cumul-fence = [Marked] ; (A-cumul(strong-fence | po-rel) | wmb |
+> > 	po-unlock-lock-po) ; [Marked]
+> > let prop = [Marked] ; (overwrite & ext)? ; cumul-fence* ;
+> > 	[Marked] ; rfe? ; [Marked]
+> 
+> Please be more specific.  What difference between mb and wmb are you
+> concerned about?  
 
-?
+Since the code uses wmb, there are certain pairs of events that will not be in strong-fence.
+Since strong-fence contributes to cumul-fence, cumul-fence to prop, and prop to hb, 
+the pair of events related by hb is less that if the code would use mb instead.
+Because of this, there are executions (in particular the one that violates liveness) that have 
+an acyclic hb relation, but would create a cycle (and thus the memory model would not accept 
+the behavior) if mb would have been used.
 
-> Link: https://syzkaller.appspot.com/bug?extid=5d1da78b375c3b5e6c2b
-> Reported-by: syzbot+5d1da78b375c3b5e6c2b@syzkaller.appspotmail.com
-> Signed-off-by: eadivs <eadivs@sina.com>
-> ---
->  kernel/bpf/hashtab.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 65877967f414..f5381e1c00a6 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -473,7 +473,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
->         bool percpu_lru = (attr->map_flags & BPF_F_NO_COMMON_LRU);
->         bool prealloc = !(attr->map_flags & BPF_F_NO_PREALLOC);
->         struct bpf_htab *htab;
-> -       int err, i;
-> +       int err, i, j = HASHTAB_MAP_LOCK_COUNT;
->
->         htab = kzalloc(sizeof(*htab), GFP_USER | __GFP_ACCOUNT);
->         if (!htab)
-> @@ -523,8 +523,10 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
->                                                            sizeof(int),
->                                                            sizeof(int),
->                                                            GFP_USER);
-> -               if (!htab->map_locked[i])
-> +               if (!htab->map_locked[i]) {
-> +                       j = i;
->                         goto free_map_locked;
-> +               }
->         }
->
->         if (htab->map.map_flags & BPF_F_ZERO_SEED)
-> @@ -554,7 +556,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
->  free_prealloc:
->         prealloc_destroy(htab);
->  free_map_locked:
-> -       for (i = 0; i < HASHTAB_MAP_LOCK_COUNT; i++)
-> +       for (i = 0; i < j; i++)
->                 free_percpu(htab->map_locked[i]);
->         bpf_map_area_free(htab->buckets);
->  free_htab:
-> --
-> 2.37.2
->
+> Can you give a small litmus test that illustrates this
+> difference?  Can you explain in more detail how this difference affects the
+> qspinlock implementation?
+
+Here is a litmus test showing the problem (I hope the comment are enough to relate it back to qspinlock)
+
+C Liveness
+{
+  atomic_t x = ATOMIC_INIT(0);
+  atomic_t y = ATOMIC_INIT(0);
+}
+
+P0(atomic_t *x) {
+  // clear_pending_set_locked
+  int r0 = atomic_fetch_add(2,x) ;
+}
+
+P1(atomic_t *x, int *z) {
+  // queued_spin_trylock
+  int r0 = atomic_read(x);
+  // barrier after the initialization of nodes
+  smp_wmb();
+  // xchg_tail
+  int r1 = atomic_cmpxchg_relaxed(x,r0,42);
+  // link node into the waitqueue
+  WRITE_ONCE(*z, 1);
+}
+
+P2(atomic_t *x,atomic_t *z) {
+  // node initialization
+  WRITE_ONCE(*z, 2);
+  // queued_spin_trylock
+  int r0 = atomic_read(x);
+  // barrier after the initialization of nodes
+  smp_wmb();
+  // xchg_tail
+  int r1 = atomic_cmpxchg_relaxed(x,r0,24);
+}
+
+exists (0:r0 = 24 /\ 1:r0 = 26 /\ z=2)
+
+herd7 says that the behavior is observable. 
+However if you change wmb by mb, it is not observable anymore.
+
+> 
+> > From an engineering perspective, I think the only issue is that cat
+> > *currently* does not have any syntax for this,
+> 
+> Syntax for what?  The difference between wmb and mb?
+> 
+> >  nor does herd currently
+> > implement the await model checking techniques proposed in those works
+> > (c.f. Theorem 5.3. in the "making weak memory models fair" paper,
+> > which says that for this kind of loop, iff the mo-maximal reads in
+> > some graph are read in a loop iteration that does not exit the loop,
+> > the loop can run forever). However GenMC and I believe also Dat3M and
+> > recently also Nidhugg support such techniques. It may not even be too
+> > much effort to implement something like this in herd if desired.
+> 
+> I believe that herd has no way to express the idea of a program running forever.
+> On the other hand, it's certainly true (in all of these
+> models) than for any finite number N, there is a feasible execution in which a
+> loop runs for more than N iterations before the termination condition eventually
+> becomes true.
+
+Here I was again quoting Jonas.
+I think his intention was to make a distinction between graph based semantics and tools.
+While herd7 cannot reason about this kind of property, it is possible to define the property 
+using graph based semantics and there are tools already using this.
+
+Hernan
+
