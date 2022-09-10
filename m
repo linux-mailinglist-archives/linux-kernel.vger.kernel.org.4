@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2832E5B4AC9
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 01:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B6B5B4ACC
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 01:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiIJXLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 19:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S229622AbiIJXMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 19:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiIJXLb (ORCPT
+        with ESMTP id S229535AbiIJXMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 19:11:31 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E3D33347
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:11:30 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id g12so3458805qts.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:11:30 -0700 (PDT)
+        Sat, 10 Sep 2022 19:12:19 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95968E083
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:12:17 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id u28so806130qku.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=jLcAZDQOWnQUWa/zS3ZhETCWwFUmZvMcvW1wH6uC4IQ=;
-        b=kKI9Y/dPFSJwHLDiuiQWqjNNMjhCyEC8V1S4USUXFNjeHZGF9Zn78Bt6kDVLjHocBI
-         DK8RqRrndEqsvUB5s46w8aV00WkG195asL5ML1DCBCfSRHXiNPpbHJxtJ9c5odZQEsrp
-         3Xf3SDWGyNWnfzDkE6szl94+SwkZ1S1Bdl8zHQrStphM0cXSSsQduPun0GDfJh8mFzPi
-         0Dm8DRqynE6wcTffvSVNrEY5bU2FqsLqUJG/r6kSbFtxpeE1+fqzEBvSsdA1c4XSVBkJ
-         96p109S0N1+GRuwCnixAo6AxACnar2QLaInwtgTxH3FSwMZL+yXQ5G/IelbYGxDevbU3
-         9eqg==
+        bh=1qAOHyl0ZytUGK0LKmP2phdfOjsGHVNHqllONgN6fKY=;
+        b=mwZQUBhTeAzkTF8xxYrlGo8hF8qHq4dcf2rSQVSfUettUq6InYxFR8fpF4QMoSceAN
+         RoRZV4iOGW14ERDM/zH2z6/y5uwBgFJ6Vw5paH6adAvG6kDmcwmjzVHOW6t8l+6mzWhI
+         19QkDWEILoadygJBRB6OpPDLGyvEhqUERYWp0a46U3cIb1YdZoghY3P764lvdzRqM7Yf
+         Lq4omeoMa7H0Qtb3sTYu4tSj4l3gQ9WUseXQCyTXw06W65FOwhxeK/ic2ORpO/E+hnke
+         LtV/7zzO1bSWM5vtsjEb2N09U7H0nGbYahtuGdbd5s7NQjPN8Rnq7ORAO5CC7BM+rLyc
+         baFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jLcAZDQOWnQUWa/zS3ZhETCWwFUmZvMcvW1wH6uC4IQ=;
-        b=uN7KWdX7NvmMJ3LEia+WW32MS86qJmV2vm4u/Dd71H3EyMRnxvdHk1+YMXP8NpkuUE
-         OO5bSdwjeIkru2OCEodPgdRLJOn75sfsMV9diW6fIXdr6HU6iyOjQTInaYHOvrAQgGUk
-         sVWVQXrL5gv43Wsc5yTeF9MJzdmNrT1zw4nji4WvhMgc9thmz5C0SMqjeCkXDMYd6ETV
-         ScgYZaCVV1+13Dx6RQMMqsm1/T1ocBZ9KtJmWzr1R7yqO6Qawi98FrWUtOirPPysYMxR
-         eP0kb0S+RDlDoZMkhAYc6yrSkuGjk2wRfDudoVQs05BsGLpgVNtldzp9q+rYZfExZ3+z
-         oulQ==
-X-Gm-Message-State: ACgBeo1RvCFADI+UubO7S0Pp0BPdwHqz5rohD2XocWDHekyK2CnIOT0H
-        xi+4Ypj2T/ciZx8JYV6hnImGr5YK4QrH9q5N5Ac=
-X-Google-Smtp-Source: AA6agR4u/97xa/Pmb0INvHCCAaWtQSAbkJM0/G/XmWbAS+CmgzasYU+TUZmO9xD4qFLYZfTiXWz25WrO1DvAzeIvuyc=
-X-Received: by 2002:a05:622a:11cf:b0:35b:a369:cc3 with SMTP id
- n15-20020a05622a11cf00b0035ba3690cc3mr7113419qtk.11.1662851489754; Sat, 10
- Sep 2022 16:11:29 -0700 (PDT)
+        bh=1qAOHyl0ZytUGK0LKmP2phdfOjsGHVNHqllONgN6fKY=;
+        b=S8dxVrEXBsVpb+e9xKLG2k1c9RN2n44eOjXv8QP0F3CbIZDbCst6SyI0i0Y9pAR902
+         fpj80DsmD+j4x4YrZX6HlcPNRnKCBgOz8eVd0/D3TZ2U73ZWTORvHo1Hc+yunbrPXs2P
+         yxIRL5RIwiZ0WQHZSz1Enwhe1b2XSs5NWyCURu/Kd6zrolOh7/c57Q5NLMx4VuDB6jge
+         GL7b92kuw2RjuLPRjxWFBECjuiaBTX2p07vwrREOoIpMvoCytGnYRHqKZ3FeV6YOVkDY
+         dfAAT5RBgJtGT7kVZ+8hEkMVu5e2mTroh7s3WpAMvIYlHPYZ51ieA7IihdpDWtkpBSSJ
+         Tj0Q==
+X-Gm-Message-State: ACgBeo0kGbWo1W9yoVrszO9tBAvWVVReyp2C9PX8hgA4vMjq8YCWqMhQ
+        5waMZ4YzIY9PAmaN+LBaUmk+N6EFgcoZblky49g=
+X-Google-Smtp-Source: AA6agR62AluZGb9Ks2brmA4j58myrTw8x2kq+ZKGD56YZvnh3QLJg0zqXmag9qouK4TB3QKuwjVqquVIveUPbmD+tDI=
+X-Received: by 2002:a05:620a:25ca:b0:6b8:7633:baf with SMTP id
+ y10-20020a05620a25ca00b006b876330bafmr15148666qko.515.1662851536678; Sat, 10
+ Sep 2022 16:12:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907071023.3838692-1-feng.tang@intel.com> <20220907071023.3838692-3-feng.tang@intel.com>
-In-Reply-To: <20220907071023.3838692-3-feng.tang@intel.com>
+References: <20220907071023.3838692-1-feng.tang@intel.com> <20220907071023.3838692-5-feng.tang@intel.com>
+In-Reply-To: <20220907071023.3838692-5-feng.tang@intel.com>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sun, 11 Sep 2022 01:11:18 +0200
-Message-ID: <CA+fCnZdSUi6mC1e42bztst2tvhc-sLZdnj=Sr=doqxOokXmwTg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] mm/slub: only zero the requested size of buffer
- for kzalloc
-To:     Feng Tang <feng.tang@intel.com>,
-        Alexander Potapenko <glider@google.com>
+Date:   Sun, 11 Sep 2022 01:12:05 +0200
+Message-ID: <CA+fCnZfLCe8fhQ5UAyF1LwZuMCfbsoEXDmX3deaW6i_E5UE60g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] mm/slub: extend redzone check to extra allocated
+ kmalloc space than requested
+To:     Feng Tang <feng.tang@intel.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Christoph Lameter <cl@linux.com>,
@@ -80,128 +79,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 9:10 AM Feng Tang <feng.tang@intel.com> wrote:
+On Wed, Sep 7, 2022 at 9:11 AM Feng Tang <feng.tang@intel.com> wrote:
 >
-> kzalloc/kmalloc will round up the request size to a fixed size
-> (mostly power of 2), so the allocated memory could be more than
-> requested. Currently kzalloc family APIs will zero all the
-> allocated memory.
+> kmalloc will round up the request size to a fixed size (mostly power
+> of 2), so there could be a extra space than what is requested, whose
+> size is the actual buffer size minus original request size.
 >
-> To detect out-of-bound usage of the extra allocated memory, only
-> zero the requested part, so that sanity check could be added to
-> the extra space later.
+> To better detect out of bound access or abuse of this space, add
+> redzone sanity check for it.
 >
-> For kzalloc users who will call ksize() later and utilize this
-> extra space, please be aware that the space is not zeroed any
-> more.
+> And in current kernel, some kmalloc user already knows the existence
+> of the space and utilizes it after calling 'ksize()' to know the real
+> size of the allocated buffer. So we skip the sanity check for objects
+> which have been called with ksize(), as treating them as legitimate
+> users.
 >
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
 > Signed-off-by: Feng Tang <feng.tang@intel.com>
 > ---
->  mm/slab.c | 6 +++---
->  mm/slab.h | 9 +++++++--
->  mm/slub.c | 6 +++---
->  3 files changed, 13 insertions(+), 8 deletions(-)
+>  mm/slab.h        |  4 ++++
+>  mm/slab_common.c |  4 ++++
+>  mm/slub.c        | 57 +++++++++++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 62 insertions(+), 3 deletions(-)
 >
-> diff --git a/mm/slab.c b/mm/slab.c
-> index a5486ff8362a..73ecaa7066e1 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3253,7 +3253,7 @@ slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
->         init = slab_want_init_on_alloc(flags, cachep);
->
->  out:
-> -       slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-> +       slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init, 0);
->         return objp;
->  }
->
-> @@ -3506,13 +3506,13 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->          * Done outside of the IRQ disabled section.
->          */
->         slab_post_alloc_hook(s, objcg, flags, size, p,
-> -                               slab_want_init_on_alloc(flags, s));
-> +                               slab_want_init_on_alloc(flags, s), 0);
->         /* FIXME: Trace call missing. Christoph would like a bulk variant */
->         return size;
->  error:
->         local_irq_enable();
->         cache_alloc_debugcheck_after_bulk(s, flags, i, p, _RET_IP_);
-> -       slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +       slab_post_alloc_hook(s, objcg, flags, i, p, false, 0);
->         kmem_cache_free_bulk(s, i, p);
->         return 0;
->  }
 > diff --git a/mm/slab.h b/mm/slab.h
-> index d0ef9dd44b71..20f9e2a9814f 100644
+> index 20f9e2a9814f..0bc91b30b031 100644
 > --- a/mm/slab.h
 > +++ b/mm/slab.h
-> @@ -730,12 +730,17 @@ static inline struct kmem_cache *slab_pre_alloc_hook(struct kmem_cache *s,
+> @@ -885,4 +885,8 @@ void __check_heap_object(const void *ptr, unsigned long n,
+>  }
+>  #endif
 >
->  static inline void slab_post_alloc_hook(struct kmem_cache *s,
->                                         struct obj_cgroup *objcg, gfp_t flags,
-> -                                       size_t size, void **p, bool init)
-> +                                       size_t size, void **p, bool init,
-> +                                       unsigned int orig_size)
->  {
->         size_t i;
->
->         flags &= gfp_allowed_mask;
->
-> +       /* If original request size(kmalloc) is not set, use object_size */
-> +       if (!orig_size)
-> +               orig_size = s->object_size;
+> +#ifdef CONFIG_SLUB_DEBUG
+> +void skip_orig_size_check(struct kmem_cache *s, const void *object);
+> +#endif
 > +
->         /*
->          * As memory initialization might be integrated into KASAN,
->          * kasan_slab_alloc and initialization memset must be
-> @@ -746,7 +751,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->         for (i = 0; i < size; i++) {
->                 p[i] = kasan_slab_alloc(s, p[i], flags, init);
->                 if (p[i] && init && !kasan_has_integrated_init())
-> -                       memset(p[i], 0, s->object_size);
-> +                       memset(p[i], 0, orig_size);
+>  #endif /* MM_SLAB_H */
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 8e13e3aac53f..5106667d6adb 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1001,6 +1001,10 @@ size_t __ksize(const void *object)
+>                 return folio_size(folio);
+>         }
+>
+> +#ifdef CONFIG_SLUB_DEBUG
+> +       skip_orig_size_check(folio_slab(folio)->slab_cache, object);
+> +#endif
+> +
+>         return slab_ksize(folio_slab(folio)->slab_cache);
+>  }
+>
+> diff --git a/mm/slub.c b/mm/slub.c
+> index f523601d3fcf..2f0302136604 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -812,12 +812,27 @@ static inline void set_orig_size(struct kmem_cache *s,
+>         if (!slub_debug_orig_size(s))
+>                 return;
+>
+> +#ifdef CONFIG_KASAN_GENERIC
+> +       /*
+> +        * KASAN could save its free meta data in the start part of object
+> +        * area, so skip the redzone check if kasan's meta data size is
+> +        * bigger enough to possibly overlap with kmalloc redzone
+> +        */
+> +       if (s->kasan_info.free_meta_size_in_object * 2 >= s->object_size)
 
-Arguably, with slab_want_init_on_alloc(), all allocated memory should
-be zeroed to prevent possibility of info-leaks, even unused paddings.
-Perhaps, Alexander can give his opinion here.
+Why is free_meta_size_in_object multiplied by 2? Looks cryptic,
+probably needs a comment.
 
 Thanks!
 
-
->                 kmemleak_alloc_recursive(p[i], s->object_size, 1,
->                                          s->flags, flags);
+> +               orig_size = s->object_size;
+> +#endif
+> +
+>         p += get_info_end(s);
+>         p += sizeof(struct track) * 2;
+>
+>         *(unsigned int *)p = orig_size;
+>  }
+>
+> +void skip_orig_size_check(struct kmem_cache *s, const void *object)
+> +{
+> +       set_orig_size(s, (void *)object, s->object_size);
+> +}
+> +
+>  static unsigned int get_orig_size(struct kmem_cache *s, void *object)
+>  {
+>         void *p = kasan_reset_tag(object);
+> @@ -949,13 +964,34 @@ static __printf(3, 4) void slab_err(struct kmem_cache *s, struct slab *slab,
+>  static void init_object(struct kmem_cache *s, void *object, u8 val)
+>  {
+>         u8 *p = kasan_reset_tag(object);
+> +       unsigned int orig_size = s->object_size;
+>
+> -       if (s->flags & SLAB_RED_ZONE)
+> +       if (s->flags & SLAB_RED_ZONE) {
+>                 memset(p - s->red_left_pad, val, s->red_left_pad);
+>
+> +               if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
+> +                       unsigned int zone_start;
+> +
+> +                       orig_size = get_orig_size(s, object);
+> +                       zone_start = orig_size;
+> +
+> +                       if (!freeptr_outside_object(s))
+> +                               zone_start = max_t(unsigned int, orig_size,
+> +                                               s->offset + sizeof(void *));
+> +
+> +                       /*
+> +                        * Redzone the extra allocated space by kmalloc
+> +                        * than requested.
+> +                        */
+> +                       if (zone_start < s->object_size)
+> +                               memset(p + zone_start, val,
+> +                                       s->object_size - zone_start);
+> +               }
+> +       }
+> +
+>         if (s->flags & __OBJECT_POISON) {
+> -               memset(p, POISON_FREE, s->object_size - 1);
+> -               p[s->object_size - 1] = POISON_END;
+> +               memset(p, POISON_FREE, orig_size - 1);
+> +               p[orig_size - 1] = POISON_END;
 >         }
-> diff --git a/mm/slub.c b/mm/slub.c
-> index effd994438e6..f523601d3fcf 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3376,7 +3376,7 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
->         init = slab_want_init_on_alloc(gfpflags, s);
 >
->  out:
-> -       slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init);
-> +       slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init, orig_size);
+>         if (s->flags & SLAB_RED_ZONE)
+> @@ -1103,6 +1139,7 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
+>  {
+>         u8 *p = object;
+>         u8 *endobject = object + s->object_size;
+> +       unsigned int orig_size;
 >
->         return object;
->  }
-> @@ -3833,11 +3833,11 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->          * Done outside of the IRQ disabled fastpath loop.
->          */
->         slab_post_alloc_hook(s, objcg, flags, size, p,
-> -                               slab_want_init_on_alloc(flags, s));
-> +                               slab_want_init_on_alloc(flags, s), 0);
->         return i;
->  error:
->         slub_put_cpu_ptr(s->cpu_slab);
-> -       slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +       slab_post_alloc_hook(s, objcg, flags, i, p, false, 0);
->         kmem_cache_free_bulk(s, i, p);
->         return 0;
->  }
+>         if (s->flags & SLAB_RED_ZONE) {
+>                 if (!check_bytes_and_report(s, slab, object, "Left Redzone",
+> @@ -1112,6 +1149,20 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
+>                 if (!check_bytes_and_report(s, slab, object, "Right Redzone",
+>                         endobject, val, s->inuse - s->object_size))
+>                         return 0;
+> +
+> +               if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
+> +                       orig_size = get_orig_size(s, object);
+> +
+> +                       if (!freeptr_outside_object(s))
+> +                               orig_size = max_t(unsigned int, orig_size,
+> +                                               s->offset + sizeof(void *));
+> +                       if (s->object_size > orig_size  &&
+> +                               !check_bytes_and_report(s, slab, object,
+> +                                       "kmalloc Redzone", p + orig_size,
+> +                                       val, s->object_size - orig_size)) {
+> +                               return 0;
+> +                       }
+> +               }
+>         } else {
+>                 if ((s->flags & SLAB_POISON) && s->object_size < s->inuse) {
+>                         check_bytes_and_report(s, slab, p, "Alignment padding",
 > --
 > 2.34.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "kasan-dev" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220907071023.3838692-3-feng.tang%40intel.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220907071023.3838692-5-feng.tang%40intel.com.
