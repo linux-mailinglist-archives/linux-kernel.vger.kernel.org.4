@@ -2,147 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8CD5B454A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11035B454D
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIJItJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 04:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S229546AbiIJIxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 04:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIJItH (ORCPT
+        with ESMTP id S229498AbiIJIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 04:49:07 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2117.outbound.protection.outlook.com [40.107.243.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB916746C;
-        Sat, 10 Sep 2022 01:49:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ReZcp6Go+0AYRvQ6LjJswHY3S7g/3l8yf2vxNNyZ7u+WMnYL8gPwaPJUbHxO8ojRD9snLrTWgIj82vapCxaM8AJbsZ7WK1EtXiVo/gIYbnfN5vgNkkVs9Xg2AJYaxP7vYq7iy+OflHdui5Rp7L56RLfOrX6OkLGiZ3bTrEp+qnodgzHlDcRsXNJJQdFSGqqvkYYY4h/kO0lUEXSXgAZrvpD+kBS7yuWeHwsc93QC+6tcs0AA0XSGIebm4vELJyhAnSRaR3BzkpJklXznXDnZcmdiwe9G5clZFlaXuVm/fMq8dlJE+MldkYWIoPBtHkDom/GfoJBc6exQuEXcnew4kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kTUPxfUcBoOidsF87JZPLzEdMSM+1YMC/594JQbXxUw=;
- b=aZrhBmktjVmw5PEl4hhXpQu3YcFOaf2/3QvH9axTre7qu1wChZK3C07qqbp9P7ULehIOgJUlCCmyIMvKWXaI51y5dPo9y5C3ODveFUzUBS1bJwZpOR6/wt5HQBwfHywhlp0kbChTBR11yOmKvAhuj/gfsdM2q3VNoYA1f751zYZk9MMEJoKnu0M3MMq+rufD7kpVebSmvh5mnM6extQr4lRgksCnCNtU4E6bu4JJl1v97TkFkF0dGIgrZVG84+kAmeH1+J3utkX5VC7lU1h06+RC1wkKqg+AcjPzd5A1Mb4WVtfPvgUlKm7PJnf1pixaIN5x393axpJ52zHex+NS0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 10 Sep 2022 04:53:32 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8554DB6F;
+        Sat, 10 Sep 2022 01:53:31 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id x1so3901249plv.5;
+        Sat, 10 Sep 2022 01:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kTUPxfUcBoOidsF87JZPLzEdMSM+1YMC/594JQbXxUw=;
- b=a1qvgVa4KIE9sWr+lBz2lcVTFeqQhcptGbv+TmGbDAi87vUFnd/tpgfCBnyTDlzXdQPgEGA6C0YkTux/Sz1l6P5gu8q6fRo8A3jaJikqagjUQKpBuiFuVVZgZO9pql9Twp/s9Upxw3UD5B1WB+T1JajRYNpFAsTXShS+Z4D0jSc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from DM6PR13MB4431.namprd13.prod.outlook.com (2603:10b6:5:1bb::21)
- by SA1PR13MB5540.namprd13.prod.outlook.com (2603:10b6:806:233::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.5; Sat, 10 Sep
- 2022 08:49:04 +0000
-Received: from DM6PR13MB4431.namprd13.prod.outlook.com
- ([fe80::2944:20ba:ee80:b9c7]) by DM6PR13MB4431.namprd13.prod.outlook.com
- ([fe80::2944:20ba:ee80:b9c7%3]) with mapi id 15.20.5612.011; Sat, 10 Sep 2022
- 08:49:04 +0000
-Date:   Sat, 10 Sep 2022 10:48:58 +0200
-From:   "niklas.soderlund@corigine.com" <niklas.soderlund@corigine.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
-        "apw@canonical.com" <apw@canonical.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "louis.peens@corigine.com" <louis.peens@corigine.com>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>,
-        "oss-drivers@corigine.com" <oss-drivers@corigine.com>
-Subject: Re: [PATCH v4] checkpatch: warn for non-standard fixes tag style
-Message-ID: <YxxPepPX8Vp91XEA@oden.dyn.berto.se>
-References: <20220908164434.122106-1-niklas.soderlund@corigine.com>
- <3275d886491dc934e3277cde9cc766b0ce0886ea.camel@toradex.com>
- <Yxrt1aa60xY0H7j0@oden.dyn.berto.se>
- <9f9a0740aef282d30af8fa02ca7c6479e80aa9a0.camel@perches.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9f9a0740aef282d30af8fa02ca7c6479e80aa9a0.camel@perches.com>
-X-ClientProxiedBy: GV3P280CA0105.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:8::11) To DM6PR13MB4431.namprd13.prod.outlook.com
- (2603:10b6:5:1bb::21)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=72/oeCBVclIwopZSMahfEmdmddIkxZJ8NhzVuu9Z76o=;
+        b=i7TazntaWMmqPTQ/zvwb6GDc163hf7AQulDgg8mfQkh5IQZdy5VOrsLgWiUOfqBmoA
+         HZ1ZA4zSFredTF+4JIxN6SIjzwd78AF64Q5cXffk4GaWJ+OIaYRs0mf6ht5EDOwga7Ma
+         0OBKQbZ/M7zwlWyoef9cqW4loh9d0soP2w4oYCHQO8js+ZFO7P4qt1uSBz+THjoRWLqS
+         3H8BDUFSB1892kkWOgyO3EvuGmXN8ii5/+kXCnvBjnstVitDYv4YOLP1DRrcD6u/xefg
+         +O06d0Oys9TemQ0mOMQ/Y0ZcTcF+P4NBXQPPR7jyM/begm9hhT5axAla+r5EHRmlvs0H
+         P61Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=72/oeCBVclIwopZSMahfEmdmddIkxZJ8NhzVuu9Z76o=;
+        b=Njkfzr0dMoXQqZ1TCSHkcqEjv5iNftj9B5ZnSweon0jMcQpDhEhQsee6rCRIqxBTvN
+         h7y1NplUKSfZCPSg6rOnv4y7Yec1uMRgN0vVVZHiJYZ9yF4g6Wry2/O4XlDb9SgfBszN
+         az8pINfJDskUGQO9neVZBtDQwHa5YmC9zFhRSFa31ex2Y2Wg+03ShSzdjmAlAA2WL6hN
+         U3Twoa2j7ChjcsgIP6u1SOqjsbk3dGEFutzxd0sLy+4MzMGVlBirI2XUlVgnoRzZ7hpR
+         oQGguJ2/qbB71Btlo3B2qjebaRWM/QiwmwxRhaV6XrIFxHhKUv6KjEifqfiyvnpoVzAs
+         SLDQ==
+X-Gm-Message-State: ACgBeo1Wytv3efOSg/+Xh6X5CDAhv/6qyySi+DGhd6/nhtq1IrVAholl
+        LZ/CfTQeKSx/+pDBgM0gIVNa0SNCQQGEkiuQpvc=
+X-Google-Smtp-Source: AA6agR4bm4kjs3BnpKxgHEatl+d9lgawh8cXGi4KM6ZXKwWIuqi7n5xL/2GQX7CGtVca1qNjiDdKaPfXgcTOOd9Tues=
+X-Received: by 2002:a17:90b:4acc:b0:1f5:7f05:12e8 with SMTP id
+ mh12-20020a17090b4acc00b001f57f0512e8mr13409539pjb.92.1662800010520; Sat, 10
+ Sep 2022 01:53:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR13MB4431:EE_|SA1PR13MB5540:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b1941b0-4d63-479b-5d56-08da9309508b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pPF7uFXmDS+Aib5mHPrYro7UNmTyJ09sgBWEoIq6dtI3Hy9aYnXBapVxon+Grym5F9aF4WcQIrzkOpXeL6s8M5mn5RP+Fl2S0pa6Jz1w1+i6YKaW8nvoHv0FBpG9XqBAEBumdQJ+kq9v4+8E1QlPJmfIoJl0B/gzxNNzdgdukZkJOF9ontHVXqXlBDV2YMU79I0WSRBhte29Foyf7esGBecgNoC572NXfEJLnFwtWjFwzfO1T70pSv6rMgsPM3Adq1BCx4KLGT8SfTO1z+NRDaDvmXSa7Zh+w2/0O/RefHKz4lonDdFdYwHsWYOrfs031hdxu+1JPC43qM0I8vvQq5BG6SqAyBIo3uXf5gTNIXt/qCOckOc7yetbEjdv6BaapfVJ+M4NC0bg+w0TcOWA7mM7Ny98eo4PfcwSPcMsGo5K1rmZT/wBK5fk5XuWFIhKFY0yankxDzOFNitIDt/Wx3q4h0SeQYnL+57RHBtKE+P+3YRHu3TcVL81JOJywgZf2Sz1hlNkEnpJfvfytgEMOvX0WBBFfTU2L2vbbFbVkNKYEi0moqNJ5I/o2/Y4oZSLl1GCF21YlyCtJHG+NpAaV7ikl7D6tDRqNw2VsLBHNgtWJlPzcJPlf4X3e54jAnc5Y0WTnS1eZCSn/ZCtX36VW7vaJQ5wtdCAy9EG8pJBEkWB50F6kkvrCJL3UBsjB0w9IiYAri5UsmQBnHuQ437Qi2Pj8E6bCigWOGGRs0I2CGHzBhKdS3yR+YrLXtm7pcoS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB4431.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(39830400003)(396003)(346002)(136003)(26005)(6486002)(9686003)(66574015)(6506007)(41300700001)(52116002)(6512007)(186003)(38350700002)(53546011)(38100700002)(86362001)(107886003)(6666004)(4326008)(5660300002)(66476007)(8936002)(6916009)(316002)(54906003)(8676002)(66946007)(2906002)(66556008)(478600001)(4744005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?SLHNWQOFkCRnLFLj/obCq7GqQzWT5y21tk1ZYbM9KNBmvmvemZPzf0MlPJ?=
- =?iso-8859-1?Q?WBOP296Bl/f6sWuViU9OA28+n4ZXHxXAJysX6/1ufhSHcpwZe9gzYOLRDB?=
- =?iso-8859-1?Q?rSlx8kxNZhM52jNrXWxC+2x9I8LbjII3lkWh/nhCJPd2Wy6mJFYrvLJ4v1?=
- =?iso-8859-1?Q?kRdFiskeQpT1H87suRkJZlIVwEMiEeb3ad2MWLCztoSoYV0UGpns9Mu+RR?=
- =?iso-8859-1?Q?WV+RgSnvSTDI3aOqXfHvSHUdYZ8dsoZnf+pGtk95T/dNbvHKS2znwsO2xW?=
- =?iso-8859-1?Q?Qkn8yl2kSupIAxXxIbhnvLYwNFSCBrQGdSBETgRocIeQ+WzpNQwCWJwhrC?=
- =?iso-8859-1?Q?imdnDnfU6ZYfYTLOeyRHXKdqwS1vkR1rFTDWO1h/tbAWd+bdNj08tQnSiU?=
- =?iso-8859-1?Q?sftPKkMuV0ii2b7aTSpOwsfcdc7XpcuAxol8q8nHwmjpxYxO1hejeYsDWp?=
- =?iso-8859-1?Q?LwNzAp21XaDoKeM6yKy3Rbl9WsdhaETZAZnh3Rpl7atwpQA/EkE3aSKSsI?=
- =?iso-8859-1?Q?7mMIi2afXiH+8zgDPBu2zn/gIQJYLNQ/l8dx9pxaTv6T2IAa6MNOkOdvW3?=
- =?iso-8859-1?Q?Tbbay+W3rGmr7Y7F3lD+gxO0h3y9xay0I4JIxJ6xQQg6USmSstC+Cj1Iwo?=
- =?iso-8859-1?Q?kF7mvdQoxJLZuw8K8sIKAS9DWo86GSSllgkyXcMA+p1DjifI5OY6A2dnaT?=
- =?iso-8859-1?Q?IwxDoSpZ/NxtZTWQrdhh/gogvTkz7Gj4cAABM/WWSv1QAEyoDJ/Xc4esxQ?=
- =?iso-8859-1?Q?HOYM8SfUk6rrtlveGQqs8cg/0JI92BepyvvUnARha2DKVCjZ3IMdQz2HvC?=
- =?iso-8859-1?Q?Z2ObU2DroeUyWpMjqsnk7Xoo2TSzc6q2i6gtdc2MTXg+o5BQOO5hFldZ3C?=
- =?iso-8859-1?Q?l/XmuKWqlaKJJcIzPjH6xA6EVmsczQi2l1QJLLxPbb6QV44FZ70Ef2aNMf?=
- =?iso-8859-1?Q?VYL/+3rzQJGBybstXJCGXAMhPnrm42LQ6k5xVYC8WWNsRmkFTdAhN9DamU?=
- =?iso-8859-1?Q?gN7O0PxKvzBTT5UPAlRu5Jne1LuBGKKOdYr65ptgw26ACR9RQOBd+QVr/w?=
- =?iso-8859-1?Q?f3JL90MG2lkpj5LffzRdGjaV17mHQR1NrnyJdwmi/TuZwac4QUCpm8f4hg?=
- =?iso-8859-1?Q?MQ4KwIIVlbl++BAmcVGzQLpOvMl/RnF+65IimUl1MT8ZNnvGWE2i7V/Lms?=
- =?iso-8859-1?Q?m4n4DARw9K62W41IKMlqb5JqrcerxSTH1OY17L3CQe0c7vpcCk/2n+Flym?=
- =?iso-8859-1?Q?KweIr8/Gy+LRyo+pyALDoBvVBXedpREQE75akiS5xW6vhS0S92vZpKojTD?=
- =?iso-8859-1?Q?X6PMDRicFw6s3vqlQiDRepMkviWNXUzJib9ll05eDdzstV8LgQpHfEcNsm?=
- =?iso-8859-1?Q?spSXGaU1pHeYYPHzsyn0AWLyyhhfVL+f+WEfiPNUcZBT3FhK3gWqQSsDWS?=
- =?iso-8859-1?Q?1a+f27l4vNLSQ5XEluqApvwQUFDAoQYcwGGVpGEpWHJ7FJMwVQJkYN+vVl?=
- =?iso-8859-1?Q?6AUvHDfTQmHeeqRc5xrkQJamz7LEtAmiw5vkC+BMkchBRIuKlBCrdgp0HL?=
- =?iso-8859-1?Q?aMqJvOCVAh8J+RvaR0VOSA6u3gsCTuoFwv7pO0v6D/8objaxT09Y6kKCSf?=
- =?iso-8859-1?Q?ecjkH8uR/77QlIijMPB18BE3sC32tLwYJw5EJaiYXkSn1IX2dQgStioA?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5540
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220829210546.755377-1-james.hilliard1@gmail.com>
+ <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
+ <CADvTj4pF=D7PEBF-LK_sKckRUCq-vd9ZjohpiEgLvORg8UaZyw@mail.gmail.com>
+ <CAEf4BzbjMWC50J-mn_aNd2BeJWU=nLJmsJCAVvTqLSYsh4RejA@mail.gmail.com>
+ <CADvTj4qLhgQ1K30dKoviw10G6f5XTv7T6SChUPvYnNWZGxw4OA@mail.gmail.com>
+ <871qsjyb41.fsf@oracle.com> <CADvTj4ov8wnWCGXsKRF5QJn9_+NQ8RspydrGPjE5=9KWZQuNEA@mail.gmail.com>
+ <87r10j7h8r.fsf@oracle.com>
+In-Reply-To: <87r10j7h8r.fsf@oracle.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Sat, 10 Sep 2022 02:53:19 -0600
+Message-ID: <CADvTj4qMBFszS6=DbVLRqYGndMSLOpCa5hHpwNi5N2d7uB4quA@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
+To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        David Faust <david.faust@oracle.com>, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, elena.zannoni@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+On Sat, Sep 10, 2022 at 2:43 AM Jose E. Marchesi
+<jose.marchesi@oracle.com> wrote:
+>
+>
+> > On Sat, Sep 10, 2022 at 12:53 AM Jose E. Marchesi
+> > <jose.marchesi@oracle.com> wrote:
+> >>
+> >>
+> >> > On Fri, Sep 9, 2022 at 12:56 PM Andrii Nakryiko
+> >> > <andrii.nakryiko@gmail.com> wrote:
+> >> >>
+> >> >> On Fri, Sep 9, 2022 at 11:23 AM James Hilliard
+> >> >> <james.hilliard1@gmail.com> wrote:
+> >> >> >
+> >> >> > On Fri, Sep 9, 2022 at 12:05 PM Andrii Nakryiko
+> >> >> > <andrii.nakryiko@gmail.com> wrote:
+> >> >> > >
+> >> >> > > On Mon, Aug 29, 2022 at 2:05 PM James Hilliard
+> >> >> > > <james.hilliard1@gmail.com> wrote:
+> >> >> > > >
+> >> >> > > > The bpf_tail_call_static function is currently not defined unless
+> >> >> > > > using clang >= 8.
+> >> >> > > >
+> >> >> > > > To support bpf_tail_call_static on GCC we can check if __clang__ is
+> >> >> > > > not defined to enable bpf_tail_call_static.
+> >> >> > > >
+> >> >> > > > We need to use GCC assembly syntax when the compiler does not define
+> >> >> > > > __clang__ as LLVM inline assembly is not fully compatible with GCC.
+> >> >> > > >
+> >> >> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >> >> > > > ---
+> >> >> > > > Changes v1 -> v2:
+> >> >> > > >   - drop __BPF__ check as GCC now defines __bpf__
+> >> >> > > > ---
+> >> >> > > >  tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
+> >> >> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
+> >> >> > > >
+> >> >> > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> >> >> > > > index 7349b16b8e2f..867b734839dd 100644
+> >> >> > > > --- a/tools/lib/bpf/bpf_helpers.h
+> >> >> > > > +++ b/tools/lib/bpf/bpf_helpers.h
+> >> >> > > > @@ -131,7 +131,7 @@
+> >> >> > > >  /*
+> >> >> > > >   * Helper function to perform a tail call with a constant/immediate map slot.
+> >> >> > > >   */
+> >> >> > > > -#if __clang_major__ >= 8 && defined(__bpf__)
+> >> >> > > > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
+> >> >> > > >  static __always_inline void
+> >> >> > > >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> >> > > >  {
+> >> >> > > > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> >> > > >                 __bpf_unreachable();
+> >> >> > > >
+> >> >> > > >         /*
+> >> >> > > > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+> >> >> > > > -        * pointer) and r3 (constant map index) from _different paths_ ending
+> >> >> > > > +        * Provide a hard guarantee that the compiler won't optimize setting r2
+> >> >> > > > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
+> >> >> > > >          * up at the _same_ call insn as otherwise we won't be able to use the
+> >> >> > > >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+> >> >> > > >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+> >> >> > > > @@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> >> > > >          *
+> >> >> > > >          * Note on clobber list: we need to stay in-line with BPF calling
+> >> >> > > >          * convention, so even if we don't end up using r0, r4, r5, we need
+> >> >> > > > -        * to mark them as clobber so that LLVM doesn't end up using them
+> >> >> > > > -        * before / after the call.
+> >> >> > > > +        * to mark them as clobber so that the compiler doesn't end up using
+> >> >> > > > +        * them before / after the call.
+> >> >> > > >          */
+> >> >> > > > -       asm volatile("r1 = %[ctx]\n\t"
+> >> >> > > > +       asm volatile(
+> >> >> > > > +#ifdef __clang__
+> >> >> > > > +                    "r1 = %[ctx]\n\t"
+> >> >> > > >                      "r2 = %[map]\n\t"
+> >> >> > > >                      "r3 = %[slot]\n\t"
+> >> >> > > > +#else
+> >> >> > > > +                    "mov %%r1,%[ctx]\n\t"
+> >> >> > > > +                    "mov %%r2,%[map]\n\t"
+> >> >> > > > +                    "mov %%r3,%[slot]\n\t"
+> >> >> > > > +#endif
+> >> >> > >
+> >> >> > > Hey James,
+> >> >> > >
+> >> >> > > I don't think it's a good idea to have a completely different BPF asm
+> >> >> > > syntax in GCC-BPF vs what Clang is supporting. Note that Clang syntax
+> >> >> > > is also what BPF users see in BPF verifier log and in llvm-objdump
+> >> >> > > output, so that's what BPF users are familiar with.
+> >> >> >
+> >> >> > Is the difference a BPF specific assembly format deviation or a generic
+> >> >> > deviation in assembler template syntax between GCC/llvm?
+> >> >> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
+> >> >> >
+> >> >>
+> >> >> Sorry, I don't understand the question. I'm talking about the above
+> >> >> snippet with "r1 = %[ctx]" vs "mov %%r1,%[ctx]". Seems like the rest
+> >> >> stayed the same. So this would be a "BPF specific assembly format"
+> >> >> case, right? I don't know what else could be different with GCC-BPF
+> >> >> assembly.
+> >> >
+> >> > I mean it's unclear if it's a generic assembly template format difference
+> >> > that applies to all targets or one that's BPF target specific.
+> >>
+> >> It is certainly BPF specific.
+> >>
+> >> I think that when I first wrote the BPF GNU toolchain port the assembly
+> >> format used by LLVM was different than it is now: I certainly didn't
+> >> invent the syntax the GNU assembler uses for BPF.
+> >>
+> >> It seems LLVM settled with that C-like syntax for assembly instead,
+> >> which is very unconventional.
+> >>
+> >> > Anyways for now I sent a new patch so that bpf_tail_call_static is defined
+> >> > on non-clang compilers so that it will work when GCC-BPF supports the
+> >> > existing asm format.
+> >> > https://lore.kernel.org/bpf/20220909224544.3702931-1-james.hilliard1@gmail.com/
+> >>
+> >> I don't think this patch makes much sense: these guards are designed to
+> >> avoid compilers that do not support the inline assembly (as presumably
+> >> happen with clang < 8) to choke on the header file.  That's also the
+> >> case of GCC BPF at the moment.
+> >>
+> >> With this patch, people won't be currentty able to use bpf_helpers.h
+> >> with GCC BPF even if they don't use bpf_tail_call_static.
+> >
+> > That doesn't seem to be an issue here, from what I can tell it's not
+> > a failure in the compiler but a failure in the assembler, so having
+> > bpf_tail_call_static unguarded in GCC doesn't break anything
+> > that isn't already broken.
+>
+> IMO it makes it worse, because:
+>
+> 1) With your patch the error message will happen at assembly time
+>    (invalid syntax in the intermediate .s file mixed with valid syntax)
+>    pointing to a location in a temporary .S file.  With the guards, you
+>    get an error at compile time instead, pointing to the undefined
+>    function in the C source.  IMO it is much easier to figure out what
+>    is wrong in the second case than in the first.
 
-Thanks for your feedback.
+A compile time error may be somewhat misleading as one would
+suspect the issue is with a missing include or something along
+those lines, even though the issue is with the inline assembly.
 
-On 2022-09-09 10:57:10 -0700, Joe Perches wrote:
-> I think it's better to make sure that there is a likely SHA1 of some
-> minimum length after the fixes line.
-> 
-> And a relatively common defect is to have the word "commit" after fixes.
-> 
-> e.g.:
-> 
-> Fixes commit 554c0a3abf216 ("staging: Add rtl8723bs sdio wifi driver").
-> Fixes commit a2c60d42d97c ("Add files for new driver - part 16").
-> 
-> So maybe:
-> 
-> 	if (!$in_header_lines &&
-> 	    $line =~ /^\s*fixes:?\s*(?:commit\s*)?[0-9a-f]{5,}\b/i)
+>
+> 2) If/when we support the C-like assembly syntax in GCC, you will want
+>    to guard the function anyway with a GCC_MAJOR > 12 (or whatever) very
+>    much like it is done with clang >= 8.
 
-I'm sorry I just sent out v6 and missed this comment, which I think is a 
-great idea. I will let v6 stew for a day or two in case there is other 
-feedback and then spin a v7 with this addressed.
+Wouldn't we need to check the GAS version instead of the GCC
+version? AFAIU GAS version isn't known at compile time so a version
+check may not make sense here for GCC.
 
--- 
-Kind Regards,
-Niklas Söderlund
+>
+> >> >> > >
+> >> >> > > This will cause constant and unavoidable maintenance burden both for
+> >> >> > > libraries like libbpf and end users and their BPF apps as well.
+> >> >> > >
+> >> >> > > Given you are trying to make GCC-BPF part of the BPF ecosystem, please
+> >> >> > > think about how to help the ecosystem, move it forward and unify it,
+> >> >> > > not how to branch out and have Clang vs GCC differences everywhere.
+> >> >> > > There is a lot of embedded BPF asm in production applications, having
+> >> >> > > to write something as trivial as `r1 = X` in GCC or Clang-specific
+> >> >> > > ways is a huge burden.
+> >> >> > >
+> >> >> > > As such, we've reverted your patch ([0]). Please add de facto BPF asm
+> >> >> > > syntax support to GCC-BPF and this change won't be necessary.
+> >> >> > >
+> >> >> > >   [0]
+> >> >> > > https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=665f5d3577ef43e929d59cf39683037887c351bf
+> >> >> > >
+> >> >> > > >                      "call 12"
+> >> >> > > >                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+> >> >> > > >                      : "r0", "r1", "r2", "r3", "r4", "r5");
+> >> >> > > > --
+> >> >> > > > 2.34.1
+> >> >> > > >
