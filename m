@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FF45B4751
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 17:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8325B4759
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 17:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIJPeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 11:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S229561AbiIJPmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 11:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIJPeU (ORCPT
+        with ESMTP id S229446AbiIJPmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 11:34:20 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD67E4E86A
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 08:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Z+umsEgE+0BVdH31f6mmvIugV/Oo08OxjxooJr5Ldk0=; b=oOkKlFJg/widSzLx1kmtByViA7
-        iOPPJVXzhj9kBu4SsHbdIuC8ZvEUEWVuF7wtWK9NY1wDz3/5meiB92klu0LVN4Bm3K6+oo2Rbflxi
-        xuhDbB9wgCuLMFKmNs4ZX3jsa8mX2XqIiqnuyGGBl4H6OSaQkIj1E6xZyyLBmYZurLWb31WizyZN+
-        O1jWvr/yubX+SzsqQLAKgCgR+wLUiayc0HOm6lizgh1Gaac2vu0rqaQKPtH1p4tEG0/zz8AByiMgj
-        D4a4FsKWEWTK3jJgeBqj7gHvccozD0WQKEeJ7+NlQMxDBWJ/bcK/RIwj9La/k/u+OIFQRI7btv70F
-        1Ec0jrnA==;
-Received: from [2a01:799:961:d200:4519:292a:25da:963a] (port=63245)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oX2Uo-0006Kf-1D; Sat, 10 Sep 2022 17:34:14 +0200
-Message-ID: <03d5a161-9bc9-3d04-acda-2e5ca5a19d71@tronnes.org>
-Date:   Sat, 10 Sep 2022 17:34:04 +0200
+        Sat, 10 Sep 2022 11:42:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E614D26;
+        Sat, 10 Sep 2022 08:42:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA13EB8010F;
+        Sat, 10 Sep 2022 15:42:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F99C433C1;
+        Sat, 10 Sep 2022 15:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662824560;
+        bh=luECLScAoXW4trye3u3QR5BAVG50o9WKq4LURxl0cWE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=OglzfM37e36vzr8RIz38aKNhfmFgibKtibSrXPxPXQxdygFx+atkOZh3JNt71PUY6
+         2S0Eip2IqnsZuGY7oggCvdwm42lV9aRNn7Dn9nUzGuh/E4BcZYjwkAAn+a+jtNxp+8
+         FOXE46EQA4dSN2Km2LXB6ukzhgc7QWaVgmbUb4i2klVbVrzmJNvLapw+jTc4WgP8Sn
+         gT6sTIx/QE1RnpSC++ABbUzSwSDvU1GBgjd7UB997SV46FyILWCbmjKFFIh1JSPvq0
+         8RJ0TU+fU8kaAQVZSguBGoaIlIokY7BL2FEZpfhephsISRy9GGuv5q5iKanIgYycUH
+         ILd1FW78uL9qw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
+Cc:     linux@roeck-us.net, vigneshr@ti.com, sjg@chromium.org,
+        miquel.raynal@bootlin.com, gregkh@linuxfoundation.org,
+        linux-pwm@vger.kernel.org, richard@nod.at, heiko@sntech.de,
+        robh+dt@kernel.org, jamie@jamieiles.com,
+        u.kleine-koenig@pengutronix.de, linux-mtd@lists.infradead.org,
+        philipp.tomsich@vrull.eu, ulf.hansson@linaro.org,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        vkoul@kernel.org, zhangqing@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com,
+        linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+In-Reply-To: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
+References: <20220909212543.17428-1-jbx6244@gmail.com> <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
+Subject: Re: (subset) [PATCH v1 01/11] dt-bindings: serial: rockchip: add rockchip,rk3128-uart
+Message-Id: <166282455399.474671.11726724099870642599.b4-ty@kernel.org>
+Date:   Sat, 10 Sep 2022 16:42:33 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dom Cobley <dom@raspberrypi.com>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
- <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
- <20220905145729.ln675jko3aw6sgzs@houat>
- <965de5c0-bc6a-7210-c946-b916ae2219fc@i2se.com>
- <eb06337b-d501-3ca7-0e50-eda3aec75683@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <eb06337b-d501-3ca7-0e50-eda3aec75683@tronnes.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,129 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 07.09.2022 18.44, skrev Noralf Trønnes:
+On Sat, 10 Sep 2022 00:01:28 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-uart compatible string.
 > 
 > 
-> Den 07.09.2022 12.36, skrev Stefan Wahren:
->> Hi Maxime,
->>
->> Am 05.09.22 um 16:57 schrieb Maxime Ripard:
->>> On Fri, Sep 02, 2022 at 01:28:16PM +0200, Noralf Trønnes wrote:
->>>>
->>>> Den 01.09.2022 21.35, skrev Noralf Trønnes:
->>>>>
->>>>> I have finally found a workaround for my kernel hangs.
->>>>>
->>>>> Dom had a look at my kernel and found that the VideoCore was fine, and
->>>>> he said this:
->>>>>
->>>>>> That suggests cause of lockup was on arm side rather than VC side.
->>>>>>
->>>>>> But it's hard to diagnose further. Once you've had a peripheral not
->>>>>> respond, the AXI bus locks up and no further operations are possible.
->>>>>> Usual causes of this are required clocks being stopped or domains
->>>>>> disabled and then trying to access the hardware.
->>>>>>
->>>>> So when I got this on my 64-bit build:
->>>>>
->>>>> [  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 --
->>>>> SError
->>>>> [  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
->>>>>      5.19.0-rc6-00096-gba7973977976-dirty #1
->>>>> [  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
->>>>> [  166.702206] Workqueue: events_freezable_power_
->>>>> thermal_zone_device_check
->>>>> [  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
->>>>> BTYPE=--)
->>>>> [  166.702242] pc : regmap_mmio_read32le+0x10/0x28
->>>>> [  166.702261] lr : regmap_mmio_read+0x44/0x70
->>>>> ...
->>>>> [  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
->>>>>
->>>>> I wondered if that reg read was stalled due to a clock being stopped.
->>>>>
->>>>> Lo and behold, disabling runtime pm and keeping the vec clock running
->>>>> all the time fixed it[1].
->>>>>
->>>>> I don't know what the problem is, but at least I can now test this
->>>>> patchset.
->>>>>
->>>>> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
->>>>>
->>>> It turns out I didn't have to disable runtime pm:
->>>> https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
->>> If the bcm2711_thermal IP needs that clock to be enabled, it should grab
->>> a reference itself, but it looks like even the device tree binding
->>> doesn't ask for one.
->> The missing clock in the device tree binding is expected, because
->> despite of the code there is not much information about the BCM2711
->> clock tree. But i'm skeptical that the AVS IP actually needs the VEC
->> clock, i think it's more likely that the VEC clock parent is changed and
->> that cause this issue. I could take care of the bcm2711 binding & driver
->> if i know which clock is really necessary.
-> 
-> Seems you're right, keeping the parent always enabled is enough:
-> 
-> 	clk_prepare_enable(clk_get_parent(vec->clock)); // pllc_per
-> 
-> I tried enabling just the grandparent clock as well, but that didn't help.
-> 
-> Without the clock hack it seems the hang occurs when switching between
-> NTSC and PAL, at most I've been able to do that 4-5 times before it hangs.
-> 
-> For a while it looked like fbdev/fbcon had a play in this, but then I
-> realised that it just gave me a NTSC mode to start from and to go back
-> to when qutting modetest.
-> 
 
-I've looked some more into this problem and I see that downstream is
-using a firmware clock for vec:
+Applied to
 
-clk: Move vec clock to clk-raspberrypi
-https://github.com/raspberrypi/linux/pull/4639
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-If I do the same my problem goes away.
+Thanks!
 
-It's interesting to note that on downstream 5.10.103-v7l+ #1530,
-pllc_per is enabled even if tvout is not enabled:
+[05/11] dt-bindings: spi: rockchip: add rockchip,rk3128-spi
+        commit: 14c3ffd7947ef3623682148be07b9c0bb8737f37
 
-$ sudo cat /sys/kernel/debug/clk/pllc_per/regdump
-cm = 0x00000000
-a2w = 0x00000004 (disable bit(8) is not set)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-It's when mainline vc4_vec disables this vec parent clock that the crash
-occurs.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Sidenote: Another downstream fw clock change with a vec reference[1]:
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Another issue not related to the clock crash problem:
-
-I assumed that unloading the vc4 module would release the clocks, but
-this didn't happen.
-
-When I looked at it I remembered that there's a catch in the DRM unplug
-machinery when it comes to unloading a driver and the DRM disable hooks.
-
-static void vc4_drm_unbind(struct device *dev)
-{
-	struct drm_device *drm = dev_get_drvdata(dev);
-
-	drm_dev_unplug(drm);
-	drm_atomic_helper_shutdown(drm);
-}
-
-Here the drm_device is first marked as unplugged and then the pipeline
-is disabled. Since vc4_vec_encoder_disable() is protected by
-drm_dev_enter() the VEC is not disabled, clocks are not released and PM
-is left on.
-
-In the drivers that I have written where the hardware is not expected to
-have gone away on device unbind (SPI), I've just left out the
-drm_dev_enter() check in the disable hook.
-
-Noralf.
-
-[1] https://github.com/raspberrypi/linux/pull/4706
+Thanks,
+Mark
