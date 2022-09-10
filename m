@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23E95B4373
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 02:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C955B4375
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 02:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiIJAuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 20:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S230108AbiIJAye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 20:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiIJAuD (ORCPT
+        with ESMTP id S229690AbiIJAy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 20:50:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D47E3B979;
-        Fri,  9 Sep 2022 17:50:02 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y3so7890088ejc.1;
-        Fri, 09 Sep 2022 17:50:02 -0700 (PDT)
+        Fri, 9 Sep 2022 20:54:29 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC5EC73
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 17:54:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n17-20020a05600c3b9100b003b3235574dbso2833706wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 17:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=FibNXoOIqGjam8FQaCwVIl7uN/7cSP7wgcWxw2l2siw=;
-        b=VIt7nZL2lkC/K0df7BQHCSyhfMX9Si2xUJ5Cs8gGiuOncqtJ+7tOwJ4wrmsWtsNswx
-         kMCauGsYuemow1y/DgT8/4vV+P0pbeVE9P0fHhvInu4jBAy/iDTqWHT9upeKF564rOrL
-         JkNZcC6NZhhli/3l0cICoNeDb12y1YOkizmKSvq3S2IJBoZP2eP2wCMvgGY4uABIfN4c
-         L+dw6CrZqBtawLX+UNY994qSUmcvhaFrI0nUDWRNFvjmXkRQ6hcvA9wHjcJNsEcz9SBr
-         SEzt0m4mvz+wPuvr6f7IUDyjwdp/9LuVhs+yNMz/B0Pzt+/QG/B26L+FrDzyjClTnFrs
-         Lqpg==
+        bh=9Ztwre21GCjHUMNtK/HGLGU0r9pbtZVuDPqXh18HLmU=;
+        b=Mycs5Q3nWJwijGxU5dJJMM01xHs05pLw7B8pR5B/w2Sga1p/Vkn3ykACVn7m4cco4Y
+         Lzpl2NzhpySPA9DAxpqeJu4wuD7mxytxVBkLNlsBkczu5Ym3zaQDomXSiKW5gYGwjQjz
+         8tgj8d/DDFQ1Hh2CrRHJbYaPp2yM9P3/nY/PLkTVBVTG+Z7DoCHLSjOYg1mqLwk2McCA
+         ezyVNKK0ntE2GlCknqPhS+Eum/A7nOHAzrLYZn4G1eJK3KYLtDQNUG7oIwvmCSuErgCB
+         qXvueN8T2ZHCeBZY7YeS6aUpe39VTTTTOy86gAGBRLLQ1fznPs4nxzOkUTGa6yosX91c
+         qBtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FibNXoOIqGjam8FQaCwVIl7uN/7cSP7wgcWxw2l2siw=;
-        b=3vV3okijbxeFRm1gNeyeTCusES5GNmnVynMUpllrxAkeV9T0HVzbdEcU0jYhCjaesC
-         lOHHw0WhOv7f153ucJpUDjRILOKVJ/tSqt1kRIq7BqQcEmeerLvbwoTsFcM2jbElXLt0
-         xWpOqlzshBhtCjqYMzVKQRsEoB6UaxdNBnYnkUHnYt3LPRMCLhK7XSURs73uo0L3Lf0e
-         MjpcvFHnYfWKLIeAAMUAoHP8i+qdPcrYdUNQx6Tf5MhEqXT+A2rVsN3mSNl20xqlXfgO
-         2QE4xy3UAiVOILKn/P+FfVpD554BLYZlG56RN4z94FAC3hF628FIx0bO4xcIOIozt5vS
-         Mv1Q==
-X-Gm-Message-State: ACgBeo0ZS95IoB+SJL0md/uLwYM993sJSoAqb1F2zH2rbiEGk0BSuXty
-        vMsUzs9YfwDQD84P0nuZucofVrCg1BEkuaggKm4=
-X-Google-Smtp-Source: AA6agR75RCJhiA1g3/v3+Kq3v8MmZyd48JcejsQBsUFSDdYqTQYnRFiLwJPPvhNMhm4PGJKjDRAPg3LEA0Hrtuuy05A=
-X-Received: by 2002:a17:907:6096:b0:73d:9d12:4b04 with SMTP id
- ht22-20020a170907609600b0073d9d124b04mr11859936ejc.745.1662771000962; Fri, 09
- Sep 2022 17:50:00 -0700 (PDT)
+        bh=9Ztwre21GCjHUMNtK/HGLGU0r9pbtZVuDPqXh18HLmU=;
+        b=FQr9eZFVGqWAh56rct73NmlM3K0l5Tt0UuOA4rAwfErlxdSoHRugh9btCM8//lc7Ku
+         VPyWTfQMS5gscH4rosY2WBepY3BO7UZlS3dtaB+yr/W33EotSPnBLcbZ7ztHPg5/Jhwv
+         3Zxx9uZlpuD3u4d8zoQ0YRsDY67Gh4j2rCgvk2NxBMMfL4Ixo1yBLN9SfOyxQZu/z13L
+         lAoTpAju4xwu3zX4z0NLCUsHQClu7diAZ7UVjV1Vafan9B2gqebDs2mOPoBpNkeEFFiS
+         mEKioX8dGu6/Mb+l/SaTFrQfVgFyYxfivOGWujt6J7YhSVip3s44OjxZX1T5y3gjupEF
+         87LA==
+X-Gm-Message-State: ACgBeo3BYjfoZqpXHHfRb/JmM5oqpgaofSs1MFc5dVik1cZ2F/Bwp6BL
+        Vq6EKROzITdaIZsskVEq08ounbsV14xXz51PyUrUJA==
+X-Google-Smtp-Source: AA6agR624o4oCcwoh88uEPgDcPoWpagjQc6CQZxPjnCtqdVZOBRCA8B81UqdQFycSdMhGHLLv/+SvTT389qF5e33GlQ=
+X-Received: by 2002:a05:600c:2202:b0:3b4:6189:fc6a with SMTP id
+ z2-20020a05600c220200b003b46189fc6amr2788680wml.171.1662771264775; Fri, 09
+ Sep 2022 17:54:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220826230639.1249436-1-yosryahmed@google.com>
- <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
- <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
- <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
- <CA+khW7g-jeiXMM-K+KK7L3tzG0catFSM+x5vHKMs=PF=s+=Pag@mail.gmail.com>
- <CAJD7tkZ77JDt62CMw2AmpvTJ5fpVs0mkPdVqMJm8X8zCBq=LhA@mail.gmail.com> <CAJD7tkZz52GkTr+TuZnArEOsyxxMPnE5A1AKZfY-gjx0tUW6dQ@mail.gmail.com>
-In-Reply-To: <CAJD7tkZz52GkTr+TuZnArEOsyxxMPnE5A1AKZfY-gjx0tUW6dQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Sep 2022 17:49:49 -0700
-Message-ID: <CAEf4BzaH7xgoDfKstCmQzVY5HJpE8Hn8WFfyUU7PH64QpQcwsg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Hao Luo <haoluo@google.com>, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220907003630.1115439-1-eugenis@google.com>
+In-Reply-To: <20220907003630.1115439-1-eugenis@google.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Fri, 9 Sep 2022 17:54:13 -0700
+Message-ID: <CAMn1gO4X93khAqOOvCJjWmm410rv8S5847GfsPckJwqtLSzc-Q@mail.gmail.com>
+Subject: Re: [PATCH v4] arm64: mte: move register initialization to C
+To:     Evgenii Stepanov <eugenis@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,72 +74,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 2:35 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+On Tue, Sep 6, 2022 at 5:36 PM Evgenii Stepanov <eugenis@google.com> wrote:
 >
-> On Mon, Aug 29, 2022 at 6:50 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Mon, Aug 29, 2022 at 6:42 PM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > On Mon, Aug 29, 2022 at 6:07 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > >
-> > > > On Mon, Aug 29, 2022 at 3:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > > >
-> > > > > On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
-> > > > > >
-> > > > > > On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > > > > >
-> > > [...]
-> > > > > > >
-> > > > > > > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> > > > > > > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
-> > > > > > > +SEC("fentry/cgroup_attach_task")
-> > > > > >
-> > > > > > Can we select an attachpoint that is more stable? It seems
-> > > > > > 'cgroup_attach_task' is an internal helper function in cgroup, and its
-> > > > > > signature can change. I'd prefer using those commonly used tracepoints
-> > > > > > and EXPORT'ed functions. IMHO their interfaces are more stable.
-> > > > > >
-> > > > >
-> > > > > Will try to find a more stable attach point. Thanks!
-> > > >
-> > > > Hey Hao,
-> > > >
-> > > > I couldn't find any suitable stable attach points under kernel/cgroup.
-> > > > Most tracepoints are created using TRACE_CGROUP_PATH which only
-> > > > invokes the tracepoint if the trace event is enabled, which I assume
-> > > > is not something we can rely on. Otherwise, there is only
-> > >
-> > > Can we explicitly enable the cgroup_attach_task event, just for this
-> > > test? If it's not easy, I am fine with using fentry.
-> >
-> > I see a couple of tests that read from /sys/kernel/debug/tracing, but
-> > they are mostly reading event ids, I don't see any tests enabling or
-> > disabling a tracing event, so I am not sure if that's an accepted
-> > pattern. Also I am not sure if we can rely on tracefs being in that
-> > path. Andrii, is this considered acceptable?
-> >
+> If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
+> CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
+> in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
+> in fact implement FEAT_MTE2, setting the system register like this may
+> lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
+> in the C function cpu_enable_mte which is called based on the sanitized
+> version of the system register.
 >
-> Anyone with thoughts here? Is it acceptable to explicitly enable a
-> trace event in a BPF selftest to attach to a tracepoint that is only
-> invoked if the trace event is enabled (e.g. cgroup_attach_task) ?
-> Otherwise the test program would attach to the fentry of an internal
-> function, which is more vulnerable to being changed and breaking the
-> test (until someone updates the test with the new signature).
->
+> There is no need for the rest of the MTE-related system register
+> initialization to happen from assembly, with the exception of TCR_EL1,
+> which must be set to include at least TBI1 because the secondary CPUs
+> access KASan-allocated data structures early. Therefore, make the TCR_EL1
+> initialization unconditional and move the rest of the initialization to
+> cpu_enable_mte so that we no longer have a dependency on the unsanitized
+> ID register value.
 
-IMO it's fine to use fentry. If something changes about signature,
-we'll detect it soon enough and adjust selftests.
+Moving the register initialization to C also fixes a bug where the
+kernel's zeroing of TFSR_EL1 has no practical effect when the kernel
+is started in VHE mode because the register is currently being zeroed
+prior to the kernel enabling the redirect of TFSR_EL2 to TFSR_EL1 when
+it enables VHE. As a result, without this patch it is possible to get
+a spurious KASAN error report if TFSR_EL2 is non-zero out of reset.
 
-Messing with global tracefs in selftests is less desirable. It will
-also potentially force tests to be sequential.
-
-> > >
-> > > > trace_cgroup_setup_root() and trace_cgroup_destroy_root() which are
-> > > > irrelevant here. A lot of EXPORT'ed functions are not called in the
-> > > > kernel, or cannot be invoked from userspace (the test) in a
-> > > > straightforward way. Even if they did, future changes to such code
-> > > > paths can also change in the future, so I don't think there is really
-> > > > a way to guarantee that future changes don't break the test.
-> > > >
-> > > > Let me know what you think.
-> > > >
+Peter
