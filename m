@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A8A5B462A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 14:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FA95B4633
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 14:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiIJMLq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Sep 2022 08:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S229655AbiIJMfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 08:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJMLn (ORCPT
+        with ESMTP id S229446AbiIJMfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 08:11:43 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EEF1759F;
-        Sat, 10 Sep 2022 05:11:39 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MPsBw6l7jz67gYW;
-        Sat, 10 Sep 2022 20:10:48 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 10 Sep 2022 14:11:36 +0200
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 10 Sep 2022 13:11:36 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2375.031;
- Sat, 10 Sep 2022 13:11:36 +0100
-From:   Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
- Models"
-Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKw
-Date:   Sat, 10 Sep 2022 12:11:36 +0000
-Message-ID: <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
-In-Reply-To: <674d0fda790d4650899e2fcf43894053@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.134.155]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sat, 10 Sep 2022 08:35:48 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CD45040;
+        Sat, 10 Sep 2022 05:35:47 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a14so3018178ljj.8;
+        Sat, 10 Sep 2022 05:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ylankE0Ntcy0fsfQcuqcC6SNPzukIG6CjHTnu9Jh3Qw=;
+        b=m0j2q/wOOyX3sBYygCXuf0GnAJujmOFo7EMdTErAa7sxWkqNTWnaVnXVBgbItew1PR
+         H1ZpKn6ij5A7tzWhxS1U+LBe2qbuh141TFxjZQl7aSI4dsknFOr5w8B78TVDLILswE20
+         J2UM+cmXt9JvaoIfSVuU03E4eHlWjzQWEoosHlGodaDN38+9O1w05ghVJzSZgANOI4MZ
+         Bk09wNS7slZRxakCNeRyA1SUiG0q0C/DN8ZPOzbeWFs9rhUE/hluKrath+zb1leShmtf
+         uNRN+Mx+KOIo4YMVbAl0alNUQHkfzQ/J1qo2wTY9+f/NnI1mD5iW9jqwgn4WJjyG6AeN
+         Z7wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ylankE0Ntcy0fsfQcuqcC6SNPzukIG6CjHTnu9Jh3Qw=;
+        b=T3UZV1ohQsWwsE+ti+0hZ9O5UqYq4UyH+BnluWzmOuBeNDHtxpFmSM9zi/RlMVm9yn
+         6d3ozLrFolxohCiql59b2WDGuttoPhp64VcNVhEG6g7JWJNSxv81pCCmISdikjdB7IXu
+         Y1YsOin8dkqbUvZfDlIssMn415WYF1O1qsGxH/mIYUNNpniUppYfFDjKod87T1j28zF/
+         ZZ2PNiLuUSwetq+KrEM/Y7X8jjmw2FUZCZ9zOrUfe2gqkinTx6GSZIIgzvzPMFf2wq/P
+         W9CAkBMvfAParGDhwGHiKKp/vLcui48i6c0T2h3G+Q58pTZtmbkFxlXPLp4Cf7R/9uMb
+         DGyQ==
+X-Gm-Message-State: ACgBeo3sib1eBwMnaCCnnDglHqdnC+DH9kmuun8F1if4kZEjRZY1b47/
+        ZrzOLfsDcvqcWSDMSwQJxmU=
+X-Google-Smtp-Source: AA6agR7AEhYcjxJXjLPhbXBdf+MXAQzDChKDVE1xSxa0FIjE57ci1fPhV4Eba3gXLB1Lx6IGlLnRaA==
+X-Received: by 2002:a05:651c:2d0:b0:25e:6c94:59d5 with SMTP id f16-20020a05651c02d000b0025e6c9459d5mr5644442ljo.488.1662813345560;
+        Sat, 10 Sep 2022 05:35:45 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id a19-20020a056512201300b0048a757d1303sm243827lfb.217.2022.09.10.05.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 05:35:44 -0700 (PDT)
+Date:   Sat, 10 Sep 2022 15:35:42 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jonathan Derrick <jonathan.derrick@intel.com>,
+        Revanth Rajashekar <revanth.rajashekar@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
+ log-buffer
+Message-ID: <20220910123542.tzxg2blegw55z5fj@mobilestation>
+References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
+ <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
+ <20220910053045.GA23052@lst.de>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220910053045.GA23052@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,25 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Sep 10, 2022 at 07:30:45AM +0200, Christoph Hellwig wrote:
+> I think this will work, but unless we have to I'd generally prefer
+> to just split dta that is DMAed into into a separate allocation.
+> That is, do a separate kmalloc for the nvme_smart_log structure.
 
-What they mean seems to be that a prop relation followed only by wmb (not mb) doesn't enforce the order of some writes to the same location, leading to the claimed hang in qspinlock (at least as far as LKMM is concerned). 
+Well, both approaches will solve the denoted problem. I am just
+wondering why do you think that the kmalloc-ed buffer is more
+preferable? IMO it is a bit less suitable since increases the memory
+granularity - two kmalloc's instead of one. Moreover it makes the code
+a bit more complex for the same reason of having two mallocs and two
+frees. Meanwhile using the ____cacheline_aligned qualifier to prevent
+the noncoherent DMA problem is a standard approach.
 
-What we mean is that wmb does not give the same propagation properties as mb.
-The claim is based on these relations from the memory model
+What would be the best solution if we had a qualifier like this:
+#ifdef CONFIG_DMA_NONCOHERENT
+#define ____dma_buffer ____cacheline_aligned
+#else
+#define ____dma_buffer
+#endif
+and used it instead of the direct ____cacheline_aligned utilization.
 
-let strong-fence = mb | gp
-...
-let cumul-fence = [Marked] ; (A-cumul(strong-fence | po-rel) | wmb |
-	po-unlock-lock-po) ; [Marked]
-let prop = [Marked] ; (overwrite & ext)? ; cumul-fence* ;
-	[Marked] ; rfe? ; [Marked]
+-Sergey
 
-From an engineering perspective, I think the only issue is that cat *currently* does not have any syntax for this, nor does herd currently implement the await model checking techniques proposed in those works (c.f. Theorem 5.3. in the "making weak memory models fair" paper, which says that for this kind of loop, iff the mo-maximal reads in some graph are read in a loop iteration that does not exit the loop, the loop can run forever). However GenMC and I believe also Dat3M and recently also Nidhugg support such techniques. It may not even be too much effort to implement something like this in herd if desired.
-
-The Dartagnan model checker uses the Theorem 5.3 from above to detect liveness violations.
-
-We did not try to come up with a litmus test about the behavior because herd7 cannot reason about liveness.
-However, if anybody is interested, the violating execution is shown here
-	https://github.com/huawei-drc/cna-verification/blob/master/verification-output/BUG1.png
-
-Hernan
+> 
+> Guenter, is this ok with you?
