@@ -2,146 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769675B4801
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB835B4804
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 21:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiIJS5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 14:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S229549AbiIJTDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 15:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJS5U (ORCPT
+        with ESMTP id S229446AbiIJTDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 14:57:20 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7DF48E8B;
-        Sat, 10 Sep 2022 11:57:19 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id r12so4330596ljg.10;
-        Sat, 10 Sep 2022 11:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=76A7GHL2L8UG4HVxO3h23qrqx49uxNUAVqmZcmf8l6U=;
-        b=TjOuJww3nWJHgG+FYP1gCAMtJH+Q+xFJW3lnvKQ/G5yTA272GC1mNIiBsOBT1sDJzh
-         8HW1/yJH5KBCMj8GApH/A3y50dbEMJ/xVxCCTbC0XhYITOxcPq6q6AQFyKQfCmAN5HcW
-         j6gG0VDtE+vEPAgAyYKJ8uHULs2zp3bkmR64+8NuJ82eYFieNc/e4QEvn5aom3QQSTaM
-         yOQGoi96Hh7h84ZNAQUoK1kPtb8+JDerUtyNGxpgk+B1HgT5Fh948lsYD9iCkacI5nvp
-         ys0HQXn9nAoKA8wzEqjMUpi8p8zSDLMdVpF/1OqVYOytfLHkIr8seEjUGK+GHOeLo7y0
-         OMwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=76A7GHL2L8UG4HVxO3h23qrqx49uxNUAVqmZcmf8l6U=;
-        b=8MM23qg8NtoCBbGAidrRggV9jOCtChlIRy7EIUuy/ywWEXtegMdO5F8esfL+Dp28j9
-         LdpTyCCndL51UJQwBcu1ESh5tMZA5HNeYNvpD/WYeCFLWQMoUidWme70zV5xZBI7Ng/C
-         BedkXGQgc6KBdeVyJ65NCAGwL7x9WRJHNZ0fxX03aCy6jFSvstIrNXivcu4LHxkeCSjm
-         oAeRQG/huDNrKOI3sU+NOuVydReOHj6e7UIpYyetwNa2tOQ/HiQ/hSYmgb3XNxS35oUz
-         Xo8ZKAaQjvObd3BYh/sNDJAPdox2xF22vOd0+BJqOQlausu+Ly+u2cS/cIjB3uq1oq4N
-         o+XA==
-X-Gm-Message-State: ACgBeo0FN0VcL1MgchWO99j+Yp46YRFj8hfxqXUgyGSlpXgYYUCjMvwp
-        9huvTqyZiThRoFdu8L4jHslfX6gOqxk=
-X-Google-Smtp-Source: AA6agR7W6fJ3B5cqBLv/4P5bQQ4nOFhj2xFa1XuN3q9MBC7JKe+GdIixZuAvn7LnH2QaJlP9HrD4iw==
-X-Received: by 2002:a2e:9a90:0:b0:26b:efd1:18fc with SMTP id p16-20020a2e9a90000000b0026befd118fcmr1131472lji.499.1662836237567;
-        Sat, 10 Sep 2022 11:57:17 -0700 (PDT)
-Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b0049476667228sm345057lfr.65.2022.09.10.11.57.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 11:57:15 -0700 (PDT)
-Message-ID: <607af3f8-9fb2-da00-1867-5ab59ce9d3e8@gmail.com>
-Date:   Sat, 10 Sep 2022 21:57:20 +0300
+        Sat, 10 Sep 2022 15:03:38 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B249C491EC
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 12:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=IfGYbbeCCpVUgPtnr7pWT4b/nUnNPSzqNx/sB1Pg1Rg=; b=AKxX8bxiBjG+q7+EXxVAD2UqlV
+        0EaltR9bt2kbEQOvHj8A2K1UcB8UWy7LqGe0B017nQrGYk8Lh8PG5j2OqlHqRjY2tVTbbbEocFOSF
+        0q05iQASdmmpXabrWYpnAwx7IxpxkL+HFgp9Xs1sPTv+rVxl7Hwn8tE4CLskPFNUVsNxSv0G75OF3
+        63Uu3kTOKkTOPmHM47zgOWW5TNEW/wFCce3aQqXibytFBX4RwuApxR6sM+bUwsqZYev8T+FoHqeFJ
+        CsBTqGPIFTRZjEaoqbaQ3EXhYE6bJ+13qnqviwkoU/mJUEJjqMNK+5Jf7D5EWeldbgK3nrCSwk12o
+        WfnZ89GA==;
+Received: from [38.44.74.92] (helo=killbill.home)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oX5l9-00Eggr-3W; Sat, 10 Sep 2022 21:03:19 +0200
+From:   Melissa Wen <mwen@igalia.com>
+To:     rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, igormtorrente@gmail.com
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Melissa Wen <mwen@igalia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        kernel test robot <lkp@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/vkms: fix 32bit compilation error by replacing macros
+Date:   Sat, 10 Sep 2022 18:03:03 -0100
+Message-Id: <20220910190303.682897-1-mwen@igalia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/2] dmaengine: ti: k3-udma: Respond TX done if
- DMA_PREP_INTERRUPT is not requested
-To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
-        broonie@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     vigneshr@ti.com, kishon@ti.com
-References: <20220822091531.27827-1-vaishnav.a@ti.com>
- <20220822091531.27827-2-vaishnav.a@ti.com>
- <1d4eb194-aab7-42c7-f33f-4b89e607dc6c@gmail.com>
- <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
- <7dae9f3f-88eb-d996-3cb3-89402ea9e31f@gmail.com>
- <a30e917d-e031-3829-36fb-b897e971825f@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <a30e917d-e031-3829-36fb-b897e971825f@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Replace vkms_formats macro for fixed-point operations with functions
+from drm/drm_fixed.h to do the same job and fix 32-bit compilation
+errors.
 
+v2:
+- don't cast results to s32 (Igor)
+- add missing drm_fixp2int conversion (Igor)
 
-On 05/09/2022 06:02, Vaishnav Achath wrote:
->> Let me think about over the weekend... Do you have performance numbers for this
->> change?
->>
-> Thank you, yes we tested mainly for the SPI cases(Master and Slave mode), there
-> we saw a peak delay of 400ms for transaction completion and this varied with CPU
-> load, after adding the patch to not wait for DMA TX completion and use EOW
-> interrupt the peak latency reduced to 2ms.
+Fixes: a19c2ac9858 ("drm: vkms: Add support to the RGB565 format")
+Tested-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com> (v1)
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com> (v1)
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Melissa Wen <mwen@igalia.com>
+---
+ drivers/gpu/drm/vkms/vkms_formats.c | 53 +++++++++++------------------
+ 1 file changed, 19 insertions(+), 34 deletions(-)
 
-Thank you for the details.
-
->> If we make sure that this is only affecting non cyclic transfers with a in code
->> comment to explain the expectations from the user I think this can be safe.
->> \
-> Sure I will add this in the next revision.
-
-You can add my Acked-by when you send the next version:
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
->>>
->>>>>
->>>>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->>>>> ---
->>>>>    drivers/dma/ti/k3-udma.c | 5 ++++-
->>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->>>>> index 39b330ada200..03d579068453 100644
->>>>> --- a/drivers/dma/ti/k3-udma.c
->>>>> +++ b/drivers/dma/ti/k3-udma.c
->>>>> @@ -263,6 +263,7 @@ struct udma_chan_config {
->>>>>        enum udma_tp_level channel_tpl; /* Channel Throughput Level */
->>>>>          u32 tr_trigger_type;
->>>>> +    unsigned long tx_flags;
->>>>>          /* PKDMA mapped channel */
->>>>>        int mapped_channel_id;
->>>>> @@ -1057,7 +1058,7 @@ static bool udma_is_desc_really_done(struct udma_chan
->>>>> *uc, struct udma_desc *d)
->>>>>          /* Only TX towards PDMA is affected */
->>>>>        if (uc->config.ep_type == PSIL_EP_NATIVE ||
->>>>> -        uc->config.dir != DMA_MEM_TO_DEV)
->>>>> +        uc->config.dir != DMA_MEM_TO_DEV || !(uc->config.tx_flags &
->>>>> DMA_PREP_INTERRUPT))
->>>>>            return true;
->>>>>          peer_bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->>>>> @@ -3418,6 +3419,8 @@ udma_prep_slave_sg(struct dma_chan *chan, struct
->>>>> scatterlist *sgl,
->>>>>        if (!burst)
->>>>>            burst = 1;
->>>>>    +    uc->config.tx_flags = tx_flags;
->>>>> +
->>>>>        if (uc->config.pkt_mode)
->>>>>            d = udma_prep_slave_sg_pkt(uc, sgl, sglen, dir, tx_flags,
->>>>>                           context);
->>>>
->>>
->>
-> 
-
+diff --git a/drivers/gpu/drm/vkms/vkms_formats.c b/drivers/gpu/drm/vkms/vkms_formats.c
+index 300abb4d1dfe..d4950688b3f1 100644
+--- a/drivers/gpu/drm/vkms/vkms_formats.c
++++ b/drivers/gpu/drm/vkms/vkms_formats.c
+@@ -1,27 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ 
+-#include <drm/drm_rect.h>
++#include <linux/kernel.h>
+ #include <linux/minmax.h>
++#include <drm/drm_rect.h>
++#include <drm/drm_fixed.h>
+ 
+ #include "vkms_formats.h"
+ 
+-/* The following macros help doing fixed point arithmetic. */
+-/*
+- * With Fixed-Point scale 15 we have 17 and 15 bits of integer and fractional
+- * parts respectively.
+- *  | 0000 0000 0000 0000 0.000 0000 0000 0000 |
+- * 31                                          0
+- */
+-#define SHIFT 15
+-
+-#define INT_TO_FIXED(a) ((a) << SHIFT)
+-#define FIXED_MUL(a, b) ((s32)(((s64)(a) * (b)) >> SHIFT))
+-#define FIXED_DIV(a, b) ((s32)(((s64)(a) << SHIFT) / (b)))
+-/* This macro converts a fixed point number to int, and round half up it */
+-#define FIXED_TO_INT_ROUND(a) (((a) + (1 << (SHIFT - 1))) >> SHIFT)
+-#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)))
+-#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)))
+-
+ static size_t pixel_offset(const struct vkms_frame_info *frame_info, int x, int y)
+ {
+ 	return frame_info->offset + (y * frame_info->pitch)
+@@ -137,19 +122,19 @@ static void RGB565_to_argb_u16(struct line_buffer *stage_buffer,
+ 	int x_limit = min_t(size_t, drm_rect_width(&frame_info->dst),
+ 			       stage_buffer->n_pixels);
+ 
+-	s32 fp_rb_ratio = INT_TO_FIXED_DIV(65535, 31);
+-	s32 fp_g_ratio = INT_TO_FIXED_DIV(65535, 63);
++	s64 fp_rb_ratio = drm_fixp_div(drm_int2fixp(65535), drm_int2fixp(31));
++	s64 fp_g_ratio = drm_fixp_div(drm_int2fixp(65535), drm_int2fixp(63));
+ 
+ 	for (size_t x = 0; x < x_limit; x++, src_pixels++) {
+ 		u16 rgb_565 = le16_to_cpu(*src_pixels);
+-		s32 fp_r = INT_TO_FIXED((rgb_565 >> 11) & 0x1f);
+-		s32 fp_g = INT_TO_FIXED((rgb_565 >> 5) & 0x3f);
+-		s32 fp_b = INT_TO_FIXED(rgb_565 & 0x1f);
++		s64 fp_r = drm_int2fixp((rgb_565 >> 11) & 0x1f);
++		s64 fp_g = drm_int2fixp((rgb_565 >> 5) & 0x3f);
++		s64 fp_b = drm_int2fixp(rgb_565 & 0x1f);
+ 
+ 		out_pixels[x].a = (u16)0xffff;
+-		out_pixels[x].r = FIXED_TO_INT_ROUND(FIXED_MUL(fp_r, fp_rb_ratio));
+-		out_pixels[x].g = FIXED_TO_INT_ROUND(FIXED_MUL(fp_g, fp_g_ratio));
+-		out_pixels[x].b = FIXED_TO_INT_ROUND(FIXED_MUL(fp_b, fp_rb_ratio));
++		out_pixels[x].r = drm_fixp2int(drm_fixp_mul(fp_r, fp_rb_ratio));
++		out_pixels[x].g = drm_fixp2int(drm_fixp_mul(fp_g, fp_g_ratio));
++		out_pixels[x].b = drm_fixp2int(drm_fixp_mul(fp_b, fp_rb_ratio));
+ 	}
+ }
+ 
+@@ -248,17 +233,17 @@ static void argb_u16_to_RGB565(struct vkms_frame_info *frame_info,
+ 	int x_limit = min_t(size_t, drm_rect_width(&frame_info->dst),
+ 			    src_buffer->n_pixels);
+ 
+-	s32 fp_rb_ratio = INT_TO_FIXED_DIV(65535, 31);
+-	s32 fp_g_ratio = INT_TO_FIXED_DIV(65535, 63);
++	s64 fp_rb_ratio = drm_fixp_div(drm_int2fixp(65535), drm_int2fixp(31));
++	s64 fp_g_ratio = drm_fixp_div(drm_int2fixp(65535), drm_int2fixp(63));
+ 
+ 	for (size_t x = 0; x < x_limit; x++, dst_pixels++) {
+-		s32 fp_r = INT_TO_FIXED(in_pixels[x].r);
+-		s32 fp_g = INT_TO_FIXED(in_pixels[x].g);
+-		s32 fp_b = INT_TO_FIXED(in_pixels[x].b);
++		s64 fp_r = drm_int2fixp(in_pixels[x].r);
++		s64 fp_g = drm_int2fixp(in_pixels[x].g);
++		s64 fp_b = drm_int2fixp(in_pixels[x].b);
+ 
+-		u16 r = FIXED_TO_INT_ROUND(FIXED_DIV(fp_r, fp_rb_ratio));
+-		u16 g = FIXED_TO_INT_ROUND(FIXED_DIV(fp_g, fp_g_ratio));
+-		u16 b = FIXED_TO_INT_ROUND(FIXED_DIV(fp_b, fp_rb_ratio));
++		u16 r = drm_fixp2int(drm_fixp_div(fp_r, fp_rb_ratio));
++		u16 g = drm_fixp2int(drm_fixp_div(fp_g, fp_g_ratio));
++		u16 b = drm_fixp2int(drm_fixp_div(fp_b, fp_rb_ratio));
+ 
+ 		*dst_pixels = cpu_to_le16(r << 11 | g << 5 | b);
+ 	}
 -- 
-Péter
+2.35.1
+
