@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213F25B45D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 11:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EAD5B45D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 11:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIJJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 05:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S229623AbiIJJ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 05:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiIJJzv (ORCPT
+        with ESMTP id S229512AbiIJJ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 05:55:51 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5AA4F67C;
-        Sat, 10 Sep 2022 02:55:41 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28A6fhtn010684;
-        Sat, 10 Sep 2022 09:55:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=AekO7LXMiPMPHj0e9wm7kfhcKGcZ34ewjOjwBfQ7ZaU=;
- b=VvtRt/MowH6cY3yl1C+WzqIbxHLK86v4PfE75Wn73eBs2fA4dM4OLfb+aTgbv9+/eISq
- wdys9lV4o3RNJ72ruqpY006FN6g0Ih/hublRdF2JT67VpGCK2RxGjwFqn00At3H/fZBz
- H9kwCwGjQKs0CUUk3rrJQtYdK/rjvAmiP31yV0bqoreAFnMFjkrYEabb1orvlJ6Nhfkm
- tos70He0HgfpJeQWCP9q1CwTFZWRrsE8RX/iykyXpgDJrE7AOyKlbckkpifRe3pGck++
- LAZ3rbXUqnwMWMnGgPeAVdloVjLb3iMYROlndPzxKJLYUuGLiaL2eIytIDMGqXts+cp3 DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jgkt9d75u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 09:55:39 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28A9qtjj029962;
-        Sat, 10 Sep 2022 09:55:38 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jgkt9d75e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 09:55:38 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28A9oLTp015821;
-        Sat, 10 Sep 2022 09:55:37 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jghuj89ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 09:55:36 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28A9tYdU24772888
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Sep 2022 09:55:34 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91D934C044;
-        Sat, 10 Sep 2022 09:55:34 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A27F74C040;
-        Sat, 10 Sep 2022 09:55:32 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.2.106])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat, 10 Sep 2022 09:55:32 +0000 (GMT)
-Date:   Sat, 10 Sep 2022 15:25:29 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        adilger.kernel@dilger.ca, tytso@mit.edu
-Subject: Re: [PATCH v1] fs/ext4/xattr: check the return value of
- ext4_xattr_inode_dec_ref()
-Message-ID: <Yxxe/X14BiltT352@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20220909044727.2622256-1-floridsleeves@gmail.com>
+        Sat, 10 Sep 2022 05:57:01 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674725851E
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 02:57:00 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id f11so6807864lfa.6
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 02:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lygMYUYxRPSYT5H0Ya1zp0m+glPknn5XdqgvO7ucKO4=;
+        b=aUTrdmNZNdelst6a64h9mY3uUDJcPU0pg50MSjlAKs5YR5X0wdvf6iNhx0Jjg50uww
+         CI00+eYfWq0cYxW9ZmLcyPjCvS3FPRISPPk/wcH4ZtnWpe7EzrcobC+WFGF/8tj2Alf6
+         99rfEtVHsO65/G0ljd28gZ0Dr/8UWjV7IzmDAU9ajTJXYimq3wl85+Yla9Z8za9qr2wD
+         rA/EYxIC6wYIHLc5RJVWXgLyY5nLct3/nzqiRf+LxFhanQP1eA72BdvXb8DfvgHLBCYl
+         7jW5DJqDCodgc4yajpFlxuTg9nl0OunS8AbCmIzGbKeJcm0K45XGgbEIdYqca2CBHz5C
+         V8Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lygMYUYxRPSYT5H0Ya1zp0m+glPknn5XdqgvO7ucKO4=;
+        b=fvsFygl4LzLBqZh//A57uj0QiX7c/ZAyH74sv4GURw1z41VXYB2Auyah2gyjWyYG4h
+         wyDVw6pf5Vqr3Fcj5f1FQIlB4LXM/9YC8jQ5Nh8mnjbkQqjBKDmqAm8xG9tB1VoTZgMi
+         2hdrUox2BPyNhekBMKL9WUVVcNIhPwTYfVbUBVgO+2SX25SebTLkJ/ej4xo6cI5d45Nb
+         ckXrZu5wJq5Q4/KZ0DyS/+1tBFC3hsNUX/ppdCrfWxpHtR5bqodZw086L5CcTmFH7KW/
+         zg4J1D4K13WUHftZD2UxlL5iKTYJkptsnORYBso79155ieV060g/nepNf0DVL+yWfo98
+         oGKg==
+X-Gm-Message-State: ACgBeo0wxh5/DHiJC3CXNxqp11sKYAdHXzFNLKOmlFDO1+q7YHO3RKIK
+        74ZiC40DETZtxbYQ9zKKEJ4owQ==
+X-Google-Smtp-Source: AA6agR4iEi9ObHgqEcSaW+6uqCOgJkuRc2bFmxCpEJwBhpNpdXS8KvebgVM1+Z42Z9URFo2Q7JBdYg==
+X-Received: by 2002:ac2:4c42:0:b0:497:9dfe:e870 with SMTP id o2-20020ac24c42000000b004979dfee870mr5500481lfk.184.1662803818793;
+        Sat, 10 Sep 2022 02:56:58 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u5-20020a2eb805000000b0026ad058ba51sm289922ljo.45.2022.09.10.02.56.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 02:56:58 -0700 (PDT)
+Message-ID: <82dcf030-dd74-19f6-1069-82f1a6d89769@linaro.org>
+Date:   Sat, 10 Sep 2022 11:56:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909044727.2622256-1-floridsleeves@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Cpa2Xstm04l5aXD2HFpm79tEqViHX8uF
-X-Proofpoint-ORIG-GUID: v5apK_AP8UWGTSS0YJNXml7_HDIzUaBu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-10_04,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=624 bulkscore=0 phishscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209100036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH 03/10] dt-bindings: apple,aic2: Add CPU PMU per-cpu
+ pseudo-interrupts
+Content-Language: en-US
+To:     Janne Grunau <j@jannau.net>, asahi@lists.linux.dev
+Cc:     Mark Kettenis <kettenis@openbsd.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220909135103.98179-1-j@jannau.net>
+ <20220909135103.98179-4-j@jannau.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220909135103.98179-4-j@jannau.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:47:27PM -0700, Li Zhong wrote:
-> Check the return value of ext4_xattr_inode_dec_ref(), which could return
-> error code and need to be warned.
+On 09/09/2022 15:50, Janne Grunau wrote:
+> Advertise the two pseudo-interrupts that tied to the two PMU
+> flavours present in the Apple M1 Pro/Max/Ultra SoC.
 > 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  fs/ext4/xattr.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> We choose the expose two different pseudo-interrupts to the OS
+> as the e-core PMU is obviously different from the p-core one,
+> effectively presenting two different devices.
 > 
-> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-> index 533216e80fa2..76141ed12bc2 100644
-> --- a/fs/ext4/xattr.c
-> +++ b/fs/ext4/xattr.c
-> @@ -1540,7 +1540,9 @@ static int ext4_xattr_inode_lookup_create(handle_t *handle, struct inode *inode,
->  
->  	err = ext4_xattr_inode_write(handle, ea_inode, value, value_len);
->  	if (err) {
-> -		ext4_xattr_inode_dec_ref(handle, ea_inode);
-> +		err = ext4_xattr_inode_dec_ref(handle, ea_inode);
-Hey Li,
+> Imported from "apple,aic".
 
-My only concern here is in case ext4_xattr_inode_dec_ref() fails, we
-overwrite the err value and the actual err from ext4_xattr_inode_write() 
-is lost.
 
-I feel the ext4_xattr_inode_write() error code would be more valuable
-for the calling function hence that is the one we should propogate.  
-Maybe we can just print the warning without overwriting err? 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Regards,
-Ojaswin
-> +		if (err)
-> +			ext4_warning_inode(ea_inode, "cleanup dec ref error %d", err);
->  		iput(ea_inode);
->  		return err;
->  	}
-> -- 
-> 2.25.1
-> 
+
+Best regards,
+Krzysztof
