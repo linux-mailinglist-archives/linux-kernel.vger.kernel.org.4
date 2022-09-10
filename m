@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF90F5B446B
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 08:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A63B5B446F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 08:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiIJG2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 02:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
+        id S229810AbiIJG3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 02:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiIJG2f (ORCPT
+        with ESMTP id S229758AbiIJG3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 02:28:35 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C09E0E6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 23:28:34 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id d189so5578902ybh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 23:28:34 -0700 (PDT)
+        Sat, 10 Sep 2022 02:29:07 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7101CFD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 23:29:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id v16so8829612ejr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Sep 2022 23:29:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=VVGMPzF4qPTcVF0S13mk7tfi+gz326IHs3V7xzCu89k=;
-        b=Q1yactfH9fHoBlFjLh/RkEEKZc3eMN7+1hST+ET0eD8TuzAbVHOIwT/SgxBsaOTOmw
-         G1WGrYmr4IUkTkMAy/hg1UIFPTIKs91bN8kjU75OSnlWcHwbymrr+YXXBO+HSeMxL4ae
-         3rImXB28cfFdSo5K/0RASIr9653GanFYqkkHqAk2E8YU9z8RakvPenpLqdspbdMYEgHn
-         zwcK5R8EMG9BTqPEcP5HG9Gq4fFc8zA1mxXrNrI3BqTYYKd1OgoUsfABSRdkkwXbL+O9
-         crCRzFvo/k2hIUfVWB0Z4bTI2j9D0h1jTQkgqsP1hsu2KTndX/Xp1UMyzcInHNTFSgIb
-         U06A==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ZTuu2gUdZr5DySwjOMJBuPe4tNMA1YFFv9H1miY+0Uw=;
+        b=jpEpO4i3fEtgVCvZ3Qs8weVO2BtRkvK9pU1/1eIO8Nclx8vvwswUG2ojYCYj7oxQJ8
+         vmvvpxmgVQNu/J6h+F/LrTL8odjeBmR3LhHoz2XYjBzD8w4Stoq1eP79Yu5IrU7XxxD4
+         eRzhf2MpKbQE4TSQYFNHX7gHx5PKRMA8X9Uif4B0RI7mlDVH5NwXGriVTujmQfFjCkwN
+         yhk7Gh0zpB+pDfjtXMaXSQ7rjoMw2dTdTK01jBNBuvPrHj0x39A4nk1lUmR7zyNN3wwi
+         hJOp5pCJXcbov+Tlk1OJprK7PuxQMslDwdhftsQcxb1Ss1apiskSP7I7NzaGOnNEI8Lj
+         JCvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VVGMPzF4qPTcVF0S13mk7tfi+gz326IHs3V7xzCu89k=;
-        b=xdej5MX8guyzuhsZX1S+MXg/qyzZqoc8yizPpPsz5XgXbP2rFLE/VJfbAhLUml+3to
-         UiR+Ripjl0X/w89+E6cEOOCEIEBC1GsINSbGVQRnC6ug5iNEpcmbbx1Qjtx2zIqYpf3Q
-         ML0230EEpmj8BGB+n26jRSST7mU2DzRYuDEe9GUL2rm0b45MF7573+3EWZIxXcvqJhq5
-         wy+Vi7nk7lFdYfpJnKrz8fZ8lTDbtcr2faBFSRMIoL9z/PUkiNRT5qHvQJjr7pPpjVne
-         P5y4fB+oLlLZBzcs8swSu4jEaXK3X6EeQo51UyiPt+xi58GnyoZ8SS7ujhPS9eee2aNP
-         Xb5g==
-X-Gm-Message-State: ACgBeo13SJDvPARqZECn8aqlaTcfrEuMaJCAC/YyrcAVOrCxQHiTeCbd
-        He1BtTOeuG8bp8k2ykKQO7h+atkKb1FFGDrsQA8i3Z9PgTE=
-X-Google-Smtp-Source: AA6agR5eOT8uI8O2s0BA5NJo82/U37NcUj2qumkS3F8JdL9Q4GLpnWh6BAB/JO2wVEvdfDr+LXl3ZDDd1UiFWz+1L6A=
-X-Received: by 2002:a05:6902:56e:b0:6a8:f726:79cd with SMTP id
- a14-20020a056902056e00b006a8f72679cdmr14066826ybt.209.1662791314058; Fri, 09
- Sep 2022 23:28:34 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ZTuu2gUdZr5DySwjOMJBuPe4tNMA1YFFv9H1miY+0Uw=;
+        b=yeu5ll+HjNKijSsb0TqftG145Mf7h3DgM2Y0DFylLNSJ++7ppWc7+ofh+1ORD+gvdM
+         omYfWtakZ2zxtKQKDPL6HJ+stDyjrGfbldtdaOJtJzDCLzizOsG1qFq8dZKah8KE4873
+         kZGx9uOoUaHsVMdu87BYoaAPknMSK9TQ7yguVosi1TsNfwxJd7K31I/LMDElGqOSVrvi
+         FgCytAXNwOMkvNNxfMoefd8KnKzk6rJx1OuaML8KtHF+M0GmZK3zagOej9gzAL6fO+VQ
+         ViBdLCeAdfvboZMcjsWOVqVWDZY5PFyYfI5ysJ7UaOypn5hUqQXwrXoZZ7HWV7KAq2wm
+         NlGQ==
+X-Gm-Message-State: ACgBeo07/DJGZXjHvC3TzV7Ko+zg707H/kkrZLowPtIELA4b/yvt7AlZ
+        hOgjW6ZXoCsD3NM7o7mz2M5ItvZPmeg=
+X-Google-Smtp-Source: AA6agR74ZdiJrO/fuR7ZfexUeUquOlWT8U8TOl3FcYfkoF0HTarb0jTxaZHGSvi5IKQjudYGXe4OUA==
+X-Received: by 2002:a17:906:8477:b0:77a:6e22:72f9 with SMTP id hx23-20020a170906847700b0077a6e2272f9mr3057779ejc.170.1662791345365;
+        Fri, 09 Sep 2022 23:29:05 -0700 (PDT)
+Received: from [192.168.1.101] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id gx6-20020a1709068a4600b0073d68d2fc29sm1254282ejc.218.2022.09.09.23.29.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 23:29:05 -0700 (PDT)
+Message-ID: <75e8636b-71f4-1334-47c6-0e60f26a2d0a@gmail.com>
+Date:   Sat, 10 Sep 2022 08:29:03 +0200
 MIME-Version: 1.0
-References: <20220626201712.18064-1-ubizjak@gmail.com> <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiayOnntaOaQtjm4JXNoXjQdkyT3euMKNfn4ozHRk-oqg@mail.gmail.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Sat, 10 Sep 2022 08:28:22 +0200
-Message-ID: <CAFULd4bM0=oNvp5VAfHa59nBK3=f++PR3EB2B-Zds1ae+14dfA@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
- for X86_CMPXCHG64
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: r8188eu: add kfree() on an error path of
+ rtw_xmit_resource_alloc()
+Content-Language: en-US
+To:     xkernel.wang@foxmail.com, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <tencent_DD1047278567B897D2CF7F13483573596E06@qq.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <tencent_DD1047278567B897D2CF7F13483573596E06@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,31 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 3, 2022 at 11:01 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sun, Jun 26, 2022 at 1:18 PM Uros Bizjak <ubizjak@gmail.com> wrote:
-> >
-> >    Also, by using try_cmpxchg64() instead of cmpxchg64()
-> > in CMPXCHG_LOOP macro, the compiler actually produces sane code,
-> > improving lockref_get_or_lock main loop from:
->
-> Heh. I'm actually looking at that function because I committed my "add
-> sparse annotation for conditional locking" patch, and
-> lockref_get_or_lock() has the wrong "polarity" for conditional locking
-> (it returns false when it takes the lock).
->
-> But then I started looking closer, and that function has no users any
-> more. In fact, it hasn't had users since back in 2013.
->
-> So while I still think ARCH_USE_CMPXCHG_LOCKREF is fine for 32-bit
-> x86, the part about improving lockref_get_or_lock() code generation is
-> kind of pointless. I'm going to remove that function as "unused, and
-> with the wrong return value".
+On 9/10/22 02:29, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+> 
+> In rtw_xmit_resource_alloc(), if usb_alloc_urb() fails, then the memory
+> `pxmitbuf->pallocated_buf` which is allocated by kzalloc() is not properly
+> released before returning.
+> 
+> So this patch adds kfree() on the above error path to release it. As there
+> is no proper device to test with, no runtime testing was performed.
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_xmit.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 67f9c05..9c39d08 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -44,8 +44,10 @@ static int rtw_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *px
+>   	pxmitbuf->dma_transfer_addr = 0;
+>   
+>   	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
+> -	if (!pxmitbuf->pxmit_urb)
+> +	if (!pxmitbuf->pxmit_urb) {
+> +		kfree(pxmitbuf->pallocated_buf);
+>   		return _FAIL;
+> +	}
+>   
+>   	return _SUCCESS;
+>   }
 
-May I consider this message as a formal Acked-by: for the patch? I'll
-resubmit the patch with a commit message updated to reference
-lockref_put_not_zero instead of the removed lockref_get_or_lock.
+Hi Xiaoke,
 
-Thanks,
-Uros.
+I applied your patch and tested it. That is OK.
+
+But you excluded the change history. Usually this is not accepted by 
+Greg. Reason is that what identifies the patch is the change itself. The 
+change itself is the same as: "[PATCH v4] staging: r8188eu: fix 
+potential memory leak in rtw_os_xmit_resource_alloc()" Even if you 
+change the Subject, Description and the branch it remains the same patch 
+for Greg.
+
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+
