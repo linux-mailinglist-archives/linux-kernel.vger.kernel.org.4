@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37965B451F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2493F5B4521
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIJILB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 04:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S229579AbiIJIMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 04:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIJIK6 (ORCPT
+        with ESMTP id S229456AbiIJIMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 04:10:58 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E782867
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:10:56 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id by6so4621871ljb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=txFmNqivSGonl1t91BWxPpRyV6wFFoxPfmlb622zlU4=;
-        b=A5TM8+1WniIN3PtwC3BZhC1jY1dASPxIPewi0arGlquPn/062oVa4wvFnMaDdQ66xH
-         lLilxwCx+Oczx5jWgRyQAg2ip6OazqkWh4V1XGR+5gIyckfUpA9X8SqJjFyZ9pnRxktj
-         2+zY2Wbhp317Cx2fosdt/tCEvQLJwCf3HpMROaX2tqvwQuaQZnNiWg3z/MJEsvvxSkeE
-         DvFlwqgD3HwX/BAKIc4wnOuWTCDa/EAWxAAGuwbzVd41uc7TfsfZhmE6x6K+Fxk299rC
-         NcqRotinLeaE2WIaVpi4zQ1ropa7GfNiFpkLdd1oK6uzUNnuzaig1dB0hts3oEkvc+Pf
-         LL6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=txFmNqivSGonl1t91BWxPpRyV6wFFoxPfmlb622zlU4=;
-        b=Fwne/AeRYbAEhNVpQO3DM9eYmPdZbZn9IUPz7bLFzvNpL3S3BEBnLl+iUoowiktnVo
-         pudpW6vY4XRjj7QgXjfo85kV12eo+lUp1sXZlY9jlY6J1jkMeBhNbSGXp7wLTwCbC17x
-         jiAomB/iPtmF25j0ybuDG3j8GKzMzgoaXYBdNwx0rZVel5e2kV8vokahJ//xOwzXkrG2
-         3gmbrzJadwIkz5T33dzFEaVorWoe4fupNy1+IIyd9GdrMm9zKecKob+4HLF4NVU+gcW5
-         egy/W72liwruHyvVUGIR92gFtcBCA81IrICvYQVV8S4Cwgbcr7miBtBcmDD0msi3C5Ey
-         WEmw==
-X-Gm-Message-State: ACgBeo3iNz8L4VT5dFLWhX19DTPAf28qh8kQi2pS2keFHksLKKm/F0MO
-        hUqbpeGsPTYan/VdcPonLQgluA==
-X-Google-Smtp-Source: AA6agR7789VL7NQdhtwL2QwBsV2k2YfdkUDrGL8k0PU+vC77/8Ct9Y0/++AmZJIlkccmwRb2Sq7irw==
-X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id u1-20020a2e8541000000b00261b44b1a8bmr5409456ljj.46.1662797454999;
-        Sat, 10 Sep 2022 01:10:54 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05651c201000b00267232d0652sm259553ljo.46.2022.09.10.01.10.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 01:10:54 -0700 (PDT)
-Message-ID: <bd23014f-eb9b-31a5-f777-c1b15f65fd89@linaro.org>
-Date:   Sat, 10 Sep 2022 10:10:53 +0200
+        Sat, 10 Sep 2022 04:12:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C6484EF1;
+        Sat, 10 Sep 2022 01:12:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24E066115A;
+        Sat, 10 Sep 2022 08:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A16C433C1;
+        Sat, 10 Sep 2022 08:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662797529;
+        bh=0DxQy5CttLgojIPCKyl5ZWyJOoAHRG4YOaNwSG82daM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JcqqcXGhGuSiWqICxMxMoELzg7CfhoRJnsduKxf3EG8N87Q8HCMmlznWQfcXW6qYk
+         TPU6j9SO3CjdQmrmuuBQhLSxnUEH3r64Xjq4vz8TvptSh2AcMRsS97sNQ9ErXL5rNb
+         Zm9+Km+pIQ/VgUnjJ1D6hmOo7AkXQkyuLcaC/TFTjZDGmYZQQBcuJkcQOYUtlEOfBb
+         IabSBy+Gzil8+PbrU2nSBwn6Sn6ozIlVqlhGz5xf0BataUN2GHTKJ8RzByGQs9Qe4X
+         5wH5p1NDOJ7drt6Nz2H6sMfimVI7g+xvEonxAjD+ivgXgdIaSRUr7I3Nv8TJ7rPol+
+         Ht4KQxIgxXgPA==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-efi@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Lennart Poettering <lennart@poettering.net>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH v5 0/8] efi: implement generic compressed boot support
+Date:   Sat, 10 Sep 2022 10:11:44 +0200
+Message-Id: <20220910081152.2238369-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v8 3/4] dt-bindings: hwmon: Add bindings for max31760
-Content-Language: en-US
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
- <20220909133718.388213-4-Ibrahim.Tilki@analog.com>
- <1662740789.477872.1507147.nullmailer@robh.at.kernel.org>
- <20220909164710.GA1537271-robh@kernel.org>
- <DM8PR03MB624727E043782EC34DBBE6B196439@DM8PR03MB6247.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DM8PR03MB624727E043782EC34DBBE6B196439@DM8PR03MB6247.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7437; i=ardb@kernel.org; h=from:subject; bh=0DxQy5CttLgojIPCKyl5ZWyJOoAHRG4YOaNwSG82daM=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBjHEa9K6XmcUMI0fvxsU29KDHZbD1WjarndMtbnD2A peWjacSJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYxxGvQAKCRDDTyI5ktmPJMJtDA CWayoJHowEBPOn0VBVgwp0VNNdKO8tJiS6Z1udXEfSac/n+ry+Ram1S+FnsioF/tK06Pvlet3Mb4/Y P/efv576LtWDm8IV8fsrbiWgOLO45A68lMxj4j7Mga9PucgV1Cbkw6apdS/SWReuBq0WeU4dOnSs1e sjmJUCKduTDB1cC+pzG9YIJ6ZgOYtQr1G/hpJdAPwrZlu2HgUxBZMmewYicgBvG+krUoEZGPztxGSq 2pT9MX5o6MDiyFKo8u+joiKwtNRnREv/L0XQOuhHFjArFOSeC10mrX+VsiIN4clX51LnByXrlQ1c8c KvSlPlx5XRug6lykl1sH6Z6/BmDfZsu4hxudNgaAPjoArmJ6+ANRcdX5aqhEzcmTcTCRN4ohAhiYTy fCBQNnFNNgQUnH9lPoO24IaZxgFCpozcsf0lSdaKNlNBm7i90TTWxh7sQjh2Oze4cojVUGP6HPz7uJ oPPf3yb8kU13AyCVUWHHIGt01/sMQ5UYHnQ5lSDVIDbIU=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,37 +69,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/09/2022 19:48, Tilki, Ibrahim wrote:
-ded form is:
->>
->> reg:
->>   items:
->>     - items:
->>         - minimum: 0x50
->>           maximum: 0x57
->>
-> 
-> Actually it passes the check when I remove maxItems property:
-> 
->   reg:
->     description: I2C address of slave device.
->     items:
->       minimum: 0x50
->       maximum: 0x57
-> 
-> I cannot find a way to specify both maxItems and min-max limits.
-> Which one should I drop? Line below is from the output of dt_bindigs_check:
-> 
-> hint: "maxItems" is not needed with an "items" list
+Relatively modern architectures such as arm64 or RISC-V don't implement
+a self-decompressing kernel, and leave it up to the bootloader to
+decompress the compressed image before executing it. For bare metal
+boot, this policy makes sense, as a self-decompressing image essentially
+duplicates a lot of fiddly preparation work to create a 1:1 mapping and
+set up the C runtime, and to discover or infer where DRAM lives from
+device trees or other firmware tables.
 
-Use Rob's first syntax:
+For EFI boot, the situation is a bit different: the EFI entrypoint is
+called with a 1:1 cached mapping covering all of DRAM already active,
+and with a stack, a heap, a memory map and boot services to load and
+start images. This means it is rather trivial to implement a
+self-decompressing wrapper for EFI boot in a generic manner, and reuse
+it across architectures that implement EFI boot.
 
-reg:
-  minimum: 0x50
-  maximum: 0x57
+The only slight downside is that when UEFI secure boot is enabled, the
+generic LoadImage/StartImage only allow signed images to be loaded and
+started, and we would prefer to avoid the need to sign both the inner
+and outer PE/COFF images.
 
-(this will expect only one item)
+However, the only truly generic and portable way to achieve this is to
+rely on LoadImage/StartImage as the EFI spec defines them, and avoid
+making assumptions about how things might work under the hood, and how
+we might circumvent that. This includes just loading the image into
+memory and jumping to the PE entry point: in the context of secure boot,
+measured boot and other hardening measures the firmware may take (such
+as disallowing mappings that are both writable and executable), using
+the firmware's image loading API is the only maintainable choice.
 
+For this reason, this version of the series includes support for signing
+the images using sbsign, if the signing key and cert are specified in
+Kconfig.
 
-Best regards,
-Krzysztof
+The code is wired up for arm64, LoongArch and RISC-V. The latter was
+build tested only.
+
+Changes since v4:
+- make CONFIG_EFI_ZBOOT user selectable again, and turn it on by default
+  only for LoongArch
+- set KBUILD_IMAGE to vmlinuz.efi if CONFIG_EFI_ZBOOT=y, so that make
+  targets such as zinstall and bindeb-pkg do the right thing
+- throw an error is BSS was not cleared by the loader - this is needed
+  to detect broken distro implementations of LoadImage in shim and grub
+- add vmlinuz.* to .gitignore on the various architectures
+- switch back to defining uncompressed_size as 'extern __aligned(1)' so
+  that the compiler will perform the unaligned access as appropriate on
+  the architecture in question - this requires the latest binutils on
+  LoongArch [0]
+
+Changes since v3:
+- add support for XZ and ZSTD compression
+- deal with exit data returned by StartImage()
+- use LoadFile2 based image loading instead of passing the raw buffer -
+  this way, the provenance of the data is more visible, allowing us,
+  for instance, to deal with initrd= on arm64 transparently (this means
+  that systemd-boot on arm64 will work unmodified provided that the
+  [deprecated] command line initrd loader is enabled in the kernel
+  build)
+- include LoongArch support
+- rename compressed image to vmlinuz.efi on all architectures
+
+Changes since v2:
+- drop some of the refactoring work to make efi_printk() available in
+  the decompressor, and just use fixed strings instead;
+- provide memcpy/memmove/memset based on the UEFI boot services, instead
+  of having to specify for each architecture how to wire these up;
+- drop PI/DXE based signature check circumvention, and just sign the
+  inner image instead, if needed;
+- add a header to the zimage binary that identifies it as a EFI zboot
+  image, and describes the compression algorithm and where the payload
+  lives in the image - this might be used by non-EFI loaders to locate
+  and decompress the bare metal image, given that the EFI zboot one is
+  not a hybrid like the one it encapsulates.
+
+[0] https://sourceware.org/pipermail/binutils/2022-September/122713.html
+
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+Cc: Peter Jones <pjones@redhat.com>
+Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Atish Patra <atishp@atishpatra.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Xi Ruoyao <xry111@xry111.site>
+Cc: Lennart Poettering <lennart@poettering.net>
+Cc: Jeremy Linton <jeremy.linton@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+
+Ard Biesheuvel (8):
+  efi: name the ARCH-stub.c files uniformly
+  efi/libstub: add some missing EFI prototypes
+  efi/libstub: use EFI provided memcpy/memset routines
+  efi/libstub: move efi_system_table global var into separate object
+  efi/libstub: implement generic EFI zboot
+  arm64: efi: enable generic EFI compressed boot
+  riscv: efi: enable generic EFI compressed boot
+  loongarch: efi: enable generic EFI compressed boot
+
+ arch/arm64/Makefile                                       |   9 +-
+ arch/arm64/boot/.gitignore                                |   1 +
+ arch/arm64/boot/Makefile                                  |   6 +
+ arch/arm64/kernel/image-vars.h                            |  13 -
+ arch/loongarch/Kconfig                                    |   1 +
+ arch/loongarch/Makefile                                   |   4 +-
+ arch/loongarch/boot/.gitignore                            |   1 +
+ arch/loongarch/boot/Makefile                              |   6 +
+ arch/loongarch/kernel/image-vars.h                        |   3 -
+ arch/riscv/Makefile                                       |   6 +-
+ arch/riscv/boot/.gitignore                                |   1 +
+ arch/riscv/boot/Makefile                                  |   6 +
+ arch/riscv/kernel/image-vars.h                            |   9 -
+ drivers/firmware/efi/Kconfig                              |  38 +++
+ drivers/firmware/efi/libstub/Makefile                     |  21 +-
+ drivers/firmware/efi/libstub/Makefile.zboot               |  70 +++++
+ drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} |   0
+ drivers/firmware/efi/libstub/efi-stub.c                   |   2 -
+ drivers/firmware/efi/libstub/efistub.h                    |  35 ++-
+ drivers/firmware/efi/libstub/file.c                       |  17 ++
+ drivers/firmware/efi/libstub/intrinsics.c                 |  30 ++
+ drivers/firmware/efi/libstub/systable.c                   |   8 +
+ drivers/firmware/efi/libstub/zboot-header.S               | 143 ++++++++++
+ drivers/firmware/efi/libstub/zboot.c                      | 296 ++++++++++++++++++++
+ drivers/firmware/efi/libstub/zboot.lds                    |  43 +++
+ include/linux/efi.h                                       |  13 +
+ 26 files changed, 732 insertions(+), 50 deletions(-)
+ create mode 100644 drivers/firmware/efi/libstub/Makefile.zboot
+ rename drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} (100%)
+ create mode 100644 drivers/firmware/efi/libstub/intrinsics.c
+ create mode 100644 drivers/firmware/efi/libstub/systable.c
+ create mode 100644 drivers/firmware/efi/libstub/zboot-header.S
+ create mode 100644 drivers/firmware/efi/libstub/zboot.c
+ create mode 100644 drivers/firmware/efi/libstub/zboot.lds
+
+-- 
+2.35.1
+
