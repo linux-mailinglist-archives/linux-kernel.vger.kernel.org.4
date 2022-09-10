@@ -2,108 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE34D5B4AD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 01:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26DB5B4AD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 01:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiIJXXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 19:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S229770AbiIJXZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 19:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIJXXE (ORCPT
+        with ESMTP id S229534AbiIJXZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 19:23:04 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A52241983
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:23:04 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id d17so2978950qko.13
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=gAh0um/m+ykZ+JIcJQ0J8f0pH78Jfp+soM0rxxd5C7I=;
-        b=P/X+iO8smfwRNjyX+sIG6K2vmo0ffexU18WbP2Lly4u5YLMjeqlCim87Tp9gnyO3pM
-         8uEAjZJmua0E9d0HTMDNBzbqLgfCY5ucoaCmqlFSB9q4nbo2pvE/MXZOE2Ax8FaKw7fF
-         MSzriN28pNkO3RL7uOo2AZEgGtsoLp7DNUilBrm2FhzvV4rmnByE6H79wfM3dO46ks+z
-         HcQqnWyKxhlwwl8Epcr1oNj38tyzcylesf39DUuXQjhnapoLfgiA4zJOE4epWpUBgEL7
-         evAAASBxYnZlA5rG9jv4lYhOsMR9yhiJqeDIWtyUc7HrSJcopg9VmqfrAsSlNXfIq9Qo
-         3Bhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gAh0um/m+ykZ+JIcJQ0J8f0pH78Jfp+soM0rxxd5C7I=;
-        b=MaBu/8jmM25nRNC0RoDgXcByd+Ye6+vcTfKqYS0d+Sp47Ey+riUZ3sJLIMvbnzRqk3
-         obBq+xgEWOFW9hWVIrQivWZUu59C+76HEDRZpM7VxsPNLX8cShKeTkD/UoxRsTKbXbYM
-         QLC4ZI8MWKFmaBvDywDrTEg85UykYD3HyxojwRX/8Txu2Lfjg9NA8Tji36UIORc6Jw7T
-         Lh7T09OvdEiYxiSTIWKbUfdL04Dm/p3J9YBpuWW4Klszzn9ZuVCjJINJD+TN3eJroJ8l
-         kuUsR1ZYVNElBzXeAM31bZyo9ISKaqmaQ7BK99fvdF7zkj+zcxrmyPdZk8VXOETLZPBt
-         BXZA==
-X-Gm-Message-State: ACgBeo1z7ZpTXMv8lYhZMVwq0XsZr4aGvXs4KIGwZ00fg66u4DMCAoE1
-        0z0N0wUGyug0yvAbRKOeVH8RV8gTDWWNBjqEQdo=
-X-Google-Smtp-Source: AA6agR5qejqmrkDAUGRO2GLZzpbFpiBpGVCM8e/gsqKBkFyWoN+PWqnyTH9XojvofiZaUw4RbEfPaS/8jmaLVFrqMlI=
-X-Received: by 2002:a05:620a:254f:b0:6bc:5763:de4b with SMTP id
- s15-20020a05620a254f00b006bc5763de4bmr14293905qko.207.1662852183307; Sat, 10
- Sep 2022 16:23:03 -0700 (PDT)
+        Sat, 10 Sep 2022 19:25:51 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054473DF15
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 16:25:49 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662852347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IWRb6xubtC5pF+wzMkdOEJAm7Xvs8Cx6RhZM8IbyZTw=;
+        b=LvJIOhNPyu76a4uuIsCCjsnS77ayOwWWa+hN9QddZOvAmkw+dpc8lkf143cwvcymlkAmEl
+        Cg2CqDDG7lry6W3W/v/73F1EpR+wS7TcD7iXEtoSRtlArg/jyqJblH6zy3ER/r+3SBBjq2
+        QIbBV7wr30aRNhM5elILWP1eN1hS8OU=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH] kasan: better invalid/double-free report header
+Date:   Sun, 11 Sep 2022 01:25:30 +0200
+Message-Id: <fce40f8dbd160972fe01a1ff39d0c426c310e4b7.1662852281.git.andreyknvl@google.com>
 MIME-Version: 1.0
-References: <20220907110015.11489-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20220907110015.11489-1-vincenzo.frascino@arm.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sun, 11 Sep 2022 01:22:52 +0200
-Message-ID: <CA+fCnZe+ZW7_aeetYGpgyrS06ajfqFB1ULYLKEL++JZx4tLWBw@mail.gmail.com>
-Subject: Re: [PATCH v2] mte: Initialize tag storage to KASAN_TAG_INVALID
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 1:00 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> When the kernel is entered on aarch64, the MTE allocation tags are in an
-> UNKNOWN state.
->
-> With MTE enabled, the tags are initialized:
->  - When a page is allocated and the user maps it with PROT_MTE.
->  - On allocation, with in-kernel MTE enabled (HW_TAGS KASAN).
->
-> If the tag pool is zeroed by the hardware at reset, it makes it
-> difficult to track potential places where the initialization of the
-> tags was missed.
->
-> This can be observed under QEMU for aarch64, which initializes the MTE
-> allocation tags to zero.
->
-> Initialize to tag storage to KASAN_TAG_INVALID to catch potential
-> places where the initialization of the tags was missed.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Hi Vincenzo,
+Update the report header for invalid- and double-free bugs to contain
+the address being freed:
 
-Cold you clarify what kind of places this refers to? Like the kernel
-allocating memory and not setting the tags? Or is this related to
-userspace applications? I'm not sure what's the user story for this
-new flag is.
+BUG: KASAN: invalid-free in kfree+0x280/0x2a8
+Free of addr ffff00000beac001 by task kunit_try_catch/99
 
-> This is done introducing a new kernel command line parameter
-> "mte.tags_init" that enables the debug option.
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/kasan/report.c         | 23 ++++++++++++++++-------
+ mm/kasan/report_generic.c |  3 ++-
+ mm/kasan/report_tags.c    |  2 +-
+ 3 files changed, 19 insertions(+), 9 deletions(-)
 
-Depending on the intended use, this can be extended to "mte.tags_init=<tag>".
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index 39e8e5a80b82..df3602062bfd 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -175,17 +175,14 @@ static void end_report(unsigned long *flags, void *addr)
+ 
+ static void print_error_description(struct kasan_report_info *info)
+ {
+-	if (info->type == KASAN_REPORT_INVALID_FREE) {
+-		pr_err("BUG: KASAN: invalid-free in %pS\n", (void *)info->ip);
+-		return;
+-	}
++	pr_err("BUG: KASAN: %s in %pS\n", info->bug_type, (void *)info->ip);
+ 
+-	if (info->type == KASAN_REPORT_DOUBLE_FREE) {
+-		pr_err("BUG: KASAN: double-free in %pS\n", (void *)info->ip);
++	if (info->type != KASAN_REPORT_ACCESS) {
++		pr_err("Free of addr %px by task %s/%d\n",
++			info->access_addr, current->comm, task_pid_nr(current));
+ 		return;
+ 	}
+ 
+-	pr_err("BUG: KASAN: %s in %pS\n", info->bug_type, (void *)info->ip);
+ 	if (info->access_size)
+ 		pr_err("%s of size %zu at addr %px by task %s/%d\n",
+ 			info->is_write ? "Write" : "Read", info->access_size,
+@@ -420,6 +417,18 @@ static void complete_report_info(struct kasan_report_info *info)
+ 	} else
+ 		info->cache = info->object = NULL;
+ 
++	switch (info->type) {
++	case KASAN_REPORT_INVALID_FREE:
++		info->bug_type = "invalid-free";
++		break;
++	case KASAN_REPORT_DOUBLE_FREE:
++		info->bug_type = "double-free";
++		break;
++	default:
++		/* bug_type filled in by kasan_complete_mode_report_info. */
++		break;
++	}
++
+ 	/* Fill in mode-specific report info fields. */
+ 	kasan_complete_mode_report_info(info);
+ }
+diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
+index 087c1d8c8145..043c94b04605 100644
+--- a/mm/kasan/report_generic.c
++++ b/mm/kasan/report_generic.c
+@@ -132,7 +132,8 @@ void kasan_complete_mode_report_info(struct kasan_report_info *info)
+ 	struct kasan_alloc_meta *alloc_meta;
+ 	struct kasan_free_meta *free_meta;
+ 
+-	info->bug_type = get_bug_type(info);
++	if (!info->bug_type)
++		info->bug_type = get_bug_type(info);
+ 
+ 	if (!info->cache || !info->object)
+ 		return;
+diff --git a/mm/kasan/report_tags.c b/mm/kasan/report_tags.c
+index d3510424d29b..ecede06ef374 100644
+--- a/mm/kasan/report_tags.c
++++ b/mm/kasan/report_tags.c
+@@ -37,7 +37,7 @@ void kasan_complete_mode_report_info(struct kasan_report_info *info)
+ 	bool is_free;
+ 	bool alloc_found = false, free_found = false;
+ 
+-	if (!info->cache || !info->object) {
++	if ((!info->cache || !info->object) && !info->bug_type) {
+ 		info->bug_type = get_common_bug_type(info);
+ 		return;
+ 	}
+-- 
+2.25.1
 
-> Note: The proposed solution should be considered a debug option because
-> it might have performance impact on large machines at boot.
-
-Thanks!
