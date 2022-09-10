@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A2D5B4501
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 09:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2CC5B450C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 09:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIJHzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 03:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S229491AbiIJH5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 03:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiIJHyp (ORCPT
+        with ESMTP id S229488AbiIJH52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 03:54:45 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164B41F2E2;
-        Sat, 10 Sep 2022 00:54:43 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28A7scA8032127;
-        Sat, 10 Sep 2022 00:54:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=+BixbfkLRoEVSlMXKnuj4O4Z7KmNTMJZZpE1nhzCvQ0=;
- b=fNURsP9Bymuxacc1M8vTSYGxdSWjSS+UPSmI3QRjE/P9w7aBUro6pR+yBVh+d8TdAFPY
- V22wwAKDG3HJqhzTIb8qES2leBjsk+Gwvt0pyczuNKut7eyVIUbbIDDsWMJFn3thCpEt
- x0LhxkDhBaL6tI+korm58lvpKjD/R/rQeqCYHBVeFvDKJLHKCxj7phR5r3VT63+3Gtcy
- 4q8GZd52srmiFIQA8l4Fb/txqJHOE5RyNoxh8RUdrrNVP54AhZyNYxnIBBT+gCw4CRz0
- K28AidfymOg8kvWQsufU+2tHOmZXBy+dEUlbnwV4TnQP9tM/ShcKYeleOx8P5dsVmwmx /w== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3jgjwm8h0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 00:54:37 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 10 Sep
- 2022 00:54:36 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Sat, 10 Sep 2022 00:54:36 -0700
-Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
-        by maili.marvell.com (Postfix) with ESMTP id 84C6E3F7055;
-        Sat, 10 Sep 2022 00:54:33 -0700 (PDT)
-From:   Naveen Mamindlapalli <naveenm@marvell.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sgoutham@marvell.com>, <hkelam@marvell.com>
-CC:     Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: [net-next PATCH 4/4] octeontx2-af: Initialize PTP_SEC_ROLLOVER register properly
-Date:   Sat, 10 Sep 2022 13:24:16 +0530
-Message-ID: <20220910075416.22887-5-naveenm@marvell.com>
-X-Mailer: git-send-email 2.16.5
-In-Reply-To: <20220910075416.22887-1-naveenm@marvell.com>
-References: <20220910075416.22887-1-naveenm@marvell.com>
+        Sat, 10 Sep 2022 03:57:28 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5982E796BD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:57:27 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id f14so5552069lfg.5
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 00:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=FBGOIg/B2+IRHqE8BYouXguAvAX+t/CI7o0Vq9YTfI0=;
+        b=MlDQ2ythtKpKOjWObS4gfHzZWOKHcWdUoGdVxqhWziD/d3D74tWUoLU3wJWywyaJVe
+         J9DNVtw9Jw7v+Ksx7qGMhK6C6ThbmhL7kFPKTpVVEb3Lj5n7d/JrZGkOp+PwpZ3acigM
+         URMCRNVKNmxx3QRaLS4sdh6emcAyPwomh4+TcxURVjzjnew/m0gjjuPgcbIGdBL1R2g0
+         vrcG4SZuVlvocrhW0xdm0BfqYIL6WCFOUPqreYUJ1iVhZw75xh3L1fNUVNsIr/NH6+hb
+         hykWFw+9WcGGtQLBT8hQoihR75L8PyQEcvIBSnHpoZLY1Vu3JZUEkmrYuHaP77G14ZsJ
+         MI1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FBGOIg/B2+IRHqE8BYouXguAvAX+t/CI7o0Vq9YTfI0=;
+        b=Go0znOl5Q21d8qNS1ZLaZ5D0EUDEHhZP0g7nDXsljwLAxWK5UFKntunIxaW7sIB57x
+         59XwOVzEyv3iGLyuX/qfbTDt7AUvIDNdUPlvwlA4qTpURL7kTx1p/KoFultE3BLaQXB3
+         Smy9E5G/swPakcNvoyk07KtVs9B4j6xeLHaQT7e2rlbzgA+pB2/9jUhIETNtd+YblHzR
+         MtphR9llJzMraMIrkYbOM/Ctq/rMR54yOHHePy+bEwMFX3i4GJ4Il5CWeAL8bPe9rT+J
+         3f7g4RCm4LSl0i9mFrFnsh8aqWECGrjruhOukUHApNjyLGCyRnDRjEgI02gXS2pvgZER
+         2JEQ==
+X-Gm-Message-State: ACgBeo3fzw0sJTXBfxkg1ra0cq0YOxsKXsRIhn3JwFRo2Ww3egP4SkUf
+        wUVWtB2YEQqcTQq68YmSuVJ0Hw==
+X-Google-Smtp-Source: AA6agR5BjkJ+3ILP6ANCTf0QXdk2PGjorpHbnNON4yZjw5qhZAa1CM+brxbEvMXc0lgHySEkklUFEg==
+X-Received: by 2002:a05:6512:3128:b0:499:3c1d:f9e with SMTP id p8-20020a056512312800b004993c1d0f9emr1171315lfd.634.1662796645731;
+        Sat, 10 Sep 2022 00:57:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 202-20020a2e05d3000000b0026ab83298d6sm251494ljf.77.2022.09.10.00.57.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 00:57:25 -0700 (PDT)
+Message-ID: <91645b10-5f4f-9c9b-3867-96357e06e330@linaro.org>
+Date:   Sat, 10 Sep 2022 09:57:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: SxrOZAVU8E-BqXeLgUyONRg-sQ6eZf1c
-X-Proofpoint-ORIG-GUID: SxrOZAVU8E-BqXeLgUyONRg-sQ6eZf1c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-10_04,2022-09-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RESEND PATCH v5 1/2] dt-bindings: power: reset: qcom-pon: Add
+ new compatible "qcom,pmk8350-pon"
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
+        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        andersson@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com
+References: <20220909204207.15820-1-quic_amelende@quicinc.com>
+ <20220909204207.15820-2-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220909204207.15820-2-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the reset value of PTP_SEC_ROLLOVER is incorrect on
-CNF10KB silicon, the ptp timestamps are inaccurate. This
-patch initializes the PTP_SEC_ROLLOVER register properly
-for the CNF10KB silicon.
+On 09/09/2022 22:42, Anjelique Melendez wrote:
+> From: David Collins <quic_collinsd@quicinc.com>
+> 
+> Add a new compatible string "qcom,pmk8350-pon" for GEN3 PMIC PON
+> peripherals and update "reg" property.
+> Also, Add an optional "reg-names" property to differentiate between
+> GEN1/GEN2 and GEN3 peripherals. GEN1/GEN2 peripherals only need one
+> register address to be specified (e.g. "pon") whereas GEN3 peripherals
+> can have two register addresses specified ("hlos", "pbs").
+> 
 
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/ptp.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-index 01f7dbad6b92..3411e2e47d46 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-@@ -52,12 +52,18 @@
- #define PTP_CLOCK_COMP				0xF18ULL
- #define PTP_TIMESTAMP				0xF20ULL
- #define PTP_CLOCK_SEC				0xFD0ULL
-+#define PTP_SEC_ROLLOVER			0xFD8ULL
- 
- #define CYCLE_MULT				1000
- 
- static struct ptp *first_ptp_block;
- static const struct pci_device_id ptp_id_table[];
- 
-+static bool is_ptp_dev_cnf10kb(struct ptp *ptp)
-+{
-+	return (ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_B_PTP) ? true : false;
-+}
-+
- static bool is_ptp_dev_cn10k(struct ptp *ptp)
- {
- 	return (ptp->pdev->device == PCI_DEVID_CN10K_PTP) ? true : false;
-@@ -290,6 +296,10 @@ void ptp_start(struct ptp *ptp, u64 sclk, u32 ext_clk_freq, u32 extts)
- 	/* sclk is in MHz */
- 	ptp->clock_rate = sclk * 1000000;
- 
-+	/* Program the seconds rollover value to 1 second */
-+	if (is_ptp_dev_cnf10kb(ptp))
-+		writeq(0x3b9aca00, ptp->reg_base + PTP_SEC_ROLLOVER);
-+
- 	/* Enable PTP clock */
- 	clock_cfg = readq(ptp->reg_base + PTP_CLOCK_CFG);
- 
--- 
-2.16.5
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
