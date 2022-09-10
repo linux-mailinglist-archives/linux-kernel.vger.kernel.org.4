@@ -2,86 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409D85B47D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83285B47D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbiIJSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 14:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S229607AbiIJSGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 14:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIJSCy (ORCPT
+        with ESMTP id S229547AbiIJSGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 14:02:54 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA84386A7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 11:02:54 -0700 (PDT)
-Received: from ipservice-092-217-076-063.092.217.pools.vodafone-ip.de ([92.217.76.63] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1oX4oc-0000f7-MI; Sat, 10 Sep 2022 20:02:50 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 4/4] staging: r8188eu: rtw_is_scan_deny is always false
-Date:   Sat, 10 Sep 2022 20:02:36 +0200
-Message-Id: <20220910180236.489808-5-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220910180236.489808-1-martin@kaiser.cx>
-References: <20220910180236.489808-1-martin@kaiser.cx>
+        Sat, 10 Sep 2022 14:06:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D343476FD;
+        Sat, 10 Sep 2022 11:06:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E766622839;
+        Sat, 10 Sep 2022 18:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662833166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jtpAflz75tk/7O+KpeoQcj1GmdcjzpJmIWDZSVDk+Ow=;
+        b=koswIchFyH3Wehtp4xn+fsSP6FvOwrhSHoIXOBQLaKpmaQ96KSAmhPqydFMkX6l8DvGP0X
+        dmUy1Rgjp9VI9dWCrlH7FKgVdhvYOOYjC7Z5Ivesyu46BFBgnRJeahlsvJdUa49nYHwpps
+        ll35F2gTdi4omOUDnrZEFffGPRLLthk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662833166;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jtpAflz75tk/7O+KpeoQcj1GmdcjzpJmIWDZSVDk+Ow=;
+        b=36xh3YBWz3RWKuhjCp8Y2tQ2aY0y2B4rLrJ6Iu4KJ2/Jg0sB6LhjiGRYV83/WjE4OQ2KC7
+        8cRs+Xq0RrfAPsCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AE58613441;
+        Sat, 10 Sep 2022 18:06:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oqm6KQ7SHGMzBQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sat, 10 Sep 2022 18:06:06 +0000
+Message-ID: <88fab56a-f6e5-bae0-5ed7-1e01c070d136@suse.de>
+Date:   Sat, 10 Sep 2022 20:06:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/hyperv: Add ratelimit on error message
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com
+References: <1662736193-31379-1-git-send-email-ssengar@linux.microsoft.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1662736193-31379-1-git-send-email-ssengar@linux.microsoft.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------iOtIe2r2YKIBO2x8OPRRgA6D"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtw_is_scan_deny macro returns false. Remove the macro and resulting
-dead code.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------iOtIe2r2YKIBO2x8OPRRgA6D
+Content-Type: multipart/mixed; boundary="------------bGlCSrH7Zav1mUDFUYFaeVpp";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Saurabh Sengar <ssengar@linux.microsoft.com>, ssengar@microsoft.com,
+ drawat.floss@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+ linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, mikelley@microsoft.com
+Message-ID: <88fab56a-f6e5-bae0-5ed7-1e01c070d136@suse.de>
+Subject: Re: [PATCH] drm/hyperv: Add ratelimit on error message
+References: <1662736193-31379-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1662736193-31379-1-git-send-email-ssengar@linux.microsoft.com>
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_ioctl_set.c | 5 -----
- drivers/staging/r8188eu/include/rtw_mlme.h   | 1 -
- 2 files changed, 6 deletions(-)
+--------------bGlCSrH7Zav1mUDFUYFaeVpp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-index d163a1a256ed..55e6b0f41dc3 100644
---- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-+++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-@@ -351,11 +351,6 @@ u8 rtw_set_802_11_bssid_list_scan(struct adapter *padapter, struct ndis_802_11_s
- 		/*  Scan or linking is in progress, do nothing. */
- 		res = true;
- 	} else {
--		if (rtw_is_scan_deny(padapter)) {
--			indicate_wx_scan_complete_event(padapter);
--			return _SUCCESS;
--		}
--
- 		spin_lock_bh(&pmlmepriv->lock);
- 
- 		res = rtw_sitesurvey_cmd(padapter, pssid, ssid_max_num);
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index 47bf7ce228aa..b69989cbab21 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -537,7 +537,6 @@ void _rtw_join_timeout_handler(struct adapter *adapter);
- void rtw_scan_timeout_handler(struct adapter *adapter);
- 
-  void rtw_dynamic_check_timer_handlder(struct adapter *adapter);
--#define rtw_is_scan_deny(adapter) false
- 
- void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
- 
--- 
-2.30.2
+SGkNCg0KQW0gMDkuMDkuMjIgdW0gMTc6MDkgc2NocmllYiBTYXVyYWJoIFNlbmdhcjoNCj4g
+RHVlIHRvIGEgZnVsbCByaW5nIGJ1ZmZlciwgdGhlIGRyaXZlciBtYXkgYmUgdW5hYmxlIHRv
+IHNlbmQgdXBkYXRlcyB0bw0KPiB0aGUgSHlwZXItViBob3N0LiAgQnV0IG91dHB1dGluZyB0
+aGUgZXJyb3IgbWVzc2FnZSBjYW4gbWFrZSB0aGUgcHJvYmxlbQ0KPiB3b3JzZSBiZWNhdXNl
+IGNvbnNvbGUgb3V0cHV0IGlzIGFsc28gdHlwaWNhbGx5IHdyaXR0ZW4gdG8gdGhlIGZyYW1l
+DQo+IGJ1ZmZlci4NCj4gUmF0ZSBsaW1pdGluZyB0aGUgZXJyb3IgbWVzc2FnZSwgYWxzbyBv
+dXRwdXQgdGhlIGVycm9yIGNvZGUgZm9yIGFkZGl0aW9uYWwNCj4gZGlhZ25vc2FiaWxpdHku
+DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTYXVyYWJoIFNlbmdhciA8c3NlbmdhckBsaW51eC5t
+aWNyb3NvZnQuY29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVy
+dl9kcm1fcHJvdG8uYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24o
+KyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0v
+aHlwZXJ2L2h5cGVydl9kcm1fcHJvdG8uYyBiL2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlw
+ZXJ2X2RybV9wcm90by5jDQo+IGluZGV4IDc2YTE4MmEuLjAxM2E3ODIgMTAwNjQ0DQo+IC0t
+LSBhL2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlwZXJ2X2RybV9wcm90by5jDQo+ICsrKyBi
+L2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlwZXJ2X2RybV9wcm90by5jDQo+IEBAIC0yMDgs
+NyArMjA4LDcgQEAgc3RhdGljIGlubGluZSBpbnQgaHlwZXJ2X3NlbmRwYWNrZXQoc3RydWN0
+IGh2X2RldmljZSAqaGRldiwgc3RydWN0IHN5bnRodmlkX21zZw0KPiAgIAkJCSAgICAgICBW
+TV9QS1RfREFUQV9JTkJBTkQsIDApOw0KPiAgIA0KPiAgIAlpZiAocmV0KQ0KPiAtCQlkcm1f
+ZXJyKCZodi0+ZGV2LCAiVW5hYmxlIHRvIHNlbmQgcGFja2V0IHZpYSB2bWJ1c1xuIik7DQo+
+ICsJCWRybV9lcnJfcmF0ZWxpbWl0ZWQoJmh2LT5kZXYsICJVbmFibGUgdG8gc2VuZCBwYWNr
+ZXQgdmlhIHZtYnVzOyBlcnJvciAlZFxuIiwgcmV0KTsNCg0KSSBiZXR0ZXIgb3B0aW9uIHdv
+dWxkIHByb2JhYmx5IGJlIGRybV9lcnJfb25jZSgpLiBUaGVuIHlvdSdkIGdldCB0aGUgDQpm
+aXJzdCBlcnJvciBtZXNzYWdlIGFuZCBza2lwIGFsbCBvdGhlcnMuDQoNCkJlc3QgcmVnYXJk
+cw0KVGhvbWFzDQoNCj4gICANCj4gICAJcmV0dXJuIHJldDsNCj4gICB9DQoNCi0tIA0KVGhv
+bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
+cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
+ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
+aHJlcjogSXZvIFRvdGV2DQo=
 
+--------------bGlCSrH7Zav1mUDFUYFaeVpp--
+
+--------------iOtIe2r2YKIBO2x8OPRRgA6D
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMc0g0FAwAAAAAACgkQlh/E3EQov+CE
+ww/+I+eQKR3NQNWcRRvlRQHTqbuedg7X/VJu/JG4zK2QtUxt3t52LnEPw5Xmz4YNsK1GQHV46liI
+U4XrJ85doUxKsTSf3k06C39XQh+trdum4Re7IEi2feGnmtSRyvsCzTrHPBo4zD+3yCTRrmjYrOE6
+GQPhxwDPx5Fje/NO1Rx93m3+sv1C3LPGCOnAzcwF+Uy4O+Ofk4a6XfurWDUFNTsdE8NkRFPZH9WU
+5KwjO411+F8ASiBORSYevjPcJQbF3j44NlpUK9UZi817O5HCJGwH9v8wVoQpq1PWvJ1jWjwNUVGn
+2IIHcpngD0rjF8Lkkg7d1L8q3n/fjEEkz1Ixe5bO9QqFrKdmDkdsaufbNjKoQI1oEkUJcHscVCXy
+gH09MqmUR0/jQKvDqgke/FNiNzfN8pLo0mpA0gkizcxMWi2mqMHvZkxeEoo6t2chXgY/qudxMcez
+EJd6SLdNleV+LuFL98clCS+yeXMhw+gCKhNxPZcVWGt+aAwuC1L6eQwUpOR7lsNn6cCdwiM6UBUV
+77PMME6UTIhQHu4YgHTq/S4mDQtBthRAjPq4AKHtKbThmTJqZFqlHOBpWnX+AgDYV/q7kLDEMl1O
+e+1fWuuOPtubNDqtWmmfhAHTMIWN/iU2POixlZQNdN4Cg52ey3i0aJ2GRK3h4CtydZqA32i8dnre
+Bf8=
+=gsbw
+-----END PGP SIGNATURE-----
+
+--------------iOtIe2r2YKIBO2x8OPRRgA6D--
