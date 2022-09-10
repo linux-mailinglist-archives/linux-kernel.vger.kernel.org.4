@@ -2,265 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5095B45BE
+	by mail.lfdr.de (Postfix) with ESMTP id F06F45B45C0
 	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 11:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiIJJjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 05:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S229561AbiIJJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 05:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIJJjb (ORCPT
+        with ESMTP id S229498AbiIJJog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 05:39:31 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on0104.outbound.protection.outlook.com [104.47.25.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52923241
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 02:39:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yx8XplelhBdOrU5obTdD9Dv6hiL5e4bbmkL2tkDq8bwH7WjwKV89z+rpCvXLkMH4oPMLexy/IEMbgEr3+AmgbXf2tI7OeHr4iO/Rh/OOoVdMFX0zGdlrC1Jqv7RIkhvtzN55qys5Pknce1jQ1sMqyj8UaLkbpN51UMsO4x5tSdTM3kUVe2BMZQSofj3MkmBtPi5fZxy1Zr4LGB/y/VgezCwY1uANLwA+6IDu+EIwrhzyv2XpPX2NbKl9aPaI7JTJfYrshyRq2CFqs+6t4f/bNYC0J8ZXW3e5qPQNKwCUbsxbfG5w4OGyvUVImFuna8hp7OzyBl4ZthclOcJL0YgIAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xnUUk1oKJpuoWA57kBAmZgfJkTnSBUnqP2pT3KXCcdo=;
- b=CCakIAD7WP4hlElq29pzMTI53TmvTZGxcLm92WnPtkS6oSvl28qHXIWjnyVtZJ1o31oBKJhCTBCYMjKLG39DXtWXTTAmOmma5lXoD10LSlENwga17+ZO5bHCQs6aJh6mPHdw5BzTKZ2vQkDTzGwKa2TfgvxrnbVxCARThrwsUZ9UDJkOduzscxR6MRLLH4ZfrtuAmLbprCymtZwckHNnCv/uG28bWjCaojlwnyhu25tYTmnIJKICAzjAekV4J0twtdiPAwu1TJ5PB/a44pn91wLn68CYaP7g6zRtJofFfS5welptJsvHvhYIxVCGVSMsJztV+NBBPMGYg6LoDQObUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xnUUk1oKJpuoWA57kBAmZgfJkTnSBUnqP2pT3KXCcdo=;
- b=bJH6kuojKvdgqVdWjqWpL21fJg77zQSg2Sabhf77Yx3kEg07zTyTQXEJ5XYUU6MGrAiJjHCihQsIxwLDErAh8sx9wJ1eQQgZEzT5RU8x8FPMYPQ0MaLK0jt0SvPsMTog8Mj1QeU7xwshe3tkToqALwVY0wd5sQN3TQQm+1znc0Yh9dwZFoeRENQTluRZKl1LsLQxb09IMrvelLjbXMLVViPrN4OJC3n7jdLvhwjcYPCgU5meCzslWqtdjCNDXS3Cm4koIoPDTFhKtED0g4s9r/mxQlxGKrpOLYsTcd51aa91d6OV8mcg1re+8xad2RCZzX+xTNlE1YoCaOKljyyCRw==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB3277.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Sat, 10 Sep
- 2022 09:39:20 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%5]) with mapi id 15.20.5612.022; Sat, 10 Sep 2022
- 09:39:20 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>
-CC:     Ash Logan <ash@heyquark.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "j.ne@posteo.net" <j.ne@posteo.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: Fragmented physical memory on powerpc/32
-Thread-Topic: Fragmented physical memory on powerpc/32
-Thread-Index: AQHYw7/6EKYd9DQJkEOt+3QHHtm+fq3YauaA
-Date:   Sat, 10 Sep 2022 09:39:20 +0000
-Message-ID: <9fbc5338-5e10-032a-8f55-e080bd93f74b@csgroup.eu>
-References: <20220302044406.63401-12-ash@heyquark.com>
- <20220513224353.n56qg5fhstbaqhfz@pali>
- <d84e4d24-f350-80fc-6c31-b7e7f8d429f4@heyquark.com>
- <20220520080454.c3cqodsdbfbkmg56@pali>
- <935b426a-6c64-beb0-907f-8c3f0a089ab7@heyquark.com>
- <20220520123002.rd46p5ty6wumi7cc@pali> <20220609222420.ponpoodiqmaqtwht@pali>
- <20220808184034.lskqrk6z3gb5q76r@pali>
- <219cda7b-da4b-7a5a-9809-0878e0fc02ba@csgroup.eu>
- <20220908153511.57ceunyusziqfcav@pali> <20220908201701.sd3zqn5hfixmjvhh@pali>
-In-Reply-To: <20220908201701.sd3zqn5hfixmjvhh@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB3277:EE_
-x-ms-office365-filtering-correlation-id: cfaf066e-c59d-4872-d1d0-08da93105676
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4GQiKJ88qkaAgMjCGQc0D/YLyQ/X49BP0M+QPXhPe/L32EFdTxMILTuPZmLkNvr3CJx2O5n6dWMEcO9t6FGiev1cfdvO5qxaIrGfmqWKzW/fA6JXmq4xTnJWkcEks9xMa1DjqAzbLROdRwARfGAVkb7p5pYfFJs11ugT3Fk+vOaMmOzKZI5mJNu8JmPq9Bwb2KXKcm3Cisl+eMPHGoNaJsPghZScBb6+wVxOMo5wYroLTQ7FRhHDSXQbW/WIjVn+m64a9WvFta6MkQzfh2VbThVb4i09/ZXR5W0blKwXxb1CRENNvyJM8r4VpfCE7R3kYHfv9lazVwtlEjpx+RaE+Ww9HJGDU5MHkggP6mg62bmmF7ZfeQjt7khZaaAdwNsG7JTuwa1I8w23h1gXt+Ht7DF/ZGtPjlQnGRatpzIc4qoL8WsczWQmDPEmpjm/PhRi5jMGCJP24PP5qk3sNAmwC29CqLtmEAiIRjbfMJuP8t9E6nUb1SSwa8exb7NxVlHgu0mYyYLiP4PaTaMCQUl4JQjprv/UKRrr3uaCh6X8BsQFH6WNz1i6IVnKbhuQQ4a9qMK5/QnlJ4K0lcgopB3cJa2pfqQ71MHE3QGyImPvoJAwkAJTf561CUZtDnLQCsjPmGDIQEJagvKx+boXzaqGKcM8b60D9H1D0GXRpIDQC50ivw7fHLfnXUFl4OeW5G9TjL2OLXBZFa1xaEkxn1D0JaRVN+RyAEeQFLKnkMdFkREQSW9kPiOWVOR1p0vQ8r1ZG1z6bzuQMTUnkhG6hbwRLH4pvDG6dP2EXHzr/33t51HZpP9jJxydEq+d0bajWu7gGWPrSXRnOoCW3/g/0+EwfQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39850400004)(366004)(396003)(346002)(26005)(6512007)(71200400001)(41300700001)(478600001)(6506007)(6486002)(83380400001)(2616005)(66574015)(186003)(2906002)(44832011)(8936002)(7416002)(5660300002)(110136005)(45080400002)(54906003)(316002)(66446008)(64756008)(66556008)(66476007)(8676002)(76116006)(66946007)(91956017)(4326008)(122000001)(86362001)(31696002)(31686004)(38100700002)(38070700005)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ni91Y2VhYnJ1dWZHcTUySEs5L0dseWNTakhRU3p3NGNsa0YxRnBrZ0lBV0xB?=
- =?utf-8?B?MTIzV2dtODc5S0dKOXI0aCt5a1lpSkVYaGtSUnltaVc1REpwK21tc0FKS0Vs?=
- =?utf-8?B?c3VNTXBuZGxKaDk0cEkvVGEwTGN1R1RiN3NrbnArakIya2pJRmdaeDdKWDBk?=
- =?utf-8?B?TzJ6bmYwdUxsRW5GZjZ0THVsenhyWXdYS0QvTVBTbDBxKzIxQUlqSFBadEEx?=
- =?utf-8?B?ZXBGaEQxTFBNOGtlM1lEb0dIS3NzYUF0SVB6cm9zWXNJU3RrVXlyRi9tc1Zz?=
- =?utf-8?B?OWRPVWJGUnFvUVU4TWZyU2NCUDRDZ3ZNL09BdVpSTWExQldiSWlIY2dqY2Qx?=
- =?utf-8?B?bzdTQmd3WktKNjV1NUxwMlVPelhRNy9BZDQvTlpEN3Blc29SQU5ZRWovcHR1?=
- =?utf-8?B?eWNVbHpxSkJXeG9lSjk3QlZZT09vQ2tOTzR6ZHVOY2lwYWpzYUMwdGo0cmRo?=
- =?utf-8?B?VVBCRG41N3dCUmkrRllzR3lCYlNyM3I4anNTa2xRWGFEZnpORXFRT29BTEZ3?=
- =?utf-8?B?M0NvdnRJenppT3pjdDc1T0lQeWRkU3llNzI4SnkrSUZvVXptNUdhQkd6OW5y?=
- =?utf-8?B?TVpGc0F3eWpYajUxaExEK0I1VnhXNTlxN3hkOXo5UHdoU2kxTjFneVNZbUZi?=
- =?utf-8?B?cjRhUFhPMzdFQnJ6eUhnVWQxUVhFWUpnWGhOSDJjbGtwOER0eUQyMUNqK1J2?=
- =?utf-8?B?cFh5OWFTZXNUZzRsSm1mejkxR0FET080UmlnQTMwNGVjMnV6eDU3UFRtSm5L?=
- =?utf-8?B?SXBJNitQZmhrVVkyNVFiUjhjUlFyZ3VvVTVRV05tWGtMenB6YzVIQ2gxRWV3?=
- =?utf-8?B?NFp0ZXM2TDI4bUFOVmQ1MDJ6ZVJaVmMyMExhdk4xZnI4Qnp2WkgrY0FYNWdu?=
- =?utf-8?B?WEhCUkEwYnVZVkpxellibWRUVTJySm1YUXZ4YndSNDM5Q2lTMXdRazNsc1pX?=
- =?utf-8?B?dDhnZ2RDSFBqY1JXcXdaY0R6NnoxNDdsa3puYmVxYjhmVk55K21YR3ZmYkFI?=
- =?utf-8?B?NGQrWGRhdG1PdFRoTm5OSjRMZWVJMkxsQUJTSkZKRjFKYW5SNUxQKzJOTW5B?=
- =?utf-8?B?bXRobHFiNkJDZlQ3Z1lkWVl5dXRmZWM1ZjNKNDBDSDJqVFVWT1Mzdm9meE45?=
- =?utf-8?B?SEtTbnZDdzFPemVvdGVtM0s5ZnRNZHh4clR3U0dVemdLT2NkbGFudGFMN0FQ?=
- =?utf-8?B?NytDZW1KVHhDSzRaUVJ4cnlab0hnc1VZNkxwT3NmSlFZSFVhN1R2TE9ORnB1?=
- =?utf-8?B?dGZqNDlFczkrWHlMLzBuS2krLzdkZ2tYaEJRaWdkcTNYdEQ3V3F3Y3l4WThs?=
- =?utf-8?B?aXRTTmQ3OHBnRzF0THZEL1lOWkl0ZUV3TXJ2UXVJTVN6aytGazRyYlhINUFU?=
- =?utf-8?B?aWZkYWJoamE0LzN5bEJETkZxdno1T1loVENjNVlvanV2UE1SYStZZi81OEJa?=
- =?utf-8?B?UmtlVlB0YXJ5dG9TT2J2N3NSVW15cU42a29saDQ4WFVmcEJMQWNFN1YxRVRR?=
- =?utf-8?B?QWEvOU00U0ZRQ05tNjAvUG5FK3FYaTBiY081M2FKamFsRndiai9BRE9EM3lG?=
- =?utf-8?B?M3Q2RzF4cXpSNW5iTVpWcGtSbkFkQlIwQTlTOWhvbHRFR1FDVGhzNDA1SmE5?=
- =?utf-8?B?bnVndzZmMitDaGF2aDZyV1Bualc2UTBJd3R3cVFXRkcwNzV0dThqbDRHbkQz?=
- =?utf-8?B?Q2RZRlBpLzBuY2NRR3NESndiSk9abTQ3TzF1YjdOTzJ5TEFhL3RZOTBmMHI0?=
- =?utf-8?B?RHVzUEZjMGZmY2VWck96SUZZODBRR2UwUWhJWlhvV3ZuLzVhWU1SS1I4YXRu?=
- =?utf-8?B?THcvYytieis4OHpLTThNRWEzNGEvTVQxdWZMbHNJOGk5c2VsS1RsWUlyY0tk?=
- =?utf-8?B?ajNUOW5uMkFVcGNLQ0VLazRaNDc0MXZ2TFRHKzFBR3UrdGI0dmJTY213SXhF?=
- =?utf-8?B?elBnMXl0eWowYTV1djhJSTY0UFZhcXkrOFViYkZKY2VmdWpJWTJMVGFCMlAy?=
- =?utf-8?B?RWQwK3J3NDVKMzBjeXQ2TUc1Q2VQRHBXVFRvWWcxUDRMbW9mRDBRTm1xOXUx?=
- =?utf-8?B?VWgySjkyV2JKUkhpSy8xWUVra3E2cW0rV0ZCNStiZ0d3Vmx4S29jZHdxZDcr?=
- =?utf-8?B?TTlZTkNORXUvU01BUnhONmpIamtCazlLeGxuTWQxOWozR2doN0I3am5zcUVy?=
- =?utf-8?Q?NWgICvLdW1Ac9iQvc/9UoDg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3489BF1F7DD55C4487926096167883FB@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sat, 10 Sep 2022 05:44:36 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDA1F5AD;
+        Sat, 10 Sep 2022 02:44:35 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s11so5875436edd.13;
+        Sat, 10 Sep 2022 02:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=OScyhco9O6uRT8iddKJAEiXM793/knN1pDcTqvXuiMI=;
+        b=HhFwVzdvfxgIi0HCYKd+W7tgY3pZFmqATruMIQDJeqEecrIhkdFomVhuBDVKs9oyGZ
+         tZ5rIznWMtzcpmusT+0u/yCMyGPB3uZ/AB77PUKgD1aIZVkK+vvkXDaMRYSkx/E0kz/Z
+         c/Ee5NKNgXcOLIHVJSEYBDR+WgOoiLLGGngaDzDo4b7FXLEYYEZ1/Cqsey2YWuo72NnZ
+         LCvn0MicWHJqQ/wW5Q1Z2IATaligXRg8AaOfNZ/PHoWhP3uKSc7aPuOK6bugoC588qUa
+         0CEp/Xz6yx0T7cZDOFTLpmoTPToRD/weCZ1qZROwfMZDy+mdo+NR3wiCbjhUMx9c7Fn3
+         gNhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=OScyhco9O6uRT8iddKJAEiXM793/knN1pDcTqvXuiMI=;
+        b=ZUGpd9DqotSn792MmZBCKDuBMSObKVqWF0DRQesZ43WC1OGqMfXYMaj3IQbIE129VM
+         vAWMy3nqokSIalgAWEOsXXYEYnShIDDoTj6ZbjjpD3xejpOzNIW0OOg57vejMtOsmDro
+         UVukmACZMbWtbYl4GBWAPDnoboTdkw9dZ//OlkfwNhTRJnk5i/nllWGWwHQ4szaLDxLi
+         iV+OgOFz4QNz10GyPsIA2oy3NxllHl64B92J0NqlMoJLuWh1iP08qEfsTI5jJrwjy4fX
+         v8ucNxD9u6759nBNLAxAuwuIUjgPgNZegQX/bZCckpDjjKJDvaUyHVYVN+Hzmkxum8Yq
+         URGQ==
+X-Gm-Message-State: ACgBeo1bAwl2WhdvAS+h7qwa33Gxnk5ZWSfvoBaLRlxJMcfkp9WYpTCp
+        GBQl+HtRotIBg+wflcAA6BM=
+X-Google-Smtp-Source: AA6agR4fB9XRFndVnH2VIdvLIFOvnR+pcr3y7EKJD1tO0tasRPOuGGEm587+aY3F1XESeUchhD4I2Q==
+X-Received: by 2002:aa7:dc13:0:b0:443:3f15:8440 with SMTP id b19-20020aa7dc13000000b004433f158440mr14297998edu.274.1662803073628;
+        Sat, 10 Sep 2022 02:44:33 -0700 (PDT)
+Received: from localhost.localdomain ([5.25.52.35])
+        by smtp.gmail.com with ESMTPSA id z20-20020a170906715400b0073d65a95161sm1456240ejj.222.2022.09.10.02.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 02:44:33 -0700 (PDT)
+From:   Kerem Karabay <kekrby@gmail.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kerem Karabay <kekrby@gmail.com>
+Subject: [PATCH 1/2] HID: apple: fix key translations where multiple quirks attempt to translate the same key and the ones that depend on other translations
+Date:   Sat, 10 Sep 2022 12:43:53 +0300
+Message-Id: <20220910094354.12359-1-kekrby@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfaf066e-c59d-4872-d1d0-08da93105676
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2022 09:39:20.5108
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OXi+CjG/+kxef7OHTA0B2WY5a5vyHsS8f1ZFnZ2fXaB0lAgYLiAHcQ1rA5HdGNZ77JEzclUtkTezA4fUw5mcU+/LEkHVtVxzewXaaz5RMdc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3277
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KyBBZGRpbmcgTWlrZSB3aG8gbWlnaHQgaGVscCBpZiB0aGUgcHJvYmxlbSBpcyBhcm91bmQgbWVt
-YmxvY2suDQoNCkxlIDA4LzA5LzIwMjIgw6AgMjI6MTcsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6
-DQo+IE9uIFRodXJzZGF5IDA4IFNlcHRlbWJlciAyMDIyIDE3OjM1OjExIFBhbGkgUm9ow6FyIHdy
-b3RlOg0KPj4gT24gVGh1cnNkYXkgMDggU2VwdGVtYmVyIDIwMjIgMTU6MjU6MTQgQ2hyaXN0b3Bo
-ZSBMZXJveSB3cm90ZToNCj4+PiBMZSAwOC8wOC8yMDIyIMOgIDIwOjQwLCBQYWxpIFJvaMOhciBh
-IMOpY3JpdMKgOg0KPj4+PiBPbiBGcmlkYXkgMTAgSnVuZSAyMDIyIDAwOjI0OjIwIFBhbGkgUm9o
-w6FyIHdyb3RlOg0KPj4+Pj4gT24gRnJpZGF5IDIwIE1heSAyMDIyIDE0OjMwOjAyIFBhbGkgUm9o
-w6FyIHdyb3RlOg0KPj4+Pj4+ICsgbGludXgtbW0NCj4+Pj4+Pg0KPj4+Pj4+IERvIHlvdSBrbm93
-IHdoYXQgYXJlIHJlcXVpcmVtZW50cyBmb3Iga2VybmVsIHRvIHN1cHBvcnQgbm9uLWNvbnRpZ3Vv
-dXMNCj4+Pj4+PiBtZW1vcnkgc3VwcG9ydCBhbmQgd2hhdCBpcyBuZWVkZWQgdG8gZW5hYmxlIGl0
-IGZvciAzMi1iaXQgcG93ZXJwYz8NCj4+Pj4+DQo+Pj4+PiBBbnkgaGludHM/DQo+Pj4+DQo+Pj4+
-IFBJTkc/DQo+Pj4+DQo+Pj4NCj4+PiBUaGUgdHJlZSBmb2xsb3dpbmcgcGF0Y2hlcyBsYW5kZWQg
-aW4gcG93ZXJwYy9uZXh0IGJyYW5jaCwgc28gdGhleSBzaG91bGQNCj4+PiBzb29uIGJlIHZpc2li
-bGUgaW4gbGludXgtbmV4dCB0b286DQo+Pj4NCj4+PiBmYzA2NzU1ZTI1NjIgKCJwb3dlcnBjLzMy
-OiBEcm9wIGEgc3RhbGUgY29tbWVudCBhYm91dCByZXNlcnZhdGlvbiBvZg0KPj4+IGdpZ2FudGlj
-IHBhZ2VzIikNCj4+PiBiMGUwZDY4YjFjNTIgKCJwb3dlcnBjLzMyOiBBbGxvdyBmcmFnbWVudGVk
-IHBoeXNpY2FsIG1lbW9yeSIpDQo+Pj4gMDExNTk1M2RjZWJlICgicG93ZXJwYy8zMjogUmVtb3Zl
-IHdpaV9tZW1vcnlfZml4dXBzKCkiKQ0KPj4NCj4+IE91LCBuaWNlISBJIHdpbGwgdHJ5IHRvIHRl
-c3QgaXQgaWYgaXQgYWxsb3dzIG1lIHRvIGFjY2VzcyBtb3JlIHRoYW4gMkdCDQo+PiBvZiBSQU0g
-ZnJvbSA0R0IgRERSMyBtb2R1bGUgd2l0aCAzMi1iaXQgYWRkcmVzc2luZyBtb2RlIG9uIFAyMDIw
-IENQVS4NCj4gDQo+IEhlbGxvISBPaywgSSBoYXZlIHRyaWVkIGl0IGZyb20gcG93ZXJwYy9uZXh0
-IGJyYW5jaCwgYnV0IHNlZW1zIGl0IGRvZXMNCj4gbm90IHdvcmsuIEknbSBnZXR0aW5nIGp1c3Qg
-ZWFybHkga2VybmVsIGNyYXNoLg0KPiANCj4gWyAgICAwLjAwMDAwMF0gQ1BVIG1hcHMgaW5pdGlh
-bGl6ZWQgZm9yIDEgdGhyZWFkIHBlciBjb3JlDQo+IFsgICAgMC4wMDAwMDBdICAodGhyZWFkIHNo
-aWZ0IGlzIDApDQo+IFsgICAgMC4wMDAwMDBdIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+IFsgICAgMC4wMDAwMDBdIHBoeXNfbWVtX3NpemUg
-ICAgID0gMHhiZTUwMDAwMA0KPiBbICAgIDAuMDAwMDAwXSBkY2FjaGVfYnNpemUgICAgICA9IDB4
-MjANCj4gWyAgICAwLjAwMDAwMF0gaWNhY2hlX2JzaXplICAgICAgPSAweDIwDQo+IFsgICAgMC4w
-MDAwMDBdIGNwdV9mZWF0dXJlcyAgICAgID0gMHgwMDAwMDAwMDEwMDEwMTA4DQo+IFsgICAgMC4w
-MDAwMDBdICAgcG9zc2libGUgICAgICAgID0gMHgwMDAwMDAwMDEwMDEwMTA4DQo+IFsgICAgMC4w
-MDAwMDBdICAgYWx3YXlzICAgICAgICAgID0gMHgwMDAwMDAwMDEwMDEwMTA4DQo+IFsgICAgMC4w
-MDAwMDBdIGNwdV91c2VyX2ZlYXR1cmVzID0gMHg4NGUwODAwMCAweDA4MDAwMDAwDQo+IFsgICAg
-MC4wMDAwMDBdIG1tdV9mZWF0dXJlcyAgICAgID0gMHgwMDAyMDAxMA0KPiBbICAgIDAuMDAwMDAw
-XSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K
-PiBtcGM4NXh4X3JkYl9zZXR1cF9hcmNoKCkNCj4gWyAgICAwLjAwMDAwMF0gaW9yZW1hcCgpIGNh
-bGxlZCBlYXJseSBmcm9tIG9mX2lvbWFwKzB4NDgvMHg4MC4gVXNlIGVhcmx5X2lvcmVtYXAoKSBp
-bnN0ZWFkDQo+IFsgICAgMC4wMDAwMDBdIE1QQzg1eHggUkRCIGJvYXJkIGZyb20gRnJlZXNjYWxl
-IFNlbWljb25kdWN0b3INCj4gWyAgICAwLjAwMDAwMF0gYmFycmllci1ub3NwZWM6IHVzaW5nIGlz
-eW5jOyBzeW5jIGFzIHNwZWN1bGF0aW9uIGJhcnJpZXINCj4gWyAgICAwLjAwMDAwMF0gYmFycmll
-ci1ub3NwZWM6IHBhdGNoZWQgMTgyIGxvY2F0aW9ucw0KPiBbICAgIDAuMDAwMDAwXSBUb3Agb2Yg
-UkFNOiAweGZmNzAwMDAwLCBUb3RhbCBSQU06IDB4YmU1MDAwMDANCj4gWyAgICAwLjAwMDAwMF0g
-TWVtb3J5IGhvbGUgc2l6ZTogMTA0Mk1CDQo+IFsgICAgMC4wMDAwMDBdIFpvbmUgcmFuZ2VzOg0K
-PiBbICAgIDAuMDAwMDAwXSAgIE5vcm1hbCAgIFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAw
-MDAwMDAyZmZmZmZmZl0NCj4gWyAgICAwLjAwMDAwMF0gICBIaWdoTWVtICBbbWVtIDB4MDAwMDAw
-MDAzMDAwMDAwMC0weDAwMDAwMDAwZmY2ZmZmZmZdDQo+IFsgICAgMC4wMDAwMDBdIE1vdmFibGUg
-em9uZSBzdGFydCBmb3IgZWFjaCBub2RlDQo+IFsgICAgMC4wMDAwMDBdIEVhcmx5IG1lbW9yeSBu
-b2RlIHJhbmdlcw0KPiBbICAgIDAuMDAwMDAwXSAgIG5vZGUgICAwOiBbbWVtIDB4MDAwMDAwMDAw
-MDAwMDAwMC0weDAwMDAwMDAwN2ZmZmZmZmZdDQo+IFsgICAgMC4wMDAwMDBdICAgbm9kZSAgIDA6
-IFttZW0gMHgwMDAwMDAwMGMwMjAwMDAwLTB4MDAwMDAwMDBlZWZmZmZmZl0NCj4gWyAgICAwLjAw
-MDAwMF0gICBub2RlICAgMDogW21lbSAweDAwMDAwMDAwZjAwMDAwMDAtMHgwMDAwMDAwMGZmNmZm
-ZmZmXQ0KPiBbICAgIDAuMDAwMDAwXSBJbml0bWVtIHNldHVwIG5vZGUgMCBbbWVtIDB4MDAwMDAw
-MDAwMDAwMDAwMC0weDAwMDAwMDAwZmY2ZmZmZmZdDQo+IFsgICAgMC4wMDAwMDBdIE1NVTogQWxs
-b2NhdGVkIDEwODggYnl0ZXMgb2YgY29udGV4dCBtYXBzIGZvciAyNTUgY29udGV4dHMNCj4gWyAg
-ICAwLjAwMDAwMF0gcGVyY3B1OiBFbWJlZGRlZCAxMSBwYWdlcy9jcHUgczE0MTk2IHI4MTkyIGQy
-MjY2OCB1NDUwNTYNCj4gWyAgICAwLjAwMDAwMF0gcGNwdS1hbGxvYzogczE0MTk2IHI4MTkyIGQy
-MjY2OCB1NDUwNTYgYWxsb2M9MTEqNDA5Ng0KPiBbICAgIDAuMDAwMDAwXSBwY3B1LWFsbG9jOiBb
-MF0gMCBbMF0gMQ0KPiBbICAgIDAuMDAwMDAwXSBCdWlsdCAxIHpvbmVsaXN0cywgbW9iaWxpdHkg
-Z3JvdXBpbmcgb24uICBUb3RhbCBwYWdlczogNzc3NzkyDQo+IFsgICAgMC4wMDAwMDBdIEtlcm5l
-bCBjb21tYW5kIGxpbmU6IHJvb3Q9dWJpMDpyb290ZnMgcm9vdGZzdHlwZT11YmlmcyB1YmkubXRk
-PXJvb3RmcywyMDQ4IHJvb3RmbGFncz1jaGtfZGF0YV9jcmMgcncgY29uc29sZT10dHlTMCwxMTUy
-MDANCj4gWyAgICAwLjAwMDAwMF0gRGVudHJ5IGNhY2hlIGhhc2ggdGFibGUgZW50cmllczogMTMx
-MDcyIChvcmRlcjogNywgNTI0Mjg4IGJ5dGVzLCBsaW5lYXIpDQo+IFsgICAgMC4wMDAwMDBdIElu
-b2RlLWNhY2hlIGhhc2ggdGFibGUgZW50cmllczogNjU1MzYgKG9yZGVyOiA2LCAyNjIxNDQgYnl0
-ZXMsIGxpbmVhcikNCj4gWyAgICAwLjAwMDAwMF0gbWVtIGF1dG8taW5pdDogc3RhY2s6b2ZmLCBo
-ZWFwIGFsbG9jOm9mZiwgaGVhcCBmcmVlOm9mZg0KPiBbICAgIDAuMDAwMDAwXSBLZXJuZWwgYXR0
-ZW1wdGVkIHRvIHJlYWQgdXNlciBwYWdlICg3ZGY1OCkgLSBleHBsb2l0IGF0dGVtcHQ/ICh1aWQ6
-IDApDQo+IFsgICAgMC4wMDAwMDBdIEJVRzogVW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgZGF0YSBh
-Y2Nlc3Mgb24gcmVhZCBhdCAweDAwMDdkZjU4DQo+IFsgICAgMC4wMDAwMDBdIEZhdWx0aW5nIGlu
-c3RydWN0aW9uIGFkZHJlc3M6IDB4YzAxYzgzNDgNCj4gWyAgICAwLjAwMDAwMF0gT29wczogS2Vy
-bmVsIGFjY2VzcyBvZiBiYWQgYXJlYSwgc2lnOiAxMSBbIzFdDQo+IFsgICAgMC4wMDAwMDBdIEJF
-IFBBR0VfU0laRT00SyBTTVAgTlJfQ1BVUz0yIFAyMDIwUkRCLVBDDQo+IFsgICAgMC4wMDAwMDBd
-IE1vZHVsZXMgbGlua2VkIGluOg0KPiBbICAgIDAuMDAwMDAwXSBDUFU6IDAgUElEOiAwIENvbW06
-IHN3YXBwZXIgTm90IHRhaW50ZWQgNi4wLjAtcmMyLTBjYWFjYjE5N2I2Nzc0MTBiZGFjODFiYzM0
-ZjA1MjM1KyAjMTIxDQo+IFsgICAgMC4wMDAwMDBdIE5JUDogIGMwMWM4MzQ4IExSOiBjMDFjYjJi
-YyBDVFI6IDAwMDAwMDBhDQo+IFsgICAgMC4wMDAwMDBdIFJFR1M6IGMxMGQ3ZTIwIFRSQVA6IDAz
-MDAgICBOb3QgdGFpbnRlZCAgKDYuMC4wLXJjMi0wY2FhY2IxOTdiNjc3NDEwYmRhYzgxYmMzNGYw
-NTIzNSspDQo+IFsgICAgMC4wMDAwMDBdIE1TUjogIDAwMDIxMDAwIDxDRSxNRT4gIENSOiA0ODA0
-NDIyNCAgWEVSOiAwMDAwMDAwMA0KPiBbICAgIDAuMDAwMDAwXSBERUFSOiAwMDA3ZGY1OCBFU1I6
-IDAwMDAwMDAwDQo+IFsgICAgMC4wMDAwMDBdIEdQUjAwOiBjMDFjYjI5NCBjMTBkN2YxMCBjMTA0
-NTM0MCAwMDAwMDAwMSAwMDAwMDAwNCBjMTEyYmNjMCAwMDAwMDAxNSBlZWRmMTAwMA0KPiBbICAg
-IDAuMDAwMDAwXSBHUFIwODogMDAwMDAwMDMgMDAwN2RmNTggMDAwMDAwMDAgZjAwMDAwMDAgMjgw
-NDQyMjggMDAwMDAyMDAgMDAwMDAwMDAgMDAwMDAwMDANCj4gWyAgICAwLjAwMDAwMF0gR1BSMTY6
-IDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIDAyNzVjYjdhIGMwMDAwMDAwIDAwMDAwMDAxIDAw
-MDAwNzVmIDAwMDAwMDAwDQo+IFsgICAgMC4wMDAwMDBdIEdQUjI0OiBjMTAzMTAwNCAwMDAwMDAw
-MCAwMDAwMDAwMCAwMDAwMDAwMSBjMTBmMDAwMCBlZWRmMTAwMCAwMDA4MDAwMCAwMDA4MDAwMA0K
-PiBbICAgIDAuMDAwMDAwXSBOSVAgW2MwMWM4MzQ4XSBmcmVlX3VucmVmX3BhZ2VfcHJlcGFyZS5w
-YXJ0LjkzKzB4NDgvMHg2MA0KPiBbICAgIDAuMDAwMDAwXSBMUiBbYzAxY2IyYmNdIGZyZWVfdW5y
-ZWZfcGFnZSsweDg0LzB4NGI4DQo+IFsgICAgMC4wMDAwMDBdIENhbGwgVHJhY2U6DQo+IFsgICAg
-MC4wMDAwMDBdIFtjMTBkN2YxMF0gW2VlZGYxMDAwXSAweGVlZGYxMDAwICh1bnJlbGlhYmxlKQ0K
-PiBbICAgIDAuMDAwMDAwXSBbYzEwZDdmMjBdIFtjMDFjYjI5NF0gZnJlZV91bnJlZl9wYWdlKzB4
-NWMvMHg0YjgNCj4gWyAgICAwLjAwMDAwMF0gW2MxMGQ3ZjcwXSBbYzEwMDc2NDRdIG1lbV9pbml0
-KzB4ZDAvMHgxOTQNCj4gWyAgICAwLjAwMDAwMF0gW2MxMGQ3ZmEwXSBbYzEwMDBlNGNdIHN0YXJ0
-X2tlcm5lbCsweDRjMC8weDZkMA0KPiBbICAgIDAuMDAwMDAwXSBbYzEwZDdmZjBdIFtjMDAwMDNl
-MF0gc2V0X2l2b3IrMHgxM2MvMHgxNzgNCj4gWyAgICAwLjAwMDAwMF0gSW5zdHJ1Y3Rpb24gZHVt
-cDoNCj4gWyAgICAwLjAwMDAwMF0gNTUyODE3YmUgNTUwOTEwM2EgN2QyOTQyMTQgNTUyOTM4MzAg
-N2Q0YTRhMTQgODEyYTAwM2MgODE0YTAwMzggNTUyOTAwMmENCj4gWyAgICAwLjAwMDAwMF0gN2M4
-OTIwNTAgNTQ4NGMyM2EgNTQ4OWVhZmEgNTQ4NDA2ZmUgPDdkMmE0ODJlPiA3ZDI0MjQzMCA1NDg0
-MDc3ZSA5MDg3MDAxMA0KPiBbICAgIDAuMDAwMDAwXSAtLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAw
-MDAwMDAwIF0tLS0NCj4gWyAgICAwLjAwMDAwMF0NCj4gWyAgICAwLjAwMDAwMF0gS2VybmVsIHBh
-bmljIC0gbm90IHN5bmNpbmc6IEZhdGFsIGV4Y2VwdGlvbg0KPiBbICAgIDAuMDAwMDAwXSBSZWJv
-b3RpbmcgaW4gMSBzZWNvbmRzLi4NCj4gWyAgICAwLjAwMDAwMF0gU3lzdGVtIEhhbHRlZCwgT0sg
-dG8gdHVybiBvZmYgcG93ZXINCj4gDQo+IDRHQiBERFIzIFNPRElNTSBtb2R1bGUgaXMgc2V0IHZp
-YSBGcmVlc2NhbGUgTEJDIHRvIHRoZSB3aG9sZSA0IEdCDQo+IGFkZHJlc3MgcmFuZ2UuIEFuZCBv
-biByYW5nZXM6DQo+IDB4MDAwMF8wMDAwIC0gMHg3ZmZmX2ZmZmYNCj4gMHhjMDIwXzAwMDAgLSAw
-eGVlZmZfZmZmZg0KPiAweGYwMDBfMDAwMCAtIDB4ZmY2Zl9mZmZmDQo+IHRoZXJlIGlzIG5vIHBl
-cmlwaGVyYWwgZGV2aWNlLCB0aGV5IGFyZSBmcmVlIGZvciBEUkFNLiBCZXR3ZWVuIHRoZXNlDQo+
-IHBoeXNpY2FsIHJhbmdlcyBhcmUgbWFwcGVkIHBlcmlwaGVyYWwgZGV2aWNlcyAoUENJZSBhbmQg
-Tk9SKS4NCj4gDQo+IEFueSBpZGVhIGlmIEknbSBkb2luZyBzb21ldGhpbmcgd3Jvbmcgb3IgdGhl
-cmUgY2FuIGJlIGEgYnVnIGluIG1lbW9yeSBjb2RlPw0KPiANCj4gUXVpdGUgc3VzcGljaW91cyBp
-cyB0aGF0ICJJbml0bWVtIHNldHVwIG5vZGUgMCIgcHJpbnRzIG9uZSByYW5nZSB3aGVyZQ0KPiBh
-cmUgYWxzbyBwZXJpcGhlcmFscywgbm90IGp1c3QgRFJBTS4gQ3Jhc2ggaXMgb24gYWRkcmVzcyAw
-eGMwMWM4MzQ4DQo+IHdoaWNoIGJlbG9uZ3MgdG8gUENJZS4NCj4gDQoNClllcyBJIGFsc28gZmlu
-ZCB0aGF0ICJJbml0bWVtIHNldHVwIG5vZGUgMCIgc3VzcGljaW91cy4NCg0KSG93ZXZlciB0aGUg
-Y3Jhc2ggYWRkcmVzcyAweGMwMWM4MzQ4IGlzIHZhbGlkIGtlcm5lbCBhZGRyZXNzLiBUaGF0J3Mg
-YSANCnZpcnR1YWwgYWRkcmVzcywgbm90IGEgcGh5c2ljYWwgYWRkcmVzcywgc28gdGhhdCdzIG5v
-dCBQQ0llLiBUaGF0J3MgDQprZXJuZWwgbGluZWFyIG1hcHBpbmcsIHNvIHRoYXQncyBsaWtlbHkg
-cGh5c2ljYWwgYWRkcmVzcyAweDAwMWM4MzQ4IA0Kb2Zmc2V0ZWQgYnkgUEFHRV9PRkZTRVQgd2hp
-Y2ggaXMgMHhjMDAwMDAwMC4NCg0KRG8geW91IGhhdmUgYSB3YXkgdG8gcmVwcm9kdWNlIHRoaXMg
-cHJvYmxlbSB1bmRlciBRRU1VID8NCg0KVGhhbmtzDQpDaHJpc3RvcGhl
+The hid-apple driver does not support chaining translations or
+dependencies on other translations. This creates two problems:
+
+1 - In Non-English keyboards of Macs, KEY_102ND and KEY_GRAVE are
+swapped and the APPLE_ISO_TILDE_QUIRK is used to work around this
+problem. The quirk is not set for the Macs where these bugs happen yet
+(see the 2nd patch for that), but this can be forced by setting the
+iso_layout parameter. Unfortunately, this only partially works.
+KEY_102ND gets translated to KEY_GRAVE, but KEY_GRAVE does not get
+translated to KEY_102ND, so both of them end up functioning as
+KEY_GRAVE. This is because the driver translates the keys as if Fn was
+pressed and the original is sent if it is not pressed, without any
+further translations happening on the key[#463]. KEY_GRAVE is present at
+macbookpro_no_esc_fn_keys[#195], so this is what happens:
+
+    - KEY_GRAVE -> KEY_ESC (as if Fn is pressed)
+    - KEY_GRAVE is returned (Fn isn't pressed, so translation is discarded)
+    - KEY_GRAVE -> KEY_102ND (this part is not reached!)
+    ...
+
+2 - In case the touchbar does not work, the driver supports sending
+Escape when Fn+KEY_GRAVE is pressed. As mentioned previously, KEY_102ND
+is actually KEY_GRAVE and needs to be translated before this happens.
+
+Normally, these are the steps that should happen:
+
+    - KEY_102ND -> KEY_GRAVE
+    - KEY_GRAVE -> KEY_ESC (Fn is pressed)
+    - KEY_ESC is returned
+
+Though this is what happens instead, as dependencies on other
+translations are not supported:
+
+    - KEY_102ND -> KEY_ESC (Fn is pressed)
+    - KEY_ESC is returned
+
+This patch fixes both bugs by ordering the translations correctly and by
+making the translations continue and not return immediately after
+translating a key so that chained translations work and translations can
+depend on other ones.
+
+This patch also simplifies the implementation of the swap_fn_leftctrl
+option a little bit, as it makes it simply use a normal translation
+instead adding extra code to translate a key to KEY_FN[#381]. This change
+wasn't put in another patch as the code that translates the Fn key needs
+to be changed because of the changes in the patch, and those changes
+would be discarded with the next patch anyway (the part that originally
+translates KEY_FN to KEY_LEFTCTRL needs to be made an else-if branch of
+the part that transltes KEY_LEFTCTRL to KEY_FN).
+
+Note: Line numbers (#XYZ) are for drivers/hid/hid-apple.c at commit
+20afcc462579 ("HID: apple: Add "GANSS" to the non-Apple list").
+
+Note: These bugs are only present on Macs with a keyboard with no
+dedicated escape key and a non-English layout.
+
+Signed-off-by: Kerem Karabay <kekrby@gmail.com>
+---
+ drivers/hid/hid-apple.c | 99 ++++++++++++++++++-----------------------
+ 1 file changed, 44 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 6970797cdc56..066e8a85daa5 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -314,6 +314,7 @@ static const struct apple_key_translation swapped_option_cmd_keys[] = {
+ 
+ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
+ 	{ KEY_FN, KEY_LEFTCTRL },
++	{ KEY_LEFTCTRL, KEY_FN },
+ 	{ }
+ };
+ 
+@@ -375,24 +376,40 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	struct apple_sc *asc = hid_get_drvdata(hid);
+ 	const struct apple_key_translation *trans, *table;
+ 	bool do_translate;
+-	u16 code = 0;
++	u16 code = usage->code;
+ 	unsigned int real_fnmode;
+ 
+-	u16 fn_keycode = (swap_fn_leftctrl) ? (KEY_LEFTCTRL) : (KEY_FN);
+-
+-	if (usage->code == fn_keycode) {
+-		asc->fn_on = !!value;
+-		input_event_with_scancode(input, usage->type, KEY_FN,
+-				usage->hid, value);
+-		return 1;
+-	}
+-
+ 	if (fnmode == 3) {
+ 		real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
+ 	} else {
+ 		real_fnmode = fnmode;
+ 	}
+ 
++	if (swap_fn_leftctrl) {
++		trans = apple_find_translation(swapped_fn_leftctrl_keys, code);
++
++		if (trans)
++			code = trans->to;
++	}
++
++	if (iso_layout > 0 || (iso_layout < 0 && (asc->quirks & APPLE_ISO_TILDE_QUIRK) &&
++			hid->country == HID_COUNTRY_INTERNATIONAL_ISO)) {
++		trans = apple_find_translation(apple_iso_keyboard, code);
++
++		if (trans)
++			code = trans->to;
++	}
++
++	if (swap_opt_cmd) {
++		trans = apple_find_translation(swapped_option_cmd_keys, code);
++
++		if (trans)
++			code = trans->to;
++	}
++
++	if (code == KEY_FN)
++		asc->fn_on = !!value;
++
+ 	if (real_fnmode) {
+ 		if (hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI ||
+ 		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO ||
+@@ -430,15 +447,18 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 		else
+ 			table = apple_fn_keys;
+ 
+-		trans = apple_find_translation (table, usage->code);
++		trans = apple_find_translation(table, code);
+ 
+ 		if (trans) {
+-			if (test_bit(trans->from, input->key))
++			bool from_is_set = test_bit(trans->from, input->key);
++			bool to_is_set = test_bit(trans->to, input->key);
++
++			if (from_is_set)
+ 				code = trans->from;
+-			else if (test_bit(trans->to, input->key))
++			else if (to_is_set)
+ 				code = trans->to;
+ 
+-			if (!code) {
++			if (!(from_is_set || to_is_set)) {
+ 				if (trans->flags & APPLE_FLAG_FKEY) {
+ 					switch (real_fnmode) {
+ 					case 1:
+@@ -455,62 +475,31 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 					do_translate = asc->fn_on;
+ 				}
+ 
+-				code = do_translate ? trans->to : trans->from;
++				if (do_translate)
++					code = trans->to;
+ 			}
+-
+-			input_event_with_scancode(input, usage->type, code,
+-					usage->hid, value);
+-			return 1;
+ 		}
+ 
+ 		if (asc->quirks & APPLE_NUMLOCK_EMULATION &&
+-				(test_bit(usage->code, asc->pressed_numlock) ||
++				(test_bit(code, asc->pressed_numlock) ||
+ 				test_bit(LED_NUML, input->led))) {
+-			trans = apple_find_translation(powerbook_numlock_keys,
+-					usage->code);
++			trans = apple_find_translation(powerbook_numlock_keys, code);
+ 
+ 			if (trans) {
+ 				if (value)
+-					set_bit(usage->code,
+-							asc->pressed_numlock);
++					set_bit(code, asc->pressed_numlock);
+ 				else
+-					clear_bit(usage->code,
+-							asc->pressed_numlock);
++					clear_bit(code, asc->pressed_numlock);
+ 
+-				input_event_with_scancode(input, usage->type,
+-						trans->to, usage->hid, value);
++				code = trans->to;
+ 			}
+-
+-			return 1;
+ 		}
+ 	}
+ 
+-	if (iso_layout > 0 || (iso_layout < 0 && (asc->quirks & APPLE_ISO_TILDE_QUIRK) &&
+-			hid->country == HID_COUNTRY_INTERNATIONAL_ISO)) {
+-		trans = apple_find_translation(apple_iso_keyboard, usage->code);
+-		if (trans) {
+-			input_event_with_scancode(input, usage->type,
+-					trans->to, usage->hid, value);
+-			return 1;
+-		}
+-	}
++	if (usage->code != code) {
++		input_event_with_scancode(input, usage->type, code, usage->hid, value);
+ 
+-	if (swap_opt_cmd) {
+-		trans = apple_find_translation(swapped_option_cmd_keys, usage->code);
+-		if (trans) {
+-			input_event_with_scancode(input, usage->type,
+-					trans->to, usage->hid, value);
+-			return 1;
+-		}
+-	}
+-
+-	if (swap_fn_leftctrl) {
+-		trans = apple_find_translation(swapped_fn_leftctrl_keys, usage->code);
+-		if (trans) {
+-			input_event_with_scancode(input, usage->type,
+-					trans->to, usage->hid, value);
+-			return 1;
+-		}
++		return 1;
+ 	}
+ 
+ 	return 0;
+-- 
+2.37.2
+
