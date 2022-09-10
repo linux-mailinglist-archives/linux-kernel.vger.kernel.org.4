@@ -2,188 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECB75B48D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 22:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55ED5B48F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 23:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiIJUlj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Sep 2022 16:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S229736AbiIJVNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 17:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiIJUlg (ORCPT
+        with ESMTP id S229629AbiIJVNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 16:41:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FFE12AD1;
-        Sat, 10 Sep 2022 13:41:33 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MQ4Vr3M0Qz67KX0;
-        Sun, 11 Sep 2022 04:40:20 +0800 (CST)
-Received: from lhrpeml100004.china.huawei.com (7.191.162.219) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 10 Sep 2022 22:41:31 +0200
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml100004.china.huawei.com (7.191.162.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 10 Sep 2022 21:41:30 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2375.031;
- Sat, 10 Sep 2022 21:41:30 +0100
-From:   Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
+        Sat, 10 Sep 2022 17:13:43 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD64B4AA
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:13:41 -0700 (PDT)
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 99822402D4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 21:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662844417;
+        bh=YIXqxtSbGe6vWCX7g0eeSDhgSl7mx2fz9QQkdP6SCjU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=OkyKYvApXY8hT4qnfzeHHlyqCeSGBUEbF3qpXIuQ1qHxBzhrUnzF9N4Nf2FtWFfCN
+         LZ8LV7F8IP19idSEy99YBXzq45XVWnE6fYzZ8lyPATDHiJJ2SFr66jjr2aeOxsmqEo
+         cXZbBo/edTqaPSUQkCyk174Ue9duQJZgqiCAD2QNh8i+ubcI/7ITN/TDwjxZR7VGb9
+         ha03RNXI+jGy9gBhGLj7x4ukryOamOdazzrehgECajzWZCKR1UbUiUXbi3EXpPLeYc
+         r85AGysjJxJSMsolEy7jSidSafYDJCahxZGTRnH37zb9kORyoAzCpozCZkaRZf7yJi
+         p+fd9I+bka5+Q==
+Received: by mail-ot1-f72.google.com with SMTP id s24-20020a0568301e1800b0063b341613f2so2642110otr.19
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:13:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YIXqxtSbGe6vWCX7g0eeSDhgSl7mx2fz9QQkdP6SCjU=;
+        b=SiWWe9ew4UsVc3fcwlPQ+7PyVspQdMO6U3x9D6SxehLVUTZ/H2ReDuqbaNsaBgmwUx
+         CHO4dG3ckTuaMGXNj3p4mF9a3+fCKS/6oHJdwwrIqMZ5LA4wb+hK2541vWw2L+SHf6U2
+         z2UG6EISo5Uev+RMvtSBgiRfIhgthOy0g2RjDDoiobYIEl83spId8TGTg3wfIevbQfim
+         lgKFkkakjiSNcYv2516oIuLIXEVw/cWraO58EEn6DSP4FnRmUuJCb+QWfXGwMiFjvYHj
+         Swd58TmVfA5DdwlW5tl+sa74tIRSOjW2bH5TKcax575NPvdlWAjspA1nN4pquLPE6m9G
+         UukA==
+X-Gm-Message-State: ACgBeo2YCX/0RLTXRYcvyajfuraqxpVz14uwSf8+8EciTP/MaPyDa7qW
+        o/k98+Ri+hyf2oPWRF6KdZ14i0Hnb8v6D9SA6T25ops9ieoDy94Mk4j6W95pYDtGENg01TX3YRN
+        Jh0EiqqoH/gs7hhpVPoCLn/YuPh4yErbtj3iMv/AsBw==
+X-Received: by 2002:a05:6830:1f2e:b0:655:ca83:ddf2 with SMTP id e14-20020a0568301f2e00b00655ca83ddf2mr1151079oth.235.1662844414871;
+        Sat, 10 Sep 2022 14:13:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5pGsEEItr/aSLMNOIU+AZmK8M+PFn+4mg2dcqIyP1lfX4BseZAUG23BVX+s27yE6qxA8684g==
+X-Received: by 2002:a05:6830:1f2e:b0:655:ca83:ddf2 with SMTP id e14-20020a0568301f2e00b00655ca83ddf2mr1151054oth.235.1662844414569;
+        Sat, 10 Sep 2022 14:13:34 -0700 (PDT)
+Received: from localhost.localdomain ([2001:67c:1562:8007::aac:4084])
+        by smtp.gmail.com with ESMTPSA id z14-20020a056870e30e00b0012769122387sm2892567oad.54.2022.09.10.14.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 14:13:34 -0700 (PDT)
+From:   Jorge Merlino <jorge.merlino@canonical.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
- Models"
-Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAGhxQA==
-Date:   Sat, 10 Sep 2022 20:41:30 +0000
-Message-ID: <e8b6b7222a894984b4d66cdcc6435efe@huawei.com>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
-In-Reply-To: <YxynQmEL6e194Wuw@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.132.83]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Jorge Merlino <jorge.merlino@canonical.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Fix race condition when exec'ing setuid files
+Date:   Sat, 10 Sep 2022 18:12:14 -0300
+Message-Id: <20220910211215.140270-1-jorge.merlino@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> You were quoting Jonas here, right?  The email doesn't make this obvious
-> because it doesn't have two levels of "> > " markings.
+This patch fixes a race condition in check_unsafe_exec when a heavily
+threaded program tries to exec a setuid file. check_unsafe_exec counts the
+number of threads sharing the same fs_struct and compares it to the total
+number of users of the fs_struct by looking at its users counter. If there
+are more users than process threads using it the setuid exec fails with
+LSM_UNSAFE_SHARE. The problem is that, during the kernel_clone code
+execution, the fs_struct users counter is incremented before the new thread
+is added to the thread_group list. So there is a race when the counter has
+been incremented but the thread is not visible to the while_each_tread loop
+in check_unsafe_exec.
 
-Yes, I was quoting Jonas. 
-It seems my mail client did not format the email correctly and I did not notice.
-Sorry for that.
+This patch sort of fixes this by setting a process flag to the parent
+process during the time this race is possible. Thus, if a process is
+forking, it counts an extra user fo the fs_struct as the counter might be
+incremented before the thread is visible. But this is not great as this
+could generate the opposite problem as there may be an external process
+sharing the fs_struct that is masked by some thread that is being counted
+twice. I submit this patch just as an idea but mainly I want to introduce
+this issue and see if someone comes up with a better solution.
 
-> In general, _no_ two distinct relations in the LKMM have the same propagation
-> properties.  If wmb always behaved the same way as mb, we wouldn't use two
-> separate words for them.
+This is a simple code to reproduce this issue:
 
-I understand that relations with different names are intended to be different.
-What I meant was 
-	"wmb gives weaker propagation guarantees than mb and because of this, liveness of qspinlock is not guaranteed in LKMM" 
+$ cat Makefile
+ALL=a b
+all: $(ALL)
 
-> 
-> > The claim is based on these relations from the memory model
-> >
-> > let strong-fence = mb | gp
-> > ...
-> > let cumul-fence = [Marked] ; (A-cumul(strong-fence | po-rel) | wmb |
-> > 	po-unlock-lock-po) ; [Marked]
-> > let prop = [Marked] ; (overwrite & ext)? ; cumul-fence* ;
-> > 	[Marked] ; rfe? ; [Marked]
-> 
-> Please be more specific.  What difference between mb and wmb are you
-> concerned about?  
+a: LDFLAGS=-pthread
 
-Since the code uses wmb, there are certain pairs of events that will not be in strong-fence.
-Since strong-fence contributes to cumul-fence, cumul-fence to prop, and prop to hb, 
-the pair of events related by hb is less that if the code would use mb instead.
-Because of this, there are executions (in particular the one that violates liveness) that have 
-an acyclic hb relation, but would create a cycle (and thus the memory model would not accept 
-the behavior) if mb would have been used.
+b: b.c
+	$(CC) b.c -o b
+	sudo chown root:root b
+	sudo chmod u+s b
 
-> Can you give a small litmus test that illustrates this
-> difference?  Can you explain in more detail how this difference affects the
-> qspinlock implementation?
+test:
+	for I in $$(seq 1000); do echo $I; ./a ; done
 
-Here is a litmus test showing the problem (I hope the comment are enough to relate it back to qspinlock)
+clean:
+	rm -vf $(ALL)
 
-C Liveness
+$ cat a.c
+
+void *nothing(void *p)
 {
-  atomic_t x = ATOMIC_INIT(0);
-  atomic_t y = ATOMIC_INIT(0);
+	return NULL;
 }
 
-P0(atomic_t *x) {
-  // clear_pending_set_locked
-  int r0 = atomic_fetch_add(2,x) ;
+void *target(void *p) {
+	for (;;) {
+		pthread_t t;
+		if (pthread_create(&t, NULL, nothing, NULL) == 0)
+			pthread_join(t, NULL);
+    	}
+	return NULL;
 }
 
-P1(atomic_t *x, int *z) {
-  // queued_spin_trylock
-  int r0 = atomic_read(x);
-  // barrier after the initialization of nodes
-  smp_wmb();
-  // xchg_tail
-  int r1 = atomic_cmpxchg_relaxed(x,r0,42);
-  // link node into the waitqueue
-  WRITE_ONCE(*z, 1);
+int main(void)
+{
+	struct timespec tv;
+	int i;
+
+	for (i = 0; i < 10; i++) {
+		pthread_t t;
+		pthread_create(&t, NULL, target, NULL);
+	}
+	tv.tv_sec = 0;
+	tv.tv_nsec = 100000;
+	nanosleep(&tv, NULL);
+	if (execl("./b", "./b", NULL) < 0)
+		perror("execl");
+	return 0;
 }
 
-P2(atomic_t *x,atomic_t *z) {
-  // node initialization
-  WRITE_ONCE(*z, 2);
-  // queued_spin_trylock
-  int r0 = atomic_read(x);
-  // barrier after the initialization of nodes
-  smp_wmb();
-  // xchg_tail
-  int r1 = atomic_cmpxchg_relaxed(x,r0,24);
+$ cat b.c
+
+int main(void)
+{
+	const uid_t euid = geteuid();
+	if (euid != 0) {
+		printf("Failed, got euid %d (expecting 0)\n", euid);
+        	return 1;
+	}
+	return 0;
 }
 
-exists (0:r0 = 24 /\ 1:r0 = 26 /\ z=2)
+$ make
+make
+cc   -pthread  a.c   -o a
+cc b.c -o b
+sudo chown root:root b
+sudo chmod u+s b
+$ make test
 
-herd7 says that the behavior is observable. 
-However if you change wmb by mb, it is not observable anymore.
+Without this fix, one will see 'Failed, got euid 1000 (expecting 0)' messages
+---
+ fs/exec.c             | 2 ++
+ include/linux/sched.h | 1 +
+ kernel/fork.c         | 3 +++
+ 3 files changed, 6 insertions(+)
 
-> 
-> > From an engineering perspective, I think the only issue is that cat
-> > *currently* does not have any syntax for this,
-> 
-> Syntax for what?  The difference between wmb and mb?
-> 
-> >  nor does herd currently
-> > implement the await model checking techniques proposed in those works
-> > (c.f. Theorem 5.3. in the "making weak memory models fair" paper,
-> > which says that for this kind of loop, iff the mo-maximal reads in
-> > some graph are read in a loop iteration that does not exit the loop,
-> > the loop can run forever). However GenMC and I believe also Dat3M and
-> > recently also Nidhugg support such techniques. It may not even be too
-> > much effort to implement something like this in herd if desired.
-> 
-> I believe that herd has no way to express the idea of a program running forever.
-> On the other hand, it's certainly true (in all of these
-> models) than for any finite number N, there is a feasible execution in which a
-> loop runs for more than N iterations before the termination condition eventually
-> becomes true.
-
-Here I was again quoting Jonas.
-I think his intention was to make a distinction between graph based semantics and tools.
-While herd7 cannot reason about this kind of property, it is possible to define the property 
-using graph based semantics and there are tools already using this.
-
-Hernan
+diff --git a/fs/exec.c b/fs/exec.c
+index 9a5ca7b82bfc..a6f949a899d5 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1581,6 +1581,8 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
+ 	while_each_thread(p, t) {
+ 		if (t->fs == p->fs)
+ 			n_fs++;
++			if (t->flags & PF_IN_FORK)
++				n_fs++;
+ 	}
+ 	rcu_read_unlock();
+ 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e7b2f8a5c711..f307165a434a 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1722,6 +1722,7 @@ extern struct pid *cad_pid;
+ 						 * I am cleaning dirty pages from some other bdi. */
+ #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
+ #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
++#define PF_IN_FORK		0x02000000	/* Process is forking, prevents race condition on fs_struct users value */
+ #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
+ #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
+ #define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 8a9e92068b15..54e1e1fbe0bd 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2245,6 +2245,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 	retval = copy_files(clone_flags, p);
+ 	if (retval)
+ 		goto bad_fork_cleanup_semundo;
++	current->flags |= PF_IN_FORK;
+ 	retval = copy_fs(clone_flags, p);
+ 	if (retval)
+ 		goto bad_fork_cleanup_files;
+@@ -2474,6 +2475,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 		attach_pid(p, PIDTYPE_PID);
+ 		nr_threads++;
+ 	}
++	current->flags &= ~PF_IN_FORK;
+ 	total_forks++;
+ 	hlist_del_init(&delayed.node);
+ 	spin_unlock(&current->sighand->siglock);
+@@ -2556,6 +2558,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 	spin_lock_irq(&current->sighand->siglock);
+ 	hlist_del_init(&delayed.node);
+ 	spin_unlock_irq(&current->sighand->siglock);
++	current->flags &= ~PF_IN_FORK;
+ 	return ERR_PTR(retval);
+ }
+ 
+-- 
+2.34.1
 
