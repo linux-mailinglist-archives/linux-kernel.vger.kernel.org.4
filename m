@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB8A5B47D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409D85B47D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiIJSC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 14:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
+        id S229451AbiIJSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 14:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiIJSCy (ORCPT
+        with ESMTP id S229547AbiIJSCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Sep 2022 14:02:54 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A450B3AE72
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 11:02:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA84386A7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 11:02:54 -0700 (PDT)
 Received: from ipservice-092-217-076-063.092.217.pools.vodafone-ip.de ([92.217.76.63] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1oX4ob-0000f7-O2; Sat, 10 Sep 2022 20:02:49 +0200
+        id 1oX4oc-0000f7-MI; Sat, 10 Sep 2022 20:02:50 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 3/4] staging: r8188eu: remove rtw_clear_scan_deny
-Date:   Sat, 10 Sep 2022 20:02:35 +0200
-Message-Id: <20220910180236.489808-4-martin@kaiser.cx>
+Subject: [PATCH 4/4] staging: r8188eu: rtw_is_scan_deny is always false
+Date:   Sat, 10 Sep 2022 20:02:36 +0200
+Message-Id: <20220910180236.489808-5-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220910180236.489808-1-martin@kaiser.cx>
 References: <20220910180236.489808-1-martin@kaiser.cx>
@@ -45,44 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtw_clear_scan_deny macro is empty. Remove it.
+The rtw_is_scan_deny macro returns false. Remove the macro and resulting
+dead code.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c    | 3 ---
- drivers/staging/r8188eu/include/rtw_mlme.h | 1 -
- 2 files changed, 4 deletions(-)
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c | 5 -----
+ drivers/staging/r8188eu/include/rtw_mlme.h   | 1 -
+ 2 files changed, 6 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 596bb03b6ee3..de722c199cce 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -264,8 +264,6 @@ int rtw_init_mlme_priv(struct adapter *padapter)/* struct	mlme_priv *pmlmepriv)
- 
- 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
- 
--	rtw_clear_scan_deny(padapter);
+diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+index d163a1a256ed..55e6b0f41dc3 100644
+--- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
++++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+@@ -351,11 +351,6 @@ u8 rtw_set_802_11_bssid_list_scan(struct adapter *padapter, struct ndis_802_11_s
+ 		/*  Scan or linking is in progress, do nothing. */
+ 		res = true;
+ 	} else {
+-		if (rtw_is_scan_deny(padapter)) {
+-			indicate_wx_scan_complete_event(padapter);
+-			return _SUCCESS;
+-		}
 -
- 	rtw_init_mlme_timer(padapter);
+ 		spin_lock_bh(&pmlmepriv->lock);
  
- exit:
-@@ -928,7 +926,6 @@ void rtw_indicate_disconnect(struct adapter *padapter)
- 
- 		_clr_fwstate_(pmlmepriv, _FW_LINKED);
- 		rtw_led_control(padapter, LED_CTL_NO_LINK);
--		rtw_clear_scan_deny(padapter);
- 	}
- 	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
- 
+ 		res = rtw_sitesurvey_cmd(padapter, pssid, ssid_max_num);
 diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index e000f0565458..47bf7ce228aa 100644
+index 47bf7ce228aa..b69989cbab21 100644
 --- a/drivers/staging/r8188eu/include/rtw_mlme.h
 +++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -538,7 +538,6 @@ void rtw_scan_timeout_handler(struct adapter *adapter);
+@@ -537,7 +537,6 @@ void _rtw_join_timeout_handler(struct adapter *adapter);
+ void rtw_scan_timeout_handler(struct adapter *adapter);
  
   void rtw_dynamic_check_timer_handlder(struct adapter *adapter);
- #define rtw_is_scan_deny(adapter) false
--#define rtw_clear_scan_deny(adapter) do {} while (0)
+-#define rtw_is_scan_deny(adapter) false
  
  void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
  
