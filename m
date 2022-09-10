@@ -1,92 +1,57 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520F55B442F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 06:57:19 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5A15B443C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 07:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIJE46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 00:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S229599AbiIJFaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 01:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiIJE44 (ORCPT
+        with ESMTP id S229437AbiIJFaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 00:56:56 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2963CB9402
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 21:56:54 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id WsXsooWDfez1rWsXsoPi6u; Sat, 10 Sep 2022 06:56:52 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Sep 2022 06:56:52 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <04d65bd7-a6b2-bb14-fd69-632542ae9e86@wanadoo.fr>
-Date:   Sat, 10 Sep 2022 06:56:43 +0200
+        Sat, 10 Sep 2022 01:30:52 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C1C7F262;
+        Fri,  9 Sep 2022 22:30:51 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A536368AA6; Sat, 10 Sep 2022 07:30:45 +0200 (CEST)
+Date:   Sat, 10 Sep 2022 07:30:45 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jonathan Derrick <jonathan.derrick@intel.com>,
+        Revanth Rajashekar <revanth.rajashekar@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
+ log-buffer
+Message-ID: <20220910053045.GA23052@lst.de>
+References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru> <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2] efi: efibc: Guard against allocation failure
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-efi@vger.kernel.org
-Cc:     ardb@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        matt@codeblueprint.co.uk, mjg59@srcf.ucam.org
-References: <20220909194214.186731-1-gpiccoli@igalia.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220909194214.186731-1-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 09/09/2022 à 21:42, Guilherme G. Piccoli a écrit :
-> There is a single kmalloc in this driver, and it's not currently
-> guarded against allocation failure. Do it here by just bailing-out
-> the reboot handler, in case this tentative allocation fails.
-> 
-> Fixes: 416581e48679 ("efi: efibc: avoid efivar API for setting variables")
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
-> 
-> V2:
-> * Rebased against 6.0-rc4;
-> * Dropped from the original series [0].
-> 
-> [0] https://lore.kernel.org/linux-efi/20220729194532.228403-1-gpiccoli@igalia.com/
-> 
-> 
->   drivers/firmware/efi/efibc.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/firmware/efi/efibc.c b/drivers/firmware/efi/efibc.c
-> index 8ced7af8e56d..4f9fb086eab7 100644
-> --- a/drivers/firmware/efi/efibc.c
-> +++ b/drivers/firmware/efi/efibc.c
-> @@ -48,6 +48,9 @@ static int efibc_reboot_notifier_call(struct notifier_block *notifier,
->   		return NOTIFY_DONE;
->   
->   	wdata = kmalloc(MAX_DATA_LEN * sizeof(efi_char16_t), GFP_KERNEL);
-Hi,
+I think this will work, but unless we have to I'd generally prefer
+to just split dta that is DMAed into into a separate allocation.
+That is, do a separate kmalloc for the nvme_smart_log structure.
 
-even if mostly useless in this case, kmalloc_array()?
-
-Or certainly maybe even better, kstrndup()?
-
-CJ
-
-> +	if (!wdata)
-> +		return NOTIFY_DONE;
-> +
->   	for (l = 0; l < MAX_DATA_LEN - 1 && str[l] != '\0'; l++)
->   		wdata[l] = str[l];
->   	wdata[l] = L'\0';
-
+Guenter, is this ok with you?
