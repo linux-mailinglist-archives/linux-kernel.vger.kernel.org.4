@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B5C5B4696
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F6B5B4698
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 16:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIJOUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 10:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S229579AbiIJOVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 10:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiIJOUk (ORCPT
+        with ESMTP id S229582AbiIJOVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 10:20:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51365208F
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 07:20:38 -0700 (PDT)
+        Sat, 10 Sep 2022 10:21:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E5D5247A;
+        Sat, 10 Sep 2022 07:21:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4795060C59
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 14:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03B6C433D6;
-        Sat, 10 Sep 2022 14:20:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F443B80092;
+        Sat, 10 Sep 2022 14:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B82DC433D6;
+        Sat, 10 Sep 2022 14:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662819637;
-        bh=jtLoTUmzkJ28HBfAIdRhrITf/Pt98gaT25ffER4L1Zg=;
+        s=k20201202; t=1662819674;
+        bh=63DVG7CI05AFTgN1wqbObJQpKPDKqz6f9ZGmJ68BDdc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y2L6TAeE7bTtjKAjjbCb02y30jqC4k746YIQuIYasaKbR3Nhwt/2GroO/mWwCmAJV
-         Jr6WbYaecTzQboH2+lwF/B+IMRbaJJ8p8xFc8TYEE2OoOgnwUJw8parus0Up5F9eZo
-         KUel8MVI6oqnx3DbWRnZrZ1dvNKvkWtetIBxPWlJ5VH9hvCnzaXHEg2MxiKpIWV5Cn
-         FmpsrIxyVnKZTLh8bW8r4xSl/q5dk4IvVFNihUGawMvcq8hdhpzB0KoaZ3354BzVaO
-         i+Xi3DSchx2ShW39yEJKhRTV9dlNwDJBtgs0A0bLHG+m0e/R2JzGc/lcjUqieERwqz
-         hbUetZ+gXip9g==
+        b=Jfz9c2+1L0Qbi/i+NBg8hjor0yFDFEsC0SMMf8FEX4SjB8Q6FGsd/75tlKJmLPdCN
+         +kB3wPQfewensiY6Kbw0H7OQumEPvm+GWC/96iYTKA7zrx9ahWBPgD59wGLfCUQueO
+         1OnIfOxYk09pT/1Nd5YsXsTFjD/RWSgvuR9D//metjOk1SKzkaR9clbalvjT/DmRQQ
+         JS95rT14hk0TBxhqHec7DysS6hf+bc8J+oZ85M7PMRaRg0CZBfl96av9Uh/TTHkt+V
+         BjV1fZjy2/6xqBz67vXyFTiCjxhl90HHJGjIaMTbr43yDLe2J4qmTSBuW+LJXCJn+m
+         pWx/O8ZQr0wHA==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oX1LX-009PO7-Bn;
-        Sat, 10 Sep 2022 15:20:35 +0100
-Date:   Sat, 10 Sep 2022 15:20:35 +0100
-Message-ID: <871qsjqpjg.wl-maz@kernel.org>
+        id 1oX1M7-009POh-UA;
+        Sat, 10 Sep 2022 15:21:12 +0100
+Date:   Sat, 10 Sep 2022 15:21:12 +0100
+Message-ID: <87zgf7paxz.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v2] KVM: arm64: Only set KVM_MODE_PROTECTED if is_hyp_mode_available()
-In-Reply-To: <20220910134342.GA959@willie-the-truck>
-References: <20220909144552.3000716-1-quic_eberman@quicinc.com>
-        <Yxt3wmXYYbWraXrd@arm.com>
-        <05057e2a-1a85-69ba-ffcd-584d4090467a@quicinc.com>
-        <878rmrr3xw.wl-maz@kernel.org>
-        <20220910134342.GA959@willie-the-truck>
+To:     Janne Grunau <j@jannau.net>
+Cc:     asahi@lists.linux.dev, Mark Kettenis <kettenis@openbsd.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 01/10] dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
+In-Reply-To: <20220910114324.GD4024@jannau.net>
+References: <20220909135103.98179-1-j@jannau.net>
+        <20220909135103.98179-2-j@jannau.net>
+        <874jxfqzvj.wl-maz@kernel.org>
+        <20220910114324.GD4024@jannau.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: will@kernel.org, quic_eberman@quicinc.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Rcpt-To: j@jannau.net, asahi@lists.linux.dev, kettenis@openbsd.org, alyssa@rosenzweig.io, marcan@marcan.st, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, sven@svenpeter.dev, tglx@linutronix.de, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,53 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 14:43:44 +0100,
-Will Deacon <will@kernel.org> wrote:
+On Sat, 10 Sep 2022 12:43:24 +0100,
+Janne Grunau <j@jannau.net> wrote:
 > 
-> On Sat, Sep 10, 2022 at 10:09:31AM +0100, Marc Zyngier wrote:
-> > On Fri, 09 Sep 2022 18:55:18 +0100,
-> > Elliot Berman <quic_eberman@quicinc.com> wrote:
+> On 2022-09-10 11:37:20 +0100, Marc Zyngier wrote:
+> > On Fri, 09 Sep 2022 14:50:54 +0100,
+> > Janne Grunau <j@jannau.net> wrote:
 > > > 
+> > > Fixes: dba07ad11384 ("dt-bindings: apple,aic: Add affinity description for per-cpu pseudo-interrupts")
+> > > Signed-off-by: Janne Grunau <j@jannau.net>
+> > > ---
 > > > 
+> > >  .../devicetree/bindings/interrupt-controller/apple,aic.yaml     | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
 > > > 
-> > > On 9/9/2022 10:28 AM, Catalin Marinas wrote:
-> > > > On Fri, Sep 09, 2022 at 07:45:52AM -0700, Elliot Berman wrote:
-> > > >> Do not switch kvm_mode to KVM_MODE_PROTECTED if hypervisor mode is not
-> > > >> available. This prevents "Protected KVM" cpu capability being reported
-> > > >> when Linux is booting in EL1 and would not have KVM enabled.
-> > > >> 
-> > > >> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > > >> ---
-> > > >>   arch/arm64/kvm/arm.c | 4 +++-
-> > > >>   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >> 
-> > > >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > >> index 8fe73ee5fa84..861f4b388879 100644
-> > > >> --- a/arch/arm64/kvm/arm.c
-> > > >> +++ b/arch/arm64/kvm/arm.c
-> > > >> @@ -2272,7 +2272,9 @@ static int __init early_kvm_mode_cfg(char *arg)
-> > > >>   		return -EINVAL;
-> > > >>     	if (strcmp(arg, "protected") == 0) {
-> > > >> -		if (!is_kernel_in_hyp_mode())
-> > > >> +		if (!is_hyp_mode_available())
-> > > >> +			kvm_mode = KVM_MODE_DEFAULT;
-> > > > 
-> > > > I think kvm_mode is already KVM_MODE_DEFAULT at this point. You may want
-> > > > to print a warning instead.
-> > > > 
-> > > 
-> > > Does it make sense to print warning for kvm-arm.mode=nvhe as well?
+> > > diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> > > index 85c85b694217..e18107eafe7c 100644
+> > > --- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> > > +++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> > > @@ -96,7 +96,7 @@ properties:
+> > >                Documentation/devicetree/bindings/arm/cpus.yaml).
+> > >  
+> > >          required:
+> > > -          - fiq-index
+> > > +          - apple,fiq-index
+> > >            - cpus
+> > >  
+> > >  required:
 > > 
-> > In general, specifying a kvm-arm.mode when no hypervisor mode is
-> > available should be reported as a warning.
+> > With a commit message added,
 > 
-> As long as this is pr_warn() rather than WARN() then I agree. Otherwise,
-> kernels with a kvm-arm.mode hardcoded in CONFIG_CMDLINE (e.g. Android's
-> GKI) will make for noisy guests.
+> I've added
+> 
+> | The required list used "fiq-index" instead of "apple,fiq-index"
+> | described as property and used in the dts. Add the missing "apple,"
+> | prefix.
+> 
+> as commit description.
 
-Indeed, pr_warn() is what I had in mind. A WARN() would be pretty
-overkill, as there is nothing majorly wrong with booting at EL1, just
-an impossibility to honour the request from the command line.
+Perfect, ship it.
 
 	M.
 
