@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152CC5B45F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 12:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0BE5B45FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 13:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiIJKxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 06:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S229558AbiIJLAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 07:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIJKxV (ORCPT
+        with ESMTP id S229522AbiIJLAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 06:53:21 -0400
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358317549B
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 03:53:18 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 1134 invoked from network); 10 Sep 2022 12:53:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1662807195; bh=ySIT/E9Gt09cmxMpPlzE5Vy+axb5DVXkBXG6cqkUlbA=;
-          h=Subject:To:Cc:From;
-          b=pSjJ7yhl30zGLZHJaOwWzCg+aLFhNWRw7QMA74OmvSSmzKvUzNEmgRZa0vfLk8FuC
-           NenomNaZwQstKZhrLYzHm9u8bQbd9y4ckNEeDJ4opuD6XJO4xnOIpnOueIT/XaLJ7M
-           Ky4jgg/D88SkfoZHxycdGNSej9fezo46aBXd0ddE=
-Received: from ip-137-21.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.21])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <tsbogend@alpha.franken.de>; 10 Sep 2022 12:53:15 +0200
-Message-ID: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
-Date:   Sat, 10 Sep 2022 12:53:40 +0200
+        Sat, 10 Sep 2022 07:00:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A9303C1;
+        Sat, 10 Sep 2022 04:00:13 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28AAVUmI029080;
+        Sat, 10 Sep 2022 11:00:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=BYq2Yzlbmcp890FD5E8AWx2DvgLgZmzL7hQQrObUyDc=;
+ b=NqR0WkwzlvjdwyF2cOIJaLgqzT58XRYkrW8o9ugHXj2Xu1o9JczysM9uNJdkfPYGOmR1
+ SC8fvuEpBG66MJtAPhfWRV1yBbWeKeouv9nSkAF/K3D88V+jm7IbIlzOIiaRjiER+uZ2
+ JseRc2obofwWTps9in5aScBtOBgyRIlkMsYgBpclR+iVKPZGNf2WMlOOGIywesUTcO86
+ L9VZqkdgdjfweL/0DB9o64kseTSqvgKxmrl6OOz/dFMR9em6ntib9SUCAXAeW+66WcWe
+ R3NoVcPt+f1ykgjoERzl1AxgZIlF0yjTnHEwbzuUb2iTuYe9cvlGfe1ZL4nigpwkvVDC sw== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jgrwf8d95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Sep 2022 11:00:12 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28AApo2P021978;
+        Sat, 10 Sep 2022 11:00:10 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3jgj7907yv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Sep 2022 11:00:09 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28AB06P836176304
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 10 Sep 2022 11:00:06 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CE53AE04D;
+        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41FC3AE051;
+        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
+Received: from localhost (unknown [9.171.12.48])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat, 10 Sep 2022 11:00:06 +0000 (GMT)
+Date:   Sat, 10 Sep 2022 13:00:04 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 6.0-rc5
+Message-ID: <your-ad-here.call-01662807604-ext-8310@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PwcoFUXw82O5XkcsDqdHgZokFlbBX7cZ
+X-Proofpoint-ORIG-GUID: PwcoFUXw82O5XkcsDqdHgZokFlbBX7cZ
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
- <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
- <20220707100630.GC9894@alpha.franken.de>
- <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
- <20220707143930.GA14693@alpha.franken.de>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-In-Reply-To: <20220707143930.GA14693@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-WP-MailID: d28ee153a6549419ec426d4a137f785b
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000C [geMU]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-10_04,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 bulkscore=0 mlxlogscore=802 suspectscore=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209100038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi THomas,
+Hello Linus,
 
-On 7/7/22 16:39, Thomas Bogendoerfer wrote:
-[...]
->> Or can you point me to the code in
->> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
->> interrupts on VPE 1 (is it simply unmask_mips_irq)?
-> 
-> IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
-> on the same CPU. I've checked MIPS MT specs and it's possible do
-> modify CP0 registers between VPEs. Using that needs changes in
-> irq-mips-cpu.c. But mabye that's not woth the effort as probably
-> all SMP cabable platforms have some multi processort capable
-> interrupt controller implemented.
-> 
-> I thought about another way solve the issue. By introducing a
-> new function in smp-mt.c which sets the value of the interrupt
-> mask for the secondary CPU, which is then used in vsmp_init_secondary().
-> Not sure if this is worth the effort compared to a .boot_secondary
-> override.
+please pull s390 changes for 6.0-rc5.
 
+Thank you,
+Vasily
 
-Enabling interrupts on the second VPE using hotplug will be accepted
-upstream? Below is a sample patch.
+The following changes since commit 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c:
 
-Unfortunately, this is not a generic solution. If in the future there
-are more platforms that require a similar patch, this can be converted
-into some generic solution.
+  s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages (2022-08-30 21:57:07 +0200)
 
---- a/arch/mips/lantiq/irq.c
-+++ b/arch/mips/lantiq/irq.c
-@@ -335,6 +336,18 @@ static const struct irq_domain_ops irq_domain_ops = {
- 	.map = icu_map,
- };
- 
-+static int lantiq_cpu_starting(unsigned int cpu)
-+{
-+	/*
-+	 * MIPS CPU startup function vsmp_init_secondary() will only enable some of
-+	 *  the interrupts for the second CPU/VPE. Fix this during hotplug.
-+	 */
-+	if (cpu > 0)
-+		set_c0_status(ST0_IM);
-+
-+	return 0;
-+}
-+
- int __init icu_of_init(struct device_node *node, struct device_node *parent)
- {
- 	struct device_node *eiu_node;
-@@ -410,6 +423,10 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 	}
- 	of_node_put(eiu_node);
- 
-+	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LANTIQ_STARTING,
-+				  "arch/mips/lantiq:starting",
-+				  lantiq_cpu_starting, NULL);
-+
- 	return 0;
- }
- 
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -152,6 +152,7 @@ enum cpuhp_state {
- 	CPUHP_AP_IRQ_RISCV_STARTING,
- 	CPUHP_AP_IRQ_LOONGARCH_STARTING,
- 	CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
-+	CPUHP_AP_IRQ_LANTIQ_STARTING,
- 	CPUHP_AP_ARM_MVEBU_COHERENCY,
- 	CPUHP_AP_MICROCODE_LOADER,
- 	CPUHP_AP_PERF_X86_AMD_UNCORE_STARTING,
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.0-4
 
-Best regards,
-Aleksander
+for you to fetch changes up to 8d96bba75a43ba564bf8732e955d9f519d2bbaec:
+
+  s390/smp: enforce lowcore protection on CPU restart (2022-09-07 14:04:01 +0200)
+
+----------------------------------------------------------------
+s390 updates for 6.0-rc5
+
+- Fix absolute zero lowcore corruption on kdump when CPU0 is offline.
+
+- Fix lowcore protection setup for offline CPU restart.
+
+----------------------------------------------------------------
+Alexander Gordeev (2):
+      s390/boot: fix absolute zero lowcore corruption on boot
+      s390/smp: enforce lowcore protection on CPU restart
+
+ arch/s390/kernel/nmi.c   | 2 +-
+ arch/s390/kernel/setup.c | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
