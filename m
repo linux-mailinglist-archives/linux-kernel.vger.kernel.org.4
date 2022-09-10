@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F9A5B4A8C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 00:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7DF5B4A95
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 00:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiIJW3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 18:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S230102AbiIJWaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 18:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiIJW2l (ORCPT
+        with ESMTP id S230410AbiIJW2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Sep 2022 18:28:41 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8C945040
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 15:28:07 -0700 (PDT)
-Message-ID: <20220910222301.597440803@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4FB45060
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 15:28:09 -0700 (PDT)
+Message-ID: <20220910222301.654817026@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662848885;
+        s=2020; t=1662848886;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=yRyMpUYT+kmNyPrU5TuOkxnIPqW5hmLjaAM5Dx5YUoo=;
-        b=1A7aaJDo5ez7UQG931AM8p7H8p6BWjG63SKE1+1TPnXaVDmopf1Esy9YgKCz9z7VQ2KHu/
-        w9Wctya/3qu04CV3Y/iPRYP9JGm+1hkaTUItnJfB7gUrChLs9TU5+is8FhwZ5SGAtcD1Wo
-        L3aqmnQa5uy+FuHnc4mhLsBV2nialmlPvXnddzylyWy5JAcwRyC/p8rYptlRL+BGnDBn6u
-        Qk1h+dmGIMVQJysK6VcJDUmLxbSRWV9yJvyQtZQIAfbR3beT0cvCzek/Dgjte5IDAdzt/J
-        E3hry0isBo7OT+0tP+wM8/wI6oFV4kLcSUHIXyPGuv9HKse+UsdvM8Lpyvwd9g==
+         references:references; bh=V3nslHeiY7vWR7aBqi9IfKVmvqX1b3nre7PznFTjP54=;
+        b=zqvAM8a9TzTOkfp4BhhnkkB0U0BnK8o+ThtyYJXwrCKV4bF963O+463y9zW4X1kDD8piWo
+        kzjEznuNrUsehJ7+RWMMir6ne7agCdu9FNFPcceIR8QdgYn11KbRY0gcjmwXePDZ2YXGTS
+        W/dkY3OAk0R9eeYVbF2bhoc47dPm57m/R7o1fcb3XgUrSVX4xx55KBjoK1NsLlx33WX8l5
+        wibpW4M4JeX9QKyfemK486O5y3PUV8NEODDLS9V7InTrzrwOW8U2fqqx7kT3SDpoRyfkCJ
+        Kq4xvOArAUEJrZ7mfBp0GOO7BE/af+y9Pm40WrV0fhDXGLxyGCVMSLmjcIXzyw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662848885;
+        s=2020e; t=1662848886;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=yRyMpUYT+kmNyPrU5TuOkxnIPqW5hmLjaAM5Dx5YUoo=;
-        b=J6KUbzvZVvtdwgZ9oumV19NJwy3XtkgtPj+dhTtWS+2XytNviPsASH/b9X/AaSxZWx6yEf
-        N0mJYDKrvnmoTQCQ==
+         references:references; bh=V3nslHeiY7vWR7aBqi9IfKVmvqX1b3nre7PznFTjP54=;
+        b=B4+MUerbxLxDsVOn+jgpVITvcY8hQaT4GUc+ZkKfcqUCj9ZvmuV6tZbevKaQFjIo6U4vm4
+        uKQkM+qIxZTOqJCQ==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     John Ogness <john.ogness@linutronix.de>,
@@ -48,11 +48,11 @@ Cc:     John Ogness <john.ogness@linutronix.de>,
         Jason Wessel <jason.wessel@windriver.com>,
         Daniel Thompson <daniel.thompson@linaro.org>,
         John Ogness <jogness@linutronix.de>
-Subject: [patch RFC 21/29] printk: Add buffer management for noBKL consoles
+Subject: [patch RFC 22/29] printk: Add sequence handling for non-BKL consoles
 References: <20220910221947.171557773@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 11 Sep 2022 00:28:04 +0200 (CEST)
+Date:   Sun, 11 Sep 2022 00:28:06 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -63,234 +63,306 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case of hostile takeovers it must be ensured that the previous owner
-cannot scribble over the output buffer of the emergency/panic context. This
-is achieved by:
+On 64bit systems the sequence tracking is embedded into the atomic console
+state, on 32bit it has to be stored in a seperate atomic member. The latter
+needs to handle the non-atomicity in hostile takeover cases, while 64bit can
+completely rely on the state atomicity.
 
- - Allocating per CPU output buffers per console and add the required handling
-   into the acquire/release functions.
+The ringbuffer sequence number is 64bit, but having a 32bit representation
+in the console is sufficient. If a console ever gets more than 2^31 records
+behind the ringbuffer then this is the least of the problems.
 
- - Adding a single instance to struct console for early boot (pre per CPU
-   data being available). The builtin instance is also used for threaded
-   printing once printer threads become available.
-
-Wrapped into a seperate data structure so other context related fields can
-be added in later steps.
+On acquire() the stomic 32bit sequence number is expanded to 64 bit by
+folding the ringbuffers sequence into it carefully.
 
 Co-Developed-by: John Ogness <jogness@linutronix.de>
 Signed-off-by: John Ogness <jogness@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/console.h      |   21 ++++++++++++-
- kernel/printk/printk.c       |   18 ++++++++---
- kernel/printk/printk_nobkl.c |   69 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 102 insertions(+), 6 deletions(-)
+ include/linux/console.h      |   11 +-
+ kernel/printk/printk_nobkl.c |  204 ++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 212 insertions(+), 3 deletions(-)
 
 --- a/include/linux/console.h
 +++ b/include/linux/console.h
-@@ -276,6 +276,7 @@ struct console;
+@@ -275,6 +275,8 @@ struct console;
+  * @hov_state:		The handover state for spin and cleanup
   * @req_state:		The request state for spin and cleanup
   * @spinwait_max_us:	Limit for spinwait acquire
++ * @oldseq:		The sequence number at acquire()
++ * @newseq:		The sequence number for progress
   * @prio:		Priority of the context
-+ * @txtbuf:		Pointer to the text buffer for this context
+  * @txtbuf:		Pointer to the text buffer for this context
   * @thread:		The acquire is printk thread context
-  * @hostile:		Hostile takeover requested. Cleared on normal
-  *			acquire or friendly handover
-@@ -289,11 +290,25 @@ struct cons_context {
+@@ -288,6 +290,8 @@ struct cons_context {
+ 	struct cons_state	old_state;
+ 	struct cons_state	hov_state;
  	struct cons_state	req_state;
++	u64			oldseq;
++	u64			newseq;
  	unsigned int		spinwait_max_us;
  	enum cons_prio		prio;
-+	struct cons_text_buf	*txtbuf;
- 	unsigned int		thread		: 1;
- 	unsigned int		hostile		: 1;
- 	unsigned int		spinwait	: 1;
- };
- 
-+#define CONS_MAX_NEST_LVL	8
-+
-+/**
-+ * struct cons_context_data - console context data
-+ * @txtbuf:		Buffer for storing the text
-+ *
-+ * Used for early boot embedded into struct console and for
-+ * per CPU data.
-+ */
-+struct cons_context_data {
-+	struct cons_text_buf		txtbuf;
-+};
-+
- /**
-  * struct console - The console descriptor structure
-  * @name:		The name of the console driver
-@@ -315,6 +330,8 @@ struct cons_context {
+ 	struct cons_text_buf	*txtbuf;
+@@ -330,6 +334,7 @@ struct cons_context_data {
   * @node:		hlist node for the console list
   *
   * @atomic_state:	State array for non-BKL consoles. Real and handover
-+ * @pcpu_data:		Pointer to percpu context data
-+ * @ctxt_data:		Builtin context data for early boot and threaded printing
++ * @atomic_seq:		Sequence for record tracking (32bit only)
+  * @pcpu_data:		Pointer to percpu context data
+  * @ctxt_data:		Builtin context data for early boot and threaded printing
   */
- struct console {
- 	char			name[16];
-@@ -336,8 +353,10 @@ struct console {
+@@ -353,8 +358,10 @@ struct console {
  	struct hlist_node	node;
  
  	/* NOBKL console specific members */
--	atomic_long_t __private	atomic_state[2];
-+	atomic_long_t __private		atomic_state[2];
- 
-+	struct cons_context_data __percpu	*pcpu_data;
-+	struct cons_context_data		ctxt_data;
- };
- 
- #ifdef CONFIG_LOCKDEP
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -1071,9 +1071,17 @@ static void __init log_buf_add_cpu(void)
- static inline void log_buf_add_cpu(void) {}
- #endif /* CONFIG_SMP */
- 
-+static void cons_alloc_percpu_data(struct console *con);
-+
- static void __init set_percpu_data_ready(void)
- {
-+	struct console *con;
-+
-+	console_list_lock();
-+	for_each_registered_console(con)
-+		cons_alloc_percpu_data(con);
- 	__printk_percpu_data_ready = true;
-+	console_list_unlock();
- }
- 
- static unsigned int __init add_to_rb(struct printk_ringbuffer *rb,
-@@ -2341,6 +2349,11 @@ static bool __pr_flush(struct console *c
- 
- #endif /* !CONFIG_PRINTK */
- 
-+#define con_printk(lvl, con, fmt, ...)			\
-+	printk(lvl pr_fmt("%sconsole [%s%d] " fmt),	\
-+	       (con->flags & CON_BOOT) ? "boot" : "",	\
-+	       con->name, con->index, ##__VA_ARGS__)
-+
- #include "printk_nobkl.c"
- 
- #ifdef CONFIG_EARLY_PRINTK
-@@ -3191,11 +3204,6 @@ static void try_enable_default_console(s
- 		newcon->flags |= CON_CONSDEV;
- }
- 
--#define con_printk(lvl, con, fmt, ...)			\
--	printk(lvl pr_fmt("%sconsole [%s%d] " fmt),	\
--	       (con->flags & CON_BOOT) ? "boot" : "",	\
--	       con->name, con->index, ##__VA_ARGS__)
+-	atomic_long_t __private		atomic_state[2];
 -
- #define cons_first()					\
- 	hlist_entry(console_list.first, struct console, node)
- 
++	atomic_long_t __private	atomic_state[2];
++#ifndef CONFIG_64BIT
++	atomic_t __private	atomic_seq;
++#endif
+ 	struct cons_context_data __percpu	*pcpu_data;
+ 	struct cons_context_data		ctxt_data;
+ };
 --- a/kernel/printk/printk_nobkl.c
 +++ b/kernel/printk/printk_nobkl.c
-@@ -207,6 +207,43 @@ static inline bool cons_check_panic(void
+@@ -51,6 +51,8 @@
+ 
+ #ifdef CONFIG_PRINTK
+ 
++static bool cons_release(struct cons_context *ctxt);
++
+ #define copy_full_state(_dst, _src)	do { _dst = _src; } while(0)
+ #define copy_bit_state(_dst, _src)	do { _dst.bits = _src.bits; } while(0)
+ 
+@@ -244,6 +246,205 @@ static void cons_context_set_text_buf(st
  }
  
  /**
-+ * cons_context_set_text_buf - Set the output text buffer for the current context
-+ * @ctxt:	Pointer to the aquire context
++ * cons_forward_sequence - Helper function forward the sequence
++ * @con:	Console to work on
 + *
-+ * Buffer selection:
-+ *   1) Early boot uses the console builtin buffer
-+ *   2) Threads use the console builtin buffer
-+ *   3) All other context use the per CPU buffers
-+ *
-+ * This guarantees that there is no concurrency on the output records
-+ * ever. Per CPU nesting is not a problem at all. The takeover logic
-+ * tells the interrupted context that the buffer has been overwritten.
-+ *
-+ * There are two critical regions which matter:
-+ *
-+ * 1) Context is filling the buffer with a record. After interruption
-+ *    it continues to sprintf() the record and before it goes to
-+ *    write it out, it checks the state, notices the takeover, discards
-+ *    the content and backs out.
-+ *
-+ * 2) Context is in a unsafe critical region in the driver. After
-+ *    interruption it might read overwritten data from the output
-+ *    buffer. When it leaves the critical region it notices and backs
-+ *    out. Hostile takeovers in driver critical regions are best effort
-+ *    and there is not much which can be done about that.
++ * Forward @con->atomic_seq to the oldest available record. For init
++ * only. Do not use for runtime updates.
 + */
-+static void cons_context_set_text_buf(struct cons_context *ctxt)
++static void cons_forward_sequence(struct console *con)
++{
++	u32 seq = (u32)prb_first_valid_seq(prb);
++#ifdef CONFIG_64BIT
++	struct cons_state state;
++
++	cons_state_read(con, STATE_REAL, &state);
++	state.seq = seq;
++	cons_state_set(con, STATE_REAL, &state);
++#else
++	atomic_set(&ACCESS_PRIVATE(con, atomic_seq), seq);
++#endif
++}
++
++/**
++ * cons_context_sequence_init - Retrieve the last printed sequence number
++ * @ctxt:	Pointer to an aquire context which contains
++ *		all information about the acquire mode
++ *
++ * On return the retrieved sequence number is stored in ctxt->oldseq.
++ *
++ * The sequence number is safe in forceful takeover situations.
++ *
++ * Either the writer succeded to update before it got interrupted
++ * or it failed. In the latter case the takeover will print the
++ * same line again.
++ *
++ * The sequence is only the lower 32bits of the ringbuffer sequence. The
++ * ringbuffer must be 2^31 records ahead to get out of sync. This needs
++ * some care when starting a console, i.e setting the sequence to 0 is
++ * wrong. It has to be set to the oldest valid sequence in the ringbuffer
++ * as that cannot be more than 2^31 records away
++ *
++ * On 64bit the 32bit sequence is part of console::state which is saved
++ * in @ctxt->state. This prevents the 32bit update race.
++ */
++static void cons_context_sequence_init(struct cons_context *ctxt)
++{
++	u64 rbseq;
++
++#ifdef CONFIG_64BIT
++	ctxt->oldseq = ctxt->state.seq;
++#else
++	ctxt->oldseq = atomic_read(&ACCESS_PRIVATE(ctxt->console, atomic_seq));
++#endif
++
++	/*
++	 * The sequence is only the lower 32bits of the ringbuffer
++	 * sequence. So it needs to be expanded to 64bit. Get the next
++	 * sequence number from the ringbuffer and fold it.
++	 */
++	rbseq = prb_next_seq(prb);
++	ctxt->oldseq = rbseq - ((u32)rbseq - (u32)ctxt->oldseq);
++	ctxt->newseq = ctxt->oldseq;
++}
++
++/**
++ * cons_sequence_try_update - Try to update the sequence number
++ * @ctxt:	Pointer to an aquire context which contains
++ *		all information about the acquire mode
++ *
++ * Returns:	True on success
++ *		False on fail.
++ *
++ * Internal helper as the logic is different on 32bit and 64bit.
++ *
++ * On 32 bit the sequence is seperate from state and therefore
++ * subject to a subtle race in the case of hostile takeovers.
++ *
++ * On 64 bit the sequence is part of the state and therefore safe
++ * vs. hostile takeovers.
++ *
++ * In case of fail the console has been taken over and @ctxt is
++ * invalid. Caller has to reacquire the console.
++ */
++#ifdef CONFIG_64BIT
++static bool __maybe_unused cons_sequence_try_update(struct cons_context *ctxt)
 +{
 +	struct console *con = ctxt->console;
++	struct cons_state old, new;
 +
-+	/* Early boot or allocation fail? */
-+	if (!con->pcpu_data)
-+		ctxt->txtbuf = &con->ctxt_data.txtbuf;
-+	else
-+		ctxt->txtbuf = &(this_cpu_ptr(con->pcpu_data)->txtbuf);
++	cons_state_read(con, STATE_REAL, &old);
++	do {
++		/* Full state compare including sequence */
++		if (!cons_state_full_match(old, ctxt->state))
++			return false;
++
++		/* Preserve bit state */
++		copy_bit_state(new, old);
++		new.seq = ctxt->newseq;
++
++		/*
++		 * Can race with hostile takeover or with a handover
++		 * request.
++		 */
++	} while (!cons_state_try_cmpxchg(con, STATE_REAL, &old, &new));
++
++	copy_full_state(ctxt->state, new);
++	ctxt->oldseq = ctxt->newseq;
++
++	return true;
 +}
++#else
++static bool __maybe_unused cons_sequence_try_update(struct cons_context *ctxt)
++{
++	struct console *con = ctxt->console;
++	unsigned long old, new, cur;
++	struct cons_state state;
++	int pcpu;
++
++	/*
++	 * There is a corner case which needs to be considered here:
++	 *
++	 * CPU0			CPU1
++	 * printk()
++	 *  acquire()		-> emergency
++	 *  write()		   acquire()
++	 *  update_seq()
++	 *    state == OK
++	 * --> NMI
++	 *			   takeover()
++	 * <---			     write()
++	 *  cmpxchg() succeeds	     update_seq()
++	 *			     cmpxchg() fails
++	 *
++	 * There is nothing which can be done about this other than having
++	 * yet another state bit which needs to be tracked and analyzed,
++	 * but fails to cover the problem completely.
++	 *
++	 * No other scenarios expose such a problem. On same CPU takeovers
++	 * the cmpxchg() always fails on the interrupted context after the
++	 * interrupting context finished printing, but that's fine as it
++	 * does not own the console anymore. The state check after the
++	 * failed cmpxchg prevents that.
++	 */
++	cons_state_read(con, STATE_REAL, &state);
++	/* Sequence is not part of cons_state on 32bit */
++	if (!cons_state_bits_match(state, ctxt->state))
++		return false;
++
++	/*
++	 * Get the original sequence number which was retrieved
++	 * from @con->atomic_seq. @con->atomic_seq should be still
++	 * the same. 32bit truncates. See cons_context_set_sequence().
++	 */
++	old = (unsigned long)ctxt->oldseq;
++	new = (unsigned long)ctxt->newseq;
++	cur = atomic_cmpxchg(&ACCESS_PRIVATE(con, atomic_seq), old, new);
++	if (cur == old) {
++		ctxt->oldseq = ctxt->newseq;
++		return true;
++	}
++
++	/*
++	 * Reread the state. If the state does not own the console anymore
++	 * then it cannot touch the sequence again.
++	 */
++	cons_state_read(con, STATE_REAL, &state);
++	/* Sequence is not part of cons_state on 32bit */
++	if (!cons_state_bits_match(state, ctxt->state))
++		return false;
++
++	/* If panic and not on the panic CPU, drop the lock */
++	pcpu = atomic_read(&panic_cpu);
++	if (pcpu != PANIC_CPU_INVALID && pcpu != smp_processor_id())
++		goto unlock;
++
++	if (pcpu == smp_processor_id()) {
++		/*
++		 * This is the panic CPU. Emitting a warning here does not
++		 * help at all. The callchain is clear and the priority is
++		 * to get the messages out. In the worst case duplicated
++		 * ones. That's a job for postprocessing.
++		 */
++		atomic_set(&ACCESS_PRIVATE(con, atomic_seq), new);
++		ctxt->oldseq = ctxt->newseq;
++		return true;
++	}
++
++	/*
++	 * Only emit a warning when this happens outside of a panic
++	 * situation as on panic it's neither useful nor helping to let the
++	 * panic CPU get the important stuff out.
++	 */
++	WARN_ON_ONCE(pcpu == PANIC_CPU_INVALID);
++
++unlock:
++	cons_release(ctxt);
++	return false;
++}
++#endif
 +
 +/**
   * cons_cleanup_handover - Cleanup a handover request
   * @ctxt:	Pointer to acquire context
   *
-@@ -482,6 +519,7 @@ static bool __cons_try_acquire(struct co
+@@ -519,6 +720,7 @@ static bool __cons_try_acquire(struct co
  		return false;
  success:
  	/* Common updates on success */
-+	cons_context_set_text_buf(ctxt);
++	cons_context_sequence_init(ctxt);
+ 	cons_context_set_text_buf(ctxt);
  	return true;
  
- check_hostile:
-@@ -610,6 +648,35 @@ static bool __maybe_unused cons_release(
- }
+@@ -529,7 +731,6 @@ static bool __cons_try_acquire(struct co
+ 	if (!cons_state_try_cmpxchg(con, STATE_REAL, &old, &new))
+ 		goto again;
  
- /**
-+ * cons_alloc_percpu_data - Allocate percpu data for a console
-+ * @con:	Console to allocate for
-+ */
-+static void cons_alloc_percpu_data(struct console *con)
-+{
-+	if (!printk_percpu_data_ready())
-+		return;
-+
-+	con->pcpu_data = alloc_percpu(typeof(*con->pcpu_data));
-+	if (con->pcpu_data)
-+		return;
-+
-+	con_printk(KERN_WARNING, con, "Failed to allocate percpu buffers\n");
-+}
-+
-+/**
-+ * cons_free_percpu_data - Free percpu data of a console on unregister
-+ * @con:	Console to clean up
-+ */
-+static void cons_free_percpu_data(struct console *con)
-+{
-+	if (!con->pcpu_data)
-+		return;
-+
-+	free_percpu(con->pcpu_data);
-+	con->pcpu_data = NULL;
-+}
-+
-+/**
-  * cons_nobkl_init - Initialize the NOBKL console state
-  * @con:	Console to initialize
-  */
-@@ -620,6 +687,7 @@ static void cons_nobkl_init(struct conso
- 		.enabled = !!(con->flags & CON_ENABLED),
+-	ctxt->hostile = true;
+ 	copy_full_state(ctxt->state, new);
+ 	goto success;
+ }
+@@ -688,6 +889,7 @@ static void cons_nobkl_init(struct conso
  	};
  
-+	cons_alloc_percpu_data(con);
+ 	cons_alloc_percpu_data(con);
++	cons_forward_sequence(con);
  	cons_state_set(con, STATE_REAL, &state);
  }
  
-@@ -632,6 +700,7 @@ static void cons_nobkl_cleanup(struct co
- 	struct cons_state state = { };
- 
- 	cons_state_set(con, STATE_REAL, &state);
-+	cons_free_percpu_data(con);
- }
- 
- #else /* CONFIG_PRINTK */
 
