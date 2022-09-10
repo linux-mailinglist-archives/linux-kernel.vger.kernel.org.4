@@ -2,155 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EB45B4539
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CA15B453C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 10:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIJIYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 04:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S229609AbiIJI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIJIYl (ORCPT
+        with ESMTP id S229536AbiIJI0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 04:24:41 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD75314008
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1662798278; x=1694334278;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3Cx5V1X+W7yy5o4//P50VU22wRF+vaid1kU1sjxXoMk=;
-  b=qIPDdhghR1xd/wsvhuO/zEEhNSJ8J8heCCaEl11pz4uRqS3gOPYWgOZS
-   jINK4KNw5nwJkTNlQgmDUke+srRzmNW/n5POq6t67ydP+d+SDqjDc1uVc
-   dtbJRJj7jvbT9MPq5P1Q+7hfb4kIzr42LR/rzwPih7X7NtE4L0VJo9dfN
-   ba73clWgCm0nCGnsEtgZT2kEmv+v2IXafYpgOyOwWcNHKk/w0fndD6SP4
-   RWhHRlVtj+A3Z1tqjXYizOO6RDEqdLNPu8vU9gSLm6um84VVwUxUZ6f8G
-   m+mjrUdeyaDtK+q7+LXQNoIeDnSA071XjX6SQzabKN4LovSctj+geWaBm
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,305,1654531200"; 
-   d="scan'208";a="315286074"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Sep 2022 16:24:31 +0800
-IronPort-SDR: ewYlTomsdmGOC+i0S46HiHOg+4PJnjJrhpnE5OCT3KE5PA7Cc0se96f8c3JrRS8t+2YneCHSGh
- DroIDg7jUPJJQyd210wQt6WfFWNlJokIzBiy7IEoRurapEuYuwcUh+XuYftmQdcroQk1WcU66Q
- cVNomDA1UXqWxd+vm2bJFAPNzf4ksU7fQtRKpjrhiflH03fRX6iEEhpbvij9exsaapt6ckN0le
- dd4+wGEIW87jW/y6tuaxAWB4XNszzX0uTFkA12ulpjYWSNtHhZzaVcpQGxZJQsNhDLPKpMwMWV
- ePtaR+3EC/D19zik2p+9Q47r
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Sep 2022 00:44:49 -0700
-IronPort-SDR: DFncbpgrrPnXT2K8VtQpTZGSGBNsbz+EFTB0VfGcNo0PgE20EHD1gLGHBlHNUnZbtKcwQl7jJR
- 5clIByephv1ig85XC0yQoWHx+bZ5sDd/cisrBD/rtStB/mB27D0Yk2f0OjNuu+cr7eOGh33OoL
- sCamLbkcP0FxpP3EyIQnBButJojqnmv64coC7sFWV2JGVxGNKVwiT3qQJXaeO3iXXpsL4RQCMh
- 47VZ4q8LYr2BrkGOsqtHmQhKNqFG8GFL0CugKrLwM8guZ0rhDpYq9+ldGty/ETbKHAGMJzgkgK
- 7po=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Sep 2022 01:24:31 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MPm9q3k9Pz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:24:31 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1662798270; x=1665390271; bh=3Cx5V1X+W7yy5o4//P50VU22wRF+vaid1kU
-        1sjxXoMk=; b=MsMJyhOp/GAMNKZ9LvKV2dWLG7YyCEJ4HiIcWvec9Jr7O42Q3dq
-        iEm23hczQDhV9pAKyG0YIuvMmCLJSHsmk+PMtIcWvf4JrpfWrJTEaYiVb5gad8NJ
-        igSEn41laJ12/i0+VDjsskBjhA3OkKMak4P5u/g6RZ2Oyoclf6zzJD4HArb1sx8R
-        kyKuLiNQHPVT8UfkOw3ezbltXxWvpNpKhpYPw3uKCQeQu/A5rVWatX3IvugIf2AT
-        spB3TwLOWJNamqYV2KUZ75N7gDqKfyY+LCWxIrs1nXzoPChxW3itZL3oTQ3WizHV
-        DHY/zp0M3H7M7ClKjqOvL+5nN2qTM6dxGbQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BHO8htRiUrw9 for <linux-kernel@vger.kernel.org>;
-        Sat, 10 Sep 2022 01:24:30 -0700 (PDT)
-Received: from [10.225.1.43] (unknown [10.225.1.43])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MPm9n38KCz1RvLy;
-        Sat, 10 Sep 2022 01:24:29 -0700 (PDT)
-Message-ID: <3597fe1a-aca3-b854-ae30-f5d069c5003b@opensource.wdc.com>
-Date:   Sat, 10 Sep 2022 17:24:27 +0900
+        Sat, 10 Sep 2022 04:26:53 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7488E0FB
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 01:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662798412; x=1694334412;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=edMros1zwKMDUZOarHjJXHIlnGh4LxkLP40pazDgUw8=;
+  b=BkRO2DHnhv7TIC8MNAwweJRwqQ0xDfvTQNkcZRAo8//kaXcO2jgrSx4G
+   NSGvfOezMEAmQG/wx4uzgH5XyRuvbf+YwqYoOYvSL7GLY44Z5fcOaIj6y
+   AeIka3r6CS9z/a433OvCLtkJ+voLfiQ+CNFBdh6z+bb/UnWGGujm3xmDm
+   g7Bi4Uxg6zJ3Q7SQByM7BziNE8ZGexThI2X78/T82f9IBJns1VlCtO58O
+   1v02G5Fo2nONRFNgeypjYW+JOVH8NseRrRQPwHODQww5eERXlKI4wmLJG
+   TFZrve/tqNFc6Z5OY2GrmcJtvPF6ee4R12sbGhpBExaXit4xwNRS9w/rR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="298961468"
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="298961468"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 01:26:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
+   d="scan'208";a="791054441"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Sep 2022 01:26:47 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWvp8-0002JZ-1p;
+        Sat, 10 Sep 2022 08:26:46 +0000
+Date:   Sat, 10 Sep 2022 16:26:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:tp_fix 1/1] include/linux/rcupdate.h:707: undefined
+ reference to `bpf_prog_inc_misses_counter'
+Message-ID: <202209101652.Q0TCRc8T-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.1
-Subject: Re: [PATCH] drivers/ata: fix repeated words in comments
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Conor.Dooley@microchip.com, wangjianli@cdjrlc.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220908124937.25962-1-wangjianli@cdjrlc.com>
- <e2f882f7-6871-a754-fbbd-6a5201f45f4a@microchip.com>
- <3a73cf7f02915891c77dc5a3203dc187f6d91194.camel@HansenPartnership.com>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <3a73cf7f02915891c77dc5a3203dc187f6d91194.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/08 22:02, James Bottomley wrote:
-> On Thu, 2022-09-08 at 12:56 +0000, Conor.Dooley@microchip.com wrote:
->> On 08/09/2022 13:49, wangjianli wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you
->>> know the content is safe
->>>
->>> Delete the redundant word 'in'.
->>>
->>> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
->>> ---
->>>   drivers/ata/libata-eh.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
->>> index 7c128c89b454..ca865a95cf24 100644
->>> --- a/drivers/ata/libata-eh.c
->>> +++ b/drivers/ata/libata-eh.c
->>> @@ -863,7 +863,7 @@ void ata_eh_fastdrain_timerfn(struct timer_list
->>> *t)
->>>    *
->>>    *     Set ATA_PFLAG_EH_PENDING and activate fast drain if
->>> @fastdrain
->>>    *     is non-zero and EH wasn't pending before.  Fast drain
->>> ensures
->>> - *     that EH kicks in in timely manner.
->>> + *     that EH kicks in timely manner.
->>
->> Hey wangjianli,
->> This does not look like the right fix to me.. To me, it looks like it
->> should be s/in in/in in a/.
->>
->> If you're using an automated tool, which I can only assume you are,
->> to find these typos it'd be a good idea to check the output for
->> correctness prior to sending patches.
-> 
-> And it would also have been nice to accommodate the exact same feedback
-> last time these patches were posted:
-> 
-> https://lore.kernel.org/all/cec12e246d7151f6041bf553629a3047e81d4afe.camel@HansenPartnership.com/
-> 
-> It's really disappointing you haven't accommodated any feedback either
-> into your bot or the patches it sends.  Not doing so really does render
-> this work largely useless.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git tp_fix
+head:   1d5150ae30634ba3ff98b5ac0489f44375acca56
+commit: 1d5150ae30634ba3ff98b5ac0489f44375acca56 [1/1] bpf: Prevent bpf program recursion for raw tracepoint probes
+config: riscv-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220910/202209101652.Q0TCRc8T-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1d5150ae30634ba3ff98b5ac0489f44375acca56
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf tp_fix
+        git checkout 1d5150ae30634ba3ff98b5ac0489f44375acca56
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-And another submitter sent a similar incorrect "fix", twice, ignoring my
-comments. I am OK with applying such fixes, even though they have little value.
-But the submitter has to be willing to listen and fix their patches. I will not
-do that for them :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   riscv32-linux-ld: kernel/bpf/trampoline.o: in function `rcu_read_lock':
+>> include/linux/rcupdate.h:707: undefined reference to `bpf_prog_inc_misses_counter'
+
+
+vim +707 include/linux/rcupdate.h
+
+c3ac7cf1847a4e Paul E. McKenney          2015-09-10  654  
+^1da177e4c3f41 Linus Torvalds            2005-04-16  655  /**
+ca5ecddfa8fcbd Paul E. McKenney          2010-04-28  656   * rcu_read_lock() - mark the beginning of an RCU read-side critical section
+^1da177e4c3f41 Linus Torvalds            2005-04-16  657   *
+9b06e818985d13 Paul E. McKenney          2005-05-01  658   * When synchronize_rcu() is invoked on one CPU while other CPUs
+^1da177e4c3f41 Linus Torvalds            2005-04-16  659   * are within RCU read-side critical sections, then the
+9b06e818985d13 Paul E. McKenney          2005-05-01  660   * synchronize_rcu() is guaranteed to block until after all the other
+^1da177e4c3f41 Linus Torvalds            2005-04-16  661   * CPUs exit their critical sections.  Similarly, if call_rcu() is invoked
+^1da177e4c3f41 Linus Torvalds            2005-04-16  662   * on one CPU while other CPUs are within RCU read-side critical
+^1da177e4c3f41 Linus Torvalds            2005-04-16  663   * sections, invocation of the corresponding RCU callback is deferred
+^1da177e4c3f41 Linus Torvalds            2005-04-16  664   * until after the all the other CPUs exit their critical sections.
+^1da177e4c3f41 Linus Torvalds            2005-04-16  665   *
+1893afd6340911 Paul E. McKenney          2021-04-29  666   * In v5.0 and later kernels, synchronize_rcu() and call_rcu() also
+1893afd6340911 Paul E. McKenney          2021-04-29  667   * wait for regions of code with preemption disabled, including regions of
+1893afd6340911 Paul E. McKenney          2021-04-29  668   * code with interrupts or softirqs disabled.  In pre-v5.0 kernels, which
+1893afd6340911 Paul E. McKenney          2021-04-29  669   * define synchronize_sched(), only code enclosed within rcu_read_lock()
+1893afd6340911 Paul E. McKenney          2021-04-29  670   * and rcu_read_unlock() are guaranteed to be waited for.
+1893afd6340911 Paul E. McKenney          2021-04-29  671   *
+^1da177e4c3f41 Linus Torvalds            2005-04-16  672   * Note, however, that RCU callbacks are permitted to run concurrently
+77d8485a8b5416 Paul E. McKenney          2010-07-08  673   * with new RCU read-side critical sections.  One way that this can happen
+^1da177e4c3f41 Linus Torvalds            2005-04-16  674   * is via the following sequence of events: (1) CPU 0 enters an RCU
+^1da177e4c3f41 Linus Torvalds            2005-04-16  675   * read-side critical section, (2) CPU 1 invokes call_rcu() to register
+^1da177e4c3f41 Linus Torvalds            2005-04-16  676   * an RCU callback, (3) CPU 0 exits the RCU read-side critical section,
+^1da177e4c3f41 Linus Torvalds            2005-04-16  677   * (4) CPU 2 enters a RCU read-side critical section, (5) the RCU
+^1da177e4c3f41 Linus Torvalds            2005-04-16  678   * callback is invoked.  This is legal, because the RCU read-side critical
+^1da177e4c3f41 Linus Torvalds            2005-04-16  679   * section that was running concurrently with the call_rcu() (and which
+^1da177e4c3f41 Linus Torvalds            2005-04-16  680   * therefore might be referencing something that the corresponding RCU
+^1da177e4c3f41 Linus Torvalds            2005-04-16  681   * callback would free up) has completed before the corresponding
+^1da177e4c3f41 Linus Torvalds            2005-04-16  682   * RCU callback is invoked.
+^1da177e4c3f41 Linus Torvalds            2005-04-16  683   *
+^1da177e4c3f41 Linus Torvalds            2005-04-16  684   * RCU read-side critical sections may be nested.  Any deferred actions
+^1da177e4c3f41 Linus Torvalds            2005-04-16  685   * will be deferred until the outermost RCU read-side critical section
+^1da177e4c3f41 Linus Torvalds            2005-04-16  686   * completes.
+^1da177e4c3f41 Linus Torvalds            2005-04-16  687   *
+9079fd7c2e06a9 Paul E. McKenney          2010-08-07  688   * You can avoid reading and understanding the next paragraph by
+9079fd7c2e06a9 Paul E. McKenney          2010-08-07  689   * following this rule: don't put anything in an rcu_read_lock() RCU
+90326f0521a880 Sebastian Andrzej Siewior 2019-10-15  690   * read-side critical section that would block in a !PREEMPTION kernel.
+9079fd7c2e06a9 Paul E. McKenney          2010-08-07  691   * But if you want the full story, read on!
+9079fd7c2e06a9 Paul E. McKenney          2010-08-07  692   *
+b3e627d3d5092a Lai Jiangshan             2019-10-15  693   * In non-preemptible RCU implementations (pure TREE_RCU and TINY_RCU),
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  694   * it is illegal to block while in an RCU read-side critical section.
+01b1d88b09824b Thomas Gleixner           2019-07-26  695   * In preemptible RCU implementations (PREEMPT_RCU) in CONFIG_PREEMPTION
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  696   * kernel builds, RCU read-side critical sections may be preempted,
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  697   * but explicit blocking is illegal.  Finally, in preemptible RCU
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  698   * implementations in real-time (with -rt patchset) kernel builds, RCU
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  699   * read-side critical sections may be preempted and they may also block, but
+ab74fdfd4e11ec Paul E. McKenney          2014-05-04  700   * only when acquiring spinlocks that are subject to priority inheritance.
+^1da177e4c3f41 Linus Torvalds            2005-04-16  701   */
+6da9f775175e51 Waiman Long               2019-05-21  702  static __always_inline void rcu_read_lock(void)
+bc33f24bdca8b6 Paul E. McKenney          2009-08-22  703  {
+bc33f24bdca8b6 Paul E. McKenney          2009-08-22  704  	__rcu_read_lock();
+bc33f24bdca8b6 Paul E. McKenney          2009-08-22  705  	__acquire(RCU);
+d8ab29f8be918b Paul E. McKenney          2011-10-07  706  	rcu_lock_acquire(&rcu_lock_map);
+f78f5b90c4ffa5 Paul E. McKenney          2015-06-18 @707  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+bde23c6892878e Heiko Carstens            2012-02-01  708  			 "rcu_read_lock() used illegally while idle");
+bc33f24bdca8b6 Paul E. McKenney          2009-08-22  709  }
+^1da177e4c3f41 Linus Torvalds            2005-04-16  710  
+
+:::::: The code at line 707 was first introduced by commit
+:::::: f78f5b90c4ffa559e400c3919a02236101f29f3f rcu: Rename rcu_lockdep_assert() to RCU_LOCKDEP_WARN()
+
+:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
