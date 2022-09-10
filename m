@@ -2,104 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F5F5B4783
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 18:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B111E5B4786
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 18:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiIJQc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 12:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S229578AbiIJQkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 12:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiIJQcX (ORCPT
+        with ESMTP id S229446AbiIJQkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 12:32:23 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD624A83E;
-        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id f131so6899551ybf.7;
-        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GkMFjVtDr0W10OJLyjB1PHKjRI7ZFioNTd0VYLRMl94=;
-        b=ThoRLvkIbjrCWL0q+TFVOHf3eGbii09QgZZ8+fnloYa65GmvZoYZxXRfi4dIf/o3/X
-         CHxXNCVetlaCzlNPH7RHeluIxXBW9UaWGxJbq44/RtWKjnWMdCJeIjeGpTxtZk7sC3XY
-         FC1+bATa/yirJyG/f0TfPtNbPuBdAW51Y4xNJXJOabOT0rud7KCnxWelfVT3WcqdnVvi
-         S/MvEcHpaC+v+YF47p1//uEddmEbtpH4EW44HoPAx6nua0qW6qe+AO4eBtEhW/IhMKDt
-         EtzYW5sIUxU/qV5nqC5OKkZTZ9vMESj0n6S0HZwEROc08lB3wnnH38cngZo5+KpEIQns
-         iUaQ==
-X-Gm-Message-State: ACgBeo09Bstel6aHIS4x5EoDtJZ7DCW8jizVZ0Jd0dyvtaTwHiRyqD8t
-        l7KDxBTL2gsd8LWoF2CLf5zUIJz+v4ZKxTCZ4bs=
-X-Google-Smtp-Source: AA6agR4n7pXTzaWGoZwbXMPbML7j3aWjxBABW4Ue2CuqwFbK1YnZzMiGo3Y8jNXuTBWAX9gMGWr6mCabLDZaslxS/Ik=
-X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
- v12-20020a252f0c000000b006a8f23012edmr15745127ybv.633.1662827541557; Sat, 10
- Sep 2022 09:32:21 -0700 (PDT)
+        Sat, 10 Sep 2022 12:40:15 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143052CCB6
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 09:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662828014; x=1694364014;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zIp1/EtwLnaGlmoo6cFjWSi3ozzDqKKUwaTubdxavIs=;
+  b=n1XEyHuK8Mh+vekQjex495jkAEFsBqBPjUlcd9nrgneMH7ofBTSBt47D
+   j8X5D/UinyfrMhlYnrNmZY9b7SQRiq21jqNPuuT/KpJDOwv0LnxyQUn27
+   PU75jCZUpWQA6GpL7FKrngp+MB8ZSaZOMEMPK7pIBmTkwVlAZYTAl3SK8
+   /6zvnVITcBI20s/nYD8Hp2p5Te6or8KylCRPMcE3uxA6Dy/RU9Fw9GRz2
+   w9LqTdT7hhLF8AdFg6BcBlTbRK0e0LYXqYCMl0ByQN9yuldrFDSjVcTIC
+   7wCbvLvufzveojW282rilKiaK+AGRkC1kLgTaDIpMOBwSev9vNxH0GKu6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="284673944"
+X-IronPort-AV: E=Sophos;i="5.93,306,1654585200"; 
+   d="scan'208";a="284673944"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 09:40:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,306,1654585200"; 
+   d="scan'208";a="757933888"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Sep 2022 09:40:11 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oX3Wd-0000HY-1E;
+        Sat, 10 Sep 2022 16:40:11 +0000
+Date:   Sun, 11 Sep 2022 00:39:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [pinchartl-media:streams/v6.0/v11 34/49]
+ drivers/media/v4l2-core/v4l2-subdev.c:931:9: error: implicit declaration of
+ function 'for_each_active_route'; did you mean 'for_each_active_irq'?
+Message-ID: <202209110000.usvZPbyp-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com> <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
-In-Reply-To: <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 10 Sep 2022 18:32:10 +0200
-Message-ID: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Sep 08, 2022 at 04:29:02PM +0300, Andy Shevchenko wrote:
-> > This series is about unification on how we handle ACPI _UID when
-> > it's known to be an integer-in-the-string.
-> >
-> > The idea of merging either all via ACPI tree, or taking ACPI stuff
-> > for the v6.1 while the rest may be picked up later on by respective
-> > maintainers separately
->
-> >(currently all depends on Wolfram, other
-> > patches have got the tags from the maintainers).
->
-> I stand corrected, the perf patch is not tagged yet.
->
-> > Partially compile-tested (x86-64).
+tree:   git://linuxtv.org/pinchartl/media.git streams/v6.0/v11
+head:   c8cf58f00bee6d4f43462b3e3f83ef516c594d61
+commit: 9fc634e7ac71c145523c64f734836068ee14a4e8 [34/49] media: subdev: use for_each_active_route() in v4l2_subdev_init_stream_configs()
+config: ia64-randconfig-r022-20220907 (https://download.01.org/0day-ci/archive/20220911/202209110000.usvZPbyp-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
+        git fetch --no-tags pinchartl-media streams/v6.0/v11
+        git checkout 9fc634e7ac71c145523c64f734836068ee14a4e8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/media/v4l2-core/
 
-Tentatively applied as 6.1 material.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If there are updates, we'll make changes as they go.
+All errors (new ones prefixed by >>):
 
-Thanks!
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'check_state':
+   drivers/media/v4l2-core/v4l2-subdev.c:157:22: error: implicit declaration of function 'v4l2_subdev_state_get_stream_format' [-Werror=implicit-function-declaration]
+     157 |                 if (!v4l2_subdev_state_get_stream_format(state, pad, stream))
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_init_stream_configs':
+>> drivers/media/v4l2-core/v4l2-subdev.c:931:9: error: implicit declaration of function 'for_each_active_route'; did you mean 'for_each_active_irq'? [-Werror=implicit-function-declaration]
+     931 |         for_each_active_route(routing, route) {
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         for_each_active_irq
+>> drivers/media/v4l2-core/v4l2-subdev.c:931:46: error: expected ';' before '{' token
+     931 |         for_each_active_route(routing, route) {
+         |                                              ^~
+         |                                              ;
+   drivers/media/v4l2-core/v4l2-subdev.c:955:46: error: expected ';' before '{' token
+     955 |         for_each_active_route(routing, route) {
+         |                                              ^~
+         |                                              ;
+   drivers/media/v4l2-core/v4l2-subdev.c:924:13: warning: unused variable 'format_idx' [-Wunused-variable]
+     924 |         u32 format_idx = 0;
+         |             ^~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: At top level:
+   drivers/media/v4l2-core/v4l2-subdev.c:919:1: warning: 'v4l2_subdev_init_stream_configs' defined but not used [-Wunused-function]
+     919 | v4l2_subdev_init_stream_configs(struct v4l2_subdev_stream_configs *stream_configs,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +931 drivers/media/v4l2-core/v4l2-subdev.c
+
+   917	
+   918	static int
+   919	v4l2_subdev_init_stream_configs(struct v4l2_subdev_stream_configs *stream_configs,
+   920					const struct v4l2_subdev_krouting *routing)
+   921	{
+   922		struct v4l2_subdev_route *route;
+   923		u32 num_configs = 0;
+   924		u32 format_idx = 0;
+   925	
+   926		kvfree(stream_configs->configs);
+   927		stream_configs->configs = NULL;
+   928		stream_configs->num_configs = 0;
+   929	
+   930		/* Count number of formats needed */
+ > 931		for_each_active_route(routing, route) {
+   932			/*
+   933			 * Each route needs a format on both ends of the route, except
+   934			 * for source streams which only need one format.
+   935			 */
+   936			num_configs +=
+   937				(route->flags & V4L2_SUBDEV_ROUTE_FL_SOURCE) ? 1 : 2;
+   938		}
+   939	
+   940		if (!num_configs)
+   941			return 0;
+   942	
+   943		stream_configs->configs = kvcalloc(num_configs,
+   944			sizeof(*stream_configs->configs), GFP_KERNEL);
+   945	
+   946		if (!stream_configs->configs)
+   947			return -ENOMEM;
+   948	
+   949		stream_configs->num_configs = num_configs;
+   950	
+   951		/*
+   952		 * Fill in the 'pad' and stream' value for each item in the array from
+   953		 * the routing table
+   954		 */
+   955		for_each_active_route(routing, route) {
+   956			u32 idx;
+   957	
+   958			if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_SOURCE)) {
+   959				idx = format_idx++;
+   960	
+   961				stream_configs->configs[idx].pad = route->sink_pad;
+   962				stream_configs->configs[idx].stream = route->sink_stream;
+   963			}
+   964	
+   965			idx = format_idx++;
+   966	
+   967			stream_configs->configs[idx].pad = route->source_pad;
+   968			stream_configs->configs[idx].stream = route->source_stream;
+   969		}
+   970	
+   971		return 0;
+   972	}
+   973	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
