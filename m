@@ -2,170 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879845B47E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AF15B47E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Sep 2022 20:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIJSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 14:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S229629AbiIJSLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 14:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIJSL1 (ORCPT
+        with ESMTP id S229620AbiIJSLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 14:11:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9394F4AD58;
-        Sat, 10 Sep 2022 11:11:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 539F92282E;
-        Sat, 10 Sep 2022 18:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662833485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6UCnH+5b7J8QcaxQduLbCitDQV4To+pDJ7A+kcfIag4=;
-        b=N9qDJgkljr8gasfl+S4Ju1yVDMHRlWge1MRHhQsisvYEMSkOHAfNtruTbmNKnGDqm6BJh9
-        62xKP6XS3dsUDafzOwckgQmdIcu4kHcLD7qTUSjV20jO05nt1OnL2aozxhHYf7a1fzOwp5
-        Epi6uPQc/WbdXDbLubEIsmFGqGHuqXI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662833485;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6UCnH+5b7J8QcaxQduLbCitDQV4To+pDJ7A+kcfIag4=;
-        b=lFRwSMUgedQGMsJ0NuCBHpIV6bZ0A42eIAlRf8B4ZGDrzjbUS2kia2t1FT3v0sgOuaUwos
-        1oxA4Y3vPJmFQKCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23696133B7;
-        Sat, 10 Sep 2022 18:11:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fn/HB03THGNZBgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Sat, 10 Sep 2022 18:11:25 +0000
-Message-ID: <14302178-c797-8635-4325-070f78b7f805@suse.de>
-Date:   Sat, 10 Sep 2022 20:11:24 +0200
+        Sat, 10 Sep 2022 14:11:46 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760A04B0D4;
+        Sat, 10 Sep 2022 11:11:45 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id fs14so4318126pjb.5;
+        Sat, 10 Sep 2022 11:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=pAWZMQ4OebAxACXO2jGPq2qtXaPGJKbsWZHu2snLesU=;
+        b=FSy5hLs/8uHSnX2eCqR/NPTOot9ONoHZuJBzGA+4ya5og1h23dEPAvZJpqsd0HzFVw
+         s05EJvefDSk4Y+lxe2qG5foA+80l4gEDw5FonWsYSzhF32TNLtCoiouych0K3VdALK+8
+         ikwTHJmcqmNY0vPhXNUhkhs+QdB7705DRzciphKZvzH18vqmcTdOxoui0o0EWb5ArYS/
+         YLV+C4eE/zH5Ux4vXJoBWfTR/s7MR3MFgUpAIPjAoftrlcHkvwOrnv3wfTUYaJcu3exQ
+         Lb2x0QxZUiOOB70dwBHlkuHejpf26QQ7e0kCfdDxfIcfpuUDLN7kQjTS4ee9FjUZSPmM
+         udWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=pAWZMQ4OebAxACXO2jGPq2qtXaPGJKbsWZHu2snLesU=;
+        b=e/Kddm22lRSRENjC7l2OBqMlRzgyrB2Je34rBofjHMFFgwPyU93UISPgYy+AUvwCeH
+         tqbK4V5ahFFFSMGRWreY9SBXwiggy88aC+aVbKCJysh+8zJaAF2nPnlAU3098EiWWSGr
+         Rcf7Qam+Sn48IPSpgm+gmjNpEaP/0R6m4RBj94BWtMa5at3MJFQim66UvpZPiJm/bzog
+         67GSObKz5UHkLFLk2FNNjleVvDijVY7XOFjBfNcQRPwsVEJjEcLOyZqsoxSFeoVWFXTO
+         MVvKjsoPJlAcVHlXViR59w0p98FZfSjdbW13Y6bb0YJqarxqcOLKPrayy+K3u8oPJx1x
+         XHvA==
+X-Gm-Message-State: ACgBeo1LHxB9qDMq4WlbHFnFJZjW5iIwANOmCq9V7cjAf+7YNlHUQRuT
+        Dbhy/BfrXru4MjreZHlwBkQ=
+X-Google-Smtp-Source: AA6agR6ZOHuxwi86aeOxm1Mk6kKDWGMGK8Maowlh/sa/0K73mfbj9bqRcwDM3xCcy6k+F4zK5f85Yg==
+X-Received: by 2002:a17:90b:4ac3:b0:1fd:ded0:ea80 with SMTP id mh3-20020a17090b4ac300b001fdded0ea80mr15410157pjb.142.1662833504838;
+        Sat, 10 Sep 2022 11:11:44 -0700 (PDT)
+Received: from localhost ([192.55.55.56])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170902e5c400b00172fad607b3sm2565372plf.207.2022.09.10.11.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 11:11:44 -0700 (PDT)
+Date:   Sat, 10 Sep 2022 11:11:43 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Yuan Yao <yuan.yao@linux.intel.com>, isaku.yamahata@gmail.com,
+        Kai Huang <kai.huang@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4 10/26] KVM: Drop kvm_count_lock and instead protect
+ kvm_usage_count with kvm_lock
+Message-ID: <20220910181143.GC699006@ls.amr.corp.intel.com>
+References: <cover.1662679124.git.isaku.yamahata@intel.com>
+ <c95e36034d7ffd67b7afed3ba790de921426e737.1662679124.git.isaku.yamahata@intel.com>
+ <YxqtfmhBGQlkhTvU@gao-cwp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
- VMs
-Content-Language: en-US
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------n3RoxP0YamBvEOHUprK5slXD"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YxqtfmhBGQlkhTvU@gao-cwp>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------n3RoxP0YamBvEOHUprK5slXD
-Content-Type: multipart/mixed; boundary="------------yyhwzZbDnmmgJCE0ens3rj6y";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Saurabh Sengar <ssengar@linux.microsoft.com>, ssengar@microsoft.com,
- drawat.floss@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
- linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, mikelley@microsoft.com
-Message-ID: <14302178-c797-8635-4325-070f78b7f805@suse.de>
-Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
- VMs
-References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+On Fri, Sep 09, 2022 at 11:05:34AM +0800,
+Chao Gao <chao.gao@intel.com> wrote:
 
---------------yyhwzZbDnmmgJCE0ens3rj6y
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> >+	 * cpu_hotplug_disable() and other CPUs are offlined.  No need for
+> >+	 * locking.
+> >+	 */
+> >+	lockdep_assert_not_held(&kvm_lock);
+> >+
+> >+	if (kvm_usage_count) {
+> >+		preempt_disable();
+> > 		hardware_disable_nolock(NULL);
+> >+		preempt_enable();
+> 
+> kvm_suspend() is called with interrupt disabled. So, no need to disable
+> preemption.
+> 
+> /**
+>  * syscore_suspend - Execute all the registered system core suspend callbacks.
+>  *
+>  * This function is executed with one CPU on-line and disabled interrupts.
+>  */
+> int syscore_suspend(void)
 
-SGkNCg0KQW0gMDkuMDkuMjIgdW0gMTY6NDMgc2NocmllYiBTYXVyYWJoIFNlbmdhcjoNCj4g
-aHlwZXJ2X3NldHVwX3ZyYW0gdHJpZXMgdG8gcmVtb3ZlIGNvbmZsaWN0aW5nIGZyYW1lYnVm
-ZmVyIGJhc2VkIG9uDQo+ICdzY3JlZW5faW5mbycuIEFzIG9ic2VydmVkIGluIHBhc3QgZHVl
-IHRvIHNvbWUgYnVnIG9yIHdyb25nIHNldHRpbmcNCj4gaW4gZ3J1YiwgdGhlICdzY3JlZW5f
-aW5mbycgZmllbGRzIG1heSBub3QgYmUgc2V0IGZvciBHZW4xLCBhbmQgaW4gc3VjaA0KPiBj
-YXNlcyBkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycyB3aWxs
-IG5vdCBkbyBhbnl0aGluZw0KPiB1c2VmdWwuDQo+IEZvciBHZW4xIFZNcywgaXQgc2hvdWxk
-IGFsd2F5cyBiZSBwb3NzaWJsZSB0byBnZXQgZnJhbWVidWZmZXINCj4gY29uZmxpY3QgcmVt
-b3ZlZCB1c2luZyBQQ0kgZGV2aWNlIGluc3RlYWQuDQo+IA0KPiBGaXhlczogYTBhYjVhYmNl
-ZDU1ICgiZHJtL2h5cGVydiA6IFJlbW92aW5nIHRoZSByZXN0cnVjdGlvbiBvZiBWUkFNIGFs
-bG9jYXRpb24gd2l0aCBQQ0kgYmFyIHNpemUiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBTYXVyYWJo
-IFNlbmdhciA8c3NlbmdhckBsaW51eC5taWNyb3NvZnQuY29tPg0KPiAtLS0NCj4gICBkcml2
-ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1fZHJ2LmMgfCAyNCArKysrKysrKysrKysr
-KysrKysrKy0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNCBk
-ZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vaHlwZXJ2
-L2h5cGVydl9kcm1fZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1f
-ZHJ2LmMNCj4gaW5kZXggNmQxMWU3OTM4YzgzLi5iMGNjOTc0ZWZhNDUgMTAwNjQ0DQo+IC0t
-LSBhL2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlwZXJ2X2RybV9kcnYuYw0KPiArKysgYi9k
-cml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1fZHJ2LmMNCj4gQEAgLTczLDEyICs3
-MywyOCBAQCBzdGF0aWMgaW50IGh5cGVydl9zZXR1cF92cmFtKHN0cnVjdCBoeXBlcnZfZHJt
-X2RldmljZSAqaHYsDQo+ICAgCQkJICAgICBzdHJ1Y3QgaHZfZGV2aWNlICpoZGV2KQ0KPiAg
-IHsNCj4gICAJc3RydWN0IGRybV9kZXZpY2UgKmRldiA9ICZodi0+ZGV2Ow0KPiArCXN0cnVj
-dCBwY2lfZGV2ICpwZGV2Ow0KPiAgIAlpbnQgcmV0Ow0KPiAgIA0KPiAtCWRybV9hcGVydHVy
-ZV9yZW1vdmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKHNjcmVlbl9pbmZvLmxmYl9iYXNl
-LA0KPiAtCQkJCQkJICAgICBzY3JlZW5faW5mby5sZmJfc2l6ZSwNCj4gLQkJCQkJCSAgICAg
-ZmFsc2UsDQo+IC0JCQkJCQkgICAgICZoeXBlcnZfZHJpdmVyKTsNCj4gKwlpZiAoZWZpX2Vu
-YWJsZWQoRUZJX0JPT1QpKSB7DQo+ICsJCWRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3Rp
-bmdfZnJhbWVidWZmZXJzKHNjcmVlbl9pbmZvLmxmYl9iYXNlLA0KPiArCQkJCQkJCSAgICAg
-c2NyZWVuX2luZm8ubGZiX3NpemUsDQoNClVzaW5nIHNjcmVlbl9pbmZvIGhlcmUgc2VlbXMg
-d3JvbmcgaW4gYW55IGNhc2UuIFlvdSB3YW50IHRvIHJlbW92ZSB0aGUgDQpmcmFtZWJ1ZmZl
-ciBkZXZpY2VzIHRoYXQgY29uZmxpY3Qgd2l0aCB5b3VyIGRyaXZlciwgd2hpY2ggbWlnaHQg
-YmUgDQp1bnJlbGF0ZWQgdG8gc2NyZWVuX2luZm8uIEFGQUlDVCB0aGUgY29ycmVjdCBzb2x1
-dGlvbiB3b3VsZCBhbHdheXMgDQpyZXRyaWV2ZSB0aGUgUENJIGRldmljZSBmb3IgcmVtb3Zh
-bCAoaS5lLiwgYWx3YXlzIGRvIHRoZSBlbHNlIGJyYW5jaCkuDQoNCkJlc3QgcmVnYXJkDQpU
-aG9tYXMNCg0KPiArCQkJCQkJCSAgICAgZmFsc2UsDQo+ICsJCQkJCQkJICAgICAmaHlwZXJ2
-X2RyaXZlcik7DQo+ICsJfSBlbHNlIHsNCj4gKwkJcGRldiA9IHBjaV9nZXRfZGV2aWNlKFBD
-SV9WRU5ET1JfSURfTUlDUk9TT0ZULCBQQ0lfREVWSUNFX0lEX0hZUEVSVl9WSURFTywgTlVM
-TCk7DQo+ICsJCWlmICghcGRldikgew0KPiArCQkJZHJtX2VycihkZXYsICJVbmFibGUgdG8g
-ZmluZCBQQ0kgSHlwZXItViB2aWRlb1xuIik7DQo+ICsJCQlyZXR1cm4gLUVOT0RFVjsNCj4g
-KwkJfQ0KPiArDQo+ICsJCXJldCA9IGRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3Rpbmdf
-cGNpX2ZyYW1lYnVmZmVycyhwZGV2LCAmaHlwZXJ2X2RyaXZlcik7DQo+ICsJCXBjaV9kZXZf
-cHV0KHBkZXYpOw0KPiArCQlpZiAocmV0KSB7DQo+ICsJCQlkcm1fZXJyKGRldiwgIk5vdCBh
-YmxlIHRvIHJlbW92ZSBib290IGZiXG4iKTsNCj4gKwkJCXJldHVybiByZXQ7DQo+ICsJCX0N
-Cj4gKwl9DQo+ICAgDQo+ICAgCWh2LT5mYl9zaXplID0gKHVuc2lnbmVkIGxvbmcpaHYtPm1t
-aW9fbWVnYWJ5dGVzICogMTAyNCAqIDEwMjQ7DQo+ICAgDQoNCi0tIA0KVGhvbWFzIFppbW1l
-cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
-b25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJt
-YW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZv
-IFRvdGV2DQo=
-
---------------yyhwzZbDnmmgJCE0ens3rj6y--
-
---------------n3RoxP0YamBvEOHUprK5slXD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMc00wFAwAAAAAACgkQlh/E3EQov+C5
-1g//crmmOE4lqZdtNDgRfZACe1ffCyw4RK1uKp6Ag08jwd0Cp9KOUSokkNULTqYxGU1iM4zaxRgp
-5k9nlqAaaRTaNKsNdQc/8XXbtKzk+QSLySo0p3aVz/lPYlGYma5p4htjZrRj9yIT4DppZFLkSuTz
-wTnQOBwU7v77t5GeaNV3a/wdwnn4xJ49rpetKERtjtIZHdARMdhvK6z4seeFfMysOb2PcznlOhB2
-+/eW5+uU4f3uwe0YSoy5ihVOta/IYwO87zOgMEqaqYnHK1PozLEAndxGl5E69wc1JF0UxGffOdxB
-dhow7adOUuvbqih+E31WshS616sWzczEJNNODs5V4o4pYWlh3VLS2FKjA3wgpSN8Tb69sbyrv1OL
-5aIitRybyPPHMED9BtE8x9H3ILUoiBJ+RQJ3b1lH12U3pKZapOx/ZvtlRCZeYj6JyjoHZrt0TN6J
-u634IMQcH1Q/V5qtPya/ej/RCuFtYqKT2WuEen0OKvOI2NPN+soYpAusHk3X6KdGxLsvmFlYbVw2
-JOvofL4Igc8Oecr871p68Z2rf1zo8w2wgtaiVlxWJlkXiJnnaAuPKnP5BaCBMWeI+uXdh8wueZD9
-lL1G62wDY04XN2sHfUOrUaJQR+y7MIAr+kqWOnJmveBVtbd0xOmAZeIBFM8IfeBBWsaNOtHNTjxG
-3Gs=
-=el/k
------END PGP SIGNATURE-----
-
---------------n3RoxP0YamBvEOHUprK5slXD--
+Thanks, I'll fix it with a comment.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
