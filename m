@@ -2,156 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB465B4CA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7057A5B4C9E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiIKIh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 04:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S229892AbiIKIfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 04:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIKIhX (ORCPT
+        with ESMTP id S229732AbiIKIf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 04:37:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882D30560;
-        Sun, 11 Sep 2022 01:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662885442; x=1694421442;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uMf3K04xeQCNkmkTP8NTLrU3WiyufBIe+F2AtJ43V04=;
-  b=VA/L7JBYE6UHEYhLhpxlsbLJM2EmHykYKN7HnqUYpZR6e/qTnWVRlUDI
-   EGpygAlcSvOfuG72S3/mU3to9IFLeUne2asCzy77YiQCSyMya/JAhwlzV
-   fvY0ew/wmdgWopPk859UZEgG0sVPAy2NukGbxets8MV9yC9Y4q+tN5jBc
-   6n2v3IfYR79ImljLKdYsWIXJ+o3mlIJn17xWp2lv5xUKg810hTnrjeP2t
-   +8SNH3ahAY7ifGMTMcvmUVlD7ZQUrlnBsquXwV9aDBKmq7dHAI5iLHTsq
-   EwqXkrJ6AfAsjOkgOLXhV05slnrK+UVd8k2DTKT5uaa6OSYYEUOptjbRO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="280725885"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="280725885"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 01:37:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="566841440"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 11 Sep 2022 01:37:16 -0700
-Date:   Sun, 11 Sep 2022 16:27:45 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v1 3/5] fpga: dfl: Add DFHv1 Register Definitions
-Message-ID: <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 11 Sep 2022 04:35:28 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E331303F8
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:35:27 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id p12-20020a259e8c000000b006958480b858so5146943ybq.12
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=YbtCFZvILXpJC+a2fdohEwEfZPgdvsYvrLOiWC4FHmU=;
+        b=VR7VeyMXlcZH0eIG2slwMf0Avl0QqmZ584jICzhQKSzU/7NMm+PbJkUcbdepWXQr/S
+         6nUUBz/fNLBk5+WG1cKXVERR2VF96XEyBO99p2hk3IZ9WhPLcqOZ6jPMDvaxCammepA7
+         QhbUnmh9Yfj4gPEgmJZAuGcUeoi0vKqpfNYzhaIyY7/GyttjK13Ns9fsjZwgYQJREeiw
+         azxOTeFd6y0wkTKF0eUWIRGNHWvlvJ0jGWncuDH/V3fi9jlU81x+s5nZQIGLVo/k2Nc/
+         1MCYRhH2TlBG7mJpwa4RTypq+EZpqYGdlWs7nqyc1imZ9/iHVpjkzbGCvwiRwW77BlFn
+         Q0kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=YbtCFZvILXpJC+a2fdohEwEfZPgdvsYvrLOiWC4FHmU=;
+        b=zxKofpxV8wNRjm8b/Ly6HYYDtSHU/DbB84s23W4VxSjy3kyS1ZXbwawgR6fCtNz5+V
+         mtx0z05wDaz2OQcMAuEMRhAPPoapXANfzTNHK0RhTJnyKRxH0O0mbi8bm2fwueOE+po2
+         999zx/MnahnSV9Zg0wdIKVjMro9kRUVU/3DtiyeOO7MwnZ14C1sgWbWoNeht1VRylVpc
+         iH+QK3Aje/Z5Iq3hX8e0ZU2ps1JyjE5H6aVu36VhqILLjZBjjz4iIYo3x5rCnqNFlCWT
+         /YIrO+HR2sjzHmVSide7G4BEs9fNXaqjDAJgVhr5dxRqIZipIzEuJBihiaETnNYXaDcs
+         9YQA==
+X-Gm-Message-State: ACgBeo32w2vneTRUFoaRYZdeprCHY+TLSYHZo9OGseRhN8vtvbseel8L
+        19HzGySL9wfyS1+5fV+UqqVjaqmXLpRf
+X-Google-Smtp-Source: AA6agR7fFiGV7ORO5loPzZn8xBcfu1/VrYN+FRNC79M2U4ZQJuiDnvJNiUt4h+qem/NB9lNHcwzyAtCQz3pA
+X-Received: from yuanchu.svl.corp.google.com ([2620:15c:2d4:203:5076:f273:1383:891d])
+ (user=yuanchu job=sendgmr) by 2002:a05:6902:725:b0:6ae:4951:cc24 with SMTP id
+ l5-20020a056902072500b006ae4951cc24mr13154999ybt.50.1662885326656; Sun, 11
+ Sep 2022 01:35:26 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 01:34:16 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220911083418.2818369-1-yuanchu@google.com>
+Subject: [RFC PATCH 0/2] mm: multi-gen LRU: per-process heatmaps
+From:   Yuanchu Xie <yuanchu@google.com>
+To:     linux-mm@kvack.org, Yu Zhao <yuzhao@google.com>
+Cc:     Michael Larabel <Michael@MichaelLarabel.com>,
+        Jon Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yuanchu Xie <yuanchu@google.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 at 12:04:24 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> 
-> This patch adds the definitions for DFHv1 header and related register
-> bitfields.
-> 
-> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  include/linux/dfl.h | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index b5accdcfa368..61bcf20c1bc8 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -23,6 +23,16 @@
->  #define GUID_H			0x10
->  #define NEXT_AFU		0x18
->  
-> +/*
-> + * DFHv1 Register Offset definitons
-> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
-> + * as common header registers
-> + */
-> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
-> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
-> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
-> +#define DFHv1_PARAM_DATA	0x8   /* Offset of Param data from Param header */
-> +
->  #define DFH_SIZE		0x8
->  
->  /* Device Feature Header Register Bitfield */
-> @@ -30,8 +40,35 @@
->  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->  #define DFH_EOL			BIT_ULL(40)		/* End of list */
-> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
->  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->  
-> +/*
-> + *  CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+Today, the MGLRU debugfs interface (/sys/kernel/debug/lru_gen) provides
+a histogram counting the number of pages belonging to each generation,
+providing some data for memory coldness, but we don't actually know
+where the memory actually is. However, since MGLRU revamps the page
+reclaim mechanism to walk page tables, we can hook into MGLRU page table
+access bit harvesting with a BPF program to collect information on
+relative hotness and coldness, NUMA nodes, whether a page is anon/file,
+etc.
 
-Reduce one whitespace indent.
+Using BPF programs to collect and aggregate page access information
+allows for the userspace agent to customize what to collect and how to
+aggregate. It could focus on a particular region of interest and count a
+moving average access frequency, or find allocations that are never
+accessed that could be eliminated all together. Currently MGLRU relies
+on heuristics with regards to what generation a page is assigned, for
+example, pages accessed through page tables are always assigned to the
+youngest generation. Exposing page access data can allow future work to
+customize page generation assignments (with more BPF).
 
-> + * 1'b1 = absolute (ARM or other non-PCIe use)
-> + */
-> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
-> +
-> +/*
-> + * CSR Header Register Bit Definitions
-> + */
+We demonstrate feasibility with a proof-of-concept that prints a live
+heatmap of a process, with configurable MGLRU aging intervals and
+aggregation intervals. This is a very rough PoC that still needs a lot
+of work, but it shows a lot can be done by exposing page access
+information from MGLRU. I will be presenting this work at the coming
+LPC.
 
-Use oneline style comment should be OK?
+As an example. I ran the memtier benchmark[1] and captured a heatmap of
+memcached being populated and running the benchmark (similar to the one
+Yu posted for OpenWRT[2]):
 
-> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
-> +
-> +/*
-> + * CSR SIZE Goup Register Bit Definitions
-> + */
+$ cat ./run_memtier_benchmark.sh
+    run_memtier_benchmark()
+    {
+        # populate dataset
+        memtier_benchmark/memtier_benchmark -s 127.0.0.1 -p 11211 \
+            -P memcache_binary -n allkeys -t 1 -c 1 --ratio 1:0 --pipeline 8 \
+            --key-minimum=1 --key-maximum=$2 --key-pattern=P:P \
+            -d 1000
 
-Same concern
+        # access dataset using Guassian pattern
+        memtier_benchmark/memtier_benchmark -s 127.0.0.1 -p 11211 \
+            -P memcache_binary --test-time $1 -t 1 -c 1 --ratio 0:1 \
+            --pipeline 8 --key-minimum=1 --key-maximum=$2 \
+            --key-pattern=G:G --randomize --distinct-client-seed
 
-> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
-> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
-> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
-> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
-> +
-> +/*
-> + * PARAM Header Register Bit Definitions
-> + */
+        # collect results
+    }
 
-Same
+    run_duration_secs=3600
+    max_key=8000000
 
-> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
-> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
-> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
-> +
->  /**
->   * enum dfl_id_type - define the DFL FIU types
->   */
-> -- 
-> 2.25.1
-> 
+    run_memtier_benchmark $run_duration_secs $max_key
+
+In the following screenshot we can see the process of populating the
+dataset and accessing the dataset:
+https://services.google.com/fh/files/events/memcached_memtier_startup.png
+
+Patch 1 adds the infrastructure to enable BPF programs to monitor page
+access bit harvesting
+
+Patch 2 includes a proof-of-concept python TUI program displaying online
+per-process heatmaps.
+
+[1] https://github.com/RedisLabs/memtier_benchmark
+[2] https://lore.kernel.org/all/20220831041731.3836322-1-yuzhao@google.com/
+
+Yuanchu Xie (2):
+  mm: multi-gen LRU: support page access info harvesting with eBPF
+  mm: add a BPF-based per-process heatmap tool
+
+ include/linux/mmzone.h          |   1 +
+ mm/vmscan.c                     | 154 ++++++++
+ tools/vm/heatmap/Makefile       |  30 ++
+ tools/vm/heatmap/heatmap.bpf.c  | 123 +++++++
+ tools/vm/heatmap/heatmap.user.c | 188 ++++++++++
+ tools/vm/heatmap/heatmap_tui.py | 600 ++++++++++++++++++++++++++++++++
+ 6 files changed, 1096 insertions(+)
+ create mode 100644 tools/vm/heatmap/Makefile
+ create mode 100644 tools/vm/heatmap/heatmap.bpf.c
+ create mode 100644 tools/vm/heatmap/heatmap.user.c
+ create mode 100755 tools/vm/heatmap/heatmap_tui.py
+
+-- 
+2.37.2.789.g6183377224-goog
+
