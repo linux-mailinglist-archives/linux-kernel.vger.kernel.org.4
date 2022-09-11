@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02F75B4D68
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1B25B4D26
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiIKKaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 06:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S230035AbiIKKGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 06:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiIKKad (ORCPT
+        with ESMTP id S229771AbiIKKGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 06:30:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F53037F9D;
-        Sun, 11 Sep 2022 03:30:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A95F4B802BD;
-        Sun, 11 Sep 2022 10:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038BCC433C1;
-        Sun, 11 Sep 2022 10:30:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662892229;
-        bh=rNnbtRFKYREYyqEB7cI/f2rBcfDDV7x9aQ18P6n205U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N7+so8nMUS8AntI37LqQR6aolHFhmwsq60lvM/jMkeiTpXQFl68I22dUsOd8WwsGD
-         6EPkPkpxMqb8qSSzQxuD+ggBeil1U8iAPZJXFfK2VfkSRaK2R9CAoKIMEe6vDJORzY
-         S7BahXqRiDLkAYhT3T62SHhCLs7X5d26ZGOIK3q8yI6vVWDZbMEP/8e2+p1KNnNAad
-         y+ydJKlisNDGP9uByVGa92KVdo5O/3QNjdH2VzYdFZAH7q67QVh7nHMgRHVWKwge1p
-         kde/pwUpH1pGbdKTQW8ZEXcx4J1HjQ8cxm2QQn1aWukNMU2wHQyLYyz2H2MIpnb8ZE
-         JE8j9S0/RFfMA==
-Date:   Sun, 11 Sep 2022 10:56:25 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v4 1/2] iio: pressure: dps310: Refactor startup
- procedure
-Message-ID: <20220911105625.348e3861@jic23-huawei>
-In-Reply-To: <85280d48-4251-2811-b66d-092f4153fbb5@linux.ibm.com>
-References: <20220809211246.251006-1-eajames@linux.ibm.com>
-        <20220809211246.251006-2-eajames@linux.ibm.com>
-        <CAHp75Vf5wcabm_-oKGN2m7z=L2xu1D6wtzKLhu6n19Uhq8yijQ@mail.gmail.com>
-        <e35b595f-572e-a539-c550-831cdd02dbd3@linux.ibm.com>
-        <CAHp75VfU26QZ7Z1ApzRcFPudgsQc7zWF5g0kwn7Jzk1htXaWng@mail.gmail.com>
-        <20220820124915.5dd5b745@jic23-huawei>
-        <85280d48-4251-2811-b66d-092f4153fbb5@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 11 Sep 2022 06:06:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1704013D7D;
+        Sun, 11 Sep 2022 03:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662890811; x=1694426811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=COoydWrhxx4yHmAPhCBCqR8wvWQLCV4m7CypWvSwh8w=;
+  b=d44lBWsFEfjgphwKGO7PfMVrzesBd1LZt5LIJ6qnTCcYcX0ut81SSd+b
+   6CaU5fbEwGLbFjr4GOLKJAxtcCvdVj1zriaNTnaWMaBWSIKVBPtUxArwO
+   EcBXVaO/lroMRTzLFscFkEmuV9NbxG+pXxeaZIBrWGzW41Uh5JaRiqXx5
+   3O3Uhm9OAppnXmDjO4nqBw9zebfVOPFCjgROqfWeZagsPyTTwqg+AxDQQ
+   LoMHNxJTUpOh9XrOMLs10ln82NA12pVTY0w3NfglpbVGCmm1pIp+cqm4r
+   eE4HJOkQFt8Gd7zxGf1XEhgVzv/sNrP3AnMqmmsv47po6qRc1Q74aVGC7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="323936195"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="323936195"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 03:06:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="677732462"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Sep 2022 03:06:46 -0700
+Date:   Sun, 11 Sep 2022 17:57:15 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 1/5] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+Message-ID: <Yx2w+yl9SFFx0Qtx@yilunxu-OptiPlex-7050>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906190426.3139760-2-matthew.gerlach@linux.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sep 2022 14:48:20 -0500
-Eddie James <eajames@linux.ibm.com> wrote:
+On 2022-09-06 at 12:04:22 -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add documentation describing the extentions provided by Version
+> 1 of the Device Feature Header (DFHv1).
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  Documentation/fpga/dfl.rst | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..31699b89781e 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -561,6 +561,30 @@ new DFL feature via UIO direct access, its feature id should be added to the
+>  driver's id_table.
+>  
+>  
+> +Extending the Device Feature Header - DFHv1
+> +===========================================
+> +The current 8 bytes of the Device Feature Header, hereafter referred to as
+> +to DFHv0, provide very little opportunity for the hardware to describe itself
+> +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
+> +to provide increased flexibility and extensibility to hardware designs using
+> +Device Feature Lists.  The list below describes some of the goals behind the
+> +changes in DFHv1:
+> +
+> +* Provide a standardized mechanism for features to describe
+> +  parameters/capabilities to software.
+> +* Standardize the use of a GUID for all DFHv1 types.
+> +* Decouple the location of the DFH from the register space of the feature itself.
+> +
+> +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
+> +a list of parameter values to a particular feature.
+> +
+> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUILD standard
+> +across all types.
+> +
+> +With DFHv0, the register map of a given feature is located immediately following
+> +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
+> +map can be specified as an offset to the DFHv1 or as an absolute address.
 
-> On 8/20/22 06:49, Jonathan Cameron wrote:
-> > On Fri, 19 Aug 2022 12:42:00 +0300
-> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> >  
-> >> On Mon, Aug 15, 2022 at 4:42 PM Eddie James <eajames@linux.ibm.com> wrote:  
-> >>> On 8/12/22 17:03, Andy Shevchenko wrote:  
-> >>>> On Wed, Aug 10, 2022 at 12:12 AM Eddie James <eajames@linux.ibm.com> wrote:  
-> >> ...
-> >>  
-> >>>>> +       rc = regmap_write(data->regmap, 0x0e, 0xA5);
-> >>>>> +       if (rc)
-> >>>>> +               return rc;
-> >>>>> +
-> >>>>> +       rc = regmap_write(data->regmap, 0x0f, 0x96);
-> >>>>> +       if (rc)
-> >>>>> +               return rc;  
-> >>>> This code already exists, but still want to ask, is it really
-> >>>> byte-registers here and not be16/le16 one? In such a case perhaps bulk
-> >>>> write can be used to reflect it better?  
-> >>> The temperature and pressure regs are 24 bits big endian, and all the
-> >>> rest are 8 bits. I think the existing approach is best.  
-> >> It doesn't look like you got what I was meaning... Or I misunderstood
-> >> what you said.
-> >>
-> >> The code above writes two byte values to two sequential registers
-> >> which make me think that they are 16-bit registers at offset 0x0e.  
-> > Given they are undocumented, this is guessing territory.
-> > Probably best to just leave them as is.
-> > You could do a bulk write on an array though as that implies
-> > nothing about what's in the registers -just that they happen
-> > to be next to each other.  
-> 
-> 
-> Indeed. Is it worth it to switch to bulk write for two 2-byte writes? 
-> I'm inclined to say no and will leave this as-is for v6, but if you 
-> think it is, I can switch it.
-> 
+Could you make a table or diagram to describe the data structure layout of DFHv1
+extention.
 
-As far as I'm concerned, fine either way.
+Thanks,
+Yilun
 
-Jonathan
-
+> +
+>  Open discussion
+>  ===============
+>  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> -- 
+> 2.25.1
 > 
-> Thanks,
-> 
-> Eddie
-> 
-> 
-> >  
-> >> ...
-> >>  
-> >>>>> +       rc = regmap_write(data->regmap, 0x0e, 0x00);
-> >>>>> +       if (rc)
-> >>>>> +               return rc;
-> >>>>> +
-> >>>>> +       return regmap_write(data->regmap, 0x0f, 0x00);  
-> >> Ditto.
-> >>  
-
