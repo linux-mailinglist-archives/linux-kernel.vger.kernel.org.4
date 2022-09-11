@@ -2,98 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75CA5B4EA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E125B4EA8
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiIKMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 08:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S230269AbiIKMDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 08:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiIKMBn (ORCPT
+        with ESMTP id S230115AbiIKMDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 08:01:43 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2D232EE5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:41 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id l12so7475108ljg.9
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=eBGzSiuctdtKY9Qsp3sP8qBpPaicy+2nwjL/q6AwtQc=;
-        b=SMdWzqWkIa6MWyvZKBP4R1WG8PemK+5S/bpbE368D+7fKifMIn06u87l4CKYMGDgvq
-         uOskkjiwy35Bzd1Dhb36cQ7CMcbchDq/4EO/ErQP3ASGVLJvo4jyWeYOIO2IYAq78Wpk
-         GKQ4z1oxZ1PK0PZhdjbcVZG0kdOlzKJeVfCpk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eBGzSiuctdtKY9Qsp3sP8qBpPaicy+2nwjL/q6AwtQc=;
-        b=nE7wDE9ffV5TTxDjCgcPSLJjbtcaFv4EVasCMXilHcPsPS4ip961Q+757nDK9PCWtg
-         DI6lkh0HRdAP2F7f6Kx5ac+LqcnmN/SlobAxse7BgarmwPxRIDUlo6FcF4486L74qRjK
-         vTuha+fE8bHKf8fH+1D41EiuEKBlR7lnnV+Z/Fiit/XuGwrH3hubXNm7435ygjhp9oJb
-         MXLECcqxjdosdd6lR6AQQ4pL9SwyhBKrKL2SkUMzX2St3iioba46rMzHlEHUtLu5jv9a
-         7Hojnf+S7JrE3Z3K/5tDWyO+8+XkISm5TYaXmKNTIiNAjychTMSfHxOFn/DLmuEh9nKn
-         cKpw==
-X-Gm-Message-State: ACgBeo1J7DQgszrqL4n1WnIEKOU+x+qg42iY4KP4E7BiCZA3hu3MQHtL
-        8EI7HmBfyFSfCSYA8VCJhSceFqJ6hRO1YFrz
-X-Google-Smtp-Source: AA6agR6s9H7Rj6m+LKHKaK+fpZr/k68RlO3XjLI9f3M9y6+314BYzNeUppPCYM7B4BCAszulAEeCCA==
-X-Received: by 2002:a05:651c:1033:b0:26a:aa02:b0fa with SMTP id w19-20020a05651c103300b0026aaa02b0famr7052646ljm.82.1662897699801;
-        Sun, 11 Sep 2022 05:01:39 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id a23-20020ac25e77000000b00492ea54beeasm580317lfr.306.2022.09.11.05.01.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 05:01:38 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id o2so8306209lfc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:38 -0700 (PDT)
-X-Received: by 2002:a05:6512:3d16:b0:498:f04f:56cf with SMTP id
- d22-20020a0565123d1600b00498f04f56cfmr5822982lfv.612.1662897698202; Sun, 11
- Sep 2022 05:01:38 -0700 (PDT)
+        Sun, 11 Sep 2022 08:03:15 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432AC32EE5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:03:14 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id XLg7ovwaCu8plXLg7o0FVH; Sun, 11 Sep 2022 14:03:12 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 11 Sep 2022 14:03:12 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH] headers: Remove some left-over license text in include/uapi/linux/netfilter/
+Date:   Sun, 11 Sep 2022 14:03:09 +0200
+Message-Id: <e41c6fd2ed7d55b432129403d7a2bd443b759b33.1662897784.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220910221947.171557773@linutronix.de>
-In-Reply-To: <20220910221947.171557773@linutronix.de>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Sun, 11 Sep 2022 08:01:21 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wj=CBxrztv0gs273zovMRNsG=i1jg-rf3d-aAx4WLEF1w@mail.gmail.com>
-Message-ID: <CAHk-=wj=CBxrztv0gs273zovMRNsG=i1jg-rf3d-aAx4WLEF1w@mail.gmail.com>
-Subject: Re: [patch RFC 00/29] printk: A new approach - WIP
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 6:27 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> After taking a step back we decided to go for a radically different
-> approach:
+When the SPDX-License-Identifier tag has been added, the corresponding
+license text has not been removed.
 
-From a quick look through the patches this morning, I see nothing
-alarming. The proof is in the pudding, but this seems to have a sane
-model for console list handling and for handling the individual
-console states.
+Remove it now.
 
-But I'm on a laptop and only read through the patches while going
-through my email this morning, so I may well have missed something.
+Also, in xt_connmark.h, move the copyright text at the top of the file
+which is a much more common pattern.
 
-                 Linus
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ include/uapi/linux/netfilter/ipset/ip_set.h |  4 ----
+ include/uapi/linux/netfilter/xt_AUDIT.h     |  4 ----
+ include/uapi/linux/netfilter/xt_connmark.h  | 13 ++++---------
+ include/uapi/linux/netfilter/xt_osf.h       | 14 --------------
+ 4 files changed, 4 insertions(+), 31 deletions(-)
+
+diff --git a/include/uapi/linux/netfilter/ipset/ip_set.h b/include/uapi/linux/netfilter/ipset/ip_set.h
+index 6397d75899bc..79e5d68b87af 100644
+--- a/include/uapi/linux/netfilter/ipset/ip_set.h
++++ b/include/uapi/linux/netfilter/ipset/ip_set.h
+@@ -3,10 +3,6 @@
+  *                         Patrick Schaaf <bof@bof.de>
+  *                         Martin Josefsson <gandalf@wlug.westbo.se>
+  * Copyright (C) 2003-2011 Jozsef Kadlecsik <kadlec@netfilter.org>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+  */
+ #ifndef _UAPI_IP_SET_H
+ #define _UAPI_IP_SET_H
+diff --git a/include/uapi/linux/netfilter/xt_AUDIT.h b/include/uapi/linux/netfilter/xt_AUDIT.h
+index 1b314e2f84ac..56a3f6092e0c 100644
+--- a/include/uapi/linux/netfilter/xt_AUDIT.h
++++ b/include/uapi/linux/netfilter/xt_AUDIT.h
+@@ -4,10 +4,6 @@
+  *
+  * (C) 2010-2011 Thomas Graf <tgraf@redhat.com>
+  * (C) 2010-2011 Red Hat, Inc.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+  */
+ 
+ #ifndef _XT_AUDIT_TARGET_H
+diff --git a/include/uapi/linux/netfilter/xt_connmark.h b/include/uapi/linux/netfilter/xt_connmark.h
+index f01c19b83a2b..41b578ccd03b 100644
+--- a/include/uapi/linux/netfilter/xt_connmark.h
++++ b/include/uapi/linux/netfilter/xt_connmark.h
+@@ -1,18 +1,13 @@
+ /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/* Copyright (C) 2002,2004 MARA Systems AB <https://www.marasystems.com>
++ * by Henrik Nordstrom <hno@marasystems.com>
++ */
++
+ #ifndef _XT_CONNMARK_H
+ #define _XT_CONNMARK_H
+ 
+ #include <linux/types.h>
+ 
+-/* Copyright (C) 2002,2004 MARA Systems AB <https://www.marasystems.com>
+- * by Henrik Nordstrom <hno@marasystems.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- */
+-
+ enum {
+ 	XT_CONNMARK_SET = 0,
+ 	XT_CONNMARK_SAVE,
+diff --git a/include/uapi/linux/netfilter/xt_osf.h b/include/uapi/linux/netfilter/xt_osf.h
+index 6e466236ca4b..f1f097896bdf 100644
+--- a/include/uapi/linux/netfilter/xt_osf.h
++++ b/include/uapi/linux/netfilter/xt_osf.h
+@@ -1,20 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+ /*
+  * Copyright (c) 2003+ Evgeniy Polyakov <johnpol@2ka.mxt.ru>
+- *
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ #ifndef _XT_OSF_H
+-- 
+2.34.1
+
