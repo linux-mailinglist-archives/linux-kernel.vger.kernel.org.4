@@ -2,166 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCED15B5151
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A14B5B515A
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiIKVVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 17:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S229652AbiIKVln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 17:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIKVVM (ORCPT
+        with ESMTP id S229498AbiIKVlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 17:21:12 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897F518B21
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662931271; x=1694467271;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0Sf+GBjhkRoF+sqR5wv3WqZ1Cd0NCbnAVLknq9A1cCM=;
-  b=iyH+n9Hb1pLVNBTK0cL40+6KyzuMOCYA30vjEDDEcme987q8CDr4v5M1
-   GFv+C3NBiBKvq8sF/bs3lHqge6waMAci/nxsaWt9SVtHUQ1tqMVO5Iez9
-   4K/X6/B8jr8UPe5catO3mdLb+FkcP03Iqf7Nye7dCfFAEyKJKj5jGReEx
-   M7vkv694x+Cqoy7Y/V4ASd5MdzMEd/6OXUY0gTt+SVIMMFyZChfDrds7n
-   6MJSIoAP3xVMNBa/hkHieCctG3RQ6U0nsbQ2UOSf9USruP7kl1DMMU3qV
-   mdZDhmMw/c2o8uNdTGXizS9BLc4wc7U7xaC67A3KOF3Ow1HN2ybDbDePI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="298553428"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="298553428"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 14:21:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="758184900"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2022 14:21:09 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXUO4-0001qP-2P;
-        Sun, 11 Sep 2022 21:21:08 +0000
-Date:   Mon, 12 Sep 2022 05:20:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/5.15 62/102] arch/arm/mach-at91/pm.c:370:38:
- error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
-Message-ID: <202209120522.AOuxSu1o-lkp@intel.com>
+        Sun, 11 Sep 2022 17:41:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C003201A1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:41:40 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28BLfACZ012463;
+        Sun, 11 Sep 2022 21:41:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=172gqBHdWTQsPiaT/19OqMVWgqe3jX8FYL5YY4LecWU=;
+ b=iO7OZl1YeSX35Wr6OiLm5BQ6Msub0d37eTaouQSKMx2M96EWXBbR3kvuHmCf9evzR6+t
+ kGWqKBv850ASNqix5c2qSieY08VeXI0kJGZBs18+SZ4x+0b0HwIgeEdojL2AggZcHEhS
+ MzAtrC6ArV8hihSxSPpSr3NGLCJOqF9qWEwPNbw0m3jJEbLQZhqtB5DmFUm1DWEGaLsP
+ U8fMXwbn4D0tmjVpAbtwPcSv0RR9iX/9aWyND/kL1dCIuu4gGChK7jibpXb3bciNglH9
+ amYkzgZ8UuILaMBReIdg5P/TVJ00GhhyFVUuOwe20D1djOLRy7o6QGMa6PN4myJ4a9ME pA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk43jp9t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 11 Sep 2022 21:41:10 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28BLf9DA028608
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 11 Sep 2022 21:41:09 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 11 Sep 2022 14:41:09 -0700
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        "Alexandru Elisei" <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kvmarm@lists.cs.columbia.edu>
+Subject: [PATCH v3] KVM: arm64: Ignore kvm-arm.mode if !is_hyp_mode_available()
+Date:   Sun, 11 Sep 2022 14:40:59 -0700
+Message-ID: <20220911214059.2767620-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: O96vbLzBZ1LFAsrLFd_xeOhMc_hcdqfA
+X-Proofpoint-ORIG-GUID: O96vbLzBZ1LFAsrLFd_xeOhMc_hcdqfA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-11_12,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=861 clxscore=1015
+ mlxscore=0 priorityscore=1501 impostorscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209110084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
-head:   58b6ddd0dfd470c48feef1d58e9151373f59e315
-commit: 4e1102de88e91852e109ab98731f9cd1f0c7286f [62/102] ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220912/202209120522.AOuxSu1o-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=4e1102de88e91852e109ab98731f9cd1f0c7286f
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.15
-        git checkout 4e1102de88e91852e109ab98731f9cd1f0c7286f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Ignore kvm-arm.mode if !is_hyp_mode_available(). Specifically, we want
+to avoid switching kvm_mode to KVM_MODE_PROTECTED if hypervisor mode is
+not available. This prevents "Protected KVM" cpu capability being
+reported when Linux is booting in EL1 and would not have KVM enabled.
+Reasonably though, we should warn if the command line is requesting a
+KVM mode at all if KVM isn't actually available. Don't emit warning for
+"kvm-arm.mode=none" since this would disable KVM anyway.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ arch/arm64/kvm/arm.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 8fe73ee5fa84..8e5d1c8502f5 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -2271,6 +2271,16 @@ static int __init early_kvm_mode_cfg(char *arg)
+ 	if (!arg)
+ 		return -EINVAL;
+ 
++	if (strcmp(arg, "none") == 0) {
++		kvm_mode = KVM_MODE_NONE;
++		return 0;
++	}
++
++	if (!is_hyp_mode_available()) {
++		pr_warn_once("KVM is not available. Ignoring kvm-arm.mode\n")
++		return 0;
++	}
++
+ 	if (strcmp(arg, "protected") == 0) {
+ 		if (!is_kernel_in_hyp_mode())
+ 			kvm_mode = KVM_MODE_PROTECTED;
+@@ -2285,11 +2295,6 @@ static int __init early_kvm_mode_cfg(char *arg)
+ 		return 0;
+ 	}
+ 
+-	if (strcmp(arg, "none") == 0) {
+-		kvm_mode = KVM_MODE_NONE;
+-		return 0;
+-	}
+-
+ 	return -EINVAL;
+ }
+ early_param("kvm-arm.mode", early_kvm_mode_cfg);
 
->> arch/arm/mach-at91/pm.c:370:38: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
-                   tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
-                                                      ^
->> arch/arm/mach-at91/pm.c:373:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDO_OFF'
-                   index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
-                                   ^
->> arch/arm/mach-at91/pm.c:377:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PUO_OFF'
-                   index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
-                                   ^
->> arch/arm/mach-at91/pm.c:381:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDODT_OFF'
-                   index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
-                                   ^
->> arch/arm/mach-at91/pm.c:385:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SRO_PUODT_OFF'
-                   index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
-                                   ^
-   5 errors generated.
-
-
-vim +/DDR3PHY_ZQ0SR0 +370 arch/arm/mach-at91/pm.c
-
-   350	
-   351	static int at91_suspend_finish(unsigned long val)
-   352	{
-   353		unsigned char modified_gray_code[] = {
-   354			0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
-   355			0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
-   356			0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
-   357			0x10, 0x11,
-   358		};
-   359		unsigned int tmp, index;
-   360		int i;
-   361	
-   362		if (soc_pm.data.mode == AT91_PM_BACKUP && soc_pm.data.ramc_phy) {
-   363			/*
-   364			 * Bootloader will perform DDR recalibration and will try to
-   365			 * restore the ZQ0SR0 with the value saved here. But the
-   366			 * calibration is buggy and restoring some values from ZQ0SR0
-   367			 * is forbidden and risky thus we need to provide processed
-   368			 * values for these (modified gray code values).
-   369			 */
- > 370			tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
-   371	
-   372			/* Store pull-down output impedance select. */
- > 373			index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
-   374			soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
-   375	
-   376			/* Store pull-up output impedance select. */
- > 377			index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
-   378			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-   379	
-   380			/* Store pull-down on-die termination impedance select. */
- > 381			index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
-   382			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-   383	
-   384			/* Store pull-up on-die termination impedance select. */
- > 385			index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
-   386			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-   387	
-   388			/*
-   389			 * The 1st 8 words of memory might get corrupted in the process
-   390			 * of DDR PHY recalibration; it is saved here in securam and it
-   391			 * will be restored later, after recalibration, by bootloader
-   392			 */
-   393			for (i = 1; i < BACKUP_DDR_PHY_CALIBRATION; i++)
-   394				soc_pm.bu->ddr_phy_calibration[i] =
-   395					*((unsigned int *)soc_pm.memcs + (i - 1));
-   396		}
-   397	
-   398		flush_cache_all();
-   399		outer_disable();
-   400	
-   401		at91_suspend_sram_fn(&soc_pm.data);
-   402	
-   403		return 0;
-   404	}
-   405	
-
+base-commit: 0982c8d859f8f7022b9fd44d421c7ec721bb41f9
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
