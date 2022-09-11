@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BAB5B4FF6
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265555B4FFC
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIKQUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 12:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S229686AbiIKQVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 12:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiIKQUL (ORCPT
+        with ESMTP id S229774AbiIKQVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 12:20:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8239014029
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 09:20:06 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y17so9916752ejo.6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 09:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xUphcrXxQc1ipnQhfpFIDYBTmrSlFRYJTDjjM/qgN3o=;
-        b=hWI2lxW+3yst5tOygYtWH3uD42UCnBngUblM6Yl6sFe60p/mlNy5ItkZPgWyg8IM+B
-         Bq0M5BY04O4kcIXAe7u5nH0pN5BZcToXyQ3y6ARmtW6yJJlXDV11wEB8cznjrroOK3nP
-         Fvo6LvlKsX4nLh35c89hqbVR1mImbSBqJ6ftnvOyLLR098QvjSy8w7ZVhZ1yYmMvC7hr
-         fG8kYJ7T93BZIdO8A8zaJtfs8CgGxTnIjBEsBwGPC2ZpwFzOX/FKf4UWbvM+GT7csOjl
-         +Su4Ew6tjRJOx32gnbe7auOvnBjzXnz/dupbXyuy7oAXkrOovF9b48dugLe/qwTg5sdu
-         Gm/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xUphcrXxQc1ipnQhfpFIDYBTmrSlFRYJTDjjM/qgN3o=;
-        b=ZgQuDTxDKUQTZWgKs5k659IDXBJTCbcM2BVETa9FwUwsj9RJxHw82b+331QfZYCfKm
-         E9QE1QP1p8ozNywqeR2vAbJved8gwODiSiRfXC8QL1y7SqYxlbZuLRmCT7Pvb2TAoRnv
-         3tkDKGqLLzlYsubGbnLficDktAHrKzpqDG/oQNrAeS4puGYnOXNmyWcxTowOi45BCpHz
-         lMD04+VBJIrOsK6tf+Z08SLC9+jKeu1QxF8voQ1XOweoYiVjYo92j1CnozeMU/zBS2Et
-         T75qnrNHHYWF3GkUB/r6DRvMHR+rDNvio/cbP2EtRnKIhHYwOXbqOjAO20sWOe7NuL7Y
-         5zMw==
-X-Gm-Message-State: ACgBeo01vJlDehP29L3WHkVOQaSsOFm6qHH0RWLF7Q5ZHROjHG04nbZD
-        UoF4c13YTfwgRU90Lqfm5Fs=
-X-Google-Smtp-Source: AA6agR7kp7AB1fLPUmeg1WKG0Ar+XXUfe3/HxCUunyPfSboqDsOv1dfV8VH86SApTcJKR2uFcJo7gg==
-X-Received: by 2002:a17:907:31ce:b0:742:1206:529e with SMTP id xf14-20020a17090731ce00b007421206529emr16006575ejb.643.1662913205042;
-        Sun, 11 Sep 2022 09:20:05 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id bt6-20020a170906b14600b00779dc23be62sm3055346ejb.120.2022.09.11.09.20.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 09:20:04 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 6/6] staging: r8188eu: replace tabs with space in odm_query_rxpwrpercentage()
-Date:   Sun, 11 Sep 2022 18:19:49 +0200
-Message-Id: <20220911161949.11293-7-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220911161949.11293-1-straube.linux@gmail.com>
-References: <20220911161949.11293-1-straube.linux@gmail.com>
+        Sun, 11 Sep 2022 12:21:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43579220FE;
+        Sun, 11 Sep 2022 09:21:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BC7460F3C;
+        Sun, 11 Sep 2022 16:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D1BC433B5;
+        Sun, 11 Sep 2022 16:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662913269;
+        bh=cGfWdjsunVGfPSZnLvUn5+vhKZzaMGDo1120Cm21tzk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OJZM7TB1QZmLpOAIyyPwJcx8NRaqx5j+pAjfCr2xcwoE3+zV1aGr5/cE6kV6WqVR7
+         0wAVfPHFVmmQGbgSjhbD9YEoHs1XPMlYbdzvjB+MUiWh3QMzuiAXfqGQ9J7LeKw1DW
+         TVq1O8kp+Bic50n3bgVUlHhwK/klb0T0OGWMckWabjgqMSIOyyFh1r/9e6x4I9WEmC
+         Jo0ge8oYF0f11+slT29Sd0CUc2G1i6QQJmoRs5T8Y9IwTH5YaMjTLVfrm45kvfp5be
+         xiezNqH4HuB0gn95EKH7crldsJqvAMFBH8k1Akwo44F9fqheyF2AX5IgWGg4GSWssM
+         QajM4oqxmC1fg==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11e9a7135easo17337674fac.6;
+        Sun, 11 Sep 2022 09:21:09 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3RKP4HHPSA3qUFHA3ZsQe91SAuP58ZgIHPV3FmIJmubsGqX+M8
+        XGlxLMy0M1HbGrW7+HAlAJYNowxmvbdVf47HYaU=
+X-Google-Smtp-Source: AA6agR4WxSXlbU7Po+4Z/ivfavMWvRhtAeEpn4FFnOVslawINbxBs1npyJelq94Jp0sGwlqNn9hCLLS7FNwOfa+P5tA=
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
+ x14-20020a056870a78e00b0012b542be5b2mr2811184oao.112.1662913268609; Sun, 11
+ Sep 2022 09:21:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-5-guoren@kernel.org>
+ <Yxmaz7wJPEBQ7Vki@hirez.programming.kicks-ass.net> <CAJF2gTSs4Ycu52DH6NUzdMXQGMT51XU6x-fgQ-_OpRne+vkTqQ@mail.gmail.com>
+ <Yx36JRG64DtuDrRz@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yx36JRG64DtuDrRz@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 12 Sep 2022 00:20:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRKJmn_+Otg4NMG0rGU6zziOgfcpsFwBcE=nEKb9s9jTg@mail.gmail.com>
+Message-ID: <CAJF2gTRKJmn_+Otg4NMG0rGU6zziOgfcpsFwBcE=nEKb9s9jTg@mail.gmail.com>
+Subject: Re: [PATCH V4 4/8] riscv: traps: Add noinstr to prevent
+ instrumentation inserted
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In statements spaces should be used not tabs. Replace tabs withs spaces
-in two return statements in odm_query_rxpwrpercentage().
+On Sun, Sep 11, 2022 at 11:09 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Sat, Sep 10, 2022 at 05:17:44PM +0800, Guo Ren wrote:
+>
+> > > > -asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
+> > > > +asmlinkage __visible __trap_section void noinstr name(struct pt_regs *regs)  \
+> > >
+> > > But now you have __trap_section and noinstr both adding a section
+> > > attribute.
+> >
+> > Oops, thx for correcting. Here is my solution.
+> >
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index 635e6ec26938..eba744caa711 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -92,9 +92,11 @@ static void do_trap_error(struct pt_regs *regs, int
+> > signo, int code,
+> >  }
+> >
+> >  #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
+> > -#define __trap_section         __section(".xip.traps")
+> > +#define __trap_section                                                 \
+> > +       noinline notrace __attribute((__section__(".xip.traps")))       \
+> > +       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> >  #else
+> > -#define __trap_section
+> > +#define __trap_section noinstr
+> >  #endif
+>
+> This is almost guaranteed to get out of sync when the compiler guys add
+> yet another sanitizier. Please consider picking up this patch:
+>
+>   https://lore.kernel.org/all/20211110115736.3776-7-jiangshanlai@gmail.com/
+Thx, that is what I want.
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/odm_HWConfig.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> and using __noinstr_section(".xip.traps")
 
-diff --git a/drivers/staging/r8188eu/hal/odm_HWConfig.c b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-index a870973395f6..38f357e8aeda 100644
---- a/drivers/staging/r8188eu/hal/odm_HWConfig.c
-+++ b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-@@ -6,9 +6,9 @@
- static u8 odm_query_rxpwrpercentage(s8 antpower)
- {
- 	if ((antpower <= -100) || (antpower >= 20))
--		return	0;
-+		return 0;
- 	else if (antpower >= 0)
--		return	100;
-+		return 100;
- 	else
- 		return 100 + antpower;
- }
+
+
 -- 
-2.37.3
-
+Best Regards
+ Guo Ren
