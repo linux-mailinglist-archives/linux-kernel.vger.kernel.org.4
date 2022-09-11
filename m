@@ -2,127 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1B25B4D26
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4728C5B4D73
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiIKKGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 06:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S230150AbiIKKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 06:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIKKGw (ORCPT
+        with ESMTP id S229437AbiIKKdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 06:06:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1704013D7D;
-        Sun, 11 Sep 2022 03:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662890811; x=1694426811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=COoydWrhxx4yHmAPhCBCqR8wvWQLCV4m7CypWvSwh8w=;
-  b=d44lBWsFEfjgphwKGO7PfMVrzesBd1LZt5LIJ6qnTCcYcX0ut81SSd+b
-   6CaU5fbEwGLbFjr4GOLKJAxtcCvdVj1zriaNTnaWMaBWSIKVBPtUxArwO
-   EcBXVaO/lroMRTzLFscFkEmuV9NbxG+pXxeaZIBrWGzW41Uh5JaRiqXx5
-   3O3Uhm9OAppnXmDjO4nqBw9zebfVOPFCjgROqfWeZagsPyTTwqg+AxDQQ
-   LoMHNxJTUpOh9XrOMLs10ln82NA12pVTY0w3NfglpbVGCmm1pIp+cqm4r
-   eE4HJOkQFt8Gd7zxGf1XEhgVzv/sNrP3AnMqmmsv47po6qRc1Q74aVGC7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="323936195"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="323936195"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 03:06:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="677732462"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Sep 2022 03:06:46 -0700
-Date:   Sun, 11 Sep 2022 17:57:15 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 1/5] Documentation: fpga: dfl: Add documentation for
- DFHv1
-Message-ID: <Yx2w+yl9SFFx0Qtx@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-2-matthew.gerlach@linux.intel.com>
+        Sun, 11 Sep 2022 06:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1F3C151;
+        Sun, 11 Sep 2022 03:33:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88A86B80AFD;
+        Sun, 11 Sep 2022 10:33:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0B5C433C1;
+        Sun, 11 Sep 2022 10:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662892382;
+        bh=cssxUf85fo3xwMVXH/oVbDV1rjWJb8y2wy7UmYIaa/E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XhS4kISCYFy6qLa6qqROP8fKIKO2yZ7KB3lILrsOWftAH4qhs7fP9GJNhGGgIf0mV
+         tgsdv8Hp9Mh65yi1xD1HgolYEFzi9moGvQiLZkmA0QYx3wvg+jTpT/bMx64kWwX4MT
+         T77oD/VHNrpD0k0tp9zTOqGHmUavTYm9QG6uYgFQudGTQOm4nfrDE+N6FuqhLfpg2O
+         ZRCbPokf5+pXGG2vYiGAbA0oKhTOjCtU0d2CjAcjTQUMM8TYsvrxc3/jZfYs2hMVLw
+         7QYrLteGR+Mt8OW/FzFjZ4N9Qv/YjOItXlC16XCsvOlmVApc4bs+uw9a390RCDuljs
+         QxvNmLSs+IvAQ==
+Date:   Sun, 11 Sep 2022 10:58:54 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     lars@metafoo.de, krisman@collabora.com,
+        dmitry.osipenko@collabora.com, kernel@collabora.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] iio: light: tsl2583: Fix module unloading
+Message-ID: <20220911105855.4acad644@jic23-huawei>
+In-Reply-To: <03401e6f-f660-9313-61dc-a930675c82ec@collabora.com>
+References: <20220826122352.288438-1-shreeya.patel@collabora.com>
+        <20220828173327.7949ad73@jic23-huawei>
+        <03401e6f-f660-9313-61dc-a930675c82ec@collabora.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-2-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 at 12:04:22 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Add documentation describing the extentions provided by Version
-> 1 of the Device Feature Header (DFHv1).
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  Documentation/fpga/dfl.rst | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 15b670926084..31699b89781e 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -561,6 +561,30 @@ new DFL feature via UIO direct access, its feature id should be added to the
->  driver's id_table.
->  
->  
-> +Extending the Device Feature Header - DFHv1
-> +===========================================
-> +The current 8 bytes of the Device Feature Header, hereafter referred to as
-> +to DFHv0, provide very little opportunity for the hardware to describe itself
-> +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
-> +to provide increased flexibility and extensibility to hardware designs using
-> +Device Feature Lists.  The list below describes some of the goals behind the
-> +changes in DFHv1:
-> +
-> +* Provide a standardized mechanism for features to describe
-> +  parameters/capabilities to software.
-> +* Standardize the use of a GUID for all DFHv1 types.
-> +* Decouple the location of the DFH from the register space of the feature itself.
-> +
-> +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
-> +a list of parameter values to a particular feature.
-> +
-> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUILD standard
-> +across all types.
-> +
-> +With DFHv0, the register map of a given feature is located immediately following
-> +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
-> +map can be specified as an offset to the DFHv1 or as an absolute address.
+On Fri, 9 Sep 2022 00:25:49 +0530
+Shreeya Patel <shreeya.patel@collabora.com> wrote:
 
-Could you make a table or diagram to describe the data structure layout of DFHv1
-extention.
-
-Thanks,
-Yilun
-
-> +
->  Open discussion
->  ===============
->  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
-> -- 
-> 2.25.1
+> On 28/08/22 22:03, Jonathan Cameron wrote:
+> > On Fri, 26 Aug 2022 17:53:52 +0530
+> > Shreeya Patel <shreeya.patel@collabora.com> wrote:
+> >  
+> >> tsl2583 uses devm_iio_device_register() function and
+> >> calling iio_device_unregister() in remove breaks the
+> >> module unloading.
+> >> Fix this by using iio_device_register() instead of
+> >> devm_iio_device_register() function in probe.  
+> > Not sure why you are wrapping at 55 chars. I rewrapped this whilst applying.
+> >
+> > Reworded it a little too as I was touching it anyway.
+> >
+> > Applied to the fixes-togreg branch of iio.git.  
 > 
+> Hi Jonathan,
+> 
+> I was wondering if this got picked by you. I don't see it in 
+> fixes-togreg that's why wanted to just confirm if you aren't looking for 
+> some extra changes in this.
+> 
+> 
+oops. I forgot to push that branch out. Done so now.
+
+Jonathan
+
+> Thanks
+> Shreeya Patel
+> 
+> >  
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: 371894f5d1a0 ("iio: tsl2583: add runtime power management support")  
+> > I took a look at this patch and it introduces the issue I just pointed
+> > out in replying to your v1 by dropping the
+> > /* Make sure the chip is on */
+> > Which was correct even with runtime pm because it covered the case of
+> > runtime_pm being disabled.   We probably need to bring that back as well,
+> > perhaps as part of a cleanup patch taking this fully devm_
+> >
+> > This driver has another issue for working if runtime PM isn't built into
+> > the kernel which is that it checks the return of pm_runtime_put_autosuspend()
+> > which calls
+> >
+> > static inline int __pm_runtime_suspend(struct device *dev, int rpmflags)
+> > {
+> > 	return -ENOSYS;
+> > }
+> >
+> > I've been meaning to do an audit for drivers that have this problem for
+> > a while, but not yet gotten to it.
+> >
+> > An ideal IIO driver needs to work correctly whether or not CONFIG_PM is
+> > enabled.
+> >
+> > Jonathan
+> >
+> >  
+> >> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> >> ---
+> >> Changes in v2
+> >>    - Use iio_device_register() instead of devm_iio_device_register()
+> >>    - Add fixes and stable tags
+> >>
+> >>   drivers/iio/light/tsl2583.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/iio/light/tsl2583.c b/drivers/iio/light/tsl2583.c
+> >> index 82662dab87c0..94d75ec687c3 100644
+> >> --- a/drivers/iio/light/tsl2583.c
+> >> +++ b/drivers/iio/light/tsl2583.c
+> >> @@ -858,7 +858,7 @@ static int tsl2583_probe(struct i2c_client *clientp,
+> >>   					 TSL2583_POWER_OFF_DELAY_MS);
+> >>   	pm_runtime_use_autosuspend(&clientp->dev);
+> >>   
+> >> -	ret = devm_iio_device_register(indio_dev->dev.parent, indio_dev);
+> >> +	ret = iio_device_register(indio_dev);
+> >>   	if (ret) {
+> >>   		dev_err(&clientp->dev, "%s: iio registration failed\n",
+> >>   			__func__);  
+> >  
+
