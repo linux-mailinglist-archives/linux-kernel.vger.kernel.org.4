@@ -2,148 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA5A5B4F6A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBDA5B4F6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiIKOSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 10:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S229498AbiIKOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiIKOSt (ORCPT
+        with ESMTP id S229441AbiIKOgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 10:18:49 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9012D21245
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 07:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1662905928; x=1694441928;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1ZeosKCdRqJre/8DiboNXUF0h0xy40H1IiMlnXbs1ts=;
-  b=adZE2pMzG6X4VpOvqc5IuK0HychrImAl/63pnc3dSQMi5sj0/IShqzBs
-   L4ZEpOVnnY64rC7MeXpMkwivfgBB7qlwndZs3Yff9l1c9JC+p1uKy2ICa
-   4sBBgSC6hz5EfW7WsSwmOfdJukSd72ivMfX1RRohmoirtDRjrpQM72RNr
-   h6ta9jdnatjetr1sAoveMGwauWqSRHbA+Z/gOgXVQS5OfHjJoxDsC4icD
-   Qfm+RV06+c2XZFIm7ee8LmS2B4F51fGVAtM8y4lx3cMDYa8B9tRYzpTF4
-   pdegOFCjmdAai9yuMGREzL9LjfP7l6jED1LVE7ZZX5PSqAmP3SxaoHv1H
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,307,1654531200"; 
-   d="scan'208";a="323164908"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Sep 2022 22:18:47 +0800
-IronPort-SDR: dca/WEYOpMgd5J2vtZltinpb8KwqgWN4TIGPzxEv0JUWyW6Q9up5acpBVhXRKceTIxY9g9xKRv
- bw523sj2vqXl9xqnJbMgpVhNZnjq4B8NuCi+ZETa0/BcxL/jY6WVAoGHToyoUsSeGOEgQnLSI2
- dB0wfBsKvLAM5eO4P/JUzZEs0WE//xbJmRdPIKJspKBeRiIMHOtBFtH1E8eTyI4yaxiMky99ZQ
- Ph3IJUMGQ5xntmCQIrb8Jyq4D3Jae3KDV5A+P0xHxISPFVVAdlVTFlbsrpvxz2vQ0Y2tjgfv7P
- DnrKM4iiqgs0P0ACb8qu8FKM
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2022 06:33:37 -0700
-IronPort-SDR: CoSAOp//LA6y6q8Z5Zm8ZV8lFvA20rUm+7u97hOqbrsQrQ3bj6wbMuqQJXaACOqBBsTIXBbw66
- aINI7PbPewmQNeRTITPXmWZhPotSXSJn4l9XbEKsQJnqxDNVbtBsbFyowhTtXd9x8z1kN8uVdF
- I8ZteOVAZRMyqI802/uNhUhjiYVEBBvKEVjWB7zUZSGvYbeACst+mdyCmmjN2yzoFLoaluAhS2
- P97ISyySZN8Yj27jXeYh4ekxHLGzdQ2Ytku9W4iHWqnSoSO+bxn+xLAMMCPSsZpe33Rpa3bmen
- VLk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2022 07:18:46 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MQX064hTRz1RwtC
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 07:18:46 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1662905925; x=1665497926; bh=1ZeosKCdRqJre/8DiboNXUF0h0xy40H1IiM
-        lnXbs1ts=; b=j4h2ZE/9PX6h/2kYKLziwwoSgdmonXasjWQwvwVH6ACmLFoeoQC
-        RIAi/oynNfqjDavUA/A9ZlQSaIU2wt6G7N+Z5LeY0j6WKkCIQEexOpArbHZcK7rz
-        608Gw/tG/qm0KYRDg3nUrrcfMhvhif7729OMuAtTtXRmcRCPBX1eOw6PVAZdXj26
-        gTwhvg7Z0Zmm3wyLcqoAHrL2j9S1ZRcP/v5z3Ha2/05VGkPZA11LtjpPoZPaY63A
-        pD8vGUpLde2i8Xeu3yNpleGpo4howJ9GIfSdaSoruNfpKDdhzsGhkW+hIdnuibbG
-        6dB1jAdwiBHJNCV4FGuKPh40dmLBeCSQyTQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id OysM0BdQdxrH for <linux-kernel@vger.kernel.org>;
-        Sun, 11 Sep 2022 07:18:45 -0700 (PDT)
-Received: from [10.225.1.43] (unknown [10.225.1.43])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MQX024lcsz1RvLy;
-        Sun, 11 Sep 2022 07:18:42 -0700 (PDT)
-Message-ID: <99d7c533-f19e-a52a-e532-2a07cd78e9b9@opensource.wdc.com>
-Date:   Sun, 11 Sep 2022 23:18:40 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of
- creating a PPC dependency
+        Sun, 11 Sep 2022 10:36:00 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50060.outbound.protection.outlook.com [40.107.5.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAEE26552;
+        Sun, 11 Sep 2022 07:35:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lfd5wqk1UTZaoUgBm0X/FRjBvIJUpdqkcV0mxUk8MgCxAqEyuakU+0zCwdBrNg3GAVT0MXz4apdo4LZkIv7uNbs7A+rnDzHJBE6RoXlpamHbZHNsCdS1omPB22yCVgEXAs8Z/Pz0fDgQjOXTBq6FPkLxxatO02Qsb7oWoeoA4HTcLRJXArWseK0txlFetgZxTH+Qhh3eqrQXjTslGbVjpw+I8gLh9rXwehiAwBwNZ6HvTdQaQXKo0B4bWBAjLkhztkxPRqjjMLTSMb8gtG+Uok2arMTlVFfEIamCdMd3AtqPTA+On29EeefdeKRBaZ14k/E5g9po3Itn3MrAEAxy+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vOeYnlqOJEYXKQyObYcaSrNP8qe5Gu9GSlBDFXoZAd4=;
+ b=hWbH9Qiu1sBnJira8jz35mA03l/XfyW56ovmSrOwon09ltUZ1MoIxWz+KyWKXfKp33n0mANKslmV5YZEGZ2FzpXGy/o2llCDzqLfprvgzKfoq/lS421HfxV8bAks9qG7iQJ2aY02xL7osQvtWWQ2OKH874lKFStBhP0BLIg0xfgkLBK0iSF0P0F9+eqt5cgXr7+i+18RzoUpZ5SQbqXz5BNmGKnrShTBahv3pQjAcYg18407GpFeVM2wwdcDTmCoHUMd+Lqq69hXDcdMduIqjRBBvUM4UL86nSDbuxbTIcpiZHTuXXHQ3zTkjZUautIY0AVOVbbit8IkLfPlj3AhOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vOeYnlqOJEYXKQyObYcaSrNP8qe5Gu9GSlBDFXoZAd4=;
+ b=MkMXCNQxn63cT8NRul4HsHuDwIUK6B26Tg8rBkn3ysRUR+uJne57a25KLSgKG7QIBavAgAu7fFEx7bTGKmTcC9RPFpSIKRujgdXAvDX2Ah7wpOd8QuUiX9gTCVZp08PxsK+hdN6NUxJ9NrW5JvLj43vEEoDkJmv99CONJPRknkU=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PAXPR04MB9469.eurprd04.prod.outlook.com (2603:10a6:102:2b4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Sun, 11 Sep
+ 2022 14:35:55 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5612.022; Sun, 11 Sep 2022
+ 14:35:55 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Tobias Waldekranz <tobias@waldekranz.com>,
+        =?Windows-1252?Q?Marek_Beh=FAn?= <kabel@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        =?Windows-1252?Q?Alvin_=8Aipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        David Ahern <dsahern@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Subject: Re: [PATCH v2 net-next 03/10] net: dsa: allow the DSA master to be
+ seen and changed through rtnetlink
+Thread-Topic: [PATCH v2 net-next 03/10] net: dsa: allow the DSA master to be
+ seen and changed through rtnetlink
+Thread-Index: AQHYxXrq7VKdgocdc0yXd/+v2/htAK3aTKIA
+Date:   Sun, 11 Sep 2022 14:35:55 +0000
+Message-ID: <20220911143554.tq4lf5eqs4novhtn@skbuf>
+References: <20220911010706.2137967-1-vladimir.oltean@nxp.com>
+ <20220911010706.2137967-4-vladimir.oltean@nxp.com>
+In-Reply-To: <20220911010706.2137967-4-vladimir.oltean@nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-Cc:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
- <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
- <2379456e-4f18-d619-10bf-022327de0463@csgroup.eu>
- <4b33bffc-2b6d-46b4-9f1d-d18e55975a5a@www.fastmail.com>
- <0ad5f339-de31-2849-34a1-928ae65cc696@opensource.wdc.com>
- <c4f3d527-7e70-4077-b40b-129144d79374@www.fastmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <c4f3d527-7e70-4077-b40b-129144d79374@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PAXPR04MB9469:EE_
+x-ms-office365-filtering-correlation-id: 43bf5bd2-48ba-4f14-8f37-08da9402ef5c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yDnbC6Q1EsDPcIbiWip3YAYMJfdeMVaBU7G2U+YAx5qkgpUy63KStdlYGVzKmRdnDQFcX5ro2EjHugqxit8Ie2di5T+OeY/B6cSvVU396s5LnsscFiVOm83q5FSQTr2BIDiadPTHiT73aQ14qtulYqmSHFWpp3Em0l+PEJR+UpbD3Q7F0V2AA7u7Z3YtTRSDtyQ2oLvqJPY4wENiOS8VtVgyzVB4Z10/jr408D/xIKSJ9dK3WqTz4zNmUta9xqSwcWD40n0XixZM0X73fG9Dcva1DXZOEnIY3rGgnnXIzsRHBliUMtIkVfas8P0jlmvoAFpa06WQT842xb26vY4XIXOqQVHEQnwDMqEfCsfCLKzaXwCDZHZvx20EyURlGon68WGbhQJTsE3mHs+WF1RCaTVMz4hhqTvAq1TWfyw3UPpDSbri2hcRm5c4T4v4YyE4NithnBOgmQJZpkb5lZi2SCgcK05iYQEzjVqLLlqqC1HQyLMtVp3C9MwspyPK8fBsq8NIIUCZTMLzdlo9LWkASzsPTxD/dZj8Wejdl+7SM+OxPRKuHbHm3LL2ue901QbDHBAwOeILlGwd3N12qdIGpsLlDXl99CwHw77aCcdBVGvdrd7IKozHlq2n9V1PQS/vf1p/6vCvcTACRlbMsxg/6AAnq3Otc5ESy8RpHUYWM5uywvQOdP1M9XaSYzpq3cRZpQUKykRTDedRZT/o2oglXrYp45VnOxWNCtuRqKytAPMia3CS5DuUDj1F9GhWWDLOiypRd27y6MjitzXn9WUV7Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(346002)(136003)(39860400002)(376002)(396003)(38100700002)(38070700005)(122000001)(86362001)(4326008)(76116006)(66946007)(66476007)(66556008)(8676002)(66446008)(316002)(6916009)(2906002)(5660300002)(8936002)(7416002)(44832011)(4744005)(54906003)(71200400001)(41300700001)(478600001)(9686003)(6512007)(6506007)(26005)(64756008)(6486002)(33716001)(1076003)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?WUW4L1obn7U3zzAqklFlQP/kM/dMUNGFRNyp1uTdd6fGPZGax1WX4ogy?=
+ =?Windows-1252?Q?45pQiZauwGhu+xm0knzmXQPRHZ9uYBnAIVwW6tBG68VcEj8jSHT9Nwpp?=
+ =?Windows-1252?Q?dYuBs9MlW6ky3m1LlU/131takM1KMF+cZvLpajjARurTEAilu49cbji3?=
+ =?Windows-1252?Q?j+txjOTzn0y0xQKyVZ+rZxjwcLgUPB6jGiOXwAlP/YWEfK/ENvSF9OV+?=
+ =?Windows-1252?Q?ncrlinTM41s9UEz6oGaiBY8g66y8WHUyQvs8ZzINrhuvMgTUrKdOTdm6?=
+ =?Windows-1252?Q?9ka4b/9uFlpZVLKW1uDJJ9I5oMEbTxVYALUu73qhEx7XN39s3trDfH+j?=
+ =?Windows-1252?Q?OEJOXEbzLSwVyTPAc+FvW0uf4et8VY2S1ES7fCjTD9guFHK2NMFGnS9n?=
+ =?Windows-1252?Q?xtQnyXDRBl6K4HYS8ErKWLicXHIBv5jslIB58XoLlXp7oYxuKCB1ox/i?=
+ =?Windows-1252?Q?Hm2k/Z6m3qgUJ7LBKHumGv54llEaUUsl8qIGAOojuupIjkGZjRR2V7wU?=
+ =?Windows-1252?Q?+NCtcsJJmO7jcPgdh6UKlQO+6X5RPLZlrKUmyWcAOduexYGwIsqF9mo/?=
+ =?Windows-1252?Q?H98Q2YG8xqSiWzJlnGMSo9LGxy/RDXmO3b+WQy9/XngJCNilh/MLDwlp?=
+ =?Windows-1252?Q?QFBZ4svgiacUpOERw1yQIg7tAvyVz0qx+8ZunOt9x6XNaINYngJVFGek?=
+ =?Windows-1252?Q?x1R2Tr+qgtc5TYRGiViNnmgh3KCl3ezMWZFeCvQgF2YhLmY4fn4thITR?=
+ =?Windows-1252?Q?MwWk1hq1e+AXu4jWqfXzf/vNQfBegFVqvNh/dTtN3VTBuEneS7gPO80Z?=
+ =?Windows-1252?Q?7RnGcpgpe57u5ytRuNoyzWMsgLKPEkkf9EOC3WsbaekBO59aOz8Eo+Vf?=
+ =?Windows-1252?Q?pHG7B8i/ICmsnLvyjaj9Q5fqnu3ruAbxiRd5z3T75jfVdof0myHzmGv6?=
+ =?Windows-1252?Q?RCR3Yop0fZs4R0W023/vtyjoRr0tHxViojAzbmP1XQAw9HPTN521YveL?=
+ =?Windows-1252?Q?dc6x8zLSW356W9LscGYxw9oevYD2ALxZsHXEQj535NSWQh1uHzWrxCdk?=
+ =?Windows-1252?Q?5UeYmqCwp0Z959caIYX8fAsgl2L5KOSnCFO4qt3nUjaVLhv8iTv3oBj/?=
+ =?Windows-1252?Q?EGef1/VkR/I03tLs0sgq1RyBvsboZ03mysHzq09XkmaqTQaOwdPm5Xw+?=
+ =?Windows-1252?Q?qhTzHFVgOHrFSSjcrcoOws4Iz115GRXP/OscqsnXobJD4qtDwavSC1UE?=
+ =?Windows-1252?Q?YR3SnA0EliediSWaPmaqdCHZXGlYCl1swyxtmQ3MOAW1f16nLBFXLXYa?=
+ =?Windows-1252?Q?Qk2n3kwZeWx7Bzrgix4e8h1UfSOCPgsi/7IhS9RH1YQYh6pQ6ZnihWbz?=
+ =?Windows-1252?Q?WbyDw0uF8nbjfyktJOv67ZDmGxIOwbRVtV4K8TO2z13rQKq9DiZW5t2n?=
+ =?Windows-1252?Q?SycxjJROFIl7/QCCBGC6U+GsiZSyczI+chCBT+77nCxBysUZQCDIZtSQ?=
+ =?Windows-1252?Q?/Uq67CYeLIKv3nLnRyRX1zZkhcV2zZesaINvKR0vRcCpkr9LlygDweDv?=
+ =?Windows-1252?Q?3O/FKss30xBKkMZfxxm+Vy/vdpen8Q977X6IK33tkukTrWPsViGNfdEV?=
+ =?Windows-1252?Q?UKwpjgt70GwygsgzGN+guWcwT5DgsFWx9WWKmV+7jlY8skJgVP0jI06r?=
+ =?Windows-1252?Q?ye7JHu88a/6K/L4U/Vi+ZLY0XReDt1+ELtB4iHZxdM0DMOUE1uwSaA?=
+ =?Windows-1252?Q?=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <9B5649E68D886543BB48D83D41DC1FCD@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43bf5bd2-48ba-4f14-8f37-08da9402ef5c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2022 14:35:55.2387
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XFEu2WRAiYWlLKPJOenSoEI14kENdqipUIovgegq8gZrpCdkPnzR4EaBrtHWmKZcg5IvoU4hSBnO/mYOccpIrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9469
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/11 21:41, Arnd Bergmann wrote:
-> On Sun, Sep 11, 2022, at 1:54 PM, Damien Le Moal wrote:
->> On 2022/09/09 20:31, Arnd Bergmann wrote:
->>>  
->>>  config PATA_PLATFORM
->>> -	tristate "Generic platform device PATA support"
->>> -	depends on EXPERT || PPC || HAVE_PATA_PLATFORM
->>> +	tristate "Generic platform device PATA support" if EXPERT || HAVE_PATA_PLATFORM
->>
->> Shouldn't this be:
->>
->> 	tristate "Generic platform device PATA support" if EXPERT || PPC
->>
->> ?
->>
->> And while at it, it would be nice to add "|| COMPILE_TEST" too.
-> 
-> The idea was that this can be selected by CONFIG_PATA_OF_PLATFORM
-> in any configuration that has CONFIG_OF enabled. Since PPC
-> has CONFIG_OF enabled unconditionally, there is no need to
-> make this option visible separately.
-> 
-> Same for compile-testing: since CONFIG_OF can be enabled on
-> any architecture, PATA_OF_PLATFORM is already covered by
-> allmodconfig builds anywhere. The separate HAVE_PATA_PLATFORM
-> is only needed for machines that want the non-OF pata-platform
-> module (sh, m68k-mac, mips-sibyte arm-s3c-simtec).
+On Sun, Sep 11, 2022 at 04:06:59AM +0300, Vladimir Oltean wrote:
+> +struct rtnl_link_ops dsa_link_ops __read_mostly =3D {
+> +	.kind			=3D "dsa",
+> +	.priv_size		=3D sizeof(struct dsa_port),
+> +	.maxtype		=3D IFLA_DSA_MAX,
+> +	.policy			=3D dsa_policy,
+> +	.changelink		=3D dsa_changelink,
+> +	.get_size		=3D dsa_get_size,
+> +	.fill_info		=3D dsa_fill_info,
+> +};
 
-Got it. Thanks for the details.
-
-> 
->        Arnd
-
--- 
-Damien Le Moal
-Western Digital Research
-
+I forgot to apply Jakub's suggestion to set netns_refund =3D true.
+On the other hand, I think the patches are otherwise fine, and I
+wouldn't resend them, especially without any feedback. If there is no
+other feedback, can I fix this up through an incremental patch?=
