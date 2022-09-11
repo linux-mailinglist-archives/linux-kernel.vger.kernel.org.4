@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A14B5B515A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1CF5B516C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 00:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiIKVln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 17:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
+        id S229695AbiIKWDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 18:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIKVlk (ORCPT
+        with ESMTP id S229662AbiIKWDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 17:41:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C003201A1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:41:40 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28BLfACZ012463;
-        Sun, 11 Sep 2022 21:41:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=172gqBHdWTQsPiaT/19OqMVWgqe3jX8FYL5YY4LecWU=;
- b=iO7OZl1YeSX35Wr6OiLm5BQ6Msub0d37eTaouQSKMx2M96EWXBbR3kvuHmCf9evzR6+t
- kGWqKBv850ASNqix5c2qSieY08VeXI0kJGZBs18+SZ4x+0b0HwIgeEdojL2AggZcHEhS
- MzAtrC6ArV8hihSxSPpSr3NGLCJOqF9qWEwPNbw0m3jJEbLQZhqtB5DmFUm1DWEGaLsP
- U8fMXwbn4D0tmjVpAbtwPcSv0RR9iX/9aWyND/kL1dCIuu4gGChK7jibpXb3bciNglH9
- amYkzgZ8UuILaMBReIdg5P/TVJ00GhhyFVUuOwe20D1djOLRy7o6QGMa6PN4myJ4a9ME pA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk43jp9t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Sep 2022 21:41:10 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28BLf9DA028608
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Sep 2022 21:41:09 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 11 Sep 2022 14:41:09 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        "Alexandru Elisei" <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kvmarm@lists.cs.columbia.edu>
-Subject: [PATCH v3] KVM: arm64: Ignore kvm-arm.mode if !is_hyp_mode_available()
-Date:   Sun, 11 Sep 2022 14:40:59 -0700
-Message-ID: <20220911214059.2767620-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 11 Sep 2022 18:03:52 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7917240B0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:03:51 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-127ba06d03fso18824566fac.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=QciXyEtl0SG2sFGkjdrqOCkJJthnC/gW3bZjn86sQs4=;
+        b=nedOYSluEe/44mthiiwXwA1U+s+w585VU+/rvGTWb2MVLxhVMCOtmFyFNWm5Tx4nrs
+         Y/VKNMFavwPbWQ/bofYNMUUJPmD3kZOTVO+aYqiQKDGGnLt0DiW/E6TXIIQAfb1hfnC8
+         Unml1Eyq/Z0zoF94XBmzFCALmSunHjPbqpVcgCEnWIDLogM+TohnaUANarxzJh/HQ3C8
+         c3OVSevJPkUdg3+l7n4xSg6hddlARLnc4NjToD2DgM8ilRTeFDmTVoXS/Qkgq5iPq4S1
+         ne7YFDXwa2QQW1WmawvHd059Au6Qxg9S7kwvrMK7AfmK7MLWZ1ZOx/Xa7bgGzMDyoUKB
+         jqLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=QciXyEtl0SG2sFGkjdrqOCkJJthnC/gW3bZjn86sQs4=;
+        b=EQ5w2imVi8TVnhDWn0kno6MXchQh7HcTjiWFi4sE7OKMnyCsRLxbNeRz5KKgx5anLz
+         YMRT6l3lmw8GdgrM9esLf2LPgZxXN0T84vpeZDLGYyFE1DCBCtK9QaO9ccgNDJa4BN25
+         NWkzC1A/4NSx43ZAoVL5K8MY2i223tAY6BDwtZFrPZvvNlY3kjiFQSJMEDuLPrsyOTag
+         NaSyElsCsR1TXawUIGD8Aje6RGEFG0yUDrqkNMjUXio5RCm5WAAKky64zJQHBAgEwKWU
+         5wSW+6NOUZUxDb3VAn6V3awXSJ3A8KldwQjC73A31aBngOHht243vOH/5UEVkjh2ZPZZ
+         bMFg==
+X-Gm-Message-State: ACgBeo2OZJ+F+8LPCUAQBhu+dAPGevIusG4yNiGqvIotj/tylqvFj1uD
+        sUlLYk3MQvFmdNIfDr94JtNGosPoPgsEWg==
+X-Google-Smtp-Source: AA6agR7M8OWqYsVeZuV7IzoTsnUUDdXizBgkugpQqrzObWrhOry54eJ7h10jSDTh27LUPjKoUGD+6Q==
+X-Received: by 2002:a05:6808:201e:b0:34f:7d7a:3017 with SMTP id q30-20020a056808201e00b0034f7d7a3017mr2927903oiw.219.1662933831071;
+        Sun, 11 Sep 2022 15:03:51 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id r19-20020a056870439300b00127d2005ea1sm4664249oah.18.2022.09.11.15.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Sep 2022 15:03:50 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     brgl@bgdev.pl, linus.walleij@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 0/3] Introduce the ACCES IDIO-16 GPIO library module
+Date:   Sun, 11 Sep 2022 16:34:37 -0400
+Message-Id: <cover.1662927941.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: O96vbLzBZ1LFAsrLFd_xeOhMc_hcdqfA
-X-Proofpoint-ORIG-GUID: O96vbLzBZ1LFAsrLFd_xeOhMc_hcdqfA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-11_12,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=861 clxscore=1015
- mlxscore=0 priorityscore=1501 impostorscore=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209110084
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ignore kvm-arm.mode if !is_hyp_mode_available(). Specifically, we want
-to avoid switching kvm_mode to KVM_MODE_PROTECTED if hypervisor mode is
-not available. This prevents "Protected KVM" cpu capability being
-reported when Linux is booting in EL1 and would not have KVM enabled.
-Reasonably though, we should warn if the command line is requesting a
-KVM mode at all if KVM isn't actually available. Don't emit warning for
-"kvm-arm.mode=none" since this would disable KVM anyway.
+In a similar vein as the Intel 8255 interface library module [0], the
+ACCES IDIO-16 GPIO library module is introduced to consolidate much of
+the shared code between the existing 104-IDIO-16 and PCI-IDIO-16 GPIO
+drivers.
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- arch/arm64/kvm/arm.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+The idio-16 module exposes consumer library functions to facilitate
+communication with devices within the ACCES IDIO-16 family such as the
+104-IDIO-16 and the PCI-IDIO-16.
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 8fe73ee5fa84..8e5d1c8502f5 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -2271,6 +2271,16 @@ static int __init early_kvm_mode_cfg(char *arg)
- 	if (!arg)
- 		return -EINVAL;
- 
-+	if (strcmp(arg, "none") == 0) {
-+		kvm_mode = KVM_MODE_NONE;
-+		return 0;
-+	}
-+
-+	if (!is_hyp_mode_available()) {
-+		pr_warn_once("KVM is not available. Ignoring kvm-arm.mode\n")
-+		return 0;
-+	}
-+
- 	if (strcmp(arg, "protected") == 0) {
- 		if (!is_kernel_in_hyp_mode())
- 			kvm_mode = KVM_MODE_PROTECTED;
-@@ -2285,11 +2295,6 @@ static int __init early_kvm_mode_cfg(char *arg)
- 		return 0;
- 	}
- 
--	if (strcmp(arg, "none") == 0) {
--		kvm_mode = KVM_MODE_NONE;
--		return 0;
--	}
--
- 	return -EINVAL;
- }
- early_param("kvm-arm.mode", early_kvm_mode_cfg);
+A CONFIG_GPIO_IDIO_16 Kconfig option is introduced by this patch.
+Modules wanting access to these idio-16 library functions should select
+this Kconfig option and import the IDIO_16 symbol namespace.
 
-base-commit: 0982c8d859f8f7022b9fd44d421c7ec721bb41f9
+[0] https://lore.kernel.org/all/d1a24895f2ea67f689c24c34a20ddb43cd7246af.1658324498.git.william.gray@linaro.org/
+
+William Breathitt Gray (3):
+  gpio: idio-16: Introduce the ACCES IDIO-16 GPIO library module
+  gpio: 104-idio-16: Utilize the idio-16 GPIO library
+  gpio: pci-idio-16: Utilize the idio-16 GPIO library
+
+ MAINTAINERS                     |   6 ++
+ drivers/gpio/Kconfig            |  11 +++
+ drivers/gpio/Makefile           |   1 +
+ drivers/gpio/gpio-104-idio-16.c |  91 +++++-------------
+ drivers/gpio/gpio-idio-16.c     | 159 ++++++++++++++++++++++++++++++++
+ drivers/gpio/gpio-idio-16.h     |  70 ++++++++++++++
+ drivers/gpio/gpio-pci-idio-16.c | 119 +++---------------------
+ 7 files changed, 281 insertions(+), 176 deletions(-)
+ create mode 100644 drivers/gpio/gpio-idio-16.c
+ create mode 100644 drivers/gpio/gpio-idio-16.h
+
+
+base-commit: 3af20d2723be5f70e1ce818504a4c093a81b21f5
 -- 
-2.25.1
+2.37.2
 
