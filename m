@@ -2,113 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3602C5B4C1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 06:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00275B4BDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 06:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiIKEvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 00:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S229614AbiIKElM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 00:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiIKEvX (ORCPT
+        with ESMTP id S229636AbiIKElJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 00:51:23 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4496B29CB3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 21:51:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bq23so9610818lfb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Sep 2022 21:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date;
-        bh=XIY+68P3U22mQGsLLoSSFcg2zg1iq6nyQPz8fLaQ0oE=;
-        b=KMFPIZg72ybP/U7EjC2ScfiAUimjnENQw0GEyTYJzmkUU52crQ6OHlLskmExR7NsSs
-         eMY9SN0NOGAqyKnlGcCLLgdOs6Zjmj+OE9PviAhQdducKwbYV9wzHgn/rbq+7bGUx559
-         NodqqgwDI1U8LSxxaSKvzGyevZmw4d85G43k+/QUsDCmQzdS/01OO6nGrrgv4o8ywLAS
-         oZGLMbfaTaDk8ekJkgsUnobyUQLa71UK+15ACp1hxK9r8APUX/VCok+93Z33A1EZsq93
-         n9631zSD2uMvomFLsW6aMIbP145LN5a+TL/DXeuW565iBiQ7pgoEkG9EPtVOin1SV0ul
-         8gvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=XIY+68P3U22mQGsLLoSSFcg2zg1iq6nyQPz8fLaQ0oE=;
-        b=hxznyOdxal9WtUqEOb47Hx4H+gAYbihHHvxikoO0+iKneeykzZJg+Y8LseKisrWwOW
-         XzuO7XaYmBP+SgOSBkSiEPPhrOuBtZjUVvGPcKgc7yR6SZip186pJVwcoi6hanPCL4Xk
-         OJ4hjPHhroFfHyJYTG19KhdYV5VFxC72a/+qG5cvLZHur/V4pNOLNT+UR0ceYj/6hEjV
-         GTKjD6rHbZvWjsoeBMZK4QTQWZcCnRcc4fTnbxYRi2zwlMjjAdJQM93KGH2Z1d2wdfsm
-         PShNevaz01RHpJVXMmjWAKrUlxabakv9kYYtJtryKLi91QInLpMzZknLp8v6ZeY9MOL/
-         TDqw==
-X-Gm-Message-State: ACgBeo2EOpSmtDGKPU5seU/W3g5xrIf6jRUNcFzqIwM4lFeFrxQsAvX+
-        Q5SsCFi3MttAYn3FhzQ5Fzw=
-X-Google-Smtp-Source: AA6agR4HaTIFXR95Cv35IjLjzgwZoQn9BgzbhDxW7IP1eMizctu6PfCBylwC524DiMtSVr18MWoAFw==
-X-Received: by 2002:a05:6512:281a:b0:49a:4e46:34ff with SMTP id cf26-20020a056512281a00b0049a4e4634ffmr411587lfb.72.1662871880581;
-        Sat, 10 Sep 2022 21:51:20 -0700 (PDT)
-Received: from ?IPV6:2a02:a31a:a240:1700:e929:c054:a46d:3844? ([2a02:a31a:a240:1700:e929:c054:a46d:3844])
-        by smtp.googlemail.com with ESMTPSA id 7-20020a2eb947000000b00268cfcf841asm46332ljs.56.2022.09.10.21.51.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 21:51:20 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <c1d7ac5a-90bf-d6ea-ec77-ec7662482d2e@gmail.com>
-Date:   Sun, 11 Sep 2022 06:51:18 +0200
+        Sun, 11 Sep 2022 00:41:09 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8B541D17;
+        Sat, 10 Sep 2022 21:41:07 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MQH7G6hG9zHnkn;
+        Sun, 11 Sep 2022 12:39:06 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 11 Sep 2022 12:41:05 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 11 Sep
+ 2022 12:41:04 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <jack@suse.cz>, <tytso@mit.edu>, <adilger.kernel@dilger.ca>
+CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH v2] ext4: Fix dir corruption when ext4_dx_add_entry() fails
+Date:   Sun, 11 Sep 2022 12:52:04 +0800
+Message-ID: <20220911045204.516460-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
- display modes
-Content-Language: pl
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
- <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
- <20220905133755.gcmmntg3wnecyqjq@houat>
- <10ce686a-d7c8-9ce4-3979-735ad8eab3b5@gmail.com>
- <20220907143421.4iopqwhp3yfircsh@houat>
- <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
- <20220909135444.5oi6oh6nqwuke3jl@houat>
- <79ab3fef-fdaa-e191-d839-4af88191e672@gmail.com>
-In-Reply-To: <79ab3fef-fdaa-e191-d839-4af88191e672@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Yes, lines 0-23 is the entire blanking area. And the "back porch" in this
-> context is everything from the start of the sync pulse to the start of active
-> video. It's not just the equalizing pulses.
+Following process may lead to fs corruption:
+1. ext4_create(dir/foo)
+ ext4_add_nondir
+  ext4_add_entry
+   ext4_dx_add_entry
+     a. add_dirent_to_buf
+      ext4_mark_inode_dirty
+      ext4_handle_dirty_metadata   // dir inode bh is recorded into journal
+     b. ext4_append    // dx_get_count(entries) == dx_get_limit(entries)
+       ext4_bread(EXT4_GET_BLOCKS_CREATE)
+        ext4_getblk
+         ext4_map_blocks
+          ext4_ext_map_blocks
+            ext4_mb_new_blocks
+             dquot_alloc_block
+              dquot_alloc_space_nodirty
+               inode_add_bytes    // update dir's i_blocks
+            ext4_ext_insert_extent
+	     ext4_ext_dirty  // record extent bh into journal
+              ext4_handle_dirty_metadata(bh)
+	      // record new block into journal
+       inode->i_size += inode->i_sb->s_blocksize   // new size(in mem)
+     c. ext4_handle_dirty_dx_node(bh2)
+	// record dir's new block(dx_node) into journal
+     d. ext4_handle_dirty_dx_node((frame - 1)->bh)
+     e. ext4_handle_dirty_dx_node(frame->bh)
+     f. do_split    // ret err!
+     g. add_dirent_to_buf
+	 ext4_mark_inode_dirty(dir)  // update raw_inode on disk(skipped)
+2. fsck -a /dev/sdb
+ drop last block(dx_node) which beyonds dir's i_size.
+  /dev/sdb: recovering journal
+  /dev/sdb contains a file system with errors, check forced.
+  /dev/sdb: Inode 12, end of extent exceeds allowed value
+	(logical block 128, physical block 3938, len 1)
+3. fsck -fn /dev/sdb
+ dx_node->entry[i].blk > dir->i_size
+  Pass 2: Checking directory structure
+  Problem in HTREE directory inode 12 (/dir): bad block number 128.
+  Clear HTree index? no
+  Problem in HTREE directory inode 12: block #3 has invalid depth (2)
+  Problem in HTREE directory inode 12: block #3 has bad max hash
+  Problem in HTREE directory inode 12: block #3 not referenced
 
-I meant "from the end of the sync pulse", obviously. Sorry about the slipup.
+Fix it by marking inode dirty directly inside ext4_append().
+Fetch a reproducer in [Link].
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216466
+CC: stable@vger.kernel.org
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ v1->v2: mark inode dirty inside ext4_append().
+ fs/ext4/namei.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index 3a31b662f661..0d0e41d2dee8 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -85,15 +85,20 @@ static struct buffer_head *ext4_append(handle_t *handle,
+ 		return bh;
+ 	inode->i_size += inode->i_sb->s_blocksize;
+ 	EXT4_I(inode)->i_disksize = inode->i_size;
++	err = ext4_mark_inode_dirty(handle, inode);
++	if (err)
++		goto out;
+ 	BUFFER_TRACE(bh, "get_write_access");
+ 	err = ext4_journal_get_write_access(handle, inode->i_sb, bh,
+ 					    EXT4_JTR_NONE);
+-	if (err) {
+-		brelse(bh);
+-		ext4_std_error(inode->i_sb, err);
+-		return ERR_PTR(err);
+-	}
++	if (err)
++		goto out;
+ 	return bh;
++
++out:
++	brelse(bh);
++	ext4_std_error(inode->i_sb, err);
++	return ERR_PTR(err);
+ }
+ 
+ static int ext4_dx_csum_verify(struct inode *inode,
+-- 
+2.31.1
+
