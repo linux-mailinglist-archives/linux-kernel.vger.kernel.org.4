@@ -2,58 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37E85B4D02
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5CE5B4D05
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiIKJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 05:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
+        id S229908AbiIKJcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 05:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIKJbV (ORCPT
+        with ESMTP id S229437AbiIKJcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 05:31:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A793D25E99;
-        Sun, 11 Sep 2022 02:31:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2ED33B80AFD;
-        Sun, 11 Sep 2022 09:31:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9DDC433C1;
-        Sun, 11 Sep 2022 09:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662888676;
-        bh=onrx/VfMWRlqA5VQAt3JkDr5rEpPhLtH56ehL+XsUmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=osLIxzE+0FD1Ft+iZT4rWvKoO3/F0gfUDsbzIPsgVR08sO9eqQE6JeSHcZBAhXxuv
-         i26ZBqWOB5LcdikOEHB6dwlsBL1uLT568r6+4PXp29YkP78rJa7NjMQxeb+o4ZgW5b
-         FRb1CdORknuycjgxtYYy7F0fb09dIcxTlaaBX98uRCdBlYx293qL4tlxRvsICH3SOS
-         mvWe5nN9ZCnsHjAuVRepksGra7Fnb3G7V3oLgb0MXMpe9PAmuab7wAlikFXOzSkvPX
-         sfotqljp2P3Hv8V+rfY3aJcq9fsBME1AMA4gmb+sqvYZCCy5Nvp4IxpmWsHELoGRLq
-         zLlZBEUnfTq3Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oXJJD-0005c1-DD; Sun, 11 Sep 2022 11:31:23 +0200
-Date:   Sun, 11 Sep 2022 11:31:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        srinivas.kandagatla@linaro.org, amahesh@qti.qualcomm.com,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.19 33/38] misc: fastrpc: increase maximum
- session count
-Message-ID: <Yx2q6zgypevyXEto@hovoldconsulting.com>
-References: <20220910211623.69825-1-sashal@kernel.org>
- <20220910211623.69825-33-sashal@kernel.org>
+        Sun, 11 Sep 2022 05:32:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BBA25E99
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 02:32:14 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MQPYD1pCCzmVFt;
+        Sun, 11 Sep 2022 17:28:32 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 11 Sep 2022 17:32:12 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <robinmholt@gmail.com>, <steve.wahl@hpe.com>,
+        <mike.travis@hpe.com>, <arnd@arndb.de>,
+        <gregkh@linuxfoundation.org>, <cuigaosheng1@huawei.com>,
+        <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drivers/misc/sgi-xp: remove unused declarations in xp.h
+Date:   Sun, 11 Sep 2022 17:32:12 +0800
+Message-ID: <20220911093212.3220496-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910211623.69825-33-sashal@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,40 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 05:16:18PM -0400, Sasha Levin wrote:
-> From: Johan Hovold <johan+linaro@kernel.org>
-> 
-> [ Upstream commit 689a2d9f9332a27b1379ef230396e944f949a72b ]
-> 
-> The SC8280XP platform uses 14 sessions for the compute DSP so increment
-> the maximum session count.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> Link: https://lore.kernel.org/r/20220829080531.29681-4-johan+linaro@kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+xp_nofault_PIOR_target and xp_error_PIOR have been removed since
+commit 9726bfcdb977 ("misc/sgi-xp: remove SGI SN2 support"),
+so remove them.
 
-SC8280XP was not added until 6.0 so the stable tag was left out on
-purpose (as usual).
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ drivers/misc/sgi-xp/xp.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-Please drop.
+diff --git a/drivers/misc/sgi-xp/xp.h b/drivers/misc/sgi-xp/xp.h
+index 9f9af77f8d2e..cf073304b714 100644
+--- a/drivers/misc/sgi-xp/xp.h
++++ b/drivers/misc/sgi-xp/xp.h
+@@ -334,9 +334,7 @@ extern int (*xp_cpu_to_nasid) (int);
+ extern enum xp_retval (*xp_expand_memprotect) (unsigned long, unsigned long);
+ extern enum xp_retval (*xp_restrict_memprotect) (unsigned long, unsigned long);
+ 
+-extern u64 xp_nofault_PIOR_target;
+ extern int xp_nofault_PIOR(void *);
+-extern int xp_error_PIOR(void);
+ 
+ extern struct device *xp;
+ extern enum xp_retval xp_init_uv(void);
+-- 
+2.25.1
 
-> ---
->  drivers/misc/fastrpc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 93ebd174d8487..08032a207c1c0 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -25,7 +25,7 @@
->  #define SDSP_DOMAIN_ID (2)
->  #define CDSP_DOMAIN_ID (3)
->  #define FASTRPC_DEV_MAX		4 /* adsp, mdsp, slpi, cdsp*/
-> -#define FASTRPC_MAX_SESSIONS	13 /*12 compute, 1 cpz*/
-> +#define FASTRPC_MAX_SESSIONS	14
->  #define FASTRPC_MAX_VMIDS	16
->  #define FASTRPC_ALIGN		128
->  #define FASTRPC_MAX_FDLIST	16
-
-Johan
