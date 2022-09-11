@@ -1,153 +1,93 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344405B5124
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 22:41:01 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0CB5B5126
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 22:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiIKUkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 16:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S229459AbiIKUnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 16:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIKUkg (ORCPT
+        with ESMTP id S229492AbiIKUnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 16:40:36 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021023.outbound.protection.outlook.com [52.101.62.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AAE222BC;
-        Sun, 11 Sep 2022 13:40:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cLFFA4E5qctspooiw5yghbPC0m0qtuy/KRVJsPr+1/jEEpQWvfhcsvG1t7yn1TkHWYdGiGsy+x7Qr97fljyuLCojatP1/9tex7QaMFyYHxh0HDzpdNLt4E3AKrt9sAbvE2uHBc5beaYnf969jxU9zaKva40ZbhvTSGJ5Ue9wB2pGm4HtMKBpo7TM6R/dkx67nGob98zoOxUjEq7dFMcvJWLyALHQf210/cbmdsvtTE16iD2Bti7Nweh0btjVlRBg6PdPA/BVyWtnqtQX0eMty06VlToIeRC7gSaGucy5pw8PGxRMW5X8rm+y4RMlOfDUCo+8+nXEzre3VsqlbVszZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HqZ04fRvj+jUk70oPR9hq9VQGwD/RYO0EaRoRKDKBig=;
- b=XILCDe5SojuDqo2uZgIaHRPK2VOBTbF9+Ph6y/1uD5SYtXStoOafgvK3GIi+yszXG5GsBSgC6fjstwr3EAU7PJE40L4UJeV4kcP3FEgHVGMp1KfildvSEJo8q8rErb4Zt8939bSlGzYgGcexGxptf0ZOH9Q/7RRsU6Rwe1IrQT4TDzanYmSGg09agw2/icJilLmuIZd3Zc4hXY4f1r8Wtd1byMP06asZ6PYjn8aDOi7AHBz7eKww9AHG4XuIN3o37XdHR1EnyGXA2M9kGQTc2UhwvGnJOVs3MUmW2HfdOxnL9swa6+9B/9u4A/Q0lYEHSwMNPqAOZiwNCuH+XIpGPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HqZ04fRvj+jUk70oPR9hq9VQGwD/RYO0EaRoRKDKBig=;
- b=DTU4NhBWUoGb1FS5YHfuDG0ynwIFEfnXGfnjn3pUtVkOxB7TrSYmemyVPgRFmVZAONjA+B5k0CbCXtc/672FwgfLmqUI098cfyUgVhjFtr2kFpwle2d7PUQHOiehZ23c0OmX/CAAdZG1lJ8hc63k7et++kdNWkwCvJMd65wg3NQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
- by DS7PR21MB3694.namprd21.prod.outlook.com (2603:10b6:8:90::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.3; Sun, 11 Sep
- 2022 20:40:32 +0000
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::3581:1d96:33ac:7305]) by BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::3581:1d96:33ac:7305%4]) with mapi id 15.20.5654.003; Sun, 11 Sep 2022
- 20:40:32 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
-Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
-        sthemmin@microsoft.com, paulros@microsoft.com,
-        shacharr@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH net] net: mana: Add rmb after checking owner bits
-Date:   Sun, 11 Sep 2022 13:40:05 -0700
-Message-Id: <1662928805-15861-1-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0159.namprd04.prod.outlook.com
- (2603:10b6:303:85::14) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+        Sun, 11 Sep 2022 16:43:14 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8336C2317F
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 13:43:12 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id u6so10033626eda.12
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 13:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lSSgE6qKNsM5nRSZIZrwkAPBKl3L+uuKrmU0F7pD7HY=;
+        b=JPDXpPqvckmhgM18iZ464Ra4GB/SbxdXoB7mEFnkbkwW0BRaAxrNtroPGl5mUT2WBd
+         pvwfk74PBiUKM3805865m1rO90BYGGTb6OfQMgoWFTvGGKxz7e1J59pXHUMb90uqIGVq
+         DvczbtudWRonTOXp0egQqyMlPi3QFxL2LC3I9HxD8oKSiT/VZByKkCnkKkwmDqdP/2lj
+         jSI9jTQmMP8PcfjfMBcWc7SQ7xf+70+2cVLkZq9xRKkmN8oNLab6YKRdUP9uqKgEZWb+
+         ueuuFbB+qY5K5T90Y7pJ7YbxEYirSPrYgAljQnXnSb1mbHnpaKONiixAd8OxhKnuaiWN
+         DSXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lSSgE6qKNsM5nRSZIZrwkAPBKl3L+uuKrmU0F7pD7HY=;
+        b=etwBzW90wiKqxaJQ7EjZ+qNBhd94PmDcsrUNP4lnlMshLgv/O9/XrcoEwYPz94YpbA
+         P5LXML0z/EZFYisfjq9GL/VAeaCyJVk+Yry9EL6ZJ2o0Ymbzm8ooZkaqcNDO3S6AY29T
+         NX1OywpJYy3XsO0EzCWJa/GJpEahaAFWFtfurE4y7LPOJ1w1fvz7oKK2wqL0ONJdLAqf
+         z6m+oFm5/hauym/ZBcEWlwHAMqJU7N8I1v63PncsiST0yeZJ3Hil3Z6lX8YbV8naiuN1
+         UuSiQ4REG0w3aMOgG8gDB6tA7RFZdMT/Z5veQ1qccB8QABFkJp3m+ozD1Na5gBUjs/TZ
+         ULoA==
+X-Gm-Message-State: ACgBeo3LVUSXJ0gK7O/WL5+0njrIEms+wYzDrNwSnEoecP25GVgePPa5
+        SyZYdVEd08CxntANFZ5t6JVv+n/yGa1+kA+aLGafcw==
+X-Google-Smtp-Source: AA6agR6XNXb6iXZAgJVLktD2yTU+LhSGDNL4w1b9CIbVMQlDxN1dXvmNUnGzMKm9uOJ76P7qbjXjKF0Dd53Kd+70owY=
+X-Received: by 2002:a05:6402:5249:b0:451:67ff:f02 with SMTP id
+ t9-20020a056402524900b0045167ff0f02mr5735975edd.227.1662928990454; Sun, 11
+ Sep 2022 13:43:10 -0700 (PDT)
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|DS7PR21MB3694:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab5b9f09-c28d-494b-7d1b-08da9435dee3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8aon7iKAHAJnGjsX7ORXiaVuuLlFc9dVbznHu/7f0tyAJaiycx26/7dKPvWqb/orYv76iSnA3KBuszF/HzlxEtmA4MdK9Vi2lUKorY88AGDZWtCz0UFJZXGOK3kGK+AbBV5T4VYbckf7yoKIE0KSPz/xdGYedQM5Uq5niHsCx7O6+bwsCtYhBpakBldnMbuZZBYHsxF5+XbynkmBs2mjgpRFNJl6mS/3TXKZFIMcw+DLFJwESOCTmc65jpDBY7EHk0DjeH7W1QgjSEsEZfhxckr1OWUrjJD+X4stA/RBQ0prbcPk5/6KSSGmsFp+fPN5pFCvMg+mEFO8cAngvEQWm1AaWm3eq+JYkrmGpszLWyx6b0HyPs7uNui/SX0xbp/144R11RbF+fIaKUh50aAUKtIFVOYdCNXEw/86WqgqfSK+3uJ8EpQ+sGEFNsJoGVhsNpUzH/724uCx8HKS4xOaP6DX/k2XlmcJg6Qe4ulDxA7sX0cnKibnphvnMpuQkNaz73+DIWFTVLAVwRVrFB//DxziOelh/gecJeMwWfMx0Xf4feVgn4jXtKbw12wNLFF1auplaJkg5cZ+nSaji4d1rwdY0Rcw5EIZy632vcRdg6E6cUz1SQdk3y1DBke+AXW1Dt5trV+8KIGVVeQ+SqwFumSpJJSsa5znEBYGB32GKk8fEV3gxJZEravhHsPAYKYeXZDwISBMADXJV5AuqIfHe8pGbAWG1NPlYXYk/qBFurDFxJ791claKufzH+w0R9916UTRdo5GgWi1Vb5+oUeWkf7JyKZF6lrxdC9QnQpNC4OeYs4gYbdn9zbt+3MYrsfQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199009)(186003)(82960400001)(82950400001)(2616005)(6506007)(316002)(10290500003)(41300700001)(26005)(52116002)(6512007)(38100700002)(6666004)(38350700002)(66476007)(478600001)(6486002)(2906002)(36756003)(7846003)(8936002)(66946007)(66556008)(4326008)(8676002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Pf8PePbBGUIDo85DLjwJB6H6dEki02HPcqGQIHj3LmmOolwjCVbBztnmoLZ5?=
- =?us-ascii?Q?p2Dq+aqGj7dU21e6QS/uIHHF1t7aOYqyO4OH4RYAq53jgFAjE/gYElgJSNbe?=
- =?us-ascii?Q?b3fAzuqF+oyJ94nU7tZtdv/2KDDdq6vb/fPTl/Fb9DRqioelJ2TnF9zhbR+v?=
- =?us-ascii?Q?Q8jGml9HvRvqj0JuCFxjtTWJGABNWRxe9U+LQoTi67ZajLBRT3l81M5KMxZs?=
- =?us-ascii?Q?w4M7X3xV/UzY+EDQ+6r4eoEwAldnHkVcktFMv8Pj3z6GR3hO9sDPG3erpTph?=
- =?us-ascii?Q?yM8zmrBJ9XWBxf5Xau6HPd1Ta6JOOqsZp5byQ4BuexgaavEA9ZmvZHn45VqZ?=
- =?us-ascii?Q?rII/DQQKyXz2cT41U/0PBLf/FYEE0JiHshuVwUzftguNRNYPsctpOlhuhIiE?=
- =?us-ascii?Q?3KWeR07jVqROIK9NQqyzCxQg5UWT/NI8Cws1YgJsuJfQYRSsbRufSkUYyP9P?=
- =?us-ascii?Q?+K5Ppf+NQiMWKrT+8q8ceMqhk2KkyR6OC3T+9ZhTBm1z7f/Zvn+t9hkwTEtN?=
- =?us-ascii?Q?vnV+ngcQxYjmuOV4nCdNi2M6vSM6afiXnVg2jLdtFIyrPZjvY+gzI2c0a58A?=
- =?us-ascii?Q?vUHC+a94kFeqckTrO4PN6V1FPSxkJKf6DGz8OKiWaIgJQVbDQPYP+/2l5A83?=
- =?us-ascii?Q?9QQIVEIiuQo0Qp2dUt0DHZhwJOhjk3NDnhD80588sswUzEF2qGr5lPEW+ojs?=
- =?us-ascii?Q?tiAm1ljhw2a9Q4Fw9zxSQjNB4FGYAbOFaLJNjiAFP1iYrMAL2unma70ae+NH?=
- =?us-ascii?Q?rU5bpLHkDapOTeHB7TGQAx/Ze4xNtKJzpe4Db8modOI899QwSQH/d8aYnflK?=
- =?us-ascii?Q?y0DdL4RcXQB+ImzL1oZYMwhpr5nGihM5RF49joyV6N5FRcy/+gBdpCRcoohS?=
- =?us-ascii?Q?yKGP3GPYimCWMfqGlMsD4hkaw0+oR8GDdWtmavn70RTD5/3eVZi1Efw52h+r?=
- =?us-ascii?Q?vjHYwOMxwAUGthqFpQqGWD67gYiPPKY4es/55hP0U6sfFtjOpF7t7es+eEWX?=
- =?us-ascii?Q?ZI1c46DBj6jxwkr0jU/+7xjRIusf8bLV3K6xpOzLCxfF8l5tpZlLOebwHYiB?=
- =?us-ascii?Q?okQS28TsSO/D+6+bl9kKa9kUuliXymGEnyBmCwA4PD2HroTiOiL3TjmScUXI?=
- =?us-ascii?Q?sWpCvCC11IhJmqX++VxU4/cTbXN4zgtF3KrD6h5WbTPExOFebrQU925irByP?=
- =?us-ascii?Q?vZlAub413rv1iGOg9V0as2sC6LkIRi0JoKdBg0oHgoUs16nybhrHV0LYPZcA?=
- =?us-ascii?Q?hNIx771QIxrBn3Ok4snk8Jb0WJn7PqO/3gYh6JunDEJhm7hzjlnn6qWQT4Yn?=
- =?us-ascii?Q?mQCyDfl7h8q68aCwerizphUN0CkIAL2l/BvfVl8ac0xon1egRFgyznnfQt1W?=
- =?us-ascii?Q?aASh7td5Y31iVRK7Cyby7F2/6sTY0+AOj15ISUOKTt3LWOddX84ScMS6hRKZ?=
- =?us-ascii?Q?JTpSp6pcfGuCaDnD/EKFWUjxGQxPjBtazegaHK7SSnx4rnSt2zKLzabsGTg3?=
- =?us-ascii?Q?GJwN7H3kaK4SKo2d0Ftov1OoSSVsgKwOXyOIK4lvOh8Wv6XvnirXqdMp9b8k?=
- =?us-ascii?Q?tFi+W4AHe9EOpr4izVC8YnPsKYUC0cBHb4WewHhW?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3694
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220911095923.3614387-1-pasha.tatashin@soleen.com>
+ <20220911095923.3614387-3-pasha.tatashin@soleen.com> <Yx4IEvkmAlcTIP6v@casper.infradead.org>
+In-Reply-To: <Yx4IEvkmAlcTIP6v@casper.infradead.org>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Sun, 11 Sep 2022 16:42:34 -0400
+Message-ID: <CA+CK2bD5ae0oUefiGMAzxun4-rJhqUdfJqbzcCkZM_Uek-KTxQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm/page_table_check: Do WARN_ON instead of BUG_ON by default
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per GDMA spec, rmb is necessary after checking owner_bits, before
-reading EQ or CQ entries.
+On Sun, Sep 11, 2022 at 12:08 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Sun, Sep 11, 2022 at 09:59:22AM +0000, Pasha Tatashin wrote:
+> > Currently, page_table_check when detects errors panics kernel. Instead,
+> > print a warning, and panic only when specifically requested via kernel
+> > parameter:
+> >
+> >       page_table_check=panic
+>
+> Why are the page table checks so special that they deserve their own
+> command line parameter?  Why shouldn't this be controlled by the usual
+> panic_on_warn option?
 
-Add rmb in these two places to comply with the specs.
+page_table_check can be used as a security feature preventing false
+page sharing between address spaces. For example, at Google we want it
+to keep enabled on production systems, yet we do not want to enable
+panic_on_warn as it would cause panics for many other reasons which
+are security unrelated.
 
-Cc: stable@vger.kernel.org
-Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-Reported-by: Sinan Kaya <Sinan.Kaya@microsoft.com>
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
----
- drivers/net/ethernet/microsoft/mana/gdma_main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 5f9240182351..e10b9f8f89e1 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -397,6 +397,11 @@ static void mana_gd_process_eq_events(void *arg)
- 			break;
- 		}
- 
-+		/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+		 * reading eqe.
-+		 */
-+		rmb();
-+
- 		mana_gd_process_eqe(eq);
- 
- 		eq->head++;
-@@ -1134,6 +1139,11 @@ static int mana_gd_read_cqe(struct gdma_queue *cq, struct gdma_comp *comp)
- 	if (WARN_ON_ONCE(owner_bits != new_bits))
- 		return -1;
- 
-+	/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+	 * reading completion info
-+	 */
-+	rmb();
-+
- 	comp->wq_num = cqe->cqe_info.wq_num;
- 	comp->is_sq = cqe->cqe_info.is_sq;
- 	memcpy(comp->cqe_data, cqe->cqe_data, GDMA_COMP_DATA_SIZE);
--- 
-2.25.1
-
+Pasha
