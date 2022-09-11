@@ -2,99 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9D55B4C9B
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB465B4CA7
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIKIVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 04:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S229934AbiIKIh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 04:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiIKIVa (ORCPT
+        with ESMTP id S229902AbiIKIhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 04:21:30 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6B627148
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:21:26 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id k10so10018699lfm.4
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=6zmGVdl11b0ROAYxJ+gThLkfrhcRSy/y+Qy1x8CThhk=;
-        b=nDwGrgcnx+keVT3odto1xVqLJ+66LZ8HDgiH7wW8CrzwTOv4pckH668zS/bDdSiTBw
-         Srv0Q42Qzr8FB/tKKZ17vnZU13bb4gnpkkPW5unaeWOIOLWqOUs5LBpili1JzIQJIMt5
-         e6YZi7AYxbqhbpDFcclG5wSmr3UeZhXzS8GSGHpr6Gyt34tb9UtAsyWDC0Sls9tuMpzB
-         ecT2k45NBYNNiUxX5cldvKJfb3rWwVo1jCk3QIWrxAA6WgfLU0CINS7bm3tnZDwGsjCV
-         /pfh3c2Z10/k0Q5tyL7cJuYSh/BIl5ReDo4xNN09Vr+Xo69Afbp4RH3nRmNV58OAXCXX
-         yUKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6zmGVdl11b0ROAYxJ+gThLkfrhcRSy/y+Qy1x8CThhk=;
-        b=aSdmGeJh10C+92impRRcCFqsGMimsE0i39bmMaebqO1ftvfm5KYz+BFIjUqj7OIvOB
-         Jip+ZhdDycMJXQc4Us6uAdOo5lGwpDmbKYs/inkz4vJvCroUINJ2SfhJ+Jh8F9JXkcsQ
-         frsY0MzEvAOGO9GzL+TbUihdOZbZ9727UrloAZ7+LQPTE4pcfN+t9Ypm8x8dsFDJSKvo
-         XVtsODtNzsMScm0C+m6tbFa+rjCKg+EDvk8/U8wovpUwCsA2wAaV+a9jXi7hkTMqhHuZ
-         kX81o5C92ggPig1P0e++gNAac0g/LApP9hxxBoAuaVNosbSfNpL3dkt6t9oVr4AAoxt9
-         kfiw==
-X-Gm-Message-State: ACgBeo2oWm8b2vcXtzlT53eNxuIEIFBOpENWTINb70NrJ6vFTje0hSJE
-        UvPRCeEOecM6VVJPGfQ98HGAWQ==
-X-Google-Smtp-Source: AA6agR4aRzDrW4zZC9GGeuLpHwH2RX8bvSmlMmS16jge3BxxOtj4fsVpMVMp/7gf0vo0+kIC37bM6Q==
-X-Received: by 2002:a05:6512:33c4:b0:492:cdb1:f5c2 with SMTP id d4-20020a05651233c400b00492cdb1f5c2mr6808363lfg.406.1662884484821;
-        Sun, 11 Sep 2022 01:21:24 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056512370500b0049901524a73sm533798lfr.114.2022.09.11.01.21.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 01:21:24 -0700 (PDT)
-Message-ID: <60327375-abcc-73d0-6280-ad82af31f145@linaro.org>
-Date:   Sun, 11 Sep 2022 10:21:22 +0200
+        Sun, 11 Sep 2022 04:37:23 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882D30560;
+        Sun, 11 Sep 2022 01:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662885442; x=1694421442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMf3K04xeQCNkmkTP8NTLrU3WiyufBIe+F2AtJ43V04=;
+  b=VA/L7JBYE6UHEYhLhpxlsbLJM2EmHykYKN7HnqUYpZR6e/qTnWVRlUDI
+   EGpygAlcSvOfuG72S3/mU3to9IFLeUne2asCzy77YiQCSyMya/JAhwlzV
+   fvY0ew/wmdgWopPk859UZEgG0sVPAy2NukGbxets8MV9yC9Y4q+tN5jBc
+   6n2v3IfYR79ImljLKdYsWIXJ+o3mlIJn17xWp2lv5xUKg810hTnrjeP2t
+   +8SNH3ahAY7ifGMTMcvmUVlD7ZQUrlnBsquXwV9aDBKmq7dHAI5iLHTsq
+   EwqXkrJ6AfAsjOkgOLXhV05slnrK+UVd8k2DTKT5uaa6OSYYEUOptjbRO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="280725885"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="280725885"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 01:37:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="566841440"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga003.jf.intel.com with ESMTP; 11 Sep 2022 01:37:16 -0700
+Date:   Sun, 11 Sep 2022 16:27:45 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v1 3/5] fpga: dfl: Add DFHv1 Register Definitions
+Message-ID: <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/9] dt-bindings: ufs: qcom: Add sm6115 binding
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220910143213.477261-1-iskren.chernev@gmail.com>
- <20220910143213.477261-2-iskren.chernev@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220910143213.477261-2-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/09/2022 16:32, Iskren Chernev wrote:
-> Add SM6115 UFS to DT schema.
+On 2022-09-06 at 12:04:24 -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> This patch adds the definitions for DFHv1 header and related register
+> bitfields.
+> 
+> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > ---
->  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
+>  include/linux/dfl.h | 37 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index b5accdcfa368..61bcf20c1bc8 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -23,6 +23,16 @@
+>  #define GUID_H			0x10
+>  #define NEXT_AFU		0x18
+>  
+> +/*
+> + * DFHv1 Register Offset definitons
+> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+> + * as common header registers
+> + */
+> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+> +#define DFHv1_PARAM_DATA	0x8   /* Offset of Param data from Param header */
+> +
+>  #define DFH_SIZE		0x8
+>  
+>  /* Device Feature Header Register Bitfield */
+> @@ -30,8 +40,35 @@
+>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>  
+> +/*
+> + *  CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
 
+Reduce one whitespace indent.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> + * 1'b1 = absolute (ARM or other non-PCIe use)
+> + */
+> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
+> +
+> +/*
+> + * CSR Header Register Bit Definitions
+> + */
 
+Use oneline style comment should be OK?
 
-Best regards,
-Krzysztof
+> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+> +
+> +/*
+> + * CSR SIZE Goup Register Bit Definitions
+> + */
+
+Same concern
+
+> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
+> +
+> +/*
+> + * PARAM Header Register Bit Definitions
+> + */
+
+Same
+
+> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+> +
+>  /**
+>   * enum dfl_id_type - define the DFL FIU types
+>   */
+> -- 
+> 2.25.1
+> 
