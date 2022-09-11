@@ -2,292 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4825B516E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 00:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63605B5174
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 00:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIKWEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 18:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        id S229573AbiIKWLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 18:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiIKWDz (ORCPT
+        with ESMTP id S229554AbiIKWLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 18:03:55 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F04240B1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:03:54 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1278a61bd57so18769518fac.7
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=7XTw7m4Nf8cdHglRVS0K+UqUFYYElhVsCMvVRx04Mko=;
-        b=nfUIBfu/DX62qlddDxVvtk7wUU6715kZrtnFlRb7twZx79NcDu3J0fvUSqqUm5/7bG
-         3f6P3RJZs/47vroc1FtdLEOxXttgETgpV6t1TDk8UEtQIQsnmTo7cULkPLCWnpnL0jQ2
-         4QtIYVCo4555yl2hN96WUTQbdXfGcA95uhPvXuW/dfmBk3DrGXTvzGRbzS6wzQzY9eyq
-         UC8Pgs/nYXknmbuAGyAHeXfjN+NzELO6zATZEyLa33H6X2Zum/42rg/tQcY5jlglmc56
-         E1uayubGEXmDK3rjnoFawfn7x6I6nWYXqw8bbjaAGUkgfm+Ya/0cuXwUMkkfLhZaNs8H
-         sksw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=7XTw7m4Nf8cdHglRVS0K+UqUFYYElhVsCMvVRx04Mko=;
-        b=L0yKdlLcdODmvOU8lEZIs7xQXdRL5Amp7oltL2wQT81EIBcPATzhhlpShz29fASFzV
-         uwB3jyWvU5Z9SkAVRCeJkNgtalNeetaRyynywA4SBrAF5eTa52XQwQjsazsDSlthQjtr
-         jpum5/Hj9TXY/Nr968gHlfxDzEGPPCgIOJzbAQWgNu6YED2YVfZz6yhqMxaIduavYDZR
-         YRu+I4gBYh1568bmrLb5TXWCv9YiBZ9SZb4TZIBACSlyARdgvOJmF1bLYbTtTZzMualX
-         4HLZ41KI6mRyjfLy7fx3DSRBxBvVjzugsFpZR6EHSirpSw0xTsxhWDc1YyTx2+knVCr5
-         pFqg==
-X-Gm-Message-State: ACgBeo1vT4lGbUO/s9kG2mZoxDjNv7r+rVyXejCo62Y9JDoSMYQSG6nB
-        AZ9AXBgMf+TIVywtn16SvCKdWg==
-X-Google-Smtp-Source: AA6agR7VThkM5Zrw8/wrAkX2Fckt8wBmzt7Y6t+Ny3QcOjTXwoHJvViE0Ku78AsY28B5LIJ69a2hzA==
-X-Received: by 2002:a05:6808:138b:b0:344:a921:9e06 with SMTP id c11-20020a056808138b00b00344a9219e06mr7945718oiw.272.1662933833677;
-        Sun, 11 Sep 2022 15:03:53 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id r19-20020a056870439300b00127d2005ea1sm4664249oah.18.2022.09.11.15.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 15:03:53 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     brgl@bgdev.pl, linus.walleij@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH 3/3] gpio: pci-idio-16: Utilize the idio-16 GPIO library
-Date:   Sun, 11 Sep 2022 16:34:40 -0400
-Message-Id: <bc6282aceca4f0a7bd4f33b5fbe7d5555d6ab32b.1662927941.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <cover.1662927941.git.william.gray@linaro.org>
-References: <cover.1662927941.git.william.gray@linaro.org>
+        Sun, 11 Sep 2022 18:11:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1D6252BE;
+        Sun, 11 Sep 2022 15:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662934274; x=1694470274;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7i2KnNq7yrgZB6ZJd5EtHLTUqcedo4CZx9AqVi8sgNE=;
+  b=FvxKMGLN9/9P5Cjp4uOkl7QvqgHCkc+MFlCI1BYdyij1aO64lFZ0D5Qr
+   spkitk9q1JbpPMBnDT0jDEMuwExwrlqaVReQGsqroXT/F5firylsoe/4j
+   45pMSIlW0Fjlh/Vf8+6Fj1VpwvFRAmtVo7a/0AeDkA/h8BwXGBIgHB5lq
+   AhgZLDX+5eSQ3EmxM4nv9hWcyX/njTM5Enhi/nipcnJhV7LEb3dCYqox2
+   D4VWhwN5FVcjawYyOAe4RybZKr1ToMkz+0i7yDfkiBO8VRRI0gJ6x7Vro
+   AZmMfP3srZrR4LoYk89vyGMKg1Cf2XGXKScJbURQbs3cGyU4Y02K2Cd4i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="323982604"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="323982604"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 15:11:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="704973933"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Sep 2022 15:11:11 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXVAU-0001st-10;
+        Sun, 11 Sep 2022 22:11:10 +0000
+Date:   Mon, 12 Sep 2022 06:11:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 1/5] net: ipqess: introduce the Qualcomm
+ IPQESS driver
+Message-ID: <202209120614.ZJKTCvbf-lkp@intel.com>
+References: <20220909152454.7462-2-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909152454.7462-2-maxime.chevallier@bootlin.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ACCES PCI-IDIO-16 device is part of the ACCES IDIO-16 family, so the
-idio-16 GPIO library module is selected and utilized to consolidate
-code.
+Hi Maxime,
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/gpio/Kconfig            |   1 +
- drivers/gpio/gpio-pci-idio-16.c | 119 ++++----------------------------
- 2 files changed, 14 insertions(+), 106 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 48846ee476e2..8b90bff7b198 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1585,6 +1585,7 @@ config GPIO_PCH
- config GPIO_PCI_IDIO_16
- 	tristate "ACCES PCI-IDIO-16 GPIO support"
- 	select GPIOLIB_IRQCHIP
-+	select GPIO_IDIO_16
- 	help
- 	  Enables GPIO support for the ACCES PCI-IDIO-16. An interrupt is
- 	  generated when any of the inputs change state (low to high or high to
-diff --git a/drivers/gpio/gpio-pci-idio-16.c b/drivers/gpio/gpio-pci-idio-16.c
-index 71a13a394050..41f9c447ebf9 100644
---- a/drivers/gpio/gpio-pci-idio-16.c
-+++ b/drivers/gpio/gpio-pci-idio-16.c
-@@ -3,8 +3,7 @@
-  * GPIO driver for the ACCES PCI-IDIO-16
-  * Copyright (C) 2017 William Breathitt Gray
-  */
--#include <linux/bitmap.h>
--#include <linux/bitops.h>
-+#include <linux/bits.h>
- #include <linux/device.h>
- #include <linux/errno.h>
- #include <linux/gpio/driver.h>
-@@ -16,51 +15,28 @@
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
--/**
-- * struct idio_16_gpio_reg - GPIO device registers structure
-- * @out0_7:	Read: FET Drive Outputs 0-7
-- *		Write: FET Drive Outputs 0-7
-- * @in0_7:	Read: Isolated Inputs 0-7
-- *		Write: Clear Interrupt
-- * @irq_ctl:	Read: Enable IRQ
-- *		Write: Disable IRQ
-- * @filter_ctl:	Read: Activate Input Filters 0-15
-- *		Write: Deactivate Input Filters 0-15
-- * @out8_15:	Read: FET Drive Outputs 8-15
-- *		Write: FET Drive Outputs 8-15
-- * @in8_15:	Read: Isolated Inputs 8-15
-- *		Write: Unused
-- * @irq_status:	Read: Interrupt status
-- *		Write: Unused
-- */
--struct idio_16_gpio_reg {
--	u8 out0_7;
--	u8 in0_7;
--	u8 irq_ctl;
--	u8 filter_ctl;
--	u8 out8_15;
--	u8 in8_15;
--	u8 irq_status;
--};
-+#include "gpio-idio-16.h"
- 
- /**
-  * struct idio_16_gpio - GPIO device private data structure
-  * @chip:	instance of the gpio_chip
-  * @lock:	synchronization lock to prevent I/O race conditions
-  * @reg:	I/O address offset for the GPIO device registers
-+ * @state:	ACCES IDIO-16 device state
-  * @irq_mask:	I/O bits affected by interrupts
-  */
- struct idio_16_gpio {
- 	struct gpio_chip chip;
- 	raw_spinlock_t lock;
--	struct idio_16_gpio_reg __iomem *reg;
-+	struct idio_16 __iomem *reg;
-+	struct idio_16_state state;
- 	unsigned long irq_mask;
- };
- 
- static int idio_16_gpio_get_direction(struct gpio_chip *chip,
- 	unsigned int offset)
- {
--	if (offset > 15)
-+	if (idio_16_get_direction(offset))
- 		return GPIO_LINE_DIRECTION_IN;
- 
- 	return GPIO_LINE_DIRECTION_OUT;
-@@ -82,43 +58,16 @@ static int idio_16_gpio_direction_output(struct gpio_chip *chip,
- static int idio_16_gpio_get(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
--	unsigned long mask = BIT(offset);
--
--	if (offset < 8)
--		return !!(ioread8(&idio16gpio->reg->out0_7) & mask);
--
--	if (offset < 16)
--		return !!(ioread8(&idio16gpio->reg->out8_15) & (mask >> 8));
--
--	if (offset < 24)
--		return !!(ioread8(&idio16gpio->reg->in0_7) & (mask >> 16));
- 
--	return !!(ioread8(&idio16gpio->reg->in8_15) & (mask >> 24));
-+	return idio_16_get(idio16gpio->reg, offset);
- }
- 
- static int idio_16_gpio_get_multiple(struct gpio_chip *chip,
- 	unsigned long *mask, unsigned long *bits)
- {
- 	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
--	unsigned long offset;
--	unsigned long gpio_mask;
--	void __iomem *ports[] = {
--		&idio16gpio->reg->out0_7, &idio16gpio->reg->out8_15,
--		&idio16gpio->reg->in0_7, &idio16gpio->reg->in8_15,
--	};
--	void __iomem *port_addr;
--	unsigned long port_state;
--
--	/* clear bits array to a clean slate */
--	bitmap_zero(bits, chip->ngpio);
--
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		port_addr = ports[offset / 8];
--		port_state = ioread8(port_addr) & gpio_mask;
--
--		bitmap_set_value8(bits, port_state, offset);
--	}
- 
-+	idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
- 	return 0;
- }
- 
-@@ -126,61 +75,16 @@ static void idio_16_gpio_set(struct gpio_chip *chip, unsigned int offset,
- 	int value)
- {
- 	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
--	unsigned int mask = BIT(offset);
--	void __iomem *base;
--	unsigned long flags;
--	unsigned int out_state;
--
--	if (offset > 15)
--		return;
--
--	if (offset > 7) {
--		mask >>= 8;
--		base = &idio16gpio->reg->out8_15;
--	} else
--		base = &idio16gpio->reg->out0_7;
--
--	raw_spin_lock_irqsave(&idio16gpio->lock, flags);
- 
--	if (value)
--		out_state = ioread8(base) | mask;
--	else
--		out_state = ioread8(base) & ~mask;
--
--	iowrite8(out_state, base);
--
--	raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
-+	idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, value);
- }
- 
- static void idio_16_gpio_set_multiple(struct gpio_chip *chip,
- 	unsigned long *mask, unsigned long *bits)
- {
- 	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
--	unsigned long offset;
--	unsigned long gpio_mask;
--	void __iomem *ports[] = {
--		&idio16gpio->reg->out0_7, &idio16gpio->reg->out8_15,
--	};
--	size_t index;
--	void __iomem *port_addr;
--	unsigned long bitmask;
--	unsigned long flags;
--	unsigned long out_state;
- 
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		index = offset / 8;
--		port_addr = ports[index];
--
--		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
--
--		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
--
--		out_state = ioread8(port_addr) & ~gpio_mask;
--		out_state |= bitmask;
--		iowrite8(out_state, port_addr);
--
--		raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
--	}
-+	idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
- }
- 
- static void idio_16_irq_ack(struct irq_data *data)
-@@ -335,6 +239,8 @@ static int idio_16_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	idio16gpio->chip.set = idio_16_gpio_set;
- 	idio16gpio->chip.set_multiple = idio_16_gpio_set_multiple;
- 
-+	idio_16_state_init(&idio16gpio->state);
-+
- 	girq = &idio16gpio->chip.irq;
- 	girq->chip = &idio_16_irqchip;
- 	/* This will let us handle the parent IRQ in the driver */
-@@ -379,3 +285,4 @@ module_pci_driver(idio_16_driver);
- MODULE_AUTHOR("William Breathitt Gray <vilhelm.gray@gmail.com>");
- MODULE_DESCRIPTION("ACCES PCI-IDIO-16 GPIO driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(IDIO_16);
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-ipqess-introduce-Qualcomm-IPQESS-driver/20220909-232946
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 169ccf0e40825d9e465863e4707d8e8546d3c3cb
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220912/202209120614.ZJKTCvbf-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0f2d032fe80cfabb7db162b9c19ed6e23077baeb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maxime-Chevallier/net-ipqess-introduce-Qualcomm-IPQESS-driver/20220909-232946
+        git checkout 0f2d032fe80cfabb7db162b9c19ed6e23077baeb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/net/ethernet/qualcomm/ipqess/ipqess.c: In function 'ipqess_axi_probe':
+>> drivers/net/ethernet/qualcomm/ipqess/ipqess.c:1191:17: error: implicit declaration of function 'netif_tx_napi_add'; did you mean 'netif_napi_add'? [-Werror=implicit-function-declaration]
+    1191 |                 netif_tx_napi_add(netdev, &ess->tx_ring[i].napi_tx,
+         |                 ^~~~~~~~~~~~~~~~~
+         |                 netif_napi_add
+   cc1: some warnings being treated as errors
+
+
+vim +1191 drivers/net/ethernet/qualcomm/ipqess/ipqess.c
+
+  1097	
+  1098	static int ipqess_axi_probe(struct platform_device *pdev)
+  1099	{
+  1100		struct device_node *np = pdev->dev.of_node;
+  1101		struct net_device *netdev;
+  1102		phy_interface_t phy_mode;
+  1103		struct resource *res;
+  1104		struct ipqess *ess;
+  1105		int i, err = 0;
+  1106	
+  1107		netdev = devm_alloc_etherdev_mqs(&pdev->dev, sizeof(struct ipqess),
+  1108						 IPQESS_NETDEV_QUEUES,
+  1109						 IPQESS_NETDEV_QUEUES);
+  1110		if (!netdev)
+  1111			return -ENOMEM;
+  1112	
+  1113		ess = netdev_priv(netdev);
+  1114		ess->netdev = netdev;
+  1115		ess->pdev = pdev;
+  1116		spin_lock_init(&ess->stats_lock);
+  1117		SET_NETDEV_DEV(netdev, &pdev->dev);
+  1118		platform_set_drvdata(pdev, netdev);
+  1119	
+  1120		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+  1121		ess->hw_addr = devm_ioremap_resource(&pdev->dev, res);
+  1122		if (IS_ERR(ess->hw_addr))
+  1123			return PTR_ERR(ess->hw_addr);
+  1124	
+  1125		err = of_get_phy_mode(np, &phy_mode);
+  1126		if (err) {
+  1127			dev_err(&pdev->dev, "incorrect phy-mode\n");
+  1128			return err;
+  1129		}
+  1130	
+  1131		ess->ess_clk = devm_clk_get(&pdev->dev, "ess");
+  1132		if (!IS_ERR(ess->ess_clk))
+  1133			clk_prepare_enable(ess->ess_clk);
+  1134	
+  1135		ess->ess_rst = devm_reset_control_get(&pdev->dev, "ess");
+  1136		if (IS_ERR(ess->ess_rst))
+  1137			goto err_clk;
+  1138	
+  1139		ipqess_reset(ess);
+  1140	
+  1141		ess->phylink_config.dev = &netdev->dev;
+  1142		ess->phylink_config.type = PHYLINK_NETDEV;
+  1143		ess->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 |
+  1144						       MAC_100 | MAC_1000FD;
+  1145	
+  1146		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+  1147			  ess->phylink_config.supported_interfaces);
+  1148	
+  1149		ess->phylink = phylink_create(&ess->phylink_config,
+  1150					      of_fwnode_handle(np), phy_mode,
+  1151					      &ipqess_phylink_mac_ops);
+  1152		if (IS_ERR(ess->phylink)) {
+  1153			err = PTR_ERR(ess->phylink);
+  1154			goto err_clk;
+  1155		}
+  1156	
+  1157		for (i = 0; i < IPQESS_MAX_TX_QUEUE; i++) {
+  1158			ess->tx_irq[i] = platform_get_irq(pdev, i);
+  1159			scnprintf(ess->tx_irq_names[i], sizeof(ess->tx_irq_names[i]),
+  1160				  "%s:txq%d", pdev->name, i);
+  1161		}
+  1162	
+  1163		for (i = 0; i < IPQESS_MAX_RX_QUEUE; i++) {
+  1164			ess->rx_irq[i] = platform_get_irq(pdev, i + IPQESS_MAX_TX_QUEUE);
+  1165			scnprintf(ess->rx_irq_names[i], sizeof(ess->rx_irq_names[i]),
+  1166				  "%s:rxq%d", pdev->name, i);
+  1167		}
+  1168	
+  1169		netdev->netdev_ops = &ipqess_axi_netdev_ops;
+  1170		netdev->features = NETIF_F_HW_CSUM | NETIF_F_RXCSUM |
+  1171				   NETIF_F_HW_VLAN_CTAG_RX |
+  1172				   NETIF_F_HW_VLAN_CTAG_TX |
+  1173				   NETIF_F_TSO | NETIF_F_GRO | NETIF_F_SG;
+  1174		/* feature change is not supported yet */
+  1175		netdev->hw_features = 0;
+  1176		netdev->vlan_features = NETIF_F_HW_CSUM | NETIF_F_SG | NETIF_F_RXCSUM |
+  1177					NETIF_F_TSO |
+  1178					NETIF_F_GRO;
+  1179		netdev->watchdog_timeo = 5 * HZ;
+  1180		netdev->base_addr = (u32)ess->hw_addr;
+  1181		netdev->max_mtu = 9000;
+  1182		netdev->gso_max_segs = IPQESS_TX_RING_SIZE / 2;
+  1183	
+  1184		ipqess_set_ethtool_ops(netdev);
+  1185	
+  1186		err = ipqess_hw_init(ess);
+  1187		if (err)
+  1188			goto err_phylink;
+  1189	
+  1190		for (i = 0; i < IPQESS_NETDEV_QUEUES; i++) {
+> 1191			netif_tx_napi_add(netdev, &ess->tx_ring[i].napi_tx,
+  1192					  ipqess_tx_napi, 64);
+  1193			netif_napi_add(netdev, &ess->rx_ring[i].napi_rx, ipqess_rx_napi,
+  1194				       64);
+  1195		}
+  1196	
+  1197		err = register_netdev(netdev);
+  1198		if (err)
+  1199			goto err_hw_stop;
+  1200	
+  1201		return 0;
+  1202	
+  1203	err_hw_stop:
+  1204		ipqess_hw_stop(ess);
+  1205	
+  1206		ipqess_tx_ring_free(ess);
+  1207		ipqess_rx_ring_free(ess);
+  1208	err_phylink:
+  1209		phylink_destroy(ess->phylink);
+  1210	
+  1211	err_clk:
+  1212		clk_disable_unprepare(ess->ess_clk);
+  1213	
+  1214		return err;
+  1215	}
+  1216	
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
