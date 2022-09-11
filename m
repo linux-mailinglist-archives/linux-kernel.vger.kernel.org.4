@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638B25B4F56
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011B85B4F50
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiIKOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 10:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S230391AbiIKODU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 10:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiIKODQ (ORCPT
+        with ESMTP id S230237AbiIKODL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 10:03:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713C33A3B;
-        Sun, 11 Sep 2022 07:03:15 -0700 (PDT)
+        Sun, 11 Sep 2022 10:03:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3681E33419;
+        Sun, 11 Sep 2022 07:03:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8DA0B80B3B;
-        Sun, 11 Sep 2022 14:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F68EC43149;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C06CC60F5B;
+        Sun, 11 Sep 2022 14:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AF2C43146;
         Sun, 11 Sep 2022 14:03:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1662904989;
-        bh=37cnzMM3fHj4HuHjrrjP7jTiSZuXJ1j1atdznt3e8Hc=;
+        bh=AEuQN1qN6g4lPNcGSyMgkuEVA8PP453BV0ADwWgFgQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pepUIK7+4MCU4bGUVs4WRJUA0mEgHALyh3xx8GjxAj7Rb86mJnGkxBX0GgjHKBAGP
-         0jemwS3p6nE6gC4g+3kKUgo8hY1jQjPdYDRwaWODTGnb2P8s1ma3Fw7xnnKag1tW70
-         Gr8Y/6v4ReELfhaBfzGaYpkhMgggyWP6PA31yLZui1iWlQIQrVbKVnsJvEuA7xNaFh
-         41xwZebw6XtD1Ay0FxsHIRLnAIPXELfzTQG9dCh98TKc3/u8wuoCoRJpz5PGyFPuza
-         5IYOI0slfL6D6nO5QLp/jscmhiE3X+JBrv7CK4ly+k/PUvKrfPrH60e5GdNkYpcian
-         hwlH40e72dGuA==
+        b=usPjSiPoWKN/+cbGghdmZOsmNK8WmSkn2z0waF9Doxij9MQM9jGqUSQcCAgQBP4QP
+         MSQX7lFNP3knTEpkm96ktvS7fqMqQpZ+CAevgb5iLlEpEBdZfe/1cJTpczQRnTm7OG
+         p6qad5mI9g8yUDdl1QOpkGnYi72nNkeyxgTQwFW7CjvSwYb01VsIMydjhHk2MWjdku
+         UoLVBREBCsjTwNWpnTTOhfAgHUZqqce+Bp8XkR1U5PXddR9/RFYT6FPsRLfIXgvH4S
+         BK9yM6yV7yIC2i2AyblhFEhTi0p9NogBs9iQTlpg4mrM9WO73m0M8RcjOiG2CYPP+X
+         357X7OT9pwulA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oXNYM-0007wp-2p; Sun, 11 Sep 2022 16:03:18 +0200
+        id 1oXNYM-0007ws-5j; Sun, 11 Sep 2022 16:03:18 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Johan Hovold <johan@kernel.org>
 Cc:     Amireddy mallikarjuna reddy <mallikarjuna.reddy@ftdichip.com>,
         arun.pappan@ftdichip.com, sowjanya.reddy@ftdichip.com,
         malliamireddy009@gmail.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 07/12] USB: serial: ftdi_sio: clean up modem-status handling
-Date:   Sun, 11 Sep 2022 16:02:11 +0200
-Message-Id: <20220911140216.30481-8-johan@kernel.org>
+Subject: [PATCH 08/12] USB: serial: ftdi_sio: clean up attribute handling
+Date:   Sun, 11 Sep 2022 16:02:12 +0200
+Message-Id: <20220911140216.30481-9-johan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220911140216.30481-1-johan@kernel.org>
 References: <20220911140216.30481-1-johan@kernel.org>
@@ -59,51 +59,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All chip types but the original SIO (FT8U100AX) return a two-byte modem
-status and there's no need to explicitly list every other type in the
-handler.
+The driver exposes two attributes for all chip types but FT232A, which
+doesn't have a configurable latency timer, and SIO, which (probably)
+doesn't support the event-char mechanism either.
+
+Explicitly test for the exceptions rather than list each and every
+supported device type in the attribute helpers.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ drivers/usb/serial/ftdi_sio.c | 47 ++++++++++++-----------------------
+ 1 file changed, 16 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index f372f55a1bdf..58e0acb211df 100644
+index 58e0acb211df..835e12fc971a 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -2821,27 +2821,13 @@ static int ftdi_get_modem_status(struct usb_serial_port *port,
- 	if (!buf)
- 		return -ENOMEM;
- 	/*
--	 * The 8U232AM returns a two byte value (the SIO a 1 byte value) in
--	 * the same format as the data returned from the in point.
-+	 * The device returns a two byte value (the SIO a 1 byte value) in the
-+	 * same format as the data returned from the IN endpoint.
- 	 */
--	switch (priv->chip_type) {
--	case SIO:
-+	if (priv->chip_type == SIO)
- 		len = 1;
--		break;
--	case FT232A:
--	case FT232B:
--	case FT2232C:
--	case FT232R:
--	case FT2232H:
--	case FT4232H:
--	case FT232H:
--	case FTX:
-+	else
- 		len = 2;
--		break;
--	default:
--		ret = -EFAULT;
--		goto out;
+@@ -1726,46 +1726,31 @@ static DEVICE_ATTR_WO(event_char);
+ static int create_sysfs_attrs(struct usb_serial_port *port)
+ {
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	int retval = 0;
+-
+-	/* XXX I've no idea if the original SIO supports the event_char
+-	 * sysfs parameter, so I'm playing it safe.  */
+-	if (priv->chip_type != SIO) {
+-		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
+-		retval = device_create_file(&port->dev, &dev_attr_event_char);
+-		if ((!retval) &&
+-		    (priv->chip_type == FT232B ||
+-		     priv->chip_type == FT2232C ||
+-		     priv->chip_type == FT232R ||
+-		     priv->chip_type == FT2232H ||
+-		     priv->chip_type == FT4232H ||
+-		     priv->chip_type == FT232H ||
+-		     priv->chip_type == FTX)) {
+-			retval = device_create_file(&port->dev,
+-						    &dev_attr_latency_timer);
+-		}
++	enum ftdi_chip_type type = priv->chip_type;
++	int ret = 0;
++
++	if (type != SIO) {
++		ret = device_create_file(&port->dev, &dev_attr_event_char);
++		if (ret)
++			return ret;
+ 	}
+-	return retval;
++
++	if (type != SIO && type != FT232A)
++		ret = device_create_file(&port->dev, &dev_attr_latency_timer);
++
++	return ret;
+ }
+ 
+ static void remove_sysfs_attrs(struct usb_serial_port *port)
+ {
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	enum ftdi_chip_type type = priv->chip_type;
+ 
+-	/* XXX see create_sysfs_attrs */
+-	if (priv->chip_type != SIO) {
++	if (type != SIO)
+ 		device_remove_file(&port->dev, &dev_attr_event_char);
+-		if (priv->chip_type == FT232B ||
+-		    priv->chip_type == FT2232C ||
+-		    priv->chip_type == FT232R ||
+-		    priv->chip_type == FT2232H ||
+-		    priv->chip_type == FT4232H ||
+-		    priv->chip_type == FT232H ||
+-		    priv->chip_type == FTX) {
+-			device_remove_file(&port->dev, &dev_attr_latency_timer);
+-		}
 -	}
  
- 	ret = usb_control_msg(port->serial->dev,
- 			usb_rcvctrlpipe(port->serial->dev, 0),
++	if (type != SIO && type != FT232A)
++		device_remove_file(&port->dev, &dev_attr_latency_timer);
+ }
+ 
+ #ifdef CONFIG_GPIOLIB
 -- 
 2.35.1
 
