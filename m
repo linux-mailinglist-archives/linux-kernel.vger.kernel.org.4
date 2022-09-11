@@ -2,96 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35695B501E
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 19:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84B45B5022
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 19:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiIKRIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 13:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S229652AbiIKRJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 13:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIKRIp (ORCPT
+        with ESMTP id S229517AbiIKRJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 13:08:45 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48A255A6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 10:08:42 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b35so9677678edf.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 10:08:42 -0700 (PDT)
+        Sun, 11 Sep 2022 13:09:18 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7C355A6
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 10:09:16 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c24so6180340pgg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 10:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=JtKK92om0G2WOBVnqwpOEzB17LAG8qKM2Zhmdg8A6S4=;
-        b=Z2HRxRGB91lOsuC6eUUPNgHwLqmjDcxMZ92LvFs/wrUpURtnUBps7W2DGgDwnFVnbr
-         uXtNCAN/aOaN17Vnbdbv1X9PUHqidhNkmRyTVvXKYVbqUk660ix1N6JD5BwgwqDDlpWr
-         cmIN5XWptg7R3ZimhhWn1ymJtGVLnzNsOKDJm71z3ckua6+yMkIaHtHqoz3zeqPisry2
-         EbEbPpMzJz0YFNdcMQDc4UAJH7uE4rZj9V0+5L8FmqHE25bpYp5hR+8bhD489FUwyb9X
-         N2SZtRZmnU0eA/UIA4SZnnayZz6ExfLXozfgArqCRGIdiU1EMfbv2kUYGjegpqRj4sd1
-         osQA==
+        bh=rVg/nUPUahFrY03m9GGG4uJ3U+zHnjAn7s/JPA1xauI=;
+        b=MFKyMyMsIesxA0DmtEKIfc2YggzM5oE0iC9v9lmb8SaMJ9VEUVhxDEc5FH755lwKqZ
+         CMwgS7zb24wGJbuUUk/2VNWwybMpOqaI2LEVyLDJMaPplCCjnHrtNeFr/WKz6SNZm3ub
+         GqRqhTJPhSw9abz3KuKHd7KZtlKiWFFQEXu+GjUkj2v+Pe/kKW0TuATJEVPE5lFlqf/O
+         iGcaMSglnWYP1UKb3qpl7nFoUGsmCtmRSjnSKF02xI3EDOZHbHJR1GCbKbHblxTp8Aru
+         1CvDs6vbE9yy4QlA5GxAUq3JqAxkzTVWz4uyhf1XVBeoOmnZNwuySkexQ1sEB7mlk9tc
+         9xQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=JtKK92om0G2WOBVnqwpOEzB17LAG8qKM2Zhmdg8A6S4=;
-        b=In1CmnX91jS/ko4ht1rk87aTzk7qyyycNp/d6p+C9cpjiQA1V4ojVdVt3ooJVWg8co
-         1iWidu1FECSjN0Tzw1EfMKtPsdRrZ3Q2MDDKeKld3IMkppojgrBycW4fg+A3leGEK1QF
-         3MyQNJvEC2BB9lCcyAt+57nG1vgWg4fIduBBrbEDMXRjLYGjotulcxVN/K9dGKZhgtQU
-         GO+10Vi7G7tN4Aa91Fh7ZFBU92yux/pidgBCST6y3qjaUcfRWyEuDJST8rXskxVgDKCj
-         8OcIOV3qbCOr2qlKHaioj9nzbbFzZ/p9+eAiFKQ7egTJwmcvvjZmgnzQC8NrNwh0XnDI
-         yCSw==
-X-Gm-Message-State: ACgBeo3CnBswfvlFWsBpQdcuQj3EFHcN6RJl6TbKlAWt/2OsxbFUszpJ
-        JqdmRtvNHBbKVfYuqdUBHQQ=
-X-Google-Smtp-Source: AA6agR6r51nJtrAKM5UOSmlhYsNfYlIA+DoYdk4U2mxC/t6Uf2/oGtBM2IwFtzYGJYBzIkxe5TdMng==
-X-Received: by 2002:a05:6402:1ccb:b0:446:4346:8597 with SMTP id ds11-20020a0564021ccb00b0044643468597mr19299220edb.177.1662916121414;
-        Sun, 11 Sep 2022 10:08:41 -0700 (PDT)
-Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id p1-20020a056402044100b0044e81203bebsm4246565edw.31.2022.09.11.10.08.40
+        bh=rVg/nUPUahFrY03m9GGG4uJ3U+zHnjAn7s/JPA1xauI=;
+        b=egU4BHT7G8GpmeeLrLh8wbVml48YAxTfZVuff9KClZKBYtOgBuxKGXeFUq6dCq6GW0
+         WlA/1vVFastec/NU8gURNwgguxQjWCcZ/mUKnkggWT8kXmsklgmakWzJEdJo/tSvpbaA
+         2fRIxS4ZvI+ILwIKWBta9q+lfWHmgChF/rAzTEEAF6EaUFHCXP2DEEndc5sJBOkV1RcZ
+         wN8qxY78cjT7QfvIk8IxYK8hwWaQ2HuQJMBKaGEngD2gzpJAXAqPE10UiuqHCZ2CzL+u
+         XIVypJUKcHPnNzSbOGy1YbqeepEXkl+EvY3Dv7eyz6PppRo27kP+uvr/QZR53d8CHSHX
+         Dczg==
+X-Gm-Message-State: ACgBeo1dAIWugPkU5TyYZs4ORBe8P8Fi7MEfeGA0NcvlYZ5ANSRA/iwi
+        jJuM/7ys5uB5YwAhizvr6CcoUA==
+X-Google-Smtp-Source: AA6agR4bEH2jS6nzYnKoyIsWLgZFO1EruHmIKounR3STYARea4NoxJ99yesFmAZX8fAnQsn7bodv7Q==
+X-Received: by 2002:a63:8a4a:0:b0:434:c99c:6fd4 with SMTP id y71-20020a638a4a000000b00434c99c6fd4mr19795263pgd.24.1662916156090;
+        Sun, 11 Sep 2022 10:09:16 -0700 (PDT)
+Received: from [10.4.98.41] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id w63-20020a626242000000b0053dec787698sm3663315pfb.175.2022.09.11.10.09.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 10:08:40 -0700 (PDT)
-Message-ID: <f85070d3-2ead-d80e-8789-2ffc00a8a582@gmail.com>
-Date:   Sun, 11 Sep 2022 19:08:39 +0200
+        Sun, 11 Sep 2022 10:09:15 -0700 (PDT)
+Message-ID: <69f2df4e-b2c6-0f19-bf8d-92b7d6c4e033@bytedance.com>
+Date:   Mon, 12 Sep 2022 01:09:05 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/6] staging: r8188eu: some coding style cleanups
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [External] Re: [PATCH 1/3] PCI/AER: Use
+ pci_aer_clear_uncorrect_error_status() to clear uncorrectable error status
 Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220911161949.11293-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220911161949.11293-1-straube.linux@gmail.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        bhelgaas@google.com, ruscur@russell.cc, oohall@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        ntb@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org
+References: <20220901181634.99591-1-chenzhuo.1@bytedance.com>
+ <20220901181634.99591-2-chenzhuo.1@bytedance.com>
+ <20220911162206.5f2uctuotuddqpre@mobilestation>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <20220911162206.5f2uctuotuddqpre@mobilestation>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/11/22 18:19, Michael Straube wrote:
-> This series contains some coding style cleanups in the file
-> odm_HWConfig.c.
-> 
-> Michael Straube (6):
->    staging: r8188eu: rename odm_SignalScaleMapping()
->    staging: r8188eu: clean up camel case in odm_signal_scale_mapping()
->    staging: r8188eu: remove unnecessary initialization
->    staging: r8188eu: rename odm_QueryRxPwrPercentage()
->    staging: r8188eu: clean up camel case in odm_query_rxpwrpercentage()
->    staging: r8188eu: replace tabs with space in
->      odm_query_rxpwrpercentage()
-> 
->   drivers/staging/r8188eu/hal/odm_HWConfig.c | 60 +++++++++++-----------
->   1 file changed, 30 insertions(+), 30 deletions(-)
-> 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
 
+On 9/12/22 12:22 AM, Serge Semin wrote:
+> Hi Zhuo
+> 
+> On Fri, Sep 02, 2022 at 02:16:32AM +0800, Zhuo Chen wrote:
+>> Status bits for ERR_NONFATAL errors only are cleared in
+>> pci_aer_clear_nonfatal_status(), but we want clear uncorrectable
+>> error status in ntb_hw_idt.c and lpfc_attr.c. So we add
+>> pci_aer_clear_uncorrect_error_status() and change to use it.
+> 
+> What about the next drivers
+> 
+> drivers/scsi/lpfc/lpfc_attr.c
+> drivers/crypto/hisilicon/qm.c
+> drivers/net/ethernet/intel/ice/ice_main.c
+> 
+> which call the pci_aer_clear_nonfatal_status() method too?
+
+‘pci_aer_clear_nonfatal_status()’ in 
+drivers/net/ethernet/intel/ice/ice_main.c has already been removed and 
+merged in kernel in: 
+https://github.com/torvalds/linux/commit/ca415ea1f03abf34fc8e4cc5fc30a00189b4e776
+
+‘pci_aer_clear_nonfatal_status()’ in drivers/crypto/hisilicon/qm.c will 
+be removed in the next kernel:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/crypto/hisilicon/qm.c?id=00278564a60e11df8bcca0ececd8b2f55434e406
+
+Uncorrectable error status register was intended to be cleared in 
+drivers/scsi/lpfc/lpfc_attr.c. But originally function was changed in 
+https://github.com/torvalds/linux/commit/e7b0b847de6db161e3917732276e425bc92a2feb
+and
+https://github.com/torvalds/linux/commit/894020fdd88c1e9a74c60b67c0f19f1c7696ba2f
+> 
+>>
+>> Use pci_aer_clear_nonfatal_status() in dpc_process_error(), which has
+>> no functional changes.
+>>
+>> Since pci_aer_clear_nonfatal_status() is used only internally, move
+>> its declaration to the PCI internal header file. Also, no one cares
+>> about return value of pci_aer_clear_nonfatal_status(), so make it void.
+>>
+>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>> ---
+>>   drivers/ntb/hw/idt/ntb_hw_idt.c |  4 ++--
+>>   drivers/pci/pci.h               |  2 ++
+>>   drivers/pci/pcie/aer.c          | 23 ++++++++++++++++++-----
+>>   drivers/pci/pcie/dpc.c          |  3 +--
+>>   drivers/scsi/lpfc/lpfc_attr.c   |  4 ++--
+>>   include/linux/aer.h             |  4 ++--
+>>   6 files changed, 27 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+>> index 733557231ed0..de1dbbc5b9de 100644
+>> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
+>> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+>> @@ -2657,8 +2657,8 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+>>   	ret = pci_enable_pcie_error_reporting(pdev);
+>>   	if (ret != 0)
+>>   		dev_warn(&pdev->dev, "PCIe AER capability disabled\n");
+> 
+>> -	else /* Cleanup nonfatal error status before getting to init */
+>> -		pci_aer_clear_nonfatal_status(pdev);
+>> +	else /* Cleanup uncorrectable error status before getting to init */
+>> +		pci_aer_clear_uncorrect_error_status(pdev);
+> 
+>  From the IDT NTB PCIe initialization procedure point of view both of
+> these methods are equivalent. So for the IDT NTB part:
+> 
+IDT NTB part is the same as drivers/scsi/lpfc/lpfc_attr.c. The original 
+function is clear uncorrectable error status register including fatal 
+and non-fatal error status bits.
+
+> Acked-by: Serge Semin <fancer.lancer@gmail.com>
+> 
+> -Sergey
+> 
+>>   
+>>   	/* First enable the PCI device */
+>>   	ret = pcim_enable_device(pdev);
+>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+>> index e10cdec6c56e..574176f43025 100644
+>> --- a/drivers/pci/pci.h
+>> +++ b/drivers/pci/pci.h
+>> @@ -686,6 +686,7 @@ void pci_aer_init(struct pci_dev *dev);
+>>   void pci_aer_exit(struct pci_dev *dev);
+>>   extern const struct attribute_group aer_stats_attr_group;
+>>   void pci_aer_clear_fatal_status(struct pci_dev *dev);
+>> +void pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+>>   int pci_aer_clear_status(struct pci_dev *dev);
+>>   int pci_aer_raw_clear_status(struct pci_dev *dev);
+>>   #else
+>> @@ -693,6 +694,7 @@ static inline void pci_no_aer(void) { }
+>>   static inline void pci_aer_init(struct pci_dev *d) { }
+>>   static inline void pci_aer_exit(struct pci_dev *d) { }
+>>   static inline void pci_aer_clear_fatal_status(struct pci_dev *dev) { }
+>> +static inline void pci_aer_clear_nonfatal_status(struct pci_dev *dev) { }
+>>   static inline int pci_aer_clear_status(struct pci_dev *dev) { return -EINVAL; }
+>>   static inline int pci_aer_raw_clear_status(struct pci_dev *dev) { return -EINVAL; }
+>>   #endif
+>> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+>> index 7952e5efd6cf..d2996afa80f6 100644
+>> --- a/drivers/pci/pcie/aer.c
+>> +++ b/drivers/pci/pcie/aer.c
+>> @@ -251,13 +251,13 @@ int pci_disable_pcie_error_reporting(struct pci_dev *dev)
+>>   }
+>>   EXPORT_SYMBOL_GPL(pci_disable_pcie_error_reporting);
+>>   
+>> -int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>> +void pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>>   {
+>>   	int aer = dev->aer_cap;
+>>   	u32 status, sev;
+>>   
+>>   	if (!pcie_aer_is_native(dev))
+>> -		return -EIO;
+>> +		return;
+>>   
+>>   	/* Clear status bits for ERR_NONFATAL errors only */
+>>   	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &status);
+>> @@ -265,10 +265,7 @@ int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>>   	status &= ~sev;
+>>   	if (status)
+>>   		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
+>> -
+>> -	return 0;
+>>   }
+>> -EXPORT_SYMBOL_GPL(pci_aer_clear_nonfatal_status);
+>>   
+>>   void pci_aer_clear_fatal_status(struct pci_dev *dev)
+>>   {
+>> @@ -286,6 +283,22 @@ void pci_aer_clear_fatal_status(struct pci_dev *dev)
+>>   		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
+>>   }
+>>   
+>> +int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
+>> +{
+>> +	int aer = dev->aer_cap;
+>> +	u32 status;
+>> +
+>> +	if (!pcie_aer_is_native(dev))
+>> +		return -EIO;
+>> +
+>> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &status);
+>> +	if (status)
+>> +		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(pci_aer_clear_uncorrect_error_status);
+>> +
+>>   /**
+>>    * pci_aer_raw_clear_status - Clear AER error registers.
+>>    * @dev: the PCI device
+>> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
+>> index 3e9afee02e8d..7942073fbb34 100644
+>> --- a/drivers/pci/pcie/dpc.c
+>> +++ b/drivers/pci/pcie/dpc.c
+>> @@ -288,8 +288,7 @@ void dpc_process_error(struct pci_dev *pdev)
+>>   		 dpc_get_aer_uncorrect_severity(pdev, &info) &&
+>>   		 aer_get_device_error_info(pdev, &info)) {
+>>   		aer_print_error(pdev, &info);
+>> -		pci_aer_clear_nonfatal_status(pdev);
+>> -		pci_aer_clear_fatal_status(pdev);
+>> +		pci_aer_clear_uncorrect_error_status(pdev);
+>>   	}
+>>   }
+>>   
+>> diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+>> index 3caaa7c4af48..1ed8d1640325 100644
+>> --- a/drivers/scsi/lpfc/lpfc_attr.c
+>> +++ b/drivers/scsi/lpfc/lpfc_attr.c
+>> @@ -4712,7 +4712,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
+>>    * Description:
+>>    * If the @buf contains 1 and the device currently has the AER support
+>>    * enabled, then invokes the kernel AER helper routine
+>> - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
+>> + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrectable
+>>    * error status register.
+>>    *
+>>    * Notes:
+>> @@ -4738,7 +4738,7 @@ lpfc_aer_cleanup_state(struct device *dev, struct device_attribute *attr,
+>>   		return -EINVAL;
+>>   
+>>   	if (phba->hba_flag & HBA_AER_ENABLED)
+>> -		rc = pci_aer_clear_nonfatal_status(phba->pcidev);
+>> +		rc = pci_aer_clear_uncorrect_error_status(phba->pcidev);
+>>   
+>>   	if (rc == 0)
+>>   		return strlen(buf);
+>> diff --git a/include/linux/aer.h b/include/linux/aer.h
+>> index 97f64ba1b34a..f638ad955deb 100644
+>> --- a/include/linux/aer.h
+>> +++ b/include/linux/aer.h
+>> @@ -44,7 +44,7 @@ struct aer_capability_regs {
+>>   /* PCIe port driver needs this function to enable AER */
+>>   int pci_enable_pcie_error_reporting(struct pci_dev *dev);
+>>   int pci_disable_pcie_error_reporting(struct pci_dev *dev);
+>> -int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+>> +int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev);
+>>   void pci_save_aer_state(struct pci_dev *dev);
+>>   void pci_restore_aer_state(struct pci_dev *dev);
+>>   #else
+>> @@ -56,7 +56,7 @@ static inline int pci_disable_pcie_error_reporting(struct pci_dev *dev)
+>>   {
+>>   	return -EINVAL;
+>>   }
+>> -static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>> +static inline int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
+>>   {
+>>   	return -EINVAL;
+>>   }
+>> -- 
+>> 2.30.1 (Apple Git-130)
+>>
+
+-- 
+Thanks,
+Zhuo Chen
