@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4824B5B53B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 07:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC13C5B5595
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiILF7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 01:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S230056AbiILHya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiILF7t (ORCPT
+        with ESMTP id S229549AbiILHyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 01:59:49 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DD864CC;
-        Sun, 11 Sep 2022 22:59:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQwsp4bqkz4xDK;
-        Mon, 12 Sep 2022 15:59:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662962384;
-        bh=4Cy88NTKj6+UEtZEhvAHYVxnMHG/azrPKm7tLgF+5EE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=asOWi269Sh07w5zA/qMXS1WBPQoeAVujGdi3k07K02A0k2615ZIt4HZB3atdrV1s+
-         uwF8TcxY+BxQIld4wj4WBcXdosbAeIcRhYhrvKWFpoiEvKKIhk0d8jmWThB1NKOxA5
-         IU3CAhjOhiRXOxWuGNO2r7ZkE560j5MQT9nov+/9OEgEkOloxewopHBht5IgS6jc88
-         gLJXsCKlHwhu7vLjQZABPsFOMiczy+zoQKkXMkz0KN5aHangnzG5rbFmTgpBXxgrlV
-         ltFPRCit3ZcaN4ugB8TIaWjVjZfdCvdBuzbso0DpxIHr6jxFGMlHHl0xUN6I/+uWjl
-         XtvIbDB2wIX1A==
-Date:   Mon, 12 Sep 2022 15:59:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tejun Heo <tj@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the cgroup tree with the tip tree
-Message-ID: <20220912155941.530e4318@canb.auug.org.au>
+        Mon, 12 Sep 2022 03:54:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E95220C5;
+        Mon, 12 Sep 2022 00:54:24 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id wc11so3647302ejb.4;
+        Mon, 12 Sep 2022 00:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=SKzjbw9lRJgBcel5ZxP+EuDqjzgPYYKLm1vp+TeEmao=;
+        b=n+4YDeyora0QTIWMZOdeMAMixt9nmvLKpDxfVeUUkBvF4Ex9zyX41DuUAglc2eltdf
+         LWLE0hEE/8Rs81gOvk9UAzCiZvBys0amYrLicqrFiq7hDJajaf45axUmUMcnbO5BqrHw
+         lOJl3Iw/dmztLB0bE3zWt6lg12WzgEpFLNGz4YaeGfpHpblvap+WZyGlFOvhldZGCkmu
+         fKC/3/I2muEK9Za+KRGNZ8LzYQb6RZRe2PULuWJ8/Jt2ysgxZnQ6Vt6G2t1w0HMw/JKu
+         96yUeJqgAyogw9CBKBQsahfgdBWqNoaCW4q3bz7uJo6d9F8DBcYEadpPaPvZwPX+Bnt2
+         NI5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=SKzjbw9lRJgBcel5ZxP+EuDqjzgPYYKLm1vp+TeEmao=;
+        b=sMhpKczLUSc5RvN6WUUGrP5P2INQwcCcCnVDUlbjWtwoITynnln1VCeVbNEAmunvbC
+         lzYDrPlcgGOLHXYKrIhhmNLAGAIwPzY9r5LOPa5RUHybxWuHrK/FW8Zo/lfk1a1dDsjg
+         5H1LA6N4a/rgVL5sSsNZx0FQj9doH8h9aERINSo2tp0+DqGwDBiUwpL8rK4munRWvpX8
+         yNGqUdw07lQQRmmLrH05SJd9ihiajlRQvHvdEWTZm/zw4J4uuFcc/8UM5RoXtU6GsSU2
+         A6+B3AWIStb/D1BjXy5u5ilOKog9BtuSUPpd05uuMWipPzH5GvIlbZZkUinhn6eIYSUs
+         valA==
+X-Gm-Message-State: ACgBeo2qU4PWAL1xcZivFDQmnclg2E5eU87BmnT4eyxEiuLU3LnzeVti
+        vCfcuh7FmMr88nNbYeFg3U4=
+X-Google-Smtp-Source: AA6agR7gMSwOQYP5VpYpYYXjbopehskWuSprT2EJjXvJiS/M74ODUvx6J/6HlC3OTPnt33bw3Arcsw==
+X-Received: by 2002:a17:906:dc93:b0:742:133b:42c3 with SMTP id cs19-20020a170906dc9300b00742133b42c3mr18127101ejc.502.1662969262925;
+        Mon, 12 Sep 2022 00:54:22 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id md10-20020a170906ae8a00b0073d753759fasm4052753ejb.172.2022.09.12.00.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 00:54:22 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 13:54:52 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Martin KaFai Lau <kafai@fb.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-wpan@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH 3/4] net-next: frags: add inetpeer frag_mem tracking
+Message-ID: <20220911115447.GA101734@debian>
+References: <20220829114648.GA2409@debian>
+ <CANn89iLkfMUK8n5w00naST9J+KrLaAqqg2r0X9Sd-L0XzpLzSQ@mail.gmail.com>
+ <20220901150115.GB31767@debian>
+ <CANn89iKMe7WZS-Q4rzqEUUD+ANL6Fmb6BnFo8TvX7y_EVi=HOw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vYbzmSrv_qwdyivZZwlUxFV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iKMe7WZS-Q4rzqEUUD+ANL6Fmb6BnFo8TvX7y_EVi=HOw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vYbzmSrv_qwdyivZZwlUxFV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 01, 2022 at 09:06:59AM -0700, Eric Dumazet wrote:
+> It can be disabled if needed, by changing ipfrag_max_dist sysctl.
 
-Hi all,
+I understand your reluctance to add another dependency on inetpeer.
 
-Today's linux-next merge of the cgroup tree got a conflict in:
+> Quite frankly IPv4 reassembly unit is a toy, I am always surprised
+> some applications are still relying on IP fragments.
 
-  kernel/cgroup/cgroup.c
-
-between commit:
-
-  34f26a15611a ("sched/psi: Per-cgroup PSI accounting disable/re-enable int=
-erface")
-
-from the tip tree and commit:
-
-  8a693f7766f9 ("cgroup: Remove CFTYPE_PRESSURE")
-
-from the cgroup tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc kernel/cgroup/cgroup.c
-index 3dcd2a0041b3,e24015877d3c..000000000000
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@@ -5222,8 -5159,6 +5247,7 @@@ static struct cftype cgroup_psi_files[
-  #ifdef CONFIG_PSI
-  	{
-  		.name =3D "io.pressure",
-- 		.flags =3D CFTYPE_PRESSURE,
- +		.file_offset =3D offsetof(struct cgroup, psi_files[PSI_IO]),
-  		.seq_show =3D cgroup_io_pressure_show,
-  		.write =3D cgroup_io_pressure_write,
-  		.poll =3D cgroup_pressure_poll,
-@@@ -5231,8 -5166,6 +5255,7 @@@
-  	},
-  	{
-  		.name =3D "memory.pressure",
-- 		.flags =3D CFTYPE_PRESSURE,
- +		.file_offset =3D offsetof(struct cgroup, psi_files[PSI_MEM]),
-  		.seq_show =3D cgroup_memory_pressure_show,
-  		.write =3D cgroup_memory_pressure_write,
-  		.poll =3D cgroup_pressure_poll,
-@@@ -5240,8 -5173,6 +5263,7 @@@
-  	},
-  	{
-  		.name =3D "cpu.pressure",
-- 		.flags =3D CFTYPE_PRESSURE,
- +		.file_offset =3D offsetof(struct cgroup, psi_files[PSI_CPU]),
-  		.seq_show =3D cgroup_cpu_pressure_show,
-  		.write =3D cgroup_cpu_pressure_write,
-  		.poll =3D cgroup_pressure_poll,
-
---Sig_/vYbzmSrv_qwdyivZZwlUxFV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMeys0ACgkQAVBC80lX
-0GxaGQf/dF3GoCD3OTuYEJfb1oX2c3U109+wd9g3m/cUP/OwiEnjS8jd+9YNHJUx
-AlmcypkV/l+eem8tYYrGJXwZT4VcnH6t1vRTcW8OGBSRAj9T+FPhcbHJuRVX+Tp8
-B4d146uQCpM5xMJ6B5dwZ3nwysPqxQ0wCf9WvhaZR4/IeuHkfeiEqcHkndz4JbFQ
-omFEqhCEejKpKSD5mO2ab0BMhl2EtkT0xj574FSIYSJWtVOaOf+o3i/indBiaceO
-tKTj5okd+yV9OjwL2yxyoai+1ZpceKVOEF7dLw31yIvEI4fAzKlEoV8D9TuinWK8
-QJ2f2syfOQDYBt3UV3PFsTxbOvgpHQ==
-=4yjz
------END PGP SIGNATURE-----
-
---Sig_/vYbzmSrv_qwdyivZZwlUxFV--
+Do you think there's any room for improvement in IP fragments? I
+believe that it is possible to make frags less fragile and prone
+to overload in real-world scenarios.
