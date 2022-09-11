@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0FC5B4C38
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 07:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323CA5B4C3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 07:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIKFnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 01:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S229896AbiIKFvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 01:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIKFnl (ORCPT
+        with ESMTP id S229599AbiIKFvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 01:43:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAD043328;
-        Sat, 10 Sep 2022 22:43:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99F1EB80908;
-        Sun, 11 Sep 2022 05:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF91CC433C1;
-        Sun, 11 Sep 2022 05:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662875018;
-        bh=ELjelkCwKjUcA1hlQAEvA79fcr8n4JPvscovVYEZNFM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sOCpgho45N/4pXRgAVJeI4goYTSYh1ALYp0OrN5n89iMpKQ80uz1uAcjXG3NYV8Y+
-         X/MXpY/SuU1NSDdRtYu09vCBZJTsP6NHzcJltaHuq4CUI6jfwhI23rZ8kX/ZVOzxnL
-         kC7dYRzQv1Mb5i5hEqCDsC5N/v9NZTq0xVIem38w=
-Date:   Sun, 11 Sep 2022 07:44:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH stable-4.19 0/4] USB: backports to 4.19
-Message-ID: <Yx11oB0C3h7D6I2H@kroah.com>
-References: <20220906134915.19225-1-johan@kernel.org>
+        Sun, 11 Sep 2022 01:51:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C05844572;
+        Sat, 10 Sep 2022 22:51:46 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MQJhn0gCKzHnkl;
+        Sun, 11 Sep 2022 13:49:45 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
+ (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 11 Sep
+ 2022 13:51:43 +0800
+From:   Peng Wu <wupeng58@huawei.com>
+To:     <vincent.sunplus@gmail.com>, <kishon@ti.com>, <vkoul@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <inux-phy@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
+        <wupeng58@huawei.com>
+Subject: [PATCH] phy: sunplus: Fix an IS_ERR() vs NULL bug in sp_usb_phy_probe
+Date:   Sun, 11 Sep 2022 05:49:31 +0000
+Message-ID: <20220911054931.122530-1-wupeng58@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906134915.19225-1-johan@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500023.china.huawei.com (7.221.188.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,24 +46,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:49:11PM +0200, Johan Hovold wrote:
-> And here are the corresponding backports to 4.19.
-> 
-> Johan
-> 
-> 
-> Johan Hovold (4):
->   usb: dwc3: fix PHY disable sequence
->   usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
->   USB: serial: ch341: fix lost character on LCR updates
->   USB: serial: ch341: fix disabled rx timer on older devices
-> 
->  drivers/usb/dwc3/core.c      | 19 ++++++++++---------
->  drivers/usb/dwc3/dwc3-qcom.c | 14 +++++++++++++-
->  drivers/usb/dwc3/host.c      |  1 +
->  drivers/usb/serial/ch341.c   | 15 +++++++++++++--
->  4 files changed, 37 insertions(+), 12 deletions(-)
+The devm_ioremap() function returns NULL on error, it doesn't return
+error pointers.
 
-All backports now queued up, many thanks for doing these.
+Fixes: 99d9ccd973852 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+---
+ drivers/phy/sunplus/phy-sunplus-usb2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
+index 5269968b3060..0e64eb3e6db5 100644
+--- a/drivers/phy/sunplus/phy-sunplus-usb2.c
++++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
+@@ -256,8 +256,8 @@ static int sp_usb_phy_probe(struct platform_device *pdev)
+ 	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
+ 	usbphy->moon4_regs = devm_ioremap(&pdev->dev, usbphy->moon4_res_mem->start,
+ 					  resource_size(usbphy->moon4_res_mem));
+-	if (IS_ERR(usbphy->moon4_regs))
+-		return PTR_ERR(usbphy->moon4_regs);
++	if (!usbphy->moon4_regs)
++		return -ENOMEM;
+ 
+ 	usbphy->phy_clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(usbphy->phy_clk))
+-- 
+2.17.1
+
