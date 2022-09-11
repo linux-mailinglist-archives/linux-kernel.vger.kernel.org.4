@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365025B4CD6
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3D45B4CDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIKJDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 05:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S230074AbiIKJGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 05:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiIKJDl (ORCPT
+        with ESMTP id S229677AbiIKJGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 05:03:41 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C01A39B88;
-        Sun, 11 Sep 2022 02:03:40 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id iw17so5858274plb.0;
-        Sun, 11 Sep 2022 02:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date;
-        bh=Kr6/Om/0NREnjozpuGQOaVHKHAHxskJmGNV3oyHv3K8=;
-        b=msXX4pYXfjyDfjIuaiOnniF6JthsWkmdTST+DH5mh92HWV3HgPnM1O/iQyb6LKfWaV
-         fNtwT1sSXt9muX/OE7q5mZMwsFjxf7xTh/rtfJ4CCPRRHonLkdWWOBHG3LPRBYufWL/Z
-         HPlBrEIIDhHxcJNgy+6FslrCUO9OWRkEnsKCe0DptNcBWb0wUpGc9yJs4Az1Y0JPiYGv
-         X1tlWjbHZlUET+j+F00TyCNmo2imDrcK2UkHq9eLRO+E+4Xb7umTFXXEnX38Kdxm5CfU
-         5mvizvX+RtMvBDMKb/sE/mq4zOEBVjr/U0hrglC4ot3mUuxS6S4NZmjgd5l0Tv0PXCRF
-         X8vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Kr6/Om/0NREnjozpuGQOaVHKHAHxskJmGNV3oyHv3K8=;
-        b=WeOtL2iKRV9JXyIr9Cx160cwNMy3/he6MiO2YuU+fz68HgKc1QPKn+no8vyCjHMEqx
-         JI9jcmYlNEniXWVzMS293mH8DTu+6pfep6VI6JQrOPmwOeOpHwlGyVczNS5657TM4/Gc
-         ktiy8zJ+HSYEYvofB5gGd1DJiLnLi2uvr2RuJI0GO+DFGVM/3LPM2P9IUdvLBN19l1Mw
-         He0ECV14HcbhLMKXkm6w+QI+emfSq7u9ighZeMhSi2e/d6ildQq/57B8+BHIjF+BufDW
-         8yeMzolCO+YQJJtslg1SZnv7RF+E4hhxAh1d/Y2QWt9qF4qiEeXFecr3xrxoyn9NBkb4
-         iVWA==
-X-Gm-Message-State: ACgBeo2e5RYqwo/1I+r5jEkN1uQC6sLslg6zWn6PdKrBNSowdTBe5Ncz
-        00D0V644aX/y+c+zBKAp0QzATF57xRI=
-X-Google-Smtp-Source: AA6agR7N4TxeWC4P/k4VG+pSPItVs/dpsotDSIa5iCQMJNKkdKkJOcf11TKu4P7Q+u7rLPezEzkMBg==
-X-Received: by 2002:a17:90b:1bca:b0:1fb:7eaf:8955 with SMTP id oa10-20020a17090b1bca00b001fb7eaf8955mr18622511pjb.37.1662887020055;
-        Sun, 11 Sep 2022 02:03:40 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g186-20020a6252c3000000b00541e7922fa0sm1894940pfb.191.2022.09.11.02.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 02:03:38 -0700 (PDT)
-Message-ID: <631da46a.620a0220.ebe5b.2b70@mx.google.com>
-X-Google-Original-Message-ID: <20220911090336.GA14537@cgel.zte@gmail.com>
-Date:   Sun, 11 Sep 2022 09:03:36 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu.xin16@zte.com.cn,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Subject: Re: [PATCH v3 3/3] ipv4: add documentation of two sysctls about icmp
-References: <20220830091453.286285-1-xu.xin16@zte.com.cn>
- <20220830091718.286452-1-xu.xin16@zte.com.cn>
- <fd70dbcd-961f-9edd-78e4-23a7ef20187b@6wind.com>
+        Sun, 11 Sep 2022 05:06:50 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4C06BCAD;
+        Sun, 11 Sep 2022 02:06:48 -0700 (PDT)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.105])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2sbpR1jFrsWAA--.22738S2;
+        Sun, 11 Sep 2022 17:06:35 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     lpieralisi@kernel.org, robin.murphy@arm.com, chenhuacai@loongson.cn
+Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
+        lenb@kernel.org, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        loongarch@lists.linux.dev
+Subject: [PATCH V5 0/2] DMA: update acpi_dma_get_range to return dma map regions 
+Date:   Sun, 11 Sep 2022 17:06:33 +0800
+Message-Id: <20220911090635.5559-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd70dbcd-961f-9edd-78e4-23a7ef20187b@6wind.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx_2sbpR1jFrsWAA--.22738S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UKF4xtr1ftF1xur43Awb_yoW8XrykpF
+        9a9rsxJr45KrZxJry3Aw1rZr15Xw1fZryxGa9rK34kJF1jvr17Jry8Z3WxCa4UAF9rGr40
+        qF98Ja45WF1UAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
+        jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
+        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_XrWUJr1UMxC20s026xCaFV
+        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+        x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+        JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:07:11PM +0200, Nicolas Dichtel wrote:
-> 
-> Le 30/08/2022 à 11:17, cgel.zte@gmail.com a écrit :
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > Add the descriptions of the sysctls of error_cost and error_burst in
-> > Documentation/networking/ip-sysctl.rst.
-> > 
-> > Signed-off-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-> > Reviewed-by: Yunkai Zhang (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> Maybe you could resubmit this one alone?
-> 
+The patch series changed acpi_dma_get_range to return dma regions
+as of_dma_get_range, so that dev->dma_range_map can be initialized
+conveniently.
 
-Okay. did.
+And acpi_arch_dma_setup for ARM64 is changed wih removing dma_base
+and size from it's parameters.
 
-> 
-> Thank you,
-> Nicolas
+Remove ARCH_HAS_PHYS_TO_DMA for LoongArch and use generic
+phys_to_dma/dma_to_phys in include/linux/dma-direct.h.
+
+V1 -> V2
+- Removed dma_base and size from acpi_arch_dma_setup' parameters
+- Add patch to remove ARCH_HAS_PHYS_TO_DMA for LoongArch
+
+V2 -> V3
+- Add kerneldoc for acpi_dma_get_range changing
+- Remove redundant code in acpi_arch_dma_setup, and check map
+
+V3 -> V4
+- Change title to "Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA"
+- Use resource_size() to get size 
+
+V4 -> V5
+- Change commit log for patch: Support multiple dma windows with different offsets
+- Remove a unnecessary blank line
+- Fix a bug of acpi_dma_get_range
+
+Jianmin Lv (2):
+  ACPI / scan: Support multiple dma windows with different offsets
+  LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA
+
+ arch/loongarch/Kconfig        |  1 -
+ arch/loongarch/kernel/dma.c   | 52 ++++++++++++++--------------------
+ arch/loongarch/kernel/setup.c |  2 +-
+ drivers/acpi/arm64/dma.c      | 28 ++++++++++--------
+ drivers/acpi/scan.c           | 53 +++++++++++++++--------------------
+ include/acpi/acpi_bus.h       |  3 +-
+ include/linux/acpi.h          | 12 ++++----
+ 7 files changed, 70 insertions(+), 81 deletions(-)
+
+-- 
+2.31.1
+
