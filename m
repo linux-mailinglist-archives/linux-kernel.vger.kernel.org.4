@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA6F5B4E28
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7105B4E57
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiIKLP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 07:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S230292AbiIKLX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 07:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiIKLON (ORCPT
+        with ESMTP id S230174AbiIKLXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 07:14:13 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FFE3DBF5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:12:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z25so10392933lfr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VVRMe5K9zQktuETEV7D34ZSBEU0mHzUqiBeP7TQimRg=;
-        b=TPRQYWyFaIE2NL91c/UGueEkDW+rrjJMXDWHFp3TrW0bEJZUszkyyLiQmYzzLZvmmw
-         U1XLWPKZV6bgbcsX2kD8DFzB7Tlvp3okZ5qRN0cigKsRKnD1GBoJag3BUmIZJRGXJbhd
-         LZiaSAVKs6/j7UhQ7uATMq64MWXHqaG8zfqCtNuau6c85ZJkESg53zXuEj3/yS80lFWc
-         korb9iy5j8zNONCMdBNacqFphfPMkxxJJG/JjzAAkOUIgG+/jMgdtjcdEhnJl39Gctd9
-         m8Hndvu9g8QEweuTC8OsvHtqcB8gQxEOemjE780WBtyNZlGfC/SeZE7qd8O8upE43KGx
-         kd2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VVRMe5K9zQktuETEV7D34ZSBEU0mHzUqiBeP7TQimRg=;
-        b=YMsOCD9hfs4BGeiX13tTSgEKgy7NBqw8/JJU2AeBdMXLhybpd6Pv2lZDTS0kUBfRgM
-         empG3/XNu5JTFX4ca3xZ2PYWwJ1TbaZBlkAkrEDOZVGgVPvtu5dRPcQKWXC142ZfME20
-         mrSbbss1ccaTsi14uczwtyXfZlInKmnVe4IdrO6zZtnv2hPHO1oMK0EtHJl21zPg1rf2
-         x6jFGcidUpkaFYmaByGMcLVwJemQcQRuPueNmFP2l/3QMOwn+IZ4xrLFVrXx3d2RaMea
-         Z+dQQsYgSzO3TPW7btYEVBJ7WD4MIwy9EYlIRWUIQ2OUxAUDU6TNXJ5nJJHdTdjnlCbw
-         fazA==
-X-Gm-Message-State: ACgBeo13AIGMCzehq7v3VUM91Eq+afgfthtwLYh7Yg4K4Ksa6kqIEWsp
-        GOEXpQL2u2OkdpEvXWjJ1yNZDA==
-X-Google-Smtp-Source: AA6agR44IqbVtkDkNkeYN3N9BRB2ZKYL9EtrOXYqnVwp98NIzDUbDtydQjTlzVwyacE/DG3gHC7ayA==
-X-Received: by 2002:a05:6512:c1c:b0:499:acb9:5788 with SMTP id z28-20020a0565120c1c00b00499acb95788mr2203332lfu.347.1662894776682;
-        Sun, 11 Sep 2022 04:12:56 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0025dfd8c9287sm607365ljc.69.2022.09.11.04.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 04:12:56 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 40/40] arm64: dts: qcom: sc7280-herobrine: correct TLMM gpio-line-names
-Date:   Sun, 11 Sep 2022 13:12:00 +0200
-Message-Id: <20220911111200.199182-41-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220911111200.199182-1-krzysztof.kozlowski@linaro.org>
-References: <20220911111200.199182-1-krzysztof.kozlowski@linaro.org>
+        Sun, 11 Sep 2022 07:23:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25772663;
+        Sun, 11 Sep 2022 04:21:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4639060E9B;
+        Sun, 11 Sep 2022 11:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719BBC433D6;
+        Sun, 11 Sep 2022 11:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662895312;
+        bh=i/8RNdF4fIf2jIET0PhL9Ssf48I1ZP8JWvmjfkVVEAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F75H1/HAwJwME7QOAlR+0f2q8aCbLVzTysODEfr9C0K7A/QVLWQsPE1RjnSctw9LJ
+         a1B6KA3vZ83ieVksPIUI1YEzsYgf2VjGx6duxcpjv95CrjMv5uTwjFHyETkhJMEyL+
+         Ob7U43Rkb80ERbRlSotGf5rAOLPOXHbRYSI5Jv2DIuFQqxDkfkQ0loT85UVGRxdyx6
+         17I6ByzKbO3gLTN0tizqj3aaERz/Mbc1hTSB3z+Pk3BHFvJF4z7xINXVpNuonZphBQ
+         pSactYYc6yVKOhQ9XBSSqIppt2SbOuLnHG6Oqvt5NgA/VMHcVRV9zeELV1QDBir5by
+         m0KHqaVDruNCA==
+Received: by pali.im (Postfix)
+        id AB127878; Sun, 11 Sep 2022 13:21:49 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [RFC PATCH 0/3] PCI: Introduce new PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() macros
+Date:   Sun, 11 Sep 2022 13:20:21 +0200
+Message-Id: <20220911112024.14304-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,25 +59,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 174 GPIOs in SC7280.
+PCI controllers and lot of non-ECAM compliant PCIe controllers still use
+Intel PCI Configuration Mechanism #1 for accessing PCI config space.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 2 --
- 1 file changed, 2 deletions(-)
+Native PCIe controller drivers invents its own macros which implements
+config space address calculation and in lof of cases it is just
+duplication of the same code.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-index bc795c480352..3448e9ed8b03 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-@@ -371,7 +371,5 @@ &tlmm {
- 			  "",				/* 170 */
- 			  "MOS_BLE_UART_TX",
- 			  "MOS_BLE_UART_RX",
--			  "",
--			  "",
- 			  "";
- };
+PCIe ECAM address macro PCIE_ECAM_OFFSET() is already in include header
+file linux/pci-ecam.h and ECAM compliant drivers were already converted
+to use it.
+
+Do similar thing also for Intel PCI Configuration Mechanism #1.
+Introduce a new file linux/pci-conf1.h with PCI_CONF1_ADDRESS() and
+PCI_CONF1_EXT_ADDRESS() macros and convert two drivers pci-ftpci100.c
+and pcie-mt7621.c to use it.
+
+There are many more drivers which could be converted to this common
+macros. This is just RFC patch series and if you like it, I can look at
+conversion of other drivers.
+
+What do you think?
+
+Note that similar cleanup was applied for U-Boot PCI controller drivers:
+https://lore.kernel.org/u-boot/20211126104252.5443-1-pali@kernel.org/
+
+Pali Rohár (3):
+  PCI: Add standard PCI Config Address macros
+  PCI: ftpci100: Use PCI_CONF1_ADDRESS() macro
+  PCI: mt7621: Use PCI_CONF1_EXT_ADDRESS() macro
+
+ drivers/pci/controller/pci-ftpci100.c | 22 +++---------
+ drivers/pci/controller/pcie-mt7621.c  |  4 +--
+ include/linux/pci-conf1.h             | 51 +++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 19 deletions(-)
+ create mode 100644 include/linux/pci-conf1.h
+
 -- 
-2.34.1
+2.20.1
 
