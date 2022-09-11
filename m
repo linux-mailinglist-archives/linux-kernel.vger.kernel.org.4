@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3115B4B29
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 03:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184B45B4B2D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 03:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiIKBOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Sep 2022 21:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S229806AbiIKBUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Sep 2022 21:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiIKBN5 (ORCPT
+        with ESMTP id S229738AbiIKBUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Sep 2022 21:13:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF5DDD9;
-        Sat, 10 Sep 2022 18:13:56 -0700 (PDT)
+        Sat, 10 Sep 2022 21:20:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94403275E2;
+        Sat, 10 Sep 2022 18:20:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9766E60DDB;
-        Sun, 11 Sep 2022 01:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0214DC433C1;
-        Sun, 11 Sep 2022 01:13:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D9AAB80AFB;
+        Sun, 11 Sep 2022 01:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B313AC433D7;
+        Sun, 11 Sep 2022 01:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662858835;
-        bh=MeoerLBAPT9yREBhU9oRAJcpZt/hWhuixo7TStbdTjk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tvPWlhbtbekWBecfnQ74hnjTB2kcC5KUKgVBnPXCUYV23W7UT5LogKs9HEbKTC5Co
-         g3QE/DM67eW4RjCYDw0u6uOOH+50DigwNHFExDOtsmQRZEoSeHVmNjemHKJoZ6b5WC
-         mLBB2itN1xC46kD3SbErY/iIaS0O8+1xJOi5wNnEEplOlKuq+Gug1wUVBFUl4WZPaX
-         vF5bG3nwwW7j8goNgh7M8KBR4mix3SOc4H5z9VdgDbqhHeNP+8mBeE70OZrnv3Y4XM
-         dGYQmXotoRQzmKRiltJjhsPat1aL9dD3B70oOy0Kpg/f2/j/6v5wdl1FQipgmjAB/u
-         CXbb2zW56GHxA==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11eab59db71so14096191fac.11;
-        Sat, 10 Sep 2022 18:13:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3FbqCjI2/UWTF//kcVOhtNhHntjTTDuN5g83Q7iFyMoOAxFGHe
-        x/76QtAtmXCf0xGWg9Z4PqnFJzEb8a+zagiYLNI=
-X-Google-Smtp-Source: AA6agR4bcGzrnAq5Tqy6Eqx1fM4d1eSVwcSJsOIm24Kg6cAY2vOjkeUWe5EEaM5Rgubow59jC/8cP9IImnLFMMmOgb0=
-X-Received: by 2002:a05:6808:2028:b0:344:246d:2bed with SMTP id
- q40-20020a056808202800b00344246d2bedmr6237639oiw.19.1662858834117; Sat, 10
- Sep 2022 18:13:54 -0700 (PDT)
+        s=k20201202; t=1662859214;
+        bh=rWDmi4fW+8QiaUIaHPO9PJpi7XbAu+qWF7VNyCjQb1o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=d/ca/W/qRzivihAnXQLNkLbaXbQat52l8m85Vq1/NeeJ6BMp7K4JZL3KVPCGB/vti
+         iqsAXlZybZK9RiwEvZo9jLfNIF58/FSEWVl22VHbr61ZKk9VHG+c2aXgrxFhXimd3T
+         LSqaf51Cmb+BbB3yqbQ2efRUjobTk5QzfoQwgSI4rvhirHkS2HQKNVXy2yvEmZgeXU
+         r0dDQFIJft9QLKg+iM8SEt8S74I9iLEisS8pMHqDo/IA8OkyHjlKGT7CbiIS6fl8Uq
+         yETrmviT2JV8xthTB20Lx1Y/U8aXEWpS6XEt3NGNg4g7c8dlpP+Na7m+UaCM1PE1Wa
+         tOhDeRzMWvHdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 926D1C73FE7;
+        Sun, 11 Sep 2022 01:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-7-guoren@kernel.org>
- <YxoTdxk772vneG53@linutronix.de> <0ff315c978d24215b00c42df51f51b2d@AcuMS.aculab.com>
-In-Reply-To: <0ff315c978d24215b00c42df51f51b2d@AcuMS.aculab.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 11 Sep 2022 09:13:42 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQFwYDtBUpOViYMrWPVKCXJsNwmL9o16jEhpV_v7FjZyA@mail.gmail.com>
-Message-ID: <CAJF2gTQFwYDtBUpOViYMrWPVKCXJsNwmL9o16jEhpV_v7FjZyA@mail.gmail.com>
-Subject: Re: [PATCH V4 6/8] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "palmer@rivosinc.com" <palmer@rivosinc.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "jszhang@kernel.org" <jszhang@kernel.org>,
-        "lazyparser@gmail.com" <lazyparser@gmail.com>,
-        "falcon@tinylab.org" <falcon@tinylab.org>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "apatel@ventanamicro.com" <apatel@ventanamicro.com>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2] bpf: btf: fix truncated last_member_type_id in
+ btf_struct_resolve
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166285921459.4256.17072586904568979283.git-patchwork-notify@kernel.org>
+Date:   Sun, 11 Sep 2022 01:20:14 +0000
+References: <20220910110120.339242-1-oss@lmb.io>
+In-Reply-To: <20220910110120.339242-1-oss@lmb.io>
+To:     Lorenz Bauer <oss@lmb.io>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,72 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 3:30 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Sebastian Andrzej Siewior
-> > Sent: 08 September 2022 17:08
-> >
-> > On 2022-09-07 22:25:04 [-0400], guoren@kernel.org wrote:
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index a07bb3b73b5b..a8a12b4ba1a9 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -433,6 +433,14 @@ config FPU
-> > >
-> > >       If you don't know what to do here, say Y.
-> > >
-> > > +config IRQ_STACKS
-> > > +   bool "Independent irq stacks"
-> > > +   default y
-> > > +   select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> > > +   help
-> > > +     Add independent irq stacks for percpu to prevent kernel stack overflows.
-> > > +     We may save some memory footprint by disabling IRQ_STACKS.
-> >
-> > Do you really think that it is needed to save memory here? Avoiding
-> > stack overflows in deep call chains is probably more important than
-> > saving ~8KiB per CPU.
-Original riscv is !IRQ_STACKS, I just give a config to make it back.
-So I would add a CONFIG_EXPERT in the next version.
+Hello:
 
-Actually, I have a similar opinion to you, IRQ_STACKS should be force
-enabled. But as a new feature, we should give users a choice - use or
-not.
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
->
-> Particularly if a 64bit build is using small stacks.
->
-> Without static analysis of actual call chain depth it is
-> really difficult to trim the stack size.
->
-> I'd bet (a few beers) that the deepest stack use in inside
-> the console print code form a printk() (eg warn_on_once)
-> in an obscure error path somewhere.
-> This won't be hit during any normal testing.
-That means stack overflow would be hidden a lot. But we could enable
-VMAP_STACK & STACK_LEAK [1].
+On Sat, 10 Sep 2022 11:01:20 +0000 you wrote:
+> When trying to finish resolving a struct member, btf_struct_resolve
+> saves the member type id in a u16 temporary variable. This truncates
+> the 32 bit type id value if it exceeds UINT16_MAX.
+> 
+> As a result, structs that have members with type ids > UINT16_MAX and
+> which need resolution will fail with a message like this:
+> 
+> [...]
 
-[1]: https://lore.kernel.org/lkml/20220907014809.919979-1-guoren@kernel.org/
+Here is the summary with links:
+  - [bpf,v2] bpf: btf: fix truncated last_member_type_id in btf_struct_resolve
+    https://git.kernel.org/bpf/bpf/c/a37a32583e28
 
->
-> I think that the analysis objtool does is getting close
-> to be able to generate the raw data that can be used for
-> static stack depth analysis.
-> You need the 'CFI' constants for indirect calls and
-> some assumptions about depth of recursive calls.
-> But apart from that the code to process the raw output
-> isn't that complex.
->
-> A nice task for someone with some spare time.
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-
-
-
+You are awesome, thank you!
 -- 
-Best Regards
- Guo Ren
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
