@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C54D5B4F5A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1105B4F4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 16:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiIKOEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 10:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S230448AbiIKOD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 10:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiIKODQ (ORCPT
+        with ESMTP id S230333AbiIKODM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 10:03:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6125333A3A;
-        Sun, 11 Sep 2022 07:03:15 -0700 (PDT)
+        Sun, 11 Sep 2022 10:03:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660D433A19;
+        Sun, 11 Sep 2022 07:03:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13C83B80B52;
-        Sun, 11 Sep 2022 14:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02B8C43150;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED68D61041;
+        Sun, 11 Sep 2022 14:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5CCC4314F;
         Sun, 11 Sep 2022 14:03:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1662904989;
-        bh=SAqqcP5lBP9yri+H9v6GzRI9aDJ/79pe958bAhnOMkw=;
+        bh=4VDAeDrDE5XmmwiLBFA5Z5Gow6FH/LGJWnAEFdy77bw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vI+EiDCpbWLRRhLV5ZS31hyuSwJCqJLEM9sc0cJeJXnKvIQ+94kHhn4jVlcvE9j5d
-         VYcvotOyucCGqVHzLw7fFVu+isOpTq/sOmk5DgO0CnivCAuGAEd04ziDnDtnUCh5B/
-         gcX3CEVs0RxSgZKjHo3QNFaM1HZQx/iO1AadP7Zrx0s+0WItfXoGUuT4qo8QnLOb+X
-         xnHQtSSgp7KSD9/hr4XTUpdqMcST1EylREk5+Mb8E9IGGn8H4+YT/UPpStkU9eYff6
-         GyfO82AfaZk6jxhBvdDIkbJQmbx/yiEqr2RcpEO0/OUhGqK8hm+D19PUl0W+YuYC8T
-         BwQjRn+DQxHqQ==
+        b=e6qh9CEkMZATgzZDsl0E9mTtdXTFCNPVt7FW55dI5eLClbbr0C65y6TBy1gjk68ei
+         Z9A6aEDtz+spf/X/dO69TZ88Xol4XrLAJ6yLsf/A4qKObqGehX8i/A9z+n5z5d3bdh
+         T8FkQf72RWqDLYzcnRlFxungHLJfni6qPYuC++Brtiqa+FowZWuwXqhLXhKS7b5I/M
+         TOwFwSc6ICsLNuuxu8d7q5mw3T3oMHX2mLYA3uZ3gt8hyFZfIq0mX6ev6f2sV5cQ24
+         VN2aFwKzxYFtMrYMPFqDZmzdUjoZ6vCYg22Q9YjglNXvlwCauOAa9yRIVxOCrjUvNg
+         dZb4L3zG9sbaA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oXNYM-0007wy-BC; Sun, 11 Sep 2022 16:03:18 +0200
+        id 1oXNYM-0007x1-Dh; Sun, 11 Sep 2022 16:03:18 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Johan Hovold <johan@kernel.org>
 Cc:     Amireddy mallikarjuna reddy <mallikarjuna.reddy@ftdichip.com>,
         arun.pappan@ftdichip.com, sowjanya.reddy@ftdichip.com,
         malliamireddy009@gmail.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/12] USB: serial: ftdi_sio: assume hi-speed type
-Date:   Sun, 11 Sep 2022 16:02:14 +0200
-Message-Id: <20220911140216.30481-11-johan@kernel.org>
+Subject: [PATCH 11/12] USB: serial: ftdi_sio: simplify divisor handling
+Date:   Sun, 11 Sep 2022 16:02:15 +0200
+Message-Id: <20220911140216.30481-12-johan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220911140216.30481-1-johan@kernel.org>
 References: <20220911140216.30481-1-johan@kernel.org>
@@ -59,83 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for adding further Hi-Speed types, assume a 120 MHz clock
-and set the channel index by default and instead override these values
-as needed for legacy types.
+In preparation for adding further Hi-Speed types, assume the device type
+is Hi-Speed unless it's an explicitly listed legacy type when
+determining divisors.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ drivers/usb/serial/ftdi_sio.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index e772aacae562..a43101000ee3 100644
+index a43101000ee3..e9f508e31876 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1552,13 +1552,15 @@ static int ftdi_determine_type(struct usb_serial_port *port)
- 	version = le16_to_cpu(udev->descriptor.bcdDevice);
- 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
- 
--	priv->baud_base = 48000000 / 2;
--	priv->channel = 0;
-+	/* Assume Hi-Speed type */
-+	priv->baud_base = 120000000 / 2;
-+	priv->channel = CHANNEL_A + ifnum;
- 
- 	switch (version) {
- 	case 0x200:
- 		priv->chip_type = FT232A;
--
-+		priv->baud_base = 48000000 / 2;
-+		priv->channel = 0;
- 		/*
- 		 * FT232B devices have a bug where bcdDevice gets set to 0x200
- 		 * when iSerialNumber is 0. Assume it is an FT232B in case the
-@@ -1571,37 +1573,36 @@ static int ftdi_determine_type(struct usb_serial_port *port)
+@@ -1370,9 +1370,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 			baud = 9600;
+ 		}
  		break;
- 	case 0x400:
- 		priv->chip_type = FT232B;
-+		priv->baud_base = 48000000 / 2;
-+		priv->channel = 0;
- 		break;
- 	case 0x500:
- 		priv->chip_type = FT2232C;
--		priv->channel = CHANNEL_A + ifnum;
-+		priv->baud_base = 48000000 / 2;
- 		break;
- 	case 0x600:
- 		priv->chip_type = FT232R;
-+		priv->baud_base = 48000000 / 2;
-+		priv->channel = 0;
- 		break;
- 	case 0x700:
- 		priv->chip_type = FT2232H;
--		priv->channel = CHANNEL_A + ifnum;
--		priv->baud_base = 120000000 / 2;
- 		break;
- 	case 0x800:
- 		priv->chip_type = FT4232H;
--		priv->channel = CHANNEL_A + ifnum;
--		priv->baud_base = 120000000 / 2;
- 		break;
- 	case 0x900:
- 		priv->chip_type = FT232H;
--		priv->channel = CHANNEL_A + ifnum;
--		priv->baud_base = 120000000 / 2;
- 		break;
- 	case 0x1000:
- 		priv->chip_type = FTX;
--		priv->channel = CHANNEL_A + ifnum;
-+		priv->baud_base = 48000000 / 2;
- 		break;
- 	default:
- 		if (version < 0x200) {
- 			priv->chip_type = SIO;
- 			priv->baud_base = 12000000 / 16;
-+			priv->channel = 0;
- 		} else {
- 			dev_err(&port->dev, "unknown device type: 0x%02x\n", version);
- 			return -ENODEV;
+-	case FT2232H:
+-	case FT4232H:
+-	case FT232H:
++	default:
+ 		if ((baud <= 12000000) && (baud >= 1200)) {
+ 			div_value = ftdi_2232h_baud_to_divisor(baud);
+ 		} else if (baud < 1200) {
 -- 
 2.35.1
 
