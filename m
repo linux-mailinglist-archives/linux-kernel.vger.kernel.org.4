@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3D45B4CDB
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6A25B4CDD
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiIKJGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 05:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S230101AbiIKJG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 05:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiIKJGu (ORCPT
+        with ESMTP id S229715AbiIKJGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 05:06:50 -0400
+        Sun, 11 Sep 2022 05:06:51 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4C06BCAD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 145D13A16F;
         Sun, 11 Sep 2022 02:06:48 -0700 (PDT)
 Received: from loongson-pc.loongson.cn (unknown [10.20.42.105])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2sbpR1jFrsWAA--.22738S2;
-        Sun, 11 Sep 2022 17:06:35 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2sbpR1jFrsWAA--.22738S3;
+        Sun, 11 Sep 2022 17:06:38 +0800 (CST)
 From:   Jianmin Lv <lvjianmin@loongson.cn>
 To:     lpieralisi@kernel.org, robin.murphy@arm.com, chenhuacai@loongson.cn
 Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
         lenb@kernel.org, robert.moore@intel.com,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         loongarch@lists.linux.dev
-Subject: [PATCH V5 0/2] DMA: update acpi_dma_get_range to return dma map regions 
-Date:   Sun, 11 Sep 2022 17:06:33 +0800
-Message-Id: <20220911090635.5559-1-lvjianmin@loongson.cn>
+Subject: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with different offsets
+Date:   Sun, 11 Sep 2022 17:06:34 +0800
+Message-Id: <20220911090635.5559-2-lvjianmin@loongson.cn>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220911090635.5559-1-lvjianmin@loongson.cn>
+References: <20220911090635.5559-1-lvjianmin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_2sbpR1jFrsWAA--.22738S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UKF4xtr1ftF1xur43Awb_yoW8XrykpF
-        9a9rsxJr45KrZxJry3Aw1rZr15Xw1fZryxGa9rK34kJF1jvr17Jry8Z3WxCa4UAF9rGr40
-        qF98Ja45WF1UAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf8Dx_2sbpR1jFrsWAA--.22738S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gr4rXFW7Jry8JF1rtw13Jwb_yoW3tFWxpa
+        na9FyfGw47Kr4DWr4kZr4ru3W5Z3sY93yxXrWxG3sakr909r1UJFsrA340ka4rCFyqkF4x
+        ZF4DtFyrCF1UAr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
@@ -57,46 +59,248 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch series changed acpi_dma_get_range to return dma regions
-as of_dma_get_range, so that dev->dma_range_map can be initialized
-conveniently.
+In DT systems configurations, of_dma_get_range() returns struct
+bus_dma_region DMA regions; they are used to set-up devices
+DMA windows with different offset available for translation between DMA
+address and CPU address.
 
-And acpi_arch_dma_setup for ARM64 is changed wih removing dma_base
-and size from it's parameters.
+In ACPI systems configuration, acpi_dma_get_range() does not return
+DMA regions yet and that precludes setting up the dev->dma_range_map
+pointer and therefore DMA regions with multiple offsets.
 
-Remove ARCH_HAS_PHYS_TO_DMA for LoongArch and use generic
-phys_to_dma/dma_to_phys in include/linux/dma-direct.h.
+Update acpi_dma_get_range() to return struct bus_dma_region
+DMA regions like of_dma_get_range() does.
 
-V1 -> V2
-- Removed dma_base and size from acpi_arch_dma_setup' parameters
-- Add patch to remove ARCH_HAS_PHYS_TO_DMA for LoongArch
+After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
+ARM64, where the original dma_addr and size are removed as these
+arguments are now redundant, and pass 0 and U64_MAX for dma_base
+and size of arch_setup_dma_ops; this is a simplification consistent
+with what other ACPI architectures also pass to iommu_setup_dma_ops().
 
-V2 -> V3
-- Add kerneldoc for acpi_dma_get_range changing
-- Remove redundant code in acpi_arch_dma_setup, and check map
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+---
+ drivers/acpi/arm64/dma.c | 28 ++++++++++++---------
+ drivers/acpi/scan.c      | 53 +++++++++++++++++-----------------------
+ include/acpi/acpi_bus.h  |  3 +--
+ include/linux/acpi.h     |  7 +++---
+ 4 files changed, 44 insertions(+), 47 deletions(-)
 
-V3 -> V4
-- Change title to "Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA"
-- Use resource_size() to get size 
-
-V4 -> V5
-- Change commit log for patch: Support multiple dma windows with different offsets
-- Remove a unnecessary blank line
-- Fix a bug of acpi_dma_get_range
-
-Jianmin Lv (2):
-  ACPI / scan: Support multiple dma windows with different offsets
-  LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA
-
- arch/loongarch/Kconfig        |  1 -
- arch/loongarch/kernel/dma.c   | 52 ++++++++++++++--------------------
- arch/loongarch/kernel/setup.c |  2 +-
- drivers/acpi/arm64/dma.c      | 28 ++++++++++--------
- drivers/acpi/scan.c           | 53 +++++++++++++++--------------------
- include/acpi/acpi_bus.h       |  3 +-
- include/linux/acpi.h          | 12 ++++----
- 7 files changed, 70 insertions(+), 81 deletions(-)
-
+diff --git a/drivers/acpi/arm64/dma.c b/drivers/acpi/arm64/dma.c
+index f16739ad3cc0..93d796531af3 100644
+--- a/drivers/acpi/arm64/dma.c
++++ b/drivers/acpi/arm64/dma.c
+@@ -4,11 +4,12 @@
+ #include <linux/device.h>
+ #include <linux/dma-direct.h>
+ 
+-void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
++void acpi_arch_dma_setup(struct device *dev)
+ {
+ 	int ret;
+ 	u64 end, mask;
+-	u64 dmaaddr = 0, size = 0, offset = 0;
++	u64 size = 0;
++	const struct bus_dma_region *map = NULL;
+ 
+ 	/*
+ 	 * If @dev is expected to be DMA-capable then the bus code that created
+@@ -26,7 +27,19 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
+ 	else
+ 		size = 1ULL << 32;
+ 
+-	ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
++	ret = acpi_dma_get_range(dev, &map);
++	if (!ret && map) {
++		const struct bus_dma_region *r = map;
++
++		for (end = 0; r->size; r++) {
++			if (r->dma_start + r->size - 1 > end)
++				end = r->dma_start + r->size - 1;
++		}
++
++		size = end + 1;
++		dev->dma_range_map = map;
++	}
++
+ 	if (ret == -ENODEV)
+ 		ret = iort_dma_get_ranges(dev, &size);
+ 	if (!ret) {
+@@ -34,17 +47,10 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
+ 		 * Limit coherent and dma mask based on size retrieved from
+ 		 * firmware.
+ 		 */
+-		end = dmaaddr + size - 1;
++		end = size - 1;
+ 		mask = DMA_BIT_MASK(ilog2(end) + 1);
+ 		dev->bus_dma_limit = end;
+ 		dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
+ 		*dev->dma_mask = min(*dev->dma_mask, mask);
+ 	}
+-
+-	*dma_addr = dmaaddr;
+-	*dma_size = size;
+-
+-	ret = dma_direct_set_offset(dev, dmaaddr + offset, dmaaddr, size);
+-
+-	dev_dbg(dev, "dma_offset(%#08llx)%s\n", offset, ret ? " failed!" : "");
+ }
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 42cec8120f18..f96ef8536037 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -20,6 +20,7 @@
+ #include <linux/platform_data/x86/apple.h>
+ #include <linux/pgtable.h>
+ #include <linux/crc32.h>
++#include <linux/dma-direct.h>
+ 
+ #include "internal.h"
+ 
+@@ -1467,25 +1468,21 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
+  * acpi_dma_get_range() - Get device DMA parameters.
+  *
+  * @dev: device to configure
+- * @dma_addr: pointer device DMA address result
+- * @offset: pointer to the DMA offset result
+- * @size: pointer to DMA range size result
++ * @map: pointer to DMA ranges result
+  *
+- * Evaluate DMA regions and return respectively DMA region start, offset
+- * and size in dma_addr, offset and size on parsing success; it does not
+- * update the passed in values on failure.
++ * Evaluate DMA regions and return pointer to DMA regions on
++ * parsing success; it does not update the passed in values on failure.
+  *
+  * Return 0 on success, < 0 on failure.
+  */
+-int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+-		       u64 *size)
++int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+ {
+ 	struct acpi_device *adev;
+ 	LIST_HEAD(list);
+ 	struct resource_entry *rentry;
+ 	int ret;
+ 	struct device *dma_dev = dev;
+-	u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
++	struct bus_dma_region *r;
+ 
+ 	/*
+ 	 * Walk the device tree chasing an ACPI companion with a _DMA
+@@ -1510,31 +1507,28 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+ 
+ 	ret = acpi_dev_get_dma_resources(adev, &list);
+ 	if (ret > 0) {
++		r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
++		if (!r) {
++			ret = -ENOMEM;
++			goto out;
++		}
++
+ 		list_for_each_entry(rentry, &list, node) {
+-			if (dma_offset && rentry->offset != dma_offset) {
++			if (rentry->res->start >= rentry->res->end) {
++				kfree(r);
+ 				ret = -EINVAL;
+-				dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
++				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+ 				goto out;
+ 			}
+-			dma_offset = rentry->offset;
+ 
+-			/* Take lower and upper limits */
+-			if (rentry->res->start < dma_start)
+-				dma_start = rentry->res->start;
+-			if (rentry->res->end > dma_end)
+-				dma_end = rentry->res->end;
+-		}
+-
+-		if (dma_start >= dma_end) {
+-			ret = -EINVAL;
+-			dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+-			goto out;
++			r->cpu_start = rentry->res->start;
++			r->dma_start = rentry->res->start - rentry->offset;
++			r->size = resource_size(rentry->res);
++			r->offset = rentry->offset;
++			r++;
+ 		}
+ 
+-		*dma_addr = dma_start - dma_offset;
+-		len = dma_end - dma_start;
+-		*size = max(len, len + 1);
+-		*offset = dma_offset;
++		*map = r;
+ 	}
+  out:
+ 	acpi_dev_free_resource_list(&list);
+@@ -1624,20 +1618,19 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+ 			  const u32 *input_id)
+ {
+ 	const struct iommu_ops *iommu;
+-	u64 dma_addr = 0, size = 0;
+ 
+ 	if (attr == DEV_DMA_NOT_SUPPORTED) {
+ 		set_dma_ops(dev, &dma_dummy_ops);
+ 		return 0;
+ 	}
+ 
+-	acpi_arch_dma_setup(dev, &dma_addr, &size);
++	acpi_arch_dma_setup(dev);
+ 
+ 	iommu = acpi_iommu_configure_id(dev, input_id);
+ 	if (PTR_ERR(iommu) == -EPROBE_DEFER)
+ 		return -EPROBE_DEFER;
+ 
+-	arch_setup_dma_ops(dev, dma_addr, size,
++	arch_setup_dma_ops(dev, 0, U64_MAX,
+ 				iommu, attr == DEV_DMA_COHERENT);
+ 
+ 	return 0;
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index e7d27373ff71..73ac4a1d6947 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -613,8 +613,7 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev);
+ int acpi_iommu_fwspec_init(struct device *dev, u32 id,
+ 			   struct fwnode_handle *fwnode,
+ 			   const struct iommu_ops *ops);
+-int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+-		       u64 *size);
++int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
+ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+ 			   const u32 *input_id);
+ static inline int acpi_dma_configure(struct device *dev,
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 6f64b2f3dc54..bb41623dab77 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -281,12 +281,12 @@ void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
+ 
+ #ifdef CONFIG_ARM64
+ void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
+-void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size);
++void acpi_arch_dma_setup(struct device *dev);
+ #else
+ static inline void
+ acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
+ static inline void
+-acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size) { }
++acpi_arch_dma_setup(struct device *dev) { }
+ #endif
+ 
+ int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
+@@ -977,8 +977,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
+ 	return DEV_DMA_NOT_SUPPORTED;
+ }
+ 
+-static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
+-				     u64 *offset, u64 *size)
++static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+ {
+ 	return -ENODEV;
+ }
 -- 
 2.31.1
 
