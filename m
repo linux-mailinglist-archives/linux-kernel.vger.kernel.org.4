@@ -2,98 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850E65B513C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09665B513E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiIKVLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 17:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S229693AbiIKVOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 17:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIKVLx (ORCPT
+        with ESMTP id S229479AbiIKVOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 17:11:53 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046AB17E21
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:11:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id go6so2031864pjb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=neMslesTLFGkDrNSg5TMEjVXMqr7T8WuoAoV+VgMUco=;
-        b=ZYUWtNVE3bSYBAE0i5Bu0UFAQd2Q4jsrFrqpQlz4+2kMYbe67idp/t4jjVFkun4Xmm
-         CtxoiUzN2zwLSBdqUlTO0/5II0nFx/DdYsp27HDtX6KaqARQABDkG2pIqvWQSAc0Kg0i
-         UJ/ZWtE4ogjcDLPDH2sMkRyJ7XBkgegZsu1Y8kFcGFbARJ8E91EStH7xhT11AOs+Zo9f
-         EHB3byTHKH325zpMhb5FFe3DclMQkZTs3vqv7yHj765LgQ+T1F5Db0sC1AhayQGd8JwQ
-         c1+TFUJGd2zd+e2tnf6uj+1Yw+zyBGKBumocsEn3PO2KhTLHjNtWyRTxgecOA7UQoo2k
-         sokw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=neMslesTLFGkDrNSg5TMEjVXMqr7T8WuoAoV+VgMUco=;
-        b=4LN3aeW4/stOH8cys4AsBeMjqi61o5i9t7GxjoRHwI6sNrLaH3hafkKPAn/kiPK1Wq
-         oKbFHfEowV+hZeHQnLL6oyCqTR7KDPwBoY2l+z9SxxYUettxBjrNwAVRsB8eIMMoj3FU
-         UZwbfHMrSlb11WmFHw+Cp8Mga4jAzBoGJccs0Y5VKFzuN1qljgZg1N3Qj0b0Ro0eh2uv
-         vG+pRZwnz0BD20drV8lIDTcphphKPYKXKkHpmR65e4yRYWO+JzN4ncJAPILt6Qv5Gb/t
-         56a21tthFsgrOa+fx5DsLLnHpaq6uBV2L77MGze9ndf1RYf9dK59ClwYnZdJze6bxfBR
-         zIWg==
-X-Gm-Message-State: ACgBeo3mIKxBvLDG3mtn6Tm/lQUdY+uovOb1FZ3UUdkgfqb1CeJcKoPC
-        eVeTslfZsgznIbh+WbfbkhPVKMTPj30OrHP3JDk=
-X-Google-Smtp-Source: AA6agR5TtDIqz8zJE5qU6jGx1Z7RDe4QrGvaDZoBBgRC31ghdF/9c/p/t6zRjPg6ZSqs94v84yGAXW5IyBgwCiPEQbY=
-X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
- on15-20020a17090b1d0f00b00202be3ea14amr5511840pjb.102.1662930711467; Sun, 11
- Sep 2022 14:11:51 -0700 (PDT)
+        Sun, 11 Sep 2022 17:14:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5852C1A07C
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662930857; x=1694466857;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Fcg0Xww7zGyxfdtjwCAc3oQ6UgD+m7HcdmX8IuAMmkI=;
+  b=Y43XKcj+jRabL+W5RdEMNJZRaBs3DMZT025w2U5pGjoUnfXT/TMCrHB3
+   4MGZz8da9EsIFvN88veDX/Vh4t8IXNMN5TBjkiZlb/SEGkVEqghmXD/vz
+   2Xbx/mXymyoOKMFxiJrXfVv+5gnuYgKg6tfYR0mC/YFaa2rejUc3cOh7v
+   7YUJblr6ttZqQLqN5R06fqUeMzQWZwRF+tPzueYUalvCZU8o5kDxe1V/V
+   MBockNtZSYgyoGuUo/2l6bSR6Ntxya6IQTqzW3vD49CbvtoBMbUiPizGv
+   JuFfgcVdBNWI6d3w52QN53oUXdDIuI0WDG31HmKM1M0pdnAJ1u/iXdauk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="299092049"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="299092049"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 14:14:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="615852846"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP; 11 Sep 2022 14:14:16 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 11 Sep 2022 14:14:16 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 11 Sep 2022 14:14:16 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Sun, 11 Sep 2022 14:14:16 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Sun, 11 Sep 2022 14:14:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NqPxKnqOV02m+XmJ0H2cVd07/8kf/Qx3+eP/TuxMqP1jzCnF9gqMxr2W0n05ZiFP2yz6XmfI+R9NmluVU+qEUNTi+uctIBubfOT3CqAPlT6Uyo3iiX9sLjrR9DqF/a2lFfpS//DbGnwpU9f1W83iNpopSUbSC6WOesF+Bk0g+mUiFX3HbJW5LkoMGHQHFXqWdKSQPdn0sUDXvN7VrTjS1XYla1xPHpQWKgXogOSBvllDCuFmhd8KY7Hri+C2rtAXJ9Ug8S7+rWWROvhx2OpUsEhhdKT+KTYDsscBpiOB09dCyzJN8KKpyshW1dv0tTiRhqH/p/Njn+I5ce6Yp9tKWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dVpvw31RwxvlvazMpf9wH1PcICIDZJJbz/3GUO31z5k=;
+ b=Knqa2vAPYGYt2ALUpIikW7uK3pMHnHELqWEjxADiURZILLH9gWVb2UEE+IuFSs8uocxhIUeo/LLKLUMKuNS5bC5uXimn60Tm96zIMnGy02DGavRTNjItBN+ymI25mXflcOc/yBpcZ2E5FrdTtaaSFXIasHFn8wjmyX90jTXzGLR5O67f7DZMz6jLPEisBFzoft5VyaEzP1GNG4gWpfmiQQXVQ90lMQVROX15T1U9wHqssHxg/TssC2a7nJ1xvVX/oSrABL9uBINnD5i+QC2Jv1qjUFzC2MHpJuGepXG+lQUs+4kRZ/ZnorLqdOMnodOU85VIndCO21UL9/b13mZiQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ DM4PR11MB6065.namprd11.prod.outlook.com (2603:10b6:8:60::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.20; Sun, 11 Sep 2022 21:14:00 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::5145:64b6:db32:b424]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::5145:64b6:db32:b424%5]) with mapi id 15.20.5612.022; Sun, 11 Sep 2022
+ 21:14:00 +0000
+Date:   Sun, 11 Sep 2022 23:13:53 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <intel-gfx@lists.freedesktop.org>, David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH v4 1/3] drm: Use XArray instead of IDR for minors
+Message-ID: <20220911211353.kuv3jnwkgo2m5arw@nostramo>
+References: <20220906201629.419160-1-michal.winiarski@intel.com>
+ <20220906201629.419160-2-michal.winiarski@intel.com>
+ <Yxe1YDcVfqbjgT6a@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yxe1YDcVfqbjgT6a@casper.infradead.org>
+X-ClientProxiedBy: FR3P281CA0031.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::9) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:3112:b0:576:a9c4:be04 with HTTP; Sun, 11 Sep 2022
- 14:11:50 -0700 (PDT)
-Reply-To: zjianxin700@gmail.com
-From:   Zong Jianxin <joanjeropngetich@gmail.com>
-Date:   Sun, 11 Sep 2022 14:11:50 -0700
-Message-ID: <CAHmv3xbsEs25=JhEi=vyk2vfScFwN19KSSkROzbvCMcO1mHRFg@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4966]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joanjeropngetich[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [zjianxin700[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|DM4PR11MB6065:EE_
+X-MS-Office365-Filtering-Correlation-Id: cde79016-0703-478b-98d3-08da943a8c18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kD3nR3vsbWe5K1ZSJOY+2vCJlGD2rgA+dl15wNQVHxGt8LLov9IOV3DKO2ZZhyt5ZYeGjfvURnXEhUWvBsSHJj9E/oHjpi9J+OBgncOv2udamLs/7gOC02q6bdD+yCE6n/hRv4TTjPef0ZAlTXjvDG+0v/+fChmCSdl9vCRkX24AJDyv199Of19+suS6Z7CoXiTpa6EYHGKJz20e6lcKpbp9RVHE+CI+S6e9ArjyM4QmK6CeKxbAJGKqTWAjyS/HQRt/ndLZR7bqSCbFFdR9kGvfMNZdwNZ2sOqpmH4b95ouBqWOfN78Bl0ktbGYAEHJxYFvmNFafWm7qhBRU1UqRfgeSZj31K3EoOJdJlJW2zoMaZvbfV0P9BoAXZzfAc3T99kY8ljrB3pmMVmSDn05WHGfvL1DEJAGoEZvgL/vV1wN1w4cUk5J+WjqURjEba+rJlY9t1to5v6DA8RF95qV7fx0aGs9FfgpwW1Qn134w07FVp7xE7LCJtcYSOhAM+IpMwqJie+YPboLll2HWqrNsOqbaAA+VRtz4my0tvcgjEOwu60pdA7HEZLgtwogJ34ZVWM5xw3VQEUBoHaDvj/4W3JvRJJL2fRHTbzJQCUffu6j7i9eNnmt2LjSjpsW++HKhxlE7NL+2fGc/Wsg+Urjt8Sqrzd80RlEIy97XAhPiRcec7kC5o5FbjsRzcvzGDB/39lIeOI+GgazfwmL+dUbjw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(366004)(396003)(136003)(376002)(39860400002)(186003)(6512007)(26005)(41300700001)(6506007)(83380400001)(6486002)(9686003)(1076003)(478600001)(6666004)(316002)(6916009)(4326008)(8936002)(8676002)(7416002)(2906002)(82960400001)(5660300002)(38100700002)(86362001)(66556008)(66476007)(54906003)(66946007)(33716001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkpGaUw5eXN1WnY2a25XbCtKL0Nrb1huYUlsVkN6TGdMbkgzSEdYaFBGY1lV?=
+ =?utf-8?B?VTEwZkVUWitZbmU4akFrUjUwWXFmV2J2ajdEMlV5bFdtcDdLWjBIUWlmSVcw?=
+ =?utf-8?B?TlFkRzFEakdZMklsZmFObHhabVJrYmIvWGJkNmxBUmhGeWt0MS9mRTM0VWNu?=
+ =?utf-8?B?a1AxQ0VDNW9WMm94aTZ0MzcxaXkxWjI1RWtrNVMxM1AzMGVQZXdEK2F3dUdF?=
+ =?utf-8?B?K0RCaEMvYVk2bCtFZkdiZ3lUZDlNa1pGYW9MSEVtYlpHWjl0MGFGOTNnMkhC?=
+ =?utf-8?B?ajErS3ZmeVdoQkhZbURGQTl3Y3J3RXh6WHF0VjdwVXVzQ3ZaOU5DcWVRTk9U?=
+ =?utf-8?B?Y21EM2k3U0lXNXkxS3RQQXAwSmo3a05QZDk2NkRkMXJJZzZCUWxCdzNzN1ZF?=
+ =?utf-8?B?UkNIM1htenk0aE9IK3h4SmJBRDdsTTVRbUNSL09uc2t2Ykw2SGMyeEhSMm80?=
+ =?utf-8?B?VjBDM2JPQUVMQy9wMDRLakYrZC9rVDZQdEtwSUF0MCtWWWZGWmhranVxc3BD?=
+ =?utf-8?B?QmFTdGFpKzVPcCtZK0xybkRXek1EZXB3clptc0c5MDIrRVJFWDl5WU5KQ0pU?=
+ =?utf-8?B?eERmdThnVkwyL1dVNU5VUHA2bkNLdTgwUnp6bmFUNng3S3dqQnJSQjNCZ0hD?=
+ =?utf-8?B?T09ublBUa281S3d5VmduOHNXeFVEVHRiMEJZK3BXb25hb2xCVitpT29qNFdC?=
+ =?utf-8?B?dlF3dTdWRytxNk9tckJXQkJ5MWZaRi9aUWZyMVcyKy9hbzY1RzdYa0Rudnl4?=
+ =?utf-8?B?V3dMR2EzM1NOUlo0YlJlRCtrbTkraWtCTU8yYm5yeTlKSzdRNlBKdC9QOU55?=
+ =?utf-8?B?c3VjNzJNRTNrdDh3emFnM2FiY0haQjVMVjJwS1ozSkhlOFQwUU5kcnc5WEhO?=
+ =?utf-8?B?UGRTTUxQaFQreEFweHUzM3NHSlF3UkV2T3JMT0FJZ3NrdzN5NU8vV1FZN1d0?=
+ =?utf-8?B?NVJIK2d3cENhV2pFTU5sUUNMQnFFSXo3SDIvOHFYNUtQTldLaUFvc2hIdTRn?=
+ =?utf-8?B?cE1reURDWG85TWlZTUVlMnp4ZHVqQWF3d2dGanNBMUNpNUhFbUJLZEx0WTAw?=
+ =?utf-8?B?Y0p6Y0kvcXowTzhzTGE3NWIvY1hYOHA2cm1xb0t4Q25SVmVtYjN1ODFhenhy?=
+ =?utf-8?B?YmU4VWZldDM4eHpHSkZ2UGtLRm9IbjE4Nmg0S1hrQlRYYnNTL3FmZ1lYV1JE?=
+ =?utf-8?B?UXE0SjQyK3FGWUhTSHVZS3BQSm5nVXNaSDdvTlFkQWw0aGFzdFVndVh2NGRG?=
+ =?utf-8?B?RWRWS3ZFTTIxK2xtcXNWY1oyMU10RW1tV3dxM1VrSkMrSVFZV0ZRZ2dpRE5s?=
+ =?utf-8?B?VmdUQmgxUHNrNzhCeGVQa3F1MEJuUUpCdTVLWVNpWmRWcElUSnllWUZYTERB?=
+ =?utf-8?B?QnBUSVVSWDc3RlBSWGxlQWRTMjBZMjhPenMzMmhSNFFKZHBKWG1obDZkRVVv?=
+ =?utf-8?B?K1JLUjRrV01HcXpQZ1VGNVdIdWJ1Zmg4b2NaOWM3c0RySE9aeS9KSXdIdU1W?=
+ =?utf-8?B?SjRJSjBMVEtYQS9BMVNKQlZiOHVrYkY1dDM3UFh0UFJOZUdMd083RlpWMXBo?=
+ =?utf-8?B?WkhoS3BRY2xwVytGQmVvTkFqK3V5aVgvL3FGRGpCZzEwakt6V0FST0Z1T00w?=
+ =?utf-8?B?VHR0eXlYV2U5TVJxWTNXRURWVUZOWXp3VWR0b1BiT0tHZnVRRTFGRjZRWUpZ?=
+ =?utf-8?B?MUUvbXRISThuRmJ5VFBRS1hnRGoyV1VneXBhZFJPeTFleFVRSEkxUGFZOWdo?=
+ =?utf-8?B?Uk5oNWh5OWxoZUFxcFBmMERyT2pFbTEyQVhBeTNVUjRnamQwTnZEMGFTN0RI?=
+ =?utf-8?B?MUlGOW5KY3FoeEx1WlZEZmJiZUI3Mm1RTVUrVFYzMit1THVRMjJyWFN4WDdX?=
+ =?utf-8?B?NnhnQjV4eDJFbFhvWlRMaTh6aUxobXhHRG5DZFk3SWJlMit1KzVGem5ZSHBT?=
+ =?utf-8?B?NEJMNHZKdUNZS3lRWmhzbXRKb0JPUUVUdDJzc2JHVWhJQzVFZDVUNGpmUmpL?=
+ =?utf-8?B?NkpyaXZWTGNGK0VTeE1IejFwa1ZKbmIzcVFWSXJLMHB4K091T1J2QjFvcXVH?=
+ =?utf-8?B?TTU5cHFQSkJWLyt4TGdEMVJVdFVKYUtjWXQxdFhFMVhlRllBQXNTQVR3c0xE?=
+ =?utf-8?B?TTFBWHZkOHVETzRPVWVuQUJTejRWTXBtcCtkUmdVWVJhWmRGZ0hkRnFDZDBO?=
+ =?utf-8?B?eUE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cde79016-0703-478b-98d3-08da943a8c18
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2022 21:14:00.7345
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SfAzcesRM22ucBxYcNDVpvdAVHcSdWCYS3MHhirnYiZYDLgxgn+0CnXiodim9kps2cdWIrdA/20/21CN9bI5PijaQp9sfV0LKsNNK+zzt7c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6065
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Did you receive my previous email? Please respond back for more details
+On Tue, Sep 06, 2022 at 10:02:24PM +0100, Matthew Wilcox wrote:
+> On Tue, Sep 06, 2022 at 10:16:27PM +0200, Michał Winiarski wrote:
+> > IDR is deprecated, and since XArray manages its own state with internal
+> > locking, it simplifies the locking on DRM side.
+> > Additionally, don't use the IRQ-safe variant, since operating on drm
+> > minor is not done in IRQ context.
+> > 
+> > Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+> > Suggested-by: Matthew Wilcox <willy@infradead.org>
+> 
+> I have a few questions, but I like where you're going.
+> 
+> > @@ -98,21 +98,18 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
+> >  static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+> >  {
+> >  	struct drm_minor *minor = data;
+> > -	unsigned long flags;
+> >  
+> >  	WARN_ON(dev != minor->dev);
+> >  
+> >  	put_device(minor->kdev);
+> >  
+> > -	spin_lock_irqsave(&drm_minor_lock, flags);
+> > -	idr_remove(&drm_minors_idr, minor->index);
+> > -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +	xa_release(&drm_minors_xa, minor->index);
+> 
+> Has it definitely been unused at this point?  I would think that
+> xa_erase() (an unconditional store) would be the correct function to
+> call.
 
-Thanks
-Zong Jianxin
+Yes, unless there's a programmers error somewhere - I'll replace it though.
+
+> 
+> > @@ -122,20 +119,12 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> >  	minor->type = type;
+> >  	minor->dev = dev;
+> >  
+> > -	idr_preload(GFP_KERNEL);
+> > -	spin_lock_irqsave(&drm_minor_lock, flags);
+> > -	r = idr_alloc(&drm_minors_idr,
+> > -		      NULL,
+> > -		      64 * type,
+> > -		      64 * (type + 1),
+> > -		      GFP_NOWAIT);
+> > -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > -	idr_preload_end();
+> > -
+> > +	r = xa_alloc(&drm_minors_xa, &id, NULL,
+> > +		     XA_LIMIT(64 * type, 64 * (type + 1) - 1), GFP_KERNEL);
+> >  	if (r < 0)
+> >  		return r;
+> >  
+> > -	minor->index = r;
+> > +	minor->index = id;
+> 
+> Wouldn't it be better to call:
+> 
+> 	r = xa_alloc(&drm_minors_xa, &minor->index, NULL,
+> 			XA_LIMIT(64 * type, 64 * (type + 1) - 1), GFP_KERNEL);
+> 
+> I might also prefer a little syntactic sugar like:
+> 
+> #define DRM_MINOR_LIMIT(type)	XA_LIMIT(64 * (type), 64 * (type) + 63)
+> 
+> but that's definitely a matter of taste.
+
+Sure.
+
+> 
+> > @@ -172,9 +161,12 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
+> >  		goto err_debugfs;
+> >  
+> >  	/* replace NULL with @minor so lookups will succeed from now on */
+> > -	spin_lock_irqsave(&drm_minor_lock, flags);
+> > -	idr_replace(&drm_minors_idr, minor, minor->index);
+> > -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +	entry = xa_store(&drm_minors_xa, minor->index, &minor, GFP_KERNEL);
+> > +	if (xa_is_err(entry)) {
+> > +		ret = xa_err(entry);
+> > +		goto err_debugfs;
+> > +	}
+> > +	WARN_ON(entry);
+> 
+> Might be better as an xa_cmpxchg()?
+
+Ack.
+
+> 
+> > @@ -187,16 +179,13 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
+> >  static void drm_minor_unregister(struct drm_device *dev, unsigned int type)
+> >  {
+> >  	struct drm_minor *minor;
+> > -	unsigned long flags;
+> >  
+> >  	minor = *drm_minor_get_slot(dev, type);
+> >  	if (!minor || !device_is_registered(minor->kdev))
+> >  		return;
+> >  
+> >  	/* replace @minor with NULL so lookups will fail from now on */
+> > -	spin_lock_irqsave(&drm_minor_lock, flags);
+> > -	idr_replace(&drm_minors_idr, NULL, minor->index);
+> > -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +	xa_erase(&drm_minors_xa, minor->index);
+> 
+> This isn't an exact replacement, but I'm not sure whether that makes a
+> difference.  xa_erase() allows allocation of this ID again while
+> idr_replace() means that lookups return NULL, but the ID remains in
+> use.  The equivalent of idr_replace() is:
+> 	xa_store(&drm_minors_xa, minor->index, NULL, GFP_KERNEL);
+
+It does makes a difference, I'll change it to the equivalent.
+
+> 
+> > @@ -215,13 +204,10 @@ static void drm_minor_unregister(struct drm_device *dev, unsigned int type)
+> >  struct drm_minor *drm_minor_acquire(unsigned int minor_id)
+> >  {
+> >  	struct drm_minor *minor;
+> > -	unsigned long flags;
+> >  
+> > -	spin_lock_irqsave(&drm_minor_lock, flags);
+> > -	minor = idr_find(&drm_minors_idr, minor_id);
+> > +	minor = xa_load(&drm_minors_xa, minor_id);
+> >  	if (minor)
+> >  		drm_dev_get(minor->dev);
+> > -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> 
+> This is also not an exact equivalent as the dev_drm_get() is now outside
+> the lock.  Does that matter in this case?  I don't know the code well
+> enough to say.  If you want it to be equivalent, then:
+> 
+> 	xa_lock(&drm_minors_xa);
+> 	minor = xa_load(&drm_minors_xa, minor_id);
+> 	if (minor)
+> 		drm_dev_get(minor->dev);
+> 	xa_unlock(&drm_minors_xa);
+> 
+> would be the code to use.
+
+Again, it does matter, I'll change it.
+
+> 
+> > @@ -1037,7 +1023,7 @@ static void drm_core_exit(void)
+> >  	unregister_chrdev(DRM_MAJOR, "drm");
+> >  	debugfs_remove(drm_debugfs_root);
+> >  	drm_sysfs_destroy();
+> > -	idr_destroy(&drm_minors_idr);
+> > +	xa_destroy(&drm_minors_xa);
+> 
+> I don't know if this is the right call.  xa_destroy() is the exact
+> replacement, but if the xarray should already be empty (and it should,
+> right?) then asserting the xa_empty() is true may be the better call
+> to make.
+
+Yeah - I'll replace it with WARN_ON.
+
+> 
+> 
+> Phew, that was a lot of comments/questions.  I hope that was useful!
+
+Very useful indeed, thanks!
+
+-Michał
