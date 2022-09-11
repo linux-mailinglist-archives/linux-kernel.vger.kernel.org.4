@@ -2,50 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53EA5B4EA0
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75CA5B4EA5
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiIKL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 07:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S230209AbiIKMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 08:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiIKL7h (ORCPT
+        with ESMTP id S230020AbiIKMBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 07:59:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F411000
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:59:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1846C60FF6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 11:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217D3C433D6;
-        Sun, 11 Sep 2022 11:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662897574;
-        bh=4Jbss07D3ML9Z0J0BQzLGO84p1atHK3C7/kFc+KRRW0=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=fPUKjbOcgd59h8FTkJN0YYt+0DMo5NW0idEd+QpmoXjpFgWxzWS2NMrC68g7aoa1R
-         Zn6D8Tkoy/BH7VZEl5GnFdaBDSRwvN0LEpc/xqwrT9mTcYFRx3nhNcywxyGykgXrEH
-         /Q8gHd+WtiLcGU217FjsjjBSz2sT6zUdncJ34Ayw=
-Date:   Sun, 11 Sep 2022 13:59:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        xkernel.wang@foxmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: add kfree() on an error path of
- rtw_xmit_resource_alloc()
-Message-ID: <Yx3NrRHMGbDLipWJ@kroah.com>
-References: <tencent_DD1047278567B897D2CF7F13483573596E06@qq.com>
- <75e8636b-71f4-1334-47c6-0e60f26a2d0a@gmail.com>
+        Sun, 11 Sep 2022 08:01:43 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2D232EE5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:41 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l12so7475108ljg.9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=eBGzSiuctdtKY9Qsp3sP8qBpPaicy+2nwjL/q6AwtQc=;
+        b=SMdWzqWkIa6MWyvZKBP4R1WG8PemK+5S/bpbE368D+7fKifMIn06u87l4CKYMGDgvq
+         uOskkjiwy35Bzd1Dhb36cQ7CMcbchDq/4EO/ErQP3ASGVLJvo4jyWeYOIO2IYAq78Wpk
+         GKQ4z1oxZ1PK0PZhdjbcVZG0kdOlzKJeVfCpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=eBGzSiuctdtKY9Qsp3sP8qBpPaicy+2nwjL/q6AwtQc=;
+        b=nE7wDE9ffV5TTxDjCgcPSLJjbtcaFv4EVasCMXilHcPsPS4ip961Q+757nDK9PCWtg
+         DI6lkh0HRdAP2F7f6Kx5ac+LqcnmN/SlobAxse7BgarmwPxRIDUlo6FcF4486L74qRjK
+         vTuha+fE8bHKf8fH+1D41EiuEKBlR7lnnV+Z/Fiit/XuGwrH3hubXNm7435ygjhp9oJb
+         MXLECcqxjdosdd6lR6AQQ4pL9SwyhBKrKL2SkUMzX2St3iioba46rMzHlEHUtLu5jv9a
+         7Hojnf+S7JrE3Z3K/5tDWyO+8+XkISm5TYaXmKNTIiNAjychTMSfHxOFn/DLmuEh9nKn
+         cKpw==
+X-Gm-Message-State: ACgBeo1J7DQgszrqL4n1WnIEKOU+x+qg42iY4KP4E7BiCZA3hu3MQHtL
+        8EI7HmBfyFSfCSYA8VCJhSceFqJ6hRO1YFrz
+X-Google-Smtp-Source: AA6agR6s9H7Rj6m+LKHKaK+fpZr/k68RlO3XjLI9f3M9y6+314BYzNeUppPCYM7B4BCAszulAEeCCA==
+X-Received: by 2002:a05:651c:1033:b0:26a:aa02:b0fa with SMTP id w19-20020a05651c103300b0026aaa02b0famr7052646ljm.82.1662897699801;
+        Sun, 11 Sep 2022 05:01:39 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id a23-20020ac25e77000000b00492ea54beeasm580317lfr.306.2022.09.11.05.01.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 05:01:38 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id o2so8306209lfc.10
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:01:38 -0700 (PDT)
+X-Received: by 2002:a05:6512:3d16:b0:498:f04f:56cf with SMTP id
+ d22-20020a0565123d1600b00498f04f56cfmr5822982lfv.612.1662897698202; Sun, 11
+ Sep 2022 05:01:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75e8636b-71f4-1334-47c6-0e60f26a2d0a@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220910221947.171557773@linutronix.de>
+In-Reply-To: <20220910221947.171557773@linutronix.de>
+From:   Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Sun, 11 Sep 2022 08:01:21 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wj=CBxrztv0gs273zovMRNsG=i1jg-rf3d-aAx4WLEF1w@mail.gmail.com>
+Message-ID: <CAHk-=wj=CBxrztv0gs273zovMRNsG=i1jg-rf3d-aAx4WLEF1w@mail.gmail.com>
+Subject: Re: [patch RFC 00/29] printk: A new approach - WIP
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,49 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 08:29:03AM +0200, Philipp Hortmann wrote:
-> On 9/10/22 02:29, xkernel.wang@foxmail.com wrote:
-> > From: Xiaoke Wang <xkernel.wang@foxmail.com>
-> > 
-> > In rtw_xmit_resource_alloc(), if usb_alloc_urb() fails, then the memory
-> > `pxmitbuf->pallocated_buf` which is allocated by kzalloc() is not properly
-> > released before returning.
-> > 
-> > So this patch adds kfree() on the above error path to release it. As there
-> > is no proper device to test with, no runtime testing was performed.
-> > 
-> > Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> > ---
-> >   drivers/staging/r8188eu/core/rtw_xmit.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> > index 67f9c05..9c39d08 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> > @@ -44,8 +44,10 @@ static int rtw_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *px
-> >   	pxmitbuf->dma_transfer_addr = 0;
-> >   	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
-> > -	if (!pxmitbuf->pxmit_urb)
-> > +	if (!pxmitbuf->pxmit_urb) {
-> > +		kfree(pxmitbuf->pallocated_buf);
-> >   		return _FAIL;
-> > +	}
-> >   	return _SUCCESS;
-> >   }
-> 
-> Hi Xiaoke,
-> 
-> I applied your patch and tested it. That is OK.
-> 
-> But you excluded the change history. Usually this is not accepted by Greg.
-> Reason is that what identifies the patch is the change itself. The change
-> itself is the same as: "[PATCH v4] staging: r8188eu: fix potential memory
-> leak in rtw_os_xmit_resource_alloc()" Even if you change the Subject,
-> Description and the branch it remains the same patch for Greg.
+On Sat, Sep 10, 2022 at 6:27 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> After taking a step back we decided to go for a radically different
+> approach:
 
-Agreed, please fix up.
+From a quick look through the patches this morning, I see nothing
+alarming. The proof is in the pudding, but this seems to have a sane
+model for console list handling and for handling the individual
+console states.
 
-thanks,
+But I'm on a laptop and only read through the patches while going
+through my email this morning, so I may well have missed something.
 
-greg k-h
+                 Linus
