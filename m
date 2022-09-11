@@ -2,56 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4728C5B4D73
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F525B4D29
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 12:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiIKKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 06:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S229937AbiIKKH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 06:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIKKdG (ORCPT
+        with ESMTP id S230043AbiIKKHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 06:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1F3C151;
-        Sun, 11 Sep 2022 03:33:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88A86B80AFD;
-        Sun, 11 Sep 2022 10:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0B5C433C1;
-        Sun, 11 Sep 2022 10:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662892382;
-        bh=cssxUf85fo3xwMVXH/oVbDV1rjWJb8y2wy7UmYIaa/E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XhS4kISCYFy6qLa6qqROP8fKIKO2yZ7KB3lILrsOWftAH4qhs7fP9GJNhGGgIf0mV
-         tgsdv8Hp9Mh65yi1xD1HgolYEFzi9moGvQiLZkmA0QYx3wvg+jTpT/bMx64kWwX4MT
-         T77oD/VHNrpD0k0tp9zTOqGHmUavTYm9QG6uYgFQudGTQOm4nfrDE+N6FuqhLfpg2O
-         ZRCbPokf5+pXGG2vYiGAbA0oKhTOjCtU0d2CjAcjTQUMM8TYsvrxc3/jZfYs2hMVLw
-         7QYrLteGR+Mt8OW/FzFjZ4N9Qv/YjOItXlC16XCsvOlmVApc4bs+uw9a390RCDuljs
-         QxvNmLSs+IvAQ==
-Date:   Sun, 11 Sep 2022 10:58:54 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     lars@metafoo.de, krisman@collabora.com,
-        dmitry.osipenko@collabora.com, kernel@collabora.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] iio: light: tsl2583: Fix module unloading
-Message-ID: <20220911105855.4acad644@jic23-huawei>
-In-Reply-To: <03401e6f-f660-9313-61dc-a930675c82ec@collabora.com>
-References: <20220826122352.288438-1-shreeya.patel@collabora.com>
-        <20220828173327.7949ad73@jic23-huawei>
-        <03401e6f-f660-9313-61dc-a930675c82ec@collabora.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 11 Sep 2022 06:07:55 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7012E2B631
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 03:07:52 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id w8so10201280lft.12
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 03:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=eX+5//Qd0qiSGwhAdD53iMPOZ01D21SlUbjRrzVLFVc=;
+        b=h0koii7fb1oT1Vgdrhf0gQ9jd9ilSYjBDM8UqO5+Cm+C0BHn1/1fmWk/ljpw6QiPVY
+         Gkvm8OhkNcO/nz20CcNvR0eELLUZaWUJYeuNQycAIBTC4NPVRlebf40qNQqcT8Q+YaM+
+         uEKWgHoX8XPzmTSdLEO7h+l53zjL1pJcEndP2KWHiifv7XLZtasW1bSVxEuEPMb1dZtn
+         1kuYB//4c7MYGIZ29UbP6RnWRBdaZ+IRlO2gBqz6Ho3vG21dTzvGRg1EepZwDLmcztpk
+         bFsy76jngPxmmFiY8mhQnISFcNmQTXJkWxIVmQR7zlOO5bEVMwF5xzrvN8NhwI75ngeO
+         p3kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eX+5//Qd0qiSGwhAdD53iMPOZ01D21SlUbjRrzVLFVc=;
+        b=E1HKwsZfpbWJiakHlwxXletzqaIzQDqUlBllY9vZMAM4nELYk5YMAONu/vfY2dj5pR
+         0vlf/PcvDra82j8XpEuoyojwAWgbb6EiuOAklC5FS8pBhlnF1W6RqtwfhaKYaao+Q0DI
+         WbDtGGGBYwQY1I0hE+QXF25z3hg6N3CroLcGywvap/qVENJzm8/EgFz8TXnqY5xFbj/u
+         iuk8mGTChonDB2yD3NOtDIzGonTE/XdaBVzZxteNBoUSh0OfLDfvQtPFYJYe/D7/zzUO
+         I6WxOKa0ENrqgtJlgOlbAh6ZYX865Qr+Gm33Ngqs0sQWn0rcbFNyHDTchl0/Gw8M3keg
+         BO1w==
+X-Gm-Message-State: ACgBeo0yEPULBDASsKT4KzaB7qNqsdftlTGeTRKyx/pRycoyJCrVycGL
+        5YhkqaUE4Xxv0Jg19NMIzG1nQA==
+X-Google-Smtp-Source: AA6agR6A1V3CcXvwvEZeblw1I30gk4e6QrGX06JYml79blEXygiH9sh4/BbGUWmJnqZGus5TWgAb7w==
+X-Received: by 2002:a05:6512:a87:b0:498:fbeb:daea with SMTP id m7-20020a0565120a8700b00498fbebdaeamr3993625lfu.632.1662890870806;
+        Sun, 11 Sep 2022 03:07:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s12-20020a056512214c00b0049480c8e7bcsm558548lfr.176.2022.09.11.03.07.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 03:07:50 -0700 (PDT)
+Message-ID: <7e5eb29f-913a-7540-c618-fb6c5a493d5d@linaro.org>
+Date:   Sun, 11 Sep 2022 12:07:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 7/9] arm64: dts: qcom: sm6115: Add basic soc dtsi
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-8-iskren.chernev@gmail.com>
+ <d51b0a89-a151-dd5b-b026-4291031fe1ea@linaro.org>
+ <ad940df1-6876-0c38-81c8-7d7ca97046de@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ad940df1-6876-0c38-81c8-7d7ca97046de@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,87 +84,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sep 2022 00:25:49 +0530
-Shreeya Patel <shreeya.patel@collabora.com> wrote:
+On 11/09/2022 11:09, Iskren Chernev wrote:
+> 
+> 
+> On 9/11/22 11:40, Krzysztof Kozlowski wrote:
+>> On 10/09/2022 16:32, Iskren Chernev wrote:
+>>> Add support for Qualcomm SM6115 SoC. This includes:
+>>> - GCC
+>>> - Pinctrl
+>>> - RPM (CC+PD)
+>>> - USB
+>>> - MMC
+>>> - UFS
+>>>
+>>> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+>>> ---
+>>> pending issues with dtschema:
+>>> - for some reason, using pinctrl phandles (in mmc) breaks the pinctrl
+>>>   schema (4 times)
+>>>       .output/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: pinctrl@500000: sdc1-on-state: 'oneOf' conditional failed, one must be fixed:
+>>>             'pins' is a required property
+>>>             'clk', 'cmd', 'data', 'rclk' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>>             [[26]] is not of type 'object'
+>>>             From schema: /home/iskren/src/pmos/linux-postmarketos/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-pinctrl.yaml
+>>
+>> It's the same as 06367559766b7c9bd96d2baef8bfc5a9bb451e25. I propose to
+>> fix it the same way. I can do a biger change for all pinctrls, so here
+>> you would need to add "-pins" prefix to entries (see patch
+>> 4fcdaf4b0320f93d0ccb4d36b795ed258fb07b27).
+> 
+> OK, that makes sense. One thing that is a bit odd -- the current pattern
+> "(pinconf|-pins)$" matches anything that ends in pinconf OR -pins (so it could
+> be sth-pinconf). 
 
-> On 28/08/22 22:03, Jonathan Cameron wrote:
-> > On Fri, 26 Aug 2022 17:53:52 +0530
-> > Shreeya Patel <shreeya.patel@collabora.com> wrote:
-> >  
-> >> tsl2583 uses devm_iio_device_register() function and
-> >> calling iio_device_unregister() in remove breaks the
-> >> module unloading.
-> >> Fix this by using iio_device_register() instead of
-> >> devm_iio_device_register() function in probe.  
-> > Not sure why you are wrapping at 55 chars. I rewrapped this whilst applying.
-> >
-> > Reworded it a little too as I was touching it anyway.
-> >
-> > Applied to the fixes-togreg branch of iio.git.  
-> 
-> Hi Jonathan,
-> 
-> I was wondering if this got picked by you. I don't see it in 
-> fixes-togreg that's why wanted to just confirm if you aren't looking for 
-> some extra changes in this.
-> 
-> 
-oops. I forgot to push that branch out. Done so now.
+Yeah, I am fixing it to ^(pinconf|.*-pins)$
 
-Jonathan
+> Also, if you only have a single block, isn't the idea to just
+> list it in the -states node.  I mean we either force everybody to nest with
+> a pinconf, or we allow -pins for nested stuff and directly in -state for the
+> non-nested. Just my 2c.
 
-> Thanks
-> Shreeya Patel
-> 
-> >  
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 371894f5d1a0 ("iio: tsl2583: add runtime power management support")  
-> > I took a look at this patch and it introduces the issue I just pointed
-> > out in replying to your v1 by dropping the
-> > /* Make sure the chip is on */
-> > Which was correct even with runtime pm because it covered the case of
-> > runtime_pm being disabled.   We probably need to bring that back as well,
-> > perhaps as part of a cleanup patch taking this fully devm_
-> >
-> > This driver has another issue for working if runtime PM isn't built into
-> > the kernel which is that it checks the return of pm_runtime_put_autosuspend()
-> > which calls
-> >
-> > static inline int __pm_runtime_suspend(struct device *dev, int rpmflags)
-> > {
-> > 	return -ENOSYS;
-> > }
-> >
-> > I've been meaning to do an audit for drivers that have this problem for
-> > a while, but not yet gotten to it.
-> >
-> > An ideal IIO driver needs to work correctly whether or not CONFIG_PM is
-> > enabled.
-> >
-> > Jonathan
-> >
-> >  
-> >> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> >> ---
-> >> Changes in v2
-> >>    - Use iio_device_register() instead of devm_iio_device_register()
-> >>    - Add fixes and stable tags
-> >>
-> >>   drivers/iio/light/tsl2583.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/iio/light/tsl2583.c b/drivers/iio/light/tsl2583.c
-> >> index 82662dab87c0..94d75ec687c3 100644
-> >> --- a/drivers/iio/light/tsl2583.c
-> >> +++ b/drivers/iio/light/tsl2583.c
-> >> @@ -858,7 +858,7 @@ static int tsl2583_probe(struct i2c_client *clientp,
-> >>   					 TSL2583_POWER_OFF_DELAY_MS);
-> >>   	pm_runtime_use_autosuspend(&clientp->dev);
-> >>   
-> >> -	ret = devm_iio_device_register(indio_dev->dev.parent, indio_dev);
-> >> +	ret = iio_device_register(indio_dev);
-> >>   	if (ret) {
-> >>   		dev_err(&clientp->dev, "%s: iio registration failed\n",
-> >>   			__func__);  
-> >  
+I didn't get this one... We allow exactly this, don't we (in PMIC GPIOs)?
 
+
+Best regards,
+Krzysztof
