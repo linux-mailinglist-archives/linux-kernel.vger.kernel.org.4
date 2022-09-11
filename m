@@ -2,138 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4045B50AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 20:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B180D5B50AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 20:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiIKSkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 14:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S229619AbiIKSl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 14:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIKSkF (ORCPT
+        with ESMTP id S229498AbiIKSlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 14:40:05 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED9EBC1D;
-        Sun, 11 Sep 2022 11:40:03 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 947732B05927;
-        Sun, 11 Sep 2022 14:39:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sun, 11 Sep 2022 14:40:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662921599; x=1662925199; bh=UfGN9EkXoT
-        86oWuOWRB8qaSDzpqIdiSsLF8lJ30Qpio=; b=V0XLIuSmvv94NFAKfH+ekuPdli
-        P+JePexh7RLuNLA6ZGNbKbWjP39O9kyp/hlE6APlUB5DOUbygulX3KR0XFx9XAue
-        TL0ra5DvtzHx3Lol4lm4F+ESUKZ2bTIDmQo1K0HgKQmUUVqjyaCRIy+BMNDoBdLN
-        Cy9KhpBg6x35/owc/S9y8Bk9pAiE63mHeHMW/9yxWSc/TeKdDswZeE6tIEjm8qoI
-        qQPuMJJoMZM8bbmmhE9pW6c/yk0W3bl25wNkhnjtTf8Px3ZJHnx57a2bId6htXNx
-        VGV6BSArH5nZ+GgDRWwxpQSkSBngEq1qQvxo51VHeiEn+dYVLH9o/F/zlWfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662921599; x=1662925199; bh=UfGN9EkXoT86oWuOWRB8qaSDzpqI
-        diSsLF8lJ30Qpio=; b=sN6Da89eKJbI/7HCzPENwcVL5wfrpK/ZoS53TBDBVHm1
-        qLeBXLv3rAfohOTKwNNmrGnQfZHkpmGKkLmlJOF1Q4tN5pTkq8WPiFMHxMlxTGWw
-        Fy/PrUPvo2RVtLf9VpQ7NGd++U1QtjW9m8xPGYfgHdTwhwjUgU7xHUSjkQGrGmmJ
-        Ca63zRo/OEifl1RYQvu2NaVnHjIlC7AXIQU4Ny6WHWbgj8bnonuZ7JrFnWeAAFbr
-        1r2sZPzDaXKyFLh0ZhQZg+frhjis+W6dAm52rLfArt0cJnYVw6EK4gOT2+D7Hwyw
-        hJgRn3o7Jvgj/eKhG7zZBrzCJWANvtCXp3x4qVO6Uw==
-X-ME-Sender: <xms:fCseY1Sl4Uc_QMc34bInOkJzBGYxvylgRzNFJyXwblsPyi_RJcpXAg>
-    <xme:fCseY-z4At9dK_MzOlSKE23eBCRl3RhCtYTDYWFIu7Kx1yc-3mi9qv9XSlfCqSVYT
-    -d9lskEHwscf85jkes>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedutddgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:fCseY61c2LgvvwOgFWbY4yYrADhkrBgT55GXFE51fdxmDajdaGdx9A>
-    <xmx:fCseY9BPwtHaIYWwM8JVH7zjO7pYzYOsOoR4ubiUcEMNP9y-nrb2HQ>
-    <xmx:fCseY-ifdBPVu3ot44Ot2ehGdzvGFGVKi_KSi6l4D9VvcC1lqf1QFA>
-    <xmx:fyseY3b--qSqUQDwplz8JtdqNhyXKGy_vBf8CnDi1cFOOGnkw7HatWNGHCg4MbrD>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CD899B60086; Sun, 11 Sep 2022 14:39:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <7409c92a-68df-4406-bd86-835d9a959ef5@www.fastmail.com>
-In-Reply-To: <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
-References: <20220908022506.1275799-1-guoren@kernel.org>
- <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com>
- <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
- <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
-Date:   Sun, 11 Sep 2022 20:39:35 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     guoren <guoren@kernel.org>
-Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Jisheng Zhang" <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, "Huacai Chen" <chenhuacai@kernel.org>,
-        "Anup Patel" <apatel@ventanamicro.com>,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Guo Ren" <guoren@linux.alibaba.com>,
-        "Andreas Schwab" <schwab@suse.de>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 11 Sep 2022 14:41:23 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB42127FC9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 11:41:22 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3450a7358baso76219107b3.13
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 11:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date;
+        bh=WG+RdUuUEyk7LRTVM31iORwh9ysLyZm3eQt+kO0Z8AE=;
+        b=JQFtZxpsmN/1ojPn8NUziq8h5g2YeaFh3cUtuzkrDbelgKf9JNGGxsrqaqcoNemahJ
+         VFg+/Dpw2zP+8s4jlGr5E3kD6aZKrF77S/qExhg3QGv99052mObhs+/9RL76mBV8NZ+v
+         Xy5ZYyeIXDCGvgrSbIk0QhvzVUG4m6FTo/k8SnjiA2GJdzcE85MT21vrw5Eh+hel+KFj
+         JIXTRMuPCF2/SCSJQcYpUrsCW/MCTg0iiHm3STAVGV999L8kfRf/Esnf0DnYWjtOsOBg
+         Q8GGHC9sat8xbHVJm2OVpG+Vy45l43N1ymhq64Vf1EiZEMB6QiNpqN+q8t4upIzrwbnX
+         NVOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=WG+RdUuUEyk7LRTVM31iORwh9ysLyZm3eQt+kO0Z8AE=;
+        b=65qKxwyPEAGxwfcxoOrR/mDviXDwsBaBTfqt6K9V0+KaU9+mUGI9mVzwd4fQU/+jIx
+         2IIOn2Sh6wtf9VbpeLPZNC0PzLLpFm109OHVUWjiNGiAWC2NGoYpWR1rfYghYWNxSuEF
+         tBfVvCk1YgdHvA6usq1gtDLYZm4TzPhnlbHgucWW0Iz29CDxlk3t+VEpp0ylW6KfQ60C
+         P/yemMDrVhukTHjA6wM6FKafYP1iASniPQiW3/POi7dAz47Y5pk+vQXGelAlc9AcMCBU
+         /M6Q816Q2/MwR8V7ISQEYHpXH8AeVRhhcOK6mlu9yTEmsD4lFIj4gsYJdV/2jvQOeq8f
+         ERmg==
+X-Gm-Message-State: ACgBeo3U86F/GYnM2tQ3lv31rMeu5inNOnnmJrW8q97nH0d+2dphf3Bk
+        Le6sBnegco0bJEOBI8ePe9QOueNIZUOiyk3nwVU=
+X-Google-Smtp-Source: AA6agR7bVyjgpvFYGsgHBvLM2GNafrRqv68R0NNYD4U5DM4X5ig7iBS0SdLGGt4DCFZZeRKSzZjl0ngF+arflVHc58c=
+X-Received: by 2002:a0d:d2c1:0:b0:33e:e1f4:4bb0 with SMTP id
+ u184-20020a0dd2c1000000b0033ee1f44bb0mr18820406ywd.234.1662921681926; Sun, 11
+ Sep 2022 11:41:21 -0700 (PDT)
+MIME-Version: 1.0
+Sender: a.ragnvar50@gmail.com
+Received: by 2002:a05:7000:bd91:0:0:0:0 with HTTP; Sun, 11 Sep 2022 11:41:21
+ -0700 (PDT)
+From:   Mrs Aisha Al-Gaddafi <mrsaishagaddafii46@gmail.com>
+Date:   Sun, 11 Sep 2022 18:41:21 +0000
+X-Google-Sender-Auth: koRuNlrVjIZtnEKm5AdJfVDWjFE
+Message-ID: <CADmpa4H5BA0L=A_=vCvA_0JX2LRvqLFH-GEtV=--z8aVEjUUKA@mail.gmail.com>
+Subject: Please I really need your urgent Help Now
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
+        MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112d listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9997]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 0.9997]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsaishagaddafii46[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [a.ragnvar50[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good Day To You My Beloved Friend,
+
+How are you together with your lovely family?
+
+With due respect to your person and much sincerity of purpose I wish
+to write to you today for our mutual benefit in this investment
+transaction,
 
 
-On Sun, Sep 11, 2022, at 1:35 AM, Guo Ren wrote:
-> On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Sat, Sep 10, 2022, at 2:52 PM, Guo Ren wrote:
->> > On Thu, Sep 8, 2022 at 3:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> >> On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
->> >> > From: Guo Ren <guoren@linux.alibaba.com>
->> >> - When VMAP_STACK is set, make it possible to select non-power-of-two
->> >>   stack sizes. Most importantly, 12KB should be a really interesting
->> >>   choice as 8KB is probably still not enough for many 64-bit workloads,
->> >>   but 16KB is often more than what you need. You probably don't
->> >>   want to allow 64BIT/8KB without VMAP_STACK anyway since that just
->> >>   makes it really hard to debug, so hiding the option when VMAP_STACK
->> >>   is disabled may also be a good idea.
->> > I don't want this config to depend on VMAP_STACK. Some D1 chips would
->> > run with an 8K stack size and !VMAP_STACK.
->>
->> That sounds like a really bad idea, why would you want to risk
->> using such a small stack without CONFIG_VMAP_STACK?
->>
->> Are you worried about increased memory usage or something else?
-> The requirement is from [1], and I think disabling CONFIG_VMAP_STACK
-> would be the last step after serious testing.
+I'm Mss Aisha Gaddafi presently residing herein Oman the
+Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
+single Mother and a widow with three Children, I am the only
+biological Daughter of the late Libyan President (Late Colonel
+Muammar Gaddafi) I have an investment funds worth Twenty Seven
+Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
+and i need an investment Manager/Partner and because of my Asylum
+Status I will authorize you the ownership of the investment funds,
+However I am interested in you for investment project assistance in
+your country or in any good business that will give us a good profit or in
+your company there in your country or in any part of the world, hoping
+from there we can
+build a business relationship in the nearest future.
 
-I still don't see why you need to turn off VMAP_STACK at all
-if it works. The only downside I can see with using VMAP_STACK
-on a 64-bit system is that it may expose bugs with device
-drivers that do DMA to stack data. Once you have tested the
-system successfully, you can also assume that you have no such
-drivers.
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits. If you are
+willing to handle this project kindly reply urgently to enable me to
+provide you more information about the investment funds,
 
-     Arnd
+Your urgent reply and help will be appreciated if only you are interested in
+this investment project and helping us out,
+
+Sorry if you received this letter in your spam, is due to our recent
+connection/network error here in the country.
+
+
+Best Regards,
+Mss Aisha Gaddafi.
