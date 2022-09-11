@@ -2,274 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAB05B4EB3
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AC35B4EBA
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiIKMLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 08:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S230116AbiIKMWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 08:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiIKMLH (ORCPT
+        with ESMTP id S229949AbiIKMWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 08:11:07 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DFA303EB
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:11:05 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id XLnjox3GD9RnzXLnjofkL5; Sun, 11 Sep 2022 14:11:03 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Sep 2022 14:11:03 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] headers: Remove some left-over license text in include/uapi/linux/dvb/
-Date:   Sun, 11 Sep 2022 14:10:59 +0200
-Message-Id: <84668f75659991dc2c2fa9728badfcf918485fc1.1662898254.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 11 Sep 2022 08:22:20 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0079326C3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:22:18 -0700 (PDT)
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28BCLrdL027206;
+        Sun, 11 Sep 2022 21:21:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28BCLrdL027206
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662898914;
+        bh=07On58pfAqeOPq4SkhwmI7FDSiggencyKc6cl9k18mg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dJMv7n+wlGbFk5b6w07BTCC2ykK9x39n82TqtW3YMB3HZOBYegrwB0giz2raRx/ml
+         4yx955rw6BYEfWPp1/98STbneSPZUlkZ7ZA2AgZ9BbSW9JT36LaCmIy+VfN6d+8KEU
+         /ctj/EBHWfuWBk814AnmytwBG9Ryvygg/fQ2jc3K+ULSVpLyeg1v/kSJOMiUdiOp1S
+         NOnmmpHBtN0uCJd92A4gBv+e4WfmqjefDpCHeMqWL/KJPhLMXL/MJwllrspUozJ4O5
+         S3FyPagW33DtNBUrGlkdJRs5EAnWb3BNy82rZ9fjGLjcl0AhAxVlDIn2ut7DpllNzq
+         E5SPhuNSK4gYA==
+X-Nifty-SrcIP: [209.85.160.53]
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127dca21a7dso16382158fac.12;
+        Sun, 11 Sep 2022 05:21:54 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3/TM45+z2BUVIxV+AKOMmMr1Wf2a3PQ5KMToWxxHp15CAvsbI/
+        eLjwKDuGp0kxwXzR5Hay1PiPPvwfOw29gtGIInc=
+X-Google-Smtp-Source: AA6agR4mmN3oWojOW4OyzpDwjNMuHZ5shgZclcZMD4/8WBxQTrzs7mm0t4r8VgIgsbuMgBYDyJe3ol8lYCxc862U/y8=
+X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
+ x12-20020a54400c000000b0034f99130262mr900341oie.287.1662898912945; Sun, 11
+ Sep 2022 05:21:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <202209101939.bvk64Fok-lkp@intel.com> <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 11 Sep 2022 21:21:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASbcsLqUU+WsO7zQ-toucvkd1ePGX_HW7ehrywoS-cUMQ@mail.gmail.com>
+Message-ID: <CAK7LNASbcsLqUU+WsO7zQ-toucvkd1ePGX_HW7ehrywoS-cUMQ@mail.gmail.com>
+Subject: Re: [masahiroy:fixes 6/6] arch/mips/kernel/branch.c:712:20: error:
+ instruction requires a CPU feature not currently enabled
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-license identifier to uapi header files wi
+On Sun, Sep 11, 2022 at 2:56 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sat, Sep 10, 2022 at 12:24 PM kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git fixes
+> > head:   97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5
+> > commit: 97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5 [6/6] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+> > config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220910/202209101939.bvk64Fok-lkp@intel.com/config)
+>
+> This is likely:
+> arch/mips/loongson2ef/Platform
+> 28:cflags-$(CONFIG_CPU_LOONGSON2EF)     += $(call
+> as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+> arch/mips/Makefile
+> 155:cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+>
+> probably both need to use cc-option similar to
+> https://lore.kernel.org/llvm/20220907045907.484043-2-ndesaulniers@google.com/
+>
+> Masahiro, I'm at Linux Plumbers Conf; not sure when I can get to a
+> formal patch.  Want to drop my 2 patches and I'll send a v4 at some
+> point?
 
-When the SPDX-License-Identifier tag has been added, the corresponding
-license text has not been removed.
 
-Remove it now.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- include/uapi/linux/dvb/audio.h    | 15 ---------------
- include/uapi/linux/dvb/ca.h       | 15 ---------------
- include/uapi/linux/dvb/dmx.h      | 15 ---------------
- include/uapi/linux/dvb/frontend.h | 15 ---------------
- include/uapi/linux/dvb/net.h      | 15 ---------------
- include/uapi/linux/dvb/osd.h      | 15 ---------------
- include/uapi/linux/dvb/version.h  | 15 ---------------
- include/uapi/linux/dvb/video.h    | 15 ---------------
- 8 files changed, 120 deletions(-)
+OK, dropped.
 
-diff --git a/include/uapi/linux/dvb/audio.h b/include/uapi/linux/dvb/audio.h
-index 2f869da69171..77fb866890b4 100644
---- a/include/uapi/linux/dvb/audio.h
-+++ b/include/uapi/linux/dvb/audio.h
-@@ -7,21 +7,6 @@
-  * Copyright (C) 2000 Ralph  Metzler <ralph@convergence.de>
-  *                  & Marcus Metzler <marcus@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Lesser Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBAUDIO_H_
-diff --git a/include/uapi/linux/dvb/ca.h b/include/uapi/linux/dvb/ca.h
-index dffa59e95ebb..4244b187cc4d 100644
---- a/include/uapi/linux/dvb/ca.h
-+++ b/include/uapi/linux/dvb/ca.h
-@@ -5,21 +5,6 @@
-  * Copyright (C) 2000 Ralph  Metzler <ralph@convergence.de>
-  *                  & Marcus Metzler <marcus@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Lesser Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBCA_H_
-diff --git a/include/uapi/linux/dvb/dmx.h b/include/uapi/linux/dvb/dmx.h
-index b4112f0b6dd3..7b16375f94e2 100644
---- a/include/uapi/linux/dvb/dmx.h
-+++ b/include/uapi/linux/dvb/dmx.h
-@@ -5,21 +5,6 @@
-  * Copyright (C) 2000 Marcus Metzler <marcus@convergence.de>
-  *                  & Ralph  Metzler <ralph@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _UAPI_DVBDMX_H_
-diff --git a/include/uapi/linux/dvb/frontend.h b/include/uapi/linux/dvb/frontend.h
-index 4f9b4551c534..2c5b9563804a 100644
---- a/include/uapi/linux/dvb/frontend.h
-+++ b/include/uapi/linux/dvb/frontend.h
-@@ -7,21 +7,6 @@
-  *		    Holger Waechtler <holger@convergence.de>
-  *		    Andre Draszik <ad@convergence.de>
-  *		    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBFRONTEND_H_
-diff --git a/include/uapi/linux/dvb/net.h b/include/uapi/linux/dvb/net.h
-index 0c550ef93f2c..7cbb47ac38ef 100644
---- a/include/uapi/linux/dvb/net.h
-+++ b/include/uapi/linux/dvb/net.h
-@@ -5,21 +5,6 @@
-  * Copyright (C) 2000 Marcus Metzler <marcus@convergence.de>
-  *                  & Ralph  Metzler <ralph@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBNET_H_
-diff --git a/include/uapi/linux/dvb/osd.h b/include/uapi/linux/dvb/osd.h
-index 858997c74043..6003b108ba45 100644
---- a/include/uapi/linux/dvb/osd.h
-+++ b/include/uapi/linux/dvb/osd.h
-@@ -7,21 +7,6 @@
-  * Copyright (C) 2001 Ralph  Metzler <ralph@convergence.de>
-  *                  & Marcus Metzler <marcus@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Lesser Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBOSD_H_
-diff --git a/include/uapi/linux/dvb/version.h b/include/uapi/linux/dvb/version.h
-index 2c5cffe6d2a0..1a8cd038aa0b 100644
---- a/include/uapi/linux/dvb/version.h
-+++ b/include/uapi/linux/dvb/version.h
-@@ -4,21 +4,6 @@
-  *
-  * Copyright (C) 2000 Holger Waechtler <holger@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _DVBVERSION_H_
-diff --git a/include/uapi/linux/dvb/video.h b/include/uapi/linux/dvb/video.h
-index 179f1ec60af6..9910b73737e0 100644
---- a/include/uapi/linux/dvb/video.h
-+++ b/include/uapi/linux/dvb/video.h
-@@ -7,21 +7,6 @@
-  * Copyright (C) 2000 Marcus Metzler <marcus@convergence.de>
-  *                  & Ralph  Metzler <ralph@convergence.de>
-  *                    for convergence integrated media GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- *
-  */
- 
- #ifndef _UAPI_DVBVIDEO_H_
+Thanks.
+
+
+
+
+
+
 -- 
-2.34.1
-
+Best Regards
+Masahiro Yamada
