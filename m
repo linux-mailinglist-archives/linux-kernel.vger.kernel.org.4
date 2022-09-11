@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D661B5B50CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 21:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328B65B50D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 21:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIKTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 15:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S229604AbiIKTSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 15:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIKTPf (ORCPT
+        with ESMTP id S229488AbiIKTSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 15:15:35 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BC819031
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 12:15:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id u9so15586965ejy.5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 12:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=siH8GbCgzSgUrSeqhFveF0F9U0Hvq+9AhRsP9/PYgB4=;
-        b=CrtGAG6bN4UEjWBpJL3YVLktnEO6VNRYbPZhAztaFxriztiQa5j2acS6ZAc4TP19id
-         rszmXCQzUBHpwYDs5PmsKgqFVDdcqwinHZW86/OKa/27Z31wHWdmn+nDME8jyqe/XIW1
-         KVoeduI0Aof64MK13sZYNqj7aUKHOOMSgrQeK02z3aKr/EyT8BaEdc1oKwC4oMqkpIpo
-         KBTGbW8G6Kqn5vrBjVw7og0zSqQpXYo5KkjWgasgTRoC9DLxAX0yrkNfdrDoL7ue9OCv
-         iOxCU6tf18fdI1BxGQ20mhNRzdDeDvwfhth/kuoAaQ2PXqWKNb/AxK529NR67V2DoB+Y
-         W5Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=siH8GbCgzSgUrSeqhFveF0F9U0Hvq+9AhRsP9/PYgB4=;
-        b=ADMrrDW3IYWc1blJVtkleWwYniiA8naeHHLh5HCD61VhpiK84kgvdxXzC90SZQMWuE
-         3fnlGyAR42f3jVxsbGcuxx3WBq3LVLFn7OhpGw09OVdDcg5u1TRbClF7MxZSgL2x5uua
-         B/VZHnWWwuty6YkpO/dIP8obB1qeTPeMJhKx491ZA2oXZDYa7CeVh7rH5mY7ZOHQo7+D
-         PIRdWcG/h6E3gRNxOeN28fJ0e3jjA9Ld5yKUCcIB5ya/ESLCAGaTnJ+8zwVASQfmNGQ7
-         VTQxpvd2lqcWwBTkE3T+vxlXTZ6F4rVcRpY0kRABaGpXjDLyxgrm1ubuk/p/HhALR+mF
-         9v9A==
-X-Gm-Message-State: ACgBeo0mwzwaI6TreEpJKgf0qSNG/UsJWWHOe7j4GeiV8E0AMd94+0UC
-        HkglGRHDWyF1M3yFOhKT3s4=
-X-Google-Smtp-Source: AA6agR7+sL3YY6zdFMG25nfCaLTep5knbLZV7ruXS9yQctLegZrD+d55dHm2leBECZLgCMzC/lmiMg==
-X-Received: by 2002:a17:907:763b:b0:77b:c559:2bcb with SMTP id jy27-20020a170907763b00b0077bc5592bcbmr4059857ejc.490.1662923733156;
-        Sun, 11 Sep 2022 12:15:33 -0700 (PDT)
-Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa7c753000000b0044ea1fe7ce4sm4371270eds.56.2022.09.11.12.15.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 12:15:32 -0700 (PDT)
-Message-ID: <2a9d164d-d509-e59a-61d3-671526581423@gmail.com>
-Date:   Sun, 11 Sep 2022 21:15:31 +0200
+        Sun, 11 Sep 2022 15:18:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943EBE082
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 12:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662923886; x=1694459886;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xQ6aw17yTEVxopys8Zx6lpGx1KD6LXlJcgFWJMO8HO0=;
+  b=iKgxCnKh7HzzVRrGRZ3FeNOsHbxr21rrxglf4qf3M2vH18vd5SjXglQS
+   xCShk6zVHpKP1ouMYl0ZKxpNe1TRB159/MwrdTIjHwDpbgsPoPQl+25Qt
+   b3d+4z719ScnqZ3tfJ3z6M/KauyTRTDR4vZ+X9CFM2QkvArTlNrrCYgO5
+   1zHCRrkwjw6poD6vZR6dXCPP0utNXd8k775+p6K28lkEsGjEo9xRJhTBS
+   qvqA/dW/3GqSrDU22kqa63+l5SzBIekPeACCxURahY+s9LWbXHkNIcvaN
+   q82OGPQaikXcUXmXnfSW5kKVE5n78eGiUTIV/MHbQirN9dII/bHSW6s4n
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="296482568"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="296482568"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 12:18:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="593243053"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2022 12:18:04 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXSSy-0001iF-0p;
+        Sun, 11 Sep 2022 19:18:04 +0000
+Date:   Mon, 12 Sep 2022 03:17:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v6.0-rc1 22/30]
+ include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
+Message-ID: <202209120346.sFuVQArY-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] staging: r8188eu: remove recv_osdep.h header
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220911174933.3784-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220911174933.3784-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +61,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/11/22 19:49, Michael Straube wrote:
-> This series removes the header recv_osdep.h.
-> 
-> Tested on x86_64 with Inter-Tech DMG-02.
-> 
-> Michael Straube (3):
->    staging: r8188eu: make _netdev_open() static
->    staging: r8188eu: remove unused prototypes from recv_osdep.h
->    staging: r8188eu: remove recv_osdep.h
-> 
->   drivers/staging/r8188eu/core/rtw_br_ext.c     |  1 -
->   drivers/staging/r8188eu/core/rtw_cmd.c        |  1 -
->   drivers/staging/r8188eu/core/rtw_mlme.c       |  1 -
->   drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  1 -
->   drivers/staging/r8188eu/core/rtw_recv.c       |  1 -
->   drivers/staging/r8188eu/core/rtw_sta_mgt.c    |  1 -
->   drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  1 -
->   drivers/staging/r8188eu/hal/usb_ops_linux.c   |  1 -
->   drivers/staging/r8188eu/include/osdep_intf.h  |  3 +++
->   drivers/staging/r8188eu/include/recv_osdep.h  | 23 -------------------
->   drivers/staging/r8188eu/include/rtw_recv.h    |  3 +++
->   drivers/staging/r8188eu/os_dep/os_intfs.c     |  3 +--
->   .../staging/r8188eu/os_dep/osdep_service.c    |  1 -
->   drivers/staging/r8188eu/os_dep/usb_intf.c     |  1 -
->   14 files changed, 7 insertions(+), 35 deletions(-)
->   delete mode 100644 drivers/staging/r8188eu/include/recv_osdep.h
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.0-rc1
+head:   5edde9c71a668fbd7f3c3990fde5b6b4a00dfc9b
+commit: f87ff66fb349ec7d2840f4ebc552bfa0018cabb4 [22/30] riscv: Make virt_to_pfn() a real function
+config: riscv-randconfig-c023-20220911 (https://download.01.org/0day-ci/archive/20220912/202209120346.sFuVQArY-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=f87ff66fb349ec7d2840f4ebc552bfa0018cabb4
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.0-rc1
+        git checkout f87ff66fb349ec7d2840f4ebc552bfa0018cabb4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   init/main.o: in function `.L0 ':
+   include/trace/events/initcall.h:10:(.text+0x24): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/main.o: in function `.L0 ':
+   init/main.c:187:(.init.text+0x24): relocation truncated to fit: R_RISCV_HI20 against symbol `reset_devices' defined in .sbss section in init/main.o
+   init/main.o: in function `.L0 ':
+   arch/riscv/include/asm/atomic.h:30:(.text.unlikely+0x10): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/main.o: in function `.L0 ':
+   init/main.c:686:(.ref.text+0x28): relocation truncated to fit: R_RISCV_HI20 against `kernel_init'
+   init/version.o: in function `.L0 ':
+   include/linux/fortify-string.h:160:(.init.text+0x4c): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/do_mounts.o: in function `.L0 ':
+   init/do_mounts.c:278:(.text+0x60): relocation truncated to fit: R_RISCV_HI20 against `.LC8'
+   init/do_mounts.c:308:(.init.text+0xd8): relocation truncated to fit: R_RISCV_HI20 against `root_wait'
+   init/do_mounts.o: in function `.L0 ':
+   include/linux/mm.h:723:(.text.unlikely+0x2c): relocation truncated to fit: R_RISCV_HI20 against `.LC1'
+   init/do_mounts_initrd.o: in function `.L0 ':
+   init/do_mounts_initrd.c:45:(.init.text+0x24): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/initramfs.o: in function `.L0 ':
+   init/initramfs.c:738:(.text+0x18): relocation truncated to fit: R_RISCV_HI20 against `initramfs_cookie'
+   init/initramfs.c:58:(.init.text+0x24): additional relocation overflows omitted from the output
+   riscv64-linux-ld: crypto/rsa-pkcs1pad.o: in function `.L0 ':
+>> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
+>> riscv64-linux-ld: include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
+   riscv64-linux-ld: lib/scatterlist.o: in function `.L0 ':
+>> lib/scatterlist.c:140: undefined reference to `virt_to_pfn'
+   riscv64-linux-ld: lib/scatterlist.o: in function `.L0 ':
+>> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
+   riscv64-linux-ld: drivers/i2c/busses/i2c-qup.o: in function `.L0 ':
+>> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
+   riscv64-linux-ld: drivers/i2c/busses/i2c-qup.o:include/linux/scatterlist.h:163: more undefined references to `virt_to_pfn' follow
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
+   Selected by [y]:
+   - DRM_TTM_HELPER [=y] && HAS_IOMEM [=y] && DRM [=y]
+   - DRM_HISI_HIBMC [=y] && HAS_IOMEM [=y] && DRM [=y] && PCI [=y] && (ARM64 || COMPILE_TEST [=y])
 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+vim +163 include/linux/scatterlist.h
+
+82f66fbef58de4 Jens Axboe    2007-10-22  151  
+18dabf473e1585 Jens Axboe    2007-10-22  152  /**
+18dabf473e1585 Jens Axboe    2007-10-22  153   * sg_set_buf - Set sg entry to point at given data
+18dabf473e1585 Jens Axboe    2007-10-22  154   * @sg:		 SG entry
+18dabf473e1585 Jens Axboe    2007-10-22  155   * @buf:	 Data
+18dabf473e1585 Jens Axboe    2007-10-22  156   * @buflen:	 Data length
+18dabf473e1585 Jens Axboe    2007-10-22  157   *
+18dabf473e1585 Jens Axboe    2007-10-22  158   **/
+82f66fbef58de4 Jens Axboe    2007-10-22  159  static inline void sg_set_buf(struct scatterlist *sg, const void *buf,
+d32311fed70d12 Herbert Xu    2005-09-17  160  			      unsigned int buflen)
+d32311fed70d12 Herbert Xu    2005-09-17  161  {
+ac4e97abce9b80 Rusty Russell 2013-05-30  162  #ifdef CONFIG_DEBUG_SG
+ac4e97abce9b80 Rusty Russell 2013-05-30 @163  	BUG_ON(!virt_addr_valid(buf));
+ac4e97abce9b80 Rusty Russell 2013-05-30  164  #endif
+642f149031d704 Jens Axboe    2007-10-24  165  	sg_set_page(sg, virt_to_page(buf), buflen, offset_in_page(buf));
+d32311fed70d12 Herbert Xu    2005-09-17  166  }
+d32311fed70d12 Herbert Xu    2005-09-17  167  
+
+:::::: The code at line 163 was first introduced by commit
+:::::: ac4e97abce9b80c020e7113325f49e58b7b15e3f scatterlist: sg_set_buf() argument must be in linear mapping
+
+:::::: TO: Rusty Russell <rusty@rustcorp.com.au>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
