@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710245B519D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 00:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830BC5B51A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 00:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiIKWv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 18:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S229817AbiIKWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 18:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIKWvz (ORCPT
+        with ESMTP id S229775AbiIKWwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 18:51:55 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EEA1F616
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:51:54 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id s10so7967413ljp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yM7pyJPLpZr6W6HgiirCcLKrLf3hCJUXHi6htit82Vw=;
-        b=F4gwHKGWrQRu6pQJx8cBbxgt54jl4czoZk8Z4XVyTLguTxfbTzp6sMpZu8nIopJM2r
-         k3lLw7PnronxpJ83KSkAOswSbH5NguzrQ0aJ52dMv2/tgC7w6PtqBbJmP7e+eIzYJNjT
-         OK4AlelOQbbd0CRd1YsxqERBq/nE1HX0r5lYzhvNDmjof/ooxKnjMBkKo9XYv6k1NQbZ
-         h0ScnWs/6eZVeInjjf2LfRO0PClybPgCLZtW630AqifEb2u7Em2Z9xZvkKQ9qXSaSRNt
-         YBxlTwZezBGCrDaV5nV4tOauakGCrfS+TiblC5MYYeHeJ6SwKmVGXfiqz/2BI6Tu3EJ0
-         rVrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yM7pyJPLpZr6W6HgiirCcLKrLf3hCJUXHi6htit82Vw=;
-        b=1ktE0f8/afeJ6NTrKYM2g9tW21d/K/lOJLDDD8ByYNxdE48aOtcoOsn2HnYY95hEy1
-         Oln/0ZicKhpOZQM+WUPFTWhc/ROLM4WAJrA6gACsdh6D07IWfjfv2A3H9+7JtWPa46sL
-         OvAXm1xsH+dV33Fn8VErvd9ZlQAKOxRQEKGde7aZO/Ndb6A0Ldo1x0c3BUbSQ2PCby9f
-         r9bOjidmVtANZioyrW2p51kWute9owpsExheI0fnVzuEqTxEUKatZ2A8IMlRoddnmAsG
-         UUW75taLTb1MOLTfmK9yCC4SiCLSUXYlJo4BQIZezRbaMomvNi4kZk5VojcJ3dpk+/Wf
-         aaTA==
-X-Gm-Message-State: ACgBeo1ep4O1JVvF+8t2qZxeF1ygqCSsPvRqvQr8/sKdi6nDtc2+VJUu
-        Ydx8FpLpNYh7VPWue0knwhEHJM/l5ymlcfC5/gc=
-X-Google-Smtp-Source: AA6agR5FE2L8IC9yEVhYpJMTOZNPsrCj5VjsOUZA2VTB44ysrpFgzMSgWY/3NJH2N0zA6jcgT0doiinOz5DhHasfwHY=
-X-Received: by 2002:a2e:98ce:0:b0:26b:e763:27d1 with SMTP id
- s14-20020a2e98ce000000b0026be76327d1mr3464714ljj.306.1662936712597; Sun, 11
- Sep 2022 15:51:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <YxAq2jYvGG8QOypu@gmail.com> <87czcfhsme.fsf@email.froward.int.ebiederm.org>
- <bdff6cf478fc29c80997a623a57dae5f@ispras.ru> <874jxkcfoa.fsf@email.froward.int.ebiederm.org>
- <da95e333b4c508ddf8130f8f2d2cbb92@ispras.ru> <YxjRx3+MipdFOudw@gmail.com>
- <20220908081003.sjuerd5wiyge4jos@wittgenstein> <87v8pxa51n.fsf@email.froward.int.ebiederm.org>
- <20220909075158.ed4linrpwwabxabl@wittgenstein> <202209110810.F7352A26@keescook>
-In-Reply-To: <202209110810.F7352A26@keescook>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Sun, 11 Sep 2022 15:51:41 -0700
-Message-ID: <CANaxB-yhmfRru4+n_+Q39QpkTzZjBHqkoq3JFwAG9mXDd0bjKA@mail.gmail.com>
-Subject: Re: Potentially undesirable interactions between vfork() and time namespaces
+        Sun, 11 Sep 2022 18:52:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D691FCC2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 15:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662936735; x=1694472735;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uh6h+f5XxlUrid+mW5lRb+0HK1TmXzjsJDHaZGGayRA=;
+  b=nov1mQ6E4Hcu+grL9uS2yMnotpdKYdRDzRmZxGEKzWRoM0RYboLhk9+y
+   cUqD4TyM8HoG0ltDlPKezHOfWUfASsBtzcEs+ZcyNTMm3SetleQawXT+d
+   vkUsXuiU7P5lUsaFK6Ym4ZxOCkR33cIqUUWNQ++an2011AXJL1W++XORO
+   uZEN1nTUcoLQPoC7YzVc9mBpgHhRdE+5vIfjPaIQz45w7cELwWqXeeUSx
+   YVORgKc3qQjdionXwPq/x7CPMBpqCxO4HDrn5G8zd7SgfUT0E5XS/XLKq
+   ymZl9m9TKO7yCFrWIf/DWHymiAO6QhbK2lAkCcchob99piOs1+gcahsXy
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="299096906"
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="299096906"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 15:52:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="649060190"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Sep 2022 15:52:12 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXVoC-0001vZ-0S;
+        Sun, 11 Sep 2022 22:52:12 +0000
+Date:   Mon, 12 Sep 2022 06:52:03 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Izbyshev <izbyshev@ispras.ru>,
-        Florian Weimer <fweimer@redhat.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [linux-stable-rc:linux-5.10.y 5204/8352]
+ fs/ocfs2/cluster/heartbeat.o: warning: objtool: o2hb_setup_one_bio() falls
+ through to next function o2hb_wait_on_io()
+Message-ID: <202209120657.feDONzxI-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 8:12 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Sep 09, 2022 at 09:51:58AM +0200, Christian Brauner wrote:
-> > As stated above the proposed exec behavior we currently clearly emulate
-> > in userspace. So that part is fine.
->
-> It's not clear to me yet what the right solution is from this thread so
-> far... what's needed for v6.0 release (since we're quickly running out
-> of release candidates)?
+Hi Kees,
 
-Kees,
+FYI, the error/warning still remains.
 
-I think we reached a consensus to go with Eric's idea. We will send
-the patch shortly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   281e81a5e2b211e2ecdca7362330acf9b238a1a6
+commit: 58823a9b097cf36dd59c4d463396e15a5ec4efb7 [5204/8352] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: x86_64-randconfig-a012-20220912 (https://download.01.org/0day-ci/archive/20220912/202209120657.feDONzxI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=58823a9b097cf36dd59c4d463396e15a5ec4efb7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 58823a9b097cf36dd59c4d463396e15a5ec4efb7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ocfs2/
 
-Thanks,
-Andrei
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ocfs2/cluster/heartbeat.o: warning: objtool: o2hb_setup_one_bio() falls through to next function o2hb_wait_on_io()
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
