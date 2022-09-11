@@ -2,136 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03D95B4E98
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1965B4E9B
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiIKLwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 07:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S230115AbiIKLzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 07:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiIKLwI (ORCPT
+        with ESMTP id S229949AbiIKLy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 07:52:08 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DFE2250F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:52:06 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id f26so1913579qto.11
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=MQaM98zF6Au3ifgBX1LN9vhnn6oLk/4qb19oOxSo2ys=;
-        b=SigBH0gvrEn1MEJM6v83gDZiBN7mUjGGRt4qVaAat9iISUXJD8JcDqtiVF/84C6yXf
-         AKj/3foELjE98IRegp7cjL3MAqtx9H0Yp/UluKzROBF4yJ17gVd9gRzks01IxNrIlEV9
-         H+F4IesaKttoAQlIBWKSCYzoAZp3sZdfA3HK8fviZeLfwD8A015T4mSrc8ANPBGla0BO
-         yIO1GuLrrUIyDbSRWU7nHd5IXarxGehiiYze0OKQYJUbq52Z+DSDMGOkpKmu8ueSY+QL
-         GoxOcp01Kdj+CvQdu+8ojPRDAyD8Rj8XwxawNeV/S+h+Blac5xlAOKlnG/5aYILTED2I
-         y5pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MQaM98zF6Au3ifgBX1LN9vhnn6oLk/4qb19oOxSo2ys=;
-        b=j85rQ8P2srrA6sG0IPI48ijpaFVXOpcNgP/zIfyXotGXbzZpc6mIe0N41184WyKcEd
-         1fPQpulFOFmXf7jXP1NuiZ1VNiaWQmWSiQG2HfwKWeSw2mSLpYp+VWX7y1TMmMGNSCTY
-         UPd6evIMTTbU38OUeDAtI0eQlLnRnzbayT1nBgNz/FUmO8M3octsMhEz9UFE3bLVa3ZT
-         hfQo0JtBL9sxu/BIKG5KX2NH/lyf2QEs5c1FWtHPsTtJrWtdH4EwmFSRI/l5U9YZYPYi
-         7DRZcwCjm/X2DhMCHt8vH7EA42J7qVVZbEHt8JuSldafOSELOsvKg/ldJCbYswI0ZHni
-         8tjg==
-X-Gm-Message-State: ACgBeo1wCjnFfYAo5qe1lJg3kOjw7XQf9jRdXlFtHlu/LS0IU4LWkFFe
-        BFRdAj8TTX1iTrjUtiEJXO3P2fZfEc6rEysgFDY=
-X-Google-Smtp-Source: AA6agR59yOWQiuef4RAzd0Ue1tcPYotyEFBsUgd+CB1gxXMS9L+XZKteCqvdhwqa8jqp9+HXQehG4aJQLaCeAtS93eI=
-X-Received: by 2002:a05:622a:14d1:b0:344:b14a:b22a with SMTP id
- u17-20020a05622a14d100b00344b14ab22amr18977092qtx.203.1662897125285; Sun, 11
- Sep 2022 04:52:05 -0700 (PDT)
+        Sun, 11 Sep 2022 07:54:57 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB301276E
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1662897295; x=1694433295;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nEn8hKjiKoJTls+Eq+dMQFIVcEgOZT1PN3pCw0YzqBA=;
+  b=L76eqDwiwOnZyiWUmtldwL7YjdTvkIJsU/oxCl0sQSZI99muhuIPCmaJ
+   9tzEVQfaWy4PnBNK8E5BoNy1RDGVkHnyuw3L7M1zmAp9piZKkswGUOgYo
+   nGMhTmU0RoUL1Ykey+dyDHBfDomxcq8ALuFHYAjPZ1a+1b2XNLMfjIXaD
+   MhkWXVYGoxkh8gdpm0qly/EeEEjaWogP6FqyKFFN1YAd0ORua1UDW+vSr
+   EdlY6xEB5ZyRPW/sOixuufwrbXc+8bd/5/timfePz0//XT8MTRPsn8ie3
+   dJuanIFhvV58XGxOmC5u8t7Woq/oIRb3lVVV+x5+wLDrHScjXI2I10V57
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,307,1654531200"; 
+   d="scan'208";a="211518608"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Sep 2022 19:54:53 +0800
+IronPort-SDR: hTkFQDrU1o7RwuYb1Sl6dtiKoc3Z5YXbX6oKPJliRnagFIDQnh13fLJwLiGXlRcGfTfs0XSjO9
+ fWJKoNxTw/iFzayQULXDiiOWqwCDphtgCeFoX+0fnLoueu5p98Y+tGCpMDVtY1Ebv9ztCoAsJm
+ KJoE1FERUmbd58fYJvGcD+VHsAruAKrd+5wYhNjalKbD7cw2uEWlmEzdKaCWn+KssWFq+hVo57
+ HdY1wfaciCE3hKlvjQm1GeOYTAFcheotr73W7I/CibyUYzb27HJGZcJxXgpTdUT4zUDsZAtEfX
+ mx3KMYZ3nP/Z1sxagVXVlE5T
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2022 04:09:43 -0700
+IronPort-SDR: 1mnUHHepEJLCFhb8lnxdId8plX1yCiq/hhjjVsCoheQF0c2Umr6xneRT5A5o81Vj2jhFSe+KZy
+ PlvcysCHuBcIhDTGHvL9X9bjv5dyd29N9t2VpZWypCxpzWtonML2ns4IMUDQZ50VEsg9+yBaHl
+ sy5cj+zrHGWKOZe37p/idBc2yrvrhoKgefeRBSNt8qEFC7BCPH7vkXRvkEzDYPbyg/aKBJCyld
+ bTVVBmuvrMsBpc4vKSq7J0/1PoXoguPkzf9hH8HY0wgnukJVHukmJepAy80GGfFevvVUwoPHEN
+ uLo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2022 04:54:54 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MQSp44rcRz1Rwtl
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:54:52 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1662897291; x=1665489292; bh=nEn8hKjiKoJTls+Eq+dMQFIVcEgOZT1PN3p
+        Cw0YzqBA=; b=b//d1NznLH7uqx+zxu1XKsgYvHK8cvddlO+X+BrUSrpC87lFG91
+        d3Vpv+9exCjXUjTAyd427GRKpmiNPyT2b9ve5safOQicRcqnk8seOSfw0t5vEtEG
+        uXzVFBxsWwS96iWcRmvCeD0eSxpQl3dz6I0l0JNgDulN1P1mneK+Tg87iEeoahbF
+        E0ai0CUigyfjV+fLc8Dq5u6w7HkhzulnuoiqNxFeAyrRpWhxFJ1lbpw6WH0t9g36
+        JRWFHb8gEZD/cyRGXAAGMtE9m0qpcNcteDCN8do3aa2CcnsazsuLPok4r5Iz1YQA
+        iAE/27eukv59/gckzsodmDUuzxrZPBDt0EA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bQTHDmnOycZF for <linux-kernel@vger.kernel.org>;
+        Sun, 11 Sep 2022 04:54:51 -0700 (PDT)
+Received: from [10.225.1.43] (unknown [10.225.1.43])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MQSp04Wlsz1RvLy;
+        Sun, 11 Sep 2022 04:54:48 -0700 (PDT)
+Message-ID: <0ad5f339-de31-2849-34a1-928ae65cc696@opensource.wdc.com>
+Date:   Sun, 11 Sep 2022 20:54:46 +0900
 MIME-Version: 1.0
-References: <20220907071023.3838692-1-feng.tang@intel.com> <20220907071023.3838692-4-feng.tang@intel.com>
- <CA+fCnZeT_mYndXDYoi0LHCcDkOK4V1TR_omE6CKdbMf6iDwP+w@mail.gmail.com> <Yx1caGQ8R2alhOKh@feng-clx>
-In-Reply-To: <Yx1caGQ8R2alhOKh@feng-clx>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sun, 11 Sep 2022 13:51:54 +0200
-Message-ID: <CA+fCnZd1bDe9oQcCZjN+NTxs8qF3fzRoXcSZvyeCNxoX6U-wsg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] mm: kasan: Add free_meta size info in struct kasan_cache
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "Sang, Oliver" <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH v2] powerpc: select HAVE_PATA_PLATFORM in PPC instead of
+ creating a PPC dependency
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
+Cc:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220909090343.21886-1-lukas.bulwahn@gmail.com>
+ <21359abe-c3c9-4aa8-8ebf-75ff64cb1935@www.fastmail.com>
+ <2379456e-4f18-d619-10bf-022327de0463@csgroup.eu>
+ <4b33bffc-2b6d-46b4-9f1d-d18e55975a5a@www.fastmail.com>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <4b33bffc-2b6d-46b4-9f1d-d18e55975a5a@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 5:57 AM Feng Tang <feng.tang@intel.com> wrote:
->
-> Hi Andrey,
->
-> Thanks for reviewing this series!
->
-> On Sun, Sep 11, 2022 at 07:14:55AM +0800, Andrey Konovalov wrote:
-> > On Wed, Sep 7, 2022 at 9:11 AM Feng Tang <feng.tang@intel.com> wrote:
-> > >
-> > > When kasan is enabled for slab/slub, it may save kasan' free_meta
-> > > data in the former part of slab object data area in slab object
-> > > free path, which works fine.
-> > >
-> > > There is ongoing effort to extend slub's debug function which will
-> > > redzone the latter part of kmalloc object area, and when both of
-> > > the debug are enabled, there is possible conflict, especially when
-> > > the kmalloc object has small size, as caught by 0Day bot [1]
-> > >
-> > > For better information for slab/slub, add free_meta's data size
-> > > into 'struct kasan_cache', so that its users can take right action
-> > > to avoid data conflict.
-> > >
-> > > [1]. https://lore.kernel.org/lkml/YuYm3dWwpZwH58Hu@xsang-OptiPlex-9020/
-> > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > Signed-off-by: Feng Tang <feng.tang@intel.com>
-> > > Acked-by: Dmitry Vyukov <dvyukov@google.com>
-> > > ---
-> > >  include/linux/kasan.h | 2 ++
-> > >  mm/kasan/common.c     | 2 ++
-> > >  2 files changed, 4 insertions(+)
-> > >
-> > > diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> > > index b092277bf48d..293bdaa0ba09 100644
-> > > --- a/include/linux/kasan.h
-> > > +++ b/include/linux/kasan.h
-> > > @@ -100,6 +100,8 @@ static inline bool kasan_has_integrated_init(void)
-> > >  struct kasan_cache {
-> > >         int alloc_meta_offset;
-> > >         int free_meta_offset;
-> > > +       /* size of free_meta data saved in object's data area */
-> > > +       int free_meta_size_in_object;
-> >
-> > I thinks calling this field free_meta_size is clear enough. Thanks!
->
-> Yes, the name does look long. The "in_object" was added to make it
-> also a flag for whether the free meta is saved inside object's data
-> area.
->
-> For 'free_meta_size', the code logic in slub should be:
->
->   if (info->free_meta_offset == 0 &&
->         info->free_meta_size >= ...)
+On 2022/09/09 20:31, Arnd Bergmann wrote:
+> On Fri, Sep 9, 2022, at 1:19 PM, Christophe Leroy wrote:
+>> Le 09/09/2022 =C3=A0 13:09, Arnd Bergmann a =C3=A9crit=C2=A0:
+>>> On Fri, Sep 9, 2022, at 11:03 AM, Lukas Bulwahn wrote:
+>>>
+>>> I don't see a single powerpc machine that creates a
+>>>   name=3D"pata_platform" platform_device. I suspect this was
+>>> only needed bwfore 2007 commit 9cd55be4d223 ("[POWERPC] pasemi:
+>>> Move electra-ide to pata_of_platform"), so the "|| PPC"
+>>> bit should just get removed without adding the HAVE_PATA_PLATFORM
+>>> bit.
+>>
+>> But that was added in 2008 by commit 61f7162117d4 ("libata:=20
+>> pata_of_platform: OF-Platform PATA device driver")
+>=20
+> Ah, I see. In that case, I think we should probably just always
+> allow PATA_OF_PLATFORM to be enabled regardless of
+> HAVE_PATA_PLATFORM, something like
+>=20
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 1c9f4fb2595d..c93d97455744 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -1102,8 +1102,7 @@ config PATA_PCMCIA
+>  	  If unsure, say N.
+> =20
+>  config PATA_PLATFORM
+> -	tristate "Generic platform device PATA support"
+> -	depends on EXPERT || PPC || HAVE_PATA_PLATFORM
+> +	tristate "Generic platform device PATA support" if EXPERT || HAVE_PAT=
+A_PLATFORM
 
-I'd say you can keep the current logic and just rename the field to
-make it shorter. But up to you, I'm fine with either approach. Thanks!
+Shouldn't this be:
+
+	tristate "Generic platform device PATA support" if EXPERT || PPC
+
+?
+
+And while at it, it would be nice to add "|| COMPILE_TEST" too.
+
+>  	help
+>  	  This option enables support for generic directly connected ATA
+>  	  devices commonly found on embedded systems.
+> @@ -1112,7 +1111,8 @@ config PATA_PLATFORM
+> =20
+>  config PATA_OF_PLATFORM
+>  	tristate "OpenFirmware platform device PATA support"
+> -	depends on PATA_PLATFORM && OF
+> +	depends on OF
+> +	select PATA_PLATFORM
+>  	help
+>  	  This option enables support for generic directly connected ATA
+>  	  devices commonly found on embedded systems with OpenFirmware
+>=20
+> and then also drop the "select HAVE_PATA_PLATFORM" from
+> arm64 and arm/versatile.
+>=20
+> Or we can go one step further, and either split out the
+> 'pata_platform_driver' into a separate file from
+> '__pata_platform_probe', or merge pata_of_platform.c
+> back into pata_platform.c.
+>=20
+>       Arnd
+
+--=20
+Damien Le Moal
+Western Digital Research
+
