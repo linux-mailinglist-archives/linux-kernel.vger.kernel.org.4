@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68125B4E7F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52C95B4E82
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiIKLjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 07:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S230350AbiIKLku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 07:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiIKLjI (ORCPT
+        with ESMTP id S230133AbiIKLks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 07:39:08 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCB437FAB
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:39:07 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id XLIlo9qwZGYmzXLIloWpvx; Sun, 11 Sep 2022 13:39:05 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Sep 2022 13:39:05 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        James Chapman <jchapman@katalix.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH] headers: Remove some left-over license text
-Date:   Sun, 11 Sep 2022 13:39:01 +0200
-Message-Id: <0e5ff727626b748238f4b78932f81572143d8f0b.1662896317.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 11 Sep 2022 07:40:48 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE9E356EF;
+        Sun, 11 Sep 2022 04:40:44 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1662896435t3wpl56d
+Received: from localhost.localdomain ( [182.148.14.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 11 Sep 2022 19:40:34 +0800 (CST)
+X-QQ-SSF: 01000000002000E0G000B00A0000000
+X-QQ-FEAT: 83ShfzFP0oCS9RCHpkBXn9KTMohWsUEWJPYARlmVinaDtrsRT3tZlkmzTVDls
+        AmWdje4lropRfcVZlL7B/CT7H2QeHtHsZKU0zTJ265dUcJPC7RHgImySQ4oE/xV8KBaD3as
+        BOWrwak3xjSGm2xnJKDqfA1DICssHEvBYFFc8416Z4Do99E9C1+QLDAfaP3QsS/lrnXVclQ
+        8pD3TNFyswcyFKYZR80VgfmATZSpGaS9bnEYS6DJsxXJhyURGp5iR7Pqc6226qL9CVCwpeA
+        mJTaOSBcb1Z/o19NCuuasYrEzrYpoKwOSNTEy+BC4bW1Lilgl7KrE/xBMDSqqpnloK9q0dQ
+        2HoAHNPwrgPLf6OlCGkhC4qS5m1GFik7iJVfyjew07lY9+u/4t5TwkhCXnxIw==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     mikecyr@linux.ibm.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] scsi: ibmvscsis: fix repeated words in comments
+Date:   Sun, 11 Sep 2022 19:40:27 +0800
+Message-Id: <20220911114027.14615-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove a left-over from commit 2874c5fd2842 ("treewide: Replace GPLv2
-boilerplate/reference with SPDX - rule 152")
+Delete the redundant word 'the'.
+Delete the redundant word 'to'.
 
-There is no need for an empty "License:".
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- include/linux/if_pppol2tp.h | 2 --
- include/linux/if_pppox.h    | 2 --
- 2 files changed, 4 deletions(-)
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/if_pppol2tp.h b/include/linux/if_pppol2tp.h
-index 96d40942e5a3..c87efd333faa 100644
---- a/include/linux/if_pppol2tp.h
-+++ b/include/linux/if_pppol2tp.h
-@@ -4,8 +4,6 @@
+diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+index eee1a24f7e15..0e253f961c6c 100644
+--- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
++++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+@@ -401,7 +401,7 @@ static long ibmvscsis_check_init_msg(struct scsi_info *vscsi, uint *format)
+  * and the driver is requesting that the command queue be de-registered
+  * in a safe manner. If there is no outstanding I/O then we can stop the
+  * queue. If we are restarting the queue it will be reflected in the
+- * the state of the adapter.
++ * state of the adapter.
   *
-  * This file supplies definitions required by the PPP over L2TP driver
-  * (l2tp_ppp.c).  All version information wrt this file is located in l2tp_ppp.c
-- *
-- * License:
-  */
- #ifndef __LINUX_IF_PPPOL2TP_H
- #define __LINUX_IF_PPPOL2TP_H
-diff --git a/include/linux/if_pppox.h b/include/linux/if_pppox.h
-index 69e813bcb947..ff3beda1312c 100644
---- a/include/linux/if_pppox.h
-+++ b/include/linux/if_pppox.h
-@@ -5,8 +5,6 @@
-  *
-  * This file supplies definitions required by the PPP over Ethernet driver
-  * (pppox.c).  All version information wrt this file is located in pppox.c
-- *
-- * License:
-  */
- #ifndef __LINUX_IF_PPPOX_H
- #define __LINUX_IF_PPPOX_H
+  * EXECUTION ENVIRONMENT:
+  *	Process environment
+@@ -444,7 +444,7 @@ static void ibmvscsis_disconnect(struct work_struct *work)
+ 		break;
+ 
+ 	/*
+-	 * Can transition from this state to to unconfiguring
++	 * Can transition from this state to unconfiguring
+ 	 * or err disconnect.
+ 	 */
+ 	case ERR_DISCONNECT_RECONNECT:
 -- 
-2.34.1
+2.36.1
 
