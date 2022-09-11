@@ -2,201 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5265B4FE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68225B4FF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiIKQNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 12:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S229585AbiIKQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 12:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIKQMz (ORCPT
+        with ESMTP id S229464AbiIKQUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 12:12:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAD12B190;
-        Sun, 11 Sep 2022 09:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662912773; x=1694448773;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=e1njG/ms4c7Wt/dFm1QalGUQME5inUMeKY7ULkgCdQo=;
-  b=hLKmH9cX0XH1p94zlx2JwUtgiy3EMOcILwmyXw15BBRL+/gmAf6t16bm
-   LEEw3H9H6TnEkNf+6Xh6QY4z/2/1A2kcTbf4+x5w9x6hpqU5zDYHJIqMI
-   otqUzTCHKt4SBfVfLshXdbsz6Ssfck7XYB8vo0SgjsIndYTlwd641gOAv
-   w6rTRNfCtjwFQ3wGOdji3ocNx0QeLszbNUBv+6dnA5iVwy3obCe7/AXl0
-   d+X4oa1/Q3vGaeWcF8VL0auClUT/8G6p8GgJ/zsB0I41rtRzpOu588C2V
-   W0b6XTSU/bZbffltNPntzTkFCUzfHCS+wAIxDiozqvTAOz0v4ZjA2Uv24
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="297736409"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="297736409"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:12:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="566918308"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:12:53 -0700
-Date:   Sun, 11 Sep 2022 09:13:13 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v1 2/5] fpga: dfl: Move the DFH definitions
-In-Reply-To: <Yx2Wn7LR6O6ilXae@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2209110909450.142336@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-3-matthew.gerlach@linux.intel.com> <Yx2Wn7LR6O6ilXae@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sun, 11 Sep 2022 12:20:02 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814CF13CDA
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 09:20:01 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id r17so14955213ejy.9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 09:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/TGKUFp4Rbs92WA6usXfMvWSPRyltn47twUf2C6Q1X8=;
+        b=dFVmMNfXALglYwsdXIPXJ68QMJ+5jyaUzrAQjh/6vqEMm4zRioMty4Lo1Ognup+iN6
+         Zr4XDH9A94lnq2XU1fPZ0NWHA8yx7ZBE2VsiGjoy5A2XYdSArtc7zdYg4LOofggNGKg2
+         VwYNaXYZZD1xhZUd80lmS5rJWB4USHD47COJ6mm0pVNgaUDTy1GoL/iW92S36Ul9fMjM
+         dsh7DlfPwnBexHuNnb7gmLGUuEEx8HvWk1sPOwE7x7/5BJ3HRmw8V8CHD73AuEk9Ga23
+         Jwi+zgTbsYpTzm/mwibI1j4+dKm3b/cHoR33ErGubybdxZcrCrb6FamGjHvldTEGJNYv
+         wB4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/TGKUFp4Rbs92WA6usXfMvWSPRyltn47twUf2C6Q1X8=;
+        b=II9KY5PAjV6WwuE1zSUtOkKpFpnEyvlxrajqkPG4wXUfrKr2PFXedYZ13GhzvRSxmY
+         tPbbNqnElYwdhQSo9OrZPG6WQycHzqyN9ozwwhYt/j0W5cwwhn8FGV7CI1chfj2g/KBJ
+         toQ6+2CeQg8FirrVMrxwVn5I3s9ERjHWI/d3Hdcbka6D+t/SSLzYAcmf3AsncJuGP6Ej
+         CuOYTllJiGCuM1ZxYLwD1e9aHfNTJiXIYuYgYN+raDQtmrHpPGvvxIxy/hFThoi2VLsT
+         K/zRzveeA5QbsoNCmWyrq+SDttFmyMPLL/N9E06vENOIpocNmZMXOX9egbCGkzNC+fou
+         vYnQ==
+X-Gm-Message-State: ACgBeo0H5wSrpDNpuUbbgz560uKXma9zUTsU9Ywti49erNT45v0UUbGd
+        lSO+g5S4vnZ/S3qQNIlR6k4=
+X-Google-Smtp-Source: AA6agR47JfPP+uvrRjdrr/oVnIhSpbAwANtcJA58FfLAKIwHgzOZMKtxFA+ojR5DelxbWeaQSW7cug==
+X-Received: by 2002:a17:907:782:b0:740:7120:c6e7 with SMTP id xd2-20020a170907078200b007407120c6e7mr15968189ejb.313.1662913200091;
+        Sun, 11 Sep 2022 09:20:00 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
+        by smtp.gmail.com with ESMTPSA id bt6-20020a170906b14600b00779dc23be62sm3055346ejb.120.2022.09.11.09.19.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Sep 2022 09:19:59 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/6] staging: r8188eu: some coding style cleanups
+Date:   Sun, 11 Sep 2022 18:19:43 +0200
+Message-Id: <20220911161949.11293-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series contains some coding style cleanups in the file
+odm_HWConfig.c.
 
+Michael Straube (6):
+  staging: r8188eu: rename odm_SignalScaleMapping()
+  staging: r8188eu: clean up camel case in odm_signal_scale_mapping()
+  staging: r8188eu: remove unnecessary initialization
+  staging: r8188eu: rename odm_QueryRxPwrPercentage()
+  staging: r8188eu: clean up camel case in odm_query_rxpwrpercentage()
+  staging: r8188eu: replace tabs with space in
+    odm_query_rxpwrpercentage()
 
-On Sun, 11 Sep 2022, Xu Yilun wrote:
+ drivers/staging/r8188eu/hal/odm_HWConfig.c | 60 +++++++++++-----------
+ 1 file changed, 30 insertions(+), 30 deletions(-)
 
-> On 2022-09-06 at 12:04:23 -0700, matthew.gerlach@linux.intel.com wrote:
->> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
->>
->> Moving the DFH register offset and register definitions from
->> drivers/fpga/dfl.h to include/linux/dfl.h.  These definitions
->> need to be accessed by dfl drivers that are outside of
->> drivers/fpga.
->>
->> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->>  drivers/fpga/dfl.h  | 22 ++--------------------
->>  include/linux/dfl.h | 23 ++++++++++++++++++++++-
->>  2 files changed, 24 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
->> index 06cfcd5e84bb..d4dfc03a0b61 100644
->> --- a/drivers/fpga/dfl.h
->> +++ b/drivers/fpga/dfl.h
->> @@ -2,7 +2,7 @@
->>  /*
->>   * Driver Header File for FPGA Device Feature List (DFL) Support
->>   *
->> - * Copyright (C) 2017-2018 Intel Corporation, Inc.
->> + * Copyright (C) 2017-2022 Intel Corporation, Inc.
->>   *
->>   * Authors:
->>   *   Kang Luwei <luwei.kang@intel.com>
->> @@ -17,6 +17,7 @@
->>  #include <linux/bitfield.h>
->>  #include <linux/cdev.h>
->>  #include <linux/delay.h>
->> +#include <linux/dfl.h>
->>  #include <linux/eventfd.h>
->>  #include <linux/fs.h>
->>  #include <linux/interrupt.h>
->> @@ -53,28 +54,9 @@
->>  #define PORT_FEATURE_ID_UINT		0x12
->>  #define PORT_FEATURE_ID_STP		0x13
->>
->> -/*
->> - * Device Feature Header Register Set
->> - *
->> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
->> - * For AFUs, they have DFH + GUID as common header registers.
->> - * For private features, they only have DFH register as common header.
->> - */
->> -#define DFH			0x0
->> -#define GUID_L			0x8
->> -#define GUID_H			0x10
->> -#define NEXT_AFU		0x18
->> -
->> -#define DFH_SIZE		0x8
->> -
->>  /* Device Feature Header Register Bitfield */
->> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
->>  #define DFH_ID_FIU_FME		0
->>  #define DFH_ID_FIU_PORT		1
->> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->> -#define DFH_EOL			BIT_ULL(40)		/* End of list */
->> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->>  #define DFH_TYPE_AFU		1
->>  #define DFH_TYPE_PRIVATE	3
->>  #define DFH_TYPE_FIU		4
->> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
->> index 431636a0dc78..b5accdcfa368 100644
->> --- a/include/linux/dfl.h
->> +++ b/include/linux/dfl.h
->> @@ -2,7 +2,7 @@
->>  /*
->>   * Header file for DFL driver and device API
->>   *
->> - * Copyright (C) 2020 Intel Corporation, Inc.
->> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
->>   */
->>
->>  #ifndef __LINUX_DFL_H
->> @@ -11,6 +11,27 @@
->>  #include <linux/device.h>
->>  #include <linux/mod_devicetable.h>
->>
->> +/*
->> + * Device Feature Header Register Set
->> + *
->> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
->> + * For AFUs, they have DFH + GUID as common header registers.
->> + * For private features, they only have DFH register as common header.
->> + */
->> +#define DFH			0x0
->> +#define GUID_L			0x8
->> +#define GUID_H			0x10
->> +#define NEXT_AFU		0x18
->
-> Now these macros are accessible in global kernel, should we add the
-> DFL_ or DFH_ prefix for them?
->
-> Thanks,
-> Yilun
+-- 
+2.37.3
 
-It does make sense to a DFL_ or DFH_ to these globabl macros, but I'll 
-look again to see if the ones above really need to be global, where as the 
-macros below definitely need to be global.  I also think a marco like 
-DFL_DFH might be a little strange.
-
-Thanks,
-Matthew Gerlach
-
-8>
->> +
->> +#define DFH_SIZE		0x8
->> +
->> +/* Device Feature Header Register Bitfield */
->> +#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
->> +#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->> +#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->> +#define DFH_EOL			BIT_ULL(40)		/* End of list */
->> +#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->> +
->>  /**
->>   * enum dfl_id_type - define the DFL FIU types
->>   */
->> --
->> 2.25.1
->>
->
