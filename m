@@ -2,130 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE505B4EDA
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BDA5B4EE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 14:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiIKMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 08:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S230192AbiIKM6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 08:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiIKMoW (ORCPT
+        with ESMTP id S229981AbiIKM63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 08:44:22 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A073340C
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:44:20 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id z23so7572847ljk.1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 05:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=VXlBS00/GuegNihbP9LSEb4G+N9nTOzbXeMOhsINvjI=;
-        b=XpoArl7ff1h6D0gSVSU/rP94OJvGVV117RL7aC0lFzwT/82bFY0Rp3sLV2aPWEyoWV
-         +kBMt//uXEFJKIsQAVug9jbFK6wbHUZfYBVG2XmxkrJvUAuNLilLQfDM9ObO0vJDn3HP
-         uFh3DiEwN55E9ybN4w+SDX9CLwOe7e40EMpDWA7aVffh5XjRhFAfOuV+7HbyoKw6znVt
-         rKLJDoSsdTROphrV4PM+7ZHIXHSFvCgdnBJOVRXSllAsh8JM+x3h7D0Ou2AOcDjGPi/D
-         vHpTd80+Zwc++L7Q+0oUv7qBJGuysMWf2K/hXvPfawx2n/gcdvo58omvf5AOyhbjZv+A
-         dVKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VXlBS00/GuegNihbP9LSEb4G+N9nTOzbXeMOhsINvjI=;
-        b=1PSOJdUWXKisSUVG+sc5Cwi8nxcvmb4g9edHVDG5C4Yqf2xWIJ8xXJrbwuE5mjkTWW
-         iDCOxydgt9E1qvAnr62CbxoivxSa8giUehzyUZ6OPoPq56sPRhoqhS/VoNQtnsnxbSCz
-         X26rs7FNOfxQOGCjKJe2g1llWFCPQpHJkwKkloHGjxSsiPKibjD3t8glzD6MjhZ3TRKa
-         DH3yZA8sI3+AKm14NK78D7ZqXAD3esvmPgukw46ckVaVsU6q/vyc5u3AkWxAezmyYqY0
-         jpag51ar9KkAxZL3/1jrfFUIaNK8+IiBSOWPcaOjsCZ2qn/ueCVZu7GfzxXv77nSOmzz
-         0RSA==
-X-Gm-Message-State: ACgBeo14WN3RjH8vBrhI6VEuDunKnchcU4ZIGwxk704IZynRu28WElqB
-        +A3mlRiG0GWYzmblS2wSo+L/+Awik8U+x7b1rw==
-X-Google-Smtp-Source: AA6agR77d5mBO13s3Dzm+PerpQco5W1DQHqkbuy03uqkYDXSOzpkZ7ShT0NoyIN3jSCSmY4n3fHtzf4FUq4tY7Jany4=
-X-Received: by 2002:a2e:b8cd:0:b0:261:e189:710 with SMTP id
- s13-20020a2eb8cd000000b00261e1890710mr6244703ljp.331.1662900258858; Sun, 11
- Sep 2022 05:44:18 -0700 (PDT)
+        Sun, 11 Sep 2022 08:58:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DB52250E;
+        Sun, 11 Sep 2022 05:58:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CE050CE0B66;
+        Sun, 11 Sep 2022 12:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B819C433D6;
+        Sun, 11 Sep 2022 12:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662901101;
+        bh=5pJPTMNJ5+OElsd2lfD1/7XCGfw/8/wjX2/SJBtX6dc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H/f2Q9GZUUjdulHdonqjUh0XkSa0hh6y7LrCaZoiIalUTU/ncEa1JNDyvY3CXRUzb
+         eouebK/Xa3nZqcm9EVYRVNuxwU+nCzhNxXclivv3Vf1gZsQTMAvyVvFQUxYk3nFUnk
+         e42A18EwT6ZnaVh7NrKoGb99spI/o4EEZL6Da0ORC0JsTukjIc6omPzsHzKNmqUO7g
+         1fK9Bv46qhBqnUiHypM+Dc22bQjBiyoPH2Xn4xLNm78xnQCS920VhHnHoQ+LuIyE4L
+         3Ub7b+bWIiLxejkK13qMk2cAGzc2y0ZjLne2dlyWcJuYk10Ahq7NDqX4ibSbxY+IT8
+         AXv3F/Qyp1qGw==
+Received: by pali.im (Postfix)
+        id 5DA7D878; Sun, 11 Sep 2022 14:58:18 +0200 (CEST)
+Date:   Sun, 11 Sep 2022 14:58:18 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+Message-ID: <20220911125818.qe4j6gwbz423m2xt@pali>
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
+ <20220906211628.6u4hbpn4shjcvqel@pali>
+ <Yxe7CJnIT5AiUilL@google.com>
+ <20220906214114.vj3v32dzwxz6uqik@pali>
+ <YxfBKkqce/IQQLk9@google.com>
+ <20220906220901.p2c44we7i4c35uvx@pali>
+ <YxfMkzW+5W3Hm1dU@google.com>
 MIME-Version: 1.0
-Sender: lyrilhill@gmail.com
-Received: by 2002:a05:651c:1508:0:0:0:0 with HTTP; Sun, 11 Sep 2022 05:44:17
- -0700 (PDT)
-From:   Mrs Aisha Gaddafi <aishagaddafiaisha20@gmail.com>
-Date:   Sun, 11 Sep 2022 05:44:17 -0700
-X-Google-Sender-Auth: 58evqtI_f4UPoeLUgBMxyxSIhKY
-Message-ID: <CAGU6a+3FDPC_L6Umfy2j_MT1z=8G+pfyJwU_5MhfbdawcKrMSQ@mail.gmail.com>
-Subject: GOOD DAY MY DEAR.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
-        MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxfMkzW+5W3Hm1dU@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:234 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lyrilhill[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  2.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.8 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm writing this letter with tears  from my heart. Please let me use
-this medium to create a mutual conversation with you seeking for your
-acceptance towards investing in your country under your management as
-my  business partner, My name is Aisha  Gaddafi and presently living
-in Oman, i am a Widow and single Mother with three Children, the only
-biological Daughter of late Libyan President (Late Colonel Muammar
-Gaddafi) and presently i am under political asylum protection by the
-Omani Government.
+On Tuesday 06 September 2022 15:41:23 Dmitry Torokhov wrote:
+> Linus, do you think we should introduce GPIOD_OUT_INACTIVE /
+> GPIOD_OUT_ACTIVE or GPIOD_OUT_DEASSERTED / GPIOD_OUT_ASSERTED and
+> deprecate existing GPIOD_OUT_LOW and GPIO_OUT_HIGH?
 
-I have funds worth " Seven Million Five Hundred Thousand United State
-Dollars" [$7.500.000.00 US Dollars] which I want to entrust to you for
-investment projects in your country. If you are willing to handle this
-project on my behalf, kindly reply urgent to enable me provide you
-more details to start the transfer process, I will appreciate your
-urgent response through my private email address below:
-
-aishagaddafiaisha20@gmail.com
-
-You can know more through the BBC news links below:
-
-http://www.bbc.com/news/world-africa-19966059
-
-
-Thanks
-Yours Truly Aisha
-aishagaddafiaisha20@gmail.com
++1 for GPIOD_OUT_INACTIVE / GPIOD_OUT_ACTIVE. It is less misleading than GPIOD_OUT_LOW.
