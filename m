@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895495B4C94
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9D55B4C9B
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 10:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiIKIO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 04:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S229895AbiIKIVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 04:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIKIOZ (ORCPT
+        with ESMTP id S229732AbiIKIVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 04:14:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D183ED68;
-        Sun, 11 Sep 2022 01:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662884064; x=1694420064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1Z2dBzAu07oRdKDsfU/Mjkd7mvup6KYmOABUCmSZYLI=;
-  b=gqpwlZJvzbcZxqzaBs43xDjSgSSfpfpjiKajCgBpPa+1VGADYpxE6Jk8
-   Prv/DOTsXGyK97V4MbB+mG8w0KO/tmjo1N/5b5H5NJWTcq7B43otQT+82
-   FDr09hMvmOhB2pycGeJPKVBx+YmVIGWZNGeylatbShIgddh0WXS3kOKTn
-   ut4ExbkC9oxgHsg+IOe303k3plTXlghR5kBXLneGD3r7DXxe2wA+9ec1G
-   MLP/RVRhsF7yA7up8Uk+SsSzTAvOqIrKCJYw9cLRofrfVRe9UW7XgMpnW
-   ACAeeRCguAME82iYGBk4R8y5Ku25r6IMNEePs+y5iJ46J098dzFa/zKog
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="295288059"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="295288059"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 01:14:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="677708059"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Sep 2022 01:14:19 -0700
-Date:   Sun, 11 Sep 2022 16:04:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v1 2/5] fpga: dfl: Move the DFH definitions
-Message-ID: <Yx2Wn7LR6O6ilXae@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-3-matthew.gerlach@linux.intel.com>
+        Sun, 11 Sep 2022 04:21:30 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6B627148
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:21:26 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id k10so10018699lfm.4
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 01:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6zmGVdl11b0ROAYxJ+gThLkfrhcRSy/y+Qy1x8CThhk=;
+        b=nDwGrgcnx+keVT3odto1xVqLJ+66LZ8HDgiH7wW8CrzwTOv4pckH668zS/bDdSiTBw
+         Srv0Q42Qzr8FB/tKKZ17vnZU13bb4gnpkkPW5unaeWOIOLWqOUs5LBpili1JzIQJIMt5
+         e6YZi7AYxbqhbpDFcclG5wSmr3UeZhXzS8GSGHpr6Gyt34tb9UtAsyWDC0Sls9tuMpzB
+         ecT2k45NBYNNiUxX5cldvKJfb3rWwVo1jCk3QIWrxAA6WgfLU0CINS7bm3tnZDwGsjCV
+         /pfh3c2Z10/k0Q5tyL7cJuYSh/BIl5ReDo4xNN09Vr+Xo69Afbp4RH3nRmNV58OAXCXX
+         yUKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6zmGVdl11b0ROAYxJ+gThLkfrhcRSy/y+Qy1x8CThhk=;
+        b=aSdmGeJh10C+92impRRcCFqsGMimsE0i39bmMaebqO1ftvfm5KYz+BFIjUqj7OIvOB
+         Jip+ZhdDycMJXQc4Us6uAdOo5lGwpDmbKYs/inkz4vJvCroUINJ2SfhJ+Jh8F9JXkcsQ
+         frsY0MzEvAOGO9GzL+TbUihdOZbZ9727UrloAZ7+LQPTE4pcfN+t9Ypm8x8dsFDJSKvo
+         XVtsODtNzsMScm0C+m6tbFa+rjCKg+EDvk8/U8wovpUwCsA2wAaV+a9jXi7hkTMqhHuZ
+         kX81o5C92ggPig1P0e++gNAac0g/LApP9hxxBoAuaVNosbSfNpL3dkt6t9oVr4AAoxt9
+         kfiw==
+X-Gm-Message-State: ACgBeo2oWm8b2vcXtzlT53eNxuIEIFBOpENWTINb70NrJ6vFTje0hSJE
+        UvPRCeEOecM6VVJPGfQ98HGAWQ==
+X-Google-Smtp-Source: AA6agR4aRzDrW4zZC9GGeuLpHwH2RX8bvSmlMmS16jge3BxxOtj4fsVpMVMp/7gf0vo0+kIC37bM6Q==
+X-Received: by 2002:a05:6512:33c4:b0:492:cdb1:f5c2 with SMTP id d4-20020a05651233c400b00492cdb1f5c2mr6808363lfg.406.1662884484821;
+        Sun, 11 Sep 2022 01:21:24 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056512370500b0049901524a73sm533798lfr.114.2022.09.11.01.21.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 01:21:24 -0700 (PDT)
+Message-ID: <60327375-abcc-73d0-6280-ad82af31f145@linaro.org>
+Date:   Sun, 11 Sep 2022 10:21:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-3-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 1/9] dt-bindings: ufs: qcom: Add sm6115 binding
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-2-iskren.chernev@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220910143213.477261-2-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,119 +85,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 at 12:04:23 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+On 10/09/2022 16:32, Iskren Chernev wrote:
+> Add SM6115 UFS to DT schema.
 > 
-> Moving the DFH register offset and register definitions from
-> drivers/fpga/dfl.h to include/linux/dfl.h.  These definitions
-> need to be accessed by dfl drivers that are outside of
-> drivers/fpga.
-> 
-> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 > ---
->  drivers/fpga/dfl.h  | 22 ++--------------------
->  include/linux/dfl.h | 23 ++++++++++++++++++++++-
->  2 files changed, 24 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 06cfcd5e84bb..d4dfc03a0b61 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -2,7 +2,7 @@
->  /*
->   * Driver Header File for FPGA Device Feature List (DFL) Support
->   *
-> - * Copyright (C) 2017-2018 Intel Corporation, Inc.
-> + * Copyright (C) 2017-2022 Intel Corporation, Inc.
->   *
->   * Authors:
->   *   Kang Luwei <luwei.kang@intel.com>
-> @@ -17,6 +17,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/cdev.h>
->  #include <linux/delay.h>
-> +#include <linux/dfl.h>
->  #include <linux/eventfd.h>
->  #include <linux/fs.h>
->  #include <linux/interrupt.h>
-> @@ -53,28 +54,9 @@
->  #define PORT_FEATURE_ID_UINT		0x12
->  #define PORT_FEATURE_ID_STP		0x13
->  
-> -/*
-> - * Device Feature Header Register Set
-> - *
-> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> - * For AFUs, they have DFH + GUID as common header registers.
-> - * For private features, they only have DFH register as common header.
-> - */
-> -#define DFH			0x0
-> -#define GUID_L			0x8
-> -#define GUID_H			0x10
-> -#define NEXT_AFU		0x18
-> -
-> -#define DFH_SIZE		0x8
-> -
->  /* Device Feature Header Register Bitfield */
-> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
->  #define DFH_ID_FIU_FME		0
->  #define DFH_ID_FIU_PORT		1
-> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
-> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
-> -#define DFH_EOL			BIT_ULL(40)		/* End of list */
-> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->  #define DFH_TYPE_AFU		1
->  #define DFH_TYPE_PRIVATE	3
->  #define DFH_TYPE_FIU		4
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 431636a0dc78..b5accdcfa368 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -2,7 +2,7 @@
->  /*
->   * Header file for DFL driver and device API
->   *
-> - * Copyright (C) 2020 Intel Corporation, Inc.
-> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
->   */
->  
->  #ifndef __LINUX_DFL_H
-> @@ -11,6 +11,27 @@
->  #include <linux/device.h>
->  #include <linux/mod_devicetable.h>
->  
-> +/*
-> + * Device Feature Header Register Set
-> + *
-> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
-> + * For AFUs, they have DFH + GUID as common header registers.
-> + * For private features, they only have DFH register as common header.
-> + */
-> +#define DFH			0x0
-> +#define GUID_L			0x8
-> +#define GUID_H			0x10
-> +#define NEXT_AFU		0x18
+>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
 
-Now these macros are accessible in global kernel, should we add the
-DFL_ or DFH_ prefix for them?
 
-Thanks,
-Yilun
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +
-> +#define DFH_SIZE		0x8
-> +
-> +/* Device Feature Header Register Bitfield */
-> +#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
-> +#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
-> +#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
-> +#define DFH_EOL			BIT_ULL(40)		/* End of list */
-> +#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
-> +
->  /**
->   * enum dfl_id_type - define the DFL FIU types
->   */
-> -- 
-> 2.25.1
-> 
+
+Best regards,
+Krzysztof
