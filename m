@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC995B514F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCED15B5151
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIKVUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 17:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S229748AbiIKVVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 17:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIKVUP (ORCPT
+        with ESMTP id S229510AbiIKVVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 17:20:15 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CFC18365;
-        Sun, 11 Sep 2022 14:20:13 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id go34so15949495ejc.2;
-        Sun, 11 Sep 2022 14:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=KVt9Uyft/E21p0hWag8KEVJdTkCMY+n74W7H1HgusJI=;
-        b=oACUNPspfdMBHHKbJyj/sh6VnWNfkG+yN8hBMBC1qGV38/zgimguacYJXYS6IGbmyb
-         h5oydXvdFFiqr1CLT8AEKcL6BiRlCcKm5lrUyJzMul0O7WMPf5Tv/SUkJ+EolUfTUvwG
-         nlY9858p6MdhM4H4gIxvc97whUBSHSLELy4POmJe/cnCqJnDLXOEVRwadpvQbuypt4wt
-         3EUtK+tjZyH/Ml1Z2w0dgeshpQuAApayFlvL8NvD1VDQKSkQB9LSZGqv27QRwyogqmaQ
-         e2+xPX/22AHvWe/jmZEjLDreFuJhCsas0y403g6nDTLoymdPt22xNlA1MPY8y/ZlFqFh
-         /Xjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=KVt9Uyft/E21p0hWag8KEVJdTkCMY+n74W7H1HgusJI=;
-        b=nDlZpjej21DWFqwzkHz4jQJTgKwL6u5AwRJ6I0jGlCxDlwupWBMwVMIah5x9ueut97
-         rTqsBrif6H7GLNGJe7BGWez1BGwYbDM95HClVKR9Lozb9jpF8fNLw7t0Brt1MEF1w+Kq
-         Xynih68MhLSADYpPVXcHygUrpOHirK8ONILs7XhZRDpTpmalGeWUYphbyEtH0J+vr51p
-         qkVhUlqSltDGZ3lrKyZZUv3P42rHUL8fL/3fomjeAYIuLkiZ1dY5x7DBo2XaFFVymTmz
-         /R3dju1l6IljdgmiPwnd4L7J4SpH3bmOj9pPVHf1kYHapQWN5GdXlkdsdxpsAo6xKjAQ
-         cQpg==
-X-Gm-Message-State: ACgBeo28TG8yLndIFwx4KsNY3VnPk265s9g8OFXokxoBCF95YUk9mEw1
-        G76ooMnFZRVRFjqNfJeFhvdc549Tpy4=
-X-Google-Smtp-Source: AA6agR49ZY8ZeQPl1KfjMRig98o0lBzeHgAs3S20hN85CmuYt2HxrF4h53upXO3Y6Alsfu+RCkXthg==
-X-Received: by 2002:a17:906:9c82:b0:6e1:1d6c:914c with SMTP id fj2-20020a1709069c8200b006e11d6c914cmr16376286ejc.769.1662931212202;
-        Sun, 11 Sep 2022 14:20:12 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id g22-20020a170906539600b0072f4f4dc038sm3432711ejo.42.2022.09.11.14.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 14:20:11 -0700 (PDT)
-Message-ID: <76d87f49-6a44-0a05-c9dc-af870fade924@gmail.com>
-Date:   Sun, 11 Sep 2022 23:20:10 +0200
+        Sun, 11 Sep 2022 17:21:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897F518B21
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662931271; x=1694467271;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0Sf+GBjhkRoF+sqR5wv3WqZ1Cd0NCbnAVLknq9A1cCM=;
+  b=iyH+n9Hb1pLVNBTK0cL40+6KyzuMOCYA30vjEDDEcme987q8CDr4v5M1
+   GFv+C3NBiBKvq8sF/bs3lHqge6waMAci/nxsaWt9SVtHUQ1tqMVO5Iez9
+   4K/X6/B8jr8UPe5catO3mdLb+FkcP03Iqf7Nye7dCfFAEyKJKj5jGReEx
+   M7vkv694x+Cqoy7Y/V4ASd5MdzMEd/6OXUY0gTt+SVIMMFyZChfDrds7n
+   6MJSIoAP3xVMNBa/hkHieCctG3RQ6U0nsbQ2UOSf9USruP7kl1DMMU3qV
+   mdZDhmMw/c2o8uNdTGXizS9BLc4wc7U7xaC67A3KOF3Ow1HN2ybDbDePI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="298553428"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="298553428"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 14:21:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="758184900"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2022 14:21:09 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXUO4-0001qP-2P;
+        Sun, 11 Sep 2022 21:21:08 +0000
+Date:   Mon, 12 Sep 2022 05:20:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.15 62/102] arch/arm/mach-at91/pm.c:370:38:
+ error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
+Message-ID: <202209120522.AOuxSu1o-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1] dt-bindings: clock: convert rockchip,rk3128-cru.txt to
- YAML
-To:     heiko@sntech.de
-Cc:     zhangqing@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,159 +62,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip,rk3128-cru.txt to YAML.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   58b6ddd0dfd470c48feef1d58e9151373f59e315
+commit: 4e1102de88e91852e109ab98731f9cd1f0c7286f [62/102] ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220912/202209120522.AOuxSu1o-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=4e1102de88e91852e109ab98731f9cd1f0c7286f
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout 4e1102de88e91852e109ab98731f9cd1f0c7286f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- .../bindings/clock/rockchip,rk3128-cru.txt    | 58 ---------------
- .../bindings/clock/rockchip,rk3128-cru.yaml   | 73 +++++++++++++++++++
- 2 files changed, 73 insertions(+), 58 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-deleted file mode 100644
-index 6f8744fd3..000000000
---- a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-+++ /dev/null
-@@ -1,58 +0,0 @@
--* Rockchip RK3126/RK3128 Clock and Reset Unit
--
--The RK3126/RK3128 clock controller generates and supplies clock to various
--controllers within the SoC and also implements a reset controller for SoC
--peripherals.
--
--Required Properties:
--
--- compatible: should be "rockchip,rk3126-cru" or "rockchip,rk3128-cru"
--  "rockchip,rk3126-cru" - controller compatible with RK3126 SoC.
--  "rockchip,rk3128-cru" - controller compatible with RK3128 SoC.
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- #clock-cells: should be 1.
--- #reset-cells: should be 1.
--
--Optional Properties:
--
--- rockchip,grf: phandle to the syscon managing the "general register files"
--  If missing pll rates are not changeable, due to the missing pll lock status.
--
--Each clock is assigned an identifier and client nodes can use this identifier
--to specify the clock which they consume. All available clocks are defined as
--preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
--used in device tree sources. Similar macros exist for the reset sources in
--these files.
--
--External clocks:
--
--There are several clocks that are generated outside the SoC. It is expected
--that they are defined using standard clock bindings with following
--clock-output-names:
-- - "xin24m" - crystal input - required,
-- - "ext_i2s" - external I2S clock - optional,
-- - "gmac_clkin" - external GMAC clock - optional
--
--Example: Clock controller node:
--
--	cru: cru@20000000 {
--		compatible = "rockchip,rk3128-cru";
--		reg = <0x20000000 0x1000>;
--		rockchip,grf = <&grf>;
--
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--Example: UART controller node that consumes the clock generated by the clock
--  controller:
--
--	uart2: serial@20068000 {
--		compatible = "rockchip,serial";
--		reg = <0x20068000 0x100>;
--		interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
--		clock-frequency = <24000000>;
--		clocks = <&cru SCLK_UART2>, <&cru PCLK_UART2>;
--		clock-names = "sclk_uart", "pclk_uart";
--	};
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-new file mode 100644
-index 000000000..03e5d7f0e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/rockchip,rk3128-cru.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3126/RK3128 Clock and Reset Unit (CRU)
-+
-+maintainers:
-+  - Elaine Zhang <zhangqing@rock-chips.com>
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+description: |
-+  The RK3126/RK3128 clock controller generates and supplies clock to various
-+  controllers within the SoC and also implements a reset controller for SoC
-+  peripherals.
-+  Each clock is assigned an identifier and client nodes can use this identifier
-+  to specify the clock which they consume. All available clocks are defined as
-+  preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
-+  used in device tree sources. Similar macros exist for the reset sources in
-+  these files.
-+  There are several clocks that are generated outside the SoC. It is expected
-+  that they are defined using standard clock bindings with following
-+  clock-output-names:
-+    - "xin24m"     - crystal input       - required
-+    - "ext_i2s"    - external I2S clock  - optional
-+    - "gmac_clkin" - external GMAC clock - optional
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk3126-cru
-+      - rockchip,rk3128-cru
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  "#reset-cells":
-+    const: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: xin24m
-+
-+  rockchip,grf:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to the syscon managing the "general register files" (GRF),
-+      if missing pll rates are not changeable, due to the missing pll
-+      lock status.
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - "#reset-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    cru: clock-controller@20000000 {
-+      compatible = "rockchip,rk3128-cru";
-+      reg = <0x20000000 0x1000>;
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
+All errors (new ones prefixed by >>):
+
+>> arch/arm/mach-at91/pm.c:370:38: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
+                   tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
+                                                      ^
+>> arch/arm/mach-at91/pm.c:373:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDO_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:377:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PUO_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:381:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDODT_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:385:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SRO_PUODT_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
+                                   ^
+   5 errors generated.
+
+
+vim +/DDR3PHY_ZQ0SR0 +370 arch/arm/mach-at91/pm.c
+
+   350	
+   351	static int at91_suspend_finish(unsigned long val)
+   352	{
+   353		unsigned char modified_gray_code[] = {
+   354			0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
+   355			0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
+   356			0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
+   357			0x10, 0x11,
+   358		};
+   359		unsigned int tmp, index;
+   360		int i;
+   361	
+   362		if (soc_pm.data.mode == AT91_PM_BACKUP && soc_pm.data.ramc_phy) {
+   363			/*
+   364			 * Bootloader will perform DDR recalibration and will try to
+   365			 * restore the ZQ0SR0 with the value saved here. But the
+   366			 * calibration is buggy and restoring some values from ZQ0SR0
+   367			 * is forbidden and risky thus we need to provide processed
+   368			 * values for these (modified gray code values).
+   369			 */
+ > 370			tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
+   371	
+   372			/* Store pull-down output impedance select. */
+ > 373			index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
+   374			soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
+   375	
+   376			/* Store pull-up output impedance select. */
+ > 377			index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
+   378			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   379	
+   380			/* Store pull-down on-die termination impedance select. */
+ > 381			index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
+   382			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   383	
+   384			/* Store pull-up on-die termination impedance select. */
+ > 385			index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
+   386			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   387	
+   388			/*
+   389			 * The 1st 8 words of memory might get corrupted in the process
+   390			 * of DDR PHY recalibration; it is saved here in securam and it
+   391			 * will be restored later, after recalibration, by bootloader
+   392			 */
+   393			for (i = 1; i < BACKUP_DDR_PHY_CALIBRATION; i++)
+   394				soc_pm.bu->ddr_phy_calibration[i] =
+   395					*((unsigned int *)soc_pm.memcs + (i - 1));
+   396		}
+   397	
+   398		flush_cache_all();
+   399		outer_disable();
+   400	
+   401		at91_suspend_sram_fn(&soc_pm.data);
+   402	
+   403		return 0;
+   404	}
+   405	
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
