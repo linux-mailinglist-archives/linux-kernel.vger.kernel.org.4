@@ -2,73 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0D85B4F8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 17:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D289C5B4F90
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiIKPGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 11:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S229577AbiIKPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 11:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIKPGi (ORCPT
+        with ESMTP id S229459AbiIKPJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 11:06:38 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAF92E6A9;
-        Sun, 11 Sep 2022 08:06:37 -0700 (PDT)
-Received: from localhost.localdomain (unknown [93.175.11.123])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 6B40340737A7;
-        Sun, 11 Sep 2022 15:06:32 +0000 (UTC)
-From:   Vadim Shakirov <shakirov@ispras.ru>
-To:     reiserfs-devel@vger.kernel.org
-Cc:     Vadim@vger.kernel.org, Shakirov@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Shakirov Vadim <shakirov@ispras.ru>
-Subject: [PATCH] reiserfs: added check in case of bad disk in search_by_entry_key
-Date:   Sun, 11 Sep 2022 18:05:51 +0300
-Message-Id: <20220911150551.34520-1-shakirov@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <0>
-References: <0>
+        Sun, 11 Sep 2022 11:09:02 -0400
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C812E6B6;
+        Sun, 11 Sep 2022 08:09:01 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id o23so4494818pji.4;
+        Sun, 11 Sep 2022 08:09:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=tnxEpb6pf+fpk/khg6S5+1VA2aKHrO1P36M1MNHRA7w=;
+        b=nJASzaLCelNKRznhA847c1UE4ar8IpIihax5UeQYeDgq0ESWQNYITeRbVlGAvsgOQE
+         cfRWAF/a12Re++n47BNrbPJ39M5hsnlazAsHxlost98dWnS5jkXvVBH3ctNMZGk9KoR0
+         4AlPbO8WhpzXiDfbszdGG2BJUMcC3U4QYgjTGNAZrw5QsxESGmU5BVHbTt8ak7ru4k9Y
+         wI96mdLHIifQ7TD6MdO5DahoLB5GPMTiZ0b/rVmfkyxy1AYqBGxpYxjF2YkyKf+CEMEQ
+         HCAK7IwJjuhQwsfX4bZq5Kd/KY58R8ybRNoBGpxQ8IMJvOUG6A3RSaZ+/kX+Ibji0Vcr
+         na7Q==
+X-Gm-Message-State: ACgBeo24yxj7+tFpvc1jPH1cD/hxOYZdeYqtKTjtKa/q9QDOn+JfOLU7
+        0nLVGZUczUipMQnj7Lyt9Fc=
+X-Google-Smtp-Source: AA6agR4rNPwx9VPnzfHkI3k7LIuzmTO9M+flEcD9XHbrrV7UG17q720pcwe/Vi78YoliZsPp6zC+Rg==
+X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr19425015pjb.241.1662908941218;
+        Sun, 11 Sep 2022 08:09:01 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id d19-20020aa797b3000000b0053ea3d2ecd6sm3533917pfq.94.2022.09.11.08.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 08:09:00 -0700 (PDT)
+Message-ID: <fd1d7c49-a090-e8c7-415b-dfcda94ace9d@acm.org>
+Date:   Sun, 11 Sep 2022 08:08:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [RFC PATCH 2/7] RDMA/rxe: Convert the triple tasklets to
+ workqueues
+To:     Yanjun Zhu <yanjun.zhu@linux.dev>,
+        Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
+        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        zyjzyj2000@gmail.com
+Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        rpearsonhpe@gmail.com, yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
+        y-goto@fujitsu.com
+References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+ <41e5476f4f14a0b77f4a8c3826e3ef943bf7c173.1662461897.git.matsuda-daisuke@fujitsu.com>
+ <0b3366e6-c0ae-7242-5006-b638e629972d@linux.dev>
+Content-Language: en-US
+In-Reply-To: <0b3366e6-c0ae-7242-5006-b638e629972d@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vadim Shakirov
+On 9/11/22 00:10, Yanjun Zhu wrote:
+> I also implemented a workqueue for rxe. IMO, can we add a variable to
+> decide to use tasklet or workqueue?
+> 
+> If user prefer using tasklet, he can set the variable to use
+> tasklet. And the default is tasklet. Set the variable to another
+> value to use workqueue.
 
-Syzkaller has detected a bug in the search_by_entry_key function when the disk is bad.
-For example, when we mount a disk using the search_by_key function, we are looking for an item_head that describes the .privroot directory. On the correct disk, either the desired position will be found, or the position following the desired element will be returned (since the key by which we are looking for may have an offset greater than that of the sought item_head), and using PATH_LAST_POSITION(path)-- the desired element is found.
+I'm in favor of removing all uses of the tasklet mechanism because of 
+the disadvantages of that mechanism. See also:
+* "Eliminating tasklets" (https://lwn.net/Articles/239633/).
+* "Modernizing the tasklet API" (https://lwn.net/Articles/830964/).
+* Sebastian Andrzej Siewior's opinion about tasklets 
+(https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/).
 
-But in the case of a bad disk, it may happen the item_head of the stat-file of the directory exists, but the item_head itself of the directory file does not exist. In this case, after ITEM_NOT_FOUND is returned from searh_by_key and PATH_LAST_POSITION(path)-- is executed, the location will point to the item_head of the stat file in this directory - dir_id and object_id will match, and the offset of the stat file is 0. And then we will treat the item_head of the stat file as if it were the item_head of a directory.
+Thanks,
 
-Signed-off-by: Shakirov Vadim <shakirov@ispras.ru>
----
- fs/reiserfs/namei.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 1594687582f0..c6db8db6a391 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -133,6 +133,12 @@ int search_by_entry_key(struct super_block *sb, const struct cpu_key *key,
- 		}
- 		PATH_LAST_POSITION(path)--;
- 
-+		if (!is_direntry_le_ih(tp_item_head(path)) ||
-+		    COMP_SHORT_KEYS(&(tp_item_head(path))->ih_key, key)) {
-+			pathrelse(path);
-+			return IO_ERROR;
-+		}
-+
- 	case ITEM_FOUND:
- 		break;
- 
--- 
-2.25.1
+Bart.
 
