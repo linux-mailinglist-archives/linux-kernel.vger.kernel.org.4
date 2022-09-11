@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC1E5B4EF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 15:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB085B4EFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 15:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIKNWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 09:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S230187AbiIKN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 09:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiIKNV7 (ORCPT
+        with ESMTP id S230159AbiIKN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 09:21:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6768F23BD5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:21:57 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id XMuIol8dXLFqbXMuIofNot; Sun, 11 Sep 2022 15:21:56 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Sep 2022 15:21:56 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <fac99d27-2e28-3c08-4cf3-c97afec99b77@wanadoo.fr>
-Date:   Sun, 11 Sep 2022 15:21:54 +0200
+        Sun, 11 Sep 2022 09:26:32 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4F62B19D
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:26:30 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i26so10629198lfp.11
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=14hFcicxsn548zF5tUnuNbrYw8l13xnXDnsLcahEqfk=;
+        b=frcJwqBtf0XHKe+56ABxIpvFvEaoysRlhFuJ0s0iUv5RTlrk8X41rUvhDo6nqLViAz
+         eQJuYbWQy5ZCng4vacdrerB+QGj7gt07niFi4RcgFHOfQYZJZCZ6rH42Zidv59XsAXTC
+         vs+IGBPhlAab9SoRs97HSwgQRasr7GuwygmY24VZUA8EMw16UODiZOuZMjLKvDNhKOAL
+         acfFZErdpCLbPUB/3n0Uzd07wwz3RuaDJ+/6zqrgsd3tU9s/3TeYlkV/IINi0v1zNPcJ
+         k/ZwF35lX6TQsikam/Ks53BJM+B01Uvm0ZN5qjTMvWNo0kyAFkppjBpzJYW0f80d+vRe
+         IR4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=14hFcicxsn548zF5tUnuNbrYw8l13xnXDnsLcahEqfk=;
+        b=kwmT4QO0NFZfre8CtwFREn1H1J3RTvFQWAnU9WrDCMJR/5vpYakbT3YqJcCsJHjIpM
+         xsO9Jia9l3RCYL67oUlDo4G8Eg0+fpYoTMRGiC2jU024exq0xZ81wbhPyCJB/WofIUO9
+         7bqgw1dCVceWClSA1MiMgANDvKYnrqqYwGsllacGV9W/D9UTUQpKS/pum60+ynMY0CW2
+         85ouRkprk9FH8dAnqzzJvFfTVX7RsjZ2PqYqkffjtUsLq/d8WPbELCoelHP0ry1wA96n
+         H5MgDW61GWmqUWhJoc0egQpQK4vElojytPzNDXJ3aIPdPQvKORIMfvS7XouB2Gzenco5
+         Vl/w==
+X-Gm-Message-State: ACgBeo0L0s1g0hZXDEqx3yTnkKbWfz+chIuAtFQm4qvqWkDj8O2GkpNd
+        KzodEKToL73x7hyeXmdnrM8lgw==
+X-Google-Smtp-Source: AA6agR7pcPv7y7NYzQVSzmWGEtOD4Mtp8S102HDFmXzLHd8E9ye2Htr0ID91MSFLZ1YPLDuNe7akWQ==
+X-Received: by 2002:a05:6512:3996:b0:492:dacb:33ce with SMTP id j22-20020a056512399600b00492dacb33cemr6988194lfu.445.1662902788579;
+        Sun, 11 Sep 2022 06:26:28 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z14-20020a19650e000000b00490b5f09973sm614410lfb.92.2022.09.11.06.26.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 06:26:27 -0700 (PDT)
+Message-ID: <f63fcb88-77de-0d57-f3f4-5d61a6d4c133@linaro.org>
+Date:   Sun, 11 Sep 2022 15:26:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH] checkpatch: Check check for places where
- dev_err_probe() would likely be better than dev_err()
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 01/40] dt-bindings: pinctrl: qcom,sm6115-pinctrl: fix
+ matching pin config
 Content-Language: en-US
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <3cdc2e776dea77b07c75694ba1410bd21e8ed749.1662902045.git.christophe.jaillet@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <3cdc2e776dea77b07c75694ba1410bd21e8ed749.1662902045.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220911111200.199182-1-krzysztof.kozlowski@linaro.org>
+ <20220911111200.199182-2-krzysztof.kozlowski@linaro.org>
+ <732d13e0-07a6-3b22-23e3-32f20cf7f750@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <732d13e0-07a6-3b22-23e3-32f20cf7f750@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 11/09/2022 à 15:15, Christophe JAILLET a écrit :
-> Some functions are known to potentially return -EPROBE_DEFER. In such a
-> case, it is likely that dev_err_probe() is a better choice than err_err().
+On 11/09/2022 14:59, Iskren Chernev wrote:
 > 
-> dev_err_probe():
->    - is usually less verbose
->    - generates smaller .o files
->    - handles -EPROBE_DEFER so that logs are not spammed
->    - automatically log the error code in a human readable way
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is only a PoC to see if there is some interest in such a new
-> check.
-> The hard coded '5 lines of context' has been chosen because a typical
-> pattern is:
 > 
-> 	clk = devm_clk_get(dev, "clk_lcd");
-> 	if (IS_ERR(clk) {
-> 		dev_err(dev, "Error meesage\n");
-> 		return PTR_ERR(clk);
-> 	}
-
-(adding Linus Walleij)
-
-
-I forgot to say that this patch is a try to address the comment from 
-Linus Walleij at [1].
-
-It would not help "fixing a gazillion dev_err_probe()", but it could 
-help not having more to fix later :)
-
-CJ
-
-[1]: 
-https://lore.kernel.org/all/CACRpkdZEcTD1A3tR=d4fDF89ECMDfchVPW921v6X6ARiPXHEMQ@mail.gmail.com/
-
-
-> ---
->   scripts/checkpatch.pl | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
+> On 9/11/22 14:11, Krzysztof Kozlowski wrote:
+>> Matching PMIC GPIOs config nodes within a '-state' node by '.*' pattern
+>> does not work as expected because of linux,phandle in the DTB:
+>>
+>>     'pins' is a required property
+>>     'function' is a required property
+>>     'rx', 'tx' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>     [[59]] is not of type 'object'
+>>
+>> Make the schema stricter and expect such nodes to be either named
+>> 'pinconfig' or followed with '-pins' prefix.
 > 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 2737e4ced574..88365749ed2e 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -2625,6 +2625,9 @@ sub process {
->   	my $last_blank_line = 0;
->   	my $last_coalesced_string_linenr = -1;
->   
-> +	my $last_function_that_return_defer = "";
-> +	my $last_function_that_return_defer_linenr = 0;
-> +
->   	our @report = ();
->   	our $cnt_lines = 0;
->   	our $cnt_error = 0;
-> @@ -7459,6 +7462,17 @@ sub process {
->   			WARN("DUPLICATED_SYSCTL_CONST",
->   				"duplicated sysctl range checking value '$1', consider using the shared one in include/linux/sysctl.h\n" . $herecurr);
->   		}
-> +
-> +# check for places where dev_err_probe() would likely be better than dev_err()
-> +		if ($line =~ /((?:devm_)?clk_get)s*\(/) {
-> +			$last_function_that_return_defer = $1;
-> +			$last_function_that_return_defer_linenr = $linenr;
-> +		}
-> +		if ($last_function_that_return_defer_linenr >= ($linenr - 5) &&
-> +		    $line =~ /dev_err[^_]/) {
-> +			WARN("LIKELY_DEV_ERR_PROBE",
-> +				"dev_err_probe() is likely a better choice than err_err() after a " . $last_function_that_return_defer . "() call\n" . $herecurr);
-> +		}
->   	}
->   
->   	# If we have no input at all, then there is nothing to report on
+> Well, now you don't allow pinconfig, so maybe tweak the commit message.
 
+True, thanks!
+
+
+Best regards,
+Krzysztof
