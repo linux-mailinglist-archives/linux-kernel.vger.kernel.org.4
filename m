@@ -2,41 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F665B4E96
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03D95B4E98
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 13:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiIKLvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 07:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S230209AbiIKLwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 07:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiIKLvB (ORCPT
+        with ESMTP id S230011AbiIKLwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 07:51:01 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CF713EA9
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:50:56 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id XLUDoCHEZJvOZXLUEoFLUg; Sun, 11 Sep 2022 13:50:55 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Sep 2022 13:50:55 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] headers: Remove some left-over license text
-Date:   Sun, 11 Sep 2022 13:50:30 +0200
-Message-Id: <2a15aba72497e78ff08c8b8a8bfe3cf5a3e6ee18.1662897019.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 11 Sep 2022 07:52:08 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DFE2250F
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:52:06 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id f26so1913579qto.11
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 04:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=MQaM98zF6Au3ifgBX1LN9vhnn6oLk/4qb19oOxSo2ys=;
+        b=SigBH0gvrEn1MEJM6v83gDZiBN7mUjGGRt4qVaAat9iISUXJD8JcDqtiVF/84C6yXf
+         AKj/3foELjE98IRegp7cjL3MAqtx9H0Yp/UluKzROBF4yJ17gVd9gRzks01IxNrIlEV9
+         H+F4IesaKttoAQlIBWKSCYzoAZp3sZdfA3HK8fviZeLfwD8A015T4mSrc8ANPBGla0BO
+         yIO1GuLrrUIyDbSRWU7nHd5IXarxGehiiYze0OKQYJUbq52Z+DSDMGOkpKmu8ueSY+QL
+         GoxOcp01Kdj+CvQdu+8ojPRDAyD8Rj8XwxawNeV/S+h+Blac5xlAOKlnG/5aYILTED2I
+         y5pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=MQaM98zF6Au3ifgBX1LN9vhnn6oLk/4qb19oOxSo2ys=;
+        b=j85rQ8P2srrA6sG0IPI48ijpaFVXOpcNgP/zIfyXotGXbzZpc6mIe0N41184WyKcEd
+         1fPQpulFOFmXf7jXP1NuiZ1VNiaWQmWSiQG2HfwKWeSw2mSLpYp+VWX7y1TMmMGNSCTY
+         UPd6evIMTTbU38OUeDAtI0eQlLnRnzbayT1nBgNz/FUmO8M3octsMhEz9UFE3bLVa3ZT
+         hfQo0JtBL9sxu/BIKG5KX2NH/lyf2QEs5c1FWtHPsTtJrWtdH4EwmFSRI/l5U9YZYPYi
+         7DRZcwCjm/X2DhMCHt8vH7EA42J7qVVZbEHt8JuSldafOSELOsvKg/ldJCbYswI0ZHni
+         8tjg==
+X-Gm-Message-State: ACgBeo1wCjnFfYAo5qe1lJg3kOjw7XQf9jRdXlFtHlu/LS0IU4LWkFFe
+        BFRdAj8TTX1iTrjUtiEJXO3P2fZfEc6rEysgFDY=
+X-Google-Smtp-Source: AA6agR59yOWQiuef4RAzd0Ue1tcPYotyEFBsUgd+CB1gxXMS9L+XZKteCqvdhwqa8jqp9+HXQehG4aJQLaCeAtS93eI=
+X-Received: by 2002:a05:622a:14d1:b0:344:b14a:b22a with SMTP id
+ u17-20020a05622a14d100b00344b14ab22amr18977092qtx.203.1662897125285; Sun, 11
+ Sep 2022 04:52:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220907071023.3838692-1-feng.tang@intel.com> <20220907071023.3838692-4-feng.tang@intel.com>
+ <CA+fCnZeT_mYndXDYoi0LHCcDkOK4V1TR_omE6CKdbMf6iDwP+w@mail.gmail.com> <Yx1caGQ8R2alhOKh@feng-clx>
+In-Reply-To: <Yx1caGQ8R2alhOKh@feng-clx>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 11 Sep 2022 13:51:54 +0200
+Message-ID: <CA+fCnZd1bDe9oQcCZjN+NTxs8qF3fzRoXcSZvyeCNxoX6U-wsg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] mm: kasan: Add free_meta size info in struct kasan_cache
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "Sang, Oliver" <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,111 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-license identifier to uapi header files with a license")
+On Sun, Sep 11, 2022 at 5:57 AM Feng Tang <feng.tang@intel.com> wrote:
+>
+> Hi Andrey,
+>
+> Thanks for reviewing this series!
+>
+> On Sun, Sep 11, 2022 at 07:14:55AM +0800, Andrey Konovalov wrote:
+> > On Wed, Sep 7, 2022 at 9:11 AM Feng Tang <feng.tang@intel.com> wrote:
+> > >
+> > > When kasan is enabled for slab/slub, it may save kasan' free_meta
+> > > data in the former part of slab object data area in slab object
+> > > free path, which works fine.
+> > >
+> > > There is ongoing effort to extend slub's debug function which will
+> > > redzone the latter part of kmalloc object area, and when both of
+> > > the debug are enabled, there is possible conflict, especially when
+> > > the kmalloc object has small size, as caught by 0Day bot [1]
+> > >
+> > > For better information for slab/slub, add free_meta's data size
+> > > into 'struct kasan_cache', so that its users can take right action
+> > > to avoid data conflict.
+> > >
+> > > [1]. https://lore.kernel.org/lkml/YuYm3dWwpZwH58Hu@xsang-OptiPlex-9020/
+> > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > Signed-off-by: Feng Tang <feng.tang@intel.com>
+> > > Acked-by: Dmitry Vyukov <dvyukov@google.com>
+> > > ---
+> > >  include/linux/kasan.h | 2 ++
+> > >  mm/kasan/common.c     | 2 ++
+> > >  2 files changed, 4 insertions(+)
+> > >
+> > > diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> > > index b092277bf48d..293bdaa0ba09 100644
+> > > --- a/include/linux/kasan.h
+> > > +++ b/include/linux/kasan.h
+> > > @@ -100,6 +100,8 @@ static inline bool kasan_has_integrated_init(void)
+> > >  struct kasan_cache {
+> > >         int alloc_meta_offset;
+> > >         int free_meta_offset;
+> > > +       /* size of free_meta data saved in object's data area */
+> > > +       int free_meta_size_in_object;
+> >
+> > I thinks calling this field free_meta_size is clear enough. Thanks!
+>
+> Yes, the name does look long. The "in_object" was added to make it
+> also a flag for whether the free meta is saved inside object's data
+> area.
+>
+> For 'free_meta_size', the code logic in slub should be:
+>
+>   if (info->free_meta_offset == 0 &&
+>         info->free_meta_size >= ...)
 
-When the SPDX-License-Identifier tag has been added, the corresponding
-license text has not been removed.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- include/uapi/linux/tc_act/tc_bpf.h        |  5 -----
- include/uapi/linux/tc_act/tc_skbedit.h    | 13 -------------
- include/uapi/linux/tc_act/tc_skbmod.h     |  7 +------
- include/uapi/linux/tc_act/tc_tunnel_key.h |  5 -----
- include/uapi/linux/tc_act/tc_vlan.h       |  5 -----
- 5 files changed, 1 insertion(+), 34 deletions(-)
-
-diff --git a/include/uapi/linux/tc_act/tc_bpf.h b/include/uapi/linux/tc_act/tc_bpf.h
-index 653c4f94f76e..fe6c8f8f3e8c 100644
---- a/include/uapi/linux/tc_act/tc_bpf.h
-+++ b/include/uapi/linux/tc_act/tc_bpf.h
-@@ -1,11 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_BPF_H
-diff --git a/include/uapi/linux/tc_act/tc_skbedit.h b/include/uapi/linux/tc_act/tc_skbedit.h
-index 6cb6101208d0..64032513cc4c 100644
---- a/include/uapi/linux/tc_act/tc_skbedit.h
-+++ b/include/uapi/linux/tc_act/tc_skbedit.h
-@@ -2,19 +2,6 @@
- /*
-  * Copyright (c) 2008, Intel Corporation.
-  *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms and conditions of the GNU General Public License,
-- * version 2, as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-- * more details.
-- *
-- * You should have received a copy of the GNU General Public License along with
-- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-- * Place - Suite 330, Boston, MA 02111-1307 USA.
-- *
-  * Author: Alexander Duyck <alexander.h.duyck@intel.com>
-  */
- 
-diff --git a/include/uapi/linux/tc_act/tc_skbmod.h b/include/uapi/linux/tc_act/tc_skbmod.h
-index af6ef2cfbf3d..ac62c9a993ea 100644
---- a/include/uapi/linux/tc_act/tc_skbmod.h
-+++ b/include/uapi/linux/tc_act/tc_skbmod.h
-@@ -1,12 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2016, Jamal Hadi Salim
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
--*/
-+ */
- 
- #ifndef __LINUX_TC_SKBMOD_H
- #define __LINUX_TC_SKBMOD_H
-diff --git a/include/uapi/linux/tc_act/tc_tunnel_key.h b/include/uapi/linux/tc_act/tc_tunnel_key.h
-index 3f10dc4e7a4b..49ad4033951b 100644
---- a/include/uapi/linux/tc_act/tc_tunnel_key.h
-+++ b/include/uapi/linux/tc_act/tc_tunnel_key.h
-@@ -2,11 +2,6 @@
- /*
-  * Copyright (c) 2016, Amir Vadai <amir@vadai.me>
-  * Copyright (c) 2016, Mellanox Technologies. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_TUNNEL_KEY_H
-diff --git a/include/uapi/linux/tc_act/tc_vlan.h b/include/uapi/linux/tc_act/tc_vlan.h
-index 5b306fe815cc..3e1f8e57cdd2 100644
---- a/include/uapi/linux/tc_act/tc_vlan.h
-+++ b/include/uapi/linux/tc_act/tc_vlan.h
-@@ -1,11 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2014 Jiri Pirko <jiri@resnulli.us>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_VLAN_H
--- 
-2.34.1
-
+I'd say you can keep the current logic and just rename the field to
+make it shorter. But up to you, I'm fine with either approach. Thanks!
