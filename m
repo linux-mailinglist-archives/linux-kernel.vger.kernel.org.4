@@ -2,214 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148365B514B
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC995B514F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 23:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiIKVRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 17:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S229695AbiIKVUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 17:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIKVRb (ORCPT
+        with ESMTP id S229510AbiIKVUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 17:17:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F8D26AEA
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 14:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662931051; x=1694467051;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Eni6pit1misnqHqlJtjektfnPpxUovniHQMbrNEZkCI=;
-  b=ehnec3ECTB1eoAfw07YQFyhEQqMIo/RIFxp4hP3ywORSoEVxkkwcKpFN
-   hHY6EJdmkDQGxJZp1LyjTqT7wHNLZdQe4dHK2bgeHg7omukiSB+e5Xets
-   Xt1Ku8JVInbEZYNRfewIaAlg5m0njBSlhB8CV4+oAL1EldDH0AjFa5/+c
-   i0I/TwD3uj9pLCkhQaxUTmlXqt+0YoLQOdbBcVI2pPGhheS4kZ8Y9A9Q0
-   OCbOxx0Fb0cHYzRS3RauVvj63otwyeCCiPPvgayonWtUkip5m0Ani/QWz
-   lc3NvAs3F5s6e5CJGACNw5BBDL4V5HD+9zsRpb09mm/aX5Jkg4rAjgQaD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="295337259"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="295337259"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 14:17:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="791356689"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga005.jf.intel.com with ESMTP; 11 Sep 2022 14:17:30 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 11 Sep 2022 14:17:30 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 11 Sep 2022 14:17:29 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Sun, 11 Sep 2022 14:17:29 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Sun, 11 Sep 2022 14:17:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=exgtPUFVWCBaRTKnXWxN3Z0W7nCfMxdlxnYATJ/5H/2zNr1p/U0qn04P2GZ61tuo5HbHp3DyV7jczwhaMT83GQoxCEZ0o3yTPvqgxEWnzBc7Ay87jVHIAGqNh+XnojUMNun53xRqwj3y3+aYf/8NsTdvFGMFnXeVd+z624BOVnmS35jjiO3ysrvTv3Y4h0vvYb4TpeLTU3Q2mgKfByh2FfhdE0eMcbDFuuvt8u9lqaTaD5mWITdGlz6NZum/BY9USmlfsJGROLwWrtTuaMyVw4kRTIIGCtU0OiRTZqEfMecM3PXIS2p2d3mhvTfC+tIon1uUZEwocHt2/a2w+so9Ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BURZsTUp8t4+hgi3/wRuiapcI4tA1G2tUY+fOYCxK7w=;
- b=fvASL/vE52tLMvfVGpi41mAO8Ly4w5BrNAo1lW8FW2FG1U8T7p2uYmkqWQPCWM7LLR8IXcNlvXYizafFD55Kg2ZMQiPRXnY+khwchFJKeA7Su9uD5UtbrF7TD3lTlCvJHN8sSvsDcYgtU9gAmtWmXDC787amtpqyeVbG6E5myQ3vj7LPzp1KyPIFrjUaozgGx9JF6HFRLHhK1BAUu9LFG8clKgSoREoib6qKMvIwnNvsHH4QFx7F3fBdl0GxzQze0lZlwlVVU3KLDaGdvkjEjGxTNxNXXCb3WG9Au9kl6eUnecj3OdEw53tsTUqyuS8h2yfr0B7uVbzyAP8s5CGULg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
- DM4PR11MB6065.namprd11.prod.outlook.com (2603:10b6:8:60::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.20; Sun, 11 Sep 2022 21:17:23 +0000
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424]) by DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424%5]) with mapi id 15.20.5612.022; Sun, 11 Sep 2022
- 21:17:23 +0000
-From:   =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <intel-gfx@lists.freedesktop.org>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Simon Ser <contact@emersion.fr>,
-        Matthew Wilcox <willy@infradead.org>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-Subject: [PATCH v5 3/3] drm: Introduce skip_legacy_minors modparam
-Date:   Sun, 11 Sep 2022 23:14:43 +0200
-Message-ID: <20220911211443.581481-4-michal.winiarski@intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220911211443.581481-1-michal.winiarski@intel.com>
-References: <20220911211443.581481-1-michal.winiarski@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0111.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::14) To DM4PR11MB5373.namprd11.prod.outlook.com
- (2603:10b6:5:394::7)
+        Sun, 11 Sep 2022 17:20:15 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CFC18365;
+        Sun, 11 Sep 2022 14:20:13 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id go34so15949495ejc.2;
+        Sun, 11 Sep 2022 14:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=KVt9Uyft/E21p0hWag8KEVJdTkCMY+n74W7H1HgusJI=;
+        b=oACUNPspfdMBHHKbJyj/sh6VnWNfkG+yN8hBMBC1qGV38/zgimguacYJXYS6IGbmyb
+         h5oydXvdFFiqr1CLT8AEKcL6BiRlCcKm5lrUyJzMul0O7WMPf5Tv/SUkJ+EolUfTUvwG
+         nlY9858p6MdhM4H4gIxvc97whUBSHSLELy4POmJe/cnCqJnDLXOEVRwadpvQbuypt4wt
+         3EUtK+tjZyH/Ml1Z2w0dgeshpQuAApayFlvL8NvD1VDQKSkQB9LSZGqv27QRwyogqmaQ
+         e2+xPX/22AHvWe/jmZEjLDreFuJhCsas0y403g6nDTLoymdPt22xNlA1MPY8y/ZlFqFh
+         /Xjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=KVt9Uyft/E21p0hWag8KEVJdTkCMY+n74W7H1HgusJI=;
+        b=nDlZpjej21DWFqwzkHz4jQJTgKwL6u5AwRJ6I0jGlCxDlwupWBMwVMIah5x9ueut97
+         rTqsBrif6H7GLNGJe7BGWez1BGwYbDM95HClVKR9Lozb9jpF8fNLw7t0Brt1MEF1w+Kq
+         Xynih68MhLSADYpPVXcHygUrpOHirK8ONILs7XhZRDpTpmalGeWUYphbyEtH0J+vr51p
+         qkVhUlqSltDGZ3lrKyZZUv3P42rHUL8fL/3fomjeAYIuLkiZ1dY5x7DBo2XaFFVymTmz
+         /R3dju1l6IljdgmiPwnd4L7J4SpH3bmOj9pPVHf1kYHapQWN5GdXlkdsdxpsAo6xKjAQ
+         cQpg==
+X-Gm-Message-State: ACgBeo28TG8yLndIFwx4KsNY3VnPk265s9g8OFXokxoBCF95YUk9mEw1
+        G76ooMnFZRVRFjqNfJeFhvdc549Tpy4=
+X-Google-Smtp-Source: AA6agR49ZY8ZeQPl1KfjMRig98o0lBzeHgAs3S20hN85CmuYt2HxrF4h53upXO3Y6Alsfu+RCkXthg==
+X-Received: by 2002:a17:906:9c82:b0:6e1:1d6c:914c with SMTP id fj2-20020a1709069c8200b006e11d6c914cmr16376286ejc.769.1662931212202;
+        Sun, 11 Sep 2022 14:20:12 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906539600b0072f4f4dc038sm3432711ejo.42.2022.09.11.14.20.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 14:20:11 -0700 (PDT)
+Message-ID: <76d87f49-6a44-0a05-c9dc-af870fade924@gmail.com>
+Date:   Sun, 11 Sep 2022 23:20:10 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|DM4PR11MB6065:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10a2f41a-644d-4cb3-4a88-08da943b04a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1ufxRGNyPea//rp/OTtiLb2TfdPosKT8gGX7yeSKabRKJD9V/ishLR12w1sBck2FqpWefKddwbHEzDYrty7HN4beOUd38gMkae3HlTIlxICnawSJHnfVSB6MpoWsOzqWjTGbjs7xQKRDBLBuKH2k2vqMfHA2EDtelks+myVtn2zalDQNDrRuDwhFIbFVODqvuGDHEBXVA4VLtWZsbOMXfiilGNeOy7wg35jWE4Dr2f9slfsf02J6/9yc5o8DKjuYe/o+6weqy/rP5Z0SyFqPfXq9kKtC6FPtgtogAfKWTrTSWZn8MkxXY2XxJlGh1IUaX2u6dCoygX6546Os5vKPfKyxLej1tLwJ7q1ttC6IIBs/sAhrDCkmx/Zgw0F2B+tlG69Pp4X/7bEr/Lq+DXCD9gx5bO5TILxDorU2boa3hiQNM6O1OKAfj+Zq+2+bsPDJwyG8QRwJhtva+9YX4Pxxc+6yhLoChemwAxl3ywgscZ2GgtNuXcVpuwQfaouAl6yhCIsAAd4wNTgxoItOm6JSdzOOqjQmlUdXsdp0mUwMwUJW/b3iUcw8ibc/+smt4JOYyelOUSDQ5yVYijCaPTUuomfCp2alDsEgKMJdG3UGk3yb7uYRQ6PzOircekW21P34uxXu8Fp4nwz8dH26OXe3fzKfeMyOh+xtSqa60Iep1o6IbvGHLjEzpTRisabhA9qNrprN95qyovBQVmf30cqzYg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(136003)(376002)(39860400002)(186003)(6512007)(26005)(41300700001)(6506007)(83380400001)(6486002)(1076003)(478600001)(2616005)(6666004)(316002)(4326008)(8936002)(8676002)(7416002)(2906002)(82960400001)(5660300002)(38100700002)(86362001)(66556008)(66476007)(54906003)(66946007)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFZuakEyZG9NN0VhdlhVdjFQWURrd2UzbWVzdGFRQWJtVDMxK3JwQ3BTVGdI?=
- =?utf-8?B?WDFWanJJVFp2L3VLNFFRRWxlV2ZER3RtY0dTMGdsc0dGS2paR0FjSkZ0YUFC?=
- =?utf-8?B?djV1Mlp1VnV0L1IySC9PYlpKbFN6VHlJZ1ZtUjVVU2VJQW5MeUEwdU5iTEpu?=
- =?utf-8?B?WmRZT0s1aC82MlkydmRoMktrMGN5UkRabEk2cDVqcTFRYmhxZlVhSUp5bzla?=
- =?utf-8?B?OVZqSlprcXk4dnJTZmpBNGFLaTBJK3Z0OEhrODc0aWZFUTU5T3p2bVNKR29J?=
- =?utf-8?B?YmdWcjZFZDlkM1VsNXVRL3ZiQndxUzZIYW1uckJMcXlWd1NhMVM4cUpPSm04?=
- =?utf-8?B?ZEpLdFk4TXdDL1VLVkZQZjRFWXNrTTFQZ0NGS0Izd1pyT1pRcGQ0OUNCS1pi?=
- =?utf-8?B?czd5dm55aXJtMkR2c2c4WG16TmxjeXN1U3llaWV0SEhoYy9hSkFkNXgrOUxG?=
- =?utf-8?B?RmljOWxZclhUS1BlZ0Z0SythSm9wK0I5eUdBYTVPdG1FcFplaGdzOEUrRlNY?=
- =?utf-8?B?VVdFMHAwc25ScGhiTHRqdmg1bjNva29hVjlyUnlDRFd4WC9qTVZzVlIxRmJC?=
- =?utf-8?B?Tlk0aHNTZDR3UC9vbEJGaGpUMWQ0M2FFc2xUbHQ2NmN1bmswTXZ2ZnhsekVi?=
- =?utf-8?B?b1NaNXo3Sk40RUhRVzZQUXJrdjhiS1N1RnRJdUpHWkJaZ1RJV3ZsQ3F0UVhL?=
- =?utf-8?B?OWNlb296cDU2UzM2b0R1Rnd2U0h3QXdiRVh6WlZaTUVCNUVEUk9IVC9kQTlr?=
- =?utf-8?B?b1Y5NHFYMmtGUVc2Rk93anhRZldzWHgvMjdwV2pCODY2YlpLcDRxdzBkVUtr?=
- =?utf-8?B?RGFZUnJ5bDdQYy91eXBKVnNTVjRFaWlWNkVvWXZQSnJ2R0tucm1zTFV3TnNR?=
- =?utf-8?B?SytkeXdFNXg3VkhUZC9kaitaYVZKTWpWcUhoVU1KOTl0ZWhCS0NZSXJzNDQy?=
- =?utf-8?B?SmV4aGNjbXY3a1BqRlU3MFg2N3UwTEdCWVZJQ2tybG95bkUxM1N6bVN0aVpv?=
- =?utf-8?B?WDBFT2FsN0NSOEVHMWtvY2dVeW8wR0NMTklPcmdXWjJMVFF3dXVQclY4OUxu?=
- =?utf-8?B?ZktMZ0orSDZ3Tkt0VTRCckRTNUlpNFgyaGgvYktiM3h1WFN6VExBRlBRNlJl?=
- =?utf-8?B?ZHFQNXNSUUlUNkMxakVZanlrUS9UNkFFNnRXVkJsMWQvbEY5L2F5Nk9WWTc3?=
- =?utf-8?B?QWZndVptWVFicE56UVl1enc3bCtsMmRTb3JoVk90M0N1Tk42b21BWEl2SFBh?=
- =?utf-8?B?cnZ2SHBYM3BxUkV2M0VlYSt0dnNkRW5RZkZGOWpCelJJTVN2N1FCaitUekRn?=
- =?utf-8?B?SjNKYWwrSklDN0dUT1Nsa3pwRFIrdEswbEFORW9KNUJLblFTZ2VTV3Y2dEl0?=
- =?utf-8?B?a2RZdlIxQVVBakNNbWFjeU14ZHZPc25yNjhXSWt0RURIWElkZkh6YlRRZVdk?=
- =?utf-8?B?L2NzZzRieVVDUjNROXg3bUVKRWJKNktvaFNDbS91RmRBeXZjZmRYTFpCMmUy?=
- =?utf-8?B?TjlKQ1lGdXRYKzNINjVIUHRGYy84ZG4razVMRkNkRXZkQ1l5RTNrY3NwcStQ?=
- =?utf-8?B?bldXMy9rTnA5dmE0R0gyaitlY21nWnc3cVl3eS9xL2UzWVM3SDRWSk4yYlRo?=
- =?utf-8?B?SmEyY2hwcGlkUGI3MjlMK2NyRDU1OHFEeDVNYWtBSlpseE1seVZFdkkzb2xI?=
- =?utf-8?B?RGhhZGFpMkozMkhmRStydWZuc2E4Wm0zakE2TnZoVkxtRUpRNWhwSjE0SGsy?=
- =?utf-8?B?eXdITElHMHVtMHIzKzBIQ2I3ZlEya1ZGTHNUVGM1NmxkUVI2aXRDQ0d6Wll6?=
- =?utf-8?B?T01pRFAyOHM5WDhSNGxybXVhTjJXNlEyUS9SNFZFVWRsMmNpd0xoRDhFT1R4?=
- =?utf-8?B?Wi9hTEVYeUJ0NGxlTndEQS91WE0yQmpXWllPOStMMjdxdjZhN09ibGthSGNW?=
- =?utf-8?B?N2hQblRRck84R2R6WC8ydHFDRkluQUZBaTlxOXM2UGs4RGxRdlJRQUNXZmV4?=
- =?utf-8?B?WHJGOFhGVzBBZTl2S0tRODVYdENHYzlYTS9lTFBpWm93RnBxMEhWVTZKYm9i?=
- =?utf-8?B?bkVka1J0UncvUGhsODRVWk5jdTJQbk1lbkVyc2tLeG9mU1dwSlQwbThDWk03?=
- =?utf-8?B?TzY5YjYvTk1oNGpPWHdLWHY0Ty90ZkdueEo0aHBaTlRNVEpTRHdkMVpTeGF5?=
- =?utf-8?B?d0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10a2f41a-644d-4cb3-4a88-08da943b04a9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2022 21:17:22.9468
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tOXhJsMdUogiZMFfGmOlcPou/Nen73LTq+OSbEpGcWyP7Mgl9a2J/VUa3K6yPt0zGkWU6XcLjtrMt/x9Ral/DRrW76k7VTjbebrB4mXUPYc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6065
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1] dt-bindings: clock: convert rockchip,rk3128-cru.txt to
+ YAML
+To:     heiko@sntech.de
+Cc:     zhangqing@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While there is support for >64 DRM devices on kernel side, existing
-userspace may still have some hardcoded assumptions and it's possible
-that it will require changes to be able to use more than 64 devices.
-Add a modparam to simplify testing and development of >64 devices
-support on userspace side by allocating minors from the >=192 range
-(without the need of having >64 physical devices connected).
+Convert rockchip,rk3128-cru.txt to YAML.
 
-Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- drivers/gpu/drm/drm_drv.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ .../bindings/clock/rockchip,rk3128-cru.txt    | 58 ---------------
+ .../bindings/clock/rockchip,rk3128-cru.yaml   | 73 +++++++++++++++++++
+ 2 files changed, 73 insertions(+), 58 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
 
-diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-index 3718bd6bbef6..368408997fed 100644
---- a/drivers/gpu/drm/drm_drv.c
-+++ b/drivers/gpu/drm/drm_drv.c
-@@ -56,6 +56,11 @@ MODULE_LICENSE("GPL and additional rights");
- 
- static DEFINE_XARRAY_ALLOC(drm_minors_xa);
- 
-+static bool skip_legacy_minors;
-+module_param_unsafe(skip_legacy_minors, bool, 0400);
-+MODULE_PARM_DESC(skip_legacy_minors,
-+		 "Don't allocate minors in 0-192 range. This can be used for testing userspace support for >64 drm devices (default: false)");
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
+deleted file mode 100644
+index 6f8744fd3..000000000
+--- a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
++++ /dev/null
+@@ -1,58 +0,0 @@
+-* Rockchip RK3126/RK3128 Clock and Reset Unit
+-
+-The RK3126/RK3128 clock controller generates and supplies clock to various
+-controllers within the SoC and also implements a reset controller for SoC
+-peripherals.
+-
+-Required Properties:
+-
+-- compatible: should be "rockchip,rk3126-cru" or "rockchip,rk3128-cru"
+-  "rockchip,rk3126-cru" - controller compatible with RK3126 SoC.
+-  "rockchip,rk3128-cru" - controller compatible with RK3128 SoC.
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- #clock-cells: should be 1.
+-- #reset-cells: should be 1.
+-
+-Optional Properties:
+-
+-- rockchip,grf: phandle to the syscon managing the "general register files"
+-  If missing pll rates are not changeable, due to the missing pll lock status.
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. All available clocks are defined as
+-preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
+-used in device tree sources. Similar macros exist for the reset sources in
+-these files.
+-
+-External clocks:
+-
+-There are several clocks that are generated outside the SoC. It is expected
+-that they are defined using standard clock bindings with following
+-clock-output-names:
+- - "xin24m" - crystal input - required,
+- - "ext_i2s" - external I2S clock - optional,
+- - "gmac_clkin" - external GMAC clock - optional
+-
+-Example: Clock controller node:
+-
+-	cru: cru@20000000 {
+-		compatible = "rockchip,rk3128-cru";
+-		reg = <0x20000000 0x1000>;
+-		rockchip,grf = <&grf>;
+-
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+-
+-Example: UART controller node that consumes the clock generated by the clock
+-  controller:
+-
+-	uart2: serial@20068000 {
+-		compatible = "rockchip,serial";
+-		reg = <0x20068000 0x100>;
+-		interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
+-		clock-frequency = <24000000>;
+-		clocks = <&cru SCLK_UART2>, <&cru PCLK_UART2>;
+-		clock-names = "sclk_uart", "pclk_uart";
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+new file mode 100644
+index 000000000..03e5d7f0e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/rockchip,rk3128-cru.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- /*
-  * If the drm core fails to init for whatever reason,
-  * we should prevent any drivers from registering with it.
-@@ -112,7 +117,7 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
- static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
- {
- 	struct drm_minor *minor;
--	int r;
-+	int r = -EBUSY;
- 
- 	minor = drmm_kzalloc(dev, sizeof(*minor), GFP_KERNEL);
- 	if (!minor)
-@@ -127,7 +132,8 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
- 	 * and 128-191 are render nodes.
- 	 * After reaching the limit, we're allocating minors dynamically - first-come, first-serve.
- 	 */
--	r = xa_alloc(&drm_minors_xa, &minor->index, NULL, DRM_LEGACY_MINOR_LIMIT(type), GFP_KERNEL);
-+	if (!skip_legacy_minors)
-+		r = xa_alloc(&drm_minors_xa, &minor->index, NULL, DRM_LEGACY_MINOR_LIMIT(type), GFP_KERNEL);
- 	if (r == -EBUSY)
- 		r = xa_alloc(&drm_minors_xa, &minor->index, NULL, DRM_MINOR_LIMIT, GFP_KERNEL);
- 	if (r < 0)
++title: Rockchip RK3126/RK3128 Clock and Reset Unit (CRU)
++
++maintainers:
++  - Elaine Zhang <zhangqing@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++description: |
++  The RK3126/RK3128 clock controller generates and supplies clock to various
++  controllers within the SoC and also implements a reset controller for SoC
++  peripherals.
++  Each clock is assigned an identifier and client nodes can use this identifier
++  to specify the clock which they consume. All available clocks are defined as
++  preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
++  used in device tree sources. Similar macros exist for the reset sources in
++  these files.
++  There are several clocks that are generated outside the SoC. It is expected
++  that they are defined using standard clock bindings with following
++  clock-output-names:
++    - "xin24m"     - crystal input       - required
++    - "ext_i2s"    - external I2S clock  - optional
++    - "gmac_clkin" - external GMAC clock - optional
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3126-cru
++      - rockchip,rk3128-cru
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 1
++
++  "#reset-cells":
++    const: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: xin24m
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the syscon managing the "general register files" (GRF),
++      if missing pll rates are not changeable, due to the missing pll
++      lock status.
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    cru: clock-controller@20000000 {
++      compatible = "rockchip,rk3128-cru";
++      reg = <0x20000000 0x1000>;
++      rockchip,grf = <&grf>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++    };
 -- 
-2.37.3
+2.20.1
 
