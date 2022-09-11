@@ -2,117 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1416E5B51B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 01:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64965B51BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 01:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiIKXBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 19:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S229727AbiIKXB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 19:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIKXBE (ORCPT
+        with ESMTP id S229751AbiIKXBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 19:01:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC6A22BC3;
-        Sun, 11 Sep 2022 16:01:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E5F41F983;
-        Sun, 11 Sep 2022 23:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662937259; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6GyFucV8IpoFY7ympxLT3VA1hGgSyrlaYbBgNDtngws=;
-        b=AapnVKz9c6auorp4kIOp+Di5TmReoXni7sRNu0PSMenZJjKKcJaR5+mOTSAY2lqRZzH5Yw
-        iCj+9I1nZFGzdnwJZkn5+wNNKhaQ4MN6adAhTgaWpQ72ese3u1Z45kAFn0y3M286vQyqbb
-        KfsKILXMAFrPnJUi7VsaUurDbjjFXHM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662937259;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6GyFucV8IpoFY7ympxLT3VA1hGgSyrlaYbBgNDtngws=;
-        b=drju+b++gNLD/clfcCSu/WZXKkgAPKWSEVYI0oc3rTF6Zbb2Ix33AW1MPpGdvG6k9CUK4p
-        KfviLz7Unw5tibCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27A3F133E6;
-        Sun, 11 Sep 2022 23:00:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7DwFM6hoHmPhDgAAMHmgww
-        (envelope-from <neilb@suse.de>); Sun, 11 Sep 2022 23:00:56 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Sun, 11 Sep 2022 19:01:23 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F072656C
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 16:01:21 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-12b542cb1d3so9263618fac.13
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 16:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=6zz4KZBW7Xf3j2wSfJkLMRtj9pzF2Gk+JSNytD8QvQo=;
+        b=KImd/fj3U/QgmbidNljOQB0iad08e+8tC7mEvjqEkvixNow+Z+wnVSTmbZV23CPKc0
+         HVBqKaWCkJGIcrZIoRXaBlNToBktSydSGjlVRnEZNW0TQpsTqVtdIUtF/c4W/YXoR8L6
+         uT5mXj7nfc2hX+QoF4xeHytsBybIIg2LF5SlM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6zz4KZBW7Xf3j2wSfJkLMRtj9pzF2Gk+JSNytD8QvQo=;
+        b=qSc4QUDUL6q58pelpPSuZ8ihX1fonkZMpdj9jnJmIDptbbP32mrxdwhJGvj4NGdtlG
+         oFFNrD0ZzYQuZAJVESw8FQ41mrHjjbcp3bfsSNSn2oVsQpe8vRVzIsmnlo5cGGYEhoUk
+         9LGzMvhGSbt1CYgYfEB+gmbzFQFHwWRK8bsVkDNAZ95QcAsi/5gTSQCknLZ55uEd5VL6
+         16IK/1aKnonIIwMIPkFvL9Ry6O6rtb5B3/Y2fR6oN1w+LR09s/7w7YckfACPi9Luuy7v
+         Y6/VBpD3KcTV/oouoI30B75nPYYfpwLfjzed8o9RBroik16scLuoPPQCc4eQPPtjBRlG
+         TPSw==
+X-Gm-Message-State: ACgBeo0yVv1KZgd7oISuB1CLJbFUskJyXNc+QhVfs6mb4qMRvYQf97cH
+        LSyhkh6dYrDhdS/L582vJDm/09ZReHI/hI+hl1r7Fg==
+X-Google-Smtp-Source: AA6agR4/09plFX0OTLhhwmmwNv2ATAUGQVcnLBvFUcpfLX90f+vdiRH8e94cVQoAUJ+DNnBqf83WSMN07J4bpj24cxM=
+X-Received: by 2002:a05:6808:1142:b0:343:86a0:dedc with SMTP id
+ u2-20020a056808114200b0034386a0dedcmr8186288oiu.44.1662937280713; Sun, 11 Sep
+ 2022 16:01:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 11 Sep 2022 18:01:20 -0500
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "Eugeniu Rosca" <erosca@de.adit-jv.com>,
-        "Trond Myklebust" <trondmy@hammerspace.com>,
-        "mrodin@de.adit-jv.com" <mrodin@de.adit-jv.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "roscaeugeniu@gmail.com" <roscaeugeniu@gmail.com>
-Subject: [PATCH - stable] SUNRPC: use _bh spinlocking on ->transport_lock
-In-reply-to: <Yx107owrRwmIc7pX@kroah.com>
-References: <20220418121210.689577360@linuxfoundation.org>,
- <20220418121211.327937970@linuxfoundation.org>,
- <20220907142548.GA9975@lxhi-065>,
- <166259870333.30452.4204968221881228505@noble.neil.brown.name>,
- <f575eeb3000330d9194c6256ad6063bc58f996c7.camel@hammerspace.com>,
- <20220908120931.GA3480@lxhi-065>, <Yx107owrRwmIc7pX@kroah.com>
-Date:   Mon, 12 Sep 2022 09:00:52 +1000
-Message-id: <166293725263.30452.1720462103844620549@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1662643422-14909-8-git-send-email-quic_srivasam@quicinc.com>
+References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com> <1662643422-14909-8-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Sun, 11 Sep 2022 18:01:20 -0500
+Message-ID: <CAE-0n53CUPAW2P5uC-4fN+qPw0PLCaz4Dfom7htYOTT9-o+A9Q@mail.gmail.com>
+Subject: Re: [PATCH v6 7/8] remoteproc: qcom: Add support for memory sandbox
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bgoswami@quicinc.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, judyhsiao@chromium.org,
+        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        perex@perex.cz, quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
+        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Srinivasa Rao Mandadapu (2022-09-08 06:23:41)
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index ccb5592..e55d593 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/firmware.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+> +#include <linux/iommu.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -48,6 +49,8 @@
+>  #define LPASS_PWR_ON_REG               0x10
+>  #define LPASS_HALTREQ_REG              0x0
+>
+> +#define SID_MASK_DEFAULT        0xF
+> +
+>  #define QDSP6SS_XO_CBCR                0x38
+>  #define QDSP6SS_CORE_CBCR      0x20
+>  #define QDSP6SS_SLEEP_CBCR     0x3c
+> @@ -333,6 +336,42 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>         return 0;
+>  }
+>
+> +static void adsp_unmap_smmu(struct rproc *rproc)
+> +{
+> +       struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
 
-Prior to Linux 5.3, ->transport_lock in sunrpc required the _bh style
-spinlocks (when not called from a bottom-half handler).
+Drop the cast, it's unnecessary.
 
-When upstream 3848e96edf4788f772d83990022fa7023a233d83 was backported to
-stable kernels, the spin_lock/unlock calls should have been changed to
-the _bh version, but this wasn't noted in the patch and didn't happen.
+> +
+> +       iommu_unmap(rproc->domain, adsp->mem_phys, adsp->mem_size);
+> +}
+> +
+[..]
+> @@ -343,9 +382,17 @@ static int adsp_start(struct rproc *rproc)
+>         if (ret)
+>                 return ret;
+>
+> +       if (adsp->has_iommu) {
+> +               ret = adsp_map_smmu(adsp, rproc);
+> +               if (ret) {
+> +                       dev_err(adsp->dev, "ADSP smmu mapping failed\n");
+> +                       goto disable_irqs;
+> +               }
+> +       }
+> +
+>         ret = clk_prepare_enable(adsp->xo);
+>         if (ret)
+> -               goto disable_irqs;
+> +               goto adsp_smmu_unmap;
+>
+>         ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
+>                                     adsp->proxy_pd_count);
+> @@ -401,6 +448,9 @@ static int adsp_start(struct rproc *rproc)
+>         qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>  disable_xo_clk:
+>         clk_disable_unprepare(adsp->xo);
+> +adsp_smmu_unmap:
+> +       if (adsp->has_iommu)
+> +               adsp_unmap_smmu(rproc);
 
-So convert these lock/unlock calls to the _bh versions.
+Why not pass adsp directly to adsp_unmap_smmu()? And even better would
+be to make it a no-op when adsp->has_iommu is false, so that the code
+reads straight-line otherwise.
 
-This patch is required for any stable kernel prior to 5.3 to which the
-above mentioned patch was backported.  Namely 4.9.y, 4.14.y, 4.19.y.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
----
- net/sunrpc/xprt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
-index d05fa7c36d00..b1abf4848bbc 100644
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1550,9 +1550,9 @@ static void xprt_destroy(struct rpc_xprt *xprt)
- 	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
- 	 * can only run *before* del_time_sync(), never after.
- 	 */
--	spin_lock(&xprt->transport_lock);
-+	spin_lock_bh(&xprt->transport_lock);
- 	del_timer_sync(&xprt->timer);
--	spin_unlock(&xprt->transport_lock);
-+	spin_unlock_bh(&xprt->transport_lock);
- 
- 	/*
- 	 * Destroy sockets etc from the system workqueue so they can
--- 
-2.37.1
-
+>  disable_irqs:
+>         qcom_q6v5_unprepare(&adsp->q6v5);
+>
+> @@ -429,6 +479,9 @@ static int adsp_stop(struct rproc *rproc)
+>         if (ret)
+>                 dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
+>
+> +       if (adsp->has_iommu)
+> +               adsp_unmap_smmu(rproc);
+> +
+>         handover = qcom_q6v5_unprepare(&adsp->q6v5);
+>         if (handover)
+>                 qcom_adsp_pil_handover(&adsp->q6v5);
+> --
+> 2.7.4
+>
