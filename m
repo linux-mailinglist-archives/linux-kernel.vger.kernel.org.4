@@ -2,151 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328B65B50D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 21:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273D35B50D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 21:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIKTSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 15:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S229633AbiIKTST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 15:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiIKTSH (ORCPT
+        with ESMTP id S229620AbiIKTSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 15:18:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943EBE082
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 12:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662923886; x=1694459886;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xQ6aw17yTEVxopys8Zx6lpGx1KD6LXlJcgFWJMO8HO0=;
-  b=iKgxCnKh7HzzVRrGRZ3FeNOsHbxr21rrxglf4qf3M2vH18vd5SjXglQS
-   xCShk6zVHpKP1ouMYl0ZKxpNe1TRB159/MwrdTIjHwDpbgsPoPQl+25Qt
-   b3d+4z719ScnqZ3tfJ3z6M/KauyTRTDR4vZ+X9CFM2QkvArTlNrrCYgO5
-   1zHCRrkwjw6poD6vZR6dXCPP0utNXd8k775+p6K28lkEsGjEo9xRJhTBS
-   qvqA/dW/3GqSrDU22kqa63+l5SzBIekPeACCxURahY+s9LWbXHkNIcvaN
-   q82OGPQaikXcUXmXnfSW5kKVE5n78eGiUTIV/MHbQirN9dII/bHSW6s4n
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="296482568"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="296482568"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 12:18:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="593243053"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Sep 2022 12:18:04 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXSSy-0001iF-0p;
-        Sun, 11 Sep 2022 19:18:04 +0000
-Date:   Mon, 12 Sep 2022 03:17:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v6.0-rc1 22/30]
- include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
-Message-ID: <202209120346.sFuVQArY-lkp@intel.com>
+        Sun, 11 Sep 2022 15:18:13 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE2E20F5A
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 12:18:12 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MQfdZ3yl5z9rxT;
+        Sun, 11 Sep 2022 19:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1662923890; bh=bGaVPf8nx5kftHUo6mckTenm3zOphG3Gr7MFgIK6Dqc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kKVoHPx8Q7Uyp86kzQCBVy5vK8X6yH4bmiVFd7+DhA0LCgflnvno6sTuXglgAsaAO
+         0WiQZVYPkgKwCdudc/XRsP5p2Qbpaz1nxjsfs8JVx7xF1EHr6Odr88WDHgyXBiImuW
+         rVB1wsdsoPSnbz0qrjNEd0E2h17hjBgK5+azP5Hg=
+X-Riseup-User-ID: 9F950CD118B48A66B9EAA4D732F7118852F6F40A80EC596CD80B5FF6EDD6E76E
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MQfdR2ZCYz5vTk;
+        Sun, 11 Sep 2022 19:18:03 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        michal.winiarski@intel.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH v5 1/2] drm/tests: Split drm_framebuffer_create_test into parameterized tests
+Date:   Sun, 11 Sep 2022 16:17:55 -0300
+Message-Id: <20220911191756.203118-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.0-rc1
-head:   5edde9c71a668fbd7f3c3990fde5b6b4a00dfc9b
-commit: f87ff66fb349ec7d2840f4ebc552bfa0018cabb4 [22/30] riscv: Make virt_to_pfn() a real function
-config: riscv-randconfig-c023-20220911 (https://download.01.org/0day-ci/archive/20220912/202209120346.sFuVQArY-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=f87ff66fb349ec7d2840f4ebc552bfa0018cabb4
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.0-rc1
-        git checkout f87ff66fb349ec7d2840f4ebc552bfa0018cabb4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+The igt_check_drm_framebuffer_create is based on a loop that executes
+tests for all createbuffer_tests test cases. This could be better
+represented by parameterized tests, provided by KUnit.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+So, convert the igt_check_drm_framebuffer_create into parameterized tests.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-mairacanal@riseup.net/
+- Use .init for mock_drm_device instead of a global variable. (Michał Winiarski)
+- Add Michał's Reviewed-by tag.
 
-   init/main.o: in function `.L0 ':
-   include/trace/events/initcall.h:10:(.text+0x24): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/main.o: in function `.L0 ':
-   init/main.c:187:(.init.text+0x24): relocation truncated to fit: R_RISCV_HI20 against symbol `reset_devices' defined in .sbss section in init/main.o
-   init/main.o: in function `.L0 ':
-   arch/riscv/include/asm/atomic.h:30:(.text.unlikely+0x10): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/main.o: in function `.L0 ':
-   init/main.c:686:(.ref.text+0x28): relocation truncated to fit: R_RISCV_HI20 against `kernel_init'
-   init/version.o: in function `.L0 ':
-   include/linux/fortify-string.h:160:(.init.text+0x4c): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/do_mounts.o: in function `.L0 ':
-   init/do_mounts.c:278:(.text+0x60): relocation truncated to fit: R_RISCV_HI20 against `.LC8'
-   init/do_mounts.c:308:(.init.text+0xd8): relocation truncated to fit: R_RISCV_HI20 against `root_wait'
-   init/do_mounts.o: in function `.L0 ':
-   include/linux/mm.h:723:(.text.unlikely+0x2c): relocation truncated to fit: R_RISCV_HI20 against `.LC1'
-   init/do_mounts_initrd.o: in function `.L0 ':
-   init/do_mounts_initrd.c:45:(.init.text+0x24): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/initramfs.o: in function `.L0 ':
-   init/initramfs.c:738:(.text+0x18): relocation truncated to fit: R_RISCV_HI20 against `initramfs_cookie'
-   init/initramfs.c:58:(.init.text+0x24): additional relocation overflows omitted from the output
-   riscv64-linux-ld: crypto/rsa-pkcs1pad.o: in function `.L0 ':
->> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
->> riscv64-linux-ld: include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: lib/scatterlist.o: in function `.L0 ':
->> lib/scatterlist.c:140: undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: lib/scatterlist.o: in function `.L0 ':
->> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: drivers/i2c/busses/i2c-qup.o: in function `.L0 ':
->> include/linux/scatterlist.h:163: undefined reference to `virt_to_pfn'
-   riscv64-linux-ld: drivers/i2c/busses/i2c-qup.o:include/linux/scatterlist.h:163: more undefined references to `virt_to_pfn' follow
+v2 -> v3: https://lore.kernel.org/dri-devel/20220901124210.591994-1-mairacanal@riseup.net/
+- Add David's Reviewed-by tag.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_TTM
-   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
-   Selected by [y]:
-   - DRM_TTM_HELPER [=y] && HAS_IOMEM [=y] && DRM [=y]
-   - DRM_HISI_HIBMC [=y] && HAS_IOMEM [=y] && DRM [=y] && PCI [=y] && (ARM64 || COMPILE_TEST [=y])
+v3 -> v4: https://lore.kernel.org/dri-devel/20220907200247.89679-1-mairacanal@riseup.net/
+- No changes.
 
+v4 -> v5: https://lore.kernel.org/dri-devel/202209110709.ZO1yJeyE-lkp@intel.com/T/#mac65eb9447b57f1ebbe7cc516f38c11c7a076295
+- Reduce stack usage on drm_framebuffer_test_init (kernel test bot).
+---
+ drivers/gpu/drm/tests/drm_framebuffer_test.c | 53 +++++++++++---------
+ 1 file changed, 30 insertions(+), 23 deletions(-)
 
-vim +163 include/linux/scatterlist.h
-
-82f66fbef58de4 Jens Axboe    2007-10-22  151  
-18dabf473e1585 Jens Axboe    2007-10-22  152  /**
-18dabf473e1585 Jens Axboe    2007-10-22  153   * sg_set_buf - Set sg entry to point at given data
-18dabf473e1585 Jens Axboe    2007-10-22  154   * @sg:		 SG entry
-18dabf473e1585 Jens Axboe    2007-10-22  155   * @buf:	 Data
-18dabf473e1585 Jens Axboe    2007-10-22  156   * @buflen:	 Data length
-18dabf473e1585 Jens Axboe    2007-10-22  157   *
-18dabf473e1585 Jens Axboe    2007-10-22  158   **/
-82f66fbef58de4 Jens Axboe    2007-10-22  159  static inline void sg_set_buf(struct scatterlist *sg, const void *buf,
-d32311fed70d12 Herbert Xu    2005-09-17  160  			      unsigned int buflen)
-d32311fed70d12 Herbert Xu    2005-09-17  161  {
-ac4e97abce9b80 Rusty Russell 2013-05-30  162  #ifdef CONFIG_DEBUG_SG
-ac4e97abce9b80 Rusty Russell 2013-05-30 @163  	BUG_ON(!virt_addr_valid(buf));
-ac4e97abce9b80 Rusty Russell 2013-05-30  164  #endif
-642f149031d704 Jens Axboe    2007-10-24  165  	sg_set_page(sg, virt_to_page(buf), buflen, offset_in_page(buf));
-d32311fed70d12 Herbert Xu    2005-09-17  166  }
-d32311fed70d12 Herbert Xu    2005-09-17  167  
-
-:::::: The code at line 163 was first introduced by commit
-:::::: ac4e97abce9b80c020e7113325f49e58b7b15e3f scatterlist: sg_set_buf() argument must be in linear mapping
-
-:::::: TO: Rusty Russell <rusty@rustcorp.com.au>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
+diff --git a/drivers/gpu/drm/tests/drm_framebuffer_test.c b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+index ec7a08ba4056..df235b7fdaa5 100644
+--- a/drivers/gpu/drm/tests/drm_framebuffer_test.c
++++ b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+@@ -25,7 +25,7 @@ struct drm_framebuffer_test {
+ 	const char *name;
+ };
+ 
+-static struct drm_framebuffer_test createbuffer_tests[] = {
++static const struct drm_framebuffer_test drm_framebuffer_create_cases[] = {
+ { .buffer_created = 1, .name = "ABGR8888 normal sizes",
+ 	.cmd = { .width = 600, .height = 600, .pixel_format = DRM_FORMAT_ABGR8888,
+ 		 .handles = { 1, 0, 0 }, .pitches = { 4 * 600, 0, 0 },
+@@ -330,43 +330,50 @@ static struct drm_mode_config_funcs mock_config_funcs = {
+ 	.fb_create = fb_create_mock,
+ };
+ 
+-static struct drm_device mock_drm_device = {
+-	.mode_config = {
+-		.min_width = MIN_WIDTH,
+-		.max_width = MAX_WIDTH,
+-		.min_height = MIN_HEIGHT,
+-		.max_height = MAX_HEIGHT,
+-		.funcs = &mock_config_funcs,
+-	},
+-};
++static int drm_framebuffer_test_init(struct kunit *test)
++{
++	struct drm_device *mock;
++
++	mock = kunit_kzalloc(test, sizeof(*mock), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, mock);
+ 
+-static int execute_drm_mode_fb_cmd2(struct drm_mode_fb_cmd2 *r)
++	mock->mode_config.min_width = MIN_WIDTH;
++	mock->mode_config.max_width = MAX_WIDTH;
++	mock->mode_config.min_height = MIN_HEIGHT;
++	mock->mode_config.max_height = MAX_HEIGHT;
++	mock->mode_config.funcs = &mock_config_funcs;
++
++	test->priv = mock;
++	return 0;
++}
++
++static void drm_test_framebuffer_create(struct kunit *test)
+ {
++	const struct drm_framebuffer_test *params = test->param_value;
++	struct drm_device *mock = test->priv;
+ 	int buffer_created = 0;
+ 
+-	mock_drm_device.dev_private = &buffer_created;
+-	drm_internal_framebuffer_create(&mock_drm_device, r, NULL);
+-	return buffer_created;
++	mock->dev_private = &buffer_created;
++	drm_internal_framebuffer_create(mock, &params->cmd, NULL);
++	KUNIT_EXPECT_EQ(test, params->buffer_created, buffer_created);
+ }
+ 
+-static void igt_check_drm_framebuffer_create(struct kunit *test)
++static void drm_framebuffer_test_to_desc(const struct drm_framebuffer_test *t, char *desc)
+ {
+-	int i = 0;
+-
+-	for (i = 0; i < ARRAY_SIZE(createbuffer_tests); i++) {
+-		KUNIT_EXPECT_EQ_MSG(test, createbuffer_tests[i].buffer_created,
+-				    execute_drm_mode_fb_cmd2(&createbuffer_tests[i].cmd),
+-		     "Test %d: \"%s\" failed\n", i, createbuffer_tests[i].name);
+-	}
++	strcpy(desc, t->name);
+ }
+ 
++KUNIT_ARRAY_PARAM(drm_framebuffer_create, drm_framebuffer_create_cases,
++		  drm_framebuffer_test_to_desc);
++
+ static struct kunit_case drm_framebuffer_tests[] = {
+-	KUNIT_CASE(igt_check_drm_framebuffer_create),
++	KUNIT_CASE_PARAM(drm_test_framebuffer_create, drm_framebuffer_create_gen_params),
+ 	{ }
+ };
+ 
+ static struct kunit_suite drm_framebuffer_test_suite = {
+ 	.name = "drm_framebuffer",
++	.init = drm_framebuffer_test_init,
+ 	.test_cases = drm_framebuffer_tests,
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.3
+
