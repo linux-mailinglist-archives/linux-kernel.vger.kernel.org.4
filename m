@@ -2,92 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0CB5B5126
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 22:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BECC5B512C
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 22:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIKUnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 16:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S229631AbiIKUs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 16:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIKUnO (ORCPT
+        with ESMTP id S229492AbiIKUsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 16:43:14 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8336C2317F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 13:43:12 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id u6so10033626eda.12
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 13:43:12 -0700 (PDT)
+        Sun, 11 Sep 2022 16:48:25 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB46622BFC;
+        Sun, 11 Sep 2022 13:48:24 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id l16so3626489ilj.2;
+        Sun, 11 Sep 2022 13:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=lSSgE6qKNsM5nRSZIZrwkAPBKl3L+uuKrmU0F7pD7HY=;
-        b=JPDXpPqvckmhgM18iZ464Ra4GB/SbxdXoB7mEFnkbkwW0BRaAxrNtroPGl5mUT2WBd
-         pvwfk74PBiUKM3805865m1rO90BYGGTb6OfQMgoWFTvGGKxz7e1J59pXHUMb90uqIGVq
-         DvczbtudWRonTOXp0egQqyMlPi3QFxL2LC3I9HxD8oKSiT/VZByKkCnkKkwmDqdP/2lj
-         jSI9jTQmMP8PcfjfMBcWc7SQ7xf+70+2cVLkZq9xRKkmN8oNLab6YKRdUP9uqKgEZWb+
-         ueuuFbB+qY5K5T90Y7pJ7YbxEYirSPrYgAljQnXnSb1mbHnpaKONiixAd8OxhKnuaiWN
-         DSXA==
+        bh=ZVQHM/37BbrOGPiFeLtiNZICTr76UsNj+DYuPTvsb8Q=;
+        b=RE50kfvR/4MBOCxWXWbyfeWyAOuv3CbuiaLU7BMsyghIreYzCGstvna7nzetMmdNVT
+         Gt0EnZWy+hhZWdPO/qkwuo1IP2xsnPHlAEpWuZmvZ6trJP6d/tnrBtQx7K1AW2CPgIq5
+         5Bj/9wvyD27kxFExBucubc/D8uCzJ9HCh3ndqqKBWAH1jjtfcz/4GVNoB+0GpyKNM2SR
+         MJYikIp66vTwOZ915PwxP5PZZIut6ucG7vZ7AdEbEC6IrdtU7vfewJQko5F91HrvvkDJ
+         jkPcVOAgFzg4tom5e4rFX85P+QjNKecE9ulprVilfILVcUKTiwnLI/m9F0CM0YEbnHkd
+         nrLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lSSgE6qKNsM5nRSZIZrwkAPBKl3L+uuKrmU0F7pD7HY=;
-        b=etwBzW90wiKqxaJQ7EjZ+qNBhd94PmDcsrUNP4lnlMshLgv/O9/XrcoEwYPz94YpbA
-         P5LXML0z/EZFYisfjq9GL/VAeaCyJVk+Yry9EL6ZJ2o0Ymbzm8ooZkaqcNDO3S6AY29T
-         NX1OywpJYy3XsO0EzCWJa/GJpEahaAFWFtfurE4y7LPOJ1w1fvz7oKK2wqL0ONJdLAqf
-         z6m+oFm5/hauym/ZBcEWlwHAMqJU7N8I1v63PncsiST0yeZJ3Hil3Z6lX8YbV8naiuN1
-         UuSiQ4REG0w3aMOgG8gDB6tA7RFZdMT/Z5veQ1qccB8QABFkJp3m+ozD1Na5gBUjs/TZ
-         ULoA==
-X-Gm-Message-State: ACgBeo3LVUSXJ0gK7O/WL5+0njrIEms+wYzDrNwSnEoecP25GVgePPa5
-        SyZYdVEd08CxntANFZ5t6JVv+n/yGa1+kA+aLGafcw==
-X-Google-Smtp-Source: AA6agR6XNXb6iXZAgJVLktD2yTU+LhSGDNL4w1b9CIbVMQlDxN1dXvmNUnGzMKm9uOJ76P7qbjXjKF0Dd53Kd+70owY=
-X-Received: by 2002:a05:6402:5249:b0:451:67ff:f02 with SMTP id
- t9-20020a056402524900b0045167ff0f02mr5735975edd.227.1662928990454; Sun, 11
- Sep 2022 13:43:10 -0700 (PDT)
+        bh=ZVQHM/37BbrOGPiFeLtiNZICTr76UsNj+DYuPTvsb8Q=;
+        b=r/vMRqJ10U+tFhTIsWXAhu3tVUnqpxEcPOYuA5A3UpzJCTK/2dR6TT8L7E2L5D+v1X
+         x9WzNb3bNJhh/BLx4QSA7eV/EzeNU6AxuhuhpMJDF2ntc/tewcoqoauGBPbEIgGQyLu3
+         Iqf4i30Nhf4LjrFoMhWC6B7vxwWlB7DQumL6JM+EAs8YDu6WwXgJHiSipwHZxj9ZQu2K
+         SR4XORAnoQYegQjFQMK7yCSdUk41GcKb3DNTlGf/zkS3jueZ691xStVBDITCQTklUlSn
+         fABSorfMtRngwYilcjZsU958VSLeOywNFmZ5qZtHXQKb1rzcd0MzZL0XJAFtZWhOorkZ
+         PLPg==
+X-Gm-Message-State: ACgBeo0Wie0uJDl7gS3oBGx36YhYwfWJHjY23w83CH4Iq1V2lgEHXu1o
+        p3QuzMc1e/UJ6yBX57XWFZ4PpXNkUZo53AjN6bk=
+X-Google-Smtp-Source: AA6agR71aeFCzogjuFx7JGCncWwFSimJ0ZSs/t1MkvqU4gU1pAfSi8OsmEw+8k+rZI02d0TUsGGR7A74lK4B2C6WBv8=
+X-Received: by 2002:a92:cbcf:0:b0:2f3:b515:92d with SMTP id
+ s15-20020a92cbcf000000b002f3b515092dmr2734086ilq.91.1662929304245; Sun, 11
+ Sep 2022 13:48:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220911095923.3614387-1-pasha.tatashin@soleen.com>
- <20220911095923.3614387-3-pasha.tatashin@soleen.com> <Yx4IEvkmAlcTIP6v@casper.infradead.org>
-In-Reply-To: <Yx4IEvkmAlcTIP6v@casper.infradead.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Sun, 11 Sep 2022 16:42:34 -0400
-Message-ID: <CA+CK2bD5ae0oUefiGMAzxun4-rJhqUdfJqbzcCkZM_Uek-KTxQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm/page_table_check: Do WARN_ON instead of BUG_ON by default
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <c4cb11c8ffe732b91c175a0fc80d43b2547ca17e.1662920329.git.dxu@dxuuu.xyz>
+In-Reply-To: <c4cb11c8ffe732b91c175a0fc80d43b2547ca17e.1662920329.git.dxu@dxuuu.xyz>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sun, 11 Sep 2022 22:47:46 +0200
+Message-ID: <CAP01T74zOa=3uYJ_3YebAxzZTYRwAhF62Giy9ovuKwk++FpU0g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Move nf_conn extern declarations to filter.h
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, martin.lau@linux.dev,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 12:08 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Sun, 11 Sept 2022 at 20:20, Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> On Sun, Sep 11, 2022 at 09:59:22AM +0000, Pasha Tatashin wrote:
-> > Currently, page_table_check when detects errors panics kernel. Instead,
-> > print a warning, and panic only when specifically requested via kernel
-> > parameter:
-> >
-> >       page_table_check=panic
+> We're seeing the following new warnings on netdev/build_32bit and
+> netdev/build_allmodconfig_warn CI jobs:
 >
-> Why are the page table checks so special that they deserve their own
-> command line parameter?  Why shouldn't this be controlled by the usual
-> panic_on_warn option?
+>     ../net/core/filter.c:8608:1: warning: symbol
+>     'nf_conn_btf_access_lock' was not declared. Should it be static?
+>     ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
+>     declared. Should it be static?
+>
+> Fix by ensuring extern declaration is present while compiling filter.o.
+>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-page_table_check can be used as a security feature preventing false
-page sharing between address spaces. For example, at Google we want it
-to keep enabled on production systems, yet we do not want to enable
-panic_on_warn as it would cause panics for many other reasons which
-are security unrelated.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Pasha
+>  include/linux/filter.h                   | 6 ++++++
+>  include/net/netfilter/nf_conntrack_bpf.h | 7 +------
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 527ae1d64e27..96de256b2c8d 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -567,6 +567,12 @@ struct sk_filter {
+>
+>  DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+>
+> +extern struct mutex nf_conn_btf_access_lock;
+> +extern int (*nfct_bsa)(struct bpf_verifier_log *log, const struct btf *btf,
+> +                      const struct btf_type *t, int off, int size,
+> +                      enum bpf_access_type atype, u32 *next_btf_id,
+> +                      enum bpf_type_flag *flag);
+> +
+>  typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
+>                                           const struct bpf_insn *insnsi,
+>                                           unsigned int (*bpf_func)(const void *,
+> diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
+> index a61a93d1c6dc..cf2c0423d174 100644
+> --- a/include/net/netfilter/nf_conntrack_bpf.h
+> +++ b/include/net/netfilter/nf_conntrack_bpf.h
+> @@ -5,6 +5,7 @@
+>
+>  #include <linux/bpf.h>
+>  #include <linux/btf.h>
+> +#include <linux/filter.h>
+>  #include <linux/kconfig.h>
+>  #include <linux/mutex.h>
+>
+> @@ -14,12 +15,6 @@
+>  extern int register_nf_conntrack_bpf(void);
+>  extern void cleanup_nf_conntrack_bpf(void);
+>
+> -extern struct mutex nf_conn_btf_access_lock;
+> -extern int (*nfct_bsa)(struct bpf_verifier_log *log, const struct btf *btf,
+> -                      const struct btf_type *t, int off, int size,
+> -                      enum bpf_access_type atype, u32 *next_btf_id,
+> -                      enum bpf_type_flag *flag);
+> -
+>  #else
+>
+>  static inline int register_nf_conntrack_bpf(void)
+> --
+> 2.37.1
+>
