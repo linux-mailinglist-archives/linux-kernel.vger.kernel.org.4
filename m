@@ -2,220 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2945B4CEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828DA5B4CE1
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 11:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiIKJQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 05:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
+        id S230115AbiIKJJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 05:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiIKJQa (ORCPT
+        with ESMTP id S229920AbiIKJI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 05:16:30 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7793BC4D;
-        Sun, 11 Sep 2022 02:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662887787; x=1694423787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R8farjhv/coFNpKXqTaQfgiezZzPSSkEHtaqgvhs4vg=;
-  b=CCXfVFnWzGD8bN/83irtBBwOzOlllZKPGtsDpNdN2ciyRnuMnAmuh6uo
-   GiqMswfpHcT8ayDTpWyZ/QdO3uKbXNjm03sIyzXrvMYfEcBP1WtvXv0bJ
-   QTLPPND7VPKV02jdfhmyLfjIYZywMyFcWjfdI18phFLU/kI4K2MYpOsrY
-   VH9z06Sn41AGtdGJW8KlFQ3CuWvZB5wqPxOw/+2jZgcr7dL1LOkG1Lt22
-   SUM8i7iMSzupsEOWO5IGHq7Kg9n/BqWCZjVlSlTPJMymhWoHtMkdATI0n
-   vuBq3uwAorYxeizc76hO/pWgowqPU7FRh23wwupRxvuXjgkurIKC0VeLY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="298507693"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="298507693"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 02:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="648939104"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga001.jf.intel.com with ESMTP; 11 Sep 2022 02:16:21 -0700
-Date:   Sun, 11 Sep 2022 17:06:49 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX interrupts
-Message-ID: <Yx2lKZJq4LA0KWRY@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
+        Sun, 11 Sep 2022 05:08:59 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDBA3A16F;
+        Sun, 11 Sep 2022 02:08:58 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e16so10670254wrx.7;
+        Sun, 11 Sep 2022 02:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=51+6g2H4IMDHj+sU7xTxYoeo5wF1+JRvy8PW2Gghvnk=;
+        b=Zo0vEjkQi7WyD3p916qXn2EtpJG/Me/29Jan97sf8p1ia94iW7c4XgektQR48fcLlI
+         3VsfvlwnO8IvIpaBEfWh2lum50fngrlUvQvpuS0tldKFF2aOC41PMhARWVm+xPFO2SZ/
+         02N7HkhZ/BLERjnPKPyp2Fd7Jc5G1e4YrmCGOsXUqvNafY+SCpAQjczApbNFXqGwMt5T
+         zzjUrZdT7LsDCUJzrU+DWn8CBRwGt3eIq1eHqNTdicW9iC3l0IJlOIrI8CPQvpBdWwTa
+         A8gizFgZOR73FrDX6YhFkirfgB+UNbAz08ukw7VWQcA191IM6kZ4u1Hn642Qy0WNiOho
+         JyjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=51+6g2H4IMDHj+sU7xTxYoeo5wF1+JRvy8PW2Gghvnk=;
+        b=Ph3+v7AhW6NCDL718H+jKD8c5KMaSyDbshCNi+nIqWGY26Q6df/5hjRBbwMNfHhqA2
+         cLX2FiOHlcoBjEGSgSzGBlICavKC2xl+27+sLPew0jbLDq2u/JeVc3wQdR4BRY4Yd5E6
+         7V5ABQHvE+g4P2rZkR4wszk0szoib8VSDwdf4Q/xhylz076EXOlVzjA7Zn7gHry5eo5Y
+         ClNDWn3F/6WYUgnXwvCUNEesGskxHajSTGrvF+qZA2Ytc6rHxKrhEyExhEqSG8es1TqD
+         rv9IKhIBToduFGm1ox5Aby+9GD3ICAle312sPRIEZw3GnNaAwTituLfTWsNLu122E/YO
+         sxPw==
+X-Gm-Message-State: ACgBeo2n2bRpxXpxoHeN1K6lI9GFc0WCLQmrT6HJWs4NafUN77Gz0kny
+        PQWbDfUpqCfZeztxk31k6npn+5P5kNvouA==
+X-Google-Smtp-Source: AA6agR4y7jgI10wcJFzL0Tg+WC3aqKqllygRkCquiMHYVk8AE8NvUcdHuhiz8nh1Qjm/FPqeyU/s4A==
+X-Received: by 2002:a5d:48d1:0:b0:225:3ee8:e5b8 with SMTP id p17-20020a5d48d1000000b002253ee8e5b8mr11475929wrs.105.1662887336922;
+        Sun, 11 Sep 2022 02:08:56 -0700 (PDT)
+Received: from [192.168.74.101] ([77.78.20.135])
+        by smtp.gmail.com with ESMTPSA id z11-20020a7bc7cb000000b003b3401f1e24sm5863263wmk.28.2022.09.11.02.08.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 02:08:56 -0700 (PDT)
+Message-ID: <ad940df1-6876-0c38-81c8-7d7ca97046de@gmail.com>
+Date:   Sun, 11 Sep 2022 12:09:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 7/9] arm64: dts: qcom: sm6115: Add basic soc dtsi
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-8-iskren.chernev@gmail.com>
+ <d51b0a89-a151-dd5b-b026-4291031fe1ea@linaro.org>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+In-Reply-To: <d51b0a89-a151-dd5b-b026-4291031fe1ea@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 at 12:04:25 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Define and use a DFHv1 parameter to add generic support for MSIX
-> interrupts for DFL devices.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  drivers/fpga/dfl.c  | 59 +++++++++++++++++++++++++++++++++------------
->  include/linux/dfl.h | 13 ++++++++++
->  2 files changed, 57 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index b9aae85ba930..17f704dc8483 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -941,25 +941,11 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
->  	void __iomem *base = binfo->ioaddr + ofst;
->  	unsigned int i, ibase, inr = 0;
->  	enum dfl_id_type type;
-> -	int virq;
-> +	int virq, off;
->  	u64 v;
->  
->  	type = feature_dev_id_type(binfo->feature_dev);
->  
-> -	/*
-> -	 * Ideally DFL framework should only read info from DFL header, but
-> -	 * current version DFL only provides mmio resources information for
-> -	 * each feature in DFL Header, no field for interrupt resources.
-> -	 * Interrupt resource information is provided by specific mmio
-> -	 * registers of each private feature which supports interrupt. So in
-> -	 * order to parse and assign irq resources, DFL framework has to look
-> -	 * into specific capability registers of these private features.
-> -	 *
-> -	 * Once future DFL version supports generic interrupt resource
-> -	 * information in common DFL headers, the generic interrupt parsing
-> -	 * code will be added. But in order to be compatible to old version
-> -	 * DFL, the driver may still fall back to these quirks.
-> -	 */
 
-I don't think we should just remove the entire comments here, we still
-need these quirks for DFHv0.
 
->  	if (type == PORT_ID) {
->  		switch (fid) {
->  		case PORT_FEATURE_ID_UINT:
-> @@ -981,6 +967,28 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
->  		}
->  	}
->  
-> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
-> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+On 9/11/22 11:40, Krzysztof Kozlowski wrote:
+> On 10/09/2022 16:32, Iskren Chernev wrote:
+>> Add support for Qualcomm SM6115 SoC. This includes:
+>> - GCC
+>> - Pinctrl
+>> - RPM (CC+PD)
+>> - USB
+>> - MMC
+>> - UFS
+>>
+>> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+>> ---
+>> pending issues with dtschema:
+>> - for some reason, using pinctrl phandles (in mmc) breaks the pinctrl
+>>   schema (4 times)
+>>       .output/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: pinctrl@500000: sdc1-on-state: 'oneOf' conditional failed, one must be fixed:
+>>             'pins' is a required property
+>>             'clk', 'cmd', 'data', 'rclk' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>             [[26]] is not of type 'object'
+>>             From schema: /home/iskren/src/pmos/linux-postmarketos/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-pinctrl.yaml
+>
+> It's the same as 06367559766b7c9bd96d2baef8bfc5a9bb451e25. I propose to
+> fix it the same way. I can do a biger change for all pinctrls, so here
+> you would need to add "-pins" prefix to entries (see patch
+> 4fcdaf4b0320f93d0ccb4d36b795ed258fb07b27).
 
-Is it possible we don't list all quirks again?
+OK, that makes sense. One thing that is a bit odd -- the current pattern
+"(pinconf|-pins)$" matches anything that ends in pinconf OR -pins (so it could
+be sth-pinconf). Also, if you only have a single block, isn't the idea to just
+list it in the -states node.  I mean we either force everybody to nest with
+a pinconf, or we allow -pins for nested stuff and directly in -state for the
+non-nested. Just my 2c.
 
-> +		v = readq(base);
-> +		v = FIELD_GET(DFH_VERSION, v);
-> +
-> +		if (v == 1) {
-> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
-> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
-> +						     DFHv1_PARAM_ID_MSIX);
-> +				if (off >= 0) {
-> +					ibase = readl(base + DFHv1_PARAM_HDR +
-> +						      off + DFHv1_PARAM_MSIX_STARTV);
-> +					inr = readl(base + DFHv1_PARAM_HDR +
-> +						    off + DFHv1_PARAM_MSIX_NUMV);
-> +					dev_dbg(binfo->dev, "%s start %d num %d fid 0x%x\n",
-> +						__func__, ibase, inr, fid);
-> +				}
-> +			}
-> +		}
-> +	}
-
-Please help describe how the new irq params works with existing irq
-capable features. Some possible cases?
-
-If version = v1, has irq param, no feature quirk.
-If version = v1, no irq param, has feature quirk.
-If version = v1, has irq param, has feature quirk.
-
-Thanks,
-Yilun
-
-> +
->  	if (!inr) {
->  		*irq_base = 0;
->  		*nr_irqs = 0;
-> @@ -1879,6 +1887,27 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
->  }
->  EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
->  
-> +int dfl_find_param(void __iomem *base, resource_size_t max, int param)
-> +{
-> +	int off = 0;
-> +	u64 v, next;
-> +
-> +	while (off < max) {
-> +		v = readq(base + off);
-> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
-> +			return off;
-> +
-> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-> +		if (!next)
-> +			break;
-> +
-> +		off += next;
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +EXPORT_SYMBOL_GPL(dfl_find_param);
-> +
->  static void __exit dfl_fpga_exit(void)
->  {
->  	dfl_chardev_uinit();
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 61bcf20c1bc8..5652879ab48e 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -69,6 +69,10 @@
->  #define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
->  #define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
->  
-> +#define DFHv1_PARAM_ID_MSIX	0x1
-> +#define DFHv1_PARAM_MSIX_STARTV	0x8
-> +#define DFHv1_PARAM_MSIX_NUMV	0xc
-> +
->  /**
->   * enum dfl_id_type - define the DFL FIU types
->   */
-> @@ -142,4 +146,13 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
->  	module_driver(__dfl_driver, dfl_driver_register, \
->  		      dfl_driver_unregister)
->  
-> +/*
-> + * dfl_find_param() - find the offset of the given parameter
-> + * @base: base pointer to start of dfl parameters in DFH
-> + * @max: maximum offset to search
-> + * @param: id of dfl parameter
-> + *
-> + * Return: positive offset on success, negative error code otherwise.
-> + */
-> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
->  #endif /* __LINUX_DFL_H */
-> -- 
-> 2.25.1
-> 
+> Best regards,
+> Krzysztof
