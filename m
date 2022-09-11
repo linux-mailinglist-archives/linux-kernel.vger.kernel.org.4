@@ -2,136 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1D95B5001
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21AE5B4FFF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 18:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiIKQWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 12:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S229693AbiIKQV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 12:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiIKQVU (ORCPT
+        with ESMTP id S229488AbiIKQVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 12:21:20 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E176713F3C;
-        Sun, 11 Sep 2022 09:21:19 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id A2339204CA0B; Sun, 11 Sep 2022 09:21:19 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A2339204CA0B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662913279;
-        bh=Z4QMTDUS2dSBcOU+9vvtM4dEnmR8yddlU4SZvyzFekg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MyEWnvVu3dsnLw8poRMoSa6YY4x+ckJRSbanuAxolY57UgncQ/5UQ+l9jr53JK81v
-         PIs46XiNi9Hg4WrlJ7w36VjWdXmy/ggnXWlBEbl/RvVoo5lnBVOAWWyA9wZc7XSdvq
-         zsKLYL5uvtfx38ZTYt18HPcGhzmKMTFf0FFo+8Sc=
-Date:   Sun, 11 Sep 2022 09:21:19 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
- VMs
-Message-ID: <20220911162119.GB7754@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
- <14302178-c797-8635-4325-070f78b7f805@suse.de>
+        Sun, 11 Sep 2022 12:21:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C2B13F02;
+        Sun, 11 Sep 2022 09:21:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662913284; x=1694449284;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=afnYNxBE1faQLt1ou19ySq2DFzzNl3lg+B6mfO4Ehng=;
+  b=NuPQxWZLnT6i1yh6CwiQ24t4Raa6thhKhudE9mYMm07fT+E3ehNC8h7W
+   736s2D/A1bUpWod93pKzQ3Ay4rffvDhEe/qotpRrX0uYgu4GvUnxUn+gG
+   nE+PTf1K2rR1iKsUfDntFfJSdzhI820Uk63hRE7JAYEh0mnNpCrfX/ZEJ
+   yNcD01Zv4asQDnso/G4mY4CFPHuZQQB0Oj0pT7FgEOZAM+Dbx0x+3QpYf
+   gKO+09/Kfw9jwcnDAKzztYky246A/Kz7BXTzn9Qfhhh7nNp0JnF2RdToj
+   cTCHRzqFcrUBRrp0YmQA4MPX3wG35BL2h847qF0rDom1z3tPmb6zYA9oD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="359459860"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="359459860"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:21:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="944358817"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 09:21:23 -0700
+Date:   Sun, 11 Sep 2022 09:21:42 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v1 3/5] fpga: dfl: Add DFHv1 Register Definitions
+In-Reply-To: <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2209110920490.142336@rhweight-WRK1>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-4-matthew.gerlach@linux.intel.com> <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <14302178-c797-8635-4325-070f78b7f805@suse.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 08:11:24PM +0200, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 09.09.22 um 16:43 schrieb Saurabh Sengar:
-> >hyperv_setup_vram tries to remove conflicting framebuffer based on
-> >'screen_info'. As observed in past due to some bug or wrong setting
-> >in grub, the 'screen_info' fields may not be set for Gen1, and in such
-> >cases drm_aperture_remove_conflicting_framebuffers will not do anything
-> >useful.
-> >For Gen1 VMs, it should always be possible to get framebuffer
-> >conflict removed using PCI device instead.
-> >
-> >Fixes: a0ab5abced55 ("drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size")
-> >Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> >---
-> >  drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 24 ++++++++++++++++++++----
-> >  1 file changed, 20 insertions(+), 4 deletions(-)
-> >
-> >diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> >index 6d11e7938c83..b0cc974efa45 100644
-> >--- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> >+++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> >@@ -73,12 +73,28 @@ static int hyperv_setup_vram(struct hyperv_drm_device *hv,
-> >  			     struct hv_device *hdev)
-> >  {
-> >  	struct drm_device *dev = &hv->dev;
-> >+	struct pci_dev *pdev;
-> >  	int ret;
-> >-	drm_aperture_remove_conflicting_framebuffers(screen_info.lfb_base,
-> >-						     screen_info.lfb_size,
-> >-						     false,
-> >-						     &hyperv_driver);
-> >+	if (efi_enabled(EFI_BOOT)) {
-> >+		drm_aperture_remove_conflicting_framebuffers(screen_info.lfb_base,
-> >+							     screen_info.lfb_size,
-> 
-> Using screen_info here seems wrong in any case. You want to remove
-> the framebuffer devices that conflict with your driver, which might
-> be unrelated to screen_info. AFAICT the correct solution would
-> always retrieve the PCI device for removal (i.e., always do the else
-> branch).
-
-In a Gen2 VM, the Hyper-V frame buffer device is presented only as a VMbus device.
-It's not presented as a PCI device like it is in a Gen1 VM. This would have worked
-if we had the frame buffer device available as PCI device in Gen2 but unfortunately
-thats not the case here.
-
-Regards,
-Saurabh
-
-> 
-> Best regard
-> Thomas
-> 
-> >+							     false,
-> >+							     &hyperv_driver);
-> >+	} else {
-> >+		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT, PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
-> >+		if (!pdev) {
-> >+			drm_err(dev, "Unable to find PCI Hyper-V video\n");
-> >+			return -ENODEV;
-> >+		}
-> >+
-> >+		ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &hyperv_driver);
-> >+		pci_dev_put(pdev);
-> >+		if (ret) {
-> >+			drm_err(dev, "Not able to remove boot fb\n");
-> >+			return ret;
-> >+		}
-> >+	}
-> >  	hv->fb_size = (unsigned long)hv->mmio_megabytes * 1024 * 1024;
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
 
 
+On Sun, 11 Sep 2022, Xu Yilun wrote:
 
+> On 2022-09-06 at 12:04:24 -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+>>
+>> This patch adds the definitions for DFHv1 header and related register
+>> bitfields.
+>>
+>> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> ---
+>>  include/linux/dfl.h | 37 +++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 37 insertions(+)
+>>
+>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>> index b5accdcfa368..61bcf20c1bc8 100644
+>> --- a/include/linux/dfl.h
+>> +++ b/include/linux/dfl.h
+>> @@ -23,6 +23,16 @@
+>>  #define GUID_H			0x10
+>>  #define NEXT_AFU		0x18
+>>
+>> +/*
+>> + * DFHv1 Register Offset definitons
+>> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+>> + * as common header registers
+>> + */
+>> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+>> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+>> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+>> +#define DFHv1_PARAM_DATA	0x8   /* Offset of Param data from Param header */
+>> +
+>>  #define DFH_SIZE		0x8
+>>
+>>  /* Device Feature Header Register Bitfield */
+>> @@ -30,8 +40,35 @@
+>>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+>> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>>
+>> +/*
+>> + *  CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+>
+> Reduce one whitespace indent.
+>
+>> + * 1'b1 = absolute (ARM or other non-PCIe use)
+>> + */
+>> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
+>> +
+>> +/*
+>> + * CSR Header Register Bit Definitions
+>> + */
+>
+> Use oneline style comment should be OK?
+>
+>> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+>> +
+>> +/*
+>> + * CSR SIZE Goup Register Bit Definitions
+>> + */
+>
+> Same concern
+>
+>> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+>> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+>> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+>> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
+>> +
+>> +/*
+>> + * PARAM Header Register Bit Definitions
+>> + */
+>
+> Same
+>
+>> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+>> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+>> +
+>>  /**
+>>   * enum dfl_id_type - define the DFL FIU types
+>>   */
+>> --
+>> 2.25.1
+>>
+>
+
+Hi Yilun,
+
+I will fix the extra whitespace and change the comments to a single line 
+where appropropriate.
+
+Thanks,
+Matthew Gerlach
