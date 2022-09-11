@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DBF5B4F1C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 15:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DA35B4F19
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 15:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiIKNf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 09:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S230139AbiIKNfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 09:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbiIKNfQ (ORCPT
+        with ESMTP id S230298AbiIKNf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 09:35:16 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4425726546
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:35:14 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id o2so8510481lfc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:35:14 -0700 (PDT)
+        Sun, 11 Sep 2022 09:35:28 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683D82E9C5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:35:26 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r12so6063605ljg.10
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 06:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=QlVRgO/cxLzkQMXlTq+j27uwBVDl70ffY/8cBjcxA7o=;
-        b=J54BrCgxF4HVfOhDGi30ygpf0pUi3CG1IwNZTXXn7aL4skdmFnlp8WPUWiBNX0Fu2b
-         0If6k6Q5p1FHayfINaA4DoshW4hQ7S6ynyXRP/R94I8BXnaIG87G1r9s14YQqJDr5Nf/
-         NOIRRsP+KZ17cQ2cRfZ00X3AOO7JTysmll93g6i4a7u/Are18m+oPb+rpMdVYa/xh8Wi
-         3aejEEUcLsO1Jkp9/N9okSom9cESnjsXgeXPxDZB/r453KAeo84AqBtKE0/snWa1R545
-         LSrdUp1+rTJHnpr2OD6C/dEZcvhNma2gx9B+heDAMt/In5wIDFzYt+35ZS5wuT+eixFX
-         Izyg==
+        bh=KICw7UMl7zN23PIkXw/yJP4KTrozrVApXevGldlrPOo=;
+        b=FvkMmM0nF9BOpltwukZ1eETLa9lu+wZbzCJEwXswmP3jC7vtJqvX3Lwd5drKZPSwQa
+         0A012OE5i9Jc8TNKsM30kebAXaiqKK4qziLLe1O0GCDvLkMHNcqT/0PufQa0+EO8khgT
+         UZkX3uAlqssIECsMGJw+B4F63Jg93Z0ybKR4xKMDYqC9G94xZE8+kyuSPI+wS6h3yG1n
+         OLVUXwkvXOjMuCOwn+OLmHMCVxZhT3kGOnf9gm8EYayMHhqows1ZImqrddu9ZfZSr7ex
+         XqADU2RSkmAHup/Nrty5QZFQIjNFNd4uhURlLFXXoejAG1nB9IZbgVmvaDJ6i0Ww8NKy
+         GmHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=QlVRgO/cxLzkQMXlTq+j27uwBVDl70ffY/8cBjcxA7o=;
-        b=aGMEir2ImSJIvNh0xZB7UtzbtR5hxLUqpHKqrkqYlHy9RzlGLqrCz130CSAeo9UCjt
-         OwdrfZqimWRvLV8oZtNF3qeDhkT8+NlbhRvQTtjpstkz0V0lUWixwEvO8cpKqMhFJAU9
-         7yV1tuPDNCThuBw6y4+rF/8kBlOuBE5+EKSR1iShyODvPAVDjhtfL4QJa/MDmGplojaJ
-         e9O6h2Fo0A7DZdU48VQCGPXzT0z2aOOg+3172nb0QohNSxNSmHivaQ9h5p3c41jOsyo1
-         MtXW30heMoNMTTOvMeBmTzOZV+Cjue8ctYpn47CKcljWRr8DahpWXKHWiKL6zlvGqDiG
-         Y9eQ==
-X-Gm-Message-State: ACgBeo3SlrVdd3cRUM1/a9W0pUXHs873faClruPhMSOurqmqRuN5BfCF
-        MbjFBJRzdJ4NNbeag41HpHcN+w==
-X-Google-Smtp-Source: AA6agR61CK8CK9Swd5vV7gek3vz+DGp2FC0Jgm0BFfEyQtU9+TQN+EcHbpzoO7UZssxwhl2LR9uQfQ==
-X-Received: by 2002:ac2:5107:0:b0:497:adac:7305 with SMTP id q7-20020ac25107000000b00497adac7305mr6451873lfb.32.1662903312669;
-        Sun, 11 Sep 2022 06:35:12 -0700 (PDT)
+        bh=KICw7UMl7zN23PIkXw/yJP4KTrozrVApXevGldlrPOo=;
+        b=5vJgCJbqA4hIKXvDn+F8QvPZLOUWgP6leERczayqTSZozMdgt9kOfoDDQMV0LMz4Dq
+         K0zcSE/c4tYnQ1gkja39+xF65dcxlp7LPL0NywiEDsR0x1luYwXcA799waFL/7VOd9p0
+         gBOEiWM2x7rpH/dshgY3cZW0EFb5poRsdoqQV6TeibcamYVy7JLmi6OAcns2pkBWTiGJ
+         UuzIzs1aopWkMXGyXnQGYxYV9JydsbY7ZAFIsURK2xf3kCTFz2a5u45aCEHZ/PbD1bgx
+         1AtwEDppWVJ/s3chT5Q9yHyUsiOEIzup7qGJtyEuWGa7RlMJhmtNb/6oljAXQFj2yXWI
+         gXkA==
+X-Gm-Message-State: ACgBeo2/MnUgwllXF+JX7UOZyw910DMoTpoxo8849CR1xtPSCizcgbUH
+        eyxDu0b2MTM+yLmX6k8dfHgtICA/1j8d8w==
+X-Google-Smtp-Source: AA6agR7ht56AETrc67OcWwjk2ZdTN89lNQG6sdK7NhjVDq+yGtmrt31v3dYPncjALQdQHUUg3ZF0PA==
+X-Received: by 2002:a2e:8709:0:b0:26b:eb1d:a811 with SMTP id m9-20020a2e8709000000b0026beb1da811mr2510375lji.64.1662903324811;
+        Sun, 11 Sep 2022 06:35:24 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u13-20020a056512128d00b0048b256bb005sm618836lfs.49.2022.09.11.06.35.11
+        by smtp.gmail.com with ESMTPSA id v9-20020a05651203a900b004946bec4e61sm614338lfp.140.2022.09.11.06.35.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 06:35:11 -0700 (PDT)
-Message-ID: <9c7b977c-841b-68d1-505c-3dfaf86ad9bc@linaro.org>
-Date:   Sun, 11 Sep 2022 15:35:11 +0200
+        Sun, 11 Sep 2022 06:35:24 -0700 (PDT)
+Message-ID: <f32df517-ce96-d461-89a9-df16b46ebcc2@linaro.org>
+Date:   Sun, 11 Sep 2022 15:35:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
@@ -85,9 +85,13 @@ On 10/09/2022 19:19, Ibrahim Tilki wrote:
 > ---
 >  .../bindings/hwmon/adi,max31760.yaml          | 42 +++++++++++++++++++
 
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
+If a tag was not added on purpose, please state why and what changed.
 
 Best regards,
 Krzysztof
