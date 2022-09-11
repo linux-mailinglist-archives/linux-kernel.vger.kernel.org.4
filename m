@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4185B4C83
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 09:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750A95B4C86
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Sep 2022 09:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiIKHZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 03:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S229809AbiIKHbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 03:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiIKHZD (ORCPT
+        with ESMTP id S229733AbiIKHbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 03:25:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CF2255A4
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 00:25:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 11 Sep 2022 03:31:08 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B3772D1E1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 00:31:03 -0700 (PDT)
+Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1115B60E9A
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 07:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F1FC433D6;
-        Sun, 11 Sep 2022 07:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662881101;
-        bh=OrAu6mHIVqYRRW/CQFimPqBKISrkvqtpRN9Epl3Dyxg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=slDYJmis3ItMPuBIHoHNT3dHscIivy08miuXqCAL0AjgKn5uM6Pr1LdrkTOmXpsEi
-         1J5/JHa5KHtCSKx8oyEtVUDwl3iUfGAH4pTzL8YswRreXy+A7Fdw1DDgRq+DQ0dLeS
-         zRxd7J0HjaSiY3GEANn6RPX8rEBCTjQlPISulNHY=
-Date:   Sun, 11 Sep 2022 09:25:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3 1/2] staging: vt6655: remove unnecessary volatile
- qualifier
-Message-ID: <Yx2NY0RBWLqH3rDK@kroah.com>
-References: <cover.1662724786.git.namcaov@gmail.com>
- <c3a7d9963b1c38c5f493786d7268c430617412dd.1662724786.git.namcaov@gmail.com>
- <Yxt/3FOysEbwCm9T@kroah.com>
- <CA+sZ8B8Y1ZGou1Y4tQYJC1Wp_2MVdYKO0Bd3SfxMAU1DF+mz_g@mail.gmail.com>
+        by mail.8bytes.org (Postfix) with ESMTPSA id 577DB221169;
+        Sun, 11 Sep 2022 09:31:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1662881462;
+        bh=dpn0tsJQ0Z4NLTovO/Oi/8+2RqkOs+LGUNaqt/NRQb4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=yYIY31f6klOoMmD5DkK4KNwYQZADj5lHsPaBpatpcAlgJ9ho26pl5pi1Gtg7PDxJo
+         BTdYVhNrAytJPzkUM1onYpMJNReT+iaYccSyMpOUZuMShevgU//gE5JdTmCQwRz6n4
+         0WmnjL4EYU9P+WmqHrRLA81nBPVdlSZ1zpit3FZqISg9OCbzb+IiV9aA5F3iZpwOxU
+         qrhuRylX50at/K0TF96Sr92VCq2VSgZ3f/FDsO6ED25DHWnZdOnN0BK8mxxWVTVk72
+         igsjr0mpUC2SjbCAEYv6dxzTi51CrHPTmXlXJHYw2hp6YzBZ25lSTuqUU26/AwPXRv
+         hV8H2sek4ScwA==
+Date:   Sun, 11 Sep 2022 09:31:01 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: [git pull] IOMMU Fixes for Linux v6.0-rc4
+Message-ID: <Yx2Otdo+oqAeDG6s@8bytes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+sZ8B8Y1ZGou1Y4tQYJC1Wp_2MVdYKO0Bd3SfxMAU1DF+mz_g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 09:12:44AM +0200, Nam Cao wrote:
-> On Fri, Sep 9, 2022 at 8:03 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Sep 09, 2022 at 02:17:55PM +0200, Nam Cao wrote:
-> > > Remove volatile qualifier for the member rd0 of struct vnt_rx_desc,
-> > > because there is no reason it must be volatile.
-> > >
-> > > Signed-off-by: Nam Cao <namcaov@gmail.com>
-> > > ---
-> > >  drivers/staging/vt6655/desc.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/staging/vt6655/desc.h b/drivers/staging/vt6655/desc.h
-> > > index 17a40c53b8ff..3f0f287b1693 100644
-> > > --- a/drivers/staging/vt6655/desc.h
-> > > +++ b/drivers/staging/vt6655/desc.h
-> > > @@ -182,7 +182,7 @@ struct vnt_rdes1 {
-> > >
-> > >  /* Rx descriptor*/
-> > >  struct vnt_rx_desc {
-> > > -     volatile struct vnt_rdes0 rd0;
-> > > +     struct vnt_rdes0 rd0;
-> >
-> > You can not just remove this without describing _WHY_ it is ok to do so.
-> >
-> > Have you properly determined why it is, or is not, ok to use volatile
-> > here?
-> 
-> I did not carefully look at the volatile usage here. After looking at it
-> again, using volatile is actually valid: the structure resides on coherent
-> memory.
+Hi Linus,
 
-Are you sure?  That's a very odd thing for a driver to need.  Looks like
-they are allocating some dma memory and then pointing structures on top
-of that memory.  Why would you need to have "volatile" markings on a
-structure definition for that?
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Dig into this some more please, I don't think this is correct.
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-thanks,
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v6.0-rc4
+
+for you to fetch changes up to 2380f1e8195ef612deea1dc7a3d611c5d2b9b56a:
+
+  iommu: Fix false ownership failure on AMD systems with PASID activated (2022-09-11 08:30:41 +0200)
+
+----------------------------------------------------------------
+IOMMU Fixes for Linux v6.0-rc4
+
+Including:
+
+	- Intel VT-d fixes from Lu Baolu
+
+	  - Boot kdump kernels with VT-d scalable mode on
+
+	  - Calculate the right page table levels
+
+	  - Fix two recursive locking issues
+
+	  - Fix a lockdep splat issue
+
+	- AMD IOMMU fixes:
+
+	  - Fix for completion-wait command to use full 64 bits of data
+
+	  - Fix PASID related issue where GPU sound devices failed to
+	    initialize
+
+	- Fix for Virtio-IOMMU to report correct caching behavior, needed for
+	  use with VFIO
+
+----------------------------------------------------------------
+Jason Gunthorpe (1):
+      iommu: Fix false ownership failure on AMD systems with PASID activated
+
+Jean-Philippe Brucker (1):
+      iommu/virtio: Fix interaction with VFIO
+
+John Sperbeck (1):
+      iommu/amd: use full 64-bit value in build_completion_wait()
+
+Lu Baolu (5):
+      iommu/vt-d: Fix kdump kernels boot failure with scalable mode
+      iommu/vt-d: Correctly calculate sagaw value of IOMMU
+      iommu/vt-d: Fix recursive lock issue in iommu_flush_dev_iotlb()
+      iommu/vt-d: Fix lockdep splat due to klist iteration in atomic context
+      iommu/vt-d: Fix possible recursive locking in intel_iommu_init()
+
+ drivers/iommu/amd/iommu.c    |   3 +-
+ drivers/iommu/amd/iommu_v2.c |   2 +
+ drivers/iommu/intel/dmar.c   |   7 ++
+ drivers/iommu/intel/iommu.c  | 241 ++++++++++++++++++++-----------------------
+ drivers/iommu/intel/iommu.h  |   9 +-
+ drivers/iommu/iommu.c        |  21 +++-
+ drivers/iommu/virtio-iommu.c |  11 ++
+ include/linux/dmar.h         |   4 +-
+ 8 files changed, 163 insertions(+), 135 deletions(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
