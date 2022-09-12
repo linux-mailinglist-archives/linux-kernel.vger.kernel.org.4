@@ -2,120 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033B35B5BF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A63B5B5BF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiILOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S230041AbiILOLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiILOJ7 (ORCPT
+        with ESMTP id S229498AbiILOLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:09:59 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0569FDD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:09:58 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id r12so9157470ljg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mfq8c150I3kGu6rO3ZTAAfIdEDf7WQxub5tNq7rRvTU=;
-        b=H0AQMRXRpk3pNXxtcRoGC9Up38rl/ba0GRrM16r9+CKhsO+jeQLJiF8NzKI2/uUzjp
-         5M/3QwA6PW83EPqjqUg9MVdLLjkzm9fNjjjP4lIsu6jkfZZJc/cAXPeAqfbCw3czkFak
-         TGmpvnWeRqfDEXeUmmCsZnDQ68s0bJhEVE6tI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mfq8c150I3kGu6rO3ZTAAfIdEDf7WQxub5tNq7rRvTU=;
-        b=pZY5mkHcr1QTLVHs4AhPlJHA9biZURl5yTOZcqvCZlORRH4dNcbT/FDfESU9CE8rl4
-         2ps3NaIQ3JtJBI7YBX1M1474h5d2OhXxVfRlYM40kAjXR+vF/fO+Y+I1Pmar9v0wEAkZ
-         SSovLX2iabpXe/wtUwyPYQuva7050I7uSl5qRhxIXTpRHdBkCP7RAMx3EgUGvIIJvFVS
-         5ZVnQ9SZtpkrt68SpAz5OV8JCleqTDMemjzd/XnVJbMb7G8RvCdsoliim4G2eLOPObVA
-         lbSlc/BN3shOHkERRipoSuPfEj6rHmvX5ehtV3SX49D6/POV1yfrS5Zdv4waW0N6UpUM
-         7oNg==
-X-Gm-Message-State: ACgBeo0/znzq66n16AlN8RilBGundDlZXnUUfiGJCO3B9/YjmoMoX/Dg
-        1dl/JBoPtGYMTSItap5wLcP+fK9fMWlAYy3m
-X-Google-Smtp-Source: AA6agR5kuILIL+8RrNwg3iQWTeVaZYZE0E8rByAzEoPgx9lyYjH60TSnGmQgAkBjOliF3P32jk69Vw==
-X-Received: by 2002:a2e:5357:0:b0:26a:9a92:86c2 with SMTP id t23-20020a2e5357000000b0026a9a9286c2mr7499480ljd.178.1662991796708;
-        Mon, 12 Sep 2022 07:09:56 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id dt6-20020a0565122a8600b004976809d6a7sm1081284lfb.283.2022.09.12.07.09.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 07:09:54 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id f14so14124373lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:09:54 -0700 (PDT)
-X-Received: by 2002:a05:6512:10c1:b0:492:a27d:ff44 with SMTP id
- k1-20020a05651210c100b00492a27dff44mr8393482lfg.405.1662991794094; Mon, 12
- Sep 2022 07:09:54 -0700 (PDT)
+        Mon, 12 Sep 2022 10:11:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4FFD00;
+        Mon, 12 Sep 2022 07:11:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41AEDB80D55;
+        Mon, 12 Sep 2022 14:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11EFC433C1;
+        Mon, 12 Sep 2022 14:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662991878;
+        bh=OtpVMG63/twYTBPtJm030JQK0As6OlhIeF6G6tO5hfo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OaqqLDwbkO4VC/jDcesIgP4kTYD6Nfh85TxxKofogLQ7XydWFSNnLrWVlpKx+QxQy
+         lx9Kk56VJeuFcv3c15xXCjpB+DX+1iCiEcTazL+ZX0X5YFJyhKX20rF11x00EfygKW
+         X6HF72k3LhwCUzVnMItGq6a2QKWzIrMRcpeSUa6SZO1S2O8YaBqTkvcX8jkPJgt4BG
+         WJvfeImAWDgqer/JfP48zuotOSbnelFLpdHTiuVbz1jeB8KbtPvGF7V2axxDRqcepO
+         uCn0Qu0HaO1k5pqQ3IM9M4hl5A7y4BQITjTyfrGDwnku2qb7KtkY/br3rMWQyxezr2
+         2uORJK3YSqT7A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 34B1C5C06AB; Mon, 12 Sep 2022 07:11:16 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 07:11:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
+ in explanation.txt
+Message-ID: <20220912141116.GK246308@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
+ <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
+ <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
 MIME-Version: 1.0
-References: <20220902130625.217071627@infradead.org> <20220902130947.190618587@infradead.org>
- <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
- <YxI+K8Y+f/FHSQCU@hirez.programming.kicks-ass.net> <CAHk-=wjRLehUO=u8HDJGRFv+wz7hakSc=z6eTg547pAmb0UKHg@mail.gmail.com>
- <YxXJswK9QjhCGmPN@hirez.programming.kicks-ass.net>
-In-Reply-To: <YxXJswK9QjhCGmPN@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Sep 2022 10:09:38 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whRetwx+5Bjiee+T+Nyyi8EiZ17SM3AL8jJnXuA+WjQyQ@mail.gmail.com>
-Message-ID: <CAHk-=whRetwx+5Bjiee+T+Nyyi8EiZ17SM3AL8jJnXuA+WjQyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 08/59] x86/build: Ensure proper function alignment
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 6:07 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Sep 02, 2022 at 11:08:54AM -0700, Linus Torvalds wrote:
->
-> > Let's just do this right.
->
-> Something like so then?
+On Mon, Sep 12, 2022 at 02:38:58PM +0100, Paul Heidekrüger wrote:
+> On 12. Sep 2022, at 12:38, Paul E. McKenney <paulmck@kernel.org> wrote:
+> 
+> > On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekrüger wrote:
+> >> The current informal control dependency definition in explanation.txt is
+> >> too broad and, as discussed, needs to be updated.
+> >> 
+> >> Consider the following example:
+> >> 
+> >>> if(READ_ONCE(x))
+> >>>  return 42;
+> >>> 
+> >>> WRITE_ONCE(y, 42);
+> >>> 
+> >>> return 21;
+> >> 
+> >> The read event determines whether the write event will be executed "at
+> >> all" - as per the current definition - but the formal LKMM does not
+> >> recognize this as a control dependency.
+> >> 
+> >> Introduce a new definition which includes the requirement for the second
+> >> memory access event to syntactically lie within the arm of a non-loop
+> >> conditional.
+> >> 
+> >> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
+> >> Cc: Marco Elver <elver@google.com>
+> >> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> >> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> >> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> >> Cc: Martin Fink <martin.fink@in.tum.de>
+> >> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> >> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > Hearing no objections, I reverted the old version and replaced it
+> > with this version.  Thank you both!
+> > 
+> > 							Thanx, Paul
+> 
+> Oh, wait, there was further discussion [1, 2], and we finally agreed on [3].
+> So [3] is the final version.
+> 
+> I think me sending a v2 immediately after the v1 led to this out-of-order
+> discussion - sorry!
 
-Sorry, I dropped this due to travel.
+My bad, and thank you for checking and letting me know!
 
-The patch looks sane, the only thing I worry a bit about is
+I have reverted to the proper state.
 
-> +config FUNCTION_ALIGNMENT
-> +       int
-> +       default 64 if FUNCTION_ALIGNMENT_64B
-..
-> +       default 0
+							Thanx, Paul
 
-Is '0' even a valid value then for things like
-
-> +#define __ALIGN                        .balign CONFIG_FUNCTION_ALIGNMENT
-> +#define __ALIGN_STR            __stringify(__ALIGN)
-
-because it doesn't really seem like a sensible byte alignment.
-
-Maybe "default 4" would be a safer choice?
-
-                   Linus
+> Many thanks,
+> Paul
+> 
+> [1]: https://lore.kernel.org/all/663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org/
+> [2]: https://lore.kernel.org/all/D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de/
+> [3]: https://lore.kernel.org/all/20220903165718.4186763-1-paul.heidekrueger@in.tum.de/
+> 
+> 
+> >> ---
+> >> 
+> >> v2:
+> >> - Fix typos
+> >> - Fix indentation of code snippet
+> >> 
+> >> v1:
+> >> @Alan, since I got it wrong the last time, I'm adding you as a co-developer after my
+> >> SOB. I'm sorry if this creates extra work on your side due to you having to
+> >> resubmit the patch now with your SOB if I understand correctly, but since it's
+> >> based on your wording from the other thread, I definitely wanted to give you
+> >> credit.
+> >> 
+> >> tools/memory-model/Documentation/explanation.txt | 7 ++++---
+> >> 1 file changed, 4 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> >> index ee819a402b69..0bca50cac5f4 100644
+> >> --- a/tools/memory-model/Documentation/explanation.txt
+> >> +++ b/tools/memory-model/Documentation/explanation.txt
+> >> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
+> >> through a pointer will depend on the value read earlier from that
+> >> pointer.
+> >> 
+> >> -Finally, a read event and another memory access event are linked by a
+> >> -control dependency if the value obtained by the read affects whether
+> >> -the second event is executed at all.  Simple example:
+> >> +Finally, a read event X and another memory access event Y are linked by
+> >> +a control dependency if Y syntactically lies within an arm of an if,
+> >> +else or switch statement and the condition guarding Y is either data or
+> >> +address-dependent on X.  Simple example:
+> >> 
+> >> 	int x, y;
+> >> 
+> >> --
+> >> 2.35.1
+> 
+> 
