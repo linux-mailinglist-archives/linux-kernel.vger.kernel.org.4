@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E1B5B62E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC9F5B62EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiILVl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S229965AbiILVnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiILVly (ORCPT
+        with ESMTP id S229528AbiILVnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:41:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA7A4C61F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663018913; x=1694554913;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qFnIjffMALUQQUIAOVDoq6z2zOO7NBVKHgBfILKSm68=;
-  b=m5R6mxcqh9cDwTuB5X4Qk5dvUcEU5bGf7xyyCL8SLaOH8H/szIqKlZ0d
-   jylS4abmc2z6q5k0CD6HBgLShtqpscasuHzju1st7Pm1/Q6R7uMTm83OY
-   wZHWj2/6VbD3M6RpUXRgUwJnMYWy81QpFwdQN74Wrj5ojTUQyYqF8EBqL
-   je9eOeJC9j2tEd1jbadjgQwKgwGXuZcOPgCe1AGhT7VI7tjVP0PpzmOny
-   M72Ec2PPqrEXif9JH+P+h82yoM2dtFpsD2kUbLaW0MR0oB9avZ8s0pY2u
-   XTwrvExDBmqqDYf5NJeqCE0gsnPULWIm/Bv+8eY5kbnFoqP5Fo5C94uZs
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298775514"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="298775514"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 14:41:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="646645164"
-Received: from gjmurphy-mobl.ger.corp.intel.com (HELO [10.213.203.202]) ([10.213.203.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 14:41:48 -0700
-Message-ID: <356d4ad1-f7d8-b8ff-3b63-819a64bf5b9f@intel.com>
-Date:   Mon, 12 Sep 2022 14:41:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@intel.com>,
-        Ashok Raj <ashok_raj@linux.intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>
-References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
- <YxDvpLb77lwb8zaT@araj-dh-work>
- <20220904003952.fheisiloilxh3mpo@box.shutemov.name>
- <Yxtk4gMbcVgTKzKg@araj-dh-work> <20220912133935.3bb3e247@jacob-builder>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220912133935.3bb3e247@jacob-builder>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 12 Sep 2022 17:43:52 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05A04C62C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:43:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y5-20020a25bb85000000b006af8f244604so1247627ybg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=2d3fydqfX2g65N3phYlMxqgvPYWylfGPLLgNinkZtt0=;
+        b=ZyLbqVNgTed8/0xWnsk+tR2bOwO5rwirlfTupR72ID3PCTMhFXg/e8BAFLSWElwOIb
+         kSEZWlZpBUDgCmHZ6FNZRaMsPx0f9XWxOS9KfY3ch50Le7A9zCo8OpgZd3aHfrxEZZdZ
+         HNABn/7p+5t0vUxv4hrnNsVv7BjgfBaSxu8BYz7IY9/Ls7QRdUWJpJJsCx/GG0TjY4YL
+         9osbkn93FTbkUyvA3D5z2WBxpQ6T35P0YiCNDIKnzirRfLvomOplATDlwkKMdVOHjLwb
+         qoNnHtZ9PXj8el2ezt0rGJreHXQMtSRkv10hKARhx9ZHKUd5suGg2tJ06B+b/InWPt+g
+         5yAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=2d3fydqfX2g65N3phYlMxqgvPYWylfGPLLgNinkZtt0=;
+        b=uXpDBRkY/W6BBpmx6gnuFEjZH8lQMoOD2ZZC5dU9PJkE+mpGGjMp6DLuc55huTZUFU
+         A9uKMnKM0gukKw/RJ/3JDgULa7vtRcY/jY19jYxayL098bDLtmJSPRWCeohn0zVlPNOV
+         OcA3gauLFU4sKBCd4W0dFlk/CrHgmuLtgv9aQcZ0b+MJuNwzNZFpMaN7D8qzfGipqzMt
+         qnCkjH/HcAVZ4CaBFtZp6ndx+CMWwDEOFd6jHrA+6TCirwjBC8mLN+i2DbkVl4ac8/FU
+         aC9HCrIRl5zQEHWMLutC1kIsk7DM9JH/bD06ocTlSlbF3OdMwwummh+j/r9dLZ1H7gQw
+         5NQw==
+X-Gm-Message-State: ACgBeo3l/2ifIPu7aTpDl+ht9gs6dJUXmqWo4z9PatIwohLbTpWHQPFo
+        fqavxkW5sADdm2R9+OpX7S7HT144Tw==
+X-Google-Smtp-Source: AA6agR6dOUbw4syADaJEIcxCeDzWlSzErY/9EAd+wVdfmpfcPpI7s8I6rNEgQ+gEJZAdtRqd6evKVLkZDw==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a0d:e946:0:b0:345:696:caaa with SMTP id
+ s67-20020a0de946000000b003450696caaamr23604716ywe.507.1663019030957; Mon, 12
+ Sep 2022 14:43:50 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 14:43:40 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220912214344.928925-1-nhuck@google.com>
+Subject: [PATCH] net: korina: Fix return type of korina_send_packet
+From:   Nathan Huckleberry <nhuck@google.com>
+Cc:     Nathan Huckleberry <nhuck@google.com>,
+        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 13:39, Jacob Pan wrote:
->>> +	if (pasid_valid(mm->pasid) && !forced) {
-> I don't think this works since we have lazy pasid free.  for example,
-> after all the devices did sva_unbind, mm->pasid  we'll remain valid until
-> mmdrop(). LAM  should be supported in this case.
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-Nah, it works fine.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-It just means that the rules are "you can't do LAM if your process
-*EVER* got a PASID" instead of "you can't do LAM if you are actively
-using your PASID".
+The return type of korina_send_packet should be changed from int to
+netdev_tx_t.
 
-We knew that PASID use would be a one-way trip for a process when we
-moved to the simplified implementation.  This is just more fallout from
-that.  It's fine.
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+---
+ drivers/net/ethernet/korina.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> Perhaps, we could introduce another prctl flag for SVA, PR_GET_SVA?
-> Both iommu driver and LAM can set/query the flag. LAM applications may not
-> be the only ones want to know if share virtual addressing is  on.
+diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
+index df9a8eefa007..eec6a9ec528b 100644
+--- a/drivers/net/ethernet/korina.c
++++ b/drivers/net/ethernet/korina.c
+@@ -416,7 +416,8 @@ static void korina_abort_rx(struct net_device *dev)
+ }
+ 
+ /* transmit packet */
+-static int korina_send_packet(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t korina_send_packet(struct sk_buff *skb,
++				      struct net_device *dev)
+ {
+ 	struct korina_private *lp = netdev_priv(dev);
+ 	u32 chain_prev, chain_next;
+-- 
+2.37.2.789.g6183377224-goog
 
-I don't think it's a good idea to add yet more UABI around this issue.
-Won't the IOMMU folks eventually get their hardware in line with LAM?
-Isn't this situation temporary?
