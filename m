@@ -2,310 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07375B55C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6676B5B55D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiILIQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S229928AbiILIVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiILIQY (ORCPT
+        with ESMTP id S229705AbiILIVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:16:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8A825EB8;
-        Mon, 12 Sep 2022 01:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662970582; x=1694506582;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=bMkQSCJc9PjRMa8f/uzcRApXYCMs0BNdkgj25Cw1fa4=;
-  b=shm85FHEg2UmqpJJ5b/VDMxYU5h97BYTpJHyE6+h1kWQ8h4cvkmu1gr6
-   lAM29oqQRyQwea0bONRMf/SyMBH+09lrxqnfPxB3CJEPcWco/o7YC6ief
-   OQeLc377rmuZ6IoQZlDb13Vsr9qbCX+5AH8Seag6rCzRSr8E8ps9eyBdi
-   y0bXtzxdcjwuQCornZ6qixm9KsjYoAg3j37lSEXYXw8Uan8PBcB0nh947
-   A8HybXRPBoSHCYS+dWXH1K4g2B0/XJyi46n9At+tYE5xqoYwZfTwy5bQL
-   LZc5IBsgnVtZNKed5hJHJIq+cwZLqLAzfgX4SlpXBgeH/8ZwV6hoOmMy4
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
-   d="scan'208";a="176666001"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Sep 2022 01:16:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 12 Sep 2022 01:16:21 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Mon, 12 Sep 2022 01:16:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VNWt5xemWGQnJMfkFCk9lsYMcCLW9JMtDar6aM7BaW8lXfLOEOY5Ic70z/GL3MoKTlYvmM2GRTo/3aGWzvkKv4omOM+LRfG0tZQuc+Eu5jjKxHRlQFSlXSZdZ7if0P5lFdLK7zm3gfDEz/RqfPVPCBvpM9z+HNoLIMnFGbH6HFey39FZZT3FA+p66MWmz1GBTYg9QuD8vCsWlSLqZCMQguOVr6q1dsXdt1gi5tSNeElecZWUqyKeZ+TjyFyLpgJe/rhiy73MSzsUOx2KN5ggBJO+EsgLavGGZxDUA/UcE6WnumoSXntVYXEBWxHkkILJ7nIAKGzW1C2AZUjll0vZtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UGxCscTlyYjZ1KNZy+fuaKEIN6h9wlGj9xjBFGmApn8=;
- b=ipQ6n1nEkhPGr+1W4GPB58OMLZKjH+/m6QzzFW2OPtCoSzqOuYkbrq2306SbN6kj3SQ8R5PNwf8QQzb//cvM0ctVb21VLeelDa1trDohHSHlnHXLwmMGmsbOvhBB8ctOqr4rAg4NbBBRKQKAXweQ4UrcJl+S/8hxkxZft7JhXbaPdml1Bq1Imc31G5t2zL6d0GQrlJ1tH5oBNDualIR8Adlt/el39wJKR80FXQNbizDRxTTz7QBKLhxnN6FhKtoD2ZK2/Xrs2rSPY9qM5QUnJZhZHvKY400WYMoXSI2CphpY/pqSLsRTPEptP6xd7/M/cZ8j3Fis+6fMymIv1V4eqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UGxCscTlyYjZ1KNZy+fuaKEIN6h9wlGj9xjBFGmApn8=;
- b=OjkGNMCHmEGDtPLLypQyeb597TBQEXzmcDo7DmvL3plCcVdRIk2zCiVMQEq5pQ/5hR6UIp1UUo1qC9K83U/HrOJaiUoHN8lDcy/PFEnJADJZOlLHDtVJsVQ0Wm5Zoa8PMtDJuKuHW99OF3/fA68ZCgM+G6XDMxQ6Q2AlG0Tff4c=
-Received: from CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9)
- by CY5PR11MB6306.namprd11.prod.outlook.com (2603:10b6:930:22::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
- 2022 08:16:16 +0000
-Received: from CO1PR11MB4865.namprd11.prod.outlook.com
- ([fe80::f851:80cd:172b:4b1c]) by CO1PR11MB4865.namprd11.prod.outlook.com
- ([fe80::f851:80cd:172b:4b1c%5]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 08:16:16 +0000
-From:   <Kavyasree.Kotagiri@microchip.com>
-To:     <robh@kernel.org>
-CC:     <Claudiu.Beznea@microchip.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <Nicolas.Ferre@microchip.com>,
-        <lee@kernel.org>, <robh+dt@kernel.org>, <Sergiu.Moga@microchip.com>
-Subject: RE: [RESEND PATCH v9 1/3] dt-bindings: mfd: Convert atmel-flexcom to
- json-schema
-Thread-Topic: [RESEND PATCH v9 1/3] dt-bindings: mfd: Convert atmel-flexcom to
- json-schema
-Thread-Index: AQHYw5S351ZiP2+bvEqYZuXgNIsbDK3WCUwAgACWniCABNh4sA==
-Date:   Mon, 12 Sep 2022 08:16:16 +0000
-Message-ID: <CO1PR11MB48654A4239AB7A760193497992449@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <20220908150658.1839520-1-kavyasree.kotagiri@microchip.com>
- <20220908150658.1839520-2-kavyasree.kotagiri@microchip.com>
- <1662671776.565921.3355400.nullmailer@robh.at.kernel.org>
- <SA2PR11MB48742AF8A0C9BC6D32D57A2892439@SA2PR11MB4874.namprd11.prod.outlook.com>
-In-Reply-To: <SA2PR11MB48742AF8A0C9BC6D32D57A2892439@SA2PR11MB4874.namprd11.prod.outlook.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR11MB4865:EE_|CY5PR11MB6306:EE_
-x-ms-office365-filtering-correlation-id: c5804287-154a-47a2-048d-08da94971080
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LyKcinMda/mYEP0k7JbWPCjd6iXKdmRIXxtXTUSugvTrc1lc9SuF7ElI2Rjak+K/endhxDjIE6p6i+UUHPQaKCwUUN1aBN2BionZ2NsWtZbX81zZ/rQ7yIFYmIPvJUrNaCuKxtjelj4DdcB9rFHfpBbW9ZDc8GF0bvpYtui8+hImgj5pO+8yIZJpmJdR0HB3rR+xRnglnEJo5U5QF1C6F2g5eH108+zjpaW30YBS7v6s5fcywrQE+/rQc8B9Db+DCun/wacd2vDvHwC43PJp1TxlP2Fb6fTPvFSrYGf3RC4iopvXYIFw+9mc2PlAyFUZz/SuIhAqOECsE2cZkvq5qU1gqsAhPzPLMfmaLTmO9Ux+OKmRCueYr6JsT9wrlMTXKkDtG/Dqtbuxqn9jP5hqMIXgtafLWwgTl+EVjJ1BxoICQB/qv7dK7uOMf6YtAcgqMT9cMqPYy7wQ9h8xR3YAu54eENkH5UNX2rkwxQ0pPUypVb/BBxFNz9HTHcXdglYPkdoFRY5UaWiv8G8nK3XMMBTYM2gVGhGDYcf26FTmSL93S8FkrGta/JdL9+Io2iYal7FO1u71P6BfRfI+EZ5odmMhblhhHyUzxMceIxJVNaTV0+EN67RGC+aPugX0rHDXnW3NdhbuTld1K/JrOxvBfRUN/Fwwk+o+9bBMo6hkW/RLm/CXXtmbQxMG+mlcRSmOMAzigF2O/LkxrR6MgPu5pVYs0PawvxHcoOLajElFJ1aGEMDVpdgtb4Ivh8KsGuG2c8FQ/JRdSuloRXNuu/DZZKuvRMlZKh1y2i82LVpXOC7YXqzL2/j+iaVOjB1u/m2xK5tC/qSvWkmKZJIgp/BDBw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39860400002)(366004)(346002)(376002)(66946007)(186003)(64756008)(8936002)(52536014)(66476007)(5660300002)(2906002)(66556008)(4326008)(8676002)(76116006)(7696005)(66446008)(9686003)(33656002)(6506007)(86362001)(26005)(107886003)(55016003)(966005)(41300700001)(83380400001)(478600001)(38100700002)(6916009)(38070700005)(54906003)(316002)(71200400001)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PWJ4SJMKE5c5R45TGcuYWHFmeqm6uQdS4qLmv+CIGLvgCr7n75Eo4uCNLH9X?=
- =?us-ascii?Q?kbjYhFacsLduBJXaMC0NnwEltgMBnGMukA9iCMHVSuO5xqwMl+5Mu1/4xgnS?=
- =?us-ascii?Q?wksoP1Dqih7S6fJ7gThyhZzp+mQpA+NnPlPnIZYCrtBt42zKYWXD8eSFpIrn?=
- =?us-ascii?Q?2W1BE4gTHxYFi/5a6whRdt0KZAQnODp+zZqB8yo0LBkNFmM4n5l5ms1oFwWA?=
- =?us-ascii?Q?Auka4sB/Oj2kJNmaJOfohgCMwF+U2mfyK4a4+w87s5EkAOcP8xCb/G8QTWi0?=
- =?us-ascii?Q?+kZP1/Ld89gd1/XiQEyWt4hr1HX9BifOXx1kY79z9yIue4okFpITVpUkV0DH?=
- =?us-ascii?Q?1E48/ByaE0RNPtTQeylB0OYCYT0x9FQlBf8pLQsbyntBnxp+cJagXq0DuR0s?=
- =?us-ascii?Q?4JjfG6TP6V3/5Uho+fxVgTvmuf+FgFHeM+Si6BQO6L3EgSL9YJuNCj8IUVEh?=
- =?us-ascii?Q?nsjKTcD18oDeb/3wL11ywnfElXsbRsCOXqZFlQL5aUfrIj1Q+IQm5YFhaCAN?=
- =?us-ascii?Q?StJWBTldO5itYODdrZTV32FgGuD9j9530WROGOBif+YEIfvp2FE151yU7XJi?=
- =?us-ascii?Q?IykdvBiqplqgWOTXR81XkcusCHLFasgEbv2UIyNbo3YXTAoiB33Te+YGTbYY?=
- =?us-ascii?Q?3awOfq01rv6JVqdLs2j3QhB5fVY0OqcL2bGOoL0Y2BJbL3aXbGrKcp7tCagz?=
- =?us-ascii?Q?w/hJh3ZandJaItGfdTu/KEu3Mbv7O7LTHCpK1dRvQx8FNfEmnEMPALpoRDnU?=
- =?us-ascii?Q?mkpOqd++3PQUqDBmJGAvZ09g5uCazCsvNswTHcXvegJHzyXyDgjFWjqJhe9n?=
- =?us-ascii?Q?U3l+/JX6Tm2GlgMjbNQMe9Xpx9VLJUA79hwl2XeHExkFBE/kE3Pbi4Hcze1E?=
- =?us-ascii?Q?2deY64usEuq42nHBuhAm4eO3GLwDHkA0mzUUwXHyU/cHaW+eJfpIlUuyvaOE?=
- =?us-ascii?Q?PaFuGtwIa2lXEG93sRCfIt2GGra469HBgDeSnjxJXvshcWE3vYm/81rYgZcb?=
- =?us-ascii?Q?IYNDR16uiCHBebcjCsb7ep7X5sTag0mCns4ebYRBqyvIXqJl10Z8PfNJcFZo?=
- =?us-ascii?Q?rLzm8ROgIF7f3fkQqjw6Ro6QbU4d9WAB0cDFe/SMrBKq4o5JC0Y3sm4BGu3K?=
- =?us-ascii?Q?viqROEo5V4kvy92yy/sEokJcuoU2kpXyfjO5HOIxNjZKSrn/5GIzhl+4I0Sa?=
- =?us-ascii?Q?hOnRZKxs8ucvdzGqJfNs9wwNkCYv+BCF44WzFXRY8D1AGc8c2j1GqAUb98pS?=
- =?us-ascii?Q?gU53Iit3ZrkgqKRjHaUmxh8FGyQnXa30otrwzBlrI04NdbUCd0/M0ABhRfLX?=
- =?us-ascii?Q?xqBwN0BnzLm+F4QIZLCqMJ/CusYzapOMMX2kjKacbevZc/JblNm8GxbtS8yg?=
- =?us-ascii?Q?xVJCu/0VqhhdpmBo51AUYXD/YwwAo73qCR4ZBJt/Tmi4A92rxn8O2W2iwTET?=
- =?us-ascii?Q?AZkeprkoOaxQ4Nqzn9PCw3Ic/4LZgicK4gowrkM2U4Xp44C6ziIfW61PjW92?=
- =?us-ascii?Q?C+hRiIzXofhDsClSoBFSfAgT8VyWR3iU74VtuMksyoC4+c3UCiPkHqHNpYwU?=
- =?us-ascii?Q?qc6QUUVzcr/d6wp0n2hGx858B1XTX8ERQbLFNJ9OMSUZfqNCetqWV5iWlJK4?=
- =?us-ascii?Q?Pg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 12 Sep 2022 04:21:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BBB26544
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:21:02 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C7BG79037693;
+        Mon, 12 Sep 2022 08:20:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=cb+UoFqw3wk74sENZx0JziB3/sfP2sFHoWZ65QxhDzA=;
+ b=VJQTfmJkRcSuRD4i4Z87ircxIQy9OXMPBE1Ug2ZSEqDTtpSF0gUPr1iKctrGm5LSP5Rj
+ uTaT6PykV6ZY0Lr4Z+h+icFCGfCJRCzXiqrVbMxT3KAmN2Mb6DgF92G9gEf5Yzdaqa3z
+ m328l1fPrQXyIRNqYWVP2soyNTQVZPi9OJA8eBMmMY23Q0htvL+r9u8tY33dHua43EfB
+ YxwJgwkCcHDDc3Rv5yeekNMjcCfbF0lJ64Ra7D6SXezSwjvr18g5UoSLucfly8oNaGV4
+ a3sDk18/rmHeNjpl1xjSZqisoH0TqCoXvSM89C2CVsBo/NPijOOdeXc1aC9enLVjrUBY 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jhxdj55m5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 08:20:35 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28C5qkLn038555;
+        Mon, 12 Sep 2022 08:20:34 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jhxdj55ju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 08:20:34 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28C86YHV002764;
+        Mon, 12 Sep 2022 08:20:31 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3jgj78sh1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 08:20:31 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28C8KTVx30147042
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Sep 2022 08:20:29 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46E24A4040;
+        Mon, 12 Sep 2022 08:20:29 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A63A0A4051;
+        Mon, 12 Sep 2022 08:20:24 +0000 (GMT)
+Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.91.220])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Sep 2022 08:20:24 +0000 (GMT)
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     jpoimboe@redhat.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
+        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
+Subject: [PATCH v3 00/16] objtool: Enable and implement --mcount option on powerpc
+Date:   Mon, 12 Sep 2022 13:50:04 +0530
+Message-Id: <20220912082020.226755-1-sv@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5804287-154a-47a2-048d-08da94971080
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2022 08:16:16.3988
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qy5+t0y+s7lVCKOF1PZEYcBEK0KvEdkdUbqU0eKPI4YUcABw9isN56SXST3zxXuFu1p9hsfSVwAjsREGlG4SRQQ5aDKRYaBQXR5sKvGIZmC13r3Jyo2hga7j0vy5iy9F
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6306
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jAQErej-Crb9RxS6isTRf0dcNoodkm4w
+X-Proofpoint-GUID: BvWwWq6yM0W5AGErR9G4e1Qwfbb9VmfU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_04,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 spamscore=0 impostorscore=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209120027
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > Convert the Atmel flexcom device tree bindings to json schema.
-> > >
-> > > Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> > > ---
-> > > v8 -> v9:
-> > >  - Changed reference provided for spi bindings to atmel,at91rm9200-
-> > spi.yaml
-> > >
-> > > v7 -> v8:
-> > >  - Added back patternProperties for child nodes.
-> > >
-> > > v6 -> v7:
-> > >  - Change filename to atmel,sama5d2-flexcom.yaml
-> > >  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
-> > >
-> > > v5 -> v6:
-> > >  - Removed spi node from example as suggested by Rob and
-> > >    also pattern properties(spi dt-bindings conversion to yaml patch i=
-s
-> under
-> > review).
-> > >    Once that is accepted, I will add back spi example through new pat=
-ch.
-> > >
-> > > v4 -> v5:
-> > >  - Fixed indentations.
-> > >
-> > > v3 -> v4:
-> > >  - Corrected format of enum used for compatible string.
-> > >
-> > > v2 -> v3:
-> > >  - used enum for compatible string.
-> > >  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
-> > >  - fixed dtschema errors.
-> > >
-> > > v1 -> v2:
-> > >  - Fix title.
-> > >
-> > >  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 91
-> > +++++++++++++++++++
-> > >  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -------------
-> > >  2 files changed, 91 insertions(+), 63 deletions(-)
-> > >  create mode 100644
-> > Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> > >  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-
-> > flexcom.txt
-> > >
-> >
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
-> >
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check=
-.
-> > This will change in the future.
-> >
-> > Full log is available here: https://patchwork.ozlabs.org/patch/
-> >
-> >
-> > flexcom@e0040000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8291.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8309.dtb
-> >
-> > flexcom@e0044000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8291.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8309.dtb
-> >
-> > flexcom@e0060000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8291.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8309.dtb
-> >
-> > flexcom@e0064000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8291.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8309.dtb
-> >
-> > flexcom@e0070000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-> >         arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8291.dtb
-> >         arch/arm/boot/dts/lan966x-pcb8309.dtb
-> >
-> > flexcom@e2824000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-sama7g5ek.dtb
-> >
-> > flexcom@f8034000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-kizbox3-hs.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_icp.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-> >
-> > flexcom@f8038000: spi@400: Unevaluated properties are not allowed
-> > ('dma-names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-kizbox3-hs.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_icp.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-> >
-> > flexcom@fc010000: spi@400: Unevaluated properties are not allowed
-> ('dma-
-> > names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-kizbox3-hs.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_icp.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-> >
-> > flexcom@fc014000: spi@400: Unevaluated properties are not allowed
-> ('dma-
-> > names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-kizbox3-hs.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_icp.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-> >
-> > flexcom@fc018000: spi@400: Unevaluated properties are not allowed
-> ('dma-
-> > names', 'dmas' were unexpected)
-> >         arch/arm/boot/dts/at91-kizbox3-hs.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_icp.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-> >         arch/arm/boot/dts/at91-sama5d2_xplained.dtb
->=20
-> dma properties for spi node is already being covered by Sergiu in below
-> patch:
-> https://lore.kernel.org/lkml/b4625526-8f9b-ada8-f854-
-> 751a48545576@linaro.org/
->=20
-Hi Rob, Please let me know your comments.
+This patchset enables and implements objtool --mcount
+option on powerpc. This applies atop powerpc/merge branch.
 
-Thanks,
-Kavya
+Changelog:
 
->=20
-> Thanks,
-> Kavya
+v3:
+
+* Patch 01/16 - Rework patch subject.
+	      -	Rework changelog.
+	      - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 02/16 - Rework changelog to update details based on feedback
+ 		from Nicholas Piggin and Michael Ellerman.
+	      - Use quotes instead of __stringify macro, based on
+		suggestion from Christophe Leroy.
+
+* Patch 03/16 - Add Reviewed-by tag from Christophe Leroy.
+	      - Based on Christophe's suggestion, keep all <linux/...>
+	        before <asm/...>.
+	      - Rework changelog.
+
+* Patch 04/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 05/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 06/16 - No change. 
+
+* Patch 07/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 08/16 - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 09/16 - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 10/16 - Reorder local variable declarations to use reverse
+		xmas tree format. 
+	      - Add Signed-off-by tag from Sathvika Vasireddy indicating
+	        changes done.
+	      - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 11/16 - Update changelog to indicate that powerpc kernel does
+		not support nop'ed out ftrace locations. 
+	      - Add Acked-by tag from Peter Zijlstra.
+	      - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 12/16 - Per Christophe's comment, rework changelog. 
+
+* Patch 13/16 - Add Acked-by tag from Peter Zijlstra.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 14/16 - Simplify arch_ftrace_match() function, based on
+ 		Christophe's suggestion. 
+              - Add Reviewed-by tag from Christophe Leroy. 
+
+* Patch 15/16 - Include code from Christophe Leroy to use local vars for
+ 		type and imm, and to adapt len for prefixed
+		instructions.
+
+* Patch 16/16 - Based on suggestion from Christophe Leroy, setup
+                immediate value calculation outside the check for
+                specific instruction under case 18. 
+	      - Set instruction type to INSN_CALL for 'bla'
+	        instruction as well.
+		
+v2:
+
+* Change subject of patch 01/16
+* As suggested by Christophe Leroy, add barrier_before_unreachable()
+before __builtin_unreachable() to work around a gcc problem.
+* Fix issues reported by Kernel Test Robot.
+* Include suggestions from Christophe Leroy, and change commit 
+messages for patches 01/16, 02/16, 03/16, 05/16.
+
+Christophe Leroy (4):
+  objtool: Fix SEGFAULT
+  objtool: Use target file endianness instead of a compiled constant
+  objtool: Use target file class size instead of a compiled constant
+  powerpc: Fix objtool unannotated intra-function call warnings on PPC32
+
+Sathvika Vasireddy (12):
+  powerpc: Fix __WARN_FLAGS() for use with Objtool
+  powerpc: Override __ALIGN and __ALIGN_STR macros
+  powerpc: Fix objtool unannotated intra-function call warnings
+  powerpc: Curb objtool unannotated intra-function warnings
+  powerpc: Skip objtool from running on drivers/crypto/vmx/aesp8-ppc.o
+  powerpc: Skip objtool from running on VDSO files
+  objtool: Add --mnop as an option to --mcount
+  objtool: Read special sections with alts only when specific options are selected
+  objtool: Use macros to define arch specific reloc types
+  objtool: Add arch specific function arch_ftrace_match()
+  objtool/powerpc: Enable objtool to be built on ppc
+  objtool/powerpc: Add --mcount specific implementation
+
+ Makefile                                      |   4 +-
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/asm.h                |   7 ++
+ arch/powerpc/include/asm/bug.h                |   3 +-
+ arch/powerpc/include/asm/linkage.h            |   3 +
+ arch/powerpc/kernel/cpu_setup_6xx.S           |  26 +++--
+ arch/powerpc/kernel/cpu_setup_fsl_booke.S     |   8 +-
+ arch/powerpc/kernel/entry_32.S                |   9 +-
+ arch/powerpc/kernel/entry_64.S                |   2 +
+ arch/powerpc/kernel/exceptions-64s.S          |   7 +-
+ arch/powerpc/kernel/head_40x.S                |   5 +-
+ arch/powerpc/kernel/head_64.S                 |   7 +-
+ arch/powerpc/kernel/head_8xx.S                |   5 +-
+ arch/powerpc/kernel/head_book3s_32.S          |  29 +++--
+ arch/powerpc/kernel/head_fsl_booke.S          |   5 +-
+ arch/powerpc/kernel/misc_64.S                 |   4 +-
+ arch/powerpc/kernel/swsusp_32.S               |   5 +-
+ arch/powerpc/kernel/vdso/Makefile             |   2 +
+ arch/powerpc/kernel/vector.S                  |   4 +-
+ arch/powerpc/kvm/book3s_hv_interrupts.S       |   4 +-
+ arch/powerpc/kvm/book3s_hv_rmhandlers.S       |  25 +++--
+ arch/powerpc/kvm/fpu.S                        |  17 ++-
+ arch/powerpc/platforms/52xx/lite5200_sleep.S  |  15 ++-
+ arch/x86/Kconfig                              |   1 +
+ drivers/crypto/vmx/Makefile                   |   2 +
+ scripts/Makefile.lib                          |   1 +
+ tools/objtool/arch/powerpc/Build              |   2 +
+ tools/objtool/arch/powerpc/decode.c           | 101 ++++++++++++++++++
+ .../arch/powerpc/include/arch/cfi_regs.h      |  11 ++
+ tools/objtool/arch/powerpc/include/arch/elf.h |  10 ++
+ .../arch/powerpc/include/arch/special.h       |  21 ++++
+ tools/objtool/arch/powerpc/special.c          |  19 ++++
+ tools/objtool/arch/x86/decode.c               |   5 +
+ tools/objtool/arch/x86/include/arch/elf.h     |   2 +
+ .../arch/x86/include/arch/endianness.h        |   9 --
+ tools/objtool/builtin-check.c                 |  14 +++
+ tools/objtool/check.c                         |  53 ++++-----
+ tools/objtool/elf.c                           |   8 +-
+ tools/objtool/include/objtool/arch.h          |   2 +
+ tools/objtool/include/objtool/builtin.h       |   1 +
+ tools/objtool/include/objtool/elf.h           |   8 ++
+ tools/objtool/include/objtool/endianness.h    |  32 +++---
+ tools/objtool/orc_dump.c                      |  11 +-
+ tools/objtool/orc_gen.c                       |   4 +-
+ tools/objtool/special.c                       |   3 +-
+ 45 files changed, 411 insertions(+), 107 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/asm.h
+ create mode 100644 tools/objtool/arch/powerpc/Build
+ create mode 100644 tools/objtool/arch/powerpc/decode.c
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/special.h
+ create mode 100644 tools/objtool/arch/powerpc/special.c
+ delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
+
+-- 
+2.31.1
+
