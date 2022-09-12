@@ -2,177 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8352B5B5945
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A4A5B5942
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiILL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S229677AbiILL1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiILL1f (ORCPT
+        with ESMTP id S229885AbiILL06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:27:35 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF82D23178;
-        Mon, 12 Sep 2022 04:27:34 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CBItZN008055;
-        Mon, 12 Sep 2022 11:27:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
- b=G4NBw+f8VDDqQ6EjyH1xRp9TQ8qBH2tpqrisJH2/L1MBJc5GCBOTyltfNFj+8VgIzj8Q
- JErR8EsYTsMhzCJmAKF2fyh3wxXvedIi5gnNKkqxVdqBeX99PAPGux8x51AEMbf0PwNj
- 7ER79FtntjB2rzPW8SYcNTGt4V1ek6YMLj4JCRoaKUIH6eHYzGM0UfpKIYiJchmmV9wA
- b2XETQeXKcj8E+gD3fn/0p92nVBb0ge82QvH5v0Zuv+VOx1MfNBacnmAjSN9b1Q4UXbe
- yPXHHHnTYPNueFoLg6eQ/9Me3GW+POA55kp3XMYItgEfTbxiFOycVjd2AoIfsACjQfbM 6A== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jghc2k7ug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 11:27:05 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28C9rG6o029544;
-        Mon, 12 Sep 2022 11:27:05 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jgj5awpun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 11:27:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=icfrVnWyl2ufSRbKVRNsGVyQl+E9eFrXV2OPHQMoqmW38dEPgwE47PnspaZYaT5eSBVvWACNVNGvmdanLtG1xFvA8U1CRnCxjNa02HLTt5ma0ITNDNbDPKf+sH4Zahf1CF8IvGYm3H3KrllIO4z2Rn32wpG8NsNRn6LqtLXp6L34WWNXPi0vTMWU/NmATjzd3RYaVSN3U+7A/58MKWkCqsLGHlLuOdZya83s9CIjVvHuHrZJBbQi8djcb5nM9VLsTqfAu6mgbMYH1GH53LaE9cSvLSbpHrswyg5GZTv6/ViYJUBWge2lSZfVwGDPsHome9mwdXlw8JJY+vyAtMHV1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
- b=TfsqBl8MPOOy2kruDmXLN+KE4X2Vxo1Zand5tjRVEDt4KBNVckKlPo0rZyFZ3pDX6251stjBcv28LETUbQbOwmLWVaMc1qO0pNgTM7cYvYi34EVoUCpFRoXSpkAw6Tr625gzFL4/ljbLA+/lQEX/w0/KDvGogqSf+anHa5Omg4xUlz0UgwwSsgqZMrGC//wg/naiJpKXjpXE+ApCNRt0hzckXMKrITPNPqbAwScdxNLXfkK+gFMDxHXt6mQrZrvCXh8+OU1il7SxgTOTGtzM3EoU08WBG79jCN5PDwJwi+AeCzsmVsLq1YG+96+SnbxHL93OBZw1y9L7e6LAUhauJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
- b=pm5l+RO4UCMUwdcYEtNJE3OcpCD4L3JWMBITvEM7ZvyNf/EuoudfQKNRouBbt9xOZX6MVWNFnvalYiPcbDIWHbNM9tLkBrJpPcupQmnrk2BiSl3rwnO/n23QoWQbPRx9EM2EKQ4UsjyvZTJ0tIKX7jEsacmEWvM5dKQAklZMpU8=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MW5PR10MB5668.namprd10.prod.outlook.com
- (2603:10b6:303:1a3::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Mon, 12 Sep
- 2022 11:27:03 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 11:27:03 +0000
-Date:   Mon, 12 Sep 2022 14:26:46 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
-Subject: Re: [PATCH] EDAC/altera: add platform_get_irq error checking
-Message-ID: <Yx8Xds2BrK7PNjXJ@kadam>
-References: <20220909053839.2293-1-yuzhe@nfschina.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909053839.2293-1-yuzhe@nfschina.com>
-X-ClientProxiedBy: JN2P275CA0044.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::32)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Mon, 12 Sep 2022 07:26:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1584D2716B;
+        Mon, 12 Sep 2022 04:26:56 -0700 (PDT)
+Received: from mercury (unknown [185.122.133.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B3526601FDD;
+        Mon, 12 Sep 2022 12:26:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662982015;
+        bh=o80oaU6GqebkOE2g+nIEyb5x8hg/oY67TkqBygdDPKg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QpnpULNvztVTP1drtfIwbDkuWBOoV3eBUkJfQbuQV+xcWVoB5uRm+Zp7iTKLunMw4
+         pjeo0wWxPfsGxu60nQV/KgtiWcH9RaCfTh+yFSoCRwHpSoxKfIyxBdQ9vOrBrWootC
+         MfhLvMsKf8zPSsUKs4JNgbARg+nAy8rrBc0t3KwqgjpO7914InlKJYJDu5k2BknG3X
+         /s+NpmvTtkgg5aO22jWjBrTDQ7yyHjqnqBvBNrYUT7NPuo8kviY77bNTzXA1Z0ZV9J
+         OYLIo6NNh7MUYmM3zE4H2u5wUEkWW8yihi8lqT6PUTUd8cG9x9hez/PLvD2Y0XHa5Z
+         lhAfJkWFCRc+Q==
+Received: by mercury (Postfix, from userid 1000)
+        id 716E1106084A; Mon, 12 Sep 2022 13:26:52 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 13:26:52 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] power: supply: rt9471: Add Richtek RT9471 charger
+ driver
+Message-ID: <20220912112652.5zz2bscbtcpiwrjd@mercury.elektranox.org>
+References: <1661742391-11378-1-git-send-email-u0084500@gmail.com>
+ <1661742391-11378-3-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|MW5PR10MB5668:EE_
-X-MS-Office365-Filtering-Correlation-Id: 811550f8-d9f7-4206-8445-08da94b1b6f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JyrA5yNLidM4Y5X34IvYYU1OoUsaF471OlPVSCD2+CIkX/mRaHPVEIXk9VBWLRnX2FPjcLkGLeL/q9hkkmYVBr6Ko2ghjOAEqr6CWUcZavFA6+WSKwlESlFwlWXeDgPIQTlyqcU6eRosgBsAl/S1I97YlLwJbX3FR0epTYekwpQ1jANpbM0YQrjBLbP1W638IesEefqoI/N10QJnrBHAlEKPvYWIxQPNzuN+PEBx85lKVR+lEmzPAz5Qp0vQta8opUBJCKdQd9vC5sy6D5HazT5JneBzwkXRbVw+b/S3ghKHLBEV8jHEXlfOo/Sohw2SNXUbdwmy80p9mBIiq0B0iYBPKnfOsSLp4NREnVMA5AwcYUUalQmv39LCKLBo57Sq30Iawe7ypWSJr+JwV2wevibTkBb/01kyVC78zaDdNA4lHALMBfkaLA1i878hMHIA4KpDywqNrlVnDCuLKF+LOxuiLJRO6BGCcN+ZZvyhYoqSRK9HZz0Wp0FrDgevBw1Lg8SS98FCu6w4QgtLhpgljqg2L3E7GQr8e6prZSXVGgZw3L9g6W2ACU1BkmiUrLfNmqm8MKyLs5j8HspJ2mLC6mq7fSzC4IPE/4bKf/jwtTQwEWX9CJofrOG9XZn4b3qIP+g4khPAoFV6o4OnpPcrgDsnNCq4tJMXUEK9b5ss0TnTLuxWMCSJP5LTJ1UB0K9AIGmbAGGvpH7J3LSnwGttIA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(39860400002)(396003)(346002)(136003)(366004)(316002)(6916009)(33716001)(8676002)(7416002)(5660300002)(38100700002)(66476007)(66946007)(4326008)(66556008)(8936002)(83380400001)(41300700001)(6486002)(478600001)(9686003)(6512007)(6666004)(6506007)(26005)(186003)(44832011)(86362001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DHxgjc8bYZ1z2tauk3iYaSVwYR25+XyahZDJtN2dCM+MgHqRdBwX3k9IIlsM?=
- =?us-ascii?Q?LPWoRiAu8At2aJL2i5z664elI5JYCKfWxHfCDAoKO44TQrk63EO/2o459m08?=
- =?us-ascii?Q?RUyyY16oDUh5qDD57S96QCH+n4KMJfn76dSQAjz/n430rLexrbm/0ldftOVU?=
- =?us-ascii?Q?EIMzn14mvdqg9uzYLGGESsThMb3upZ6K35kHOri1OXH3GDLXrMaMN4l+G5Zq?=
- =?us-ascii?Q?P0FEZ1pSb/ktEeo5pEYBcDWrUwGZrJoFO4sWWXAsrHGP/oJ81gXvJRPkj2bN?=
- =?us-ascii?Q?Hfd2PR7KL0P3NNQIgIS0me92YRbEexPzG/GX3f+i7oE3XBrUl/1S35oqOGuk?=
- =?us-ascii?Q?cxPii6OzBFitacgD1Kbwj0+cXVGS04BHtJOm1GDRoHzEZ5xKJObr/A25M5Ea?=
- =?us-ascii?Q?nvAXkm+pW4UMFaUyy9TCMw64CDK5lUMsmFIPu0s4X9rajP6YRtTTily8KoBb?=
- =?us-ascii?Q?iTZivdHQ04W70CHrvPPjG490GJfrfbwtgsDJ7D7eNrLEP7FogyJPOnD4Wyt2?=
- =?us-ascii?Q?OWGOxIoTol1tyhNc69bx8znP0jkh2WdcszmJJ2/HZE5NwlQLhZyEfIVvWu79?=
- =?us-ascii?Q?Sf2ACFhQsgdIWYfcAnEsxCw0SsJzh3PFc05UOCklwHRBV0pFmwcKNB78ozZQ?=
- =?us-ascii?Q?HgJuJQWwLAcLJvz15iSuOM28mKSG8lHo7mihMUO1MtcFHn32S7orGJu+kdhU?=
- =?us-ascii?Q?h0Qixp8XU+jsEzXBjlHmV7mVtjkJtKroVDbakXqJIiIFUUmqGlILya5ywvcZ?=
- =?us-ascii?Q?Ji3/pzDvgOFJsMC7GTfonHW10rg/Ny3vrkb8tc180GXHnLVNLypwiYo8nBfK?=
- =?us-ascii?Q?FMU8rOqo8zTaBrfQ9AGo3d6Afi5ljYyNwckgJK6N6sX5s4+YlFSZbil3jACP?=
- =?us-ascii?Q?IRRSNFrBDn+gfPCbO0N3TgLJQG1a88E8yaOsFrewduS69KtdiE36KlibhIIu?=
- =?us-ascii?Q?H8OLY9rVom2WNyV7FAX40WJLkjEMEzbS6/48D5QNEhCJag7dfXck7VQch8p8?=
- =?us-ascii?Q?1dxakSY0cqWw/PSGEBqTuJJt9geCoFzvozQ5XRfV+XVOtbiF7IV77wk/GC3J?=
- =?us-ascii?Q?IMpG1WjnU4jNaIDQZlCYQolB/krcZ6ilwhiEzmDxhsI+aHDdb8m46p/tuwxq?=
- =?us-ascii?Q?B7FkLsMaYpJ9sOFqjGd3trHkVLzZaDtRUD29rwXEdK1L4rzOG9yK1yy/Xad0?=
- =?us-ascii?Q?e881CuVUIAIPENTK1nTxuiF8tI0AQ39AwFtoOW+3fd802Ffv03mdrK69vAco?=
- =?us-ascii?Q?sfA7pv+R5/frIHlJr2Zx3Fqzbz/wKlFiS5YlcAzae9NzgHNq49FUhxlwq7+a?=
- =?us-ascii?Q?hzUdYFOMGXl/ux1NBlT6HUawjyUrVCcBzdhayac19VseghmioN9vt5XzO2Vd?=
- =?us-ascii?Q?OGbaMxyIoQX/LDR2Wod0kBi7e5fAsYwI8mkCfUpF4hvIvkdx2IIqVNr+DUjp?=
- =?us-ascii?Q?zQaweTnf6xFAGs3XyQd/9a6Qni36omS+It194easJYyuzIdl2+sI2qqiwXvl?=
- =?us-ascii?Q?EP3sMSBazWXQfDxTTQwVTBRYls/mI1jCQhtssXj5DoBmuCgKLzvg5Nz7JcWk?=
- =?us-ascii?Q?LkElvBpxPd/VYUxVrpvNjsoWssEjdrseYNxrSeSm?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 811550f8-d9f7-4206-8445-08da94b1b6f6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 11:27:03.0764
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JZQPXPQIysfgvSShhoRP0vkTHct0laqffnub1xasTaSkA/Co2KRUDZakIbrJq2nL0CPeCaANGqs/pmklq8sttmQbSodurn7NTI/lnoj5Ksc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5668
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_07,2022-09-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209120038
-X-Proofpoint-ORIG-GUID: kIxxc7mxmjIw_bkOAPnX-9CYW0BdfB0o
-X-Proofpoint-GUID: kIxxc7mxmjIw_bkOAPnX-9CYW0BdfB0o
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ngw7nkeq7vpwgdfw"
+Content-Disposition: inline
+In-Reply-To: <1661742391-11378-3-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 01:38:38PM +0800, Yu Zhe wrote:
-> The platform_get_irq() function returns negative error codes on error,
-> check it.
-> 
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+
+--ngw7nkeq7vpwgdfw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Mon, Aug 29, 2022 at 11:06:30AM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> Add support for the RT9471 3A 1-Cell Li+ battery charger.
+>=20
+> The RT9471 is a highly-integrated 3A switch mode battery charger with
+> low impedance power path to better optimize the charging efficiency.
+>=20
+> Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
->  drivers/edac/altera_edac.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index e7e8e624a436..79c7c97c7a46 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -355,6 +355,8 @@ static int altr_sdram_probe(struct platform_device *pdev)
->  
->  	/* Arria10 has a 2nd IRQ */
->  	irq2 = platform_get_irq(pdev, 1);
-> +	if (irq2 < 0)
-> +		return irq2;
+> Since v4:
+> - Remove the line for the owner field in driver.
+>=20
+> Since v2:
+> - Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_to_c=
+hip function.
+> - Specify the member name directly for the use of linear range.
+>=20
+> ---
 
-This will break the driver.  Only certain hardware has the second IRQ.
-(Read the comments later in the probe).  In fact, the code works fine
-as-is because devm_request_irq() will fail later if this IRQ is
-required.
+Thanks, driver looks mostly good.
 
-This code is not beautiful.  It should only request the IRQ in cases
-where it is present, but it used to work correctly and now it will be
-broken.
+>  drivers/power/supply/Kconfig  |  16 +
+>  drivers/power/supply/Makefile |   1 +
+>  drivers/power/supply/rt9471.c | 952 ++++++++++++++++++++++++++++++++++++=
+++++++
+>  drivers/power/supply/rt9471.h |  76 ++++
+>  4 files changed, 1045 insertions(+)
+>  create mode 100644 drivers/power/supply/rt9471.c
+>  create mode 100644 drivers/power/supply/rt9471.h
+>=20
+> [...]
+> +static inline int rt9471_set_hiz(struct rt9471_chip *chip, int enable)
+> +{
+> +	return regmap_field_write(chip->rm_fields[F_HZ], enable);
+> +}
+> +
+> +static inline int rt9471_set_ichg(struct rt9471_chip *chip, int microamp)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_ICHG_REG,
+> +					       RT9471_RANGE_ICHG, microamp);
+> +}
+> +
+> +static inline int rt9471_get_ichg(struct rt9471_chip *chip, int *microam=
+p)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_ICHG_REG,
+> +					       RT9471_RANGE_ICHG, microamp);
+> +}
+> +
+> +static inline int rt9471_set_cv(struct rt9471_chip *chip, int microvolt)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_VBAT_REG,
+> +					       RT9471_RANGE_VCHG, microvolt);
+> +}
+> +
+> +static inline int rt9471_get_cv(struct rt9471_chip *chip, int *microamp)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_VBAT_REG,
+> +					       RT9471_RANGE_VCHG, microamp);
+> +}
+> +
+> +static inline int rt9471_set_mivr(struct rt9471_chip *chip, int microvol=
+t)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_MIVR,
+> +					       RT9471_RANGE_MIVR, microvolt);
+> +}
+> +
+> +static inline int rt9471_get_mivr(struct rt9471_chip *chip, int *microvo=
+lt)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_MIVR,
+> +					       RT9471_RANGE_MIVR, microvolt);
+> +}
+> +
+> +static inline int rt9471_set_aicr(struct rt9471_chip *chip, int microamp)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_AICR, RT9471_RANGE_AICR,
+> +					       microamp);
+> +}
+> +
+> +static inline int rt9471_get_aicr(struct rt9471_chip *chip, int *microam=
+p)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_AICR, RT9471_RANGE_AICR,
+> +					       microamp);
+> +}
+> +
+> +static inline int rt9471_set_iprechg(struct rt9471_chip *chip, int micro=
+amp)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_IPRE_CHG,
+> +					       RT9471_RANGE_IPRE, microamp);
+> +}
+> +
+> +static inline int rt9471_get_iprechg(struct rt9471_chip *chip, int *micr=
+oamp)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_IPRE_CHG,
+> +					       RT9471_RANGE_IPRE, microamp);
+> +}
+> +
+> +static inline int rt9471_set_ieoc(struct rt9471_chip *chip, int microamp)
+> +{
+> +	return rt9471_set_value_by_field_range(chip, F_IEOC_CHG,
+> +					       RT9471_RANGE_IEOC, microamp);
+> +}
+> +
+> +static inline int rt9471_get_ieoc(struct rt9471_chip *chip, int *microam=
+p)
+> +{
+> +	return rt9471_get_value_by_field_range(chip, F_IEOC_CHG,
+> +					       RT9471_RANGE_IEOC, microamp);
+> +}
+> +
+> +static inline int rt9471_set_chg_enable(struct rt9471_chip *chip, int en=
+able)
+> +{
+> +	return regmap_field_write(chip->rm_fields[F_CHG_EN], !!enable);
+> +}
 
-regards,
-dan carpenter
+Please drop these one line wrappers.
 
+> [...]
+> diff --git a/drivers/power/supply/rt9471.h b/drivers/power/supply/rt9471.h
+> new file mode 100644
+> index 00000000..f3d8e23
+> --- /dev/null
+> +++ b/drivers/power/supply/rt9471.h
+> @@ -0,0 +1,76 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/* Copyright (C) 2022 Richtek Technology Corp. */
+> +
+> +#ifndef __RT9471_CHARGER_H
+> +#define __RT9471_CHARGER_H
+> +
+> +#define RT9471_IRQ_BC12_DONE	0
+> +#define RT9471_IRQ_DETACH	1
+> +#define RT9471_IRQ_RECHG	2
+> +#define RT9471_IRQ_CHG_DONE	3
+> +#define RT9471_IRQ_BG_CHG	4
+> +#define RT9471_IRQ_IE0C		5
+> +#define RT9471_IRQ_CHG_RDY	6
+> +#define RT9471_IRQ_VBUS_GD	7
+> +#define RT9471_IRQ_CHG_BATOV	9
+> +#define RT9471_IRQ_CHG_SYSOV	10
+> +#define RT9471_IRQ_CHG_TOUT	11
+> +#define RT9471_IRQ_CHG_BUSUV	12
+> +#define RT9471_IRQ_CHG_THREG	13
+> +#define RT9471_IRQ_CHG_AICR	14
+> +#define RT9471_IRQ_CHG_MIVR	15
+> +#define RT9471_IRQ_SYS_SHORT	16
+> +#define RT9471_IRQ_SYS_MIN	17
+> +#define RT9471_IRQ_AICC_DONE	18
+> +#define RT9471_IRQ_PE_DONE	19
+> +#define RT9471_IRQ_JEITA_COLD	20
+> +#define RT9471_IRQ_JEITA_COOL	21
+> +#define RT9471_IRQ_JEITA_WARM	22
+> +#define RT9471_IRQ_JEITA_HOT	23
+> +#define RT9471_IRQ_OTG_FAULT	24
+> +#define RT9471_IRQ_OTG_LBP	25
+> +#define RT9471_IRQ_OTG_CC	26
+> +#define RT9471_IRQ_WDT		29
+> +#define RT9471_IRQ_VAC_OV	30
+> +#define RT9471_IRQ_OTP		31
+> +
+> +#define RT9471_REG_OTGCFG	0x00
+> +#define RT9471_REG_TOP		0x01
+> +#define RT9471_REG_FUNC		0x02
+> +#define RT9471_REG_IBUS		0x03
+> +#define RT9471_REG_VBUS		0x04
+> +#define RT9471_REG_PRECHG	0x05
+> +#define RT9471_REG_VCHG		0x07
+> +#define RT9471_REG_ICHG		0x08
+> +#define RT9471_REG_CHGTMR	0x09
+> +#define RT9471_REG_EOC		0x0A
+> +#define RT9471_REG_INFO		0x0B
+> +#define RT9471_REG_JEITA	0x0C
+> +#define RT9471_REG_PUMP_EXP	0x0D
+> +#define	RT9471_REG_DPDMDET	0x0E
+> +#define RT9471_REG_ICSTAT	0x0F
+> +#define	RT9471_REG_STAT0	0x10
+> +#define RT9471_REG_STAT1	0x11
+> +#define RT9471_REG_STAT2	0x12
+> +#define RT9471_REG_IRQ0		0x20
+> +#define RT9471_REG_MASK0	0x30
+> +
+> +#define RT9471_OTGCV_MASK	GENMASK(7, 6)
+> +#define RT9471_OTGCC_MASK	BIT(0)
+> +#define RT9471_OTGEN_MASK	BIT(1)
+> +#define RT9471_CHGFAULT_MASK	GENMASK(4, 1)
+> +
+> +/* Device ID */
+> +#define RT9470_DEVID		0x09
+> +#define RT9470D_DEVID		0x0A
+> +#define RT9471_DEVID		0x0D
+> +#define RT9471D_DEVID		0x0E
+> +
+> +#define RT9471_NUM_IRQ_REGS	4
+> +#define RT9471_OTGCV_MINUV	4850000
+> +#define RT9471_OTGCV_STEPUV	150000
+> +#define RT9471_NUM_VOTG		4
+> +#define RT9471_VCHG_MAXUV	4700000
+> +#define RT9471_ICHG_MAXUA	3150000
+> +
+> +#endif /* __RT9471_CHARGER_H */
+
+Please merge this into rt9471.c
+
+> --=20
+> 2.7.4
+>=20
+
+--ngw7nkeq7vpwgdfw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMfF3gACgkQ2O7X88g7
++poMLA//bRvmhaVX+6qP0mYl5mzNJbzzdfHknQ7gWwDGNWn9ksfNDc8Lo0U/9ZMQ
+FpF5gK2ay+jOZEofSH/30mIjgTruSSpe8tlxZIC4SBb79DjY0pTfyf/HkOPMnT2h
+xUq96peg99KmbPXR3Yx9SjcOqIWmMDUIeTysIf9Gt6xT0tPZdMnbOjYnvHYQIkDm
+7FgbXzKPvq9e1SgVY/rLS4DmmkrlxIurns9rWYLeGUEdhAXnRrmHgokVAcaxCGfx
+ntZeEiqPoGPl9YvD580oXHy/J1Mn9hvSScQtD+5b5enwxRGrJPQhCpyhguIJBMMo
+LJ4jftpiJHPIMjBpVBs5MOKnQwxELNhYtK5v0kL9EgHmABoxsm6MtNd40ZtwYwSw
+ickVb4x2hUaNznD7Oj18Hg1v3z/FII+FpsIbT2yp4PIb4On7LYhU6E19hMOss8BQ
+PuwjklttAJs66Ku6RM4g0gaaJm6mBDH4luzI+Yj9m8GZIQtcvSfVk881gKO7d/qy
+vzJV+N6LKwFJzVdloJ6E/D90przkc8KRIsX4mmrzuIOT0Bm/DQKZbTKWupWwA1W0
+uONfK02ch1smeG+aWJp0FtE5Ab4YcjwA9cZ2a5ONrFGRGwGmHyQpO8XAgSjR6jT6
+r5mMc+AuxOWgadTN02dbCc3ANM2429PwJNHzWVDFwClMkMWMH+w=
+=f+cf
+-----END PGP SIGNATURE-----
+
+--ngw7nkeq7vpwgdfw--
