@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063E35B58D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF43D5B58D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiILKzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S229927AbiILK47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiILKz1 (ORCPT
+        with ESMTP id S229585AbiILK44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:55:27 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF71900D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:55:24 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id by6so10031002ljb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:55:23 -0700 (PDT)
+        Mon, 12 Sep 2022 06:56:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8500D33A34
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:56:54 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z25so14209576lfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=uODYllNYs6vH+/kP4ToqCRWAa9suYiwygYLIovAsVnU=;
-        b=g5fbjdZa+uRqiNsPW0QD54nGvN7X5aBbFAzzt0v+0YiKM55+91yR7pR/x/1kFFkQFa
-         PDWGSbEg3Hot7+eat0TLFcdROvwOW+1/mXiy8dFW66v1Yfs/O2y2K2kwkSzPLZa+v+CL
-         tbOCLnGjXC9j7Eiy+HSp7flLu5Efsj19mYkdWiGfFLW7npPqOtK3Hf00X84ZPZfXdQ40
-         HWI+QwpAqjra5/lqiZrtlwzDRvHrT1bbE5QnQsSnnuBYwEROC2mZXilwtTGqHLS3PBuL
-         LuYNy2zrrUDmQNecRjfxlA1JgSEiNErKvDJs17T6D5Vqs562DgVOLs+kqp0BrUQh4iEU
-         mt3A==
+        bh=6tUzH5tD0/EQDJEHdG2/yvhoYIxFUu9UMKWjQ4i6dFU=;
+        b=SteGjDdLxOkNmkZpFFdzmeBoHnptV89fx54Dw/Oq0PuAe8oAuJV+gZsgGNzUvlISyV
+         6PYF38zZkik05eSX8MajAQR9M0Huu+NQys7oOd88lgiBWzxJD45vl6m6SHoJEfJoYTMe
+         HQ0GGJu0nKzn3j1OQSrt8Gky3N9KPvFQID5TKwuIoZ/Dv3XzWrBx6MkkTc4uTHn0CCpY
+         ximD+qWIvYS16GSJ+uHHpyo875URq4ospCkjtpGgP6w+aeJoGShxs86YneVdCB6GSc37
+         9tj5VgPVbmIPhaQN2awukxTRNMnVY8Bpx/9+fJIcoZUrafA8Rn8YAxl9EBiXG8o6DrDv
+         053w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=uODYllNYs6vH+/kP4ToqCRWAa9suYiwygYLIovAsVnU=;
-        b=MHhDxqGqCSHox0/C6VQe8uXANypk3ydXBJJ0JqPdJCT7nS/p3NzR623uxcDiWio+1W
-         YVDO2xrQbj69z1kMjhMie1vcPhWpHarbltCQlrXarg6/qCwePtN992BPDFB5Z4nJn2eh
-         t5KUmjiwboXCoid2XxCuJ04ZOBBUkCVizwApNwJutb75LJZWmjIC1Xs96IwBxiyIqkv5
-         b6AnpLnw1GCEXjZfa2exObG1MWzMz5L39Il236xeGgCL/8h8eH6ise5Pi/FZl+OG9gCj
-         f2j4gpdEFcNnc8aSiqpd6Ow0T+1AeCAuZRETZal6dMmJohhiEPV7Lab4cwL93+i+HTCU
-         mIWQ==
-X-Gm-Message-State: ACgBeo0so10DBST1QjN82Q1rcHEq+tZ5lJRKzcDqMCnNVmH92FJgPC8p
-        lRwPA6jcOhPMYFo+/BXw4fQ8mw==
-X-Google-Smtp-Source: AA6agR7lep5ZcMDwaWlJ4ySJTisrqo0Rgf7jMEe3bPC10uTlj7rtt8SS/ZwEojVJGCAYkw9+IAP/Dg==
-X-Received: by 2002:a2e:9cda:0:b0:26b:e930:6f7d with SMTP id g26-20020a2e9cda000000b0026be9306f7dmr4201796ljj.436.1662980122396;
-        Mon, 12 Sep 2022 03:55:22 -0700 (PDT)
+        bh=6tUzH5tD0/EQDJEHdG2/yvhoYIxFUu9UMKWjQ4i6dFU=;
+        b=7z2W6oDj7iScRlfnLAxXJJ4CraLD8Ji9dMoNZLpVs1itKfKfAQbhYO/PtdAyarFXrv
+         eYvqkeZxY04pbiu+Pw69S133hMiNRpWgKShjjB4dHPJtselsnx4XrmNbStCHMFmnOCZk
+         M5/dbCksuybNhsMqeT5tNDbkl5KXujmK3rP8NBCp8O28qKucC/y9a1VYvnXRt6YDe+JF
+         gCGggLtcq4QAQ4O/96w6+XXU7DIZj/rIL8hu8w4DTq/yeb54uoiJRjpYg66NcaPB+tNL
+         mhvjciiS9XWFUp3gANs0wRZW0x7yjKnzR+jGUwXB0/8gUT1hX0HZKaH6AnONzYqbHMNV
+         T4ug==
+X-Gm-Message-State: ACgBeo0Vz1pzOVj2VFx6O78RL0ZMWyX5Sov9bNPf35Qu2w7GZHymp4OT
+        WEjwLfcmzdbv2PtaaT7QKnXYWA==
+X-Google-Smtp-Source: AA6agR7DCprV111kPIM22VhkcLuzQZR4DAuJ30/naNbA1c9awj4/5+Rmp5HIg+7zRvXmBQbRD/hMDg==
+X-Received: by 2002:a05:6512:2381:b0:492:afa4:6b67 with SMTP id c1-20020a056512238100b00492afa46b67mr8076625lfv.621.1662980212623;
+        Mon, 12 Sep 2022 03:56:52 -0700 (PDT)
 Received: from [10.129.96.84] ([109.232.243.34])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512229100b00498fc3d4d15sm996417lfu.190.2022.09.12.03.55.21
+        by smtp.gmail.com with ESMTPSA id n4-20020a05651203e400b00492d064e8f8sm1002962lfq.263.2022.09.12.03.56.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 03:55:21 -0700 (PDT)
-Message-ID: <cd363d98-74be-b42f-b1e1-c0f7e79f6011@linaro.org>
-Date:   Mon, 12 Sep 2022 12:55:18 +0200
+        Mon, 12 Sep 2022 03:56:52 -0700 (PDT)
+Message-ID: <e3c0bafe-394c-e8cc-aba0-6eb480dc5b43@linaro.org>
+Date:   Mon, 12 Sep 2022 12:56:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: media: i2c: document OV4689 DT
- bindings
+Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
 Content-Language: en-US
 To:     Mikhail Rudenko <mike.rudenko@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -66,17 +65,17 @@ To:     Mikhail Rudenko <mike.rudenko@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Shawn Tu <shawnx.tu@intel.com>,
-        Christian Hemp <c.hemp@phytec.de>,
-        Arec Kao <arec.kao@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Daniel Scally <djrscally@gmail.com>,
-        Jimmy Su <jimmy.su@intel.com>
+        Christian Hemp <c.hemp@phytec.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <20220911200147.375198-2-mike.rudenko@gmail.com>
+ <20220911200147.375198-3-mike.rudenko@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220911200147.375198-2-mike.rudenko@gmail.com>
+In-Reply-To: <20220911200147.375198-3-mike.rudenko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,89 +89,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 11/09/2022 22:01, Mikhail Rudenko wrote:
-> Add device-tree binding documentation for OV4689 image sensor driver,
-> and the relevant MAINTAINERS entries.
-> 
-> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+> +static const struct i2c_device_id ov4689_id[] = {
+> +	{ "ov4689", 0 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ov4689_id);
+> +
+> +static const struct of_device_id ov4689_of_match[] = {
+> +	{ .compatible = "ovti,ov4689" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, ov4689_of_match);
+> +
+> +static struct i2c_driver ov4689_i2c_driver = {
+> +	.driver = {
+> +		.name = "ov4689",
+> +		.pm = &ov4689_pm_ops,
+> +		.of_match_table = of_match_ptr(ov4689_of_match),
 
-Too many "media" prefixes in the subject. Also you duplicated dt
-bindings as prefix and commit msg (skip the latter).
+of_match_ptr is usually paired with maybe_unused, otherwise you will
+have compile test warnings.
 
-> ---
->  .../bindings/media/i2c/ovti,ov4689.yaml       | 141 ++++++++++++++++++
->  MAINTAINERS                                   |   7 +
->  2 files changed, 148 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> new file mode 100644
-> index 000000000000..376330b5572a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> @@ -0,0 +1,141 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +	},
+> +	.probe = ov4689_probe,
+> +	.remove	= ov4689_remove,
+> +	.id_table = ov4689_id,
+> +};
 > +
-> +title: Omnivision OV4689 CMOS
+> +module_i2c_driver(ov4689_i2c_driver);
 > +
-> +maintainers:
-> +  - Mikhail Rudenko <mike.rudenko@gmail.com>
-> +
-> +description: |
-> +  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
-> +  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
-> +  at 2688x1520 resolution. It is programmable through an I2C
-> +  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> +  connection.
-> +
-> +allOf:
-> +  - $ref: /schemas/media/video-interface-devices.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov4689
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      External clock (XVCLK) for the sensor, 6-64 MHz
-> +    maxItems: 1
-> +
-> +  clock-names: true
+> +MODULE_DESCRIPTION("OmniVision ov4689 sensor driver");
+> +MODULE_LICENSE("GPL");
 
-This has to be strictly defined - which name you expect.
-
-> +
-> +  dovdd-supply:
-> +    description:
-> +      Digital I/O voltage supply, 1.7-3.0 V
-> +
-> +  avdd-supply:
-> +    description:
-> +      Analog voltage supply, 2.6-3.0 V
-> +
-> +  dvdd-supply:
-> +    description:
-> +      Digital core voltage supply, 1.1-1.3 V
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-
-You can skip here maxItems - it is defined by gpio-consumer-common.
-
-> +    description:
-> +      GPIO connected to the powerdown pin (active low)
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO connected to the reset pin (active low)
-> +
 
 Best regards,
 Krzysztof
