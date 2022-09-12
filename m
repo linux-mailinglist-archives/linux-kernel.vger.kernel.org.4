@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C385B636A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7575B636D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiILWPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
+        id S230341AbiILWPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiILWOI (ORCPT
+        with ESMTP id S230254AbiILWOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Sep 2022 18:14:08 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF954E631
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:13:56 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id b23so8019602iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:13:56 -0700 (PDT)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B1B4E636
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:13:57 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id 138so7152223iou.9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=RNx37yKQbZV3YwKmbwhHH3b5iEfqDIvtsv7is9A0p3M=;
-        b=i2PeBm5KHM44vDseOJdiQmCvkbrFjxDot/fbuwa5w9tjLRwombOzQRSZ9w6JSw8QW+
-         qTwFakJ9vmCBQkST+yMSEpDr5q5dSSxgsrEuPekdTCr99XN0iB+iVWDfk0viCYwkX5Oe
-         dRQDZrxkjBjaczzhGfceMC3D2h6kIRImMSO2A=
+        bh=voPhsoaHT770bZnSxaOidypoc2wPeBFAreupfLjJEw0=;
+        b=Inhtl0nBvTwwMMQkeB+30lBb3w7BnKQMzlRF90y/59z/Laj3751CdVOlt820XPfxI4
+         2mOFNQEYq3gGqaMigySGpLd5UXSvrTlpfT39gFPUCsd1Cf3P6HNLBY+Xh+IcZdRGIyVf
+         2BlDn7tOU4M5HrB5tqjwrAMJtfye7mR5OJTQk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=RNx37yKQbZV3YwKmbwhHH3b5iEfqDIvtsv7is9A0p3M=;
-        b=cS3SQEMK0QeslZNtVxIwC1WfcC+FnOy2V3PF8b/theqhcsX045Wwli6+EJt+nqDkhm
-         nbQ98kARU/rtBMlrPWQYSSzkQtWpJ6s/VaGGYUh/fzney6r4vN7LhHKCmkDKk067odDD
-         yUCy2TfxaF+2PBVig+BkVSqCYlc3/KNPDnWSmHx1ho0fmiPPvFKm3ralpgBEKBXLNQG/
-         QjeivVUn+B0WmqjjAV8nEMW7ISgjAIyyT+iBjdfXXGVb+kCwZxl4nm2NKkyEIh18cXVs
-         vOmKIW2qU20CImWqHGbD0t+E8l7InTnEPcWmHgf6QygIonqYnRad7xyo6gpaEg62w7HK
-         qPvA==
-X-Gm-Message-State: ACgBeo0XzbKsUujisEXPT6IMiN8koyzZQkkPePLUAQFXPZZDOiFtuHJd
-        fy28ao/VYuue5gWV8tFYA3uhHg==
-X-Google-Smtp-Source: AA6agR5vMYNcU9Q6AtJghvz6j5UO+YRrBxglU//jxaDXv0cAUvLfabcSA9mP6kDU3lOkDAd0jhndfA==
-X-Received: by 2002:a05:6638:13c4:b0:35a:55df:29b2 with SMTP id i4-20020a05663813c400b0035a55df29b2mr295524jaj.85.1663020835825;
-        Mon, 12 Sep 2022 15:13:55 -0700 (PDT)
+        bh=voPhsoaHT770bZnSxaOidypoc2wPeBFAreupfLjJEw0=;
+        b=plnPP9PiEuZ/dUMb2gD1VjDf9W6rdR6oEmLf6RqV1H28WdJkPtkIfJpzwVzfT+mPvN
+         mJ8r2xChrrB+ds6ar/5G/1MBnSelvoiVOk43mllMEMI4Lwh+aRe0H8M/Nw/1B0I5Qp0O
+         BBKnNgIpCk/VlFAGyRiS6+zhZBpHT5k573e9ijy8Gdrhs31qID5AiArVFOHNn+AsyNQP
+         5vu9lJZ0d+auEbUnXU34uCIOpKG0x2GnGbUgl+Axa42p/zPeCpNP1DLRr8LDvKY5EBP7
+         4Hrt+GRtpE7FA42wKMBPNUlKnx/lShGdDPasEn05wzihYeUs/7MkQ6zDbxsdLeI3sCCK
+         KcXQ==
+X-Gm-Message-State: ACgBeo11/8MtESUMWduWSwNgLV3fuzGDU2v7QW8R4038qrenHXxaHC4t
+        s3HixF7QPL8ytqSxU3Ln5D2R0w==
+X-Google-Smtp-Source: AA6agR5D1AVvH2kkuflK8l+Rg/N+BNYFqxo59H5yFAw8LkZQlmKDXiuh0/SYfadlNmkzxI64kSbtOw==
+X-Received: by 2002:a05:6638:3802:b0:351:d8a5:6d58 with SMTP id i2-20020a056638380200b00351d8a56d58mr15378011jav.206.1663020837468;
+        Mon, 12 Sep 2022 15:13:57 -0700 (PDT)
 Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id 18-20020a056e020cb200b002f16e7021f6sm4077334ilg.22.2022.09.12.15.13.54
+        by smtp.gmail.com with ESMTPSA id 18-20020a056e020cb200b002f16e7021f6sm4077334ilg.22.2022.09.12.15.13.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 15:13:55 -0700 (PDT)
+        Mon, 12 Sep 2022 15:13:56 -0700 (PDT)
 From:   Raul E Rangel <rrangel@chromium.org>
 To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
 Cc:     andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
         mario.limonciello@amd.com, timvp@google.com,
         linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
         Raul E Rangel <rrangel@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-Date:   Mon, 12 Sep 2022 16:13:11 -0600
-Message-Id: <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 08/13] ACPI: PM: Take wake IRQ into consideration when entering suspend-to-idle
+Date:   Mon, 12 Sep 2022 16:13:12 -0600
+Message-Id: <20220912160931.v2.8.I7d9202463f08373feccd6e8fd87482c4f40ece5d@changeid>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220912221317.2775651-1-rrangel@chromium.org>
 References: <20220912221317.2775651-1-rrangel@chromium.org>
@@ -65,7 +63,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,154 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device tree already has a mechanism to pass the wake_irq. It does this
-by looking for the wakeup-source property and setting the
-I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-ACPI interrupt wake flag to determine if the interrupt can be used to
-wake the system. Previously the i2c drivers had to make assumptions and
-blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-If there is a device with an Active Low interrupt and the device gets
-powered off while suspending, the interrupt line will go low since it's
-no longer powered and wakes the system. For this reason we should
-respect the board designers wishes and honor the wake bit defined on the
-interrupt.
+This change adds support for ACPI devices that use ExclusiveAndWake or
+SharedAndWake in their _CRS GpioInt definition (instead of using _PRW),
+and also provide power resources. Previously the ACPI subsystem had no
+idea if the device had a wake capable interrupt armed. This resulted
+in the ACPI device PM system placing the device into D3Cold, and thus
+cutting power to the device. With this change we will now query the
+_S0W method to figure out the appropriate wake capable D-state.
 
 Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 ---
 
-Changes in v2:
-- Look at wake_cabple bit for IRQ/Interrupt resources
+(no changes since v1)
 
- drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
- drivers/i2c/i2c-core-base.c |  6 +++++-
- drivers/i2c/i2c-core.h      |  4 ++--
- 3 files changed, 35 insertions(+), 12 deletions(-)
+ drivers/acpi/device_pm.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index c762a879c4cc6b..c3d69b287df824 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
- 	{}
- };
+diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+index 9dce1245689ca2..6bc81f525d5160 100644
+--- a/drivers/acpi/device_pm.c
++++ b/drivers/acpi/device_pm.c
+@@ -681,8 +681,23 @@ static int acpi_dev_pm_get_state(struct device *dev, struct acpi_device *adev,
+ 		d_min = ret;
+ 		wakeup = device_may_wakeup(dev) && adev->wakeup.flags.valid
+ 			&& adev->wakeup.sleep_state >= target_state;
+-	} else {
+-		wakeup = adev->wakeup.flags.valid;
++	} else if (acpi_device_can_wakeup(adev)) {
++		/* ACPI GPE from specified by _PRW. */
++		wakeup = true;
++	} else if (device_may_wakeup(dev) && dev->power.wakeirq) {
++		/*
++		 * The ACPI subsystem doesn't manage the wake bit for IRQs
++		 * defined with ExclusiveAndWake and SharedAndWake. Instead we
++		 * expect them to be managed via the PM subsystem. Drivers
++		 * should call dev_pm_set_wake_irq to register an IRQ as a wake
++		 * source.
++		 *
++		 * If a device has a wake IRQ attached we need to check the
++		 * _S0W method to get the correct wake D-state. Otherwise we
++		 * end up putting the device into D3Cold which will more than
++		 * likely disable wake functionality.
++		 */
++		wakeup = true;
+ 	}
  
-+struct i2c_acpi_irq_context {
-+	int irq;
-+	int wake_capable;
-+};
-+
- static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 			      struct i2c_acpi_lookup *lookup)
- {
-@@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 
- static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
- {
--	int *irq = data;
-+	struct i2c_acpi_irq_context *irq_ctx = data;
- 	struct resource r;
- 
--	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
--		*irq = i2c_dev_irq_from_resources(&r, 1);
-+	if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
-+		irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
-+		irq_ctx->wake_capable =
-+			r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
-+	}
- 
- 	return 1; /* No need to add resource to the list */
- }
-@@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
- /**
-  * i2c_acpi_get_irq - get device IRQ number from ACPI
-  * @client: Pointer to the I2C client device
-+ * @wake_capable: Set to 1 if the IRQ is wake capable
-  *
-  * Find the IRQ number used by a specific client device.
-  *
-  * Return: The IRQ number or an error code.
-  */
--int i2c_acpi_get_irq(struct i2c_client *client)
-+int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
- 	struct list_head resource_list;
--	int irq = -ENOENT;
-+	struct i2c_acpi_irq_context irq_ctx = {
-+		.irq = -ENOENT,
-+		.wake_capable = 0,
-+	};
- 	int ret;
- 
- 	INIT_LIST_HEAD(&resource_list);
- 
-+	if (wake_capable)
-+		*wake_capable = 0;
-+
- 	ret = acpi_dev_get_resources(adev, &resource_list,
--				     i2c_acpi_add_resource, &irq);
-+				     i2c_acpi_add_resource, &irq_ctx);
- 	if (ret < 0)
- 		return ret;
- 
- 	acpi_dev_free_resource_list(&resource_list);
- 
--	if (irq == -ENOENT)
--		irq = acpi_dev_gpio_irq_get(adev, 0);
-+	if (irq_ctx.irq == -ENOENT)
-+		irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
-+			adev, 0, &irq_ctx.wake_capable);
-+
-+	if (wake_capable)
-+		*wake_capable = irq_ctx.wake_capable;
- 
--	return irq;
-+	return irq_ctx.irq;
- }
- 
- static int i2c_acpi_get_info(struct acpi_device *adev,
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 91007558bcb260..97315b41550213 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
- 	struct i2c_client	*client = i2c_verify_client(dev);
- 	struct i2c_driver	*driver;
- 	int status;
-+	int acpi_wake_capable = 0;
- 
- 	if (!client)
- 		return 0;
-@@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
- 			if (irq == -EINVAL || irq == -ENODATA)
- 				irq = of_irq_get(dev->of_node, 0);
- 		} else if (ACPI_COMPANION(dev)) {
--			irq = i2c_acpi_get_irq(client);
-+			irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
-+
-+			if (irq > 0 && acpi_wake_capable)
-+				client->flags |= I2C_CLIENT_WAKE;
- 		}
- 		if (irq == -EPROBE_DEFER) {
- 			status = irq;
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index 87e2c914f1c57b..8e336638a0cd2e 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
- #ifdef CONFIG_ACPI
- void i2c_acpi_register_devices(struct i2c_adapter *adap);
- 
--int i2c_acpi_get_irq(struct i2c_client *client);
-+int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
- #else /* CONFIG_ACPI */
- static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
- 
--static inline int i2c_acpi_get_irq(struct i2c_client *client)
-+static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
- {
- 	return 0;
- }
+ 	/*
 -- 
 2.37.2.789.g6183377224-goog
 
