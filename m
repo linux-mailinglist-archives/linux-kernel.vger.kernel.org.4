@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370AB5B5EB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB6F5B5EB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiILRAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S229575AbiILRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiILRAI (ORCPT
+        with ESMTP id S229844AbiILRAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:00:08 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28890DF5D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663002006; bh=66J1fNK0sXY52O7nedBCC9IIs1jy9eMRcGcxQ2S+brc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=T6xgQDNDSqBsXPH935mIIWsRCRn/4EY5IljL9Xy4mLKKoOew94HtDPF/Dq5m33qB2jHeEcaFikWgAmMly5aNhp9RDn9i/TbqB+ZAumLPAlCSAZm+vQiMaGiUak8RR0RSzKsH+oypHnjBj+d8hu0oo1mDcqTxUt0AbjAi1ex0qAcxxPRt+ZKpgX4G/Ak6f8RkkUxwjs32yGsx5paH+6uxyHBgw5pZlHIjYddpCPRJpxQWofFK7eq9GQBG19BwpSs1qJKub0xOx/cj4zkKXMjloZ7an7cYe0oS9dEHw+y7pnDW1IS+kEpj5NM7hrSD5qNtURDdpWuivW1ZGK4/7qn4MQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663002006; bh=lKDl45kQPks3UdTqJKmMp7PvQXsrY6kbNR6CaDY9PaK=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wx4QWcCBXJ+9AKxdDT+vrRL6QZg74hLN4PuylEIHIOaVY7ZDdoebgzfUHk6nhN2p0HQOhYZY9zDA2GAIG/Ch69xLPyTBcjLZhivjNc1V6jEh3Z5NsF5dhql4YsdpfMetimtJ+kZuCODF7KHPqo4U+FqYZr6rFBbLDiL7/s7AjCgyWIpz8zcad95abT9RHp1jefgzrM5dUaSTiFBAOPtgiBZsVcwj7CXtK4nn5wagN22IixGiB1CD9zyzTt79UvFasAlW+hjv6vM1If0XrNqa3+TQFdaqWWPjpR7oee5KzwcIaTjsxl4IgQODzbXl9dk+E9RrHH0bGtM52jN50v/qAA==
-X-YMail-OSG: QZzvfBQVM1n2b9dzFzRp9qsRiWRmRIUoEmAle_qTp2dJPqorUjloYcqlC_kQhbH
- v_Ft2cxz82oHJ7C28S7FN7HXnCtAD2_GWpp4LRvTKxIEKpMaWYN.M5aaUJyDNA8X23wLS8LuoCmM
- HYhVHvXFJPO7cG5HoFTJIFdAbCEoqbNAzlI.5Nqo1C2qVVpFogry.ALmD5kVFKOMaY532Gz8SC6U
- xZgEmdRutN.sTw7VCmyfDN7b0F5LHNxrytBYgfx27HEU39MIhHlqeAwTGErhZ_ERVXdkiY5ZWK8L
- g_zX3JvcSwBFu5n3Ej7Gxw.Y.GC6Io6rXWN7NAG8tr9uXhNXOzUuTOnHCf1RzmtgBB4b.SStv7X7
- FaWqRNsUdaRhyKRYaj7K334XQY9ZgZFaLbJ0Htf.iz1wVk6W_iCsSUU5Fk3OuDMpAgFdr5ORaQHP
- N0BqyqM3a865zCoBqF3a3sAmrjjOwpjkzR0vOS9lmnsgGskRoEU2tNa5.3EMx4zeZit3T.LDvf_i
- iPHlTfj2RmfZ28j6qRuDnpwgBDWj6h5rRhCDC0U4la5RPjkwtTdSedBYcloAuAxS6Kmhx0yu7lVa
- foWkz_mnFl9KlpYTyYaoGaUJqkfrvfUyhnzWsTxZP64njd_.VGYxvQ7mcgU0o9.is75e4TvZ0VGk
- MO7G2KY0Z2XhIuVpKnqq4d.KmmZJPioEFNLgZna0hIrv.2M3EztDmNg43clJFRa3ekKe7t2yOrGM
- NUgrvy_qq8ZjH7UsGi8n3VK0z4zS0LanGNG.XBPp9O2wbvfxhT49vqR1Z1QVqZuD6wPFsahYCerN
- NQxIgt1kQn4ZcFdzbP8kQMVoRu8cUhlFCk3_wOp9zF9SCq4PJb10.dMgPBNFygm_pu6VMPzAL5mr
- JK9Rb4esGxceTl2c926iYRLSjBq4IruHcA6lqxXOvQ1rTITijlyoKJYbzo0VK6F1ffOjcOEQG3WP
- vVFwUiSMxz1PhEoSQBMqYB2Ed2F_AzwsTClGa2zElohtYk8IpNXXtaQKv2QX2gcbDfekmElW0EII
- kGSnRO2p9eeoubs_n0hzt3i4KS_D2HiLU7BINLShWHCHwNVW__MHK1bPC4MHF_cKmrWm_kYDEGea
- 6BmuKZz4IZDnfN703teu.Bfbr0a9AmHdD79rNHXyI66J9kO2IsTLdi2k6PX5YSWupsmZV9_QG23G
- 7bsOa18CCI1Zw5xpUWiJtjU9.aiH52DwLZb5lwOCQg_lnYydtZWElHbaMVeKSMTJkN.SHYM3NNst
- 3.cd3zPEQuXp.MFcN7IjLfB1Tkzg9umhogIwmPCX2XtRq1dU700GBcifHSyT59qbunZtVAl9G6gA
- mpVIAz33O7_jCJXkYbGcnIVEPAr2FR8LrOR17ljyjJUtfEynV4veFiB_TqIe3JztOjMAoFxpU2FE
- x.n2h6TMZwxa2R1YDR3rgDxZALvEzyOJp0STB1wUax0t.LniL7leb9aj2IyurfnyFLHnF6LPKZda
- d6s5vg0M2ehkjvS3kfU6.AXodYuznbn2AyeZbu25tWOaE.2Dx1X9BUGiNiaiUUHw4A6OPeUCqnns
- CXtTgM4N65asNciWMg6CdVd2iMxhUjcqrmH1cKLJOcMlf6n3nIettqRk66UI1WMRV.c0Nrd3ClBl
- OtolPntnieGD2R5beM8TJS8YsL7a.UunI115bnmcDstMzRsViR68suDuVblmiW.VJQNqtXOk8RJU
- SDuRrtwS8UWXf.OhzMqtOISWY5dDBwoZX5NLOuAYeqcTrz7JhHy3BMpFcVDvvN..sLyVZZlfqyJM
- z5T.uwRlic_dz.NNNnZz.P8mLkKvVr_CTirs_FQvgL9MFxj5ZCihabG66nTllYTxOYMLWBbDHTna
- p_ki0QFu657cEOKjLT33kLlP4VQroNl9.pwG_wH7Ovo255Y9W8hSILvB6oMHz13TVvEFYsVeRzFQ
- eh0Jyu_LG7jLMpzcqxf6DCtYpVfCz7GhClNi_d0eYljAKyQCRRHRJTkE2D96900CHkgRM_khUa6w
- zrG6NaipGtyuiEl3oYX6WI_eWIoaw1HOnHa61JyD_pKTr0KNXBoj1loWnmBYBBU9ycIX81CB0Js3
- KyZmeAWc2Qh5f2k7_vERvwMeZ4.gJyHbu__uA4M5Dvytofbd8R_RrX7qbyF6u0Q2pFL0e0T3Flsn
- 8BzGJ0q3Vbm4DZ_BEboP2._Tf4lKiNkm38LYMlGgoa4httgEWI7UdrMbBkzEEnSzEHpSGWPo.iyn
- JnQ9RsqhDedNsi1P1GX5lxmOaKuVJsTEpMxORXjiQkTtIP7CCKyyUcZjSSfhdCFFg312boVpLtna
- lRWdibHIkFQ--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Mon, 12 Sep 2022 17:00:06 +0000
-Received: by hermes--production-gq1-5499fdd576-dlgnq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 70b580c9c7f5073724570de758dcb345;
-          Mon, 12 Sep 2022 17:00:04 +0000 (UTC)
-Message-ID: <48dd3c0e-f652-798f-9cb9-a53aaae6dcb9@schaufler-ca.com>
-Date:   Mon, 12 Sep 2022 10:00:04 -0700
+        Mon, 12 Sep 2022 13:00:21 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222D41209D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:00:18 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 65so9250357pfx.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=sfYBJC32ETGyteiWg3YC9wQpy2EzrGHLM+DajwGhI4I=;
+        b=b9P3PVEQ9u6tuw4txhn443NBSCEH8tCVzgKr4rmIdZFsA7TJUheFOKJC7L39lri40z
+         4NKkxjzd8vuOT7w+CY7VVC18Frtz41ldO3BbwB9sK6olTDNV6ACrIw2EDDG6MAesNhe1
+         HoyK7EUtVSQBKgfpLvJ8kxwvN9xIbYqR/OLJuC4F9TzSeEbDUck+kq6bHLY1Zny2exPt
+         IqNkab7JEGth4ZT2EjQRjbbVSNUHFK+XAKjKitJzYTRglRw4sIjKlqmebilPV/ZI3+tg
+         st2WDmMsWFCwxApJhzVm9K0UYRehYXzLWdGzitqjmizle8lMy5vaj7DGoHakP4Eam9LX
+         Kr1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sfYBJC32ETGyteiWg3YC9wQpy2EzrGHLM+DajwGhI4I=;
+        b=vl4NOUCNmV0x3WXQGgIlAXNLBU9Brp4Ac8xDQ48WfVXcQLBcMUZblDvPrsofu1ILtP
+         RDvSAPwXFdm1COJ4IYgZLxjslR6ezVx2ILTBkZolEpUFzSHlJeODpjKJB6Lv4eodDdOJ
+         HLKIPBN1PfUyxhxVkbJPvx9DSX4UXeHqGL63EgkGiIbcEQxpQj0I0ytj25xr6gNuG+ue
+         GkhoGKY3A4HF9KIPW3vKaX+zo1EHYzNoidWeHj2YGRYKDa/H3QAKGyjTl6JukI0XrWJO
+         T91qZ9ALJHgj770u1gPLW96YoX273B6NHwAFVQ5h3X6KV91nMgzoHhtoasQaCnOEuSrU
+         G07A==
+X-Gm-Message-State: ACgBeo3zI0xop8Gx+DCs3FUp99bhCXOm8c7QNA74Va8Tv3Dov3ZKttPF
+        9UwvMjHnZiTPa9H9CUE8eMUcNQ==
+X-Google-Smtp-Source: AA6agR4X4xWoT+7YRcOdp1xsn8Z9iuWeLxFphBLc3/8KNvPhY5ySw4xeAoZBvddlZJmKeRi76+goxQ==
+X-Received: by 2002:a63:fc13:0:b0:42b:890d:5954 with SMTP id j19-20020a63fc13000000b0042b890d5954mr24154219pgi.200.1663002017237;
+        Mon, 12 Sep 2022 10:00:17 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id pg2-20020a17090b1e0200b001fd7fe7d369sm5442265pjb.54.2022.09.12.10.00.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 10:00:16 -0700 (PDT)
+Message-ID: <333abaaa-4e56-7a4e-a4a1-f3f54970a21e@linaro.org>
+Date:   Mon, 12 Sep 2022 22:30:11 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH linux-next] smack: lsm: remove the unneeded result
- variable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 5/9] dt-bindings: mmc: sdhci-msm: Add pinctrl-1
+ property
 Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, casey@schaufler-ca.com
-References: <20220912100535.18125-1-xu.panda@zte.com.cn>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220912100535.18125-1-xu.panda@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-6-iskren.chernev@gmail.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20220910143213.477261-6-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20612 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/2022 3:05 AM, cgel.zte@gmail.com wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
->
-> Return the value smk_ptrace_rule_check() directly instead of storing it
-> in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 
-Added to https://github.com/cschaufler/smack-next#next.
-Thank you.
 
+On 9/10/22 8:02 PM, Iskren Chernev wrote:
+> Most mmc blocks contain two pinctrls, default and sleep. But then
+> dt-schema complains about pinctrl-1 not being defined.
+> 
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 > ---
->  security/smack/smack_lsm.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 16e24a6cdc7c..b6306d71c908 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -497,13 +497,11 @@ static int smack_ptrace_access_check(struct task_struct *ctp, unsigned int mode)
->   */
->  static int smack_ptrace_traceme(struct task_struct *ptp)
->  {
-> -       int rc;
->         struct smack_known *skp;
->
->         skp = smk_of_task(smack_cred(current_cred()));
->
-> -       rc = smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, __func__);
-> -       return rc;
-> +       return smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, __func__);
->  }
->
->  /**
+>   Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> index a792fa5574a0..775476d7f9f0 100644
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> @@ -97,6 +97,10 @@ properties:
+>       description:
+>         Should specify pin control groups used for this controller.
+>   
+> +  pinctrl-1:
+> +    description:
+> +      Should specify sleep pin control groups used for this controller.
+> +
+>     resets:
+>       maxItems: 1
+>   
+
+Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+
+Thanks.
