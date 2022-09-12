@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA675B5D35
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EB75B5D3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiILPcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S229630AbiILPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiILPcv (ORCPT
+        with ESMTP id S229696AbiILPdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:32:51 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 183A726572;
-        Mon, 12 Sep 2022 08:32:51 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C0B6B204778A;
-        Mon, 12 Sep 2022 08:32:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C0B6B204778A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662996770;
-        bh=24KADFj4btF3I+/3El4CjQCGgseN2zkrF5osGbvl+xE=;
-        h=From:To:Subject:Date:From;
-        b=j9D/dSfidQMifQCZLsMtHDo19KCgzJdaiREUzzmOzl66gK2quNutiCpl+4gkezUJQ
-         eB2xYy9dfWKa4n6cS1WeSdC/soiOpA6Etdp8weEkfulOQy58CICPM3FleUgoxoszB9
-         EPHjJlzAXk1jAz9DCBj4dJxqThntGvyQV3DAjKO8=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-Subject: [PATCH] drm/hyperv: Don't overwrite dirt_needed value set by host
-Date:   Mon, 12 Sep 2022 08:32:46 -0700
-Message-Id: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 11:33:08 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A167829C81;
+        Mon, 12 Sep 2022 08:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5vF4nOR7okjhrE/WI9Z86whidSR0qc+yOoCcLcC0enw=; b=diSA+9u3Z1hJnF3PkEmLt1Z+Dw
+        VULXwWOrkOZhK5gjSrwU0PpzhoDXP4X6wI9cUJ2RZYz2Vn7tESFZkaU5DK2/mHagnUzWQZcrlJP7d
+        n/TtjxjLZNoApHSZvkzyXA3cNsoTFSzZC/yknWZpYJ3Cg4LUj/ZqEnd+aRomup6okV1sxxIceIcKd
+        ZqHlqpEiZNMounKMwSNU/8tXymmB6hc14gO6RDDu4iBqLCd9LKLvUZUtkKiO1UjtfbcUM6Fn1rc8K
+        S4H5uxnIazS9KGT2+TQnM0KDWSHWV2lzmidwF/1eR0w62j7cBD2nhpT+6YAeNsPbtKWbl040vl1Hv
+        epiBwP4g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34268)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oXlQl-0001rB-Ts; Mon, 12 Sep 2022 16:33:03 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oXlQh-0008Dq-Pi; Mon, 12 Sep 2022 16:32:59 +0100
+Date:   Mon, 12 Sep 2022 16:32:59 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
+ for all ports
+Message-ID: <Yx9RK0bDba4s02qn@shell.armlinux.org.uk>
+References: <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-7-colin.foster@in-advantage.com>
+ <Yx7yZESuK6Jh0Q8X@shell.armlinux.org.uk>
+ <20220912101621.ttnsxmjmaor2cd7d@skbuf>
+ <20220912114117.l2ufqv5forkpehif@skbuf>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912114117.l2ufqv5forkpehif@skbuf>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Existing code is causing a race condition where dirt_needed value is
-already set by the host and gets overwritten with default value. Remove
-this default setting of dirt_needed, to avoid overwriting the value
-received in the channel callback set by vmbus_open. Removing this
-setting also means the default value for dirt_needed is changed to false
-as it's allocated by kzalloc which is similar to legacy hyperv_fb driver.
+On Mon, Sep 12, 2022 at 11:41:18AM +0000, Vladimir Oltean wrote:
+> On Mon, Sep 12, 2022 at 01:16:21PM +0300, Vladimir Oltean wrote:
+> > > Therefore, I think you can drop this patch from your series and
+> > > you won't see any functional change.
+> > 
+> > This is true. I am also a bit surprised at Colin's choices to
+> > (b) split the work he submitted such that he populates mac_capabilities
+> >     but does not make any use of it (not call phylink_generic_validate
+> >     from anywhere). We try as much as possible to not leave dead code
+> >     behind in the mainline tree, even if future work is intended to
+> >     bring it to life. I do understand that this is an RFC so the patches
+> >     weren't intended to be applied as is, but it is still confusing to
+> >     review a change which, as you've correctly pointed out, has no
+> >     effect to the git tree as it stands.
+> 
+> Ah, I retract this comment; after actually looking at all the patches, I
+> do see that in patch 8/8, Colin does call phylink_generic_validate().
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
- drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 2 --
- 1 file changed, 2 deletions(-)
+Good point, I obviously missed that in the series.
 
-diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-index 4a8941fa0815..57d49a08b37f 100644
---- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-+++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-@@ -198,8 +198,6 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
- 	if (ret)
- 		drm_warn(dev, "Failed to update vram location.\n");
- 
--	hv->dirt_needed = true;
--
- 	ret = hyperv_mode_config_init(hv);
- 	if (ret)
- 		goto err_vmbus_close;
 -- 
-2.31.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
