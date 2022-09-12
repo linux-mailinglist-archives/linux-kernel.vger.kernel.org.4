@@ -2,161 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8767A5B623A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0615B623D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiILUcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 16:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S229862AbiILUds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 16:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiILUci (ORCPT
+        with ESMTP id S229616AbiILUdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 16:32:38 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B410C491C1;
-        Mon, 12 Sep 2022 13:32:33 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id g23so2641290qtu.2;
-        Mon, 12 Sep 2022 13:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ak18MshwY5Ellami6mArUG9tdrgWOmpzvJ37jVCJT+I=;
-        b=kPbT7g9rnCoCnMIYdM1bRd6JYDOSYuR3bH2eAsv+0bojSjBWcs+/zTztK6hQakX9Qr
-         +0Ut76l09BltjJM9DuDq/rkxXivP6IfTQGjIZvYXxoFUqIO7Bd5mbKoynAWCMqbwEHtN
-         zK1BAEAf8hiKRB14oiiMIOMK4Ip9/u5+BZyC/Ztw0apDyKkF5Vf44AMshWe2IfO/sWXP
-         x0sSmRbO0xaZ/9eVjmBxOeUVkkbQoqBoBG4hLQWadEIwfu2WLyo8C5Hwax2FlxomeNqg
-         V7zAEvoR3JalyLc5/BEBCvkHVc5cQlQUeu8db3zbF1c6vmFnrUjqUTBmK3qjVL8i5cZr
-         tANQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ak18MshwY5Ellami6mArUG9tdrgWOmpzvJ37jVCJT+I=;
-        b=Mrpf8EOQDQ9FifC/WQ+LpNc6NOs/zk9O7tryQ3rZPxqrp3Zk9elrlrsDoeOelXYEFi
-         Jlt12L595js84pn5SxaSxn7sGmKUbw0PAGO1OvQOEeNhI+YHMzwSxOf4Owe6A3Qi1uy2
-         OEq3Vf1HxQo39EJGEf0XTjXowzjibT51aEAGzPfL3/qvbXZRQ3bjy7JVT1UI/MiMToOa
-         yClBI05Uquc9a0lI2eadMbrs0F1N+9bCsUVkSSeGK41yGSVPeYukHhGjTkEoFo4L2HGB
-         ENfkRkPtDMqPmDZv7cJkqqreuOA4AUuk2qsEpuDwGs8ZCHdNO1OrOsK2N0bWMcEOSCA5
-         VmQA==
-X-Gm-Message-State: ACgBeo3c4r61BhE4brQprnkMfGrKLr8CFjwtdSJMXnMeh74uOsqoSJ2D
-        uF14NnjHKfoAPd/dm7k7Ot9aHEYq4jA=
-X-Google-Smtp-Source: AA6agR6yF3sOOtMvFhrpST7frBaH5o2SmbfUJbaOLOVZIceA8/NFP93Ook06/LDJ6t9ep9DmIhFemg==
-X-Received: by 2002:ac8:7f48:0:b0:35b:bac4:c472 with SMTP id g8-20020ac87f48000000b0035bbac4c472mr2708992qtk.442.1663014752496;
-        Mon, 12 Sep 2022 13:32:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:216d:1a77:16d6:2f68? ([2600:1700:2442:6db0:216d:1a77:16d6:2f68])
-        by smtp.gmail.com with ESMTPSA id h22-20020ac87156000000b0033a5048464fsm5042440qtp.11.2022.09.12.13.32.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 13:32:32 -0700 (PDT)
-Message-ID: <75e803f8-2b25-22c8-0831-e90d0c889da1@gmail.com>
-Date:   Mon, 12 Sep 2022 15:32:31 -0500
+        Mon, 12 Sep 2022 16:33:46 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A9348C89;
+        Mon, 12 Sep 2022 13:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6w8PQBqR6HdnX1SoBWf39MoFT/GYBph2BTf28EIyMSs=; b=UG28dgXx2zplqODUZ3sEK1ECLk
+        ZO2rc4SM0OWvg+7C4MdF86VjY3qzkM3aqmfuT4zWReeEfiD6gztCCrqUEH0nWOA0SGgeXvzdvX0hs
+        +kRT+cWWIUlOHxUvckbLdNKCrg+3GVEDf28oWIqv4IeKjrIolUM8n2RBnfm8wZJcsTRu7b6sv49EL
+        8aPMKYsIm6wUUWIhUQ1SbxSRb0yFPVj76HKQjbGAHY3HsmxZARCeEluitX3Kofr4S3Bm/d1CgXlba
+        eZndrsz09gpXb1xjnpJIjsREsMWuL8qXLEq6DatqNUs6hBIDbFuU69x/yYl7EqZaIjvQHfmkFR5Yh
+        cjqP3B3w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34272)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oXq7g-00026J-0Q; Mon, 12 Sep 2022 21:33:40 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oXq7e-0008Qc-Tw; Mon, 12 Sep 2022 21:33:38 +0100
+Date:   Mon, 12 Sep 2022 21:33:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Li Yang <leoyang.li@nxp.com>, shawnguo@kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Subject: Re: [PATCH v4 1/2] arm64: dts: lx2160a: update PCIe nodes to match
+ rev2 silicon
+Message-ID: <Yx+XonDqmpE4KGhD@shell.armlinux.org.uk>
+References: <20220817202538.21493-1-leoyang.li@nxp.com>
+ <20220817202538.21493-2-leoyang.li@nxp.com>
+ <CAOesGMhz8PYNG_bgMX-6gka77k1hJOZUv6xqJRqATaJ6mFbk6A@mail.gmail.com>
+ <CAOesGMjsegmLUVxbjZJ3kgxnDkVTyxy5BB=is2CM_7Se7TQrWQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] driver: of: overlay: demote message to warning
-Content-Language: en-US
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Rob Herring <robh+dt@kernel.org>, xe-linux-external@cisco.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220907230709.271889-1-danielwa@cisco.com>
- <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
- <20220908003510.GE4320@zorba>
- <c0c66918-f55e-83e4-edea-b2d32fdb27a7@gmail.com>
- <3fcea82c-f5cf-f066-67b9-08669c44a9c6@gmail.com>
- <20220912170524.GX4320@zorba>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220912170524.GX4320@zorba>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOesGMjsegmLUVxbjZJ3kgxnDkVTyxy5BB=is2CM_7Se7TQrWQ@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 12:05, Daniel Walker wrote:
-> On Mon, Sep 12, 2022 at 01:45:40AM -0500, Frank Rowand wrote:
->> On 9/8/22 12:55, Frank Rowand wrote:
->>> On 9/7/22 19:35, Daniel Walker wrote:
->>>> On Wed, Sep 07, 2022 at 06:54:02PM -0500, Frank Rowand wrote:
->>>>> On 9/7/22 18:07, Daniel Walker wrote:
->>>>>> This warning message shows by default on the vast majority of overlays
->>>>>> applied. Despite the text identifying this as a warning it is marked
->>>>>> with the loglevel for error. At Cisco we filter the loglevels to only
->>>>>> show error messages. We end up seeing this message but it's not really
->>>>>> an error.
->>>>>>
->>>>>> For this reason it makes sense to demote the message to the warning
->>>>>> loglevel.
->>>>>>
->>>>>> Cc: xe-linux-external@cisco.com
->>>>>> Signed-off-by: Daniel Walker <danielwa@cisco.com>
->>>>>> ---
->>>>>>  drivers/of/overlay.c | 2 +-
->>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
->>>>>> index bd8ff4df723d..4ae276ed9a65 100644
->>>>>> --- a/drivers/of/overlay.c
->>>>>> +++ b/drivers/of/overlay.c
->>>>>> @@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
->>>>>>  	}
->>>>>>  
->>>>>>  	if (!of_node_check_flag(target->np, OF_OVERLAY))
->>>>>> -		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
->>>>>> +		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
->>>>>>  		       target->np, new_prop->name);
->>>>>>  
->>>>>>  	if (ret) {
->>>>>
->>>>> NACK
->>>>>
->>>>> This is showing a real problem with the overlay.
->>>>
->>>> What's the real problem ?
->>>>
->>>> Daniel
->>>
->>> A memory leak when the overlay is removed.
->>>
->>> I'll send a patch to update the overlay file in Documumentation/devicetree/ to provide
->>> more information about this.  If you don't see a patch by tomorrow, feel free to
->>> ping me.
->>>
->>> -Frank
->>
->> The good news is that your question prodded me to start improving the in kernel documentation
->> of overlays.  The promised patch is a rough start at:
->>
->>    https://lore.kernel.org/all/20220912062615.3727029-1-frowand.list@gmail.com/
->>
->> The bad news is that what I wrote doesn't explain the memory leak in any more detail.
->> If an overlay adds a property to a node in the base device tree then the memory
->> allocated to do the add will not be freed when the overlay is removed.  Since it is
->> possible to add and remove overlays multiple times, the ensuing size of the memory
->> leak is potentially unbounded.
+On Mon, Sep 12, 2022 at 11:54:06AM -0700, Olof Johansson wrote:
+> On Mon, Sep 12, 2022 at 12:05 AM Olof Johansson <olof@lixom.net> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Aug 17, 2022 at 1:26 PM Li Yang <leoyang.li@nxp.com> wrote:
+> > >
+> > > The original dts was created based on the non-production rev1 silicon
+> > > which was only used for evaluation.  Update the PCIe nodes to align with
+> > > the different controller used in production rev2 silicon.
+> >
+> > How can I confirm what version of silicon I have on a system?
+> >
+> > My non-evaluation commercially purchased system (HoneyComb LX2K) has:
+> >
+> > # cat /sys/bus/soc/devices/soc0/revision
+> > 1.0
+> >
+> > And I will be really grumpy if this system stops working. It's what I
+> > use to do all my maintainer work, even if that's been fairly dormant
+> > this year.
+> >
+> > It's overall setting off red flags to update an in-place devicetree to
+> > a "new revision" of silicon instead of adding a new DT for said
+> > revision. 2160A has been on the market for several years, so it just
+> > seems odd to all of the sudden retroactively make things
+> > non-backwards-compatible.
 > 
-> Isn't this only a problem if you remove the overlay?
-
-Yes, but we don't know if the overlay will be removed.  And I will not accept a
-change that suppresses the message if there is no expectation to remove the
-overlay.
-
+> Confirmed that this patch renders my HoneyComb unbootable -- PCIe doesn't probe.
 > 
-> if the dt fixup driver does have the ability to remove the overlay doesn't it
-> have responsibility to free the memory? Or is it impossible to free the memory?
+> Shawn, please revert, and be on the lookout for similar problematic
+> approaches in the future. Thanks!
 
-It is difficult due to architectural issues.  Reference counting occurs at the node
-level, and not at the property level.  So memory related to properties is freed
-when the corresponding overlay node reference count leads to the node being freed.
+I think you may also need to beware of the MC firmware revision - I
+seem to remember reading in the changelog notes for it that NXP
+dropped support in the MC firmware for the older silicon, though I
+may be misremembering. It's been a while since I really looked at
+the LX2160A from the point of view of maintaining or developing
+anything for it.
 
-> 
-> Daniel
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
