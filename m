@@ -2,47 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA0E5B5635
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467305B5638
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiILIaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S230247AbiILIah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiILI3k (ORCPT
+        with ESMTP id S230186AbiILIaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:29:40 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59262ADE;
-        Mon, 12 Sep 2022 01:29:14 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 5141568B05; Mon, 12 Sep 2022 10:29:10 +0200 (CEST)
-Date:   Mon, 12 Sep 2022 10:29:10 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] nvme-hwmon: Cache-line-align the NVME SMART
- log-buffer
-Message-ID: <20220912082909.GA10666@lst.de>
-References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru> <20220909191916.16013-2-Sergey.Semin@baikalelectronics.ru> <20220910053045.GA23052@lst.de> <20220910123542.tzxg2blegw55z5fj@mobilestation>
+        Mon, 12 Sep 2022 04:30:17 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7A1A059;
+        Mon, 12 Sep 2022 01:30:00 -0700 (PDT)
+Message-ID: <7d30b552-a737-9f19-dea8-26978a6601ea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662971398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ko/M01mjxRdaswWjLV+NEVwlojpcTrguLl8c9fDwroI=;
+        b=rvaOSKdYwVlUfJroDJhCBq6ntfqFHL8SbcFkneCZfF5tR0ktlwo6gSd4FZVjVsIHewZxp+
+        QN2w9xmTZvsx5att7O/aO4DqKQs8zfGBaVMjxDSPl2VdqqI9YnDTYjVNdUngXRGH6hWRMw
+        svEl0BhCzh6qwS9/ng6HF1jpWEL6mOc=
+Date:   Mon, 12 Sep 2022 16:29:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910123542.tzxg2blegw55z5fj@mobilestation>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Subject: Re: [RFC PATCH 2/7] RDMA/rxe: Convert the triple tasklets to
+ workqueues
+To:     "matsuda-daisuke@fujitsu.com" <matsuda-daisuke@fujitsu.com>,
+        'Bart Van Assche' <bvanassche@acm.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "leonro@nvidia.com" <leonro@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>
+Cc:     "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+ <41e5476f4f14a0b77f4a8c3826e3ef943bf7c173.1662461897.git.matsuda-daisuke@fujitsu.com>
+ <0b3366e6-c0ae-7242-5006-b638e629972d@linux.dev>
+ <fd1d7c49-a090-e8c7-415b-dfcda94ace9d@acm.org>
+ <TYCPR01MB8455D739FC9FB034E3485C87E5449@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <TYCPR01MB8455D739FC9FB034E3485C87E5449@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,28 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 03:35:42PM +0300, Serge Semin wrote:
-> Well, both approaches will solve the denoted problem. I am just
-> wondering why do you think that the kmalloc-ed buffer is more
-> preferable?
 
-Because it clearly documents the intent.  Here is one buffer that is
-just a data buffer, and here is one with kernel internal structure.
-The concept of embedding on-disk / on-the-wire structures into internal
-stuctures always seemed rather weird and unexpected to me, as we now
-need to ensure that the alignment works right on both sides.  With
-the right annotations (as done in this series) this will work, but
-it feels a little fragile to me.
+在 2022/9/12 15:58, matsuda-daisuke@fujitsu.com 写道:
+> On Mon, Sep 12, 2022 12:09 AM Bart Van Assche wrote:
+>> On 9/11/22 00:10, Yanjun Zhu wrote:
+>>> I also implemented a workqueue for rxe. IMO, can we add a variable to
+>>> decide to use tasklet or workqueue?
+>>>
+>>> If user prefer using tasklet, he can set the variable to use
+>>> tasklet. And the default is tasklet. Set the variable to another
+>>> value to use workqueue.
+> That's an interesting idea, but I am not sure how users specify it.
+> IIRC, tasklets are generated when rdma link is added, typically by
+> executing ' rdma link add' command. I don't think we can add
+> an device specific option to the utility(iproute2/rdma).
 
-> What would be the best solution if we had a qualifier like this:
-> #ifdef CONFIG_DMA_NONCOHERENT
-> #define ____dma_buffer ____cacheline_aligned
-> #else
-> #define ____dma_buffer
-> #endif
-> and used it instead of the direct ____cacheline_aligned utilization.
+In my workqueue implementation, I used a sysctl variable to set a value 
+to choose tasklet or workqueue.
 
-So independent of my preference for separate allocations, this suggested
-additional would still be very useful for the places where we need
-to use the alignment for performance or other reasons.  I'd use
-something like __dma_alligned or similar, though.
+You can use sysctl or driver parameter to decide to use tasklet or 
+workqueue.
+
+And finally the Macros like #if ... #else ... #endif also acts as a method.
+
+Zhu Yanjun
+
+>
+>> I'm in favor of removing all uses of the tasklet mechanism because of
+>> the disadvantages of that mechanism. See also:
+>> * "Eliminating tasklets" (https://lwn.net/Articles/239633/).
+>> * "Modernizing the tasklet API" (https://lwn.net/Articles/830964/).
+>> * Sebastian Andrzej Siewior's opinion about tasklets
+>> (https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/).
+> I am also in favor of using workqueues alone not only because of the
+> disadvantages above but also to avoid complexity. I would like to know
+> if there is anybody who will bothered by the change especially in terms
+> of performance.
+>
+> Thanks,
+> Daisuke
+>
+>> Thanks,
+>>
+>> Bart.
