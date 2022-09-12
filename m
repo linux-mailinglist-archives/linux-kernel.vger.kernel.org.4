@@ -2,164 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC45B5C94
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9AD5B5C9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiILOqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S230060AbiILOrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiILOqW (ORCPT
+        with ESMTP id S229718AbiILOrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:46:22 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18CC423BD5;
-        Mon, 12 Sep 2022 07:46:19 -0700 (PDT)
-Received: from chenhuacai$loongson.cn ( [114.216.208.34] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Mon, 12 Sep 2022 22:45:42
- +0800 (GMT+08:00)
-X-Originating-IP: [114.216.208.34]
-Date:   Mon, 12 Sep 2022 22:45:42 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-To:     "Ard Biesheuvel" <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Matthew Garrett" <mjg59@srcf.ucam.org>,
-        "Peter Jones" <pjones@redhat.com>,
-        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
-        "Heinrich Schuchardt" <heinrich.schuchardt@canonical.com>,
-        "AKASHI Takahiro" <takahiro.akashi@linaro.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, "Xi Ruoyao" <xry111@xry111.site>,
-        "Lennart Poettering" <lennart@poettering.net>,
-        "Jeremy Linton" <jeremy.linton@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>
-Subject: Re: Re: Re: [PATCH v5 8/8] loongarch: efi: enable generic EFI
- compressed boot
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <CAMj1kXEvRfgMo+kJBwdNQfcBSfEXYGZ5vTbh2Ym8T6X+p9iWBA@mail.gmail.com>
-References: <20220910081152.2238369-1-ardb@kernel.org>
- <20220910081152.2238369-9-ardb@kernel.org>
- <6876236f.7b0c.18327c74248.Coremail.chenhuacai@loongson.cn>
- <CAMj1kXFpQ1FkiMMXeA-E5FdnDzhZr7qmN15PNig_9KXxGNRJhQ@mail.gmail.com>
- <2c005589.7bc5.1832d12eb0c.Coremail.chenhuacai@loongson.cn>
- <CAMj1kXEvRfgMo+kJBwdNQfcBSfEXYGZ5vTbh2Ym8T6X+p9iWBA@mail.gmail.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: K93xHmZvb3Rlcl90eHQ9NDMwNjo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Mon, 12 Sep 2022 10:47:32 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9424223BC1;
+        Mon, 12 Sep 2022 07:47:31 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id CFBAA1C5A; Mon, 12 Sep 2022 10:47:30 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org CFBAA1C5A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1662994050;
+        bh=KrCKV+nSm550BbWCcA/q//1uO/LeSXqDHyHCbzO1WJk=;
+        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
+        b=Dfx5+C/kD+osKxTq13Gb2GCFlVdcialgctzJi05n2pAIbusLp1G06ffaXC3Eac1yY
+         H7CWy0N5muuBjXNSIiooqAQzv7jet1zI4xWjxBmZys9o1JABAQIakYevKUN79sli9L
+         81iLAHBR1MuyfGYXr065a8FUKIoL1YQtZ2Xs+16o=
+Date:   Mon, 12 Sep 2022 10:47:30 -0400
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Florian Weimer <fweimer@redhat.com>, Theodore Ts'o <tytso@mit.edu>,
+        Jan Kara <jack@suse.cz>, NeilBrown <neilb@suse.de>,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, brauner@kernel.org, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <20220912144730.GD9304@fieldses.org>
+References: <20220908182252.GA18939@fieldses.org>
+ <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+ <20220909154506.GB5674@fieldses.org>
+ <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
+ <20220910145600.GA347@fieldses.org>
+ <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+ <87a67423la.fsf@oldenburg.str.redhat.com>
+ <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
+ <20220912135131.GC9304@fieldses.org>
+ <1abae98579030d437224ae24f73fffaabb3f64c1.camel@kernel.org>
 MIME-Version: 1.0
-Message-ID: <72e78c9d.7c1d.1833229c931.Coremail.chenhuacai@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8Dxw+EWRh9jz3oXAA--.5038W
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAHBmMfIVwBkwAAsT
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1abae98579030d437224ae24f73fffaabb3f64c1.camel@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIEFyZCwKCgo+IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPiDlj5Hku7bkuro6ICJBcmQgQmll
-c2hldXZlbCIgPGFyZGJAa2VybmVsLm9yZz4KPiDlj5HpgIHml7bpl7Q6MjAyMi0wOS0xMiAxODox
-ODowNSAo5pif5pyf5LiAKQo+IOaUtuS7tuS6ujogIumZiOWNjuaJjSIgPGNoZW5odWFjYWlAbG9v
-bmdzb24uY24+Cj4g5oqE6YCBOiBsaW51eC1lZmlAdmdlci5rZXJuZWwub3JnLCBsaW51eC1hcm0t
-a2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcs
-ICJKYW1lcyBFLkouIEJvdHRvbWxleSIgPEphbWVzLkJvdHRvbWxleUBoYW5zZW5wYXJ0bmVyc2hp
-cC5jb20+LCAiTWF0dGhldyBHYXJyZXR0IiA8bWpnNTlAc3JjZi51Y2FtLm9yZz4sICJQZXRlciBK
-b25lcyIgPHBqb25lc0ByZWRoYXQuY29tPiwgIklsaWFzIEFwYWxvZGltYXMiIDxpbGlhcy5hcGFs
-b2RpbWFzQGxpbmFyby5vcmc+LCAiSGVpbnJpY2ggU2NodWNoYXJkdCIgPGhlaW5yaWNoLnNjaHVj
-aGFyZHRAY2Fub25pY2FsLmNvbT4sICJBS0FTSEkgVGFrYWhpcm8iIDx0YWthaGlyby5ha2FzaGlA
-bGluYXJvLm9yZz4sICJQYWxtZXIgRGFiYmVsdCIgPHBhbG1lckBkYWJiZWx0LmNvbT4sICJBdGlz
-aCBQYXRyYSIgPGF0aXNocEBhdGlzaHBhdHJhLm9yZz4sICJBcm5kIEJlcmdtYW5uIiA8YXJuZEBh
-cm5kYi5kZT4sICJYaSBSdW95YW8iIDx4cnkxMTFAeHJ5MTExLnNpdGU+LCAiTGVubmFydCBQb2V0
-dGVyaW5nIiA8bGVubmFydEBwb2V0dGVyaW5nLm5ldD4sICJKZXJlbXkgTGludG9uIiA8amVyZW15
-LmxpbnRvbkBhcm0uY29tPiwgIldpbGwgRGVhY29uIiA8d2lsbEBrZXJuZWwub3JnPiwgIkNhdGFs
-aW4gTWFyaW5hcyIgPGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tPgo+IOS4u+mimDogUmU6IFJlOiBb
-UEFUQ0ggdjUgOC84XSBsb29uZ2FyY2g6IGVmaTogZW5hYmxlIGdlbmVyaWMgRUZJIGNvbXByZXNz
-ZWQgYm9vdAo+IAo+IE9uIFN1biwgMTEgU2VwdCAyMDIyIGF0IDE2OjAzLCDpmYjljY7miY0gPGNo
-ZW5odWFjYWlAbG9vbmdzb24uY24+IHdyb3RlOgo+ID4KPiA+Cj4gPgo+ID4KPiA+ID4gLS0tLS3l
-jp/lp4vpgq7ku7YtLS0tLQo+ID4gPiDlj5Hku7bkuro6ICJBcmQgQmllc2hldXZlbCIgPGFyZGJA
-a2VybmVsLm9yZz4KPiA+ID4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMTAgMjI6Mjg6MDQgKOaYn+ac
-n+WFrSkKPiA+ID4g5pS25Lu25Lq6OiAi6ZmI5Y2O5omNIiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5j
-bj4KPiA+ID4g5oqE6YCBOiBsaW51eC1lZmlAdmdlci5rZXJuZWwub3JnLCBsaW51eC1hcm0ta2Vy
-bmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsICJK
-YW1lcyBFLkouIEJvdHRvbWxleSIgPEphbWVzLkJvdHRvbWxleUBoYW5zZW5wYXJ0bmVyc2hpcC5j
-b20+LCAiTWF0dGhldyBHYXJyZXR0IiA8bWpnNTlAc3JjZi51Y2FtLm9yZz4sICJQZXRlciBKb25l
-cyIgPHBqb25lc0ByZWRoYXQuY29tPiwgIklsaWFzIEFwYWxvZGltYXMiIDxpbGlhcy5hcGFsb2Rp
-bWFzQGxpbmFyby5vcmc+LCAiSGVpbnJpY2ggU2NodWNoYXJkdCIgPGhlaW5yaWNoLnNjaHVjaGFy
-ZHRAY2Fub25pY2FsLmNvbT4sICJBS0FTSEkgVGFrYWhpcm8iIDx0YWthaGlyby5ha2FzaGlAbGlu
-YXJvLm9yZz4sICJQYWxtZXIgRGFiYmVsdCIgPHBhbG1lckBkYWJiZWx0LmNvbT4sICJBdGlzaCBQ
-YXRyYSIgPGF0aXNocEBhdGlzaHBhdHJhLm9yZz4sICJBcm5kIEJlcmdtYW5uIiA8YXJuZEBhcm5k
-Yi5kZT4sICJYaSBSdW95YW8iIDx4cnkxMTFAeHJ5MTExLnNpdGU+LCAiTGVubmFydCBQb2V0dGVy
-aW5nIiA8bGVubmFydEBwb2V0dGVyaW5nLm5ldD4sICJKZXJlbXkgTGludG9uIiA8amVyZW15Lmxp
-bnRvbkBhcm0uY29tPiwgIldpbGwgRGVhY29uIiA8d2lsbEBrZXJuZWwub3JnPiwgIkNhdGFsaW4g
-TWFyaW5hcyIgPGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tPgo+ID4gPiDkuLvpopg6IFJlOiBbUEFU
-Q0ggdjUgOC84XSBsb29uZ2FyY2g6IGVmaTogZW5hYmxlIGdlbmVyaWMgRUZJIGNvbXByZXNzZWQg
-Ym9vdAo+ID4gPgo+ID4gPiBPbiBTYXQsIDEwIFNlcHQgMjAyMiBhdCAxNToyMiwg6ZmI5Y2O5omN
-IDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPiB3cm90ZToKPiA+ID4gPgo+ID4gPiA+IEhpLCBBcmQs
-Cj4gPiA+ID4KPiA+ID4gPiBJIHByZWZlciB0byBnaXZlIGEgY2hhbmNlIHRvIGRpc2FibGUgWkJP
-T1QsIHNvIEkgZG9uJ3Qgd2FudCB0byBzZWxlY3QgRUZJX1pCT09UIHVuY29uZGl0aW9uYWxseSBp
-biBLY29uZmlnLCBhbmQgdGhlbiB0aGUgTWFrZWZpbGUgY2FuIGJlIGxpa2UgdGhpczoKPiA+ID4g
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gvTWFrZWZpbGUgYi9hcmNoL2xvb25nYXJjaC9N
-YWtlZmlsZQo+ID4gPiA+IGluZGV4IGMzZjU3OWJkZjllNS4uYmM2ZmU2NTEyNWY1IDEwMDY0NAo+
-ID4gPiA+IC0tLSBhL2FyY2gvbG9vbmdhcmNoL01ha2VmaWxlCj4gPiA+ID4gKysrIGIvYXJjaC9s
-b29uZ2FyY2gvTWFrZWZpbGUKPiA+ID4gPiBAQCAtMTQsNiArMTQsMTAgQEAgZWxzZQo+ID4gPiA+
-ICBLQlVJTERfSU1BR0UgICA6PSAkKGJvb3QpL3ZtbGludXguZWZpCj4gPiA+ID4gIGVuZGlmCj4g
-PiA+ID4KPiA+ID4gPiAraWZkZWYgQ09ORklHX0VGSV9aQk9PVAo+ID4gPiA+ICtLQlVJTERfSU1B
-R0UgICAgOj0gJChib290KS92bWxpbnV6LmVmaQo+ID4gPiA+ICtlbmRpZgo+ID4gPiA+ICsKPiA+
-ID4gPiAgYXJjaHNjcmlwdHM6IHNjcmlwdHNfYmFzaWMKPiA+ID4gPiAgICAgICAgICQoUSkkKE1B
-S0UpICQoYnVpbGQpPWFyY2gvbG9vbmdhcmNoL2Jvb3QvdG9vbHMgcmVsb2NzCj4gPiA+ID4KPiA+
-ID4KPiA+ID4gT0ssIEkgd2lsbCBmb2xkIHRoaXMgaW4uIFRoaXMgYWN0dWFsbHkgYWxpZ25zIGl0
-IHdpdGggdGhlIG90aGVyCj4gPiA+IGFyY2hpdGVjdHVyZXMsIHNvIEkgcHJlZmVyIHRoaXMgYXBw
-cm9hY2ggYXMgd2VsbC4KPiA+Cj4gPiBUaGFuayB5b3UsIGFuZCBpZiAibWFrZSBpbnN0YWxsIiBj
-YW4gYWxzbyBoYW5kbGUgdGhlIHpib290IGNhc2UsIHRoYXQncyBldmVuIGJldHRlci4gOikKPiA+
-Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gvTWFrZWZpbGUgYi9hcmNoL2xvb25nYXJj
-aC9NYWtlZmlsZQo+ID4gaW5kZXggYzNmNTc5YmRmOWU1Li41NDgwZmUyZGU3Y2QgMTAwNjQ0Cj4g
-PiAtLS0gYS9hcmNoL2xvb25nYXJjaC9NYWtlZmlsZQo+ID4gKysrIGIvYXJjaC9sb29uZ2FyY2gv
-TWFrZWZpbGUKPiA+IEBAIC0xMzcsNyArMTM3LDExIEBAIHZtbGludXguZWxmIHZtbGludXguZWZp
-IHZtbGludXouZWZpOiB2bWxpbnV4Cj4gPiAgY29yZS15ICs9IGFyY2gvbG9vbmdhcmNoL2Jvb3Qv
-ZHRzLwo+ID4KPiA+ICBpbnN0YWxsOgo+ID4gK2lmbmRlZiBDT05GSUdfRUZJX1pCT09UCj4gPiAg
-ICAgICAgICQoUSlpbnN0YWxsIC1EIC1tIDc1NSAkKEtCVUlMRF9JTUFHRSkgJChJTlNUQUxMX1BB
-VEgpL3ZtbGludXgtJChLRVJORUxSRUxFQVNFKQo+ID4gK2Vsc2UKPiA+ICsgICAgICAgJChRKWlu
-c3RhbGwgLUQgLW0gNzU1ICQoS0JVSUxEX0lNQUdFKSAkKElOU1RBTExfUEFUSCkvdm1saW51ei0k
-KEtFUk5FTFJFTEVBU0UpCj4gPiArZW5kaWYKPiA+ICAgICAgICAgJChRKWluc3RhbGwgLUQgLW0g
-NjQ0IC5jb25maWcgJChJTlNUQUxMX1BBVEgpL2NvbmZpZy0kKEtFUk5FTFJFTEVBU0UpCj4gPiAg
-ICAgICAgICQoUSlpbnN0YWxsIC1EIC1tIDY0NCBTeXN0ZW0ubWFwICQoSU5TVEFMTF9QQVRIKS9T
-eXN0ZW0ubWFwLSQoS0VSTkVMUkVMRUFTRSkKPiA+Cj4gCj4gSXMgdGhlcmUgYW55IHJlYXNvbiBp
-biBwYXJ0aWN1bGFyIHRoaXMgaXMgb3BlbiBjb2RlZCBsaWtlIHRoaXM/IE90aGVyCj4gYXJjaGl0
-ZWN0dXJlcyBqdXN0IGRvIHNvbWV0aGluZyBsaWtlCj4gCj4gaW5zdGFsbDoKPiAgICAgJChjYWxs
-IGNtZCxpbnN0YWxsKQo+IAo+IGFuZCBiZSBkb25lIHdpdGggaXQuCkl0IHNlZW1zIHRoYXQgdGhl
-cmUgYXJlIHR3byBwcm9ibGVtczoKMSwgdGhlIGRlZmF1bHQgaW5zdGFsbCBzY3JpcHQgZG9lc24n
-dCBpbnN0YWxsIHRoZSBjb25maWd1cmF0aW9uIGZpbGU7CjIsIHRoZSBrZXJuZWwgbmFtZSBpbiAi
-aW5zdGFsbGtlcm5lbCIgaXNuJ3QgdGhlIHNhbWUgYXMgdGhlIG9wZW4gY29kZWQgdmVyc2lvbiwg
-aXQgbG9va3MgbGlrZSB0aGlzOgppZiBbICRBUkNIID0gJ3BwYzY0JyAtbyAkQVJDSCA9ICdwcGMn
-IF07IHRoZW4KICAgIEtFUk5FTF9OQU1FPXZtbGludXgKZWxzZQogICAgS0VSTkVMX05BTUU9dm1s
-aW51egpmaQoKTWF5YmUgd2UgY2FuIHByb3ZpZGUgYW4gYXJjaC1zcGVjaWZpYyBpbnN0YWxsLnNo
-IGFzIGFybTY0IGRvZXMsIGJ1dCBpdCBpcyBldmVuIG1vcmUgY29tcGxleCB0aGFuIHRoZSBvcGVu
-IGNvZGVkIHZlcnNpb24uCgpIdWFjYWkKCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTku7blkKvmnInp
-vpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nkuIrp
-naLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbku5bk
-urrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbpg6jl
-iIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bkuK3n
-moTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXor53m
-iJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpUaGlzIGVtYWls
-IGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gZnJv
-bSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBl
-cnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ugb2Yg
-dGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVkaW5nLCBi
-dXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVwcm9kdWN0
-aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQg
-cmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZW1haWwgaW4g
-ZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFpbCBpbW1lZGlh
-dGVseSBhbmQgZGVsZXRlIGl0LiA=
+On Mon, Sep 12, 2022 at 10:02:27AM -0400, Jeff Layton wrote:
+> On Mon, 2022-09-12 at 09:51 -0400, J. Bruce Fields wrote:
+> > On Mon, Sep 12, 2022 at 08:55:04AM -0400, Jeff Layton wrote:
+> > > Because of the "seen" flag, we have a 63 bit counter to play with. Could
+> > > we use a similar scheme to the one we use to handle when "jiffies"
+> > > wraps? Assume that we'd never compare two values that were more than
+> > > 2^62 apart? We could add i_version_before/i_version_after macros to make
+> > > it simple to handle this.
+> > 
+> > As far as I recall the protocol just assumes it can never wrap.  I guess
+> > you could add a new change_attr_type that works the way you describe.
+> > But without some new protocol clients aren't going to know what to do
+> > with a change attribute that wraps.
+> > 
+> 
+> Right, I think that's the case now, and with contemporary hardware that
+> shouldn't ever happen, but in 10 years when we're looking at femtosecond
+> latencies, could this be different? I don't know.
+
+That doesn't sound likely.  We probably need not just 2^63 writes to a
+single file, but a dependent sequence of 2^63 interspersed writes and
+change attribute reads.
+
+Then there's the question of how many crashes and remounts are possible
+for a single filesystem in the worst case.
+
+> 
+> > I think this just needs to be designed so that wrapping is impossible in
+> > any realistic scenario.  I feel like that's doable?
+> > 
+> > If we feel we have to catch that case, the only 100% correct behavior
+> > would probably be to make the filesystem readonly.
+> 
+> What would be the recourse at that point? Rebuild the fs from scratch, I
+> guess?
+
+I guess.
+
+--b.
