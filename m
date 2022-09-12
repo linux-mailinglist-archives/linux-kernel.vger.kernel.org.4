@@ -2,152 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9065B6190
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 21:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383715B6195
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 21:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiILTUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 15:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S230439AbiILTWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 15:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiILTUn (ORCPT
+        with ESMTP id S230410AbiILTWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 15:20:43 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4658940BF5;
-        Mon, 12 Sep 2022 12:20:41 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so6538596oth.8;
-        Mon, 12 Sep 2022 12:20:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=3AP/8H6lNUJxt0e4xcmzSjTGN2LrpryaMTGu/8MaPTE=;
-        b=ZbLO/SQ42CahYnGvYwX+wqjgPx9KsurMrUQEwF59S7pbdB8cgNOrAixKUGOkDV5sJ9
-         v2xEr3seWQ3bOWhYieyVRX5hRUPM2tr/5EpVV30IruxQpnSx0aadCdSdjnX7XiWkgh4c
-         AQe82Sn984j8+8UOv9JaxWp9UKHIizE5uUF1gGoVnKFgkMCgZoikWCw/sJN9sKEOROyO
-         DchfAmZ/B4OigGww3ihcgJe0ncZ+ioqxRzdpgRdI/SbMyg0dM0lhoGBzppSvkybMMi0M
-         T6gs+cN3wiftMBZrG6s1dMH1CPB5z7Dm3iZVAjMs9BwdJCBU+P0eDWIDcHEhRV9NAT1P
-         Ozxg==
-X-Gm-Message-State: ACgBeo2Dt1pAghHuoEKqPSzdHTufCsUtxHLiHN52O8Kb6ODje0AGeOwZ
-        yOS1W7XPjuF96V5kKCZPbkl0rIZ1CQ==
-X-Google-Smtp-Source: AA6agR7xawQGM5WeoMEXiFMiRQalX4BDsabwBsBRE57tKwigga13hjnnPHVUevtOi6lJDbcfUCqFBA==
-X-Received: by 2002:a05:6830:1d89:b0:655:d851:365f with SMTP id y9-20020a0568301d8900b00655d851365fmr3412786oti.293.1663010440379;
-        Mon, 12 Sep 2022 12:20:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s22-20020a4ac816000000b0044b47bb023fsm4449106ooq.37.2022.09.12.12.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 12:20:39 -0700 (PDT)
-Received: (nullmailer pid 1680895 invoked by uid 1000);
-        Mon, 12 Sep 2022 19:20:38 -0000
-Date:   Mon, 12 Sep 2022 14:20:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2 15/20] dt-bindings: nvmem: add YAML schema for the
- sl28 vpd layout
-Message-ID: <20220912192038.GA1661550-robh@kernel.org>
-References: <20220901221857.2600340-1-michael@walle.cc>
- <20220901221857.2600340-16-michael@walle.cc>
+        Mon, 12 Sep 2022 15:22:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E427240E32;
+        Mon, 12 Sep 2022 12:22:07 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CFk8ta032664;
+        Mon, 12 Sep 2022 19:21:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3A8TuLCd5BQbonOl2eFox10LNFw4hpHA46h/y7AAg+Y=;
+ b=SqgP9AjUPSVN1w/8+D8NjpqTLpUf5Q61RFNUhRQrJRE4WYeX64URnWCCt9/1Tq+yZwmb
+ f1f7Scto7zaWuP5vwuZbHQX4j0tCXkx+ISRTb6BVM8PJraAGQ3PsKlqYy1z/Jwx0uEfO
+ npKOLzmj3V/r8tCWrUiDxBH9DnMn3nRciW0+jrnPf6dtODIs0PODbPysYmOvwa6gsJ8J
+ hKrLn2ulURGa/knaaj19b4OcLihF5sYKLmiJiooRn6KpetyIjCwRaGxx42CELobPvV5q
+ L/k3k4+HvpUardNRUB0IfMORhxS2JklJ/82naV3z+XV1tytZ5Mt/u7KJG1jRJpnt+JHL kQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgkve6240-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 19:21:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CJLogK013783
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 19:21:50 GMT
+Received: from [10.110.24.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
+ 2022 12:21:49 -0700
+Message-ID: <e6543dd7-30ac-d210-6bf0-95bb9d22ca0a@quicinc.com>
+Date:   Mon, 12 Sep 2022 12:21:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901221857.2600340-16-michael@walle.cc>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 1/3] drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register
+ before start link training
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1662999830-13916-1-git-send-email-quic_khsieh@quicinc.com>
+ <1662999830-13916-2-git-send-email-quic_khsieh@quicinc.com>
+ <0f381285-860f-aaa2-2ae7-834608d0b4e8@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <0f381285-860f-aaa2-2ae7-834608d0b4e8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mlwNgnieoV03m1uadj3Hjdp-Yp8Dn4F8
+X-Proofpoint-GUID: mlwNgnieoV03m1uadj3Hjdp-Yp8Dn4F8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_13,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ adultscore=0 mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209120065
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:18:52AM +0200, Michael Walle wrote:
-> Add a schema for the NVMEM layout on Kontron's sl28 boards.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> changes since v1:
->  - add custom select
->  - add description
->  - add "additionalProperties: false", I wasn't sure if all the
->    subnodes needs it. I'd say yes, but the brcm,nvram binding
->    doesn't have them neither.
-> 
->  .../nvmem/layouts/kontron,sl28-vpd.yaml       | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
-> new file mode 100644
-> index 000000000000..0c180f29e880
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/layouts/kontron,sl28-vpd.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NVMEM layout of the Kontron SMARC-sAL28 vital product data
-> +
-> +maintainers:
-> +  - Michael Walle <michael@walle.cc>
-> +
-> +description:
-> +  The vital product data (VPD) of the sl28 boards contains a serial
-> +  number and a base MAC address. The actual MAC addresses for the
-> +  on-board ethernet devices are derived from this base MAC address by
-> +  adding an offset.
-> +
-> +# We need a select here so we don't match all nodes with 'user-otp'
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: kontron,sl28-vpd
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: kontron,sl28-vpd
-> +      - const: user-otp
-> +
-> +  serial-number:
-> +    type: object
-> +    description: The board's serial number
-> +
-> +  base-mac-address:
-> +    type: object
-> +    description:
-> +      Base MAC address for all on-module network interfaces. The first
-> +      argument of the phandle will be treated as an offset.
-> +
-> +    properties:
-> +      "#nvmem-cell-cells":
 
-You can't just add a new #.*-cells buried in a device binding. I'm fine 
-with the concept though having more than 1 user would be nice.
+On 9/12/2022 11:39 AM, Dmitry Baryshkov wrote:
+> On 12/09/2022 19:23, Kuogee Hsieh wrote:
+>> DOWNSPREAD_CTRL (0x107) shall be cleared to 0 upon power-on reset or an
+>> upstream device disconnect. This patch will enforce this rule by always
+>> cleared DOWNSPREAD_CTRL register to 0 before start link training. At 
+>> rare
+>> case that DP MSA timing parameters may be mis-interpreted by the sink
+>> which causes audio sampling rate be calculated wrongly and cause audio
+>> did not work at sink if DOWNSPREAD_CTRL register is not cleared to 0.
+>>
+>> Changes in v2:
+>> 1) fix spelling at commit text
+>> 2) merge ssc variable into encoding[0]
+>>
+>> Changes in v3:
+>> -- correct spelling of DOWNSPREAD_CTRL
+>> -- replace err with len of ssize_t
+>>
+>> Changes in v4:
+>> -- split into 2 patches
+>>
+>> Fixes: 154b5a7da0fd ("drm/msm/dp: add displayPort driver support")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 13 +++++--------
+>>   1 file changed, 5 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
+>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> index ab6aa13..2c74c59 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> @@ -1245,8 +1245,7 @@ static int dp_ctrl_link_train(struct 
+>> dp_ctrl_private *ctrl,
+>>   {
+>>       int ret = 0;
+>>       const u8 *dpcd = ctrl->panel->dpcd;
+>> -    u8 encoding = DP_SET_ANSI_8B10B;
+>> -    u8 ssc;
+>> +    u8 encoding[] = { 0, DP_SET_ANSI_8B10B };
+>>       u8 assr;
+>>       struct dp_link_info link_info = {0};
+>>   @@ -1258,13 +1257,11 @@ static int dp_ctrl_link_train(struct 
+>> dp_ctrl_private *ctrl,
+>>         dp_aux_link_configure(ctrl->aux, &link_info);
+>>   -    if (drm_dp_max_downspread(dpcd)) {
+>> -        ssc = DP_SPREAD_AMP_0_5;
+>> -        drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, &ssc, 1);
+>> -    }
+>> +    if (drm_dp_max_downspread(dpcd))
+>> +        encoding[0] |= DP_SPREAD_AMP_0_5;
+>
+> It would be simpler to call drm_dp_dpcd_write(ssc, DP_DOWNSPREAD_CTRL, 
+> 1) unconditionally here. You won't have to change the 
+> encoding/DP_MAIN_LINK_CHANNEL_CODING_SET/etc.
 
-Any case that doesn't match foos->#foo-cells or has a default # of 
-cells if missing (as this does) has to be added to dtschema to decode it 
-properly. It won't really matter until there's a user with 2 or more 
-entries. I'm happy to do update the dtschema part, but I'd prefer to see 
-the schema in dtschema rather than the kernel.
+The difference is one write with 2 bytes against two writes with one 
+byte each.
 
-Rob
+I think it is more efficient to combine two bytes into one write since 
+these two bytes are consecutive address.
+
+>
+>>   -    drm_dp_dpcd_write(ctrl->aux, DP_MAIN_LINK_CHANNEL_CODING_SET,
+>> -                &encoding, 1);
+>> +    /* config DOWNSPREAD_CTRL and MAIN_LINK_CHANNEL_CODING_SET */
+>> +    drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, encoding, 2);
+>>         if (drm_dp_alternate_scrambler_reset_cap(dpcd)) {
+>>           assr = DP_ALTERNATE_SCRAMBLER_RESET_ENABLE;
+>
