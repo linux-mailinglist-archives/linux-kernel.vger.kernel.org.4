@@ -2,87 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2FB5B59D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AFC5B59E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiILMCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
+        id S229691AbiILMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiILMB2 (ORCPT
+        with ESMTP id S230011AbiILMCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:01:28 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D37322ED7C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:01:05 -0700 (PDT)
-Received: (qmail 565827 invoked by uid 1000); 12 Sep 2022 08:01:03 -0400
-Date:   Mon, 12 Sep 2022 08:01:03 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Message-ID: <Yx8ff+Q/mNu/3R92@rowland.harvard.edu>
-References: <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
- <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
- <e8b6b7222a894984b4d66cdcc6435efe@huawei.com>
- <CAEXW_YQPSi7RyA=Cz5S753uw4SqBp2v+7CqqE3LN9VQ48q40Zg@mail.gmail.com>
- <34735a476c3b4913985de3403a6216bd@huawei.com>
+        Mon, 12 Sep 2022 08:02:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B4F3DBD2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:02:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oXi8p-0000HU-5f; Mon, 12 Sep 2022 14:02:19 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:75e7:62d4:691e:2f47])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A554E12F5;
+        Mon, 12 Sep 2022 12:02:18 +0000 (UTC)
+Date:   Mon, 12 Sep 2022 14:02:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Ziyang Xuan <william.xuanziyang@huawei.com>, edumazet@google.com,
+        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] can: bcm: check the result of can_send() in
+ bcm_can_tx()
+Message-ID: <20220912120210.6oc4tbb7xjxhjihc@pengutronix.de>
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <5c0f2f1bd1dc7bbb9500afd4273e36378e00a35d.1662606045.git.william.xuanziyang@huawei.com>
+ <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rnwntybvven35lb2"
 Content-Disposition: inline
-In-Reply-To: <34735a476c3b4913985de3403a6216bd@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:13:33AM +0000, Jonas Oberhauser wrote:
-> As I tried to explain before, this problem has nothing to do with 
-> stores propagating within a given time to another core. Rather it is 
-> due to two stores to the same location happening in a surprising 
-> order. I.e., both stores propagate quickly to other cores, but in a 
-> surprising coherence order.And if a wmb in the code is replaced by an 
-> mb, then this co will create a pb cycle and become forbidden.
-> 
-> Therefore this hang should be observable on a hypothetical LKMM 
-> processor which makes use of all the relaxed liberty the LKMM allows. 
-> However according to the authors of that paper (who are my colleagues 
-> but I haven't been involved deeply in that work), not even Power+gcc 
-> allow this reordering to happen, and if that's true it is probably 
-> because the wmb is mapped to lwsync which is fully cumulative in Power 
-> but not in LKMM.
 
-Yes, that's right.  On ARM64 architectures the reordering is forbidden 
-by other multi-copy atomicity, and on PPC is it forbidden by 
-B-cumulativity (neither of which is part of the LKMM).
+--rnwntybvven35lb2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If I'm not mistaken, another way to forbid it is to replace one of the 
-relaxed atomic accesses with an atomic access having release semantics.  
-Perhaps this change will find its way into the kernel source, since it 
-has less overhead than replacing wmb with bm.
+On 08.09.2022 08:47:57, Oliver Hartkopp wrote:
+> Sorry, but NACK.
+>=20
+> The curr_frame counter handles the sequence counter of multiplex messages.
+>=20
+> Even when this single send attempt failed the curr_frame counter has to
+> continue.
+>=20
+> For that reason the comment about statistics *before* the curr_frame++ mi=
+ght
+> be misleading.
+>=20
+> A potential improvement could be:
+>=20
+> 	if (!(can_send(skb, 1)))
 
-Alan
+Nitpick:
+In the kernel we usually assign the return value to a variable first,
+and evaluate this variable in the if ().
+
+> 		op->frames_abs++;
+>=20
+> 	op->currframe++;
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rnwntybvven35lb2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMfH78ACgkQrX5LkNig
+011kxwgAqOqSIZx3uPc8Kfl3nqztqUiLqG9DrtssBRQfFziA8lBSlDwcOip3QywP
+1VApIpOCREvpcVeIOqW8Iz8O+3Uo90Do2GXPSh+aciJo/PgSjnKFb69iwMHV5SI6
+2lSXs56tAGjIHKESrIQUpCIaYmDHJZIPjHY/NEh1nk9gR3X/lH1+w9ts2XJJ+v9w
+suTw/v1DneHJSmdIaCj+UgiZiLl64rTWjv4BwIDibavSkunvo5sc0o9QHiH8HnB9
+KFd8kBkcSMR5JhWay/J4RPo2KtMnlFy7vPEh2whyx7Kz5FRi8HY0pr1H0AQ2SUOk
+jqq4J6cSwerwHBplJDZIdCyfjcGkYw==
+=oJz8
+-----END PGP SIGNATURE-----
+
+--rnwntybvven35lb2--
