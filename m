@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920CC5B58B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1D55B58BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiILKru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S229743AbiILKv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiILKrt (ORCPT
+        with ESMTP id S229520AbiILKvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:47:49 -0400
+        Mon, 12 Sep 2022 06:51:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B8431235;
-        Mon, 12 Sep 2022 03:47:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F1430546;
+        Mon, 12 Sep 2022 03:51:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2536261185;
-        Mon, 12 Sep 2022 10:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA22C433C1;
-        Mon, 12 Sep 2022 10:47:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F07360C3C;
+        Mon, 12 Sep 2022 10:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1788CC433D6;
+        Mon, 12 Sep 2022 10:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662979667;
-        bh=JqvZVTquvYu9SykLPcx/npNE2iazBZMw0+uVLw8hkpY=;
+        s=k20201202; t=1662979881;
+        bh=x1l0IDqQZ51UEurxy14dU5zvqq4g9UAFcH1HMygZUMQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oq+h1G6gk5PSZ51uOpozKg+WiZpYc0MaiCzyZLhWZiQweHG3iKZ1nGwxl8BZ4xNwk
-         1ci9MCOCl5+813JWlPuLp18qu5cztW/czMeZqCeRxOPkU8l3ImHJXbhWhZoLTsxQrx
-         bO/qmW4j6FFVxB/YE3sew8rFm8Dn0aJOBevmqBAOq99MnnpfqYcGYOyF+HEP2Kjx9F
-         K7OZVuZwymOSCiifx3Fh7zse+lG71u5cdgF97L//KrPHPqX5AZzC59BLF7IZJVWq/W
-         uMFzy2+HF+r8cA8/dAI4KlOJYtZdzmMupAKIxrP7iCDSdgz+kNEkUfd6gF9Nylx/zo
-         Ks2DJ1j8ZedTA==
-Date:   Mon, 12 Sep 2022 13:47:40 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-sgx@vger.kernel.org, dave.hansen@linux.intel.com,
-        seanjc@google.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/intel: Clear SGX bit if both SGX driver and KVM SGX
- are not enabled
-Message-ID: <Yx8OTDwhqbgvGp4p@kernel.org>
-References: <20220909080853.547058-1-kai.huang@intel.com>
+        b=Fxj8z/gR5MD47zuFVSSO478nUPnekHAm6fqAYLue2tCVGDiM3wk5uHK1/CIv2eXO+
+         Wwyu7k/l+99TiwyfwOdMe/OwtVp2xsj/uucqLQSogz+loOAS1znBWBjFi1YEUqEw39
+         dRnuCNNgK57b7qNz3VjVpbM4g7lhsrbfvjSlhqz/ziHddozLgkwQXV+Skt5SQYVhhd
+         5N9x83v77Q7LkjANuenLswqIWAXAyM3w7itcfhiDUlr/WscHqF9msN0Re38HwkGw0E
+         IgeuiojT8NrE8X6tXcLrCAYag8aWfVvpyEw41/m0OnWkbrxJT0zAHAakNTz8PCa70o
+         Gk74XT8W6K+ww==
+Date:   Mon, 12 Sep 2022 11:51:14 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC v1 net-next 8/8] net: dsa: ocelot: add external ocelot
+ switch control
+Message-ID: <Yx8PIsInsR7oQqgh@google.com>
+References: <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-9-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220909080853.547058-1-kai.huang@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220911200244.549029-9-colin.foster@in-advantage.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,23 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 08:08:53PM +1200, Kai Huang wrote:
-> Currently on platform which has SGX enabled, if CONFIG_X86_SGX is not
-> enabled, the X86_FEATURE_SGX is not cleared, resulting in /proc/cpuinfo
-> shows "sgx" feature.  This is not desired.
+On Sun, 11 Sep 2022, Colin Foster wrote:
+
+> Add control of an external VSC7512 chip by way of the ocelot-mfd interface.
 > 
-> Clear SGX feature bit if both SGX driver and KVM SGX are not enabled in
-> init_ia32_feat_ctl().
+> Currently the four copper phy ports are fully functional. Communication to
+> external phys is also functional, but the SGMII / QSGMII interfaces are
+> currently non-functional.
 > 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+> 
+> v1 from previous RFC:
+>     * Remove unnecessary byteorder and kconfig header includes.
+>     * Create OCELOT_EXT_PORT_MODE_SERDES macro to match vsc9959.
+>     * Utilize readx_poll_timeout for SYS_RESET_CFG_MEM_INIT.
+>     * *_io_res struct arrays have been moved to the MFD files.
+>     * Changes to utilize phylink_generic_validate() have been squashed.
+>     * dev_err_probe() is used in the probe function.
+>     * Make ocelot_ext_switch_of_match static.
+>     * Relocate ocelot_ext_ops structure to be next to vsc7512_info, to
+>       match what was done in other felix drivers.
+>     * Utilize dev_get_regmap() instead of the obsolete
+>       ocelot_init_regmap_from_resource() routine.
+> 
+> ---
+>  drivers/mfd/ocelot-core.c           |   3 +
+>  drivers/net/dsa/ocelot/Kconfig      |  14 ++
+>  drivers/net/dsa/ocelot/Makefile     |   5 +
+>  drivers/net/dsa/ocelot/ocelot_ext.c | 254 ++++++++++++++++++++++++++++
+>  include/soc/mscc/ocelot.h           |   2 +
+>  5 files changed, 278 insertions(+)
+>  create mode 100644 drivers/net/dsa/ocelot/ocelot_ext.c
+> 
+> diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
+> index aa7fa21b354c..b7b9f6855f74 100644
+> --- a/drivers/mfd/ocelot-core.c
+> +++ b/drivers/mfd/ocelot-core.c
+> @@ -188,6 +188,9 @@ static const struct mfd_cell vsc7512_devs[] = {
+>  		.use_of_reg = true,
+>  		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
+>  		.resources = vsc7512_miim1_resources,
+> +	}, {
+> +		.name = "ocelot-ext-switch",
+> +		.of_compatible = "mscc,vsc7512-ext-switch",
+>  	},
+>  };
 
-Is it a pattern that flags are cleared when they are disabled by the
-kernel? I don't know the answer for this.
+Please separate this out into its own patch.
 
-I could imagine that sometimes you might want to know whether the CPU
-supports a feature, even if e.g. your distribution kernel does not.
-
-There's of course other ways to answer such qeustion, e.g. by using
-cpuid utility.
-
-BR, Jarkko
+-- 
+Lee Jones [李琼斯]
