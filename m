@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1D55B58BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75175B58BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiILKv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S229780AbiILKva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiILKvX (ORCPT
+        with ESMTP id S229646AbiILKvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:51:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F1430546;
-        Mon, 12 Sep 2022 03:51:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F07360C3C;
-        Mon, 12 Sep 2022 10:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1788CC433D6;
-        Mon, 12 Sep 2022 10:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662979881;
-        bh=x1l0IDqQZ51UEurxy14dU5zvqq4g9UAFcH1HMygZUMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fxj8z/gR5MD47zuFVSSO478nUPnekHAm6fqAYLue2tCVGDiM3wk5uHK1/CIv2eXO+
-         Wwyu7k/l+99TiwyfwOdMe/OwtVp2xsj/uucqLQSogz+loOAS1znBWBjFi1YEUqEw39
-         dRnuCNNgK57b7qNz3VjVpbM4g7lhsrbfvjSlhqz/ziHddozLgkwQXV+Skt5SQYVhhd
-         5N9x83v77Q7LkjANuenLswqIWAXAyM3w7itcfhiDUlr/WscHqF9msN0Re38HwkGw0E
-         IgeuiojT8NrE8X6tXcLrCAYag8aWfVvpyEw41/m0OnWkbrxJT0zAHAakNTz8PCa70o
-         Gk74XT8W6K+ww==
-Date:   Mon, 12 Sep 2022 11:51:14 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [RFC v1 net-next 8/8] net: dsa: ocelot: add external ocelot
- switch control
-Message-ID: <Yx8PIsInsR7oQqgh@google.com>
-References: <20220911200244.549029-1-colin.foster@in-advantage.com>
- <20220911200244.549029-9-colin.foster@in-advantage.com>
+        Mon, 12 Sep 2022 06:51:25 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3183054C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:51:23 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id r12so8490058ljg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=JyxZJBDxwa1juNFoQDcnNx8kzZcf1BUcQHxFamfBS9U=;
+        b=ol/VATnLs6JCVymJeLMyS2ANExMLVBlpsGNJCzRIcNIEumS6IS4Y8ZFSmBuInRU1YP
+         5pwlePB8AIjfMmLI7BDksVLpV7C92efrimaWI2/owvq5NFJHK6DTiIfwoIhiwElyVNpN
+         13FnRgm3CbJSI9TEiOkwwz7EnK8b/hF88zTBBWECRy1Jf1I8RUFe3K80YJVvsDBb2xQ1
+         WqRs+9yV4++IkJP0CjVXEXa8fFFJc00VV2btLPtEdnC9aAhjSiLSzw/8s9HXycU+i0Wh
+         2IuL0zGZkf69gLqn9u6ZtW38fTBofCLyf/9CakO7RjOCzEFut6tC09dJPYwyaW3XKtwm
+         hAcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JyxZJBDxwa1juNFoQDcnNx8kzZcf1BUcQHxFamfBS9U=;
+        b=bp9j7rpZ+UYlhiqN1yYs7qEo4pqa6YrWi4oJXBfQvfyQp0qRMXuvB/TAnMyH3ycxbK
+         YsGrVgWotWzfcyesucSVIWFbHm6tdaIU9S4OQBeNdDoAicizLgyrH0tlaTEGP8DsP6Hg
+         85IT3Kkv+TOKnS0a3UP5jv0Lc8TL9sL8ChDu1C7i77gG/V8rlXQt2E6/2XjjuvICPf0W
+         1XhEEdu2E+c/ZY1NStY0ilftVEdC/qVrbgsDws6/JGcjzlJSTl0+FzHwGzft5xzLrcs7
+         KRrKLuhhk7iWDkq7+Cek3NZm+L/sOrh+UB2NcaN0znpK35KU9liXWap9Yb8lun2QX2Ja
+         +sqg==
+X-Gm-Message-State: ACgBeo06RmINuR4TyyFWy+EXIjyVENPJ2a4x+Wi7QgPHyboGE0jS1zh6
+        FmcRk//d8VaJaogiAm0n3fIxqzErsZ2HNA==
+X-Google-Smtp-Source: AA6agR79aoCpEogSUJhr9xxLEteFdk51Jg5L0gCGuub7enPMTGd6uvgE8eglysHg+QSpeMwTWtu5sw==
+X-Received: by 2002:a2e:a552:0:b0:25e:6fa1:a6c4 with SMTP id e18-20020a2ea552000000b0025e6fa1a6c4mr7292256ljn.90.1662979881408;
+        Mon, 12 Sep 2022 03:51:21 -0700 (PDT)
+Received: from [10.129.96.84] ([109.232.243.34])
+        by smtp.gmail.com with ESMTPSA id d28-20020a0565123d1c00b0048a8586293asm1005267lfv.48.2022.09.12.03.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 03:51:20 -0700 (PDT)
+Message-ID: <14d7bbb5-51c4-8fc0-2303-f5164c6da903@linaro.org>
+Date:   Mon, 12 Sep 2022 12:51:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220911200244.549029-9-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1] dt-bindings: clock: convert rockchip,rk3128-cru.txt to
+ YAML
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     zhangqing@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <76d87f49-6a44-0a05-c9dc-af870fade924@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <76d87f49-6a44-0a05-c9dc-af870fade924@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Sep 2022, Colin Foster wrote:
+On 11/09/2022 23:20, Johan Jonker wrote:
+> Convert rockchip,rk3128-cru.txt to YAML.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-> Add control of an external VSC7512 chip by way of the ocelot-mfd interface.
-> 
-> Currently the four copper phy ports are fully functional. Communication to
-> external phys is also functional, but the SGMII / QSGMII interfaces are
-> currently non-functional.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
-> 
-> v1 from previous RFC:
->     * Remove unnecessary byteorder and kconfig header includes.
->     * Create OCELOT_EXT_PORT_MODE_SERDES macro to match vsc9959.
->     * Utilize readx_poll_timeout for SYS_RESET_CFG_MEM_INIT.
->     * *_io_res struct arrays have been moved to the MFD files.
->     * Changes to utilize phylink_generic_validate() have been squashed.
->     * dev_err_probe() is used in the probe function.
->     * Make ocelot_ext_switch_of_match static.
->     * Relocate ocelot_ext_ops structure to be next to vsc7512_info, to
->       match what was done in other felix drivers.
->     * Utilize dev_get_regmap() instead of the obsolete
->       ocelot_init_regmap_from_resource() routine.
-> 
-> ---
->  drivers/mfd/ocelot-core.c           |   3 +
->  drivers/net/dsa/ocelot/Kconfig      |  14 ++
->  drivers/net/dsa/ocelot/Makefile     |   5 +
->  drivers/net/dsa/ocelot/ocelot_ext.c | 254 ++++++++++++++++++++++++++++
->  include/soc/mscc/ocelot.h           |   2 +
->  5 files changed, 278 insertions(+)
->  create mode 100644 drivers/net/dsa/ocelot/ocelot_ext.c
-> 
-> diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-> index aa7fa21b354c..b7b9f6855f74 100644
-> --- a/drivers/mfd/ocelot-core.c
-> +++ b/drivers/mfd/ocelot-core.c
-> @@ -188,6 +188,9 @@ static const struct mfd_cell vsc7512_devs[] = {
->  		.use_of_reg = true,
->  		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
->  		.resources = vsc7512_miim1_resources,
-> +	}, {
-> +		.name = "ocelot-ext-switch",
-> +		.of_compatible = "mscc,vsc7512-ext-switch",
->  	},
->  };
+Thank you for your patch. There is something to discuss/improve.
 
-Please separate this out into its own patch.
+> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+> new file mode 100644
+> index 000000000..03e5d7f0e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
--- 
-Lee Jones [李琼斯]
+Can't it be Dual licensed?
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/rockchip,rk3128-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip RK3126/RK3128 Clock and Reset Unit (CRU)
+> +
+> +maintainers:
+> +  - Elaine Zhang <zhangqing@rock-chips.com>
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +description: |
+> +  The RK3126/RK3128 clock controller generates and supplies clock to various
+> +  controllers within the SoC and also implements a reset controller for SoC
+> +  peripherals.
+> +  Each clock is assigned an identifier and client nodes can use this identifier
+> +  to specify the clock which they consume. All available clocks are defined as
+> +  preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
+> +  used in device tree sources. Similar macros exist for the reset sources in
+> +  these files.
+> +  There are several clocks that are generated outside the SoC. It is expected
+> +  that they are defined using standard clock bindings with following
+> +  clock-output-names:
+> +    - "xin24m"     - crystal input       - required
+> +    - "ext_i2s"    - external I2S clock  - optional
+> +    - "gmac_clkin" - external GMAC clock - optional
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3126-cru
+> +      - rockchip,rk3128-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: xin24m
+
+More clocks were mentioned in old binding.
+
+> +
+> +  rockchip,grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the syscon managing the "general register files" (GRF),
+> +      if missing pll rates are not changeable, due to the missing pll
+> +      lock status.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +  - "#reset-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    cru: clock-controller@20000000 {
+> +      compatible = "rockchip,rk3128-cru";
+> +      reg = <0x20000000 0x1000>;
+> +      rockchip,grf = <&grf>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +    };
+
+
+Best regards,
+Krzysztof
