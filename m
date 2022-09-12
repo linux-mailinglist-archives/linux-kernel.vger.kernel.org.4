@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C614D5B5A32
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C345B5A34
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiILMeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S229533AbiILMgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiILMeq (ORCPT
+        with ESMTP id S229520AbiILMgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:34:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F58B84A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662986083; x=1694522083;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=XwPatMYrk01yCGY1Bivmbdb6qmd5Rj2Fjyg5GT3ZnWk=;
-  b=as1yQna+f4s+r0I3dMNgVgR1Lh/Ri7g7hgFdZna042oID2zgTkIIMZio
-   HD9F/rsdyU0D1Fv5tplIvPsI3DvGJ8kdjC7ntqD98ZuHkvEdOA8gK3ONP
-   P3nuoEUfdfSUn+1xPbq4RtykhOl9xtqMK2xiBVq0kZlFenZ+Ef1GWNIPr
-   fBSx0ZkojBDL8Wj5VWBH7J2HvC6YD+KvfoD8K99ZUIKJL+e1YAKLY5k6c
-   tCRzjN2leUx8Byt7ne1cKxMhP/b9E7WFaCHReFvzMQmakVhBTiTzw80uq
-   KQmjPIi2ahqs07h0MdGDl7RhJcmcPF8VWKop7GovQrowTVBtZKnucy6Vx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="280870616"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="280870616"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 05:34:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="678074172"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga008.fm.intel.com with SMTP; 12 Sep 2022 05:34:37 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 15:34:37 +0300
-Date:   Mon, 12 Sep 2022 15:34:37 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-Message-ID: <Yx8nXZnTDEwuPEvP@intel.com>
-References: <20220912101522.69482-1-javierm@redhat.com>
- <Yx8Ms2jhgwpiDqA6@intel.com>
- <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
- <Yx8Vo4x7frhbElPq@intel.com>
- <4002a4d6-04cb-b342-952f-b42ef3188df4@suse.de>
+        Mon, 12 Sep 2022 08:36:19 -0400
+Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE07920BD7;
+        Mon, 12 Sep 2022 05:36:17 -0700 (PDT)
+Received: from [10.36.2.165] (unknown [178.232.223.95])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.turbocat.net (Postfix) with ESMTPSA id BCB79260276;
+        Mon, 12 Sep 2022 14:36:14 +0200 (CEST)
+Message-ID: <baf121ae-a5a4-47a3-bc3a-9255708009b9@selasky.org>
+Date:   Mon, 12 Sep 2022 14:36:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4002a4d6-04cb-b342-952f-b42ef3188df4@suse.de>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
+Content-Language: en-US
+From:   Hans Petter Selasky <hps@selasky.org>
+To:     =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org
+Cc:     0215yys@hanmail.net
+References: <CANXPkT6mYusYe8O0dbq3vW+24SsUZ19PqhOL+wLFRnbFXwu0Zg@mail.gmail.com>
+ <CANXPkT7nOhH+5bD0ycyRBT9FKQBBszCVuWkqp4tFtVRf2+8DFg@mail.gmail.com>
+ <CANXPkT5k9Pw4ka6CihyCg0oTd-32Te-ox=f3=9rtCphVgrdctA@mail.gmail.com>
+ <165590120140.1149771.2257818527859865760@Monstersaurus>
+ <4883f0a7-6a1b-31bd-33fe-db8f6dcf73fa@selasky.org>
+ <CANXPkT73ssg6RRyfDtp7c_8sO60a-UT0-Y4S1_=D=M_mcLNN9g@mail.gmail.com>
+ <CANXPkT4qYOYPL+F=-Pi_NbQErq9WwrR-M-BHe=gP9Ay4bSs+=w@mail.gmail.com>
+ <CANXPkT5=ryAFvb1cO+Wb0CQYmytwedS2dqVTYqt2Km1fkK4w9Q@mail.gmail.com>
+ <CANXPkT7vt8gq5UO4OXK2pTUyyB102ANJ5i9s92AW+a3rAioMog@mail.gmail.com>
+ <085b9025-bc23-37d4-d430-afc432b4d783@selasky.org>
+In-Reply-To: <085b9025-bc23-37d4-d430-afc432b4d783@selasky.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:05:36PM +0200, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 12.09.22 um 13:18 schrieb Ville Syrjälä:
-> > On Mon, Sep 12, 2022 at 01:05:45PM +0200, Thomas Zimmermann wrote:
-> >> Hi
-> >>
-> >> Am 12.09.22 um 12:40 schrieb Ville Syrjälä:
-> >>> On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
-> >>>> Provides a default plane state check handler for primary planes that are a
-> >>>> fullscreen scanout buffer and whose state scale and position can't change.
-> >>>>
-> >>>> There are some drivers that duplicate this logic in their helpers, such as
-> >>>> simpledrm and ssd130x. Factor out this common code into a plane helper and
-> >>>> make drivers use it.
-> >>>>
-> >>>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >>>> ---
-> >>>>
-> >>>>    drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
-> >>>>    drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
-> >>>>    drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
-> >>>>    include/drm/drm_plane_helper.h     |  2 ++
-> >>>>    4 files changed, 33 insertions(+), 41 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
-> >>>> index c7785967f5bf..fb41eee74693 100644
-> >>>> --- a/drivers/gpu/drm/drm_plane_helper.c
-> >>>> +++ b/drivers/gpu/drm/drm_plane_helper.c
-> >>>> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
-> >>>>    	kfree(plane);
-> >>>>    }
-> >>>>    EXPORT_SYMBOL(drm_plane_helper_destroy);
-> >>>> +
-> >>>> +/**
-> >>>> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
-> >>>> + * @plane: plane to check
-> >>>> + * @new_state: plane state to check
-> >>>
-> >>> That is not a plane state. Also should s/new_// since it's just
-> >>> the overall atomic state thing rather than some new or old state.
-> >>
-> >> Using only 'state' is non-intuitive and has lead to bugs where sub-state
-> >> was retrieved from the wrong state information. So we've been using
-> >> 'new_state' and 'old_state' explicitly in several places now.
-> > 
-> > There is no old or new drm_atomic_state. It contains both.
-> 
-> I (vaguely) remember a bug where a driver tried 
-> drm_atomic_get_new_plane_state() with the (old) state that's passed to 
-> atomic_update. It didn't return the expected results and modesetting 
-> gave slightly wrong results. 
+Hi Mauro and YongSu,
 
-As there is no wrong drm_atomic_state to pass I don't think it could
-have been the case. 
+Answering my own question: The reason nobody has triggered this yet, is 
+because the buffer size used is power of two. Because unsigned modulus 
+is used, the result becomes correct. See below. But if non-power of two 
+ring-buffer is used, then the result becomes incorrect. There is no 
+block for non-power of two sized buffers. See:
 
-> So we began to be more precise about new 
-> and old. And whatever is stored in 'plane->state' is then just 'the state'.
+https://github.com/search?q=dvb_set_pesfilter&type=code
 
-There were certainly a lot of confusion before the explicit new/old
-state stuff was added whether foo->state/etc. was the old or the
-new state. And labeling things as explicitly old vs. new when passing
-in individual object states certainly makes sense. But that doesn't
-really have anything to do with mislabeling the overall drm_atomic_state.
+cat << EOF > testX.c
+#include <stdio.h>
 
-> 
-> I understand that the semantics of atomic_check are different from 
-> atomic_update, but it still doesn't hurt to talk of new_state IMHO.
+int
+main()
+{
+int consumed_old;
+int consumed_fix;
+size_t idx = 3;
+ssize_t pread = 15;
+ssize_t size = 256;
 
-IMO it's just confusing. Makes the reader think there is somehow
-different drm_atomic_states for old vs. new states when there isn't.
-I also wouldn't call it new_state for .atomic_update() either.
+consumed_old = (idx - pread) % size;
 
-In both cases you have the old and new states in there and how
-exactly they get used in the hooks is more of an implementation
-detail. The only rules you would have to follow is that at the
-end of .atomic_update() the hardware state matches the new state,
-and .atomic_check() makes sure the transition from the old to the
-new state is possible.
+consumed_fix = (idx - pread);
+if (consumed_fix < 0)
+consumed_fix += size;
 
-I've proposed renaming drm_atomic_state to eg. drm_atomic_transaction
-a few times before but no one took the bait so far...
+printf("old=%d new=%d size=%zd\n", consumed_old, consumed_fix, size);
 
--- 
-Ville Syrjälä
-Intel
+size = 254;
+
+consumed_old = (idx - pread) % size;
+
+consumed_fix = (idx - pread);
+if (consumed_fix < 0)
+consumed_fix += size;
+
+printf("old=%d new=%d size=%zd\n", consumed_old, consumed_fix, size);
+
+return (0);
+}
+EOF
+
+cc testX.c && ./a.out
+old=244 new=244 size=256
+old=244 new=242 size=254
+
+So either push the suggested fix, or block non-power of two buffer sizes!
+
+Best regards,
+--HPS
