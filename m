@@ -2,96 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C849B5B5A49
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20865B5A7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiILMlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229696AbiILMxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiILMlF (ORCPT
+        with ESMTP id S229459AbiILMxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:41:05 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80526240B8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:41:04 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id 134so4138078vkz.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:41:04 -0700 (PDT)
+        Mon, 12 Sep 2022 08:53:03 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188452F016
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:53:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so19876816ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=kVJLEvTQjCVtMF/qEALQM2zlZ9S2bfQcHYzqRRaNIdnhgili1IouMM+7RZQGmX3CAq
-         +GEwZk64/zTPKOdnUsR9Z5c/GfbUgHgQAKilFBmfZbL83OBn0CGQdeb3hQfZfgSBu8p6
-         SpaoT5YBN502DSHanF3pmQddbf2S8+55nmFniY76FzfaGiqhpQNFoS5svfWj5koA73Cj
-         /6/YXqgzbawHk9s2UxNhV2Z2OrFhHeFiltwxx/pFXZIP/Kn3eQpyEbUpvqbLzT8Z6tLj
-         jkj6KViVRdEOkBpT0Y9U0wVoBrFOCIliTCGP44n87C7LAn1Cr53isO6W+1RodWogh4B3
-         dUVQ==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=tOIlfPq2ElXkUCEyu7N3MrXzejnmLtvuNl3d7obAAww=;
+        b=VDqqWhb5ylht++1mGBIcektHyAi39C14PUmnBmfipT81ZE0GKP0mYt+ByPYWhh9TIA
+         mS+6lii3yMInlQjzKVjZG+YoOvEORPwGOclbIrp1rjL8i8fcSKLUKoYet4oc5L/tG/i+
+         1kUP2+uwVAiA0DpzU7N5NMAufs1621515n/gLBF+9o4G1d0IJN6/jtM463W3YJVQCm2j
+         9mnG9+37ZHyGu8ilEKCsH2CI66t2xJJgj8/VBCFzoNLEX2oeIyV5Vjb4CaGlDMb50RLc
+         uQe6K8iZHu03npo2fnkHpShdGGqsc36NMhWxF4i0YYDwVA+F+p17++fKOip6j7TG1QSP
+         aA2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=CoUPnGf+DTr47YYeXwLyqLvSPGsh1CXlJsxpk9taWOgkI9ga8GYmsnuIOv70HD0Ox9
-         KomfEoI6PCg4qwCSuJlE/+utZ1TpaAsnxnZakw6nvHOKX4LBt/kcwKw0Uu0wg+WbJTDz
-         xTXqGFuYpTd66CJQ8jWHvffuoWDD+LLVbyYbPRfw3CFapm7GMuJhtahSC36Zn93GauJj
-         5on9MSlGS3rh5YA4ZRg+Xcs+BZDqPQq0cjO92I4HeGef8B+Ga/S6cL+6jWlXgkvwp3Y3
-         PCZz2E5nXCrcJSdAclxQqazVttN0ZFeoae3XEhM8ShMudBUdIBAdxrI+eshyqQ16NGkx
-         TGOw==
-X-Gm-Message-State: ACgBeo3PU5MGmOHORYR4AjrugzwkXR/HIoYCNuSD7iHB5LBHHRG750o9
-        A9SLZzwKoKSLJNFhCt04jmzpm527INY69JLkcQc=
-X-Google-Smtp-Source: AA6agR5GJKlYuXs1QwstaoMneD069pul08zDc50/lf3ftdVjZVYfz9nuBw3tUuYF71np13MYPMCJAZ2hdf90ApoFAPs=
-X-Received: by 2002:a1f:ab01:0:b0:37d:2a0b:b010 with SMTP id
- u1-20020a1fab01000000b0037d2a0bb010mr8251398vke.33.1662986462966; Mon, 12 Sep
- 2022 05:41:02 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a59:1289:0:b0:2f5:88a6:bb8b with HTTP; Mon, 12 Sep 2022
- 05:41:02 -0700 (PDT)
-Reply-To: maryalbertt00045@gmail.com
-From:   Mary Albert <leguezim@gmail.com>
-Date:   Mon, 12 Sep 2022 13:41:02 +0100
-Message-ID: <CAP8wXGsKqOpZkN=t9gW1RdckL1fFfucP_DRXg_BZMAHL3ktT0w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4988]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [maryalbertt00045[at]gmail.com]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a2e listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [leguezim[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=tOIlfPq2ElXkUCEyu7N3MrXzejnmLtvuNl3d7obAAww=;
+        b=YdLCExsH+EH04XKQDSZzYf1MeRL4Wumg0RsNiaKnRXbKuNsR7DeAiMbW5cWvZScCvo
+         mDqEha8wE6l3kuh87lH9lKqT2zH6nZyeSgCG4x7CnMF5E7xLqMyz273Hdq3lhxiflK0s
+         1/uG1JChZ5rMnnp3fxCsHoe2x6ex2QIDpNaHW9iY/sg88eRNuVt28VQQZ07Ds3T/EGEL
+         Exx8ZW91x8zsPWzEZQvPvHdFs63IdfznirHjB8dRtRnrZ908vtL6Q3mibmSJcDCfkODu
+         M7sTVDIBSZdrkOi9wMlZZR6E11JzAjgyXz7V2Qx4oBpty+ynr6fYdjcA+mgJRJFN5L9r
+         Qa/w==
+X-Gm-Message-State: ACgBeo3l17rNJGudXU5d4/Tp9BMKrgWijW+3xpXyL/vwl4VmVcewMN5R
+        Xrl+/TRe8fKLdvJ53hbwLuwf5yClNug9og==
+X-Google-Smtp-Source: AA6agR5QGV0R9nshpLwUMT4VuaykUqJh7cLtlG1AagueobJig4jwhSX+l4qD3RzKLW04aXTC2NRCZw==
+X-Received: by 2002:a17:906:cc50:b0:777:5a19:2264 with SMTP id mm16-20020a170906cc5000b007775a192264mr13318732ejb.130.1662987180521;
+        Mon, 12 Sep 2022 05:53:00 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id ku5-20020a170907788500b00773f3cb67ffsm4393119ejc.28.2022.09.12.05.52.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Sep 2022 05:52:59 -0700 (PDT)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     willy@infradead.org
+Cc:     linux-kernel@vger.kernel.org, Wei Yang <richard.weiyang@gmail.com>
+Subject: [PATCH 1/2] XArray: make xa_dump output more friendly to read
+Date:   Mon, 12 Sep 2022 12:46:46 +0000
+Message-Id: <20220912124647.17164-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch helps to adjust xa_dump output by:
+
+  * add an index to each entry
+  * add indent to each entry
+
+Then the output would look like:
+
+[ 0]0-4095: node ffff938e16539b60 max 19 parent 0000000000000000 shift 6 count 48 values 48 array ffffffffc05e1280 list ffff938e16539b78 ffff938e16539b78 marks 0 0 0
+  [ 0]0-63: value 0 (0x0) [0000000000000001]
+  [ 1]64-127: sibling (slot 0)
+  [ 2]128-191: sibling (slot 0)
+  [ 3]192-255: sibling (slot 0)
+  [ 4]256-319: sibling (slot 0)
+  [ 5]320-383: sibling (slot 0)
+  [ 6]384-447: sibling (slot 0)
+  [ 7]448-511: sibling (slot 0)
+  [ 8]512-575: sibling (slot 0)
+  [ 9]576-639: sibling (slot 0)
+  [10]640-703: sibling (slot 0)
+  [11]704-767: sibling (slot 0)
+  [12]768-831: sibling (slot 0)
+  [13]832-895: sibling (slot 0)
+  [14]896-959: sibling (slot 0)
+  [15]960-1023: sibling (slot 0)
+  [32]2048-2111: value 2048 (0x800) [0000000000001001]
+  [33]2112-2175: sibling (slot 32)
+  [34]2176-2239: sibling (slot 32)
+  [35]2240-2303: sibling (slot 32)
+  [36]2304-2367: sibling (slot 32)
+  [37]2368-2431: sibling (slot 32)
+  [38]2432-2495: sibling (slot 32)
+  [39]2496-2559: sibling (slot 32)
+  [40]2560-2623: sibling (slot 32)
+  [41]2624-2687: sibling (slot 32)
+  [42]2688-2751: sibling (slot 32)
+  [43]2752-2815: sibling (slot 32)
+  [44]2816-2879: sibling (slot 32)
+  [45]2880-2943: sibling (slot 32)
+  [46]2944-3007: sibling (slot 32)
+  [47]3008-3071: sibling (slot 32)
+
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ lib/xarray.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/lib/xarray.c b/lib/xarray.c
+index ea9ce1f0b386..326b73bb9811 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -2249,19 +2249,22 @@ void xa_dump_node(const struct xa_node *node)
+ 
+ void xa_dump_index(unsigned long index, unsigned int shift)
+ {
++	pr_cont("[%2lu]", (index >> shift) & XA_CHUNK_MASK);
+ 	if (!shift)
+-		pr_info("%lu: ", index);
++		pr_cont("%lu: ", index);
+ 	else if (shift >= BITS_PER_LONG)
+-		pr_info("0-%lu: ", ~0UL);
++		pr_cont("0-%lu: ", ~0UL);
+ 	else
+-		pr_info("%lu-%lu: ", index, index | ((1UL << shift) - 1));
++		pr_cont("%lu-%lu: ", index, index | ((1UL << shift) - 1));
+ }
+ 
+-void xa_dump_entry(const void *entry, unsigned long index, unsigned long shift)
++void xa_dump_entry(const void *entry, unsigned long index, unsigned long shift,
++			int level)
+ {
+ 	if (!entry)
+ 		return;
+ 
++	pr_info("%*s", level * 2, level ? " " : "");
+ 	xa_dump_index(index, shift);
+ 
+ 	if (xa_is_node(entry)) {
+@@ -2273,7 +2276,8 @@ void xa_dump_entry(const void *entry, unsigned long index, unsigned long shift)
+ 			xa_dump_node(node);
+ 			for (i = 0; i < XA_CHUNK_SIZE; i++)
+ 				xa_dump_entry(node->slots[i],
+-				      index + (i << node->shift), node->shift);
++				      index + (i << node->shift), node->shift,
++				      level + 1);
+ 		}
+ 	} else if (xa_is_value(entry))
+ 		pr_cont("value %ld (0x%lx) [%px]\n", xa_to_value(entry),
+@@ -2300,6 +2304,6 @@ void xa_dump(const struct xarray *xa)
+ 			xa_marked(xa, XA_MARK_1), xa_marked(xa, XA_MARK_2));
+ 	if (xa_is_node(entry))
+ 		shift = xa_to_node(entry)->shift + XA_CHUNK_SHIFT;
+-	xa_dump_entry(entry, 0, shift);
++	xa_dump_entry(entry, 0, shift, 0);
+ }
+ #endif
 -- 
-Hello,
-how are you?
+2.33.1
+
