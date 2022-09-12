@@ -2,223 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CF55B5892
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BEA5B589F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiILKlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S229834AbiILKn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiILKk7 (ORCPT
+        with ESMTP id S229643AbiILKnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:40:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E9E25C54
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662979256; x=1694515256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xvZUSVtkt8NC7DmHmTz7x9gz0jguSGru5KDUJa1jfIA=;
-  b=Moi4Tw/SPlNESpNb/vOieDGgYlh9quendheTH2phweTNqKJ044hUCDpN
-   pX0EPDDwW7yW4YDjGBj9cD3vqFLVt3D2ndDiZTUXUAfvUPg9gzDz76pX+
-   iunKgCFFXcv5rpbFcFldilJsVBBTsdz0F3WubPROtJ0UuORvQb4tj1hDi
-   E5mw0LE4E5zPyv/niIEUsbZZg65O7lcR0GdrBwCU9c+bR7YNvBivYtnKw
-   FyYPPOu6ZjXB0z9BDPfYyebVCk9tUcA0aODFPzQkbejjpiPc31Wp0gghx
-   ZyX4J/fQITcFZjn8v2sNhFXacPjyT7WEYzJ5+aMoNOdI2CViElF3ExTId
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="277568237"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="277568237"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:40:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="616005410"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga002.jf.intel.com with SMTP; 12 Sep 2022 03:40:52 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 13:40:51 +0300
-Date:   Mon, 12 Sep 2022 13:40:51 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-Message-ID: <Yx8Ms2jhgwpiDqA6@intel.com>
-References: <20220912101522.69482-1-javierm@redhat.com>
+        Mon, 12 Sep 2022 06:43:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E672BF66;
+        Mon, 12 Sep 2022 03:43:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 129DA61185;
+        Mon, 12 Sep 2022 10:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44202C433D6;
+        Mon, 12 Sep 2022 10:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662979399;
+        bh=HFbxptHJbeklKZuBBOedjhhiYS8C1dAxfzpGwX+ybSk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=GX5cscunz3ZzTiwTAjcScG3yJHb8NYzqhsjWgk94imXnA38dLl47l9mHxlNRWXMYO
+         wqV9nY9DGHy3fvOW+cqtR+ml5LLq1/z8Hs6Jzodkk74AN1MIo0kcrCOl/+ODfv7Ib+
+         9EiubChBy/rQKqgkFgyvPp+2q9tXTQTXhHaFZJ0efGIErTvlqx5g4xjorZ1Ue/YyF2
+         grGGctcTD7co/myRa0zlHcDjfM+yEH0jgju9G+zJhl9fDQ7eCC4krnLzd3BN9G7ZRE
+         AaX7p3FIESdIztsC7rzgoirgNMbZ7RlI91qch7rHRHv9t4wc0Vywim5iBnhICbSBRO
+         b7RLygT77iPFw==
+Message-ID: <c1c9f537e67f2d46404a4a3983e9542de49e28bc.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Mon, 12 Sep 2022 06:43:15 -0400
+In-Reply-To: <166284799157.30452.4308111193560234334@noble.neil.brown.name>
+References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+        , <20220907125211.GB17729@fieldses.org>
+        , <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+        , <20220907135153.qvgibskeuz427abw@quack3>
+        , <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+        , <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>
+        , <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+        , <20220908155605.GD8951@fieldses.org>
+        , <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+        , <20220908182252.GA18939@fieldses.org>
+        , <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+         <166284799157.30452.4308111193560234334@noble.neil.brown.name>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220912101522.69482-1-javierm@redhat.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
-> Provides a default plane state check handler for primary planes that are a
-> fullscreen scanout buffer and whose state scale and position can't change.
-> 
-> There are some drivers that duplicate this logic in their helpers, such as
-> simpledrm and ssd130x. Factor out this common code into a plane helper and
-> make drivers use it.
-> 
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
->  drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
->  drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
->  drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
->  include/drm/drm_plane_helper.h     |  2 ++
->  4 files changed, 33 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
-> index c7785967f5bf..fb41eee74693 100644
-> --- a/drivers/gpu/drm/drm_plane_helper.c
-> +++ b/drivers/gpu/drm/drm_plane_helper.c
-> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
->  	kfree(plane);
->  }
->  EXPORT_SYMBOL(drm_plane_helper_destroy);
-> +
-> +/**
-> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
-> + * @plane: plane to check
-> + * @new_state: plane state to check
+On Sun, 2022-09-11 at 08:13 +1000, NeilBrown wrote:
+> On Fri, 09 Sep 2022, Jeff Layton wrote:
+> >=20
+> > The machine crashes and comes back up, and we get a query for i_version
+> > and it comes back as X. Fine, it's an old version. Now there is a write=
+.
+> > What do we do to ensure that the new value doesn't collide with X+1?=
+=20
+>=20
+> (I missed this bit in my earlier reply..)
+>=20
+> How is it "Fine" to see an old version?
+> The file could have changed without the version changing.
+> And I thought one of the goals of the crash-count was to be able to
+> provide a monotonic change id.
+>=20
 
-That is not a plane state. Also should s/new_// since it's just
-the overall atomic state thing rather than some new or old state.
-
-> + *
-> + * Provides a default plane state check handler for primary planes whose atomic
-> + * state scale and position is not expected to change because the primary plane
-> + * is always a fullscreen scanout buffer.
-> + *
-> + * RETURNS:
-> + * Zero on success, or an errno code otherwise.
-> + */
-> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
-> +				  struct drm_atomic_state *new_state)
-> +{
-> +	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> +	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> +	struct drm_crtc_state *new_crtc_state = NULL;
-> +
-> +	if (new_crtc)
-> +		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> +
-> +	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> +						   DRM_PLANE_NO_SCALING,
-> +						   DRM_PLANE_NO_SCALING,
-> +						   false, false);
-> +}
-> +EXPORT_SYMBOL(drm_plane_helper_atomic_check);
-> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-> index 79e8e2017c68..28cf9c87f86d 100644
-> --- a/drivers/gpu/drm/solomon/ssd130x.c
-> +++ b/drivers/gpu/drm/solomon/ssd130x.c
-> @@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
->  	return ret;
->  }
->  
-> -static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
-> -						     struct drm_atomic_state *new_state)
-> -{
-> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> -	struct drm_crtc_state *new_crtc_state = NULL;
-> -
-> -	if (new_crtc)
-> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> -
-> -	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> -						   DRM_PLANE_NO_SCALING,
-> -						   DRM_PLANE_NO_SCALING,
-> -						   false, false);
-> -}
-> -
->  static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
->  						       struct drm_atomic_state *old_state)
->  {
-> @@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
->  
->  static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
->  	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
-> -	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
-> +	.atomic_check = drm_plane_helper_atomic_check,
->  	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
->  	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
->  };
-> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-> index 777ccd250871..ea5b3239a659 100644
-> --- a/drivers/gpu/drm/tiny/simpledrm.c
-> +++ b/drivers/gpu/drm/tiny/simpledrm.c
-> @@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
->  	DRM_FORMAT_MOD_INVALID
->  };
->  
-> -static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
-> -						       struct drm_atomic_state *new_state)
-> -{
-> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> -	struct drm_crtc_state *new_crtc_state = NULL;
-> -	int ret;
-> -
-> -	if (new_crtc)
-> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> -
-> -	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> -						  DRM_PLANE_NO_SCALING,
-> -						  DRM_PLANE_NO_SCALING,
-> -						  false, false);
-> -	if (ret)
-> -		return ret;
-> -	else if (!new_plane_state->visible)
-> -		return 0;
-> -
-> -	return 0;
-> -}
-> -
->  static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
->  							 struct drm_atomic_state *old_state)
->  {
-> @@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
->  
->  static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
->  	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
-> -	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
-> +	.atomic_check = drm_plane_helper_atomic_check,
->  	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
->  	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
->  };
-> diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
-> index 1781fab24dd6..7ba414655d69 100644
-> --- a/include/drm/drm_plane_helper.h
-> +++ b/include/drm/drm_plane_helper.h
-> @@ -41,5 +41,7 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
->  int drm_plane_helper_disable_primary(struct drm_plane *plane,
->  				     struct drm_modeset_acquire_ctx *ctx);
->  void drm_plane_helper_destroy(struct drm_plane *plane);
-> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
-> +				  struct drm_atomic_state *new_state);
->  
->  #endif
-> -- 
-> 2.37.1
-
--- 
-Ville Syrjälä
-Intel
+"Fine" in the sense that we expect that to happen in this situation.
+It's not fine for the clients obviously, which is why we're discussing
+mitigation techniques.
+--=20
+Jeff Layton <jlayton@kernel.org>
