@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF445B52E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 05:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D754E5B52ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 05:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiILDiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 23:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S229731AbiILDif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 23:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiILDhu (ORCPT
+        with ESMTP id S229853AbiILDiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 23:37:50 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6022D1F3;
-        Sun, 11 Sep 2022 20:36:13 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h188so7032415pgc.12;
-        Sun, 11 Sep 2022 20:36:13 -0700 (PDT)
+        Sun, 11 Sep 2022 23:38:15 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488691D0D2;
+        Sun, 11 Sep 2022 20:37:30 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id v1so7341670plo.9;
+        Sun, 11 Sep 2022 20:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=28/DbnWRsqXYe1eOweFp4AtNKeSEOcgZmxd8skmN3WY=;
-        b=q8CO8T4v7fXmaBih607EW5eE39K7eFFcD3VcaQYIVPH6l/I8h8aZFkuZb1ZN4sO7IH
-         I1JaKGYJnnkQcH/smeQYTxculfu09pHcUY2f44bg/m9uw8oyfvUBAoXLEiN7HV4AKed0
-         fhZSB5qnmjf9vFHPS7WnASw8RswmVeD2A2QMQFg5YyuIltBnz59pk82EHZWOK8e1SmRw
-         qthVgSC1hmNp7C47WUxDEz1HuKce9TbHh8eTEY+pGFebQbR5/sHHrMYtVgf5rCsIBomt
-         jW7bA+TTzvO0PeHnoO9q0EleMxq1VgdDyWX5UBzKdzWTxyT43zCbGM5tlqIZVoZqHCYI
-         tM4Q==
+        bh=WaXIZ5JwVsOhXBftrVsmp7zYZvH72+xMf1APyVxWgac=;
+        b=BvBKHaXw647oP9whkO74o4CzpP4P0/nUEZi1CHqGBs6t+xL0thcbuhYD7lgmQwUl0o
+         ZpPPX74a4aVDI3l0bC88XCzZP9MREdsxXGtSnXMLfp8yJky9wKYPZzRjv4lropHPJ0XL
+         +hERQAJkHrfbMVMZaURFlo2ROu6wlmXa8dG+ArOzvcwk+YPU4WdpIsOhkgP7eySPpwdf
+         W537ielDapcbfB+Gzou5YVX3mETbb/H7R/11w6/3dXYLB7ZNQbEkrnNJCiK+/IEgD4eL
+         hVCRcoSwRFsCV2FjaQahsqBZI55qsjCu0jTeVBIbKRyKas6nPMjmswhhXIuBDHQkMPht
+         FkLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date;
-        bh=28/DbnWRsqXYe1eOweFp4AtNKeSEOcgZmxd8skmN3WY=;
-        b=da9D0d8kmiCWEB5mKagFEvdPDtswHucWlKxNluozTfGoOF/+cD9gneyE5X+W4p706L
-         tvuxN53gWjO47nSUqm53rxWgd5DV/2D9bjO6RmDM3ZbTacFRyhzO6aejFNkO8D+MiVrB
-         TA22FLERRBd7qwOFjYwqVPzzmc+y+UtO5IJvpvK+2k4p5Mfee1Wk5xru/Hiv2Kos+taM
-         DEoO0BHMOw3/K6U19vw3mqjNenr2+hM+WmHIqUfmHRuRss0OuSvUwkF6V422R6gi4sU7
-         olMCsqgCoYwmBNsqbUWP8oqme+GgGUhMhXrPmYW3tQ5TJZlcPJJ+oF2KkFXTCZ5OJgXH
-         JSJQ==
-X-Gm-Message-State: ACgBeo0LqN4ivy8T/FmCas4OxI2GzbSagPAOErUyg3JF3fN+4Pl65dU5
-        bc74j/xesYviELmIleXBaLLLyR/Pg6sysg==
-X-Google-Smtp-Source: AA6agR6YmOJZmt1wEo4MqljCt99ps2A60hby6DjbT9rgMFoEuWZ/6rfiFpF0Hde+lOqCcmAivT60yA==
-X-Received: by 2002:a63:34b:0:b0:438:e839:f840 with SMTP id 72-20020a63034b000000b00438e839f840mr3612977pgd.540.1662953772564;
-        Sun, 11 Sep 2022 20:36:12 -0700 (PDT)
+        bh=WaXIZ5JwVsOhXBftrVsmp7zYZvH72+xMf1APyVxWgac=;
+        b=nOPLIpLVYsWWHxQv59aoxO7ACzDElcBxpqJ8tOi+MgAtaTUfMXuv/3s+9DsKJM4/2u
+         LHTKXttP8bnYZnQCB0F/tIkia3QQ4P8x2Oax4Ka7gxKyKi8nNzTxoHxx9FEy8SBY/EgF
+         Hc3HlPEoII7feKhdNGWJZmyhpuvttArx/DWgNJR0tx9poJCVHE3v3v/MRPvQuJW1x15P
+         fzPgnmlT1kevbrwXr6QnEJlEG+gHyCmCtHo0bM8Ex6cdCAMSwzYBC3Usn1ar1hWwOL3a
+         BXH7WlNIAmd2xZOL+L+z/uZGf5rbiruKP3YUSBQR7VJHlyJy1HEBxuDGhbGIZ+UgrSjU
+         8lOw==
+X-Gm-Message-State: ACgBeo0uZ0mFaDfdohqFP0MLZPIU2BUrWj6DY+QeRZOwIwouy20u+XFL
+        w/CqJUoMmRUv8c8dQvOCdho=
+X-Google-Smtp-Source: AA6agR7WZjKQIj4wNSJkCIx88LLNCKl079Nd0UrTPInvVpyfh3D9Q3WpEzX1koiAd5Wet3k9KSWFRg==
+X-Received: by 2002:a17:903:1205:b0:171:4f8d:22a7 with SMTP id l5-20020a170903120500b001714f8d22a7mr24673515plh.164.1662953849690;
+        Sun, 11 Sep 2022 20:37:29 -0700 (PDT)
 Received: from localhost ([2406:7400:61:8a0f:392d:db19:673c:627a])
-        by smtp.gmail.com with ESMTPSA id s185-20020a625ec2000000b00539aa7f0b53sm4031691pfb.104.2022.09.11.20.36.08
+        by smtp.gmail.com with ESMTPSA id c12-20020aa7952c000000b0052e987c64efsm4187352pfp.174.2022.09.11.20.37.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Sep 2022 20:36:12 -0700 (PDT)
+        Sun, 11 Sep 2022 20:37:29 -0700 (PDT)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 12 Sep 2022 09:06:04 +0530
-Message-Id: <CMU3WT0AU1BP.1BXXFEIOXQTXG@skynet-linux>
-Cc:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        <linux-kernel@vger.kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
+Date:   Mon, 12 Sep 2022 09:07:22 +0530
+Message-Id: <CMU3XSTKA8DK.3V3N5T54PCYIQ@skynet-linux>
+Cc:     <bjorn.andersson@linaro.org>, "Andy Gross" <agross@kernel.org>,
         "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "Andy Gross" <agross@kernel.org>,
         "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "open list" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2 2/4] dt-bindings: remoteproc: qcom: Convert wcnss
  documentation to YAML
 From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
 To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Rob Herring" <robh@kernel.org>
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>
 X-Mailer: aerc 0.12.0
 References: <20220908184925.2714098-1-sireeshkodali1@gmail.com>
  <20220908184925.2714098-3-sireeshkodali1@gmail.com>
- <1662671776.543526.3355395.nullmailer@robh.at.kernel.org>
- <ec73f713-2e42-3282-2e04-97a5db367702@linaro.org>
-In-Reply-To: <ec73f713-2e42-3282-2e04-97a5db367702@linaro.org>
+ <932d68ce-0c14-3fda-8247-f5fe34b2f8b0@linaro.org>
+In-Reply-To: <932d68ce-0c14-3fda-8247-f5fe34b2f8b0@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -83,68 +82,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Sep 9, 2022 at 1:30 PM IST, Krzysztof Kozlowski wrote:
-> On 08/09/2022 23:16, Rob Herring wrote:
-> > On Fri, 09 Sep 2022 00:19:23 +0530, Sireesh Kodali wrote:
-> >> This is a direct conversion of the existing txt documentation to YAML.
-> >> It is in preparation for the addition of pronto-v3 to the docs. This
-> >> patch doesn't document any of the existing subnodes/properties that ar=
-e
-> >> not documented in the existing txt file. That is done in a separate
-> >> patch.
-> >>
-> >> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-> >> ---
-> >>  .../bindings/remoteproc/qcom,wcnss-pil.yaml   | 263 +++++++++++++++++=
-+
-> >>  1 file changed, 263 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,=
-wcnss-pil.yaml
-> >>
+On Fri Sep 9, 2022 at 1:29 PM IST, Krzysztof Kozlowski wrote:
+> On 08/09/2022 20:49, Sireesh Kodali wrote:
+> > This is a direct conversion of the existing txt documentation to YAML.
+> > It is in preparation for the addition of pronto-v3 to the docs. This
+> > patch doesn't document any of the existing subnodes/properties that are
+> > not documented in the existing txt file. That is done in a separate
+> > patch.
 > >=20
-> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
-k'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> > ---
+> >  .../bindings/remoteproc/qcom,wcnss-pil.yaml   | 263 ++++++++++++++++++
+> >  1 file changed, 263 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,w=
+cnss-pil.yaml
 > >=20
-> > yamllint warnings/errors:
-> >=20
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/remoteproc/qcom,wcnss-pil.example.dtb: pronto@a21b000: iris: 'vddxo-supply=
-' is a required property
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/remoteproc/qcom,wcnss-pil.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/remoteproc/qcom,wcnss-pil.example.dtb: pronto@a21b000: iris: 'vddrfa-suppl=
-y' is a required property
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/remoteproc/qcom,wcnss-pil.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/remoteproc/qcom,wcnss-pil.example.dtb: pronto@a21b000: iris: 'vddpa-supply=
-' is a required property
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/remoteproc/qcom,wcnss-pil.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/remoteproc/qcom,wcnss-pil.example.dtb: pronto@a21b000: iris: 'vdddig-suppl=
-y' is a required property
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/remoteproc/qcom,wcnss-pil.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/remoteproc/qcom,wcnss-pil.example.dtb: wcnss: 'bt' does not match any of t=
-he regexes: 'pinctrl-[0-9]+'
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/soc/qcom/qcom,wcnss.yaml
-> >=20
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pi=
+l.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
+> > new file mode 100644
+> > index 000000000000..bc18139fdb91
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
+> > @@ -0,0 +1,263 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/remoteproc/qcom,wcnss-pil.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm WCNSS Peripheral Image Loader
+> > +
+> > +maintainers:
+> > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
 >
-> This needs to be fixed.
+> Use email from maintainers entry.
+
+I didn't notice the entry had changed from since v1, will be fixed in v3
 >
-> Please run `make dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->
-Will be fixed in v3
+> > +
+> > +description:
+> > +  This document defines the binding for a component that loads and boo=
+ts
+> > +  firmware on the Qualcomm WCNSS core.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,riva-pil
+> > +      - qcom,pronto-v1-pil
+> > +      - qcom,pronto-v2-pil
+> > +
+> > +  reg:
+> > +    maxItems: 3
+> > +    description:
+> > +      The base address and size of the CCU, DXE and PMU register block=
+s
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: ccu
+> > +      - const: dxe
+> > +      - const: pmu
+> > +
+> > +  interrupts:
+> > +    minItems: 2
+> > +    maxItems: 5
+> > +
+> > +  interrupt-names:
+> > +    minItems: 2
+> > +    items:
+> > +      - const: wdog
+> > +      - const: fatal
+> > +      - const: ready
+> > +      - const: handover
+> > +      - const: stop-ack
+> > +
+> > +  firmware-name:
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    description:
+> > +      Relative firmware image path for the WCNSS core. Defaults to
+> > +      "wcnss.mdt".
+> > +
+> > +  vddpx-supply:
+> > +    description:
+> > +      PX regulator to be held on behalf of the booting of the WCNSS co=
+re
+> > +
+> > +  vddmx-supply:
+> > +    description:
+> > +      MX regulator to be held on behalf of the booting of the WCNSS co=
+re.
+> > +
+> > +  vddcx-supply:
+> > +    description:
+> > +      CX regulator to be held on behalf of the booting of the WCNSS co=
+re.
+> > +
+> > +  power-domains:
+> > +    maxItems: 2
+> > +
+> > +  power-domain-names:
+> > +    items:
+> > +      - const: cx
+> > +      - const: mx
+> > +
+> > +  qcom,smem-states:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    description:
+> > +      States used by the AP to signal the WCNSS core that it should sh=
+utdown
+> > +    items:
+> > +      - description: Stop the modem
+> > +
+> > +  qcom,smem-state-names:
+> > +    description: The names of the state bits used for SMP2P output
+> > +    items:
+> > +      - const: stop
+> > +
+> > +  memory-region:
+> > +    maxItems: 1
+> > +    description: reserved-memory for the WCNSS core
+> > +
+> > +  smd-edge:
+> > +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
+> > +    description:
+> > +      Qualcomm Shared Memory subnode which represents communication ed=
+ge,
+> > +      channels and devices related to the ADSP.
+> > +
+> > +  iris:
+> > +    type: object
+> > +    description:
+> > +      The iris subnode of the WCNSS PIL is used to describe the attach=
+ed RF module
+> > +      and its resource dependencies.
+> > +
+> additionalProperties false on this level.
+
+Will be added in v3
 
 Regards,
 Sireesh
+>
+> > +    properties:
+> > +      compatible:
+> > +        enum:
+> > +          - qcom,wcn3620
+> > +          - qcom,wcn3660
+> > +          - qcom,wcn3660b
+> > +          - qcom,wcn3680
+> > +
+> > +      clocks:
+> > +        minItems: 1
+> > +        items:
+> > +          - description: XO clock
+> > +          - description: RF clock
+> > +
+> > +      clock-names:
+> > +        minItems: 1
+> > +        items:
+> > +          - const: xo
+> > +          - const: rf
+> > +
+> > +      vddxo-supply:
+> > +        description:
+> > +          Reference to the regulator to be held on behalf of the booti=
+ng WCNSS
+> > +          core
+> > +
+> > +      vddrfa-supply:
+> > +        description:
+> > +          Reference to the regulator to be held on behalf of the booti=
+ng WCNSS
+> > +          core
+> > +
+> > +      vddpa-supply:
+> > +        description:
+> > +          Reference to the regulator to be held on behalf of the booti=
+ng WCNSS
+> > +          core
+> > +
+> > +      vdddig-supply:
 >
 > Best regards,
 > Krzysztof
