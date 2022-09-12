@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD75B534E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 06:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55195B533F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 06:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiILEgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 00:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S229569AbiILE2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 00:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiILEgD (ORCPT
+        with ESMTP id S229565AbiILE2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 00:36:03 -0400
+        Mon, 12 Sep 2022 00:28:46 -0400
+X-Greylist: delayed 1667 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Sep 2022 21:28:43 PDT
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC121AF28
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 21:36:01 -0700 (PDT)
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20301CB10
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 21:28:43 -0700 (PDT)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
         by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <m.v.b@runbox.com>)
-        id 1oXact-009cFM-Sa; Mon, 12 Sep 2022 06:00:51 +0200
+        id 1oXacx-009cJl-FF; Mon, 12 Sep 2022 06:00:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From; bh=UB4fTYWfrW3vEt2oDlOTKBk6EbS08X1+1sCyJYpMX6M=; b=wsBt9B
-        rNhZlSmXaFOaUsL7bzGgtj6T7a5eDibuOqEJyMGFsWPJHhhEZ7XYhJuc4B5Nl1EqurFY12BPedUZz
-        bfHkSGxrj1XbJp1AwXJy0UOSEcx2IeWNvPkf3IKz50q84/OFGAMT03HUT1v3MeAGEyBUOOdnZzM8a
-        /o0ye5rKua9T7Klgi/hJwrnQqymFfyE5e4cG5MtZ19CYsFxRMRXUnrV+FKN21itSK65H6euVC3LGJ
-        MQiDuyeA+4MVqW75zaAkcDGoAX+cBOMvTuYilUiWPpXxB0ZDLOvM12//HqjbLUNrSCWzHlJbg8B1B
-        9z7JeYqQ1fpFHHDJI73HWwoCXW9A==;
+         s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
+        :Message-Id:Date:Subject:Cc:To:From;
+        bh=NYGbYznUIsRn2pdVapESgYelwBLsRFvNvEAjFtNvGkY=; b=hUlUMRT6twm3sxZyGROBdgsTlJ
+        fII5XbgviPM6jWxx2yNthBtrz/MU8KJhm1ZXqCcJjk8+J4mtYeXUqxigOFOwIYTQ2Zc4e48PDKWkl
+        FiuU6VRFooF1FOHn4h4H/AHNXHvorUWqFMXGuCwLn7YIrQgWkgdhSx2EtufY38sDgmNT6MzRdbw/B
+        AZQMJ+sqoJrsP6dYzR5QX5WCGleAnfX/i0WKifjcdY836iaxkt+tMhkZUw4Fs5nAuntsGQuiRGQhq
+        zDSupC5d67TwaIuKszVMf40uPU44pvcTB/xuMPxDuJVHNzidix+97p7tXEK/85/2ZIUUHd2D4MF4J
+        2ngOSmFw==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
         (envelope-from <m.v.b@runbox.com>)
-        id 1oXact-0004X5-Cu; Mon, 12 Sep 2022 06:00:51 +0200
+        id 1oXacr-00022C-OX; Mon, 12 Sep 2022 06:00:50 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.90_1)
-        id 1oXach-0003S3-DL; Mon, 12 Sep 2022 06:00:39 +0200
+        id 1oXaci-0003S3-RC; Mon, 12 Sep 2022 06:00:41 +0200
 From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
 To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc:     m.v.b@runbox.com, Juergen Gross <jgross@suse.com>,
@@ -42,10 +44,12 @@ Cc:     m.v.b@runbox.com, Juergen Gross <jgross@suse.com>,
         Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
         Demi Marie Obenour <demi@invisiblethingslab.com>,
         Gerd Hoffmann <kraxel@redhat.com>
-Subject: [PATCH 0/2] xen/gntdev: Fixes for leaks and VMA splitting
-Date:   Mon, 12 Sep 2022 00:00:00 -0400
-Message-Id: <20220912040002.198191-1-m.v.b@runbox.com>
+Subject: [PATCH 1/2] xen/gntdev: Prevent leaking grants
+Date:   Mon, 12 Sep 2022 00:00:01 -0400
+Message-Id: <20220912040002.198191-2-m.v.b@runbox.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220912040002.198191-1-m.v.b@runbox.com>
+References: <20220912040002.198191-1-m.v.b@runbox.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,36 +62,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Prior to this commit, if a grant mapping operation failed partially,
+some of the entries in the map_ops array would be invalid, whereas all
+of the entries in the kmap_ops array would be valid. This in turn would
+cause the following logic in gntdev_map_grant_pages to become invalid:
 
-The changes in this patch series intend to fix the Xen grant device
-driver, so that grant mapping leaks caused by partially failed grant
-mapping operations are avoided with the first patch, and so that the
-splitting of VMAs does not result in incorrectly unmapped grant pages
-with the second patch. The second patch also prevents a similar issue in
-a double-mapping scenario, where mmap() is used with MAP_FIXED to map
-grants over an existing mapping created with the same grants, and where
-grant pages are unmapped incorrectly as well.
+  for (i = 0; i < map->count; i++) {
+    if (map->map_ops[i].status == GNTST_okay) {
+      map->unmap_ops[i].handle = map->map_ops[i].handle;
+      if (!use_ptemod)
+        alloced++;
+    }
+    if (use_ptemod) {
+      if (map->kmap_ops[i].status == GNTST_okay) {
+        if (map->map_ops[i].status == GNTST_okay)
+          alloced++;
+        map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
+      }
+    }
+  }
+  ...
+  atomic_add(alloced, &map->live_grants);
 
-These commits were tested on top of Linux v5.15.67, but I have also
-verified that they compile fine on top of the base commit mentioned at
-the bottom of this cover letter. The base commit in question is tagged
-as "next-20220909".
+Assume that use_ptemod is true (i.e., the domain mapping the granted
+pages is a paravirtualized domain). In the code excerpt above, note that
+the "alloced" variable is only incremented when both kmap_ops[i].status
+and map_ops[i].status are set to GNTST_okay (i.e., both mapping
+operations are successful).  However, as also noted above, there are
+cases where a grant mapping operation fails partially, breaking the
+assumption of the code excerpt above.
 
-Thank you,
+The aforementioned causes map->live_grants to be incorrectly set. In
+some cases, all of the map_ops mappings fail, but all of the kmap_ops
+mappings succeed, meaning that live_grants may remain zero. This in turn
+makes it impossible to unmap the successfully grant-mapped pages pointed
+to by kmap_ops, because unmap_grant_pages has the following snippet of
+code at its beginning:
 
-Vefa
+  if (atomic_read(&map->live_grants) == 0)
+    return; /* Nothing to do */
 
-M. Vefa Bicakci (2):
-  xen/gntdev: Prevent leaking grants
-  xen/gntdev: Accommodate VMA splitting
+In other cases where only some of the map_ops mappings fail but all
+kmap_ops mappings succeed, live_grants is made positive, but when the
+user requests unmapping the grant-mapped pages, __unmap_grant_pages_done
+will then make map->live_grants negative, because the latter function
+does not check if all of the pages that were requested to be unmapped
+were actually unmapped, and the same function unconditionally subtracts
+"data->count" (i.e., a value that can be greater than map->live_grants)
+from map->live_grants. The side effects of a negative live_grants value
+have not been studied.
 
- drivers/xen/gntdev-common.h |  3 +-
- drivers/xen/gntdev.c        | 90 +++++++++++++++++++++----------------
- 2 files changed, 54 insertions(+), 39 deletions(-)
+The net effect of all of this is that grant references are leaked in one
+of the above conditions. In Qubes OS v4.1 (which uses Xen's grant
+mechanism extensively for X11 GUI isolation), this issue manifests
+itself with warning messages like the following to be printed out by the
+Linux kernel in the VM that had granted pages (that contain X11 GUI
+window data) to dom0: "g.e. 0x1234 still pending", especially after the
+user rapidly resizes GUI VM windows (causing some grant-mapping
+operations to partially or completely fail, due to the fact that the VM
+unshares some of the pages as part of the window resizing, making the
+pages impossible to grant-map from dom0).
 
+The fix for this issue involves counting all successful map_ops and
+kmap_ops mappings separately, and then adding the sum to live_grants.
+During unmapping, only the number of successfully unmapped grants is
+subtracted from live_grants. To determine which grants were successfully
+unmapped, their status fields are set to an arbitrary positive number
+(1), as was done in commit ebee0eab0859 ("Xen/gntdev: correct error
+checking in gntdev_map_grant_pages()"). The code is also modified to
+check for negative live_grants values after the subtraction and warn the
+user.
 
-base-commit: 9a82ccda91ed2b40619cb3c10d446ae1f97bab6e
+Link: https://github.com/QubesOS/qubes-issues/issues/7631
+Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
+Cc: stable@vger.kernel.org
+Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+---
+ drivers/xen/gntdev.c | 32 +++++++++++++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
+index 84b143eef395..485fa9c630aa 100644
+--- a/drivers/xen/gntdev.c
++++ b/drivers/xen/gntdev.c
+@@ -367,8 +367,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
+ 	for (i = 0; i < map->count; i++) {
+ 		if (map->map_ops[i].status == GNTST_okay) {
+ 			map->unmap_ops[i].handle = map->map_ops[i].handle;
+-			if (!use_ptemod)
+-				alloced++;
++			alloced++;
+ 		} else if (!err)
+ 			err = -EINVAL;
+ 
+@@ -377,8 +376,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
+ 
+ 		if (use_ptemod) {
+ 			if (map->kmap_ops[i].status == GNTST_okay) {
+-				if (map->map_ops[i].status == GNTST_okay)
+-					alloced++;
++				alloced++;
+ 				map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
+ 			} else if (!err)
+ 				err = -EINVAL;
+@@ -394,8 +392,13 @@ static void __unmap_grant_pages_done(int result,
+ 	unsigned int i;
+ 	struct gntdev_grant_map *map = data->data;
+ 	unsigned int offset = data->unmap_ops - map->unmap_ops;
++	int successful_unmaps = 0;
++	int live_grants;
+ 
+ 	for (i = 0; i < data->count; i++) {
++		if (map->unmap_ops[offset + i].status == GNTST_okay)
++			successful_unmaps++;
++
+ 		WARN_ON(map->unmap_ops[offset + i].status != GNTST_okay &&
+ 			map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
+ 		pr_debug("unmap handle=%d st=%d\n",
+@@ -403,6 +406,9 @@ static void __unmap_grant_pages_done(int result,
+ 			map->unmap_ops[offset+i].status);
+ 		map->unmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
+ 		if (use_ptemod) {
++			if (map->kunmap_ops[offset + i].status == GNTST_okay)
++				successful_unmaps++;
++
+ 			WARN_ON(map->kunmap_ops[offset + i].status != GNTST_okay &&
+ 				map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
+ 			pr_debug("kunmap handle=%u st=%d\n",
+@@ -411,11 +417,15 @@ static void __unmap_grant_pages_done(int result,
+ 			map->kunmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
+ 		}
+ 	}
++
+ 	/*
+ 	 * Decrease the live-grant counter.  This must happen after the loop to
+ 	 * prevent premature reuse of the grants by gnttab_mmap().
+ 	 */
+-	atomic_sub(data->count, &map->live_grants);
++	live_grants = atomic_sub_return(successful_unmaps, &map->live_grants);
++	if (WARN_ON(live_grants < 0))
++		pr_err("%s: live_grants became negative (%d) after unmapping %d pages!\n",
++		       __func__, live_grants, successful_unmaps);
+ 
+ 	/* Release reference taken by __unmap_grant_pages */
+ 	gntdev_put_map(NULL, map);
+@@ -424,6 +434,8 @@ static void __unmap_grant_pages_done(int result,
+ static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
+ 			       int pages)
+ {
++	int idx;
++
+ 	if (map->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
+ 		int pgno = (map->notify.addr >> PAGE_SHIFT);
+ 
+@@ -436,6 +448,16 @@ static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
+ 		}
+ 	}
+ 
++	/* Set all unmap/kunmap status fields to an arbitrary positive value,
++	 * so that it is possible to determine which grants were successfully
++	 * unmapped by inspecting the status fields.
++	 */
++	for (idx = offset; idx < offset + pages; idx++) {
++		map->unmap_ops[idx].status = 1;
++		if (use_ptemod)
++			map->kunmap_ops[idx].status = 1;
++	}
++
+ 	map->unmap_data.unmap_ops = map->unmap_ops + offset;
+ 	map->unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
+ 	map->unmap_data.pages = map->pages + offset;
 -- 
 2.37.3
 
