@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB7C5B63CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0842F5B63D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiILWmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S229888AbiILWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiILWmK (ORCPT
+        with ESMTP id S229689AbiILWsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:42:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE79402D1;
-        Mon, 12 Sep 2022 15:42:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 760ADB80E00;
-        Mon, 12 Sep 2022 22:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28567C433D6;
-        Mon, 12 Sep 2022 22:42:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663022527;
-        bh=SqNE7ZCLF7o+gpUAaG6L1c6OlJKhN/9eqQwPlUMIWgk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NxAfJCe7jZ2CDkTBzDeUc937ahUv96+iHYECrwYBBv9ykIsQdh1U3WbULMpn7E0tA
-         LpJeBWc8LKvEmkIGhWX3DQFdR3bo6K+KGVAEO4eSeYc2FH9sW4Wov/tne5l0sjlCuB
-         aYvficsyMk6RmqsCPxwPIy1Pd+bOoVKrdCaS/skQoRhSQkRlgH4ep5VQI2LHOU/YdP
-         6wsn8hwFRJnhw8tvcH4nHBBCpQJLfBrr5vjApiNQUCcBfR8FxqxBNIt/24lWWkZkWz
-         8nBLfdKJdrqg9leqHhFQ6ebM5zUE24Ekv5nsNVmtZGGr2Wb2M6ZjioDZeQdPiDXJNO
-         3xn0kW0ds78Yg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0CA93C73FE5;
-        Mon, 12 Sep 2022 22:42:07 +0000 (UTC)
-Subject: Re: [GIT PULL] Hyper-V fixes for 6.0-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yx+vEggYHHyBdb5r@liuwe-devbox-debian-v2>
-References: <Yx+vEggYHHyBdb5r@liuwe-devbox-debian-v2>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yx+vEggYHHyBdb5r@liuwe-devbox-debian-v2>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20220912
-X-PR-Tracked-Commit-Id: f0880e2cb7e1f8039a048fdd01ce45ab77247221
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e839a756012b6cad7a4eeb67b0598ac3f349f863
-Message-Id: <166302252702.25412.14039653395008305231.pr-tracker-bot@kernel.org>
-Date:   Mon, 12 Sep 2022 22:42:07 +0000
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com, sthemmin@microsoft.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 18:48:43 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA124BA77
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:48:42 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id my9-20020a17090b4c8900b002027721b2b0so7577948pjb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=69eqzQldLaAKRphbYvjKq9UwxC3qVyQ1BnuwXpOP90k=;
+        b=SmME0BoRudH8DEJT4v4/zsZ3xWJOz30HsCdv6NK/gwQLgnwxaE20doDBhiq1uGrL/Q
+         n/AFLvKj7G5Qkcm4WCvGz9AExc2p38QVLZAsgZ/Uxgz4wzUuEDlgtEuQ8lFt7midKBbM
+         53T4PwLEP5Q1mr0miEpX2RrlDptWi8e3bFLCz0I00ei2+lfbCV3hqYsImIfvPBIqSWpC
+         nAt9f86oKWbs9ruvNhLnhXuQsJervZtGPvEA7Evq3/d1kEWzCwRJwe4kjsmf+R8FKawQ
+         K5s/ABkk1n77LzD6wp633Hq6RfNJTCaxU/nEjRGusnm9um5co6dbyWJNO/fNEJ94FBrq
+         zm1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=69eqzQldLaAKRphbYvjKq9UwxC3qVyQ1BnuwXpOP90k=;
+        b=PQsjELKpQcFQV1eymtrEWYU1PhfUrfSPfd0mNULVEMTqpTJBYh7s2bjb3V82Y+acSD
+         V80c1HbSGVQL9jOhuS1d6gSyEkqgs7aM3nkVDzgipRITOAh720VvH/H9WxQ06D5KhU2v
+         tT7DRD94yT9lvxtvqgNwJE63Ny1EDA4MiSpyhVLAY6seKOU1SJlRoO3vRDAvcxgOn/Lg
+         TQNOBMvdY6ZayKgwRq8Jhb+Zq91KRZxi1SD5w9zGGuYMIbXSofDfCX9R9CMjD9C68gZa
+         XDNQx5faOSymxVBfBL8KMH1XO6nRX087q9GqICZYEU+w/+/0CROls7chxblq3m8JJT2R
+         Kphg==
+X-Gm-Message-State: ACgBeo3S+DhZZES+M3ABbz/4Q9Eoebx8L+zamDJ7mc0iXMwAJWOMYvVq
+        iXz55Em1UZ0QESGaM0f3RuYx0nu47k4=
+X-Google-Smtp-Source: AA6agR54JsXmsNxLeykhCovQYXLPwCyudwSKJ5KzmN5v6Pt0M/FYw9u1jAFxSPymtmO4mvSh0T1/Iv01d8c=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
+ (user=jthies job=sendgmr) by 2002:a05:6a00:a04:b0:534:d8a6:40ce with SMTP id
+ p4-20020a056a000a0400b00534d8a640cemr30258261pfh.15.1663022922073; Mon, 12
+ Sep 2022 15:48:42 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 22:47:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220912224745.2716345-1-jthies@google.com>
+Subject: [PATCH v2] platform/chrome: cros_ec: Notify the PM of wake events
+ during resume
+From:   Jameson Thies <jthies@google.com>
+To:     chrome-platform@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        Jameson Thies <jthies@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 12 Sep 2022 22:13:38 +0000:
+Update cros_ec_report_events_during_suspend to notify the PM of wake
+events during resume by calling pm_wakeup_event.
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20220912
+Signed-off-by: Jameson Thies <jthies@google.com>
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+---
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e839a756012b6cad7a4eeb67b0598ac3f349f863
+Changes since v1:
+- Updated wording in commit message from "Log" to "Notify PM of".
+---
+ drivers/platform/chrome/cros_ec.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thank you!
-
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d..110df0fd4b00 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
+ 
+ static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
+ {
++	bool wake_event;
++
+ 	while (ec_dev->mkbp_event_supported &&
+-	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
++	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
+ 		blocking_notifier_call_chain(&ec_dev->event_notifier,
+ 					     1, ec_dev);
++
++		if (wake_event && device_may_wakeup(ec_dev->dev))
++			pm_wakeup_event(ec_dev->dev, 0);
++	}
+ }
+ 
+ /**
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.37.2.789.g6183377224-goog
+
