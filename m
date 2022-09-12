@@ -2,71 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D9B5B5BDA
+	by mail.lfdr.de (Postfix) with ESMTP id BD1405B5BDB
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiILOCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S230041AbiILODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiILOCf (ORCPT
+        with ESMTP id S230008AbiILOCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:02:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26931DF7;
-        Mon, 12 Sep 2022 07:02:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55620B80D55;
-        Mon, 12 Sep 2022 14:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C12BDC433D7;
-        Mon, 12 Sep 2022 14:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662991350;
-        bh=CJr3xwvNDLqpU75iwXI4nimkb371IeI9yF6/g36e4xc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=N1nOlaRpf2JgDjhUFohphJn0WEbiK2kjJ26VaR9g4S5wHF2HOFtBsFk/2T0nXBph7
-         77ibhHYqpi3L6XnjzmPh//mHS2Lg5SslT7sj+yslZc8YFPDPcjTumTUL2w9WPW7OFR
-         ftYUFI2lqrKbP35Bn4c5rnjobP2zddXr4QSR+0gCoI10pBxFj5bhOK+kISSJ0GCcM/
-         +TKchp8rwoV4O9RbRNkPOrt/vl3g9S4zAofpbEG5hLuuh0hQKYt2c6vJkPZWnOv2Yq
-         qsuylp4XPZcB4gkt7uTDSyigrW6sr28/mZGFZTJai5QQu7GOvbQT8p5m5xgzm4NEvW
-         kfXn2hX9ZIvGQ==
-Message-ID: <1abae98579030d437224ae24f73fffaabb3f64c1.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Florian Weimer <fweimer@redhat.com>, Theodore Ts'o <tytso@mit.edu>,
-        Jan Kara <jack@suse.cz>, NeilBrown <neilb@suse.de>,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Date:   Mon, 12 Sep 2022 10:02:27 -0400
-In-Reply-To: <20220912135131.GC9304@fieldses.org>
-References: <20220908155605.GD8951@fieldses.org>
-         <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
-         <20220908182252.GA18939@fieldses.org>
-         <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-         <20220909154506.GB5674@fieldses.org>
-         <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
-         <20220910145600.GA347@fieldses.org>
-         <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
-         <87a67423la.fsf@oldenburg.str.redhat.com>
-         <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
-         <20220912135131.GC9304@fieldses.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 12 Sep 2022 10:02:54 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3746932AB9;
+        Mon, 12 Sep 2022 07:02:46 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oXk1M-0007Yg-04; Mon, 12 Sep 2022 16:02:44 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0D555C1291; Mon, 12 Sep 2022 16:02:34 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 16:02:34 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Aleksander Bajkowski <olek2@wp.pl>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+Message-ID: <20220912140233.GA9366@alpha.franken.de>
+References: <20220702190705.5319-1-olek2@wp.pl>
+ <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org>
+ <20220706081901.GA10797@alpha.franken.de>
+ <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+ <20220707100630.GC9894@alpha.franken.de>
+ <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+ <20220707143930.GA14693@alpha.franken.de>
+ <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-12 at 09:51 -0400, J. Bruce Fields wrote:
-> On Mon, Sep 12, 2022 at 08:55:04AM -0400, Jeff Layton wrote:
-> > Because of the "seen" flag, we have a 63 bit counter to play with. Coul=
-d
-> > we use a similar scheme to the one we use to handle when "jiffies"
-> > wraps?=A0Assume that we'd never compare two values that were more than
-> > 2^62 apart? We could add i_version_before/i_version_after macros to mak=
-e
-> > it simple to handle this.
->=20
-> As far as I recall the protocol just assumes it can never wrap.  I guess
-> you could add a new change_attr_type that works the way you describe.
-> But without some new protocol clients aren't going to know what to do
-> with a change attribute that wraps.
->=20
+On Sat, Sep 10, 2022 at 12:53:40PM +0200, Aleksander Bajkowski wrote:
+> Hi THomas,
+> 
+> On 7/7/22 16:39, Thomas Bogendoerfer wrote:
+> [...]
+> >> Or can you point me to the code in
+> >> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
+> >> interrupts on VPE 1 (is it simply unmask_mips_irq)?
+> > 
+> > IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
+> > on the same CPU. I've checked MIPS MT specs and it's possible do
+> > modify CP0 registers between VPEs. Using that needs changes in
+> > irq-mips-cpu.c. But mabye that's not woth the effort as probably
+> > all SMP cabable platforms have some multi processort capable
+> > interrupt controller implemented.
+> > 
+> > I thought about another way solve the issue. By introducing a
+> > new function in smp-mt.c which sets the value of the interrupt
+> > mask for the secondary CPU, which is then used in vsmp_init_secondary().
+> > Not sure if this is worth the effort compared to a .boot_secondary
+> > override.
+> 
+> 
+> Enabling interrupts on the second VPE using hotplug will be accepted
+> upstream? Below is a sample patch.
 
-Right, I think that's the case now, and with contemporary hardware that
-shouldn't ever happen, but in 10 years when we're looking at femtosecond
-latencies, could this be different? I don't know.
+as this is just another hack, below is what I prefer.
 
-> I think this just needs to be designed so that wrapping is impossible in
-> any realistic scenario.  I feel like that's doable?
->=20
-> If we feel we have to catch that case, the only 100% correct behavior
-> would probably be to make the filesystem readonly.
+Thomas.
 
-What would be the recourse at that point? Rebuild the fs from scratch, I
-guess?
---=20
-Jeff Layton <jlayton@kernel.org>
+commit 15853dc9e6d213558acbf961f98e9f77b4b61db2
+Author: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date:   Mon Sep 12 15:59:44 2022 +0200
+
+    my lantiq approach
+
+diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
+index c731082a0c42..1cc4f56b57f6 100644
+--- a/arch/mips/lantiq/prom.c
++++ b/arch/mips/lantiq/prom.c
+@@ -84,6 +84,16 @@ void __init plat_mem_setup(void)
+ 	__dt_setup_arch(dtb);
+ }
+ 
++#if defined(CONFIG_MIPS_MT_SMP)
++extern const struct plat_smp_ops vsmp_smp_ops;
++static struct plat_smp_ops lantiq_smp_ops;
++
++static void lantiq_init_secondary(void)
++{
++	set_c0_status(ST0_IM);
++}
++#endif
++
+ void __init prom_init(void)
+ {
+ 	/* call the soc specific detetcion code and get it to fill soc_info */
+@@ -95,7 +105,13 @@ void __init prom_init(void)
+ 	prom_init_cmdline();
+ 
+ #if defined(CONFIG_MIPS_MT_SMP)
+-	if (register_vsmp_smp_ops())
++
++	if (cpu_has_mipsmt) {
++		lantiq_smp_ops = vsmp_smp_ops;
++		lantiq_smp_ops.init_secondary = lantiq_init_secondary;
++		register_smp_ops(&lantiq_smp_ops);
++	} else {
+ 		panic("failed to register_vsmp_smp_ops()");
++	}
+ #endif
+ }
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
