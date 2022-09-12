@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545E85B59C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3DE5B58C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiILMAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        id S229816AbiILKyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiILL7z (ORCPT
+        with ESMTP id S229511AbiILKyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:59:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167D7183A0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:59:55 -0700 (PDT)
+        Mon, 12 Sep 2022 06:54:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7CCD86;
+        Mon, 12 Sep 2022 03:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662983995; x=1694519995;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wv1rqTq8BRjgtfh8asl4Ex9ddD+7awkmX+crc484eSo=;
-  b=ZcryoVgsU7xTIIxvinDhFpoDEFyms6fzAwQnL9TX08JZnlYT+/U0vn46
-   EvczKjFFjYX5aO/RFcwPfgvO8V8UoM0U8kzQTHN8w5byiB1BD3wH/MY9+
-   QBuXkWj4mL/k9G2fEMxIcId99vGLRzpPF3a9YWhk2EvLB7rjEdVZ24H55
-   UZKvUS7Dpn5067OWGQSQIUi/LHPzNBl2iZhPf63uWIVJgY5Gznwl3PoRI
-   5JIC+t3JqTT/vvKnE4fU5Ens7e2qt9uj1GmhL7xBPe6AndfR3NjEZTmGK
-   N+ygoJJAhvU47oxRG204M794kW2EJ2i/d8ZRAxcMOftp/5fnwRUF2fSnk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="324078478"
+  t=1662980070; x=1694516070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hlBDz53+flWgbd1kP2vmgg1tnZZa5Xxm55qgoo4qc9s=;
+  b=dIPYNesc2xZt7KeQw1jaf2uhrjVkgIfNX0/DAsa0vvescMQ8lS8/T5jg
+   sjZsv+ECSZxRIVw/3UVjImEiBxG9tmBfWRzVe/gmVxCq7s2foNa0wsR+q
+   6UFmvshu1anZ1i+eIxFSdm4s7EDIzbqptIGVzFPqJg6QUsQaXF/JQKmMb
+   9aQ2JvPYfLXyWsnrpcamrYths152PjxGUpyChYg+Ph4SmiUwHBwZbgT+T
+   xnzot4CJlpMAZiEAxzZT1WD/W06b8GWJVgeWs+IASJCNZCcu7cZR8SZ8s
+   GMzd+i0dSeuMbc128KjzwmatEW91RGc21CHonzXaJ9pCIffaxZG5dNrH7
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="297837609"
 X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="324078478"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:59:54 -0700
+   d="scan'208";a="297837609"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:54:29 -0700
 X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="705126318"
-Received: from vtsymbal-mobl.ger.corp.intel.com (HELO [10.252.32.67]) ([10.252.32.67])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:59:49 -0700
-Message-ID: <c83fb25e-ef59-63e1-4223-648dab9885ea@linux.intel.com>
-Date:   Mon, 12 Sep 2022 12:53:42 +0200
+   d="scan'208";a="567122849"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:54:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oXh52-001JDf-2Y;
+        Mon, 12 Sep 2022 13:54:20 +0300
+Date:   Mon, 12 Sep 2022 13:54:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <Yx8P3ABrwYaMBRhn@smile.fi.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
+ <YxesjfoBagiC3gGE@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2209081049290.61321@rhweight-WRK1>
+ <Yxpbx0Tclqy4O9cR@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2209110850120.142336@rhweight-WRK1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 5/7] soundwire: intel: Don't disable interrupt until
- children are removed
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com,
-        sanyog.r.kale@intel.com, broonie@kernel.org
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
-References: <20220907101402.4685-1-rf@opensource.cirrus.com>
- <20220907101402.4685-6-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220907101402.4685-6-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2209110850120.142336@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Sep 11, 2022 at 08:56:41AM -0700, matthew.gerlach@linux.intel.com wrote:
+> On Fri, 9 Sep 2022, Andy Shevchenko wrote:
+> > On Thu, Sep 08, 2022 at 11:27:03AM -0700, matthew.gerlach@linux.intel.com wrote:
+> > > On Tue, 6 Sep 2022, Andy Shevchenko wrote:
+> > > > On Tue, Sep 06, 2022 at 12:04:26PM -0700, matthew.gerlach@linux.intel.com wrote:
 
+...
 
-On 9/7/22 12:14, Richard Fitzgerald wrote:
-> The cadence_master code needs the interrupt to complete message transfers.
-> When the bus driver is being removed child drivers are removed, and their
-> remove actions might need bus transactions.
+> > > > > +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
+> > > > 
+> > > > Isn't this available via normal interfaces to user?
+> > > 
+> > > I am not sure what "normal interfaces to user" you are referring to.  The
+> > > code is just trying to read the frequency of the input clock to the uart
+> > > from a DFH paramter.
+> > 
+> > I mean dev_dbg() call. The user can get uart_clk via one of the UART/serial
+> > ABIs (don't remember which one, though).
 > 
-> Use the sdw_master_ops.remove callback to disable the interrupt handling
-> only after the child drivers have been removed.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
->  drivers/soundwire/intel.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-> index 01be62fa6c83..d5e723a9c80b 100644
-> --- a/drivers/soundwire/intel.c
-> +++ b/drivers/soundwire/intel.c
-> @@ -1255,6 +1255,13 @@ static int intel_prop_read(struct sdw_bus *bus)
->  	return 0;
->  }
->  
-> +static void intel_bus_remove(struct sdw_bus *bus)
-> +{
-> +	struct sdw_cdns *cdns = bus_to_cdns(bus);
-> +
-> +	sdw_cdns_enable_interrupt(cdns, false);
+> I don't think UART/serial ABIs to get the input clock frequency would be
+> available until after the call to serial8250_register_8250_port()
 
-don't you need to check for any on-going transactions on the bus?
+Is it a problem?
 
-I wonder if there could be a corner case where there are no child
-devices but still a device physically attached to the bus. I am not sure
-if the 'no devices left' is a good-enough indication of no activity on
-the bus.
+> which needs the clock frequency as an input.
 
-> +}
-> +
->  static struct sdw_master_ops sdw_intel_ops = {
->  	.read_prop = sdw_master_read_prop,
->  	.override_adr = sdw_dmi_override_adr,
-> @@ -1264,6 +1271,7 @@ static struct sdw_master_ops sdw_intel_ops = {
->  	.set_bus_conf = cdns_bus_conf,
->  	.pre_bank_switch = intel_pre_bank_switch,
->  	.post_bank_switch = intel_post_bank_switch,
-> +	.remove = intel_bus_remove,
->  };
->  
->  static int intel_init(struct sdw_intel *sdw)
-> @@ -1502,7 +1510,6 @@ static void intel_link_remove(struct auxiliary_device *auxdev)
->  	 */
->  	if (!bus->prop.hw_disabled) {
->  		intel_debugfs_exit(sdw);
-> -		sdw_cdns_enable_interrupt(cdns, false);
->  		snd_soc_unregister_component(dev);
->  	}
->  	sdw_bus_master_delete(bus);
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
