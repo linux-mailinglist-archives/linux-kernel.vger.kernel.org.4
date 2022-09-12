@@ -2,75 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1258F5B5749
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF685B574B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiILJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
+        id S229881AbiILJkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiILJjp (ORCPT
+        with ESMTP id S229778AbiILJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:39:45 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A2FB1D5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:39:44 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 198so6777465ybc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=/locK1nMU2wTDSjtK8T7mBpx0lWcB3ffdE7tyuNnsYs=;
-        b=pThsu5An0/jrF8fEvIK3vLpJIylUeCqjtoaIipVkF5wKRk2gnbm0SWZvK0hB+8ZPny
-         3e4ujceiZzHQXHcHaBhonlrQhIspiuLFa8OgJRds3lu6rJBhrq2anAXXmzP6w/4YuFsY
-         cQ2kmTBFwj21sJxnir219xicAXrvcHCLC4eHoFgdGMM4SbW2cSJE1m7ZuN+mveJYldcB
-         aOthGIsSEMcRv+ho/WdsJIj0wZVYGFLlNZfQZvZ/0QCo+0ym/oLE5MW3gSFi7WlC5UmL
-         E8RpTmqSmauBiZP26OfZdvcAPqATsKjULON4soiC6m+P8bz1ncatWVESM7chQ0rHwQQy
-         sFcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/locK1nMU2wTDSjtK8T7mBpx0lWcB3ffdE7tyuNnsYs=;
-        b=s5lMxFRiWsk55YoARRUo4pG6uYB9YoD8qEcCWFBuIfXIyEehmky09006fc1ACkAPnp
-         coLCLhvOLlZqFbeyNKqnKE8XanJ7UVwPuc6g0gP4o/+R6hklnEoNulWPhszkk8aDmHEm
-         n/UFsOnwNFbF3ULl7iOhiyOdBch8ouPltcrWT0KZumAvNjO5OCfh1GWBvHriwNAp3zwO
-         cRttAuRiXfTFO8nIiZcJmrpaYB3NEHukrt/IvRZCG4K7J8HrANQV7O+d4n/+wLpF1zzZ
-         GcZTeiNZddhWSJWRPl9mhpH2/Ju8irWBvJM/sXtzL/k7O51A30eK0Txji3czHIArw0GK
-         nHcA==
-X-Gm-Message-State: ACgBeo3gzZB1ZZ0rTnAAhqP0HwkjOzOMWKv75bgMhzOViw7OCL0dHIt+
-        lJ/S3IfrJEygmzOv3YpYgJHn35JwL/rxJ8wdKoSrLCJnO+0=
-X-Google-Smtp-Source: AA6agR5ftx8aP1X1AogNJFtAI0hydnVUXmuHTwE6kQ+Vk8DHhTQ+/7JavoIx33IUmDGMTfaI7SPYh5thF91WCBNYhms=
-X-Received: by 2002:a25:1e86:0:b0:68d:549a:e4c2 with SMTP id
- e128-20020a251e86000000b0068d549ae4c2mr20782284ybe.93.1662975583465; Mon, 12
- Sep 2022 02:39:43 -0700 (PDT)
+        Mon, 12 Sep 2022 05:40:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8BF11AF08;
+        Mon, 12 Sep 2022 02:40:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC22D113E;
+        Mon, 12 Sep 2022 02:40:05 -0700 (PDT)
+Received: from [10.57.49.22] (unknown [10.57.49.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB79C3F71A;
+        Mon, 12 Sep 2022 02:39:57 -0700 (PDT)
+Message-ID: <1037211f-6c10-16de-4819-2a51d115f65b@arm.com>
+Date:   Mon, 12 Sep 2022 10:39:56 +0100
 MIME-Version: 1.0
-References: <cover.1662411799.git.andreyknvl@google.com> <CA+fCnZdok0KzOfYmXHQMNFmiuU1H26y8=PaRZ+F0YqTbgxH1Ww@mail.gmail.com>
-In-Reply-To: <CA+fCnZdok0KzOfYmXHQMNFmiuU1H26y8=PaRZ+F0YqTbgxH1Ww@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 12 Sep 2022 11:39:07 +0200
-Message-ID: <CANpmjNM3RqQpvxvZ4+J9DYvMjcZwWjwEGakQb8U4DL+Eu=6K5A@mail.gmail.com>
-Subject: Re: [PATCH mm v3 00/34] kasan: switch tag-based modes to stack ring
- from per-object metadata
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 06/13] Documentation: coresight: fix a documentation build
+ warning
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        corbet@lwn.net
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Leo Yan <leo.yan@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cover.1660829433.git.mchehab@kernel.org>
+ <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,93 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Sept 2022 at 13:50, Andrey Konovalov <andreyknvl@gmail.com> wrote:
->
-> On Mon, Sep 5, 2022 at 11:05 PM <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > This series makes the tag-based KASAN modes use a ring buffer for storing
-> > stack depot handles for alloc/free stack traces for slab objects instead
-> > of per-object metadata. This ring buffer is referred to as the stack ring.
-> >
-> > On each alloc/free of a slab object, the tagged address of the object and
-> > the current stack trace are recorded in the stack ring.
-> >
-> > On each bug report, if the accessed address belongs to a slab object, the
-> > stack ring is scanned for matching entries. The newest entries are used to
-> > print the alloc/free stack traces in the report: one entry for alloc and
-> > one for free.
-> >
-> > The advantages of this approach over storing stack trace handles in
-> > per-object metadata with the tag-based KASAN modes:
-> >
-> > - Allows to find relevant stack traces for use-after-free bugs without
-> >   using quarantine for freed memory. (Currently, if the object was
-> >   reallocated multiple times, the report contains the latest alloc/free
-> >   stack traces, not necessarily the ones relevant to the buggy allocation.)
-> > - Allows to better identify and mark use-after-free bugs, effectively
-> >   making the CONFIG_KASAN_TAGS_IDENTIFY functionality always-on.
-> > - Has fixed memory overhead.
-> >
-> > The disadvantage:
-> >
-> > - If the affected object was allocated/freed long before the bug happened
-> >   and the stack trace events were purged from the stack ring, the report
-> >   will have no stack traces.
-> >
-> > Discussion
-> > ==========
-> >
-> > The proposed implementation of the stack ring uses a single ring buffer for
-> > the whole kernel. This might lead to contention due to atomic accesses to
-> > the ring buffer index on multicore systems.
-> >
-> > At this point, it is unknown whether the performance impact from this
-> > contention would be significant compared to the slowdown introduced by
-> > collecting stack traces due to the planned changes to the latter part,
-> > see the section below.
-> >
-> > For now, the proposed implementation is deemed to be good enough, but this
-> > might need to be revisited once the stack collection becomes faster.
-> >
-> > A considered alternative is to keep a separate ring buffer for each CPU
-> > and then iterate over all of them when printing a bug report. This approach
-> > requires somehow figuring out which of the stack rings has the freshest
-> > stack traces for an object if multiple stack rings have them.
-> >
-> > Further plans
-> > =============
-> >
-> > This series is a part of an effort to make KASAN stack trace collection
-> > suitable for production. This requires stack trace collection to be fast
-> > and memory-bounded.
-> >
-> > The planned steps are:
-> >
-> > 1. Speed up stack trace collection (potentially, by using SCS;
-> >    patches on-hold until steps #2 and #3 are completed).
-> > 2. Keep stack trace handles in the stack ring (this series).
-> > 3. Add a memory-bounded mode to stack depot or provide an alternative
-> >    memory-bounded stack storage.
-> > 4. Potentially, implement stack trace collection sampling to minimize
-> >    the performance impact.
-> >
-> > Thanks!
->
-> Hi Andrew,
->
-> Could you consider picking up this series into mm?
->
-> Most of the patches have a Reviewed-by tag from Marco, and I've
-> addressed the last few comments he had in v3.
->
-> Thanks!
+On 18/08/2022 14:38, Mauro Carvalho Chehab wrote:
+> Using wildcards for cross-reference doesn't work, as the Sphinx
+> automarkup plugin is not smart enough. So, changeset
+> c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
+> tried to fix it, but at the wrong way, as it the building system
+> will keep producing warnings about that:
+> 
+> 	Warning: Documentation/trace/coresight/coresight.rst references a file that doesn't exist: Documentation/devicetree/bindings/arm/arm,coresight-
+> 
+> As automarkup will still try (and fail) to create a cross reference.
+> So, instead, change the markup to ensure that the warning won't be
+> reported.
+> 
+> Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
+> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-I see them in -next, so they've been picked up?
+Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-FWIW, my concerns have been addressed, so for patches that don't yet
-have my Reviewed:
+> ---
+> 
+> See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
+> 
+>   Documentation/trace/coresight/coresight.rst | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
+> index 4a71ea6cb390..826e59a698da 100644
+> --- a/Documentation/trace/coresight/coresight.rst
+> +++ b/Documentation/trace/coresight/coresight.rst
+> @@ -130,7 +130,7 @@ Misc:
+>   Device Tree Bindings
+>   --------------------
+>   
+> -See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
+> +See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
+>   
+>   As of this writing drivers for ITM, STMs and CTIs are not provided but are
+>   expected to be added as the solution matures.
 
-
-Acked-by: Marco Elver <elver@google.com>
