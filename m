@@ -2,199 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4E35B5893
+	by mail.lfdr.de (Postfix) with ESMTP id A2CF55B5892
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiILKkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S229992AbiILKlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiILKkp (ORCPT
+        with ESMTP id S230074AbiILKk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:40:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88A12495D;
-        Mon, 12 Sep 2022 03:40:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E01FB80C67;
-        Mon, 12 Sep 2022 10:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7AFC433D6;
-        Mon, 12 Sep 2022 10:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662979240;
-        bh=DIfVeEZaLk2MHz9A0QBEd0qnfu425kQdhOpMpcQXmiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f7yIlaBJhfHKhEAsCTDhsNQhEi+bsittT7YoYl5+IoUZ50/aKc5nasLsAl0drcB5j
-         pLE21tUBXYpl6eEskGqaZ1YNAh0Kc+zml48Z8bv9FU+PjM4Q0VCaCmp+hXl3ECFaLK
-         a4CUPHrD7f/xhh+3BAC2+4FwuLywAxsSy0rm3h4U+lqpuZq+23Bh/p3I0/fHLyTTaV
-         La89zSN/hjDIz0Mhuk4nWyVkV7PxgGzlv94KMJK6ight0dxglG0B9jDwoWJwBDWaOd
-         G1fNlQBfACK9/OQKd6UsyP1Pekcp6a+C8ICd0KvrSkEDNZnHRvlosPl4wco96L/ueM
-         gpIDcrvQZ7CZA==
-Date:   Mon, 12 Sep 2022 13:40:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
- EAGAIN
-Message-ID: <Yx8MoYF3Jed5G+uo@kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-2-jarkko@kernel.org>
- <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
- <Yxp4iIKjOQflQC2i@kernel.org>
- <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
- <Yxq6oAcGkg33tkb8@kernel.org>
+        Mon, 12 Sep 2022 06:40:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E9E25C54
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662979256; x=1694515256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xvZUSVtkt8NC7DmHmTz7x9gz0jguSGru5KDUJa1jfIA=;
+  b=Moi4Tw/SPlNESpNb/vOieDGgYlh9quendheTH2phweTNqKJ044hUCDpN
+   pX0EPDDwW7yW4YDjGBj9cD3vqFLVt3D2ndDiZTUXUAfvUPg9gzDz76pX+
+   iunKgCFFXcv5rpbFcFldilJsVBBTsdz0F3WubPROtJ0UuORvQb4tj1hDi
+   E5mw0LE4E5zPyv/niIEUsbZZg65O7lcR0GdrBwCU9c+bR7YNvBivYtnKw
+   FyYPPOu6ZjXB0z9BDPfYyebVCk9tUcA0aODFPzQkbejjpiPc31Wp0gghx
+   ZyX4J/fQITcFZjn8v2sNhFXacPjyT7WEYzJ5+aMoNOdI2CViElF3ExTId
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="277568237"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="277568237"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:40:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="616005410"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga002.jf.intel.com with SMTP; 12 Sep 2022 03:40:52 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 13:40:51 +0300
+Date:   Mon, 12 Sep 2022 13:40:51 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
+ helper
+Message-ID: <Yx8Ms2jhgwpiDqA6@intel.com>
+References: <20220912101522.69482-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yxq6oAcGkg33tkb8@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220912101522.69482-1-javierm@redhat.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 07:01:36AM +0300, Jarkko Sakkinen wrote:
-> On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
-> > > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
-> > >> Hi Jarkko and Haitao,
-> > >>
-> > >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
-> > >>> From: Haitao Huang <haitao.huang@linux.intel.com>
-> > >>>
-> > >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
-> > >>> may not finish in one shot and return EAGAIN error code
-> > >>> and count of bytes of EPC pages on that operations are
-> > >>> finished successfully.
-> > >>>
-> > >>> Change the unclobbered_vdso_oversubscribed_remove test
-> > >>> to rerun the ioctl()'s in a loop, updating offset and length
-> > >>> using the byte count returned in each iteration.
-> > >>>
-> > >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
-> > >>
-> > >> Should this patch be moved to the "critical fixes for v6.0" series?
-> > > 
-> > > I think not because it does not risk stability of the
-> > > kernel itself. It's "nice to have" but not mandatory.
-> > 
-> > ok, thank you for considering it.
-> > 
-> > ...
-> > 
-> > >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-> > >>>  	modt_ioc.offset = heap->offset;
-> > >>>  	modt_ioc.length = heap->size;
-> > >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
-> > >>> -
-> > >>> +	count = 0;
-> > >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-> > >>>  	       heap->size);
-> > >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> > >>> -	errno_save = ret == -1 ? errno : 0;
-> > >>> +	do {
-> > >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> > >>> +
-> > >>> +		errno_save = ret == -1 ? errno : 0;
-> > >>> +		if (errno_save != EAGAIN)
-> > >>> +			break;
-> > >>> +
-> > >>> +		EXPECT_EQ(modt_ioc.result, 0);
-> > >>
-> > >> If this check triggers then there is something seriously wrong and in that case
-> > >> it may also be that this loop may be unable to terminate or the error condition would
-> > >> keep appearing until the loop terminates (which may be many iterations). Considering
-> > >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
-> > >> similar to how ASSERT_EQ() is used in patch 5/5.
-> > >>
-> > >> Apart from that I think that this looks good.
-> > >>
-> > >> Thank you very much for adding this.
-> > >>
-> > >> Reinette
-> > > 
-> > > Hmm... I could along the lines:
-> > > 
-> > > /*
-> > >  * Get time since Epoch is milliseconds.
-> > >  */
-> > > unsigned long get_time(void)
-> > > {
-> > >     struct timeval start;
-> > > 
-> > >     gettimeofday(&start, NULL);
-> > > 
-> > >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
-> > > }
-> > > 
-> > > and
-> > > 
-> > > #define IOCTL_RETRY_TIMEOUT 100
-> > > 
-> > > In the test function:
-> > > 
-> > >         unsigned long start_time;
-> > > 
-> > >         /* ... */
-> > > 
-> > >         start_time = get_time();
-> > >         do {
-> > >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
-> > > 
-> > >                 /* ... */
-> > >         }
-> > > 
-> > >         /* ... */
-> > > 
-> > > What do you think?
-> > 
-> > I do think that your proposal can be considered for an additional check in this
-> > test but the way I understand it it does not address my feedback.
-> > 
-> > In this patch the flow is:
-> > 
-> > 	do {
-> > 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> > 
-> > 		errno_save = ret == -1 ? errno : 0;
-> > 		if (errno_save != EAGAIN)
-> > 			break;
-> > 
-> > 		EXPECT_EQ(modt_ioc.result, 0);
-> > 		...
-> > 	} while ...
-> > 
-> > 
-> > If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
-> > and modt_ioc.result != 0. This should never happen because in the kernel
-> > (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
-> > when the ioctl() returns EFAULT.
-> > 
-> > In my opinion this check should be changed to:
-> > 		ASSERT_EQ(modt_ioc.result, 0);
+On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
+> Provides a default plane state check handler for primary planes that are a
+> fullscreen scanout buffer and whose state scale and position can't change.
 > 
-> Right, I missed this. It should be definitely ASSERT_EQ(().
+> There are some drivers that duplicate this logic in their helpers, such as
+> simpledrm and ssd130x. Factor out this common code into a plane helper and
+> make drivers use it.
+> 
+> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+>  drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
+>  drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
+>  drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
+>  include/drm/drm_plane_helper.h     |  2 ++
+>  4 files changed, 33 insertions(+), 41 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
+> index c7785967f5bf..fb41eee74693 100644
+> --- a/drivers/gpu/drm/drm_plane_helper.c
+> +++ b/drivers/gpu/drm/drm_plane_helper.c
+> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
+>  	kfree(plane);
+>  }
+>  EXPORT_SYMBOL(drm_plane_helper_destroy);
+> +
+> +/**
+> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
+> + * @plane: plane to check
+> + * @new_state: plane state to check
 
-I was thinking to add patch, which adds helper to calculate static
-content length from the last item of the segment table (offset + size)
-and replace total_length calculations in various tests. 
+That is not a plane state. Also should s/new_// since it's just
+the overall atomic state thing rather than some new or old state.
 
-I won't send a new version this week because I'm at Open Source Summit
-EU and Linux Security Summit EU.
+> + *
+> + * Provides a default plane state check handler for primary planes whose atomic
+> + * state scale and position is not expected to change because the primary plane
+> + * is always a fullscreen scanout buffer.
+> + *
+> + * RETURNS:
+> + * Zero on success, or an errno code otherwise.
+> + */
+> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
+> +				  struct drm_atomic_state *new_state)
+> +{
+> +	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> +	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> +	struct drm_crtc_state *new_crtc_state = NULL;
+> +
+> +	if (new_crtc)
+> +		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> +
+> +	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> +						   DRM_PLANE_NO_SCALING,
+> +						   DRM_PLANE_NO_SCALING,
+> +						   false, false);
+> +}
+> +EXPORT_SYMBOL(drm_plane_helper_atomic_check);
+> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+> index 79e8e2017c68..28cf9c87f86d 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+> @@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
+>  	return ret;
+>  }
+>  
+> -static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
+> -						     struct drm_atomic_state *new_state)
+> -{
+> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> -	struct drm_crtc_state *new_crtc_state = NULL;
+> -
+> -	if (new_crtc)
+> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> -
+> -	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> -						   DRM_PLANE_NO_SCALING,
+> -						   DRM_PLANE_NO_SCALING,
+> -						   false, false);
+> -}
+> -
+>  static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
+>  						       struct drm_atomic_state *old_state)
+>  {
+> @@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
+>  
+>  static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
+>  	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+> -	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
+> +	.atomic_check = drm_plane_helper_atomic_check,
+>  	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
+>  	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
+>  };
+> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
+> index 777ccd250871..ea5b3239a659 100644
+> --- a/drivers/gpu/drm/tiny/simpledrm.c
+> +++ b/drivers/gpu/drm/tiny/simpledrm.c
+> @@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
+>  	DRM_FORMAT_MOD_INVALID
+>  };
+>  
+> -static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
+> -						       struct drm_atomic_state *new_state)
+> -{
+> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> -	struct drm_crtc_state *new_crtc_state = NULL;
+> -	int ret;
+> -
+> -	if (new_crtc)
+> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> -
+> -	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> -						  DRM_PLANE_NO_SCALING,
+> -						  DRM_PLANE_NO_SCALING,
+> -						  false, false);
+> -	if (ret)
+> -		return ret;
+> -	else if (!new_plane_state->visible)
+> -		return 0;
+> -
+> -	return 0;
+> -}
+> -
+>  static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
+>  							 struct drm_atomic_state *old_state)
+>  {
+> @@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
+>  
+>  static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
+>  	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+> -	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
+> +	.atomic_check = drm_plane_helper_atomic_check,
+>  	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
+>  	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
+>  };
+> diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
+> index 1781fab24dd6..7ba414655d69 100644
+> --- a/include/drm/drm_plane_helper.h
+> +++ b/include/drm/drm_plane_helper.h
+> @@ -41,5 +41,7 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
+>  int drm_plane_helper_disable_primary(struct drm_plane *plane,
+>  				     struct drm_modeset_acquire_ctx *ctx);
+>  void drm_plane_helper_destroy(struct drm_plane *plane);
+> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
+> +				  struct drm_atomic_state *new_state);
+>  
+>  #endif
+> -- 
+> 2.37.1
 
-BR, Jarkko
+-- 
+Ville Syrjälä
+Intel
