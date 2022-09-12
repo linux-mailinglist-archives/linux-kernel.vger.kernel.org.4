@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3E35B57A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715795B57A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiILJzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S229786AbiILJ4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiILJyj (ORCPT
+        with ESMTP id S229919AbiILJ4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:54:39 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62751371A5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:54:13 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-127f5411b9cso21929179fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:54:13 -0700 (PDT)
+        Mon, 12 Sep 2022 05:56:31 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F08DBCC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:56:30 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so11866646edc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
-        b=DsakfoHHvjkCzFmrXswEp7xEl2vlHecZUQLc4AeBee9qTkBuz7JW8GjUYBFDygDbGg
-         SJZHfs8zhC0TDbr2MxYaLmmCAM8gMVQX08/4bDTXEomnCckKoAoOgb2EcXSVSXcte7IZ
-         WtK4534RRAq1I5IjbGN/Gh5tOUG75wqToFeWl2IK1oVF0+T5Hu2L7JUAapRNmnqmSyVW
-         QBCU8MKDENYIJKLmAuQ6toOkEPUWP5qobeYB/20qwOeRvn6lE4+wZyAiQI+/OQIjxbCd
-         4UnV7QW/AEISrqn30CmubVJAN+HEyQtiin+kjotgbNH8iHcB3iiK0CkBfyIt9gZPL18t
-         qstA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=B0+OE8VXDoRTxh9i6eriGohbYVJR3cjU3m0gr8M6bQU=;
+        b=kdvGPE8Of/ge0WhsAzI3BcvMQhAQVx75RN70Ut262Bd0Y3yYnZi7xnFEkfhhLXo0l7
+         bKGrlGbIpWb1gj8dwAYucqHPJYmFcfcnWV8LMwBb6RjkgdpYopM4OUgpw0vSwAg7Qb5V
+         Sq7DVuiSXE9+LcYQK508BZH18sqBFyFm1WVbHxmROdxPchBFVZ9DRxN/weMqu+LoWGW4
+         OFQmzleFBpcTwUb/KCZ3F9k3i5Hw/6Yh8anVyyCNzWKv5j4JIop9Gw7ND9yEPDjBtF0m
+         TdIPx5Bs5y+HwKXWy97L35a3199k5mZH/nNYibjkJOwkGVlvjHnyIbuXAlFMfqQhkC9W
+         tPUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
-        b=tLO4ctpJdyNwlwsrfKcqJP97Wc+Ap96oc4usEtRwYaXlIXW/Zf3rmrCuwhkhYbA4l/
-         Hc1oxuj2pqm8B1yQcUooFCfunDJRfbwd/TLQobmx7kmHm00/IVjLnDqCrfBzntuuEPvO
-         YmoM9mTXc6CBTL4+0SWNF4FK8E4xpeSyFaDjx0W2QozIIhnlAu1KkTRuq2DiOEFcxgyz
-         gY5SPhyUMp2iLMKmcDqyjldDRmdcB5YeL1UvtLKUjMqrQ41y/NYkcIbnySVZM1nPqTs5
-         Ni/WWymQYz0y+EkyjBOgNo3WpMEFZ4esdgIQstcOdyi5OY8OJxNYOyd08DBp1MwPEAfX
-         Wung==
-X-Gm-Message-State: ACgBeo2R/c6f6ggx+6vIf4QTJ2igLEZ4aXliBK6Bp9DsvtgBACzDrMPw
-        qmV3QOzo3GcW6NTe1WEjMeZJIwCCpcUsOc9/LUE=
-X-Google-Smtp-Source: AA6agR7+m1HbyJV4ki1kjoSYA9QLm/LD8votEjFZJy78nGw4Ac59Z8KvjYPBj2+/ehEfbiiwDxabrSq63WSPY5/IieE=
-X-Received: by 2002:a05:6808:1717:b0:334:9342:63f1 with SMTP id
- bc23-20020a056808171700b00334934263f1mr9115886oib.77.1662976452752; Mon, 12
- Sep 2022 02:54:12 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=B0+OE8VXDoRTxh9i6eriGohbYVJR3cjU3m0gr8M6bQU=;
+        b=ysJU5aap1Qw4IeXekrZJKCk3yJK1/r29ZYpUj6Gmg+1/q7FsNJ1PKXaev/mTLMyX03
+         eFPjKT4ryODtC6A+uv64HYgK73RDLr/tWIT6Nm8cOMyayFM29+w/koo/xQmFqhmOBJ+N
+         536S40PPHLXd/uLsi9ewTVlL2AAfpEjspBTQK9a56705yzYBlPiw/dRni7XLLdqYAZWz
+         4Y5m8yyiyIJ3Ew6N0q59pkpPq1lkk1Hk6rKgr6lJyJd4xclxdddWwBtedf6JNwbJmMq3
+         oX8KZ90KP7acnfnnACIB07hejDyLAdLFcqxiqCj2X0xMQOE7LYoxRi9RZ16Tf7nXUqru
+         wwQQ==
+X-Gm-Message-State: ACgBeo1WDRMUQxEnZ5+W85q3km28QpsuRqsLH31hk3NjKKRVnXnkQDQt
+        KzCQ+g0Mhoyh1ttnJ8g5lZPMcy457EDZqJ2J9ua9RQ==
+X-Google-Smtp-Source: AA6agR5+RvJMt7gLbYMaWFWPzBly7Pn1NpOVb/B5jQlouqfeTSIiY9yQvRKZxEHDImxz9p+HDxLGR3s+rlAoQFYgTQA=
+X-Received: by 2002:a05:6402:354c:b0:451:d47f:653 with SMTP id
+ f12-20020a056402354c00b00451d47f0653mr3272379edd.69.1662976588677; Mon, 12
+ Sep 2022 02:56:28 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6358:52c7:b0:b3:4dd7:8c58 with HTTP; Mon, 12 Sep 2022
- 02:54:12 -0700 (PDT)
-Reply-To: sb9174937@gmail.com
-From:   Susan Bikram <redw07882@gmail.com>
-Date:   Mon, 12 Sep 2022 02:54:12 -0700
-Message-ID: <CAND8bMJQrg9BuUmu4gCqHhjEHneSZaQVVSsnky4nKhQiCbsMDw@mail.gmail.com>
-Subject: Waiting to hear from you
-To:     undisclosed-recipients:;
+References: <20220909121329.42004-1-brgl@bgdev.pl> <20220909121329.42004-3-brgl@bgdev.pl>
+ <YxykorLetCjAls/Z@sol> <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
+ <Yx8Bj0+4STpklMc2@sol>
+In-Reply-To: <Yx8Bj0+4STpklMc2@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 12 Sep 2022 11:56:17 +0200
+Message-ID: <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [sb9174937[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [redw07882[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [redw07882[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear ,
+On Mon, Sep 12, 2022 at 11:53 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
 
-Please can I have your attention and possibly help me for humanity's
-sake please. I am writing this message with a heavy heart filled with
-sorrows and sadness.
-Please if you can respond, i have an issue that i will be most
-grateful if you could help me deal with it please.
+[snip]
 
-Susan
+> > >
+> > > My knee-jerk reaction here was to make the pid unsigned, as we never
+> > > pass a negative PID.
+> > > Keeping in mind that the existing kernel will return 0 for this field
+> > > (the existing padding), so 0 needs to be excluded from valid PIDs
+> > > anyway.
+> > >
+> > > Andy suggests returning -1 for kernel held lines.
+> > > In that case 0 would mean "old kernel", while -1 would mean "kernel
+> > > held".
+> > >
+> > > As libgpiod will have to convert the 0 to -1 when returning the PID to
+> > > user-space as a pid_t, I'm good with the uAPI using 0 to mean
+> > > "no PID available" for all cases. I'm still open to passing -1 for
+> > > kernel held is there is a use case for it, but I don't see one.
+> > >
+> >
+> > Using -1 sounds good but I've just realized there's a different
+> > problem. A process holding a file descriptor may fork and both the
+> > parent and the child will keep the same file descriptors open. Now
+> > we'll have two processes (with different PIDs) holding the same GPIO
+> > lines (specifically holding a file descriptor to the same anonymous
+> > inode).
+> >
+> > This already poses a problem for this patch as we'd need to return an
+> > array of PIDs which we don't have the space for but also is a
+> > situation which we haven't discussed previously IIRC - two processes
+> > keeping the same GPIO lines requested.
+> >
+> > I don't have any good idea on how to address this yet. One thing off
+> > the top of my head is: close the parent's file descriptor from kernel
+> > space (is it even possible?) on fork() (kind of like the close() on
+> > exec flag).
+> >
+> > I need to think about it more.
+> >
+>
+> I thought the O_CLOEXEC was set on the request fds exactly to prevent this
+> case - only one process can hold the request fd.
+>
+
+O_CLOEXEC means "close on exec" not "close on fork". When you fork,
+you inherit all file descriptors from your parent. Only once you call
+execve() are the fds with this flag closed *in the child*.
+
+Bart
