@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133C65B5AFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76335B5B08
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiILNRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S229823AbiILNVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 09:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiILNRU (ORCPT
+        with ESMTP id S229652AbiILNVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 09:17:20 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C192ED5F;
-        Mon, 12 Sep 2022 06:17:17 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C9kN1F026955;
-        Mon, 12 Sep 2022 15:16:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=DJv34owWXbp7wiiVh54Yb8R/LId3v7mQgsIrzElrNlE=;
- b=LBasRIrueL6b7XRNxyuUr3IiD7719JjzKhV7OCtI57RP61Ck+7qsT4q9bP42g6HGD0oh
- IvWDO69Z0Wa+9wPbqAhXsao8srTV4oP0YLQT/q8PaLeprBFWyHT4YIWkgNqqw6L9ZNl+
- Se39iiZgdX6Ll6B/hQWDUwfLL87VrJ9r3RJeKPjbZXbDIpx96BMtwcqkXpqRk6KwbcAB
- ELyQE0rWxzqdHIKJ/bTuEudUocw4jA8ZmVg6pO04VltDxhKljyxztxMZYn1pPphxAu3Y
- MzdwphUU+zNhyVjlJwXxWyh5LbPTvvQCpmCUE8HhDRDRI4esvoUFsS6AzWBUnk+cvCVO mg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jgjwv261a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 15:16:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ED02910002A;
-        Mon, 12 Sep 2022 15:16:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E0CC122FA29;
-        Mon, 12 Sep 2022 15:16:51 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.123) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Mon, 12 Sep
- 2022 15:16:51 +0200
-Message-ID: <be86a79c-253e-2054-4cfa-37b950f578d7@foss.st.com>
-Date:   Mon, 12 Sep 2022 15:16:50 +0200
+        Mon, 12 Sep 2022 09:21:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F11121E12
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 06:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662988859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QcJ4hYnOykjT5bKhT2L+jboPTMLweg9s7FN9sWH8lgs=;
+        b=P0lz18RoPsCiC8i8NmPB2XTNveHaqOBnhbKecRmw4uwBx5ycGe4rYcmvsjfmNfUXXhMJ1h
+        7SaG89OgkcDaio35Oc/IasjjMWYMJrmXP5WiPtA7QmwR16HJcIL2eapMMT7MlTlO9n20zq
+        9nVQFlfTttRCKr0jsOXWtpaZ+fHVZN8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-668-L4qFUPMqPwu7x2MEi03oxQ-1; Mon, 12 Sep 2022 09:20:54 -0400
+X-MC-Unique: L4qFUPMqPwu7x2MEi03oxQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62D7529ABA1F;
+        Mon, 12 Sep 2022 13:20:53 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.57])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BE4249BB60;
+        Mon, 12 Sep 2022 13:20:48 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+References: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+        <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
+        <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+        <20220908155605.GD8951@fieldses.org>
+        <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+        <20220908182252.GA18939@fieldses.org>
+        <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+        <20220909154506.GB5674@fieldses.org>
+        <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
+        <20220910145600.GA347@fieldses.org>
+        <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+        <87a67423la.fsf@oldenburg.str.redhat.com>
+        <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
+Date:   Mon, 12 Sep 2022 15:20:46 +0200
+In-Reply-To: <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org> (Jeff
+        Layton's message of "Mon, 12 Sep 2022 08:55:04 -0400")
+Message-ID: <875yhs20gh.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] ARM: dts: stm32: argon: remove spidev node
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        <linux-spi@vger.kernel.org>
-CC:     Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
- <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.123]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To EQNDAG1NODE4.st.com
- (10.75.129.133)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_08,2022-09-12_01,2022-06-22_01
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 10:21, Wolfram Sang wrote:
-> Commit 956b200a846e ("spi: spidev: Warn loudly if instantiated from DT
-> as "spidev"") states that there should not be spidev nodes in DTs.
-> Remove this non-HW description. There won't be a regression because it
-> won't bind since 2015 anyhow.
-> 
-> Fixes: 16e3e44c5b87 ("ARM: dts: stm32: Add support for the emtrion emSBC-Argon")
-> Cc: Reinhold Mueller <reinhold.mueller@emtrion.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Please take it via your platform tree.
-> 
->   arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi | 6 ------
->   1 file changed, 6 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi b/arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi
-> index ac53ee3c496b..30156b7546ed 100644
-> --- a/arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi
-> @@ -435,12 +435,6 @@ &spi1 {
->   	pinctrl-0 = <&spi1_pins_a>;
->   	cs-gpios = <&gpioz 3 0>;
->   	status = "disabled";
-> -
-> -	spidev@0  {
-> -		compatible = "spidev";
-> -		reg = <0>;
-> -		spi-max-frequency = <100000>;
-> -	};
->   };
->   
->   &timers1 {
+* Jeff Layton:
 
-Applied on stm32-next.
+> On Mon, 2022-09-12 at 14:13 +0200, Florian Weimer wrote:
+>> * Jeff Layton:
+>>=20
+>> > To do this we'd need 2 64-bit fields in the on-disk and in-memory=20
+>> > superblocks for ext4, xfs and btrfs. On the first mount after a crash,
+>> > the filesystem would need to bump s_version_max by the significant
+>> > increment (2^40 bits or whatever). On a "clean" mount, it wouldn't need
+>> > to do that.
+>> >=20
+>> > Would there be a way to ensure that the new s_version_max value has ma=
+de
+>> > it to disk? Bumping it by a large value and hoping for the best might =
+be
+>> > ok for most cases, but there are always outliers, so it might be
+>> > worthwhile to make an i_version increment wait on that if necessary.=20
+>>=20
+>> How common are unclean shutdowns in practice?  Do ex64/XFS/btrfs keep
+>> counters in the superblocks for journal replays that can be read easily?
+>>=20
+>> Several useful i_version applications could be negatively impacted by
+>> frequent i_version invalidation.
+>>=20
+>
+> One would hope "not very often", but Oopses _are_ something that happens
+> occasionally, even in very stable environments, and it would be best if
+> what we're building can cope with them.
 
-Thanks.
-Alex
+I was wondering if such unclean shutdown events are associated with SSD
+=E2=80=9Cunsafe shutdowns=E2=80=9D, as identified by the SMART counter.  I =
+think those
+aren't necessarily restricted to oopses or various forms of powerless
+(maybe depending on file system/devicemapper configuration)?
+
+I admit it's possible that the file system is shut down cleanly before
+the kernel requests the power-off state from the firmware, but the
+underlying SSD is not.
+
+Thanks,
+Florian
+
