@@ -2,173 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928895B54A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D315B54A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiILGlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S229854AbiILGop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiILGlK (ORCPT
+        with ESMTP id S229536AbiILGok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 02:41:10 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4139C22BE7
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:41:08 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id p5so9358151ljc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=IUm/MN9hYg83su7ZYahLGm5MEwsIsG/QUzjstSeG6Mo=;
-        b=kI34oFaT/0WS4Cfj03tST6nGUpXjNT380JwZ8FEdZt75QHxAkIIf6k0og+uTwf9eTq
-         NucX3cDSq5+0xiCS0rQXRopsfEykwrDtmoLfDq5k1ccgq58Ym+3kbNX/k38bz/lnJhfd
-         a5yFamW9SM3CFIxVNuRbQoPP7Su31yvXtOON777PIstuoMTTkLMqG/H/F6ObCibwPlCQ
-         NEH3rmwq85391FHz4YrWGLtUoGLzBJgCcB04MAVXh/Kel3ysSkw/tN011zrV6s6epDp5
-         IE+auP7GxK133EIlSC8Ez0IiUkBvtfxpVv8in9PJQMvU6spqLCbJIYuXosuQfHsL3edu
-         xQdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=IUm/MN9hYg83su7ZYahLGm5MEwsIsG/QUzjstSeG6Mo=;
-        b=FEca2A380PFKcJ9PJRNk31+PwAL9D9MGZ3Z1HClTY7lgfeiqp1udQKCNQAH6wLdTcK
-         tuDiM0nwGaXN+T1f3DsapELiOnKhPh2di1uQKarhVzdPwAPHFT2Md75zR1JgBYPAPUfr
-         HKWNdnHD6w45AOeW8FImxuGFea2iOG/ut6ZS9SMGAHbuDhQwtGK7NyHt7vwrxJnJCgvf
-         +Mq3an7i8rfOa6JMlj90HR0XI3Nx2KQcd9W4bVYQFsOGljAxhVUfEkJGAg0iXAra7M7V
-         rsGqShtsxJgHADFeRIqgeRuOeqa2PaT0F6BKLK6e1La1PfBt1XMdrOGVXWc2AMFPW5Wf
-         nOBQ==
-X-Gm-Message-State: ACgBeo3eFs4+5FrNeRKpF6RwS+DaXJ+a0PpSiRTj35MTZ+dMaEHFPsX7
-        a7tebnMQHlP/cYXuCBUsjlDFSXN8xp9cIAaKpkfg6Q==
-X-Google-Smtp-Source: AA6agR5s2whA7uWOJa+KmUu83OmHts4XhTJeLfLamvGr/SSqHLqGGJ3PE6/vnSEQ3bawMQV3MgXyResxjLGZLowFb1s=
-X-Received: by 2002:a2e:7314:0:b0:26a:ca18:60eb with SMTP id
- o20-20020a2e7314000000b0026aca1860ebmr6790851ljc.69.1662964866499; Sun, 11
- Sep 2022 23:41:06 -0700 (PDT)
+        Mon, 12 Sep 2022 02:44:40 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E686D91;
+        Sun, 11 Sep 2022 23:44:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WJUWJyaL5+XNO+pE8zm2LEdWXCRsr9zMoLrkfdhqq+bv6TXaUnjtLTmeRcLO/VvmZ7/ZQqRGBQosQ7y4gDwAvUiiETydHwD/Y0szrP70mW/mQXbookF2YQzCQaFfpLUegMcjPPDcWOsiJMZ6FKjJXRlJGWg7EYBl7EIm96KKZ4x5A1PNYTo77lEie5Wm933GGP2IUffUtv4jrxVIz1+NekEVvUb17kdt0ipDzBRJYgMNoZFUyBsOQh2AIiwrFpOaphU6gNI1JT0NTGMlJMMMY3ZjacG11Ju2gbt/yP7x7eqgSCYMbiDuzM12IhdXl/uqfwm7/Wb4Aje+MTXQ/8P36Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b0AJbi8v7jPAJ+qzJjUpE0VrZ/EyCndcHEld+PfnUgY=;
+ b=DPFpsEBcuiikHzYvLftwqhL7Hek+92iGyxn++415m8rYWQH/nR4p/OBEJ8UEO1ZzqZdz+A/6WUJ+5pmXW6cX6rIiZ9ZVgyFkKhqhKU6tM8RvjE7P+R9MddnB+stlAuMtAC1zIZlXl+F+L/YLepDUnMl3cNlPPTjTUzxlQBSTwOMR//gQBgWoMChom4HxgIVcaRF4NQFnt3ncYb0ndFfwT+aGiVEBqnXKenGBjgIp8XCeDwBknSpf4c1AgrHHGzXGISqCkBLzhrS5uDS+YcZwa13jkNA5suDbBW9OS2JlzmzdbIUoh3jlt857DIl0Qbay4QaQYpcF9UtD6lC4gRygVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b0AJbi8v7jPAJ+qzJjUpE0VrZ/EyCndcHEld+PfnUgY=;
+ b=CsMnu6wBOaCqa5z/YDDBnc4VHu/NKWGKHolgqovXZJTqcNBD1XJ/Xj0ISTIWI7KpO6XU1lMCSQ9DMfGTLiTdDmP0yHQ+4wRpsIvBGIrEAxj9LfuUXoTOPI/rpdEvI0f187P3lGrvLOf9NfCz6cXvqOEkLY9ddSrRuxi+lsv4Dx4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SJ0PR12MB5405.namprd12.prod.outlook.com (2603:10b6:a03:3af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
+ 2022 06:44:34 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 06:44:34 +0000
+Message-ID: <0658c1ee-ba64-711d-241b-8fc6f510a50e@amd.com>
+Date:   Mon, 12 Sep 2022 08:44:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/6] dma-buf: Remove the signaled bit status check
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+ <20220909170845.4946-2-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220909170845.4946-2-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0177.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a0::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20220908144424.4232-1-zong.li@sifive.com> <20220908144424.4232-6-zong.li@sifive.com>
- <36fe0073-7fa2-9733-7041-d9f70da1a5ea@microchip.com>
-In-Reply-To: <36fe0073-7fa2-9733-7041-d9f70da1a5ea@microchip.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 12 Sep 2022 14:40:55 +0800
-Message-ID: <CANXhq0rRZhPtrpRQOnwbJj-GRVSCHErLxvGnPAxqfJBk8rNRPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] soc: sifive: ccache: use pr_fmt() to remove
- CCACHE: prefixes
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB5405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19ba2985-6291-4f28-fa1b-08da948a4066
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ymQtl50FBGF2Hv3yffPrXWCV49lpWH9gldjkVdMBaS2nazhmcOqon1nRChcyQjR2+aweg23SSUXbHC/bzSjm8irOjqU/Yqs0d2Lxx+irJEn1nLEeJvH2B8FU5R5/qqEoYCQiWQAvBfkSKFw+OV584o+aYCgRGeltJWGYd9KA3JGHNpexBnJcZ4lXHmpPkfeFOZQKYoijOVAu6uLZKIMa5lk8vksIVCDq5JIde11vIzwegRMiypUNxNlNSr91uIC/NeAlfBM4CrJHzvAlfDmZt+yn8LDpuEOozt223nqR55H6CgygtSQIHvdDvFNx+dXfpUd7DS7ztnXf1t8wqto12OE43I+fYRh13D4nM4iWq934I2HwlFxdeYBPPKfMp1/1BfY9/vFI2eP3F4HEuvYxjhpdbXx5evzD62s8VI3xLgePh7x0rwuAvQnrI2a/CTI3eyLA17Hw/Xq6iRArNhs9VBEbCc0UiMY2zw1rfrg5dYS4RTfHiDYWfLKUNFGNTfxtk0a5vTuTIkDkRdThIroBI2rt5F+zk02d0dWkOVMO20L/FIMC2zcE5+FeS2WzluvpARlDX/DuU3tpBt7XILqBsEDoaLGu6tlEk0MzZMMUR0PVSxZkTCMxgy1moHjg13b9wWSdziSglbCjjRw2UqSRG+DLxZFcm5sECV4S5xkyaPIV22f54MhSqke6PoqFAcdSSgyj1ECv8LdsIvxtXg4zDKn0neL4dMdcBY5hLYQyAavymh9YqAD1hcS20ky1ptm35TaZRY47yGPRTEYe+7qko7Fmi7qomcoSneKyGpi6EhCKBh9KGpUsaeLdEmyzyb6h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(346002)(136003)(366004)(186003)(2616005)(8936002)(5660300002)(83380400001)(66574015)(6512007)(86362001)(2906002)(6506007)(31686004)(36756003)(31696002)(6486002)(6666004)(478600001)(921005)(38100700002)(41300700001)(8676002)(316002)(66946007)(66476007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dE13R2l1WFRKUk5QaTdhaTBrc0JWb2ZLSGk1eDV5UnZFRDNWQitBaXMrbmJj?=
+ =?utf-8?B?b1d5d2pDSlV0WHFuRTlGUnVTTVc2NGdCRHdBZWVNWUZ3dmo4V3BVbE5FZkEz?=
+ =?utf-8?B?cG5BYUVqOUpLUnRsVGgrdHhoZHA0TG5rd3dWajM2eHNBV0NQa21Vc0ZIWFpP?=
+ =?utf-8?B?WFJEbE9WenhFdVJhcGdwakxLNVVsbUhpcUZ1Q3MwaXFtYlVDdnBTSzVWZDRa?=
+ =?utf-8?B?TmcrdmdYVFNmbkw4ZFlSblVESjZ1QWR2M0pxYTRMeVowQXR3ckJXTkw5dmVH?=
+ =?utf-8?B?M1NtR0lHcWRhVmlkRlBnd0EweVlwWS9UNFpzUWJLK1J6c1A4bWhLTm1QVHlQ?=
+ =?utf-8?B?WTFjTHBSeWdvcTZ4dW1YeTVnRUJXaGdrZjFLZGZKWUgvQjY3OUJGMFZtMHFY?=
+ =?utf-8?B?Vi9DRC9ibDhTSG1XeThSemYzV05OaFM1YWFhSExndDIwZ04yVTVnaXh3L1J3?=
+ =?utf-8?B?KzU2QmJUU3FqaHNSTnFmWnhTYS8xbjlDZDFNVlhTL0MrZ2w4andWeDlDQXln?=
+ =?utf-8?B?bmVQMnh3MFZyc1lKdzg4L1A0TXNKMlhvQm9yU3dqOEpNdXVabjdEaFF1VFFy?=
+ =?utf-8?B?SEtNbTRwZ1Y5a2lWdWlnSmpnT2JiOEVsYnMrYmlhNnVsL09MNFhZM09qNmJL?=
+ =?utf-8?B?WWdYT3B3MGthS0pKRUlpSmRCNDUyZmZaWlBXTmxvWllpWXBkMDVLV29jTDZt?=
+ =?utf-8?B?ME5tY2dqcHVzT2lrc1NmSy9tcVJCQ3BzOXNUcklWUnVEZ0tnNDgrbm40VmNP?=
+ =?utf-8?B?SlZ2Mmh6OVZkYVpkTEdqSFE4VmkralZ3WVBEcUpPR2RBOUhJSHlRWEZlSTZo?=
+ =?utf-8?B?V2h3RkJHcm5zaWIxMWhPbGFWMUNRMzI3ckxKRW1BSzV1Vjk0OTJBUG83dTRI?=
+ =?utf-8?B?V2JOWVo3d0pOOEw4NDFlNzVYa2l0QmIwdWpwYnNmZDVialpYTlAvanNXRXZq?=
+ =?utf-8?B?bEhaRFV5WFZvRFlwNE9aS2kvMlpzZmFDSWpEOGdET29Tb2ZvN2tnbzZiR3Bs?=
+ =?utf-8?B?a25Rb3VVaUtFcE5CNitZdGl6TlhWUzhxRVcwRkhGYVFnMjdzL2lIQkdkZkVO?=
+ =?utf-8?B?aFVyb0lVMG5jL052VDM3eXZvZEc4NXJSRU52R2N4Y1JSVkttRWgrc1VQTlU2?=
+ =?utf-8?B?NUkzU3ZGRUdZRjh5ejJyK1VaK2ZkZ2plblpYS290QUlsUmN2ZEwwNmdQYnY4?=
+ =?utf-8?B?RnI2d1YycHUvQ0ozeEdCbXJmck5MTEIyQ1hUc1ozQWNGMDRoTm5qOExVMm8v?=
+ =?utf-8?B?b2RvUWdSdUpDcktCWkpUK1c0cWhwNkVJK0dLMzZJREJlVGtLUDl1UVlRdHdr?=
+ =?utf-8?B?OXV6UU9IckgvRHQ0NUZZQ2J6dSs3VDZDV2hqd3M0WkhrUHhHdEFlMERmSlQx?=
+ =?utf-8?B?d3JGaVlKVEFUcE9IamRMamh0RVlxODhma3NmWk41Vm5ORzl4WFNwQW5Tb01n?=
+ =?utf-8?B?Zm02YVAzbUdJNkRsV0VkZjZvamFCQzI3R2dibzl0c25ZVmpOeC9QMEN0T2VD?=
+ =?utf-8?B?czdpcWsrZVRhTG9pUWZnNkJjT2xWQUdQczAwUFg0eWhnVmxBaW0yZVZlb2hL?=
+ =?utf-8?B?Rk5sY25tYS8rU1RYcTliSThBU25RVXloV255VEMvRlVYQTBmQmVkZlBORWtQ?=
+ =?utf-8?B?QmtjaG1HZjNqT29mM3JRc0xRKzZIY0s5ak5OSzN0OVhocHFJUzdWajcyMGpx?=
+ =?utf-8?B?MWdpYi9hTGVhdjQ1d3pCUzhId3h6VlpUSHdpL01ZMXFCVUlXOGJBYk9RWC9m?=
+ =?utf-8?B?KzlTZUZtb1ROUllTSUYrcmVFd3FtdGxNUkZFRzQxc3NNWFlmODhYRTBacnVu?=
+ =?utf-8?B?UWxTRFBoRHBWaGQycEN0MkFMQ0dmUXEwQytDVXdkZ0tGZ3lyNWNRVk5uRG5H?=
+ =?utf-8?B?QjQ1TEZNOTdvOUlFMVlqdVNFcVpzMTl3NlVWNmZxbS8zZXBpUFV2T3I2YzBj?=
+ =?utf-8?B?L2dMSTJvNlpiYmcrSFRGV3htZzJwRThLTGx5YTMrV2hzVDF1VEZFNkh2NG56?=
+ =?utf-8?B?bTFWaGx4TEJNd29DZ2dLQ3dBdU1mRmloRUE3WjZoUTU0S3NqSTRwVW5mdkJ0?=
+ =?utf-8?B?bFVNU2dOdmh4VUgwNHBXVmtnSTRuSytCU2hhQm5JQmpwbUs1bS8xZ0lGNVRl?=
+ =?utf-8?B?VDkyWVkreXZDektyQWQ5NmNvVnhOTFcyZDhxeXF3ZlZQQTlVV0tqRlI4MTZV?=
+ =?utf-8?Q?orr8p55zofqAb6q8t1bnxrnAX1K/G4jKSLnrxLkpTaX6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19ba2985-6291-4f28-fa1b-08da948a4066
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 06:44:33.5890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xzDQ7fmXc1va/OIwPd0tCFjSs8FQePDWDTpLV801PXhTHtD8OCc5PvzPA87O8UzW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5405
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 2:40 AM <Conor.Dooley@microchip.com> wrote:
+Am 09.09.22 um 19:08 schrieb Arvind Yadav:
+> Remove the signaled bit status check because it is returning
+> early when the fence is already signaled and
+> __dma_fence_enable_signaling is checking the status of signaled
+> bit again.
 >
-> On 08/09/2022 15:44, Zong Li wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > From: Ben Dooks <ben.dooks@sifive.com>
-> >
-> > Use the pr_fmt() macro to prefix all the output with "CCACHE:"
-> > to avoid having to write it out each time, or make a large diff
-> > when the next change comes along.
-> >
-> > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> btw, I think Ben missed a print - a pr_err() in init().
->
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 
-I got that one, I will fix it in v4
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-> > ---
-> >  drivers/soc/sifive/sifive_ccache.c | 15 +++++++++------
-> >  1 file changed, 9 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
-> > index 58d14f11a63a..b3929c4d6d5b 100644
-> > --- a/drivers/soc/sifive/sifive_ccache.c
-> > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -5,6 +5,9 @@
-> >   * Copyright (C) 2018-2022 SiFive, Inc.
-> >   *
-> >   */
-> > +
-> > +#define pr_fmt(fmt) "CCACHE: " fmt
-> > +
-> >  #include <linux/debugfs.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/of_irq.h>
-> > @@ -85,13 +88,13 @@ static void ccache_config_read(void)
-> >
-> >         cfg = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-> >
-> > -       pr_info("CCACHE: %u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
-> > +       pr_info("%u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
-> >                 (cfg & 0xff), (cfg >> 8) & 0xff,
-> >                 BIT_ULL((cfg >> 16) & 0xff),
-> >                 BIT_ULL((cfg >> 24) & 0xff));
-> >
-> >         cfg = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-> > -       pr_info("CCACHE: Index of the largest way enabled: %u\n", cfg);
-> > +       pr_info("Index of the largest way enabled: %u\n", cfg);
-> >  }
-> >
-> >  static const struct of_device_id sifive_ccache_ids[] = {
-> > @@ -155,7 +158,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DIR_CORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_LOW);
-> > -               pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DirError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DirError interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -175,7 +178,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DATA_CORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_LOW);
-> > -               pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DataError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataError interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -185,7 +188,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DATA_UNCORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_LOW);
-> > -               pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DataFail @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataFail interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -227,7 +230,7 @@ static int __init sifive_ccache_init(void)
-> >                 rc = request_irq(g_irq[i], ccache_int_handler, 0, "ccache_ecc",
-> >                                  NULL);
-> >                 if (rc) {
-> > -                       pr_err("CCACHE: Could not request IRQ %d\n", g_irq[i]);
-> > +                       pr_err("Could not request IRQ %d\n", g_irq[i]);
-> >                         return rc;
-> >                 }
-> >         }
-> > --
-> > 2.17.1
-> >
+> ---
 >
+> Changes in v1, v2: This new patch was not part of previous series.
+>
+> ---
+>   drivers/dma-buf/dma-fence.c | 3 ---
+>   1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 066400ed8841..64c99739ad23 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -601,9 +601,6 @@ void dma_fence_enable_sw_signaling(struct dma_fence *fence)
+>   {
+>   	unsigned long flags;
+>   
+> -	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+> -		return;
+> -
+>   	spin_lock_irqsave(fence->lock, flags);
+>   	__dma_fence_enable_signaling(fence);
+>   	spin_unlock_irqrestore(fence->lock, flags);
+
