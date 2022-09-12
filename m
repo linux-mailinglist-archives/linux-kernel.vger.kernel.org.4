@@ -2,198 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FC55B5B67
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC135B5B6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiILNjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 09:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S229851AbiILNkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 09:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiILNjJ (ORCPT
+        with ESMTP id S229473AbiILNkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 09:39:09 -0400
-Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA021A3AB;
-        Mon, 12 Sep 2022 06:39:07 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 0435B100374;
-        Mon, 12 Sep 2022 15:39:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1662989941;
-        bh=nm9WbrH67w9L+VF1lN6eNZbJB8nMF8zkvtmxeZ0sJhU=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=jBRKDaSZHuFx968kYxk+7LggHpxSVNm936kJ3LW3hvCu7FwCGQGfjrK5yNh0heYcc
-         5pS9rv1LpMZzEuHPlJTvxx3mVTT9dqLnSKAEbFnN+F4MZNPyIUXoBQQFkUobSFmMXT
-         7eXorTAUBlMzh1YBlc43rjMlk8KN9UL1upAW4gSMRmVnySeAElHubQaiSVBtLS+fkj
-         nMp5xI12ejOWaf3J1ip2IWi9nGbFkFXIQSF9N9KDe6hY0wE1CkDgNukPNiyidY0Ofs
-         1CHoNbVpckJgWVgQ7KuWSsnuOv6n0LGCHRkZh00de7ybZ04MgLmyjqpp+Qop4S4NQr
-         xaEHxCyaKzneA==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id F3978542; Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id C473E135;
-        Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id BFF7E22;
-        Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id BB5F84A0447; Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 49FCC4A018D;
-        Mon, 12 Sep 2022 15:38:59 +0200 (CEST)
-        (Extended-Queue-bit xtech_lh@fff.in.tum.de)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
- in explanation.txt
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
-Date:   Mon, 12 Sep 2022 14:38:58 +0100
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
-References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
- <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 09:40:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3823C0B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 06:40:13 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjfW-0002vR-3V; Mon, 12 Sep 2022 15:40:10 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjfT-000JPI-OK; Mon, 12 Sep 2022 15:40:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXjfR-000NxN-Ls; Mon, 12 Sep 2022 15:40:05 +0200
+Date:   Mon, 12 Sep 2022 15:40:04 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+Message-ID: <20220912134004.bwdwnshk7xegytvu@pengutronix.de>
+References: <20220826152650.2c55e482@canb.auug.org.au>
+ <CACRpkdYZOK9NhEqqU4Wkg1XHCHEQk=AR6w9730qo_tHmgGrorA@mail.gmail.com>
+ <YwiscXaIDER6SnBf@shikoro>
+ <CACRpkdZZHFQLu3ZfPaSPdWBCNiR9Mmqwgz697XaMWWuAsyPW-w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="at4pz37mukpabpqm"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZZHFQLu3ZfPaSPdWBCNiR9Mmqwgz697XaMWWuAsyPW-w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12. Sep 2022, at 12:38, Paul E. McKenney <paulmck@kernel.org> wrote:
 
-> On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekr=C3=BCger wrote:
->> The current informal control dependency definition in explanation.txt =
-is
->> too broad and, as discussed, needs to be updated.
->>=20
->> Consider the following example:
->>=20
->>> if(READ_ONCE(x))
->>>  return 42;
->>>=20
->>> WRITE_ONCE(y, 42);
->>>=20
->>> return 21;
->>=20
->> The read event determines whether the write event will be executed =
-"at
->> all" - as per the current definition - but the formal LKMM does not
->> recognize this as a control dependency.
->>=20
->> Introduce a new definition which includes the requirement for the =
-second
->> memory access event to syntactically lie within the arm of a non-loop
->> conditional.
->>=20
->> Link: =
-https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.=
-tum.de/
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+--at4pz37mukpabpqm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Linus,
+
+On Fri, Aug 26, 2022 at 03:18:25PM +0200, Linus Walleij wrote:
+> On Fri, Aug 26, 2022 at 1:20 PM Wolfram Sang <wsa@the-dreams.de> wrote:
 >=20
-> Hearing no objections, I reverted the old version and replaced it
-> with this version.  Thank you both!
+> > > How typical, the ideal way to resolve it is if there is an immutable
+> > > branch with the basic changes I can pull in from the i2c tree
+> >
+> > It is already there:
+> >
+> > git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/make_re=
+move_callback_void-immutable
 >=20
-> 							Thanx, Paul
+> Oh excellent, pulled this in and applied Stephens fixup on top.
 
-Oh, wait, there was further discussion [1, 2], and we finally agreed on =
-[3].
-So [3] is the final version.
+Ideally you would have squashed the fixup into the merge commit. With
+the history as it is now you introduced a commit (i.e.  1681956cb79c
+("Merge branch 'i2c/make_remove_callback_void-immutable' of
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into devel"))
+that fails to compile the pinctrl-cy8c95x0 driver. Also a better subject
+line than "pinctrl: fixup for "i2c: Make remove callback return void""
+would be nice, I would have mentioned 'cy8c95x0' at least. (But this is
+mood of course if your tree is already stable or you remerge and
+squash.)
 
-I think me sending a v2 immediately after the v1 led to this =
-out-of-order
-discussion - sorry!
+> > Uwe (originator of the series) spread this information. Sorry that it
+> > did not reach you.
+>=20
+> Don't worry about that, there is no perfect process.
 
-Many thanks,
-Paul
+This commit touches quite a lot of files and subsystems. In the first
+revision I added all affected maintainers and lists. vger refused the
+mail because the the headers got too long.
 
-[1]: =
-https://lore.kernel.org/all/663d568d-a343-d44b-d33d-29998bff8f70@joelferna=
-ndes.org/
-[2]: =
-https://lore.kernel.org/all/D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de=
-/
-[3]: =
-https://lore.kernel.org/all/20220903165718.4186763-1-paul.heidekrueger@in.=
-tum.de/
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
->> ---
->>=20
->> v2:
->> - Fix typos
->> - Fix indentation of code snippet
->>=20
->> v1:
->> @Alan, since I got it wrong the last time, I'm adding you as a =
-co-developer after my
->> SOB. I'm sorry if this creates extra work on your side due to you =
-having to
->> resubmit the patch now with your SOB if I understand correctly, but =
-since it's
->> based on your wording from the other thread, I definitely wanted to =
-give you
->> credit.
->>=20
->> tools/memory-model/Documentation/explanation.txt | 7 ++++---
->> 1 file changed, 4 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/tools/memory-model/Documentation/explanation.txt =
-b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..0bca50cac5f4 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -464,9 +464,10 @@ to address dependencies, since the address of a =
-location accessed
->> through a pointer will depend on the value read earlier from that
->> pointer.
->>=20
->> -Finally, a read event and another memory access event are linked by =
-a
->> -control dependency if the value obtained by the read affects whether
->> -the second event is executed at all.  Simple example:
->> +Finally, a read event X and another memory access event Y are linked =
-by
->> +a control dependency if Y syntactically lies within an arm of an if,
->> +else or switch statement and the condition guarding Y is either data =
-or
->> +address-dependent on X.  Simple example:
->>=20
->> 	int x, y;
->>=20
->> --
->> 2.35.1
+--at4pz37mukpabpqm
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMfNrEACgkQwfwUeK3K
+7AlS2Af/bMaBSlYevYVGFQzSVdMobsIKe9oembDOe/g9NPdQ3Cs7PO92QRRcB6z8
+3647Jc/rmgSeAJOAkvYKZXyYDxdnatVgQPYwRf9c7c+IJw9uV34uoZFUT3vT4omQ
+Or9trei0waEsXP4medfbIkUm51NZe2XvbPBGs0ZpfHpKKZqaVjFJc3o5kn220PTu
+UTwgtwAv8YRleIWinub47dk8NfNAPNDumOvHTdUVE9ilKp5YIyml3JyjrF/SGMPE
+iRrbd82/sdiBXXsFrGDorrp64eQxEmawQXZLwizNVu0psfIxviDsPb9HA37EulqG
+coXhP6Usoqs971Xue2R6cxKnHa4UCQ==
+=wkpk
+-----END PGP SIGNATURE-----
+
+--at4pz37mukpabpqm--
