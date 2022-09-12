@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89615B5E08
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84ABC5B5E16
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiILQS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S229742AbiILQWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiILQSz (ORCPT
+        with ESMTP id S229520AbiILQWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:18:55 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FA63868A;
-        Mon, 12 Sep 2022 09:18:54 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id m16so4805076ilg.3;
-        Mon, 12 Sep 2022 09:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dKtqFa8Lj7sKVbipP1evfO/jZ1JEKgMyQWZPo5L2svY=;
-        b=LYJrUWkBI5r0+ftj5RafEIHZV3TKIYV+GtfpLp5bklqBn7NVcwrDDRIvV40oAViNnw
-         PAYijJ1aNQ4wlDinX3lV3rhtEr6tMQHvjF4Qpem/VsESXWSpyHspJurr8+MBPgRUnyS1
-         JSyYvDet2ykXQxZD7W0xJQ/PbXRNVY8laRRXUVrXu8sLgFQQEl/CQnZve/OUnnSCjOC9
-         SWBwhTCcO23qhLn2kVpDFhkjIR4NmaqXoDjc0wRMDxkqLUhcCuzscCc2alA3Bl4rAfUt
-         b5JxVOVq1YMz+KhSjV168EA76QkBJyrj/895rj3CdO4d8Ut7a/C9fvaelZoVGDGCEllR
-         K/2Q==
+        Mon, 12 Sep 2022 12:22:02 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B192A70D;
+        Mon, 12 Sep 2022 09:22:01 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278a61bd57so24712400fac.7;
+        Mon, 12 Sep 2022 09:22:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dKtqFa8Lj7sKVbipP1evfO/jZ1JEKgMyQWZPo5L2svY=;
-        b=Z8HIHWjrHTTpQL4YWbVNpS5pVfa/1Ij5usrAUhmaIsTWwK6CUKPPFaJ5Pugg8zWZdS
-         pn6PAv+rWCt3i03UJMvUAggMs4LiOoW0cG92h7RF3dCDbtm9hpIyKVCRoAWNXrRXwXeE
-         tRytTY477Fd30MY+9SnHS/zDOZJEr5eymwiepSokmTYnwTuxWNFld6rtmghNcLbFsjC2
-         +50U+msnwdaigM/hA6edJvKvBPARXxK9YM7Ko+ZLKwzzKv5A+vG03AAD0tG6m48//uA4
-         aB4wbF9nk0xSyIlPdl45NcMaUkeW/6xR2NibHJ0UMFgYS2rjFo2ZzDcYmKXYIHI/drcG
-         iD5Q==
-X-Gm-Message-State: ACgBeo2wlpfoxvcydeojEc8KT/jBxnMNc2q+rByxP4e5tiyoYeNeCZxQ
-        qbuIcOjoR/kvZqT26Xh9PmkMk8auYidpUCr3qWw=
-X-Google-Smtp-Source: AA6agR6MemFAoJLParyi3ed9uKb3AZKl39DwttCreIuRBOy0bqj7TVF1woYsiMJbd8RxkweMyI0pKSKSOrXHyq4gx6o=
-X-Received: by 2002:a05:6e02:1aac:b0:2f1:94e3:1805 with SMTP id
- l12-20020a056e021aac00b002f194e31805mr10813730ilv.72.1662999534105; Mon, 12
- Sep 2022 09:18:54 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=r00DFKnjQ6MqdljnOGbZpoS3i+7YfIuY/QvCEDJNxz4=;
+        b=GhWPfTyhJqQZoB2Xb40gICKlvU0d01gBDgCNQMgWcIhKIOP8QlDhSdoPBZnGSzJADP
+         yFAOX1tkCQj/FMO40wbZBcJ1Fa17sdo3ouzEE2cxV7vY8sJMHkWiCS0VpgYKJIB+PHlE
+         b6HQw2/kIf+2I3BvrrEIL04Balu+yEHrCXW96FUumc+Hd33dnaiQvJheWwUvs7eSFTmI
+         eWHxdDKNuG7N/mmk9VxnTCeyaeHZvuhaHRZWx50s6fTkTM6thFbGqr+Vs9jbZHVZQnPE
+         R+1KebOhKUUynu9wI5cwX6dhINrzK7kAZqg3gVVmA8KqPygh+Zz+HQSbhae2CxqhTH5W
+         axNQ==
+X-Gm-Message-State: ACgBeo3qvW2r8kkWPxz52SEoCevNu8pF6y7K8U7ujgHam/oIlDrCmEdk
+        qbWv/oJ9N6zt9xRL/dmZgQ==
+X-Google-Smtp-Source: AA6agR6loyFpBasqevtTvWoqIcVpwvLcLwVcfU8zNnKPyNcqpBvzXAW2C9KsWZEg5Kqo5x6rdL4rWA==
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id x14-20020a056870a78e00b0012b542be5b2mr5139723oao.112.1662999720989;
+        Mon, 12 Sep 2022 09:22:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j16-20020a056870169000b0011e73536301sm5706841oae.52.2022.09.12.09.22.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 09:22:00 -0700 (PDT)
+Received: (nullmailer pid 1413504 invoked by uid 1000);
+        Mon, 12 Sep 2022 16:21:59 -0000
+Date:   Mon, 12 Sep 2022 11:21:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        linux-rockchip@lists.infradead.org, philipp.tomsich@vrull.eu,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, kever.yang@rock-chips.com,
+        zhangqing@rock-chips.com, linux-kernel@vger.kernel.org,
+        heiko@sntech.de
+Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
+ rockchip,rk3128-pwm
+Message-ID: <20220912162159.GA1397560-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+ <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
+ <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
 MIME-Version: 1.0
-References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-24-ojeda@kernel.org>
- <CAK7LNAQ=JfmrnGAUNXm_4RTz0fOhzfYC=htZ-VuEx=HAJPNtmw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQ=JfmrnGAUNXm_4RTz0fOhzfYC=htZ-VuEx=HAJPNtmw@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 12 Sep 2022 17:18:43 +0100
-Message-ID: <CANiq72kZEqAwr_m14mAFjHsFJTLjj7i4He0qyrprubpmBfOFdw@mail.gmail.com>
-Subject: Re: [PATCH v9 23/27] Kbuild: add Rust support
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        patches@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Sat, Sep 10, 2022 at 09:48:04PM +0200, Johan Jonker wrote:
+> Reduced CC.
+> 
+> Hi Rob,
+> 
 
-On Mon, Sep 12, 2022 at 5:08 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> I have not figured out where this difference comes from.
+Seemed like a simple enough warning to fix...
 
-It is the `RUSTC_BOOTSTRAP` environment variable: it allows to use
-unstable featuers in the stable compiler.
+> The rk3328 and rv1108 PWM interrupt is chaired between blocks I think.
+> For rv1108 the same interrupt is used for all PWM nodes.
+> For rk3328 only added to one PWM node.
+> Currently not in use in a Linux drivers??
 
-We currently set it in the global `Makefile`, but we could be more
-explicit and do it on each command if you think that would be better.
+How is that relevant to the binding? It's used in dts files.
 
-If you want that we keep using the global export, then we can add a
-comment explaining this to clarify.
+> 
+> No consensus yet...on removing or parent node, so it stays as it is...
+> Maybe if you have ideas things will change. ;)
 
-Cheers,
-Miguel
+Only that existing issues should be addressed before adding new 
+platforms especially if the binding might change in an incompatible way 
+(splitting nodes).
+
+Rob
