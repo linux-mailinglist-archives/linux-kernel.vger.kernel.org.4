@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FAB95B644C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 01:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21835B644F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 01:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiILXob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 19:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S229883AbiILXp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 19:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiILXo2 (ORCPT
+        with ESMTP id S229626AbiILXpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 19:44:28 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBF81FCC8;
-        Mon, 12 Sep 2022 16:44:26 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id c11so18024277wrp.11;
-        Mon, 12 Sep 2022 16:44:25 -0700 (PDT)
+        Mon, 12 Sep 2022 19:45:23 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2A913D7D;
+        Mon, 12 Sep 2022 16:45:22 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bq9so18080495wrb.4;
+        Mon, 12 Sep 2022 16:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=v8PIwy1hbcLR+ry7wUtqp5tyu2XN0J5uMtXiUjC7ge8=;
-        b=IkCTjy+HZ1pwY9b0eL7AekHyToTZJ6S2rq5nUNGvuLssfUAoS2qkRzb1joKmGxHSgs
-         hHi97FkqLT4q7wL1qaw9hbrt7XI3+WqJMb4r5MX9JUFCSQnybXDJRfABop1/J/SJhr3f
-         AXCNJJ9M+SwGJBE857iX1JxfjgxVlxLsX/GUy1BNkyL42vlWfZtjKjtDMZAFGO4/i4P3
-         Io4XtLUrx1/7sOKLHOWU95hzhxL2IKQKTMmYvR2l15Mk+rFdxOtixWBbPcQfug+zrCjl
-         UUjM7IJ17QPpDYiSXyqDvoYX3IFd9VHl4Dfj04SzPnHEJPCSS878zKwK0KplzxY02CB4
-         XejQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Je74ISkjKuqmYbxBR4pABNa6asr1zFtT31m2iJGIDn0=;
+        b=aulZcGlLQQToD0/WX54mgGcKXSfBvkxt2mxLOdvS1f12Iz1cURNVBVtnqt2PI31xyz
+         d/7aHHacqYBvjq+BYF4uuXGege2hHbSwm2M7qHxlygTH/4Lrsr+K6M9CTXad1xBFAjhc
+         3hFIfkAtN2Y4idORFUVZlSsSMCh5osxvouHaASt3sY+M9YbHV4RPWS656+WIbPm7Yx+b
+         sT8c/cfXyxPbIAzpA69hheuF1froYSASBBWnLBqrWjnSHw6Laaj4a3X8NR8Q1fsc8wNK
+         dqByy3uWoVAxivOQONTeeQ6L+WLuHWZzjF5rzc9Sp5zZN1lVcdZZjlxWpc/GClzUHAZy
+         QcsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=v8PIwy1hbcLR+ry7wUtqp5tyu2XN0J5uMtXiUjC7ge8=;
-        b=wIdZM4SnSpxtcI3B4CrkHJ+klXx9LJ2n0Gx8ARsyvnhQlLALzyKa/EJFdBPc8gez6m
-         mhqxUggjZCxDNCY7SuToho7Hz+4H2e3EPFOXzJWeRdvoq8zfnHp41RTrAm0AT1TzDupp
-         4TI41DiPLxV1BgvQ568DGLr8L5FEIcEPiXhJJekuQXqYcVrfvdgRpCRVSdbJ1/Djjc+K
-         cf57GNd7bmQt+zxSkuci6quMpJiwZCDdCUwJJRnwRoAvjS5ixJghdphPjf9vdAIKFKvA
-         UWHtMDZIiBOqy/5/bLPeP8k0IkObPelthRmWzUwIBbobzmac7NdFmejox7v99Byt1kRK
-         R8kA==
-X-Gm-Message-State: ACgBeo03tIaCfKlYkFdzbOH3+ZQ+iDAs0jzrD2D3VH58nIMjj9gdP4b2
-        Q5Rxfl9XDEp/vME5cvUgdJJp+kh5Z8U=
-X-Google-Smtp-Source: AA6agR6WtDi0693iv0cBu/peZL7Be0Ht5fQv8RxHdrMddO63sl+SGhwR/bltjXou1KX+dEsuOLjKew==
-X-Received: by 2002:adf:df8f:0:b0:228:df40:bb57 with SMTP id z15-20020adfdf8f000000b00228df40bb57mr16714900wrl.692.1663026264185;
-        Mon, 12 Sep 2022 16:44:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Je74ISkjKuqmYbxBR4pABNa6asr1zFtT31m2iJGIDn0=;
+        b=L5AkDE1TXXvohn0a569tUsXyfVx89aWD/VScYBfgF8+7w5SRzz8tMfOeJ++kI4pM8/
+         tJrY2klUczAtfHUJjGMFZ3HIpstw9XmLs+urNOmI/Q9lJygg8wYPhXS3SxogTuFQhITS
+         JtrIUuVzmmIiv/VQz9gfA5N36PZMCfW+hLXiFARVCE0URnHSPI1WTlTS4bQLJgVV6s9w
+         4mpis9jXscBCY6BReq7u9hmJubxHwYramIsYg1AH0gjkP0xxJdqgBrd6fgcyl85HKY9y
+         MSJYcOdiHpzpQBwjpvpIbWWyxzga1ipWbkVW0zdyKY2BBurddcughkwl7226Onqi0iU0
+         TJLQ==
+X-Gm-Message-State: ACgBeo0QFXptgm7NhytDbffmIsSPazkvw9u2bxvFBjSQ/x0FO8pmjVon
+        aztmLS9cN06qhLyWvhi2yNw+WiifuE8=
+X-Google-Smtp-Source: AA6agR7UUeHkH4Yv2qfOFgwGbLd7LEBPQbSvSUcEvZMyXLphB7eB0fQKk+ve9cFPvvz0aTxphwZ9Dg==
+X-Received: by 2002:a05:6000:1886:b0:22a:2944:a09 with SMTP id a6-20020a056000188600b0022a29440a09mr14762387wri.391.1663026320572;
+        Mon, 12 Sep 2022 16:45:20 -0700 (PDT)
 Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05600c3b9600b003b435c41103sm14082752wms.0.2022.09.12.16.44.23
+        by smtp.gmail.com with ESMTPSA id k16-20020a05600c1c9000b003b492338f45sm3202943wms.39.2022.09.12.16.45.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 16:44:23 -0700 (PDT)
+        Mon, 12 Sep 2022 16:45:20 -0700 (PDT)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio <linux-iio@vger.kernel.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/9] Add support for pressure sensor Bosch BMP380
-Date:   Tue, 13 Sep 2022 01:43:46 +0200
-Message-Id: <cover.1663025017.git.ang.iglesiasg@gmail.com>
+Subject: [PATCH v6 1/9] iio: pressure: bmp280: reorder local variables following reverse xmas tree
+Date:   Tue, 13 Sep 2022 01:44:52 +0200
+Message-Id: <363a106afbfe30ce590b80b1494c8b3322870f8a.1663025017.git.ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1663025017.git.ang.iglesiasg@gmail.com>
+References: <cover.1663025017.git.ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,130 +77,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds BMP380 variant to the already existing drivers for
-the Bosch BMP180/280 pressure sensors.
+Reordered definitions of local variables following the reverse christmas
+tree convention.
 
-Patch 1 reorder local variables declarations following reverse xmas tree
-conventions, as suggested by Andy Shevchenko <andy.shevchenko@gmail.com>.
-Patch 2 migrates existing code to use FIELD_GET/FIELD_PREP and GENMASK
-utilities.
-Patch 3 is a minor refactor of the function that loads bmp280 calibration
-params, taking advantage of the data contiguity in memory.
-Patch 4 is a minor refactor simplifying driver initialization logic
-to facilitate the integration of the new sensor variant extending the
-information stored in the "chip_info" struct.
-Patch 5 fixes DMA unsafe regmap_bulk_* calls reported by Jonathan Cameron
-<jic23@kernel.org>.
-Patch 6 is a minor refactor reordering device match tables declarations in
-forward order as suggested by Andy Shevchenko <andy.shevchenko@gmail.com>.
-Patch 7 adds the basic logic to initialize and read measurements from
-the sensor.
-Patch 8 adds references and sensor id to the devicetree bindings docs.
-Patch 9 adds advanced configurable features such as sampling frequency
-and IIR filter through the IIO sysfs ABI.
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+---
+ drivers/iio/pressure/bmp280-core.c | 65 +++++++++++++++---------------
+ 1 file changed, 33 insertions(+), 32 deletions(-)
 
-Changes in v6:
- - Introduced patch 1 reordering local variables declarations.
- - Patch 2 is separated form v5 patch 1, separating initialization
-   refactor from migration to FIELD_GET, FIELD_PREP and GENMASK.
- - Patch 3 backports a refactor made to bmp280 calibration load
-   on v5 patch 2.
- - Introduced patch 6 reordering i2c device match tables declarations.
- - Revised patch 7 and 9 and smoothed transition to patch 9 moving some
-   code on v5 patch 5 to patch 7 (BMP380 basic enablement).
- - Cleaned error handling of regmap calls thorough patches.
- - Changed formula used to handle IIR filter on patch 9 following feedback
-   made by Andy Shevchenko <andy.shevchenko@gmail.com>.
- - Made union with data buffers on patch 5 anonymous (suggested by Andy
-   Shevchenko <andy.shevchenko@gmail.com>)
- - Improved handling of be16 and le16 data on patch 5 integrating changes
-   suggested by Jonathan Cameron <jic23@kernel.org>.
-
-Changes in v5:
- - Moved dt bindings patch (previously patch 2/5) to 4/5 to preserve
-   tree coherence as suggested by Jonathan Cameron <jic23@kernel.org>
- - Patch 1: Simplified initial oversampling values assignation.
- - Patch 1: Updated codepaths for bmp180 and bmp280 to use FIELD_GET and
-   FIELD_GET helpers. Migrated compatible masks to use GENMASK.
- - Patch 2: Store DMA-safe buffers on the device data struct instead of
-   using dynamic allocations for calibration buffers.
-   Thanks Jonathan Cameron <jic23@kernel.org>.
- - Patch 3: Fixed small typos
- - Patch 3: Fixed incompatible division on 32-bit machines reported by
-   Andy Shevchenko <andy.shevchenko@gmail.com> and kernel test robot
-   <lkp@intel.com>.
- - Patch 3: Fixed inconsistent use of "x" and "X" declaring constants.
- - Patch 5: Dropped incorrect reported-by tag on changelog message.
- - Patch 5: Fixed typos on various comments.
-
-Changes in v4:
- - Patch 4 and 2: Merged v3 patch 2 (Kconfig refs update) into this patch.
- - Patch 3: Added patch fixing unsafe DMA regmap_bulk_* calls reported by
-   Jonathan Cameron <jic23@kernel.org>.
- - Patch 4: Fixed DMA unsafe buffers used on regmap_bulk_* calls reported
-   by Jonathan Cameron <jic23@kernel.org>.
-
-Changes in v3:
- - Patch 2: Fixed incorrect abbreviation.
- - Patch 3: use dev_err_probe helper to handle error initializing sensor.
- - Patch 4: Fixed kernel test robot warning provoked by missing include.
- - Patch 4: Fixed bug reported by Dan Carpenter <dan.carpenter@oracle.com>.
- - Patch 5: Fixed formatting and typos on multiple comments.
- - Patch 5: Fixed missing boolean initialization reported by
-   Andy Shevchenko <andy.shevchenko@gmail.com>.
- - Patch 5: Replaced duplicated comments with a single comment containing
-   a brief explantation in a shared location.
- - Patch 5: Dropped incorrect use of unlikely macro.
-
-Changes in v2:
- - Added patch 2 updating Kconfig with references to new sensor.
- - Patch 3 adds changes proposed by Jonathan Cameron <jic23@kernel.org>
-   to declutter and unify configuration logic for the different sensors
-   extending "chip_info" struct with default configuration parameters.
- - Patch 4: store temperature and pressure adc values on 3 byte array
-   instead of using the type __le32. Uses function get_unaligned_le24
-   to convert the little-endian encoded 3 byte value to an integer.
- - Patch 4: drops custom macro le16_from_bytes and use get_unaligned_le16.
- - Patch 4: generate masks using GENMASK macro.
- - Patch 4: use FIELD_PREP to generate bitfields for registries.
- - Patch 4: dropped stray formatting change.
- - Patch 5: adds sanity checks in bmp280_read_raw for channel properties
-   only available in the BMP380.
- - Patch 5: on bmp280_write_* checks if a problem occurred committing new
-   configuration and tries to restore previous working configuration
-   to keep the sensor in a previous working state.
- - Patch 5: refactored bmp380_chip_config to only check for configuration
-   errors when a configuration change is detected.
- - Patch 5: improved invalid configuration detection on BMP380 restarting
-   measurement loop to force a new measurement after the configuration is
-   updated.
-
-Previous patch version available on:
- https://lore.kernel.org/all/cover.1659872590.git.ang.iglesiasg@gmail.com/
-
-Angel Iglesias (9):
-  iio: pressure: bmp280: reorder local variables following reverse xmas
-    tree
-  iio: pressure: bmp280: use FIELD_GET, FIELD_PREP and GENMASK
-  iio: pressure: bmp280: Simplify bmp280 calibration data reading
-  iio: pressure: bmp280: simplify driver initialization logic
-  iio: pressure: bmp280: Fix alignment for DMA safety
-  iio: pressure: bmp280: reorder i2c device tables declarations
-  iio: pressure: bmp280: Add support for BMP380 sensor family
-  dt-bindings: iio: pressure: bmp085: Add BMP380 compatible string
-  iio: pressure: bmp280: Add more tunable config parameters for BMP380
-
- .../bindings/iio/pressure/bmp085.yaml         |   4 +-
- drivers/iio/pressure/Kconfig                  |   6 +-
- drivers/iio/pressure/bmp280-core.c            | 962 +++++++++++++++---
- drivers/iio/pressure/bmp280-i2c.c             |  15 +-
- drivers/iio/pressure/bmp280-regmap.c          |  55 +
- drivers/iio/pressure/bmp280-spi.c             |   5 +
- drivers/iio/pressure/bmp280.h                 | 164 ++-
- 7 files changed, 1018 insertions(+), 193 deletions(-)
-
-
-base-commit: 2f61ff8272967c9bdcba810aa978170814b08f7c
+diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+index fe7aa81e7cc9..42b29f30e9d1 100644
+--- a/drivers/iio/pressure/bmp280-core.c
++++ b/drivers/iio/pressure/bmp280-core.c
+@@ -151,13 +151,14 @@ static int bmp280_read_calib(struct bmp280_data *data,
+ 			     struct bmp280_calib *calib,
+ 			     unsigned int chip)
+ {
+-	int ret;
++	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
++	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
++	struct device *dev = data->dev;
+ 	unsigned int tmp;
+ 	__le16 l16;
+ 	__be16 b16;
+-	struct device *dev = data->dev;
+-	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
+-	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
++	int ret;
++
+ 
+ 	/* Read temperature calibration values. */
+ 	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_TEMP_START,
+@@ -261,8 +262,8 @@ static int bmp280_read_calib(struct bmp280_data *data,
+ static u32 bmp280_compensate_humidity(struct bmp280_data *data,
+ 				      s32 adc_humidity)
+ {
+-	s32 var;
+ 	struct bmp280_calib *calib = &data->calib.bmp280;
++	s32 var;
+ 
+ 	var = ((s32)data->t_fine) - (s32)76800;
+ 	var = ((((adc_humidity << 14) - (calib->H4 << 20) - (calib->H5 * var))
+@@ -286,8 +287,8 @@ static u32 bmp280_compensate_humidity(struct bmp280_data *data,
+ static s32 bmp280_compensate_temp(struct bmp280_data *data,
+ 				  s32 adc_temp)
+ {
+-	s32 var1, var2;
+ 	struct bmp280_calib *calib = &data->calib.bmp280;
++	s32 var1, var2;
+ 
+ 	var1 = (((adc_temp >> 3) - ((s32)calib->T1 << 1)) *
+ 		((s32)calib->T2)) >> 11;
+@@ -309,8 +310,8 @@ static s32 bmp280_compensate_temp(struct bmp280_data *data,
+ static u32 bmp280_compensate_press(struct bmp280_data *data,
+ 				   s32 adc_press)
+ {
+-	s64 var1, var2, p;
+ 	struct bmp280_calib *calib = &data->calib.bmp280;
++	s64 var1, var2, p;
+ 
+ 	var1 = ((s64)data->t_fine) - 128000;
+ 	var2 = var1 * var1 * (s64)calib->P6;
+@@ -335,9 +336,9 @@ static u32 bmp280_compensate_press(struct bmp280_data *data,
+ static int bmp280_read_temp(struct bmp280_data *data,
+ 			    int *val)
+ {
+-	int ret;
+-	__be32 tmp = 0;
+ 	s32 adc_temp, comp_temp;
++	__be32 tmp = 0;
++	int ret;
+ 
+ 	ret = regmap_bulk_read(data->regmap, BMP280_REG_TEMP_MSB, &tmp, 3);
+ 	if (ret < 0) {
+@@ -368,10 +369,10 @@ static int bmp280_read_temp(struct bmp280_data *data,
+ static int bmp280_read_press(struct bmp280_data *data,
+ 			     int *val, int *val2)
+ {
+-	int ret;
++	u32 comp_press;
+ 	__be32 tmp = 0;
+ 	s32 adc_press;
+-	u32 comp_press;
++	int ret;
+ 
+ 	/* Read and compensate temperature so we get a reading of t_fine. */
+ 	ret = bmp280_read_temp(data, NULL);
+@@ -400,10 +401,10 @@ static int bmp280_read_press(struct bmp280_data *data,
+ 
+ static int bmp280_read_humid(struct bmp280_data *data, int *val, int *val2)
+ {
++	u32 comp_humidity;
++	s32 adc_humidity;
+ 	__be16 tmp;
+ 	int ret;
+-	s32 adc_humidity;
+-	u32 comp_humidity;
+ 
+ 	/* Read and compensate temperature so we get a reading of t_fine. */
+ 	ret = bmp280_read_temp(data, NULL);
+@@ -433,8 +434,8 @@ static int bmp280_read_raw(struct iio_dev *indio_dev,
+ 			   struct iio_chan_spec const *chan,
+ 			   int *val, int *val2, long mask)
+ {
+-	int ret;
+ 	struct bmp280_data *data = iio_priv(indio_dev);
++	int ret;
+ 
+ 	pm_runtime_get_sync(data->dev);
+ 	mutex_lock(&data->lock);
+@@ -490,9 +491,9 @@ static int bmp280_read_raw(struct iio_dev *indio_dev,
+ static int bmp280_write_oversampling_ratio_humid(struct bmp280_data *data,
+ 					       int val)
+ {
+-	int i;
+ 	const int *avail = data->chip_info->oversampling_humid_avail;
+ 	const int n = data->chip_info->num_oversampling_humid_avail;
++	int i;
+ 
+ 	for (i = 0; i < n; i++) {
+ 		if (avail[i] == val) {
+@@ -507,9 +508,9 @@ static int bmp280_write_oversampling_ratio_humid(struct bmp280_data *data,
+ static int bmp280_write_oversampling_ratio_temp(struct bmp280_data *data,
+ 					       int val)
+ {
+-	int i;
+ 	const int *avail = data->chip_info->oversampling_temp_avail;
+ 	const int n = data->chip_info->num_oversampling_temp_avail;
++	int i;
+ 
+ 	for (i = 0; i < n; i++) {
+ 		if (avail[i] == val) {
+@@ -524,9 +525,9 @@ static int bmp280_write_oversampling_ratio_temp(struct bmp280_data *data,
+ static int bmp280_write_oversampling_ratio_press(struct bmp280_data *data,
+ 					       int val)
+ {
+-	int i;
+ 	const int *avail = data->chip_info->oversampling_press_avail;
+ 	const int n = data->chip_info->num_oversampling_press_avail;
++	int i;
+ 
+ 	for (i = 0; i < n; i++) {
+ 		if (avail[i] == val) {
+@@ -542,8 +543,8 @@ static int bmp280_write_raw(struct iio_dev *indio_dev,
+ 			    struct iio_chan_spec const *chan,
+ 			    int val, int val2, long mask)
+ {
+-	int ret = 0;
+ 	struct bmp280_data *data = iio_priv(indio_dev);
++	int ret = 0;
+ 
+ 	switch (mask) {
+ 	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+@@ -610,9 +611,9 @@ static const struct iio_info bmp280_info = {
+ 
+ static int bmp280_chip_config(struct bmp280_data *data)
+ {
+-	int ret;
+ 	u8 osrs = BMP280_OSRS_TEMP_X(data->oversampling_temp + 1) |
+ 		  BMP280_OSRS_PRESS_X(data->oversampling_press + 1);
++	int ret;
+ 
+ 	ret = regmap_write_bits(data->regmap, BMP280_REG_CTRL_MEAS,
+ 				 BMP280_OSRS_TEMP_MASK |
+@@ -653,8 +654,8 @@ static const struct bmp280_chip_info bmp280_chip_info = {
+ 
+ static int bme280_chip_config(struct bmp280_data *data)
+ {
+-	int ret;
+ 	u8 osrs = BMP280_OSRS_HUMIDITIY_X(data->oversampling_humid + 1);
++	int ret;
+ 
+ 	/*
+ 	 * Oversampling of humidity must be set before oversampling of
+@@ -687,10 +688,10 @@ static const struct bmp280_chip_info bme280_chip_info = {
+ 
+ static int bmp180_measure(struct bmp280_data *data, u8 ctrl_meas)
+ {
+-	int ret;
+ 	const int conversion_time_max[] = { 4500, 7500, 13500, 25500 };
+ 	unsigned int delay_us;
+ 	unsigned int ctrl;
++	int ret;
+ 
+ 	if (data->use_eoc)
+ 		reinit_completion(&data->done);
+@@ -751,9 +752,9 @@ static int bmp180_read_adc_temp(struct bmp280_data *data, int *val)
+ static int bmp180_read_calib(struct bmp280_data *data,
+ 			     struct bmp180_calib *calib)
+ {
++	__be16 buf[BMP180_REG_CALIB_COUNT / 2];
+ 	int ret;
+ 	int i;
+-	__be16 buf[BMP180_REG_CALIB_COUNT / 2];
+ 
+ 	ret = regmap_bulk_read(data->regmap, BMP180_REG_CALIB_START, buf,
+ 			       sizeof(buf));
+@@ -793,8 +794,8 @@ static int bmp180_read_calib(struct bmp280_data *data,
+  */
+ static s32 bmp180_compensate_temp(struct bmp280_data *data, s32 adc_temp)
+ {
+-	s32 x1, x2;
+ 	struct bmp180_calib *calib = &data->calib.bmp180;
++	s32 x1, x2;
+ 
+ 	x1 = ((adc_temp - calib->AC6) * calib->AC5) >> 15;
+ 	x2 = (calib->MC << 11) / (x1 + calib->MD);
+@@ -805,8 +806,8 @@ static s32 bmp180_compensate_temp(struct bmp280_data *data, s32 adc_temp)
+ 
+ static int bmp180_read_temp(struct bmp280_data *data, int *val)
+ {
+-	int ret;
+ 	s32 adc_temp, comp_temp;
++	int ret;
+ 
+ 	ret = bmp180_read_adc_temp(data, &adc_temp);
+ 	if (ret)
+@@ -828,9 +829,9 @@ static int bmp180_read_temp(struct bmp280_data *data, int *val)
+ 
+ static int bmp180_read_adc_press(struct bmp280_data *data, int *val)
+ {
+-	int ret;
+-	__be32 tmp = 0;
+ 	u8 oss = data->oversampling_press;
++	__be32 tmp = 0;
++	int ret;
+ 
+ 	ret = bmp180_measure(data, BMP180_MEAS_PRESS_X(oss));
+ 	if (ret)
+@@ -852,11 +853,11 @@ static int bmp180_read_adc_press(struct bmp280_data *data, int *val)
+  */
+ static u32 bmp180_compensate_press(struct bmp280_data *data, s32 adc_press)
+ {
++	struct bmp180_calib *calib = &data->calib.bmp180;
++	s32 oss = data->oversampling_press;
+ 	s32 x1, x2, x3, p;
+ 	s32 b3, b6;
+ 	u32 b4, b7;
+-	s32 oss = data->oversampling_press;
+-	struct bmp180_calib *calib = &data->calib.bmp180;
+ 
+ 	b6 = data->t_fine - 4000;
+ 	x1 = (calib->B2 * (b6 * b6 >> 12)) >> 11;
+@@ -883,9 +884,9 @@ static u32 bmp180_compensate_press(struct bmp280_data *data, s32 adc_press)
+ static int bmp180_read_press(struct bmp280_data *data,
+ 			     int *val, int *val2)
+ {
+-	int ret;
+-	s32 adc_press;
+ 	u32 comp_press;
++	s32 adc_press;
++	int ret;
+ 
+ 	/* Read and compensate temperature so we get a reading of t_fine. */
+ 	ret = bmp180_read_temp(data, NULL);
+@@ -990,11 +991,11 @@ int bmp280_common_probe(struct device *dev,
+ 			const char *name,
+ 			int irq)
+ {
+-	int ret;
+ 	struct iio_dev *indio_dev;
+ 	struct bmp280_data *data;
+-	unsigned int chip_id;
+ 	struct gpio_desc *gpiod;
++	unsigned int chip_id;
++	int ret;
+ 
+ 	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
+ 	if (!indio_dev)
 -- 
 2.37.3
 
