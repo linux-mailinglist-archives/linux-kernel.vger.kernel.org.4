@@ -2,104 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05A95B5713
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C825B5722
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiILJRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S229456AbiILJYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiILJRV (ORCPT
+        with ESMTP id S229688AbiILJYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:17:21 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E0032EFA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:17:15 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so7557152pjf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:17:15 -0700 (PDT)
+        Mon, 12 Sep 2022 05:24:37 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001406159;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so2296310pjk.4;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=7tR7K5oR413iRjDuxm5Mq93G56uZhpKUlH9Co9h51jc=;
-        b=X5ibPOspaJ15hBjw2+eylce5MM8U08TGDvy10Zi3IB8s6dQbzcZGr+VA0X0F4JPQmz
-         omq/dhft+a/57sllmLN/5nn+rc6t99ezuFyDd7vHfz07qeD77vyEb4JhopY++ZgC9OuF
-         diEanfMEC15V2TM5mK7Yv6OHTcA0yh23HZaghD/wA5DOgwxC2IwJUsAQNdfARmMCAoEP
-         79ImB6YEK5S3oCfmmZupvfHZVYQgt8z6XBrcm2lsNpyQWwzaj3mzFS1AwravzOfkCB0z
-         vAL+76QYh6JYatxMwax87X5d4SZh83rVuNPZKvkaW8XG+NDHt3TjfCesNYqDuG5YJZ17
-         QYbA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
+        b=i3jYkx3jASZnk7nQzWlUfg3hG5o5zcavYIAbbpiOGm0filEkseTQmzjV5rub+XCMwk
+         W355ocRljQy4Que7e2ixQmf01KSfbnPJdOIr6Mw3GYhKVpAmIH6oNc20n6wOq8reN1x7
+         V3Rf/QtIlh8ajmgSwZIdm4mFL3dS5VyIyx9SBYqGU38UEKDu1dci1bA/TtWOFhkFic4m
+         7trBiqNfFh+KrcRh5gBKf3xU+J4RZQrMbbGmiaavLQHMpfAvHu6HeXwSjcYC6R7plXCT
+         /tqUaQFjpVn98LeNwv7q0MV4JwmGCLNq+V9+bhCxK7+qA/2kFCDxX1nhHxB9mJ3/M97b
+         t4vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=7tR7K5oR413iRjDuxm5Mq93G56uZhpKUlH9Co9h51jc=;
-        b=XyHz3K+gDViDovp83/pxRCHQ7n+0jx0MM+2/HvCJVfhWtgpRtQCNRAv9Y0S9E4OjFO
-         D5yoEefywG67Pr6LqGG4pS2hq1I9k57/LffNYo5t7+LiA3y1Fom0DCwEzrhfnLvPVAZs
-         7Bvwyff+AebPZtF0N2samgMZFgSJhCfZO5liyZnhdu7lJNQX68eHItpKo1EXJHLm6mfL
-         TcKQxTZwsCY3qjb72Tz1OK+2vqc/ZL7teaKfa9Kwlp3sbF3WnCT0isIzbVPgDEayrdo/
-         Kj28ETcHmvEYSH6go5EjSQuT54Ty25/qIbKR73HfUVGz4eiYVzu0lls28vyLcYoPQD0i
-         rchg==
-X-Gm-Message-State: ACgBeo3tkLOglLjL+hGKnrVjXVA5I0rSzF3YYJWByd0aRMxGwvWr80Eu
-        PGJrahhUJTmWbLxEIQPd3KTYUg==
-X-Google-Smtp-Source: AA6agR6Z2/AyB8yAZcEb3ICpz4dIYClZXzn1ntIP/0gB329XLwnlzA25vi/KVebW9x+v3xmiFqameQ==
-X-Received: by 2002:a17:90b:1b4d:b0:202:c05f:6ea0 with SMTP id nv13-20020a17090b1b4d00b00202c05f6ea0mr7237093pjb.7.1662974234169;
-        Mon, 12 Sep 2022 02:17:14 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id o65-20020a62cd44000000b0052dbad1ea2esm4857026pfg.6.2022.09.12.02.17.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
+        b=zGBhOMRdxidGWA39sJvdR5U3UoXf8leiO5WMEhHlL+T+O65eGI2SY9JRtPWOLHpj3Y
+         neDpUQJz/d4SQMozhYIyq5C/avVKWQpKbu726vW4XKWr+VkBfb5vdhoiy82MghYq3AeL
+         3EoZNc61K69Xspo5AEQVkH5bKkNsK9ASjumAOESkRkn7FtVmnd395cf2vnoOpYJ86FUI
+         hiG7xHcMkvJYzVOHZXXgq4syGmURHDN7RkOIOp2UuZLj8X6LwZMCtSGDuDaPfA+O1tq3
+         SWoRMQzi9Dscr888mTECsG79M+3IeXBcmUTrNovJ2WVMQAjv13BcIY9+4XJzMc4u4iV1
+         331Q==
+X-Gm-Message-State: ACgBeo2cCJchcQ+1rSLFZ5BAlXLiX3VMsClavcunc6DL+MSVkng/M4kW
+        QtfpbCF88GUM/c1c1A9Dh04=
+X-Google-Smtp-Source: AA6agR4oaU+WBpYICmUHkFCM/PO1PEe4j28gFaz3bM+cs+H79Ws+xUcg+YIvrolIkiP+agnqJx6YKw==
+X-Received: by 2002:a17:90a:6d62:b0:200:579f:e4ea with SMTP id z89-20020a17090a6d6200b00200579fe4eamr23220150pjj.244.1662974675500;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090a4b8500b0020080e8c8besm4645681pjh.40.2022.09.12.02.24.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 02:17:13 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, robh@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 3/3] arm64: defconfig: Enable Qualcomm QMI cooling device driver
-Date:   Mon, 12 Sep 2022 14:46:43 +0530
-Message-Id: <20220912091643.3537857-4-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220912091643.3537857-1-bhupesh.sharma@linaro.org>
-References: <20220912091643.3537857-1-bhupesh.sharma@linaro.org>
+        Mon, 12 Sep 2022 02:24:34 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     paul@paul-moore.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] selinux/hooks: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 09:17:19 +0000
+Message-Id: <20220912091718.18053-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Qualcomm QMI cooling device driver which is
-available on several Qualcomm SoCs.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Cc: andersson@kernel.org
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Return the value avc_has_perm() directly instead of storing it in
+another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ security/selinux/hooks.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ea692ef4c841..24eed7db90bf 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -602,6 +602,7 @@ CONFIG_BRCMSTB_THERMAL=m
- CONFIG_EXYNOS_THERMAL=y
- CONFIG_TEGRA_SOCTHERM=m
- CONFIG_TEGRA_BPMP_THERMAL=m
-+CONFIG_QCOM_QMI_COOLING=m
- CONFIG_QCOM_TSENS=y
- CONFIG_QCOM_SPMI_ADC_TM5=m
- CONFIG_QCOM_SPMI_TEMP_ALARM=m
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 2a1168b33218..f553c370397e 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -5995,7 +5995,6 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(msq);
+ 	ipc_init_security(isec, SECCLASS_MSGQ);
+@@ -6003,10 +6002,9 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = msq->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_MSGQ,
+-			  MSGQ__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_MSGQ,
++			    MSGQ__CREATE, &ad);
+ }
+ 
+ static int selinux_msg_queue_associate(struct kern_ipc_perm *msq, int msqflg)
+@@ -6134,7 +6132,6 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(shp);
+ 	ipc_init_security(isec, SECCLASS_SHM);
+@@ -6142,10 +6139,9 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = shp->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_SHM,
+-			  SHM__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_SHM,
++			    SHM__CREATE, &ad);
+ }
+ 
+ static int selinux_shm_associate(struct kern_ipc_perm *shp, int shmflg)
+@@ -6219,7 +6215,6 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(sma);
+ 	ipc_init_security(isec, SECCLASS_SEM);
+@@ -6227,10 +6222,9 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = sma->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_SEM,
+-			  SEM__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_SEM,
++			    SEM__CREATE, &ad);
+ }
+ 
+ static int selinux_sem_associate(struct kern_ipc_perm *sma, int semflg)
 -- 
-2.37.1
+2.15.2
 
