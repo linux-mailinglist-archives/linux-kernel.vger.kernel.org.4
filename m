@@ -2,169 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA4E5B62C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50185B62CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiILVc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S229920AbiILVeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiILVcx (ORCPT
+        with ESMTP id S229907AbiILVd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:32:53 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5C4BA45;
-        Mon, 12 Sep 2022 14:32:52 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id c24so9455586pgg.11;
-        Mon, 12 Sep 2022 14:32:52 -0700 (PDT)
+        Mon, 12 Sep 2022 17:33:58 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEA927FEA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:33:58 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id y16-20020a17090aa41000b001fdf0a76a4eso4495202pjp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Tkfw5cCaQftuIzsthOvhCIrnxS5AAOLFSUhqXR3scw8=;
-        b=eFKJnvcPQiR4trZGgwG7tM3ANGpPowv+NfSx2EyCZ9IcJAjbofgpmT93kt6Xan2JEZ
-         H7WE4NgEhzxYGTlk8HEfOqiTWFjmG7ScnNTKhBnq+Pg9esEjcFZRtfxDC94e6OYbPGPl
-         Z1A89yxYPH3eJpkS450xq3Y4CfEaSeaQL7QXGyOVpJJnJmNg0lsLDWwjVowotI4/39LR
-         VD38dKZ1WTCLwh2odnWJgu+QgbEIJ06PsMyFeAeoWgXLOlLC/AxemXQVqD37Rq1t9o4C
-         m+v2xu/XqJsJt+oeKvtKMv6rHDH7QXMbyUboEZLQtDC7YIUhMiKgcYFZbjD4KBMSuZaD
-         1XPg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=t92G0xsuXiQ+5p7MU78V80zQy5qz0xUQIUtG/cpaDJU=;
+        b=UeaI/F7To/XvQq0UnOtlDhy7TWOfXA+1z9EGlyjpTrEGbBEhCamdHNFU0CfzdMi5hM
+         UhkFcQ2RD3R+FgOB4U8CBTvdnoG/wllzgOr3V58B3j2wlkWlevRmSN5EL0TWqkNr2i3F
+         LLQUWgJ67u+HYHc4rByBM8S6mYnUi6jWdR8UXOwwRGmp8Hra5JFxI3lZLyUBATyBU5Q4
+         3xIaVZt4CD9ZST6ilr/j0ihwyAqxJBf0tmhInPLzi8SratP4dnV0s2tLmzFKzPhxJ5nF
+         jDbz/hiWW5PVxahvFqDbp2mecyU/uMGuMRsfkkROn5aUjjz1WPFhe36xOruaoULwePmI
+         O6BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Tkfw5cCaQftuIzsthOvhCIrnxS5AAOLFSUhqXR3scw8=;
-        b=qMpiOJuOM/9JgmW+pGEd6j3KTVIcSunTkcGStIufGEsLFzGCcsBfnw1Rl2YdsVQXg9
-         BzRkCAjVqR7I7B575c+Ap1SlMJOQbgwgt+uS7sM1NSYOsAaG9OooI042GVCD6DjABhWa
-         ycOlK5np/XbUAMydVwBU6jUxwaqnBkclh3Fag4yUyIi1szjPM5C/K0dRhzLSNjI1Amx8
-         bcS0J03/5R+/xNwH7mFWtQ6+bhiAMTHtNat58g7EVyJsSEeIFRvo7VlM7wnUxSmcgb8j
-         n7SpQsq6nEjtsJe8mnTUZFRjuqpAwn2JP0870a7B0uT/kbC5+h44YEedPiLJUHeuJki4
-         +tCg==
-X-Gm-Message-State: ACgBeo3YnztUaT27Vbm7CzUO8Sk0TLJxB3TcJu853T0/UWu+set9Z6qd
-        giWeXHaQccfHljwFDCK1pv1O6KfLyXuCGpsRvEw=
-X-Google-Smtp-Source: AA6agR4cdqF2QujfbT0SQmq6doLoGJWlaphE5i3UxSTL5QLugnm803AdvfGWOIE2/bxRAyQARPTjTum7iqfzbW7pYa8=
-X-Received: by 2002:a05:6a00:1390:b0:540:b6b6:e978 with SMTP id
- t16-20020a056a00139000b00540b6b6e978mr22011617pfg.8.1663018372050; Mon, 12
- Sep 2022 14:32:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220912063514.2824432-1-james.hilliard1@gmail.com> <7cb9ebd2-5ee1-f00e-5d8e-0fe454f975a0@fb.com>
-In-Reply-To: <7cb9ebd2-5ee1-f00e-5d8e-0fe454f975a0@fb.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Mon, 12 Sep 2022 15:32:39 -0600
-Message-ID: <CADvTj4p804CMs_1J15Zd=h7+X89ZUO8Mq9fkKvqr-+MmKwkApA@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: define bpf_tail_call_static when __clang__ is
- not defined
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=t92G0xsuXiQ+5p7MU78V80zQy5qz0xUQIUtG/cpaDJU=;
+        b=hNTLnCmkVl95C35sngu+wCTcjjcdjk1ZwuGR6+sx7K/KZKrDU+ZwGfsvs4leRltCIQ
+         4LY6/38w4jG2jIPJFXL/1m6OXZYMqQp1yfDfcxA+3xkzTe6TuCIMjjeYCFSCoN/p+Ans
+         Xnca6iz4n4QQ/v5s6zX1jPFYlYzDDjOu5WagSf5pWgXnBYQ0TA2Wfpr+UOrQU8+5V7b8
+         iuNt9JiVk3voOWhyt/k5TxHZXinfILIO11CVqG4Oz0FhlsKz88Mmr57DijyUylR7l0a+
+         6kI1xSG1HpiutRa7pEMUacFdmSEuSGVUIul7WxxNS+/ZI4KgFPamckWT7TBQhnFHHVJA
+         Heyg==
+X-Gm-Message-State: ACgBeo2SRL0Firob7fjI2PhPP+J8y9pzBseOJLl5DJNNw6ZPIl3w+Ykf
+        D40hsS9/woQjDLobsjg3sPRPW9GhlGM=
+X-Google-Smtp-Source: AA6agR4Jn14x7CO49XIT60557aSMTJHu7eBX3x+qDQsf6nN0yuw8oVJdDIOQW/rtloP/L1LJ4bywP1FsqGY=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
+ (user=jthies job=sendgmr) by 2002:a17:902:db0a:b0:178:2636:b6de with SMTP id
+ m10-20020a170902db0a00b001782636b6demr10904990plx.58.1663018437527; Mon, 12
+ Sep 2022 14:33:57 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 21:33:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220912213334.2703872-1-jthies@google.com>
+Subject: [PATCH] platform/chrome: cros_ec: Log wake events during resume
+From:   Jameson Thies <jthies@google.com>
+To:     chrome-platform@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        Jameson Thies <jthies@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 11:29 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 9/12/22 7:35 AM, James Hilliard wrote:
-> > The bpf_tail_call_static function is currently not defined unless
-> > using clang >= 8.
-> >
-> > To support bpf_tail_call_static on GAS we can check if __clang__ is
-> > not defined to enable bpf_tail_call_static.
-> >
-> > We need to use a GAS assembly syntax check so that the assembler
-> > is provided GAS compatible assembly as well.
-> >
-> > We can use gasversion to provide a migration path to llvm syntax
-> > for GAS once llvm syntax is natively supported.
->
-> I didn't see a gasversion comparison in asm code.
-> Is it possible that we compare gasversion to a known
-> gas version which supports new syntax? If the gasversion
-> is supported, use the same syntax as llvm. If the
-> gasversion is not supported, output an illegal insn
-> and it would be even better if some error information
-> is printed out on the screen.
+Update cros_ec_report_events_during_suspend to log wake events during
+resume by calling pm_wakeup_event.
 
-Yeah, once llvm syntax is supported in GAS the check would simply
-need to be changed to something like:
-.if .gasversion. < 24000
+Signed-off-by: Jameson Thies <jthies@google.com>
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/platform/chrome/cros_ec.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-At least this seems to me to be the best way to provide a migration
-path as we can't really check assembler versions from the compiler
-like we can with llvm.
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d..110df0fd4b00 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
+ 
+ static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
+ {
++	bool wake_event;
++
+ 	while (ec_dev->mkbp_event_supported &&
+-	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
++	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
+ 		blocking_notifier_call_chain(&ec_dev->event_notifier,
+ 					     1, ec_dev);
++
++		if (wake_event && device_may_wakeup(ec_dev->dev))
++			pm_wakeup_event(ec_dev->dev, 0);
++	}
+ }
+ 
+ /**
+-- 
+2.37.2.789.g6183377224-goog
 
->
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> > ---
-> > Changes v1 -> v2:
-> >    - use gasversion to detect assembly variant
-> > ---
-> >   tools/lib/bpf/bpf_helpers.h | 18 ++++++++++++------
-> >   1 file changed, 12 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> > index 7349b16b8e2f..5b98f5506798 100644
-> > --- a/tools/lib/bpf/bpf_helpers.h
-> > +++ b/tools/lib/bpf/bpf_helpers.h
-> > @@ -131,7 +131,7 @@
-> >   /*
-> >    * Helper function to perform a tail call with a constant/immediate map slot.
-> >    */
-> > -#if __clang_major__ >= 8 && defined(__bpf__)
-> > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
-> >   static __always_inline void
-> >   bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >   {
-> > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >               __bpf_unreachable();
-> >
-> >       /*
-> > -      * Provide a hard guarantee that LLVM won't optimize setting r2 (map
-> > -      * pointer) and r3 (constant map index) from _different paths_ ending
-> > +      * Provide a hard guarantee that the compiler won't optimize setting r2
-> > +      * (map pointer) and r3 (constant map index) from _different paths_ ending
-> >        * up at the _same_ call insn as otherwise we won't be able to use the
-> >        * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
-> >        * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-> > @@ -148,12 +148,18 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >        *
-> >        * Note on clobber list: we need to stay in-line with BPF calling
-> >        * convention, so even if we don't end up using r0, r4, r5, we need
-> > -      * to mark them as clobber so that LLVM doesn't end up using them
-> > -      * before / after the call.
-> > +      * to mark them as clobber so that the compiler doesn't end up using
-> > +      * them before / after the call.
-> >        */
-> > -     asm volatile("r1 = %[ctx]\n\t"
-> > +     asm volatile(".ifdef .gasversion.\n\t"
-> > +                  "mov %%r1,%[ctx]\n\t"
-> > +                  "mov %%r2,%[map]\n\t"
-> > +                  "mov %%r3,%[slot]\n\t"
-> > +                  ".else\n\t"
-> > +                  "r1 = %[ctx]\n\t"
-> >                    "r2 = %[map]\n\t"
-> >                    "r3 = %[slot]\n\t"
-> > +                  ".endif\n\t"
-> >                    "call 12"
-> >                    :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
-> >                    : "r0", "r1", "r2", "r3", "r4", "r5");
