@@ -2,178 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D7B5B569C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09815B56A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiILItM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S230077AbiILIvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiILItA (ORCPT
+        with ESMTP id S229845AbiILIvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:49:00 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8202AC4F;
-        Mon, 12 Sep 2022 01:48:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ELGYozPbftZ4qzwNqRJsIGu6yn+jV7XWkVmaouaR00bFRBLzjheLpZOVefF1eDdjvO0D2MG1kcu3Qnq4ngAbciq8+qOpF+avkliAeFiKFBpJUZMmdTtHS6qb3tYWIV8Yp+ObXB4SJX7y2DFZ2BZhxzup9DF0qYSMIiF9rwd13gEL0nQ/Xy+DAbitkxd+Fk27q3flxghYZgrcG14Um9o/kHJ6jFgunE5QDTbumUn7SK9aZ+M/EIX6tqgzPejqZLPagP7nObw8XgF9OXc3RjMN0Ry7JrI/YaYU6OBbYdrROzVRLA57RWJEydmnGuXB4EzDyyULMmmm46RIup71jkX01A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TV588lQOFB8OXXEpDXP5ZlLgBZdx1/c5OoTXnsSCExg=;
- b=gfWvMT3kFlDmwf/0SEgx9ZYqrUVDUradNu7DLTCwFOCEA3atCzYpA/6an+t2/6Hsbw6urWZiAVWjz2G2gmTiIa7daUyprbtbzhkNAsgB+wdJEBHhvOyfUPrDLB5dBkL5M32vQUCgSlcH6Bc9FLXdgNKR21Ywa1oTz1C/c46mvATwhFib3+FMs6p8YzLkzSxL6T4hnxYe60swYZnwPLtHVGF4oKhv+8udxankYQscFvZWG9cZ+m6eTiLIY+tSjMkT3sNH/RfA9EOkuWQyTcz5uE6MtuZhS+7SPPBgg82KqlMriHnTku7tckTXdidbXLEI7GURSVYAp6hobwiVFxZIMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TV588lQOFB8OXXEpDXP5ZlLgBZdx1/c5OoTXnsSCExg=;
- b=3MF2Mfi81f/j2MfOA3YxtOWJlobGyDVUb4kFUI4Rghng3IAZ2UcJfugDV0LcUOtjyo6D+Ae7sMoQlOXR2PNNr0dFV+QBTTNinMYdwwqCVwfz2Z1M4lH3QENWmmODWp5W26r3BostBZCj9Hdg5UG6GpnD5mETitNOxACRxcDtGEA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BN9PR12MB5323.namprd12.prod.outlook.com (2603:10b6:408:104::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Mon, 12 Sep
- 2022 08:48:56 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 08:48:55 +0000
-Message-ID: <671e3417-db4d-1c6e-a0c7-ecab81d91022@amd.com>
-Date:   Mon, 12 Sep 2022 10:48:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 6/6] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
- <20220909170845.4946-7-Arvind.Yadav@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220909170845.4946-7-Arvind.Yadav@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM7PR02CA0026.eurprd02.prod.outlook.com
- (2603:10a6:20b:100::36) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 12 Sep 2022 04:51:08 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209422B255
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:51:04 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b21so7925371plz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/UeNpP+VC97GxtM/tp6ip0ihWytOFO+8NfMTiiZb64A=;
+        b=Tk2ZeLrKXwzkwyP2gg/3iL/biwqdAmBEtphjyT6uO6r63r19dU2BGwwnqRfoxF46wk
+         wgDK0HlRY1LYsPaHrVcBxLZ9wG07D78g2CrMCLX6QvgJ3nXDqXGR6q68U0uov3lpzkbW
+         bhlec8jh+BMtVOwvN9cBG5oZ+6bCrVZSjh0FqfJBuAQoXFpdxM2QBmCOozaZBka6uc8/
+         6VwN8sWSz0n4R/TQZii3awQ9itFtyGUiGSa06QGjbDJW0RDrV4uBPT5eEGC/noMPYcsR
+         ZZ88nGS8NU3vmBnwgyIZ/gnhNltoBswVTMhJ/o3PI01yL+rcEmA/nN/j0mLybKNSejNV
+         60lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/UeNpP+VC97GxtM/tp6ip0ihWytOFO+8NfMTiiZb64A=;
+        b=LGi06xWTzV9OgMH90KXbsU6r41xlx52CapsTbqgE/rdRJLt+ZljUlNBq3YdCUU9Tvr
+         kCS4MIAhO5unItESp0nw1KZJEostrA6YB9UXPi60vjj2OL5+W9YRmwdBH7gIVALvJ/6/
+         Zzv22xpqbKx/xJaai7NndcstItwjQSIn6Xzj+8v2oObWKVrlB7P/kwQxjYQ6Zin4UjMI
+         Dy0UJd7wyDv2nuyCUvGUKe2PZNg45GBobSrkvq6k7BEQdl89W8aW51BzTkS6qFlc012k
+         cIFhfdbMkugZVYdcUiazD8K3GxjIfoNlZOezJbhchYuzxCESTInj7Wl6SJ8+3jFYe3Pm
+         05uQ==
+X-Gm-Message-State: ACgBeo3e1hNvcgmlo+sQ3dsXABclPwDfDnK1wjxc0Uo2gvpjIjwtiDGq
+        c5Wky2YYGQKiMIDUSQPQb/FstM9aiOoNtg==
+X-Google-Smtp-Source: AA6agR43dq9ilseW2ZLnOobj5xvkN3BRzRdVtKpqcF2vjeJLYTZspljXXlvcwBWS7skmTT0WCOmnCg==
+X-Received: by 2002:a17:902:bc44:b0:176:909f:f636 with SMTP id t4-20020a170902bc4400b00176909ff636mr25363438plz.21.1662972663290;
+        Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f54d00b00172897952a0sm5326699plf.283.2022.09.12.01.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com
+Subject: [PATCH 0/4] thermal: Introduce Qualcomm Cooling Driver suppport
+Date:   Mon, 12 Sep 2022 14:20:45 +0530
+Message-Id: <20220912085049.3517140-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BN9PR12MB5323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c503623-56a2-44be-3c05-08da949ba03b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H1XS4hyt9RfP1Saco/OLV5BEwkwWKzaDI0bwBFmm3iFMjxAtzDlMFH88gL6bB1JRPjeaZWN2WoRD/WjQNie8veF3/d3nwzX4D/Zxt4hDzNf4gSoSGhIsR1dpfFQXddAB3m7oM2A8CKxQG+CPEKIEzU6u3EjsLEKpzZbZjt5VD4gxBiWrZbLWv2lvd5u64R/KC2Ny4KRBHrzGrYlW/q45JjpIDovNoWGwCenUIPHtY/kKpXx1P19ndyQjBM2RTeGHUtmcolv7BR9xDHx9QSxG3UUQuQee6clKW03ob0TRfp7r1+59nLh/3jVtvIcQbLvc0nbIj17GNKdRhnFi2qQC00ZMpXf91UPI6hsHq9vAh9j+/68wQCse76fRTPpBYM0f16NbUR4fN+8XJ3V7BkaUOcPnkkScAHf3q4uJUd9ln7E++Dm2ACaUgIZjpT2gcGoRxAoFrSPCIyd9+L1VmxVrldDiTlNKa/KrruW5JdkypgUU5VoxA5r+BL7llWLAfLwByDFQKBlE6OQ/QKk8l+twFNo9g55RHPOvQ//ZTKIvxqB4R34EQzY/L9HSZy9sSCv4jwlF7pz+NRoHM2Gj40JHKMG97g+wIrTPEzp7mFOcFFekGt3jhDvxrQK7YNaIsqBF//qSqaiXuVs7dUbEbSWRm+OCV0qx0qcDOzIEh3yiW59VyGAQKAW6ACyO0a7if0Itkdi2Ejh32hi4BQrG/nkL9Wutsuy7LZqWM2T47VWkQr3TWaCtF+vSf1/zGduBJCZoSxvu6iFPhJyOe98ExTWMdh4GIxuqDeyy5dLC6DrmC4ArGTkNzGZR7sC/uhdHofYq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(6512007)(41300700001)(86362001)(31696002)(6666004)(6506007)(6486002)(478600001)(2616005)(186003)(921005)(83380400001)(8936002)(5660300002)(38100700002)(36756003)(66556008)(2906002)(31686004)(66476007)(8676002)(66946007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDlTYm81QjdkWVZ0T0oyc3NLUk9KU0hmSG96K0REcUN2azlQQllxRzNPN3Fv?=
- =?utf-8?B?Mk5qZ3pwZlYrWS9IN2I5QzJuWHRrY0VCa3hnbVVRZStHQnQ0RjlZWG9VdDVo?=
- =?utf-8?B?U1Y2bjlFQ0c3QjRqU1JnWi9BT2pQT1pEZVpBRHFFc21GUjE3VmF6ZkpWRXVQ?=
- =?utf-8?B?cm5xNXg2MFpUcGFCVndBcXBxUVdRT3lKWUc4TEgwMEVUZWhJQnkxR2JQcXRP?=
- =?utf-8?B?ckFBanpUWGZ2cGp5S2pWVC9URDVUK0haa1BCb2VQaUV2dnIxYy9aeUx5cVVn?=
- =?utf-8?B?dmhyWjR3aGdic2tNNnh4UGFiMEVsQnBZc2RLSXpNK0UyV2tzMWl2VmFYdk1o?=
- =?utf-8?B?Z1o2SUUzbXNVM1pOWW5XZzVsclMvSk5mNjNsOUFmbjgvZ3FuVXIvandTdGJM?=
- =?utf-8?B?eWJQU1Z3a2JZYUNpcVllSkJmM04xOFNIdzdSYUFrem8zQ3hoT3hIK3IwR3VD?=
- =?utf-8?B?ckRCb0pTaG1aaEcwSWUzZ0JYOGZLQlFxc01XNVJ2QUdpVDBzWFVKVGRzWVRZ?=
- =?utf-8?B?aXpMVFcvd2tlQWZwanNhM0RKekw4WnZEWkU3Nnk3WmMrNkVNcGRBOTN2QzVa?=
- =?utf-8?B?d3pNbHRlTHVLSG15ODQrUjFRck5qd1RYNFRwZk1RNytZMWFCRWdrTEhTZ05q?=
- =?utf-8?B?bU11bXg0dU94R3IzcytCK0ZzUHBISkJVSGIxZWozZXFOZXVReU5JUkpBWkFq?=
- =?utf-8?B?SVdVYjVLVjdBSUp6dmlRR01LaFBNY3Z6VVl2SkxnYXJrbmx6eHVLNVlqU2o4?=
- =?utf-8?B?NFlvMnU1aThJcnRka1V0WktpbzIxUGZpQXhobmJpN2pOaWgwYkhQemhTQU1K?=
- =?utf-8?B?Z084WlR6bVBvVEVIdHJUeTU4UjBGTVAvR1JuTUtwQUVzdGg5NHhqK1dUUlRr?=
- =?utf-8?B?SFhFZDB6cmNFMTBWeVNKbmxCRjE5QXh6NjY2RU9iK3BnUE9WdGlYUFZ0NVll?=
- =?utf-8?B?OUg1eHVZTngxZ0J0M2ZVYmVVSkVSOWc2YzM3dm5panNLUEtFQnVYQng3OTU5?=
- =?utf-8?B?b0l5RmJOZndRN2wzMStIa0k2c0FXQ0FuZnE1ZGRvYTFJalF4c280R2RFejJv?=
- =?utf-8?B?Um5vZGxsSmI2VVpIOWp2R09teFkvQVpScFNlQytpeVAxcEN2SUI4M1dNc3dv?=
- =?utf-8?B?TDlMVHIrZTV2cnhTZ25jek5hOVloNjhLSUNiUC9JS1A3dFBxNXNFZUErOWVH?=
- =?utf-8?B?ZU5TZGVWWUxBM0cyQ3Q2K2U2RllYdUhTMUpCSW9WeFY3bTEvWVAwSmJRUnow?=
- =?utf-8?B?d3krdXgwK2U4TUVEOUhJS0xvK2ZlY3ovWC8rYVFFaWxBQVZDMklyUUZ0dmti?=
- =?utf-8?B?RFc0NGpuYmdsOUJkaWV4NTJVeFVQM1o5ZG5Rem5ER0dCYkk2ck5lLzhjdE9O?=
- =?utf-8?B?MmpwNS9rZWVUM2RuYzJteHZ4S2hWUFJYMzdaUzRqZHdSL2Iwd2VDV081bmNB?=
- =?utf-8?B?SUdQR2tMT1BvSHVLWVFWeUsrQU1BU2FsbWl6VWYyVjRVZ3JnQ0N4V1N6bXFv?=
- =?utf-8?B?c2Qzald0KzN6ZlRYL1ZZd1cxUm4wK2RscjMwaUNRU09kTlNTM015VjJYdUR5?=
- =?utf-8?B?SmZDTGxpNTAxYjlYdGJWMHJJQVZmeHY3Y1BKOEdnVXI5SzJaY3NwSTFYR3Nu?=
- =?utf-8?B?ZHNVcE9HekYxSTJNT1RudWFpRDhYV0JKcHkyNGJHdVRrVDZJTkVsUHZkVm05?=
- =?utf-8?B?S25rMDA4MjcyWjBzWWV1V1ovT1lmVjJ1N3VjQUNXbHNLOGZBbEVOQ0xuZWQ4?=
- =?utf-8?B?WWNqVitTdXoyQmIrWlRkNm5iMWFTNUtYZkpQT1gxOFI4eGgwMzNDaGdwa1N0?=
- =?utf-8?B?cmh6TWx2MnZ1ZHprMWhDQVNQendxU2N3QlkrQ0pld2E5aXBMaFZNSXBxQldk?=
- =?utf-8?B?SjRMeHZOV0dDMjJTVTN4c2NRWHc4cHllaUJiUWZ2ZjUvUVFIcmUzbnNLdVhJ?=
- =?utf-8?B?SnRCMlBpVlNsWkh0b3NwRy9wQ3BlS1kyNUc5Z1V1dm45U0NMb2drQ21MNVJS?=
- =?utf-8?B?SytTUk01aXovZWU1R2lwdFJvNVU3VXpMQm5nSW5ZWGI3TnE2ekh0UUdzQmJV?=
- =?utf-8?B?SU83d0JUSzNZN1p0S216NFJEaEZWeDhHOUh1dEFNYzRvRDJ0VnFlZ0gyajF3?=
- =?utf-8?B?RHFsYXhVS1BmRVd6dU80YVVKZGZsV3NITFZoM0J0R1Q5b2M4RnNIOG9aQjh3?=
- =?utf-8?Q?ANEkTsw8MAARsipPlQ3vpOrGcZftv47ovXS8RK+QE9Y6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c503623-56a2-44be-3c05-08da949ba03b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 08:48:55.8237
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B+NdHh5EaeVOb8qqyLJ5Q/fqt2BXGgS7whPflrMKm8rRpYA2sWP8YTAc5sBeRHVr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5323
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 09.09.22 um 19:08 schrieb Arvind Yadav:
-> Fence signaling must be enabled to make sure that
-> the dma_fence_is_signaled() function ever returns true.
-> Since drivers and implementations sometimes mess this up,
-> this ensures correct behaviour when DEBUG_WW_MUTEX_SLOWPATH
-> is used during debugging.
-> This should make any implementation bugs resulting in not
-> signaled fences much more obvious.
->
-> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
-> ---
->
-> Changes in v1,v2 :
-> 1- Addressing Christian's comment to replace
-> CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
-> 2- As per Christian's comment moving this patch at last so
-> The version of this patch is also changed and previously
-> it was [PATCH 1/4]
->
-> ---
->   include/linux/dma-fence.h | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index 775cdc0b4f24..ba1ddc14c5d4 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence *fence)
->   static inline bool
->   dma_fence_is_signaled(struct dma_fence *fence)
->   {
-> +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
+This patchset introduces the Qualcomm Cooling Driver (aka Qualcomm Thermal
+Mitigation Driver) and the related support code (dt-binding, MAINTAINER
+file etc).
 
-As by review comment from Tvrtko Ursulin let's add a separate config 
-option for this into drivers/dma-buf/Kconfig
+Several Qualcomm Snapdragon SoCs have Thermal Mitigation Devices (TMDs)
+present on various remote subsystem(s) (for e.g. the Compute DSP, aka cDSP),
+which can be used for several mitigations for remote subsystem(s), including
+remote processor mitigation, rail voltage restriction etc. 
 
-Thanks,
-Christian.
+Here we introduce the Qualcomm Cooling Driver which is based on the
+kernel thermal driver framework and also employs the kernel QMI interface
+to send the message to remote subsystem(s).
 
-> +	if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-> +		return false;
-> +#endif
-> +
->   	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->   		return true;
->   
+At the very top-level, the dts is supposed to describe a TMD node, which
+should further represent the remote subsystem(s) present on the SoC and
+further each child of a subsystem should represent the separate cooling devices
+available on the remote subsystem.
+
+Note that this patchset is targeted for the 'linux-pm' tree and the dts
+patchset/changes targeted for 'linux-arm-msm' tree will be sent as a
+separate patchset.
+
+This patchset is based on the CONFIG_QCOM_THERMAL related fix sent via
+[1]. Otherwise the latest changes from 'linux-next/master' are used to
+rebase the patchset.
+
+[1]. https://lore.kernel.org/all/CAA8EJpoM5nW=pVJB4zy4Jh9Q3gE4KOju2QVy_WtmUokKMyXtuw@mail.gmail.com/T/#m4e2b765e68e3123b3c0e28c806409dae4b988432
+
+Cc: andersson@kernel.org
+Cc: robh@kernel.org
+Cc: daniel.lezcano@linaro.org
+Cc: rafael@kernel.org
+
+Bhupesh Sharma (4):
+  thermal: qcom: qmi_cooling: Add skeletal qmi cooling driver
+  thermal: qcom: Add Kconfig entry & compilation support for qmi cooling
+    driver
+  dt-bindings: thermal: Add qcom,qmi-tmd-device and qcom,tmd-device yaml
+    bindings
+  MAINTAINERS: Add entry for Qualcomm Cooling Driver
+
+ .../bindings/thermal/qcom,qmi-tmd-device.yaml |  78 +++
+ .../bindings/thermal/qcom,tmd-device.yaml     | 122 ++++
+ MAINTAINERS                                   |  10 +
+ drivers/thermal/qcom/Kconfig                  |   4 +
+ drivers/thermal/qcom/Makefile                 |   2 +
+ drivers/thermal/qcom/qmi_cooling/Kconfig      |  14 +
+ drivers/thermal/qcom/qmi_cooling/Makefile     |   3 +
+ .../qcom/qmi_cooling/qcom_qmi_cooling.c       | 632 ++++++++++++++++++
+ .../qcom/qmi_cooling/qcom_tmd_services.c      | 352 ++++++++++
+ .../qcom/qmi_cooling/qcom_tmd_services.h      | 120 ++++
+ include/dt-bindings/thermal/qcom,tmd.h        |  14 +
+ 11 files changed, 1351 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/Kconfig
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/Makefile
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_qmi_cooling.c
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_tmd_services.c
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_tmd_services.h
+ create mode 100644 include/dt-bindings/thermal/qcom,tmd.h
+
+-- 
+2.37.1
 
