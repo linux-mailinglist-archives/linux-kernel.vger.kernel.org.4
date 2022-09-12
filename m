@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0842F5B63D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9890C5B63D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiILWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S229897AbiILWtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiILWsn (ORCPT
+        with ESMTP id S229746AbiILWtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:48:43 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA124BA77
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:48:42 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id my9-20020a17090b4c8900b002027721b2b0so7577948pjb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=69eqzQldLaAKRphbYvjKq9UwxC3qVyQ1BnuwXpOP90k=;
-        b=SmME0BoRudH8DEJT4v4/zsZ3xWJOz30HsCdv6NK/gwQLgnwxaE20doDBhiq1uGrL/Q
-         n/AFLvKj7G5Qkcm4WCvGz9AExc2p38QVLZAsgZ/Uxgz4wzUuEDlgtEuQ8lFt7midKBbM
-         53T4PwLEP5Q1mr0miEpX2RrlDptWi8e3bFLCz0I00ei2+lfbCV3hqYsImIfvPBIqSWpC
-         nAt9f86oKWbs9ruvNhLnhXuQsJervZtGPvEA7Evq3/d1kEWzCwRJwe4kjsmf+R8FKawQ
-         K5s/ABkk1n77LzD6wp633Hq6RfNJTCaxU/nEjRGusnm9um5co6dbyWJNO/fNEJ94FBrq
-         zm1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=69eqzQldLaAKRphbYvjKq9UwxC3qVyQ1BnuwXpOP90k=;
-        b=PQsjELKpQcFQV1eymtrEWYU1PhfUrfSPfd0mNULVEMTqpTJBYh7s2bjb3V82Y+acSD
-         V80c1HbSGVQL9jOhuS1d6gSyEkqgs7aM3nkVDzgipRITOAh720VvH/H9WxQ06D5KhU2v
-         tT7DRD94yT9lvxtvqgNwJE63Ny1EDA4MiSpyhVLAY6seKOU1SJlRoO3vRDAvcxgOn/Lg
-         TQNOBMvdY6ZayKgwRq8Jhb+Zq91KRZxi1SD5w9zGGuYMIbXSofDfCX9R9CMjD9C68gZa
-         XDNQx5faOSymxVBfBL8KMH1XO6nRX087q9GqICZYEU+w/+/0CROls7chxblq3m8JJT2R
-         Kphg==
-X-Gm-Message-State: ACgBeo3S+DhZZES+M3ABbz/4Q9Eoebx8L+zamDJ7mc0iXMwAJWOMYvVq
-        iXz55Em1UZ0QESGaM0f3RuYx0nu47k4=
-X-Google-Smtp-Source: AA6agR54JsXmsNxLeykhCovQYXLPwCyudwSKJ5KzmN5v6Pt0M/FYw9u1jAFxSPymtmO4mvSh0T1/Iv01d8c=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
- (user=jthies job=sendgmr) by 2002:a05:6a00:a04:b0:534:d8a6:40ce with SMTP id
- p4-20020a056a000a0400b00534d8a640cemr30258261pfh.15.1663022922073; Mon, 12
- Sep 2022 15:48:42 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 22:47:45 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220912224745.2716345-1-jthies@google.com>
-Subject: [PATCH v2] platform/chrome: cros_ec: Notify the PM of wake events
- during resume
-From:   Jameson Thies <jthies@google.com>
-To:     chrome-platform@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
-        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
-        Jameson Thies <jthies@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 18:49:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA9F62CD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663022979; x=1694558979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NsiOox7nfIPNPbqeXi04s08cExYxbUI6A8GPKqPLH8c=;
+  b=Uf/SR0VCmoWZxvio96+oGGz9Ukdd7lOVch8uJBZXx+a5YwMp4PKBLSQY
+   RoFWbroa8iEGKWBTO2RGrnA909IiR+gc/yxeLChdcEoswzl+kSzXpJGZE
+   bn+KQDI02gQbn+V4AurzukrKUs8NmgXuNMrPIsMolfgl3dkGI6FVQXbbP
+   fzk6RveJ4cpuVLMScy0LOPJ/NioI3E9rYlzww5md2W+qBowpkDn/SaTfI
+   hSfdTs0z/FB8deXorEEWlsXnZiON62tkAOB+4OlHDK2bxVFAd0uoIX61/
+   jIpk7COyAQMHyER11ZO4wF6jqcgmkoTuacZdvnfQc1jKN7Ta5Lt8+JMd+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="285008273"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="285008273"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:49:37 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="616234521"
+Received: from aburgsta-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.208.142])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:49:33 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id E30D610455B; Tue, 13 Sep 2022 01:49:30 +0300 (+03)
+Date:   Tue, 13 Sep 2022 01:49:30 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Ashok Raj <ashok_raj@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <20220912224930.ukakmmwumchyacqc@box.shutemov.name>
+References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+ <YxDvpLb77lwb8zaT@araj-dh-work>
+ <20220904003952.fheisiloilxh3mpo@box.shutemov.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904003952.fheisiloilxh3mpo@box.shutemov.name>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update cros_ec_report_events_during_suspend to notify the PM of wake
-events during resume by calling pm_wakeup_event.
+On Sun, Sep 04, 2022 at 03:39:52AM +0300, Kirill A. Shutemov wrote:
+> On Thu, Sep 01, 2022 at 05:45:08PM +0000, Ashok Raj wrote:
+> > Hi Kirill,
+> > 
+> > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:
+> > > Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> > > 64-bit linear addresses, allowing software to use of the untranslated
+> > > address bits for metadata.
+> > 
+> > We discussed this internally, but didn't bubble up here.
+> > 
+> > Given that we are working on enabling Shared Virtual Addressing (SVA)
+> > within the IOMMU. This permits user to share VA directly with the device,
+> > and the device can participate even in fixing page-faults and such.
+> > 
+> > IOMMU enforces canonical addressing, since we are hijacking the top order
+> > bits for meta-data, it will fail sanity check and we would return a failure
+> > back to device on any page-faults from device. 
+> > 
+> > It also complicates how device TLB and ATS work, and needs some major
+> > improvements to detect device capability to accept tagged pointers, adjust
+> > the devtlb to act accordingly. 
+> > 
+> > 
+> > Both are orthogonal features, but there is an intersection of both
+> > that are fundamentally incompatible.
+> > 
+> > Its even more important, since an application might be using SVA under the
+> > cover provided by some library that's used without their knowledge.
+> > 
+> > The path would be:
+> > 
+> > 1. Ensure both LAM and SVM are incompatible by design, without major
+> >    changes.
+> >    	- If LAM is enabled already and later SVM enabling is requested by
+> > 	  user, that should fail. and Vice versa.
+> > 	- Provide an API to user to ask for opt-out. Now they know they
+> > 	  must sanitize the pointers before sending to device, or the
+> > 	  working set is already isolated and needs no work.
+> 
+> The patch below implements something like this. It is PoC, build-tested only.
+> 
+> To be honest, I hate it. It is clearly a layering violation. It feels
+> dirty. But I don't see any better way as we tie orthogonal features
+> together.
+> 
+> Also I have no idea how to make forced PASID allocation if LAM enabled.
+> What the API has to look like?
 
-Signed-off-by: Jameson Thies <jthies@google.com>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
----
+Jacob, Ashok, any comment on this part?
 
-Changes since v1:
-- Updated wording in commit message from "Log" to "Notify PM of".
----
- drivers/platform/chrome/cros_ec.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+I expect in many cases LAM will be enabled very early (like before malloc
+is functinal) in process start and it makes PASID allocation always fail.
 
-diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index 8aace50d446d..110df0fd4b00 100644
---- a/drivers/platform/chrome/cros_ec.c
-+++ b/drivers/platform/chrome/cros_ec.c
-@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
- 
- static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
- {
-+	bool wake_event;
-+
- 	while (ec_dev->mkbp_event_supported &&
--	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
-+	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
- 		blocking_notifier_call_chain(&ec_dev->event_notifier,
- 					     1, ec_dev);
-+
-+		if (wake_event && device_may_wakeup(ec_dev->dev))
-+			pm_wakeup_event(ec_dev->dev, 0);
-+	}
- }
- 
- /**
+Any way out?
+
 -- 
-2.37.2.789.g6183377224-goog
-
+  Kiryl Shutsemau / Kirill A. Shutemov
