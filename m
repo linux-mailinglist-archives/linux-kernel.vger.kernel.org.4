@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BE35B5225
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 02:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A175B5229
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 02:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiILAIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 20:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S229567AbiILANe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 20:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiILAIT (ORCPT
+        with ESMTP id S229529AbiILANb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 20:08:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBAF21836;
-        Sun, 11 Sep 2022 17:08:16 -0700 (PDT)
+        Sun, 11 Sep 2022 20:13:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70FA22BC0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 17:13:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 894176113E;
-        Mon, 12 Sep 2022 00:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB8AC433D7;
-        Mon, 12 Sep 2022 00:08:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90DF8B80919
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB523C433D7;
+        Mon, 12 Sep 2022 00:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1662941295;
-        bh=FzZorLF2NlTI8c48kkyPVRMS1b1Nj7mM9WPqa+83iC0=;
+        s=korg; t=1662941608;
+        bh=a+9CeUAZFA4uEVBgG2R/sWw2w1S33FQCLzrVHj6/5fQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qkOyIAC8xjhNKb7TJznT0R9qxDAfIgpk3ityT7U5fvkhKXzZxZgbb6SCL2LrpRnIY
-         q20s4xgyqh7fXA2PeJDnhimUYeVhOEUJJT7RVu872ThuSgh+9gityr/rAgvrK4ANC3
-         tpRgP1mMn8mHs3ge/Hj/ZrrlWh43hUEXtzUIooN8=
-Date:   Sun, 11 Sep 2022 17:08:14 -0700
+        b=PPrloprx90Hw+iQ0SOaW4BE/xVV+wj+1kWyGgAFAsA00WJSFeR1fBhUUJ+zv1m7/Y
+         IwrzN0snd8fgbzGLGV579UqxmwzkSBzP9pGfBshIBL0BrGvQBguAsBMoZyeZqtng/u
+         66OHpbPlez9RwFYG+ikeYP3PuU651Lnyqw8+RAGc=
+Date:   Sun, 11 Sep 2022 17:13:26 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, Wei Xu <weixugc@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
         Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com
-Subject: Re: [PATCH v14 00/14] Multi-Gen LRU Framework
-Message-Id: <20220911170814.f6a32b40e64397a61b1f8daf@linux-foundation.org>
-In-Reply-To: <20220815071332.627393-1-yuzhao@google.com>
-References: <20220815071332.627393-1-yuzhao@google.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [PATCH v15 00/10] mm/demotion: Memory tiers and demotion
+Message-Id: <20220911171326.2e3fca66f78b0691b7e79dc8@linux-foundation.org>
+In-Reply-To: <20220818131042.113280-1-aneesh.kumar@linux.ibm.com>
+References: <20220818131042.113280-1-aneesh.kumar@linux.ibm.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -69,9 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'd like to move mglru into the mm-stable branch late this week.
+On Thu, 18 Aug 2022 18:40:32 +0530 "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
 
-I'm not terribly happy about the level of review nor the carefulness of
-the code commenting (these things are related) and I have a note here
-that "mm: multi-gen LRU: admin guide" is due for an update and everyone
-is at conference anyway.  But let's please try to push things along anyway.
+> This patch series make the creation of memory tiers explicit under
+> the control of device driver.
+
+This series has been in mm-unstable for nearly four weeks and
+everything has died down, so I'm planning on moving it into mm-stable
+late this week unless someone stops me...
+
