@@ -2,127 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228315B5E69
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9622F5B5E6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiILQkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S229760AbiILQkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiILQkE (ORCPT
+        with ESMTP id S229809AbiILQkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:40:04 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5DD12D2D;
-        Mon, 12 Sep 2022 09:40:02 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 3E1B22265;
-        Mon, 12 Sep 2022 16:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1663000681;
-        bh=1a2OBAbi4gKtku0aJDgWDysekTB5Toxc3MphEpcWgNc=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=E3UEcihC8pWHCDEEyN7d0HGaU1D2sJsQWeRwNydtJWpquUk4p+0bupa+SuVnnRw5W
-         MVIcT+q7zUmTmeTg4Q+98d6lNoHzW9ghJlxjZOFS0wtQkxR2OondqQoALL1WaTWLKq
-         AhgH+1HPsSB8IgdWZGDs2f4J+2ejgritX6L7RXqI=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 12 Sep 2022 19:40:00 +0300
-Message-ID: <1194d7b9-658f-b724-93d4-2f2b02b569ca@paragon-software.com>
-Date:   Mon, 12 Sep 2022 19:40:00 +0300
+        Mon, 12 Sep 2022 12:40:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFF21B7A2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:40:09 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663000805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=slnxiOp+gkRXmBVTDJrYoCWxL2o6z4OOeTrE9ERi8pk=;
+        b=PpRUNZSVcaZHfWwdBQdAtjTjPFNNQpCQ4HFaxk2TSxNrY11dlIYpKDZJDeqFmnEhkpsHUz
+        xSa7lbFV+MZpr7sgLNychRlMiV/LY/tkLt7qBqaRmBl6j4NSqgwo2olejgJe6Oou5W2XE2
+        sc6D3PPxvEs10IT+Ti/XTrTXo06IhtRmlifFc+wQDXprhdKs4kui7tozauuqIk9veVEPTf
+        KaRodEQDwDrTDMyzbrB8F/HiH6WRjrZSur+fR7MKffQvoHHExPSkjcm0eOieIIDmJT68d6
+        yJ1gIe3wZFyJUIofYK9urHQAEUIF5ZbmHzkk+te4B/UIqXprRIadub5XP2+MwA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663000805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=slnxiOp+gkRXmBVTDJrYoCWxL2o6z4OOeTrE9ERi8pk=;
+        b=6kc5/xjrB7UM1LAK4AFV7+uMUVeL1LlInMN9h0imVlUTWy7ec6rGwS+7adDt+df7tZeYvr
+        3ygAg93t5c0cL6Ag==
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: printk meeting at LPC 2022
+In-Reply-To: <20220910221947.171557773@linutronix.de>
+References: <20220910221947.171557773@linutronix.de>
+Date:   Mon, 12 Sep 2022 18:46:04 +0206
+Message-ID: <87h71cr1gb.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH 2/3] fs/ntfs3: Add hidedotfiles option
-Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <59960918-0adb-6d53-2d77-8172e666bf40@paragon-software.com>
-In-Reply-To: <59960918-0adb-6d53-2d77-8172e666bf40@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With this option all files with filename[0] == '.'
-will have FILE_ATTRIBUTE_HIDDEN attribute.
+Hi,
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/inode.c   | 4 ++++
-  fs/ntfs3/ntfs_fs.h | 1 +
-  fs/ntfs3/super.c   | 5 +++++
-  3 files changed, 10 insertions(+)
+We now have a room/timeslot [0] where Thomas and I will be presenting
+and discussing this new approach [1] for bringing kthread and atomic
+console printing to the kernel.
 
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 51363d4e8636..40b8565815a2 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -1257,6 +1257,10 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
-  		fa = FILE_ATTRIBUTE_ARCHIVE;
-  	}
-  
-+	/* If option "hidedotfiles" then set hidden attribute for dot files. */
-+	if (sbi->options->hide_dot_files && name->name[0] == '.')
-+		fa |= FILE_ATTRIBUTE_HIDDEN;
-+
-  	if (!(mode & 0222))
-  		fa |= FILE_ATTRIBUTE_READONLY;
-  
-diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 2c791222c4e2..cd680ada50ab 100644
---- a/fs/ntfs3/ntfs_fs.h
-+++ b/fs/ntfs3/ntfs_fs.h
-@@ -97,6 +97,7 @@ struct ntfs_mount_options {
-  	unsigned sparse : 1; /* Create sparse files. */
-  	unsigned showmeta : 1; /* Show meta files. */
-  	unsigned nohidden : 1; /* Do not show hidden files. */
-+	unsigned hide_dot_files : 1; /* Set hidden flag on dot files. */
-  	unsigned force : 1; /* RW mount dirty volume. */
-  	unsigned noacsrules : 1; /* Exclude acs rules. */
-  	unsigned prealloc : 1; /* Preallocate space when file is growing. */
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 86ff55133faf..067a0e9cf590 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -247,6 +247,7 @@ enum Opt {
-  	Opt_force,
-  	Opt_sparse,
-  	Opt_nohidden,
-+	Opt_hide_dot_files,
-  	Opt_showmeta,
-  	Opt_acl,
-  	Opt_iocharset,
-@@ -266,6 +267,7 @@ static const struct fs_parameter_spec ntfs_fs_parameters[] = {
-  	fsparam_flag_no("force",		Opt_force),
-  	fsparam_flag_no("sparse",		Opt_sparse),
-  	fsparam_flag_no("hidden",		Opt_nohidden),
-+	fsparam_flag_no("hidedotfiles",		Opt_hide_dot_files),
-  	fsparam_flag_no("acl",			Opt_acl),
-  	fsparam_flag_no("showmeta",		Opt_showmeta),
-  	fsparam_flag_no("prealloc",		Opt_prealloc),
-@@ -357,6 +359,9 @@ static int ntfs_fs_parse_param(struct fs_context *fc,
-  	case Opt_nohidden:
-  		opts->nohidden = result.negated ? 1 : 0;
-  		break;
-+	case Opt_hide_dot_files:
-+		opts->hide_dot_files = result.negated ? 1 : 0;
-+		break;
-  	case Opt_acl:
-  		if (!result.negated)
-  #ifdef CONFIG_NTFS3_FS_POSIX_ACL
--- 
-2.37.0
+Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"
 
+John Ogness
 
+[0] https://lpc.events/event/16/contributions/1394/
+[1] https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
