@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCCC5B5550
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48E55B5552
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiILHZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:25:34 -0400
+        id S229566AbiILH0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:26:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiILHZD (ORCPT
+        with ESMTP id S229895AbiILH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:25:03 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B55ACE3F;
-        Mon, 12 Sep 2022 00:24:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQylt02bPz4xD3;
-        Mon, 12 Sep 2022 17:24:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662967482;
-        bh=XuJdmswV2c9gKv/M+vCiUz1quQEgRWkwa2BIYu3NDuo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QbmNV3BPYi9EDMrxTPhR1fDKDDEUXd0Gjr+PUYrETCVRfSPEHf3koN6KfeGc0Y03G
-         OjsO8WIj2/de8SifY+ta0B3z/WTMW5lSMFQLysCipJTn1nyqSbbB2yzhGJulSMgEi4
-         lvF9WBkz8PPClJw437dieITljr3da6IfjRw4kxR1M+r+7m/eKFe9ozrGgfMPscXUPi
-         6Ty7RhyS6duAIpt4sN6qFeLlSCZqRrOB603HqcHv0oJv7gmbuFVd/zair4XUn2+pWP
-         b0wWcby3OpRAB38D+YrjPMg43D4UqvXVDn50eGl2wFnGCb+V5O9OtsgRCl7AVz8eDD
-         SgWhckxHSL3sA==
-Date:   Mon, 12 Sep 2022 17:24:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20220912172440.76a19053@canb.auug.org.au>
+        Mon, 12 Sep 2022 03:26:05 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E69413E34
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:26:04 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id s6so2164133lfo.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=S7qsMOJyMlwVuf8eNuNOSDhJ270g0hn497r6PO6XbXw=;
+        b=Krnw8ElDk+wm306zYuf/qgqXG4VO9Aq8d+XWE2tq44Qx8y/W7EMY2m2//i7kIbEaU9
+         nINjTyDNCFXLJOoBWwNwv1eCp7RzFaprzqaPyWvfFXIaze7+qNWSUdJV5w7HhgYEcdQa
+         Mwket2fkauYFMfkZGaS4LHLkZg+X4l2dHIY7v6WdPkYV08d5Wa/WElHflGvNGPIDE6eP
+         Y/RssHUwKL9D9PVWSJxVbIYlHldJ8LVfo0m1eRl2AhtrjUV57xOfGcWB/IYJYHXA1tPD
+         quLvQbMVye2moBnXy9FWMGQTleum59k8x9Rn6V5Y8dzTMZgF6MfDgnqPuNchpHLTBTtB
+         00jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=S7qsMOJyMlwVuf8eNuNOSDhJ270g0hn497r6PO6XbXw=;
+        b=muJg+mUTRPXw9fQoWN9doJztSfWxuZ2Gbd8ySjN+DbS8ONCuHPNVERU7gTmPnpplrP
+         jZQUwe2T0mM5aLjvJPWwUGdK5QKWVKtktBO5UcFPoU0P35FtKTLOC6Z0IjGRvozEn2Pc
+         33H79csn3mCAGtabb/Isleezl6VIlNfWhrHTthS/9Fe3/3M3zmJEmXqUnrPaKXAJtkr3
+         T+4Moi//ouiAKRF4Z5w971EVPoJTnvmTdRjmPBTGJS9AkSjW6WwKOELtSVD0L3rs0vGO
+         Kd7vuPT0tYz9UZ4ts8WgzHHCtZHE17haidYT4oOFenQxOp18WEEQoNCPsHB2uq9uXn0N
+         nd2w==
+X-Gm-Message-State: ACgBeo1FqNUWrRLzEM03LK2Ycn4F8dT7/8Gor40gk/4dij+DRAn7XY4z
+        Y+5VSuNP6tWjamxPfeItu4o=
+X-Google-Smtp-Source: AA6agR5F5pOWPsyydsoOnGUkI7IVqKKI0+x0s+O/0hyuEBgA03Rryq1NyCLoDy0+w7swkWktbMuodg==
+X-Received: by 2002:a19:441a:0:b0:498:2943:a34 with SMTP id r26-20020a19441a000000b0049829430a34mr7502148lfa.238.1662967562276;
+        Mon, 12 Sep 2022 00:26:02 -0700 (PDT)
+Received: from curiosity ([5.188.167.245])
+        by smtp.gmail.com with ESMTPSA id d29-20020ac25edd000000b0048a83336343sm897065lfq.252.2022.09.12.00.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 00:26:01 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 10:26:00 +0300
+From:   Sergey Matyukevich <geomatsi@gmail.com>
+To:     Jinyu Tang <tjytimi@163.com>
+Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alexandre.ghiti@canonical.com,
+        guoren@kernel.org, heiko@sntech.de, akpm@linux-foundation.org,
+        panqinglin2020@iscas.ac.cn, tongtiangen@huawei.com,
+        sunnanyong@huawei.com, anshuman.khandual@arm.com,
+        atishp@rivosinc.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, falcon@tinylab.org
+Subject: Re: [PATCH v2] riscv: make update_mmu_cache to support asid
+Message-ID: <Yx7fCL3rMgT4Uh96@curiosity>
+References: <20220904133710.117263-1-tjytimi@163.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2GXH_jUKqkbhs2pRA7wngih";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904133710.117263-1-tjytimi@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,92 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2GXH_jUKqkbhs2pRA7wngih
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Jinyu,
 
-Hi all,
+> The `update_mmu_cache` function in riscv flush tlb cache without asid
+> information now, which will flush tlbs in other tasks' address space
+> even if processor supports asid. So add a new function
+> `flush_tlb_local_one_page` to flush local one page whether processor
+> supports asid or not,for cases that need to flush local one page like
+> function `update_mmu_cache`.
+> 
+> Signed-off-by: Jinyu Tang <tjytimi@163.com>
+> ---
+> RFC V1 -> V2 : 
+> 1.Rebased on PATCH9 of IPI imporvement series as Anup Patel
+> suggestion. 
+> 2.Make commit log more clear.
+> 
+>  arch/riscv/include/asm/pgtable.h  |  2 +-
+>  arch/riscv/include/asm/tlbflush.h |  2 ++
+>  arch/riscv/mm/tlbflush.c          | 11 +++++++++++
+>  3 files changed, 14 insertions(+), 1 deletion(-)
 
-Today's linux-next merge of the rust tree got a conflict in:
+Just FYI: I have been looking into the same function w.r.t. to its
+ASID/SMP handling. In addition to what your patch is doing with ASID,
+I posted experimental change following flush_icache_mm approach. That
+patch takes into account other concurrently running harts as well as
+possible migration to other harts later on, see:
 
-  MAINTAINERS
+https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gmail.com/
 
-between commit:
-
-  fa4b9df00af4 ("MAINTAINERS: Add Runtime Verification (RV) entry")
-
-from Linus' tree and commit:
-
-  fa4b9df00af4 ("MAINTAINERS: Add Runtime Verification (RV) entry")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index cfb38ad66cfc,263ff9abca0b..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17806,17 -17477,24 +17806,35 @@@ L:	linux-rdma@vger.kernel.or
-  S:	Maintained
-  F:	drivers/infiniband/ulp/rtrs/
- =20
- +RUNTIME VERIFICATION (RV)
- +M:	Daniel Bristot de Oliveira <bristot@kernel.org>
- +M:	Steven Rostedt <rostedt@goodmis.org>
- +L:	linux-trace-devel@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/trace/rv/
- +F:	include/linux/rv.h
- +F:	include/rv/
- +F:	kernel/trace/rv/
- +F:	tools/verification/
- +
-+ RUST
-+ M:	Miguel Ojeda <ojeda@kernel.org>
-+ M:	Alex Gaynor <alex.gaynor@gmail.com>
-+ M:	Wedson Almeida Filho <wedsonaf@google.com>
-+ R:	Boqun Feng <boqun.feng@gmail.com>
-+ R:	Gary Guo <gary@garyguo.net>
-+ R:	Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-+ L:	rust-for-linux@vger.kernel.org
-+ S:	Supported
-+ W:	https://github.com/Rust-for-Linux/linux
-+ B:	https://github.com/Rust-for-Linux/linux/issues
-+ T:	git https://github.com/Rust-for-Linux/linux.git rust-next
-+ F:	Documentation/rust/
-+ F:	rust/
-+ F:	samples/rust/
-+ F:	scripts/*rust*
-+ K:	\b(?i:rust)\b
-+=20
-  RXRPC SOCKETS (AF_RXRPC)
-  M:	David Howells <dhowells@redhat.com>
-  M:	Marc Dionne <marc.dionne@auristor.com>
-
---Sig_/2GXH_jUKqkbhs2pRA7wngih
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMe3rgACgkQAVBC80lX
-0GxwEgf/R7sUyZ5yiq3lioy/9hDtNZM/JsAWJ5QDnOzMUzlW0g3cac7X1kqkIrbT
-e+l6RsqPv4ebUdbaxK2/8Ig+rT4l/yvpAPciOPtrRu/KWB/A5pXJg/qcYYByp0Vl
-lrHz1Yrs++2cPGNFFIAkCgVNGKEHgD/GH7aBh6JBUuSyXLoF13E1qdlhPjYiRb+t
-rzDkeMjFQ48LLPeqlpZhdy5zfsoYQu3Ws7QgXWoHPITn1+/DtVCoUelt9wKDivnA
-YqhjadaYb2yD4RcPNeIy08xzKG0CICvEWi2LryAhow5Ep24u8oHtcSOMLORS9w6A
-ecSNAqPAWYxzPFTE9e8MAhhtmHaAQw==
-=WnIv
------END PGP SIGNATURE-----
-
---Sig_/2GXH_jUKqkbhs2pRA7wngih--
+Regards,
+Sergey
