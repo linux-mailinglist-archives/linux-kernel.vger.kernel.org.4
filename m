@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DE85B5270
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 03:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FCE5B5274
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 03:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiILBZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 21:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S229691AbiILBZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 21:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiILBZG (ORCPT
+        with ESMTP id S229517AbiILBZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 21:25:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CF1B843;
-        Sun, 11 Sep 2022 18:25:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQpmr6v4rz4xG7;
-        Mon, 12 Sep 2022 11:25:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662945902;
-        bh=RKaxzaDfRsE6qw1SpYVOvckFVrA9MlVhRpCNQTHNX1g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u3CtstPynUvHLxd5qkzWQccXerdzjsrkFoklkjfC/0o7cr6f5buM3mLNuKi1EnXxN
-         HyNpY1dydn4uyUaNyr+FKTB70++bmq12GwlL3Bd1vELVJ4hWm3b+znC0S/XXhivig7
-         RKNkqMFMl6UZ3oWQuo3zB8lShb9pWQJOhNbtL88R/uTieAXC7hhLupOFl0Q888Wdhx
-         pg2nJznqF0WcrvAIIcWMwI8fqFWKakR7yHFpAkxbOpsspRDOxQr2N1tes+CiD0/m7F
-         8SxMrv+qAG9Ter0dxuYr02fAXc/FtfymBf6obkKOlvrR5nuaWDz1wwbW+fWviqEwDg
-         Ohd7l7Aat6+6Q==
-Date:   Mon, 12 Sep 2022 11:24:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: Re: linux-next: manual merge of the vfio tree with the net-next
- tree
-Message-ID: <20220912112458.525b054e@canb.auug.org.au>
-In-Reply-To: <20220909144436.6c08b042@canb.auug.org.au>
-References: <20220909144436.6c08b042@canb.auug.org.au>
+        Sun, 11 Sep 2022 21:25:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25FE175AB
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 18:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662945928; x=1694481928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ecU4kyT9//WudYGodoYB0OtJ/Rmk8S4MnM/86WtnIxo=;
+  b=JCyZ8Qd7Td+28qRybz1nX0xiq5DVcWxIhHqEhF6SZD7UpUL7fSmUjEjh
+   ysTp+kcFOnzNTOG9kG40Yxc0wqu2rVb5W72SiEVA96dEuM5Q1jpot0LKX
+   FW6lCrIVyD+L9nxb+WaU95VM6zD+UWA5ZWJtUTDA78MbgtCMZ07XOLots
+   WGKdgeDVuNJjG4cpQDozBmEkkq8srWuqKpVjOETFxRkze9bMmy3AEi+bS
+   W5cETje1ZxHBtjLRKktpfIjve1SQVqoqODEYUqaSOcck5hxmvhThFvVF/
+   c+VTCmdt6jqDPl5nxV+Qi4jx8+ApGZydZtQ4hDBrPFg/5a07KD4uKz8Oo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="278158945"
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="278158945"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 18:25:28 -0700
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="646261125"
+Received: from dasegal-mobl.amr.corp.intel.com (HELO intel.com) ([10.249.46.19])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 18:25:24 -0700
+Date:   Mon, 12 Sep 2022 03:25:21 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 33/37] drm/i915 i915_gem_object_types.h: document
+ struct i915_lut_handle
+Message-ID: <Yx6KgVcgyB2i2dYG@alfio.lan>
+References: <cover.1662708705.git.mchehab@kernel.org>
+ <0da7c28a377a1fac9db524dbc8462731d922b39c.1662708705.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hQ+IlOqPMDeRclybwi.gJsM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0da7c28a377a1fac9db524dbc8462731d922b39c.1662708705.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hQ+IlOqPMDeRclybwi.gJsM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Mauro,
 
-Hi all,
+On Fri, Sep 09, 2022 at 09:34:40AM +0200, Mauro Carvalho Chehab wrote:
+> commit d1b48c1e7184 ("drm/i915: Replace execbuf vma ht with an idr")
+> added a rbtree list to allow searching for obj/ctx.
+> 
+> Document it.
+> 
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v3 00/37] at: https://lore.kernel.org/all/cover.1662708705.git.mchehab@kernel.org/
+> 
+>  drivers/gpu/drm/i915/gem/i915_gem_object_types.h | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> index 9f6b14ec189a..35746cf268ea 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> @@ -21,9 +21,15 @@ struct drm_i915_gem_object;
+>  struct intel_fronbuffer;
+>  struct intel_memory_region;
+>  
+> -/*
+> - * struct i915_lut_handle tracks the fast lookups from handle to vma used
+> - * for execbuf. Although we use a radixtree for that mapping, in order to
+> +/**
+> + * struct i915_lut_handle - tracks the fast lookups from handle to vma used
+> + * for execbuf.
+> + *
 
-On Fri, 9 Sep 2022 14:44:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the vfio tree got conflicts in:
->=20
->   drivers/net/ethernet/mellanox/mlx5/core/fw.c
->   drivers/net/ethernet/mellanox/mlx5/core/main.c
->=20
-> between commit:
->=20
->   8ff0ac5be144 ("net/mlx5: Add MACsec offload Tx command support")
->=20
-> from the net-next tree and commit:
->=20
->   939838632b91 ("net/mlx5: Query ADV_VIRTUALIZATION capabilities")
->=20
-> from the vfio tree.
+just to be picky: do we or don't we want this extra space here? I
+think that besides our personal taste it's important to have a
+coherent style.
 
-This latter commit is now also in the mlx5 tree.
+I would r-b it anyway if I didn't look the next patch.
 
---=20
-Cheers,
-Stephen Rothwell
+Andi
 
---Sig_/hQ+IlOqPMDeRclybwi.gJsM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMeimoACgkQAVBC80lX
-0Gz0Hwf9HVRsGpauW0eaFRprs8Bcxqj7zip7PLv96BaItfvtyEfbEnysZuQpxh8E
-WByCdm3ZyPDEo2w5iRJgTodttWPGi83yKYniXqEHyhrADGMz+qpU3/FHJ99xdaQv
-+bT4z2z3bkiJMIqWYyR06Xk8cXLUypfE91YkBJtwo0ylw/SGfcOJ8C5Qy3BMhjMg
-E4XDOZzD3lMyVg3poCTe6K5gw7X3JZJZmnsY7/+/X02SZl6nFpq3A4BbqN0LfHrO
-B1i7n+/vlMKZCBkhl8IyQBSoCJJwmxFi4Br8to8bJ/+NrpudOs/3LdE4WXITd/mL
-TX48a5/cVGDdwmrtnm933/ELAV54Jw==
-=R90H
------END PGP SIGNATURE-----
-
---Sig_/hQ+IlOqPMDeRclybwi.gJsM--
+> + * @obj_link: link to the object associated with the @handle.
+> + * @ctx: context associated with the @handle.
+> + * @handle: a rbtree handle to lookup context for specific obj/vma.
+> + *
+> + * Although we use a radixtree for that mapping, in order to
+>   * remove them as the object or context is closed, we need a secondary list
+>   * and a translation entry (i915_lut_handle).
+>   */
+> -- 
+> 2.37.3
