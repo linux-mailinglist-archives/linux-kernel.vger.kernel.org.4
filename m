@@ -2,170 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B725B5C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4BD5B5C55
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiILO3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S230204AbiILOh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiILO3r (ORCPT
+        with ESMTP id S230191AbiILOhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:29:47 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2565E26
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:29:43 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso4220725pjq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:29:43 -0700 (PDT)
+        Mon, 12 Sep 2022 10:37:53 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B192FFDF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:37:52 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id u28so3189635qku.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GFheNGVqLERZhSYCSZk/aU+ENoKVQ3v9+pQbZTcslEY=;
-        b=exu7ea6b5fYdoPyhBfsq0X2/RyFa0nkTMBzKAhu/TECnWWoAiZHfnnwLAwMv3264+V
-         fXHM3vi4u+FYXFDPi8lgH79yRErt5ZSm0OjEyIk4DTUOGRATDN4ye/pFZ0hOBeGwQMm+
-         W/8jR6Hn+qX+5SqgaVqIG29xbM0agMOTL1bJnT6lT2WXBzCyq/aQvqNns0j1ZNrv5Aqk
-         cZNf41l4yXFpBVe8FuZpCTTUZr0uicnZK4kOofuiYwoL7b5OBsNOiuLq6l2cZ2VKMUKz
-         E3xq9TfZ8xigxuNDAJ6vqCOa67m63/y47yzeWjZcxhPF1Csy5kfCGmBsHaF1fKg4xohQ
-         OHiA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Gma6d5BlyXEKnjQsnnu5KmSUsV/V+0uYpySeCVOzahM=;
+        b=mb1F1tRoLU+2X2uBFEA5tHgs0j28pnRartJzBt0Ow8kcF8BxzHePc/0cnIxzE6PYv1
+         RDNTI7aA4u0OaXC1ns9sywci1oQ3dibmRtBsRyeAGvxUzduBPeKzXsmZtCbH+MnitP4u
+         SA7NHFNHWRU6quzuVh+Fc2m2BmYzPa9EhiVNY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GFheNGVqLERZhSYCSZk/aU+ENoKVQ3v9+pQbZTcslEY=;
-        b=X+pgdlrlYpzz74N7hdkfPvP68fX1fxMkiWeuo51NWvASXXQpZfsX36iyDGhfSeaKWy
-         5rodrVPimLn3GkseXl4WCRcuIUOQeA3Sunj8L7AEsK+AAVjDpTBhJtHOKKtg6qHIy04q
-         qgT678W2HMAGZdGukNnLLa5aENvbr9pOZIGRwrQ6xO/hmjG0hZ3Aazlht93SFNBPCYoo
-         BxxZNTlOyXHUV47llB+8t6vtMlzIi6eWZzkSznps7vH4CM0zwonnRRRKAT6NUTuTq33R
-         JRv2BnMpyeH5dzHSUVW4DYAKFNsO8Mc7sFpS9qllKiki8VcesvHsgBLfa+zXzcvgXyoP
-         rh8g==
-X-Gm-Message-State: ACgBeo1FviAyWg51svSwRGfVXGGa6VzA5JL+67l9vnDs3WqxRkV2BPG/
-        B9hsxao2kl5oFw5oDCnJqats2A==
-X-Google-Smtp-Source: AA6agR5eQXImfKaiccrP3GiMD3RTxMTyGKrsX6U7ojJdLRpLHqDclHPP5oVBbofCP8Qq/PcjRB6U6A==
-X-Received: by 2002:a17:902:7d83:b0:170:9353:f299 with SMTP id a3-20020a1709027d8300b001709353f299mr26584625plm.41.1662992982931;
-        Mon, 12 Sep 2022 07:29:42 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t23-20020a635f17000000b0042b5095b7b4sm5758510pgb.5.2022.09.12.07.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 07:29:42 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 14:29:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] KVM: selftests: Test Hyper-V invariant TSC control
-Message-ID: <Yx9CU++TkHZwVfEs@google.com>
-References: <20220831085009.1627523-1-vkuznets@redhat.com>
- <20220831085009.1627523-4-vkuznets@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Gma6d5BlyXEKnjQsnnu5KmSUsV/V+0uYpySeCVOzahM=;
+        b=b15QFK3eJ+OfNSKuPsqh7WanX0KbM+vRUAGYvmGwMH5jsQqOXWG2GnJ9mS9ilR+nmV
+         R7rKaLLDfNLpYQ5mS1YigqPEr87IEnK9tVdkLsNmz07qrJ3gY8l/9ii/M9HDI1Jzebzz
+         sSD2UeJA8+7ZlWvOCAw9jxak0H/IrvHV+NnQ54jfc7Kgnd93xUr+VxUbljxIpNnd+SMs
+         IlQ7OXEaax9ulmGqy6s12VE3T7RenHmqlFK9vFoaaBeb9ZNc8QNO19tsDUix4rD+m5gr
+         upvMWcBAl93QVB9sD3Vp2ySqXQT4ax7rxivAV0wzn4LwTr5JVFqU27z7tNQaMqS1diHL
+         fJCg==
+X-Gm-Message-State: ACgBeo07ir4Nl6ureOxNOx5fxKdqEXG6i0o9038WkVfJEgY4+Re0DPto
+        L5WFPjIB2zKZsCQF8SmF2xxDZaAPzYIYwXg8
+X-Google-Smtp-Source: AA6agR4jkYNn3PVTnWahKf+uHliycWSbaq9SowgWaAlYrlSeNvk869pS6EmTGvekeXd67urAJdgG4g==
+X-Received: by 2002:a05:620a:a98:b0:6ce:1b18:c983 with SMTP id v24-20020a05620a0a9800b006ce1b18c983mr4922016qkg.108.1662993470541;
+        Mon, 12 Sep 2022 07:37:50 -0700 (PDT)
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
+        by smtp.gmail.com with ESMTPSA id br22-20020a05622a1e1600b0035bb6c3811asm1720325qtb.53.2022.09.12.07.37.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 07:37:50 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id s9so3877657qkg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:37:50 -0700 (PDT)
+X-Received: by 2002:a05:6638:1c17:b0:35a:151b:c726 with SMTP id
+ ca23-20020a0566381c1700b0035a151bc726mr6077471jab.66.1662993004103; Mon, 12
+ Sep 2022 07:30:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831085009.1627523-4-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220912113856.817188-1-robert.foss@linaro.org> <20220912113856.817188-3-robert.foss@linaro.org>
+In-Reply-To: <20220912113856.817188-3-robert.foss@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 12 Sep 2022 15:29:52 +0100
+X-Gmail-Original-Message-ID: <CAD=FV=WrH2AAFxV72FZqk-=xU8jzCn6KtcbZRYJAaCwhmvSWmg@mail.gmail.com>
+Message-ID: <CAD=FV=WrH2AAFxV72FZqk-=xU8jzCn6KtcbZRYJAaCwhmvSWmg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] Revert "drm/bridge: ti-sn65dsi86: Implement bridge
+ connector operations for DP"
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022, Vitaly Kuznetsov wrote:
-> Add a test for the newly introduced Hyper-V invariant TSC control feature:
-> - HV_X64_MSR_TSC_INVARIANT_CONTROL is not available without
->  HV_ACCESS_TSC_INVARIANT CPUID bit set and available with it.
-> - BIT(0) of HV_X64_MSR_TSC_INVARIANT_CONTROL controls the filtering of
-> architectural invariant TSC (CPUID.80000007H:EDX[8]) bit.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Robert,
+
+On Mon, Sep 12, 2022 at 12:43 PM Robert Foss <robert.foss@linaro.org> wrote:
+>
+> As reported by Laurent in response to this commit[1], this functionality should
+> not be implemented using the devicetree, because of this let's revert this series
+> for now.
+>
+> This reverts commit c312b0df3b13e4c533743bb2c37fd1bc237368e5.
+>
+> [1] https://lore.kernel.org/all/20220902153906.31000-2-macroalpha82@gmail.com/
+>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 > ---
->  .../selftests/kvm/x86_64/hyperv_features.c    | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> index 4ec4776662a4..26e8c5f7677e 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> @@ -15,6 +15,9 @@
->  
->  #define LINUX_OS_ID ((u64)0x8100 << 48)
->  
-> +/* CPUID.80000007H:EDX */
-> +#define X86_FEATURE_INVTSC (1 << 8)
-> +
->  static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
->  				vm_vaddr_t output_address, uint64_t *hv_status)
->  {
-> @@ -60,6 +63,24 @@ static void guest_msr(struct msr_data *msr)
->  		GUEST_ASSERT_2(!vector, msr->idx, vector);
->  	else
->  		GUEST_ASSERT_2(vector == GP_VECTOR, msr->idx, vector);
-> +
-> +	/* Invariant TSC bit appears when TSC invariant control MSR is written to */
-> +	if (msr->idx == HV_X64_MSR_TSC_INVARIANT_CONTROL) {
-> +		u32 eax, ebx, ecx, edx;
-> +
-> +		cpuid(0x80000007, &eax, &ebx, &ecx, &edx);
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 28 ---------------------------
+>  1 file changed, 28 deletions(-)
 
-Add a proper kvm_x86_cpu_feature so that this is simply
+Any chance you got confused and reverted the wrong patch? This
+ti-sn65dsi86 patch doesn't seem relevant to the problems talked about
+in the commit or the cover letter. Maybe I'm missing something?
 
-		this_cpu_has(X86_FEATURE_INVTSC)
-
-> +
-> +		/*
-> +		 * TSC invariant bit is present without the feature (legacy) or
-> +		 * when the feature is present and enabled.
-> +		 */
-> +		if ((!msr->should_not_gp && !msr->write) || (msr->write && msr->write_val == 1))
-
-Relying purely on the inputs is rather nasty as it creates a subtle dependency
-on the "write 1" testcase coming last.  This function already reads the guest
-MSR value, just use that to check if INVTSC should be enabled.  And if we want
-to verify KVM "wrote" the correct value, then that can be done in the common
-path.
-
-And I think that will make this code self-documenting, e.g.
-
-	if (msr->idx == HV_X64_MSR_TSC_INVARIANT_CONTROL)
-		GUEST_ASSERT(this_cpu_has(X86_FEATURE_INVTSC) ==
-			     !!(msr_val & ...));
-
-> +			GUEST_ASSERT(edx & X86_FEATURE_INVTSC);
-> +		else
-> +			GUEST_ASSERT(!(edx & X86_FEATURE_INVTSC));
-> +	}
-> +
-> +
->  	GUEST_DONE();
->  }
->  
-> @@ -104,6 +125,15 @@ static void vcpu_reset_hv_cpuid(struct kvm_vcpu *vcpu)
->  	vcpu_clear_cpuid_entry(vcpu, HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES);
->  }
->  
-> +static bool guest_has_invtsc(void)
-> +{
-> +	const struct kvm_cpuid_entry2 *cpuid;
-> +
-> +	cpuid = kvm_get_supported_cpuid_entry(0x80000007);
-> +
-> +	return cpuid->edx & X86_FEATURE_INVTSC;
-> +}
-> +
->  static void guest_test_msrs_access(void)
->  {
->  	struct kvm_cpuid2 *prev_cpuid = NULL;
-> @@ -115,6 +145,7 @@ static void guest_test_msrs_access(void)
->  	int stage = 0;
->  	vm_vaddr_t msr_gva;
->  	struct msr_data *msr;
-> +	bool has_invtsc = guest_has_invtsc();
-
-Huh, I never added vcpu_has_cpuid_feature()?  Can you add that instead of
-open-coding the check?
+-Doug
