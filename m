@@ -2,158 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63385B5EFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249C95B5F01
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiILRO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S230036AbiILRQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiILROZ (ORCPT
+        with ESMTP id S229962AbiILRP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:14:25 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04lp2056.outbound.protection.outlook.com [104.47.13.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46763ECF9;
-        Mon, 12 Sep 2022 10:14:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fvKQUbZyndsBVSOZc7G+TeClQ5J96hcbZC4DHIYFTBLuLd3TP/HTx8Ti6jSlUfPzZA+j3fDJQBHeuVQMy1wS0UPuf+5qT8lTEh/8psuiHozw/+lTd3DQMQUZ8OCqjdLy0SR3e6FgC83bWJascGwg1Nt+qcwKbTuLo48GbccBYNc1djDLnMZ8Qm+j4TwyfxYxJ+CZjnho4S+fuiCG7EQyDKcCX1fAqYt974ZGfcVwyDdypVn0GhAvxS8GCWZRX8m52HoQCMT6z0yWyImE5EH3X4SgBhN2W1xznQ+owirM326lM/OSbv3VXdX2xZQ5FEaMt+aKth22tWoxT6+hV6xnnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cZrdqc53FRVz9ej7tMsR96sIXdpSzYieP7Horn9/7LQ=;
- b=XntUKtQOds92a40ux/9IkW203SumeMXeA1ad7uwi2cPWdZ/tnay/F9DzAwJWUDNH6I4/m72twQ9rUpuIhCeQ4um4TIrx3375oNFAqgfEH9ixnuhGdjQbIplzRO/Q+xJts2Chm70XOSVnlGRbXoA8WmTrZE/IkG8thL4Gw5qo+G5aNBb7Lh+ch2Q2Rk1yeA5Oqv7S7+QWl9XMlrkRhemk9xPcoFK0Rn6kkH3d3nl6YrqjmmhLLJ2j8HpUn/F9FHgVbr0zvjFQ2FgnTZb/W7ZFi+0RWDbrq9IiSINI4BgUUGqwVltafhuZnPnchInNQA9EKzGrAunNybeCIBXH2GkApA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=variscite.com; dmarc=pass action=none
- header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cZrdqc53FRVz9ej7tMsR96sIXdpSzYieP7Horn9/7LQ=;
- b=LFX3d1fru3em7m5KTgv8+qqHhoIbgklPV4WlbkUyT6rUq1fB2WJd3CP6CakR/Cv2dhQ4jriI3NRjtHnuTPtQXzSmp6NXX1D+tMvjFi3U/VHD7C/BSAoH+CyC8v1FRqZi1bmGmzLLb3E+dRwFkfY86AoNwY7TvgJSoGd4Kza/jtS6pznuS2WoPHnWw4anN98q9RX81AxGnPNr4Jz/7JP6sCAuKzERDZouiXHmV8yWJ5MxUAbBrqH6AoK5y/P/tuY1HrHpyyYFrfoxo2J9fzKpTBJGAhWRFU/gj6OIBcXiawTnY/lcb74O76bB42+KGt82ighH1n1w3nJQ8tCDZk5SNQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=variscite.com;
-Received: from DB9PR08MB6825.eurprd08.prod.outlook.com (2603:10a6:10:2af::9)
- by DU0PR08MB8729.eurprd08.prod.outlook.com (2603:10a6:10:403::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Mon, 12 Sep
- 2022 17:14:19 +0000
-Received: from DB9PR08MB6825.eurprd08.prod.outlook.com
- ([fe80::a88a:b945:e903:42a8]) by DB9PR08MB6825.eurprd08.prod.outlook.com
- ([fe80::a88a:b945:e903:42a8%9]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 17:14:18 +0000
-From:   Nate Drude <nate.d@variscite.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     eran.m@variscite.com, Nate Drude <nate.d@variscite.com>
-Subject: [PATCH] gpio: pca953x: Introduce support for nxp,pcal6408
-Date:   Mon, 12 Sep 2022 12:13:47 -0500
-Message-Id: <20220912171347.4167372-1-nate.d@variscite.com>
-X-Mailer: git-send-email 2.37.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR07CA0046.namprd07.prod.outlook.com
- (2603:10b6:610:5b::20) To DB9PR08MB6825.eurprd08.prod.outlook.com
- (2603:10a6:10:2af::9)
+        Mon, 12 Sep 2022 13:15:58 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A725237190
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:15:54 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id u19-20020a4a9e93000000b004757198549cso558476ook.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=qd0zc7fGhqBh9AbN0Tbs1DG34cl/lreYFTNXxxRPmTs=;
+        b=hck1MJGckV938hOMLfxLlSjnhjEBraOtrc7lREdlBCM5HFTGV3OZmPEvv5+3Sl21Ap
+         Yt8LYSgZqBQtdQ2k0zhHPsnBejGIGzLaSPovYIKxSDC1LaI5amhPapXUvT9FQi9phAAl
+         APnbZ9b4NRtkMh/w6LSKndFaZ46/HAxjxPRS5bkrpByQmpqxoReePPBAfgOJ01jpMoU2
+         /P8CeaHv3o42/byWvGXeghO9CiF8pNre8pq1RtmqAm3KGJONZr/z85bvCZQQJTntwITy
+         45HragL26K0ZDJpXE9Lv78ZpVz7VbzsWHw7w0Jei8o7DQRc7L0mEJke1XLliz+XifV5C
+         +LOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qd0zc7fGhqBh9AbN0Tbs1DG34cl/lreYFTNXxxRPmTs=;
+        b=Io2deCaIJ8WTYdxwpbGhFQvhk9M0lG85O3VyVrloXCSSxhQxjgSpdmctQYn4jcleE2
+         QWdBiBEMCHH5GxwdQDizxMU4aGPrkctpi6WMl8EHWDZ5KX2k6WQX6l1bxbHTApX7P4C3
+         zd4wZ/m4MV1HtzhT0ENZwZgFZQz4JvNXblfqTI9ONkJu5Gasq1Fp6cF3omStmIC3S4SQ
+         UVvMHf5CDTJ9kWOEs4/br9c4kc1967IlHp44rvk9O8rM2tJ/pilRVeVBJiKFdT60Tn8y
+         +JccvvHdKPrOMAuRg60fYg8E4G0tkavXzIqg/qPJXciihjjsKl3OhrG4U6FyeMDZRgcq
+         fA5Q==
+X-Gm-Message-State: ACgBeo3frU0q4H1BqaVpT0fBhKdF0uMRLJBy5pZ7SYyk5h5E8zF7Kx57
+        BmvnJx8UqC4Pf6Ke2MByVpxEjEwwwLxEAfnzZlY3fA==
+X-Google-Smtp-Source: AA6agR43q0bMJeMBvFXtfEf6TWC5gpWwhhZExSPS8FjHBG1FMoG4Nf/q0qjSadXElNF6V3I0rO/tOqbOYvTr3ZQ8qHA=
+X-Received: by 2002:a4a:1b03:0:b0:475:4a4c:e29d with SMTP id
+ 3-20020a4a1b03000000b004754a4ce29dmr5041258oop.79.1663002953138; Mon, 12 Sep
+ 2022 10:15:53 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR08MB6825:EE_|DU0PR08MB8729:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4bb64948-9cb5-49c8-03fa-08da94e23a45
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mMe1XQsT35+Fx9jRs1+i3+wioAHyF+XUnzFf5ABK+URH4tU4j6jW6T+aqNv7k89N6fLwgPheQtFkPRdYoQAB3WCd8ymaSCvxyOyDr9XStUXvCgOBDh9Jh2oIRunuXcMJFF4kLj37cYXfLMR5Hm1l3h/pBG6s3BoI31rR/rtaVUOSzcERb8ZONzmhS9boGm6j8+EPpb+j/s3Uo5j+achO9lx6z9k43fJcFRb/8xvEsWlDzU2kYpF8p95p4RkgK9tyvIyxuk/P0D/I67SkWqjCu86fWjgTtwPicA0ax+Lek5kpfTlzqpqOpZgmWFG1A+BtFDGQRUxfrGVNjimzLsZk3X4XtoR94LoCz0O8kbb1ZRh0RrgQVKiTMCCvAm2TIWUY+KEvb0EC7wjoypF0+9bf+cFXWexAwrZBw9DIU9uJT7sSfy2pbvVjY6XmvYVW7f2Irxd2lAWyi2JarcXTZ5pAsfXlm192mPPiqnbuVdWL9D0z/4lyLZGiW56dWlQ9GJ2g5U/1PscE7urru89GSiSXCwPnpakgDPMNoPOU0KgVC5JAoHpCqXOPw9SN/kvA9fYSQdVOP6f1Qh8HGzMtmYOtecIFSs+8ytPGyniNVHFE2Yam5cPsgn3sKd6Ad/q9/1cHR7awLM6F1RTgiNqPmxylQJMiEbF0kraCEvPGYrVH4C9k6eY/2XrQHH4LTRflpfBKOw2RLvFbNBzV22YfQ0hdr3etUMKxHDF0xyxwKdu+OLOqxpzGEVTiSsKRXWZEAnBvWxp7MeAvow2Gu+yaKDzPMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6825.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230019)(39850400004)(136003)(396003)(346002)(376002)(366004)(451199012)(26005)(6512007)(38100700002)(110136005)(8936002)(38350700002)(186003)(6666004)(107886003)(36756003)(2906002)(1076003)(2616005)(52116002)(6506007)(66946007)(66556008)(8676002)(66476007)(4326008)(6486002)(478600001)(316002)(41300700001)(5660300002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FWyVmjJl1F6pp4uBujcmEJ58tSxd0ZgDH7sIQEa/fDirY2HIB3xijqv7uhsF?=
- =?us-ascii?Q?w/S5G6ydfRq9+lNzqUUZ4MmbrsGLZNwFbkJf/Sw8lU6kuWdWqFWGN8fM2SwB?=
- =?us-ascii?Q?ZqkN07aeWDsyB2AihQTClWsFw5g02Umm5wdT1Bp7Q3Q2ewaJ6Pfo159HLPNS?=
- =?us-ascii?Q?txoMQFGYp71hrFufBBarC+DzJhhwzGEpackUsumui0LcOnIpw+o/G2N0iWiz?=
- =?us-ascii?Q?DMqiZKBGf1LbSw010UFcsMcF4TA8yUE+Dqv6UHvx86jtfQ2LApvU+YObsZMA?=
- =?us-ascii?Q?SlClNjhzaJVkmwREwxk9w636VoTo0HmhsFNEWC4bf2zCmBph6UFnOqZGURYW?=
- =?us-ascii?Q?s0VWFqxLRTzbA6sFwBPLGtWMv/gWBhantIOH8FlJC5YWuK1bONFkYCZob5bX?=
- =?us-ascii?Q?dvyfnsBZt/MzQBddRW3nnL8oc2seyBz9QP0omjAPO+tcpqw3uHTMBkDLRmK8?=
- =?us-ascii?Q?G9QF8GPLCQFrbqqO8G+Rgz/qiqVuyExBVKfYxBU19dkLwZSNAm+voqmo+jEi?=
- =?us-ascii?Q?+QjWyqMbnyaE66lHruV86+i/m+2EAJIo50oL5kgy9u3sqOost95O2go3EwMK?=
- =?us-ascii?Q?ZGAwVdf2gZoO+aSbTtnsfdqwAGkSUbxs6JlET6l72UHbBk/IIDyv+WFPhK7T?=
- =?us-ascii?Q?2md4PcL7IY11XqUTFfPL1k6XlNCtAV1baGQ1902bLXhirlYTLpxEbJmB+w0o?=
- =?us-ascii?Q?fFQuymz+PHLJjtDvVfdQ6CgE98vVjKXalJhyG2TxROnFIEU0dWYM7Dh2OUeT?=
- =?us-ascii?Q?jhOvbBWdNEVEqyeIDtlW/jLmMKfvfWLcUyhyN15GxfwxD/McYILjhueN/BaM?=
- =?us-ascii?Q?ZhPDwPfoyi/hjddvZ725Fks17M8lrUflz963mRvIipj3fpMocM8XHaeh9Gtz?=
- =?us-ascii?Q?cn6Vv2xESu76RTwZZxKuYMrkkegsN+j3D/lWaoVCmmZDHlK9q9ZeQBfDXM6Q?=
- =?us-ascii?Q?81k5VvF2yX8wSvmG4BmN9qyjZfuEMonQQjQ13MDcsbqjIQwQfR+Tkmzujjnv?=
- =?us-ascii?Q?vgZponjKQENv9xth7ecUC3jwMFrieiRfYBmHfBW/AIdcLuNQh4lXJ0s7ObNK?=
- =?us-ascii?Q?AhHt4NcybHrDEJgCsBQaDhsDhW+UBJL6tI0uGSV4600Bkr0WmKawfYf1Xf1w?=
- =?us-ascii?Q?KKWW9MyIbTJ5ExtzlWwyF/4wfeAhqZxCpuLtYG3Gm6O/Yy3vY1sQcDoiddvY?=
- =?us-ascii?Q?HYj32TzlEvbnViT4Le2+85FuoUqLckXVCCzfbtXNMiqx/bV/0qF1mZerehzN?=
- =?us-ascii?Q?xTqAyCAnIhAgR5yb/vTcF9rUiMD3IYj0Kg63CpAuQMN3rnAIRRet3DhbWlVS?=
- =?us-ascii?Q?sD80HWHmLRdecCt1ElDExAERm2TKYet7i8v1FUZ4nsj+h4h2TPS4Af9RrdJj?=
- =?us-ascii?Q?2llptUwIwCliZ+HEzTxlQmjxSa1QBmnIvYvhk4sehgZy5+5bziEo5eMA2A4R?=
- =?us-ascii?Q?5MUXTRo7DFR/MRQlO9QPbFuU49jD2YEr3rGYp/+Zr5u+rwWcIPzFmkbzZPD6?=
- =?us-ascii?Q?RF2D4AbvDjguZHt7j5vJRAwo8QMyLwS2yuI53LVv9xHVU8kzvRWWJdnMkz+F?=
- =?us-ascii?Q?BTGkmOreJVM++5IiH0uWe3PuOM1VuLhdGgc13wm3?=
-X-OriginatorOrg: variscite.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bb64948-9cb5-49c8-03fa-08da94e23a45
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR08MB6825.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 17:14:18.8717
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x0l1rqK7nnPOiJ9VujDwmAzfc3WQpD5EzdhWvoOP//LQ4gGRNyRcZVg3M7rpCQOvOjMdbJVQ/OpveyqUDw5nVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8729
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
+ <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com> <CAJ+vNU2FVQRwCa3DnOwkFjaZg-ntFLZmetwDbSggDXDdwOOGTg@mail.gmail.com>
+ <2ab24cc4-4aa2-d364-9b29-55f5d6b23626@denx.de> <CAJ+vNU0voeMW06Je6nyrV1Ud3sT8Us+RACcQtsKUwKVaXF+dQw@mail.gmail.com>
+ <ce0ffc43-bae7-a55b-ebea-985abc765c33@denx.de> <DU0PR04MB9417D8123D40FBC980E9C05388439@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <a03ce7a3-dfa5-6016-afbf-33193a5e2376@denx.de> <8736ba4e-1c61-995a-f090-ef322d84e5f6@gmail.com>
+ <0c924574-d2b4-2a23-0cc2-63f32d521854@oss.nxp.com>
+In-Reply-To: <0c924574-d2b4-2a23-0cc2-63f32d521854@oss.nxp.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 12 Sep 2022 10:15:41 -0700
+Message-ID: <CAJ+vNU1NW9cDDB4sa+uLK3G1Z782pPe=E=GtYLTswR2Xa1YnoQ@mail.gmail.com>
+Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
+To:     Peng Fan <peng.fan@oss.nxp.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Nate Drude <nate.d@variscite.com>
----
- Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 1 +
- drivers/gpio/gpio-pca953x.c                              | 2 ++
- 2 files changed, 3 insertions(+)
+On Mon, Sep 12, 2022 at 12:40 AM Peng Fan <peng.fan@oss.nxp.com> wrote:
+>
+>
+>
+> On 9/9/2022 1:06 PM, Matti Vaittinen wrote:
+> > Hi dee Ho peeps,
+> >
+> > On 9/9/22 05:35, Marek Vasut wrote:
+> >> On 9/9/22 04:06, Peng Fan wrote:
+> >>>> Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT
+> >>>> failure
+> >>>>
+> >>>> On 9/8/22 21:25, Tim Harvey wrote:
+> >>>>> On Thu, Sep 8, 2022 at 9:55 AM Marek Vasut <marex@denx.de> wrote:
+> >>>>>>
+> >>>>>> On 9/8/22 18:00, Tim Harvey wrote:
+> >>>>>>> On Thu, Sep 1, 2022 at 9:14 PM Matti Vaittinen
+> >>>> <mazziesaccount@gmail.com> wrote:
+> >>>>>>>>
+> >>>>>>>> Hi Tim,
+> >>>>>>>>
+> >>>>>>>> On 9/2/22 01:23, Tim Harvey wrote:
+> >>>>>>>>> Greetings,
+> >>>>>>>>>
+> >>>>>>>>> I've found that the bd71847 clk driver
+> >>>> (CONFIG_COMMON_CLK_BD718XX
+> >>>>>>>>> drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847
+> >>>>>>>>> C32K_OUT
+> >>>>>>>>> pin) which is connected IMX8MM RTC_XTALI which ends up disabling
+> >>>>>>>>> the IMX RTC as well as the IMX WDOG functionality.
+> >>>>>>>>
+> >>>>>>>> //snip
+> >>>>>>>>
+> >>>>>>>>> This happens via clk_unprepare_unused() as nothing is flagging the
+> >>>>>>>>> clk-32k-out as being used. What should be added to the device-tree
+> >>>>>>>>> to signify that this clk is indeed necessary and should not be
+> >>>>>>>>> disabled?
+> >>>>>>>>
+> >>>>>>>> I have seen following proposal from Marek Vasut:
+> >>>>>>>>
+> >>>>>>>>
+> >>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fl
+> >>>>>>>> ore.kernel.org%2Fall%2F20220517235919.200375-1-
+> >>>> marex%40denx.de%2FT%
+> >>>>>>>>
+> >>>> 2F%23m52d6d0831bf43d5f293e35cb27f3021f278d0564&amp;data=05%7C0
+> >>>> 1%7Cp
+> >>>>>>>>
+> >>>> eng.fan%40nxp.com%7C07d48edcc47c4694e08208da91da2bf4%7C686ea1d
+> >>>> 3bc2b
+> >>>>>>>>
+> >>>> 4c6fa92cd99c5c301635%7C0%7C0%7C637982664162868785%7CUnknown%
+> >>>> 7CTWFpb
+> >>>>>>>>
+> >>>> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+> >>>> 6
+> >>>>>>>>
+> >>>> Mn0%3D%7C3000%7C%7C%7C&amp;sdata=uF26u9g4onuqCWzPRAvD%2F%
+> >>>> 2FLByaEhh5
+> >>>>>>>> Dtah9K8CcAOAM%3D&amp;reserved=0
+> >>>>>>>>
+> >>>>>>>> I am not sure if the discussion is completed though. I guess it was
+> >>>>>>>> agreed this was needed/usefull and maybe the remaining thing to
+> >>>>>>>> decide was just the property naming.
+> >>>>>>>>
+> >>>>>>>> Best Regards
+> >>>>>>>>            -- Matti
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> Thanks Matti,
+> >>>>>>>
+> >>>>>>> Marek - has there been any progress on determining how best to keep
+> >>>>>>> certain clocks from being disabled?
+> >>>>>>
+> >>>>>> No. You can read the discussion above.
+> >>>>>
+> >>>>> Marek,
+> >>>>>
+> >>>>> I wasn't on the linux-clk list at that time so can't respond to the
+> >>>>> thread but the discussion seems to have died out a couple of months
+> >>>>> ago with no agreement between you or Stephen on how to deal with it.
+> >>>>>
+> >>>>> So where do we take this from here? It looks like there are about 18
+> >>>>> boards with dt's using "rohm,bd718*" which would all have non working
+> >>>>> RTC/WDOG with CONFIG_COMMON_CLK_BD718XX enabled (which it is in
+> >>>>> arch/arm64/configs/defconfig) right?
+> >
+> > Yeah. The ROHM BD71837 and BD71847 (and BD71850 - which is one of the
+> > variants) are used quite a lot. I am pretty sure not fixing this in
+> > upstream is increasing downstream solutions. I don't think that should
+> > be preferred.
+> >
+> >>>
+> >>> Is there any requirement that the bd718xx clk needs to be runtime
+> >>> on/off?
+> >>
+> >> Yes, the 32kHz clock on BD71xxx should behave like any other clock,
+> >> unless specified otherwise, see below.
+> >>
+> >>> I suppose the clk should always be never be off, if yes, why not have
+> >>> something:
+> >>
+> >> What is needed in this specific case of BD718xx is I think clock
+> >> consumer on the MX8M clock driver side which would claim the 32kHz
+> >> input from the PMIC and up the clock enable count to keep the 32 kHz
+> >> clock always on.
+> >
+> > This sounds like a solution that would describe the actual HW setup. I
+> > don't know the CCF of the i.MX8 well enough to tell whether this can
+> > ensure the clk is not disabled before the consumer is found or when the
+> > consumer is going down though. Simplest thing to me would really be to
+> > just mark the clk as "do-not-touch" one on the boards where it must not
+> > be touched.
+> >
+> >   The PMIC is most likely supplying 32 kHz clock to the MX8M,
+> >> which if the 32 kHz clock are turned off would hang (I observed that
+> >> before too).
+> >>
+> >> What I tried to address in this thread is a generic problem which
+> >> commonly appears on various embedded systems, except every time anyone
+> >> tried to solve it in a generic manner, it was rejected or they gave up.
+> >
+> > I agree with Marek - generic solution would be nice. I don't think this
+> > is something specific to this PMIC.
+> >
+> >> The problem is this -- you have an arbitrary clock, and you need to
+> >> keep it running always otherwise the system fails, and you do not have
+> >> a clock consumer in the DT for whatever reason e.g. because the SoC is
+> >> only used as a clock source for some unrelated clock net. There must
+> >> be a way to mark the clock as "never disable these", i.e.
+> >> critical-clock. (I feel like I keep repeating this over and over in
+> >> this thread, so please read the whole thread backlog)
+> >
+> > Thanks for the explanation and effor you did Marek.
+> >
+> > My take on this is that from a (generic) component vendor perspective it
+> > is a bad idea to hard-code the clock status (enable/disable) in the PMIC
+> > driver. A vendor wants to provide a driver which allows use of the
+> > component in wide variety of systems/boards. When the PMIC contains a
+> > clock gate, the PMIC driver should provide the means of controlling it.
+> > Some setups may want it enabled, other disabled and some want runtime
+> > control. This "use-policy" must not be hard coded in the driver - it
+> > needs to come from HW description which explains how the clk line is
+> > wired and potentially also from the consumer drivers. This enables the
+> > same PMIC driver to support all different setups with their own needs,
+> > right?
+> >
+> > I am not sure if some non email discussions have been ongoing around
+> > this topic but just by reading the emails it seemed to me that Marek's
+> > suggestion was acked by the DT folks - and I don't think that Stephen
+> > was (at the end of the day) against that either(?). Maybe I missed
+> > something.
+>
+> After a thought, maybe an easier way is to add a optional property
+> xxx,32k-always-on to the pmic node/driver.
+>
+> Regards,
+> Peng.
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-index 977b14db09b0..05a9fa92283f 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-+++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-@@ -47,6 +47,7 @@ properties:
-       - nxp,pca9574
-       - nxp,pca9575
-       - nxp,pca9698
-+      - nxp,pcal6408
-       - nxp,pcal6416
-       - nxp,pcal6524
-       - nxp,pcal9535
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 2925f4d8cef3..ba012ac7cd8c 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -89,6 +89,7 @@ static const struct i2c_device_id pca953x_id[] = {
- 	{ "pca9575", 16 | PCA957X_TYPE | PCA_INT, },
- 	{ "pca9698", 40 | PCA953X_TYPE, },
- 
-+	{ "pcal6408", 8 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6416", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6524", 24 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9535", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
-@@ -1243,6 +1244,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
- 	{ .compatible = "nxp,pca9575", .data = OF_957X(16, PCA_INT), },
- 	{ .compatible = "nxp,pca9698", .data = OF_953X(40, 0), },
- 
-+	{ .compatible = "nxp,pcal6408", .data = OF_953X(8, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
--- 
-2.37.3
+Is there simply a way to add the clk to the snvs_rtc and the wdog dt
+nodes so they have a use count and don't get disabled?
 
+Best Regards,
+
+Tim
