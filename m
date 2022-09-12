@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF685B574B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7548B5B57B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiILJkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S229974AbiILJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiILJkE (ORCPT
+        with ESMTP id S229942AbiILJ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:40:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8BF11AF08;
-        Mon, 12 Sep 2022 02:40:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC22D113E;
-        Mon, 12 Sep 2022 02:40:05 -0700 (PDT)
-Received: from [10.57.49.22] (unknown [10.57.49.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB79C3F71A;
-        Mon, 12 Sep 2022 02:39:57 -0700 (PDT)
-Message-ID: <1037211f-6c10-16de-4819-2a51d115f65b@arm.com>
-Date:   Mon, 12 Sep 2022 10:39:56 +0100
+        Mon, 12 Sep 2022 05:58:45 -0400
+X-Greylist: delayed 945 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 02:58:43 PDT
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1111763D8;
+        Mon, 12 Sep 2022 02:58:42 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=226828f8df=fe@dev.tdt.de>)
+        id 1oXfxm-000Oq0-87; Mon, 12 Sep 2022 11:42:46 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1oXfxl-000FzA-H8; Mon, 12 Sep 2022 11:42:45 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 136A0240049;
+        Mon, 12 Sep 2022 11:42:45 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 8660E240040;
+        Mon, 12 Sep 2022 11:42:44 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 0774E28CA4;
+        Mon, 12 Sep 2022 11:42:44 +0200 (CEST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 06/13] Documentation: coresight: fix a documentation build
- warning
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        corbet@lwn.net
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <cover.1660829433.git.mchehab@kernel.org>
- <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 12 Sep 2022 11:42:43 +0200
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Eckert.Florian@googlemail.com
+Subject: Re: [PATCH] fs/proc: add compile time info
+In-Reply-To: <CAK7LNAT3cyv07p7AZ54D=HOZRZ7-zLgMM+YPNLzcPidpDvXZgA@mail.gmail.com>
+References: <20220908113449.259942-1-fe@dev.tdt.de>
+ <CAK7LNAT3cyv07p7AZ54D=HOZRZ7-zLgMM+YPNLzcPidpDvXZgA@mail.gmail.com>
+Message-ID: <c8577c14a1663cbdea70534c086c247c@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate-ID: 151534::1662975766-314C93D3-96E302D4/0/0
+X-purgate-type: clean
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 14:38, Mauro Carvalho Chehab wrote:
-> Using wildcards for cross-reference doesn't work, as the Sphinx
-> automarkup plugin is not smart enough. So, changeset
-> c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-> tried to fix it, but at the wrong way, as it the building system
-> will keep producing warnings about that:
-> 
-> 	Warning: Documentation/trace/coresight/coresight.rst references a file that doesn't exist: Documentation/devicetree/bindings/arm/arm,coresight-
-> 
-> As automarkup will still try (and fail) to create a cross reference.
-> So, instead, change the markup to ensure that the warning won't be
-> reported.
-> 
-> Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Hello Masahiro,
 
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+thanks for your feedback.
 
-> ---
-> 
-> See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
-> 
->   Documentation/trace/coresight/coresight.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-> index 4a71ea6cb390..826e59a698da 100644
-> --- a/Documentation/trace/coresight/coresight.rst
-> +++ b/Documentation/trace/coresight/coresight.rst
-> @@ -130,7 +130,7 @@ Misc:
->   Device Tree Bindings
->   --------------------
->   
-> -See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
-> +See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
->   
->   As of this writing drivers for ITM, STMs and CTIs are not provided but are
->   expected to be added as the solution matures.
+> https://patchwork.kernel.org/project/linux-kbuild/patch/20220828024003.28873-6-masahiroy@kernel.org/
+> lands, nobody cannot reference KBUILD_BUILD_TIMESTAMP,
+> then this whack-a-mole game will end.
 
+I was not aware of that problem. Thanks for the link.
+
+I understood that this is a bad idea to create the timestamp for proc 
+like this!
+But how does it look in principle to offer the build timestamp in proc 
+for reading?
+You have only made your point about creating the timestamp but not about 
+reading it out via the proc directory.
+
+So far the timestamp is only readable as a string via dmesg.
+
+Best regards
+
+Florian
