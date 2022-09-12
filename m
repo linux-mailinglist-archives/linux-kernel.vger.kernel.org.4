@@ -2,186 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3755B5D9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5595B5DA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiILPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S230389AbiILPtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiILPr5 (ORCPT
+        with ESMTP id S230354AbiILPtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:47:57 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2101.outbound.protection.outlook.com [40.107.220.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DF12F3A8;
-        Mon, 12 Sep 2022 08:47:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a49m73gDECx7E1QaJ9usuZSpiDdPHhQtJQoEYKBGGJOf24/XguTRrZFZtgXJwYWe3bwgcuUAzLiFZOAxx8O6YRZ75QfvEUuKmc1NqdkZCkcGsflhV/5D4HSwZ0mCcmrPtUgotiiwIDKOY55b8Tpcj/Ghq66IuxdifUKG2miq2ubz4zaT2EuJ8t+MCtFJlLTQLu3CqUSzGjTm99eSje4+FmINsxPtNcjV2YUVadSWy1MXcfcX4cYZMVztAV8l8pmDWuffcpi+qfPGvZzOIjT9jDHT4RwXMjiq2+vI2N7DN/mrX+vYwOkI+FbGOwQ7gO8uiHYaHH+hK+Mxeqobw19LVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qvlZZH5mN3V8JPuGRpwif9a1jiT0DI1AJQREUXxlKRU=;
- b=O9LGeSVyPuN/ukkJcmvpQeOAf9IhYv7E7AH5btaRpSL07rov3OVucH+7Fq5xMOlAm1Iee3hwbSoBXbM5X7D89LJsRI6TbfedxuTWx1eVOgJjQ6Hz2KZweLMmSJ7KwZgwG4oiXld2pqnZlDTMrFI3MkVxQABprJmoLZivqraBiKgytIGb8u4nx3QA2velYrzz6ndj+eiV3fGM0ntbOM7sBw8XH8K0jJ1kTZEBLvRuzRq8B5nS/LQJVFmgtLKeycjPdoJqK/0xa8Q/ORJ0JeUTgaP9AHLockyM2lDb4TYWN86M+ce2Dy8LlR+EU69I2vxG+V5N3c/YPwikOQyCJQPZYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qvlZZH5mN3V8JPuGRpwif9a1jiT0DI1AJQREUXxlKRU=;
- b=rjx97/oW8rTWA0vJr91gFVaszuSOe5cGtZ0ofx72CZa+VjRpYa0pKuyGBdopmfiIsZSaIVIB2paZzRhylTZKSITDkpa5+WExyAeyYJZnGkw33lq94xkhFwGtQRigJ32DyvciaIWPACulNg9uWM9J5/Zq9NWitzeaKlpHWx81SO8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CH3PR10MB6809.namprd10.prod.outlook.com
- (2603:10b6:610:141::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
- 2022 15:47:53 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.020; Mon, 12 Sep 2022
- 15:47:52 +0000
-Date:   Mon, 12 Sep 2022 08:47:47 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Mon, 12 Sep 2022 11:49:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FCB6419;
+        Mon, 12 Sep 2022 08:49:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01429B80DB9;
+        Mon, 12 Sep 2022 15:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D37C433C1;
+        Mon, 12 Sep 2022 15:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662997776;
+        bh=Y9o8zlfMXVNo23NhygxCl5rFupwZ9JDKU3q8+i8soGs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=VgtwOgaOC5ZZZKkHfIbpB574JJEJoW23SXv6vimyQ2E1GZB5xR05EY54KK2XjKTQL
+         RuWGai+VBLlIHFi7nY6rbzs9+SbPCKNiChnIdOWdNfZ/GHCGtjH0ZzOdaYHWLEKBBQ
+         rcAw9ghpBEVXcE8bjP4GrwYj1Ahu4PzyQ3EEfVbx+NaXmVeffa939fEiix8ie8z9TR
+         i8iTLXaYSq9HD9AFPkI/HN5maYCq4lDKoCuMvS/tqG7CFhcIT0iQ4ePyQY0SsUI0HT
+         vMiIPRHoFzoXgYtCZ8+s4l/lefw4tdfUv3svux60hS94qA8CxQc+bobZwTg5Cq9PpS
+         LREs3tt82vYCw==
+Message-ID: <f50919004f95782f0e8f26d9ac0513ee0c7ee432.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
- for all ports
-Message-ID: <Yx9Uo9RiI7bRZvLC@colin-ia-desktop>
-References: <20220911200244.549029-1-colin.foster@in-advantage.com>
- <20220911200244.549029-7-colin.foster@in-advantage.com>
- <Yx7yZESuK6Jh0Q8X@shell.armlinux.org.uk>
- <20220912101621.ttnsxmjmaor2cd7d@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912101621.ttnsxmjmaor2cd7d@skbuf>
-X-ClientProxiedBy: BY5PR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::12) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Date:   Mon, 12 Sep 2022 11:49:33 -0400
+In-Reply-To: <44884eeb662c2e304ba644d585b14c65b7dc1a0a.camel@hammerspace.com>
+References: <20220908182252.GA18939@fieldses.org>
+         <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+         <20220909154506.GB5674@fieldses.org>
+         <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
+         <20220910145600.GA347@fieldses.org>
+         <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+         <87a67423la.fsf@oldenburg.str.redhat.com>
+         <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
+         <20220912135131.GC9304@fieldses.org>
+         <aeb314e7104647ccfd83a82bd3092005c337d953.camel@hammerspace.com>
+         <20220912145057.GE9304@fieldses.org>
+         <626f7e46aa25d967b3b92be61cf7059067d1a9c3.camel@hammerspace.com>
+         <44884eeb662c2e304ba644d585b14c65b7dc1a0a.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a246145b-ce36-49cf-f0eb-08da94d62723
-X-MS-TrafficTypeDiagnostic: CH3PR10MB6809:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AkrTUPlP7ft91k9Ug0MAnEMqEMa275849YNVxuid9Yu7BFQvBJ0EYoQVaYaAvuVICtyT/ZGbTZyQcWbuqeCOL6s7SIwPZMI7HHF3msBnl+Fjr4VedJ8FgisTIv4rHIAtVh1brZvH3mNJSB1jqFlL2DCkSq9anSA5ZEFb/RGKpbfd3Y4kluqHjT9Ji73JCdO9SXXZ37gzE0YBnjFNqLkD/fpShn9G9N76CkSLTeDFQqNJRncjLNlKTlMbZzT6KMpmtaybPyaIwVhnHkRDcqKx9seb8JVRwWNpqf2habSbFNI9+eFVEjliE/5oiv8Mg9eyvm0vhEYQCKwbSvjFsYZG3KNrEucqFBMfFdfHQuICJqbZAbNZpQmB6V4qqlOI2t+wsu4rbvPXrPDhohtl7g30FTN1U3KyZvbKv5m4ov39hREMad/de4hH8LwqvwcVj0Emz1/H2bsK1twVE8b9T8lMytdZzMB2zAVlC/+Z8LEirSynbvh8aKzVyMxp/nCU/PyLB1xiR7BQc2ItoDZc15BaJF0WrFCwVZiXB8HM8tNUduBnVSLp/usJ/85jyAyGbJeCFo4iPZIVz5pQyjhMppXA6c6miAx/DPAO7dfEcYT4H3g5dTVIXNb8/9G9rr7aNOmnr9XIZ2wwb8bH5bmD4ed7k9plY85m4PE9dbe/oZaqS6bx917EU6ZSvh4hBnF6EFBhTLL6gjQ6w55paG7vymJMpCsTcMOfc43yuMosPyPq0aE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(346002)(366004)(396003)(39840400004)(376002)(83380400001)(38100700002)(7416002)(2906002)(44832011)(186003)(316002)(8936002)(5660300002)(33716001)(66946007)(4326008)(66476007)(66556008)(8676002)(54906003)(41300700001)(6916009)(86362001)(6506007)(6512007)(9686003)(6666004)(26005)(478600001)(6486002)(966005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PE4w4Ny4EhTKXXrSEXVuxWVt5XP7YIalaI5IrkfupXynLfP/szWhIWEkHMmQ?=
- =?us-ascii?Q?ZAEK1e6a0o26ojQcLARknRmr+YZrLnak7Uuny5cZuRlEo5Fe+fLve2zHP+qW?=
- =?us-ascii?Q?0TVnBGTYI7AbuOhCwvyDNYJW7Ljg8+IVf1LJYQU5kEUMsDSw1UFcIMR8t5g3?=
- =?us-ascii?Q?tM7ywSMGcdPxk+9atF4OzcccAbVmzVzV30CzI/IsRHr48HzCx8JhfKTKOeWO?=
- =?us-ascii?Q?CyfwPieM3BMg7/zTyGic7YuM9MbpLtKIGxh7dE+C3ZQyBE5PleoHY8SUhgHr?=
- =?us-ascii?Q?2o27lwFe9g3CfTeRHa7xaNoNf+0SxO0GGtt4v/lSHxeYMahmQPc1vu4AXjEy?=
- =?us-ascii?Q?eIb+ob3Z6Y1iYRXRtP6V7AKnQHUFzgsLvnFgjclcmQM5UbTp+2tCkKKyHC8H?=
- =?us-ascii?Q?XIZrYuH5B7UT/jJrh29DJjRqep2Bvi7e3ZISwNiEyiNvwIa9TK19lUEkNawQ?=
- =?us-ascii?Q?8OrC70PJfoppMVfTkGSOzMRzmr7Hv+uXnB6e2wbwfv9mmaqYFNaMaofwfKHW?=
- =?us-ascii?Q?SXm8TbVPiE5E00qztIC7CqcTbBd2sPCxVKIhBnhk1Mnbf9gC61XfMelhFYCc?=
- =?us-ascii?Q?TSqVnNH67R2LJomYY/EPIHqQb/MVCmho+ApPkyGq7yYATDE8wOAfVuEySMpC?=
- =?us-ascii?Q?fwLU7QW8nfWqrnJuBu0LyQd7oZLpHy2kiyR2YjTjO4aIRAytiSr66Oiehz23?=
- =?us-ascii?Q?+5ZgpdEJXmRFUUa61cSP9r9S8/xjwKkQMGxSE1O0MWTkYZfKYWcK8VpQh407?=
- =?us-ascii?Q?63J0hPV25/zdfJBYvcdnu05JlD5tzWYNDKI0eMrPDWmSsbOww8lnMS+ufPuP?=
- =?us-ascii?Q?Axa/kYlLRnUpuiQnXmi3H9rXRfHaOj61k8UsJYpwMah08Rsu/cdxDsuSkbdq?=
- =?us-ascii?Q?eJtOJp9o27K1Sx7PzYDxPb7jyzyKx1kfFkusPCHHUVvPgZOsa9TowRlqXXHI?=
- =?us-ascii?Q?CoG3YhY5Li6SL41M0y9wdEIERL1UUZOWDLsWZzHrXlOrjFh52VKAFGYkLWwE?=
- =?us-ascii?Q?V88VXLVTON7Afy/aM5gxzDbfrl7G6d4dunJ90fPbuDLfeep2iPp9EbLVtqMz?=
- =?us-ascii?Q?N9yZOE9KJIXHEMXPgDaYFcmOjX36/OCCejlZds+wJXmWm9u/xY3lpCACUV1Z?=
- =?us-ascii?Q?++vuIUk5L8Hb28Syzt4oFlCQI9fQjZCZk+yyaGYrD2hArB8zFyoBF/XAc/wH?=
- =?us-ascii?Q?v3PxaRkCmIyB+3kvDR2AUkphB05/Zmn7fNEr4yTJM8iNN3gdBCp7MFG8xVzx?=
- =?us-ascii?Q?cLNmkrfyzRh/N0NBTF3cA5si3zXVkD0Fo6iXKRqou/MDtf7a6Qod00XCddNk?=
- =?us-ascii?Q?zxSa/j/G7XoMN8zu+aq2N8WTHGGPPOpjprlXWWUIcRwhvUrU7DPK1zqmuhuf?=
- =?us-ascii?Q?hC5uwOjDoeGEfu3Czf1Sc+uEdLiIKA1TuaSl1+EEppoQd32F1SfY9sZuK/aL?=
- =?us-ascii?Q?8KXUiJOel7aEWXjCG8AJDAyRuaVVSgQSRaCrzzjYlHJYVToTxkzOhMwUtqJu?=
- =?us-ascii?Q?0BLkSkugoh1uPjs3Wk4Resl0d6loRc7ONKfY0cX+F0aWwUM9+ns3AivVm5OE?=
- =?us-ascii?Q?L9/LFqvDJxkLGIGl0goqpfBXD5IIkj2NysaTPiKNg22k7+KESltihBkSCIkB?=
- =?us-ascii?Q?TCqgvE1qTZR3B82TlNUKt34=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a246145b-ce36-49cf-f0eb-08da94d62723
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 15:47:52.8331
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pvOYd3Yy2sSV3dA4nDN5lEMFebQefvUdYT0zAKRZ6L0paP+d4ri7QdBMWz91oGW1VAIeKoryIYeFhwmR9JTbJTi5iriS9VNnanEM59QtuKg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6809
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:16:21AM +0000, Vladimir Oltean wrote:
-> On Mon, Sep 12, 2022 at 09:48:36AM +0100, Russell King (Oracle) wrote:
-> > On Sun, Sep 11, 2022 at 01:02:42PM -0700, Colin Foster wrote:
-> > > phylink_generic_validate() requires that mac_capabilities is correctly
-> > > populated. While no existing drivers have used phylink_generic_validate(),
-> > > the ocelot_ext.c driver will. Populate this element so the use of existing
-> > > functions is possible.
-> > 
-> > Ocelot always fills in the .phylink_validate method in struct
-> > dsa_switch_ops, mac_capabilities won't be used as
-> > phylink_generic_validate() will not be called by
-> > dsa_port_phylink_validate().
-> 
-> Correct, but felix_phylink_validate() _can_ still directly call
-> phylink_validate(), right? Colin does not have the full support for
-> ocelot_ext in this patch set, but this is what he intends to do.
+On Mon, 2022-09-12 at 15:32 +0000, Trond Myklebust wrote:
+> On Mon, 2022-09-12 at 14:56 +0000, Trond Myklebust wrote:
+> > On Mon, 2022-09-12 at 10:50 -0400, J. Bruce Fields wrote:
+> > > On Mon, Sep 12, 2022 at 02:15:16PM +0000, Trond Myklebust wrote:
+> > > > On Mon, 2022-09-12 at 09:51 -0400, J. Bruce Fields wrote:
+> > > > > On Mon, Sep 12, 2022 at 08:55:04AM -0400, Jeff Layton wrote:
+> > > > > > Because of the "seen" flag, we have a 63 bit counter to play
+> > > > > > with.
+> > > > > > Could
+> > > > > > we use a similar scheme to the one we use to handle when
+> > > > > > "jiffies"
+> > > > > > wraps?=A0Assume that we'd never compare two values that were
+> > > > > > more
+> > > > > > than
+> > > > > > 2^62 apart? We could add i_version_before/i_version_after
+> > > > > > macros to
+> > > > > > make
+> > > > > > it simple to handle this.
+> > > > >=20
+> > > > > As far as I recall the protocol just assumes it can never
+> > > > > wrap.=A0
+> > > > > I
+> > > > > guess
+> > > > > you could add a new change_attr_type that works the way you
+> > > > > describe.
+> > > > > But without some new protocol clients aren't going to know what
+> > > > > to do
+> > > > > with a change attribute that wraps.
+> > > > >=20
+> > > > > I think this just needs to be designed so that wrapping is
+> > > > > impossible
+> > > > > in
+> > > > > any realistic scenario.=A0 I feel like that's doable?
+> > > > >=20
+> > > > > If we feel we have to catch that case, the only 100% correct
+> > > > > behavior
+> > > > > would probably be to make the filesystem readonly.
+> > > > >=20
+> > > >=20
+> > > > Which protocol? If you're talking about basic NFSv4, it doesn't
+> > > > assume
+> > > > anything about the change attribute and wrapping.
+> > > >=20
+> > > > The NFSv4.2 protocol did introduce the optional attribute
+> > > > 'change_attr_type' that tries to describe the change attribute
+> > > > behaviour to the client. It tells you if the behaviour is
+> > > > monotonically
+> > > > increasing, but doesn't say anything about the behaviour when the
+> > > > attribute value overflows.
+> > > >=20
+> > > > That said, the Linux NFSv4.2 client, which uses that
+> > > > change_attr_type
+> > > > attribute does deal with overflow by assuming standard uint64_t
+> > > > wrap
+> > > > around rules. i.e. it assumes bit values > 63 are truncated,
+> > > > meaning
+> > > > that the value obtained by incrementing (2^64-1) is 0.
+> > >=20
+> > > Yeah, it was the MONOTONIC_INCRE case I was thinking of.=A0 That's
+> > > interesting, I didn't know the client did that.
+> > >=20
+> >=20
+> > If you look at where we compare version numbers, it is always some
+> > variant of the following:
+> >=20
+> > static int nfs_inode_attrs_cmp_monotonic(const struct nfs_fattr
+> > *fattr,
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 const struct inode *ino=
+de)
+> > {
+> > =A0=A0=A0=A0=A0=A0=A0 s64 diff =3D fattr->change_attr -
+> > inode_peek_iversion_raw(inode);
+> > =A0=A0=A0=A0=A0=A0=A0 if (diff > 0)
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return 1;
+> > =A0=A0=A0=A0=A0=A0=A0 return diff =3D=3D 0 ? 0 : -1;
+> > }
+> >=20
+> > i.e. we do an unsigned 64-bit subtraction, and then cast it to the
+> > signed 64-bit equivalent in order to figure out which is the more
+> > recent value.
+> >=20
 
-As you mentioned, I do in fact call phylink_generic_validate() in 8/8.
+Good! This seems like the reasonable thing to do, given that the spec
+doesn't really say that the change attribute has to start at low values.
 
-> 
-> > Also "no existing drivers have used phylink_generic_validate()" I
-> > wonder which drivers you are referring to there. If you are referring
-> > to DSA drivers, then it is extensively used. The following is from
-> > Linus' tree as of today:
-> 
-> By "existing drivers", it is meant felix_vsc9959.c and seville_vsc9953.c,
-> two drivers in their own right, which use the common felix.c to talk to
-> (a) DSA and (b) the ocelot switch lib in drivers/net/ethernet/mscc/.
-> It is true that these existing drivers do not use phylink_generic_validate().
-> Furthermore, Colin's new ocelot_ext.c is on the same level as
-> felix_vsc9959.c and seville_vsc9953.c, will use felix.c in the same way,
-> and will want to use phylink_generic_validate().
-> 
-> > Secondly, I don't see a purpose for this patch in the following
-> > patches, as Ocelot continues to always fill in .phylink_validate,
-> > and as I mentioned above, as long as that member is filled in,
-> > mac_capabilities won't be used unless you explicitly call
-> > phylink_generic_validate() in your .phylink_validate() callback.
-> 
-> Yes, explicit calling is what Colin explained that he wants to do.
-> 
-> > Therefore, I think you can drop this patch from your series and
-> > you won't see any functional change.
-> 
-> This is true. I am also a bit surprised at Colin's choices to
-> (a) not ask the netdev maintainers to pull into net-next the immutable
->     branch that Lee provided here:
->     https://lore.kernel.org/lkml/YxrjyHcceLOFlT%2Fc@google.com/
->     and instead send some patches for review which are difficult to
->     apply directly to any tree
+>=20
+> ...and by the way, yes this does mean that if you suddenly add a value
+> of 2^63 to the change attribute, then you are likely to cause the
+> client to think that you just handed it an old value.
+>=20
+> i.e. you're better off having the crash counter increment the change
+> attribute by a relatively small value. One that is guaranteed to be
+> larger than the values that may have been lost, but that is not
+> excessively large.
+>=20
 
-As mentioned in the cover letter, I don't expect this to necessarily be
-ready by the next merge window. But seemingly I misjudged whether
-merging the net-next and Lee's tree would be more tedious for the netdev
-maintainers than looking at the RFC for reviewers. I'm trying to create
-as little hassle for people as I can. Apologies.
+Yeah.
+
+Like with jiffies, you need to make sure the samples you're comparing
+aren't _too_ far off. That should be doable here -- 62 bits is plenty of
+room to store a lot of change values.
+
+My benchmark (maybe wrong, but maybe good enough) is to figure on an
+increment per nanosecond for a worst-case scenario. With that, 2^40
+nanoseconds is >12 days. Maybe that's overkill.
+
+2^32 ns is about an hour and 20 mins. That's probably a reasonable value
+to use. If we can't get a a new value onto disk in that time then
+something is probably very wrong.
+--=20
+Jeff Layton <jlayton@kernel.org>
