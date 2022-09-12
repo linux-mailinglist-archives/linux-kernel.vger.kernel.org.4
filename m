@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E4C5B5D62
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F895B5D73
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiILPjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S230372AbiILPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiILPjn (ORCPT
+        with ESMTP id S229461AbiILPl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:39:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D0A6397
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 08:39:42 -0700 (PDT)
+        Mon, 12 Sep 2022 11:41:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F276317583;
+        Mon, 12 Sep 2022 08:41:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27C29B80DB9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3513C433C1;
-        Mon, 12 Sep 2022 15:39:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88BDC6123F;
+        Mon, 12 Sep 2022 15:41:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74D2C433D7;
+        Mon, 12 Sep 2022 15:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662997179;
-        bh=MOdzIQtvwZrIZeYWgAorj/0pcEr85t2z2V/ng6h3GaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nzQ4GL23rZMxIiI2gcwNbRbd8TvZRoW1fHAwN/x4hHh127TrVyb5+RssRnmHnwBpG
-         MmpeAOpBWaBK0YhOmVELUzWgEztt13h6zaBzvEGquyKEUHO7PTk7dRI1/J2nQi+1dP
-         sHANhxec5hrC9+XYAQPdEnwUtQoVHLPkC2kEGsJSXna3i3TxMlD8Z4/jEncU8BLyHn
-         2i2CX+okl7DKNkR7HqiXphjPsAUDTjPTzc8m2D0xwnPODkZhm/I0Soui+xqgHy888f
-         q6yrjozRZ9Fj9KKnewiYADQGgaJboafdNDDq5kw5+2aAkt2k+Rs+rl1IWK9/vBiF2e
-         5S8vMTZRCGT3g==
-Date:   Mon, 12 Sep 2022 08:39:38 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH v2] f2fs: fix to disallow getting inner inode via
- f2fs_iget()
-Message-ID: <Yx9SulcDlMfO/hiW@google.com>
-References: <20220830225358.300027-1-chao@kernel.org>
- <YxlNGeh6Sr4isEFf@google.com>
- <0af788ed-8797-22a2-ae0c-433fdd6a2188@kernel.org>
- <YxlRMRA7AVIusfav@google.com>
- <e5abac5f-433b-62d4-b2fa-974b5f978d61@kernel.org>
+        s=k20201202; t=1662997285;
+        bh=q6cfW2LaGIg+SltIIpaovEiimKBRJf/TFohwH/CWcBE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QdMtE+15VMAO+Mtj17TfJ1AwHaWfsJoUtC8CmVxmCpVlOCyOYM1vYgjJ/xG2pKp2x
+         +xsGO14Dz2AesZvKBxhVksflSqKrb/MapsXoDdYhToqJiwxN7YEOlC9asR4wCDN7kD
+         ubYdV2QOB01WuXNSENpeNGIsGZ96Qtasd/b/OMSCA/+iT5Msr8bfe4jGOGbbOdWGys
+         LXgmSSXv7mNrXLlRWWXhAvEoKqdIXjgvZDCHqcVOs4u9ixqF3sWF+WzkdCsJXGcweF
+         /KMXHtXFu4xl7zwHkrz6a7c9inMOFa9SQVy3sfREfF1t/4BJrPzEQk6v6NUlOaWRdq
+         mWOS6y0Eb2qNg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oXlYo-0003Ml-Bl; Mon, 12 Sep 2022 17:41:23 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/7] drm/msm: probe deferral fixes
+Date:   Mon, 12 Sep 2022 17:40:39 +0200
+Message-Id: <20220912154046.12900-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5abac5f-433b-62d4-b2fa-974b5f978d61@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,55 +69,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08, Chao Yu wrote:
-> On 2022/9/8 10:19, Jaegeuk Kim wrote:
-> > On 09/08, Chao Yu wrote:
-> > > On 2022/9/8 10:02, Jaegeuk Kim wrote:
-> > > > On 08/31, Chao Yu wrote:
-> > > > > From: Chao Yu <chao.yu@oppo.com>
-> > > > > 
-> > > > > Introduce f2fs_iget_inner() for f2fs_fill_super() to get inner inode:
-> > > > > meta inode, node inode or compressed inode, and add f2fs_check_nid_range()
-> > > > > in f2fs_iget() to avoid getting inner inode from external interfaces.
-> > > > 
-> > > > So, we don't want to check the range of inner inode numbers? What'd be the
-> > > > way to check it's okay?
-> > > 
-> > > For node_ino, meta_ino, root_ino, we have checked them in sanity_check_raw_super()
-> > > as below:
-> > > 
-> > > 	/* check reserved ino info */
-> > > 	if (le32_to_cpu(raw_super->node_ino) != 1 ||
-> > > 		le32_to_cpu(raw_super->meta_ino) != 2 ||
-> > > 		le32_to_cpu(raw_super->root_ino) != 3) {
-> > > 		f2fs_info(sbi, "Invalid Fs Meta Ino: node(%u) meta(%u) root(%u)",
-> > > 			  le32_to_cpu(raw_super->node_ino),
-> > > 			  le32_to_cpu(raw_super->meta_ino),
-> > > 			  le32_to_cpu(raw_super->root_ino));
-> > > 		return -EFSCORRUPTED;
-> > > 	}
-> > > 
-> > > compressed_ino should always be NM_I(sbi)->max_nid, it can be checked in
-> > > f2fs_init_compress_inode()?
-> > 
-> > Hmm, I'm not sure whether we really need this patch, since it'd look better
-> > to handle all the iget with single f2fs_iget?
-> 
-> Well, the main concern is previously f2fs_iget() won't check validation for inner
-> inode due to it will skip do_read_inode() - f2fs_check_nid_range(), so that in a
-> fuzzed image, caller may pass inner ino into f2fs_iget(), result in incorrect use
-> of inner inode. So I add f2fs_check_nid_range() in prior to f2fs_iget_inner() in
-> f2fs_iget() as below to detect and avoid this case.
+The MSM DRM is currently broken in multiple ways with respect to probe
+deferral. Not only does the driver currently fail to probe again after a
+late deferral, but due to a related use-after-free bug this also
+triggers NULL-pointer dereferences.
 
-FWIW, sanity_check_raw_super() checked the inode numbers.
+These bugs are not new but have become critical with the release of
+5.19 where probe is deferred in case the aux-bus EP panel driver has not
+yet been loaded.
 
-> 
-> > > > > +struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
-> > > > > +{
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	ret = f2fs_check_nid_range(F2FS_SB(sb), ino);
-> > > > > +	if (ret)
-> > > > > +		return ERR_PTR(ret);
-> > > > > +
-> > > > > +	return f2fs_iget_inner(sb, ino);
+The underlying problem is lifetime issues due to careless use of
+device-managed resources.
+
+Specifically, device-managed resources allocated post component bind
+must be tied to the lifetime of the aggregate DRM device or they will
+not necessarily be released when binding of the aggregate device is
+deferred.
+
+The following call chain and pseudo code serves as an illustration of
+the problem:
+
+ - platform_probe(pdev1)
+   - dp_display_probe()
+     - component_add()
+
+ - platform_probe(pdev2) 				// last component
+   - dp_display_probe()					// d0
+       - component_add()
+         - try_to_bring_up_aggregate_device()
+	   - devres_open_group(adev->parent)		// d1
+
+	   - msm_drm_bind()
+	     - msm_drm_init()
+	       - component_bind_all()
+	         - for_each_component()
+		   - component_bind()
+		     - devres_open_group(&pdev->dev)	// d2
+	             - dp_display_bind()
+		       - devm_kzalloc(&pdev->dev)	// a1, OK
+		     - devres_close_group(&pdev->dev)	// d3
+
+	       - dpu_kms_hw_init()
+	         - for_each_panel()
+	           - msm_dp_modeset_init()
+		     - dp_display_request_irq()
+		       - devm_request_irq(&pdev->dev)	// a2, BUG
+		     - if (pdev == pdev2 && condition)
+		       - return -EPROBE_DEFER;
+
+	      - if (error)
+ 	        - component_unbind_all()
+	          - for_each_component()
+		    - component_unbind()
+		      - dp_display_unbind()
+		      - devres_release_group(&pdev->dev) // d4, only a1 is freed
+
+           - if (error)
+	     - devres_release_group(adev->parent)	// d5
+
+The device-managed allocation a2 is buggy as its lifetime is tied to the
+component platform device and will not be released when the aggregate
+device bind fails (e.g. due to a probe deferral).
+
+When pdev2 is later probed again, the attempt to allocate the IRQ a
+second time will fail for pdev1 (which is still bound to its platform
+driver).
+
+This series fixes the lifetime issues by tying the lifetime of a2 (and
+similar allocations) to the lifetime of the aggregate device so that a2
+is released at d5.
+
+In some cases, such has for the DP IRQ, the above situation can also be
+avoided by moving the allocation in question to the platform driver
+probe (d0) or component bind (between d2 and d3). But as doing so is not
+a general fix, this can be done later as a cleanup/optimisation.
+
+Johan
+
+
+Johan Hovold (7):
+  drm/msm: fix use-after-free on probe deferral
+  drm/msm: fix memory corruption with too many bridges
+  drm/msm/dp: fix IRQ lifetime
+  drm/msm/dp: fix aux-bus EP lifetime
+  drm/msm/dp: fix bridge lifetime
+  drm/msm/hdmi: fix IRQ lifetime
+  drm/msm: drop modeset sanity checks
+
+ drivers/gpu/drm/bridge/parade-ps8640.c   |  2 +-
+ drivers/gpu/drm/display/drm_dp_aux_bus.c |  5 +++--
+ drivers/gpu/drm/msm/dp/dp_display.c      | 16 +++++++++-------
+ drivers/gpu/drm/msm/dp/dp_parser.c       |  6 +++---
+ drivers/gpu/drm/msm/dp/dp_parser.h       |  5 +++--
+ drivers/gpu/drm/msm/dsi/dsi.c            |  9 +++++----
+ drivers/gpu/drm/msm/hdmi/hdmi.c          |  7 ++++++-
+ drivers/gpu/drm/msm/msm_drv.c            |  1 +
+ include/drm/display/drm_dp_aux_bus.h     |  6 +++---
+ 9 files changed, 34 insertions(+), 23 deletions(-)
+
+-- 
+2.35.1
+
