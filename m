@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D648F5B63A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BED5B63B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiILW10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S229873AbiILW2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiILW1Y (ORCPT
+        with ESMTP id S230281AbiILW2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:27:24 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15EF205D2;
-        Mon, 12 Sep 2022 15:27:22 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b5so17778592wrr.5;
-        Mon, 12 Sep 2022 15:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=W9K0Nbt/PATc7AYj/Tml8RmmX7jWgySUjWvxLIPI9Hs=;
-        b=OPQqp90XxQK8MNhCyZoOlB+WrzpdCGgXnFA/R5DjvJaGBHJm4UEwGxwqHJQNkKNiZI
-         YFTR9ACJo8zLkhPIoZiE0/Y5V83TVrqbFIqmcEEpynmAg6cZCQoa1O7lBU/69WWUm6Pg
-         Y5J4fVXZ53akuJRe0UxiG8kwxWzWspUmBiceMW/GiAnEF32IO2izerYbStj5DfCHmW6/
-         L8Fg0UpFn5HN/8lSahK7yCPjJLaYTBfhBXbIUNnFFTeT0q23Dl9WHyZ5TIfsh12t8bEX
-         Pau5H9DBHmjl6CYkpi129TjS3SOKJY3Hip4zBTmu3zmVgVtc4S+dnkLkv1wbYq+Cb4/E
-         rA5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=W9K0Nbt/PATc7AYj/Tml8RmmX7jWgySUjWvxLIPI9Hs=;
-        b=ICYamR3BClZ6nvUnlDTyLdl7mpoRU9TEB5LKsnegFjAQknqgLezQE9AN9LKc/O7Mr5
-         khkMAoox9uchUQQkAEOlCB3oNX0cSB/HiZLtBEXM0l7HPcd8glw0t2EwvjrXLZ4iBnXB
-         GSsWcQG0N02hb24xSYczKV++s0t7ihtv5KUr4bsOfpMzdbEVPgivr48iPpr02VZt8UYZ
-         cgDxqSvE79plIm8rmPfO2Q+QSQTaMLDRzgrVTBH+ytYcrmjXjsr4EgeFLAW4cBsoveaK
-         qd6BRfuFb4940Zd7sVYh140uiHcNx3Ewudt4etfuQ2wC2SlVKqFQuUDiVTpnRWxJu/Tu
-         K1sw==
-X-Gm-Message-State: ACgBeo1lS+zszAbNEy3zltIbEXetFprIpI02r1zNvKm4J1HMBXzl4jCf
-        SsxCQOmQv7ukXz28++1ap5cAFggvSBs=
-X-Google-Smtp-Source: AA6agR6tnpc15rOuInOrql8gSUcH9upaUnlMbRgDrT3Wk8XtoGK4DV88jFgk9B0Q7nj2TsQ+B3jrmQ==
-X-Received: by 2002:a05:6000:1561:b0:22a:72a1:e3f1 with SMTP id 1-20020a056000156100b0022a72a1e3f1mr5392788wrz.456.1663021640859;
-        Mon, 12 Sep 2022 15:27:20 -0700 (PDT)
-Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003b47b80cec3sm7067940wme.42.2022.09.12.15.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 15:27:20 -0700 (PDT)
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     linux-iio <linux-iio@vger.kernel.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iio: pressure: bmp280: fix datasheet links
-Date:   Tue, 13 Sep 2022 00:26:44 +0200
-Message-Id: <20220912222645.377874-1-ang.iglesiasg@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
-References: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
+        Mon, 12 Sep 2022 18:28:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1E9205D2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663021714; x=1694557714;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QE+zpv7+p1zxtZq8Ys4LSkA9vBh400scPmP4VqRM5jU=;
+  b=T7Ocz4MJdL1MYN2CptBSPgnt6nT8T6kKvBN7xqPmhS8FMU1aDNUV5lQz
+   M+cCDlVXN39fKtcgcWgnT3sgaLlbdj7luN5ghUdPbBmhLtttjhcHLgFo7
+   bB74JMTmHGsgj1wG5pXQoV/TliZpZOsfV8GUr+syCadRyOCyzkZXqpGU1
+   9EXCVRg7QWiQ39QNIk4pXzd5BahbEPCiywnEGgVxsbRK4dwge9EevAU+F
+   lj6HqnCefNqi0gHL+ByC/gg2XFYHswEK4advf/bMSGY1VdigBPUyZg71K
+   pNrgrkEbhs5ulbYnZSFypherCL8qxYgB6SyisAesTQI/v23vfXgCiJuJz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324224794"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="324224794"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:28:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="861317773"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Sep 2022 15:28:32 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXruq-0002wB-1H;
+        Mon, 12 Sep 2022 22:28:32 +0000
+Date:   Tue, 13 Sep 2022 06:27:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [peterz-queue:call-depth-tracking 11/59] /tmp/cc5AOQRO.s: Error:
+ .size expression for __raw_callee_save___kvm_vcpu_is_preempted does not
+ evaluate to a constant
+Message-ID: <202209130641.FPokOaKK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated links for BMP280 and BME280 datasheets on Bosch website.
-Datasheet of BMP180 is no longer available on the manufacturer's website,
-changed the link to a copy hosted by a third party.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git call-depth-tracking
+head:   3a02739baf0302d9ba295686fc7a48fdd235ad15
+commit: df1de0e0220ea824baf5ff3ef0993bb85fce0c7f [11/59] x86/paravirt: Properly align PV functions
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20220913/202209130641.FPokOaKK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=df1de0e0220ea824baf5ff3ef0993bb85fce0c7f
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue call-depth-tracking
+        git checkout df1de0e0220ea824baf5ff3ef0993bb85fce0c7f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Changelog in v2:
-* Added a notice about the situation with bmp180 datasheet and list
-  missing changes from newer versions.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
----
- drivers/iio/pressure/bmp280-core.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index fe7aa81e7cc9..01cd32003ca8 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -9,9 +9,15 @@
-  * Driver for Bosch Sensortec BMP180 and BMP280 digital pressure sensor.
-  *
-  * Datasheet:
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP180-DS000-121.pdf
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001-12.pdf
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280_DS001-11.pdf
-+ * https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
-+ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
-+ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
-+ *
-+ * Notice:
-+ * The link to the bmp180 datasheet points to an outdated version missing these changes:
-+ * - Changed document referral from ANP015 to BST-MPS-AN004-00 on page 26
-+ * - Updated equation for B3 param on section 3.5 to ((((long)AC1 * 4 + X3) << oss) + 2) / 4
-+ * - Updated RoHS directive to 2011/65/EU effective 8 June 2011 on page 26
-  */
- 
- #define pr_fmt(fmt) "bmp280: " fmt
+   /tmp/cc5AOQRO.s: Assembler messages:
+>> /tmp/cc5AOQRO.s:59: Error: a bignum with underscores must have exactly 4 words
+>> /tmp/cc5AOQRO.s:59: Error: bad or irreducible absolute expression
+>> /tmp/cc5AOQRO.s:59: Error: junk at end of line, first unrecognized character is `r'
+>> /tmp/cc5AOQRO.s: Error: .size expression for __raw_callee_save___kvm_vcpu_is_preempted does not evaluate to a constant
+--
+   /tmp/ccfYcFQ6.s: Assembler messages:
+   /tmp/ccfYcFQ6.s:6: Error: a bignum with underscores must have exactly 4 words
+>> /tmp/ccfYcFQ6.s:6: Error: junk at end of line, first unrecognized character is `p'
+   /tmp/ccfYcFQ6.s:13: Error: junk at end of line, first unrecognized character is `p'
+>> /tmp/ccfYcFQ6.s: Error: .size expression for _paravirt_nop does not evaluate to a constant
+>> /tmp/ccfYcFQ6.s: Error: .size expression for paravirt_ret0 does not evaluate to a constant
 
-base-commit: 2f61ff8272967c9bdcba810aa978170814b08f7c
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
