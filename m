@@ -2,159 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744425B6348
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41D25B634A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiILWIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S230139AbiILWJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiILWIh (ORCPT
+        with ESMTP id S229610AbiILWJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:08:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827F4D267;
-        Mon, 12 Sep 2022 15:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663020514; x=1694556514;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7Utv+K3BgofoY9ZmCag46XhG1fetGA5zy+J6KFJeWFs=;
-  b=l8G8pKxsvf53RDs3hnLZ+3l5bGVSCbZEPx/G6yotLpPEIuVykTFgS90p
-   S0ZRiZU3zNemsefXQ5w1g9P113JYTjYrbrFj2Tr5WwRGnkTgR5JTQHfk5
-   WPRwOk60NuCRQj1QV2HtjmmPCQzSiAzRPxiDvz3deBb2YHd6sBWTIoUPL
-   um9LNqdGp+XNZIGBiH2lkKQtSQIbUsYWTBIs/xrFtnSHwX1qRz63JXBrY
-   725FNazd3nnC518r09BfYlPv/AP+728IYAwp3E5IMElWXK9pbXofK5ceU
-   CpvLhhekwr3EKWGjBnCk65ovCDGcuVGCoIxc+6rABzDXPSGTViz+Z06qf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="299320613"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="299320613"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:08:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="684606074"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 15:08:34 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 15:08:33 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 15:08:32 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 12 Sep 2022 15:08:32 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 12 Sep 2022 15:08:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CNGKFyaYjMrnTnj6QQV3ze2wRzK1fIR2mIbsMkMol1UwDDXjxyILBqGCkNQvhZZj3/I/+YhgqPhFLiDfse0XymaNXud8jmyMSoBjIijcS05S04VZmHwT/tfSJQ22Us2Nfiungq2kkoCvn9dNwd0jY7Tx68zvzQ3V5EuxUWJA92HBfxXKlEfG0G/9jxuXZQ8NS0f5MCFh5b7Q4SACsHyar5TcHANHZsUsSggRh+M+foCrRRhNh0CcUEQ3UzpJkwnSz8/BcQXGygC/Djp8oedAQGF+2+VIqHzqBymeu1H6MUq5r0spgFhnte8C+NJX0rMBa2eFrMpgr2oPFTCEUmRwQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1fkMYQ3Lv6U6PJZfVLwTPRMORltK2aJ3gcqYRmnIKLs=;
- b=V55CtXzKTe3Gp3JgBuJALEI07WYVKEMLoQqKaqercMCw22X8Rq10hZ66f/kfBQ926E1QtPOmtpxs3A6gAYUP7tbbUbnf6nfjyyHIlN/tnHlaqbC+saM2KypOccdyzdQDrNuxnwrhgw/g1FQlCLcCmKquqB1Xbpvglkwfd2X/U88ggWVXYZIl7SWZ8xzT9h7xOl8sm6oDXDhGFa/ams4MlD9jGOsfhwJXw7VQ96kifAx5F7By4YGs4RixZP0gANO3uiYja9B+HHc6JEKZI6g5234BBVMAo7Gr0HnYKaDmzATOWNRKRop3xYtu3UATA/JLrMBLargQEr+j4ng7v+ETPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
- by SN7PR11MB6851.namprd11.prod.outlook.com (2603:10b6:806:2a3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
- 2022 22:08:31 +0000
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::a422:5962:2b89:d7f5]) by SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::a422:5962:2b89:d7f5%7]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 22:08:31 +0000
-Message-ID: <4ff0b209-2770-3790-ae93-3ea81c15a03e@intel.com>
-Date:   Mon, 12 Sep 2022 15:08:27 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH net-next v1] drivers/net/ethernet/intel/e100: check the
- return value of e100_exec_cmd()
-Content-Language: en-US
-To:     Li Zhong <floridsleeves@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>
-CC:     <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
-        <davem@davemloft.net>, <jesse.brandeburg@intel.com>
-References: <20220909041645.2612842-1-floridsleeves@gmail.com>
-From:   Tony Nguyen <anthony.l.nguyen@intel.com>
-In-Reply-To: <20220909041645.2612842-1-floridsleeves@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0P220CA0020.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:41b::26) To SN6PR11MB3229.namprd11.prod.outlook.com
- (2603:10b6:805:ba::28)
+        Mon, 12 Sep 2022 18:09:10 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F49C4D4EB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:09:09 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id e3so3671770uax.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=1nsg+px1VV0bB3kE5IVx0qREUrvaUDeFPzXpxDDocMU=;
+        b=DCQg16izQm0Z59Ah4UWn2+aNczBqJEZK94jbE8d8czDMV+GBn60E0qa+XLyG1+GzuD
+         ef1WDTUVQ5SCnI7RPZ8f6ZxI1lgT0v/6pTPOLztkT3oR5D0lwMbKKFAOtz0TUCZ5FSS/
+         bpBG8MTryKZ0Tw/mwCoSposke4iaLwAQPvLq1yWBr26Rv8aucE3pgUVhRtQtM9wYw4Jz
+         uiWl1gvR1OE/xDg68jz5L7nEhNxBw2IGwmjEE9BZuzxo0tcokHTYtHjjO6QPdi7VIfA8
+         WqJV7IqYEYnD/LpyPcwlLuuy//TnkIirRuCUkmjGhaOs1O7Xbb8JTcj2Ot5MHbZ7BOkX
+         nGdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1nsg+px1VV0bB3kE5IVx0qREUrvaUDeFPzXpxDDocMU=;
+        b=jz3bGbpkdPzzbWG9IGVGT/iJT/VCGSFAtxsNIe3Vz32V1wMWwilDwNg48IHgbtWC+X
+         kgi2rl1j5ek9+2UPBf8SofpJXEH8gFZpWJ+wNS5baHQJJOn+8WHjIP3cFn7fbnCj7qmQ
+         D63gUB7f7eFvITmSEVoPq1RTvpjiXCaDbBnHVBTN+y8+KTS9x+ZK3/Lnwknuy6s+deM3
+         tn78G5VlpalyXY7dcv4wLkXzyUIDIF0MDpsnqGXUC8BhociTe1Gd1zgyIblZfeV+t4/8
+         9bO6c6wB7pNzxiKeA01KK+qO6IEUDMF8Dvb7Bg76ZjCrkFcHbn/YA0fYnT64fXtE0fWl
+         Nc3Q==
+X-Gm-Message-State: ACgBeo1A0tCo6VDrJK+sg0tKUUuaCNU07BNToUoVmpppO28C1tq+BMoP
+        Q7HYJuR6/kOnkRl+2VPwmtudhIPSflO2X/cGJpU=
+X-Google-Smtp-Source: AA6agR4b1XqCDnoUtKBoY/b2IR0VVvgpH8QD3NrJw2EiVV4EfVsIDqPPmejRN051IGTPKd1s/LXCcpKV7fl8S+khaVM=
+X-Received: by 2002:ab0:2b0d:0:b0:390:ed8c:c78d with SMTP id
+ e13-20020ab02b0d000000b00390ed8cc78dmr9257921uar.49.1663020548415; Mon, 12
+ Sep 2022 15:09:08 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|SN7PR11MB6851:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c49a238-ebcf-435d-2747-08da950b53ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jhtDwXZoyMS3TrteHaw2K+22jS17272qKExz0NMD+A4N+b4gN+Q9CcYtEsP2ay0ufjvxcQLYsaEK2czjyGiMBkbvQtFO6CZCXphMTapcPlPS1GNQ27NtK8Dc1rNRG4JVYyDznPxJwQ6iR78ljX6RjtuqZ1pA7rL6fB0wnFPzp5L9lOeI+J8mqw6iPPum1GX3JzvKQxyYRmFsKV9O9CChk+4reUyfpOOk2ddw0tr+n6X7R8aRwlEpBUbv+ePZCLgp9UgVQatjYguI8ii4cwACIXX3ZHm3+6/6TluTgJjdSXxvIrMARoht/soXqHQrwwfS4Hwo4jgWGDWES3WKCcjsDTqZSMaL4Yj0brQu5Gfzn+dgkv1inEO0kj+1Q9Wd5nOGefBkgteRR77Ij6F1L7YlgBwK2LyAUTkyhVfh4TIPUg+9tVwMGPKj79aardOBdwLbeE1KOZKRhfoMZzT/zY8vqSrssl3YW16IgD0pCA6pRtwPTgvRq7KLXNjJ7LlEh5HhV3zmZNiP/s9XG/tr+4I1JR3KVON2yPH2RP7WJhLiaMNCYB2f/kUXEYQifjY5xa8uqcULRQuCkMVrM5x3h+nH7Mg5WYRj3TqY6NBreIh/kOHe/T5hBIwKH9amcdGnerCSxLup2cxeCAotzeUFU9+0KvcBgZEWlBXTDqludFygCw5w4fTFnqUoG5HlLxvCXhqlIZLSj+XKCuYorJDOCabYa20EEuYFj7dA16DhPbVOBEiDoOY14SKposOq3taU7PKJ7qYhYuA3aOoba5hQF67nb1KJdlu7D/rZ2ltPnWlVDFg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(366004)(136003)(39850400004)(346002)(451199015)(31696002)(6506007)(38100700002)(66556008)(2616005)(31686004)(4326008)(53546011)(6512007)(82960400001)(2906002)(316002)(66476007)(6666004)(86362001)(41300700001)(107886003)(5660300002)(8936002)(66946007)(478600001)(6486002)(8676002)(36756003)(186003)(83380400001)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1BxTktYUjJsWDZHcFUxS2hJeDRrSitjR1NLcGV2L2RaS25lc1RDTjlMTmpQ?=
- =?utf-8?B?eUoyWTFZVGlpRWx5L3kzd1V5ZFJnZ2RocEcraVR0aWptOHYvN2RhZE15dmNr?=
- =?utf-8?B?SGlKMUxxcmt5STY0S2JFdFcwVkJnRGxURmtBMUVibnhibTVDSHhYaVNNaDI3?=
- =?utf-8?B?bzFQRVI5M01aT3F1UXdFTkVFb3ZjeHBrMW91bEhQVDRqcjgwQ3l5eWxoc3k1?=
- =?utf-8?B?dU1WWmw4cDlKZXJ0RXExNkRqSkhCdXlGcnpLQmYxNkRaditzbzhmMTJXRGw3?=
- =?utf-8?B?SU5WeXFEUG9qbFMraG1TVkNsdGpmVEovdXkzUU1aTWF6YWIvanFSd2JyTWti?=
- =?utf-8?B?bUJWMmFZVTVHbVlBS0FSZGNReEI2NmhEY2o2Ym00KysrbUc4VGdDTVd3TThF?=
- =?utf-8?B?cXp5OW0rQk85eHdRZmFlcDZkMG43NGNKeXhLaWloY2RabEVRSm9oQkdqZFA5?=
- =?utf-8?B?UHdXbG9OWnFYUVMzL3Q1Yjk3aVA2R2dzdllQZGdYYnl5U3ZLVWdIRG9lbzhX?=
- =?utf-8?B?eTJsSzVUdTVMNmxYNk80ampoVHZUNUZlTmNsazNWSVRRNVJZQTZjb3p3eGhl?=
- =?utf-8?B?d0FHN3Y0U1dmY0tCelFWSHZwdnA0cnM1YmdnSDVWUjJnODgwaGFoaGtkYlVK?=
- =?utf-8?B?V2F3aXVxR1VvaUVSa3VBWEpCTXpJcTc1eXN6ZjhzSElkMEd4b3VIZzkyNmtL?=
- =?utf-8?B?SVVFeWJocTJQS3psOW9RQ1NQZVhCQXdOeTI3UW54ZGx0dU9zQmV3bklsKzhl?=
- =?utf-8?B?Lzh1SFRQSjRhVCtDSHhseFo1c3ljVER2bzExSXdtcmRUQ2lucXQzN0p4Mnox?=
- =?utf-8?B?YXkxcktGbm10anRTckZhNnJ0YWRGUm9QMzh5VWRNSFdmWlIvUmFic2FZL0Ni?=
- =?utf-8?B?U3VsKzVBeTdYUzE5SWZ4cHBMYzZIT1p1UzZ1azBvcGY5WWpsTEViaGE5L1Zj?=
- =?utf-8?B?YUxDckdYbjRacWR3amVVUnRHZUlNYWtDUTJWdGVyWTh5VGtkdEhUbnVuOFdj?=
- =?utf-8?B?T3FJTGVmK2ZCRGQ5M0RjZEpMVHg5VGJtV2JPSlFmVVJuU211RW9iMDNrUzJm?=
- =?utf-8?B?S1kvNFpOdTBpOW5idHMyNElnL0tYWFVGUFlNdGJCR1FFYUhjWmNtUDlkTUVu?=
- =?utf-8?B?RTVqNitrUEJFUjNYSXhpenZmeks5QkJWQjRaZ0RadFlLQmV0VVlFTjkvZ2RC?=
- =?utf-8?B?TDA0bFlwUTJkbERoUHJTSFpMeUJGT0NYcUFWck9iaWVaOCtYV3ZOQzZEcDR0?=
- =?utf-8?B?MEJjMFVFVEo3b0UzSmgzL2lVOGxUZ3c5L2xjTk5wYURXSmI5aDhVMEkzNllR?=
- =?utf-8?B?bTgzNDRLREFrN21lNWhpL0JsZ013NUp6S0lRSG9kWXVNejhEcGR5OUdzNElK?=
- =?utf-8?B?UEdSeGRndzV6c01nNCtCRXBwOGtHc05HeUpvcUpzUElwVU9aSG5lVk5GQ1B5?=
- =?utf-8?B?YWh1ckZvVUo3djk3VXp2NHYyUDVaTmJaY1dWa3lTSStuY05EeWtKZnIrQWZy?=
- =?utf-8?B?MkQzK0JIRDh2bjIxRC9sMlJxeTlWczZYNWpEMkx6dzhvNjJCZ0ZnWnJXbmtW?=
- =?utf-8?B?RHRodXZJZkRhME4vemswOEk0Z05wZ0tTODQ0NVh0UUNSR2dLWWQ2Q2xVdUVX?=
- =?utf-8?B?WnQyY2d0WE5WcDIwS1JCbmhlazBPY21WRmhsZ3NVTmV5eWlqeDRSNWtqVEt3?=
- =?utf-8?B?ckQ3WEpTbitCRUNIZldYUTJURUk5dHUyTXNRejhYeDBHM2pzZ0w3RUtWWWlh?=
- =?utf-8?B?NzVUNEZwK0tLMHFWZ3cyZ0VSN29uREJaV0xhMkdkNVlYUjdQbC9TUWY1NHlj?=
- =?utf-8?B?Qk12WGFzOVlJblNRcDJ0UER6VXRlamo5MzYrb3FjRmRxVmdodWM4Q0JTL2lC?=
- =?utf-8?B?a0hZQThIWkprY0k1eFRDcU92UkRpYUI5TVJDQzVQRXVPZkE1aDR0V1NWTk5E?=
- =?utf-8?B?YnhHcWdsWVBnVWNKdmY1WTNETUw2VDlXUDFxUzk4MjZ0bXR4NjB0VFc5NVVz?=
- =?utf-8?B?bklybWpHSEhkaTNpUFFrcXF5WjZxazFHMHFTR00wUG9PN28vR2k3K0xRRXNY?=
- =?utf-8?B?VDFROEo3bnNoL2dZSjdUeTI2SkYrWlowN3RBQmVBaDZ6eHpHNTVjZ2tKQXRW?=
- =?utf-8?B?cEwwbzhTV3YzK3o1VXQzMDgrakRBc1gyL1ZUVjRxdWhFclF1R2NUeElhdmE3?=
- =?utf-8?B?WFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c49a238-ebcf-435d-2747-08da950b53ce
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 22:08:31.1107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: voZQu5y6HZUAlrC8D3TScaTRRzVFCDbM5jqxfoUutmMdWUr6FnhrEKFr3Jb5gT51kMmi+qguYU6l8mQrMjTVtl29OiDnMCBnmY1kv1x2eFw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6851
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220904214134.408619-1-jim.cromie@gmail.com> <20220904214134.408619-18-jim.cromie@gmail.com>
+ <2d3846cb-ff9a-3484-61a8-973799727d8f@akamai.com> <CAJfuBxzM=KKPbcks-aQLAJM0QVd5sjL-CucYbyFbeG5sgoCVjg@mail.gmail.com>
+ <0d9f644f-3d60-02c3-7ce0-01296757e181@akamai.com>
+In-Reply-To: <0d9f644f-3d60-02c3-7ce0-01296757e181@akamai.com>
+From:   jim.cromie@gmail.com
+Date:   Mon, 12 Sep 2022 16:08:41 -0600
+Message-ID: <CAJfuBxwtAJbcQ=Dgg_nWCDj6KP6ByO=Zrh3L9D5yMrs4h2j7pA@mail.gmail.com>
+Subject: Re: [PATCH v6 17/57] dyndbg: validate class FOO by checking with module
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>, robdclark@gmail.com,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,36 +76,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/8/2022 9:16 PM, Li Zhong wrote:
-> Check the return value of e100_exec_cmd() which could return error code
-> when execution fails.
+On Mon, Sep 12, 2022 at 2:17 PM Jason Baron <jbaron@akamai.com> wrote:
+>
+>
+>
+> On 9/9/22 16:44, jim.cromie@gmail.com wrote:
+> > On Wed, Sep 7, 2022 at 12:19 PM Jason Baron <jbaron@akamai.com> wrote:
+> >>
+> >>
+> >>
+> >> On 9/4/22 17:40, Jim Cromie wrote:
+> >>> Add module-to-class validation:
+> >>>
+> >>>   #> echo class DRM_UT_KMS +p > /proc/dynamic_debug/control
+> >>>
+> >>> If a query has "class FOO", then ddebug_find_valid_class(), called
+> >>> from ddebug_change(), requires that FOO is known to module X,
+> >>> otherwize the query is skipped entirely for X.  This protects each
+> >>> module's class-space, other than the default:31.
+> >>>
+> >>> The authors' choice of FOO is highly selective, giving isolation
+> >>> and/or coordinated sharing of FOOs.  For example, only DRM modules
+> >>> should know and respond to DRM_UT_KMS.
+> >>>
+> >>> So this, combined with module's opt-in declaration of known classes,
+> >>> effectively privatizes the .class_id space for each module (or
+> >>> coordinated set of modules).
+> >>>
+> >>> Notes:
+> >>>
+> >>> For all "class FOO" queries, ddebug_find_valid_class() is called, it
+> >>> returns the map matching the query, and sets valid_class via an
+> >>> *outvar).
+> >>>
+> >>> If no "class FOO" is supplied, valid_class = _CLASS_DFLT.  This
+> >>> insures that legacy queries do not trample on new class'd callsites,
+> >>> as they get added.
+> >>
+> >>
+> >> Hi Jim,
+> >>
+> >> I'm wondering about the case where we have a callsite which is marked
+> >> as 'class foo', but the query string is done by say module and file, so:
+> >>
+> >> # echo "module bar file foo.c +p" > /proc/dynamic_debug_control
+> >>
+> >> With the proposed code, I think this ends up not enabling anything right?
+> >
+> > correct - the only way to enable :    pr_debug_cls(CL_FOO, " ...")
+> > is
+> >    echo class CL_FOO +p > control
+> >
+> > 1st, existing dyndbg query uses, whether ad-hoc or scripted,
+> > were not written in anticipation of new / classified subsystems.
+> >
+> > 2nd, new class users dont want to sit in coach. no damn legroom.
+> >
+> > 3rd, consider DRM, which already has drm.debug
+> > ie:  /sys/module/drm/parameters/debug
+> > and prefers it, at least by inertia.
+> > protecting these new class'd callsites (3-5k of them)
+> > from casual (unintended) manipulations of the kernel-wide
+> > dyndbg state seems prudent, and a usability win.
+> >
+> > Not everyone will use module bar, requiring "class foo"
+> > guarantees that changes are intentional.
+> >
+>
+> I sort of get that your trying to protect these from unintended toggling,
+> but I would say it's that's not really new with these statements,
 
-Are you coming across this as a real bug or as something reported by 
-static analysis? If the latter, I suggest checking the return value and 
-reporting it as debug, however, not changing existing behavior. We don't 
-have validation on this driver so there is limited ability to check for 
-regressions and the code has been like this for a long time without 
-reported issues.
+Whats new here is the customer - a whole new subsystem.
+theyre accustomed to a single point of control,
+/sys/module/drm/parameters/debug,
+and dont particularly value the infinite variety of combos under the hood.
+Theyre here for (Im selling them on) the JUMP_LABEL.
 
-Thanks,
-Tony
+Isolation from unintended manipulations under the hood
+(which is afterall a global kernel state) seems like a good guarantee.
 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->   drivers/net/ethernet/intel/e100.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/e100.c b/drivers/net/ethernet/intel/e100.c
-> index 11a884aa5082..3b84745376fe 100644
-> --- a/drivers/net/ethernet/intel/e100.c
-> +++ b/drivers/net/ethernet/intel/e100.c
-> @@ -1911,7 +1911,8 @@ static inline void e100_start_receiver(struct nic *nic, struct rx *rx)
->   
->   	/* (Re)start RU if suspended or idle and RFA is non-NULL */
->   	if (rx->skb) {
-> -		e100_exec_cmd(nic, ruc_start, rx->dma_addr);
-> +		if (!e100_exec_cmd(nic, ruc_start, rx->dma_addr))
-> +			return;
->   		nic->ru_running = RU_RUNNING;
->   	}
->   }
+IOW class isolation from non-class, and from other INDEPENDENT classes.
+Only LEVEL types have any interdependence, and only with the other level
+classnames in the declared group.
+
+Ultimately, whats the client want ?
+I know my banker handles other folks money too,
+but I can reasonably expect isolation from their businesses.
+
+> prr_debug() come and go before and I'm not aware of this is an issue.
+> And in any case, a query can be modified.
+
+but youre requiring they be modified, so as not to scribble all over DRM_*,
+which wasnt there when they fiddled.
+
+> I think what bugs me is now query stuff works differently. Previously,
+> all the query strings - 'module', 'file', 'line', 'format', were
+> used as additional selectors, but now we have this new one 'class'
+> that works differently as it's requited for pr_debug_cls() statements.
+>
+
+theres a "when-in-rome" argument here, if DRM is Rome.
+
+> >
+> >
+> >> Because valid class is set to _DPRINTK_CLASS_DFLT and then:
+> >> 'dp->class_id != valid_class' is true?
+> >>
+> >> This seems confusing to me as a user as this doesn't work like the
+> >> other queries....so maybe we should only do the
+> >> 'dp->class_id != valid_class' check *if* query->class_string is set,
+> >> see below.
+> >>
+> >
+> > Could you clarify whether you think this is a logic error
+> > or a frame-of-reference difference as elaborated above ?
+>
+> 'frame-of-reference' I'm questioning the how 'class' works as mentioned
+> above not the implementation.
+>
+> Thanks,
+>
+> -Jason
+>
+> >
+> > ISTM theres a place for a well-worded paragraph in doc
+> > about the class distinction, perhaps a whole for-authors section.
+> >
+> >
+> >
+> >>
+> >>
+> >>>
+> >>> Also add a new column to control-file output, displaying non-default
+> >>> class-name (when found) or the "unknown _id:", if it has not been
+> >>> (correctly) declared with one of the declarator macros.
+> >>>
+> >>> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> >>> ---
+> >>>  lib/dynamic_debug.c | 76 ++++++++++++++++++++++++++++++++++++++++-----
+> >>>  1 file changed, 68 insertions(+), 8 deletions(-)
+> >>>
+> >>> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+> >>> index b71efd0b491d..db96ded78c3f 100644
+> >>> --- a/lib/dynamic_debug.c
+> >>> +++ b/lib/dynamic_debug.c
+> >>> @@ -56,6 +56,7 @@ struct ddebug_query {
+> >>>       const char *module;
+> >>>       const char *function;
+> >>>       const char *format;
+> >>> +     const char *class_string;
+> >>>       unsigned int first_lineno, last_lineno;
+> >>>  };
+> >>>
+> >>> @@ -136,15 +137,33 @@ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
+> >>>                       fmtlen--;
+> >>>       }
+> >>>
+> >>> -     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u\n",
+> >>> -              msg,
+> >>> -              query->function ?: "",
+> >>> -              query->filename ?: "",
+> >>> -              query->module ?: "",
+> >>> -              fmtlen, query->format ?: "",
+> >>> -              query->first_lineno, query->last_lineno);
+> >>> +     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u class=%s\n",
+> >>> +               msg,
+> >>> +               query->function ?: "",
+> >>> +               query->filename ?: "",
+> >>> +               query->module ?: "",
+> >>> +               fmtlen, query->format ?: "",
+> >>> +               query->first_lineno, query->last_lineno, query->class_string);
+> >>>  }
+> >>>
+> >>> +static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
+> >>> +                                                       const char *class_string, int *class_id)
+> >>> +{
+> >>> +     struct ddebug_class_map *map;
+> >>> +     int idx;
+> >>> +
+> >>> +     list_for_each_entry(map, &dt->maps, link) {
+> >>> +             idx = match_string(map->class_names, map->length, class_string);
+> >>> +             if (idx >= 0) {
+> >>> +                     *class_id = idx + map->base;
+> >>> +                     return map;
+> >>> +             }
+> >>> +     }
+> >>> +     *class_id = -ENOENT;
+> >>> +     return NULL;
+> >>> +}
+> >>> +
+> >>> +#define __outvar /* filled by callee */
+> >>>  /*
+> >>>   * Search the tables for _ddebug's which match the given `query' and
+> >>>   * apply the `flags' and `mask' to them.  Returns number of matching
+> >>> @@ -159,6 +178,8 @@ static int ddebug_change(const struct ddebug_query *query,
+> >>>       unsigned int newflags;
+> >>>       unsigned int nfound = 0;
+> >>>       struct flagsbuf fbuf, nbuf;
+> >>> +     struct ddebug_class_map *map = NULL;
+> >>> +     int __outvar valid_class;
+> >>>
+> >>>       /* search for matching ddebugs */
+> >>>       mutex_lock(&ddebug_lock);
+> >>> @@ -169,9 +190,22 @@ static int ddebug_change(const struct ddebug_query *query,
+> >>>                   !match_wildcard(query->module, dt->mod_name))
+> >>>                       continue;
+> >>>
+> >>> +             if (query->class_string) {
+> >>> +                     map = ddebug_find_valid_class(dt, query->class_string, &valid_class);
+> >>> +                     if (!map)
+> >>> +                             continue;
+> >>
+> >> So remove the else here.
+> >>
+> >>> +             } else {
+> >>> +                     /* constrain query, do not touch class'd callsites */
+> >>> +                     valid_class = _DPRINTK_CLASS_DFLT;
+> >>> +             }
+> >>> +
+> >>>               for (i = 0; i < dt->num_ddebugs; i++) {
+> >>>                       struct _ddebug *dp = &dt->ddebugs[i];
+> >>>
+> >>> +                     /* match site against query-class */
+> >>> +                     if (dp->class_id != valid_class)
+> >>
+> >> And then make this: if (query->class_string && (dp->class_id != valid_class))
+> >>
+> >> thoughts?
+> >>
+> >>
+> >>> +                             continue;
+> >>> +>                    /* match against the source filename */
+> >>>                       if (query->filename &&
+> >>>                           !match_wildcard(query->filename, dp->filename) &&
+> >>> @@ -420,6 +454,8 @@ static int ddebug_parse_query(char *words[], int nwords,
+> >>>               } else if (!strcmp(keyword, "line")) {
+> >>>                       if (parse_linerange(query, arg))
+> >>>                               return -EINVAL;
+> >>> +             } else if (!strcmp(keyword, "class")) {
+> >>> +                     rc = check_set(&query->class_string, arg, "class");
+> >>>               } else {
+> >>>                       pr_err("unknown keyword \"%s\"\n", keyword);
+> >>>                       return -EINVAL;
+> >>> @@ -854,6 +890,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+> >>>       return dp;
+> >>>  }
+> >>>
+> >>> +#define class_in_range(class_id, map)                                        \
+> >>> +     (class_id >= map->base && class_id < map->base + map->length)
+> >>> +
+> >>> +static const char *ddebug_class_name(struct ddebug_iter *iter, struct _ddebug *dp)
+> >>> +{
+> >>> +     struct ddebug_class_map *map;
+> >>> +
+> >>> +     list_for_each_entry(map, &iter->table->maps, link)
+> >>> +             if (class_in_range(dp->class_id, map))
+> >>> +                     return map->class_names[dp->class_id - map->base];
+> >>> +
+> >>> +     return NULL;
+> >>> +}
+> >>> +
+> >>>  /*
+> >>>   * Seq_ops show method.  Called several times within a read()
+> >>>   * call from userspace, with ddebug_lock held.  Formats the
+> >>> @@ -865,6 +915,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+> >>>       struct ddebug_iter *iter = m->private;
+> >>>       struct _ddebug *dp = p;
+> >>>       struct flagsbuf flags;
+> >>> +     char const *class;
+> >>>
+> >>>       if (p == SEQ_START_TOKEN) {
+> >>>               seq_puts(m,
+> >>> @@ -877,7 +928,16 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+> >>>                  iter->table->mod_name, dp->function,
+> >>>                  ddebug_describe_flags(dp->flags, &flags));
+> >>>       seq_escape_str(m, dp->format, ESCAPE_SPACE, "\t\r\n\"");
+> >>> -     seq_puts(m, "\"\n");
+> >>> +     seq_puts(m, "\"");
+> >>> +
+> >>> +     if (dp->class_id != _DPRINTK_CLASS_DFLT) {
+> >>> +             class = ddebug_class_name(iter, dp);
+> >>> +             if (class)
+> >>> +                     seq_printf(m, " class:%s", class);
+> >>> +             else
+> >>> +                     seq_printf(m, " class unknown, _id:%d", dp->class_id);
+> >>> +     }
+> >>> +     seq_puts(m, "\n");
+> >>>
+> >>>       return 0;
+> >>>  }
