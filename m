@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51715B5389
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 07:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B755B538D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 07:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiILF3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 01:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S229728AbiILF3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 01:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiILF3Q (ORCPT
+        with ESMTP id S229646AbiILF3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Sep 2022 01:29:16 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069E6248CF
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id 138so5127073iou.9
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1AA248DF
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:12 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id k13so2304157ilc.11
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=i5t2bbZH1qhLqkOMOWZd9/3/gcmt6p6QRrw1EPy3Aj4=;
-        b=qOh/R9lECFRWqs7dMZp6LrjZUUMurRbhAZWpZcjLAW+XOtO1yvv7fBHHkJlyTkEucK
-         bNKga9KrZesxfbiOu7HM8ANgJZHDoqwdfsPZFrTfCG9+8ck3qVQfNh50M6VT9fPXdTT3
-         yCIwfUy2bmo3w9zPxVHJ5CyInYMBcFLrr5XF9nQLAuyFYD2kfNrIikXSEvV1Y6pVVYkw
-         Diz05DSsd348fuMY0DVxkeWIalSgUwLsHBeFt4iaaeXKtlv1GwIJSDEFcGI5kG/Zi8Ah
-         gY2azQthIsvm3qIMoheAO62ri04by6YxAvUELnbEbTUTrYpOPK37gYr3K6qm534XdYWw
-         zPOA==
+        bh=XL7ChPS99XFJL4oCOKSZfP/JHI1hyG5bYnzMTIDbg5Q=;
+        b=ZPz/N1MZg7ftF0tlcoRwr9HNj0wMrzzU21myESb5DbbDCQo4xNwx0qr2GossY/Q+uO
+         ZdpsYR6a9TLoWWI0eDoBTYm4MnozH77pypOSGaDyQIl4oefREBwcO/EJS16nj18QJtwq
+         0TwpXRFSqPJodz6YVHbri98npEro/MGK6/DNd2yaWRYDZS/AV7i5FvuiVN1NH6w9hDQX
+         f3U/bWFDOcVK9ezCKsiVEVx1FsO0cVIIZUyHq0XODhXrol856oqiGW4oq7Evgh4EM5oO
+         lRuFkAM/jpe7Ztz6wB17kJCX/13m/ha0hPZ/RzLt0H9haHMTvpcVsVvKOa+E/Rlucqbh
+         muxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=i5t2bbZH1qhLqkOMOWZd9/3/gcmt6p6QRrw1EPy3Aj4=;
-        b=BSFDUFANhUVTNSNp2W3ajHi5aHW5Nswtdoys+gteBYjewgIny/aU1FKkpjjL291aSF
-         GktNGafnn075cBFD3tdXoDyPHoWhgvoMLsGS7H7anIjLpBGWRr3rfMst2LwMR7J9Iuhv
-         x/PKsa8QvCTxfdVm7X/8HhTFssQF4azXH6GOpp/Hhf9HCl47lyV90VVmw0ZKx6w/1WIG
-         fHEnSYXbDzE1LeJstK0gm+k90qkMRhmk5S665Xq0A4Cv8eaZp2960X9cKgOHqDZ2Es3b
-         dZH8VRPfqRaBQ+wQyodmxHIYefMsexWa1bLOQ5HQU4XgBauEfiisBwL7UXAMQd1Ko6zN
-         WSZg==
-X-Gm-Message-State: ACgBeo3+0TNsGMXYjBY7tcOntLq1RtjRMuHz6n1tX1R7lGjZjA6V9IIX
-        sdQ0K3OIxdkvMppVbGIfUqg=
-X-Google-Smtp-Source: AA6agR6nheDh2F55KS2HuAKuH7mmoLFpxaM+Y9nxKrP34wlXBlmFd+JSKxJMWlB4fe03p4UZt179JQ==
-X-Received: by 2002:a05:6638:2729:b0:35a:4666:5dad with SMTP id m41-20020a056638272900b0035a46665dadmr379273jav.250.1662960551093;
-        Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
+        bh=XL7ChPS99XFJL4oCOKSZfP/JHI1hyG5bYnzMTIDbg5Q=;
+        b=c5py7ZTLAdr+7vYR6I+jbaju4VOXPBLVma975uOhzQEVuOCEF5MdOE+eBY7Z4rVRp1
+         2FjD5nn0nNoWPS3YXWHBTyetoUuKXRcnxdVtNDRzHn9s9obWtsSd7X9vsZ3CPLKxTV+b
+         inUVIhT6cF0j8kWw4CcTH7ZYH9ZXv8mu9+8OSXVmzuS5sR6WdoHRtcxt30mlyHwkyMoM
+         8BuoQbUAbd+F9VqIPFKdznGhmPn38dGzvRUHhQliNv1hWRrt/amVIMdTWrxqO5SKvxP8
+         1atUDCwBEToVmi8nSSX3ULco4jmRcWTJtgADBGBn1LjEML9SXy1kkAh+FWnBqqtkJvxe
+         FoZA==
+X-Gm-Message-State: ACgBeo3GTuHYkj6KBPOFmLe2Xe9ZdK16Z1OaEpQPhmdNCibQxmXJBP+e
+        MA/+DQ+Sdj9uL4kYl8daWYU=
+X-Google-Smtp-Source: AA6agR47BQemS+MqJvt/2ptLpkQUnDhJDO4pC9EpCD+Bj0LzBAng5f40HRcbFyGQO4ZMBWidtzdolA==
+X-Received: by 2002:a05:6e02:2195:b0:2eb:8a31:43d8 with SMTP id j21-20020a056e02219500b002eb8a3143d8mr9194040ila.315.1662960552177;
+        Sun, 11 Sep 2022 22:29:12 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id q16-20020a056e02079000b002eb75fb01dbsm3006057ils.28.2022.09.11.22.29.10
+        by smtp.googlemail.com with ESMTPSA id q16-20020a056e02079000b002eb75fb01dbsm3006057ils.28.2022.09.11.22.29.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 22:29:10 -0700 (PDT)
+        Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -57,9 +57,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v7 6/9] drm-print: add drm_dbg_driver to improve namespace symmetry
-Date:   Sun, 11 Sep 2022 23:28:49 -0600
-Message-Id: <20220912052852.1123868-7-jim.cromie@gmail.com>
+Subject: [PATCH v7 7/9] drm_print: optimize drm_debug_enabled for jump-label
+Date:   Sun, 11 Sep 2022 23:28:50 -0600
+Message-Id: <20220912052852.1123868-8-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220912052852.1123868-1-jim.cromie@gmail.com>
 References: <20220912052852.1123868-1-jim.cromie@gmail.com>
@@ -75,44 +75,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print defines all of these:
-    drm_dbg_{core,kms,prime,atomic,vbl,lease,_dp,_drmres}
+When CONFIG_DRM_USE_DYNAMIC_DEBUG=y, the drm.debug API (a macro stack,
+calling _+drm_*dbg() eventually) invokes a dyndbg Factory macro to
+create a descriptor for each callsite, thus making them individually
+>control-able.
 
-but not drm_dbg_driver itself, since it was the original drm_dbg.
+In this case, the calls to _drm_*dbg are unreachable unless the
+callsite is enabled.  So those calls can short-circuit their early
+do-nothing returns.  Provide and use __drm_debug_enabled(), to do this
+when config'd, or the _raw flags-check otherwize.
 
-To improve namespace symmetry, change the drm_dbg defn to
-drm_dbg_driver, and redef grandfathered name to symmetric one.
+And since dyndbg is in use, lets also instrument the remaining users
+of drm_debug_enabled, by wrapping the _raw in a macro with a:
 
-This will help with nouveau, which uses its own stack of macros to
-construct calls to dev_info, dev_dbg, etc, for which adaptation means
-drm_dbg_##driver constructs.
+  pr_debug("todo: is this frequent enough to optimize ?\n");
+
+For CONFIG_DRM_USE_DYNAMIC_DEBUG=n, do no site instrumenting at all,
+since JUMP_LABEL might be off, and we don't want to make work.
+
+With drm, amdgpu, i915, nouveau loaded, heres remaining uses of
+drm_debug_enabled(), which costs ~1.5kb data to control the
+pr_debug("todo:..")s.
+
+Some of those uses might be ok to use __drm_debug_enabled() by
+inspection, others might warrant conversion to use dyndbg Factory
+macros, and that would want callrate data to estimate the savings
+possible.  TBH, any remaining savings are probably small; drm.debug
+covers the vast bulk of the uses.  Maybe "vblank" is the exception.
+
+:#> grep todo /proc/dynamic_debug/control | wc
+     21     168    2357
+:#> grep todo /proc/dynamic_debug/control
+drivers/gpu/drm/drm_edid_load.c:178 [drm]edid_load =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/drm_vblank.c:410 [drm]drm_crtc_accurate_vblank_count =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/drm_vblank.c:787 [drm]drm_crtc_vblank_helper_get_vblank_timestamp_internal =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/drm_vblank.c:1491 [drm]drm_vblank_restore =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/drm_vblank.c:1433 [drm]drm_vblank_enable =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/drm_plane.c:2168 [drm]drm_mode_setplane =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/display/drm_dp_mst_topology.c:1359 [drm_display_helper]drm_dp_mst_wait_tx_reply =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/display/drm_dp_mst_topology.c:2864 [drm_display_helper]process_single_tx_qlock =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/display/drm_dp_mst_topology.c:2909 [drm_display_helper]drm_dp_queue_down_tx =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/display/drm_dp_mst_topology.c:1686 [drm_display_helper]drm_dp_mst_update_slots =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_dp.c:1111 [i915]intel_dp_print_rates =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_backlight.c:5434 [i915]cnp_enable_backlight =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_backlight.c:5459 [i915]intel_backlight_device_register =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_opregion.c:43 [i915]intel_opregion_notify_encoder =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_opregion.c:53 [i915]asle_set_backlight =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_bios.c:1088 [i915]intel_bios_is_dsi_present =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/display/intel_display_debugfs.c:6153 [i915]i915_drrs_ctl_set =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/intel_pcode.c:26 [i915]snb_pcode_read =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/i915/i915_getparam.c:785 [i915]i915_getparam_ioctl =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:282 [amdgpu]vcn_v2_5_process_interrupt =_ "todo: maybe avoid via dyndbg\n"
+drivers/gpu/drm/amd/amdgpu/vcn_v2_0.c:433 [amdgpu]vcn_v2_0_process_interrupt =_ "todo: maybe avoid via dyndbg\n"
+:#>
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/drm/drm_print.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+- simplify drm-debug-enabled choices, @DanVet
+---
+ drivers/gpu/drm/drm_print.c |  4 ++--
+ include/drm/drm_print.h     | 21 ++++++++++++++++++++-
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/drm_print.c b/drivers/gpu/drm/drm_print.c
+index 29a29949ad0b..cb203d63b286 100644
+--- a/drivers/gpu/drm/drm_print.c
++++ b/drivers/gpu/drm/drm_print.c
+@@ -285,7 +285,7 @@ void __drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
+ 	struct va_format vaf;
+ 	va_list args;
+ 
+-	if (!drm_debug_enabled(category))
++	if (!__drm_debug_enabled(category))
+ 		return;
+ 
+ 	va_start(args, format);
+@@ -308,7 +308,7 @@ void ___drm_dbg(enum drm_debug_category category, const char *format, ...)
+ 	struct va_format vaf;
+ 	va_list args;
+ 
+-	if (!drm_debug_enabled(category))
++	if (!__drm_debug_enabled(category))
+ 		return;
+ 
+ 	va_start(args, format);
 diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-index f8bb3e7158c6..dfdd81c3287c 100644
+index dfdd81c3287c..9af57d3df259 100644
 --- a/include/drm/drm_print.h
 +++ b/include/drm/drm_print.h
-@@ -468,7 +468,7 @@ void __drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
+@@ -321,11 +321,30 @@ enum drm_debug_category {
+ 	DRM_UT_DRMRES
+ };
  
- #define drm_dbg_core(drm, fmt, ...)					\
- 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_CORE, fmt, ##__VA_ARGS__)
--#define drm_dbg(drm, fmt, ...)						\
-+#define drm_dbg_driver(drm, fmt, ...)						\
- 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
- #define drm_dbg_kms(drm, fmt, ...)					\
- 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_KMS, fmt, ##__VA_ARGS__)
-@@ -487,6 +487,7 @@ void __drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
- #define drm_dbg_drmres(drm, fmt, ...)					\
- 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRMRES, fmt, ##__VA_ARGS__)
+-static inline bool drm_debug_enabled(enum drm_debug_category category)
++static inline bool drm_debug_enabled_raw(enum drm_debug_category category)
+ {
+ 	return unlikely(__drm_debug & BIT(category));
+ }
  
-+#define drm_dbg(drm, fmt, ...)	drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
- 
++#define drm_debug_enabled_instrumented(category)			\
++	({								\
++		pr_debug("todo: is this frequent enough to optimize ?\n"); \
++		drm_debug_enabled_raw(category);			\
++	})
++
++#if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
++/*
++ * the drm.debug API uses dyndbg, so each drm_*dbg macro/callsite gets
++ * a descriptor, and only enabled callsites are reachable.  They use
++ * the private macro to avoid re-testing the enable-bit.
++ */
++#define __drm_debug_enabled(category)	true
++#define drm_debug_enabled(category)	drm_debug_enabled_instrumented(category)
++#else
++#define __drm_debug_enabled(category)	drm_debug_enabled_raw(category)
++#define drm_debug_enabled(category)	drm_debug_enabled_raw(category)
++#endif
++
  /*
-  * printk based logging
+  * struct device based logging
+  *
 -- 
 2.37.3
 
