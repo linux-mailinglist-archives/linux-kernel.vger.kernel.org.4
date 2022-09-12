@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175585B5FEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381355B5FED
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiILSIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S230014AbiILSKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiILSIs (ORCPT
+        with ESMTP id S230138AbiILSJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:08:48 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351892FFF6;
-        Mon, 12 Sep 2022 11:08:46 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1oXnrO-00GaLM-3p; Mon, 12 Sep 2022 18:08:42 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 5/5] arm64: dts: imx8mp-venice-gw74xx: add WiFi/BT module support
-Date:   Mon, 12 Sep 2022 11:08:36 -0700
-Message-Id: <20220912180836.773729-5-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220912180836.773729-1-tharvey@gateworks.com>
-References: <20220912180836.773729-1-tharvey@gateworks.com>
+        Mon, 12 Sep 2022 14:09:40 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456ED52
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:09:30 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d12so9335079plr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=krOgoVxwfTTiN1DsCbbELdSz8T1/ug820utrPBGbV+I=;
+        b=bbbi3kXh+LuJ615H9/uybCphjVG9PAN1wwm41NzOSOv+PgbEvdPHXSa/FUVuNSX9rF
+         cB35qq0zyXJFhMRWzip77xbxMugOe/lnqgHG02o/U6PABq7jAyVJo8WkRqikgUWx82gh
+         dhVsA+MMAdP09T3YjlDMYRAX0+zXzJxFXC8SHN333GxgUBHMYHd8srOQMgcxkNZJ71yK
+         +V8aM7TWpFRJyvy10jiXA+/A+60P1VY43ycrGU0XA7FXO3AwTGT3D5d6h2XOCj0Nlmlz
+         i6LFPmnRpVRHzrV/hIcNEO22P7kfgXapvN5dcK3PfRFuBYu1kFtrpqBVfUUvYBhcd9xW
+         lYMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=krOgoVxwfTTiN1DsCbbELdSz8T1/ug820utrPBGbV+I=;
+        b=O6SStfgpAcQ2psoCmU6vyXdltjmvPQfXZ4w0QH/xJ/WxI6dxyvIr/HxdFtbYUktLBu
+         MjoDQYi4HShFIaBAaP6J4+P079VsDn7w8UdjMS6HIDb/4KT/lTznU9HEN8FHe7kltdSc
+         Kpkvc4lqy1WLgH8HtfGZpiB2V+uJKlKnKJM3OuGKR2GaHRKoxG3+Xpk/WyKEHPbNbWlB
+         IhGYaddRv6Oxj5r8Kc0PaY4gPVDB3aUftELT1JQCDV8GPDCCco3dpwOm768iD08DaW5e
+         tDULiZjHg3d4ttuP04tR6a3YBg49Sv627y22TXekYaETWS3piS3DNeBTzyN8dujlb8Cu
+         uJPQ==
+X-Gm-Message-State: ACgBeo3eMwJ3Qo0/y436BDKvkEhFeWttG3dy0GPtf5krxoQ6oFOZT9ny
+        VXxUrGUAAix6KMswPMNXsO40ZWMOQFz0Nx5yvuo=
+X-Google-Smtp-Source: AA6agR4X+Fq14UwFKI68855EfSw8R3jyZUluAJHbDZ9hWSkXwABmcDTlgOOQ8IOazviEmBzF0o8L3K5Y3Kb2rhBqyxM=
+X-Received: by 2002:a17:90b:1c81:b0:1fb:887c:f82e with SMTP id
+ oo1-20020a17090b1c8100b001fb887cf82emr25159974pjb.92.1663006169735; Mon, 12
+ Sep 2022 11:09:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220901141307.2361752-1-georgepee@gmail.com> <f765da5c-d484-adf2-e1bb-77011780dc0b@arm.com>
+ <CAKj0CMv1EY5YCeQ4G6PnGP=XfELJkkN5BaN8W1TGe0fOTXfJBw@mail.gmail.com>
+ <YxtIiBvAGs2vAl1P@arm.com> <CAKj0CMtkY_BSkAY3Lo5QbMDM1g0Wa9F8MsVuW0fyJiuPe3z4aA@mail.gmail.com>
+ <YxtWUasndYl8syE1@arm.com> <Yx8upeabh9p6gGtY@shell.armlinux.org.uk>
+In-Reply-To: <Yx8upeabh9p6gGtY@shell.armlinux.org.uk>
+From:   George Pee <georgepee@gmail.com>
+Date:   Mon, 12 Sep 2022 13:09:17 -0500
+Message-ID: <CAKj0CMtemaGcTPDjdo_18H=_VSQE-udqazdSRsEGX2x8r+We+Q@mail.gmail.com>
+Subject: Re: [PATCH] Report support for optional ARMv8.2 half-precision
+ floating point extension
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
+        Austin Kim <austindh.kim@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GW74xx supports an on-board Laird Connectivity Sterling LWB5+ module
-which uses a Cypress CYW4373W chip to provide 1x1 802.11 a/b/g/n/ac +
-Bluetooth 5.2.
+On Mon, Sep 12, 2022 at 8:05 AM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Fri, Sep 09, 2022 at 04:05:53PM +0100, Catalin Marinas wrote:
+> > On Fri, Sep 09, 2022 at 09:57:39AM -0500, George Pee wrote:
+> > > The details are here.  I originally thought it was a compiler bug
+> > > because it first showed up after a toolchain update.
+> > >
+> > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106763
+> > >
+> > > Since FP16 is an optional extension, wouldn't it be beneficial to a
+> > > user who compiled some userspace float16 code using gcc
+> > > -mcpu=cortex-a55 which ran on a cortex-a55 with FP16 extensions but
+> > > SIGILL'd on a cortex-a55 w/o FP16?
+> >
+> > (please don't top-post)
+> >
+> > My point is that if the kernel doesn't have full support for FP16, it
+> > shouldn't advertise it to user even if the hardware supports it. If you
+> > fix the kernel to properly handle FP16 on supporting hardware, then the
+> > HWCAP part is fine by me.
+>
+> Presumably, the only CPUs that are going to support FP16 will have
+> non-trapping floating point, so the support code shouldn't be entered
+> at any time to emulate a half-precision instruction, but only to
+> handle the lazy restore of the thread's floating point registers?
+>
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
 
-Add the proper device-tree nodes for it.
-
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
-v2: no changes
----
- .../dts/freescale/imx8mp-venice-gw74xx.dts    | 62 ++++++++++++++++++-
- 1 file changed, 59 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-index 066a4afaf8a1..a2b32275bbf9 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-@@ -134,10 +134,10 @@ reg_wifi_en: regulator-wifi-en {
- 		compatible = "regulator-fixed";
- 		regulator-name = "wl";
- 		gpio = <&gpio3 9 GPIO_ACTIVE_HIGH>;
--		startup-delay-us = <100>;
-+		startup-delay-us = <70000>;
- 		enable-active-high;
--		regulator-min-microvolt = <1800000>;
--		regulator-max-microvolt = <1800000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
- 	};
- };
- 
-@@ -576,6 +576,21 @@ &uart2 {
- 	status = "okay";
- };
- 
-+/* bluetooth HCI */
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_uart3_gpio>;
-+	cts-gpios = <&gpio3 21 GPIO_ACTIVE_LOW>;
-+	rts-gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
-+	uart-has-rtscts;
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm4330-bt";
-+		shutdown-gpios = <&gpio3 8 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
- &uart4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart4>;
-@@ -616,6 +631,25 @@ &usb_dwc3_1 {
- 	status = "okay";
- };
- 
-+/* SDIO WiFi */
-+&usdhc1 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-+	pinctrl-0 = <&pinctrl_usdhc1>;
-+	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
-+	bus-width = <4>;
-+	non-removable;
-+	vmmc-supply = <&reg_wifi_en>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	wifi@0 {
-+		compatible = "cypress,cyw4373-fmac";
-+		reg = <0>;
-+	};
-+};
-+
- /* eMMC */
- &usdhc3 {
- 	assigned-clocks = <&clk IMX8MP_CLK_USDHC3>;
-@@ -860,6 +894,28 @@ MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d0
- 		>;
- 	};
- 
-+	pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK	0x194
-+			MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	0x1d4
-+			MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0	0x1d4
-+			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1	0x1d4
-+			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2	0x1d4
-+			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d4
-+		>;
-+	};
-+
-+	pinctrl_usdhc1_200mhz: usdhc1-200mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK	0x196
-+			MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	0x1d6
-+			MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0	0x1d6
-+			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1	0x1d6
-+			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2	0x1d6
-+			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d6
-+		>;
-+	};
-+
- 	pinctrl_usdhc3: usdhc3grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x190
--- 
-2.25.1
-
+I didn't see this until after I submitted v2 of the patch.  Let me
+take a look at the fp emulation code path.
+I had assumed that CP9 handling would work just like CP10/CP11 does in
+entry-armv.S and wouldn't need any special handling.
