@@ -1,58 +1,77 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9295B5353
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 06:55:00 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 797655B5303
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 06:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiILEv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 00:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S229459AbiILEOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 00:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiILEv5 (ORCPT
+        with ESMTP id S229468AbiILEOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 00:51:57 -0400
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371DC1F2C8
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 21:51:54 -0700 (PDT)
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1oXact-009cFJ-Kp; Mon, 12 Sep 2022 06:00:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-        :Message-Id:Date:Subject:Cc:To:From;
-        bh=MF+/wWILyr0C0xl3zopjiOTUR/mdZqutRIXvlF1iyQo=; b=Afk8Wm/UEp3pCO1d/xw7Ma5ptk
-        ExtXe4A5rAJKu45XYpJWUauEuRBBoP7clumjUTa8k64IbvFXw2rBCdW1yr4H/q7QUa+bgjXAAbHgX
-        cHP0pBQfuF0idhbbKFg3/ZVU66hJ/7XnVV8hRBt06wLl0MryQ3wna/kQAZgdUsJo5vCxe2U0dpR5C
-        1AK/Vti7racF1vFqeCVsgJCs0tj5RhPcOxTfr2o9OqIWNsQF1AWFhJy+s++0zVLhr1TI1t9aXgux9
-        FLjOacjtTCQWcBc7cA4lXHKJnwVtUvnZS9+CVx1BuRTDr3ju5V2opOEz1FRInuULztVkgLrjp/NGO
-        GIif5umg==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1oXact-0004X1-1z; Mon, 12 Sep 2022 06:00:51 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1oXack-0003S3-8r; Mon, 12 Sep 2022 06:00:42 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     m.v.b@runbox.com, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Subject: [PATCH 2/2] xen/gntdev: Accommodate VMA splitting
-Date:   Mon, 12 Sep 2022 00:00:02 -0400
-Message-Id: <20220912040002.198191-3-m.v.b@runbox.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220912040002.198191-1-m.v.b@runbox.com>
-References: <20220912040002.198191-1-m.v.b@runbox.com>
+        Mon, 12 Sep 2022 00:14:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97B664CF;
+        Sun, 11 Sep 2022 21:14:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84431B80B21;
+        Mon, 12 Sep 2022 04:14:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC66C43147;
+        Mon, 12 Sep 2022 04:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662956084;
+        bh=sZp87uk/tgN5rqc5QTzYD9Bq4Rq7LlVl4d9+OQDuWd0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=USNKbjUZxSnBMZ/D0y5kLqoJzB43i+DUNol2FfakpsgKH9aC/msxLEHJSyNz4nMxQ
+         1/jI+YDHOgmVh7mlrDuZH+9P3snlhQsssithFTmoBn3q2ufnS5o7qMuF21FOFqvu3D
+         rz/C7hq6UzKEK44lI3PRV37jX63Yu7TRA3P/u0jSXi/ARF17vYJ/T6lvHg9shKHbH8
+         eWabOWBeiOY70Zjl9OXEIOm2hdjs4WXqgTFPA5P3TutIpo2IVigeZlugfbDZN7apWc
+         Idg23dp34HsG4z8B8OW5pwQro4ou66s4ijWHXkxlCTjbwsKp+ci5Iy/wybDdC+jrFo
+         IDyO8fyQFzLOQ==
+Received: by mail-oo1-f46.google.com with SMTP id t4-20020a4aa3c4000000b00475624f2369so457147ool.3;
+        Sun, 11 Sep 2022 21:14:43 -0700 (PDT)
+X-Gm-Message-State: ACgBeo30ibaqfGHa/DYwphW6nxaTRGS4BcfmQQh6P3nmWKUNTFHICM0g
+        vTdBQ/Bx3RTdgATh5XKV++I531ahIVFEDkl4cQI=
+X-Google-Smtp-Source: AA6agR7uDujU33x2bd2IE9CjZsZh6lUsGTAK6HB7wAtIzyneeQRmIZl02YvTJ1zW3uuOI+4PPRCPIWutLY0xxHp6Bb4=
+X-Received: by 2002:a4a:d8cc:0:b0:475:5c7e:eb3e with SMTP id
+ c12-20020a4ad8cc000000b004755c7eeb3emr2387976oov.48.1662956082996; Sun, 11
+ Sep 2022 21:14:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
+ <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
+ <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com> <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
+ <7409c92a-68df-4406-bd86-835d9a959ef5@www.fastmail.com>
+In-Reply-To: <7409c92a-68df-4406-bd86-835d9a959ef5@www.fastmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 12 Sep 2022 12:14:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRxt_b2TswE6YJgmFZeRyVzV7fQdMX+7Ptrfa_k=auSjg@mail.gmail.com>
+Message-ID: <CAJF2gTRxt_b2TswE6YJgmFZeRyVzV7fQdMX+7Ptrfa_k=auSjg@mail.gmail.com>
+Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
+        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andreas Schwab <schwab@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,274 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to this commit, the gntdev driver code did not handle the
-following scenario correctly:
+On Mon, Sep 12, 2022 at 2:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+>
+>
+> On Sun, Sep 11, 2022, at 1:35 AM, Guo Ren wrote:
+> > On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>
+> >> On Sat, Sep 10, 2022, at 2:52 PM, Guo Ren wrote:
+> >> > On Thu, Sep 8, 2022 at 3:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >> >> On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
+> >> >> > From: Guo Ren <guoren@linux.alibaba.com>
+> >> >> - When VMAP_STACK is set, make it possible to select non-power-of-two
+> >> >>   stack sizes. Most importantly, 12KB should be a really interesting
+> >> >>   choice as 8KB is probably still not enough for many 64-bit workloads,
+> >> >>   but 16KB is often more than what you need. You probably don't
+> >> >>   want to allow 64BIT/8KB without VMAP_STACK anyway since that just
+> >> >>   makes it really hard to debug, so hiding the option when VMAP_STACK
+> >> >>   is disabled may also be a good idea.
+> >> > I don't want this config to depend on VMAP_STACK. Some D1 chips would
+> >> > run with an 8K stack size and !VMAP_STACK.
+> >>
+> >> That sounds like a really bad idea, why would you want to risk
+> >> using such a small stack without CONFIG_VMAP_STACK?
+> >>
+> >> Are you worried about increased memory usage or something else?
+> > The requirement is from [1], and I think disabling CONFIG_VMAP_STACK
+> > would be the last step after serious testing.
+>
+> I still don't see why you need to turn off VMAP_STACK at all
+> if it works. The only downside I can see with using VMAP_STACK
+> on a 64-bit system is that it may expose bugs with device
+> drivers that do DMA to stack data. Once you have tested the
+> system successfully, you can also assume that you have no such
+> drivers.
+1st, VMAP_STACK could be enabled&disabled in arch/Kconfig. If we don't
+force users to enable VMAP_STACK, why couldn't user adjust
+THREAD_SIZE?
+2nd, VMAP_STACK is not free, we still need 1KB shadow_stack.
+The EXPERT is enough for your concern.
 
-* User process sets up a gntdev mapping composed of two grant mappings
-  (i.e., two pages shared by another Xen domain).
-* User process munmap()s one of the pages.
-* User process munmap()s the remaining page.
-* User process exits.
 
-In the scenario above, the user process would cause the kernel to log
-the following messages in dmesg for the first munmap(), and the second
-munmap() call would result in similar log messages:
+>
+>      Arnd
 
-  BUG: Bad page map in process doublemap.test  pte:... pmd:...
-  page:0000000057c97bff refcount:1 mapcount:-1 \
-    mapping:0000000000000000 index:0x0 pfn:...
-  ...
-  page dumped because: bad pte
-  ...
-  file:gntdev fault:0x0 mmap:gntdev_mmap [xen_gntdev] readpage:0x0
-  ...
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x46/0x5e
-   print_bad_pte.cold+0x66/0xb6
-   unmap_page_range+0x7e5/0xdc0
-   unmap_vmas+0x78/0xf0
-   unmap_region+0xa8/0x110
-   __do_munmap+0x1ea/0x4e0
-   __vm_munmap+0x75/0x120
-   __x64_sys_munmap+0x28/0x40
-   do_syscall_64+0x38/0x90
-   entry_SYSCALL_64_after_hwframe+0x61/0xcb
-   ...
 
-For each munmap() call, the Xen hypervisor (if built with CONFIG_DEBUG)
-would print out the following and trigger a general protection fault in
-dom0:
 
-  (XEN) d0v... Attempt to implicitly unmap d0's grant PTE ...
-  (XEN) d0v... Attempt to implicitly unmap d0's grant PTE ...
-
-As of this writing, gntdev_grant_map structure's vma field (referred to
-as map->vma below) is mainly used for checking the start and end
-addresses of mappings. However, with split VMAs, these may change, and
-there could be more than one VMA associated with a gntdev mapping.
-Hence, remove the use of map->vma and rely on map->pages_vm_start for
-the original start address and on (map->count << PAGE_SHIFT) for the
-original mapping size. Let the invalidate() and find_special_page()
-hooks use these.
-
-Also, given that there can be multiple VMAs associated with a gntdev
-mapping, move the "mmu_interval_notifier_remove(&map->notifier)" call to
-the end of gntdev_put_map, so that the MMU notifier is only removed
-after the closing of the last remaining VMA.
-
-Finally, use an atomic to prevent inadvertent gntdev mapping re-use,
-instead of using the map->live_grants atomic counter and/or the map->vma
-pointer (the latter of which is now removed). This prevents the
-userspace from mmap()'ing (with MAP_FIXED) a gntdev mapping over the
-same address range as a previously set up gntdev mapping. This scenario
-can be summarized with the following call-trace, which was valid prior
-to this commit:
-
-  mmap
-    gntdev_mmap
-  mmap (repeat mmap with MAP_FIXED over the same address range)
-    gntdev_invalidate
-      unmap_grant_pages (sets 'being_removed' entries to true)
-        gnttab_unmap_refs_async
-    unmap_single_vma
-    gntdev_mmap (maps the shared pages again)
-  munmap
-    gntdev_invalidate
-      unmap_grant_pages
-        (no-op because 'being_removed' entries are true)
-    unmap_single_vma (Xen reports that a granted page is being
-      unmapped and triggers a general protection fault in dom0
-      if Xen was built with CONFIG_DEBUG)
-
-The fix for this last scenario could be worth its own commit, but we
-opted for a single commit, because removing the gntdev_grant_map
-structure's vma field requires guarding the entry to gntdev_mmap(), and
-the live_grants atomic counter is not sufficient on its own to prevent
-the mmap() over a pre-existing mapping.
-
-Link: https://github.com/QubesOS/qubes-issues/issues/7631
-Fixes: ab31523c2fca ("xen/gntdev: allow usermode to map granted pages")
-Cc: stable@vger.kernel.org
-Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
----
-
-Note for reviewers:
-
-I am not 100% sure if the "Fixes" tag is correct. Based on a quick look
-at the history of the modified file, I am under the impression that VMA
-splits could be broken for the Xen gntdev driver since day 1 (i.e.,
-v2.6.38), but I did not yet attempt to verify this by testing older
-kernels where the gntdev driver's code is sufficiently similar.
-
-Also, resetting the being_removed flags to false after the completion of
-unmap operation could be another potential solution (that I have not yet
-tested in the context of this change) to the mmap and MAP_FIXED issue
-discussed at the end of the patch description.
----
- drivers/xen/gntdev-common.h |  3 +-
- drivers/xen/gntdev.c        | 58 ++++++++++++++++---------------------
- 2 files changed, 27 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/xen/gntdev-common.h b/drivers/xen/gntdev-common.h
-index 40ef379c28ab..9c286b2a1900 100644
---- a/drivers/xen/gntdev-common.h
-+++ b/drivers/xen/gntdev-common.h
-@@ -44,9 +44,10 @@ struct gntdev_unmap_notify {
- };
- 
- struct gntdev_grant_map {
-+	atomic_t in_use;
- 	struct mmu_interval_notifier notifier;
-+	bool notifier_init;
- 	struct list_head next;
--	struct vm_area_struct *vma;
- 	int index;
- 	int count;
- 	int flags;
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 485fa9c630aa..a3a0813dada3 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -286,6 +286,9 @@ void gntdev_put_map(struct gntdev_priv *priv, struct gntdev_grant_map *map)
- 		 */
- 	}
- 
-+	if (use_ptemod && map->notifier_init)
-+		mmu_interval_notifier_remove(&map->notifier);
-+
- 	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
- 		notify_remote_via_evtchn(map->notify.event);
- 		evtchn_put(map->notify.event);
-@@ -298,7 +301,7 @@ void gntdev_put_map(struct gntdev_priv *priv, struct gntdev_grant_map *map)
- static int find_grant_ptes(pte_t *pte, unsigned long addr, void *data)
- {
- 	struct gntdev_grant_map *map = data;
--	unsigned int pgnr = (addr - map->vma->vm_start) >> PAGE_SHIFT;
-+	unsigned int pgnr = (addr - map->pages_vm_start) >> PAGE_SHIFT;
- 	int flags = map->flags | GNTMAP_application_map | GNTMAP_contains_pte |
- 		    (1 << _GNTMAP_guest_avail0);
- 	u64 pte_maddr;
-@@ -518,11 +521,7 @@ static void gntdev_vma_close(struct vm_area_struct *vma)
- 	struct gntdev_priv *priv = file->private_data;
- 
- 	pr_debug("gntdev_vma_close %p\n", vma);
--	if (use_ptemod) {
--		WARN_ON(map->vma != vma);
--		mmu_interval_notifier_remove(&map->notifier);
--		map->vma = NULL;
--	}
-+
- 	vma->vm_private_data = NULL;
- 	gntdev_put_map(priv, map);
- }
-@@ -550,29 +549,30 @@ static bool gntdev_invalidate(struct mmu_interval_notifier *mn,
- 	struct gntdev_grant_map *map =
- 		container_of(mn, struct gntdev_grant_map, notifier);
- 	unsigned long mstart, mend;
-+	unsigned long map_start, map_end;
- 
- 	if (!mmu_notifier_range_blockable(range))
- 		return false;
- 
-+	map_start = map->pages_vm_start;
-+	map_end = map->pages_vm_start + (map->count << PAGE_SHIFT);
-+
- 	/*
- 	 * If the VMA is split or otherwise changed the notifier is not
- 	 * updated, but we don't want to process VA's outside the modified
- 	 * VMA. FIXME: It would be much more understandable to just prevent
- 	 * modifying the VMA in the first place.
- 	 */
--	if (map->vma->vm_start >= range->end ||
--	    map->vma->vm_end <= range->start)
-+	if (map_start >= range->end || map_end <= range->start)
- 		return true;
- 
--	mstart = max(range->start, map->vma->vm_start);
--	mend = min(range->end, map->vma->vm_end);
-+	mstart = max(range->start, map_start);
-+	mend = min(range->end, map_end);
- 	pr_debug("map %d+%d (%lx %lx), range %lx %lx, mrange %lx %lx\n",
--			map->index, map->count,
--			map->vma->vm_start, map->vma->vm_end,
--			range->start, range->end, mstart, mend);
--	unmap_grant_pages(map,
--				(mstart - map->vma->vm_start) >> PAGE_SHIFT,
--				(mend - mstart) >> PAGE_SHIFT);
-+		 map->index, map->count, map_start, map_end,
-+		 range->start, range->end, mstart, mend);
-+	unmap_grant_pages(map, (mstart - map_start) >> PAGE_SHIFT,
-+			  (mend - mstart) >> PAGE_SHIFT);
- 
- 	return true;
- }
-@@ -1052,18 +1052,15 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 		return -EINVAL;
- 
- 	pr_debug("map %d+%d at %lx (pgoff %lx)\n",
--			index, count, vma->vm_start, vma->vm_pgoff);
-+		 index, count, vma->vm_start, vma->vm_pgoff);
- 
- 	mutex_lock(&priv->lock);
- 	map = gntdev_find_map_index(priv, index, count);
- 	if (!map)
- 		goto unlock_out;
--	if (use_ptemod && map->vma)
--		goto unlock_out;
--	if (atomic_read(&map->live_grants)) {
--		err = -EAGAIN;
-+	if (!atomic_add_unless(&map->in_use, 1, 1))
- 		goto unlock_out;
--	}
-+
- 	refcount_inc(&map->users);
- 
- 	vma->vm_ops = &gntdev_vmops;
-@@ -1084,15 +1081,16 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 			map->flags |= GNTMAP_readonly;
- 	}
- 
-+	map->pages_vm_start = vma->vm_start;
-+
- 	if (use_ptemod) {
--		map->vma = vma;
- 		err = mmu_interval_notifier_insert_locked(
- 			&map->notifier, vma->vm_mm, vma->vm_start,
- 			vma->vm_end - vma->vm_start, &gntdev_mmu_ops);
--		if (err) {
--			map->vma = NULL;
-+		if (err)
- 			goto out_unlock_put;
--		}
-+
-+		map->notifier_init = true;
- 	}
- 	mutex_unlock(&priv->lock);
- 
-@@ -1109,7 +1107,6 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 		 */
- 		mmu_interval_read_begin(&map->notifier);
- 
--		map->pages_vm_start = vma->vm_start;
- 		err = apply_to_page_range(vma->vm_mm, vma->vm_start,
- 					  vma->vm_end - vma->vm_start,
- 					  find_grant_ptes, map);
-@@ -1138,13 +1135,8 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- out_unlock_put:
- 	mutex_unlock(&priv->lock);
- out_put_map:
--	if (use_ptemod) {
-+	if (use_ptemod)
- 		unmap_grant_pages(map, 0, map->count);
--		if (map->vma) {
--			mmu_interval_notifier_remove(&map->notifier);
--			map->vma = NULL;
--		}
--	}
- 	gntdev_put_map(priv, map);
- 	return err;
- }
--- 
-2.37.3
-
+--
+Best Regards
+ Guo Ren
