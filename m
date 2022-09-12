@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440F25B5387
+	by mail.lfdr.de (Postfix) with ESMTP id D51715B5389
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 07:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiILF3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 01:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S229698AbiILF3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 01:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiILF3M (ORCPT
+        with ESMTP id S229561AbiILF3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 01:29:12 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF9248C4
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:10 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id b17so4016577ilh.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:10 -0700 (PDT)
+        Mon, 12 Sep 2022 01:29:16 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069E6248CF
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id 138so5127073iou.9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=RsTMiP9rOdYWd/CJgD5lf62E3pBpPHn3iKvnTstCS5k=;
-        b=W9eQyswY9d9anzLo9n6+2UK5jd3zMCdtrygDAwAMSM7s0OU1949CgrWCW8nXchSyiL
-         Rog3WeOHPKLi6deSZZsGF6nKh2qwU427KlJN3lgjMNhMhEA207r8rQIWQMlJAmvRiuQq
-         zMWFezmy7K7fs/TLe6IvtHaUnMRiNKtiTq84uBmku0pVplN+YeWuv5BK6Zv8wx3Ii8Aw
-         oyz/EnibqRPHntszYzw90+D5NTdmo/PcbaVPw6zgiZT5VnjiJa7WL43/vlBm5Kglnbsj
-         k2uDPVf6h0P/D1ZZv02s6Gu/jJWVdpMqlAXICXVv59sh0KVnzWtAFdhLIcXQ1FGPUOV2
-         JWzg==
+        bh=i5t2bbZH1qhLqkOMOWZd9/3/gcmt6p6QRrw1EPy3Aj4=;
+        b=qOh/R9lECFRWqs7dMZp6LrjZUUMurRbhAZWpZcjLAW+XOtO1yvv7fBHHkJlyTkEucK
+         bNKga9KrZesxfbiOu7HM8ANgJZHDoqwdfsPZFrTfCG9+8ck3qVQfNh50M6VT9fPXdTT3
+         yCIwfUy2bmo3w9zPxVHJ5CyInYMBcFLrr5XF9nQLAuyFYD2kfNrIikXSEvV1Y6pVVYkw
+         Diz05DSsd348fuMY0DVxkeWIalSgUwLsHBeFt4iaaeXKtlv1GwIJSDEFcGI5kG/Zi8Ah
+         gY2azQthIsvm3qIMoheAO62ri04by6YxAvUELnbEbTUTrYpOPK37gYr3K6qm534XdYWw
+         zPOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=RsTMiP9rOdYWd/CJgD5lf62E3pBpPHn3iKvnTstCS5k=;
-        b=4o0mY7IwlVU28PiaViQjDriwbMxuRGzExcxALex7G/mIhntZ9aGtgb3pnsUSW4CIe2
-         p8D6cXdvSa5EqXnJLTdW9Q+wkeNqyEshvZB30/SfBEuYqrgl1iJuF8yqhOt3b+glf1Kn
-         g8thmCchCaMVYCx8R8Lr1zhBZgvtsiIS6tko/IUO8VDyOienbKnXxk0zHRE/d3FE4MV+
-         mEmDmsl7kLyv+IUfmaPSGEIzmkKNnAMGsMR6DG4dE1o/TxWEjZv0Sx9/ybHytRC8HNTK
-         LEBfzNjp1evBmqDUelByW5ToN7rK7F3S2PFsbIGKTX0rTQf8VUJjj2fBU14hxmss+yzU
-         prjw==
-X-Gm-Message-State: ACgBeo2RoKW1DtLko3VricRYlGEaWYCYlvQk40Iv/NdXE5EUdz/VfFRz
-        T1EKsrij2ADWgxkXV0ZU3eg=
-X-Google-Smtp-Source: AA6agR5KpMxoafFECoggp6f+wIRK77w1QiltMXIK40Ocyg037/uILmvU26N7K21NwVRWoJyGf7uoPQ==
-X-Received: by 2002:a92:6912:0:b0:2ea:fa2e:462d with SMTP id e18-20020a926912000000b002eafa2e462dmr9379940ilc.155.1662960550217;
-        Sun, 11 Sep 2022 22:29:10 -0700 (PDT)
+        bh=i5t2bbZH1qhLqkOMOWZd9/3/gcmt6p6QRrw1EPy3Aj4=;
+        b=BSFDUFANhUVTNSNp2W3ajHi5aHW5Nswtdoys+gteBYjewgIny/aU1FKkpjjL291aSF
+         GktNGafnn075cBFD3tdXoDyPHoWhgvoMLsGS7H7anIjLpBGWRr3rfMst2LwMR7J9Iuhv
+         x/PKsa8QvCTxfdVm7X/8HhTFssQF4azXH6GOpp/Hhf9HCl47lyV90VVmw0ZKx6w/1WIG
+         fHEnSYXbDzE1LeJstK0gm+k90qkMRhmk5S665Xq0A4Cv8eaZp2960X9cKgOHqDZ2Es3b
+         dZH8VRPfqRaBQ+wQyodmxHIYefMsexWa1bLOQ5HQU4XgBauEfiisBwL7UXAMQd1Ko6zN
+         WSZg==
+X-Gm-Message-State: ACgBeo3+0TNsGMXYjBY7tcOntLq1RtjRMuHz6n1tX1R7lGjZjA6V9IIX
+        sdQ0K3OIxdkvMppVbGIfUqg=
+X-Google-Smtp-Source: AA6agR6nheDh2F55KS2HuAKuH7mmoLFpxaM+Y9nxKrP34wlXBlmFd+JSKxJMWlB4fe03p4UZt179JQ==
+X-Received: by 2002:a05:6638:2729:b0:35a:4666:5dad with SMTP id m41-20020a056638272900b0035a46665dadmr379273jav.250.1662960551093;
+        Sun, 11 Sep 2022 22:29:11 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id q16-20020a056e02079000b002eb75fb01dbsm3006057ils.28.2022.09.11.22.29.09
+        by smtp.googlemail.com with ESMTPSA id q16-20020a056e02079000b002eb75fb01dbsm3006057ils.28.2022.09.11.22.29.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 22:29:09 -0700 (PDT)
+        Sun, 11 Sep 2022 22:29:10 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -57,9 +57,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v7 5/9] drm-print.h: include dyndbg header
-Date:   Sun, 11 Sep 2022 23:28:48 -0600
-Message-Id: <20220912052852.1123868-6-jim.cromie@gmail.com>
+Subject: [PATCH v7 6/9] drm-print: add drm_dbg_driver to improve namespace symmetry
+Date:   Sun, 11 Sep 2022 23:28:49 -0600
+Message-Id: <20220912052852.1123868-7-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220912052852.1123868-1-jim.cromie@gmail.com>
 References: <20220912052852.1123868-1-jim.cromie@gmail.com>
@@ -75,39 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lkp robot told me:
+drm_print defines all of these:
+    drm_dbg_{core,kms,prime,atomic,vbl,lease,_dp,_drmres}
 
-  >> drivers/gpu/drm/drm_ioc32.c:989:2:
-  error: call to undeclared function '_dynamic_func_call_cls';
-  ISO C99 and later do not support implicit function declarations
-  [-Wimplicit-function-declaration]
+but not drm_dbg_driver itself, since it was the original drm_dbg.
 
-           DRM_DEBUG("comm=\"%s\", pid=%d, dev=0x%lx, auth=%d, %s\n",
+To improve namespace symmetry, change the drm_dbg defn to
+drm_dbg_driver, and redef grandfathered name to symmetric one.
 
-Since that macro is defined in drm_print.h, and under DRM_USE_DYN*=y
-configs, invokes dyndbg-factory macros, include dynamic_debug.h from
-there too, so that those configs have the definitions of all the
-macros in the callchain.
-
-This is done as a separate patch mostly to see how lkp sorts it.
+This will help with nouveau, which uses its own stack of macros to
+construct calls to dev_info, dev_dbg, etc, for which adaptation means
+drm_dbg_##driver constructs.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/drm/drm_print.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/drm/drm_print.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-index 2d2cef76b5c1..f8bb3e7158c6 100644
+index f8bb3e7158c6..dfdd81c3287c 100644
 --- a/include/drm/drm_print.h
 +++ b/include/drm/drm_print.h
-@@ -31,6 +31,7 @@
- #include <linux/seq_file.h>
- #include <linux/device.h>
- #include <linux/debugfs.h>
-+#include <linux/dynamic_debug.h>
+@@ -468,7 +468,7 @@ void __drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
  
- #include <drm/drm.h>
+ #define drm_dbg_core(drm, fmt, ...)					\
+ 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_CORE, fmt, ##__VA_ARGS__)
+-#define drm_dbg(drm, fmt, ...)						\
++#define drm_dbg_driver(drm, fmt, ...)						\
+ 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
+ #define drm_dbg_kms(drm, fmt, ...)					\
+ 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_KMS, fmt, ##__VA_ARGS__)
+@@ -487,6 +487,7 @@ void __drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
+ #define drm_dbg_drmres(drm, fmt, ...)					\
+ 	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRMRES, fmt, ##__VA_ARGS__)
  
++#define drm_dbg(drm, fmt, ...)	drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
+ 
+ /*
+  * printk based logging
 -- 
 2.37.3
 
