@@ -2,87 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4775B568A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19BF5B568E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiILIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S229926AbiILIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiILIqa (ORCPT
+        with ESMTP id S229838AbiILIq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:46:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C9052A70D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:46:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2645F113E;
-        Mon, 12 Sep 2022 01:46:35 -0700 (PDT)
-Received: from [172.16.16.241] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EFB33F73D;
-        Mon, 12 Sep 2022 01:46:26 -0700 (PDT)
-Message-ID: <1138228c-f26a-d968-4c92-9ea9c8c85c6f@arm.com>
-Date:   Mon, 12 Sep 2022 10:46:11 +0200
-MIME-Version: 1.0
+        Mon, 12 Sep 2022 04:46:57 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA402AE14;
+        Mon, 12 Sep 2022 01:46:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DjSSg7wLxVIA1PXV5O0Imb3lrunFex/e2n7MrySB09VosvZSwzZBIsRIfHCjgW6snGQKcfI31OsLT4S7JQ2M7UviIXi8XvUD4Xjlxy15bSpknthbed6k6xVhQQ5QhPTXBvj5xw0t3F9WrSRBV+nH6ep7kCyRMJ6E0e8ZsuL5/dBxWEFULpC/XSWWkfN3idE/4hzWT1ho4mHauVhfNCfwCy2T/S/AolTjYoEo3KR4XmECYapY6igSPIS1VkQs18N+CYDYEwlbviZAvf+v+WqhYzITz5pKS2hInPxImlL1G1QjaARISCjD7SJe9urhR1Lc+4tu97xhwBoQ2gtydu7g0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+AvaD+Od7kEpkEcgX8efmRPp2wVyvDO4Q9bF2yB1qa4=;
+ b=A3C5NRPx5thzLNtcyEICkLOoSSGHQlboBAMebXM5GPInwISVfSfVr3gnnShKGSz2STQhN+8CO8rcPf1xIYAnQPAuOLGLhuQGLN8STeaDYsXEdejq3xIwzjkCjLBXF1tLeaB1ciiY2jXgtJIKAFO946ERSfuZQhpBqhHd4B6hzdTwIwyXLH09suXgCW0NUIb/D3dHz//uJiNu4uE6uxk6QB14I3mhkv/zNHmRgudRGzZnh+5rAxqadh1SiLTLTA2ILgqIbrCKOJf2L3UN35iZhhwQ8ns+ztUNkt00SmBA4B5OR/sPuaxkgJ3pO23TvQb/SSYx+viODxkT/s8jqxOVfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AvaD+Od7kEpkEcgX8efmRPp2wVyvDO4Q9bF2yB1qa4=;
+ b=eHrsVn6DKwbQ7XleXhXwmROqlfZTthJRHVMhAjZqvtGYhC9q0SznoirGZUZFF6pGgYRhcOb12vVtr5ivxmeVWCB5+96HD65hQdHsVzCwYpDvoHRuka1xA7y9J1QWx9MqoeHJdVl2DCqVcKwDlzTevhKeUOZ00thieBc+XwgXEvk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN9PR12MB5323.namprd12.prod.outlook.com (2603:10b6:408:104::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Mon, 12 Sep
+ 2022 08:46:54 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 08:46:54 +0000
+Message-ID: <df4b1511-f2d8-2e9b-e4ea-78e5671f059e@amd.com>
+Date:   Mon, 12 Sep 2022 10:46:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/4] sched/fair: move call to list_last_entry() in
- detach_tasks
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 4/6] drm/amdgpu: Enable signaling on fence.
 Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Cc:     zhangqiao22@huawei.com
-References: <20220825122726.20819-1-vincent.guittot@linaro.org>
- <20220825122726.20819-4-vincent.guittot@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220825122726.20819-4-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+ <20220909170845.4946-5-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220909170845.4946-5-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AM5PR0402CA0003.eurprd04.prod.outlook.com
+ (2603:10a6:203:90::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BN9PR12MB5323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57ff00ee-4e90-4e7f-5eb1-08da949b57df
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NeqtDzj20cVXHfHFajdmzXrPbm5yI+LTgpiljtDpledPGNouqZH2aEAIPqoiFBnVNVEwBmDEY5z6X5V6l8z93bR95224U3UG4YQraGnc0VUj74mPWiapOFdz5FGop6Cj3vLMmVr8LFowiLECrwlEbaBNbTSCK/PTdKzKqM2WPRq5R2wroaZnlgrZ03VrXI0WRGmeVLUH81qLLJCaiIUNJUI5tQw+M9+c/vRu502u0xen19wBCMC7VO56YkxpWbFBw01ZAQpYCW5mjAC95FrWI5I6NdvsuWhSOY66doopLvgFGpP2HHxS+jd+E1BLIN9OaANkCC5azi1dnfypc+znzy4SLpwNwXUM8OoSt75uDFaKvpC5uGnoPwByVbdCpSVGqDxS5Vt6RSVOpfS0rrZjl2pG2+mmRKJ41uJVqjoEIsk9bNz4frb9SvyjlagWsfSRcEF++MKz1KGROxoZxvTl7jEiVLXqYxtUIQRgOtMWHgY0YXIfNDP/rDgyjXKqbMuCQa6hWjADSCovMwUhfcXS9sBYjxheKGVKPvoNvGhmw20XkK/Q2+bQm+aXw7ln3Q2eivElik4p6BquhaUdOoQczcv8fqP4n5bcF+fOh35Lljd2AHp+W/xalhhsv0B0T9nTIN6pSasa5JDAhz14JsH/OQSwcbaoLRdig0YKFofg2gTxQ4RVRELAwlF8PZgASpuqDITm6SENM82+0+asJDaeWrF3M3DMrOrKpNntSbbTN/4dnsx1aAjBH7e920OkziUX72GVoJMtv68N3UOQZXt4aYxoPYIx4lyVz95dpkuxFo2i6qQG3VKcZm3r2F/IQTQ0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(83380400001)(38100700002)(5660300002)(36756003)(8936002)(2616005)(921005)(186003)(316002)(66476007)(8676002)(66556008)(31686004)(2906002)(66946007)(41300700001)(31696002)(86362001)(6512007)(478600001)(6486002)(6666004)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aiswQ0FzY1loQ0R2eGtrMmxvME1HVXlQWHZGeGdWM3IrZy9TUm5tU1BQYzFt?=
+ =?utf-8?B?dUxJRGk2aFV4TmtSMEFReDEzTXJyNzVhN005cmZZeVZ5dlVjazgxK3hNM2pk?=
+ =?utf-8?B?Qk9USnpQN2xZSWlZMW1mWnpzT2FQekRTb1VjTy9MZHYxY3hIa0d2QjY4S29a?=
+ =?utf-8?B?VkE5Y1FhOW1oSldUMERVSm5idkJDazBPU29ac2VleS9ZTnB1MHZ4bThwWTQ4?=
+ =?utf-8?B?OVRoc0Q2ZlVabHpNdStXblQ4dUhCbGRUdUJXOEVDYkUrK3Z1blUreE5obW5D?=
+ =?utf-8?B?aCtTdHZMdnJaM2JSTy9HUG1QSHZhU3FwaE9seFZ5ai9aVTVnVkhBWkdjSklv?=
+ =?utf-8?B?ajYxdWFkVGtCa3JlWnFjN2lVeHBXOWpYbG01T2hsbjk4VWp5V0pLUmVmR0lz?=
+ =?utf-8?B?dTZtUVBVa2VST2RPanFwbDJuSHJkREN4QkxIZEtweGpMczRPUHFUSXJuUVZF?=
+ =?utf-8?B?N01wb1g2RWdDTUxkWVhBbUoyR0l4OW5kY0pmZXRWMjZRNmFIVmlhbDdveURw?=
+ =?utf-8?B?TEdDNGVNcnlpd3ZTdXd4UEgrdVlkNEg4VFVFMlFqeXlZS3NqU1RzQVR4Q3RD?=
+ =?utf-8?B?SGNHUGxzWXppRzRLYlVtVTFZRG1raE9qSzNGeVZwK1d0VHRrbHVJT2VMMWox?=
+ =?utf-8?B?OGN1akVQTCszU3BCZGZEdldQYWl1OVRKdUJRQlUvWlJ3Ykd6YzNHMVgzc0hs?=
+ =?utf-8?B?UFE0OElCTUdjdG9IMFRuejd4Y2hQUktnMWZmUjlZOHdPeU9rQlJic0Fvenl5?=
+ =?utf-8?B?VDJRSllFRkJqVDU2T1ljQlBabkdpbUJUa1NkTVNZUHVMc1Nmd25NcHhWVzBV?=
+ =?utf-8?B?anVQanF2Mk9BVnF0VE1GRko5VzhOUWg4QmZXZWxwWnJEb3ZHZjhKNG0rK0pE?=
+ =?utf-8?B?ZWZ4b0dRZmE0NmdrN2hhaThxbU8yZGZlZStRaGZvTlFiaWtJRmNnZzRwWEtt?=
+ =?utf-8?B?UC9HbFJ6RTJIbHJYMG1WMmR0bjhNNXdQcGVsWjFubVNWemFhc25GVkVlUU42?=
+ =?utf-8?B?UFNhaFFpWDlHUDBJclAzaEt1N1Zpclk5OThEZ1ZkOUtxQlgydXEzNGhDcmll?=
+ =?utf-8?B?Umcyc3BrN2RWWW5yZkRxVzRPckZzTzVRWnc1ZnBJS3pKVXMxcU81UnNObEo3?=
+ =?utf-8?B?UmVwRlhob0lmMUJEbW1ocVNwazhvMVNTVWJOeFdWK2VtQlBEb084RFNCU21p?=
+ =?utf-8?B?UG1ZTktTcWVxNllvZXlBT3BVaG5RRzBTNmxBeHMvSjRBYzVmcFgwb0F2SHR6?=
+ =?utf-8?B?VUFlWUN4TWtOUE5QM05memZBNUY2MjVqRmcyenpNUzBMWFNqUWRSWk1sQkF6?=
+ =?utf-8?B?bE1SZ1ErbERKUXBQakRzS1B5aUF5ZmJZMU1aUlpncWd5YWg5YjNvYnJ1MjI3?=
+ =?utf-8?B?d21xcEJweFR2QnliSy9XL2k1d2JYLzN2VDY0OFpsQ0tKMWRqcWgzNUZSZ2V3?=
+ =?utf-8?B?ek5Ja2RnZTNQMVYwbG4vNTh4eVJkNW9SZUhwZFlMcCtFdHRtdkZBR2FtZFh4?=
+ =?utf-8?B?UG1xcnNZM2ZyMDFmWmxyZmlJa2hvTGxMVTVUVXcySGJ4MC8wQlZYZGhUZ2Zz?=
+ =?utf-8?B?TlpyRlQwazJCWHFrZkZmUHhoYzEzRzhIWEVRNmgzeGJSVHhoTWRDcDFNWjNE?=
+ =?utf-8?B?Y2JvRTFwVGZSNHZvMkFDcXlrZGhpZzBLRElGS3NuMG5uUmYwUG9KTnJPK0lT?=
+ =?utf-8?B?Y3lVU0FWRmdBa2N5NlhzK1pISGVxMXFHbW9XSEJ6WXRNRm1Qa3R0cEZ6aklo?=
+ =?utf-8?B?NXEzWGo3eEpUWHNVZnRXRHdHZm92TjFGVkNiWUNxVXgwUnR2RmRrRXB1Mzl0?=
+ =?utf-8?B?QkNuanV3Tkw3di8rWUh3RVFSS1dkdjFSNUF2YXRNZUJZQTlhSmttWURjc1Zq?=
+ =?utf-8?B?ZWNWREZsbTV4eFkxT2N0UHlyQ0kxbHYwTUwzRjJ4c1llUkVuN2x6TWhGZ1Fp?=
+ =?utf-8?B?UHlvbjV6d3NDd2tRdEI5V2FyU09LZU1OZkoxWjJtUlgxTzZyZVo2UTloWlN0?=
+ =?utf-8?B?MlFEeDljaXIwTi9lQ1NOSm1LcUNwaTQ4UkhXVTRIbkxqYmZBRS9VcHdHS1hk?=
+ =?utf-8?B?Y3FwZDVWVW9IWnphV1paSFBvekVCZzJPWFhlNWxnblFvbGRFTG9RaThUdm1E?=
+ =?utf-8?B?WjB0ejRlWjZKVm9LeTBaSExHSnpIcXVCb3c0NlBqS3EzeXBiMlVFd1hOS2Nl?=
+ =?utf-8?Q?h/HZC4q8rBnCwgIxQ5JMfZ2k6kACBNqTqiM1m0apjZnI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57ff00ee-4e90-4e7f-5eb1-08da949b57df
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 08:46:54.3788
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /BIkBHiIQ8RB6k+6/tDdVFvVy5C/bS12EyF0/wEQYY6RYGSIwHqEwJ+Hgn4Q8dYC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5323
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 14:27, Vincent Guittot wrote:
-
-s/sched/fair: move/sched/fair: Move
-s/detach_tasks/detach_tasks()
-
-> Move the call to list_last_entry() in detach_tasks() after testing
-> loop_max and loop_break.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Am 09.09.22 um 19:08 schrieb Arvind Yadav:
+> Here's enabling software signaling on fence because
+> amdgpu_ctx_add_fence() is checking the status of fence
+> and emits warning.
+>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 > ---
->  kernel/sched/fair.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6972a1a29a48..260a55ac462f 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8047,8 +8047,6 @@ static int detach_tasks(struct lb_env *env)
->  		if (env->idle != CPU_NOT_IDLE && env->src_rq->nr_running <= 1)
->  			break;
->  
-> -		p = list_last_entry(tasks, struct task_struct, se.group_node);
-> -
->  		env->loop++;
->  		/*
->  		 * We've more or less seen every task there is, call it quits
-> @@ -8065,6 +8063,8 @@ static int detach_tasks(struct lb_env *env)
->  			break;
->  		}
->  
-> +		p = list_last_entry(tasks, struct task_struct, se.group_node);
+>
+> Changes in v1, v2: This new patch was not part of previous series.
+>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> index afe22f83d4a6..21221d705588 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> @@ -730,6 +730,8 @@ uint64_t amdgpu_ctx_add_fence(struct amdgpu_ctx *ctx,
+>   
+>   	dma_fence_get(fence);
+>   
+> +	dma_fence_enable_sw_signaling(fence);
 > +
->  		if (!can_migrate_task(p, env))
->  			goto next;
->  
 
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+That looks like a step into the right direction, but still isn't correct.
+
+The code using this interface should call amdgpu_ctx_wait_prev_fence() 
+before calling amdgpu_ctx_add_fence(). And amdgpu_ctx_wait_prev_fence() 
+in turn calls dma_fence_wait() which should also enables the signaling.
+
+So when we need this here something is still very wrong on the logic :)
+
+Thanks,
+Christian.
+
+>   	spin_lock(&ctx->ring_lock);
+>   	centity->fences[idx] = fence;
+>   	centity->sequence++;
+
