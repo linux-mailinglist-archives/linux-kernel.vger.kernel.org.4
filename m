@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467305B5638
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5AC5B563B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiILIah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S230072AbiILIbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiILIaR (ORCPT
+        with ESMTP id S230112AbiILIbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:30:17 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7A1A059;
-        Mon, 12 Sep 2022 01:30:00 -0700 (PDT)
-Message-ID: <7d30b552-a737-9f19-dea8-26978a6601ea@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662971398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ko/M01mjxRdaswWjLV+NEVwlojpcTrguLl8c9fDwroI=;
-        b=rvaOSKdYwVlUfJroDJhCBq6ntfqFHL8SbcFkneCZfF5tR0ktlwo6gSd4FZVjVsIHewZxp+
-        QN2w9xmTZvsx5att7O/aO4DqKQs8zfGBaVMjxDSPl2VdqqI9YnDTYjVNdUngXRGH6hWRMw
-        svEl0BhCzh6qwS9/ng6HF1jpWEL6mOc=
-Date:   Mon, 12 Sep 2022 16:29:51 +0800
+        Mon, 12 Sep 2022 04:31:18 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68332389D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:31:04 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y136so7917740pfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=oNXzENisJipNneL7zATJDx8su8CIEdjuoeO858q6IRM=;
+        b=PNS9YKAtvuHDskyRH6e+Ty+jVb2SlJ7DyoV/vlwzfGDAFN1zWKKM3C2l7DBrGuMLhs
+         Nbi26WXf2ZgybX7NOWQVAd159J2mAW4eksjp6ilkqdXOcsq92vpuVcXjb4pHGY8L4C0/
+         txY2E8wkUbhRWTfPZ9qUElPvvgD65rpReIX1/h6blbPfb3dHSO3kUdJqKuSFWv38kqDF
+         /2k49Ee/zipfct/Rti3EVPjnYTZy6NneOlPpoyKXFWx48sOwQJF+pkxkroAQrF+bOKlP
+         BihAb2J9VuYSuoVE3F4tRpXDt36EnGh5wmyAFwl6kfNwhQ3SgkyopC3n4cmmT0ak8/Ld
+         fAHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=oNXzENisJipNneL7zATJDx8su8CIEdjuoeO858q6IRM=;
+        b=58sa6FXsxpVQL/2AwZr1t0eRCkHdRIGJUeG9/4Hg7d78WmGwdZMPBtubh2XNugrl2l
+         7gxz8Fsi+KOwucCGVirTUAFHKQ2kZbol38vJKFY4vO87YDHBMURXNNyK0v2BlytukrX0
+         UMpTRAheZ81Qn3Sl3XENxtMuUJfDPEAZ+cN28W4NvvTxLcT2fQeUtl8cL84ZRj7sviq1
+         /R8uC79HHHKjlX0zgX+xzmXdnmkYSbh+XR/mBSj+ywjV4rXT7AOcw0IykhnkhV/NDnFO
+         QAu1ieopzkzxW97pHcr6hwzhZZglszDMz/Y9YSeghWB/pky2bREYDA5p64hRCzWsqoGi
+         lybw==
+X-Gm-Message-State: ACgBeo3SthHUYJNQ8v1lJEotJhodORuToy1rWYlhE2mNwUVIXJUvoYG1
+        2dU1kAx7a6WKfCibpzMzoOI=
+X-Google-Smtp-Source: AA6agR5E3KZArHImu0M2Fk+6RPG4kSfnISHPqjVFqsl0vq+xVKdT7i2SFqK0t6iJnDIG9oGb4rOEEg==
+X-Received: by 2002:a63:2bcc:0:b0:434:eb77:28a with SMTP id r195-20020a632bcc000000b00434eb77028amr20868606pgr.168.1662971463940;
+        Mon, 12 Sep 2022 01:31:03 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id ie5-20020a17090b400500b00202d585c4basm1078814pjb.5.2022.09.12.01.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 01:31:02 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     mingo@redhat.com
+Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] sched/fair: remove duplicate referenced header files
+Date:   Mon, 12 Sep 2022 08:30:49 +0000
+Message-Id: <20220912083048.17916-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH 2/7] RDMA/rxe: Convert the triple tasklets to
- workqueues
-To:     "matsuda-daisuke@fujitsu.com" <matsuda-daisuke@fujitsu.com>,
-        'Bart Van Assche' <bvanassche@acm.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "leonro@nvidia.com" <leonro@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>
-Cc:     "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
- <41e5476f4f14a0b77f4a8c3826e3ef943bf7c173.1662461897.git.matsuda-daisuke@fujitsu.com>
- <0b3366e6-c0ae-7242-5006-b638e629972d@linux.dev>
- <fd1d7c49-a090-e8c7-415b-dfcda94ace9d@acm.org>
- <TYCPR01MB8455D739FC9FB034E3485C87E5449@TYCPR01MB8455.jpnprd01.prod.outlook.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <TYCPR01MB8455D739FC9FB034E3485C87E5449@TYCPR01MB8455.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Xu Panda <xu.panda@zte.com.cn>
 
-在 2022/9/12 15:58, matsuda-daisuke@fujitsu.com 写道:
-> On Mon, Sep 12, 2022 12:09 AM Bart Van Assche wrote:
->> On 9/11/22 00:10, Yanjun Zhu wrote:
->>> I also implemented a workqueue for rxe. IMO, can we add a variable to
->>> decide to use tasklet or workqueue?
->>>
->>> If user prefer using tasklet, he can set the variable to use
->>> tasklet. And the default is tasklet. Set the variable to another
->>> value to use workqueue.
-> That's an interesting idea, but I am not sure how users specify it.
-> IIRC, tasklets are generated when rdma link is added, typically by
-> executing ' rdma link add' command. I don't think we can add
-> an device specific option to the utility(iproute2/rdma).
+linux/sched/cond_resched.h is included more than once.
 
-In my workqueue implementation, I used a sysctl variable to set a value 
-to choose tasklet or workqueue.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ kernel/sched/fair.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-You can use sysctl or driver parameter to decide to use tasklet or 
-workqueue.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index cf3300b1a1d2..66d4c4a4dfd1 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -50,8 +50,6 @@
 
-And finally the Macros like #if ... #else ... #endif also acts as a method.
+ #include <asm/switch_to.h>
 
-Zhu Yanjun
-
->
->> I'm in favor of removing all uses of the tasklet mechanism because of
->> the disadvantages of that mechanism. See also:
->> * "Eliminating tasklets" (https://lwn.net/Articles/239633/).
->> * "Modernizing the tasklet API" (https://lwn.net/Articles/830964/).
->> * Sebastian Andrzej Siewior's opinion about tasklets
->> (https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/).
-> I am also in favor of using workqueues alone not only because of the
-> disadvantages above but also to avoid complexity. I would like to know
-> if there is anybody who will bothered by the change especially in terms
-> of performance.
->
-> Thanks,
-> Daisuke
->
->> Thanks,
->>
->> Bart.
+-#include <linux/sched/cond_resched.h>
+-
+ #include "sched.h"
+ #include "stats.h"
+ #include "autogroup.h"
+-- 
+2.15.2
