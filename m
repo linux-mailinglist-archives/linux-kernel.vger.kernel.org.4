@@ -2,220 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397535B5C92
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCC45B5C94
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiILOo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S229793AbiILOqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiILOoQ (ORCPT
+        with ESMTP id S229575AbiILOqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:44:16 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBDA37F91
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:44:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s206so8511613pgs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=sukhJYoCgew7uoZYP/s1sBJhXsmmbRwwbMiHWcpxCak=;
-        b=hq7HUPwF2uqkoez9+BCSmqUdhwINWlBe4+cCDRS8h8xUs38ncizG1c+KxCaOJplpbQ
-         Rp4RxQhvwkZ0GzFcSQrVkj7Pz61BMy0jFgvLV+8Pag5VDLbXYFGY/yBOIOZv56sWbifI
-         Hm8zxbxX0Iy3aEkx+X49AoosQlokWYultOhdLAwxeK1U26Iq2P4vWOIHbBZ8TTskTvwt
-         QYfykZ2jvz1Exmz8gA+IStgOD4sAIHjPdCXVfG4hkzciCTa0s1OKTr5v8SLTiApu75HV
-         sYlauglGjpmwBXQx9IBOyzPuZrQjifJlE3u7Lc+6dkwzIUko6mCs+ep6QEcJHhuGiFAN
-         N5pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=sukhJYoCgew7uoZYP/s1sBJhXsmmbRwwbMiHWcpxCak=;
-        b=Owu5l5JAWpmJY4nc13wuBbwmzrRiUeIeJNTSqo5YbXXH38Qw9dQsZEOYsY3UTJcFVg
-         lLfJVX2vKywxBpO9Iq78x2hBRmVneO5NgEf6T1pKofBSl7/067GSoEITJgw2PAzvqa63
-         86PoygWY+g8sysYDksjMa5GIzlOkwpyZFVjphSJA9Ns+alUIKYcB+QnMkdm7uHut6YIM
-         CF1+Kqpvhwj1ypwXacbDR3T2aFkvaAnYNLc4ioJFmkM76YHxQINVlAtKCLFY9RcSmP1V
-         iOp7TLjJo8O9KmKZqU+TYWVCS5KDw+L1c6eUQ2TM+UKTHIa+qE8SdLSQaYhj7AzOfrry
-         uP7A==
-X-Gm-Message-State: ACgBeo2C0Zvsh5W1sU0sRYExjdx9zbwzy6YGIDFi8H70MSp8A5PganVA
-        I0+VmTAoxBBLpWwvyFLmAwc9KYipVacpK0hIetmWkQ==
-X-Google-Smtp-Source: AA6agR7O6vDovGN26sVycLXUycIV5F7LTGHgOYYaxmyct5XRK9tv/Z6ndqSmcU2nA+P8JaEQXq6wd8nolTZXNjmGx40=
-X-Received: by 2002:a63:201c:0:b0:434:8bd6:87e1 with SMTP id
- g28-20020a63201c000000b004348bd687e1mr24208310pgg.394.1662993851476; Mon, 12
- Sep 2022 07:44:11 -0700 (PDT)
+        Mon, 12 Sep 2022 10:46:22 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18CC423BD5;
+        Mon, 12 Sep 2022 07:46:19 -0700 (PDT)
+Received: from chenhuacai$loongson.cn ( [114.216.208.34] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Mon, 12 Sep 2022 22:45:42
+ +0800 (GMT+08:00)
+X-Originating-IP: [114.216.208.34]
+Date:   Mon, 12 Sep 2022 22:45:42 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+To:     "Ard Biesheuvel" <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Matthew Garrett" <mjg59@srcf.ucam.org>,
+        "Peter Jones" <pjones@redhat.com>,
+        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+        "Heinrich Schuchardt" <heinrich.schuchardt@canonical.com>,
+        "AKASHI Takahiro" <takahiro.akashi@linaro.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, "Xi Ruoyao" <xry111@xry111.site>,
+        "Lennart Poettering" <lennart@poettering.net>,
+        "Jeremy Linton" <jeremy.linton@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>
+Subject: Re: Re: Re: [PATCH v5 8/8] loongarch: efi: enable generic EFI
+ compressed boot
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
+In-Reply-To: <CAMj1kXEvRfgMo+kJBwdNQfcBSfEXYGZ5vTbh2Ym8T6X+p9iWBA@mail.gmail.com>
+References: <20220910081152.2238369-1-ardb@kernel.org>
+ <20220910081152.2238369-9-ardb@kernel.org>
+ <6876236f.7b0c.18327c74248.Coremail.chenhuacai@loongson.cn>
+ <CAMj1kXFpQ1FkiMMXeA-E5FdnDzhZr7qmN15PNig_9KXxGNRJhQ@mail.gmail.com>
+ <2c005589.7bc5.1832d12eb0c.Coremail.chenhuacai@loongson.cn>
+ <CAMj1kXEvRfgMo+kJBwdNQfcBSfEXYGZ5vTbh2Ym8T6X+p9iWBA@mail.gmail.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: K93xHmZvb3Rlcl90eHQ9NDMwNjo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
- <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com>
- <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com> <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
-In-Reply-To: <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Mon, 12 Sep 2022 16:44:00 +0200
-Message-ID: <CAH76GKMtMi-Bp9h_49t5TBwF1cT0AQE=4H+4E+a4SK+cJ4JJ6A@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Maluka <dmy@semihalf.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <72e78c9d.7c1d.1833229c931.Coremail.chenhuacai@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8Dxw+EWRh9jz3oXAA--.5038W
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAHBmMfIVwBkwAAsT
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
-
-Gentle ping
-
-Best regards,
-Grzegorz
-
-pon., 22 sie 2022 o 11:26 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=C5=82=
-(a):
->
-> Hi Rafael,
->
-> Could you please kindly comment on the above?
->
-> Thank you in advance,
-> Grzegorz
->
-> =C5=9Br., 20 lip 2022 o 15:15 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=
-=C5=82(a):
-> >
-> > wt., 19 lip 2022 o 20:09 Rafael J. Wysocki <rafael@kernel.org> napisa=
-=C5=82(a):
-> > >
-> > > On Thu, Jul 7, 2022 at 2:56 PM Grzegorz Jaszczyk <jaz@semihalf.com> w=
-rote:
-> > > >
-> > > > Currently the LPS0 prepare_late callback is aimed to run as the ver=
-y
-> > > > last thing before entering the S2Idle state from LPS0 perspective,
-> > > > nevertheless between this call and the system actually entering the
-> > > > S2Idle state there are several places where the suspension process =
-could
-> > > > be canceled.
-> > >
-> > > And why is this a problem?
-> > >
-> > > The cancellation will occur only if there is a wakeup signal that
-> > > would otherwise cause one of the CPUs to exit the idle state.  Such a
-> > > wakeup signal can appear after calling the new notifier as well, so
-> > > why does it make a difference?
-> >
-> > It could also occur due to suspend_test. Additionally with new
-> > notifier we could get notification when the system wakes up from
-> > s2idle_loop and immediately goes to sleep again (due to e.g.
-> > acpi_s2idle_wake condition not being met) - in this case relying on
-> > prepare_late callback is not possible since it is not called in this
-> > path.
-> >
-> > >
-> > > > In order to notify VMM about guest entering suspend, extend the S2I=
-dle
-> > > > ops by new notify callback, which will be really invoked as a very =
-last
-> > > > thing before guest actually enters S2Idle state.
-> > >
-> > > It is not guaranteed that "suspend" (defined as all CPUs entering idl=
-e
-> > > states) will be actually entered even after this "last step".
-> >
-> > Since this whole patchset is aimed at notifying the host about a guest
-> > entering s2idle state, reaching this step can be considered as a
-> > suspend "entry point" for VM IMO. It is because we are talking about
-> > the vCPU not the real CPU. Therefore it seems to me, that even if some
-> > other vCPUs could still get some wakeup signal they will not be able
-> > to kick (through s2idle_wake->swake_up_one(&s2idle_wait_head);) the
-> > original vCPU which entered s2idle_loop, triggered the new notifier
-> > and is halted due to handling vCPU exit (and was about to trigger
-> > swait_event_exclusive). So it will prevent the VM's resume process
-> > from being started.
-> >
-> > >
-> > > > Additionally extend the acpi_s2idle_dev_ops by notify() callback so
-> > > > any driver can hook into it and allow to implement its own notifica=
-tion.
-> > > >
-> > > > Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/res=
-tore
-> > > > hooks is not an option since it will not allow to prevent race
-> > > > conditions:
-> > > > - VM0 enters s2idle
-> > > > - host notes about VM0 is in s2idle
-> > > > - host continues with system suspension but in the meantime VM0 exi=
-ts
-> > > > s2idle and sends notification but it is already too late (VM could =
-not
-> > > > even send notification on time).
-> > >
-> > > Too late for what?
-> >
-> > Too late to cancel the host suspend process, which thinks that the VM
-> > is in s2idle state while it isn't.
-> >
-> > >
-> > > > Introducing notify() as a very last step before the system enters S=
-2Idle
-> > > > together with an assumption that the VMM has control over guest
-> > > > resumption allows preventing mentioned races.
-> > >
-> > > How does it do that?
-> >
-> > At the moment when VM triggers this new notifier we trap on MMIO
-> > access and the VMM handles vCPU exit (so the vCPU is "halted").
-> > Therefore the VMM could control when it finishes such handling and
-> > releases the vCPU again.
-> >
-> > Maybe adding some more context will be helpful. This patchset was
-> > aimed for two different scenarios actually:
-> > 1) Host is about to enter the suspend state and needs first to suspend
-> > VM with all pass-through devices. In this case the host waits for
-> > s2idle notification from the guest and when it receives it, it
-> > continues with its own suspend process.
-> > 2) Guest could be a "privileged" one (in terms of VMM) and when the
-> > guest enters s2idle state it notifies the host, which in turn triggers
-> > the suspend process of the host.
-> >
-> > >
-> > > It looks like you want suspend-to-idle to behave like S3 and it won't=
-.
-> >
-> > In a way, yes, we compensate for the lack of something like PM1_CNT to
-> > trap on for detecting that the guest is suspending.
-> > We could instead force the guest to use S3 but IMO it is undesirable,
-> > since it generally does make a difference which suspend mode is used
-> > in the guest, s2idle or S3, e.g some drivers check which suspend type
-> > is used and based on that behaves differently during suspend. One of
-> > the example is:
-> > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/am=
-dgpu/amdgpu_drv.c#L2323
-> > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/am=
-dgpu/amdgpu_acpi.c#L1069
-> > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/am=
-dgpu/amdgpu_gfx.c#L583
-> >
-> > Thank you,
-> > Grzegorz
+SGksIEFyZCwKCgo+IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPiDlj5Hku7bkuro6ICJBcmQgQmll
+c2hldXZlbCIgPGFyZGJAa2VybmVsLm9yZz4KPiDlj5HpgIHml7bpl7Q6MjAyMi0wOS0xMiAxODox
+ODowNSAo5pif5pyf5LiAKQo+IOaUtuS7tuS6ujogIumZiOWNjuaJjSIgPGNoZW5odWFjYWlAbG9v
+bmdzb24uY24+Cj4g5oqE6YCBOiBsaW51eC1lZmlAdmdlci5rZXJuZWwub3JnLCBsaW51eC1hcm0t
+a2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcs
+ICJKYW1lcyBFLkouIEJvdHRvbWxleSIgPEphbWVzLkJvdHRvbWxleUBoYW5zZW5wYXJ0bmVyc2hp
+cC5jb20+LCAiTWF0dGhldyBHYXJyZXR0IiA8bWpnNTlAc3JjZi51Y2FtLm9yZz4sICJQZXRlciBK
+b25lcyIgPHBqb25lc0ByZWRoYXQuY29tPiwgIklsaWFzIEFwYWxvZGltYXMiIDxpbGlhcy5hcGFs
+b2RpbWFzQGxpbmFyby5vcmc+LCAiSGVpbnJpY2ggU2NodWNoYXJkdCIgPGhlaW5yaWNoLnNjaHVj
+aGFyZHRAY2Fub25pY2FsLmNvbT4sICJBS0FTSEkgVGFrYWhpcm8iIDx0YWthaGlyby5ha2FzaGlA
+bGluYXJvLm9yZz4sICJQYWxtZXIgRGFiYmVsdCIgPHBhbG1lckBkYWJiZWx0LmNvbT4sICJBdGlz
+aCBQYXRyYSIgPGF0aXNocEBhdGlzaHBhdHJhLm9yZz4sICJBcm5kIEJlcmdtYW5uIiA8YXJuZEBh
+cm5kYi5kZT4sICJYaSBSdW95YW8iIDx4cnkxMTFAeHJ5MTExLnNpdGU+LCAiTGVubmFydCBQb2V0
+dGVyaW5nIiA8bGVubmFydEBwb2V0dGVyaW5nLm5ldD4sICJKZXJlbXkgTGludG9uIiA8amVyZW15
+LmxpbnRvbkBhcm0uY29tPiwgIldpbGwgRGVhY29uIiA8d2lsbEBrZXJuZWwub3JnPiwgIkNhdGFs
+aW4gTWFyaW5hcyIgPGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tPgo+IOS4u+mimDogUmU6IFJlOiBb
+UEFUQ0ggdjUgOC84XSBsb29uZ2FyY2g6IGVmaTogZW5hYmxlIGdlbmVyaWMgRUZJIGNvbXByZXNz
+ZWQgYm9vdAo+IAo+IE9uIFN1biwgMTEgU2VwdCAyMDIyIGF0IDE2OjAzLCDpmYjljY7miY0gPGNo
+ZW5odWFjYWlAbG9vbmdzb24uY24+IHdyb3RlOgo+ID4KPiA+Cj4gPgo+ID4KPiA+ID4gLS0tLS3l
+jp/lp4vpgq7ku7YtLS0tLQo+ID4gPiDlj5Hku7bkuro6ICJBcmQgQmllc2hldXZlbCIgPGFyZGJA
+a2VybmVsLm9yZz4KPiA+ID4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMTAgMjI6Mjg6MDQgKOaYn+ac
+n+WFrSkKPiA+ID4g5pS25Lu25Lq6OiAi6ZmI5Y2O5omNIiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5j
+bj4KPiA+ID4g5oqE6YCBOiBsaW51eC1lZmlAdmdlci5rZXJuZWwub3JnLCBsaW51eC1hcm0ta2Vy
+bmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsICJK
+YW1lcyBFLkouIEJvdHRvbWxleSIgPEphbWVzLkJvdHRvbWxleUBoYW5zZW5wYXJ0bmVyc2hpcC5j
+b20+LCAiTWF0dGhldyBHYXJyZXR0IiA8bWpnNTlAc3JjZi51Y2FtLm9yZz4sICJQZXRlciBKb25l
+cyIgPHBqb25lc0ByZWRoYXQuY29tPiwgIklsaWFzIEFwYWxvZGltYXMiIDxpbGlhcy5hcGFsb2Rp
+bWFzQGxpbmFyby5vcmc+LCAiSGVpbnJpY2ggU2NodWNoYXJkdCIgPGhlaW5yaWNoLnNjaHVjaGFy
+ZHRAY2Fub25pY2FsLmNvbT4sICJBS0FTSEkgVGFrYWhpcm8iIDx0YWthaGlyby5ha2FzaGlAbGlu
+YXJvLm9yZz4sICJQYWxtZXIgRGFiYmVsdCIgPHBhbG1lckBkYWJiZWx0LmNvbT4sICJBdGlzaCBQ
+YXRyYSIgPGF0aXNocEBhdGlzaHBhdHJhLm9yZz4sICJBcm5kIEJlcmdtYW5uIiA8YXJuZEBhcm5k
+Yi5kZT4sICJYaSBSdW95YW8iIDx4cnkxMTFAeHJ5MTExLnNpdGU+LCAiTGVubmFydCBQb2V0dGVy
+aW5nIiA8bGVubmFydEBwb2V0dGVyaW5nLm5ldD4sICJKZXJlbXkgTGludG9uIiA8amVyZW15Lmxp
+bnRvbkBhcm0uY29tPiwgIldpbGwgRGVhY29uIiA8d2lsbEBrZXJuZWwub3JnPiwgIkNhdGFsaW4g
+TWFyaW5hcyIgPGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tPgo+ID4gPiDkuLvpopg6IFJlOiBbUEFU
+Q0ggdjUgOC84XSBsb29uZ2FyY2g6IGVmaTogZW5hYmxlIGdlbmVyaWMgRUZJIGNvbXByZXNzZWQg
+Ym9vdAo+ID4gPgo+ID4gPiBPbiBTYXQsIDEwIFNlcHQgMjAyMiBhdCAxNToyMiwg6ZmI5Y2O5omN
+IDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPiB3cm90ZToKPiA+ID4gPgo+ID4gPiA+IEhpLCBBcmQs
+Cj4gPiA+ID4KPiA+ID4gPiBJIHByZWZlciB0byBnaXZlIGEgY2hhbmNlIHRvIGRpc2FibGUgWkJP
+T1QsIHNvIEkgZG9uJ3Qgd2FudCB0byBzZWxlY3QgRUZJX1pCT09UIHVuY29uZGl0aW9uYWxseSBp
+biBLY29uZmlnLCBhbmQgdGhlbiB0aGUgTWFrZWZpbGUgY2FuIGJlIGxpa2UgdGhpczoKPiA+ID4g
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gvTWFrZWZpbGUgYi9hcmNoL2xvb25nYXJjaC9N
+YWtlZmlsZQo+ID4gPiA+IGluZGV4IGMzZjU3OWJkZjllNS4uYmM2ZmU2NTEyNWY1IDEwMDY0NAo+
+ID4gPiA+IC0tLSBhL2FyY2gvbG9vbmdhcmNoL01ha2VmaWxlCj4gPiA+ID4gKysrIGIvYXJjaC9s
+b29uZ2FyY2gvTWFrZWZpbGUKPiA+ID4gPiBAQCAtMTQsNiArMTQsMTAgQEAgZWxzZQo+ID4gPiA+
+ICBLQlVJTERfSU1BR0UgICA6PSAkKGJvb3QpL3ZtbGludXguZWZpCj4gPiA+ID4gIGVuZGlmCj4g
+PiA+ID4KPiA+ID4gPiAraWZkZWYgQ09ORklHX0VGSV9aQk9PVAo+ID4gPiA+ICtLQlVJTERfSU1B
+R0UgICAgOj0gJChib290KS92bWxpbnV6LmVmaQo+ID4gPiA+ICtlbmRpZgo+ID4gPiA+ICsKPiA+
+ID4gPiAgYXJjaHNjcmlwdHM6IHNjcmlwdHNfYmFzaWMKPiA+ID4gPiAgICAgICAgICQoUSkkKE1B
+S0UpICQoYnVpbGQpPWFyY2gvbG9vbmdhcmNoL2Jvb3QvdG9vbHMgcmVsb2NzCj4gPiA+ID4KPiA+
+ID4KPiA+ID4gT0ssIEkgd2lsbCBmb2xkIHRoaXMgaW4uIFRoaXMgYWN0dWFsbHkgYWxpZ25zIGl0
+IHdpdGggdGhlIG90aGVyCj4gPiA+IGFyY2hpdGVjdHVyZXMsIHNvIEkgcHJlZmVyIHRoaXMgYXBw
+cm9hY2ggYXMgd2VsbC4KPiA+Cj4gPiBUaGFuayB5b3UsIGFuZCBpZiAibWFrZSBpbnN0YWxsIiBj
+YW4gYWxzbyBoYW5kbGUgdGhlIHpib290IGNhc2UsIHRoYXQncyBldmVuIGJldHRlci4gOikKPiA+
+Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2FyY2gvTWFrZWZpbGUgYi9hcmNoL2xvb25nYXJj
+aC9NYWtlZmlsZQo+ID4gaW5kZXggYzNmNTc5YmRmOWU1Li41NDgwZmUyZGU3Y2QgMTAwNjQ0Cj4g
+PiAtLS0gYS9hcmNoL2xvb25nYXJjaC9NYWtlZmlsZQo+ID4gKysrIGIvYXJjaC9sb29uZ2FyY2gv
+TWFrZWZpbGUKPiA+IEBAIC0xMzcsNyArMTM3LDExIEBAIHZtbGludXguZWxmIHZtbGludXguZWZp
+IHZtbGludXouZWZpOiB2bWxpbnV4Cj4gPiAgY29yZS15ICs9IGFyY2gvbG9vbmdhcmNoL2Jvb3Qv
+ZHRzLwo+ID4KPiA+ICBpbnN0YWxsOgo+ID4gK2lmbmRlZiBDT05GSUdfRUZJX1pCT09UCj4gPiAg
+ICAgICAgICQoUSlpbnN0YWxsIC1EIC1tIDc1NSAkKEtCVUlMRF9JTUFHRSkgJChJTlNUQUxMX1BB
+VEgpL3ZtbGludXgtJChLRVJORUxSRUxFQVNFKQo+ID4gK2Vsc2UKPiA+ICsgICAgICAgJChRKWlu
+c3RhbGwgLUQgLW0gNzU1ICQoS0JVSUxEX0lNQUdFKSAkKElOU1RBTExfUEFUSCkvdm1saW51ei0k
+KEtFUk5FTFJFTEVBU0UpCj4gPiArZW5kaWYKPiA+ICAgICAgICAgJChRKWluc3RhbGwgLUQgLW0g
+NjQ0IC5jb25maWcgJChJTlNUQUxMX1BBVEgpL2NvbmZpZy0kKEtFUk5FTFJFTEVBU0UpCj4gPiAg
+ICAgICAgICQoUSlpbnN0YWxsIC1EIC1tIDY0NCBTeXN0ZW0ubWFwICQoSU5TVEFMTF9QQVRIKS9T
+eXN0ZW0ubWFwLSQoS0VSTkVMUkVMRUFTRSkKPiA+Cj4gCj4gSXMgdGhlcmUgYW55IHJlYXNvbiBp
+biBwYXJ0aWN1bGFyIHRoaXMgaXMgb3BlbiBjb2RlZCBsaWtlIHRoaXM/IE90aGVyCj4gYXJjaGl0
+ZWN0dXJlcyBqdXN0IGRvIHNvbWV0aGluZyBsaWtlCj4gCj4gaW5zdGFsbDoKPiAgICAgJChjYWxs
+IGNtZCxpbnN0YWxsKQo+IAo+IGFuZCBiZSBkb25lIHdpdGggaXQuCkl0IHNlZW1zIHRoYXQgdGhl
+cmUgYXJlIHR3byBwcm9ibGVtczoKMSwgdGhlIGRlZmF1bHQgaW5zdGFsbCBzY3JpcHQgZG9lc24n
+dCBpbnN0YWxsIHRoZSBjb25maWd1cmF0aW9uIGZpbGU7CjIsIHRoZSBrZXJuZWwgbmFtZSBpbiAi
+aW5zdGFsbGtlcm5lbCIgaXNuJ3QgdGhlIHNhbWUgYXMgdGhlIG9wZW4gY29kZWQgdmVyc2lvbiwg
+aXQgbG9va3MgbGlrZSB0aGlzOgppZiBbICRBUkNIID0gJ3BwYzY0JyAtbyAkQVJDSCA9ICdwcGMn
+IF07IHRoZW4KICAgIEtFUk5FTF9OQU1FPXZtbGludXgKZWxzZQogICAgS0VSTkVMX05BTUU9dm1s
+aW51egpmaQoKTWF5YmUgd2UgY2FuIHByb3ZpZGUgYW4gYXJjaC1zcGVjaWZpYyBpbnN0YWxsLnNo
+IGFzIGFybTY0IGRvZXMsIGJ1dCBpdCBpcyBldmVuIG1vcmUgY29tcGxleCB0aGFuIHRoZSBvcGVu
+IGNvZGVkIHZlcnNpb24uCgpIdWFjYWkKCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTku7blkKvmnInp
+vpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nkuIrp
+naLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbku5bk
+urrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbpg6jl
+iIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bkuK3n
+moTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXor53m
+iJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpUaGlzIGVtYWls
+IGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gZnJv
+bSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBl
+cnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ugb2Yg
+dGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVkaW5nLCBi
+dXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVwcm9kdWN0
+aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQg
+cmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZW1haWwgaW4g
+ZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFpbCBpbW1lZGlh
+dGVseSBhbmQgZGVsZXRlIGl0LiA=
