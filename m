@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1A75B6382
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BAB5B6383
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiILWP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S230349AbiILWQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiILWO6 (ORCPT
+        with ESMTP id S230252AbiILWO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:14:58 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF354F185
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:14:05 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id r134so8150866iod.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:14:05 -0700 (PDT)
+        Mon, 12 Sep 2022 18:14:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E164F19B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:14:07 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id r134so8150899iod.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:14:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=dzeM+708wZszK2Fkz1LVc25O65T8yCXY3mmoP+m77t0=;
-        b=O2iNT6FJFBRBZms1zl29VZQblO9I34kQ+U6FRaavxK1KOfyIsrNTO3SfaX/i+w8DGD
-         2V0y4GzZ1OgwEmJAf/cMyHJhKTl0of8atPNFND8J545OnISU2V8GKeEKN/ife9A+hxgn
-         5eXUs6te/ek4lef/dJ8DzkfyyzD71mZpnmedU=
+        bh=EeZnYFIvpj94PIl9XvhDpXBXZw312Rl74G5MwZ6L5DA=;
+        b=D354vVTP9rE3f3TCt+m5kJaP3F3TB2qktc9GaXG6kS/7C8NFdrdmPVGguYWvBXlgv+
+         G8vNC9EvxVNJPfVvSSqkhJ503aH4vSRS4d38Ikfw8aY285GH7iqeyK8pjAAv9P979soK
+         PDZsj2Y+MLFT912PWWldsnfX3TD8NaLYZM5Wc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=dzeM+708wZszK2Fkz1LVc25O65T8yCXY3mmoP+m77t0=;
-        b=MuRXZyCHtwIW6oDXXvLdoC4O0M0qB8/o184wp1yqILYCGgDtu8jKSC18KQ43iQs+nA
-         iK4wBZEqzm4n02jarS8l0I60+u4A/RMSBX8efi5FHdSHd44+ACrAiYJrenF8GH/kCUP6
-         y9LEv4xVbIncp7OK6BCQHTqXW/XiyJiMPyFMj8Pod0YVeZHHwdz7eCctz4MEZVzbAH+v
-         N0t+kzrhsq9BLVIFZlcESLjAWoMCYOdHt3y/NaW6zq6t0dNCA2a0kOpe87LKk0uC+KVT
-         CJQGOxYwlaGyfp3q9k8JWX+8WsDlA0QIc1r2VZGJzaUpvU8dSMvFGmRbDY0tDNnZLqw3
-         R5Jg==
-X-Gm-Message-State: ACgBeo13BMw25WDJxHpPPdqxeh0jzfPtzHFU4ry2QnorWZKW5HIUhluT
-        V8QRedNVe/p0mu/4rihpssUutg==
-X-Google-Smtp-Source: AA6agR5bWvgDCtA7HkFBk73M7IxfVaEkBwT9ECnKRnTGkpQA3Wt/6YDW52j0WDVP0lWH9cGiwykLRA==
-X-Received: by 2002:a05:6638:1c17:b0:35a:151b:c726 with SMTP id ca23-20020a0566381c1700b0035a151bc726mr7069922jab.66.1663020844367;
-        Mon, 12 Sep 2022 15:14:04 -0700 (PDT)
+        bh=EeZnYFIvpj94PIl9XvhDpXBXZw312Rl74G5MwZ6L5DA=;
+        b=Xc4GK1jxu9x2q3KXHULEfCEBl8Iz3n5nI0DfLrgKSYEuy0E9kAsV19pMTwhZaJ7ZUM
+         p6M1M1B02hOP46PjOflUmSV4CowIctB556czXnamffqwNLxGG+Zq6BhcE9DomYI0cE/y
+         nIuI79rsr7kFHhmNvIN8+uTg80akM31z1crqVlc/QhxXPmzO1e0tz5EnZKXNLRfXEzG7
+         /zirZR0FBitPDH8a+vOvRdx/ZKLQP9VFvLd0yV4OChmpwwI+mxyjHJ/4PzR/slrH9qF3
+         8BKhYF4M5uAmbviBWWK18CAMnv16WjjQV6TMtDjhu52UzEd4NX/ZGKITR6bd1XuLJzEN
+         yWhA==
+X-Gm-Message-State: ACgBeo0PWWRdNr+r9R0DFrm+79gJ8BnKwOU+izcu/LKOHHIe47+Vgoy+
+        orZm/pHXE+T8tmCPNn+08t89/w==
+X-Google-Smtp-Source: AA6agR7Fmp+THZEHAtck6LZl/LjV8cER0DklBxTYAo7ha/1/rd6o/SbM9WJM8O+WxBGePYPgAebdng==
+X-Received: by 2002:a02:904a:0:b0:346:908d:82b8 with SMTP id y10-20020a02904a000000b00346908d82b8mr14166871jaf.225.1663020845670;
+        Mon, 12 Sep 2022 15:14:05 -0700 (PDT)
 Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id 18-20020a056e020cb200b002f16e7021f6sm4077334ilg.22.2022.09.12.15.14.02
+        by smtp.gmail.com with ESMTPSA id 18-20020a056e020cb200b002f16e7021f6sm4077334ilg.22.2022.09.12.15.14.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 15:14:03 -0700 (PDT)
+        Mon, 12 Sep 2022 15:14:05 -0700 (PDT)
 From:   Raul E Rangel <rrangel@chromium.org>
 To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
 Cc:     andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
@@ -54,12 +54,10 @@ Cc:     andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
         Raul E Rangel <rrangel@chromium.org>,
         Cai Huoqing <cai.huoqing@linux.dev>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/13] Input: elants_i2c - Don't set wake_capable and wake_irq
-Date:   Mon, 12 Sep 2022 16:13:16 -0600
-Message-Id: <20220912160931.v2.12.I031ffbe411e1bae20bf16a1876da5baf444c7928@changeid>
+Subject: [PATCH v2 13/13] Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+Date:   Mon, 12 Sep 2022 16:13:17 -0600
+Message-Id: <20220912160931.v2.13.Ia0b24ab02c22125c5fd686cc25872bd26c27ac23@changeid>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220912221317.2775651-1-rrangel@chromium.org>
 References: <20220912221317.2775651-1-rrangel@chromium.org>
@@ -83,24 +81,17 @@ Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 
 (no changes since v1)
 
- drivers/input/touchscreen/elants_i2c.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+ drivers/input/touchscreen/raydium_i2c_ts.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/input/touchscreen/elants_i2c.c b/drivers/input/touchscreen/elants_i2c.c
-index 80e16b533c452a..3500293bb1d8e1 100644
---- a/drivers/input/touchscreen/elants_i2c.c
-+++ b/drivers/input/touchscreen/elants_i2c.c
-@@ -1575,22 +1575,6 @@ static int elants_i2c_probe(struct i2c_client *client)
+diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
+index 66c5b577b791d4..88d187dc5d325f 100644
+--- a/drivers/input/touchscreen/raydium_i2c_ts.c
++++ b/drivers/input/touchscreen/raydium_i2c_ts.c
+@@ -1185,15 +1185,6 @@ static int raydium_i2c_probe(struct i2c_client *client,
  		return error;
  	}
  
--	/*
--	 * Systems using device tree should set up wakeup via DTS,
--	 * the rest will configure device as wakeup source by default.
--	 */
--	if (!client->dev.of_node)
--		device_init_wakeup(&client->dev, true);
--
 -	/*
 -	 * The wake IRQ should be declared via device tree instead of assuming
 -	 * the IRQ can wake the system. This is here for legacy reasons and
@@ -110,9 +101,9 @@ index 80e16b533c452a..3500293bb1d8e1 100644
 -	if (!client->dev.power.wakeirq)
 -		dev_pm_set_wake_irq(&client->dev, client->irq);
 -
- 	error = devm_device_add_group(&client->dev, &elants_attribute_group);
+ 	error = devm_device_add_group(&client->dev,
+ 				   &raydium_i2c_attribute_group);
  	if (error) {
- 		dev_err(&client->dev, "failed to create sysfs attributes: %d\n",
 -- 
 2.37.2.789.g6183377224-goog
 
