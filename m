@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1405B5BDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5EB5B5BE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiILODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
+        id S230012AbiILOFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiILOCy (ORCPT
+        with ESMTP id S229989AbiILOFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:02:54 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3746932AB9;
-        Mon, 12 Sep 2022 07:02:46 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oXk1M-0007Yg-04; Mon, 12 Sep 2022 16:02:44 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0D555C1291; Mon, 12 Sep 2022 16:02:34 +0200 (CEST)
-Date:   Mon, 12 Sep 2022 16:02:34 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Aleksander Bajkowski <olek2@wp.pl>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Message-ID: <20220912140233.GA9366@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org>
- <20220706081901.GA10797@alpha.franken.de>
- <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
- <20220707100630.GC9894@alpha.franken.de>
- <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
- <20220707143930.GA14693@alpha.franken.de>
- <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
+        Mon, 12 Sep 2022 10:05:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BC31D0DC;
+        Mon, 12 Sep 2022 07:05:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D55611DE;
+        Mon, 12 Sep 2022 14:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5DDC433C1;
+        Mon, 12 Sep 2022 14:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662991515;
+        bh=3aWjrgOM+tw/gSgzjaITIjqDMzYsveoZMHJ7NWF5AxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vNBwjp/i90vMIZLytHqYzaGD+wKWDYciVhHyb4dhfxvHt26N4r6wetVbKa+oKV2OS
+         1YFYjONDjqCgya8x0u7pQZ2bS85t8CjQeLt3I4ve8XJpkvs5UwjwXedve+ieO0fusq
+         KNaeNgWGdHKhVL9WobpC86g8PJDCvXd2lOjXLx3Q=
+Date:   Mon, 12 Sep 2022 16:05:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     cgel.zte@gmail.com
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] USB: serial: ftdi_sio: remove the unneeded
+ result variable
+Message-ID: <Yx88s4TwEEt6luPY@kroah.com>
+References: <20220912133826.18517-1-xu.panda@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220912133826.18517-1-xu.panda@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,79 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 12:53:40PM +0200, Aleksander Bajkowski wrote:
-> Hi THomas,
+On Mon, Sep 12, 2022 at 01:38:27PM +0000, cgel.zte@gmail.com wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
 > 
-> On 7/7/22 16:39, Thomas Bogendoerfer wrote:
-> [...]
-> >> Or can you point me to the code in
-> >> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
-> >> interrupts on VPE 1 (is it simply unmask_mips_irq)?
-> > 
-> > IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
-> > on the same CPU. I've checked MIPS MT specs and it's possible do
-> > modify CP0 registers between VPEs. Using that needs changes in
-> > irq-mips-cpu.c. But mabye that's not woth the effort as probably
-> > all SMP cabable platforms have some multi processort capable
-> > interrupt controller implemented.
-> > 
-> > I thought about another way solve the issue. By introducing a
-> > new function in smp-mt.c which sets the value of the interrupt
-> > mask for the secondary CPU, which is then used in vsmp_init_secondary().
-> > Not sure if this is worth the effort compared to a .boot_secondary
-> > override.
+> Return the value usb_control_msg() directly instead of storing
+> it in another redundant variable.
 > 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> ---
+>  drivers/usb/serial/ftdi_sio.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> Enabling interrupts on the second VPE using hotplug will be accepted
-> upstream? Below is a sample patch.
+> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+> index 0a1da579ead5..f02dcef69cb9 100644
+> --- a/drivers/usb/serial/ftdi_sio.c
+> +++ b/drivers/usb/serial/ftdi_sio.c
+> @@ -1394,7 +1394,6 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
+>         u16 value;
+>         u16 index;
+>         u32 index_value;
+> -       int rv;
+> 
+>         index_value = get_ftdi_divisor(tty, port);
+>         value = (u16)index_value;
+> @@ -1407,13 +1406,12 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
+>                 index = (u16)((index << 8) | priv->interface);
+>         }
+> 
+> -       rv = usb_control_msg(port->serial->dev,
+> -                           usb_sndctrlpipe(port->serial->dev, 0),
+> -                           FTDI_SIO_SET_BAUDRATE_REQUEST,
+> -                           FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> -                           value, index,
+> -                           NULL, 0, WDR_SHORT_TIMEOUT);
+> -       return rv;
+> +       return usb_control_msg(port->serial->dev,
+> +                              usb_sndctrlpipe(port->serial->dev, 0),
+> +                              FTDI_SIO_SET_BAUDRATE_REQUEST,
+> +                              FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> +                              value, index,
+> +                              NULL, 0, WDR_SHORT_TIMEOUT);
+>  }
 
-as this is just another hack, below is what I prefer.
+That's really not the correct use of the return value of
+usb_control_msg().  Can you fix this up to properly handle the return
+value, or better yet, use the usb_control_msg_send() call?
 
-Thomas.
+thanks,
 
-commit 15853dc9e6d213558acbf961f98e9f77b4b61db2
-Author: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Mon Sep 12 15:59:44 2022 +0200
-
-    my lantiq approach
-
-diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
-index c731082a0c42..1cc4f56b57f6 100644
---- a/arch/mips/lantiq/prom.c
-+++ b/arch/mips/lantiq/prom.c
-@@ -84,6 +84,16 @@ void __init plat_mem_setup(void)
- 	__dt_setup_arch(dtb);
- }
- 
-+#if defined(CONFIG_MIPS_MT_SMP)
-+extern const struct plat_smp_ops vsmp_smp_ops;
-+static struct plat_smp_ops lantiq_smp_ops;
-+
-+static void lantiq_init_secondary(void)
-+{
-+	set_c0_status(ST0_IM);
-+}
-+#endif
-+
- void __init prom_init(void)
- {
- 	/* call the soc specific detetcion code and get it to fill soc_info */
-@@ -95,7 +105,13 @@ void __init prom_init(void)
- 	prom_init_cmdline();
- 
- #if defined(CONFIG_MIPS_MT_SMP)
--	if (register_vsmp_smp_ops())
-+
-+	if (cpu_has_mipsmt) {
-+		lantiq_smp_ops = vsmp_smp_ops;
-+		lantiq_smp_ops.init_secondary = lantiq_init_secondary;
-+		register_smp_ops(&lantiq_smp_ops);
-+	} else {
- 		panic("failed to register_vsmp_smp_ops()");
-+	}
- #endif
- }
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+greg k-h
