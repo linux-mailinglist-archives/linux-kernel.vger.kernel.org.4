@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5658B5B5601
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576EE5B55D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiILIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S230125AbiILIVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiILIWa (ORCPT
+        with ESMTP id S229869AbiILIVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:22:30 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FB82DABC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:22:29 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C7DBup037897;
-        Mon, 12 Sep 2022 08:22:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=HVYrT76c3oGFAiAQ2/kuhi2ymF9oFlg3hq7MEvGc21k=;
- b=YDWrIa2IM4bUd2yZGfCl8QYqRXwh97V0I8KdfrCiI7yoStArVQC6jDwYNqPvrzYqL+mR
- d6L3oMeBIqdvLiS/qJmnD0V6TeSf+zRLnoGYYz+IeM2K+UVuyJVSzSeozAx/yXBgUFte
- bWeEtsp1lgrlTbLzrWad3MutRmmP/wdbcaEDgoMK2HnFDNyMCP6OADUNF86dPD+TiViR
- toXLMzlpB+x3BhUvAkRbkexkycH2Y8YbdzYZice1KNIoEgUBGRo++wow9SeYny1M17/X
- iM9hDGxPZneJcJqVUSJP8MKHytMjd68Ll6PJxkOaSKi/akMXn8sbP1GuQbg1xTvd2IPE XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jhxdj575d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:22:09 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28C6FHTw002511;
-        Mon, 12 Sep 2022 08:22:08 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jhxdj5742-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:22:08 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28C87Vnh003374;
-        Mon, 12 Sep 2022 08:22:06 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3jgj78sh3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:22:06 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28C8M3AZ34537942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 08:22:03 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABEACA4040;
-        Mon, 12 Sep 2022 08:22:03 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1A89A404D;
-        Mon, 12 Sep 2022 08:21:58 +0000 (GMT)
-Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.91.220])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Sep 2022 08:21:58 +0000 (GMT)
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     jpoimboe@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
-        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
-        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
-Subject: [PATCH v3 16/16] objtool/powerpc: Add --mcount specific implementation
-Date:   Mon, 12 Sep 2022 13:50:20 +0530
-Message-Id: <20220912082020.226755-17-sv@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220912082020.226755-1-sv@linux.ibm.com>
-References: <20220912082020.226755-1-sv@linux.ibm.com>
+        Mon, 12 Sep 2022 04:21:22 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960802A970;
+        Mon, 12 Sep 2022 01:21:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n8cOkrL+cviKDIlXcev4iX6QMB/s/+EmVnnzAoquseHTGY1M/Zri3zCAG36HeLemHE/V5gMWifbP1Nwb2fhmWDiz6tf4cpXO9+9AvzpiaaZsPwjhO5C4A7HXpE1i9ks1Fu2hgdGJQ3Yn27qSEGu+lV7V8tVIUMUZNaO1KUQw7JngoQtk3pCsASgSIr7SyeXTpgTie64TEBg3Ay8r1mvfeIFDTgzQoKIjF25GCVh6hJPMmdwsZP0AVQ0V5Kox0JS9mNV8fXbcumYZTFsvXG09WmH6sSOPF4a2wLabaQ+qpqZe57LHkg7eOB/Ds5wGGTA95qePfdsP+kDYfeQmsUqBZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YsEeRRwJRxP+nwGYkWMJWutMfHNgakAojyFTcKasUfg=;
+ b=aDmbz5MjA2qIDPQByMFfJrKgWJdaJNd94hXTkB04vx3eciEVVKxr6dIAJ44Aoc/h5QAqKhXrr3kaOoPb/O3A6DZxMqH0R8WjX8cpRekBXxmfCTHkOkKzLsI6yLHSWgoUdqYxIEcdRs2jyuaECFxhCETWLrZxU4GQfN1syVRsfuanIZYGqk/mVdr+nkVAoJ0H7hu7m9Dj2R5clbmmYANeoCo46Ly8/pZJ8OTT3/qC8S89IcWpds8iMXd2PWXcN8b+8NxQRfoY7J8hnogPnjg1SimmQOpHDxQ1ao8gcs51mySl/SixsYgiMrojB82OeHBogtYL5kD8SV7iwmTosbMRcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YsEeRRwJRxP+nwGYkWMJWutMfHNgakAojyFTcKasUfg=;
+ b=kMwpTdnYoeqNXH0admSyv8xpocvi4p82TIqB0/AwY1HtYPrrd1Kssi9DbCxKYFfJpOBqRRAry62g7uuammflIAjMit/MY7eNUtQfxrm8cVoEZcBSQcgalbA5iidSTkPadLqzeNSVtHU8X/RwMNBcICYM91Szdp/EVXjbKXY/W34OAw1dzJHlLSYF9d5N2GC+4LExWTQYMvx2L7RO77GIQAJYuHNvHXue2qSV6SWtbMKQDyIoHcWaENM0WclDvdNI+WzWQg77VpTSEo9dud/Qry22YoCX+yHoaQYkbPmzlD9ViZOlGytQGkMky81i9iSaqJ2zs41C/rqSwhcer8wouQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by DM4PR12MB5820.namprd12.prod.outlook.com (2603:10b6:8:64::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.22; Mon, 12 Sep 2022 08:21:19 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::18a5:7a35:3bb2:929b]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::18a5:7a35:3bb2:929b%3]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 08:21:19 +0000
+Date:   Mon, 12 Sep 2022 11:21:14 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     cgel.zte@gmail.com
+Cc:     petrm@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] mlxsw: core: remove the unneeded result
+ variable
+Message-ID: <Yx7r+ob2PTlbQQc9@shredder>
+References: <20220912072933.16994-1-xu.panda@zte.com.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912072933.16994-1-xu.panda@zte.com.cn>
+X-ClientProxiedBy: LO2P265CA0369.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a3::21) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HMML44sSwrciNUDD2XZCtCzOmX9QHAmV
-X-Proofpoint-GUID: VBDUvXvIeRzW44y5RkDaa1JMed8DIyQ4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_04,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=952 malwarescore=0
- clxscore=1015 spamscore=0 impostorscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209120027
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DM4PR12MB5820:EE_
+X-MS-Office365-Filtering-Correlation-Id: 590f8737-cb7b-4db1-b616-08da9497c503
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A6E5MSAAa8CbXNclxc7y7BuMmONzD+ndR/Dr87MYYoAG52I8yU+lTg7Qd6pmYLbzzwj6vO3RMee1otX6l0oH993an6KhTtQOPYzHe+x3cxpEe8gooLdAGQqVN8bRvsfc4uuNEyumNd59+JbAn7KmgZcs4ur+HvxmJkcxhkH+PqhOX9A2mmmrgy7qvGDcOgd5MLABhem1IH1rKYaoAvFu8vkDrhv6HQwA4FSKzQrnBKcTKi4x4PZr41BUzTABi80teBeLOPsxvu1CRjSdF0IWU6OC+ukvVK/HYc/4fp/2FY/Cxtsur+KDIWdpo0SeZ2Q44STP1Sptk6ZrHBSek6SwyGb40XauCfJXaSNa3+9ywc3Eyp29nmxOiudXrQZWtv+5N1YzdHRXZevZRbYaB8z3H2Sj2Dfc7qPPKOfXxbBpSm9o7hCTvmVeqHunEEGJmLVgAGEOgBbWywMfGH4chqOixfOfVdjSCbVASLrbuzJR3Y1nwMJWU37/Ru4zW2W5h1IxkEL9DLuinTW6y9f/gGhsknaqAN/BChqi+EF8lyZSQB8vvj3WYngnxCEpADaCj4JpnU8yb5YNZFgzb3jNyveipcz6kPO57yNgWGF9ScwtWWnwvcKE397hsQ3/tJApN2tef+h8qN7MmFLx1JnhNVQWDbIlfl6kr8cbvzfMZM3rtcVb4vg0lMrBtsqKdXNNlWyOcSgKQCUqe0/iQmK7NMzZlBujYd25h32S+QwGJ8BEKlLPEHGMM3R/tBWh3wpwgmTujil/hei1teZeQRm7F0HjGy/vnB4VZzntiQm2qXgJ9nuVK2odQK8orQS71BpxjyPBGTJz6gSsVTVnI4WlaQTG6g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(396003)(366004)(346002)(39860400002)(376002)(136003)(26005)(6506007)(9686003)(6512007)(478600001)(966005)(6486002)(41300700001)(6666004)(186003)(38100700002)(66946007)(66556008)(66476007)(316002)(8676002)(6916009)(54906003)(4744005)(4326008)(33716001)(2906002)(5660300002)(86362001)(8936002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?S/E0zF3b+01KpLmXUGpe8dM6eLEJ8RMvjqID/HZpRdIEkS8SnVMMwG6iGfsf?=
+ =?us-ascii?Q?VUM4amZk3/b4bxMRcm7GasjU7qqQjr4FBBV4ZeDfW9WlhRH42xWJ0rhAMQYO?=
+ =?us-ascii?Q?0ztonGt4fJpp5kf22NTTaRlZPW7NsacfCi8373YC2ASQK0NP1XLYsH27z08Z?=
+ =?us-ascii?Q?o2lKlmLmS/VvXLMXUUbKsW7uRiKJ4PBsDsHh3VStFgPJVvJWVZY0M1BwWwu2?=
+ =?us-ascii?Q?3+AVigXS/EWIJJAQtBn9HMiGO+f4bBiK3/IhniU6V3QfoYm9yQaYVIZC2M0y?=
+ =?us-ascii?Q?mtIPMO1WCU878MRG9+5nIHgYaTNEZ8neJDqXFvrcG40pzHSHcIBnLjmsGGIL?=
+ =?us-ascii?Q?OpItJ9o1jEHGWU2VJHhe+lhRsutszV1ROc8Xayw1sqXRBztgFTHf8wVfTvQm?=
+ =?us-ascii?Q?VlmTkQb5S1rzMxJOvV8z4CSJWfWtWSq0y9JT0CFO1uWjeFg4pfa+OoidPgZO?=
+ =?us-ascii?Q?hF5p7s9C2ZLjtMqXMcPY/5bEa54f+rWroZSCKliWGEPThKyYOeN1UA3Ic1pn?=
+ =?us-ascii?Q?Ikqd0I6X5h77Abm1pnmM4CeeIpO7JFUNdYa6zbz6CgSHwErsVscqEY3vPT01?=
+ =?us-ascii?Q?yxYeXtDDkqlUU/TqoNDBeqUG2U3HmLb7VCryQ9yEh9k5uc+A8oyxqPkqcX7Y?=
+ =?us-ascii?Q?Y/HAaYMw1zXFVTzAsc21xx2A9YQQcl/wus9uztO2E4+QCD6qB1/l5BiHamer?=
+ =?us-ascii?Q?hc410J5RX/DBttKBF58GR4PznCZqQ9vPB6Dmp1w5DB8RRDL4KD56EcYiHw16?=
+ =?us-ascii?Q?bIHQq6qBPF188S/AT4eQ3TczTqUfZPtURcijnY0e5RHJTaQlNUdMflHRf20E?=
+ =?us-ascii?Q?f2BOBEPImt0mU5/q4GW71Wz/Ou8W8+iggfTIT210XQhjFEDkL9CStetE944X?=
+ =?us-ascii?Q?XY5ge31Aj+7XTAmzdIcKwWXetTjxEa8JSb+pTM6FNX5XyNTpUtfdZGFscV9k?=
+ =?us-ascii?Q?Wo6JjV2itobLYZKchzyl7kyWfsdSgblvlOuJ1Wr0eJDpwpALF9jcFA0noE05?=
+ =?us-ascii?Q?iY7rWpsN7VlDESb32f5tRdc9x1JKOyGDShZf6zEibeRNyuBTeny44zghevSC?=
+ =?us-ascii?Q?4EpW7p7edb7rz/e/MT3zKaUpoVZE1jodal5PSKHjd8QcXp4RJbyoFb/II+Am?=
+ =?us-ascii?Q?dIVKp06HgJBkajvSuxdoUeHmgsu5oj8yZ3vEiwbqUqFYkcYhanC616sNdw7M?=
+ =?us-ascii?Q?V2CGCMyQd8sQUkDkmrN7rEMRXhydKxRxuQSU3x5c7Lq+pMaEsBLYX4Ws9iqe?=
+ =?us-ascii?Q?Jouq882PRySAwlC08EHOuWsXzUW0MEDcr8IDoZNEZV5QnA4Z4xi/1f4PtUwx?=
+ =?us-ascii?Q?x9oJC8qkQM/uUAKpJ3fBPbziS7Y032XpodJHd1b9egS7H6x0V9NoNXLBHGog?=
+ =?us-ascii?Q?Xa/0zvFyLxjS1rnqE2BLgurBg5jaEGAqD00bDFQLQeH4NJBHoIvYSQTkyrhF?=
+ =?us-ascii?Q?HpUX0CIe0Q79KsdFLV3yI1GjhOxqy6HA76GspePJBfnkzMf77bXnFPjBUyWE?=
+ =?us-ascii?Q?5N88UIOsI+hGJidTqb6xrHqTo/D+yklKhpg3+L+y4qc0k9Pm8YVuSs+4tRcg?=
+ =?us-ascii?Q?hVXvOqylT/CL90sY94fiF7lUv9nkRErZjf/Qz2Ui?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 590f8737-cb7b-4db1-b616-08da9497c503
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 08:21:19.4079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: km1J41Q2kvHJ3b5JYHhoZbsaqpbbh38MeqIIDEYqpX75dNQghUpWKZHLY6dw+OGeL0vgcY3Y1rEqiFlGuI4/3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5820
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables objtool --mcount on powerpc, and adds implementation
-specific to powerpc.
+On Mon, Sep 12, 2022 at 07:29:34AM +0000, cgel.zte@gmail.com wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> Return the value mlxsw_core_bus_device_register() directly instead of
+> storing it in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
----
- arch/powerpc/Kconfig                          |  1 +
- tools/objtool/arch/powerpc/decode.c           | 16 ++++++++++++++++
- tools/objtool/arch/powerpc/include/arch/elf.h |  2 ++
- 3 files changed, 19 insertions(+)
+For net-next:
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index dc05cd23c233..6be2e68fa9eb 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -238,6 +238,7 @@ config PPC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
-+	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index dcd0975cad6b..ea2b1968f0ee 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -9,6 +9,11 @@
- #include <objtool/builtin.h>
- #include <objtool/endianness.h>
- 
-+int arch_ftrace_match(char *name)
-+{
-+	return !strcmp(name, "_mcount");
-+}
-+
- unsigned long arch_dest_reloc_offset(int addend)
- {
- 	return addend;
-@@ -50,6 +55,17 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 	typ = INSN_OTHER;
- 	imm = 0;
- 
-+	switch (opcode) {
-+	case 18: /* b[l][a] */
-+		if (insn & 1)  /* bl[a] */
-+			typ = INSN_CALL;
-+
-+		imm = insn & 0x3fffffc;
-+		if (imm & 0x2000000)
-+			imm -= 0x4000000;
-+		break;
-+	}
-+
- 	if (opcode == 1)
- 		*len = 8;
- 	else
-diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objtool/arch/powerpc/include/arch/elf.h
-index 3c8ebb7d2a6b..73f9ae172fe5 100644
---- a/tools/objtool/arch/powerpc/include/arch/elf.h
-+++ b/tools/objtool/arch/powerpc/include/arch/elf.h
-@@ -4,5 +4,7 @@
- #define _OBJTOOL_ARCH_ELF
- 
- #define R_NONE R_PPC_NONE
-+#define R_ABS64 R_PPC64_ADDR64
-+#define R_ABS32 R_PPC_ADDR32
- 
- #endif /* _OBJTOOL_ARCH_ELF */
--- 
-2.31.1
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
+Please use "PATCH net-next" prefix for such patches:
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#how-do-i-indicate-which-tree-net-vs-net-next-my-patch-should-be-in
