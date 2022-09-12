@@ -2,140 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE1C5B6006
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9595B600A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiILSOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
+        id S230092AbiILSOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiILSOO (ORCPT
+        with ESMTP id S230022AbiILSOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:14:14 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B441D16
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:14:12 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z25so16245412lfr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:14:12 -0700 (PDT)
+        Mon, 12 Sep 2022 14:14:47 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2D76271;
+        Mon, 12 Sep 2022 11:14:46 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id u28so3720155qku.2;
+        Mon, 12 Sep 2022 11:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=pphKVd2FpUZgthqe9J2k6pHmxdMAUCIqGEtgJJp9FHk=;
-        b=MnO4fO2yLp8hCzWCwoN7+8I58BSrXzRDQtX2oBr5plpQqW3iCcpJER5OzI32hb/Po3
-         Pfk1xc4f1fyM5i2YiwsZfbZfChnvmtg0FOjhvAyhxL7j6jU7QNnVZSFCqYdHuWxD6W5I
-         ByeZ71lZN7P7d3aW4/kMuNhdiQ1eCjzqI0FA40iQUECBVxpXomjqZdBgPfSsTjoT7Zsn
-         jLtXai7D1pGYD25MRXnuTREMMtBJDpyx+xZt2lh07d6PmygFOXTYvdwzurS0zyumFT0i
-         A0sagUXCDQxjQa7lxDT+SVm6l4mvf53SecGCdYl4jiyl45EWo+qulv1l8zhsa05LTADu
-         HbZw==
+        bh=YPKBe9B3XbC8RUfPOGArlb9dr+0GqBtfH24k5Otusrk=;
+        b=YacZ7pCFkqrvZCQtCIGbDt2MYK3i+sd3xi1qTDTf1RqY9UYfccxhJQwuo4vjytaVrV
+         LvCX0WexjcADJKv1qBmMPN/ovyIa+1a5ZV13RyU452y2Rt7Jh8lM24X5lmw701OWu1hU
+         P21rekXqi5mPPJWZ1Emm/j4CYCwUSVXdIzHVELNE4vT/TUrKmW9Hvxu69GESQ2rK3jsO
+         eaMp4Yo8i5cPA1GX+OFYToufY0+7aWTdgpnr0ALI3B+vUg7jgXHVzB1Zf81gry1D8YPH
+         MJ9NK5UXiSgdO7gj9jvgTPBxwTIHMZbOXFP68b6QZhK7o3hDKKUNptDkh2Vjcxrpo5Vn
+         5WAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=pphKVd2FpUZgthqe9J2k6pHmxdMAUCIqGEtgJJp9FHk=;
-        b=i5kHsrEchfGZfSRL6WxT/un6epkd3Ih1He0TiZyUKwIyneTYbV0slYYCepvpbcUuAW
-         pYZ8d3eiFtsvpcvLlv3dtF2ileMTix2IaeeHHJAVWuCiUkrCR0fUFQ7H1mvWflWlXROQ
-         shSX7FbXw0NZHteU/j1B75/7nABDlr2sqlFu6c9+kAzmS1oRJneQLgvezsyN9sJx5Gag
-         UNv/oYhFhNUGVFUqfJiAeCD/VY5UCd+XiLZnDRmDlWJifWMq+zMO/wLPjHPsZhBjFCwL
-         BYem35LjfiObCAthB/rQDNhFcXN4BD5W3v4iHyIJzN8fwO4bHrTcu+/NzMpmbbav2IrO
-         SXBg==
-X-Gm-Message-State: ACgBeo0Ss8BjnydJFhdDrZDyaIXIBu1NrBiJTcutAQcBaj7oeCdawaGQ
-        +Y2QfbxvTyvrgoMIUkhzhwx7Aw==
-X-Google-Smtp-Source: AA6agR5CudFSUa17zwUnzqBC9l/1i9sEoxDOfEdCr8sclosfn/oqi/m5pbihf9dVim/I0WqX2R/6Gw==
-X-Received: by 2002:a05:6512:3c88:b0:499:c78:5bb1 with SMTP id h8-20020a0565123c8800b004990c785bb1mr4872822lfv.503.1663006450720;
-        Mon, 12 Sep 2022 11:14:10 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y26-20020a05651c221a00b0026ad1da0dc3sm1205812ljq.122.2022.09.12.11.14.10
+        bh=YPKBe9B3XbC8RUfPOGArlb9dr+0GqBtfH24k5Otusrk=;
+        b=zGTfv8dwjR//+61/3e4Zf/99Q+ZLuFGSlBhmGg4VtBaNpO/u+moHZGarIoGzwPbiEZ
+         qbgptA8XiYdInh5nV6tc4om424rr2a61CjJes51hd3reNIATMMfYD+S6XyiFwFflpk3g
+         O1JT2v2d0wyiKVEJGX6x23CBCfifqrr7FoHjr1OGTxzaLHtairaBlsloEjHO/09u5Lc4
+         Dy3CR+5ACo74wE6FE5gxjIJ5mqzAp945KtVGsDQZnsTc3v96ciQe9Ek+Sr+gS8AzcsIb
+         /Vf9/2Z7tDZzFA12GarAJ7cN3HH7m+A+ZXwW5hBEVDLb+ZFTs6aFjm8+W2ypw9o8GzQM
+         JWVA==
+X-Gm-Message-State: ACgBeo0ICPVOkd5shmFUptuKBoECMWyYCml9Rhnl8o9m6NPU+pON8TNJ
+        JDkmFf71+WFXCtrQEq4SX3o=
+X-Google-Smtp-Source: AA6agR7c8yiYGI7DfCu1B8qVctmxFMSXhsf+Q5RWzOlwmH2G0Mg5/eO01vwQ5HjoS3ZQmqA1jtGMaw==
+X-Received: by 2002:a05:620a:d8c:b0:6a7:91a4:2669 with SMTP id q12-20020a05620a0d8c00b006a791a42669mr20165762qkl.269.1663006485451;
+        Mon, 12 Sep 2022 11:14:45 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d5-20020a05622a15c500b0035bb6298526sm2342497qty.17.2022.09.12.11.14.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 11:14:10 -0700 (PDT)
-Message-ID: <2f658a69-a49c-67be-26b9-421095cde2b7@linaro.org>
-Date:   Mon, 12 Sep 2022 21:14:09 +0300
+        Mon, 12 Sep 2022 11:14:44 -0700 (PDT)
+Message-ID: <2380c655-a6ba-7cdb-06d1-9c7856ff6cce@gmail.com>
+Date:   Mon, 12 Sep 2022 11:14:42 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in Makefile
- and qcom/Kconfig
-Content-Language: en-GB
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220911184232.3198957-1-bhupesh.sharma@linaro.org>
- <CAA8EJpoM5nW=pVJB4zy4Jh9Q3gE4KOju2QVy_WtmUokKMyXtuw@mail.gmail.com>
- <75a5789e-9100-b398-1df2-50d49823831c@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <75a5789e-9100-b398-1df2-50d49823831c@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] net: broadcom: bcm4908enet: add platform_get_irq_byname
+ error checking
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Yu Zhe <yuzhe@nfschina.com>
+Cc:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com
+References: <20220909062545.16696-1-yuzhe@nfschina.com>
+ <Yx8YDUaxXBEFYyON@kadam>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Yx8YDUaxXBEFYyON@kadam>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 20:11, Bhupesh Sharma wrote:
-> 
-> 
-> On 9/12/22 1:08 AM, Dmitry Baryshkov wrote:
->> On Sun, 11 Sept 2022 at 21:42, Bhupesh Sharma 
->> <bhupesh.sharma@linaro.org> wrote:
->>>
->>> Introduce CONFIG_QCOM_THERMAL to allow better control
->>> over selection of various Qualcomm Thermal drivers
->>> available inside qcom/ directory.
->>>
->>> This is a preparatory change to allow new drivers to
->>> be added inside qcom/ directory in a more structured
->>> fashion.
->>>
->>> Cc: Bjorn Andersson <andersson@kernel.org>
->>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Cc: Amit Kucheria <amitk@kernel.org>
->>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> ---
->>>   drivers/thermal/Makefile     |  2 +-
->>>   drivers/thermal/qcom/Kconfig | 12 ++++++++++++
->>>   2 files changed, 13 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
->>> index def8e1a0399c..a12b647be0d1 100644
->>> --- a/drivers/thermal/Makefile
->>> +++ b/drivers/thermal/Makefile
->>> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)  += da9062-thermal.o
->>>   obj-y                          += intel/
->>>   obj-$(CONFIG_TI_SOC_THERMAL)   += ti-soc-thermal/
->>>   obj-y                          += st/
->>> -obj-$(CONFIG_QCOM_TSENS)       += qcom/
->>> +obj-$(CONFIG_QCOM_THERMAL)     += qcom/
+On 9/12/22 04:29, Dan Carpenter wrote:
+> On Fri, Sep 09, 2022 at 02:25:45PM +0800, Yu Zhe wrote:
+>> The platform_get_irq_byname() function returns negative error codes on error,
+>> check it.
 >>
->> Following other platforms around qcom, I think just `obj-y += qcom/`
->> would work well enough.
-> 
-> I have no strong opinion on using `obj-y += qcom/` here, but I would
-> still like us to define a CONFIG_QCOM_THERMAL like flag in the 
-> qcom/Kconfig, similar to the ST platforms which use similar selection 
-> mechanism via 'CONFIG_ST_THERMAL'.
-
-`QCOM_THERMAL' is fine for me.
-
-> 
-> Thanks.
-> 
->>>   obj-y                          += tegra/
->>>   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
->>>   obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
+>> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+>> ---
+>>   drivers/net/ethernet/broadcom/bcm4908_enet.c | 2 ++
+>>   1 file changed, 2 insertions(+)
 >>
+>> diff --git a/drivers/net/ethernet/broadcom/bcm4908_enet.c b/drivers/net/ethernet/broadcom/bcm4908_enet.c
+>> index c131d8118489..d985056db6c2 100644
+>> --- a/drivers/net/ethernet/broadcom/bcm4908_enet.c
+>> +++ b/drivers/net/ethernet/broadcom/bcm4908_enet.c
+>> @@ -705,6 +705,8 @@ static int bcm4908_enet_probe(struct platform_device *pdev)
+>>   		return netdev->irq;
+>>   
+>>   	enet->irq_tx = platform_get_irq_byname(pdev, "tx");
+>> +	if (enet->irq_tx < 0)
+>> +		return enet->irq_tx;
+>>   
+> 
+> If you read the driver, then you will see that this is deliberate.
+> Search for irq_tx and read the comments.  I'm not a subsystem expert so
+> I don't know if this an ideal way to write the code, but it's done
+> deliberately so please don't change it unless you can test it.
 
+Yup, the transmit interrupt is deemed optional, or at least was up to 
+some point during the driver development. There is however a worthy bug 
+you could fix:
+
+   static int bcm4908_enet_stop(struct net_device *netdev)
+   {
+           struct bcm4908_enet *enet = netdev_priv(netdev);
+           struct bcm4908_enet_dma_ring *tx_ring = &enet->tx_ring;
+           struct bcm4908_enet_dma_ring *rx_ring = &enet->rx_ring;
+
+           netif_stop_queue(netdev);
+           netif_carrier_off(netdev);
+           napi_disable(&rx_ring->napi);
+           napi_disable(&tx_ring->napi);
+
+           bcm4908_enet_dma_rx_ring_disable(enet, &enet->rx_ring);
+           bcm4908_enet_dma_tx_ring_disable(enet, &enet->tx_ring);
+
+           bcm4908_enet_dma_uninit(enet);
+
+           free_irq(enet->irq_tx, enet);
+
+We might attempt to free an invalid interrupt here ^^
+
+           free_irq(enet->netdev->irq, enet);
+
+           return 0;
 -- 
-With best wishes
-Dmitry
-
+Florian
