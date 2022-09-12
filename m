@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAAB5B5B7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770B55B5B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiILNmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 09:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S229960AbiILNqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 09:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiILNmm (ORCPT
+        with ESMTP id S229630AbiILNqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 09:42:42 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E9E30564;
-        Mon, 12 Sep 2022 06:42:41 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 13:42:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1662990159; x=1663249359;
-        bh=4VpvV4OBkDK69iCd91VlPdJGjR5kcBrkOVjMljOVhXE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=WREbsSlNT5mV1GEMq+8anEibl/Y3aoJGcDNiivvU6TJqqr52WhxXILaQG4KCIY1xk
-         oW6vlmDLSVZL2XaCc3qchOxkNQ1CowortXBW4wpDGwUodFGHk2wdOiVmWXsjYRj3LJ
-         8IPPNNCeZFjZE+2nmQO0S6MiQm2fzvZqOIBBxTnI=
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     Dang Huynh <danct12@riseup.net>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH] clk: qcom: sm6115: Select QCOM_GDSC
-Message-ID: <6f2ac542-90dc-ec85-d25d-9ba713de8796@connolly.tech>
-In-Reply-To: <CAA8EJpr4_G_uK5oj9Y0j_tE_LsnqDHKaU1D_nhXOiL0sA=aMnQ@mail.gmail.com>
-References: <20220910170207.1592220-1-danct12@riseup.net> <0a2bb48f-c67d-0544-5037-d02f658a3351@connolly.tech> <CAA8EJpr4_G_uK5oj9Y0j_tE_LsnqDHKaU1D_nhXOiL0sA=aMnQ@mail.gmail.com>
-Feedback-ID: 10753939:user:proton
+        Mon, 12 Sep 2022 09:46:45 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB271FCD8;
+        Mon, 12 Sep 2022 06:46:44 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3454e58fe53so101808167b3.2;
+        Mon, 12 Sep 2022 06:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=rx0FZgTO9IBRagj5Cbyi8/i3+E1D6OoMHMzWe4zqNzk=;
+        b=azbUkrG7cwFkn9DeX7B5eU2E6cvjPeREaFlQ3AMkCzsas9cqfPY2dD8gSX+0lK4GHY
+         kDqnIfB3KCzkuergCYvfNcznscxCLlJyA25Uah4+iXR01P7grHLV6PMTfYkdXt1xR3YR
+         lc2yxAoS6HW4CvhmgZtD4sO9oIvZtFjcWJSM4ZoUz6PpvNFh3SrI+6SX4kF5o1CluuSb
+         mBZx5Lyt2pEbRMSII2JzyKV/7H/n+DTotm++iXGDyqCKY1Qhh2xf6PlWrhXfQEGN0ytx
+         9SIRSeHPYJAWfcMtZSs1voPA+NghqMFwX6LYOPk3RRe4zmtuGp2POVzyWcCZeoGU4A0n
+         P6pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=rx0FZgTO9IBRagj5Cbyi8/i3+E1D6OoMHMzWe4zqNzk=;
+        b=2XsOtkx2PxL784GR1GtNKD1uMya1kWe3zU+0tDV2h8aJ6JCMB/Amf1ulaGZ0E8U6Hc
+         yt7irHtNYZ/UHbPngi3Zy34CymjaSrTXc1cVSVysOmU50DU+Hmr3aaUIh1qOMU2zEq7a
+         PtDAfmvaZMDu2uhP3luzFF7rBNWBLxCxlbnK3Kge23V9JxJ46QyroXwBLiYIT4eRMwcw
+         VL3MUqoXOWdoTCSJFaUXyeX+mlzZlmD1YGdeWA2Os2Mkl1Iy/SHxZ5N3JqwwmUpdPMRX
+         /8r7iKF0LCNLYDDWg84SYqRut4/2y2cLpfVGmMvjPGMgRfdK/5S50k2GhQIcsJRLho5T
+         B6Qg==
+X-Gm-Message-State: ACgBeo1Dr996gtPz1nuLh+fW7rLPrnBADRRBxiJ6Cv5dpS7A6Nw+hYik
+        OhfQFeKg9qsk4DTcWiVCJDOK0u5ted/aHjxQyXAJnHqqLcc=
+X-Google-Smtp-Source: AA6agR7npTsXp5Eh0fjwXRhZVPwc+KWxi6IL4YUNFlFsuoKzYxKVXYjVnaz/m2qfW/MtX7cnzsfFlehsR+kcMKFmHdE=
+X-Received: by 2002:a0d:f2c6:0:b0:329:c117:c990 with SMTP id
+ b189-20020a0df2c6000000b00329c117c990mr22531545ywf.464.1662990403462; Mon, 12
+ Sep 2022 06:46:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 12 Sep 2022 15:46:32 +0200
+Message-ID: <CAKXUXMzQDy-A5n8gvHaT9s21dn_ThuW0frCgm_tXMHPUhLY2zA@mail.gmail.com>
+Subject: State of RFC PATCH Remove CONFIG_DCACHE_WORD_ACCESS
+To:     Joe Perches <joe@perches.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Joe, hi Ben,
+
+While reviewing some kernel config, I came across
+CONFIG_DCACHE_WORD_ACCESS and tried to understand its purpose.
+
+Then, I discovered this RFC patch from 2014 that seems never to have
+been integrated:
+
+https://lore.kernel.org/all/1393964591.20435.58.camel@joe-AO722/
+[RFC] Remove CONFIG_DCACHE_WORD_ACCESS
+
+The discussion seemed to just not continue and the patch was just not
+integrated by anyone.
+
+In the meantime, the use of CONFIG_DCACHE_WORD_ACCESS has spread into
+a few more files, but replacing it with
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS still seems feasible.
+
+Are you aware of reasons that this patch from 2014 should not be integrated?
+
+I would spend some time to move the integration of this patch further
+if you consider that the patch is not completely wrong.
 
 
-On 12/09/2022 14:32, Dmitry Baryshkov wrote:
-> On Mon, 12 Sept 2022 at 16:17, Caleb Connolly <caleb@connolly.tech> wrote=
-:
->>
->>
->>
->> On 10/09/2022 18:02, Dang Huynh wrote:
->>> While working on the Fxtec Pro1X device, this error shows up with
->>> my own minimal configuration:
->>>
->>> gcc-sm6115: probe of 1400000.clock-controller failed with error -38
->>>
->>> The clock driver depends on CONFIG_QCOM_GDSC and after enabling
->>> that, the driver probes successfully.
->>>
->>> Signed-off-by: Dang Huynh <danct12@riseup.net>
->>> ---
->>>    drivers/clk/qcom/Kconfig | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
->>> index 1cf1ef70e347..d566fbdebdf9 100644
->>> --- a/drivers/clk/qcom/Kconfig
->>> +++ b/drivers/clk/qcom/Kconfig
->>> @@ -645,6 +645,7 @@ config SM_DISPCC_6350
->>>
->>>    config SM_GCC_6115
->>>        tristate "SM6115 and SM4250 Global Clock Controller"
->>> +     select QCOM_GDSC
->>
->>          depends on QCOM_GDSC
->
-> All other Qualcomm clock drivers select the GDSC if required, so I'd
-> tend to disagree.
+Best regards,
 
-Ah, in that case please disregard, sorry for the noise.
->
->
-> --
-> With best wishes
-> Dmitry
-
---
-Kind Regards,
-Caleb
-
+Lukas
