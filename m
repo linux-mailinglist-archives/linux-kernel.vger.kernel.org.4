@@ -2,171 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA6B5B6339
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751AE5B633B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiILWAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S230159AbiILWBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiILWAb (ORCPT
+        with ESMTP id S229503AbiILWB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:00:31 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A4474F8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:00:28 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w8so17060830lft.12
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AyY1pS1gIoihV9h/TOHQQzSTghwaQhWl/8N88+vxDvY=;
-        b=WQRN/VO2MUAPdhBeT6WWJnL7tyU8NFnCcS90ahHnIrwcx9G1LuvV+3Y498rgIqbKlY
-         YmqUqekXgv1zkVD6PzVK2c9iLBNhh1Cm9Iw4EW717UaUYJaZdrP/m5Zl3gpuce0Haca+
-         XrHDHoCR/KqzWdeB3iPWpMh6Qx4yZliP1Ma/BiNc+WNhHjnGPFNmcUhIT+HJnX6XYo+i
-         lgq2yF+hxPW+3cFtVjerChY2tSBAe2jv1YiTchv/6CZUDXqH1Hqnlozns1FwdbmDCDxc
-         qfaOFpD6IModzjrzui8NlB/ktycOlhMXYXnc2oosVtkaNboE4yKK85uxa252LlFB8Ghh
-         JL6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AyY1pS1gIoihV9h/TOHQQzSTghwaQhWl/8N88+vxDvY=;
-        b=wgMKBLFERlOGYgnOtTZZ+VVqLHRbqJQP2r91/l5yj7HiO7TTHxqIqj6jLW6ksZV83C
-         z+xW1EqUTZvVnHgqeOx+L3lfu8UKUTXhaKrVmWR7vC6fQulVmMs5RQIZZ61dwwwrFfRi
-         +JqVs4yxj+ISLP25dmlwBcNKpkCsd4ZlbQfG/72sBQYwGVL5ne/PkufVyBDmsSjhg76w
-         LW9+3OYL/CDgtsDMv5iW+LrQRMCgCnn+2+xcQYADN3rFitzNURmxnwH1N1PrXJq37swe
-         7pCx3Fg4vr8QUvAyj/0dFEtbhm+pAv+2wDvp2mNkZvLnA2NX5pCULftlt3xLKkkjlGlO
-         lTMQ==
-X-Gm-Message-State: ACgBeo2U6JlKzJL3DDujgdWLtFoEyYEZWYTRF9KotNgAwWKSR6c7NFak
-        8gRO1hd7kDcOMFFVWGEB2xHbFA==
-X-Google-Smtp-Source: AA6agR7EKL31HEne7c+QEs97qL44is6/wEkfX62OvNB/cmAa5ZN6XISKO26CdeTItkKMytdiDGts0w==
-X-Received: by 2002:a05:6512:3b20:b0:498:d7bc:28af with SMTP id f32-20020a0565123b2000b00498d7bc28afmr7408563lfv.65.1663020026956;
-        Mon, 12 Sep 2022 15:00:26 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id o25-20020ac25e39000000b00492d270db5esm1288184lfg.242.2022.09.12.15.00.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 15:00:26 -0700 (PDT)
-Message-ID: <09c3d23a-a6f1-b5ec-bff9-3636fcdfca50@linaro.org>
-Date:   Tue, 13 Sep 2022 01:00:25 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in Makefile
- and qcom/Kconfig
-Content-Language: en-GB
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bhupesh.linux@gmail.com, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 12 Sep 2022 18:01:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFE7B1F2;
+        Mon, 12 Sep 2022 15:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663020088; x=1694556088;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FOtvVcyfkt6giYZV1HD/o+lioyAGAwFHGdgdKsBX/kM=;
+  b=mrgmeB42CcUesOuh3tBRsI31CNLDtCu60rlRriHZj4arkFXjR++50+1v
+   G8Dis3IdBlyxg+r62vZAnihC/Z9gaRA5sKcMKKKmv3ozACVyk9ruYRho/
+   U5bmTS4vZJVSxJ15etPrxZwN+fvsI9wBaetvFuOiaYE+9fCH6VPJSX/pC
+   dcYs3vZxjtGvcbB6bTA/M9qK4jk7HRheyQNHAUkBbTU3jJe+hE6htU+/v
+   JTsXaMDH122dfyfuLBdRc01fCIoxDxgWbXJ8Gq334RPBMPUpvV+0py2K8
+   B6yVpZRJeJ5daeIAbWXaD/UxsRyox0Vyh8YZJscJw1npDOxVIQksWJ/hp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="296715200"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="296715200"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:01:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="646652166"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2022 15:01:27 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 15:01:27 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 12 Sep 2022 15:01:27 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 12 Sep 2022 15:01:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PHHpgmOjhMcUoR4Cm+Qy5L9MKiEARReE8X0aaGNzcBTDZuD1k//OPKkt+1HWWmElguPGaST3rg7EgJCzAW0/xN8Xkp5sFUg/mdLsa3uf+l7wnhLNBNAbuv8XuXzChx1Wy6BZuXI5OnxXBTrDu8IB56vm6Y1qFY8TqCICzv4nKjKvGS+rTXPGoQ5bV2hJ7ue2i0+gE+qH0payHJIMgIRgeOQ0rlYpgzZUunJkFSSnQGRdPc//fNLCQvowdsNTDXNhEjPxj/0y0IvLWBwlMQaDjFVtYSEBX/8xLjfg27dbCEJGagV2ChCdVvioyOlkvDVINZO+ViecYzDuN6fkXaIMEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=htKeQUp99IwIga5iDLnIkN0lWP4+4smk9KbWRKSgFwM=;
+ b=RyEoFAOTabDSecTV6+ExdIIsfnuIUKrzouWZgXOabSQXqD8CXGkb14YFqt/cIAgKMgiqxENWzJ42g5L3Qsx1yVKISp/FZGMuF5XsiJBzqijEC9ZB0iCjY7Ia4qJdGTzLbw/Znkf8LQXPiEC8kTxe+zKPpZZ2e3D7NxVXYcPVfdTe3wMF6YPIfZN9B7EkJs9xViXHk5k08Jn2YuuS/wLCJZvaqbEVeHfjI70pWzYApFzRl+4CUF0vKEQEuxUZPWWdDb02XzUP4+vlC+ZDpZi1r3zQ/Kcn6JyI9LfXyS2s++To5LS5GoHaSTXQ+TaWqrfZgdFFT7ZLUf2zyoDnaNzRgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
+ by DM4PR11MB5261.namprd11.prod.outlook.com (2603:10b6:5:388::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Mon, 12 Sep
+ 2022 22:01:24 +0000
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::a422:5962:2b89:d7f5]) by SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::a422:5962:2b89:d7f5%7]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 22:01:24 +0000
+Message-ID: <6445a450-d15f-be32-818a-4bb1c11ef429@intel.com>
+Date:   Mon, 12 Sep 2022 15:01:21 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] iavf: Remove useless else if
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        <jesse.brandeburg@intel.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <intel-wired-lan@lists.osuosl.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220909033240.46329-1-jiapeng.chong@linux.alibaba.com>
+From:   Tony Nguyen <anthony.l.nguyen@intel.com>
+In-Reply-To: <20220909033240.46329-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR13CA0021.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::26) To SN6PR11MB3229.namprd11.prod.outlook.com
+ (2603:10b6:805:ba::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|DM4PR11MB5261:EE_
+X-MS-Office365-Filtering-Correlation-Id: b72eeaba-d943-4da3-d903-08da950a557e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pL+rRPMU/RdaH98JnP47ecWPwN5r6OPOQkFgrfaGCHfi86MvCcPLKxpRn2R9G4hxolFrsHWBzPkxRjYx67JguOcu4JOQe4Syl918MtVjJw1NverB0M+hv9vSOyRTWc0oYNanjg3Z98AZnF1FJ3kR5vubkJQ8KflbYACnH0YVfuNUpPMlngQLRs125W/l8pFZ5G6H5qLI86EKR7GJSGxFgLfNvtnlMPZXB2UYW8E8w3Wha+x+zH3DI97iAcxnaU10iMA+kw24Vfi4GqBGhb7LrQ24JVISnZqJ26AjkeSVcHkoI8Cydp85k4w4ddW8zHT6Syso/MZHD9hBB/PnOs3ZtlAFl3gE/QkBM0YF1MaZh0E7/33BfR2NGOIgXFtZxLEJ54QtI24VXUuzMm83iNgqvsA+mityoWYyhXL47o9agBz8sZkd21ldjKri/bJ6gnBL7M83mlJV7n04x6dqM22PTdmPLBF+2OSPlFVPxcxiuvi7JZ/EVs0pmRBCZMwV5WaVg/gUTdLh6TFjdUldEbavi0IApd8sa1wDuwfueNbhl0bFro0G+sbsDXn5hoeAO/K4da5TbeQVVwGw+bWN2cs57k0fxKONmq4M/BaBnRx1t50NXh7hP1EjxDVTeoKaGqvzgRPnTPq43olAvTNeOHo+UwXN/6kds+Xhyg2YVZORuQm6J/k9y41HUgT7eDlbHNb/eUjrOU+nz5DI6LKGhjjwm+eNte2YNZ8ICWlYknAhBFf96XuQ17Xt1WS01Qlq5gI3mViZPtLSGAfhGYgU8Y5rUzcN+ERZbkpGmJt7f/PRDxkg84ENElH4q14imVajvbah
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199015)(4326008)(6486002)(6666004)(2906002)(8936002)(478600001)(2616005)(36756003)(6512007)(31686004)(186003)(26005)(38100700002)(8676002)(83380400001)(82960400001)(5660300002)(4744005)(966005)(31696002)(86362001)(66946007)(66476007)(66556008)(6636002)(316002)(41300700001)(6506007)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXBmOGI5N3ZtTWdhQ20yb0VjZWcwQ1N1VUZxK0hPc09idXNla2dRRkxFd1B2?=
+ =?utf-8?B?MkRKTkJKZ3QxYVVGZy9zWnFDMWlma1N0ZElDTGRmY3NRNE1tMy9zOVhiTFd5?=
+ =?utf-8?B?VWdkZW00bDQ2NTRxbUI2YzFLbEZIM2NNRlByZExvSHZJT3Zpajdqb3VMbnV5?=
+ =?utf-8?B?WHRQdk9ST1N2NEE2Y0ZnanI0eWlhbVlWZGhTKy9FMzRsZEJpU0l5NzNKZ2RC?=
+ =?utf-8?B?MjJrYm9GTFpSUjc3QklPVHJtY0wwa2Era1BSL2JJSG5FV3d6ZUJ5YlpQU1di?=
+ =?utf-8?B?VVBFcVpMSHFjU0dUL24yVzRhOEJIOWx1d2RFSHZDUmpHdEN1TEd6MVNjNTM2?=
+ =?utf-8?B?Y052bVc4RWN4cm05YWVUbnA4VGVWa0piSG8vZG9GdERlVk9KYzZ4dktFNnc1?=
+ =?utf-8?B?Z3BnNmJUK0VteWZuZVFxOEF4cDNsUjhEbWFPWG00MlZvMnZUbWViRjFKaHBa?=
+ =?utf-8?B?cktPek1VZnBqZlEyNFNSWlpNdTl3QTNuRE56b3d2cjF5Wm1BZXhPWnN2clFh?=
+ =?utf-8?B?UExQRkFRZ3EvQU9VOFdXZlM4TENCQlVKUUdScFA1VE1zczd5MlZiM2cwMzlG?=
+ =?utf-8?B?clVydzBna01tRFIwYzlkN084RElPVlNWOHY2OGRwTGZIbEdxY29CMktuSWc0?=
+ =?utf-8?B?UnF2SlA1TlNiM2tId2tmU2xaZnlNcFJkUmNZOHVlb2hpNjZYMU42YVA5N0RU?=
+ =?utf-8?B?Y01JQjZCdzlLY3orT3JQMkxkVTIvRDZ5RTdFK3ZmaXAwSFZhRFpmdGdUeFV2?=
+ =?utf-8?B?M3dWK2ZaeTVzcm8zR1NUd09lalVzZi9Xb3I0QjVkQWUvL2N4SEpEU0Eva1B1?=
+ =?utf-8?B?NE1BOVluMmlRS1JZMnZ0QURDN2VmWVZTdHQwd0p4RU5qajk5WWdTZGJWNnRX?=
+ =?utf-8?B?ZW1FUHY1Y0tRai9JanJqOWI2cFQ0c0liU2JpQ1ZTM1V4RU5Zb0o0VTVhKzJG?=
+ =?utf-8?B?L1g2Q1pZNGphUWZCc3Z6Ylh3N0JvS08rTnZ6U3dQeWhRRjE1eXZOeTU2dysz?=
+ =?utf-8?B?NXJJN2VuQ2RRU0lBaWE1SWd5a3dZQi9iSUJrcFQ1aDRpc1g2akR6WjRNazdy?=
+ =?utf-8?B?UXc4bWdsdWJNZDZVMFoxYlVVL0lYeklhWFZLK1BtcGpybGtWNWg2SW5vV2dS?=
+ =?utf-8?B?VGxkN2EyNzVWUVplS2Y2T0lNRTdpRXZwdWpWMEE0M2JiVmNlMWFmWEhPNFlH?=
+ =?utf-8?B?cGdHMnFJQ3pkU1dhU1ljUHRBMG1PTG4wMmpDTlNlRVFxSDJCaCtIY1JPWHdS?=
+ =?utf-8?B?OVlzMjZEczVmVHlVNDhLRzNBWWVxQlFUbXZOSElKNWEwREpsQVdLK2dpRmFW?=
+ =?utf-8?B?N3pEMHloRVB2bElaUk9QM3BORUlCV3dJRUU4aVV2enZ4KzVjMGY4ZFFBTDZp?=
+ =?utf-8?B?eWZ4OEpHQUFLYjFtbWtvbkZ2TUdrWmZQckptdjRpdE9vdUdJYzhYQ08zbnRq?=
+ =?utf-8?B?SW92d3lHQ25yL1RzUUQ2NllSUXd3bzFocGNhYWpHRzRoeHRTbjlWSVdKTk5a?=
+ =?utf-8?B?aVJUTEFzVVlTSUwybERHTE5xMlI3SGxFdm16UWtjaWVSZ2gxMEhRbzdsZ0hI?=
+ =?utf-8?B?cjB4azhFMDVEREc0STdqdW9xd25VL0FIdXRwRmtOTjMzZTBqUGtEYlJzT3JG?=
+ =?utf-8?B?M1NEbkNtWVp0OU1WTmFDUmNIOGxNdWxoakZndWorZW9TZ1lTejJ4VU5aaDIw?=
+ =?utf-8?B?MzlyNUxaeWZaNTdZWTFiZTFHQ3B3R1ZXc29aYm1oZDFWNnM3RC9mVkhwV2Jk?=
+ =?utf-8?B?YUVibWJieTQvODdDMFBhVWd0SXp1U2FsK0dScTFFUjFncm9vYWE3bFVSUjBD?=
+ =?utf-8?B?OWpHa3JkTzE2bFBoL0lzc1E1Z290VTVhSTVrYmVZejBhZXlDSGFSYVAzRHFh?=
+ =?utf-8?B?ZG5WdzAwMjZla1NhLzZPTDFPQkxvbzV1QnoveU9FeFJxam91WXhjMFZZQzJQ?=
+ =?utf-8?B?Y3RXZzIvZVcvbWhJOVRQNXdQb2VvazZ5WDdjS0ZmZ1IyUTFUK0xoait6aVpO?=
+ =?utf-8?B?azA5UlJuUjhDM2c3UFZFMlZOUks0b3N0eGVHZkQ1VEw3cEI5bm9vUnBRU1VJ?=
+ =?utf-8?B?V3ROQVFHSEJrRjlKZjUvUU1OS2IzVmx0cDVCditFdUtZaTVrQllQZnpZOGxz?=
+ =?utf-8?B?MXRnM2lwWDNzSE0wQU1uQ215TUlsV2syNi9YbUtNNmVFQXhrNjdrd05UNzBI?=
+ =?utf-8?B?cFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b72eeaba-d943-4da3-d903-08da950a557e
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 22:01:24.4653
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: I6HshiyU+Q3GVrCsT31JDeboV6Lf+vkxS1dK1obW/HHaJgJPldGHCHsOC/fe06FgpZQXiV3TN6fJjfKrtAlX2sYWNSABaCe9WevrSCPvgxI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5261
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 22:40, Bhupesh Sharma wrote:
-> Introduce CONFIG_QCOM_THERMAL to allow better control
-> over selection of various Qualcomm Thermal drivers
-> available inside qcom/ directory.
+On 9/8/2022 8:32 PM, Jiapeng Chong wrote:
+> The assignment of the else and else if branches is the same, so the else
+> if here is redundant, so we remove it and add a comment to make the code
+> here readable.
 > 
-> This is a preparatory change to allow new drivers to
-> be added inside qcom/ directory in a more structured
-> fashion later-on.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> - v1 can be viewed here: https://www.spinics.net/lists/kernel/msg4510793.html
-> - Fixed review comments from Dmitry received in v1.
-> 
->   drivers/thermal/Makefile     |  2 +-
->   drivers/thermal/qcom/Kconfig | 12 ++++++++++++
->   2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..2506c6c8ca83 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
->   obj-y				+= intel/
->   obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
->   obj-y				+= st/
-> -obj-$(CONFIG_QCOM_TSENS)	+= qcom/
-> +obj-y				+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
->   obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-> index 2c7f3f9a26eb..ccfd090273c1 100644
-> --- a/drivers/thermal/qcom/Kconfig
-> +++ b/drivers/thermal/qcom/Kconfig
-> @@ -1,8 +1,17 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config QCOM_THERMAL
-> +	tristate "Thermal drivers on Qualcomm Snapdragon series of SoCs"
-> +	help
-> +	  Support for thermal drivers on Qualcomm Snapdragon series of SoCs.
-> +	  There are several thermal sensors available on the Qualcomm Socs
-> +	  which can be used for thermal mitigation purposes.
-> +
->   config QCOM_TSENS
->   	tristate "Qualcomm TSENS Temperature Alarm"
->   	depends on NVMEM_QCOM_QFPROM
->   	depends on ARCH_QCOM || COMPILE_TEST
-> +	select QCOM_THERMAL
+> ./drivers/net/ethernet/intel/iavf/iavf_main.c:2211:6-8: WARNING: possible condition with no effect (if == else).
 
-What's the point of QCOM_THERMAL if other drivers are `select'ing it? 
-I'd have understood if it would be a menuconfig guarding all Qualcomm 
-thermal drivers.
+This was already nacked by Jakub [1].
 
->   	help
->   	  This enables the thermal sysfs driver for the TSENS device. It shows
->   	  up in Sysfs as a thermal zone with multiple trip points. Disabling the
-> @@ -15,6 +24,7 @@ config QCOM_SPMI_ADC_TM5
->   	depends on OF && SPMI && IIO
->   	select REGMAP_SPMI
->   	select QCOM_VADC_COMMON
-> +	select QCOM_THERMAL
->   	help
->   	  This enables the thermal driver for the ADC thermal monitoring
->   	  device. It shows up as a thermal zone with multiple trip points.
-> @@ -25,6 +35,7 @@ config QCOM_SPMI_TEMP_ALARM
->   	tristate "Qualcomm SPMI PMIC Temperature Alarm"
->   	depends on OF && SPMI && IIO
->   	select REGMAP_SPMI
-> +	select QCOM_THERMAL
->   	help
->   	  This enables a thermal sysfs driver for Qualcomm plug-and-play (QPNP)
->   	  PMIC devices. It shows up in sysfs as a thermal sensor with multiple
-> @@ -35,6 +46,7 @@ config QCOM_SPMI_TEMP_ALARM
->   config QCOM_LMH
->   	tristate "Qualcomm Limits Management Hardware"
->   	depends on ARCH_QCOM && QCOM_SCM
-> +	select QCOM_THERMAL
->   	help
->   	  This enables initialization of Qualcomm limits management
->   	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
+Thanks,
+Tony
 
--- 
-With best wishes
-Dmitry
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2106
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
+[1] https://lore.kernel.org/netdev/20220801091355.6ca23bcf@kernel.org/
