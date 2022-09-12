@@ -2,111 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381355B5FED
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3025C5B5FF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiILSKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S229738AbiILSKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiILSJk (ORCPT
+        with ESMTP id S230075AbiILSKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:09:40 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456ED52
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:09:30 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d12so9335079plr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:09:30 -0700 (PDT)
+        Mon, 12 Sep 2022 14:10:06 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19F525C46
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:10:03 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bt10so16234617lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=krOgoVxwfTTiN1DsCbbELdSz8T1/ug820utrPBGbV+I=;
-        b=bbbi3kXh+LuJ615H9/uybCphjVG9PAN1wwm41NzOSOv+PgbEvdPHXSa/FUVuNSX9rF
-         cB35qq0zyXJFhMRWzip77xbxMugOe/lnqgHG02o/U6PABq7jAyVJo8WkRqikgUWx82gh
-         dhVsA+MMAdP09T3YjlDMYRAX0+zXzJxFXC8SHN333GxgUBHMYHd8srOQMgcxkNZJ71yK
-         +V8aM7TWpFRJyvy10jiXA+/A+60P1VY43ycrGU0XA7FXO3AwTGT3D5d6h2XOCj0Nlmlz
-         i6LFPmnRpVRHzrV/hIcNEO22P7kfgXapvN5dcK3PfRFuBYu1kFtrpqBVfUUvYBhcd9xW
-         lYMw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=pNFaQgI/Wpk+RRqWm6LUGSleWuKJ6k1nYQ3l4ywMTD4=;
+        b=bORY4LjZaSaDGxQoTcPmNSrz0G5bhG/Pe216SBbJdiI7Nc/07Ly/IUmtQBt7D7rBkK
+         YqzT8lVcPnV15b03E6XKDAL8zJ4yHl5KvDaeswnqbiwK7qxNafhL2gRDzSMfIJEJ4EAp
+         8E2gZpA8z467e5PI7zL8dRltZ2NjO7veaLISkIn569GetV3E4990u+4ftaYmR3mBZBk/
+         CdzVeOIYmEtm2J8Go24MOL1BqF8/Z0juvLP8jmfJ8tBzEt5izeORdmqI6c+Eruz3ZNUJ
+         eNSOEZ/Jjl4z/ytolF4M1rj7oh62Ey/ToeZhYwTd4E9ipiFYxvTD9V4Ye5Sjzme2EFyr
+         1bDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=krOgoVxwfTTiN1DsCbbELdSz8T1/ug820utrPBGbV+I=;
-        b=O6SStfgpAcQ2psoCmU6vyXdltjmvPQfXZ4w0QH/xJ/WxI6dxyvIr/HxdFtbYUktLBu
-         MjoDQYi4HShFIaBAaP6J4+P079VsDn7w8UdjMS6HIDb/4KT/lTznU9HEN8FHe7kltdSc
-         Kpkvc4lqy1WLgH8HtfGZpiB2V+uJKlKnKJM3OuGKR2GaHRKoxG3+Xpk/WyKEHPbNbWlB
-         IhGYaddRv6Oxj5r8Kc0PaY4gPVDB3aUftELT1JQCDV8GPDCCco3dpwOm768iD08DaW5e
-         tDULiZjHg3d4ttuP04tR6a3YBg49Sv627y22TXekYaETWS3piS3DNeBTzyN8dujlb8Cu
-         uJPQ==
-X-Gm-Message-State: ACgBeo3eMwJ3Qo0/y436BDKvkEhFeWttG3dy0GPtf5krxoQ6oFOZT9ny
-        VXxUrGUAAix6KMswPMNXsO40ZWMOQFz0Nx5yvuo=
-X-Google-Smtp-Source: AA6agR4X+Fq14UwFKI68855EfSw8R3jyZUluAJHbDZ9hWSkXwABmcDTlgOOQ8IOazviEmBzF0o8L3K5Y3Kb2rhBqyxM=
-X-Received: by 2002:a17:90b:1c81:b0:1fb:887c:f82e with SMTP id
- oo1-20020a17090b1c8100b001fb887cf82emr25159974pjb.92.1663006169735; Mon, 12
- Sep 2022 11:09:29 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=pNFaQgI/Wpk+RRqWm6LUGSleWuKJ6k1nYQ3l4ywMTD4=;
+        b=m1eelFRocCfO5BdOgLrGHNcSuWRLwngb+kh9n0NgDH3xQN98qde7Cd/sGjHVIF/agp
+         56Z9f2Aa1xrXRLRiZHaisENoFtBjdnvhK9UOYQEFyWATVza1au9g52jAkWxWPkblKC9c
+         8SLN8LsTIJBWd03Z5Hfg1h7VmkWDJPkXHLu1hkMhqfA3cVvRnpWkhNCW/nRRzGFS3Bdp
+         UcUjwfzWSv129gXf8rGgmyDXHCe48YYtJddwwQ19r0+tGktzqDGC4WXbgdotmV9t8Fea
+         0yZGDZhhwuLJYUGO21WKjsQHJlR49q8LC3VimqaVFiRssMQIyP0KHSB6ErXt1835IDfd
+         UKIQ==
+X-Gm-Message-State: ACgBeo0p3CBmVIpHv0pZ4eMFJiPvn7vcx6wGhmzbOx9iRTIw3tZfQEcP
+        JHjgZlMlgv00wi6Ted9nXPhhLg==
+X-Google-Smtp-Source: AA6agR5nn0P4MDu8RVZ2eI1kzc3OQfQYodK0aWq3EVa9jnyZHQgpamGf0QZN86jHooMmqzYjjNgLrw==
+X-Received: by 2002:ac2:5462:0:b0:49b:8aee:3535 with SMTP id e2-20020ac25462000000b0049b8aee3535mr542834lfn.410.1663006202087;
+        Mon, 12 Sep 2022 11:10:02 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c4-20020a05651221a400b00496693860dcsm1196546lft.232.2022.09.12.11.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 11:10:01 -0700 (PDT)
+Message-ID: <e60f0053-3801-bf33-5841-69f16215fa00@linaro.org>
+Date:   Mon, 12 Sep 2022 21:10:00 +0300
 MIME-Version: 1.0
-References: <20220901141307.2361752-1-georgepee@gmail.com> <f765da5c-d484-adf2-e1bb-77011780dc0b@arm.com>
- <CAKj0CMv1EY5YCeQ4G6PnGP=XfELJkkN5BaN8W1TGe0fOTXfJBw@mail.gmail.com>
- <YxtIiBvAGs2vAl1P@arm.com> <CAKj0CMtkY_BSkAY3Lo5QbMDM1g0Wa9F8MsVuW0fyJiuPe3z4aA@mail.gmail.com>
- <YxtWUasndYl8syE1@arm.com> <Yx8upeabh9p6gGtY@shell.armlinux.org.uk>
-In-Reply-To: <Yx8upeabh9p6gGtY@shell.armlinux.org.uk>
-From:   George Pee <georgepee@gmail.com>
-Date:   Mon, 12 Sep 2022 13:09:17 -0500
-Message-ID: <CAKj0CMtemaGcTPDjdo_18H=_VSQE-udqazdSRsEGX2x8r+We+Q@mail.gmail.com>
-Subject: Re: [PATCH] Report support for optional ARMv8.2 half-precision
- floating point extension
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
-        Austin Kim <austindh.kim@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 4/7] drm/msm/dp: fix aux-bus EP lifetime
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220912154046.12900-1-johan+linaro@kernel.org>
+ <20220912154046.12900-5-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220912154046.12900-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 8:05 AM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Fri, Sep 09, 2022 at 04:05:53PM +0100, Catalin Marinas wrote:
-> > On Fri, Sep 09, 2022 at 09:57:39AM -0500, George Pee wrote:
-> > > The details are here.  I originally thought it was a compiler bug
-> > > because it first showed up after a toolchain update.
-> > >
-> > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106763
-> > >
-> > > Since FP16 is an optional extension, wouldn't it be beneficial to a
-> > > user who compiled some userspace float16 code using gcc
-> > > -mcpu=cortex-a55 which ran on a cortex-a55 with FP16 extensions but
-> > > SIGILL'd on a cortex-a55 w/o FP16?
-> >
-> > (please don't top-post)
-> >
-> > My point is that if the kernel doesn't have full support for FP16, it
-> > shouldn't advertise it to user even if the hardware supports it. If you
-> > fix the kernel to properly handle FP16 on supporting hardware, then the
-> > HWCAP part is fine by me.
->
-> Presumably, the only CPUs that are going to support FP16 will have
-> non-trapping floating point, so the support code shouldn't be entered
-> at any time to emulate a half-precision instruction, but only to
-> handle the lazy restore of the thread's floating point registers?
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+On 12/09/2022 18:40, Johan Hovold wrote:
+> Device-managed resources allocated post component bind must be tied to
+> the lifetime of the aggregate DRM device or they will not necessarily be
+> released when binding of the aggregate device is deferred.
+> 
+> This can lead resource leaks or failure to bind the aggregate device
+> when binding is later retried and a second attempt to allocate the
+> resources is made.
+> 
+> For the DP aux-bus, an attempt to populate the bus a second time will
+> simply fail ("DP AUX EP device already populated").
+> 
+> Fix this by amending the DP aux interface and tying the lifetime of the
+> EP device to the DRM device rather than DP controller platform device.
 
-I didn't see this until after I submitted v2 of the patch.  Let me
-take a look at the fp emulation code path.
-I had assumed that CP9 handling would work just like CP10/CP11 does in
-entry-armv.S and wouldn't need any special handling.
+Doug, could you please take a look?
+
+For me this is another reminder/pressure point that we should populate 
+the AUX BUS from the probe(), before binding the components together.
+
+> 
+> Fixes: c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
+> Cc: stable@vger.kernel.org      # 5.19
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/gpu/drm/bridge/parade-ps8640.c   | 2 +-
+>   drivers/gpu/drm/display/drm_dp_aux_bus.c | 5 +++--
+>   drivers/gpu/drm/msm/dp/dp_display.c      | 3 ++-
+>   include/drm/display/drm_dp_aux_bus.h     | 6 +++---
+>   4 files changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+> index d7483c13c569..6127979370cb 100644
+> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> @@ -719,7 +719,7 @@ static int ps8640_probe(struct i2c_client *client)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = devm_of_dp_aux_populate_bus(&ps_bridge->aux, ps8640_bridge_link_panel);
+> +	ret = devm_of_dp_aux_populate_bus(dev, &ps_bridge->aux, ps8640_bridge_link_panel);
+>   
+>   	/*
+>   	 * If devm_of_dp_aux_populate_bus() returns -ENODEV then it's up to
+> diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> index f5741b45ca07..2706f2cf82f7 100644
+> --- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> +++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+> @@ -322,6 +322,7 @@ static void of_dp_aux_depopulate_bus_void(void *data)
+>   
+>   /**
+>    * devm_of_dp_aux_populate_bus() - devm wrapper for of_dp_aux_populate_bus()
+> + * @dev: Device to tie the lifetime of the EP devices to
+>    * @aux: The AUX channel whose device we want to populate
+>    * @done_probing: Callback functions to call after EP device finishes probing.
+>    *                Will not be called if there are no EP devices and this
+> @@ -333,7 +334,7 @@ static void of_dp_aux_depopulate_bus_void(void *data)
+>    *         no children. The done_probing() function won't be called in that
+>    *         case.
+>    */
+> -int devm_of_dp_aux_populate_bus(struct drm_dp_aux *aux,
+> +int devm_of_dp_aux_populate_bus(struct device *dev, struct drm_dp_aux *aux,
+>   				int (*done_probing)(struct drm_dp_aux *aux))
+>   {
+>   	int ret;
+> @@ -342,7 +343,7 @@ int devm_of_dp_aux_populate_bus(struct drm_dp_aux *aux,
+>   	if (ret)
+>   		return ret;
+>   
+> -	return devm_add_action_or_reset(aux->dev,
+> +	return devm_add_action_or_reset(dev,
+>   					of_dp_aux_depopulate_bus_void, aux);
+>   }
+>   EXPORT_SYMBOL_GPL(devm_of_dp_aux_populate_bus);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index ba557328710a..e1aa6355bbf6 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1559,7 +1559,8 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
+>   		 * panel driver is probed asynchronously but is the best we
+>   		 * can do without a bigger driver reorganization.
+>   		 */
+> -		rc = devm_of_dp_aux_populate_ep_devices(dp_priv->aux);
+> +		rc = devm_of_dp_aux_populate_ep_devices(dp->drm_dev->dev,
+> +							dp_priv->aux);
+>   		of_node_put(aux_bus);
+>   		if (rc)
+>   			goto error;
+> diff --git a/include/drm/display/drm_dp_aux_bus.h b/include/drm/display/drm_dp_aux_bus.h
+> index 8a0a486383c5..a4063aa7fc40 100644
+> --- a/include/drm/display/drm_dp_aux_bus.h
+> +++ b/include/drm/display/drm_dp_aux_bus.h
+> @@ -47,7 +47,7 @@ static inline struct dp_aux_ep_driver *to_dp_aux_ep_drv(struct device_driver *dr
+>   int of_dp_aux_populate_bus(struct drm_dp_aux *aux,
+>   			   int (*done_probing)(struct drm_dp_aux *aux));
+>   void of_dp_aux_depopulate_bus(struct drm_dp_aux *aux);
+> -int devm_of_dp_aux_populate_bus(struct drm_dp_aux *aux,
+> +int devm_of_dp_aux_populate_bus(struct device *dev, struct drm_dp_aux *aux,
+>   				int (*done_probing)(struct drm_dp_aux *aux));
+>   
+>   /* Deprecated versions of the above functions. To be removed when no callers. */
+> @@ -61,11 +61,11 @@ static inline int of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
+>   	return (ret != -ENODEV) ? ret : 0;
+>   }
+>   
+> -static inline int devm_of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
+> +static inline int devm_of_dp_aux_populate_ep_devices(struct device *dev, struct drm_dp_aux *aux)
+>   {
+>   	int ret;
+>   
+> -	ret = devm_of_dp_aux_populate_bus(aux, NULL);
+> +	ret = devm_of_dp_aux_populate_bus(dev, aux, NULL);
+>   
+>   	/* New API returns -ENODEV for no child case; adapt to old assumption */
+>   	return (ret != -ENODEV) ? ret : 0;
+
+-- 
+With best wishes
+Dmitry
+
