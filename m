@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDF25B6138
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697155B613F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiILSlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S230192AbiILSoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiILSls (ORCPT
+        with ESMTP id S229715AbiILSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:41:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FE0EE3C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:41:46 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id wc11so7742223ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:41:46 -0700 (PDT)
+        Mon, 12 Sep 2022 14:44:51 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1780112A84;
+        Mon, 12 Sep 2022 11:44:51 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id x1so9431677plv.5;
+        Mon, 12 Sep 2022 11:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=MQD/YZKKsSAPByH7OP1dF0G+HDMpJwM4coeTZ3+yRho=;
-        b=M1wTVRT5z2jhy1GkmMcs4SZSrW2CrhbUdl6/1dNTrQBLiIm/YdQaWXHcDGt9ofX6He
-         I49SJfNf4Op9o+7kKDPgM3tf8+tPhsffZYE7qPthXT4oEn/RFQFrbInl7azTzQLP+WBg
-         ilgiJpAXmGfZ5rM71YIflcJZgAPKUPbnfG13EU+raO74AqfC8tFzRcludXAjXEY4MMJ0
-         zdpqOhEGS98cmcCDeAAtU5EghQiDhTlnJCCBQBK+6dDq+X9cANDHpn3lksZO1J/ZHLPU
-         pn2/li0TbG8zidU32YxgE0+c+rFwnBC2UmQaONs2xKdyLLKJurLzb4hygrJDsmESuyHp
-         yerw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=x3dhgBdfZpa2wxUdiBs2W11ZyoCSSU9/WrWzizXcRIs=;
+        b=EwswG/jwo90VzzM/Zj4fKy/aMwfPc470pwVa0b2up97FtV6VzgaKXs9ktEnKxp4zhe
+         1keqGVQeJSXpCk2Nk5d2CEaRAU+lBDBvLN+0GDJI5IjBUqv+WLpBfAK111fcCpdBCuhM
+         6iGlcWenbBsdIbEu1NnUwdHxoUJt5sqJ4pOt+mM/VBKyEdpyA7MxX3P7VxeM7kq6vgAr
+         QuU0cAy0Pe7srYx6QAcog7RyebNFXHXLwMuJHXzBaZKfUltnnSVCvPgkUQk4ebZMj+Dz
+         nngXu4juLdeDzIomVE9Q2k9jyJBhIwnswp0zoNGLbu2A9d2LpVqK6PkCdgKBrf/wzuMN
+         +mqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=MQD/YZKKsSAPByH7OP1dF0G+HDMpJwM4coeTZ3+yRho=;
-        b=GuNTBQHmanrTtibXI85MXnVM0ikd7fyn7+xwh9zF1Nnvh6mLddxTWaKApeCKW5z4xm
-         2gz+b+wKJCx/tZtBPBWvBTbUOAKt3bLELU9x3qKSFFWYAuLHlB+6HMfQLt89TgZZ3fel
-         nOD2rdHOGOFsjflkXzv0gfe66lR3AFvUvZdYYui5AeiCDUVBuKP8WP0U4QwcYCH/MMZe
-         GOaOpzYvN5nU/1zeCoZLCkRv4/lRZBG3xNXtx8FJ7Ax2OvaLjzXkwrfn9u5rWPGwvg0H
-         xJeJGunP4JlwP8dsKXrDhSBoISsef30XG7eyDgPSuHUuaR/EaxtoEsYjk1/W+a9y2kM2
-         83DA==
-X-Gm-Message-State: ACgBeo3KW0cYp7bYwm43GkJ+Ulea+8MyFsu0fFdzHYQGXGGaCvXrhoEF
-        1pBaStwDNtVs+7EuESupSeA=
-X-Google-Smtp-Source: AA6agR6/EfLbd8HHkWtIOfJkgvXO/wNUcXLd8RXEpZvx5Wd6cNhgLW3awLT4MAkZ290gQnCWUw79/w==
-X-Received: by 2002:a17:907:2d2a:b0:77e:def7:65e9 with SMTP id gs42-20020a1709072d2a00b0077edef765e9mr2618918ejc.85.1663008104955;
-        Mon, 12 Sep 2022 11:41:44 -0700 (PDT)
-Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id fw18-20020a170907501200b0073dbaeb50f6sm4797433ejc.169.2022.09.12.11.41.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 11:41:44 -0700 (PDT)
-Message-ID: <872cb7eb-b0b8-2d0e-7fd1-5ac47af6bd55@gmail.com>
-Date:   Mon, 12 Sep 2022 20:41:41 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=x3dhgBdfZpa2wxUdiBs2W11ZyoCSSU9/WrWzizXcRIs=;
+        b=QPCoUKyAbscl1x9Jtu4tkO3upyAQry7xpxm3k1wIYbfJuQFMnh+dgg7gA2l22yVKpU
+         G2+E+lTu3nJ8Pml1BMAHLUv9RmvYcvmwA+LrguLwMV4jck5A5Kwl+UpbisR7xPzIY0Nk
+         4CEtT10KZEfDZZR7n8/fHvde48vm+C+Q/LmmC4JG4xAItoX6uppPH4bfeHQfsxq9gV2X
+         DRk8TqBc/gTMFBF/6OxK8VNTrMV6hbQ2Egd/luI7Hp1gAeXXxsIHXRm7lxekJS3aTwQo
+         eoIEEa+Xr6OBmItbEAgu5wceVqZ3XnGahAfMuKE9cJeakdh0JF7+HsdCEDtQ8HnnaND9
+         8i/g==
+X-Gm-Message-State: ACgBeo2W8s+E6mcWCEGoJSnytKegmO5j/DTjngCYJFeHQaUyYSoDcJEP
+        tYS7wMvMTSO8XQqFPfErJCaF2aiFQKM=
+X-Google-Smtp-Source: AA6agR7uMnULlpQjrxcYEgxdal/7yOuvPQt1Nk2OnGP4oQBPf9kbRFZabxrbnpFKJX2kYA7DqqhguQ==
+X-Received: by 2002:a17:90b:390a:b0:202:c913:2216 with SMTP id ob10-20020a17090b390a00b00202c9132216mr7720633pjb.5.1663008290301;
+        Mon, 12 Sep 2022 11:44:50 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 38-20020a631666000000b0041d95d805d6sm5962077pgw.57.2022.09.12.11.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 11:44:49 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Sep 2022 08:44:48 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the cgroup tree
+Message-ID: <Yx9+IIQqizUB/DJu@slm.duckdns.org>
+References: <20220912161812.072aaa3b@canb.auug.org.au>
+ <Yx7iEv/wy5Olgu0M@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5] staging: r8188eu: add kfree() on an error path of
- rtw_xmit_resource_alloc()
-Content-Language: en-US
-To:     xkernel.wang@foxmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <tencent_3B46EE3287288555389AD2EC3F388827B306@qq.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <tencent_3B46EE3287288555389AD2EC3F388827B306@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yx7iEv/wy5Olgu0M@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 04:50, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Mon, Sep 12, 2022 at 09:38:58AM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 12, 2022 at 04:18:12PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the cgroup tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
 > 
-> In rtw_xmit_resource_alloc(), if usb_alloc_urb() fails, then the memory
-> `pxmitbuf->pallocated_buf` which is allocated by kzalloc() is not properly
-> released before returning.
-> So this patch adds kfree() on the above error path to release it in time.
-> 
-> Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
-> ChangeLog:
-> v1->v2 update the description.
-> v2->v3 rebase.
-> v3->v4 update the description.
-> v4->v5 rebase and update the corresponding subject and description.
-> Note that the original function name was changed, so the subject of this
-> patch is updated from "[PATCH v4] staging: r8188eu: fix potential memory
-> leak in rtw_os_xmit_resource_alloc()" to "[PATCH v5] staging: r8188eu: add
-> kfree() on an error path of rtw_xmit_resource_alloc()".
-> In addition, thanks to Philipp Hortmann for his testing and advice.
->   drivers/staging/r8188eu/core/rtw_xmit.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 67f9c05..9c39d08 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -44,8 +44,10 @@ static int rtw_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *px
->   	pxmitbuf->dma_transfer_addr = 0;
->   
->   	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!pxmitbuf->pxmit_urb)
-> +	if (!pxmitbuf->pxmit_urb) {
-> +		kfree(pxmitbuf->pallocated_buf);
->   		return _FAIL;
-> +	}
->   
->   	return _SUCCESS;
->   }
+> Hmm,. TJ should I base sched/psi on top of drivers-core-next and your
+> cgroup tree?
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Yeah, this is kinda nasty. Lemme just pull drivers-core-next into
+cgorup/for-6.1 so that folks don't have to worry about this and you can just
+pull that one.
+
+Thanks.
+
+-- 
+tejun
