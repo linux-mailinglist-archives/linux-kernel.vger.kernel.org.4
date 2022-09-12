@@ -2,186 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC8B5B59CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673BA5B5991
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiILMAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S229978AbiILLqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiILMAb (ORCPT
+        with ESMTP id S229597AbiILLqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:00:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ACA3054C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662984024; x=1694520024;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=o6Bq1Z3Sr0g8BtqtCAOe8U9O5accgN6ulqcimCetaDA=;
-  b=a4Q4ZPdOmsu1vB+Tj54bd3XmDT7NFwfBkvtPZoxAgtJ3iC98BR+3ZJzq
-   zXLooKyHoa1rxLSZsf67tH/9xFlpOknFKIh+SjXwzUO6deCY06vhDsoaf
-   53CDuHIVTymsycmMi/vcGTpGmgCse/duAZqcA72fj+Ais18tUHYUWnZ2Q
-   O7c4J3pTOONZXbpb/SHNwNuxMK9oOgkatX5IrvpvBmB7YjQqwZmRc1ogT
-   lDPsQgVqOGw52O7PTccqAmO0+JuZVSOyDg9ikTi7+TjDfI/F6GDNWg3Za
-   8A45RhR/NGpgWsFubE8De+TNGJgrHmpFxjuMqqJC5bgTA29BarWbGEp7A
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="284867038"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="284867038"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 05:00:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="705126634"
-Received: from vtsymbal-mobl.ger.corp.intel.com (HELO [10.252.32.67]) ([10.252.32.67])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 05:00:19 -0700
-Message-ID: <fa14881d-0eb8-f652-aea7-00d8c3f2a6bb@linux.intel.com>
-Date:   Mon, 12 Sep 2022 13:43:11 +0200
+        Mon, 12 Sep 2022 07:46:02 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94F13C17F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:46:01 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id wc11so4963284ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=dU6qTsmX+AR4sN4oTS+ciGVK85MYdIPdrKWG8ScWOgNhX7cCJ1mgYJErWyquyiWpR8
+         ZKKXhlelu5FWOHV4vLu1oUfC5+RQIt9Ek3b1XvEU2+pbFQS3DjW/sRiQ9mpmtYKFpISA
+         G7UoxEOCCHg4KJd2JKkNxXrmyhBpYN9IeX9zEGX+KAwnwG3rBFC7NbXuTA+I1IuDUlSI
+         PES1FOqjb1RRn8F8dtr/015vox2A4xpyxn7gc7vE/5NKqBqkl+LMINRYjncSuj+fqY18
+         7M4szXd5CGWL60jmccOgh2ugbDNV3xsSe7bSJjCGmWPXFnj1IGzRCjKMnDXz8tbBvJg3
+         R06Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=PPYxO7MmtcpIqP6lB+a2OxZmVbhfHpq07GGR+HqIR1bgiFZYpMrvHnGL3e0j1B7mHC
+         kFgIz7jsdDC3Rq6JAEe/6EMGrC+yecr4DhIXiageI+jGPrmFY9uHX+T0ye0dKKSX2+VI
+         GTg4oopIWDTQvo+0RdG6lswF8vfJOtL1AAON0MEU0zEBh/NTSHLaH8BEdofI0kVHTl5O
+         rV3HReO9lZhHAld+f6/zVfXc7g/esViFyKzNW9JqyNBbSHsH66ALAlxqTYECaSD7YHg6
+         TvtdJsJ2SH/8KOtUzi0fEdlF4QP+YPcaByGhK4MwAMhR2eB/LIKlY1cpC77PKiYjIPUp
+         hx5w==
+X-Gm-Message-State: ACgBeo1vqt7xkNd6GoOhSQ3c2ms9nvvU2NZgz9zqt4oBKHNqPwrnCgjt
+        S6uVSSk1m9v6PL7kSJVTxoJruL+CL6urFTvJimZr4Q==
+X-Google-Smtp-Source: AA6agR4itWEF5fG4C5Mcg4cNALXMb1B1eC0ZYWG9pXsheQJmPgQNvBk382aGfE0updA8rpqzChb4xjGhpIx3cChP2Gs=
+X-Received: by 2002:a17:907:94d0:b0:77e:c2e5:a35e with SMTP id
+ dn16-20020a17090794d000b0077ec2e5a35emr1638818ejc.648.1662983160325; Mon, 12
+ Sep 2022 04:46:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 5/5] soundwire: bus: Don't exit early if no device IDs
- were programmed
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220907085259.3602-1-rf@opensource.cirrus.com>
- <20220907085259.3602-6-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220907085259.3602-6-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220910224816.15058-1-someguy@effective-light.com> <eb8173f6-74cb-3010-f1c2-5eac6939e1f7@collabora.com>
+In-Reply-To: <eb8173f6-74cb-3010-f1c2-5eac6939e1f7@collabora.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 12 Sep 2022 13:45:49 +0200
+Message-ID: <CAG3jFyt-6-i1aYJ4ntTNqd__EnYejvMnfi_NEgXHOd+U9xtYJQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: it6505: use drm_debug_enabled() in it6505_debug_print()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Hamza Mahfooz <someguy@effective-light.com>,
+        linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/7/22 10:52, Richard Fitzgerald wrote:
-> Only exit sdw_handle_slave_status() right after calling
-> sdw_program_device_num() if it actually programmed an ID into at
-> least one device.
-> 
-> sdw_handle_slave_status() should protect itself against phantom
-> device #0 ATTACHED indications. In that case there is no actual
-> device still on #0. The early exit relies on there being a status
-> change to ATTACHED on the reprogrammed device to trigger another
-> call to sdw_handle_slave_status() which will then handle the status
-> of all peripherals. If no device was actually programmed with an
-> ID there won't be a new ATTACHED indication. This can lead to the
-> status of other peripherals not being handled.
-> 
-> The status passed to sdw_handle_slave_status() is obviously always
-> from a point of time in the past, and may indicate accumulated
-> unhandled events (depending how the bus manager operates). It's
-> possible that a device ID is reprogrammed but the last PING status
-> captured state just before that, when it was still reporting on
-> ID #0. Then sdw_handle_slave_status() is called with this PING info,
-> just before a new PING status is available showing it now on its new
-> ID. So sdw_handle_slave_status() will receive a phantom report of a
-> device on #0, but it will not find one.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
->  drivers/soundwire/bus.c | 27 +++++++++++++++------------
->  1 file changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-> index 6e569a875a9b..0bcc2d161eb9 100644
-> --- a/drivers/soundwire/bus.c
-> +++ b/drivers/soundwire/bus.c
-> @@ -736,20 +736,19 @@ static int sdw_program_device_num(struct sdw_bus *bus)
->  	struct sdw_slave_id id;
->  	struct sdw_msg msg;
->  	bool found;
-> -	int count = 0, ret;
-> +	int count = 0, num_programmed = 0, ret;
->  	u64 addr;
->  
->  	/* No Slave, so use raw xfer api */
->  	ret = sdw_fill_msg(&msg, NULL, SDW_SCP_DEVID_0,
->  			   SDW_NUM_DEV_ID_REGISTERS, 0, SDW_MSG_FLAG_READ, buf);
->  	if (ret < 0)
-> -		return ret;
-> +		return 0;
-
-this doesn't seem quite right to me, there are multiple -EINVAL cases
-handled in sdw_fill_msg().
-
-I didn't check if all these error cases are irrelevant in that specific
-enumeration case, if that was the case maybe we need to break that
-function in two helpers so that all the checks can be skipped.
-
->  
->  	do {
->  		ret = sdw_transfer(bus, &msg);
->  		if (ret == -ENODATA) { /* end of device id reads */
->  			dev_dbg(bus->dev, "No more devices to enumerate\n");
-> -			ret = 0;
->  			break;
->  		}
->  		if (ret < 0) {
-> @@ -781,7 +780,7 @@ static int sdw_program_device_num(struct sdw_bus *bus)
->  				 * assigned a device ID.
->  				 */
->  				if (slave->status != SDW_SLAVE_UNATTACHED)
-> -					return 0;
-> +					return num_programmed;
->  
->  				/*
->  				 * Assign a new dev_num to this Slave and
-> @@ -794,9 +793,11 @@ static int sdw_program_device_num(struct sdw_bus *bus)
->  					dev_err(bus->dev,
->  						"Assign dev_num failed:%d\n",
->  						ret);
-> -					return ret;
-> +					return num_programmed;
->  				}
->  
-> +				++num_programmed;
-> +
->  				break;
->  			}
->  		}
-> @@ -825,7 +826,7 @@ static int sdw_program_device_num(struct sdw_bus *bus)
->  
->  	} while (ret == 0 && count < (SDW_MAX_DEVICES * 2));
->  
-> -	return ret;
-> +	return num_programmed;
->  }
->  
->  static void sdw_modify_slave_status(struct sdw_slave *slave,
-> @@ -1787,14 +1788,16 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
->  
->  	if (status[0] == SDW_SLAVE_ATTACHED) {
->  		dev_dbg(bus->dev, "Slave attached, programming device number\n");
-> -		ret = sdw_program_device_num(bus);
-> -		if (ret < 0)
-> -			dev_err(bus->dev, "Slave attach failed: %d\n", ret);
-> +
->  		/*
-> -		 * programming a device number will have side effects,
-> -		 * so we deal with other devices at a later time
-> +		 * Programming a device number will have side effects,
-> +		 * so we deal with other devices at a later time.
-> +		 * But only if any devices were reprogrammed, because
-> +		 * this relies on its PING state changing to ATTACHED,
-> +		 * triggering a status change.
->  		 */
-> -		return ret;
-> +		if (sdw_program_device_num(bus))
-> +			return 0;
->  	}
->  
->  	/* Continue to check other slave statuses */
+Applied to drm-misc-next.
