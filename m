@@ -2,95 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36CA5B5EEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121FB5B5EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiILRKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S229960AbiILRMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiILRKQ (ORCPT
+        with ESMTP id S229808AbiILRMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:10:16 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761BD1261D;
-        Mon, 12 Sep 2022 10:10:14 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-12b542cb1d3so15335482fac.13;
-        Mon, 12 Sep 2022 10:10:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H+eC+D1EpLweVFQ6KYEwzGMz7cCBHgt9KoW63rykd5M=;
-        b=nchISQvkfkDMcCgkNpYWuPbtZamJ0UKnrBKWlZttKEqZXrh9hYAbgxeHZUoEi1iVzX
-         3Fnku2eiYI1zuQAh4v6odex7nBDO+9RsVkovYMbp4fSSj/6JBal9tRLbQADLVgDn2HvA
-         ZKbnwXIP7Wg9gtsvNldorBu3c+Pi5ad1RzVGrozXfXPahzOL6tFV75JDVUUgKE4nzBHM
-         F9T5OtD35/C8cxhJXVa2XI5/4y8qKJKv+K1pK9jQcev/unWCO4Oijv2+47ch2kDFDRZL
-         eFLY3sVwx7pebXchyCP+9kx6AxdkDYvljQj/nEeB7aHzZNtMDMVfbsowt3aVM8+uyO7d
-         xtKg==
-X-Gm-Message-State: ACgBeo0ymh8cA9LSiohWQdduSD7ejswxCBKdXP6IUeIRrlruYv8HO51o
-        WOB68smrZOecXzIUBQhynQ==
-X-Google-Smtp-Source: AA6agR5OI24ze1C3DwDH1kYGQX5w3a4JtPGUcIzsYckZohS0aoB+WsqIkel2p5j9gBLePwnB/LHh8Q==
-X-Received: by 2002:a05:6808:11c7:b0:347:cab3:9e5d with SMTP id p7-20020a05680811c700b00347cab39e5dmr9355582oiv.217.1663002613773;
-        Mon, 12 Sep 2022 10:10:13 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b40-20020a056870472800b0012696ac05d5sm5862989oaq.19.2022.09.12.10.10.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 10:10:13 -0700 (PDT)
-Received: (nullmailer pid 1481293 invoked by uid 1000);
-        Mon, 12 Sep 2022 17:10:12 -0000
-Date:   Mon, 12 Sep 2022 12:10:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Bharath Kumar <bkumar@qti.qualcomm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Anirudh Raghavendra <araghave@quicinc.com>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Himateja Reddy <hmreddy@quicinc.com>,
-        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 03/10] dt-bindings: misc: fastrpc: Document
- memory-region property
-Message-ID: <20220912171012.GA1481161-robh@kernel.org>
-References: <20220909133938.3518520-1-abel.vesa@linaro.org>
- <20220909133938.3518520-4-abel.vesa@linaro.org>
+        Mon, 12 Sep 2022 13:12:01 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2CA23BEF;
+        Mon, 12 Sep 2022 10:12:00 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CFjec8000958;
+        Mon, 12 Sep 2022 17:11:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Iv8qKl8exsTNqQvL9xoqmkA3Pw1r+M09k9/6mUv3Flk=;
+ b=Z1RcikfMAhx0BTEaqwk8qeyWbXnckQXL1g440xEOPzYFNsYtEyUEf64IvxmHuIyRekfe
+ uuurx/w8v6n+2pIj/YuoIZz098shiGz6+WN18qDp+QA7KnwmLFhiNH1Gvlp73yT2aKTr
+ ljgZsqihjvO6xOA34B0tXF+mjYHl9dTwJmgBM4AUtu4feWaQLyWDadomN1vsEOSKkqCQ
+ +nQKKYKPknfAguKvStGTqxtypHkpl4vPExVC9wx6FXWXo8ytDTxafQITHnp02es+sJRO
+ BqFz4T1dw2xO+jtVTGr7T/Vi+3xVbzjB8ajVDrz2UZkvHMgWdGJaLeECc+6NSdHZRoRw xw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk0ddq17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 17:11:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CHBcBI013047
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 17:11:39 GMT
+Received: from [10.111.167.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
+ 2022 10:11:35 -0700
+Message-ID: <9a740a3b-30b6-05ab-e133-9b37186ba0db@quicinc.com>
+Date:   Mon, 12 Sep 2022 10:11:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909133938.3518520-4-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 0/7] drm/msm: probe deferral fixes
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        "Laurent Pinchart" <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+References: <20220912154046.12900-1-johan+linaro@kernel.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220912154046.12900-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sbakWlb5mLpCHrY4wynzhCX1VSs1oa4F
+X-Proofpoint-ORIG-GUID: sbakWlb5mLpCHrY4wynzhCX1VSs1oa4F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_12,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209120059
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 16:39:31 +0300, Abel Vesa wrote:
-> Add memory-region property to the list of optional properties, specify
-> the value type and a definition. This property is used to specify the
-> memory region which should be used for remote heap CMA.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changes since v2:
->  * addressed Krzysztof's comment by specifying what's the use of the
->    memory region
-> 
->  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+Adding kuogee to this series
 
-Applied, thanks!
+Hi Johan
+
+Thanks for posting this.
+
+We will take a look at this, re-validate and give our reviews/tested-bys.
+
+Thanks
+
+Abhinav
+On 9/12/2022 8:40 AM, Johan Hovold wrote:
+> The MSM DRM is currently broken in multiple ways with respect to probe
+> deferral. Not only does the driver currently fail to probe again after a
+> late deferral, but due to a related use-after-free bug this also
+> triggers NULL-pointer dereferences.
+> 
+> These bugs are not new but have become critical with the release of
+> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
+> yet been loaded.
+> 
+> The underlying problem is lifetime issues due to careless use of
+> device-managed resources.
+> 
+> Specifically, device-managed resources allocated post component bind
+> must be tied to the lifetime of the aggregate DRM device or they will
+> not necessarily be released when binding of the aggregate device is
+> deferred.
+> 
+> The following call chain and pseudo code serves as an illustration of
+> the problem:
+> 
+>   - platform_probe(pdev1)
+>     - dp_display_probe()
+>       - component_add()
+> 
+>   - platform_probe(pdev2) 				// last component
+>     - dp_display_probe()					// d0
+>         - component_add()
+>           - try_to_bring_up_aggregate_device()
+> 	   - devres_open_group(adev->parent)		// d1
+> 
+> 	   - msm_drm_bind()
+> 	     - msm_drm_init()
+> 	       - component_bind_all()
+> 	         - for_each_component()
+> 		   - component_bind()
+> 		     - devres_open_group(&pdev->dev)	// d2
+> 	             - dp_display_bind()
+> 		       - devm_kzalloc(&pdev->dev)	// a1, OK
+> 		     - devres_close_group(&pdev->dev)	// d3
+> 
+> 	       - dpu_kms_hw_init()
+> 	         - for_each_panel()
+> 	           - msm_dp_modeset_init()
+> 		     - dp_display_request_irq()
+> 		       - devm_request_irq(&pdev->dev)	// a2, BUG
+> 		     - if (pdev == pdev2 && condition)
+> 		       - return -EPROBE_DEFER;
+> 
+> 	      - if (error)
+>   	        - component_unbind_all()
+> 	          - for_each_component()
+> 		    - component_unbind()
+> 		      - dp_display_unbind()
+> 		      - devres_release_group(&pdev->dev) // d4, only a1 is freed
+> 
+>             - if (error)
+> 	     - devres_release_group(adev->parent)	// d5
+> 
+> The device-managed allocation a2 is buggy as its lifetime is tied to the
+> component platform device and will not be released when the aggregate
+> device bind fails (e.g. due to a probe deferral).
+> 
+> When pdev2 is later probed again, the attempt to allocate the IRQ a
+> second time will fail for pdev1 (which is still bound to its platform
+> driver).
+> 
+> This series fixes the lifetime issues by tying the lifetime of a2 (and
+> similar allocations) to the lifetime of the aggregate device so that a2
+> is released at d5.
+> 
+> In some cases, such has for the DP IRQ, the above situation can also be
+> avoided by moving the allocation in question to the platform driver
+> probe (d0) or component bind (between d2 and d3). But as doing so is not
+> a general fix, this can be done later as a cleanup/optimisation.
+> 
+> Johan
+> 
+> 
+> Johan Hovold (7):
+>    drm/msm: fix use-after-free on probe deferral
+>    drm/msm: fix memory corruption with too many bridges
+>    drm/msm/dp: fix IRQ lifetime
+>    drm/msm/dp: fix aux-bus EP lifetime
+>    drm/msm/dp: fix bridge lifetime
+>    drm/msm/hdmi: fix IRQ lifetime
+>    drm/msm: drop modeset sanity checks
+> 
+>   drivers/gpu/drm/bridge/parade-ps8640.c   |  2 +-
+>   drivers/gpu/drm/display/drm_dp_aux_bus.c |  5 +++--
+>   drivers/gpu/drm/msm/dp/dp_display.c      | 16 +++++++++-------
+>   drivers/gpu/drm/msm/dp/dp_parser.c       |  6 +++---
+>   drivers/gpu/drm/msm/dp/dp_parser.h       |  5 +++--
+>   drivers/gpu/drm/msm/dsi/dsi.c            |  9 +++++----
+>   drivers/gpu/drm/msm/hdmi/hdmi.c          |  7 ++++++-
+>   drivers/gpu/drm/msm/msm_drv.c            |  1 +
+>   include/drm/display/drm_dp_aux_bus.h     |  6 +++---
+>   9 files changed, 34 insertions(+), 23 deletions(-)
+> 
