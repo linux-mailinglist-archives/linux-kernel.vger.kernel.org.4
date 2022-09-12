@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BEA5B589F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2855B59C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiILKn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S229849AbiILL7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiILKnY (ORCPT
+        with ESMTP id S229817AbiILL7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:43:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E672BF66;
-        Mon, 12 Sep 2022 03:43:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 129DA61185;
-        Mon, 12 Sep 2022 10:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44202C433D6;
-        Mon, 12 Sep 2022 10:43:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662979399;
-        bh=HFbxptHJbeklKZuBBOedjhhiYS8C1dAxfzpGwX+ybSk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=GX5cscunz3ZzTiwTAjcScG3yJHb8NYzqhsjWgk94imXnA38dLl47l9mHxlNRWXMYO
-         wqV9nY9DGHy3fvOW+cqtR+ml5LLq1/z8Hs6Jzodkk74AN1MIo0kcrCOl/+ODfv7Ib+
-         9EiubChBy/rQKqgkFgyvPp+2q9tXTQTXhHaFZJ0efGIErTvlqx5g4xjorZ1Ue/YyF2
-         grGGctcTD7co/myRa0zlHcDjfM+yEH0jgju9G+zJhl9fDQ7eCC4krnLzd3BN9G7ZRE
-         AaX7p3FIESdIztsC7rzgoirgNMbZ7RlI91qch7rHRHv9t4wc0Vywim5iBnhICbSBRO
-         b7RLygT77iPFw==
-Message-ID: <c1c9f537e67f2d46404a4a3983e9542de49e28bc.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Date:   Mon, 12 Sep 2022 06:43:15 -0400
-In-Reply-To: <166284799157.30452.4308111193560234334@noble.neil.brown.name>
-References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-        , <20220907125211.GB17729@fieldses.org>
-        , <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-        , <20220907135153.qvgibskeuz427abw@quack3>
-        , <166259786233.30452.5417306132987966849@noble.neil.brown.name>
-        , <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>
-        , <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
-        , <20220908155605.GD8951@fieldses.org>
-        , <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
-        , <20220908182252.GA18939@fieldses.org>
-        , <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-         <166284799157.30452.4308111193560234334@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 12 Sep 2022 07:59:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C7F95A5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662983987; x=1694519987;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GWWaF9Ele3nDBBodDuXQSkJfAumMGqKhY0d2QLPHBeE=;
+  b=SRYg68WFmq0jjRbb6w9HkVFoGXL+gI/G4syOIER830vyQ1WCzPAQvfY1
+   lkIAE4hvtuHbh5tdPFkBxhVKYiyFfnD06QJNO6wO7r+Y4GGEVS5IRqxiS
+   JSx/I0sRrL1U4cT6emTLCkb+yDxkFqyoAW0I+krfYH3mhGBQIyojaLGPo
+   hRXB342dE+qDj/YDXmVZ6mvUUXoYWOqcRGrxRhNxIlLmlir6RGwyEBpz5
+   R2fvVFq4REcKg1LJgqrJbrS9FVn9pSpJImbzT4pR/kLABF6A+M2AEG4fc
+   oMNqYZiKXOb16Bm86zDrQgpX6mTZRF2ZEyL82iKETtMIAacDrJ9BaA8Z2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="324078444"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="324078444"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:59:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="705126286"
+Received: from vtsymbal-mobl.ger.corp.intel.com (HELO [10.252.32.67]) ([10.252.32.67])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:59:41 -0700
+Message-ID: <f67f29bc-64af-52dc-a63f-3b74523c06b0@linux.intel.com>
+Date:   Mon, 12 Sep 2022 12:43:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/7] soundwire: bus: Do not forcibly disable child
+ pm_runtime
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, lgirdwood@gmail.com,
+        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com,
+        sanyog.r.kale@intel.com, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220907101402.4685-1-rf@opensource.cirrus.com>
+ <20220907101402.4685-2-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220907101402.4685-2-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-09-11 at 08:13 +1000, NeilBrown wrote:
-> On Fri, 09 Sep 2022, Jeff Layton wrote:
-> >=20
-> > The machine crashes and comes back up, and we get a query for i_version
-> > and it comes back as X. Fine, it's an old version. Now there is a write=
-.
-> > What do we do to ensure that the new value doesn't collide with X+1?=
-=20
->=20
-> (I missed this bit in my earlier reply..)
->=20
-> How is it "Fine" to see an old version?
-> The file could have changed without the version changing.
-> And I thought one of the goals of the crash-count was to be able to
-> provide a monotonic change id.
->=20
 
-"Fine" in the sense that we expect that to happen in this situation.
-It's not fine for the clients obviously, which is why we're discussing
-mitigation techniques.
---=20
-Jeff Layton <jlayton@kernel.org>
+
+On 9/7/22 12:13, Richard Fitzgerald wrote:
+> Do not call pm_runtime_disable() of a child driver in
+> sdw_delete_slave(). We really should never be trying to disable
+> another driver's pm_runtime - it is up to the child driver to
+> disable it or the core driver framework cleanup. The driver core
+> will runtime-resume a driver before calling its remove() so we
+> shouldn't break that.
+> 
+> The patch that introduced this is
+> commit dff70572e9a3 ("soundwire: bus: disable pm_runtime in sdw_slave_delete")
+> which says:
+> 
+> "prevent any race condition with the resume being executed after the
+> bus and slave devices are removed"
+> 
+> The actual problem is that the bus driver is shutting itself down before
+> the child drivers have been removed, which is the wrong way around (see
+> for example I2C and SPI drivers). If this is fixed, the bus driver will
+> still be operational when the driver framework runtime_resumes the child
+> drivers to remove them. Then the bus driver will remove() and can shut
+> down safely.
+
+The description of the fix looks good, but "if this is fixed" is very
+confusing to me.
+
+Don't you have a dependency issue here?
+
+There should be first a patch to fix the bus issue and then remove this
+pm_runtime_disable second.
+
+
+> 
+> Also note that the child drivers are not necessarily idle when the bus
+> driver is removed, so disabling their pm_runtime and stopping the bus
+> might break more than only their remove().
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> ---
+>  drivers/soundwire/bus.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index 0bcc2d161eb9..99429892221b 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -151,8 +151,6 @@ static int sdw_delete_slave(struct device *dev, void *data)
+>  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>  	struct sdw_bus *bus = slave->bus;
+>  
+> -	pm_runtime_disable(dev);
+> -
+>  	sdw_slave_debugfs_exit(slave);
+>  
+>  	mutex_lock(&bus->bus_lock);
