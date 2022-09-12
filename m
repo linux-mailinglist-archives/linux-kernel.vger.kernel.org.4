@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E725B62DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEDB5B62E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiILViE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S229575AbiILVir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiILVh5 (ORCPT
+        with ESMTP id S229886AbiILVip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:37:57 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6C4C60A;
-        Mon, 12 Sep 2022 14:37:56 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-12803ac8113so26942400fac.8;
-        Mon, 12 Sep 2022 14:37:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=BHNK/xH+mhQJiZxZdU0ybg1u2AYkzOcqp8cQqgJ1qYc=;
-        b=tQcSsAxw8ASH0FSYkCRocrKGrO4hxyPXaoxkTCHiifDna4GtVY3taF7DIzFAH+3CEA
-         5+SdcBFhSeE/74+XFVWCJlx2DV9MeC2EdheSi5lqPfueOACB/L2uMMxevAuCX7HJYYxP
-         a58jMTC1cMUhPD2MTdGkqFQnayOpQfTRPTC+PesqTVZ6esKfyxiZlTUKgKFL+SvSkuu0
-         YrKYTfJorCBIE4zTHbcnhvOxIocBHWA26XMzHOU0fR48KR5sjFik49WziPAepzKFRTLP
-         ZK/lLiG++Q/Ao9pKjsu7aLH+Lt+ttEtYtVTiu6JGS6d7H16zmRqhn0UP+dOhSHFEg4+N
-         f5uQ==
-X-Gm-Message-State: ACgBeo1PJE4GtfDODhvgHX0kkf0485o17HzaKdm5L9lRlVS8e4Ukmf+7
-        X95MtHOcNuw9VOtBVRuaMQ==
-X-Google-Smtp-Source: AA6agR7Q2f7QGvzITg1wOOoy7fhFuc9v9GHyCZijQT0w2SIi0n8gG1E9UqGwLwefbawZKU/G6mw3zg==
-X-Received: by 2002:a05:6870:e616:b0:12b:82e8:dc53 with SMTP id q22-20020a056870e61600b0012b82e8dc53mr207070oag.276.1663018675791;
-        Mon, 12 Sep 2022 14:37:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u22-20020a056871009600b0012b342d1125sm5342647oaa.13.2022.09.12.14.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 14:37:55 -0700 (PDT)
-Received: (nullmailer pid 1943256 invoked by uid 1000);
-        Mon, 12 Sep 2022 21:37:54 -0000
-Date:   Mon, 12 Sep 2022 16:37:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: [PATCH 2/4 v2] dt-bindings: memory: Add numeric LPDDR compatible
- string variant
-Message-ID: <20220912213754.GA1942982-robh@kernel.org>
-References: <20220907232914.243502-1-jwerner@chromium.org>
- <20220907232914.243502-2-jwerner@chromium.org>
+        Mon, 12 Sep 2022 17:38:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBF14BD33;
+        Mon, 12 Sep 2022 14:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663018724; x=1694554724;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YlAnYfErS6+t38OX2ZEcrlgXeg8UJVYQ3pX9p7Bh35U=;
+  b=EXnWQ3SEPMv9amXgxMSA/juyQrbRANBT2qwRmn5cFEJDWKs2boEfWipU
+   zovIkwVsQWNLFBPfvq3bgo5UPU82f+yp+PmX4MgvmDn0Fxfi1BGKd3Hpy
+   NbWBXTJNctrH3NL39IZ7eazfXcu14IOCT7gjSvimSsm3HFPcaLSYfZuaB
+   VBx90GKu6IkHv8ZO9cNGKyZuW04JhZOI0bZMDIDKZLMZBun/qh7737m17
+   r3D8EiympYs5FzDC6urXxtGuH3h1zf/tvbW/l2PwRxfd+NlYmZaNBMhFI
+   mWyb7Ti6Z/bPAmch3L2nojKlOOZKG33emnkl4wE7ExUF27GJLTabWT/Sv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324215589"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="324215589"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 14:38:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="618695458"
+Received: from mdejong-mobl.amr.corp.intel.com (HELO [10.209.13.71]) ([10.209.13.71])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 14:38:43 -0700
+Message-ID: <1cef159a-7827-47bc-639a-209521a337bf@linux.intel.com>
+Date:   Mon, 12 Sep 2022 14:38:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907232914.243502-2-jwerner@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v13 2/3] selftests: tdx: Test TDX attestation GetReport
+ support
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <9983d33b59668cfa3bc1d36beaf13f5a4180bad3.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <9983d33b59668cfa3bc1d36beaf13f5a4180bad3.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022 16:29:12 -0700, Julius Werner wrote:
-> This patch allows a new kind of compatible string for LPDDR parts in the
-> device tree bindings, in addition to the existing hardcoded
-> <vendor>,<part-number> strings. The new format contains manufacturer and
-> part (revision) information in numerical form, such as lpddr3-ff,0201
-> for an LPDDR3 part with manufacturer ID ff and revision ID 0201. This
-> helps cases where LPDDR parts are probed at runtime by boot firmware and
-> cannot be matched to hardcoded part numbers, such as the firmware on the
-> qcom/sc7280-herobrine boards does (which supports 4 different memory
-> configurations at the moment, and more are expected to be added later at
-> a point where the boot firmware can no longer be updated to specifically
-> accomodate them).
+
+
+On 9/12/22 12:21 AM, Huang, Kai wrote:
+> On Fri, 2022-09-09 at 12:27 -0700, Kuppuswamy Sathyanarayanan wrote:
+>> Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
+>> get the TDREPORT from the user space.
 > 
-> Signed-off-by: Julius Werner <jwerner@chromium.org>
-> ---
->  .../memory-controllers/ddr/jedec,lpddr-props.yaml    | 10 ++++++++++
->  .../memory-controllers/ddr/jedec,lpddr2.yaml         |  8 +++++---
->  .../memory-controllers/ddr/jedec,lpddr3.yaml         | 12 ++++++++----
->  3 files changed, 23 insertions(+), 7 deletions(-)
+> (Sorry missed this one in previous reply).
 > 
-> Changelog:
-> 
-> - v2
->   - Updated commit message to describe intended use case as an example
+> Also, the IOCTL is to return the TDREPORT _to_ userspace, but not get the
+> TDREPORT _from_ userspace.
+
+How about following?
+
+Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
+
+enable guest user space get the TDREPORT.
+
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
