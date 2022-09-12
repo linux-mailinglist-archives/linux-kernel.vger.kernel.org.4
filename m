@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6BF5B5735
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37325B5742
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiILJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S229728AbiILJhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiILJa1 (ORCPT
+        with ESMTP id S229691AbiILJhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:30:27 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E00140F1;
-        Mon, 12 Sep 2022 02:30:26 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1278a61bd57so21766939fac.7;
-        Mon, 12 Sep 2022 02:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=HiN8KRFlRzPRLsPXZuEZ24dC682+6vrgW3nClRLEgdU=;
-        b=h9sbizCEW+T6E7FZTWzcAkitUPBDkYLzhuiNagJtY7HaXyoHn+WbC4qSQI6Lexfo0+
-         5JIuKGLJ7sHrP138X252qi1zfhqHzM1lhYMnGBaocjQf1a6U1goX9L61jcEbPJ3dW2PL
-         ALBEQGrCb4iDFJRROx6QIlt3eZBs1taLcm1Jrf/CwKHDG+9onS1eguxPUrHECR1U3bxp
-         7/s3LqsonY8U85bdmu4NBwL1qlaIY7QacgHr2340AMBQQ1okaXqC1dyrx6uaowacoHlR
-         fCxzhSRB0QbLUclIjNJ4AZmdg+FVuTGrrVRNusRpwjCPw7olWItcH1pT1hn4zOXE9/MT
-         cVdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HiN8KRFlRzPRLsPXZuEZ24dC682+6vrgW3nClRLEgdU=;
-        b=DFl5nmiFjX/lTtU0f2aoF1wDZZAlQ9PFpsx0Nz++i1ygHTp33/v7BI3VHjO5tBHaqx
-         IfkXCFPtRT1R3H6oEzOIiXQjQGnbzWBcrIU67sH0Ee//es+3w8YfpQd/VA2lvHGqCvIp
-         iHVX3nXqaT7eiMZj+ioydvxVa3j+RYvlDBUOJwlpdEKJY0hd6gkpTPVardaXX6qCRt3q
-         4GaAIaEswflCX/fGDoXtAoJ0qx5qqp4XgpTLzKbdH1gY7z0buOjQ3iuPDpkXbgoGs6zH
-         6ulkmLfXCfnIUEjf5urZrdV59kZeIfrrMnV5TfGDgG6EmkYi1+IqLSArK8ZpzAEDh7S5
-         B77A==
-X-Gm-Message-State: ACgBeo0dDf68lCl7YnSHXH2EDyDEQXkYDMq8dW9p1ixdkFS2jaa8C4zK
-        dYibgCOtdH8wb6gHgc5RVLHjhbUB2Mvrfz1LwKlXqIyLNRXvuw==
-X-Google-Smtp-Source: AA6agR6DQ/W4OwSzqw+xEO8w0IIFngzoav7mf8+LHom9CmtOrq6l7hOi4BKml/HL9+gljedFJC2w7WmeJtQsXWhfqPE=
-X-Received: by 2002:a05:6870:c0c8:b0:101:b3c3:abc3 with SMTP id
- e8-20020a056870c0c800b00101b3c3abc3mr11193578oad.144.1662975025711; Mon, 12
- Sep 2022 02:30:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220911112024.14304-1-pali@kernel.org> <20220911112024.14304-4-pali@kernel.org>
-In-Reply-To: <20220911112024.14304-4-pali@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 12 Sep 2022 11:30:14 +0200
-Message-ID: <CAMhs-H9VHekbXg0avHpYP4=2mHoepnkH8rrshU9ZVnbAB=3h-A@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] PCI: mt7621: Use PCI_CONF1_EXT_ADDRESS() macro
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 12 Sep 2022 05:37:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1370133375
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:37:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D4061165
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA055C433D6;
+        Mon, 12 Sep 2022 09:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662975454;
+        bh=RfElTGrIzepVBlXKvZQanWRb9Oy61jya/t8G4QYxjFc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JW87ZC2uS0wan2k4C7RJ03kZs4WErxiO50f211CKh5AqIEZyZaXkODwSEY05/eHd8
+         y0kVfXQKoeX+Rk7+Wj6i+ZMJjAcnqbcmAQjy1elVvUfu5g49UZ2IdY2AuYB/nceeXb
+         eihaEyLTIu7MMWe1plq1PN0IFRC9gqCPnEu6s2NDAbMQ72kztb4CUKwvGkVOqNwAE/
+         zPWZkrIApheJW0vYi9/tY5vu3PZ3mqXpQrquAOKxqhhnARoWENrUIJogc+c3HqmAcQ
+         BlDXTsaxFFISAVxrsSAdDjsNuX08dGTTBQ4IQMFSWwWlVFrypfOcbjeRX2JXHIAOhg
+         Y2/Qg5z6fzzMQ==
+Date:   Mon, 12 Sep 2022 18:37:30 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
+        <ast@kernel.org>, <jbacik@fb.com>, <akpm@linux-foundation.org>
+Subject: Re: [PATCH -next 2/3] fail_function: refctor code of checking
+ return value of register_kprobe()
+Message-Id: <20220912183730.5890cbbc5c062145c07a577a@kernel.org>
+In-Reply-To: <20220826073337.2085798-2-yangyingliang@huawei.com>
+References: <20220826073337.2085798-1-yangyingliang@huawei.com>
+        <20220826073337.2085798-2-yangyingliang@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,60 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+On Fri, 26 Aug 2022 15:33:36 +0800
+Yang Yingliang <yangyingliang@huawei.com> wrote:
 
-On Sun, Sep 11, 2022 at 1:21 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> Simplify pcie-mt7621.c driver code and use new PCI_CONF1_EXT_ADDRESS()
-> macro for accessing PCIe config space.
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Refactor the error handling of register_kprobe() to improve readability.
+> No functional change.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+
+OK, but in this case, could you fold [2/3] and [3/3], because
+[3/3] can not be applied without this change.
+
+Thank you,
+
 > ---
->  drivers/pci/controller/pcie-mt7621.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controlle=
-r/pcie-mt7621.c
-> index 33eb37a2225c..28cde116cd27 100644
-> --- a/drivers/pci/controller/pcie-mt7621.c
-> +++ b/drivers/pci/controller/pcie-mt7621.c
-> @@ -25,6 +25,7 @@
->  #include <linux/of_pci.h>
->  #include <linux/of_platform.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-conf1.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/reset.h>
-> @@ -123,8 +124,7 @@ static inline void pcie_port_write(struct mt7621_pcie=
-_port *port,
->  static inline u32 mt7621_pcie_get_cfgaddr(unsigned int bus, unsigned int=
- slot,
->                                          unsigned int func, unsigned int =
-where)
->  {
-> -       return (((where & 0xf00) >> 8) << 24) | (bus << 16) | (slot << 11=
-) |
-> -               (func << 8) | (where & 0xfc) | 0x80000000;
-> +       return PCI_CONF1_EXT_ADDRESS(bus, slot, func, where);
->  }
->
->  static void __iomem *mt7621_pcie_map_bus(struct pci_bus *bus,
-> --
-> 2.20.1
->
+>  kernel/fail_function.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/fail_function.c b/kernel/fail_function.c
+> index 03643e33e4c3..893e8f9a9118 100644
+> --- a/kernel/fail_function.c
+> +++ b/kernel/fail_function.c
+> @@ -294,14 +294,13 @@ static ssize_t fei_write(struct file *file, const char __user *buffer,
+>  	}
+>  
+>  	ret = register_kprobe(&attr->kp);
+> -	if (!ret)
+> -		fei_debugfs_add_attr(attr);
+> -	if (ret < 0)
+> +	if (ret) {
+>  		fei_attr_remove(attr);
+> -	else {
+> -		list_add_tail(&attr->list, &fei_attr_list);
+> -		ret = count;
+> +		goto out;
+>  	}
+> +	fei_debugfs_add_attr(attr);
+> +	list_add_tail(&attr->list, &fei_attr_list);
+> +	ret = count;
+>  out:
+>  	mutex_unlock(&fei_lock);
+>  	kfree(buf);
+> -- 
+> 2.25.1
+> 
 
-I have just added you patches in the top of my 5.19 build:
 
-commit 70cb6afe0e2ff1b7854d840978b1849bffb3ed21 (tag: v5.19.8,
-stable/linux-5.19.y)
-
-After building them and boot with your changes no regressions seem to
-appear, so if this series are finally added to the tree, feel free to
-add my:
-
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Best regards,
-    Sergio Paracuellos
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
