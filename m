@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133E5B5FDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEE75B5FE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiILSHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S229873AbiILSHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiILSG4 (ORCPT
+        with ESMTP id S229569AbiILSHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:06:56 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1639140E27
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:06:51 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id f11so16160045lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:06:50 -0700 (PDT)
+        Mon, 12 Sep 2022 14:07:52 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597EA40E0D;
+        Mon, 12 Sep 2022 11:07:46 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id h21so6851321qta.3;
+        Mon, 12 Sep 2022 11:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=YId2qFc2g35/E70lSaVSWi+LP5D0a4HgnSmJlhd/KK8=;
-        b=jHsdErwX5dPLdoPW3dgGmcCoDgcakypIm+495tvOKtQL9QPtt8V7/gJ1h9q5lB7rwn
-         6gFbbO3m+ZzJRGyxQO6lM6CRqm6uPwUTtqDDolmemItUbKsGh2vKuFIvy+y1ec4MzufQ
-         Cx05prXleITG2xd7YWduVE4k3k/9CSrk6Z3j8KvYuCSKeLDMMn79fHpxx7lHh1qvslW7
-         SHfTyc96VKkN0HTMzfYoEUfkLuFU180L8Z0D8gv8moFUpOcMTNAeBeTzQHCkPUziVQvW
-         YHlm2eCYkTORmbcUMbmlWYl0Psi3+D/Xv68JwW69eh2CrkfN7klNFNe1zWZUXdHxSWbM
-         L8GQ==
+        bh=lQtHmdymRkBmerXzn40vH/gbxlQTSF1+Xj0FQ10cpzI=;
+        b=pShthJ/cr5irBOubNxXcPwaiRunxAF+tNPHCFo9+aBuUE2MdRqk8gJg83jqJGU4irt
+         LBcMgNXPaIbPcti4hOe1rZXv7UoPzUHHiNpSAUfL1VX3XtEqlrk0VwnkuzU9ORkLQV3S
+         t9LX/iGgbjHWZmQJaoy2UdNMgOVymohv4jpp5b+6F9ghJn2H8Nvf/Lhs08D6ffZ1HrGX
+         tLsGqDEAank1i7TfYyvDG5geZMYt893ytTbpZF/hHyeCqJOl3+6fvOnv3Sole+OzZp/f
+         xSlP1sDaLbzm2oR50sr6ZfZnFgy4OZJAFqGg5aVixhsCoLlQuFcUPxrEg0fSk96OOOxP
+         dylQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=YId2qFc2g35/E70lSaVSWi+LP5D0a4HgnSmJlhd/KK8=;
-        b=umXm3sfijR2cmxW2dCIZLlJ3+sUlNGZYlRxEgOjWcKT3cjcahFjIQaDii/aNtYNhE+
-         c3iAIwQrJT3sKKHpl9wso9tCDRmi+MeOlp/c+9AOT4pDmnu7sCGjmtUA8oaom+fp2EzI
-         cC26GvREo8BjXHhy6VijrjWG8HBNqrXyJLoPg+KtMqRF1VwiGRO+rfDd+uB8fcC+AV+t
-         uJpYT+/nUqq4V1lXQTxzaM89soO+EP7rY4fLuYU6kCvgAT/JNvwBjbVniRHeGGEScmhx
-         rum0uOtIE4CSZoIogoiBEsyxWieybule2PkPf5Ys8HhBwwBl48RyOzQIirIgzCYA9k7f
-         tmJg==
-X-Gm-Message-State: ACgBeo1nGggxGa/85W1b2rNk3kXTMObrLj5CGq3OJBY3c+LZwWQ08aIn
-        P/EWZk8KDvV9S86PpjzkD/r3QQ==
-X-Google-Smtp-Source: AA6agR72bENrYaV3AGytGeVqlM0eFcCOub+TVap9NDCtWO6DvsFG7u89q0BJcB/dxfhSP2zC9MhO2A==
-X-Received: by 2002:a05:6512:1044:b0:48b:49b1:cc85 with SMTP id c4-20020a056512104400b0048b49b1cc85mr9327400lfb.57.1663006009387;
-        Mon, 12 Sep 2022 11:06:49 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id e27-20020a05651c039b00b0026bf04aafd2sm1141288ljp.9.2022.09.12.11.06.48
+        bh=lQtHmdymRkBmerXzn40vH/gbxlQTSF1+Xj0FQ10cpzI=;
+        b=TPXkZ9tL6X4KHDDG+d5GZ6IOaoEck8fDZd/cc64e22l/+721va8ALoZ2kl5yAbca13
+         cqUqQCqmwyI3hxB4WPAuDfw+wcfNeKP+RD/TLKpqgT0eF4fguxqqqsUH2X5czvE/B+v1
+         ztKne3SLK3rJ0w/hJjoQ2AqGj17BG8Y34aXK6Ndv8Ry4zZ66asrcQc9kn2pVvTtWOGPs
+         b/fNkeg8lCbp9Qgm0k4lo+2Mho9Bwn+k0vNcYJFc6hV6Q30VqYJzhYFjg7oeX5VvB5UX
+         /mfL2RF1Ldp+SWksxqinth54XOb1BRZBPv0s3+Px2zONCITF1R4/MF82P9eXbCgd5g7q
+         Vv6A==
+X-Gm-Message-State: ACgBeo2sznncrkiUlT2xi7KXWpbdyxsfSBn6dKX0V5/70od6RjltOTDa
+        w8jwuP2vVpCHq5KYpwUzuxM=
+X-Google-Smtp-Source: AA6agR53uiIhgcty3BD/2Ymi486R3A1bjk5LjIdQ159ktZPMsFAli5ZnpZpURisIP1zemMQqeBYjhw==
+X-Received: by 2002:a05:622a:13ca:b0:35b:a248:c8c2 with SMTP id p10-20020a05622a13ca00b0035ba248c8c2mr14068787qtk.407.1663006065587;
+        Mon, 12 Sep 2022 11:07:45 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f8-20020a05620a408800b006bc192d277csm8575137qko.10.2022.09.12.11.07.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 11:06:48 -0700 (PDT)
-Message-ID: <9ac13738-ea89-e2de-6316-ab8020580569@linaro.org>
-Date:   Mon, 12 Sep 2022 21:06:47 +0300
+        Mon, 12 Sep 2022 11:07:45 -0700 (PDT)
+Message-ID: <cb4e3c49-1216-2b61-3766-9507e523973e@gmail.com>
+Date:   Mon, 12 Sep 2022 11:07:39 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 3/7] drm/msm/dp: fix IRQ lifetime
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220912154046.12900-1-johan+linaro@kernel.org>
- <20220912154046.12900-4-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220912154046.12900-4-johan+linaro@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: dsa: mt7530: stop
+ requiring phy-mode on CPU ports
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        George McCollister <george.mccollister@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20220912175058.280386-1-vladimir.oltean@nxp.com>
+ <20220912175058.280386-3-vladimir.oltean@nxp.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220912175058.280386-3-vladimir.oltean@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 18:40, Johan Hovold wrote:
-> Device-managed resources allocated post component bind must be tied to
-> the lifetime of the aggregate DRM device or they will not necessarily be
-> released when binding of the aggregate device is deferred.
+On 9/12/22 10:50, Vladimir Oltean wrote:
+> The common dsa-port.yaml does this (and more) since commit 2ec2fb8331af
+> ("dt-bindings: net: dsa: make phylink bindings required for CPU/DSA
+> ports").
 > 
-> This is specifically true for the DP IRQ, which will otherwise remain
-> requested so that the next bind attempt fails when requesting the IRQ a
-> second time.
-> 
-> Since commit c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
-> this can happen when the aux-bus panel driver has not yet been loaded so
-> that probe is deferred.
-> 
-> Fix this by tying the device-managed lifetime of the DP IRQ to the DRM
-> device so that it is released when bind fails.
-> 
-> Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-> Cc: stable@vger.kernel.org      # 5.10
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index fbe950edaefe..ba557328710a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1258,7 +1258,7 @@ int dp_display_request_irq(struct msm_dp *dp_display)
->   		return -EINVAL;
->   	}
->   
-> -	rc = devm_request_irq(&dp->pdev->dev, dp->irq,
-> +	rc = devm_request_irq(dp_display->drm_dev->dev, dp->irq,
->   			dp_display_irq_handler,
->   			IRQF_TRIGGER_HIGH, "dp_display_isr", dp);
->   	if (rc < 0) {
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-With best wishes
-Dmitry
-
+Florian
