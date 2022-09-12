@@ -2,408 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D894E5B5E94
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370AB5B5EB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiILQyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
+        id S229790AbiILRAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiILQyK (ORCPT
+        with ESMTP id S229511AbiILRAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:54:10 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC0628728
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:54:08 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r134so7466926iod.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=i+oG+sTWJgl3qPfYeshXkV9auwxWiPMlSJXVsv7XxKk=;
-        b=an+19Pb4/PxGAq+rrjdoy39F62rgqBCHmu+k3YopoKVCY4nhOFF1o5BXv/VWt/ubyB
-         cKLAWqlak+bPJdcXN2AZS7mbg+rHPo9CKFvr23GFCMvK1Xir3vdEP60RPrPmQCIa0zrc
-         QGNrLu0Sc3AlUhZziC8taxFb7H21gFtghfOWU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=i+oG+sTWJgl3qPfYeshXkV9auwxWiPMlSJXVsv7XxKk=;
-        b=6Bxldb19oYmONaweHrG4g4cFHQqjLRM1E74N/WF2FietZ3nV6fWLPahmKRIKKCVlLi
-         27eXo1/blUUFG58JN7dfXSqcAg1z5uMkI5qdqXekQPmFqQy1dHUGxHXAlHpWRuBHVEi1
-         8J/0PP+9bsWdPcn4x7pyBhrd27Ohhd6kyK7h7FgmK2VG8Ba9dmtMs+4xqIprqwiaY/mC
-         LuV4p05NoI2phlgI9LAsPxmAj22lzbd+Qg7HI7rz9aEskX4WSUGPpryQt+HLKMZH/yKs
-         baZ+Tmn6Ldo0cEuQXW2hgSLDJV27QWU2zgAnGDOg0pnlLaz2riBCopZ8GMcEn9Dr632r
-         zsyg==
-X-Gm-Message-State: ACgBeo2TC9AaA4vr4HJP5Z8bflH5xnPvjIaMU3O21S9VonAk9uAo/b3p
-        oqqcz1z4XilPhFZyNN4g49idtQ==
-X-Google-Smtp-Source: AA6agR5i+lgMTxIqTQ/f0gtnbKyPzW1Otfke5i4F/32y0o1RAlOVUvTD2jxdnTKg75wKYcur7nmXhA==
-X-Received: by 2002:a05:6638:12c2:b0:34a:d9d:c9c3 with SMTP id v2-20020a05663812c200b0034a0d9dc9c3mr14082533jas.134.1663001647863;
-        Mon, 12 Sep 2022 09:54:07 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id f8-20020a028488000000b0035a17975109sm3518622jai.138.2022.09.12.09.54.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 09:54:06 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 16:54:06 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 1/5] PCI: qcom: Add system suspend and resume support
-Message-ID: <Yx9kLuY2oGtlJfmq@google.com>
-References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
- <1662713084-8106-2-git-send-email-quic_krichai@quicinc.com>
- <Yxt4Zv2ocKW1/Bf+@google.com>
- <7670b876-abcc-1b47-9277-96e4dd5e5dd4@quicinc.com>
+        Mon, 12 Sep 2022 13:00:08 -0400
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28890DF5D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663002006; bh=66J1fNK0sXY52O7nedBCC9IIs1jy9eMRcGcxQ2S+brc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=T6xgQDNDSqBsXPH935mIIWsRCRn/4EY5IljL9Xy4mLKKoOew94HtDPF/Dq5m33qB2jHeEcaFikWgAmMly5aNhp9RDn9i/TbqB+ZAumLPAlCSAZm+vQiMaGiUak8RR0RSzKsH+oypHnjBj+d8hu0oo1mDcqTxUt0AbjAi1ex0qAcxxPRt+ZKpgX4G/Ak6f8RkkUxwjs32yGsx5paH+6uxyHBgw5pZlHIjYddpCPRJpxQWofFK7eq9GQBG19BwpSs1qJKub0xOx/cj4zkKXMjloZ7an7cYe0oS9dEHw+y7pnDW1IS+kEpj5NM7hrSD5qNtURDdpWuivW1ZGK4/7qn4MQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663002006; bh=lKDl45kQPks3UdTqJKmMp7PvQXsrY6kbNR6CaDY9PaK=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wx4QWcCBXJ+9AKxdDT+vrRL6QZg74hLN4PuylEIHIOaVY7ZDdoebgzfUHk6nhN2p0HQOhYZY9zDA2GAIG/Ch69xLPyTBcjLZhivjNc1V6jEh3Z5NsF5dhql4YsdpfMetimtJ+kZuCODF7KHPqo4U+FqYZr6rFBbLDiL7/s7AjCgyWIpz8zcad95abT9RHp1jefgzrM5dUaSTiFBAOPtgiBZsVcwj7CXtK4nn5wagN22IixGiB1CD9zyzTt79UvFasAlW+hjv6vM1If0XrNqa3+TQFdaqWWPjpR7oee5KzwcIaTjsxl4IgQODzbXl9dk+E9RrHH0bGtM52jN50v/qAA==
+X-YMail-OSG: QZzvfBQVM1n2b9dzFzRp9qsRiWRmRIUoEmAle_qTp2dJPqorUjloYcqlC_kQhbH
+ v_Ft2cxz82oHJ7C28S7FN7HXnCtAD2_GWpp4LRvTKxIEKpMaWYN.M5aaUJyDNA8X23wLS8LuoCmM
+ HYhVHvXFJPO7cG5HoFTJIFdAbCEoqbNAzlI.5Nqo1C2qVVpFogry.ALmD5kVFKOMaY532Gz8SC6U
+ xZgEmdRutN.sTw7VCmyfDN7b0F5LHNxrytBYgfx27HEU39MIhHlqeAwTGErhZ_ERVXdkiY5ZWK8L
+ g_zX3JvcSwBFu5n3Ej7Gxw.Y.GC6Io6rXWN7NAG8tr9uXhNXOzUuTOnHCf1RzmtgBB4b.SStv7X7
+ FaWqRNsUdaRhyKRYaj7K334XQY9ZgZFaLbJ0Htf.iz1wVk6W_iCsSUU5Fk3OuDMpAgFdr5ORaQHP
+ N0BqyqM3a865zCoBqF3a3sAmrjjOwpjkzR0vOS9lmnsgGskRoEU2tNa5.3EMx4zeZit3T.LDvf_i
+ iPHlTfj2RmfZ28j6qRuDnpwgBDWj6h5rRhCDC0U4la5RPjkwtTdSedBYcloAuAxS6Kmhx0yu7lVa
+ foWkz_mnFl9KlpYTyYaoGaUJqkfrvfUyhnzWsTxZP64njd_.VGYxvQ7mcgU0o9.is75e4TvZ0VGk
+ MO7G2KY0Z2XhIuVpKnqq4d.KmmZJPioEFNLgZna0hIrv.2M3EztDmNg43clJFRa3ekKe7t2yOrGM
+ NUgrvy_qq8ZjH7UsGi8n3VK0z4zS0LanGNG.XBPp9O2wbvfxhT49vqR1Z1QVqZuD6wPFsahYCerN
+ NQxIgt1kQn4ZcFdzbP8kQMVoRu8cUhlFCk3_wOp9zF9SCq4PJb10.dMgPBNFygm_pu6VMPzAL5mr
+ JK9Rb4esGxceTl2c926iYRLSjBq4IruHcA6lqxXOvQ1rTITijlyoKJYbzo0VK6F1ffOjcOEQG3WP
+ vVFwUiSMxz1PhEoSQBMqYB2Ed2F_AzwsTClGa2zElohtYk8IpNXXtaQKv2QX2gcbDfekmElW0EII
+ kGSnRO2p9eeoubs_n0hzt3i4KS_D2HiLU7BINLShWHCHwNVW__MHK1bPC4MHF_cKmrWm_kYDEGea
+ 6BmuKZz4IZDnfN703teu.Bfbr0a9AmHdD79rNHXyI66J9kO2IsTLdi2k6PX5YSWupsmZV9_QG23G
+ 7bsOa18CCI1Zw5xpUWiJtjU9.aiH52DwLZb5lwOCQg_lnYydtZWElHbaMVeKSMTJkN.SHYM3NNst
+ 3.cd3zPEQuXp.MFcN7IjLfB1Tkzg9umhogIwmPCX2XtRq1dU700GBcifHSyT59qbunZtVAl9G6gA
+ mpVIAz33O7_jCJXkYbGcnIVEPAr2FR8LrOR17ljyjJUtfEynV4veFiB_TqIe3JztOjMAoFxpU2FE
+ x.n2h6TMZwxa2R1YDR3rgDxZALvEzyOJp0STB1wUax0t.LniL7leb9aj2IyurfnyFLHnF6LPKZda
+ d6s5vg0M2ehkjvS3kfU6.AXodYuznbn2AyeZbu25tWOaE.2Dx1X9BUGiNiaiUUHw4A6OPeUCqnns
+ CXtTgM4N65asNciWMg6CdVd2iMxhUjcqrmH1cKLJOcMlf6n3nIettqRk66UI1WMRV.c0Nrd3ClBl
+ OtolPntnieGD2R5beM8TJS8YsL7a.UunI115bnmcDstMzRsViR68suDuVblmiW.VJQNqtXOk8RJU
+ SDuRrtwS8UWXf.OhzMqtOISWY5dDBwoZX5NLOuAYeqcTrz7JhHy3BMpFcVDvvN..sLyVZZlfqyJM
+ z5T.uwRlic_dz.NNNnZz.P8mLkKvVr_CTirs_FQvgL9MFxj5ZCihabG66nTllYTxOYMLWBbDHTna
+ p_ki0QFu657cEOKjLT33kLlP4VQroNl9.pwG_wH7Ovo255Y9W8hSILvB6oMHz13TVvEFYsVeRzFQ
+ eh0Jyu_LG7jLMpzcqxf6DCtYpVfCz7GhClNi_d0eYljAKyQCRRHRJTkE2D96900CHkgRM_khUa6w
+ zrG6NaipGtyuiEl3oYX6WI_eWIoaw1HOnHa61JyD_pKTr0KNXBoj1loWnmBYBBU9ycIX81CB0Js3
+ KyZmeAWc2Qh5f2k7_vERvwMeZ4.gJyHbu__uA4M5Dvytofbd8R_RrX7qbyF6u0Q2pFL0e0T3Flsn
+ 8BzGJ0q3Vbm4DZ_BEboP2._Tf4lKiNkm38LYMlGgoa4httgEWI7UdrMbBkzEEnSzEHpSGWPo.iyn
+ JnQ9RsqhDedNsi1P1GX5lxmOaKuVJsTEpMxORXjiQkTtIP7CCKyyUcZjSSfhdCFFg312boVpLtna
+ lRWdibHIkFQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Mon, 12 Sep 2022 17:00:06 +0000
+Received: by hermes--production-gq1-5499fdd576-dlgnq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 70b580c9c7f5073724570de758dcb345;
+          Mon, 12 Sep 2022 17:00:04 +0000 (UTC)
+Message-ID: <48dd3c0e-f652-798f-9cb9-a53aaae6dcb9@schaufler-ca.com>
+Date:   Mon, 12 Sep 2022 10:00:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7670b876-abcc-1b47-9277-96e4dd5e5dd4@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH linux-next] smack: lsm: remove the unneeded result
+ variable
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, casey@schaufler-ca.com
+References: <20220912100535.18125-1-xu.panda@zte.com.cn>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220912100535.18125-1-xu.panda@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20612 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 09:36:53PM +0530, Krishna Chaitanya Chundru wrote:
-> 
-> On 9/9/2022 11:01 PM, Matthias Kaehlcke wrote:
-> > On Fri, Sep 09, 2022 at 02:14:40PM +0530, Krishna chaitanya chundru wrote:
-> > > Add suspend and resume syscore ops.
-> > > 
-> > > When system suspends and if the link is in L1ss, disable the clocks
-> > > and power down the phy so that system enters into low power state to
-> > > save the maximum power. And when the system resumes, enable the clocks
-> > > back and power on phy if they are disabled in the suspend path.
-> > > 
-> > > we are doing this only when link is in l1ss but not in L2/L3 as
-> > > nowhere we are forcing link to L2/L3 by sending PME turn off.
-> > > 
-> > > is_suspended flag indicates if the clocks are disabled in the suspend
-> > > path or not.
-> > > 
-> > > There is access to Ep PCIe space to mask MSI/MSIX after pm suspend ops
-> > > (getting hit by affinity changes while making CPUs offline during suspend,
-> > > this will happen after devices are suspended (all phases of suspend ops)).
-> > > When registered with pm ops there is a crash due to un-clocked access,
-> > > as in the pm suspend op clocks are disabled. So, registering with syscore
-> > > ops which will called after making CPUs offline.
-> > My knowledge of PCI is limited, but given the issues you are seeing which
-> > don't seem to impact other DWC drivers I wonder if keeping the link in
-> > l1ss is the right thing to do. The intel, tegra and imx6 drivers all turn
-> > the PME off, which IIUC results in the link to transition ot L2 or L3.
-> > Shouldn't the QC driver do the same?
-> The other dwc drivers are trying to turn off PME in the suspend and in
-> resume path
-> they are trying to do link training again, this is what we have done
-> previously
-> But this change is rejected by nvme developers because this will decrease
-> device life cycle
-> (turning off the link and bringing up is treated as a power cycle of nvme).
+On 9/12/2022 3:05 AM, cgel.zte@gmail.com wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+>
+> Return the value smk_ptrace_rule_check() directly instead of storing it
+> in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 
-I see, so the other drivers are currently not really suitable for use with
-NVMe :(
+Added to https://github.com/cschaufler/smack-next#next.
+Thank you.
 
-For reference, Christoph pointed out here [1] that switching the link off
-wears out the flash.
-
-So IIUC keeping the link in >= L1 during system suspend is a requirement
-for NVMe and the question is how to achieve that in the dwc/pcie-qcom
-drivers without resorting to ugly hacks.
-
-[1] https://lore.kernel.org/all/20220518084356.GA6933@lst.de/#R
-
-> So we are trying this approach.
-> > 
-> > Some more comments inline, for if the current approach moves forward.
-> > 
-> > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > ---
-> > > changes since v5:
-> > > 	- Rebasing the code and replaced pm ops with syscore ops as
-> > > 	  we are getting acciess to pci region after pm ops. syscore ops
-> > > 	  will called after disabling non boot cpus and there is no pci
-> > > 	  access after that.
-> > > Changes since v4:
-> > > 	- Rebasing the code and removed the supports_system_suspend flag
-> > > 	- in the resume path as is_suspended will serve its purpose.
-> > > Changes since v3:
-> > > 	- Powering down the phy in suspend and powering it on resume to
-> > > 	  acheive maximum power savings.
-> > > Changes since v2:
-> > > 	- Replaced the enable, disable clks ops with suspend and resume
-> > > 	- Renamed support_pm_opsi flag  with supports_system_suspend.
-> > > Changes since v1:
-> > > 	- Fixed compilation errors.
-> > > ---
-> > >   drivers/pci/controller/dwc/pcie-qcom.c | 140 ++++++++++++++++++++++++++++++++-
-> > >   1 file changed, 139 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 39ca06f..6e04d0d 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -27,6 +27,7 @@
-> > >   #include <linux/reset.h>
-> > >   #include <linux/slab.h>
-> > >   #include <linux/types.h>
-> > > +#include <linux/syscore_ops.h>
-> > >   #include "../../pci.h"
-> > >   #include "pcie-designware.h"
-> > > @@ -44,6 +45,9 @@
-> > >   #define PCIE20_PARF_PM_CTRL			0x20
-> > >   #define REQ_NOT_ENTR_L1				BIT(5)
-> > > +#define PCIE20_PARF_PM_STTS			0x24
-> > > +#define PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB	BIT(8)
-> > > +
-> > >   #define PCIE20_PARF_PHY_CTRL			0x40
-> > >   #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
-> > >   #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
-> > > @@ -122,6 +126,8 @@
-> > >   #define QCOM_PCIE_CRC8_POLYNOMIAL (BIT(2) | BIT(1) | BIT(0))
-> > > +static LIST_HEAD(qcom_pcie_list);
-> > > +
-> > >   struct qcom_pcie_resources_2_1_0 {
-> > >   	struct clk_bulk_data clks[QCOM_PCIE_2_1_0_MAX_CLOCKS];
-> > >   	struct reset_control *pci_reset;
-> > > @@ -211,13 +217,21 @@ struct qcom_pcie_ops {
-> > >   	void (*post_deinit)(struct qcom_pcie *pcie);
-> > >   	void (*ltssm_enable)(struct qcom_pcie *pcie);
-> > >   	int (*config_sid)(struct qcom_pcie *pcie);
-> > > +	int (*suspend)(struct qcom_pcie *pcie);
-> > > +	int (*resume)(struct qcom_pcie *pcie);
-> > >   };
-> > >   struct qcom_pcie_cfg {
-> > >   	const struct qcom_pcie_ops *ops;
-> > > +	/*
-> > > +	 * Flag ensures which devices will turn off clks, phy
-> > > +	 * in system suspend.
-> > > +	 */
-> > > +	unsigned int supports_system_suspend:1;
-> > >   };
-> > >   struct qcom_pcie {
-> > > +	struct list_head list;	/* list to probed instances */
-> > >   	struct dw_pcie *pci;
-> > >   	void __iomem *parf;			/* DT parf */
-> > >   	void __iomem *elbi;			/* DT elbi */
-> > > @@ -225,10 +239,14 @@ struct qcom_pcie {
-> > >   	struct phy *phy;
-> > >   	struct gpio_desc *reset;
-> > >   	const struct qcom_pcie_cfg *cfg;
-> > > +	unsigned int is_suspended:1;
-> > >   };
-> > >   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> > > +static int __maybe_unused qcom_pcie_syscore_op_suspend(void);
-> > > +static void __maybe_unused qcom_pcie_syscore_op_resume(void);
-> > > +
-> > >   static void qcom_ep_reset_assert(struct qcom_pcie *pcie)
-> > >   {
-> > >   	gpiod_set_value_cansleep(pcie->reset, 1);
-> > > @@ -1301,6 +1319,28 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
-> > >   	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
-> > >   }
-> > > +static int qcom_pcie_resume_2_7_0(struct qcom_pcie *pcie)
-> > > +{
-> > > +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> > > +	int ret;
-> > > +
-> > > +	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
-> > > +
-> > > +	phy_power_on(pcie->phy);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static int qcom_pcie_suspend_2_7_0(struct qcom_pcie *pcie)
-> > > +{
-> > > +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> > > +
-> > > +	phy_power_off(pcie->phy);
-> > > +
-> > > +	clk_bulk_disable_unprepare(res->num_clks, res->clks);
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
-> > >   {
-> > >   	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
-> > > @@ -1594,6 +1634,8 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
-> > >   	.deinit = qcom_pcie_deinit_2_7_0,
-> > >   	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> > >   	.config_sid = qcom_pcie_config_sid_sm8250,
-> > > +	.suspend = qcom_pcie_suspend_2_7_0,
-> > > +	.resume = qcom_pcie_resume_2_7_0,
-> > >   };
-> > >   /* Qcom IP rev.: 2.9.0  Synopsys IP rev.: 5.00a */
-> > > @@ -1613,6 +1655,11 @@ static const struct qcom_pcie_cfg cfg_1_9_0 = {
-> > >   	.ops = &ops_1_9_0,
-> > >   };
-> > > +static const struct qcom_pcie_cfg sc7280_cfg = {
-> > > +	.ops = &ops_1_9_0,
-> > > +	.supports_system_suspend = true,
-> > > +};
-> > > +
-> > >   static const struct qcom_pcie_cfg cfg_2_1_0 = {
-> > >   	.ops = &ops_2_1_0,
-> > >   };
-> > > @@ -1642,6 +1689,23 @@ static const struct dw_pcie_ops dw_pcie_ops = {
-> > >   	.start_link = qcom_pcie_start_link,
-> > >   };
-> > > +/*
-> > > + * There is access to Ep PCIe space to mask MSI/MSIX after pm suspend
-> > > + * ops.(getting hit by affinity changes while making CPUs offline during
-> > > + * suspend, this will happen after devices are suspended
-> > > + * (all phases of suspend ops)).
-> > > + *
-> > > + * When registered with pm ops there is a crash due to un-clocked access,
-> > > + * as in the pm suspend op clocks are disabled.
-> > > + *
-> > > + * So, registering with syscore ops which will called after making
-> > > + * CPU's offline.
-> > > + */
-> > > +static struct syscore_ops qcom_pcie_syscore_ops = {
-> > > +	.suspend = qcom_pcie_syscore_op_suspend,
-> > > +	.resume = qcom_pcie_syscore_op_resume,
-> > > +};
-> > > +
-> > >   static int qcom_pcie_probe(struct platform_device *pdev)
-> > >   {
-> > >   	struct device *dev = &pdev->dev;
-> > > @@ -1720,6 +1784,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> > >   		goto err_phy_exit;
-> > >   	}
-> > > +	/* Register for syscore ops only when first instance probed */
-> > > +	if (list_empty(&qcom_pcie_list))
-> > > +		register_syscore_ops(&qcom_pcie_syscore_ops);
-> > > +
-> > > +	/*
-> > > +	 * Add the qcom_pcie list of each PCIe instance probed to
-> > > +	 * the global list so that we use it iterate through each PCIe
-> > > +	 * instance in the syscore ops.
-> > > +	 */
-> > > +	list_add_tail(&pcie->list, &qcom_pcie_list);
-> > > +
-> > >   	return 0;
-> > >   err_phy_exit:
-> > > @@ -1731,6 +1806,69 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> > >   	return ret;
-> > >   }
-> > > +static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
-> > > +{
-> > > +	u32 val;
-> > > +	struct dw_pcie *pci = pcie->pci;
-> > > +	struct device *dev = pci->dev;
-> > > +
-> > > +	if (!pcie->cfg->supports_system_suspend)
-> > > +		return 0;
-> > This check could be done in qcom_pcie_syscore_op_suspend()
-> sure , we will take of it in next patch.
-> > 
-> > > +
-> > > +	/* if the link is not active turn off clocks */
-> > > +	if (!dw_pcie_link_up(pci)) {
-> > > +		dev_info(dev, "Link is not active\n");
-> > level info seems to verbose, it's not particularly interesting that the
-> > link is not active, except for debugging.
-> sure , we will take of it in next patch.
-> > 
-> > > +		goto suspend;
-> > > +	}
-> > > +
-> > > +	/* if the link is not in l1ss don't turn off clocks */
-> > > +	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
-> > > +	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
-> > > +		dev_warn(dev, "Link is not in L1ss\n");
-> > > +		return 0;
-> > > +	}
-> > I think the following would be clearer:
-> > 
-> >    	if (dw_pcie_link_up(pci)) {
-> > 		/* if the link is not in l1ss don't turn off clocks */
-> > 		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
-> > 		if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
-> > 			dev_warn(dev, "Link is not in L1ss\n");
-> > 			return 0;
-> > 		}
-> > 	} else {
-> > 		dev_dbg(dev, "Link is not active\n");
-> > 	}
-> But as we are adding retry logic in other patch  with while loop this logic
-> will not be applicable.
-> > > +
-> > > +suspend:
-> > > +	if (pcie->cfg->ops->suspend)
-> > > +		pcie->cfg->ops->suspend(pcie);
-> > > +
-> > > +	pcie->is_suspended = true;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int __maybe_unused qcom_pcie_pm_resume(struct qcom_pcie *pcie)
-> > > +{
-> > > +	if (!pcie->is_suspended)
-> > > +		return 0;
-> > > +
-> > > +	if (pcie->cfg->ops->resume)
-> > > +		pcie->cfg->ops->resume(pcie);
-> > > +
-> > > +	pcie->is_suspended = false;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int __maybe_unused qcom_pcie_syscore_op_suspend(void)
-> > > +{
-> > > +	struct qcom_pcie *qcom_pcie;
-> > > +
-> > > +	list_for_each_entry(qcom_pcie, &qcom_pcie_list, list) {
-> > > +		qcom_pcie_pm_suspend(qcom_pcie);
-> > > +	}
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void __maybe_unused qcom_pcie_syscore_op_resume(void)
-> > > +{
-> > > +	struct qcom_pcie *qcom_pcie;
-> > > +
-> > > +	list_for_each_entry(qcom_pcie, &qcom_pcie_list, list) {
-> > > +		qcom_pcie_pm_resume(qcom_pcie);
-> > > +	}
-> > > +}
-> > > +
-> > >   static const struct of_device_id qcom_pcie_match[] = {
-> > >   	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> > >   	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> > > @@ -1742,7 +1880,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> > >   	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> > >   	{ .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
-> > >   	{ .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
-> > > -	{ .compatible = "qcom,pcie-sc7280", .data = &cfg_1_9_0 },
-> > > +	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
-> > >   	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
-> > >   	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
-> > >   	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
-> > > -- 
-> > > 2.7.4
-> > > 
+> ---
+>  security/smack/smack_lsm.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 16e24a6cdc7c..b6306d71c908 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -497,13 +497,11 @@ static int smack_ptrace_access_check(struct task_struct *ctp, unsigned int mode)
+>   */
+>  static int smack_ptrace_traceme(struct task_struct *ptp)
+>  {
+> -       int rc;
+>         struct smack_known *skp;
+>
+>         skp = smk_of_task(smack_cred(current_cred()));
+>
+> -       rc = smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, __func__);
+> -       return rc;
+> +       return smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, __func__);
+>  }
+>
+>  /**
