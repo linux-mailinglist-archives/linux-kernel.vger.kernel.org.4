@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206E75B58AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AF05B58B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiILKqt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Sep 2022 06:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S229561AbiILKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiILKqq (ORCPT
+        with ESMTP id S229670AbiILKrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:46:46 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0B31EEB;
-        Mon, 12 Sep 2022 03:46:41 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MR3Cw4VPcz67NNV;
-        Mon, 12 Sep 2022 18:45:48 +0800 (CST)
-Received: from lhrpeml100003.china.huawei.com (7.191.160.210) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 12:46:39 +0200
-Received: from lhrpeml500002.china.huawei.com (7.191.160.78) by
- lhrpeml100003.china.huawei.com (7.191.160.210) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 11:46:39 +0100
-Received: from lhrpeml500002.china.huawei.com ([7.191.160.78]) by
- lhrpeml500002.china.huawei.com ([7.191.160.78]) with mapi id 15.01.2375.031;
- Mon, 12 Sep 2022 11:46:38 +0100
-From:   Jonas Oberhauser <jonas.oberhauser@huawei.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
-CC:     Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
- Models"
-Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAuR04A==
-Date:   Mon, 12 Sep 2022 10:46:38 +0000
-Message-ID: <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
-In-Reply-To: <YxynQmEL6e194Wuw@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.157.136]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 12 Sep 2022 06:47:17 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3233204C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:47:15 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bt10so14185142lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=bS7LDsVs3qcnyEA5WCUeLMEdHfGdR6OQ6NC7pdWEKCo=;
+        b=v9C7GeUH/ntRNwKKZ1I7TT6BQcjJBRkVZ1XpH6mXDdIGqsu2oqlY8NR6ikeS2VHyL8
+         7XoeJToQeSx7WIMqvu9S5zhL+/zdPWkCJ/xRvKy5UYL5moSuGoTzW/rT+uXwRSG6Eiic
+         vRv3Oy4PyY5Y4nPRruZEaZcvpvxM6lCfMQ0gzcT4tFsasIVkJa+3D6W6V8K+hfLskejA
+         LNX5aQQbJSTAfgk7Upg8DIPsy+QVWFepdmlC4bDE/vck/eapbQzWJPan/jIBh9yCxMTn
+         xdGGkKSLDDM4Cf8yXZKpajXEJTCiwphjC+CcMOkntC3mGhoodSx7fPj7QXXQPJ79Il6x
+         BM5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=bS7LDsVs3qcnyEA5WCUeLMEdHfGdR6OQ6NC7pdWEKCo=;
+        b=ZxgoZpMNSLGSkjobJw1zJ5OGludvgmyZkSF1P1pysJCPt7xiaawchEuxM8ah43E/it
+         ddGfxCzX8Tjd8LJDUX5hSpv49Eyeg5LcfWNWw0T/HoJTR/hn+BzYtsPDQ7NZi6xNTZ8e
+         xy5SebueUOgKSCopqyMAPqtgKaRyp+YuUqGFym+Fy7V7KFzn/vEtGghxRRrCKhv6OXDG
+         rvneFFlFi4gJDczBdJ3pJccSdLLK1bYGMg/vlpo8IAmQiWwuPJa9YzdBXfshuIjnI2PU
+         ruS6CH4h8V6jg24NkAeGPKqpUS2jUfn9bvmTLFOXe3JlKitOjfVLagGoSrg3BBtwYsnP
+         vbEg==
+X-Gm-Message-State: ACgBeo1y6ZDvLD6uhfHClTXJY6yBv+1M1nGxyGxIWYtGRa/pf/xh7Uy8
+        H6n+AL0QAJy3Pp09/WSriEe2yw==
+X-Google-Smtp-Source: AA6agR5+jaTiqHAiQpzt1KGZYW6NOWDU4UIg3cF3n4GCh9g7ACcWMJRrb7wrqPm8IlRGzsNs5ZLcOA==
+X-Received: by 2002:a05:6512:3f8c:b0:492:b392:bb84 with SMTP id x12-20020a0565123f8c00b00492b392bb84mr8267929lfa.368.1662979633605;
+        Mon, 12 Sep 2022 03:47:13 -0700 (PDT)
+Received: from [10.129.96.84] ([109.232.243.34])
+        by smtp.gmail.com with ESMTPSA id p8-20020a2eb7c8000000b0026c111ac7bcsm188263ljo.86.2022.09.12.03.47.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 03:47:13 -0700 (PDT)
+Message-ID: <79c11b6a-8f34-a5ee-373d-f88d5a980039@linaro.org>
+Date:   Mon, 12 Sep 2022 12:47:09 +0200
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 3/4] dt-bindings: remoteproc: qcom: wcnss: Add
+ qcom,pronto compatible
+Content-Language: en-US
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     bjorn.andersson@linaro.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220908184925.2714098-1-sireeshkodali1@gmail.com>
+ <20220908184925.2714098-4-sireeshkodali1@gmail.com>
+ <ad201ee7-d83c-9ebc-3619-64632f1f266e@linaro.org>
+ <CMU3V4NK164X.1D3TDJPALGIDD@skynet-linux>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CMU3V4NK164X.1D3TDJPALGIDD@skynet-linux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+On 12/09/2022 05:33, Sireesh Kodali wrote:
+> On Fri Sep 9, 2022 at 1:30 PM IST, Krzysztof Kozlowski wrote:
+>> On 08/09/2022 20:49, Sireesh Kodali wrote:
+>>> The qcom,pronto compatible is used in the wcn36xx driver to determine
+>>> which register to access. However, this compatible was not documented.
+>>> This patch documents the existing compatible as is, since it isn't
+>>> immediately clear why the wcn36xx driver uses this extra compatible,
+>>> rather than relying directly on the regular compatible string.
+>>
+>> The patch does much more - messes entirely all compatibles...
+> 
+> Is there another preferred way to handle this?
 
-Sorry for the confusion.
+The one which does not introduces any other changes than what you wrote
+here. You wrote here, that qcom,pronto is being added, so why some
+things are changed to oneOf or to enums?
 
->  [...] it's certainly true (in all of these
-models) than for any finite number N, there is a feasible execution in which a loop runs for more than N iterations before the termination condition eventually becomes true.
-	
-Indeed; but more interestingly, as the Theorem 5.3 in "making weak memory models fair" states, under certain conditions it suffices to look at graphs where N=1 to decide whether a loop can run forever (despite all writes propagating to all cores eventually) or will always terminate.
-
-And since herd can generate all such graphs, herd could be extended to make that decision and output it, just like many other tools already do.
-
-To illuminate this on an example, consider the program sent by Peter earlier:
-	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
-
-Without the assumption that fr is prefix finite, the graph with infinitely many reads of thread 2 all reading the initial value (and hence being fr-before the store foo=1) would be allowed. However, the tools used to analyze the qspinlock all assume that fr is prefix finite, and hence that such a graph with infinitely many fr-before events does not exist. Because of that, all of the tools will say that this loop always terminates.
-
-However, if you change the code into the following:
-
-	WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); while (!READ_ONCE(foo));
-
-then even under the assumption of fr-prefix-finiteness, the coherence order in which WRITE_ONCE(foo, 1); is overwritten by WRITE_ONCE(foo, 0); of thread 2 would lead to non-terminating behaviors, and these are detected by those tools. Furthermore, if we synchronize the two stores as follows:
-
-	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); smp_store_release(&bar,1); while (!READ_ONCE(foo));
-
-then the graphs with that co become prohibited as they all have hb cycles, and the tools again will not detect any liveness violations. But if we go further and relax the release barrier as below
-
-
-	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); WRITE_ONCE(bar,1); while (!READ_ONCE(foo));
-
-then the hb cycle disappears, and the coherence order in which foo=0 overwrites foo=1 becomes allowed. Again, the tools will detect this and state that thread 2 could be stuck in its while loop forever.
-
-In each of these cases, the decision can be made by looking for a graph in which the loop is executed for one iteration which reads from foo=0, and checking whether that store is co-maximal. So in some sense this is all that is needed to express the idea that a program can run forever, even though only in some very limited (but common) circumstances, namely that the loop iteration that repeats forever does not create modifications to state that are observed outside the loop. Luckily this is a very common case, so these checks have proven quite useful in practice.
-
-The same kind of check could be implemented in herd together with either the implicit assumption that fr is prefix finite (like in other tools) or with some special syntax like
-
-prefix-finite fr | co as fairness
-
-which hopefully clears up the question below:
-
-> > From an engineering perspective, I think the only issue is that cat
-> > *currently* does not have any syntax for this,
-
-> Syntax for what?  The difference between wmb and mb?
-> [...]
-
-
-Thanks for your patience and hoping I explained it more clearly,
-
-jonas
+Best regards,
+Krzysztof
