@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C445B5ECE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AD95B5EDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiILRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S230001AbiILRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiILRGP (ORCPT
+        with ESMTP id S229980AbiILRIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:06:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DA62127C;
-        Mon, 12 Sep 2022 10:06:14 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CFkfkU005809;
-        Mon, 12 Sep 2022 17:06:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=W3zY9QLNPWEAB8o9Gg6uFxsBfJVYFRPkCf7CJNbWhIg=;
- b=dC7Jd2O8lPEXKSUvRn2MAm6R/Qhef7ezb2+ZaheWYXVqvymKdfRTBVOx8QQZdSmPPXP9
- LzaZ/r37bKLSB/V+ce6Psx66pCEFm/CNDJ50J415yjhuRoI67NMadqEkWyqncr8PPGbM
- u1pDr9+Pz+jvuFMGEhoS1FDYZLgR/eKHCtLEOr9g+2cW1x97t5i93CaGve0OHUjNtAb4
- EL1YnlUTNYOoFTw1n35HMrX5T4NunhfxObzSKz02DEi5WNvh+PV2EBPIiGYd59dZUUu+
- aQj0o1N9+ET+ZCCRoPjhtAPQ2w7tTllTTldnW8JwItkm9vqBKWnv0+crZaEZfkSCgVSL ZA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgkrswhnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 17:06:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CH69ro018166
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 17:06:09 GMT
-Received: from deesin-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 12 Sep 2022 10:06:06 -0700
-From:   Deepak Kumar Singh <quic_deesin@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
-        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>
-Subject: [PATCH V3 2/2] rpmsg: glink: Add lock to rpmsg_ctrldev_remove
-Date:   Mon, 12 Sep 2022 22:35:36 +0530
-Message-ID: <1663002336-11809-3-git-send-email-quic_deesin@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1663002336-11809-1-git-send-email-quic_deesin@quicinc.com>
-References: <1663002336-11809-1-git-send-email-quic_deesin@quicinc.com>
+        Mon, 12 Sep 2022 13:08:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFF62127C;
+        Mon, 12 Sep 2022 10:08:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A2C1ACE0F22;
+        Mon, 12 Sep 2022 17:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71954C433C1;
+        Mon, 12 Sep 2022 17:08:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663002488;
+        bh=K49onmE+E2NcqJj4ukS7ZLgFzwR10wrL5ukkj1ASoOY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=q6Jmf5KBTtxkJRxCTHVLiXCCwsQvS8pGuKBKHH1VZfmD1xRn5vpY4KiPF10GNmrHZ
+         3VMq/cBUN9MRDtw3X6gG9MYBlX39681Xol0yAvdETTXhpNXLvtTrD6yDjuESnNrtrN
+         fYsSjvUrTfAXD6c4mY4IKu8IVK9RubbMXAVRRQnud1z7AXeGH/G4Fj0NOnimkUcqCw
+         zxZsJm1zePdRp4JyXpgTN5Wx3nrY37ifsNDsWkpkU/252Pi0KrFHeXOAQyyucaZNX4
+         aooA8s5d9t8BbBktQ4RMPu+ja56+vc2U+IIob/B/7nqVXFxBu6/WQq16EJ5ICRSGlx
+         CUN0nmM4K02Rg==
+Date:   Mon, 12 Sep 2022 12:08:06 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v6 0/5] PCI: qcom: Add system suspend & resume support
+Message-ID: <20220912170806.GA512933@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: P5BkvfdkUZBih2mL5LbfFZtSrVSJ0yvh
-X-Proofpoint-ORIG-GUID: P5BkvfdkUZBih2mL5LbfFZtSrVSJ0yvh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_12,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- spamscore=0 clxscore=1015 phishscore=0 priorityscore=1501 mlxlogscore=935
- suspectscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209120058
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af79fc4d-4996-bb2c-7388-2d9afd991e7a@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Call to rpmsg_ctrldev_ioctl() and rpmsg_ctrldev_remove() must be synchronized.
-In present code rpmsg_ctrldev_remove() is not protected with lock, therefore
-new char device creation can succeed through rpmsg_ctrldev_ioctl() call. At the
-same time call to rpmsg_ctrldev_remove() funtion for ctrl device removal will
-free associated rpdev device. As char device creation already succeeded, user
-space is free to issue open() call which maps to rpmsg_create_ept() in kernel.
-rpmsg_create_ept() function tries to reference rpdev which has already been
-freed through rpmsg_ctrldev_remove(). Issue is predominantly seen in aggressive
-reboot tests where rpmsg_ctrldev_ioctl() and rpmsg_ctrldev_remove() can race with
-each other.
+On Mon, Sep 12, 2022 at 09:40:30PM +0530, Krishna Chaitanya Chundru wrote:
+> On 9/10/2022 1:21 AM, Bjorn Helgaas wrote:
+> > On Fri, Sep 09, 2022 at 02:14:39PM +0530, Krishna chaitanya chundru wrote:
+> > > Add suspend and resume syscore ops.
+> > > 
+> > > When system suspends, and if the link is in L1ss, disable the clocks
+> > > and power down the phy so that system enters into low power state by
+> > > parking link in L1ss to save the maximum power. And when the system
+> > > resumes, enable the clocks back and power on phy if they are disabled
+> > > in the suspend path.
+> > > 
+> > > we are doing this only when link is in l1ss but not in L2/L3 as
+> > > nowhere we are forcing link to L2/L3 by sending PME turn off.
+> > > 
+> > > is_suspended flag indicates if the clocks are disabled in the suspend
+> > > path or not.
+> > > 
+> > > There is access to Ep PCIe space to mask MSI/MSIX after pm suspend ops
+> > > (getting hit by affinity changes while making CPUs offline during suspend,
+> > > this will happen after devices are suspended (all phases of suspend ops)).
+> > > When registered with pm ops there is a crash due to un-clocked access,
+> > > as in the pm suspend op clocks are disabled. So, registering with syscore
+> > > ops which will called after making CPUs offline.
+> > > 
+> > > Make GDSC always on to ensure controller and its dependent clocks
+> > > won't go down during system suspend.
+> > > 
+> > > Krishna chaitanya chundru (5):
+> > >    PCI: qcom: Add system suspend and resume support
+> > >    PCI: qcom: Add retry logic for link to be stable in L1ss
+> > >    phy: core: Add support for phy power down & power up
+> > >    phy: qcom: Add power down/up callbacks to pcie phy
+> > >    clk: qcom: Alwaya on pcie gdsc
+> >
+> > This seems fairly ugly because it doesn't fit nicely into the PM
+> > framework.  Why is this a qcom-specific thing?  What about other
+> > DWC-based controllers?
+>
+> We wanted to allow system S3 state by turning off all PCIe clocks
+> but at the same time retaining NVMe device in D0 state and PCIe link
+> in l1ss state.
+>
+> Here nothing really specific to DWC as PCIe controller remains intact.
+> 
+> And the Qcom PHY allows this scheme  (that is to retain the link
+> state in l1ss even though all pcie clocks are turned off).
 
-Adding lock in rpmsg_ctrldev_remove() avoids any new char device creation
-throught rpmsg_ctrldev_ioctl() while remove call is already in progress.
+Is there somewhere in the PCIe spec I can read about how a link with
+clocks turned off can remain in L1.1 or L1.2?
 
-Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
----
- drivers/rpmsg/rpmsg_ctrl.c | 2 ++
- 1 file changed, 2 insertions(+)
+> Since clocks are completely managed by qcom platform driver, we are
+> trying to manage them during S3/S0 transitions with PM callbacks.
 
-diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
-index 107da70..4332538 100644
---- a/drivers/rpmsg/rpmsg_ctrl.c
-+++ b/drivers/rpmsg/rpmsg_ctrl.c
-@@ -194,10 +194,12 @@ static void rpmsg_ctrldev_remove(struct rpmsg_device *rpdev)
- 	struct rpmsg_ctrldev *ctrldev = dev_get_drvdata(&rpdev->dev);
- 	int ret;
- 
-+	mutex_lock(&ctrldev->ctrl_lock);
- 	/* Destroy all endpoints */
- 	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
- 	if (ret)
- 		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
-+	mutex_unlock(&ctrldev->ctrl_lock);
- 
- 	cdev_device_del(&ctrldev->cdev, &ctrldev->dev);
- 	put_device(&ctrldev->dev);
--- 
-2.7.4
+I'm looking at this text in PCIe r6.0, sec 5.4.1:
 
+  Components in the D0 state (i.e., fully active state) normally keep
+  their Upstream Link in the active L0 state, as defined in § Section
+  5.3.2 . ASPM defines a protocol for components in the D0 state to
+  reduce Link power by placing their Links into a low power state and
+  instructing the other end of the Link to do likewise. This
+  capability allows hardware-autonomous, dynamic Link power reduction
+  beyond what is achievable by software-only controlled (i.e., PCI-PM
+  software driven) power management.
+
+How does this qcom software management of clocks fit into this scheme?
+It seems to me that if you need software to turn clocks off and on,
+that is no longer ASPM.
+
+Bjorn
