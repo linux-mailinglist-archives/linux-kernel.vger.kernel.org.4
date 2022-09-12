@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF85B56CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1E45B56D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiILI4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S230285AbiILI5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiILIzz (ORCPT
+        with ESMTP id S230135AbiILI5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:55:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C6C186E9;
-        Mon, 12 Sep 2022 01:55:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A9C860FB2;
-        Mon, 12 Sep 2022 08:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B09C433D6;
-        Mon, 12 Sep 2022 08:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662972952;
-        bh=msP75KSX56tTMsZd1X3fo42dUu4cwWYvUj8HKKALsjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MEh5EttAWDe0TZlxzEwNpM6VQJyC1VR2hrKPmLW71BivCu6Ypc+jSCEmtDkIfLkBC
-         UzNZqcUd+R8+aCnzVPCm+p8YdkmuhVNDuDlj3wSZio8OzJ+geQl+R1KgICaIaGXHaw
-         daCWmepSUDcw+MlhOO2OLfB2Q5fP3jw3zaoxoV7gXoaG59rf66CnKJfsDXFoRy9E1Y
-         PIdqiAm62hKjQdrKqihEYZ28/hIH56LUIOpRTDJyOa9lY6FgnxRNSMmhi16UnhzehP
-         miQ6BRhn2ItaiSjO3O/DI5oUeG/0c5GsZ11EfYrgk/Jq9h5nLwkAUDY+6HFb30okzT
-         4Kmt4wQxe3lsA==
-Date:   Mon, 12 Sep 2022 10:55:47 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
- interrupt handler
-Message-ID: <Yx70E4nBtKoVVmhO@lpieralisi>
-References: <20220709143151.qhoa7vjcidxadrvt@pali>
- <20220709234430.GA489657@bhelgaas>
- <20220710000659.vxmlsvoin26tdiqw@pali>
- <20220829165109.fzrgguchg4otbbab@pali>
- <20220911154516.tu2b7qhsnk6mdtui@pali>
- <Yx7nXJRHN1sWCkVq@lpieralisi>
- <20220912084808.mmi42l7sp657dz6i@pali>
+        Mon, 12 Sep 2022 04:57:24 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A85192BB;
+        Mon, 12 Sep 2022 01:57:23 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28C8utVu009416;
+        Mon, 12 Sep 2022 03:56:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662973015;
+        bh=sRvNlBh/Ss9x2rZ28t0BBU8aqg7AeYRUVbKpiLO9SGY=;
+        h=From:To:CC:Subject:Date;
+        b=oEOhWi7mwHVhN5SzOVGqyKqfb4/6G7BggJGPNeb2MXz/WaLD74CgkPCzPrjmSCMZF
+         LEACfUC03ZwiLK0xP1ppai7mVglbyRdjN0AZLCeLw8ukqOdwyndQJMEdPlEVESLhoJ
+         9IwJgeRdT+FZO8s2zE6xDy+S/l1jZ3WkDmftWwPE=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28C8utm7015771
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 12 Sep 2022 03:56:55 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 12
+ Sep 2022 03:56:55 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 12 Sep 2022 03:56:55 -0500
+Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28C8up6u104303;
+        Mon, 12 Sep 2022 03:56:51 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <grygorii.strashko@ti.com>, <rogerq@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: [PATCH v5 0/3] Add support for QSGMII mode
+Date:   Mon, 12 Sep 2022 14:26:47 +0530
+Message-ID: <20220912085650.83263-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220912084808.mmi42l7sp657dz6i@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,96 +67,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:48:08AM +0200, Pali Rohár wrote:
-> On Monday 12 September 2022 10:01:32 Lorenzo Pieralisi wrote:
-> > On Sun, Sep 11, 2022 at 05:45:16PM +0200, Pali Rohár wrote:
-> > > On Monday 29 August 2022 18:51:09 Pali Rohár wrote:
-> > > > On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
-> > > > > On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
-> > > > > > [+cc Marc, since he commented on this]
-> > > > > > 
-> > > > > > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
-> > > > > > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
-> > > > > > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
-> > > > > > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
-> > > > > > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
-> > > > > > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
-> > > > > > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
-> > > > > > > > > >
-> > > > > > > > > > This change fixes affinity support and allows to pin interrupts from
-> > > > > > > > > > different PCIe controllers to different CPU cores.
-> > > > > > > > > 
-> > > > > > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
-> > > > > > > > > of them need similar changes?  The commit log suggests that using
-> > > > > > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
-> > > > > > > > > the case and the real culprit is some other difference between mvebu
-> > > > > > > > > and the other drivers.
-> > > > > > > > 
-> > > > > > > > And there is another reason to not use irq_set_chained_handler_and_data
-> > > > > > > > and instead use devm_request_irq(). Armada XP has some interrupts
-> > > > > > > > shared and it looks like that irq_set_chained_handler_and_data() API
-> > > > > > > > does not handle shared interrupt sources too.
-> > > > > > > > 
-> > > > > > > > I can update commit message to mention also this fact.
-> > > > > > > 
-> > > > > > > Anything needed from me to improve this fix?
-> > > > > > 
-> > > > > > My impression from Marc's response [1] was that this patch would
-> > > > > > "break the contract the kernel has with userspace" and he didn't think
-> > > > > > this was acceptable.  But maybe I'm not understanding it correctly.
-> > > > > 
-> > > > > This is argument which Marc use when he does not have any argument.
-> > > > > 
-> > > > > Support for dedicated INTx into pci-mvebu.c was introduced just recently
-> > > > > and I used irq_set_chained_handler_and_data() just because I thought it
-> > > > > is a good idea and did not know about all those issues with it. So there
-> > > > > cannot be any breakage by this patch.
-> > > > > 
-> > > > > I already converted other pci-aardvark.c driver to use
-> > > > > irq_set_chained_handler_and_data() API because wanted it... But at the
-> > > > > end _that conversion_ caused breakage of afinity support and so this
-> > > > > conversion had to be reverted:
-> > > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
-> > > > > 
-> > > > > Based on his past decisions, above suggestions which cause _real_
-> > > > > breakage and his expressions like mvebu should be put into the trash,
-> > > > > I'm not going to listen him anymore. The only breaking is done by him.
-> > > > > 
-> > > > > 
-> > > > > There are two arguments why to not use irq_set_chained_handler_and_data:
-> > > > > 
-> > > > > 1) It does not support afinity and therefore has negative performance
-> > > > >    impact on Armada platforms with more CPUs and more PCIe ports.
-> > > > > 
-> > > > > 2) It does not support shared interrupts and therefore it will break
-> > > > >    hardware on which interrupt lines are shares (mostly Armada XP).
-> > > > > 
-> > > > > So these issues have to be fixed and currently I see only option to
-> > > > > switch irq_set_chained_handler_and_data() to devm_request_irq() which I
-> > > > > did in this fixup patch.
-> > > > 
-> > > > Any progress here? This patch is waiting here since end of May and if
-> > > > something is going to be broken then it is this fact of ignoring reported
-> > > > issues and proposed patch. Do you better solution how to fix commit
-> > > > ec075262648f?
-> > > 
-> > > After two weeks I'm reminding this fix patch again...
-> > 
-> > There is no point complaining about something you were asked
-> > to change, really - there is not.
-> > 
-> > You were given feedback, feel free to ignore it, it won't help
-> > getting this patch upstream - it is as simple as that, sorry.
-> > 
-> > Thanks,
-> > Lorenzo
-> 
-> I'm not sure if I understand you, what do you mean that all patches
-> which depends on this are now automatically rejected or what?
+Add compatible for J7200 CPSW5G.
 
-I am not merging this code unless it is acked by an IRQ maintainer.
+Add support for QSGMII mode in phy-gmii-sel driver for CPSW5G in J7200.
 
-Is it clear enough ?
+Change log:
 
-Thanks,
-Lorenzo
+v4 -> v5:
+1. Undo cleanup changes in the example in:
+   Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml, moving it
+   to a separate patch in the same series. The cleanup patch is the first
+   patch in this series, with the other patches from previous versions
+   following it in the same order.
+2. Update $ref to "/schemas/phy/ti,phy-gmii-sel.yaml#" in:
+   Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml.
+3. Update description for the "phy@[0-9a-f]+$" pattern property.
+4. Add blank lines in between IF/THEN statements in:
+   Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml.
+5. Update the IF/THEN statement corresponding to the property
+   "ti,qsgmii-main-ports", disallowing the property for all compatibles
+   except "ti,j7200-cpsw5g-phy-gmii-sel" in:
+   Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml.
+6. Move "maxItems: 1" to the top where "ti,qsgmii-main-ports" property is
+   first defined, in:
+   Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml.
+
+v3 -> v4:
+1. Update $ref to /schemas/phy/phy-provider.yaml in
+   Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml.
+2. Update commit message for the "phy: ti: gmii-sel: Add support for
+   CPSW5G GMII SEL in J7200" patch, describing the reason for defining the
+   property "ti,qsgmii-main-ports" as an array.
+3. Add a check in drivers/phy/ti/phy-gmii-sel.c to ensure that the value
+   of the variable "main_ports" is within bounds. If the property
+   "ti,qsgmii-main-ports" is either not mentioned in the devicetree or the
+   value of the property is out of bounds, in both these cases,
+   "main_ports" defaults to 1.
+4. Use the function "of_property_read_u32()" instead of the function
+   "of_property_read_u32_array()" in drivers/phy/ti/phy-gmii-sel.c.
+
+v2 -> v3:
+1. Add $ref to "phy@[0-9a-f]+$" pattern property in
+   Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml.
+2. Restrict the optional ti,qsgmii-main-ports property to
+   ti,j7200-cpsw5g-phy-gmii-sel property by adding an else statement and
+   disallowing it for other compatibles.
+3. Move the "items" constraint for the ti,qsgmii-main-ports property to
+   the place the property is defined.
+
+v1 -> v2:
+1. Rename ti,enet-ctrl-qsgmii as ti,qsgmii-main-ports.
+2. Change ti,qsgmii-main-ports property from bitmask to integer.
+3. Update commit message with property name as ti,qsgmii-main-ports.
+
+v4: https://lore.kernel.org/r/20220901085506.138633-1-s-vadapalli@ti.com/
+v3: https://lore.kernel.org/r/20220822065631.27933-1-s-vadapalli@ti.com/
+v2: https://lore.kernel.org/r/20220816055848.111482-1-s-vadapalli@ti.com/
+v1: https://lore.kernel.org/r/20220531111221.22963-1-s-vadapalli@ti.com/
+
+Siddharth Vadapalli (3):
+  dt-bindings: phy: ti: phy-gmii-sel: Cleanup example
+  dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J7200
+  phy: ti: gmii-sel: Add support for CPSW5G GMII SEL in J7200
+
+ .../mfd/ti,j721e-system-controller.yaml       |  6 +++
+ .../bindings/phy/ti,phy-gmii-sel.yaml         | 27 ++++++++++-
+ drivers/phy/ti/phy-gmii-sel.c                 | 47 +++++++++++++++++--
+ 3 files changed, 76 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+
