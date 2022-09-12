@@ -2,192 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0CF5B5A35
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3686C5B5A43
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiILMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
+        id S229777AbiILMit convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Sep 2022 08:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiILMgZ (ORCPT
+        with ESMTP id S229692AbiILMiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:36:25 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6050A21254
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:36:23 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C9lqcE007834;
-        Mon, 12 Sep 2022 07:36:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=2djx8mrHj4k//KMZY57GsC6AkyV/iKwmgpZBlmtMih8=;
- b=TGOA4hgwrJXyW023aKgeCjmw4QxnqCKcaDymJge/UmXQ97Xp6u8TrAMnORnpB10lXYFT
- sSIL+avr6oV9ELE4mqpgwayhkryycwyF/J56KSouZKP9tbSf9w8zCS3/SfIfBqtec/eL
- KGXd0SMhZMNh4ICIapyBNwSdgCXciY7jj+qDN5dTkKCEsMU3t1GR8R7zf71nxGHiVZH6
- +T+TIZqI422d8zVoLUESrbMof5EflWl4+F/NIf1HHztoym6Ia7MKJm2G3TuTh2nDE62q
- cz9IR2PEXrSbinpiv9m9xp+FqHkUc+qWv0Y/TZMiaBz1IODhKExMG8qF94bPiKoUC4zS OQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jgr01tabb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 07:36:16 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Mon, 12 Sep
- 2022 07:36:14 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.12 via Frontend Transport; Mon, 12 Sep 2022 07:36:14 -0500
-Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 593262C5;
-        Mon, 12 Sep 2022 12:36:14 +0000 (UTC)
-Message-ID: <91b18b16-c3c5-554b-2875-93857521cf4c@opensource.cirrus.com>
-Date:   Mon, 12 Sep 2022 13:36:14 +0100
+        Mon, 12 Sep 2022 08:38:46 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15D21254
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:38:45 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2108.outbound.protection.outlook.com [104.47.22.108]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-13-MHZtbONTPVWuzZJlKn8BRg-1; Mon, 12 Sep 2022 14:38:41 +0200
+X-MC-Unique: MHZtbONTPVWuzZJlKn8BRg-1
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GVAP278MB0953.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:55::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.19; Mon, 12 Sep 2022 12:38:40 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b%3]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 12:38:40 +0000
+Date:   Mon, 12 Sep 2022 14:38:33 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net 0/2] Revert fec PTP changes
+Message-ID: <20220912123833.GA4303@francesco-nb.int.toradex.com>
+References: <20220912070143.98153-1-francesco.dolcini@toradex.com>
+ <20220912122857.b6g7r23esks43b3t@pengutronix.de>
+In-Reply-To: <20220912122857.b6g7r23esks43b3t@pengutronix.de>
+X-ClientProxiedBy: MR2P264CA0164.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:1::27) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 4/5] soundwire: cadence: Fix lost ATTACHED interrupts
- when enumerating
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <sanyog.r.kale@intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220907085259.3602-1-rf@opensource.cirrus.com>
- <20220907085259.3602-5-rf@opensource.cirrus.com>
- <35122b05-4d2f-8c9c-eb5e-c0f96ef585a4@linux.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <35122b05-4d2f-8c9c-eb5e-c0f96ef585a4@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: _yTDrlhy4JN1yrrmLrJ0iLajx7Rm3Rm_
-X-Proofpoint-ORIG-GUID: _yTDrlhy4JN1yrrmLrJ0iLajx7Rm3Rm_
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0495:EE_|GVAP278MB0953:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1652925d-7cc4-4c04-662b-08da94bbb864
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: co/2NkAE6fouQzvaN451ao697FNKrJ6j9izNcA5jQMZvinPDg1V8ws4IEFJgKST58uJMWWTIVRSihiaoouE2a6RuRKI6o61kiEY11S3zdAIMK0+BqHmwjUWFp2BTcUhM6FPfahrU98jRZakL/JShiUHv27oq3sm/Mmg0Uvdr2cmRrRS6Jzx611n3XeHYOVMHWLzAoAnkS9MGh7Y/UvkBei4PuTEFKAGNclQgaCG1muo1mrUmJFhYkei8k0RaLDTtbE26aTQ2HJF59NxyBgFrJym75/fmjQLS33d/J1y6mUakS6m2rpcC2BNSKvsvq610hrkP55BZZ/5d3XMdo8ooVqrq+6A24zbSkjPTGANx6PGTztn3kwp1YUL9ScGzAdPE0ETwyOuer2aoHukj9E9ukic8IhCTQKnzkU5pNp3AOdW2UAcrF/12oFcKAWNX6/UaH21XB42RvhIReMO7oXO6qmlZyFXB9rMTNlr+VB4Sw2Jje9ehpKPxn1rJiaQqSHa3c7K/pednP+wMwM1wdYQzxs1fU2sVbev75nJdgwOhNNtjBK3uD9ZXUJelrcdWq6/NVKHBjN0WS21Hak0lkuw9HXU1uEddHv6kEBMihuIWjZCWuYcOYWuVQLWpAw13sovfLbpk43WlEjWdhEex/GQcK/eZ2mPEz6rufERcO0oOZ/TmMYRXVyuqhmq5Lo4BlxaGNWdnfIeDnnUBgqegRg6o96uflpcgnuYRmDxnuM2svmzett9sJeXxzOG3ymt/yqYaZuXtt0xKHaU3UUeJMOebQw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(39840400004)(376002)(396003)(346002)(53546011)(6666004)(6506007)(52116002)(478600001)(6486002)(6512007)(41300700001)(83380400001)(1076003)(26005)(186003)(44832011)(5660300002)(7416002)(8936002)(4744005)(316002)(2906002)(54906003)(8676002)(66476007)(4326008)(66556008)(38350700002)(6916009)(86362001)(38100700002)(66946007)(33656002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vN0wJXFw+qNVC4HB58KLJj1fVPUXvMcJ8eSfOAc+LXjJ10wfedWRFE7+ysIi?=
+ =?us-ascii?Q?N0jr+9DkEFxIPsingKCOLChU05PSSI/vNFA5uBiuDw38NVw2K0tDy+gmJ6z+?=
+ =?us-ascii?Q?wMMQbsLblD0v0ddfrPxBVgvO41pQhQAxxPO7Fn//6aaY8SBxgCTyzrfR5nqn?=
+ =?us-ascii?Q?zL1m2nP+0sfOrY5d6CljxCTUxM/MxLJKw89RvzEZJdqFaEFjrF3p2hEjrVKK?=
+ =?us-ascii?Q?HthFqVKiXyu8YyRrLeeKU88gz6rnvasVkp/ZG55elSCdZH9PfsT0ZFDH9Ik9?=
+ =?us-ascii?Q?OROCEXM4bbDd1tjQeRSIPqxl8SAM57+u187svB8sJmilvZRVDZs18SoCDyUo?=
+ =?us-ascii?Q?VnNJIou0Hb8f4e7obba1AVePlVmto8BxjIlJen7zZ9UtER5JABxA1Bg6oppI?=
+ =?us-ascii?Q?IWYYuz7Dgmz6usrXFe8N0juE0B1B0pwkGjdcRNbnwso/YSELuuOFFKhn743W?=
+ =?us-ascii?Q?6WMqUNUnsi69GfBDsM1jg0UXOB/pclEFCCZVhbJIHQqSeXNS4QTfsU7AmeUc?=
+ =?us-ascii?Q?Wz49opjHB015Pk18F9cvvRbn7a7/fMcHBEtE9pyj6IwwuLEf/seAC+OHB/lZ?=
+ =?us-ascii?Q?4LUn00qQfsOD7V5SkvnuQrux6iPoBeTH1RrsRbXDhf3mRBrc43WFHQKI0X8L?=
+ =?us-ascii?Q?ZSxC/KwUEhJAfpLuA6CkBATFbO8Wmi7jLypsKYYWTX0bXrUoDdpDV4QCzS6G?=
+ =?us-ascii?Q?3DSs/PvM3B0p/nyZKE1/ywK2xBGRQhxLJbmzO2LP3k+xMsthv30HTwb0W7lT?=
+ =?us-ascii?Q?H1whtfmL7K2UHRlKVpY6oe++V8MtCl0Xgu7iNsflJlLAjzdTIDrm12GrOLMm?=
+ =?us-ascii?Q?/HQevjnaAhHFxhE/9TqaInM8h2hgLtai5qqHqA7QlK9aSlz6NUQsbNvwswLJ?=
+ =?us-ascii?Q?RzhIoIeVc9PS7PePEmlqeGBV1DU49lYKg2VayS443dtUqT+yE7DKxdQ1GRR7?=
+ =?us-ascii?Q?yMDCkLsYdy4BtUDuomd+v5UUOo9txw6bij60puz50G+ED4W22yBdC1EqKR1R?=
+ =?us-ascii?Q?/6zUAaw0uHn5FK8zJL26uXyp3agU5L775wrZp7WyDsUOffgEaYdfV9MxayOZ?=
+ =?us-ascii?Q?zFUT5uOVNwmZeMAgocMDvNNZ2P08kNx2wXXdGITmIbQr8N4ZYradWf/871sY?=
+ =?us-ascii?Q?EVfSl7rn4wR0CDifWLt4tGsUWtzzdMa4Kz/qb4wNwuLIoIpoYiMXnd49wu3M?=
+ =?us-ascii?Q?6I+7z4X2Jd/jaYfjLYhaZof9csn7zISLZbNroNoJDF77qxo36IV+V7G2dOF3?=
+ =?us-ascii?Q?YzfOJXPJ/C36rfW2C+e63E4nkfMimhiMKQhVsD5Sgd/+1UUV0uCOy5aF/I3P?=
+ =?us-ascii?Q?uw03zoM3IIuGTtyzO6ZM8sDdzaSEhTPMUIHF0wHYIQxmcSRFv/+oECrPI5XP?=
+ =?us-ascii?Q?D/SZURYQkp8cqZ8uZ5/CJqiJOq4kj25wKUWTfHlW48p+imdC0frIDJEdsgEM?=
+ =?us-ascii?Q?x0FKKWQKmjbrdE3MWNtYCTZYCaQniMTOidHTWD2u/zTD0EMwojPsA4E8puWT?=
+ =?us-ascii?Q?4qepfNfd8fRbP+31K8W0SLkfHPq7yZqEjONSHrlmsBrTgg3xfDIb2f/V6GLv?=
+ =?us-ascii?Q?7K3H2nXmDe4XGKe0oYBJV/MQeaO7m+6r5/m43GOuaV90gKvMFig9aMZhUBzu?=
+ =?us-ascii?Q?pQ=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1652925d-7cc4-4c04-662b-08da94bbb864
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 12:38:40.0666
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bYjjejOuj4vfiXiakWqUO8iDcQPkQc/b9ezXV0NJ8Das1xLEABGeGGwuWp3tEyh4a+N/YGeWQdGfR3LH5FYccyz6we699jmJGTB9hWHmR4Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0953
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/09/2022 12:05, Pierre-Louis Bossart wrote:
+On Mon, Sep 12, 2022 at 02:28:57PM +0200, Marc Kleine-Budde wrote:
+> On 12.09.2022 09:01:41, Francesco Dolcini wrote:
+> > Revert the last 2 FEC PTP changes from Csókás Bence, they are causing multiple
+> > issues and we are at 6.0-rc5.
+> > 
+> > Francesco Dolcini (2):
+> >   Revert "fec: Restart PPS after link state change"
+> >   Revert "net: fec: Use a spinlock to guard `fep->ptp_clk_on`"
 > 
-> 
-> On 9/7/22 10:52, Richard Fitzgerald wrote:
->> The correct way to handle interrupts is to clear the bits we
->> are about to handle _before_ handling them. Thus if the condition
->> then re-asserts during the handling we won't lose it.
->>
->> This patch changes cdns_update_slave_status_work() to do this.
->>
->> The previous code cleared the interrupts after handling them.
->> The problem with this is that when handling enumeration of devices
->> the ATTACH statuses can be accidentally cleared and so some or all
->> of the devices never complete their enumeration.
->>
->> Thus we can have a situation like this:
->> - one or more devices are reverting to ID #0
->>
->> - accumulated status bits indicate some devices attached and some
->>    on ID #0. (Remember: status bits are sticky until they are handled)
->>
->> - Because of device on #0 sdw_handle_slave_status() programs the
->>    device ID and exits without handling the other status, expecting
->>    to get an ATTACHED from this reprogrammed device.
->>
->> - The device immediately starts reporting ATTACHED in PINGs, which
->>    will assert its CDNS_MCP_SLAVE_INTSTAT_ATTACHED bit.
->>
->> - cdns_update_slave_status_work() clears INTSTAT0/1. If the initial
->>    status had CDNS_MCP_SLAVE_INTSTAT_ATTACHED bit set it will be
->>    cleared.
->>
->> - The ATTACHED change for the device has now been lost.
->>
->> - cdns_update_slave_status_work() clears CDNS_MCP_INT_SLAVE_MASK so
->>    if the new ATTACHED state had set it, it will be cleared without
->>    ever having been handled.
->>
->> Unless there is some other state change from another device to cause
->> a new interrupt, the ATTACHED state of the reprogrammed device will
->> never cause an interrupt so its enumeration will not be completed.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> ---
->>   drivers/soundwire/cadence_master.c | 18 ++++++++++++++----
->>   1 file changed, 14 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
->> index 245191d22ccd..3acd7b89c940 100644
->> --- a/drivers/soundwire/cadence_master.c
->> +++ b/drivers/soundwire/cadence_master.c
->> @@ -954,9 +954,22 @@ static void cdns_update_slave_status_work(struct work_struct *work)
->>   	u32 device0_status;
->>   	int retry_count = 0;
->>   
->> +	/*
->> +	 * Clear main interrupt first so we don't lose any assertions
->> +	 * the happen during this function.
->> +	 */
->> +	cdns_writel(cdns, CDNS_MCP_INTSTAT, CDNS_MCP_INT_SLAVE_MASK);
->> +
->>   	slave0 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT0);
->>   	slave1 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT1);
->>   
->> +	/*
->> +	 * Clear the bits before handling so we don't lose any
->> +	 * bits that re-assert.
->> +	 */
->> +	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT0, slave0);
->> +	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT1, slave1);
->> +
->>   	/* combine the two status */
->>   	slave_intstat = ((u64)slave1 << 32) | slave0;
->>   
->> @@ -964,8 +977,6 @@ static void cdns_update_slave_status_work(struct work_struct *work)
->>   
->>   update_status:
->>   	cdns_update_slave_status(cdns, slave_intstat);
->> -	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT0, slave0);
->> -	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT1, slave1);
-> 
-> this one is hard to review, if you don't clear the status here, then how
-> does the retry work if there is a new event?
+> Nitpick: I would revert "net: fec: Use a spinlock to guard
+> `fep->ptp_clk_on`" first, as it's the newer patch.
 
-The retry loop doesn't work off the interrupt status bits. Precisely
-because the #0 ATTACH bit probably doesn't re-assert if the PING status
-for #0 doesn't change, the retry checks the most recent PING response
-instead.
+Shame on me, I do 100% agree, I inverted the 2 patches last second.
 
-> 
-> Put differently, do we need to retry and the 'goto update_status' any more?
-> 
+Francesco
 
-Yes, I believe you do still need it. The Cadence interrupts appear to
-assert when there is a change of status. If there are multiple devices
-reporting on dev ID #0 then the PING status of #0 will not change until
-they have all been reprogrammed, so it will not automatically re-assert.
-
-Anyway, I don't want to mix bugfixes with code improvements. If the loop
-_could_ be removed that should be done separately from fixing the
-interrupt handling bug.
-
->>   
->>   	/*
->>   	 * When there is more than one peripheral per link, it's
->> @@ -1001,8 +1012,7 @@ static void cdns_update_slave_status_work(struct work_struct *work)
->>   		}
->>   	}
->>   
->> -	/* clear and unmask Slave interrupt now */
->> -	cdns_writel(cdns, CDNS_MCP_INTSTAT, CDNS_MCP_INT_SLAVE_MASK);
->> +	/* unmask Slave interrupt now */
->>   	cdns_updatel(cdns, CDNS_MCP_INTMASK,
->>   		     CDNS_MCP_INT_SLAVE_MASK, CDNS_MCP_INT_SLAVE_MASK);
->>   
