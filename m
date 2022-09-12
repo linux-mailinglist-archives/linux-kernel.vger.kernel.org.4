@@ -2,212 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FED5B56BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55525B56C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiILIwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S230341AbiILIxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiILIwj (ORCPT
+        with ESMTP id S230281AbiILIxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:52:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AE012621;
-        Mon, 12 Sep 2022 01:52:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EA2831FD05;
-        Mon, 12 Sep 2022 08:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662972756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QrEPOpC6RMrJZKG5SGOheqONS2NkCVotDwBL3ONmMr8=;
-        b=Kq1bmzcUiqmQHNsF/jhZcPASkI+Kb8xbW2GB+iyhsCXnZmDZ7W7e11v/lKUH7iF2xRXUxK
-        3d3zQoXf9NKRcQizJ8EZsJnt0h6WzJUUlBrF+p3BLCgFa3ivMDjDECHhLz0LYVE3mIUJIL
-        1kYBJ/EjIe9rnXgTH1T1SdF5wAgyd+g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662972756;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QrEPOpC6RMrJZKG5SGOheqONS2NkCVotDwBL3ONmMr8=;
-        b=EXfxBZOLY/woL4HAc486PqQ++Nq+33rlt+AGjbEXZGn1ZIf2nR75TqaEDc/LS1FVAya99r
-        iMsK9xaLPXGbqSAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9CE5139E0;
-        Mon, 12 Sep 2022 08:52:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id X3EENVTzHmOhNQAAMHmgww
-        (envelope-from <iivanov@suse.de>); Mon, 12 Sep 2022 08:52:36 +0000
+        Mon, 12 Sep 2022 04:53:07 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23962BB3F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:53:05 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m1so11622062edb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LeyEfTs9yyPVXfKQntxuZT0+LwnhmLDjpHhOJB6RFSE=;
+        b=7ABE4n2klxVQMxfpU2OTGbHusg/nacl5wpccb2AouhOt6U+q1rLxMxx8XtGRV7gSrX
+         P/PaRVBLMdMz9v6pKSwOcMl47ypbfJvWLDBNszfCO/46wKxoyO3J2aGMozLDAukIV0VD
+         cP8r/k0NGIzY1RiCloPIDbRnNLZC4Kq+s8c3IWmAq4BumicbMdPSV49tL5B63KeCv3O4
+         +KZ0zQF3iajccVlc9CUF06CIf0HIn20sdsKzCgndeHtkzKxH5AfHrayNgejVI6D4ftgJ
+         oP5nP5pamEE/AtFO+4LQtLIWo7QjHOyyILcwlIcIoiDOiNLHV1hCw9EOhLIBU1KCzRVd
+         qo0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LeyEfTs9yyPVXfKQntxuZT0+LwnhmLDjpHhOJB6RFSE=;
+        b=d/YiN0riLEwDa5FaJRzx8JMhcV+ywg0Y0dbHpaHsE58yqT5jyEI8zlV6OanWUrYnaL
+         bNEVZehavUEOlc7LVmRZCM/dOvvfUSV0SvK5bpjbQbyeC1T13n8Rbf9DI7v+Qi08EqH3
+         AE4sE7eFkGEaD1R+mikdVvXy4/m+3SQs+0m+crv1lPNYu7z38f/Ghwsb3kvjhZoEtk1O
+         81SSw+ht+FMOGArNuCWLVc9YDqvdNM1lICN8Od2KxWyHXMh+qfoZMf4U1YlB8AzrfvSY
+         9xagC8auzv7L4jDwo4aj0hxtWIQJKWhJ+fGT8dReF3jKnvKlaet8oHNz4tJHvk12B7Ea
+         FfTQ==
+X-Gm-Message-State: ACgBeo36Z+PHWFA0CXfK5WcISVOny4OLA+0SjW+mpR8SECN5eQHcoBav
+        EiWLPjrZXCrqpAKKjtXpwrbiTyDeRBBAIwlkVXxvAg==
+X-Google-Smtp-Source: AA6agR6KW+YIss8DhEhJlUrdXlg2x5bNs4hyDV6JhFmUYYpe+fNhhR98WnSBPobTN8CEbGH06f60IHTHmhiU8IIFQI4=
+X-Received: by 2002:a05:6402:5243:b0:451:6d52:5928 with SMTP id
+ t3-20020a056402524300b004516d525928mr6687535edd.328.1662972784211; Mon, 12
+ Sep 2022 01:53:04 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 12 Sep 2022 11:52:36 +0300
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        "Ivan T. Ivanov" <iivanov@suse.de>
-Cc:     Phil Elwell <phil@raspberrypi.com>, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] clk: bcm2835: Round UART input clock up
-In-Reply-To: <20220912081306.24662-1-iivanov@suse.de>
-References: <20220912081306.24662-1-iivanov@suse.de>
-User-Agent: Roundcube Webmail
-Message-ID: <1f41b47acc9abd5ddf728c87fbab46a5@suse.de>
-X-Sender: iivanov@suse.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909121329.42004-1-brgl@bgdev.pl> <20220909121329.42004-3-brgl@bgdev.pl>
+ <YxykorLetCjAls/Z@sol>
+In-Reply-To: <YxykorLetCjAls/Z@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 12 Sep 2022 10:52:53 +0200
+Message-ID: <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Sep 10, 2022 at 4:52 PM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Fri, Sep 09, 2022 at 02:13:29PM +0200, Bartosz Golaszewski wrote:
+> > It's useful for user-space to be able to know the PIDs of processes
+> > holding GPIO lines in case they have the permissions and need to kill
+> > them.
+> >
+>
+> "the PID of the process holding a GPIO line"
+>
+> As written it could be interpreted to imply that multiple processes can
+> hold a line, so go singular to remove that possibility.
+>
+> > Extend the gpio_v2_line_info structure with the consumer_pid field
+> > that's set to the PID of the user-space process or 0 if the user lives
+> > in the kernel.
+> >
+> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> > ---
+> >  drivers/gpio/gpiolib-cdev.c |  2 ++
+> >  drivers/gpio/gpiolib.c      | 24 +++++++++++++++++++-----
+> >  drivers/gpio/gpiolib.h      |  2 ++
+> >  include/uapi/linux/gpio.h   |  5 ++++-
+> >  4 files changed, 27 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> > index f8041d4898d1..9b6d518680dc 100644
+> > --- a/drivers/gpio/gpiolib-cdev.c
+> > +++ b/drivers/gpio/gpiolib-cdev.c
+> > @@ -2120,6 +2120,8 @@ static void gpio_desc_to_lineinfo(struct gpio_desc *desc,
+> >       if (desc->label)
+> >               strscpy(info->consumer, desc->label, sizeof(info->consumer));
+> >
+> > +     info->consumer_pid = desc->pid;
+> > +
+> >       /*
+> >        * Userspace only need to know that the kernel is using this GPIO so
+> >        * it can't use it.
+> > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> > index 6768734b9e15..0c9d1639b04d 100644
+> > --- a/drivers/gpio/gpiolib.c
+> > +++ b/drivers/gpio/gpiolib.c
+> > @@ -96,6 +96,11 @@ static inline void desc_set_label(struct gpio_desc *d, const char *label)
+> >       d->label = label;
+> >  }
+> >
+> > +static inline void desc_set_pid(struct gpio_desc *d, pid_t pid)
+> > +{
+> > +     d->pid = pid;
+> > +}
+> > +
+> >  /**
+> >   * gpio_to_desc - Convert a GPIO number to its descriptor
+> >   * @gpio: global GPIO number
+> > @@ -1892,7 +1897,8 @@ EXPORT_SYMBOL_GPL(gpiochip_remove_pin_ranges);
+> >   * on each other, and help provide better diagnostics in debugfs.
+> >   * They're called even less than the "set direction" calls.
+> >   */
+> > -static int gpiod_request_commit(struct gpio_desc *desc, const char *label)
+> > +static int
+> > +gpiod_request_commit(struct gpio_desc *desc, const char *label, pid_t pid)
+> >  {
+> >       struct gpio_chip        *gc = desc->gdev->chip;
+> >       int                     ret;
+> > @@ -1913,6 +1919,7 @@ static int gpiod_request_commit(struct gpio_desc *desc, const char *label)
+> >
+> >       if (test_and_set_bit(FLAG_REQUESTED, &desc->flags) == 0) {
+> >               desc_set_label(desc, label ? : "?");
+> > +             desc_set_pid(desc, pid);
+> >       } else {
+> >               ret = -EBUSY;
+> >               goto out_free_unlock;
+> > @@ -1987,7 +1994,8 @@ static int validate_desc(const struct gpio_desc *desc, const char *func)
+> >               return; \
+> >       } while (0)
+> >
+> > -int gpiod_request(struct gpio_desc *desc, const char *label)
+> > +static int
+> > +gpiod_request_with_pid(struct gpio_desc *desc, const char *label, pid_t pid)
+> >  {
+> >       int ret = -EPROBE_DEFER;
+> >       struct gpio_device *gdev;
+> > @@ -1996,7 +2004,7 @@ int gpiod_request(struct gpio_desc *desc, const char *label)
+> >       gdev = desc->gdev;
+> >
+> >       if (try_module_get(gdev->owner)) {
+> > -             ret = gpiod_request_commit(desc, label);
+> > +             ret = gpiod_request_commit(desc, label, pid);
+> >               if (ret)
+> >                       module_put(gdev->owner);
+> >               else
+> > @@ -2009,11 +2017,16 @@ int gpiod_request(struct gpio_desc *desc, const char *label)
+> >       return ret;
+> >  }
+> >
+> > +int gpiod_request(struct gpio_desc *desc, const char *label)
+> > +{
+> > +     return gpiod_request_with_pid(desc, label, 0);
+> > +}
+> > +
+> >  int gpiod_request_user(struct gpio_desc *desc, const char *label)
+> >  {
+> >       int ret;
+> >
+> > -     ret = gpiod_request(desc, label);
+> > +     ret = gpiod_request_with_pid(desc, label, current->pid);
+> >       if (ret == -EPROBE_DEFER)
+> >               ret = -ENODEV;
+> >
+> > @@ -2042,6 +2055,7 @@ static bool gpiod_free_commit(struct gpio_desc *desc)
+> >               }
+> >               kfree_const(desc->label);
+> >               desc_set_label(desc, NULL);
+> > +             desc_set_pid(desc, 0);
+> >               clear_bit(FLAG_ACTIVE_LOW, &desc->flags);
+> >               clear_bit(FLAG_REQUESTED, &desc->flags);
+> >               clear_bit(FLAG_OPEN_DRAIN, &desc->flags);
+> > @@ -2140,7 +2154,7 @@ struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+> >               return desc;
+> >       }
+> >
+> > -     ret = gpiod_request_commit(desc, label);
+> > +     ret = gpiod_request_commit(desc, label, 0);
+> >       if (ret < 0)
+> >               return ERR_PTR(ret);
+> >
+> > diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
+> > index b35deb08a7f5..d1535677e162 100644
+> > --- a/drivers/gpio/gpiolib.h
+> > +++ b/drivers/gpio/gpiolib.h
+> > @@ -165,6 +165,8 @@ struct gpio_desc {
+> >
+> >       /* Connection label */
+> >       const char              *label;
+> > +     /* Consumer's PID (if consumer is in user-space, otherwise 0) */
+> > +     pid_t                   pid;
+> >       /* Name of the GPIO */
+> >       const char              *name;
+> >  #ifdef CONFIG_OF_DYNAMIC
+> > diff --git a/include/uapi/linux/gpio.h b/include/uapi/linux/gpio.h
+> > index cb9966d49a16..37f10021d1aa 100644
+> > --- a/include/uapi/linux/gpio.h
+> > +++ b/include/uapi/linux/gpio.h
+> > @@ -219,6 +219,8 @@ struct gpio_v2_line_request {
+> >   * gpio_v2_line_flag, such as %GPIO_V2_LINE_FLAG_ACTIVE_LOW,
+> >   * %GPIO_V2_LINE_FLAG_OUTPUT etc, added together.
+> >   * @attrs: the configuration attributes associated with the line
+> > + * @consumer_pid: process ID of the user-space consumer or 0 if the consumer
+> > + * lives in kernel space
+> >   * @padding: reserved for future use
+> >   */
+> >  struct gpio_v2_line_info {
+> > @@ -228,8 +230,9 @@ struct gpio_v2_line_info {
+> >       __u32 num_attrs;
+> >       __aligned_u64 flags;
+> >       struct gpio_v2_line_attribute attrs[GPIO_V2_LINE_NUM_ATTRS_MAX];
+> > +     __s32 consumer_pid;
+>
+> My knee-jerk reaction here was to make the pid unsigned, as we never
+> pass a negative PID.
+> Keeping in mind that the existing kernel will return 0 for this field
+> (the existing padding), so 0 needs to be excluded from valid PIDs
+> anyway.
+>
+> Andy suggests returning -1 for kernel held lines.
+> In that case 0 would mean "old kernel", while -1 would mean "kernel
+> held".
+>
+> As libgpiod will have to convert the 0 to -1 when returning the PID to
+> user-space as a pid_t, I'm good with the uAPI using 0 to mean
+> "no PID available" for all cases. I'm still open to passing -1 for
+> kernel held is there is a use case for it, but I don't see one.
+>
 
-I am sorry, forgot to add change log.
+Using -1 sounds good but I've just realized there's a different
+problem. A process holding a file descriptor may fork and both the
+parent and the child will keep the same file descriptors open. Now
+we'll have two processes (with different PIDs) holding the same GPIO
+lines (specifically holding a file descriptor to the same anonymous
+inode).
 
-Change since v4:
-* Rename rounding function and it parameter from clock to rate.
-* Fix double ;; typo.
+This already poses a problem for this patch as we'd need to return an
+array of PIDs which we don't have the space for but also is a
+situation which we haven't discussed previously IIRC - two processes
+keeping the same GPIO lines requested.
 
-Regards,
-Ivan
+I don't have any good idea on how to address this yet. One thing off
+the top of my head is: close the parent's file descriptor from kernel
+space (is it even possible?) on fork() (kind of like the close() on
+exec flag).
 
-On 2022-09-12 11:13, Ivan T. Ivanov wrote:
-> It was reported that RPi3[1] and RPi Zero 2W boards have issues with
-> the Bluetooth. It turns out that when switching from initial to
-> operation speed host and device no longer can talk each other because
-> host uses incorrect UART baud rate.
-> 
-> The UART driver used in this case is amba-pl011. Original fix, see
-> below Github link[2], was inside pl011 module, but somehow it didn't
-> look as the right place to fix. Beside that this original rounding
-> function is not exactly perfect for all possible clock values. So I
-> deiced to move the hack to the platform which actually need it.
-> 
-> The UART clock is initialised to be as close to the requested
-> frequency as possible without exceeding it. Now that there is a
-> clock manager that returns the actual frequencies, an expected
-> 48MHz clock is reported as 47999625. If the requested baud rate
-> == requested clock/16, there is no headroom and the slight
-> reduction in actual clock rate results in failure.
-> 
-> If increasing a clock by less than 0.1% changes it from ..999..
-> to ..000.., round it up.
-> 
-> [1] https://bugzilla.suse.com/show_bug.cgi?id=1188238
-> [2] 
-> https://github.com/raspberrypi/linux/commit/ab3f1b39537f6d3825b8873006fbe2fc5ff057b7
-> 
-> Cc: Phil Elwell <phil@raspberrypi.com>
-> Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
-> Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->  drivers/clk/bcm/clk-bcm2835.c | 35 +++++++++++++++++++++++++++++++++--
->  1 file changed, 33 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/bcm/clk-bcm2835.c 
-> b/drivers/clk/bcm/clk-bcm2835.c
-> index 48a1eb9f2d55..4361ec4c659a 100644
-> --- a/drivers/clk/bcm/clk-bcm2835.c
-> +++ b/drivers/clk/bcm/clk-bcm2835.c
-> @@ -30,6 +30,7 @@
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/io.h>
-> +#include <linux/math.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> @@ -502,6 +503,8 @@ struct bcm2835_clock_data {
->  	bool low_jitter;
-> 
->  	u32 tcnt_mux;
-> +
-> +	bool round_up;
->  };
-> 
->  struct bcm2835_gate_data {
-> @@ -993,12 +996,34 @@ static long
-> bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
->  	return temp;
->  }
-> 
-> +static unsigned long bcm2835_round_rate(unsigned long rate)
-> +{
-> +	unsigned long scaler;
-> +	unsigned long limit;
-> +
-> +	limit = rate / 100000;
-> +
-> +	scaler = 1;
-> +	while (scaler < limit)
-> +		scaler *= 10;
-> +
-> +	/*
-> +	 * If increasing a clock by less than 0.1% changes it
-> +	 * from ..999.. to ..000.., round up.
-> +	 */
-> +	if ((rate + scaler - 1) / scaler % 1000 == 0)
-> +		rate = roundup(rate, scaler);
-> +
-> +	return rate;
-> +}
-> +
->  static unsigned long bcm2835_clock_get_rate(struct clk_hw *hw,
->  					    unsigned long parent_rate)
->  {
->  	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
->  	struct bcm2835_cprman *cprman = clock->cprman;
->  	const struct bcm2835_clock_data *data = clock->data;
-> +	unsigned long rate;
->  	u32 div;
-> 
->  	if (data->int_bits == 0 && data->frac_bits == 0)
-> @@ -1006,7 +1031,12 @@ static unsigned long
-> bcm2835_clock_get_rate(struct clk_hw *hw,
-> 
->  	div = cprman_read(cprman, data->div_reg);
-> 
-> -	return bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-> +	rate = bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-> +
-> +	if (data->round_up)
-> +		rate = bcm2835_round_rate(rate);
-> +
-> +	return rate;
->  }
-> 
->  static void bcm2835_clock_wait_busy(struct bcm2835_clock *clock)
-> @@ -2143,7 +2173,8 @@ static const struct bcm2835_clk_desc 
-> clk_desc_array[] = {
->  		.div_reg = CM_UARTDIV,
->  		.int_bits = 10,
->  		.frac_bits = 12,
-> -		.tcnt_mux = 28),
-> +		.tcnt_mux = 28,
-> +		.round_up = true),
-> 
->  	/* TV encoder clock.  Only operating frequency is 108Mhz.  */
->  	[BCM2835_CLOCK_VEC]	= REGISTER_PER_CLK(
+I need to think about it more.
+
+Bart
