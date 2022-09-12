@@ -2,328 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891DC5B5DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6215B5DB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiILPvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S230093AbiILPwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiILPvg (ORCPT
+        with ESMTP id S229741AbiILPwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:51:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EF0713D02
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 08:51:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 477DA113E;
-        Mon, 12 Sep 2022 08:51:41 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.78.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 076EA3F73D;
-        Mon, 12 Sep 2022 08:51:32 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 1/1] arm_pmu: acpi: Pre-allocate pmu structures
-Date:   Mon, 12 Sep 2022 17:51:04 +0200
-Message-Id: <20220912155105.1443303-2-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220912155105.1443303-1-pierre.gondois@arm.com>
-References: <20220912155105.1443303-1-pierre.gondois@arm.com>
+        Mon, 12 Sep 2022 11:52:39 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2083.outbound.protection.outlook.com [40.107.20.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564CE11A3B;
+        Mon, 12 Sep 2022 08:52:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=icP09uMUYdLWGDzx2rJidh6a2Fdrsu9MYZbfjZWfOYK5fxaGAR6iaIiBnNwkdQ3ldvC590ig89Zm8EV/3X1vxpeIgMCn1RB9LvWBOg4R8UvLfpspt7J8vmfzISUnZIS9/9LlSNKMU6sAIS7ybolum2PXxQ+klYP2mmKUUC/9G36d9OBRM97JLoOu8+LcUC+rwuXkRq90pkpHmvpYsPD0lKPeGfsUTk0H/vZfnEop1FD3Z/eLNfP7kJa55cq2IMdXdNpOBEdH4JkYYr4ovXtlYUEUxwmpDkOL/mUe1YG4yWP2QKRbb7sf9ZSGwECqxUenyC4f9V7jAmbizOkb6W1mNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DY9T1UP7lQWf2BM3lP7iaHujmPjuY6Y+MhJHEaqg2ds=;
+ b=CbAeLKEy3PyS59FojgzOA6Z/w9qkJQRe7vzEumCayWuzu48D8AeClwo3FypOCUhYijN7cq5Hqa6U7cDp/EO10KJ+t5ElBC7PfDlDV1Sdtmw4ITek74I2l5OLDKpOQtYVexlTelBkQjfPbIlJwiNCjLaEnOKPR8j4NZ/TsCqnCneJobAiq9Tzxifs8aA/qdUWyDNT/k+1w+K4i9Wp3XwN4wCAPnUNvGPCMTH3EkkWHU4/t364leYw0rJkZp+ynuHjb38qvCi8mxfCQvqQSV0q0FMwp7mKZahsIAokLjcHBmzmecY8MFwTLubgWqv83YQTWAzxmE8b5dW0w68x+2dGwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DY9T1UP7lQWf2BM3lP7iaHujmPjuY6Y+MhJHEaqg2ds=;
+ b=KQm3hNnUop7RPtPzLoN3REu5SVw1SVWWDDMDTpR/8wKMs9oZKmcu9Qa29WrR4ti5a+4CfsW/lofGx8KpOfH4GMsOmGjf/vrFtESeWZ8XhTeLvgXsRxNjqWuu6bBOCa/euneRmgcMc6OAgmGZeiMZIK95O1mZqyduX0hruxY6E7s=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PA4PR04MB7792.eurprd04.prod.outlook.com (2603:10a6:102:c0::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
+ 2022 15:52:35 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 15:52:35 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
+ for all ports
+Thread-Topic: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
+ for all ports
+Thread-Index: AQHYxhmBz++3+4sxbkG2gbfVifdN+a3bfLEAgAAYhICAAFyagIAAAVYA
+Date:   Mon, 12 Sep 2022 15:52:35 +0000
+Message-ID: <20220912155234.ds73xpn5ijjq3iif@skbuf>
+References: <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-7-colin.foster@in-advantage.com>
+ <Yx7yZESuK6Jh0Q8X@shell.armlinux.org.uk>
+ <20220912101621.ttnsxmjmaor2cd7d@skbuf> <Yx9Uo9RiI7bRZvLC@colin-ia-desktop>
+In-Reply-To: <Yx9Uo9RiI7bRZvLC@colin-ia-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PA4PR04MB7792:EE_
+x-ms-office365-filtering-correlation-id: 5f15341d-d708-42c5-e417-08da94d6cfa7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1ndzIucW9sbADoYuP2T7+BS/FP+aJ5baR3MMyL0bc6QTb38g+LWqfeeQHCYEvHH5HJ+bYiOOdviKBaNN8510OFHCOx9Oj8pIeUcq/4IIJyIOpxxLChjN60lECYRpu3JEzCRJlLEbmh5u6bHDHBXVDCCyN0EzIWaZot33k69qZAxugyOiXmrugr9s8lbpfix9HLk3VG/yfo3UmiFtai2V165RZX76QWlIa18AOVOXwDiwUmIRFGBfVUSvkLnfiwVbOoycGQCEM+mS2yPl2GZpYJb6+bXfTDban3a94vX9qFOJOrynNxYM+k4l/Dgda7jC5392yGnPYwCT4/XirAUnNX/Fp7FrjzOyW8DDImDmwqar7KRiE2LdaXdDpoQ4ugM58PcyYQracAIRbAXBLfGAeiG/7NZZNl/SbWA1KY1ioy4y6hlbQKs+gMxvb/pV+e8aQYSYPnJrho19zZA5c3jv2BjE3olyUegLZTuupA0ZguKtRBIJaXJwB4UUtd0pDR6x4rXpHM+c9tZv8Dfzhuyz2fWnTeQrrEdzPhaB2e1kO54MwyPLm7bjGhDEygPIDP8uhDX1nfKsie63aChHUTykWWoSGwmxVYAMnVc5ocnUEW7cYgV6r2gSkxNqb8xwHEwtCuztiSvnmKvXd5e+M0P1VMI42eHuDEQEA3fxnw0z7Li8GZPsP3Kg3kCqS6Ld2Kv18qYkKgac9ow4LU3VcYZDfJR7qk8vjjCoTsRZDsOcv3nJ54qW8ugHjPneYulajISKS8sJk4b2HbLozfjtsC/mEJCBNyOID40CWFFLGr6Ksj00cLt6uO+pAG8mrzLozeRfL5m17gVXmUihtTu8LCTLOA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(346002)(396003)(39860400002)(366004)(136003)(376002)(86362001)(38070700005)(122000001)(4326008)(38100700002)(64756008)(66946007)(76116006)(8676002)(66556008)(66476007)(91956017)(66446008)(9686003)(6512007)(71200400001)(26005)(44832011)(478600001)(41300700001)(6486002)(6506007)(966005)(33716001)(6916009)(54906003)(316002)(1076003)(2906002)(5660300002)(186003)(7416002)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mwWX0NlE2V+BobHyvj0SwfEsL54y3zjDnJti6bruCO9T+giSzgHnTVMYKf8X?=
+ =?us-ascii?Q?qoru0WSvkSwqCI4nBgtc4ay0k536zo1OwZcEIzWSFAuxSX7EfXMXCK/+K/Zj?=
+ =?us-ascii?Q?et+x6iRcqauL/GXna/7r1UNAKuG5g8Ua65E1xyawsYA4re2e1BTsUMADgN6U?=
+ =?us-ascii?Q?y7ArkpLuVkaQMdLgtVDBzBpIFn8MzbygIiI+rmfYsD2l4Ub8U34AxnGBfH05?=
+ =?us-ascii?Q?/aqJ8IUgHvFcWyM43B1JTo4vS4MYf1LfWxPhXJ7cimX0PtzvvBF4ifk/Aj5R?=
+ =?us-ascii?Q?sW2HROI+jghazKtNGVOA+dsggyaz/qGy2+3qWQDBUpFIN3DXuPtkTMttXpqV?=
+ =?us-ascii?Q?4Kq7ldZUfnstmCetSzCwRwj9D8sEQ+Sw7494Fci70RwKq0uewf6Bs8eTlOG+?=
+ =?us-ascii?Q?0p+dYKmjr+f+kN3mh0F4X9SOd90ukQoaA+jKjl5K3whQHNGNdtPgxFwvX6gJ?=
+ =?us-ascii?Q?W1wXPyM89mCXkWj8V0wySCw/G4oeqOkcLofgtfd81E8jZnkOhRXT6+I0VD/q?=
+ =?us-ascii?Q?cZb8wYTIEabBB4vMRLTbtNFbAeg1U4ARIozIxfQt95+oyvbeO+gckWGEF9vi?=
+ =?us-ascii?Q?/9m9aM+XkBi6dsRfquWBPoXyiJewSf0rReXY6fmeiWDyqnkKOmBB/iQ3aEr3?=
+ =?us-ascii?Q?PDqIpl6aniSGmL36X4yQRS3QwfHiWf1TcqN/8fi1R40y5YO2o+ydCxA+COf/?=
+ =?us-ascii?Q?P90bAWVab7gLATzAWqGPPqqRqhP3NDuEn02n3GjaAlpQhIKUq4VHKXLYrQUb?=
+ =?us-ascii?Q?MO20wnldCDozwoGc2ZKz/GfB7XX/ZxEladM2NHYZnWTiug/O8YHv3iUoA6xZ?=
+ =?us-ascii?Q?fzZYlXl7yzJBB6VuXgG0T9KhP6SS22GZmJ8k/OVORndbHWfAXAvKNSpk4K3f?=
+ =?us-ascii?Q?KeuSdGoX4rJOs23d97t3c1mYX/0RQeQDxeQbeWHz5/VFayMbGRDL/b8d31Wm?=
+ =?us-ascii?Q?ocihUS1wdVfu/4Kr3LnwcWN6yKNSPxRW7wWSix8pok+yDR5OiofG/yzVBVce?=
+ =?us-ascii?Q?i5Wb7Yx1lSyz/bJbCChVZwJo2skbTrAePnPeBdUt56i/kr19gw+ObRv2uW0W?=
+ =?us-ascii?Q?D/34VrKDNKkn2sntTj7/vilxT1PHyTecSV+bSOVERDtVP8R2nZXMALSzoc4e?=
+ =?us-ascii?Q?n/ytd3YvvOOKFLOR9DDONrWAaut4Vt5to4+HpSpo1S1T1z3SvDZg/l4+Ow2h?=
+ =?us-ascii?Q?EsW6Ory4zhGdTLFy0JfDdxRZ6TQrTF3LZadvRXvZwovMYCc2Cw2MU/qakbIi?=
+ =?us-ascii?Q?T7m/pnuGrkvlpeCjylFwVyoNbbrDpS0IZYWKtEydgoOfuO0sdEuVkWNMLioB?=
+ =?us-ascii?Q?Eybs2x1zCOTxctXi3pFT3HsKKDMlzJmM1e06CMmO2HugAmwxPtB/cc+ahe5W?=
+ =?us-ascii?Q?g28kpT4/jwC3H/rq/lPAEKo1NsGKw0P3qX72Ifks9Sm2gi/dcQCWqNeuQeDx?=
+ =?us-ascii?Q?yFzAP+qG9vspeigPSIqao0LfOMDPB/LpPKTTjHOI38uhHyTJUk43TB6lL1LZ?=
+ =?us-ascii?Q?3Y25utKDAR5WmXOKINd5x9XaqyS1F9+fRz/2f3DLh1p9duR1nQo4TJ+PJtku?=
+ =?us-ascii?Q?A5zIkOSOs1T2fSBwR+SpNBxebs3AQ+Ml8vyU++4uJKtdx3u7aW1zpZRC2EJL?=
+ =?us-ascii?Q?xQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <17702AF084BED348BB2632EB323CFE40@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f15341d-d708-42c5-e417-08da94d6cfa7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2022 15:52:35.3832
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ij06imq7tkxDdBwtv1C8j83tf+27YAc0lPn/32UwCmHVM9LcW4MDSCvpH4LExQ3HGUSn8JqAlgc4nyZTLfvjXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7792
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On an Ampere Altra,
-Running a preemp_rt kernel based on v5.19-rc3-rt4 on an Ampere Altra
-triggers:
-[   12.642389] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-[   12.642402] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
-[   12.642406] preempt_count: 0, expected: 0
-[   12.642409] RCU nest depth: 0, expected: 0
-[   12.642411] 3 locks held by cpuhp/0/24:
-[   12.642414] #0: ffffd8a22c8870d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
-[   12.642429] #1: ffffd8a22c887120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
-[   12.642436] #2: ffff083e7f0d97b8 ((&c->lock)){+.+.}-{3:3}, at: ___slab_alloc (linux/mm/slub.c:2954)
-[   12.642458] irq event stamp: 42
-[   12.642460] hardirqs last enabled at (41): finish_task_switch (linux/./arch/arm64/include/asm/irqflags.h:35)
-[   12.642471] hardirqs last disabled at (42): cpuhp_thread_fun (linux/kernel/cpu.c:776 (discriminator 1))
-[   12.642476] softirqs last enabled at (0): copy_process (linux/./include/linux/lockdep.h:191)
-[   12.642484] softirqs last disabled at (0): 0x0
-[   12.642495] CPU: 0 PID: 24 Comm: cpuhp/0 Tainted: G        W         5.19.0-rc3-rt4-custom-piegon01-rt_0 #142
-[   12.642500] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-[   12.642506] Call trace:
-[   12.642508] dump_backtrace (linux/arch/arm64/kernel/stacktrace.c:200)
-[   12.642514] show_stack (linux/arch/arm64/kernel/stacktrace.c:207)
-[   12.642517] dump_stack_lvl (linux/lib/dump_stack.c:107)
-[   12.642523] dump_stack (linux/lib/dump_stack.c:114)
-[   12.642527] __might_resched (linux/kernel/sched/core.c:9929)
-[   12.642531] rt_spin_lock (linux/kernel/locking/rtmutex.c:1732 (discriminator 4))
-[   12.642536] ___slab_alloc (linux/mm/slub.c:2954)
-[   12.642539] __slab_alloc.isra.0 (linux/mm/slub.c:3116)
-[   12.642543] kmem_cache_alloc_trace (linux/mm/slub.c:3207)
-[   12.642549] __armpmu_alloc (linux/./include/linux/slab.h:600)
-[   12.642558] armpmu_alloc_atomic (linux/drivers/perf/arm_pmu.c:927)
-[   12.642562] arm_pmu_acpi_cpu_starting (linux/drivers/perf/arm_pmu_acpi.c:204)
-[   12.642568] cpuhp_invoke_callback (linux/kernel/cpu.c:192)
-[   12.642571] cpuhp_thread_fun (linux/kernel/cpu.c:777 (discriminator 3))
-[   12.642573] smpboot_thread_fn (linux/kernel/smpboot.c:164 (discriminator 3))
-[   12.642580] kthread (linux/kernel/kthread.c:376)
-[   12.642584] ret_from_fork (linux/arch/arm64/kernel/entry.S:868)
+On Mon, Sep 12, 2022 at 08:47:47AM -0700, Colin Foster wrote:
+> > This is true. I am also a bit surprised at Colin's choices to
+> > (a) not ask the netdev maintainers to pull into net-next the immutable
+> >     branch that Lee provided here:
+> >     https://lore.kernel.org/lkml/YxrjyHcceLOFlT%2Fc@google.com/
+> >     and instead send some patches for review which are difficult to
+> >     apply directly to any tree
+>=20
+> As mentioned in the cover letter, I don't expect this to necessarily be
+> ready by the next merge window. But seemingly I misjudged whether
+> merging the net-next and Lee's tree would be more tedious for the netdev
+> maintainers than looking at the RFC for reviewers. I'm trying to create
+> as little hassle for people as I can. Apologies.
 
-arm_pmu_acpi_cpu_starting() is called in the STARTING hotplug section,
-which runs with interrupts disabled. To avoid allocating memory and
-sleeping in this function, the pmu structures must be pre-allocated.
+What is it exactly that is keeping this patch set from being ready for 6.1?
+There's still time...
 
-On ACPI systems, the count of PMUs is unknown until CPUs are
-hotplugged, cf:
-commit 0dc1a1851af1 ("arm_pmu: add armpmu_alloc_atomic()")
-
-At most #PMU_IRQs pmu structures will be used and thus need to be
-pre-allocated.
-In arm_pmu_acpi_cpu_starting() subcalls, after checking the cpuid,
-decide to use or re-use a pre-allocated pmu structure. Thus the
-pre-allocated pmu struct can be seen as a pool.
-When probing, search and free unused pmu structures.
-
-Platforms used to test this patch:
-- Juno-r2 (2 clusters: 2 big and 4 little CPUs) with 2 PMUs and
-  one interrupt for each CPU
-- Ampere Altra with 1 PMU and one interrupt for the 160 CPUs
-
-Link: https://lore.kernel.org/all/20210810134127.1394269-2-valentin.schneider@arm.com
-Reported-by: Valentin Schneider <vschneid@redhat.com>
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- drivers/perf/arm_pmu.c       |  17 +-----
- drivers/perf/arm_pmu_acpi.c  | 114 ++++++++++++++++++++++++++++++-----
- include/linux/perf/arm_pmu.h |   1 -
- 3 files changed, 103 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 59d3980b8ca2..731e793dfef5 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -861,16 +861,16 @@ static void cpu_pmu_destroy(struct arm_pmu *cpu_pmu)
- 					    &cpu_pmu->node);
- }
- 
--static struct arm_pmu *__armpmu_alloc(gfp_t flags)
-+struct arm_pmu *armpmu_alloc(void)
- {
- 	struct arm_pmu *pmu;
- 	int cpu;
- 
--	pmu = kzalloc(sizeof(*pmu), flags);
-+	pmu = kzalloc(sizeof(*pmu), GFP_KERNEL);
- 	if (!pmu)
- 		goto out;
- 
--	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, flags);
-+	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, GFP_KERNEL);
- 	if (!pmu->hw_events) {
- 		pr_info("failed to allocate per-cpu PMU data.\n");
- 		goto out_free_pmu;
-@@ -916,17 +916,6 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
- 	return NULL;
- }
- 
--struct arm_pmu *armpmu_alloc(void)
--{
--	return __armpmu_alloc(GFP_KERNEL);
--}
--
--struct arm_pmu *armpmu_alloc_atomic(void)
--{
--	return __armpmu_alloc(GFP_ATOMIC);
--}
--
--
- void armpmu_free(struct arm_pmu *pmu)
- {
- 	free_percpu(pmu->hw_events);
-diff --git a/drivers/perf/arm_pmu_acpi.c b/drivers/perf/arm_pmu_acpi.c
-index 96ffadd654ff..599d8be78950 100644
---- a/drivers/perf/arm_pmu_acpi.c
-+++ b/drivers/perf/arm_pmu_acpi.c
-@@ -17,6 +17,8 @@
- 
- static DEFINE_PER_CPU(struct arm_pmu *, probed_pmus);
- static DEFINE_PER_CPU(int, pmu_irqs);
-+static unsigned int preallocated_pmus_count;
-+static struct arm_pmu **preallocated_pmus;
- 
- static int arm_pmu_acpi_register_irq(int cpu)
- {
-@@ -187,30 +189,108 @@ static int arm_pmu_acpi_parse_irqs(void)
- 	return err;
- }
- 
-+/* Count the number of different PMU IRQs for the input PMU. */
-+static int count_pmu_irqs(struct arm_pmu *pmu)
-+{
-+	struct pmu_hw_events __percpu *hw_events = pmu->hw_events;
-+	unsigned int num_irqs = 0;
-+	int cpu, probed_cpu, irq;
-+
-+	for_each_cpu(cpu, &pmu->supported_cpus) {
-+		irq = per_cpu(hw_events->irq, cpu);
-+		for_each_cpu(probed_cpu, &pmu->supported_cpus) {
-+			if (irq == per_cpu(hw_events->irq, probed_cpu)) {
-+				if (probed_cpu == cpu)
-+					num_irqs++;
-+				break;
-+			}
-+		}
-+	}
-+
-+	return num_irqs;
-+}
-+
-+/*
-+ * Count the number of different PMU IRQs across all the PMUs of the system
-+ * to get an upper bound of the number of struct arm_pmu to pre-allocate.
-+ */
-+static int count_all_pmu_irqs(void)
-+{
-+	unsigned int num_irqs = 0;
-+	int cpu, probed_cpu, irq;
-+
-+	for_each_possible_cpu(cpu) {
-+		irq = per_cpu(pmu_irqs, cpu);
-+		for_each_possible_cpu(probed_cpu) {
-+			if (irq == per_cpu(pmu_irqs, probed_cpu)) {
-+				if (probed_cpu == cpu)
-+					num_irqs++;
-+				break;
-+			}
-+		}
-+	}
-+
-+	return num_irqs;
-+}
-+
-+static unsigned int pmu_preallocate(void)
-+{
-+	unsigned int i, num_irqs = count_all_pmu_irqs();
-+
-+	preallocated_pmus = kcalloc(num_irqs, sizeof(*preallocated_pmus),
-+					GFP_KERNEL);
-+	if (!preallocated_pmus) {
-+		pr_err("Failed to pre-allocate %d pmu struct\n", num_irqs);
-+		return -ENOMEM;
-+	}
-+
-+	for (i = 0; i < num_irqs; i++) {
-+		preallocated_pmus[i] = armpmu_alloc();
-+		if (!preallocated_pmus[i])
-+			return -ENOMEM;
-+	}
-+
-+	preallocated_pmus_count = num_irqs;
-+	return 0;
-+}
-+
- static struct arm_pmu *arm_pmu_acpi_find_alloc_pmu(void)
- {
- 	unsigned long cpuid = read_cpuid_id();
- 	struct arm_pmu *pmu;
--	int cpu;
-+	unsigned int i;
- 
--	for_each_possible_cpu(cpu) {
--		pmu = per_cpu(probed_pmus, cpu);
--		if (!pmu || pmu->acpi_cpuid != cpuid)
--			continue;
-+	for (i = 0; i < preallocated_pmus_count; i++) {
-+		pmu = preallocated_pmus[i];
- 
--		return pmu;
-+		if (!pmu->acpi_cpuid) {
-+			pmu->acpi_cpuid = cpuid;
-+			return pmu;
-+		} else if (pmu->acpi_cpuid == cpuid)
-+			return pmu;
- 	}
- 
--	pmu = armpmu_alloc_atomic();
--	if (!pmu) {
--		pr_warn("Unable to allocate PMU for CPU%d\n",
--			smp_processor_id());
--		return NULL;
--	}
-+	pr_err("Unable to find pre-allocated PMU for CPU%d\n",
-+		smp_processor_id());
-+	return NULL;
-+}
- 
--	pmu->acpi_cpuid = cpuid;
-+static void pmu_free_unused_preallocated(struct arm_pmu *pmu)
-+{
-+	int i, unused_num_irqs = count_pmu_irqs(pmu);
- 
--	return pmu;
-+	if (unused_num_irqs <= 1)
-+		return;
-+	else if (unused_num_irqs >= preallocated_pmus_count) {
-+		pr_err("Trying to free %d pmu struct when %d are allocated\n",
-+				unused_num_irqs, preallocated_pmus_count);
-+		return;
-+	}
-+
-+	unused_num_irqs--;
-+	for (i = 0; i < unused_num_irqs; i++)
-+		armpmu_free(preallocated_pmus[preallocated_pmus_count - i - 1]);
-+	preallocated_pmus_count -= unused_num_irqs;
- }
- 
- /*
-@@ -311,6 +391,8 @@ int arm_pmu_acpi_probe(armpmu_init_fn init_fn)
- 		if (!pmu || pmu->name)
- 			continue;
- 
-+		pmu_free_unused_preallocated(pmu);
-+
- 		ret = init_fn(pmu);
- 		if (ret == -ENODEV) {
- 			/* PMU not handled by this driver, or not present */
-@@ -351,6 +433,10 @@ static int arm_pmu_acpi_init(void)
- 	if (ret)
- 		return ret;
- 
-+	ret = pmu_preallocate();
-+	if (ret)
-+		return ret;
-+
- 	ret = cpuhp_setup_state(CPUHP_AP_PERF_ARM_ACPI_STARTING,
- 				"perf/arm/pmu_acpi:starting",
- 				arm_pmu_acpi_cpu_starting, NULL);
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 0407a38b470a..049908af3595 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -173,7 +173,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
- 
- /* Internal functions only for core arm_pmu code */
- struct arm_pmu *armpmu_alloc(void);
--struct arm_pmu *armpmu_alloc_atomic(void);
- void armpmu_free(struct arm_pmu *pmu);
- int armpmu_register(struct arm_pmu *pmu);
- int armpmu_request_irq(int irq, int cpu);
--- 
-2.25.1
-
+It mostly looks ok to me, I'm in the process of reviewing it. You
+mentioned documentation in the cover letter; I suppose you're talking
+about dt-schema? If so, I just started off by converting ocelot.txt to
+mscc,ocelot.yaml, since I know that the conversion process is typically
+a bit daunting to even start.
+https://patchwork.kernel.org/project/netdevbpf/patch/20220912153702.246206-=
+1-vladimir.oltean@nxp.com/=
