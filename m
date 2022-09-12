@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F2C5B5C0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3475B5C12
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiILORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S230136AbiILORi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiILOR2 (ORCPT
+        with ESMTP id S229878AbiILORd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:17:28 -0400
+        Mon, 12 Sep 2022 10:17:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5E925C6B;
-        Mon, 12 Sep 2022 07:17:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F832610E;
+        Mon, 12 Sep 2022 07:17:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A962B80D55;
-        Mon, 12 Sep 2022 14:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582EBC433D6;
-        Mon, 12 Sep 2022 14:17:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C073BB80D7F;
+        Mon, 12 Sep 2022 14:17:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7344DC433D7;
+        Mon, 12 Sep 2022 14:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662992244;
-        bh=jTbsk7yoEK+AZ3vZc8ogcuLE+gwzEOpP/ZeZUQAejUI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=N2TPTBsaMrUDjAOP8g3X0PYhgmGhVVWX1TIzIUvPGYLN7AmbGJxb2/Ic7DAZhyk42
-         eFq6z/JznWLmMAZgq1GXf9n9Wg/VGkhgbyHCGWX/007Zwc9Ux8qoBDAP6C23y0ewil
-         y5p02FwkM+hYHeoqwFOG2LkrcWBPDZLMveUnibioOokNllXzjEf6G1eddFSovN6I5K
-         P/cWAszPKXKx60FDqyoqqX4cRMSTPEBiFrEYOIu2SixK90Ad9briXm30zOTsT3Uy09
-         Qlue/SDeCQ2RUUFFdjBTSmNHI6Apo3H5rfm/b+2kpwAuvxDHWq38glaz9yvf0j7TN6
-         TX2iQZrkheScQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH -next] power: supply: bq25890: Fix enum conversion in bq25890_power_supply_set_property()
-Date:   Mon, 12 Sep 2022 07:15:53 -0700
-Message-Id: <20220912141553.1743568-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        s=k20201202; t=1662992249;
+        bh=aGq0nN+nEaeWXYxt+doqTW9R/4SDnQkBCNcOcCEmsCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZlfLpax89DnIeCvbfGgWnusbMfGKwqpDbc8FK85XBv6cSXecxLa0wDC0jHfSDa+UC
+         sYNHjMYvr8WeHg+Qz+V7vKYZ+P1fjO1Uft+HIqCP44y16+taLVJ5xudHmnQc9VuCKN
+         wyFVZb14XErXNBH6NMD7SpgyuBQie1V1LB5oCYovSFUZa3CoQfwxARYosPK1muWDUp
+         duzztajgFzwCEJKB9yWY1dz8vy7IX+i3o/YchMpL8IsHmlcvdI1onAgWgkK4bkVz7Y
+         23bx/c3BtlB8K4X+cPOm/c7plZefbZRrA9ErCEpze2bvIUHIMLC6sHFfEyGZz5ewM9
+         bhPquCKL7vUIA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oXkFa-0001K7-1O; Mon, 12 Sep 2022 16:17:26 +0200
+Date:   Mon, 12 Sep 2022 16:17:26 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     cgel.zte@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] USB: serial: ftdi_sio: remove the unneeded
+ result variable
+Message-ID: <Yx8/dtzrkRE4iFea@hovoldconsulting.com>
+References: <20220912133826.18517-1-xu.panda@zte.com.cn>
+ <Yx88s4TwEEt6luPY@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yx88s4TwEEt6luPY@kroah.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,39 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Mon, Sep 12, 2022 at 04:05:39PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Sep 12, 2022 at 01:38:27PM +0000, cgel.zte@gmail.com wrote:
+> > From: Xu Panda <xu.panda@zte.com.cn>
+> > 
+> > Return the value usb_control_msg() directly instead of storing
+> > it in another redundant variable.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 
-  drivers/power/supply/bq25890_charger.c:625:40: error: implicit conversion from enumeration type 'enum bq25890_fields' to different enumeration type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
-                  lval = bq25890_find_idx(val->intval, F_IINLIM);
-                         ~~~~~~~~~~~~~~~~              ^~~~~~~~
-  1 error generated.
+> > -       rv = usb_control_msg(port->serial->dev,
+> > -                           usb_sndctrlpipe(port->serial->dev, 0),
+> > -                           FTDI_SIO_SET_BAUDRATE_REQUEST,
+> > -                           FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> > -                           value, index,
+> > -                           NULL, 0, WDR_SHORT_TIMEOUT);
+> > -       return rv;
+> > +       return usb_control_msg(port->serial->dev,
+> > +                              usb_sndctrlpipe(port->serial->dev, 0),
+> > +                              FTDI_SIO_SET_BAUDRATE_REQUEST,
+> > +                              FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> > +                              value, index,
+> > +                              NULL, 0, WDR_SHORT_TIMEOUT);
+> >  }
+> 
+> That's really not the correct use of the return value of
+> usb_control_msg().  Can you fix this up to properly handle the return
+> value, or better yet, use the usb_control_msg_send() call?
 
-Use the proper value from the right enumerated type, TBL_IINLIM, so
-there is no more implcit conversion. The numerical values of F_IINLIM
-and TBL_IINLIM happen to be the same so there is no change in behavior.
+It is actually correct since the buffer length is zero here (i.e. it
+returns a negative errno or 0).
 
-Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting IINLIM")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1707
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/power/supply/bq25890_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But I'm also ignoring patches from this email address as it is used by
+multiple users, and of which none so far has replied to feedback (as if
+it's all automated).
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index f5368be32843..e6bd60fef0f6 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -622,7 +622,7 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
- 
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
--		lval = bq25890_find_idx(val->intval, F_IINLIM);
-+		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
- 		return bq25890_field_write(bq, F_IINLIM, lval);
- 	default:
- 		return -EINVAL;
-
-base-commit: f52c4d5f0bb486bc515b5f8a56130aea69fb29db
--- 
-2.37.3
-
+Johan
