@@ -2,108 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508DE5B5F4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DDF5B5F65
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiILRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229797AbiILRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiILRaD (ORCPT
+        with ESMTP id S229577AbiILRd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:30:03 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079EE19030;
-        Mon, 12 Sep 2022 10:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1663003786;
-        bh=le7Hd+CVZKvyI8cRoUEmz4/qdEQPFqmPQE68nCfLxLM=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=ZzZRaZD0OOQhPNBE1Kx31W1LmPDgyJY7AekTLtg7jMdjMx47K7QU8MlBXyGQfdVB9
-         DjgRt3wyvFHVQU0oCfLsa+d656MzSQWhFhTWUuLduV5d4ldxTt74DnXq1kpQ1Yjj0v
-         Vt2MPj/r79HOXzDl8uK/YTLfuzOrX8pb+p4RhGCE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mt79P-1pMAyp2PIP-00tQ2Q; Mon, 12
- Sep 2022 19:29:46 +0200
-Subject: Re: [PATCH 3/5] ACPI: battery: Allow battery hooks to be registered
- multiple times.
-To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, rafael@kernel.org,
-        lenb@kernel.org, hmh@hmh.eng.br, matan@svgalib.org,
-        corentin.chary@gmail.com, jeremy@system76.com,
-        productdev@system76.com, platform-driver-x86@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220912125342.7395-1-W_Armin@gmx.de>
- <20220912125342.7395-4-W_Armin@gmx.de>
- <wY3UHtenNt5tmQSMtoDLmzNxvJ7B56SLwlhguYfg6rqC71dDDCYypvSqvS0SUhRJwsel8wBEy3yeS8rDlJCOii24Llo0XKU34IcSn5WNwg8=@protonmail.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <155062a9-8d1a-e771-1bee-35580b1b2b73@gmx.de>
-Date:   Mon, 12 Sep 2022 19:29:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 12 Sep 2022 13:33:56 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD93201A4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:33:55 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r23so340473pgr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=/r5Bs3v4WsCz3gJEKQuWc8+fDNXKW1W7QGEa91zvunM=;
+        b=tYrJzil8gfs2G+8yrRtY8nqSTlkPcoLrajF80b138SwChrSk/Y3KQT/kzxOF4No9Lp
+         6WI3O73Z/ZAffISmvfp/na0h0iV0Zg3019mbv472YaZIdJqoNK3cYeil9yhO7EmZpFou
+         0uJjrjcklWMF5nohc79f44fPs8qztgUPdncoKDltxRzzQqr/S+sGitPtDZcto4LfgT6S
+         HaMA8Ek0KtDa4MOuW/t5K6eNTLy9UJHkYRa2oD4gwEgqR4C3qpOXMF+AU89qSpzKpVXE
+         SgV4zcXQWNXqMR1HRkIR0lHkw7mwy1/KztPkQ+DQBpJlDcC4VEKhDXGmAYYF1++sYvNw
+         vv8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/r5Bs3v4WsCz3gJEKQuWc8+fDNXKW1W7QGEa91zvunM=;
+        b=pCcbECJ3ZOe/CXVwSAvBgPya6FMp6ztDdw7qgtJRA/juw8MUqiHgMAVvVLVwGCz8ra
+         2IemUkjP5ksms0X8vg9tUWZk7SC8qa9UrQNJ+9Fpjbe5goWwogPXM/FiCmBFMB4C/+Ie
+         nCF939sK2rI3A/GgEYcebnHil2eKu06b7ht6zHXynY4OIMMQ+YN81eRMpN9LlhIorrYl
+         LIgzSKtFl9A6ce71aARVfOe/rqzSS9hD+lcL20xVHogPMMMFsENeptCVY45wDyu6BXKm
+         J2gNo0XT7gCxgfwNPIxeYSMhGIPWpjXzTg2GVW6X7zJ0lgAZqs42fWORMx66UcxAq50X
+         O8Jg==
+X-Gm-Message-State: ACgBeo2GMhxejSaGid1PHff4pCilxnOqS1OcrzgCxm50cR3ryA4uVcdb
+        xEFd0YSrkFt5nGyju0BzPe43
+X-Google-Smtp-Source: AA6agR6WpHbs3Uwsjhfe+mNha7sTw8Pvv+jWYsejJb22yqAQn7QaL3TpOk5fdS/hPKEcPFreZGz1oQ==
+X-Received: by 2002:a62:3241:0:b0:545:e66:9d05 with SMTP id y62-20020a623241000000b005450e669d05mr2632451pfy.53.1663004034664;
+        Mon, 12 Sep 2022 10:33:54 -0700 (PDT)
+Received: from workstation ([117.202.184.122])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170902650800b00176d0b44be2sm6311633plk.47.2022.09.12.10.33.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Sep 2022 10:33:53 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 23:03:46 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v6 2/5] PCI: qcom: Add retry logic for link to be stable
+ in L1ss
+Message-ID: <20220912173346.GB25849@workstation>
+References: <20220909195000.GA310621@bhelgaas>
+ <7310fc0c-5f87-87a6-4484-d60970ce3285@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <wY3UHtenNt5tmQSMtoDLmzNxvJ7B56SLwlhguYfg6rqC71dDDCYypvSqvS0SUhRJwsel8wBEy3yeS8rDlJCOii24Llo0XKU34IcSn5WNwg8=@protonmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:bdj8FMZD7tMIwPC/ksvUpRNyQqCwV+ldwI02o5ILod4hUEQk+h8
- DXozwhFh1pceb3/GkW+EliRwkhZ0dQoHDQHdzvX5YOKNwazFsL97Sj5DXPs54boLWtqChUR
- 35Yd7ufis5GjcM675xncg1kyMATEDolQWAKXusvcGDnRoop6YTEm1Ev/mFIXco7Ng0MKauI
- AUqhW/FCOMSsH1FmddhCQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hEjY63qmLik=:+zINZNHgvC4OyF4g8553NF
- 6rTG7ChLVVn67f8lRi9ILSeSWERRAUXEyr8sPkv+/bnyJ9C3a8bwhLWvX/JqLg0pjxHhfe9MS
- Qhxk+8/AvrnxKyc912+JsyAHSza7w/lKwA2d+MeTuwtTpKCLQ/zpHd0XhJ5jiqsNt4gteEp2Z
- aa+/q5pAxvpTy+S/wQ24bcAzQ80vJ6Pju5iMJKX+8SW5RF2ReXZJ7Ve/LpG35iWZDN/CWBluF
- oukfm4q338k7FVXB5UYPb0xFgwDDmIqRfeo8aK+ewS0I7/O60yYDdo4XwArrmR08xxHiqxZnM
- SnUxHx6ojHMLQ04NO5srMwAQH+B+SBKxZhDpknTUUd96tIUz0VB3CTMa9cbtr5HB0jUXnSqNC
- D5kgc1oxA0TxKyiYMC3RSBS52Nv7vmL4hQuuRCoEukBFm0yZ3PyiaLfXZMn/wlmQ1NjE36l/J
- ux/JrFUPI6YNiDXUOGb4jdjw4zig3VJ+OxlEcR26lTmMrw3Bs1ah1lNsNg+P22jIXOLWH9u2G
- roJ99gw5caI14HTTrJTjtUG0GsBWzT6F1L/lwUSUiWKj5+3l9qGmjpG/ljFpeDeD0uRJYa4oB
- J3MVs+2VHfSKTkbs025lNhgXcw2qpBBPyOL7DrD1vMTiTKA/KEKNWwWPMIV7xhw6XSNLeUOLJ
- 4PJGc9TpMHKNp+WtklOwtX51y4UY9T/V8wqyQzPJwKsbJyO7u1Z8+KARhtctyAJz4r4Li+wyU
- 92xgYWySgWMrTT8hfs0K1w8CXJp5Hyfid/jcf7qRX2yTHjp/shplRG6u8xaosUjt3VF8ozM2D
- +MvtMXvBBD9t5tLK9F7gXMN5i2OYjRh5U7v/njWob5MqGGSi9d2u8ptD3GkPgORGQHPjVciWg
- Ih2MkiWlF8xvpYmn2z2WHuTQZyQRID2e8cBC5EnNe6Ezamp+hhmv4WgIR5xSeNZojoY4WwQh3
- TYO9+mjFM5TfBqKpOxSr3AuWrIps7T6xV0VXKqztij1P/YAfsYRjBbTY6v3qtn/YAg6pshm44
- AC2ycw5r/W+7hALgUTSUERh+aqUEwCVuybvV8PVWsPl6r9p9OzkZdPxeMHRzA1s3Lgz6k32IZ
- Iikwvs2fox6nwHuxv8AGKJ25yIzvBepbauEbo525tUjZTf++8KBd2HkQ4mVIhkvfHkRP+ktGC
- TaFn5Y22rsLQtTiHL482EFjM+2
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7310fc0c-5f87-87a6-4484-d60970ce3285@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 12.09.22 um 18:42 schrieb Barnab=C3=A1s P=C5=91cze:
+On Mon, Sep 12, 2022 at 09:39:36PM +0530, Krishna Chaitanya Chundru wrote:
+> 
+> On 9/10/2022 1:20 AM, Bjorn Helgaas wrote:
+> > On Fri, Sep 09, 2022 at 02:14:41PM +0530, Krishna chaitanya chundru wrote:
+> > > Some specific devices are taking time to settle the link in L1ss.
+> > > So added a retry logic before returning from the suspend op.
+> > "L1ss" is not a state.  If you mean "L1.1" or "L1.2", say that.  Also
+> > in code comments below.
+> Yes L1ss means L1.2 and L1.2 We will update it next patch
+> > s/So added a/Add/
+> > 
+> > What are these specific devices?  Is this a qcom controller defect?
+> > An endpoint defect that should be addressed via some kind of generic
+> > quirk?
+> 
+> This is depending up on the endpoint devices and it varies to device to
+> device.
+> 
 
-> Hi
->
-> 2022. szeptember 12., h=C3=A9tf=C5=91 14:53 keltez=C3=A9ssel, Armin Wolf=
- =C3=ADrta:
->
->> Registering multiple instances of a battery hook is beneficial
->> for drivers which can be instantiated multiple times. Until now,
->> this would mean that such a driver would have to implement some
->> logic to manage battery hooks.
->>
->> Extend the battery hook handling instead.
-> I think this is already possible by embedding the acpi_battery_hook
-> object inside the driver's device specific data object, no?
->
-> Regards,
-> Barnab=C3=A1s P=C5=91cze
->
->
-Yes, it indeed is. However afaik it is not possible to pass instance-speci=
-fic
-data to such an embedded battery hook. It could be possible by passing the
-battery hook as an argument to add_battery()/remove_battery() and using co=
-ntainer_of(),
-but in my opinion this would be too much of a quick hack.
+Can we identify the source of the traffic? Is the NVMe driver not
+flushing it's queues correctly?
 
->> [...]
+> We are thinking this is not a defect if there is some traffic in the link
+> the link will
+> 
+> not go to L1ss .
+> 
+
+Is this hack still required even after switching to syscore ops?
+
+Thanks,
+Mani
+
+> > 
+> > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > > ---
+> > >   drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++-----------
+> > >   1 file changed, 25 insertions(+), 11 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > index 6e04d0d..15c2067 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > @@ -1809,26 +1809,40 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> > >   static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
+> > >   {
+> > >   	u32 val;
+> > > +	ktime_t timeout, start;
+> > >   	struct dw_pcie *pci = pcie->pci;
+> > >   	struct device *dev = pci->dev;
+> > >   	if (!pcie->cfg->supports_system_suspend)
+> > >   		return 0;
+> > > -	/* if the link is not active turn off clocks */
+> > > -	if (!dw_pcie_link_up(pci)) {
+> > > -		dev_info(dev, "Link is not active\n");
+> > > -		goto suspend;
+> > > -	}
+> > > +	start = ktime_get();
+> > > +	/* Wait max 200 ms */
+> > > +	timeout = ktime_add_ms(start, 200);
+> > > -	/* if the link is not in l1ss don't turn off clocks */
+> > > -	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> > > -	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> > > -		dev_warn(dev, "Link is not in L1ss\n");
+> > > -		return 0;
+> > > +	while (1) {
+> > > +
+> > > +		if (!dw_pcie_link_up(pci)) {
+> > > +			dev_warn(dev, "Link is not active\n");
+> > > +			break;
+> > > +		}
+> > > +
+> > > +		/* if the link is not in l1ss don't turn off clocks */
+> > > +		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> > > +		if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> > > +			dev_dbg(dev, "Link enters L1ss after %d  ms\n",
+> > > +					ktime_to_ms(ktime_get() - start));
+> > > +			break;
+> > > +		}
+> > > +
+> > > +		if (ktime_after(ktime_get(), timeout)) {
+> > > +			dev_warn(dev, "Link is not in L1ss\n");
+> > > +			return 0;
+> > > +		}
+> > > +
+> > > +		udelay(1000);
+> > >   	}
+> > > -suspend:
+> > >   	if (pcie->cfg->ops->suspend)
+> > >   		pcie->cfg->ops->suspend(pcie);
+> > > -- 
+> > > 2.7.4
+> > > 
