@@ -2,153 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B775B6454
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 01:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D648F5B63A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiILXrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 19:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S230258AbiILW10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiILXrG (ORCPT
+        with ESMTP id S229945AbiILW1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 19:47:06 -0400
-X-Greylist: delayed 2400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 16:47:04 PDT
-Received: from 9.mo582.mail-out.ovh.net (9.mo582.mail-out.ovh.net [87.98.171.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F1B13FB9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 16:47:03 -0700 (PDT)
-Received: from player750.ha.ovh.net (unknown [10.110.208.220])
-        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 0E31721AFD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:27:08 +0000 (UTC)
-Received: from etezian.org (bbcs-175-223.cust.wingo.ch [178.238.175.223])
-        (Authenticated sender: andi@etezian.org)
-        by player750.ha.ovh.net (Postfix) with ESMTPSA id 4B5682E6847BB;
-        Mon, 12 Sep 2022 22:26:39 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-95G0013efd0b66-a73e-45c9-bb98-e25c7815fbbb,
-                    3B4E35B332874A0F69C0154FD1AC24ACCE6C8C6C) smtp.auth=andi@etezian.org
-X-OVh-ClientIp: 178.238.175.223
-Date:   Tue, 13 Sep 2022 00:26:36 +0200
-From:   Andi Shyti <andi@etezian.org>
-To:     Smitha T Murthy <smitha.t@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, aakarsh.jain@samsung.com
-Subject: Re: [Patch v2 04/15] media: s5p-mfc: Add initial support for MFCv12
-Message-ID: <Yx+yHPFhLbaaSCAw@intel.intel>
-References: <20220907064715.55778-1-smitha.t@samsung.com>
- <CGME20220907063328epcas5p12c01eb755e3ddfa4fdaee8e4c3bc9527@epcas5p1.samsung.com>
- <20220907064715.55778-5-smitha.t@samsung.com>
+        Mon, 12 Sep 2022 18:27:24 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15EF205D2;
+        Mon, 12 Sep 2022 15:27:22 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b5so17778592wrr.5;
+        Mon, 12 Sep 2022 15:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=W9K0Nbt/PATc7AYj/Tml8RmmX7jWgySUjWvxLIPI9Hs=;
+        b=OPQqp90XxQK8MNhCyZoOlB+WrzpdCGgXnFA/R5DjvJaGBHJm4UEwGxwqHJQNkKNiZI
+         YFTR9ACJo8zLkhPIoZiE0/Y5V83TVrqbFIqmcEEpynmAg6cZCQoa1O7lBU/69WWUm6Pg
+         Y5J4fVXZ53akuJRe0UxiG8kwxWzWspUmBiceMW/GiAnEF32IO2izerYbStj5DfCHmW6/
+         L8Fg0UpFn5HN/8lSahK7yCPjJLaYTBfhBXbIUNnFFTeT0q23Dl9WHyZ5TIfsh12t8bEX
+         Pau5H9DBHmjl6CYkpi129TjS3SOKJY3Hip4zBTmu3zmVgVtc4S+dnkLkv1wbYq+Cb4/E
+         rA5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=W9K0Nbt/PATc7AYj/Tml8RmmX7jWgySUjWvxLIPI9Hs=;
+        b=ICYamR3BClZ6nvUnlDTyLdl7mpoRU9TEB5LKsnegFjAQknqgLezQE9AN9LKc/O7Mr5
+         khkMAoox9uchUQQkAEOlCB3oNX0cSB/HiZLtBEXM0l7HPcd8glw0t2EwvjrXLZ4iBnXB
+         GSsWcQG0N02hb24xSYczKV++s0t7ihtv5KUr4bsOfpMzdbEVPgivr48iPpr02VZt8UYZ
+         cgDxqSvE79plIm8rmPfO2Q+QSQTaMLDRzgrVTBH+ytYcrmjXjsr4EgeFLAW4cBsoveaK
+         qd6BRfuFb4940Zd7sVYh140uiHcNx3Ewudt4etfuQ2wC2SlVKqFQuUDiVTpnRWxJu/Tu
+         K1sw==
+X-Gm-Message-State: ACgBeo1lS+zszAbNEy3zltIbEXetFprIpI02r1zNvKm4J1HMBXzl4jCf
+        SsxCQOmQv7ukXz28++1ap5cAFggvSBs=
+X-Google-Smtp-Source: AA6agR6tnpc15rOuInOrql8gSUcH9upaUnlMbRgDrT3Wk8XtoGK4DV88jFgk9B0Q7nj2TsQ+B3jrmQ==
+X-Received: by 2002:a05:6000:1561:b0:22a:72a1:e3f1 with SMTP id 1-20020a056000156100b0022a72a1e3f1mr5392788wrz.456.1663021640859;
+        Mon, 12 Sep 2022 15:27:20 -0700 (PDT)
+Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003b47b80cec3sm7067940wme.42.2022.09.12.15.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 15:27:20 -0700 (PDT)
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     linux-iio <linux-iio@vger.kernel.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] iio: pressure: bmp280: fix datasheet links
+Date:   Tue, 13 Sep 2022 00:26:44 +0200
+Message-Id: <20220912222645.377874-1-ang.iglesiasg@gmail.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
+References: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907064715.55778-5-smitha.t@samsung.com>
-X-Ovh-Tracer-Id: 12842858766094371346
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedufedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpeejgfelgeekieffjeegveeuvdehgeelveetveejudffvedvleehvdefleehudelueenucfkpheptddrtddrtddrtddpudejkedrvdefkedrudejhedrvddvfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeehtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Smitha,
+Updated links for BMP280 and BME280 datasheets on Bosch website.
+Datasheet of BMP180 is no longer available on the manufacturer's website,
+changed the link to a copy hosted by a third party.
 
-just a fast look here
+Changelog in v2:
+* Added a notice about the situation with bmp180 datasheet and list
+  missing changes from newer versions.
 
-[...]
+Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+---
+ drivers/iio/pressure/bmp280-core.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-> +/* Encoder buffer size for MFCv12 */
-> +#define ENC_V120_BASE_SIZE(x, y) \
-> +	(((x + 3) * (y + 3) * 8) \
-> +	+ (((y * 64) + 2304) * (x + 7) / 8))
+diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+index fe7aa81e7cc9..01cd32003ca8 100644
+--- a/drivers/iio/pressure/bmp280-core.c
++++ b/drivers/iio/pressure/bmp280-core.c
+@@ -9,9 +9,15 @@
+  * Driver for Bosch Sensortec BMP180 and BMP280 digital pressure sensor.
+  *
+  * Datasheet:
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP180-DS000-121.pdf
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001-12.pdf
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280_DS001-11.pdf
++ * https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
++ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
++ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
++ *
++ * Notice:
++ * The link to the bmp180 datasheet points to an outdated version missing these changes:
++ * - Changed document referral from ANP015 to BST-MPS-AN004-00 on page 26
++ * - Updated equation for B3 param on section 3.5 to ((((long)AC1 * 4 + X3) << oss) + 2) / 4
++ * - Updated RoHS directive to 2011/65/EU effective 8 June 2011 on page 26
+  */
+ 
+ #define pr_fmt(fmt) "bmp280: " fmt
 
-do we need any overflow control here?
+base-commit: 2f61ff8272967c9bdcba810aa978170814b08f7c
+-- 
+2.37.3
 
-[...]
-
->  #define MFC_V7_BIT	BIT(2)
->  #define MFC_V8_BIT	BIT(3)
->  #define MFC_V10_BIT	BIT(5)
-> +#define MFC_V12_BIT	BIT(7)
->  
->  #define MFC_V5PLUS_BITS		(MFC_V5_BIT | MFC_V6_BIT | MFC_V7_BIT | \
-> -					MFC_V8_BIT | MFC_V10_BIT)
-> +					MFC_V8_BIT | MFC_V10_BIT | MFC_V12_BIT)
->  #define MFC_V6PLUS_BITS		(MFC_V6_BIT | MFC_V7_BIT | MFC_V8_BIT | \
-> -					MFC_V10_BIT)
-> -#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT)
-> +					MFC_V10_BIT | MFC_V12_BIT)
-> +#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT | \
-> +					MFC_V12_BIT)
-
-why not MFC_V10PLUS_BITS ?
-
-[...]
-
-> @@ -146,7 +146,7 @@ static struct s5p_mfc_fmt formats[] = {
->  		.codec_mode	= S5P_FIMV_CODEC_HEVC_DEC,
->  		.type		= MFC_FMT_DEC,
->  		.num_planes	= 1,
-> -		.versions	= MFC_V10_BIT,
-> +		.versions	= MFC_V10_BIT | MFC_V12_BIT,
-
-we could just yse MFC_V10PLUS_BITS here
-
-[...]
-
-> +		if (IS_MFCV12(dev)) {
-> +			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
-> +			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
-> +			if (ctx->codec_mode == S5P_FIMV_CODEC_HEVC_ENC &&
-> +								ctx->is_10bit) {
-> +				ctx->luma_dpb_size =
-> +					width64 * height32 +
-> +					ALIGN(DIV_ROUND_UP(lcu_width * 32, 4),
-> +							16) * height32 + 128;
-> +				if (ctx->is_422) {
-> +					ctx->chroma_dpb_size =
-> +						ctx->luma_dpb_size;
-> +				} else {
-> +					ctx->chroma_dpb_size =
-> +						width64 * height32 / 2 +
-> +						ALIGN(DIV_ROUND_UP(lcu_width *
-> +						32, 4), 16) * height32 / 2 + 128;
-> +				}
-
-You don't need the brackets here.
-
-> +			} else if (ctx->codec_mode == S5P_FIMV_CODEC_VP9_ENC &&
-> +					ctx->is_10bit) {
-> +				ctx->luma_dpb_size =
-> +					ALIGN(ctx->img_width * 2, 128) *
-> +					height32 + 64;
-> +				ctx->chroma_dpb_size =
-> +					ALIGN(ctx->img_width * 2, 128) *
-> +					height32 / 2 + 64;
-> +			} else {
-> +				ctx->luma_dpb_size =
-> +					width64 * height32 + 64;
-> +				if (ctx->is_422) {
-> +					ctx->chroma_dpb_size =
-> +						ctx->luma_dpb_size;
-> +				} else {
-> +					ctx->chroma_dpb_size =
-> +						width64 * height32 / 2 + 64;
-> +				}
-
-You don't need the brackets here.
-
-[...]
-
-Andi
