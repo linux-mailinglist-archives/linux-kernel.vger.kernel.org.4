@@ -2,189 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937415B548A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8AF5B5491
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiILGaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S229566AbiILGeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiILGaD (ORCPT
+        with ESMTP id S229679AbiILGeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 02:30:03 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACB110FF0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:30:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NN6KBzqT83KIeNGN5oYYSDZGdV//V58exCNZYGNu+RRY3M5V0J9QC4PC/Bhlbo/k3Aeae3rfkEn2YK1KYnt9tY4FgRLvybkMC76K8ccXLqNQHQZriIGBZNVuOC5Yr5cqzzz0pn0VqAwhZcW5LMYpCHKeHtV5DSIckEI9zT1k+rUrCKUefEeQv1DuRjhXLhhTXIAuDtt9V2ocnglFzn9oDxA6w7H6AxiF67ZW4HAa8hmcdM/uOzMaW04Ib1/KsHOdd11LOHGYFRCJMEoPBngrNu/JD7fVl+QGVyH7oo5pLDh2DL/nrWWOkEntB+RZYROxWLjFNlYrmWbxAx4VlGc0iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+4qTQQjyOum4civ6JjbRuMHNg7mRlXOMsayRhhcbhKM=;
- b=b+iWUZnqhf+Sc2g2pELXprcqkOpM65tH8G0TxO1lmZrD64T/70piICRxx1MCCj4Bo65SmN8xbruXqz6sUTDTd3vQkf1XCk+8IH540g6QmP+QBNsVI5BmadBoV4uLqmaiz5C4FPSVpIFul7aw7ZOevgYgB059/HgCZgTns6axpGovTr1LKUcmniXCcYZrIj9z8Wa6VDMj8czDQOqLkEJ9wLBWYI/1YnC2/H7sVsSIvYUe0NJgWfw8/mZl8nbkA4jr+HXo7tUi8cyLB7SGi1PpqBzqqzGuCwytuDkSpFCEuDLTwbNtMS3/3GrevLo6naZ39aLh7GDQNmDzufDZgD9Utg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+4qTQQjyOum4civ6JjbRuMHNg7mRlXOMsayRhhcbhKM=;
- b=HfYxyjb39P9gW6SjMMJ9Cx3R8WoYDehs+4u7y14GsF6AwHb6xGEZJaR0jjCgBkyijLkEBsOBJctJElJiNS+/TH6t3CXwklTEYrqbUeOkzfJno2nX7fUU7hFebSgWKSfvRgwegd32rMoY1Eu8h3hFCN9JAFKHdsSc/n4UFHPbAhU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com (2603:10b6:802:2f::13)
- by SA0PR12MB4463.namprd12.prod.outlook.com (2603:10b6:806:92::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
- 2022 06:30:00 +0000
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::c534:ae1c:f7a1:1f33]) by SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::c534:ae1c:f7a1:1f33%4]) with mapi id 15.20.5612.019; Mon, 12 Sep 2022
- 06:30:00 +0000
-Message-ID: <bc788935-f1f7-35ed-6c3f-ac22dd3d2214@amd.com>
-Date:   Mon, 12 Sep 2022 11:59:50 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 5/5] sched/fair: Add exception for hints in load balancing
- path
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        peterz@infradead.org, linux-mm@kvack.org,
-        vincent.guittot@linaro.org
-References: <20220910105326.1797-1-kprateek.nayak@amd.com>
- <20220911080547.2709-1-hdanton@sina.com>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <20220911080547.2709-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0017.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::16) To SN1PR12MB2381.namprd12.prod.outlook.com
- (2603:10b6:802:2f::13)
+        Mon, 12 Sep 2022 02:34:02 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2597140D2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4EqH1
+        chU5d770X/kuYiWfOyfZ4c8rIYHHXZj6bS5NoQ=; b=al1qouJMZuNywPpg9ueYg
+        WsmLBT7us/rp7Hte28eU+NTZRVhFQnX014VSfu/tIQvHRyqo0JqXv5c2h2gsk+rv
+        3gcnStvgcTF8m0MwqPa5zY+hhX79VkKE1Y80oGhjhj9JV2vGLT0tMezIcztXiqzc
+        UnBZdCqAZDBX/N3uKO0EGw=
+Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.20])
+        by smtp11 (Coremail) with SMTP id D8CowAC353W60h5jxXlpBQ--.26310S2;
+        Mon, 12 Sep 2022 14:33:32 +0800 (CST)
+From:   qianfanguijin@163.com
+To:     linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Evgeny Boger <boger@wirenboard.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        qianfan Zhao <qianfanguijin@163.com>
+Subject: [PATCH v2] net: allwinner: emac: Fix double spinlock in emac_timeout
+Date:   Mon, 12 Sep 2022 14:33:31 +0800
+Message-Id: <20220912063331.23369-1-qianfanguijin@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2381:EE_|SA0PR12MB4463:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a1c2e2c-0e9d-4b7d-a939-08da948837c0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HmvNgjo+ao+HSG4R81YPDka+CpKCyQT1y/qkKxRDoGDEdZ8+6o1E29DexRO+qtk7i5fSsJeDBclCOX5QY///T4i1UxbZGSpyNXWx3ibI7+Rnl6gbrfsYiPcYQVZ5PJSSPAgOmJB6bdE+BfSzkWA8JBkYu7HP+lrn/KYrQGmscQQyfG2xpy7emvfQv/x8XsIpCmzs4oLZEw1tSjhl+wlJBuXsYbC1DCc6+dD8i2QyQFJ3VG0FShLgwFlgixlAUmOzEcNhBnPhB2Ew3tnEYkgLRXG11AXTmRGv8EqM+Ft5fFOHVDEVi7wEPVYk7Vbsto4fn7RU07TRr8BtGCIz2fe4O95U+IUERHq0o2ilclc2SlGi/kEgcr0WhjmJo/zAQIHALuLEvJBkzk/xXqdd10SpQbjLQnIzk52IFXKfPAXSq9goiEjGjfUHvU4fiPC0yIsculBCOjOtzcMSgin1qPLAnIVgzhsQFuslVmM+XBxbdh5HmhxNarKhQCfW5zCJjFSxRh0R8lrpJeq7BU3my7qO+h1GHDNiTWGr2p+bi5i19vaqvo93EH9sk4sA/ZaEUIkGsXqGw1g6jzdtN19aDk2DwdJw014TS1dLlu74vlHHITB4RYIFCMljoihwhWiti6bYd0zAo+33wU/yrLo8HlQPxnse9hFGlYA8Te9gGOrdmi/imbHVd6YUfnkJIdAQgfNT+9FLtb8HAWogd0rQ/Yt7lkPP6FmLvVox7FC3MBNK1sdu14sthnGqnc1N3KEqLk15t9T3T1vVlfxjo2FObUTekgPa8WDPNBPpFc9Cnc6Jkh8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(53546011)(6506007)(6666004)(6486002)(478600001)(6512007)(41300700001)(26005)(186003)(2616005)(5660300002)(8936002)(2906002)(6916009)(316002)(66476007)(66946007)(4326008)(38100700002)(66556008)(31686004)(86362001)(8676002)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzBhemxpSE54d3IyMEdLbE9FenhTS3NuTldrTnlPd3UwblFQbnh5WFhVV3FP?=
- =?utf-8?B?STNpSEpjRVF6Tm42Z014RktJdmVya2ZjQVBSQTBLdTF6QlUwWXhocjZVWGF4?=
- =?utf-8?B?SlMvRlkwcWcxNFVxTFg3ckxDcjYvU1RVaERocFJONUU4U2R1dTZkeU1SVHNU?=
- =?utf-8?B?NXFnMVdCYi9TRnFLK050Vk9mL012cEVFWjRwVDRVamZjSVNXRHlUd3l3U3pv?=
- =?utf-8?B?NzNPWndaTHhiYnRpTTlJTXFWUnlJazhBVjVLZUJycllOWUdyL0hOUm4vbzMw?=
- =?utf-8?B?bVJROGQ3dDJENUNOVGU5STJjaTlQSzhkZ0dPVjNkaWN4QUs4dUdjRitYOVNp?=
- =?utf-8?B?NUY5andLZEFlRytCTVM1TWk5bThCcTNwSXpaK2FjcytmQVlIWlZsOFJzL0h6?=
- =?utf-8?B?dGpBMHhRbjA3THJyNHhlZGhtbW9BYlN2dGxEcnRqVFVyRXI5aExEdEp4bW1y?=
- =?utf-8?B?ZGdaV0JzQTJYbEc1RThkY2pCeEExeVJkRzNQNi9GUU9VV1JxbGFtUEJuTzBa?=
- =?utf-8?B?dC9iMVc4Zk5aWXpoRmcrbzBkTW4rRkZtYUJxWVNvc1hLTldoZG81VDk2cUxy?=
- =?utf-8?B?NStSd0t2UUw4aGo1LzdSN1JFZHlSSlpUVzRQaVp6RDJ6bzZ6czJiMWlSNjkx?=
- =?utf-8?B?bU5HSDdQdDlGa2NxNnBOZDFpd2VLNzVTUEJTTm8zL2hJQWVlZE5Kck5nK200?=
- =?utf-8?B?bkg2YTMvZVZaVE53L1FKcFU5RVM0M0dZakljVTllbytLMy9CbndYNEJFbURT?=
- =?utf-8?B?KzVIbUduOUZiNnMvcDNtZXJENnAvYzBFV25zT01Lb3VSWkpQN0RBUlFQZExK?=
- =?utf-8?B?ekZOVElxanhZMnZrWm1yWGw1c0EzSnMxYUdUZ2xUbTc1WW9ZOXVPMm11RytM?=
- =?utf-8?B?Um9ZNW9LM1dNekwzc2NZUktyeVY5VE85NGx3cVpZVlZKL1lFYlIwMUpDeVNF?=
- =?utf-8?B?UmtycUJUNXd5ZWp6bFJvbUNCNldHS0doeGg2RGxndy9YWUtZblVVdXVPaURY?=
- =?utf-8?B?OWE5ZlBQOVR0aUdha29DdVoyMU10YlpmUWFvemZnMnB1WUNTVFVNT01mYWRu?=
- =?utf-8?B?Vy9oL3pKSVNBdE8wY0ZLUWdxT3VVNmF0emlnaGtzRFBROURNU0crZ0pJZkZT?=
- =?utf-8?B?a2pnVnduQ2lwSzZlZ1BNL3RiZFpucDJsVk5wZXJHeGp3VUhLUWF4Z21JMXNF?=
- =?utf-8?B?YkQ3TWRWWEplOHpXVTNHc1dRL1VIYzdRcmgzTHFiUWY2dkkwNFFEMVJ4MERl?=
- =?utf-8?B?U2JSbnZUTWx5SDVxUzR4KzBCRXpzUkgxdkxia3VZR1dlWHE2dzVlaG9wLzNN?=
- =?utf-8?B?enVIQkhZZDQ1bVBlWVhCcU5BbTg2MThCWjAxNXJ2MnVMZVlpdGYrSXJCVm4z?=
- =?utf-8?B?NjRzR25yWE9VSERDZ2xmYWQyclFmSFZvQTFTb1JHLytnWDNxbVU4Sml2T1JN?=
- =?utf-8?B?a3I1ZUt6bnVCajdlWkd5cC9weXdTNzJoVTVIckhicjJvMkkwOThqNkpSRHVh?=
- =?utf-8?B?YlBLd1c5WlVYUFFVWnF1ZkJrbktSNEk1RW1BNVM5Zk5Ld2hXYTI0cHpwaEhj?=
- =?utf-8?B?WVZ4LzJDdms3eVdISDkrcVRWeUMveHEwcCt6eVpUVWh4REJQaVUwMkdwZHB4?=
- =?utf-8?B?NVpKZ0M4S0k2OHA1V3A4bGdjWlMvUHhrZWg3YktkWTlGT1lrRzBzNU9kN29B?=
- =?utf-8?B?RS84YzFBb2Z1L25mWDhqYUx0dnFlcHNNUXQ2Yk9JVTZCSG1TR3l6Nm9vSDFL?=
- =?utf-8?B?K1hxdXA1dWIrQmlyU0ljZGQyN1NCT0RVUU9odkc1MnFrbUNkaVdCS0J2RUZs?=
- =?utf-8?B?TUM2Qkc5OEI4K0hydklCYnJrTHF2SnpPZXBWekFQUWJvbWtsNzd4TkJ6Q3Y1?=
- =?utf-8?B?ekQ4L3pteGZIeC9HZ0xGbnM3c2I5TUpCOTFHRTlMa1VaZ25DVmE5dHd6L01h?=
- =?utf-8?B?ckh5SzFXc0N2VFpUVmtGYUVYQ1U3Q0FvcUhvRUJ2RSt5S1lwaWlUTUhYTlIy?=
- =?utf-8?B?U3IvaWJEcHIrYU9DbEZPQTJhTEtOeXpnWi94VHk0RjY3bVFOcGhPZ05LV2c5?=
- =?utf-8?B?WjJtYUJYRW1zVStRb28rdVlJdFdqY2NqQWxxL2drK3RreUVzdGx1MVJ0dUN5?=
- =?utf-8?Q?4qsLiZjOuhjXEOyLD4MDfjSrI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a1c2e2c-0e9d-4b7d-a939-08da948837c0
-X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 06:30:00.1776
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Cd4qI+5GAI5FeiFXwb49YibYbVkN7ZncvIz9r44M3ww3snvz0hGS1y1EoEykqebEXfJRFiEyKBjqrejYmkth6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4463
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowAC353W60h5jxXlpBQ--.26310S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuryrCF45KrWkWw15Zr15XFb_yoWrCFyfpF
+        yUAa48Cw4xX3Wqvw4xtrW0qFWvq3Zay34xCr4xAw4fuFn3G34rXFy8tFy2kFWYyrZrAa47
+        KF1qy3ySkF4kXaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pisqXdUUUUU=
+X-Originating-IP: [218.201.129.20]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiGhx67VaECzBFRAAAs5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Hillf,
+From: qianfan Zhao <qianfanguijin@163.com>
 
-Thank you for looking into this patch.
+emac_timeout() callback acquires lock and so does emac_init_device(),
+which called inside lock protected region. This hangs the system and
+produces following warning:
 
-On 9/11/2022 1:35 PM, Hillf Danton wrote:
-> On 10 Sep 2022 16:23:26 +0530 K Prateek Nayak <kprateek.nayak@amd.com> wrote:
->> - Load balancing considerations
->>
->> If we have more tasks than the CPUs in the MC Domain, ignore the hint
->> set by the user. This prevents losing the consolidation done at the
->> wakeup time.
-> 
-> It is waste of time to cure ten pains with a pill in five days a week.
+WARNING: CPU: 2 PID: 0 at net/sched/sch_generic.c:478
+dev_watchdog+0x2e4/0x2e8
+NETDEV WATCHDOG: FE0 (sun4i-emac): transmit queue 0 timed out
+Modules linked in:
+CPU: 2 PID: 0 Comm: swapper/2 Tainted: G W 5.15.0-00047-g0848e4aeb313
+Hardware name: Wisdom T3 based CCT Family
+[<c010f740>] (unwind_backtrace) from [<c010b744>] (show_stack+0x10/0x14)
+[<c010b744>] (show_stack) from [<c0a4d978>] (dump_stack_lvl+0x40/0x4c)
+[<c0a4d978>] (dump_stack_lvl) from [<c0120734>] (__warn+0x104/0x108)
+[<c0120734>] (__warn) from [<c01207b0>] (warn_slowpath_fmt+0x78/0xbc)
+[<c01207b0>] (warn_slowpath_fmt) from [<c0898a54>]
+(dev_watchdog+0x2e4/0x2e8)
+[<c0898a54>] (dev_watchdog) from [<c019a888>] (call_timer_fn+0x3c/0x178)
+[<c019a888>] (call_timer_fn) from [<c019bddc>]
+(run_timer_softirq+0x540/0x624)
+[<c019bddc>] (run_timer_softirq) from [<c0101298>]
+(__do_softirq+0x130/0x3bc)
+[<c0101298>] (__do_softirq) from [<c0127ea0>] (irq_exit+0xbc/0x100)
+[<c0127ea0>] (irq_exit) from [<c017e514>] (handle_domain_irq+0x60/0x78)
+[<c017e514>] (handle_domain_irq) from [<c05a6130>]
+(gic_handle_irq+0x7c/0x90)
+[<c05a6130>] (gic_handle_irq) from [<c0100afc>] (__irq_svc+0x5c/0x78)
+Exception stack(0xc14f3f70 to 0xc14f3fb8)
+3f60:                                     0003475c 00000000 00000001
+c01188a0
+3f80: c107b200 c0f06b4c c0f06b90 00000004 c1079ff8 c0c62774 00000000
+00000000
+3fa0: c10b2198 c14f3fc0 c0107fcc c0107fd0 60030013 ffffffff
+[<c0100afc>] (__irq_svc) from [<c0107fd0>] (arch_cpu_idle+0x38/0x3c)
+[<c0107fd0>] (arch_cpu_idle) from [<c0a57f38>]
+(default_idle_call+0x3c/0xcc)
+[<c0a57f38>] (default_idle_call) from [<c0157258>] (do_idle+0xdc/0x13c)
+[<c0157258>] (do_idle) from [<c01575a4>] (cpu_startup_entry+0x18/0x1c)
+[<c01575a4>] (cpu_startup_entry) from [<401015d0>] (0x401015d0)
+---[ end trace a70942a1265338f1 ]---
+rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+rcu: \x092-...0: (1 GPs behind) idle=75d/0/0x1 softirq=8288/8289 fqs=931
+\x09(detected by 0, t=2102 jiffies, g=13485, q=1635)
+Sending NMI from CPU 0 to CPUs 2:
+spi_master spi2: spi2.1: timeout transferring 4 bytes@100000Hz for
+110(100)ms
+spidev spi2.1: SPI transfer failed: -110
 
-This patch mainly tries to stop tasks with a wakeup hint being
-pulled apart by the load-balancer and then end up moving back again
-to the same LLC during subsequent wakeup leading to ping-ponging and
-lot of wasted migrations.
+Fixes: 492205050d77b (net: Add EMAC ethernet driver found on Allwinner A10 SoC's)
+Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+---
+ drivers/net/ethernet/allwinner/sun4i-emac.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-This is not a complete solution in any form and was a stop-gap for
-this experiment. I bet there are better alternatives to handle hints
-in the load-balancing path.
-I'm all ears any suggestions from the community :)
+diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/ethernet/allwinner/sun4i-emac.c
+index 49759deeed8e..034989b396f7 100644
+--- a/drivers/net/ethernet/allwinner/sun4i-emac.c
++++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
+@@ -378,14 +378,11 @@ static int emac_set_mac_address(struct net_device *dev, void *p)
+ }
+ 
+ /* Initialize emac board */
+-static void emac_init_device(struct net_device *dev)
++static void emac_init_device_no_lock(struct net_device *dev)
+ {
+ 	struct emac_board_info *db = netdev_priv(dev);
+-	unsigned long flags;
+ 	unsigned int reg_val;
+ 
+-	spin_lock_irqsave(&db->lock, flags);
+-
+ 	emac_update_speed(dev);
+ 	emac_update_duplex(dev);
+ 
+@@ -398,7 +395,15 @@ static void emac_init_device(struct net_device *dev)
+ 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+ 	reg_val |= (0xf << 0) | (0x01 << 8);
+ 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
++}
++
++static void emac_init_device(struct net_device *dev)
++{
++	struct emac_board_info *db = netdev_priv(dev);
++	unsigned long flags;
+ 
++	spin_lock_irqsave(&db->lock, flags);
++	emac_init_device_no_lock(dev);
+ 	spin_unlock_irqrestore(&db->lock, flags);
+ }
+ 
+@@ -416,7 +421,7 @@ static void emac_timeout(struct net_device *dev, unsigned int txqueue)
+ 
+ 	netif_stop_queue(dev);
+ 	emac_reset(db);
+-	emac_init_device(dev);
++	emac_init_device_no_lock(dev);
+ 	/* We can accept TX packets again */
+ 	netif_trans_update(dev);
+ 	netif_wake_queue(dev);
+-- 
+2.25.1
 
-> 
->> @@ -7977,6 +7980,21 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
->>  		return 0;
->>  	}
->>  
->> +	/*
->> +	 * Hints are followed only if the MC Domain is still ideal
->> +	 * for the task.
->> +	 */
->> +	if (!env->ignore_hint) {
->> +		/*
->> +		 * Only consider the hints from the wakeup path to maintain
->> +		 * data locality.
->> +		 */
->> +		if (READ_ONCE(p->hint) &
->> +		    (PR_SCHED_HINT_WAKE_AFFINE | PR_SCHED_HINT_WAKE_HOLD))
->> +			return 0;
->> +	}
-> 
-> The wake hints are not honored during lb without PR_SCHED_HINT_IGNORE_LB set
-> then the scheduler works as you hint.
-
-Are you suggesting we leave it to the user, to control whether the
-load-balancer can spread the task apart, even if hints are set,
-via another userspace hint "PR_SCHED_HINT_IGNORE_LB"?
-
-I had not considered it before but it may benefit some workloads.
-Again, this API is not the final API in any form but we can have
-a knob as you suggested that can be set for a class of workloads
-which may benefit from this behavior.
-
-> 
-> Hillf
-
---
-Thanks and Regards,
-Prateek
