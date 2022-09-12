@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BFD5B613A
+	by mail.lfdr.de (Postfix) with ESMTP id 964D25B613C
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiILSmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S230382AbiILSmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiILSlv (ORCPT
+        with ESMTP id S230244AbiILSlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:41:51 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D5BC9;
-        Mon, 12 Sep 2022 11:41:49 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CI5lcv001095;
-        Mon, 12 Sep 2022 18:41:41 GMT
+        Mon, 12 Sep 2022 14:41:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ABEB2C;
+        Mon, 12 Sep 2022 11:41:51 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CGNLgY028605;
+        Mon, 12 Sep 2022 18:41:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=DAbOzy7zTOG+92vcI0PAIXg5coPxX99e/DYytzhS6n0=;
- b=lye1urs/7kFV0pJcWPEWgbre81PGvMphz0TTWAmgoKCizg6iBOARKLdQ5Klj5MygCNIp
- rlqjSlAE4WIo9wmwgL4HAoV70YRDb34baniHetwIL7r7L7JL0mM8uWQnAgWXuYL465Cp
- xVSfwSg62P2FhWgXAlW+PyOrE6tp2fMkN7uydZGlkU49yaJ3dAklu7t790ywRo4y8HeL
- G0M63zzJhbpP/+IwY/GTT2fOkuADEgAVt90/BBo7bbezOmCeWlWmlcOtldtaUQvbmOAi
- MpKU1kgr/JCLJSSUsJfnVjBkTJm8gYE57e5xP101ejaRX1v6nAVmBW7NdxaQwEV6XfMb ww== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgkve5ww0-1
+ bh=tV4inXm/yrbGu0Hp/u24RULvsY73E22mjF5+EChHio0=;
+ b=WuxLiLdP8k+yWHDMIQxh5S/nKyt/lUwNHtpO5s1UbRSm7vQWFhixnlm2DaYrixC4NErW
+ rpajfG6DtB6RLXnNH8gCQ3SqLPmlsLjkxT98TEx/abVaYWL1TyNiXJvcRRqs48zv0jIm
+ rqxLoFo20wlbTMaBHFkbQEixJbj+AYYXwrELdoawDpoPTkR5VfrMtfrM8VCWZrtH84RW
+ NswdFIH8W1uZzWUO7T3QwZcapk5lP9fOd1Ttr1KmHDJmF+dmUW6Kp35j+HYO9x+uIF74
+ E1khzOCQiG0Jr22YhjvxISLK4y1A6OC79yzWZgKBTN3ZyXuKTTe/xT2Eh+xct1+8ZLtB xA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk6kd1s8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 18:41:41 +0000
+        Mon, 12 Sep 2022 18:41:43 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CIfeGw001342
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CIfgnR013182
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 18:41:40 GMT
+        Mon, 12 Sep 2022 18:41:42 GMT
 Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 12 Sep 2022 11:41:40 -0700
+ 15.2.986.29; Mon, 12 Sep 2022 11:41:42 -0700
 From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         "Elliot Berman" <quic_eberman@quicinc.com>,
         Guru Das Srinagesh <quic_gurus@quicinc.com>,
         Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v1 1/2] firmware: qcom_scm: Remove memory alloc call from qcom_scm_pas_init_image()
-Date:   Mon, 12 Sep 2022 11:41:31 -0700
-Message-ID: <d59c6a04c6b5d70df3276e903a85099ed4291b09.1663007783.git.quic_gokukris@quicinc.com>
+Subject: [PATCH v1 2/2] soc: qcom: mdt_loader: Move the memory allocation into mdt loader
+Date:   Mon, 12 Sep 2022 11:41:32 -0700
+Message-ID: <2ba262668e86e58acb086c64fc759ba02b39a525.1663007783.git.quic_gokukris@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1663007783.git.quic_gokukris@quicinc.com>
 References: <cover.1663007783.git.quic_gokukris@quicinc.com>
@@ -64,15 +64,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: EkhqGmE65TFQ-A3HjwCNmBF-imq0f6Lh
-X-Proofpoint-GUID: EkhqGmE65TFQ-A3HjwCNmBF-imq0f6Lh
+X-Proofpoint-GUID: JJhdhFDNRAOmZLrjiyAHI3TGLRNNoQA0
+X-Proofpoint-ORIG-GUID: JJhdhFDNRAOmZLrjiyAHI3TGLRNNoQA0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-12_12,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- adultscore=0 mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2207270000 definitions=main-2209120064
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -84,129 +84,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory for metadata is allocated in mdt loader and scm driver
-
-1].  163  data = kmalloc(ehdr_size + hash_size, GFP_KERNEL);
-2].  477  mdata_buf = dma_alloc_coherent(__scm->dev, size, &mdata_phys,
-     478                                        GFP_KERNEL);
-
-The SCM driver is meant to only pack arguments provided to it from clients
-for making the secure world calls. This change removes the logic of doing
-a dma alloc coherent from the SCM driver and moves it into the mdt loader
+By moving the memory allocation to mdt loader we can simplify the scm
+call, by just packing arguments provided to it from the clients for
+making secuer world calls. We can also simplify the memory allocation
+for the qcom metadata, by just doing one memory allocation in the
+mdt loader.
 
 Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 ---
- drivers/firmware/qcom_scm.c   | 33 +++------------------------------
- drivers/soc/qcom/mdt_loader.c |  3 ++-
- include/linux/qcom_scm.h      |  4 +---
- 3 files changed, 6 insertions(+), 34 deletions(-)
+ drivers/remoteproc/qcom_q6v5_mss.c  |  2 +-
+ drivers/soc/qcom/mdt_loader.c       | 41 ++++++++++++++++++++++++++++---------
+ include/linux/soc/qcom/mdt_loader.h |  5 +++--
+ 3 files changed, 35 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index cdbfe54..05ec03c 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -442,11 +442,9 @@ static void qcom_scm_set_download_mode(bool enable)
-  *			       state machine for a given peripheral, using the
-  *			       metadata
-  * @peripheral: peripheral id
-- * @metadata:	pointer to memory containing ELF header, program header table
-+ * @mdata_phys:	pointer to memory containing ELF header, program header table
-  *		and optional blob of data used for authenticating the metadata
-  *		and the rest of the firmware
-- * @size:	size of the metadata
-- * @ctx:	optional metadata context
-  *
-  * Return: 0 on success.
-  *
-@@ -454,11 +452,8 @@ static void qcom_scm_set_download_mode(bool enable)
-  * track the metadata allocation, this needs to be released by invoking
-  * qcom_scm_pas_metadata_release() by the caller.
-  */
--int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
--			    struct qcom_scm_pas_metadata *ctx)
-+int qcom_scm_pas_init_image(u32 peripheral, dma_addr_t mdata_phys)
- {
--	dma_addr_t mdata_phys;
--	void *mdata_buf;
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index fddb63c..1919bfc 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -947,7 +947,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
  	int ret;
- 	struct qcom_scm_desc desc = {
- 		.svc = QCOM_SCM_SVC_PIL,
-@@ -469,22 +464,9 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
- 	};
- 	struct qcom_scm_res res;
+ 	int i;
  
--	/*
--	 * During the scm call memory protection will be enabled for the meta
--	 * data blob, so make sure it's physically contiguous, 4K aligned and
--	 * non-cachable to avoid XPU violations.
--	 */
--	mdata_buf = dma_alloc_coherent(__scm->dev, size, &mdata_phys,
--				       GFP_KERNEL);
--	if (!mdata_buf) {
--		dev_err(__scm->dev, "Allocation of metadata buffer failed.\n");
--		return -ENOMEM;
--	}
--	memcpy(mdata_buf, metadata, size);
--
- 	ret = qcom_scm_clk_enable();
- 	if (ret)
--		goto out;
-+		return ret;
+-	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
++	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev, NULL);
+ 	if (IS_ERR(metadata))
+ 		return PTR_ERR(metadata);
  
- 	ret = qcom_scm_bw_enable();
- 	if (ret)
-@@ -497,15 +479,6 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
- 	qcom_scm_bw_disable();
- 	qcom_scm_clk_disable();
- 
--out:
--	if (ret < 0 || !ctx) {
--		dma_free_coherent(__scm->dev, size, mdata_buf, mdata_phys);
--	} else if (ctx) {
--		ctx->ptr = mdata_buf;
--		ctx->phys = mdata_phys;
--		ctx->size = size;
--	}
--
- 	return ret ? : res.result[0];
- }
- EXPORT_SYMBOL(qcom_scm_pas_init_image);
 diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 3f11554..8d06125 100644
+index 8d06125..e730413 100644
 --- a/drivers/soc/qcom/mdt_loader.c
 +++ b/drivers/soc/qcom/mdt_loader.c
-@@ -210,6 +210,7 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
+@@ -16,6 +16,7 @@
+ #include <linux/sizes.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/mdt_loader.h>
++#include <linux/dma-mapping.h>
+ 
+ static bool mdt_phdr_valid(const struct elf32_phdr *phdr)
+ {
+@@ -110,6 +111,7 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
+  * @data_len:	length of the read metadata blob
+  * @fw_name:	name of the firmware, for construction of segment file names
+  * @dev:	device handle to associate resources with
++ * @mdata_phys:	phys address for the assigned metadata buffer
+  *
+  * The mechanism that performs the authentication of the loading firmware
+  * expects an ELF header directly followed by the segment of hashes, with no
+@@ -124,11 +126,13 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
+  * Return: pointer to data, or ERR_PTR()
+  */
+ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
+-			     const char *fw_name, struct device *dev)
++			     const char *fw_name, struct device *dev,
++			     dma_addr_t *mdata_phys)
+ {
+ 	const struct elf32_phdr *phdrs;
+ 	const struct elf32_hdr *ehdr;
+ 	unsigned int hash_segment = 0;
++	struct device *scm_dev = NULL;
+ 	size_t hash_offset;
+ 	size_t hash_size;
+ 	size_t ehdr_size;
+@@ -160,9 +164,18 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
+ 	ehdr_size = phdrs[0].p_filesz;
+ 	hash_size = phdrs[hash_segment].p_filesz;
+ 
+-	data = kmalloc(ehdr_size + hash_size, GFP_KERNEL);
+-	if (!data)
+-		return ERR_PTR(-ENOMEM);
++	/*
++	 * During the scm call memory protection will be enabled for the meta
++	 * data blob, so make sure it's physically contiguous, 4K aligned and
++	 * non-cachable to avoid XPU violations.
++	 */
++	scm_dev = qcom_get_scm_device();
++	data = dma_alloc_coherent(scm_dev, ehdr_size + hash_size, mdata_phys,
++				       GFP_KERNEL);
++	if (!data) {
++		dev_err(dev, "Allocation of metadata buffer failed.\n");
++		return NULL;
++	}
+ 
+ 	/* Copy ELF header */
+ 	memcpy(data, fw->data, ehdr_size);
+@@ -179,7 +192,7 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
+ 		/* Hash is in its own segment, beyond the loaded file */
+ 		ret = mdt_load_split_segment(data + ehdr_size, phdrs, hash_segment, fw_name, dev);
+ 		if (ret) {
+-			kfree(data);
++			dma_free_coherent(scm_dev, ehdr_size + hash_size, data, mdata_phys);
+ 			return ERR_PTR(ret);
+ 		}
+ 	}
+@@ -209,10 +222,11 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
+ 	const struct elf32_phdr *phdr;
  	const struct elf32_hdr *ehdr;
  	phys_addr_t min_addr = PHYS_ADDR_MAX;
++	struct device *scm_dev = NULL;
  	phys_addr_t max_addr = 0;
-+	dma_addr_t mdata_phys;
+ 	dma_addr_t mdata_phys;
  	size_t metadata_len;
- 	void *metadata;
+-	void *metadata;
++	void *mdata_buf;
  	int ret;
-@@ -238,7 +239,7 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
+ 	int i;
+ 
+@@ -232,15 +246,22 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
+ 			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+ 	}
+ 
+-	metadata = qcom_mdt_read_metadata(fw, &metadata_len, fw_name, dev);
+-	if (IS_ERR(metadata)) {
+-		ret = PTR_ERR(metadata);
++	mdata_buf = qcom_mdt_read_metadata(fw, &metadata_len, fw_name, dev, &mdata_phys);
++	if (IS_ERR(mdata_buf)) {
++		ret = PTR_ERR(mdata_buf);
+ 		dev_err(dev, "error %d reading firmware %s metadata\n", ret, fw_name);
  		goto out;
  	}
  
--	ret = qcom_scm_pas_init_image(pas_id, metadata, metadata_len, ctx);
-+	ret = qcom_scm_pas_init_image(pas_id, mdata_phys);
- 	kfree(metadata);
+ 	ret = qcom_scm_pas_init_image(pas_id, mdata_phys);
+-	kfree(metadata);
++	if (ret || !ctx) {
++		dma_free_coherent(scm_dev, metadata_len, mdata_buf, mdata_phys);
++	} else if (ctx) {
++		ctx->ptr = mdata_buf;
++		ctx->phys = mdata_phys;
++		ctx->size = metadata_len;
++	}
++
  	if (ret) {
  		/* Invalid firmware metadata */
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index f833564..751436a 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -74,9 +74,7 @@ struct qcom_scm_pas_metadata {
- 	ssize_t size;
- };
+ 		dev_err(dev, "error %d initializing firmware %s\n", ret, fw_name);
+diff --git a/include/linux/soc/qcom/mdt_loader.h b/include/linux/soc/qcom/mdt_loader.h
+index 9e8e604..d438442 100644
+--- a/include/linux/soc/qcom/mdt_loader.h
++++ b/include/linux/soc/qcom/mdt_loader.h
+@@ -28,7 +28,8 @@ int qcom_mdt_load_no_init(struct device *dev, const struct firmware *fw,
+ 			  phys_addr_t mem_phys, size_t mem_size,
+ 			  phys_addr_t *reloc_base);
+ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
+-			     const char *fw_name, struct device *dev);
++			     const char *fw_name, struct device *dev,
++			     dma_addr_t *mdata_phys);
  
--extern int qcom_scm_pas_init_image(u32 peripheral, const void *metadata,
--				   size_t size,
--				   struct qcom_scm_pas_metadata *ctx);
-+extern int qcom_scm_pas_init_image(u32 peripheral, dma_addr_t metadata);
- void qcom_scm_pas_metadata_release(struct qcom_scm_pas_metadata *ctx);
- extern int qcom_scm_pas_mem_setup(u32 peripheral, phys_addr_t addr,
- 				  phys_addr_t size);
+ #else /* !IS_ENABLED(CONFIG_QCOM_MDT_LOADER) */
+ 
+@@ -64,7 +65,7 @@ static inline int qcom_mdt_load_no_init(struct device *dev,
+ 
+ static inline void *qcom_mdt_read_metadata(const struct firmware *fw,
+ 					   size_t *data_len, const char *fw_name,
+-					   struct device *dev)
++					   struct device *dev, dma_addr_t *mdata_phys)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
 -- 
 2.7.4
 
