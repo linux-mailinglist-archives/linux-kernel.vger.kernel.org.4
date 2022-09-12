@@ -2,137 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B693B5B549B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3275B549E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiILGiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S229802AbiILGkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiILGiD (ORCPT
+        with ESMTP id S229566AbiILGkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 02:38:03 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFAE205C1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:38:01 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id w8so13183962lft.12
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:38:01 -0700 (PDT)
+        Mon, 12 Sep 2022 02:40:02 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5C5101EE;
+        Sun, 11 Sep 2022 23:40:00 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 29so11210512edv.2;
+        Sun, 11 Sep 2022 23:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6MMFOsdik3pOVxza5iFw67+zQvf/yIVZHtdOoLDh9XA=;
-        b=WBHyt8tStNEomzn+/msR7XqF/ADGnzCqlpOgYyuTl9iS4felZamXZBRCDP0wkg8l4R
-         fV0ajIesocWpV+qkZk7ucUVPVljcFmi1gppGcQ39zw/MdY3OaKKpXa2+KAEzcCDsWJCb
-         YBFw+HGsnM+pYVt73fG5IHj4mit/jgCc+fc82ai5AYNJ6x38I5qethpk/vJg07qVRFs8
-         HZC1Ev/RjvySyWmKUC46gT5n+2+94pblkCEqx98gZ6P4t1Cvz3eLBfjp37QJqhEkr4Zx
-         +YlPi400FroQQTn0yRA7lE9kfYLTg7gd4xDoXrAn56m7jJac34t5p/lCI9l10F4KwMHz
-         z4jg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=TLRcC5IeLSQPuJjdu28jfpJ3HTwzjIn6aZaZhEyqqb8=;
+        b=RndJJ2rDg5R1zqzv716+YXL8VScLD/w+CjQXUcOaIWgngLo3cgIIg+nzNWVHsTGqPA
+         K2bgU8De2y5cpU/kiV9+5S2HtZlYDffixm8WJGLagHZvZ40GiyD1VFI2YnXBAVrdj3XH
+         vUApN1xtg37pA7G+gpnZJdDBK/j0AyES1k8Grx3HPNitxHqUOBMt0lbn2weuAhtNhE3I
+         YcDdRTBKVXjaS+Vzr4QLMRxMGbcgWufjOxzp38VTltykThp/MtEP24Fwumn6bAL544Mi
+         Awd3CgiGCl9DMeR0b9kBQaO5jHMv/KETO0rCGqcqMNBZVCQLAwbF+cSAeMKRVj+0wdG2
+         uMaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6MMFOsdik3pOVxza5iFw67+zQvf/yIVZHtdOoLDh9XA=;
-        b=Wp99ZCt8Gezr4tUsmS3+zXBwnuA++5lDak8XaVta9i7tM6Vw76b/+4C+AhEWIlDHXu
-         0BYAoMUyDGrq+VGKwvEcUC9nZMVBYARwQ4j8/Z5W4UXLZ8ykcbhkOdl4CB6pa6Zw2qsM
-         uJegtnK6Qs932qaX+92i1fYJuNCc1veK5FuQaA0ppVsZqR/+PdIa1nrYNtj0UNnUIhet
-         trnWq959Mj9s8BaZqd56WMBIwwglQUGNhd4U32xv2MnYgMkaumetbYWKAGcoh097sIhy
-         TgIGl5w3ON+vd8yCTqO09pu4nsuwZ9q2tFO2V6e2Nm1dHoXkx1/ZYCPQdwWfR8FHXP4T
-         +aKQ==
-X-Gm-Message-State: ACgBeo12v1a8xL/2EBznlaxnq28YZBpKA/lXp9gSApXuExVbvI/133wM
-        gTEyCKJRi/FhB6hSu4ULB87Jabsx465/RZyN7IXXeA==
-X-Google-Smtp-Source: AA6agR4TNG/RUu6QvTb9n6GXwBlk0k8cBa5EHKOtjXVmvbElP2VBINK++CQPC2Fa7/4D5YPELdVxUs9VgUcSmTm1/68=
-X-Received: by 2002:ac2:5681:0:b0:498:f58f:c006 with SMTP id
- 1-20020ac25681000000b00498f58fc006mr5016032lfr.428.1662964679707; Sun, 11 Sep
- 2022 23:37:59 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=TLRcC5IeLSQPuJjdu28jfpJ3HTwzjIn6aZaZhEyqqb8=;
+        b=0XL4MntvjLtscJ1TvsP2rFvZVqmG0HlsvbW7rSzxaA1HzT4+GSDyqXztR5rgKgr6eO
+         jMK79IBm2AdDpQC7ZE92TtCkgmu49Q1+RaRpsPNWC43bsDNSdMc9um68jptqJ0wH+YV5
+         iH1zeErrbz02WPx2qarVho71fJVV4DnfejOJSxetKWMa+4XbFys3OYvkNspVQlIkHV3+
+         ykTbZVRfINxsSF+N9p88l00X0qKGSFm8K9+uivle8kcZirVq1irlh++n0LUP1nAZtqPB
+         tbSo9GPdwl30vqhKJri9yQgY9Vp/WCfdqc0y5S3sQqrq9MHwWXimFpkkVEK+WFUtspF+
+         45CQ==
+X-Gm-Message-State: ACgBeo3HXpIzl9haTE4FtLr5mqJ09i7p7j6+B51sHqRXn2KtFa73ECIb
+        naCpXmdxuiBUwk7g6jKqOqY42gKzDbpiNfIXQPg=
+X-Google-Smtp-Source: AA6agR46znubc9yp+36nQs2wR6T52X6DSisQgkemoU+rz2iwtTL+xVC8jLbZylVgvB7hkbZSl+Ha8yRc8OoqRF5ToGI=
+X-Received: by 2002:a05:6402:1d55:b0:451:756e:439d with SMTP id
+ dz21-20020a0564021d5500b00451756e439dmr5670556edb.226.1662964799232; Sun, 11
+ Sep 2022 23:39:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220908144424.4232-1-zong.li@sifive.com> <20220908144424.4232-4-zong.li@sifive.com>
- <632b2853-1543-e3ba-b34f-39f3f4fdaddc@microchip.com>
-In-Reply-To: <632b2853-1543-e3ba-b34f-39f3f4fdaddc@microchip.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 12 Sep 2022 14:37:48 +0800
-Message-ID: <CANXhq0rUzyFOF_pShoPf18VrN2YH8AfgKRg438ak_3iMcRfSGA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] soc: sifive: ccache: determine the cache level
- from dts
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+References: <20220909030756.3916297-1-zhangshida@kylinos.cn> <20220911231251.GA3600936@dread.disaster.area>
+In-Reply-To: <20220911231251.GA3600936@dread.disaster.area>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Mon, 12 Sep 2022 14:39:23 +0800
+Message-ID: <CANubcdWe9thzi0WXHBg+vccP7UaGv1c8FiGQkORV6PGw_4cOwQ@mail.gmail.com>
+Subject: Re: [PATCH] xfs: remove the redundant check in xfs_bmap_first_unused
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     djwong@kernel.org, dchinner@redhat.com, chandan.babu@oracle.com,
+        zhangshida@kylinos.cn, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 2:28 AM <Conor.Dooley@microchip.com> wrote:
+Dave Chinner <david@fromorbit.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8812=E6=97=
+=A5=E5=91=A8=E4=B8=80 07:12=E5=86=99=E9=81=93=EF=BC=9A
+> Given that all the types and comparisons involved are 64 bit
+> unsigned:
 >
-> On 08/09/2022 15:44, Zong Li wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > Composable cache could be L2 or L3 cache, use 'cache-level' property of
-> > device node to determine the level.
-> >
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> > ---
-> >  drivers/soc/sifive/sifive_ccache.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
-> > index 949b824e89ad..690c19489317 100644
-> > --- a/drivers/soc/sifive/sifive_ccache.c
-> > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -38,6 +38,7 @@
-> >  static void __iomem *ccache_base;
-> >  static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
-> >  static struct riscv_cacheinfo_ops ccache_cache_ops;
-> > +static int level;
-> >
-> >  enum {
-> >         DIR_CORR = 0,
-> > @@ -144,7 +145,7 @@ static const struct attribute_group *ccache_get_priv_group(struct cacheinfo
-> >                                                            *this_leaf)
-> >  {
-> >         /* We want to use private group for composable cache only */
-> > -       if (this_leaf->level == 2)
-> > +       if (this_leaf->level == level)
-> >                 return &priv_attr_group;
-> >         else
-> >                 return NULL;
-> > @@ -215,6 +216,9 @@ static int __init sifive_ccache_init(void)
-> >         if (!ccache_base)
-> >                 return -ENOMEM;
-> >
-> > +       if (of_property_read_u32(np, "cache-level", &level))
-> > +               return -ENODEV;
+> typedef uint64_t        xfs_fileoff_t;  /* block number in a file */
 >
-> I think ENOENT or EINVAL are more comment patterns here?
+> #define XFS_FILEOFF_MAX(a,b) max_t(xfs_fileoff_t, (a), (b))
 >
-> Either way,
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>         xfs_fileoff_t br_startoff;
+>
+>         xfs_fileoff_t           lastaddr =3D 0;
+>         xfs_fileoff_t           lowest, max;
+>
+> We end up with the following calculations (in FSBs, not bytes):
+>
+>         lowest + len    =3D 0x800000ULL + 1
+>                         =3D 0x800001ULL
+>
+>         got.br_startoff - max   =3D 0ULL - 0x800000
+>                                 =3D 0xffffffffff800000ULL
+>
+> and so the existing check is:
+>
+>         if (0 >=3D 0x800001ULL && 0xffffffffff800000 >=3D 1)
+>
+> which evaluates as false because the extent that was found is not
+> beyond the initial offset (first_unused) that we need to start
+> searching at.
+>
+> With your modification, this would now evaluate as:
+>
+>         if (0xffffffffff800000 >=3D 1)
+>
+> Because of the underflow, this would then evaluate as true  and we'd
+> return 0 as the first unused offset. This is incorrect as we do not
+> have a hole at offset 0, nor is it within the correct directory
+> offset segment, nor is it within the search bounds we have
+> specified.
+>
+> If these were all signed types, then your proposed code might be
+> correct. But they are unsigned and hence we have to ensure that we
+> handle overflow/underflow appropriately.
+>
+> Which leads me to ask: did you test this change before you send
+> it to the list?
 >
 
-I will fix it in V4 patch. Thanks
+I am so sorry about the mistake, and thanks for your elaboration about
+this problem. it indeed teaches me a lesson about the necessity of test
+even for the simplest change.
 
-> > +
-> >         intr_num = of_property_count_u32_elems(np, "interrupts");
-> >         if (!intr_num) {
-> >                 pr_err("CCACHE: no interrupts property\n");
-> > --
-> > 2.17.1
-> >
->
+By the way, theoretically, in order to solve this, I wonder if we could
+change the code in the following way:
+=3D=3D=3D=3D
+xfs_bmap_first_unused(
+                /*
+                 * See if the hole before this extent will work.
+                 */
+-               if (got.br_startoff >=3D lowest + len &&
+-                   got.br_startoff - max >=3D len)
++               if (got.br_startoff >=3D max + len)
+                        break;
+=3D=3D=3D=3D
+
+Thanks,
+
+Stephen.
