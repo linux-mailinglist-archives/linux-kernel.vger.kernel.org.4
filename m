@@ -2,131 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4895B5FB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEA75B5FBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiILR7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        id S229743AbiILSCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiILR7I (ORCPT
+        with ESMTP id S229696AbiILSCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:59:08 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1972CDD9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:59:06 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s10so10873178ljp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:59:06 -0700 (PDT)
+        Mon, 12 Sep 2022 14:02:02 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FFE3F32C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:02:00 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso6400728otb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=gY3yxu1ESuLTH+rFoedO2iickM2TO6Q0hqHsiCe2Ku4=;
-        b=wYpcprvARNdYcXgSJt3ZWMMwP1MsNWeiJhjE1d1nRwLzuWDJzFFJ9P5TPtcaRAsgvi
-         8rBqiBy05mg1wceEso9dDYtdMo1v+zDsFdbISALDSwEv+z8A6pcfkeQn+pbUAsEOlveJ
-         F1YxtO90PtnKuD02p2YH/uI7JJhkAxR5DBSXQ3aFOrGZ3myQO2Gh3ShInwLxQFoJnDkW
-         SBmbgKTzmBLaCv7uwIge4yGuMx8yq2qYiOVPyNkT8QoOWUK+BKtZeR6zerNogFU66zRz
-         9H91hFfyr4WABE3FE7mmqbv4/7S/Qw7u7p926bvMROK4uuLpPcjO/xMF0eCSoplyHOME
-         8AMg==
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hpQfyYER++ZVoMkHEu62P5d1pUi0Jd4MiUp5JntBpPo=;
+        b=FBvxz68IdprF+9yu1u8Hw1qSsZbO5EhTFUkmQPAjFvMhZ7mNqDlqFGYGOYfychHet/
+         dQsK2GKe0Z6Nm7iFtuh17C9Z3/H9yMevRwrU7DZncyv8wdf7zLa5I+tFHJZ/jqn3d3O/
+         utwgIXleCjJrbV70Bw/CUQs2Tcv/TqUULvsUyv3O7Rb36zZyyxKyFU0MmilBKxdy8xEy
+         MiF2qKoFsH8y2z7aOEktLcC95dslnWv0GVTHe7xI3GJFcGanvzEtj3sZzAeZMFVGe6a6
+         qEoBuky2YuczOCZ06XdzDXpneJGW9TKQSBy3uJwynWq551tDehG000gKgy1v0zrGZFUF
+         v2fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gY3yxu1ESuLTH+rFoedO2iickM2TO6Q0hqHsiCe2Ku4=;
-        b=3SZTQNVqw9cfCjB4Uo6Jw4dZjAder0LPI+jKovmRJxLFAn9SXHxUMseV8Mfgyg0zcv
-         cU1u6h8NEN9ZHlw+o2Iw+TWVko/m8emPYg+DctHFJj1XOop0hTyV65ZHbI2JUjlOFZHO
-         BzRbd8R3zNT4lE1i5hoAItAexByItUFYc+MKhV8T7Z+xpmmSPspEG8MFvXCGbjns320Q
-         YRsCmAdyWStXz1YjHj97EMSSsM1P2Nnm+7/89CTDjP1Ht0+J7iQ12cg964LfmpGK1BQS
-         PApKCquMDw8iJ3F30n87tVUrzAytqnMZKMUw552xuu1VHo4K4Ls5xLCJcpCcHyduWj85
-         jvmA==
-X-Gm-Message-State: ACgBeo3NvmHwUD93A7QAMSTCudN/bWi8IBZm/6mFBo8HpLNk3N/y+rSt
-        nVTPiixy2jE7ZWbqvCW7e7veww==
-X-Google-Smtp-Source: AA6agR4VksOY8OzBgoRlszD2ydAjq5P8zmjOf9DeDDMq1Ex1NRMA9d8g9FQjBRLjWR/w5X/3ahn7Dg==
-X-Received: by 2002:a2e:9681:0:b0:261:c515:2b13 with SMTP id q1-20020a2e9681000000b00261c5152b13mr8229151lji.210.1663005544796;
-        Mon, 12 Sep 2022 10:59:04 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b2-20020a05651c032200b002618e5c2664sm1176437ljp.103.2022.09.12.10.59.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 10:59:04 -0700 (PDT)
-Message-ID: <5aac31ea-fdf0-268e-5c6a-bd89b3dad79a@linaro.org>
-Date:   Mon, 12 Sep 2022 20:59:03 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hpQfyYER++ZVoMkHEu62P5d1pUi0Jd4MiUp5JntBpPo=;
+        b=xzc+iiOEkzP1cXRuL9H4zH73Fa3Gy9aSre3reL159ihHSd+6J+cqag7Q7TVuiR7WSD
+         wAVcRFnL7RJ19wrTBTHy++MhqVxoEbBzMncCoXe63ff6gXy5eIh1/NtY9yoCOikEKLMe
+         AB2BWt8MMZFMEYCWbd1c2tFTIKAi+sBg6zM6YBPmd+S1B8yMnHr758PLC3KFlOt1kak8
+         gK0Yjiy6ksr7EA5FUYXjG2WI7hx1atxCC0r4O5QEft852wOcAJeoYjTY/RENrdFV+RBq
+         xCbOR/40kF8PLcCokw/nWrUcvzkbC54cC3czmkQFKhmAqCGpZ6C9YArFlt30QGHgCERL
+         4TOQ==
+X-Gm-Message-State: ACgBeo0aBWq/+soZ0s1qK3sjgFFu9qjGkpCW2lxMAc9x3di9T+52U70j
+        miCpQNVjRTx3JiE3Tlb1Y0dDCJsf0+wmnDA4u4Htvw==
+X-Google-Smtp-Source: AA6agR5jybZkvIEfZh4kpH/SL2IoZaspZpJ/N6zTxdgEH7ed8Z5noEEWSQuFrlyD+UPvS5eeyKXR/QWsbQgR74bHfE4=
+X-Received: by 2002:a9d:bc2:0:b0:654:c63:5b23 with SMTP id 60-20020a9d0bc2000000b006540c635b23mr8526142oth.48.1663005719384;
+ Mon, 12 Sep 2022 11:01:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 6/7] drm/msm/hdmi: fix IRQ lifetime
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220912154046.12900-1-johan+linaro@kernel.org>
- <20220912154046.12900-7-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220912154046.12900-7-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220812173526.15537-1-tharvey@gateworks.com> <20220812173526.15537-2-tharvey@gateworks.com>
+ <CAJ+vNU3QWWza-Q956GSLVvYJHC9owApyQD8Y1WNVDs0=qqz8-A@mail.gmail.com>
+ <CAJ+vNU3qv6yi48W6jX3-x-MiAFTU3AtbqsM-V8Dw29ZJFDrdKQ@mail.gmail.com> <20220912080449.GQ1728671@dragon>
+In-Reply-To: <20220912080449.GQ1728671@dragon>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 12 Sep 2022 11:01:47 -0700
+Message-ID: <CAJ+vNU0n7kghjD7D1JDJYr5LtrLmd0QMrdxL0x9n3QCg=eF9mg@mail.gmail.com>
+Subject: Re: [PATCH 2/6] arm64: dts: imx8mp-venice-gw74xx: remove invalid and
+ unused pinctrl_sai2
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 18:40, Johan Hovold wrote:
-> Device-managed resources allocated post component bind must be tied to
-> the lifetime of the aggregate DRM device or they will not necessarily be
-> released when binding of the aggregate device is deferred.
-> 
-> This is specifically true for the HDMI IRQ, which will otherwise remain
-> requested so that the next bind attempt fails when requesting the IRQ a
-> second time.
-> 
-> Fix this by tying the device-managed lifetime of the HDMI IRQ to the DRM
-> device so that it is released when bind fails.
-> 
-> Fixes: 067fef372c73 ("drm/msm/hdmi: refactor bind/init")
-> Cc: stable@vger.kernel.org      # 3.19
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Mon, Sep 12, 2022 at 1:04 AM Shawn Guo <shawnguo@kernel.org> wrote:
+>
+> On Thu, Sep 08, 2022 at 08:45:24AM -0700, Tim Harvey wrote:
+> > On Mon, Aug 22, 2022 at 10:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> > >
+> > > On Fri, Aug 12, 2022 at 10:35 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> > > >
+> > > > pinctrl_sai2 is not yet used and not properly defined - remove it to
+> > > > avoid:
+> > > > imx8mp-pinctrl 30330000.pinctrl: Invalid fsl,pins or pins propert
+> > > > y in node /soc@0/bus@30000000/pinctrl@30330000/sai2grp
+> > > >
+> > > > Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts
+> > > > support")
+> > > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 9 ---------
+> > > >  1 file changed, 9 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > > index de17021df53f..80f0f1aafdbf 100644
+> > > > --- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > > @@ -768,15 +768,6 @@ MX8MP_IOMUXC_NAND_DATA03__GPIO3_IO09       0x110
+> > > >                 >;
+> > > >         };
+> > > >
+> > > > -       pinctrl_sai2: sai2grp {
+> > > > -               fsl,pins = <
+> > > > -                       MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC
+> > > > -                       MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00
+> > > > -                       MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK
+> > > > -                       MX8MP_IOMUXC_SAI2_MCLK__AUDIOMIX_SAI2_MCLK
+> > > > -               >;
+> > > > -       };
+> > > > -
+> > > >         pinctrl_spi2: spi2grp {
+> > > >                 fsl,pins = <
+> > > >                         MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK   0x82
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > Shawn,
+> > >
+> > > You can drop this. I didn't see Peng's patch commit 706dd9d30d3b
+> > > ("arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings") which
+> > > takes care of this.
+> > >
+> > > Best Regards,
+> > >
+> > > Tim
+> >
+> > Shawn,
+> >
+> > Did you need me to re-submit the series this patch was in without it?
+> > I haven't seen any responses to the rest of the patches in this
+> > series.
+>
+> You said you will send a new version in responding to Fabio's comment on
+> patch 1/6 [1], right?
+>
+> Shawn
+>
+> [1] https://lore.kernel.org/linux-arm-kernel/CAJ+vNU3E+5DWR5tQyUurLzGkinjX2fidbVNZ4T70CNmhM6eNTw@mail.gmail.com/
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Shawn,
 
-> ---
->   drivers/gpu/drm/msm/hdmi/hdmi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> index a0ed6aa8e4e1..f28fb21e3891 100644
-> --- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-> +++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> @@ -344,7 +344,7 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
->   		goto fail;
->   	}
->   
-> -	ret = devm_request_irq(&pdev->dev, hdmi->irq,
-> +	ret = devm_request_irq(dev->dev, hdmi->irq,
->   			msm_hdmi_irq, IRQF_TRIGGER_HIGH,
->   			"hdmi_isr", hdmi);
->   	if (ret < 0) {
+Yes, I will re-submit that series.
 
--- 
-With best wishes
-Dmitry
+Thanks,
 
+Tim
