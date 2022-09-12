@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1111F5B5884
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486CB5B588E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiILKhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S229630AbiILKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiILKhb (ORCPT
+        with ESMTP id S229496AbiILKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:37:31 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639FC21245;
-        Mon, 12 Sep 2022 03:37:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so52773pjb.0;
-        Mon, 12 Sep 2022 03:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ingKwpa9zKSOhbnTWnyMzZNsCBv8TeJBTxZJSWGWRHI=;
-        b=GA4rituJy8VN1PzpjG4qUKNP5OJTLX7yyK7yWwUGpuATSJAH33JqBmwdlCYK2L6nwY
-         4kC+FDPak4IArlfjuyaZuPARdt++xDmbVodLUO5VR2US2e/mM9TVjr46jYGGXqoLqx3d
-         S5bztnLsaqUhkGeor4xYDvlQxYXI6TPNmPcBIxUIFHNcxefWh3tX8WvB8q5LDClNClzt
-         MZKhIBE9CzKjsbBy/rmAdGbFA3ahBHZgEFtu5OEb+TcjaJfalcfC5xGB2h1TACGL/u+x
-         BQcsAk/MswrszEa5OH3lMRxV5uZH93ZP2BTUHF9Ns5qUz8nyISrIYHL146WuvuS2drcX
-         snAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ingKwpa9zKSOhbnTWnyMzZNsCBv8TeJBTxZJSWGWRHI=;
-        b=B/Vr8BEfnlay1RtU/7TL44k6hkAB0XU/yQzUxwaW3FPJ2nW9/ITccdyec8rBKbecuK
-         vJDUXYjpYJPdcHWhjAe/o9NyoGGwpO72HR0spov6Yt9A2PStg0GUZXwYlVUaEHyR7/CU
-         n6nBdUThZiscY9tB9/9VCo/DoP9IryAMBxZPwt5mXudNy4yinyZRSc7suKNW+blDwhjT
-         /R0/aSR63Ru8UaX1fm2QyGHzm9yxUX8OI+8TMnLEAhp0PSHIpKtiW/9hYf8tOkBeCPXB
-         bbqRsHZbb1KQ1SRiwRlJoldfBIAmK+N06wvDJE05+XRAHhpYxtWR5OBUYLepqL1Mhcrj
-         iO+w==
-X-Gm-Message-State: ACgBeo2SlQN0LZfgjAwAw8Ac3delLHyfxxKBGk1Mwx6VtVOunzDz1jFE
-        2fc93y1Rppjgk8F9p33cZAQvPF8dSDc=
-X-Google-Smtp-Source: AA6agR4CjmYnlk0qDw55Y/gvdFyD+P6M+rG8+17LrKL3ui+3rI0vDJOWQe6wO8TnlQP+Rv7POsbzmQ==
-X-Received: by 2002:a17:90a:5b:b0:1fa:b78b:ad73 with SMTP id 27-20020a17090a005b00b001fab78bad73mr23338896pjb.107.1662979049909;
-        Mon, 12 Sep 2022 03:37:29 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0016f057b88c9sm5638507pln.26.2022.09.12.03.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 03:37:29 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] USB: serial: keyspan_pda: remove the unneeded result variable
-Date:   Mon, 12 Sep 2022 10:37:01 +0000
-Message-Id: <20220912103700.18338-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Sep 2022 06:39:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAED21241;
+        Mon, 12 Sep 2022 03:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662979151; x=1694515151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w3vFwdYLxWsQ9bEvrr+2hHC3zOoyKWcZ+8GtDAo7dCU=;
+  b=FUx8SQDi+VRECKMNKEnrPkpJ8h77lUkDB8/1EhzRLRgCAce1DSqj4Ind
+   BPryJaJGJCURHbm3FycsO0pHttBthL2JYA3Gc3pyWRDDVwFzFM057WQ/0
+   q5e6cwGM4zx5BpkcOPdjxOeoA9PF0iigpQA+r5z5sc18qGcSg7Yxi+Lvs
+   02wmm6NEf9vXY/qVbeDUhq6JUtaIxBdRlMjKO2DYAH3LZfb+aLw9OE1B8
+   xcOSLczz7hBLTMW+a9Akn5SICrseaiOI62IR4CP3zubvMvh3b6Qoh2Ku7
+   M2uIDcFwt2hl7feJvxAJDH/pr7tI4wMYII6D4GU7+zKl+blDsBia4UnCg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="359558492"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="359558492"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="719712154"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oXgqC-001Irg-2C;
+        Mon, 12 Sep 2022 13:39:00 +0300
+Date:   Mon, 12 Sep 2022 13:39:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
+Message-ID: <Yx8MRPxPrNG1XRqV@smile.fi.intel.com>
+References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
+ <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
+ <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On Sat, Sep 10, 2022 at 06:32:10PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-Return the usb_control_msg() directly instead of storing it in
-another redundant variable.
+...
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
----
- drivers/usb/serial/keyspan_pda.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+> Tentatively applied as 6.1 material.
 
-diff --git a/drivers/usb/serial/keyspan_pda.c b/drivers/usb/serial/keyspan_pda.c
-index 6fd15cd9e1eb..902675ac7f5c 100644
---- a/drivers/usb/serial/keyspan_pda.c
-+++ b/drivers/usb/serial/keyspan_pda.c
-@@ -393,12 +393,10 @@ static int keyspan_pda_get_modem_info(struct usb_serial *serial,
- static int keyspan_pda_set_modem_info(struct usb_serial *serial,
-                                      unsigned char value)
- {
--       int rc;
--       rc = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
--                            3, /* set pins */
--                            USB_TYPE_VENDOR|USB_RECIP_INTERFACE|USB_DIR_OUT,
--                            value, 0, NULL, 0, 2000);
--       return rc;
-+       return usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
-+                              3, /* set pins */
-+                              USB_TYPE_VENDOR|USB_RECIP_INTERFACE|USB_DIR_OUT,
-+                              value, 0, NULL, 0, 2000);
- }
+Thanks!
 
- static int keyspan_pda_tiocmget(struct tty_struct *tty)
+> If there are updates, we'll make changes as they go.
+
+There is one at least to fix a warning in the perf patch. Should I resend
+a fixed patch, just a fix, or entire series with a fixed patch?
+
+
 -- 
-2.15.2
+With Best Regards,
+Andy Shevchenko
+
 
