@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBF55B645A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 01:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4B65B645E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 01:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiILXtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 19:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S229939AbiILXuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 19:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiILXtV (ORCPT
+        with ESMTP id S229901AbiILXul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 19:49:21 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835651A02
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 16:49:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so371216pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 16:49:20 -0700 (PDT)
+        Mon, 12 Sep 2022 19:50:41 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D8BCE15;
+        Mon, 12 Sep 2022 16:50:39 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id n8so763288wmr.5;
+        Mon, 12 Sep 2022 16:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingics-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=gvVP6Dht50nvTmYpmhiCsT/vQD8yVyq8IcRlXJGAZO4=;
-        b=7lKflC4YiOFpkGbEsBl0lk8jvcUJpq8Mn4WIVH4JGd/0i1rkQd/nDb7t6hpWkSWFzJ
-         eUbjyzDKPF4xz3pKr3Y8OI1KURS2Q9G8wIXXxGNSH/USCC4B6hShEMo9e+tEjY68nUJf
-         UovXQY3b+P+rpVl0VMrKNawPdTEvbynd0nZQlI9EDJ7AkUSbwrZQDjT/e0O7550WBHys
-         vRkoFtMF7lbu5NT9ZIBYBapkspod9p40msbzPOPrmjrlP702oPOecR1Vk2QLp9qHjazW
-         bwW4lnyxLk6TchG75/gUtNnMGU5wludI75C1zqBNKEBUWxtwf9y/otAk/y6RD1ryqGR7
-         nZGA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=pTwEbLMCbyaVyzl18JN6kaVw/KjPPzqoeRa5qDh+anw=;
+        b=jpLJJxqzXXZCRZ6jDfG+yZnGjF2xpWcYwOAcnFsX37LHrmNTXoo1HC8v4dnmTEY/y3
+         4JEAbq+ell0/JyOC0+qmW7UsdP9D6ek9z28TrTN4b2dnUFn+iTfC9k1W60ceCnxLk5Iu
+         rAZ4M4P5C2qTu/asuiIpSAiFHrFlGaU8dBznvOcheO8m9PWZJ2g5FROIXA6uSN4SywV1
+         NF6Py4fCN1KxLb/B+BJI+pQN+WCGIbTMSZMappWNTjUczqi9+szjYRJrs9S7jplJ2fxM
+         sNRkFFXPeBBiNcsCH95kGot6G4IbEoi6fcW1r5FZOUtHCCFhMi4IIxsvAj3kEcXRyIZa
+         0kwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=gvVP6Dht50nvTmYpmhiCsT/vQD8yVyq8IcRlXJGAZO4=;
-        b=sR4lvvBJnc3LRwzQ3/40gXTh1iFeDFCrvREO4K4/AXtDMa8ofddrsjXLcThgPoNFh4
-         FRZpOyxsgQqazP5j322irVjs0Cckcdoy2u6SMU3jMwAWV7QxZyQCO8c9w1PyIxIQUKWC
-         KxSzPX1bMTNh/q1Z55su7n7SkRX6lucevrN+1c8yR9eoqHO/IeStmW4YR7hFFxOREBLY
-         LC94papTaMqTWZzrJmSwl3u2h49FEmSrI83qsu6o1CO3YqUMWf4UDchCMTC35tJpIldi
-         i/+Rd0M53UNTX+wVUXluz2IkXXwaszIzjtpAlfC8n9LOJHnX9KTUqvRVG1xpJnosZeTL
-         Vb3g==
-X-Gm-Message-State: ACgBeo0dmvyBri3BG3xf4icMbOhaknL4fLPz+yQFHbvjfAypWO5f8eG5
-        4dSkSXHqmhs/O9e9rPWKuVX7jnV6ooyqx6IALM6F4w==
-X-Google-Smtp-Source: AA6agR7meWyAXm13+eJxe8HZ5xJMwReynqtEsFTrvRWvkHPx5MWafsHFEg/X2fu30Fp4Ll47gDa2tOOPQvnWuzZYJRg=
-X-Received: by 2002:a17:902:f24c:b0:178:11ed:6af4 with SMTP id
- j12-20020a170902f24c00b0017811ed6af4mr16438745plc.135.1663026559799; Mon, 12
- Sep 2022 16:49:19 -0700 (PDT)
+        bh=pTwEbLMCbyaVyzl18JN6kaVw/KjPPzqoeRa5qDh+anw=;
+        b=dE3hJ+0G7VwGLhNOgHb7jJEJHfg/ULsgFdN1l1aVw9I+qtxau24zkw5DoFRcGHEVZl
+         L9hWjq1HzFs/MgDyJKm4p0AGk9r/JccHQX+tu+96fcniIuskvDoBppEd1a3Av6VlyYir
+         eWhBuSI1HnU3/iyWr4p7nsD948N7GBmgq8Viz0b+CZqyM7gufmUGJ09VpKYaj1NnqPc4
+         MgMwPnFYcBG4K88Y7YpFVx+t6PERJMhDrbuNd9O3fqHtiBRBx7Nhq+r41kp/+xT+o0FK
+         OzTxXnyesvrNMr/WJOXyz/FsGK6OcLTAMffsgknPJxr0UW5lLSsNV/EgNMIqV6WgLHcj
+         pxlQ==
+X-Gm-Message-State: ACgBeo1Zyze/lzXAE5Wk93GsmyHGDr3JE3MuX51/2UJTMA5xyn49AqkX
+        qt2sT3tL1Bk6LhBWzW0aeqRm5S+OmE0=
+X-Google-Smtp-Source: AA6agR4V9+MEFsvGmio6pzKM/iVACRqMQhmI3T0R1t6+iAye3epQ54b2i7FrT/FT4e09MtVAeiXIJg==
+X-Received: by 2002:a7b:cbd0:0:b0:3a6:9f6:a3e8 with SMTP id n16-20020a7bcbd0000000b003a609f6a3e8mr462354wmi.13.1663026637938;
+        Mon, 12 Sep 2022 16:50:37 -0700 (PDT)
+Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05600c1d1300b003b476cabf1csm8434073wms.26.2022.09.12.16.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 16:50:37 -0700 (PDT)
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     linux-iio <linux-iio@vger.kernel.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 6/9] iio: pressure: bmp280: reorder i2c device tables declarations
+Date:   Tue, 13 Sep 2022 01:50:07 +0200
+Message-Id: <a3969b60e428b9bd29ea1ebc6dd69aa5bbe59da0.1663025017.git.ang.iglesiasg@gmail.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1663025017.git.ang.iglesiasg@gmail.com>
+References: <cover.1663025017.git.ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
-References: <20220828120153.1512508-1-axel.lin@ingics.com> <f8a92b6d-ad23-24e7-2a01-73839e57cb85@baylibre.com>
-In-Reply-To: <f8a92b6d-ad23-24e7-2a01-73839e57cb85@baylibre.com>
-From:   Axel Lin <axel.lin@ingics.com>
-Date:   Tue, 13 Sep 2022 07:48:44 +0800
-Message-ID: <CAFRkauDKUGRracu2ofc=q-UTjWaeef5GfevT6kHnP=MWo__BGw@mail.gmail.com>
-Subject: Re: [RFT] [PATCH] regulator: tps65219: Fix .bypass_val_on setting
-To:     jerome Neanne <jneanne@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-jerome Neanne <jneanne@baylibre.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=8812=E6=
-=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:49=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Hi Axel,
->
-> On 28/08/2022 14:01, Axel Lin wrote:
-> > The .bypass_val_on setting does not match the .bypass_mask setting, so =
-the
-> > .bypass_mask bit will never get set.  Fix it by removing .bypass_val_on
-> > setting, the regulator_set_bypass_regmap and regulator_get_bypass_regma=
-p
-> > helpers will use rdev->desc->bypass_mask as val_on if the val_on is 0.
-> I think this will result in exact same behavior. val would be assigned
-> to 1 when enable is set and 0 otherwise. Anyway you are right this line
-> is useless.
+Change device tables declarations to forward order like in SPI codepath.
 
-Setting .bypass_val_on=3D1 won't set TPS65219_LDOS_BYP_CONFIG_MASK bit.
-The TPS65219_LDOS_BYP_CONFIG_MASK is BIT(6), so you need to set BIT(6)
-instead of 1 for .bypass_val_on.
-Remove .bypass_val_on setting then it will use .bypass_mask as
-.bypass_val_on setting.
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+---
+ drivers/iio/pressure/bmp280-i2c.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Axel
+diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
+index bf4a7a617537..5b51ebfc6f2b 100644
+--- a/drivers/iio/pressure/bmp280-i2c.c
++++ b/drivers/iio/pressure/bmp280-i2c.c
+@@ -37,18 +37,18 @@ static int bmp280_i2c_probe(struct i2c_client *client,
+ }
+ 
+ static const struct of_device_id bmp280_of_i2c_match[] = {
+-	{ .compatible = "bosch,bme280", .data = (void *)BME280_CHIP_ID },
+-	{ .compatible = "bosch,bmp280", .data = (void *)BMP280_CHIP_ID },
+-	{ .compatible = "bosch,bmp180", .data = (void *)BMP180_CHIP_ID },
+ 	{ .compatible = "bosch,bmp085", .data = (void *)BMP180_CHIP_ID },
++	{ .compatible = "bosch,bmp180", .data = (void *)BMP180_CHIP_ID },
++	{ .compatible = "bosch,bmp280", .data = (void *)BMP280_CHIP_ID },
++	{ .compatible = "bosch,bme280", .data = (void *)BME280_CHIP_ID },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bmp280_of_i2c_match);
+ 
+ static const struct i2c_device_id bmp280_i2c_id[] = {
+-	{"bmp280", BMP280_CHIP_ID },
+-	{"bmp180", BMP180_CHIP_ID },
+ 	{"bmp085", BMP180_CHIP_ID },
++	{"bmp180", BMP180_CHIP_ID },
++	{"bmp280", BMP280_CHIP_ID },
+ 	{"bme280", BME280_CHIP_ID },
+ 	{ },
+ };
+-- 
+2.37.3
+
