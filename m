@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C97E5B56C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AF85B56CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiILIyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S229593AbiILI4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiILIyU (ORCPT
+        with ESMTP id S229777AbiILIzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:54:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A561A2E68A;
-        Mon, 12 Sep 2022 01:54:15 -0700 (PDT)
+        Mon, 12 Sep 2022 04:55:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C6C186E9;
+        Mon, 12 Sep 2022 01:55:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A5A161136;
-        Mon, 12 Sep 2022 08:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7092EC433D6;
-        Mon, 12 Sep 2022 08:54:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A9C860FB2;
+        Mon, 12 Sep 2022 08:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B09C433D6;
+        Mon, 12 Sep 2022 08:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662972854;
-        bh=k2dcCERMf787HIQcJJ4C+7m5ZXOCiUi6iKsCZz+RXqc=;
+        s=k20201202; t=1662972952;
+        bh=msP75KSX56tTMsZd1X3fo42dUu4cwWYvUj8HKKALsjI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j7h8bQ7dCgfyOO+yq4e5c0RxUH1sk4pKHpKMuNZR214vyliB7FKNCz0TXzQDXKqSd
-         d0NxU/BCgdyCoVj3ODnbFKsxTsUm1G4i6FmwxN47537TicYJcTIlib4u/o0r8Xm2bf
-         viYQB7OYdgrs96KxoOC62PtsL2POIm1fNSVGBenPkhk5JAan5gvJxnHN4uo4Y0U15L
-         rqs6myNNeH8CEig868mnBEjVhAMoQPAr7rTllwSdwBTnUnn3GmcAiD7jQh6/kCqJTN
-         N5ZaJ/CufxGBtdIUWcNUsXopzer8sZF09UrsT441vGAyKLCUBFovwQYMLRS0AxyVID
-         xHBrserDQ7gqg==
-Date:   Mon, 12 Sep 2022 16:54:07 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] arm64: dts: imx: Add i.mx8mm Gateworks gw7904 dts
- support
-Message-ID: <20220912085407.GS1728671@dragon>
-References: <20220902230500.2624739-1-tharvey@gateworks.com>
- <20220902230500.2624739-2-tharvey@gateworks.com>
+        b=MEh5EttAWDe0TZlxzEwNpM6VQJyC1VR2hrKPmLW71BivCu6Ypc+jSCEmtDkIfLkBC
+         UzNZqcUd+R8+aCnzVPCm+p8YdkmuhVNDuDlj3wSZio8OzJ+geQl+R1KgICaIaGXHaw
+         daCWmepSUDcw+MlhOO2OLfB2Q5fP3jw3zaoxoV7gXoaG59rf66CnKJfsDXFoRy9E1Y
+         PIdqiAm62hKjQdrKqihEYZ28/hIH56LUIOpRTDJyOa9lY6FgnxRNSMmhi16UnhzehP
+         miQ6BRhn2ItaiSjO3O/DI5oUeG/0c5GsZ11EfYrgk/Jq9h5nLwkAUDY+6HFb30okzT
+         4Kmt4wQxe3lsA==
+Date:   Mon, 12 Sep 2022 10:55:47 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <Yx70E4nBtKoVVmhO@lpieralisi>
+References: <20220709143151.qhoa7vjcidxadrvt@pali>
+ <20220709234430.GA489657@bhelgaas>
+ <20220710000659.vxmlsvoin26tdiqw@pali>
+ <20220829165109.fzrgguchg4otbbab@pali>
+ <20220911154516.tu2b7qhsnk6mdtui@pali>
+ <Yx7nXJRHN1sWCkVq@lpieralisi>
+ <20220912084808.mmi42l7sp657dz6i@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220902230500.2624739-2-tharvey@gateworks.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220912084808.mmi42l7sp657dz6i@pali>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,951 +68,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 04:05:00PM -0700, Tim Harvey wrote:
-> The GW7904 is based on the i.MX 8M Mini SoC featuring:
->  - LPDDR4 DRAM
->  - eMMC FLASH
->  - microSD connector with UHS support
->  - LIS2DE12 3-axis accelerometer
->  - Gateworks System Controller
->  - IMX8M FEC
->  - 2x RS232 off-board connectors
->  - PMIC
->  - 10x bi-color LED's
->  - 1x miniPCIe socket with PCIe and USB2.0
->  - 802.3at Class 4 PoE
->  - 10-30VDC input via barrel-jack
+On Mon, Sep 12, 2022 at 10:48:08AM +0200, Pali Rohár wrote:
+> On Monday 12 September 2022 10:01:32 Lorenzo Pieralisi wrote:
+> > On Sun, Sep 11, 2022 at 05:45:16PM +0200, Pali Rohár wrote:
+> > > On Monday 29 August 2022 18:51:09 Pali Rohár wrote:
+> > > > On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
+> > > > > On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
+> > > > > > [+cc Marc, since he commented on this]
+> > > > > > 
+> > > > > > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
+> > > > > > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
+> > > > > > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > > > > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> > > > > > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> > > > > > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> > > > > > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
+> > > > > > > > > >
+> > > > > > > > > > This change fixes affinity support and allows to pin interrupts from
+> > > > > > > > > > different PCIe controllers to different CPU cores.
+> > > > > > > > > 
+> > > > > > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
+> > > > > > > > > of them need similar changes?  The commit log suggests that using
+> > > > > > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
+> > > > > > > > > the case and the real culprit is some other difference between mvebu
+> > > > > > > > > and the other drivers.
+> > > > > > > > 
+> > > > > > > > And there is another reason to not use irq_set_chained_handler_and_data
+> > > > > > > > and instead use devm_request_irq(). Armada XP has some interrupts
+> > > > > > > > shared and it looks like that irq_set_chained_handler_and_data() API
+> > > > > > > > does not handle shared interrupt sources too.
+> > > > > > > > 
+> > > > > > > > I can update commit message to mention also this fact.
+> > > > > > > 
+> > > > > > > Anything needed from me to improve this fix?
+> > > > > > 
+> > > > > > My impression from Marc's response [1] was that this patch would
+> > > > > > "break the contract the kernel has with userspace" and he didn't think
+> > > > > > this was acceptable.  But maybe I'm not understanding it correctly.
+> > > > > 
+> > > > > This is argument which Marc use when he does not have any argument.
+> > > > > 
+> > > > > Support for dedicated INTx into pci-mvebu.c was introduced just recently
+> > > > > and I used irq_set_chained_handler_and_data() just because I thought it
+> > > > > is a good idea and did not know about all those issues with it. So there
+> > > > > cannot be any breakage by this patch.
+> > > > > 
+> > > > > I already converted other pci-aardvark.c driver to use
+> > > > > irq_set_chained_handler_and_data() API because wanted it... But at the
+> > > > > end _that conversion_ caused breakage of afinity support and so this
+> > > > > conversion had to be reverted:
+> > > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> > > > > 
+> > > > > Based on his past decisions, above suggestions which cause _real_
+> > > > > breakage and his expressions like mvebu should be put into the trash,
+> > > > > I'm not going to listen him anymore. The only breaking is done by him.
+> > > > > 
+> > > > > 
+> > > > > There are two arguments why to not use irq_set_chained_handler_and_data:
+> > > > > 
+> > > > > 1) It does not support afinity and therefore has negative performance
+> > > > >    impact on Armada platforms with more CPUs and more PCIe ports.
+> > > > > 
+> > > > > 2) It does not support shared interrupts and therefore it will break
+> > > > >    hardware on which interrupt lines are shares (mostly Armada XP).
+> > > > > 
+> > > > > So these issues have to be fixed and currently I see only option to
+> > > > > switch irq_set_chained_handler_and_data() to devm_request_irq() which I
+> > > > > did in this fixup patch.
+> > > > 
+> > > > Any progress here? This patch is waiting here since end of May and if
+> > > > something is going to be broken then it is this fact of ignoring reported
+> > > > issues and proposed patch. Do you better solution how to fix commit
+> > > > ec075262648f?
+> > > 
+> > > After two weeks I'm reminding this fix patch again...
+> > 
+> > There is no point complaining about something you were asked
+> > to change, really - there is not.
+> > 
+> > You were given feedback, feel free to ignore it, it won't help
+> > getting this patch upstream - it is as simple as that, sorry.
+> > 
+> > Thanks,
+> > Lorenzo
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
+> I'm not sure if I understand you, what do you mean that all patches
+> which depends on this are now automatically rejected or what?
 
-Could you move these Cc after --- below?
+I am not merging this code unless it is acked by an IRQ maintainer.
 
-> ---
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  .../dts/freescale/imx8mm-venice-gw7904.dts    | 888 ++++++++++++++++++
->  2 files changed, 889 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 8bf7f7ecebaa..d7ae965d2b36 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -67,6 +67,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7903.dtb
-> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7904.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dahlia.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dev.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-dahlia.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-> new file mode 100644
-> index 000000000000..02ba85a0842a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-> @@ -0,0 +1,888 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 Gateworks Corporation
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/linux-event-codes.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/phy/phy-imx8-pcie.h>
-> +
-> +#include "imx8mm.dtsi"
-> +
-> +/ {
-> +	model = "Gateworks Venice GW7904 i.MX8MM board";
-> +	compatible = "gateworks,imx8mm-gw7904", "fsl,imx8mm";
-> +
-> +	chosen {
-> +		stdout-path = &uart2;
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x40000000 0 0x80000000>;
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		key-0 {
-> +			label = "user_pb";
-> +			gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
-> +			linux,code = <BTN_0>;
-> +		};
-> +
-> +		key-1 {
-> +			label = "user_pb1x";
-> +			linux,code = <BTN_1>;
-> +			interrupt-parent = <&gsc>;
-> +			interrupts = <0>;
-> +		};
-> +
-> +		key-2 {
-> +			label = "key_erased";
-> +			linux,code = <BTN_2>;
-> +			interrupt-parent = <&gsc>;
-> +			interrupts = <1>;
-> +		};
-> +
-> +		key-3 {
-> +			label = "eeprom_wp";
-> +			linux,code = <BTN_3>;
-> +			interrupt-parent = <&gsc>;
-> +			interrupts = <2>;
-> +		};
-> +
-> +		key-4 {
-> +			label = "switch_hold";
-> +			linux,code = <BTN_5>;
-> +			interrupt-parent = <&gsc>;
-> +			interrupts = <7>;
-> +		};
-> +	};
-> +
-> +	led-controller {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_gpio_leds>;
-> +
-> +		led-0 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led01_grn";
-> +			gpios = <&gpioled 0 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-1 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led01_yel";
-> +			gpios = <&gpioled 1 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-2 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led02_grn";
-> +			gpios = <&gpioled 2 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-3 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led02_yel";
-> +			gpios = <&gpioled 3 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-4 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led03_grn";
-> +			gpios = <&gpioled 4 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-5 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led03_yel";
-> +			gpios = <&gpioled 5 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-6 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led04_grn";
-> +			gpios = <&gpioled 6 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-7 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led04_yel";
-> +			gpios = <&gpioled 7 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-8 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led05_grn";
-> +			gpios = <&gpioled 8 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-9 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led05_yel";
-> +			gpios = <&gpioled 9 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-a {
+Is it clear enough ?
 
-The binding doesn't seem to define the number explicitly.  I understand
-we use hex in unit-address, but not sure a hex number is better than
-decimal as part of node name, mostly meant to count the instance.
-
-Shawn
-
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led06_grn";
-> +			gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-b {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_RED>;
-> +			label = "led06_red";
-> +			gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-c {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led07_grn";
-> +			gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-d {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_RED>;
-> +			label = "led07_red";
-> +			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-e {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led08_grn";
-> +			gpios = <&gpioled 10 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-f {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led08_yel";
-> +			gpios = <&gpioled 11 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-10 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led09_grn";
-> +			gpios = <&gpioled 12 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-11 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led09_yel";
-> +			gpios = <&gpioled 13 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-12 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			label = "led10_grn";
-> +			gpios = <&gpioled 14 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +
-> +		led-13 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			label = "led10_yel";
-> +			gpios = <&gpioled 15 GPIO_ACTIVE_LOW>;
-> +			default-state = "off";
-> +		};
-> +	};
-> +
-> +	pcie0_refclk: pcie0-refclk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <100000000>;
-> +	};
-> +
-> +	reg_3p3v: regulator-3p3v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "3P3V";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +	};
-> +};
-> +
-> +&A53_0 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_1 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_2 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_3 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&ddrc {
-> +	operating-points-v2 = <&ddrc_opp_table>;
-> +
-> +	ddrc_opp_table: opp-table {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp-25M {
-> +			opp-hz = /bits/ 64 <25000000>;
-> +		};
-> +
-> +		opp-100M {
-> +			opp-hz = /bits/ 64 <100000000>;
-> +		};
-> +
-> +		opp-750M {
-> +			opp-hz = /bits/ 64 <750000000>;
-> +		};
-> +	};
-> +};
-> +
-> +&fec1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_fec1>;
-> +	phy-mode = "rgmii-id";
-> +	phy-handle = <&ethphy0>;
-> +	local-mac-address = [00 00 00 00 00 00];
-> +	status = "okay";
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		ethphy0: ethernet-phy@0 {
-> +			compatible = "ethernet-phy-ieee802.3-c22";
-> +			reg = <0>;
-> +		};
-> +	};
-> +};
-> +
-> +&gpio1 {
-> +	gpio-line-names = "", "", "", "", "", "", "", "",
-> +		"", "", "", "", "rs232_en#", "", "", "",
-> +		"", "", "", "", "", "", "", "",
-> +		"", "", "", "", "", "", "", "";
-> +};
-> +
-> +&gpio5 {
-> +	gpio-line-names = "", "", "", "", "", "", "", "",
-> +		"", "", "", "", "pci_wdis#", "", "", "",
-> +		"", "", "", "", "", "", "", "",
-> +		"", "", "", "", "", "", "", "";
-> +};
-> +
-> +&i2c1 {
-> +	clock-frequency = <100000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	status = "okay";
-> +
-> +	gsc: gsc@20 {
-> +		compatible = "gw,gsc";
-> +		reg = <0x20>;
-> +		pinctrl-0 = <&pinctrl_gsc>;
-> +		interrupt-parent = <&gpio4>;
-> +		interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
-> +		interrupt-controller;
-> +		#interrupt-cells = <1>;
-> +
-> +		adc {
-> +			compatible = "gw,gsc-adc";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			channel@6 {
-> +				gw,mode = <0>;
-> +				reg = <0x06>;
-> +				label = "temp";
-> +			};
-> +
-> +			channel@82 {
-> +				gw,mode = <2>;
-> +				reg = <0x82>;
-> +				label = "vin";
-> +				gw,voltage-divider-ohms = <22100 1000>;
-> +				gw,voltage-offset-microvolt = <700000>;
-> +			};
-> +
-> +			channel@84 {
-> +				gw,mode = <2>;
-> +				reg = <0x84>;
-> +				label = "vdd_5p0";
-> +				gw,voltage-divider-ohms = <10000 10000>;
-> +			};
-> +
-> +			channel@86 {
-> +				gw,mode = <2>;
-> +				reg = <0x86>;
-> +				label = "vdd_3p3";
-> +				gw,voltage-divider-ohms = <10000 10000>;
-> +			};
-> +
-> +			channel@88 {
-> +				gw,mode = <2>;
-> +				reg = <0x88>;
-> +				label = "vdd_0p9";
-> +			};
-> +
-> +			channel@8c {
-> +				gw,mode = <2>;
-> +				reg = <0x8c>;
-> +				label = "vdd_soc";
-> +			};
-> +
-> +			channel@8e {
-> +				gw,mode = <2>;
-> +				reg = <0x8e>;
-> +				label = "vdd_arm";
-> +			};
-> +
-> +			channel@90 {
-> +				gw,mode = <2>;
-> +				reg = <0x90>;
-> +				label = "vdd_1p8";
-> +			};
-> +
-> +			channel@92 {
-> +				gw,mode = <2>;
-> +				reg = <0x92>;
-> +				label = "vdd_dram";
-> +			};
-> +
-> +			channel@a2 {
-> +				gw,mode = <2>;
-> +				reg = <0xa2>;
-> +				label = "vdd_gsc";
-> +				gw,voltage-divider-ohms = <10000 10000>;
-> +			};
-> +		};
-> +	};
-> +
-> +	gpio: gpio@23 {
-> +		compatible = "nxp,pca9555";
-> +		reg = <0x23>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		interrupt-parent = <&gsc>;
-> +		interrupts = <4>;
-> +	};
-> +
-> +	eeprom@50 {
-> +		compatible = "atmel,24c02";
-> +		reg = <0x50>;
-> +		pagesize = <16>;
-> +	};
-> +
-> +	eeprom@51 {
-> +		compatible = "atmel,24c02";
-> +		reg = <0x51>;
-> +		pagesize = <16>;
-> +	};
-> +
-> +	eeprom@52 {
-> +		compatible = "atmel,24c02";
-> +		reg = <0x52>;
-> +		pagesize = <16>;
-> +	};
-> +
-> +	eeprom@53 {
-> +		compatible = "atmel,24c02";
-> +		reg = <0x53>;
-> +		pagesize = <16>;
-> +	};
-> +
-> +	rtc@68 {
-> +		compatible = "dallas,ds1672";
-> +		reg = <0x68>;
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	status = "okay";
-> +
-> +	pmic@4b {
-> +		compatible = "rohm,bd71847";
-> +		reg = <0x4b>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_pmic>;
-> +		interrupt-parent = <&gpio3>;
-> +		interrupts = <8 IRQ_TYPE_LEVEL_LOW>;
-> +		rohm,reset-snvs-powered;
-> +		#clock-cells = <0>;
-> +		clocks = <&osc_32k 0>;
-> +		clock-output-names = "clk-32k-out";
-> +
-> +		regulators {
-> +			/* vdd_soc: 0.805-0.900V (typ=0.8V) */
-> +			BUCK1 {
-> +				regulator-name = "buck1";
-> +				regulator-min-microvolt = <700000>;
-> +				regulator-max-microvolt = <1300000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +				regulator-ramp-delay = <1250>;
-> +			};
-> +
-> +			/* vdd_arm: 0.805-1.0V (typ=0.9V) */
-> +			buck2: BUCK2 {
-> +				regulator-name = "buck2";
-> +				regulator-min-microvolt = <700000>;
-> +				regulator-max-microvolt = <1300000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +				regulator-ramp-delay = <1250>;
-> +				rohm,dvs-run-voltage = <1000000>;
-> +				rohm,dvs-idle-voltage = <900000>;
-> +			};
-> +
-> +			/* vdd_0p9: 0.805-1.0V (typ=0.9V) */
-> +			BUCK3 {
-> +				regulator-name = "buck3";
-> +				regulator-min-microvolt = <700000>;
-> +				regulator-max-microvolt = <1350000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* vdd_3p3 */
-> +			BUCK4 {
-> +				regulator-name = "buck4";
-> +				regulator-min-microvolt = <3000000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* vdd_1p8 */
-> +			BUCK5 {
-> +				regulator-name = "buck5";
-> +				regulator-min-microvolt = <1605000>;
-> +				regulator-max-microvolt = <1995000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* vdd_dram */
-> +			BUCK6 {
-> +				regulator-name = "buck6";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <1400000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* nvcc_snvs_1p8 */
-> +			LDO1 {
-> +				regulator-name = "ldo1";
-> +				regulator-min-microvolt = <1600000>;
-> +				regulator-max-microvolt = <1900000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* vdd_snvs_0p8 */
-> +			LDO2 {
-> +				regulator-name = "ldo2";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <900000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			/* vdda_1p8 */
-> +			LDO3 {
-> +				regulator-name = "ldo3";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			LDO4 {
-> +				regulator-name = "ldo4";
-> +				regulator-min-microvolt = <900000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			LDO6 {
-> +				regulator-name = "ldo6";
-> +				regulator-min-microvolt = <900000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c3 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c3>;
-> +	status = "okay";
-> +
-> +	accelerometer@19 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_accel>;
-> +		compatible = "st,lis2de12";
-> +		reg = <0x19>;
-> +		st,drdy-int-pin = <1>;
-> +		interrupt-parent = <&gpio1>;
-> +		interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-names = "INT1";
-> +	};
-> +};
-> +
-> +&i2c4 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c4>;
-> +	status = "okay";
-> +
-> +	gpioled: gpio@27 {
-> +		compatible = "nxp,pca9555";
-> +		reg = <0x27>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +	};
-> +};
-> +
-> +&pcie_phy {
-> +	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-> +	fsl,clkreq-unsupported;
-> +	clocks = <&pcie0_refclk>;
-> +	clock-names = "ref";
-> +	status = "okay";
-> +};
-> +
-> +&pcie0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pcie0>;
-> +	reset-gpio = <&gpio5 11 GPIO_ACTIVE_LOW>;
-> +	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-> +		 <&pcie0_refclk>;
-> +	clock-names = "pcie", "pcie_aux", "pcie_bus";
-> +	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-> +			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-> +	assigned-clock-rates = <10000000>, <250000000>;
-> +	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-> +				 <&clk IMX8MM_SYS_PLL2_250M>;
-> +	status = "okay";
-> +};
-> +
-> +&pgc_mipi {
-> +	status = "disabled";
-> +};
-> +
-> +/* off-board RS232 */
-> +&uart1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart1>;
-> +	status = "okay";
-> +};
-> +
-> +/* console */
-> +&uart2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart2>;
-> +	status = "okay";
-> +};
-> +
-> +/* off-board RS232 */
-> +&uart3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart3>;
-> +	status = "okay";
-> +};
-> +
-> +&usbotg1 {
-> +	dr_mode = "host";
-> +	disable-over-current;
-> +	status = "okay";
-> +};
-> +
-> +/* microSD */
-> +&usdhc2 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
-> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
-> +	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
-> +	bus-width = <4>;
-> +	vmmc-supply = <&reg_3p3v>;
-> +	status = "okay";
-> +};
-> +
-> +/* eMMC */
-> +&usdhc3 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	bus-width = <8>;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
-> +&wdog1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_wdog>;
-> +	fsl,ext-reset-output;
-> +	status = "okay";
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_hog>;
-> +
-> +	pinctrl_hog: hoggrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO12_GPIO1_IO12	0x40000041 /* RS232# */
-> +			MX8MM_IOMUXC_ECSPI2_MISO_GPIO5_IO12	0x40000041 /* PCI_WDIS# */
-> +		>;
-> +	};
-> +
-> +	pinctrl_accel: accelgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x159
-> +		>;
-> +	};
-> +
-> +	pinctrl_fec1: fec1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_ENET_MDC_ENET1_MDC			0x3
-> +			MX8MM_IOMUXC_ENET_MDIO_ENET1_MDIO		0x3
-> +			MX8MM_IOMUXC_ENET_TD3_ENET1_RGMII_TD3		0x1f
-> +			MX8MM_IOMUXC_ENET_TD2_ENET1_RGMII_TD2		0x1f
-> +			MX8MM_IOMUXC_ENET_TD1_ENET1_RGMII_TD1		0x1f
-> +			MX8MM_IOMUXC_ENET_TD0_ENET1_RGMII_TD0		0x1f
-> +			MX8MM_IOMUXC_ENET_RD3_ENET1_RGMII_RD3		0x91
-> +			MX8MM_IOMUXC_ENET_RD2_ENET1_RGMII_RD2		0x91
-> +			MX8MM_IOMUXC_ENET_RD1_ENET1_RGMII_RD1		0x91
-> +			MX8MM_IOMUXC_ENET_RD0_ENET1_RGMII_RD0		0x91
-> +			MX8MM_IOMUXC_ENET_TXC_ENET1_RGMII_TXC		0x1f
-> +			MX8MM_IOMUXC_ENET_RXC_ENET1_RGMII_RXC		0x91
-> +			MX8MM_IOMUXC_ENET_RX_CTL_ENET1_RGMII_RX_CTL	0x91
-> +			MX8MM_IOMUXC_ENET_TX_CTL_ENET1_RGMII_TX_CTL	0x1f
-> +			MX8MM_IOMUXC_SAI2_TXFS_GPIO4_IO24		0x19 /* IRQ# */
-> +			MX8MM_IOMUXC_SAI2_TXC_GPIO4_IO25		0x19 /* RST# */
-> +		>;
-> +	};
-> +
-> +	pinctrl_gpio_leds: gpioledsgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO08_GPIO1_IO8	0x40000019
-> +			MX8MM_IOMUXC_GPIO1_IO09_GPIO1_IO9	0x40000019
-> +			MX8MM_IOMUXC_GPIO1_IO10_GPIO1_IO10	0x40000019
-> +			MX8MM_IOMUXC_GPIO1_IO11_GPIO1_IO11	0x40000019
-> +		>;
-> +	};
-> +
-> +	pinctrl_gsc: gscgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SAI2_TXD0_GPIO4_IO26	0x159
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL		0x400001c3
-> +			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-> +			MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c3: i2c3grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-> +			MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c4: i2c4grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_I2C4_SCL_I2C4_SCL		0x400001c3
-> +			MX8MM_IOMUXC_I2C4_SDA_I2C4_SDA		0x400001c3
-> +		>;
-> +	};
-> +
-> +	pinctrl_pcie0: pciegrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_ECSPI2_MOSI_GPIO5_IO11	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_pmic: pmicgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_NAND_DATA02_GPIO3_IO8	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart1: uart1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_UART1_RXD_UART1_DCE_RX	0x140
-> +			MX8MM_IOMUXC_UART1_TXD_UART1_DCE_TX	0x140
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart2: uart2grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX	0x140
-> +			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX	0x140
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart3: uart3grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_UART3_RXD_UART3_DCE_RX	0x140
-> +			MX8MM_IOMUXC_UART3_TXD_UART3_DCE_TX	0x140
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2: usdhc2grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x190
-> +			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d0
-> +			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d0
-> +			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d0
-> +			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d0
-> +			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x194
-> +			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d4
-> +			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d4
-> +			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d4
-> +			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d4
-> +			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d4
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x196
-> +			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d6
-> +			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d6
-> +			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d6
-> +			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d6
-> +			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d6
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_gpio: usdhc2-gpiogrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12	0x1c4
-> +			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT  0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3: usdhc3grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK	0x190
-> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD	0x1d0
-> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0	0x1d0
-> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1	0x1d0
-> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2	0x1d0
-> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3	0x1d0
-> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4	0x1d0
-> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5	0x1d0
-> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6	0x1d0
-> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7	0x1d0
-> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE	0x190
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK	0x194
-> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD	0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0	0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1	0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2	0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3	0x1d4
-> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4	0x1d4
-> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5	0x1d4
-> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6	0x1d4
-> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7	0x1d4
-> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE	0x194
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK	0x196
-> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD	0x1d6
-> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0	0x1d6
-> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1	0x1d6
-> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2	0x1d6
-> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3	0x1d6
-> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4	0x1d6
-> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5	0x1d6
-> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6	0x1d6
-> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7	0x1d6
-> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE	0x196
-> +		>;
-> +	};
-> +
-> +	pinctrl_wdog: wdoggrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0xc6
-> +		>;
-> +	};
-> +};
-> -- 
-> 2.25.1
-> 
+Thanks,
+Lorenzo
