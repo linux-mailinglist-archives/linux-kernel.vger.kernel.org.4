@@ -2,139 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5F65B61A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 21:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7134C5B6199
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 21:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiILT0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 15:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S230491AbiILTWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 15:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiILT0G (ORCPT
+        with ESMTP id S230463AbiILTWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 15:26:06 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2051512608;
-        Mon, 12 Sep 2022 12:26:06 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11e9a7135easo26083075fac.6;
-        Mon, 12 Sep 2022 12:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=OwBDVbFQEw2EAV+CoYDVuZdyw9Sp+7B2pZqgX6wtMO8=;
-        b=VoJ5UatIZjLOTKrOnCmk/Zs7UgHFZN1Z5iu17az8YvLSGUNJ5r0hATbF37tZf0OjHH
-         5ZKToyVbZpsue0tm3aNPKtlC7U7ivv/8D94Lrtz0vCC/12ZlBjVdkrY+5Ybm/dH3VWmZ
-         b2CNKTlvhrDtgVkP9oYfHMAIToEliZTHYbWq6w15tvcY5yM55L8gNOa63KY0UKyCZnFm
-         InPZPsyFDTyxSMaCyaFhpxGhC+lWecgJJcL6nj5nCozXulS9vJZXFIMA26gGu2fR8jC2
-         wFOuvzdwFq0/Cc6Hf2uI9mBJ2Gkyx0SXzniLjUc2llJMa+w6An0EUC+PxKXztfSTUPnq
-         UECw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=OwBDVbFQEw2EAV+CoYDVuZdyw9Sp+7B2pZqgX6wtMO8=;
-        b=3lZQzbNTkA+/fRkTdoX7xBUxf7kyPAmJXeiXcv6nEZKfuIKSZgCpb8CRLUgmDwmTaP
-         hZi1X303NxKDEVBiA+inKNkjKZk3h3lo6iBEBciQw44sF5ZhjNmBPFOaKaa/vmMda48o
-         dQaqLfoiXQ3WCI7hm8yiCzfDMNElJKUWJjK+O8jgL6r6bmjdZIJElVnH5beLGF8GjF0p
-         E8TJRzsrCE/aVb9sOpCX9K3MhqxDavtcHrQkfsBu3fASV50WDYCwxKy1J5K9Kx2kLUDo
-         AdkrQrAF/Q9FMtOv1QdaLt+HhTI5eX0kZSYwpUaBeuQb+3K+yQTvVluQmbtr0aOaz5ET
-         xCdw==
-X-Gm-Message-State: ACgBeo0NM5J9y1Uv+iXmP4VNZGh7fKgUBvO5E28SCC1xJQFrGF4JsXGO
-        awqNWsbqSQ+eaVURItvQLn0=
-X-Google-Smtp-Source: AA6agR5hLdk4wV80PywGLbBBBLUDe6WFVwWLD7ei7ufpEjqgMbvwq6LB/oZJvWToQ283HEK1RjQQPw==
-X-Received: by 2002:a05:6808:23cc:b0:34b:73b1:19e8 with SMTP id bq12-20020a05680823cc00b0034b73b119e8mr10207917oib.105.1663010765430;
-        Mon, 12 Sep 2022 12:26:05 -0700 (PDT)
-Received: from grumpy-vm.hsd1.tx.comcast.net ([2601:2c3:480:7390::465])
-        by smtp.gmail.com with ESMTPSA id 5-20020a9d0d85000000b0063975d170a8sm5018208ots.7.2022.09.12.12.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 12:26:04 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, balalic.enver@gmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     markgross@kernel.org
-Subject: [PATCH v2 1/1] hp-wmi: Setting thermal profile fails with 0x06
-Date:   Mon, 12 Sep 2022 14:26:03 -0500
-Message-Id: <20220912192603.4001-1-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 12 Sep 2022 15:22:14 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193954361C;
+        Mon, 12 Sep 2022 12:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663010532; x=1694546532;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TXS01MeQcvfoprp7LLm9T1zw6OQ9jGZYEO3glco0J4Y=;
+  b=k6lvxM5NhVVlV9AgaFgY/2GWYiqjX5LWElNX6CkiPcTMBcYnJDR3DGd3
+   C6hi7r+j+3c2Hl1Bkntk3HUxjkOozAtIXiVtMUP7Tvfr7aSxJnTBHh7lb
+   rIUBj9ed7cZR2u0A4kXqklL2KqyNhklJS+VvbnsVPSY5niIezqb7iAtQC
+   oIc4Y42MeQyegk/XLvUCsQRyAso9xb+rGmk+HzMhydWM7P5n9xj7z0zFk
+   gw+cRGdoRG6Ws5Ur3eyEQ72XPIm/S3tLqepDEpu+UBj3PxPemL8fqeCvG
+   m/o0XsuvlWbfmHcZpf7cDP/8iZlLzTZLcbJPhrkw+jYDK18BEXPagX1Nu
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="173492040"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Sep 2022 12:22:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 12 Sep 2022 12:22:10 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 12 Sep 2022 12:22:09 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <michael@walle.cc>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: Fix the interrupt number for internal PHYs
+Date:   Mon, 12 Sep 2022 21:26:29 +0200
+Message-ID: <20220912192629.461452-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Error 0x06 (invalid command parameter) is reported by hp-wmi module
-when reading the current thermal profile and then proceed to set it
-back. The failing condition occurs in Linux NixOS after user
-configures the thermal profile to ‘quiet mode’ in Windows.  Quiet Fan
-Mode is supported in Windows but was not supported in hp-wmi module.
+According to the datasheet the interrupts for internal PHYs are
+80 and 81.
 
-This fix adds support for PLATFORM_PROFILE_QUIET in hp-wmi module for
-HP notebooks other than HP Omen series.  Quiet thermal profile is not
-supported in HP Omen series notebooks.
-
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
+Fixes: 6ad69e07def67c ("ARM: dts: lan966x: add MIIM nodes")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
-Based on the latest platform-drivers-x86.git/for-next
+ arch/arm/boot/dts/lan966x.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Version 2 - Set bit (PROFILE_QUIET) only for non HP Omen Notebooks
-Version 1 - Original patch
----
- drivers/platform/x86/hp-wmi.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index bc7020e9df9e..9a64601e217f 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -177,7 +177,8 @@ enum hp_thermal_profile_omen_v1 {
- enum hp_thermal_profile {
- 	HP_THERMAL_PROFILE_PERFORMANCE	= 0x00,
- 	HP_THERMAL_PROFILE_DEFAULT		= 0x01,
--	HP_THERMAL_PROFILE_COOL			= 0x02
-+	HP_THERMAL_PROFILE_COOL			= 0x02,
-+	HP_THERMAL_PROFILE_QUIET		= 0x03,
- };
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index bcb130a2471d..23665a042990 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -547,13 +547,13 @@ mdio1: mdio@e200413c {
  
- #define IS_HWBLOCKED(x) ((x & HPWMI_POWER_FW_OR_HW) != HPWMI_POWER_FW_OR_HW)
-@@ -1194,6 +1195,9 @@ static int hp_wmi_platform_profile_get(struct platform_profile_handler *pprof,
- 	case HP_THERMAL_PROFILE_COOL:
- 		*profile =  PLATFORM_PROFILE_COOL;
- 		break;
-+	case HP_THERMAL_PROFILE_QUIET:
-+		*profile = PLATFORM_PROFILE_QUIET;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1216,6 +1220,10 @@ static int hp_wmi_platform_profile_set(struct platform_profile_handler *pprof,
- 	case PLATFORM_PROFILE_COOL:
- 		tp =  HP_THERMAL_PROFILE_COOL;
- 		break;
-+	case PLATFORM_PROFILE_QUIET:
-+		tp = HP_THERMAL_PROFILE_QUIET;
-+		break;
-+
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -1263,6 +1271,8 @@ static int thermal_profile_setup(void)
+ 			phy0: ethernet-phy@1 {
+ 				reg = <1>;
+-				interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+ 				status = "disabled";
+ 			};
  
- 		platform_profile_handler.profile_get = hp_wmi_platform_profile_get;
- 		platform_profile_handler.profile_set = hp_wmi_platform_profile_set;
-+
-+		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
- 	}
- 
- 	set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
+ 			phy1: ethernet-phy@2 {
+ 				reg = <2>;
+-				interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
+ 				status = "disabled";
+ 			};
+ 		};
 -- 
-2.34.1
+2.33.0
 
