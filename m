@@ -2,100 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47C25B5963
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DA75B5966
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiILLh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S229512AbiILLis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiILLhy (ORCPT
+        with ESMTP id S229531AbiILLip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:37:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86F4931229;
-        Mon, 12 Sep 2022 04:37:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA6F5113E;
-        Mon, 12 Sep 2022 04:37:59 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A6583F71A;
-        Mon, 12 Sep 2022 04:37:52 -0700 (PDT)
-Message-ID: <fc02df92-2092-d7c2-fed5-f9db26846c07@arm.com>
-Date:   Mon, 12 Sep 2022 12:37:46 +0100
+        Mon, 12 Sep 2022 07:38:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EF931229;
+        Mon, 12 Sep 2022 04:38:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3551B80CAE;
+        Mon, 12 Sep 2022 11:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27ED3C433D6;
+        Mon, 12 Sep 2022 11:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662982721;
+        bh=FCU5SG7ZmSO/FS2aU+IZV41v+cSuNOTyiZzV1RmxhrY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SriU/tn/FGS8ENFHrlNrHCfTolGzRQNr00Nr2ti9OSsjvKXgCPHo2HD19rzggV5l5
+         TR26T6Pbv10N5cJCg6ffoltp08U8heXl/cI7xr5EzRdPshro2GCXlEerHn5rAQuCNv
+         kzP5osFCseQAKibKNhxkrMd75B+Tm5/JlxjvpDsC+2H8yfpQ3HKcD266phUUeV/MLx
+         iIKs3FjkvkLyDXlphEehBO0n1mmiD01lqnPlax64FRhv1n/34sQEdQtYuuE3uSE13a
+         2t/aDi0OnbNK+GrDxfbvdH2yZTnqpKBDG4RaiA0ong43mlx9nYxIz8Fky0E2ddj0nr
+         zrCTYSqkrQzjQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2D7805C0DF1; Mon, 12 Sep 2022 04:38:38 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 04:38:38 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
+ in explanation.txt
+Message-ID: <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: linux-next: build failure after merge of the coresight tree
-Content-Language: en-GB
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220912154219.162eb9d3@canb.auug.org.au>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220912154219.162eb9d3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-12 06:42, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekrüger wrote:
+> The current informal control dependency definition in explanation.txt is
+> too broad and, as discussed, needs to be updated.
 > 
-> After merging the coresight tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Consider the following example:
 > 
-> drivers/hwtracing/ptt/hisi_ptt.c:13:10: fatal error: linux/dma-iommu.h: No such file or directory
->     13 | #include <linux/dma-iommu.h>
->        |          ^~~~~~~~~~~~~~~~~~~
+> > if(READ_ONCE(x))
+> >   return 42;
+> >
+> > WRITE_ONCE(y, 42);
+> >
+> > return 21;
 > 
-> Caused by commit
+> The read event determines whether the write event will be executed "at
+> all" - as per the current definition - but the formal LKMM does not
+> recognize this as a control dependency.
 > 
->    ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+> Introduce a new definition which includes the requirement for the second
+> memory access event to syntactically lie within the arm of a non-loop
+> conditional.
 > 
-> interacting with commit
-> 
->    f2042ed21da7 ("iommu/dma: Make header private")
-> 
-> from the iommu tree.
-> 
-> Since the public interfaces in dna-iommu.h were moved to iommu.h, I have
-> applied the following merge fix patch:
+> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
 
-In fact it's not even using those interfaces anyway, so never had any 
-reason to include dma-iommu.h in the first place, and Mathieu can make 
-this fix in the Coresight tree as-is. FWIW,
+Hearing no objections, I reverted the old version and replaced it
+with this version.  Thank you both!
 
-Acked-by: Robin Murphy <robin.murphy@arm.com>
+							Thanx, Paul
 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 12 Sep 2022 15:35:37 +1000
-> Subject: [PATCH] hwtracing: hihi_ptt: fix up for "iommu/dma: Make header private"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->   drivers/hwtracing/ptt/hisi_ptt.c | 1 -
->   1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 666a0f14b6c4..5d5526aa60c4 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -10,7 +10,6 @@
->   #include <linux/bitops.h>
->   #include <linux/cpuhotplug.h>
->   #include <linux/delay.h>
-> -#include <linux/dma-iommu.h>
->   #include <linux/dma-mapping.h>
->   #include <linux/interrupt.h>
->   #include <linux/io.h>
+> v2:
+> - Fix typos
+> - Fix indentation of code snippet
+> 
+> v1:
+> @Alan, since I got it wrong the last time, I'm adding you as a co-developer after my
+> SOB. I'm sorry if this creates extra work on your side due to you having to
+> resubmit the patch now with your SOB if I understand correctly, but since it's
+> based on your wording from the other thread, I definitely wanted to give you
+> credit.
+> 
+>  tools/memory-model/Documentation/explanation.txt | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index ee819a402b69..0bca50cac5f4 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
+>  through a pointer will depend on the value read earlier from that
+>  pointer.
+> 
+> -Finally, a read event and another memory access event are linked by a
+> -control dependency if the value obtained by the read affects whether
+> -the second event is executed at all.  Simple example:
+> +Finally, a read event X and another memory access event Y are linked by
+> +a control dependency if Y syntactically lies within an arm of an if,
+> +else or switch statement and the condition guarding Y is either data or
+> +address-dependent on X.  Simple example:
+> 
+>  	int x, y;
+> 
+> --
+> 2.35.1
+> 
