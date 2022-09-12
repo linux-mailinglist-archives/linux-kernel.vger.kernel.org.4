@@ -2,203 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5319E5B5A80
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC3A5B5A75
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiILMxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S229779AbiILMud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiILMxE (ORCPT
+        with ESMTP id S229693AbiILMu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:53:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97EC2F016
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:53:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r18so19932859eja.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=nGTCVwpa7FHGhxIcMI2gWYkmXzWyO3MNsUyuvcbNiH8=;
-        b=E3vd1eoWlsMgyS4fO3gF6lpMkL0/Gbh09VKXtTgw6dcnjm/+FK2cT/goyin0Upse5m
-         USygGaqAA/xLQYgbrabJlO8b2ZyV7dqqxl3rPysJ2+xX+vPvYb/xEGNnGBQpnmq6FCiz
-         t26z7fAtFKCMxkEXaZDszAttM7HTHT/ftp1RtQ70IFEjwEXsYGhKP9Yrje3xNF/YkZgd
-         3URRTNuLErXfYQmHRQPk4ULz60EIQqzVGC52fgvVN+Iv2mp2S9GQVM2hBQ7thefoTuby
-         HHXrbgWashbhBWBKvXDX3pxhx3b/3lemsWc//gsFas9P3Umsl7tnQ4d3/IBD7HCI/6Pj
-         ZrAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=nGTCVwpa7FHGhxIcMI2gWYkmXzWyO3MNsUyuvcbNiH8=;
-        b=gP9/ew20WrJ1Nh9OCcUrARKGpRlHKDy30rpSf9oGyD5VSsQLdHOYlHBNydf9b/Rqmw
-         2KNBjvqWHDXYooOQstO+XcK1GTs2SvUIGwLh2l5qm1GIgBM/4h9tC8oAQzaA9mUA41I3
-         CBteqzNREqBQfoEa2UMGHjKEarTuxdP7i7eAl3k0SJA8YCg0kWJsB/1zldvlSfeOvwlF
-         Sp5hRzGStZye+QWc0gf2ZBPtOdjU5Prvtui5cmgJhKFpkXjZbuL4/86FsOvP0/eDfY+N
-         i8uZoMTrMSEJK5VPIxWD/v3yE38IoNxhk0Jenrx4swgRWnjXSjL6P/0fs2dN38EPrIRt
-         +p3Q==
-X-Gm-Message-State: ACgBeo08dxBe53ErwC6gsfW1FBUu7EYSJq4gTsd0ffHtaOdJqv1ToPV0
-        ZEs0M3tZG1/f9P2ut5cAR0G40lEyAeIeew==
-X-Google-Smtp-Source: AA6agR7YwflFmuaYz3R9twMlYnvrAzH38CVXZZBObZF9qSFEPO3iQb8syyTOKCC0F59QZaaWNem0mA==
-X-Received: by 2002:a17:907:6d9b:b0:731:1135:dc2d with SMTP id sb27-20020a1709076d9b00b007311135dc2dmr18922488ejc.76.1662987182115;
-        Mon, 12 Sep 2022 05:53:02 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id l4-20020aa7cac4000000b0044ee2869ef7sm5760869edt.4.2022.09.12.05.53.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Sep 2022 05:53:01 -0700 (PDT)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     willy@infradead.org
-Cc:     linux-kernel@vger.kernel.org, Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH 2/2] XArray: Fix xas_create_range() when lower multi-order entry present
-Date:   Mon, 12 Sep 2022 12:46:47 +0000
-Message-Id: <20220912124647.17164-2-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220912124647.17164-1-richard.weiyang@gmail.com>
-References: <20220912124647.17164-1-richard.weiyang@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 08:50:29 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F8F1E3F4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:50:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RrW/0kPlvrHgEIVhJydDnaLkoRAy5MbGoRrxURgRY62lJSgGChqXHw4i94aPdp5Kodkzku0pnCTF2ByoVDA/Z8ycAloOntRsYudISZE1D9eTKVQv2EsE+TLcTKnD+CyJosPhMJAzMZIpTxRRR93h/GcZb9gdz120QlHR5QqrPRvm4/B4suUIsbhwgW6ICLtW66nubP2IZtYC33vhlIphkd32IEFrdIYo0DblblrdByrNPw2TouNk/9oJjlyUtxuP6OnOorhQ5z+obgPxxGbBF9rVSsPBS0U8y08isIKtZZdy5NlHLyIkdIhkajsX9ZVvXPztKMvMPAcMpFM0spTmfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rBaqBt3CeDPHqMdwKkjeLpUb1EMzesXO0zqhE3C0KcY=;
+ b=aBkHGncUqNpd3R1/eyhOr9q6vuP6bQojoAK11HZSSV/ki+Tw6M7X6Lz/5r1SaGHzErw0JP+Kjc3fszEEJ6q2A4yyZwGHf+0uGdB1Fayw0SkOMqO6wy/Ma+yUxc338MnOyM6+O9FQ6QW8MJp1xfJkb38WP1U1EEon1xND0EQRt8Y4EzyZ1ZjNrbc5v3hYBhTf3R+HAyyovl+AyYmeaLapi2qIzNwe3XEck+lzmYm0CbRWg1HdiHKA7qfAuSiVMDrAIrSpL5516J+BH3Mu15l3u9pOjpQ+HBUXsSaOebVtIUQljUY7NmGPMzIHoeJt7xWwPhnw8+qPZmEJlsqMUQ+UUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rBaqBt3CeDPHqMdwKkjeLpUb1EMzesXO0zqhE3C0KcY=;
+ b=IxFBiZDvpHq5ZeM3RGHSYkVn8yR8aAfe/CaKKMmK+jENC5vDeup5nNR0TB3jjzTiykRyWmmaNFFAeCY14FgGI4rnTT/p26P441703r4Y7POROO+3Vpy6qKFOO0lWOHJvVTjvG0Lmlb87ikNYimX/1RlxfEgJeKjXcn2P8PL04oo7lCVHS5TyZlxMGVU3/ThT+el8X68U7VVo4DiXzCjXCJEZfeoFgDEKxI2mAtsip6gOYkkQ3muKhnpihggbG+Ymf060WCeJchxFY5K29YK6I79ymY9mRacAU663B8yhupsIKq04CEl4ZLrEawlVEFDkqGuYACgWpMDoFoUYgSwj4A==
+Received: from DS7PR05CA0083.namprd05.prod.outlook.com (2603:10b6:8:57::29) by
+ BL3PR12MB6449.namprd12.prod.outlook.com (2603:10b6:208:3b8::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.18; Mon, 12 Sep 2022 12:50:25 +0000
+Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:57:cafe::54) by DS7PR05CA0083.outlook.office365.com
+ (2603:10b6:8:57::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.4 via Frontend
+ Transport; Mon, 12 Sep 2022 12:50:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5612.13 via Frontend Transport; Mon, 12 Sep 2022 12:50:25 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 12 Sep
+ 2022 12:50:25 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
+ 2022 05:50:24 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server id 15.2.986.29 via Frontend Transport; Mon, 12 Sep
+ 2022 05:50:22 -0700
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>, <eperezma@redhat.com>,
+        <si-wei.liu@oracle.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Eli Cohen <elic@nvidia.com>
+Subject: [PATCH] vdpa/mlx5: Fix MQ to support non power of two num queues
+Date:   Mon, 12 Sep 2022 15:50:19 +0300
+Message-ID: <20220912125019.833708-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT011:EE_|BL3PR12MB6449:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8505b5d5-a2dd-47e5-09e0-08da94bd5d07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EAkIRxT/1fu+xjgttRU3+A1XM4yic+gvB9YeFiSAjJU4yBp6w1VtJvzBwo7LC2T/M4k/876q//Lz2qeSWS7wFYLA8gw8UJI6Wh4grSt3oRmtArRsnetUw3oAVFlaXzSef5RR9vkJIb4HujBIHWym/9Bv9J6uqFF32Rf++tL04nHRs1WXPd8i7lABne5hjFhx47SeZYpOyoeDQ+t79GVZ+q/JWpXIJ/gdawx9UC2oM5LdWaIym0rnImp1I3JEEQvxd2BCXAyKalDEU7Q+G5OawOKv1Q7poXKlLPDn0amiCKEwvdHQtkw81CLfeM/ju1ENj9FaWXmFr014WwCI3KYKKsqz1zKNj0y8p+Z2ti7iYCgyGv0ZvE92QV9VhpZo2iTsQXgZWYWIW+Rn7L4tDlqyj/tR/dwXm39f5HmvpE69sN81LX2ordDuja/48Ryg936iH5ve69uWnKZcaLwWZGOfpEclQeSVNLzXoUO+JAoueZoaGUNkzZajOQhBaeqgCFs15kinuHN4DbYxT914nR9DxC5x3nZKQN/QGMSRFYUMLPhigMiP0KIer+r9FxDvm0QsorkO64rA6JaPi18zJ0dGi8f6PP7aSqZ8Vj3Ft9uHqR3w3sR+YHQT5NWLnTPvdsjy2dseuKunAy+yn0zJIlhUZ3aa4Cyt710uZwQuLiEuK4dfKih0THNoqqFalSBvClBFwQWQ4kHEAtbcx9t6R1r/CjWxQqGa18uN2vbjo77NQy6Y1SFa2ttV1Mn/Smep52Mv6ib0tuenSfjLzix5743WSHyySomtjkr7EnwkhqvxHvI=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(396003)(39860400002)(40470700004)(36840700001)(46966006)(8676002)(40460700003)(36860700001)(70206006)(4326008)(356005)(70586007)(426003)(2616005)(336012)(1076003)(47076005)(41300700001)(186003)(81166007)(316002)(110136005)(6666004)(82740400003)(26005)(478600001)(7696005)(83380400001)(82310400005)(36756003)(86362001)(8936002)(5660300002)(107886003)(2906002)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 12:50:25.5568
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8505b5d5-a2dd-47e5-09e0-08da94bd5d07
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6449
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is already an lower order entry present, xas_create_range()
-would face two problems:
+RQT objects require that a power of two value be configured for both
+rqt_max_size and rqt_actual size.
 
-  * When new_order is roundup(order, XA_CHUNK_SHIFT), it would go up and
-    access root->parent
-  * When there is holes in lower order range, no proper entry is created
+For create_rqt, make sure to round up to the power of two the value of
+given by the user who created the vdpa device and given by
+ndev->rqt_size. The actual size is also rounded up to the power of two
+using the current number of VQs given by ndev->cur_num_vqs.
 
-This patch tries to fix this issue by adjust to proper next_index if we
-found a multi-order entry. And then look up.
+Same goes with modify_rqt where we need to make sure act size is power
+of two based on the new number of QPs.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+Without this patch, attempt to create a device with non power of two QPs
+would result in error from firmware.
+
+Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
 ---
- lib/test_xarray.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++
- lib/xarray.c      | 21 +++++++++++++++---
- 2 files changed, 72 insertions(+), 3 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/lib/test_xarray.c b/lib/test_xarray.c
-index e77d4856442c..2cf2cd8471a8 100644
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -1482,6 +1482,59 @@ static noinline void check_create_range_5(struct xarray *xa,
- 	xa_destroy(xa);
- }
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index ed100a35e596..90913365def4 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1320,6 +1320,8 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
  
-+static noinline void check_create_range_6(struct xarray *xa)
-+{
-+	unsigned long index = 0;
-+	unsigned int order, next_order;
-+
-+	order = 2 * XA_CHUNK_SHIFT - 2;
-+
-+	for (next_order = order + 1; next_order <= roundup(order, XA_CHUNK_SHIFT) + 1;
-+			next_order++) {
-+		XA_STATE(load_xas, xa, 0);
-+		XA_STATE_ORDER(xas, xa, 0, next_order);
-+
-+		for (index = 0; index < (1 << next_order); index += 1 << order) {
-+			if (index == 0)
-+				continue;
-+			xa_store_order(xa, index, order, xa_mk_index(index), GFP_KERNEL);
-+		}
-+
-+		// [0, (1 << order) - 1] is empty now
-+		rcu_read_lock();
-+		xas_load(&load_xas);
-+		XA_BUG_ON(xa, load_xas.xa_node == NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node->shift == 0);
-+		rcu_read_unlock();
-+
-+		xas_set(&load_xas, (1 << order) - 1);
-+		rcu_read_lock();
-+		xas_load(&load_xas);
-+		XA_BUG_ON(xa, load_xas.xa_node == NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node->shift == 0);
-+		rcu_read_unlock();
-+
-+		do {
-+			xas_lock(&xas);
-+			xas_create_range(&xas);
-+			xas_unlock(&xas);
-+		} while (xas_nomem(&xas, GFP_KERNEL));
-+
-+		// [0, (1 << order) - 1] is created now
-+		xas_set(&load_xas, 0);
-+		XA_BUG_ON(xa, xas_load(&load_xas) != NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node == NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node->shift != 0);
-+
-+		xas_set(&load_xas, (1 << order) - 1);
-+		XA_BUG_ON(xa, xas_load(&load_xas) != NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node == NULL);
-+		XA_BUG_ON(xa, load_xas.xa_node->shift != 0);
-+
-+		xa_destroy(xa);
-+	}
-+}
-+
- static noinline void check_create_range(struct xarray *xa)
+ static int create_rqt(struct mlx5_vdpa_net *ndev)
  {
- 	unsigned int order;
-@@ -1515,6 +1568,7 @@ static noinline void check_create_range(struct xarray *xa)
- 	}
++	int rqt_table_size = roundup_pow_of_two(ndev->rqt_size);
++	int act_sz = roundup_pow_of_two(ndev->cur_num_vqs / 2);
+ 	__be32 *list;
+ 	void *rqtc;
+ 	int inlen;
+@@ -1327,7 +1329,7 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ 	int i, j;
+ 	int err;
  
- 	check_create_range_3();
-+	check_create_range_6(xa);
- }
+-	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
++	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + rqt_table_size * MLX5_ST_SZ_BYTES(rq_num);
+ 	in = kzalloc(inlen, GFP_KERNEL);
+ 	if (!in)
+ 		return -ENOMEM;
+@@ -1336,12 +1338,12 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ 	rqtc = MLX5_ADDR_OF(create_rqt_in, in, rqt_context);
  
- static noinline void __check_store_range(struct xarray *xa, unsigned long first,
-diff --git a/lib/xarray.c b/lib/xarray.c
-index 326b73bb9811..3f9a630ef788 100644
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -708,6 +708,7 @@ void xas_create_range(struct xa_state *xas)
- 	unsigned long index = xas->xa_index;
- 	unsigned char shift = xas->xa_shift;
- 	unsigned char sibs = xas->xa_sibs;
-+	struct xa_node *node;
+ 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
+-	MLX5_SET(rqtc, rqtc, rqt_max_size, ndev->rqt_size);
++	MLX5_SET(rqtc, rqtc, rqt_max_size, rqt_table_size);
+ 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+-	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
++	for (i = 0, j = 0; i < act_sz; i++, j += 2)
+ 		list[i] = cpu_to_be32(ndev->vqs[j % ndev->cur_num_vqs].virtq_id);
  
- 	xas->xa_index |= ((sibs + 1UL) << shift) - 1;
- 	if (xas_is_node(xas) && xas->xa_node->shift == xas->xa_shift)
-@@ -723,14 +724,28 @@ void xas_create_range(struct xa_state *xas)
- 			goto success;
- 		xas->xa_index -= XA_CHUNK_SIZE;
+-	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
++	MLX5_SET(rqtc, rqtc, rqt_actual_size, act_sz);
+ 	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
+ 	kfree(in);
+ 	if (err)
+@@ -1354,6 +1356,7 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
  
-+		node = xas->xa_node;
-+		if (node->shift) {
-+			unsigned long next_index = xas->xa_index >> node->shift;
-+
-+			next_index &= ~XA_CHUNK_MASK;
-+			next_index += xas->xa_offset;
-+			next_index <<= node->shift;
-+
-+			if (next_index <= (index & ~XA_CHUNK_MASK))
-+				goto success;
-+
-+			xas->xa_index = next_index - 1;
-+		}
-+
- 		for (;;) {
--			struct xa_node *node = xas->xa_node;
--			if (node->shift >= shift)
--				break;
- 			xas->xa_node = xa_parent_locked(xas->xa, node);
-+			if (!xas->xa_node)
-+				break;
- 			xas->xa_offset = node->offset - 1;
- 			if (node->offset != 0)
- 				break;
-+			node = xas->xa_node;
- 		}
- 	}
+ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+ {
++	int act_sz = roundup_pow_of_two(num / 2);
+ 	__be32 *list;
+ 	void *rqtc;
+ 	int inlen;
+@@ -1361,7 +1364,7 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+ 	int i, j;
+ 	int err;
  
+-	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
++	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + act_sz * MLX5_ST_SZ_BYTES(rq_num);
+ 	in = kzalloc(inlen, GFP_KERNEL);
+ 	if (!in)
+ 		return -ENOMEM;
+@@ -1372,10 +1375,10 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+ 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
+ 
+ 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+-	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
++	for (i = 0, j = 0; i < act_sz; i++, j = j + 2)
+ 		list[i] = cpu_to_be32(ndev->vqs[j % num].virtq_id);
+ 
+-	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
++	MLX5_SET(rqtc, rqtc, rqt_actual_size, act_sz);
+ 	err = mlx5_vdpa_modify_rqt(&ndev->mvdev, in, inlen, ndev->res.rqtn);
+ 	kfree(in);
+ 	if (err)
 -- 
-2.33.1
+2.35.1
 
