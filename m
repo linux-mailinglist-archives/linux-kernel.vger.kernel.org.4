@@ -2,305 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B945B6148
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5DD5B614F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiILSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S229833AbiILSxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiILSs2 (ORCPT
+        with ESMTP id S229459AbiILSxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:48:28 -0400
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8E220BE4;
-        Mon, 12 Sep 2022 11:48:26 -0700 (PDT)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id 4A3DB5C1C72;
-        Mon, 12 Sep 2022 20:48:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1663008504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v0+jlOHGoUYVB2p7DAI0aVwZbtklz5aXsFhcNoBGj/E=;
-        b=BgMpsHskTk00HIp1l2Os6znDblqR8c/hnKz8TWC2zQ73d8Us/F9qV8J+4LCmqUh1H5H+lp
-        suZ/fMlznj4wRN/WaMa5rr+jxBUxgMoHNVQHdzHrN45HXu5VSZx/dsr6SvK8Wikh7wqzuI
-        Ib5/An1AuSPEDy8t4rOCTBYoAo2qg8U=
+        Mon, 12 Sep 2022 14:53:51 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9406219C02
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:53:49 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id i19so5838696pgi.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=eu+Y0GxqpAYk/blE6b6eAg2V++css9z9LTCv5OV58Iw=;
+        b=itTP2g8kQuP+En3k3FWdKM7MuG2mB8+HmOuv4jvVRnEupfn0/dVq41Rf2pcrexOJVD
+         /VCUMeem5Kh52IvYayTLE6K+sYTKq81CShFxm0ksahAIhL5b0X2UZAUaRIApZYClYW4A
+         D9uDIZ1IYn/+gz8MWx6860tvmEOr1du8pDU+7hCbpKUF33gEJeOlxOyicPjGPL5vqZ6K
+         dhHeNuGwxjCxT0fAvHniKJSO5KnhAOmO07VR4DRCH2iYOi3zPDzsDgALJ4ZGMJ6wzh2T
+         J9MMWXBwBRHJsEaxLa6ywP1NtUGP1TtZFqydNvE4BGPWnZQF/IVZ+QhzLOsMfobggWJE
+         2bXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eu+Y0GxqpAYk/blE6b6eAg2V++css9z9LTCv5OV58Iw=;
+        b=PWiqyBD+6rA8j25f2wbaoFZQLWV2T4MRyz0LDkc30auxs5LqsdlvAYsXwz5KgBEP1W
+         hf3Z1iq9YFJ45JA4287N2LMVTon9LXvBXiNQHJ1pVz4uVOvCPW2IKMmzZh+9dO7dHaA8
+         cXqwUx/A3QIY+4c7XhWiHhZJ889RRwou3XxYmjBo3iqJW7t5BAeklMgYsQwI/XSwV+E6
+         meqSF6VX4STbNrL8+avHH4aSUcPA5+gbIzRd/dq64037P+IpAATCPH9qsyaGiKuv5KXg
+         S/w3gB93yLuPoB2yoW0OfBehr+ijlA/bHVLmAZkPdlX7uD3QTOvbWzuroQD+pvdkiXRu
+         LBVA==
+X-Gm-Message-State: ACgBeo03w06C+aSYBIrM1ZC2K5IHCNhpfJQmAJlLJsy2jiTcTE2pZsAQ
+        E/l+wPEVELOB5p1ubi6COCgV+w==
+X-Google-Smtp-Source: AA6agR58cC1Ep7n6UweoDOxuW+z7oY73tW/YVyeR/I5tQtNtY/F2m9g02EzS5c1w6qxs7ZTsBDD7wQ==
+X-Received: by 2002:a63:1f0e:0:b0:438:5cd8:8d60 with SMTP id f14-20020a631f0e000000b004385cd88d60mr18709989pgf.70.1663008828733;
+        Mon, 12 Sep 2022 11:53:48 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170902da8300b001714e7608fdsm6414843plx.256.2022.09.12.11.53.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 11:53:48 -0700 (PDT)
+Message-ID: <46087486-bacd-c408-7ead-5b120412412b@linaro.org>
+Date:   Tue, 13 Sep 2022 00:23:42 +0530
 MIME-Version: 1.0
-Date:   Mon, 12 Sep 2022 20:48:24 +0200
-From:   Stefan Agner <stefan@agner.ch>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 247/779] drm/meson: encoder_hdmi: switch to bridge
- DRM_BRIDGE_ATTACH_NO_CONNECTOR
-In-Reply-To: <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
-References: <20220815180337.130757997@linuxfoundation.org>
- <20220815180347.894058731@linuxfoundation.org>
- <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
-Message-ID: <685b64f60375b69c5c790286f1386be3@agner.ch>
-X-Sender: stefan@agner.ch
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 3/4] dt-bindings: net: snps,dwmac: Update reg maxitems
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
+ <20220907204924.2040384-4-bhupesh.sharma@linaro.org>
+ <da383499-fe9f-816e-8180-a9661a9c0496@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <da383499-fe9f-816e-8180-a9661a9c0496@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-12 18:08, Stefan Agner wrote:
-> On 2022-08-15 19:58, Greg Kroah-Hartman wrote:
->> From: Neil Armstrong <narmstrong@baylibre.com>
->>
->> [ Upstream commit 0af5e0b41110e2da872030395231ab19c45be931 ]
->>
->> This implements the necessary change to no more use the embedded
->> connector in dw-hdmi and use the dedicated bridge connector driver
->> by passing DRM_BRIDGE_ATTACH_NO_CONNECTOR to the bridge attach call.
->>
->> The necessary connector properties are added to handle the same
->> functionalities as the embedded dw-hdmi connector, i.e. the HDR
->> metadata, the CEC notifier & other flags.
->>
->> The dw-hdmi output_port is set to 1 in order to look for a connector
->> next bridge in order to get DRM_BRIDGE_ATTACH_NO_CONNECTOR working.
+On 9/8/22 8:11 PM, Krzysztof Kozlowski wrote:
+> On 07/09/2022 22:49, Bhupesh Sharma wrote:
+>> Since the Qualcomm dwmac based ETHQOS ethernet block
+>> supports 64-bit register addresses, update the
+>> reg maxitems inside snps,dwmac YAML bindings.
 > 
-> HDMI on ODROID-N2+ was working with v5.15.60, and stopped working with
-> v5.15.61. Reverting this commit (and two dependent refcount leak) to be
-> the culprit. Reverting just the refcount leaks is not enough to get HDMI
-> working, so I assume it is this commit.
-> 
-> I haven't investigated much beyond that, maybe its simple a case of a
-> missing kernel configuration? DRM_DISPLAY_CONNECTOR is compiled, and the
-> module display_connector is loaded, so that part seemed to have worked.
-> 
-> Any ideas welcome.
-> 
-> FWIW, I track the issue in the HAOS tracker at
-> https://github.com/home-assistant/operating-system/issues/2120.
-
-It seems that backporting commit 7cd70656d128 ("drm/bridge:
-display-connector: implement bus fmts callbacks") fixes the problem
-without reverting this commit.
-
-@Greg, can we backport this commit as well?
-
---
-Stefan
-
-> 
-> --
-> Stefan
+> Please wrap commit message according to Linux coding style / submission
+> process:
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 > 
 >>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> Acked-by: Sam Ravnborg <sam@ravnborg.org>
->> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->> Link:
->> https://patchwork.freedesktop.org/patch/msgid/20211020123947.2585572-5-narmstrong@baylibre.com
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> Cc: Bjorn Andersson <andersson@kernel.org>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: Vinod Koul <vkoul@kernel.org>
+>> Cc: David Miller <davem@davemloft.net>
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 >> ---
->>  drivers/gpu/drm/meson/Kconfig              |  2 +
->>  drivers/gpu/drm/meson/meson_dw_hdmi.c      |  1 +
->>  drivers/gpu/drm/meson/meson_encoder_hdmi.c | 81 +++++++++++++++++++++-
->>  3 files changed, 82 insertions(+), 2 deletions(-)
+>>   Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> diff --git a/drivers/gpu/drm/meson/Kconfig b/drivers/gpu/drm/meson/Kconfig
->> index 9f9281dd49f8..a4e1ed96e5e8 100644
->> --- a/drivers/gpu/drm/meson/Kconfig
->> +++ b/drivers/gpu/drm/meson/Kconfig
->> @@ -6,9 +6,11 @@ config DRM_MESON
->>  	select DRM_KMS_HELPER
->>  	select DRM_KMS_CMA_HELPER
->>  	select DRM_GEM_CMA_HELPER
->> +	select DRM_DISPLAY_CONNECTOR
->>  	select VIDEOMODE_HELPERS
->>  	select REGMAP_MMIO
->>  	select MESON_CANVAS
->> +	select CEC_CORE if CEC_NOTIFIER
->>
->>  config DRM_MESON_DW_HDMI
->>  	tristate "HDMI Synopsys Controller support for Amlogic Meson Display"
->> diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> b/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> index fb540a503efe..5cd2b2ebbbd3 100644
->> --- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> +++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> @@ -803,6 +803,7 @@ static int meson_dw_hdmi_bind(struct device *dev,
->> struct device *master,
->>  	dw_plat_data->input_bus_encoding = V4L2_YCBCR_ENC_709;
->>  	dw_plat_data->ycbcr_420_allowed = true;
->>  	dw_plat_data->disable_cec = true;
->> +	dw_plat_data->output_port = 1;
->>
->>  	if (dw_hdmi_is_compatible(meson_dw_hdmi, "amlogic,meson-gxl-dw-hdmi") ||
->>  	    dw_hdmi_is_compatible(meson_dw_hdmi, "amlogic,meson-gxm-dw-hdmi") ||
->> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
->> b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
->> index db332fa4cd54..5e306de6f485 100644
->> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
->> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
->> @@ -14,8 +14,11 @@
->>  #include <linux/regulator/consumer.h>
->>  #include <linux/reset.h>
->>
->> +#include <media/cec-notifier.h>
->> +
->>  #include <drm/drm_atomic_helper.h>
->>  #include <drm/drm_bridge.h>
->> +#include <drm/drm_bridge_connector.h>
->>  #include <drm/drm_device.h>
->>  #include <drm/drm_edid.h>
->>  #include <drm/drm_probe_helper.h>
->> @@ -34,8 +37,10 @@ struct meson_encoder_hdmi {
->>  	struct drm_encoder encoder;
->>  	struct drm_bridge bridge;
->>  	struct drm_bridge *next_bridge;
->> +	struct drm_connector *connector;
->>  	struct meson_drm *priv;
->>  	unsigned long output_bus_fmt;
->> +	struct cec_notifier *cec_notifier;
->>  };
->>
->>  #define bridge_to_meson_encoder_hdmi(x) \
->> @@ -50,6 +55,14 @@ static int meson_encoder_hdmi_attach(struct
->> drm_bridge *bridge,
->>  				 &encoder_hdmi->bridge, flags);
->>  }
->>
->> +static void meson_encoder_hdmi_detach(struct drm_bridge *bridge)
->> +{
->> +	struct meson_encoder_hdmi *encoder_hdmi =
->> bridge_to_meson_encoder_hdmi(bridge);
->> +
->> +	cec_notifier_conn_unregister(encoder_hdmi->cec_notifier);
->> +	encoder_hdmi->cec_notifier = NULL;
->> +}
->> +
->>  static void meson_encoder_hdmi_set_vclk(struct meson_encoder_hdmi
->> *encoder_hdmi,
->>  					const struct drm_display_mode *mode)
->>  {
->> @@ -298,9 +311,30 @@ static int meson_encoder_hdmi_atomic_check(struct
->> drm_bridge *bridge,
->>  	return 0;
->>  }
->>
->> +static void meson_encoder_hdmi_hpd_notify(struct drm_bridge *bridge,
->> +					  enum drm_connector_status status)
->> +{
->> +	struct meson_encoder_hdmi *encoder_hdmi =
->> bridge_to_meson_encoder_hdmi(bridge);
->> +	struct edid *edid;
->> +
->> +	if (!encoder_hdmi->cec_notifier)
->> +		return;
->> +
->> +	if (status == connector_status_connected) {
->> +		edid = drm_bridge_get_edid(encoder_hdmi->next_bridge,
->> encoder_hdmi->connector);
->> +		if (!edid)
->> +			return;
->> +
->> +		cec_notifier_set_phys_addr_from_edid(encoder_hdmi->cec_notifier, edid);
->> +	} else
->> +		cec_notifier_phys_addr_invalidate(encoder_hdmi->cec_notifier);
->> +}
->> +
->>  static const struct drm_bridge_funcs meson_encoder_hdmi_bridge_funcs = {
->>  	.attach = meson_encoder_hdmi_attach,
->> +	.detach = meson_encoder_hdmi_detach,
->>  	.mode_valid = meson_encoder_hdmi_mode_valid,
->> +	.hpd_notify = meson_encoder_hdmi_hpd_notify,
->>  	.atomic_enable = meson_encoder_hdmi_atomic_enable,
->>  	.atomic_disable = meson_encoder_hdmi_atomic_disable,
->>  	.atomic_get_input_bus_fmts = meson_encoder_hdmi_get_inp_bus_fmts,
->> @@ -313,6 +347,7 @@ static const struct drm_bridge_funcs
->> meson_encoder_hdmi_bridge_funcs = {
->>  int meson_encoder_hdmi_init(struct meson_drm *priv)
->>  {
->>  	struct meson_encoder_hdmi *meson_encoder_hdmi;
->> +	struct platform_device *pdev;
->>  	struct device_node *remote;
->>  	int ret;
->>
->> @@ -337,6 +372,7 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
->>  	meson_encoder_hdmi->bridge.funcs = &meson_encoder_hdmi_bridge_funcs;
->>  	meson_encoder_hdmi->bridge.of_node = priv->dev->of_node;
->>  	meson_encoder_hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
->> +	meson_encoder_hdmi->bridge.interlace_allowed = true;
->>
->>  	drm_bridge_add(&meson_encoder_hdmi->bridge);
->>
->> @@ -353,17 +389,58 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
->>  	meson_encoder_hdmi->encoder.possible_crtcs = BIT(0);
->>
->>  	/* Attach HDMI Encoder Bridge to Encoder */
->> -	ret = drm_bridge_attach(&meson_encoder_hdmi->encoder,
->> &meson_encoder_hdmi->bridge, NULL, 0);
->> +	ret = drm_bridge_attach(&meson_encoder_hdmi->encoder,
->> &meson_encoder_hdmi->bridge, NULL,
->> +				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->>  	if (ret) {
->>  		dev_err(priv->dev, "Failed to attach bridge: %d\n", ret);
->>  		return ret;
->>  	}
->>
->> +	/* Initialize & attach Bridge Connector */
->> +	meson_encoder_hdmi->connector = drm_bridge_connector_init(priv->drm,
->> +							&meson_encoder_hdmi->encoder);
->> +	if (IS_ERR(meson_encoder_hdmi->connector)) {
->> +		dev_err(priv->dev, "Unable to create HDMI bridge connector\n");
->> +		return PTR_ERR(meson_encoder_hdmi->connector);
->> +	}
->> +	drm_connector_attach_encoder(meson_encoder_hdmi->connector,
->> +				     &meson_encoder_hdmi->encoder);
->> +
->>  	/*
->>  	 * We should have now in place:
->> -	 * encoder->[hdmi encoder bridge]->[dw-hdmi bridge]->[dw-hdmi connector]
->> +	 * encoder->[hdmi encoder bridge]->[dw-hdmi bridge]->[display
->> connector bridge]->[display connector]
->>  	 */
->>
->> +	/*
->> +	 * drm_connector_attach_max_bpc_property() requires the
->> +	 * connector to have a state.
->> +	 */
->> +	drm_atomic_helper_connector_reset(meson_encoder_hdmi->connector);
->> +
->> +	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXL) ||
->> +	    meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXM) ||
->> +	    meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A))
->> +		drm_connector_attach_hdr_output_metadata_property(meson_encoder_hdmi->connector);
->> +
->> +	drm_connector_attach_max_bpc_property(meson_encoder_hdmi->connector, 8, 8);
->> +
->> +	/* Handle this here until handled by drm_bridge_connector_init() */
->> +	meson_encoder_hdmi->connector->ycbcr_420_allowed = true;
->> +
->> +	pdev = of_find_device_by_node(remote);
->> +	if (pdev) {
->> +		struct cec_connector_info conn_info;
->> +		struct cec_notifier *notifier;
->> +
->> +		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
->> +
->> +		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
->> +		if (!notifier)
->> +			return -ENOMEM;
->> +
->> +		meson_encoder_hdmi->cec_notifier = notifier;
->> +	}
->> +
->>  	dev_dbg(priv->dev, "HDMI encoder initialized\n");
->>
->>  	return 0;
+>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>> index 2b6023ce3ac1..f89ca308d55f 100644
+>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>> @@ -94,7 +94,7 @@ properties:
+>>   
+>>     reg:
+>>       minItems: 1
+>> -    maxItems: 2
+>> +    maxItems: 4
+> 
+> Qualcomm ETHQOS schema allows only 2 in reg-names, so this does not make
+> sense for Qualcomm and there are no users of 4 items.
+
+On this platform the two reg spaces are 64-bit, whereas for other
+platforms based on dwmmac, for e.g. stm32 have 32-bit address space.
+
+Without this fix I was getting the following error with 'make dtbs_check':
+
+Documentation/devicetree/bindings/net/qcom,ethqos.example.dtb: 
+ethernet@20000: reg: [[0, 131072], [0, 65536], [0, 221184], [0, 256]] is 
+too long
+	From schema: 
+/home/bhsharma/code/upstream/linux-bckup/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+
+Thanks.
