@@ -2,195 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272265B5502
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9219E5B5500
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiILHG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S229589AbiILHGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiILHGy (ORCPT
+        with ESMTP id S229463AbiILHGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:06:54 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9B22AC48;
-        Mon, 12 Sep 2022 00:06:53 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h188so7397223pgc.12;
-        Mon, 12 Sep 2022 00:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VPkcWUP8a7bxjZ+WnoIZDgbqJYUoZq4umIQXPyi4AwU=;
-        b=Az0bMM9e4dFt4KHB2/pRHFbq9bHidUOx4uwY+g5vmKGfujje6higRXjTPrQv9h09zc
-         OJ+zoqvKJGygUBoY7C0K8uRCvNqviM45Rh54aQTAVjs7nBfUXFIoJVcbw3Qk3IKolU3r
-         Qc8zWrVkUUv4acgeKlNwqErbMzQNQq+AG01AjbxMCuNqwUo0U+whAuYtz+bWorSSQ+7H
-         /BHBa3p+QM7qrtxihgqoKy/jDht3kPBPr595gWZ/fOfeqORMCKdM1ICkgduzRqawJjLq
-         ntTLtjM1+FY4HxEJGqonauBnnwIjlYThL859HZoochqRJJCVIZPPlgfxFt/u9CaxjMTx
-         Nf4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VPkcWUP8a7bxjZ+WnoIZDgbqJYUoZq4umIQXPyi4AwU=;
-        b=WeDkoDOiO3P50Qplxtohmc02M/HKdYv/M24Yg3Gy6FcG5YcnX7C6oQVEKo0fdUk3aA
-         0amHrhZq4LTvCB6k2p8ZDI3wwEaAoUFqtMBwFcjfhanxq07aJgjsbWjcZjb/XeujcfWv
-         Q0HkCBo/59lg/TWuoynGs70DEzVFst3RqihvCy979TIxlj+7kuye6pxrURY4tiakljL5
-         rf9j5FDjmba/S8vqTZ/uIFWeBEalotCU0jv7KYRtc69VGyK467gZTZRtV+scziT0xlbO
-         A4IOaVlmJSs+AdE3ng4Bta//oPY1J4Y2zssXZ34GcuZ7Q+3qLoLlO3DTeM5iuoDkZHSI
-         b+pg==
-X-Gm-Message-State: ACgBeo3HMz0uyA5DiVITXiU/3OV5+2kWJTtYm9x2I9blnRMLDF+MtaP+
-        Huq7dUKVoXzjfKllHG+hvw==
-X-Google-Smtp-Source: AA6agR5sOzgwjECD1D0nDs7nRdEwTgd64nguOrzqvuMeMOIlt4aTkfSLaD6/5aTj/YYygs27FibgfA==
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:630e with SMTP id b12-20020a056a00114c00b005282c7a630emr26125991pfm.86.1662966412655;
-        Mon, 12 Sep 2022 00:06:52 -0700 (PDT)
-Received: from localhost.localdomain ([113.110.235.160])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902e80e00b0017685f53537sm5123557plg.186.2022.09.12.00.06.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Sep 2022 00:06:52 -0700 (PDT)
-From:   Ban Tao <fengzheng923@gmail.com>
-To:     fengzheng923@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        alsa-devel@alsa-project.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings for DMIC controller
-Date:   Mon, 12 Sep 2022 00:05:33 -0700
-Message-Id: <1662966333-18000-1-git-send-email-fengzheng923@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 03:06:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3622A273
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:06:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0DBE722780;
+        Mon, 12 Sep 2022 07:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662966408; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zxgjXK5zr1ASV+usLHBgaOTW2nqjBh4xLZSbcxc/vsc=;
+        b=EHFrmDpbihj70SHfUx9GdmNtdLH0Z4QMWpuzdOSVVv2JsrogagB+HF9MM/umma9WWM5UZP
+        3kNGQrYpjxiob3xKZDvP9S+5qu6hNAo0Kc3AzL85nYrvFUTP08poQllsGQUaVCUzukwlYu
+        UbxC/BjnTP7YxOTrTITJ1D9jKiCtGfo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662966408;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zxgjXK5zr1ASV+usLHBgaOTW2nqjBh4xLZSbcxc/vsc=;
+        b=L5uXJIUmA+0P0XSzlEnlhlDKpmImCD/bbaTeneEU0EwGt18KABXuU1+ebtYJotvYtHDfVf
+        DgnUydRJEykNw6BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E795E139C8;
+        Mon, 12 Sep 2022 07:06:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aASjN4faHmOnBQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 12 Sep 2022 07:06:47 +0000
+Message-ID: <5cd5b62f-a292-6e54-278d-b5cead65f49c@suse.de>
+Date:   Mon, 12 Sep 2022 09:06:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 00/12] drm/udl: More fixes
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220908095115.23396-1-tiwai@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220908095115.23396-1-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------EqXW0yCqWkDY0Pl661C3oMZx"
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT binding documentation for this new ASoC driver.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------EqXW0yCqWkDY0Pl661C3oMZx
+Content-Type: multipart/mixed; boundary="------------0e3P04GacN7TjmKiBOVVT9H6";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <5cd5b62f-a292-6e54-278d-b5cead65f49c@suse.de>
+Subject: Re: [PATCH v3 00/12] drm/udl: More fixes
+References: <20220908095115.23396-1-tiwai@suse.de>
+In-Reply-To: <20220908095115.23396-1-tiwai@suse.de>
 
-Signed-off-by: Ban Tao <fengzheng923@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
----
-v1->v2:
-1.Fix some build errors.
+--------------0e3P04GacN7TjmKiBOVVT9H6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-v2->v3:
-1.Fix some build errors.
+SGksDQoNCkkndmUgbWVhbndoaWxlIG1lcmdlZCB0aGUgcGF0Y2hzZXQsIGluY2x1ZGluZyB0
+aGUgb25lIHVwZGF0ZWQgcGF0Y2ggYW5kIA0KdGhlIG1pc3Npbmcgci1iLg0KDQpCZXN0IHJl
+Z2FyZHMNClRob21hcw0KDQoNCkFtIDA4LjA5LjIyIHVtIDExOjUxIHNjaHJpZWIgVGFrYXNo
+aSBJd2FpOg0KPiBIaSwNCj4gDQo+IHRoaXMgaXMgYW5vdGhlciByZXNwaW4gb2YgcGF0Y2gg
+c2V0IGZvciBjbGVhbmluZyB1cCBhbmQgZml4ZXMgZm9yIFVETA0KPiBkcml2ZXIgWypdLiAg
+SXQgY292ZXJzIHRoZSBQTSBwcm9ibGVtcywgcmVncmVzc2lvbnMgaW4gdGhlIHByZXZpb3Vz
+DQo+IHBhdGNoIHNldCwgZml4ZXMgZm9yIHRoZSBzdGFsbHMgb24gc29tZSBzeXN0ZW1zLCBh
+cyB3ZWxsIGFzIG1vcmUNCj4gaGFyZGVuaW5nLg0KPiANCj4gDQo+IHRoYW5rcywNCj4gDQo+
+IFRha2FzaGkNCj4gDQo+IFsqXSB2MjogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIy
+MDkwNjA3Mzk1MS4yMDg1LTEtdGl3YWlAc3VzZS5kZQ0KPiANCj4gPT09DQo+IA0KPiB2Mi0+
+djM6DQo+IC0gTW9yZSBmaXggb24gUmVzdG9yZS1vbi1kaXNwbGF5LW1vZGUgcGF0Y2gsIHN1
+Z2dlc3RlZCBieSBEYW5pZWwNCj4gLSBZZXQgbW9yZSBmaXggZm9yIHVicy5jb3VudCBjaGVj
+ayBwYXRjaCwgc3VnZ2VzdGVkIGJ5IFRob21hcw0KPiAtIEFub3RoZXIgcGF0Y2ggZm9yIHBh
+c3NpbmcgcmVjdGFuZ2xlIGRpcmVjdGx5LCBzdWdnZXN0ZWQgYnkgVGhvbWFzDQo+IC0gUHV0
+IG1vcmUgQWNrcyBmcm9tIERhbmllbCBhbmQgVGhvbWFzDQo+IA0KPiB2MS0+djI6IGNsZWFu
+dXBzIGFzIHN1Z2dlc3RlZCBieSBUaG9tYXMNCj4gLSBEcm9wIG51bXVyYnMgcGFyYW1ldGVy
+IHBhdGNoDQo+IC0gQ2xlYW4gdXAgLyBzaW1wbGlmeSBjbGlwcGluZyBwYXRjaA0KPiAtIENv
+ZGUgY2xlYW51cCBhbmQgY2hhbmdlcyBmb3IgdXJiIG1hbmFnZW1lbnQgcGF0Y2gNCj4gLSBQ
+dXQgQWNrcyBvbiBzb21lIGdpdmVuIHBhdGNoZXMNCj4gDQo+ID09PQ0KPiANCj4gVGFrYXNo
+aSBJd2FpICgxMCk6DQo+ICAgIGRybS91ZGw6IFJlc3RvcmUgZGlzcGxheSBtb2RlIG9uIHJl
+c3VtZQ0KPiAgICBSZXZlcnQgImRybS91ZGw6IEtpbGwgcGVuZGluZyBVUkJzIGF0IHN1c3Bl
+bmQgYW5kIGRpc2Nvbm5lY3QiDQo+ICAgIGRybS91ZGw6IFN1cHByZXNzIGVycm9yIHByaW50
+IGZvciAtRVBST1RPIGF0IFVSQiBjb21wbGV0aW9uDQo+ICAgIGRybS91ZGw6IEluY3JlYXNl
+IHRoZSBkZWZhdWx0IFVSQiBsaXN0IHNpemUgdG8gMjANCj4gICAgZHJtL3VkbDogRHJvcCB1
+bm5lZWRlZCBhbGlnbm1lbnQNCj4gICAgZHJtL3VkbDogUGFzcyByZWN0YW5nbGUgZGlyZWN0
+bHkgdG8gdWRsX2hhbmRsZV9kYW1hZ2UoKQ0KPiAgICBkcm0vdWRsOiBGaXggcG90ZW50aWFs
+IFVSQiBsZWFrcw0KPiAgICBkcm0vdWRsOiBGaXggaW5jb25zaXN0ZW50IHVyYnMuY291bnQg
+dmFsdWUgZHVyaW5nIHVkbF9mcmVlX3VyYl9saXN0KCkNCj4gICAgZHJtL3VkbDogRG9uJ3Qg
+cmUtaW5pdGlhbGl6ZSBzdHVmZiBhdCByZXRyeWluZyB0aGUgVVJCIGxpc3QgYWxsb2NhdGlv
+bg0KPiAgICBkcm0vdWRsOiBTeW5jIHBlbmRpbmcgVVJCcyBhdCB0aGUgZW5kIG9mIHN1c3Bl
+bmQNCj4gDQo+IFRob21hcyBaaW1tZXJtYW5uICgyKToNCj4gICAgZHJtL3VkbDogQWRkIHJl
+c2V0X3Jlc3VtZQ0KPiAgICBkcm0vdWRsOiBFbmFibGUgZGFtYWdlIGNsaXBwaW5nDQo+IA0K
+PiAgIGRyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX2Rydi5jICAgICAgfCAxOSArKysrKy0NCj4g
+ICBkcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaCAgICAgIHwgMTMgKy0tLS0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMgICAgIHwgOTMgKysrKysrKysrKysrKysr
+LS0tLS0tLS0tLS0tLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5j
+ICB8IDU0ICsrKystLS0tLS0tLS0tLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxf
+dHJhbnNmZXIuYyB8IDQ1ICsrLS0tLS0tLS0tLS0tLQ0KPiAgIDUgZmlsZXMgY2hhbmdlZCwg
+ODAgaW5zZXJ0aW9ucygrKSwgMTQ0IGRlbGV0aW9ucygtKQ0KPiANCg0KLS0gDQpUaG9tYXMg
+WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
+b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
+IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
+OiBJdm8gVG90ZXYNCg==
 
-v3->v4:
-1.None.
+--------------0e3P04GacN7TjmKiBOVVT9H6--
 
-v4->v5:
-1.Add interrupt.
-2.Keep clock and reset index.
+--------------EqXW0yCqWkDY0Pl661C3oMZx
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-v5->v6:
-1.None.
+-----BEGIN PGP SIGNATURE-----
 
-v6->v7:
-1.None.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMe2ocFAwAAAAAACgkQlh/E3EQov+Al
+cA/+PVxI4UoBrztAwpXaTMdwOgHlr0+EZVHHHvCDtuR6egUdVbnB8PULUOtAq//nudMRZTPIyFv9
+ZFaoyYcbVLBO8TzNFZkXzP7f4SKlWPI50z0PA7vlWaTGT7ciZhmhbqBTrpm4WRuPOCzLF4qFPWdY
+lKv2WYI1NbwQVKsjwTPfiyxoE/FD9yfo5TPGa7QXLu0xBCL35kNo4mXJg1zu0vIaTeKVEuhJPNpu
+uGP1jArGdlHwuF/QL1gkOmQqx15hGBoTdXVXy0/MAXxc/7Tyc0VFyUTQxwdxeKnPZuGRftXZtMjh
+e5x+bg0nirfuOPRM2lJxAgvxEigsNGJ/yLRGvTPeQn2yDK/S8criKENWWpb7CmDj3j5mfxEGPXI4
+W6E30RtypEEfDljuaHl5gwwtDBzyRovejljUjpsk+izBWkLOibV2b9ZQRjooWARfTSTqdKYGOO4w
+6J0pvzNkfLAt1f/iukpnQnMO+BTGGgsle4ONxVIDQO0X5ucB/W0zcTm9jx6BvV18aOgEhNFstZRj
+CylTeDRe7SE97eKAfsItyyLlqDNzK6Lkdv875P7yf+6J2a2Zf2+m9FiZnOD3Vofo7vBu/U7u4wix
+tTaZSvopJw60Qf6Kac8qm/+ngy2SHofFrSNHzHpa//JMHswNTraWoajmX8Lft+KtybAuoQJqZTvQ
+Vuo=
+=xjls
+-----END PGP SIGNATURE-----
 
-v7->v8:
-1.Fix some build errors.
-
-v8->v9:
-1.None.
-
-v9->v10:
-1.Put compatible first in the list of properties.
----
- .../bindings/sound/allwinner,sun50i-h6-dmic.yaml   | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-new file mode 100644
-index 0000000..2f12cab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/allwinner,sun50i-h6-dmic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner H6 DMIC
-+
-+maintainers:
-+  - Ban Tao <fengzheng923@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: allwinner,sun50i-h6-dmic
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+
-+  dmas:
-+    items:
-+      - description: RX DMA Channel
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - "#sound-dai-cells"
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - dmas
-+  - dma-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    #include <dt-bindings/clock/sun50i-h6-ccu.h>
-+    #include <dt-bindings/reset/sun50i-h6-ccu.h>
-+
-+    dmic: dmic@5095000 {
-+      #sound-dai-cells = <0>;
-+      compatible = "allwinner,sun50i-h6-dmic";
-+      reg = <0x05095000 0x400>;
-+      interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&ccu CLK_BUS_DMIC>, <&ccu CLK_DMIC>;
-+      clock-names = "bus", "mod";
-+      dmas = <&dma 7>;
-+      dma-names = "rx";
-+      resets = <&ccu RST_BUS_DMIC>;
-+    };
-+
-+...
--- 
-2.7.4
-
+--------------EqXW0yCqWkDY0Pl661C3oMZx--
