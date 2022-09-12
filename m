@@ -2,172 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC7D5B55AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1825B55AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiILIDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S229695AbiILIFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiILIDT (ORCPT
+        with ESMTP id S229592AbiILIFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:03:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5181F601;
-        Mon, 12 Sep 2022 01:03:18 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C7g1pX030101;
-        Mon, 12 Sep 2022 08:03:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cogpfbnj15ADP59OSMPVgLh4mCeiMTcqFNIAp5CsxfU=;
- b=kNKY+8H6VfFIOmstN572JZ7d++Al24EW1SJGN/Ze/ojkSTxUE17JQILZ1UHzAeqfLj12
- flZt2X1vH1PadkVMxn+Use3iK4E/q5aE20QcqEWyXskmG5ui5FulVHH8OqWzHtLj4iQc
- 4y9S7x8DqTS5hwfQn6tfPslbweFKerj+qt04PSpr99fLHPAq1YbSA6fsJbr8fT37Bh63
- 5u/zg52/0xQgPPmR7KOjxgP27h2pb6iYBv2iZbwcwHuGj2TNMdNkEjOagbz2UtcdLVmz
- tOXejs1kqxc/ABpw0n2C191iz4yP7iiI0nYg9ngdWbFnIOMjUsGomvxPw3C7UXtK0DdU eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jj0kv8hw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:03:18 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28C7goS9032045;
-        Mon, 12 Sep 2022 08:03:17 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jj0kv8huk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:03:17 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28C7ojDT018285;
-        Mon, 12 Sep 2022 08:03:15 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3jgj78sh63-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 08:03:15 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28C83Co340501686
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 08:03:12 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 053C142049;
-        Mon, 12 Sep 2022 08:03:12 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC51F42045;
-        Mon, 12 Sep 2022 08:03:08 +0000 (GMT)
-Received: from [9.171.83.92] (unknown [9.171.83.92])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Sep 2022 08:03:08 +0000 (GMT)
-Message-ID: <6daf3aa9-5b91-1948-0c43-b8407fe3bea2@linux.ibm.com>
-Date:   Mon, 12 Sep 2022 10:03:07 +0200
+        Mon, 12 Sep 2022 04:05:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96724E03F;
+        Mon, 12 Sep 2022 01:04:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58429B80B9F;
+        Mon, 12 Sep 2022 08:04:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059F5C433C1;
+        Mon, 12 Sep 2022 08:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662969896;
+        bh=m2DzyTHCqjvMi1agOjv9SowMwvteEJjnRMhOv1dZGGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fyNoyMQEBQpEvH2jI9GNhoaZUXWt12M+fa5yqw7cfD4zmBrbbJL2QEgvU9iNWtSKI
+         mSdkkyqm0EcYQqmrtAjfi0wSY/BuyW3bGjnCOGn2BUUjpvWzeClaDHW481g58PyXop
+         Vn3rInLhDK4kwxs4o1Iy6eGYTQ7RinHre5xsJdY7zPnmtenV62vuoZegWJhe4iYH0h
+         mV8G/0AqDQJFPBREYJzKpUhoLLb8tgh6cmE9/QbacuBAyAMOZaelry588nt+lKY1sf
+         /mHUWamRXEMrktnyOARVgjUVtVP+TZpNxqb3wNNu3eNy1Eh7/JMr5/HHhpH4Ewvdxy
+         Ht2+N0GBrE6iA==
+Date:   Mon, 12 Sep 2022 16:04:49 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Subject: Re: [PATCH 2/6] arm64: dts: imx8mp-venice-gw74xx: remove invalid and
+ unused pinctrl_sai2
+Message-ID: <20220912080449.GQ1728671@dragon>
+References: <20220812173526.15537-1-tharvey@gateworks.com>
+ <20220812173526.15537-2-tharvey@gateworks.com>
+ <CAJ+vNU3QWWza-Q956GSLVvYJHC9owApyQD8Y1WNVDs0=qqz8-A@mail.gmail.com>
+ <CAJ+vNU3qv6yi48W6jX3-x-MiAFTU3AtbqsM-V8Dw29ZJFDrdKQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] KVM: s390: vsie: fix crycb virtual vs physical usage
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, svens@linux.ibm.com
-References: <20220905084148.234821-1-pmorel@linux.ibm.com>
- <08c54ddd-b74e-9f6c-f5eb-13e994530ad6@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <08c54ddd-b74e-9f6c-f5eb-13e994530ad6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5NAw5mHnshwRO9qS7uVaAY2aKd9j0Fpn
-X-Proofpoint-ORIG-GUID: EQiTKXhFLZNzWf5DnUPiY-F1xjFHvjEh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_04,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- spamscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 impostorscore=0
- clxscore=1015 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209120027
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU3qv6yi48W6jX3-x-MiAFTU3AtbqsM-V8Dw29ZJFDrdKQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 08, 2022 at 08:45:24AM -0700, Tim Harvey wrote:
+> On Mon, Aug 22, 2022 at 10:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > On Fri, Aug 12, 2022 at 10:35 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> > >
+> > > pinctrl_sai2 is not yet used and not properly defined - remove it to
+> > > avoid:
+> > > imx8mp-pinctrl 30330000.pinctrl: Invalid fsl,pins or pins propert
+> > > y in node /soc@0/bus@30000000/pinctrl@30330000/sai2grp
+> > >
+> > > Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts
+> > > support")
+> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > > ---
+> > >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 9 ---------
+> > >  1 file changed, 9 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > index de17021df53f..80f0f1aafdbf 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > @@ -768,15 +768,6 @@ MX8MP_IOMUXC_NAND_DATA03__GPIO3_IO09       0x110
+> > >                 >;
+> > >         };
+> > >
+> > > -       pinctrl_sai2: sai2grp {
+> > > -               fsl,pins = <
+> > > -                       MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC
+> > > -                       MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00
+> > > -                       MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK
+> > > -                       MX8MP_IOMUXC_SAI2_MCLK__AUDIOMIX_SAI2_MCLK
+> > > -               >;
+> > > -       };
+> > > -
+> > >         pinctrl_spi2: spi2grp {
+> > >                 fsl,pins = <
+> > >                         MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK   0x82
+> > > --
+> > > 2.25.1
+> > >
+> >
+> > Shawn,
+> >
+> > You can drop this. I didn't see Peng's patch commit 706dd9d30d3b
+> > ("arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings") which
+> > takes care of this.
+> >
+> > Best Regards,
+> >
+> > Tim
+> 
+> Shawn,
+> 
+> Did you need me to re-submit the series this patch was in without it?
+> I haven't seen any responses to the rest of the patches in this
+> series.
 
-Hi David,
+You said you will send a new version in responding to Fabio's comment on
+patch 1/6 [1], right?
 
-sorry for the delay, just came back from vacation.
+Shawn
 
-On 9/5/22 18:32, David Hildenbrand wrote:
-> On 05.09.22 10:41, Pierre Morel wrote:
->> Prepare VSIE for architectural changes where lowmem kernel real and
->> kernel virtual address are different.
-> 
-> Bear with me, it used to be
-> 
->      crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
->      apcb_o = (unsigned long) &crycb->apcb0;
-> 
-> and now it's
-> 
->      apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
-> 
-> 
-> So the real issue seems to be
-> 
->      crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
-> 
-> because crycb_o actually is a guest address and not a host address.
-
-Yes, right this is the real issue, however...
-
-> 
-> 
-> But now I'm confused, because I would have thought that the result 
-> produced by both code would be identical (I completely agree that the 
-> new variant is better).
-> 
-> How does this interact with "lowmem kernel real and kernel virtual 
-> address are different." -- I would have thought that &crycb->apcb0 
-> doesn't actually access any memory and only performs arithmetical 
-> operations?
-
-...you are right and the result is identical.
-
-
-> 
->>
->> When we get the original crycb from the guest crycb we can use the
->> phys_to_virt transformation, which will use the host transformations,
->> but we must use an offset to calculate the guest real address apcb
->> and give it to read_guest_real().
-> 
-> Can you elaborate where phys_to_virt() comes into play?
-
-No, it does not have to do with phys_to_virt(), I first started to work 
-on the line:
-- crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
-
-and did not notice that after the simplifications the result was identical.
-So The comment is wrong and this patch is only making the code clearer.
-
-Thanks for your clarifications,
-
-Regards,
-Pierre
-
-
-> 
-> If this is an actual fix (as indicated in the patch subject), should 
-> this carry a
-> 
->      Fixes: 56019f9aca22 ("KVM: s390: vsie: Allow CRYCB FORMAT-2")
-> 
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+[1] https://lore.kernel.org/linux-arm-kernel/CAJ+vNU3E+5DWR5tQyUurLzGkinjX2fidbVNZ4T70CNmhM6eNTw@mail.gmail.com/
