@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5045B57FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996055B57FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiILKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S229872AbiILKPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiILKNi (ORCPT
+        with ESMTP id S229643AbiILKPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:13:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0E41D0E2;
-        Mon, 12 Sep 2022 03:13:36 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MR2Tk6qdHz68735;
-        Mon, 12 Sep 2022 18:12:42 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 12:13:33 +0200
-Received: from lhrpeml500002.china.huawei.com (7.191.160.78) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 11:13:33 +0100
-Received: from lhrpeml500002.china.huawei.com ([7.191.160.78]) by
- lhrpeml500002.china.huawei.com ([7.191.160.78]) with mapi id 15.01.2375.031;
- Mon, 12 Sep 2022 11:13:33 +0100
-From:   Jonas Oberhauser <jonas.oberhauser@huawei.com>
-To:     Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        Mon, 12 Sep 2022 06:15:19 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86C19C21;
+        Mon, 12 Sep 2022 03:15:18 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 9358C520594;
+        Mon, 12 Sep 2022 12:15:16 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.21) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Mon, 12 Sep
+ 2022 12:15:15 +0200
+Date:   Mon, 12 Sep 2022 12:15:08 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "mrodin@de.adit-jv.com" <mrodin@de.adit-jv.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
- Models"
-Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAGhxQIAA2vMAgAGe72A=
-Date:   Mon, 12 Sep 2022 10:13:33 +0000
-Message-ID: <34735a476c3b4913985de3403a6216bd@huawei.com>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
- <e8b6b7222a894984b4d66cdcc6435efe@huawei.com>
- <CAEXW_YQPSi7RyA=Cz5S753uw4SqBp2v+7CqqE3LN9VQ48q40Zg@mail.gmail.com>
-In-Reply-To: <CAEXW_YQPSi7RyA=Cz5S753uw4SqBp2v+7CqqE3LN9VQ48q40Zg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.157.136]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "roscaeugeniu@gmail.com" <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 4.14 022/284] SUNRPC: avoid race between mod_timer() and
+ del_timer_sync()
+Message-ID: <20220912101508.GA5500@lxhi-065>
+References: <20220418121210.689577360@linuxfoundation.org>
+ <20220418121211.327937970@linuxfoundation.org>
+ <20220907142548.GA9975@lxhi-065>
+ <166259870333.30452.4204968221881228505@noble.neil.brown.name>
+ <f575eeb3000330d9194c6256ad6063bc58f996c7.camel@hammerspace.com>
+ <20220908120931.GA3480@lxhi-065>
+ <Yx107owrRwmIc7pX@kroah.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yx107owrRwmIc7pX@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.21]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSm9lbCwNCg0KPiBJIHdvbmRlciBpZiB0aGlzIHNvcnQgb2YgbGl2ZW5lc3MgZ3VhcmFudGVl
-IChvciBsYWNrIHRoZXJlb2YpIGlzIHJlYWxseSBhIHByb2JsZW0gaW4gcHJhY3RpY2UsIHdoZXJl
-IHdyaXRlcyB3aWxsIGV2ZW50dWFsbHkgcHJvcGFnYXRlIGV2ZW4gdGhvdWdoIHRoZXkgbWF5IG5v
-dCBmb3IgYSBiaXQuIElzIGl0IHBvc3NpYmxlIHRvIHdyaXRlIGEgbGl2ZW5lc3MgdGVzdCBjYXNl
-IG9uIGFueSBoYXJkd2FyZSwgb3IgaXMgdGhpcyBtb3JlIGluIHRoZSByZWFsbXMgb2YgdGhlb3J5
-Pw0KRWl0aGVyIHdheSwgcXVpdGUgaW50cmlndWluZyENCg0KQXMgSSB0cmllZCB0byBleHBsYWlu
-IGJlZm9yZSwgdGhpcyBwcm9ibGVtIGhhcyBub3RoaW5nIHRvIGRvIHdpdGggc3RvcmVzIHByb3Bh
-Z2F0aW5nIHdpdGhpbiBhIGdpdmVuIHRpbWUgdG8gYW5vdGhlciBjb3JlLiBSYXRoZXIgaXQgaXMg
-ZHVlIHRvIHR3byBzdG9yZXMgdG8gdGhlIHNhbWUgbG9jYXRpb24gaGFwcGVuaW5nIGluIGEgc3Vy
-cHJpc2luZyBvcmRlci4gSS5lLiwgYm90aCBzdG9yZXMgcHJvcGFnYXRlIHF1aWNrbHkgdG8gb3Ro
-ZXIgY29yZXMsIGJ1dCBpbiBhIHN1cnByaXNpbmcgY29oZXJlbmNlIG9yZGVyLkFuZCBpZiBhIHdt
-YiBpbiB0aGUgY29kZSBpcyByZXBsYWNlZCBieSBhbiBtYiwgdGhlbiB0aGlzIGNvIHdpbGwgY3Jl
-YXRlIGEgcGIgY3ljbGUgYW5kIGJlY29tZSBmb3JiaWRkZW4uDQoNClRoZXJlZm9yZSB0aGlzIGhh
-bmcgc2hvdWxkIGJlIG9ic2VydmFibGUgb24gYSBoeXBvdGhldGljYWwgTEtNTSBwcm9jZXNzb3Ig
-d2hpY2ggbWFrZXMgdXNlIG9mIGFsbCB0aGUgcmVsYXhlZCBsaWJlcnR5IHRoZSBMS01NIGFsbG93
-cy4gSG93ZXZlciBhY2NvcmRpbmcgdG8gdGhlIGF1dGhvcnMgb2YgdGhhdCBwYXBlciAod2hvIGFy
-ZSBteSBjb2xsZWFndWVzIGJ1dCBJIGhhdmVuJ3QgYmVlbiBpbnZvbHZlZCBkZWVwbHkgaW4gdGhh
-dCB3b3JrKSwgbm90IGV2ZW4gUG93ZXIrZ2NjIGFsbG93IHRoaXMgcmVvcmRlcmluZyB0byBoYXBw
-ZW4sIGFuZCBpZiB0aGF0J3MgdHJ1ZSBpdCBpcyBwcm9iYWJseSBiZWNhdXNlIHRoZSB3bWIgaXMg
-bWFwcGVkIHRvIGx3c3luYyB3aGljaCBpcyBmdWxseSBjdW11bGF0aXZlIGluIFBvd2VyIGJ1dCBu
-b3QgaW4gTEtNTS4NCg0KQmVzdCB3aXNoZXMgYW5kIGhvcGUgdGhpcyBjbGVhcnMgaXQgdXAsIGpv
-bmFzDQo=
+Hello Greg,
+
+On So, Sep 11, 2022 at 07:41:02 +0200, gregkh@linuxfoundation.org wrote:
+> On Thu, Sep 08, 2022 at 02:09:31PM +0200, Eugeniu Rosca wrote:
+
+[..]
+
+> > Your proposal [*] seems to resolve the issue for me.
+> > 
+> > Any chance to get a stable patch, to which I will gladly provide
+> > the Reviewed-by/Tested-by signatures?
+> > 
+> > > > 
+> > > > NeilBrown
+> > > > 
+> > 
+> > [*] diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+> > index e7d55d63d4f1..7f9b94acf597 100644
+> > --- a/net/sunrpc/xprt.c
+> > +++ b/net/sunrpc/xprt.c
+> > @@ -1525,9 +1525,9 @@ static void xprt_destroy(struct rpc_xprt *xprt)
+> >  	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
+> >  	 * can only run *before* del_time_sync(), never after.
+> >  	 */
+> > -	spin_lock(&xprt->transport_lock);
+> > +	spin_lock_bh(&xprt->transport_lock);
+> >  	del_timer_sync(&xprt->timer);
+> > -	spin_unlock(&xprt->transport_lock);
+> > +	spin_unlock_bh(&xprt->transport_lock);
+> >  
+> >  	/*
+> >  	 * Destroy sockets etc from the system workqueue so they can
+> > 
+> 
+> Can you just turn this into a proper patch that we can apply to the
+> needed stable tree(s)?
+
+It has been kindly provided by Neil Brown in
+https://lore.kernel.org/lkml/166293725263.30452.1720462103844620549@noble.neil.brown.name/
+
+Best Regards,
+Eugeniu Rosca
