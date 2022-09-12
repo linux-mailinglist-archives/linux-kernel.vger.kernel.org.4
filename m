@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9622F5B5E6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371105B5E6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiILQkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S229793AbiILQks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiILQkM (ORCPT
+        with ESMTP id S229562AbiILQkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:40:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFF21B7A2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:40:09 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663000805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=slnxiOp+gkRXmBVTDJrYoCWxL2o6z4OOeTrE9ERi8pk=;
-        b=PpRUNZSVcaZHfWwdBQdAtjTjPFNNQpCQ4HFaxk2TSxNrY11dlIYpKDZJDeqFmnEhkpsHUz
-        xSa7lbFV+MZpr7sgLNychRlMiV/LY/tkLt7qBqaRmBl6j4NSqgwo2olejgJe6Oou5W2XE2
-        sc6D3PPxvEs10IT+Ti/XTrTXo06IhtRmlifFc+wQDXprhdKs4kui7tozauuqIk9veVEPTf
-        KaRodEQDwDrTDMyzbrB8F/HiH6WRjrZSur+fR7MKffQvoHHExPSkjcm0eOieIIDmJT68d6
-        yJ1gIe3wZFyJUIofYK9urHQAEUIF5ZbmHzkk+te4B/UIqXprRIadub5XP2+MwA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663000805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=slnxiOp+gkRXmBVTDJrYoCWxL2o6z4OOeTrE9ERi8pk=;
-        b=6kc5/xjrB7UM1LAK4AFV7+uMUVeL1LlInMN9h0imVlUTWy7ec6rGwS+7adDt+df7tZeYvr
-        3ygAg93t5c0cL6Ag==
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        John Kacur <jkacur@redhat.com>,
-        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: printk meeting at LPC 2022
-In-Reply-To: <20220910221947.171557773@linutronix.de>
-References: <20220910221947.171557773@linutronix.de>
-Date:   Mon, 12 Sep 2022 18:46:04 +0206
-Message-ID: <87h71cr1gb.fsf@jogness.linutronix.de>
+        Mon, 12 Sep 2022 12:40:46 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A33C25C6B;
+        Mon, 12 Sep 2022 09:40:45 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 122C32265;
+        Mon, 12 Sep 2022 16:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1663000724;
+        bh=/ZtGhq6EJuhIvLQh59RiN21gsyK9NnlVonHDvDAOoGY=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=r9NH0yXlHfBsMAc42IRDXyiaFVIBeKMdDBRfbpM7mPPPQ5btS1rMDflXCQLXM7IGj
+         oya1oXts+jf1QJYEvwW3XHiXl86Fmm9J7NFReA6WERFhqKaZT/btyhpeqbOEdrXgTD
+         8kQgMpaOYUxTKPBSxpEcYJjKwcgeaMxz2jzsW95I=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id A78F522FE;
+        Mon, 12 Sep 2022 16:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1663000843;
+        bh=/ZtGhq6EJuhIvLQh59RiN21gsyK9NnlVonHDvDAOoGY=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=DIM0XMkCn5bWwJMSEOYlV5cj26bWWtJduJYTNvgNFXBpFfEW5Urz2J8mSQkmIgjox
+         BuVUHDTuOiQ8lSjNNbOBvIQofPILnXTckKaYLC9rSByjRSlekX94VQgeSYPy6yi+9S
+         BUKq28S05qTcBHc07rhcnI+Cw5YHuM555oJ7aXpY=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 12 Sep 2022 19:40:43 +0300
+Message-ID: <b1dbef1a-d52e-5096-c179-fde8c5f0f2b2@paragon-software.com>
+Date:   Mon, 12 Sep 2022 19:40:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 3/3] fs/ntfs3: Change destroy_inode to free_inode
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <59960918-0adb-6d53-2d77-8172e666bf40@paragon-software.com>
+In-Reply-To: <59960918-0adb-6d53-2d77-8172e666bf40@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Many filesystems already use free_inode callback,
+so we will use it too from now on.
 
-We now have a room/timeslot [0] where Thomas and I will be presenting
-and discussing this new approach [1] for bringing kthread and atomic
-console printing to the kernel.
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/super.c | 20 ++++----------------
+  1 file changed, 4 insertions(+), 16 deletions(-)
 
-Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 067a0e9cf590..744c1f15ba2a 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -438,27 +438,18 @@ static struct inode *ntfs_alloc_inode(struct super_block *sb)
+  		return NULL;
+  
+  	memset(ni, 0, offsetof(struct ntfs_inode, vfs_inode));
+-
+  	mutex_init(&ni->ni_lock);
+-
+  	return &ni->vfs_inode;
+  }
+  
+-static void ntfs_i_callback(struct rcu_head *head)
++static void ntfs_free_inode(struct inode *inode)
+  {
+-	struct inode *inode = container_of(head, struct inode, i_rcu);
+  	struct ntfs_inode *ni = ntfs_i(inode);
+  
+  	mutex_destroy(&ni->ni_lock);
+-
+  	kmem_cache_free(ntfs_inode_cachep, ni);
+  }
+  
+-static void ntfs_destroy_inode(struct inode *inode)
+-{
+-	call_rcu(&inode->i_rcu, ntfs_i_callback);
+-}
+-
+  static void init_once(void *foo)
+  {
+  	struct ntfs_inode *ni = foo;
+@@ -624,7 +615,7 @@ static int ntfs_sync_fs(struct super_block *sb, int wait)
+  
+  static const struct super_operations ntfs_sops = {
+  	.alloc_inode = ntfs_alloc_inode,
+-	.destroy_inode = ntfs_destroy_inode,
++	.free_inode = ntfs_free_inode,
+  	.evict_inode = ntfs_evict_inode,
+  	.put_super = ntfs_put_super,
+  	.statfs = ntfs_statfs,
+@@ -1520,11 +1511,8 @@ static int __init init_ntfs_fs(void)
+  
+  static void __exit exit_ntfs_fs(void)
+  {
+-	if (ntfs_inode_cachep) {
+-		rcu_barrier();
+-		kmem_cache_destroy(ntfs_inode_cachep);
+-	}
+-
++	rcu_barrier();
++	kmem_cache_destroy(ntfs_inode_cachep);
+  	unregister_filesystem(&ntfs_fs_type);
+  	ntfs3_exit_bitmap();
+  }
+-- 
+2.37.0
 
-John Ogness
 
-[0] https://lpc.events/event/16/contributions/1394/
-[1] https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
