@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4575B558E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E125B5598
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiILHwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S230037AbiILHzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiILHwn (ORCPT
+        with ESMTP id S229973AbiILHy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:52:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63118220F5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:52:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 12 Sep 2022 03:54:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B343BBE3D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2WjSgTbRaIizYXvZweJtPX14wSwusvTBqm3TNtCMuuU=; b=i5On9Wo3kgrBIwJjU4NxOW+Tjv
+        kEaJFqQi9gPiWHkqSVPTEyXKFiGlu+SN9fKiExzB4eowVsTvQmCimscBy9SyVYNusz45GsjkwQJ8k
+        hTa71M+TrrmvVK+jKazx1Zu0VPj8RJZTSuIap056nblg/cmcrZuS/5D+nRrxouCrBZLDcspb1xw8X
+        MqguKePRf57+WLmdzwP5n8AlgA2BES115rYNyl8YwsEfS06WejlE1hLp6dNM4sP4oMJOIDEpEECdk
+        YiaredfOagnXx4pjrklohmXZDejwAUUyLdJCuvneyAGwGGnFRTj0Qa8+/TfJRceaNzPkMTHIWs//E
+        HSh/CWzg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oXeH6-00BkpV-2q; Mon, 12 Sep 2022 07:54:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 111522264B;
-        Mon, 12 Sep 2022 07:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662969161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7e6T9v1um99KM+Ti20fFvByqOWXnRz1VDfkPokeSp40=;
-        b=CgHsDalTGCT+TbQku15wyHuqww2SLchgqHpAzxE6r3apUnKAkofy9i/rKtp5cp/tPdx6fv
-        iKuJ7D3hOuZn0TOEvNxb5XNxY0FUhrnrAP05Lv7BOCdzdh4AwOQvaElNJ3cZTZVu0OyyYw
-        Q7PfF4m8TD1Hhtq1sZ+bOCEqdTG8KwE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662969161;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7e6T9v1um99KM+Ti20fFvByqOWXnRz1VDfkPokeSp40=;
-        b=p36L/M5NQnKuBVPIkGYKQndefXSBQbhExbSshXw4h3RoKCey7tf1iG2wJmjniMugq/u7oW
-        V01rSxU/VPpRyLBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DCB7B139C8;
-        Mon, 12 Sep 2022 07:52:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sNc8NUjlHmPZGAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 12 Sep 2022 07:52:40 +0000
-Date:   Mon, 12 Sep 2022 09:52:40 +0200
-Message-ID: <87pmg1hvw7.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     YJ Lee <yunjunlee@chromium.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        yuhsuan@chromium.org, whalechang@chromium.org
-Subject: Re: [PATCH v1] ALSA: dummy: Add customizable volume min/max.
-In-Reply-To: <20220912072945.760949-1-yunjunlee@chromium.org>
-References: <20220912072945.760949-1-yunjunlee@chromium.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9D385300074;
+        Mon, 12 Sep 2022 09:54:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 48D60201E0B22; Mon, 12 Sep 2022 09:54:34 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 09:54:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Tejun Heo <tj@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: Re: [RFC PATCH 1/8] workqueue: Unconditionally set cpumask in
+ worker_attach_to_pool()
+Message-ID: <Yx7luoAJpenWO5zK@hirez.programming.kicks-ass.net>
+References: <20220804084135.92425-1-jiangshanlai@gmail.com>
+ <20220804084135.92425-2-jiangshanlai@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804084135.92425-2-jiangshanlai@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,52 +66,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Sep 2022 09:29:45 +0200,
-YJ Lee wrote:
+On Thu, Aug 04, 2022 at 04:41:28PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > 
-> Add module parameters to support customized min/max volume leveling,
-> which will be useful to test devices with different volume granularity.
-> 
-> Signed-off-by: YJ Lee <yunjunlee@chromium.org>
-> ---
->  sound/drivers/dummy.c | 34 ++++++++++++++++++++++++----------
->  1 file changed, 24 insertions(+), 10 deletions(-)
-> 
-> diff --git a/sound/drivers/dummy.c b/sound/drivers/dummy.c
-> index 2a7fc49c1a7c5..64fb2778f1e9a 100644
-> --- a/sound/drivers/dummy.c
-> +++ b/sound/drivers/dummy.c
-> @@ -42,6 +42,8 @@ MODULE_LICENSE("GPL");
->  #define USE_CHANNELS_MAX 	2
->  #define USE_PERIODS_MIN 	1
->  #define USE_PERIODS_MAX 	1024
-> +#define USE_MIXER_VOLUME_LEVEL_MIN	-50
-> +#define USE_MIXER_VOLUME_LEVEL_MAX	100
->  
->  static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;	/* Index 0-MAX */
->  static char *id[SNDRV_CARDS] = SNDRV_DEFAULT_STR;	/* ID for this card */
-> @@ -50,6 +52,8 @@ static char *model[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = NULL};
->  static int pcm_devs[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 1};
->  static int pcm_substreams[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 8};
->  //static int midi_devs[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 2};
-> +static int mixer_volume_level_min = USE_MIXER_VOLUME_LEVEL_MIN;
-> +static int mixer_volume_level_max = USE_MIXER_VOLUME_LEVEL_MAX;
->  #ifdef CONFIG_HIGH_RES_TIMERS
->  static bool hrtimer = 1;
->  #endif
-> @@ -69,6 +73,10 @@ module_param_array(pcm_substreams, int, NULL, 0444);
->  MODULE_PARM_DESC(pcm_substreams, "PCM substreams # (1-128) for dummy driver.");
->  //module_param_array(midi_devs, int, NULL, 0444);
->  //MODULE_PARM_DESC(midi_devs, "MIDI devices # (0-2) for dummy driver.");
-> +module_param(mixer_volume_level_min, int, 0444);
+> If a worker is spuriously woken up after kthread_bind_mask() but before
+> worker_attach_to_pool(), and there are some cpu-hot-[un]plug happening
+> during the same interval, the worker task might be pushed away from its
+> bound CPU with its affinity changed by the scheduler and worker_attach_to_pool()
+> doesn't rebind it properly.
 
-I can imagine that the permission could be 0644, so that the
-parameters can be changed dynamically via sysfs, too.  But it may skip
-the sanity check at probe, hence more code would be needed, OTOH.
+Can you *please* be more explicit. The above doesn't give me enough clue
+to reconstruct the actual scenario you're fixing.
 
-So I applied the patch as is now.
-
-
-thanks,
-
-Takashi
+Draw a picture or something.
