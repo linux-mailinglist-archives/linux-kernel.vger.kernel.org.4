@@ -2,186 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3D55B5BA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C565B5BC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiILNw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 09:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229748AbiILOBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiILNwv (ORCPT
+        with ESMTP id S229636AbiILOA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 09:52:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8A473122D;
-        Mon, 12 Sep 2022 06:52:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D272B113E;
-        Mon, 12 Sep 2022 06:52:52 -0700 (PDT)
-Received: from e108754-lin.cambridge.arm.com (unknown [10.1.195.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5F28B3F73B;
-        Mon, 12 Sep 2022 06:52:45 -0700 (PDT)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>, stable@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [PATCH stable-5.10] arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
-Date:   Mon, 12 Sep 2022 14:52:26 +0100
-Message-Id: <20220912135226.31027-1-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.29.2.dirty
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 10:00:59 -0400
+X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 07:00:57 PDT
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B822CDD8;
+        Mon, 12 Sep 2022 07:00:56 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 82E1958172C;
+        Mon, 12 Sep 2022 09:54:21 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 12 Sep 2022 09:54:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662990861; x=1662994461; bh=5+ByPvLKo4
+        qXIPZBnHZ1cLujjwO8+fJkOf17+2RURFo=; b=Lm/LIQt4J5bUA0D+zC1vCVFS3K
+        7GapRZcIgbGt2qbjwzh/+P1RM3zFbHwJw88bl+YDwIJoBZy+naVOJvQ870RP51zp
+        JvZH7GAJa+njFpM6alGMZePJF53v9MNR1LSksZ6Mau3fZ/KoceiZd3nmyh0QsD56
+        ZGH7u/HLLMsXaAkzmerqfM+fjxSY3HFemjiYM41UdXNL2bZ3JjKHZxwKC7qCV/F2
+        d3/p7F9erANCNk917vjdXES9GgP7bjCoZQNdNQtrRgVDf290LC3yAbZLS/q/x1lp
+        guMEor+GbkKeyUzgrarM1CP1o7fHV1ZYUNPMVZQ2VM/77MGTlXJ71SedfRUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662990861; x=1662994461; bh=5+ByPvLKo4qXIPZBnHZ1cLujjwO8
+        +fJkOf17+2RURFo=; b=AEzbGY58mz+/XsOLF2N75l263+JbxnqvVblCKvC1OJkK
+        QZEwNY5ajrWcftR+RbYkPAEcKAxupyxFGp/0mvbVLVf4hxhhvTRPH8Jrjn5vpL7v
+        nXVa3+2dyN1JsfQ/NQEj2pc9x1wwbT9FbvI6Zpl+ktsr3zDWH8sebZuw345sV/hp
+        MS8b6OyI/e1S61xAOnZH8BxJJN18sZnph3hxMfVLR9QvONnqjQWX+Sozesyk4B1S
+        V8TwwSG55K/ouk6Aq517im8vUrbXL905VUpkglrntLVi77JWf93ekQvT30xIdrDa
+        AmENpSAQk8xITxuCuoXeG1VbCIqSsANg4UcoOdWYSA==
+X-ME-Sender: <xms:DDofY7Qnw5lngpzc0T19ofkowrS21lqE9m4InO2pyns8zKnwzKVelg>
+    <xme:DDofY8y7qcebC4oP3vZ3S838ZjDuSplnNmnPgaPuD7M1M6kN-Gtu5JlwhjYoOELRK
+    kyo6kokN31KPHo8fkA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduvddgjeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:DDofYw2WboGbourAPs20EMvtOf9o_fXxqKvquUD0p8iEWbHKZYw8Iw>
+    <xmx:DDofY7D9xFVXkv81fGNKor4FM_uE5ujl6wM6Cvr9TRX2SiMnfFi81A>
+    <xmx:DDofY0joTztUS0cNzqjs2E9B7EuRjvm0zXQrZBKhN4TAZGkur2i9RA>
+    <xmx:DTofY_Xh2bkruKTJrBg_CurB6C3X3t2JyTsHr6rgFWOpRDayJ4TyEQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9F5DDB60086; Mon, 12 Sep 2022 09:54:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-929-g09f3e68182-fm-20220908.004-g09f3e681
+Mime-Version: 1.0
+Message-Id: <687a977d-81a4-497e-86ba-b63ff4cad518@www.fastmail.com>
+In-Reply-To: <20220911012616.29948-1-rdunlap@infradead.org>
+References: <20220911012616.29948-1-rdunlap@infradead.org>
+Date:   Mon, 12 Sep 2022 15:53:54 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Randy Dunlap" <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "kernel test robot" <lkp@intel.com>,
+        "Dan Williams" <dan.j.williams@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        linux-ia64@vger.kernel.org, "Keith Mannthey" <kmannth@us.ibm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Subject: Re: [PATCH] ia64: export memory_add_physaddr_to_nid to fix cxl build error
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit e89d120c4b720e232cc6a94f0fcbd59c15d41489 upstream.
+On Sun, Sep 11, 2022, at 3:26 AM, Randy Dunlap wrote:
+> cxl_pmem.ko uses memory_add_physaddr_to_nid() but ia64 does not export it,
+> so this causes a build error:
+>
+> ERROR: modpost: "memory_add_physaddr_to_nid" [drivers/cxl/cxl_pmem.ko] 
+> undefined!
+>
+> Fix this by exporting that function.
+>
+> Fixes: 8c2676a5870a ("hot-add-mem x86_64: memory_add_physaddr_to_nid 
+> node fixup")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Ben Widawsky <bwidawsk@kernel.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: linux-ia64@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Keith Mannthey <kmannth@us.ibm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> Arnd, can you take this in your one-off fixes arch tree, or would
+> you prefer for Andrew to take it?
 
-The AMU counter AMEVCNTR01 (constant counter) should increment at the same
-rate as the system counter. On affected Cortex-A510 cores, AMEVCNTR01
-increments incorrectly giving a significantly higher output value. This
-results in inaccurate task scheduler utilization tracking.
+I've applied it to the asm-generic tree for 6.1 now, as I don't
+expect any other bugfixes for 6.0 to go through that tree. It's
+clearly a bugfix, but since the original commit you cite was from
+2006, I assume it can wait a little longer.
 
-Work around this problem by keeping the reference values of affected
-counters to 0. This results in disabling the single user of this
-counter: Frequency Invariance Engine (FIE).
-This effect is the same to firmware disabling affected counters, in
-which case 0 will be returned when reading the disabled counters.
-
-Therefore, AMU counters will not be used for frequency invariance for
-affected CPUs and CPUs in the same cpufreq policy. AMUs can still be used
-for frequency invariance for unaffected CPUs in the system.
-
-The above is achieved through adding a new erratum: ARM64_ERRATUM_2457168.
-
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Link: https://lore.kernel.org/r/20220819103050.24211-1-ionela.voinescu@arm.com
----
-
-Hi,
-
-This is a backport to stable 5.10.142 of the upstream commit
-e89d120c4b72  arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
-
-This is sent separately as there were conflicts that needed resolving
-when applying the mainline patch. Compared to the upstream version this
-no longer handles the FFH usecase, as FFH support is not present in 5.10.
-Therefore the commit message and Kconfig description are modified to
-only describe the effect on FIE caused by this erratum.
-
-Thanks,
-Ionela.
-
- Documentation/arm64/silicon-errata.rst |  2 ++
- arch/arm64/Kconfig                     | 18 ++++++++++++++++++
- arch/arm64/include/asm/cpucaps.h       |  3 ++-
- arch/arm64/kernel/cpu_errata.c         |  9 +++++++++
- arch/arm64/kernel/cpufeature.c         |  5 ++++-
- 5 files changed, 35 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index f01eed0ee23a..22a07c208fee 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -92,6 +92,8 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A77      | #1508412        | ARM64_ERRATUM_1508412       |
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A510     | #2457168        | ARM64_ERRATUM_2457168       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Neoverse-N1     | #1188873,1418040| ARM64_ERRATUM_1418040       |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Neoverse-N1     | #1349291        | N/A                         |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7c7906e9dafd..1116a8d092c0 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -657,6 +657,24 @@ config ARM64_ERRATUM_1508412
- 
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_2457168
-+	bool "Cortex-A510: 2457168: workaround for AMEVCNTR01 incrementing incorrectly"
-+	depends on ARM64_AMU_EXTN
-+	default y
-+	help
-+	  This option adds the workaround for ARM Cortex-A510 erratum 2457168.
-+
-+	  The AMU counter AMEVCNTR01 (constant counter) should increment at the same rate
-+	  as the system counter. On affected Cortex-A510 cores AMEVCNTR01 increments
-+	  incorrectly giving a significantly higher output value.
-+
-+	  Work around this problem by keeping the reference values of affected counters
-+	  to 0 thus signaling an error case. This effect is the same to firmware disabling
-+	  affected counters, in which case 0 will be returned when reading the disabled
-+	  counters.
-+
-+	  If unsure, say Y.
-+
- config CAVIUM_ERRATUM_22375
- 	bool "Cavium erratum 22375, 24313"
- 	default y
-diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
-index f42fd0a2e81c..53030d3c03a2 100644
---- a/arch/arm64/include/asm/cpucaps.h
-+++ b/arch/arm64/include/asm/cpucaps.h
-@@ -67,7 +67,8 @@
- #define ARM64_MTE				57
- #define ARM64_WORKAROUND_1508412		58
- #define ARM64_SPECTRE_BHB			59
-+#define ARM64_WORKAROUND_2457168		60
- 
--#define ARM64_NCAPS				60
-+#define ARM64_NCAPS				61
- 
- #endif /* __ASM_CPUCAPS_H */
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 78263dadd00d..aaacca6fd52f 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -545,6 +545,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 				  0, 0,
- 				  1, 0),
- 	},
-+#endif
-+#ifdef CONFIG_ARM64_ERRATUM_2457168
-+	{
-+		.desc = "ARM erratum 2457168",
-+		.capability = ARM64_WORKAROUND_2457168,
-+		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
-+		/* Cortex-A510 r0p0-r1p1 */
-+		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
-+	},
- #endif
- 	{
- 	}
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 4087e2d1f39e..e72c90b82656 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1559,7 +1559,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
- 		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
- 			smp_processor_id());
- 		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
--		init_cpu_freq_invariance_counters();
-+
-+		/* 0 reference values signal broken/disabled counters */
-+		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
-+			init_cpu_freq_invariance_counters();
- 	}
- }
- 
--- 
-2.25.1
-
+     Arnd
