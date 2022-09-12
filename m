@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1F15B52A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 04:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A586E5B52AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 04:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiILCX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Sep 2022 22:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S229544AbiILCai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Sep 2022 22:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiILCX4 (ORCPT
+        with ESMTP id S229453AbiILCag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Sep 2022 22:23:56 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9BA1EC7B
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 19:23:55 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s10so8316701ljp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 19:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sQSPw2/Yv4uUp2AaAGOjeqmDAWsfMqITGNLo8334oeE=;
-        b=VaKZg8t+l7Y5XlONXTGOuwmbf4afC1bwL9BOGvU8npmzhmzMHKlmim937SzLzi7f6+
-         mwh8N0ZgY1vey5nXKOCE2NbUS0rU+aNwpfbpFie8oZZFblfgHHmVX9M8qur8aKnT7jh9
-         /X8AVNFidSiEJh8u+DK92BrhbclID/LggJN3v9FITFQxHfGeeovBt9VSIQP9QH+iaFLc
-         MyY1hyLvbq59wQzn4QbnCsvRucAnc54Bf8rp24SnqkMeQ8IP630JXu3MC/7rh5lmDCQY
-         HDp29MGwQK4QbDCmqeSkT3uWianTiILJbqQ4plgyYF9fyOMxeqVaCZ7L6fjgqESTgpBM
-         1f5A==
+        Sun, 11 Sep 2022 22:30:36 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14174222B9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 19:30:35 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id q10-20020a0566022f0a00b00688d703717bso4827092iow.9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 19:30:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sQSPw2/Yv4uUp2AaAGOjeqmDAWsfMqITGNLo8334oeE=;
-        b=aNCpkUE9zfoVWRmL8smS0RHVj7XaG9K4Eriph8qy95GxuPPcJHzECEc56LZGBAqgau
-         nvo07CDpTQLtWTq7+cpOdbwcTzRWRVPJ4DTzecDZJ+xV7R+weAhI3Vlt+yyMezlXd6OA
-         KavZ0E/PicLx4WNy1RnyNrcyJpIcJzibsWAp3uil2lHO7OGpRTDPyGBtFd4mI16U10D0
-         ml1+MC5aiIYmQcgQyssgfVPplqB+ZR7/Q69SqLMpQQ27ZetrG1PetB1VdWSezGvnIuir
-         9wNpVk30Qe35aUicNQzd35hLSIV2cKZpXPmZjtoQtJApdrs2VQqEpDKlj2b9JK3HZE/7
-         RyFw==
-X-Gm-Message-State: ACgBeo2wZKMBCwvKrD9ID0Q4TRRfiJFxTbyPMxBUzRAUmRWBi3ijPj36
-        9Eh8fB8J5gci6S5A4pnVkiS9BmeE9KBpCkTS/78=
-X-Google-Smtp-Source: AA6agR52xr8rc8Et1DooZ9763Lw2DxwG9jieVV7VdxP5PcJbpYumqI6j+TBggJvoOrt0nc+fLsBO2c5KvN9lmmGGbag=
-X-Received: by 2002:a2e:be8d:0:b0:26c:f4b:47a0 with SMTP id
- a13-20020a2ebe8d000000b0026c0f4b47a0mr131263ljr.92.1662949433420; Sun, 11 Sep
- 2022 19:23:53 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Di8X3M089ryXIqSi+X0Mg31Ntg6oMjT7LU5Szyi7A3w=;
+        b=3jySjKpwbZGWT7U1yLVvHoAlJmjbXBCKh8oij51pdG/ktW+xEC0Cnw+Sqe3kYJYRvb
+         wcYrfdI2xn44HWtc7g+fyCstjAQ/QXP2E0okV32atNnXc9iEGCEOBJR4JPnliUXEs9Eo
+         exgOzXK/o5nz3rnM8sIkjy/P7dv0Kmgip4JTcaCE/J2AmG/ViM/mjEGF7KcPYo5y/vvi
+         +7QQz4zB2tzmYx+3faVey24201ZB3DGf900SvCzgjORs90VTWg/Si4yzjjgFzSpIOXVk
+         anquCqaF9FVMDjrgVs+llHZUnxUFoce41KOUnpjBWbZAf+SoIj8YJZBzH7V4wtVQ3oTD
+         TOYw==
+X-Gm-Message-State: ACgBeo1ZqjkjEBsGcHaKZrY7WCgnk4FD4jgFXDcO2KYp7cvLVKRsMrAZ
+        KX1QD3OiIMRZlfWATo9+7xEEevhVicHGuZgRFIGtvaIBOu1M
+X-Google-Smtp-Source: AA6agR6+f7p5acvwqLPa9Pb6cHQfFlwOBU+iwU5Wz24RKd2sKBrKMv9FwEDc2tStnV2uxSQO0FDRXC3Io45MlZF/8v3Eej5JHC5D
 MIME-Version: 1.0
-References: <1662116347-17649-1-git-send-email-zhaoyang.huang@unisoc.com> <YxhrtC/Z6H5MqUgq@arm.com>
-In-Reply-To: <YxhrtC/Z6H5MqUgq@arm.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Mon, 12 Sep 2022 10:23:25 +0800
-Message-ID: <CAGWkznF_B10YkQ0jeS_O6z3bfeLk7aQZH6AVS9znFmJwa6spHQ@mail.gmail.com>
-Subject: Re: [Resend RFC PATCH] mm: introduce __GFP_TRACKLEAK to track
- in-kernel allocation
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>
+X-Received: by 2002:a02:a791:0:b0:35a:14c6:f1e3 with SMTP id
+ e17-20020a02a791000000b0035a14c6f1e3mr4787884jaj.215.1662949834322; Sun, 11
+ Sep 2022 19:30:34 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 19:30:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027774b05e871ae18@google.com>
+Subject: [syzbot] WARNING in j1939_tp_rxtimer (2)
+From:   syzbot <syzbot+34dcf6bbda0e05f6b3ed@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
+        kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 6:00 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Fri, Sep 02, 2022 at 06:59:07PM +0800, zhaoyang.huang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > Kthread and drivers could fetch memory via alloc_pages directly which make them
-> > hard to debug when leaking. Solve this by introducing __GFP_TRACELEAK and reuse
-> > kmemleak mechanism which unified most of kernel cosuming pages into kmemleak.
->
-> This may be helpful for debugging individual drivers but they could as
-> well call kmemleak_alloc/free() directly and not bother with new GFP and
-> page flags.
-Sure, it could be done as you suggested. However, I would like to have
-all memory related things wrapped together and leaving the user a
-simple entrance. Besides, some drivers are designed in
-Producer/Consumer mode where pages are got and freed by different
-peers, which may lead to unpair kmemleak operation.
->
-> I wonder whether we could go the other way around. Add a
-> __GFP_NOLEAKTRACE (we have SLAB_NOLEAKTRACE for example) and pass it in
-> the places where we don't want pages to be scanned/tracked: page cache
-> pages (too many and they don't store pointers to other kernel objects),
-> sl*b, CMA etc. allocations (basically in all places where you have
-> kmemleak_alloc() calls, otherwise the pointers overlap and confuse
-> kmemleak).
->
-> --
-> Catalin
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    0066f1b0e275 afs: Return -EAGAIN, not -EREMOTEIO, when a f..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=124a4c8f080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5971bb33b0db1ef1
+dashboard link: https://syzkaller.appspot.com/bug?extid=34dcf6bbda0e05f6b3ed
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+34dcf6bbda0e05f6b3ed@syzkaller.appspotmail.com
+
+WARNING: CPU: 0 PID: 15 at net/can/j1939/transport.c:1096 j1939_session_deactivate_activate_next net/can/j1939/transport.c:1106 [inline]
+WARNING: CPU: 0 PID: 15 at net/can/j1939/transport.c:1096 j1939_tp_rxtimer+0x821/0xa20 net/can/j1939/transport.c:1234
+Modules linked in:
+CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.0.0-rc4-syzkaller-00062-g0066f1b0e275 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:j1939_session_deactivate net/can/j1939/transport.c:1096 [inline]
+RIP: 0010:j1939_session_deactivate_activate_next net/can/j1939/transport.c:1106 [inline]
+RIP: 0010:j1939_tp_rxtimer+0x821/0xa20 net/can/j1939/transport.c:1234
+Code: e8 c4 62 44 f8 48 8b 3c 24 e9 0a f9 ff ff e8 b6 62 44 f8 4c 89 f7 be 03 00 00 00 e8 79 7f f0 fa e9 52 f9 ff ff e8 9f 62 44 f8 <0f> 0b e9 fa f9 ff ff e8 93 62 44 f8 0f 0b e9 21 fb ff ff e8 87 62
+RSP: 0018:ffffc90000147a90 EFLAGS: 00010246
+RAX: ffffffff89453641 RBX: 0000000000000001 RCX: ffff8880122e3b00
+RDX: 0000000000000301 RSI: 0000000000000001 RDI: 0000000000000002
+RBP: dffffc0000000000 R08: ffffffff89453034 R09: ffffed100f764506
+R10: ffffed100f764506 R11: 1ffff1100f764505 R12: 1ffff1100f764500
+R13: ffff88807bb22800 R14: 1ffff1100f76451b R15: ffff88807bb228d8
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001000 CR3: 000000001f158000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x50b/0xa60 kernel/time/hrtimer.c:1749
+ hrtimer_run_softirq+0x1a1/0x580 kernel/time/hrtimer.c:1766
+ __do_softirq+0x382/0x793 kernel/softirq.c:571
+ run_ksoftirqd+0xc1/0x120 kernel/softirq.c:934
+ smpboot_thread_fn+0x533/0x9d0 kernel/smpboot.c:164
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
