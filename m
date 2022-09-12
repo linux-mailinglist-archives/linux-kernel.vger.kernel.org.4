@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF8D5B5EBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F169E5B5EC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiILRBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S229768AbiILRDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiILRBr (ORCPT
+        with ESMTP id S229520AbiILRDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:01:47 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EBD3136D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:01:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so3545157pjk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=KRfVvGxMcWVVzyGzWdz/B07EZ2xM4AP12X10HeNX+YA=;
-        b=gOyUjZPNIXCMEPph8GNoIbJnxXERolL4pKU35zKKCoWurdjbLEcvEJq7C24/ChModv
-         rX4FvfvLMH8Lqrj8NkiCyiJVJw8FkSvuDVVQp7n3XkPkFNdkuVOENYLDrJbZ2bC3uYCD
-         MgsarfSZIl57U/mW9XHOGVcXUBbyU3KmBs0+BH3L7tGnoGdpdhQxJFKiEwrOwCkAGIpA
-         h7MfIKpSXe/PC/Rsx+hmRcpxfTMJriDByqsfsqNc4P62m/5vC1FgUnTOqHUCVZoPH+N1
-         Iv+75iJ1j9j8ttGNqnv17LMQ+oJ9qZuVeXePtDqJa8iycqnMdtHZSPE1pE70/aPQO65x
-         KPkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KRfVvGxMcWVVzyGzWdz/B07EZ2xM4AP12X10HeNX+YA=;
-        b=Lj3VJalEQsE/+VnvBJyiGXbzIqv3vyMh9NzDJcIYTAbUMaqOyIQf3qRFzazb2ksrph
-         y3Bdx/Qz0FfD/InJX9/Bypw0NLO6sjTtChpjaBjrPDGi3Ofam/5K9jP6bDEi6F6QXVdz
-         24ZyzAZCWYcsY/UANuwRXVWWzC9PbV8L2D7jdnx9VKHvhbzZPs4R4SX6IG6XMZuFtp7p
-         3sb74ZS944g1SeLAkFTLcADbTbj5prTm8lakN1p6QuSVlxlP0USjU6YgzD3UMJ9FVewQ
-         d3vzNxg52vQDp5A2M1RD6Rx4sVQxcU4x0533uQXM92HnMANx9tX+7kKTewC0X8MMNXg0
-         MVOQ==
-X-Gm-Message-State: ACgBeo3CnNidOXkRPkaIFMLxAxpHL+l3qdlrAnJulHXrVdpVDn4VIqZq
-        GPasPOSf55boHRW1e6iZlykOwg==
-X-Google-Smtp-Source: AA6agR41bjUAzmYUs5QGJtGHWvfbasRXehs7fmqo8Z5czTetdmgzfi5tCsTKsKGzOZJTXLRSxovbFA==
-X-Received: by 2002:a17:90b:4b88:b0:202:e381:e643 with SMTP id lr8-20020a17090b4b8800b00202e381e643mr2930028pjb.148.1663002105819;
-        Mon, 12 Sep 2022 10:01:45 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id j8-20020a170903028800b0017829f95ca2sm3504900plr.286.2022.09.12.10.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 10:01:45 -0700 (PDT)
-Message-ID: <42a21b98-b920-868b-999e-2a43c8f4093b@linaro.org>
-Date:   Mon, 12 Sep 2022 22:31:40 +0530
+        Mon, 12 Sep 2022 13:03:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CE22AE03
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663002179; x=1694538179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6oU0DygDAbO34S5se4NPmjyYSwYVwfQrWPeER41vQzM=;
+  b=W89c4BjodK1fJ9oDta8Q9N3RikpROblTOKBxGru32ppxl2chUaKU20q1
+   gOQdAxvL80jYxU8JymmflT43Zo83D2qSI24bUWmz31iOHdbEvRBuifWRf
+   PuYascobFLxTwnJHuYZD8NrDoYh5m/9dWJHl9gJTSkssOM9qg46cUsuZM
+   ofZtZxVGjSF6Td3EOih2eGEXN6d14y6USJGUGJVvgT+/kAJMrKQ3xGW7q
+   DCW/ENC3+PJP3YxloxNBoEF/QySc+/OFWWflD7C61U2xH/L6zC9jz1YCJ
+   8+u01CjfGSzNBODER6dv+rKTiEWdF4Mp1kd0DB+9ETUT5ioEWMt0R8uv4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359644963"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="359644963"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 10:02:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="791620822"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 12 Sep 2022 10:02:55 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXmpj-0002g3-0A;
+        Mon, 12 Sep 2022 17:02:55 +0000
+Date:   Tue, 13 Sep 2022 01:02:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-attest 5/9] arch/x86/coco/mem.c:27:26: warning:
+ function 'virt_to_dma' is not needed and will not be emitted
+Message-ID: <202209130117.Ve8dGyqo-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 0/4] Add support for tsens controller reinit via
- trustzone
-Content-Language: en-US
-To:     linux-pm@vger.kernel.org
-Cc:     bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,65 +63,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 4:24 PM, Bhupesh Sharma wrote:
-> Changes since v3:
-> -----------------
-> - v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220804054638.3197294-1-bhupesh.sharma@linaro.org/
-> - Addressed review comments from Bjorn regarding early exit paths, spin
->    lock being held while returning from func, etc.
-> - Also added Bjorn's R-Bs for v3 patches.
-> - Rebased on latest linux-next (master branch) tip.
-> 
-> Changes since v2:
-> -----------------
-> - v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-1-bhupesh.sharma@linaro.org/
-> - Dropped sm6375 specific patch from v3, as suggested by Konrad.
-> - Rebased on latest linux-next (master branch) tip.
-> 
-> Changes since v1:
-> -----------------
-> - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
-> - Addressed several comments from Bjorn regarding locking, serialization
->    etc received on v1.
-> - Addressed Konrad's concerns about the tsens controller found on sm6375
->    SoC which seems to start in a bad state or is disabled when entering
->    the linux world.
-> - This series would depend on sm6375 tsens controller changes being
->    added by Konrad. It is based on linux-next (master branch) tip.
-> 
-> Some versions of Qualcomm tsens controller might enter a
-> 'bad state' causing sensor temperatures/interrupts status
-> to be in an 'invalid' state.
-> 
-> It is recommended to re-initialize the tsens controller
-> via trustzone (secure registers) using scm call(s) when that
-> happens.
-> 
-> This patchset adds the support for the same.
-> 
-> Cc: andersson@kernel.org
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> 
-> Bhupesh Sharma (4):
->    firmware: qcom: scm: Add support for tsens reinit workaround
->    thermal: qcom: tsens: Add hooks for supplying platform specific reinit
->      quirks
->    thermal: qcom: tsens: Add driver support for re-initialization quirk
->    thermal: qcom: tsens: Add reinit quirk support for tsens v2
->      controllers
-> 
->   drivers/firmware/qcom_scm.c     |  15 +++
->   drivers/firmware/qcom_scm.h     |   4 +
->   drivers/thermal/qcom/tsens-v2.c |  15 +++
->   drivers/thermal/qcom/tsens.c    | 193 ++++++++++++++++++++++++++++++++
->   drivers/thermal/qcom/tsens.h    |  18 ++-
->   include/linux/qcom_scm.h        |   2 +
->   6 files changed, 246 insertions(+), 1 deletion(-)
+tree:   https://github.com/intel/tdx.git guest-attest
+head:   ef90ba1bf9a2aada5e1f9f6c27b5e2bde91a6991
+commit: df7603408ff53cb1344704a728ee152672567b94 [5/9] x86/coco: Add cc_decrypted_alloc/free() interfaces
+config: x86_64-randconfig-r021-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130117.Ve8dGyqo-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/df7603408ff53cb1344704a728ee152672567b94
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-attest
+        git checkout df7603408ff53cb1344704a728ee152672567b94
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/ arch/x86/kernel/ lib/ net/mptcp/
 
-Gentle Ping.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Bhupesh
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/coco/mem.c:27:26: warning: function 'virt_to_dma' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+   static inline dma_addr_t virt_to_dma(void *vaddr)
+                            ^
+   1 warning generated.
+
+
+vim +/virt_to_dma +27 arch/x86/coco/mem.c
+
+    26	
+  > 27	static inline dma_addr_t virt_to_dma(void *vaddr)
+    28	{
+    29		return phys_to_dma(&mem_pdev->dev, virt_to_phys(vaddr));
+    30	}
+    31	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
