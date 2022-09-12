@@ -2,688 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC645B5E03
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A695B5E05
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiILQRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S229844AbiILQST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiILQRs (ORCPT
+        with ESMTP id S229560AbiILQSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:17:48 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70084.outbound.protection.outlook.com [40.107.7.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5521A072;
-        Mon, 12 Sep 2022 09:17:45 -0700 (PDT)
+        Mon, 12 Sep 2022 12:18:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE993D589
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662999494; x=1694535494;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=h/7VUxxK/gr5mHt8uv27JTJ/cs9sk+zmexkvGe7bA40=;
+  b=lwfLNonsIBWnifX7QnG9+LiVA+wSqvsYzWSMaZgx5h78GWFK3unfKQaC
+   eb9t2qwfmLjUIRMd4ErX9ah9GOEAPSaEGsziWyzGIX15+J4JKVkULd/tg
+   6l3TsSYtG9Vwt2ZGGXeh4Chtf227v4U66ZpEVCxWG/3G6hIZrsru8skJX
+   3O3Phe65mlLnIP+sAVffX/aQW0K99AgODjIFovzO/HbAawrwLAdq0kgWP
+   fqQuxxivW2d1Ikeugf8NWp1czHK+wXddrypDiKj3/UGvs4hDes/uvF5bE
+   e3N2o0oXYgNCYgTDrySUOxOLqtw3IXby6MTxT260trpp1JhMRrdxAmAXY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="278299283"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="278299283"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 09:18:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="593554661"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP; 12 Sep 2022 09:18:12 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 09:18:10 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 09:18:10 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 12 Sep 2022 09:18:10 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 12 Sep 2022 09:18:08 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bTjqwCnwbMN/VWP8JCvAx/qunDcVn3ebzUNIPrSxsOBJDRmVbbzZGQcAbigVKPYSJBdudEr5B8zR/+lqXW8qdCtsiRgys49r10PXUe86BHGRQ/aNgX7ldKqR+DX33arwIIgPSF81SItmkdC823MzACJwWcS5SrkdqlURwvn0PGUSmFGArGeCVmJs5WBDbOED9SzK4ZYDdpfXCgJ8Get+u455xwJs9k4qxyUMLe3RfpXveBzT6QB1kxs5b9Gy4MMa19h3zw3QLPZqfBIyHt4jGjEVsPCagc9RXggm8O4eFZbhdbo9mQpYAIYsWUDcTMNHBi7BixORkeb+hAeN412aMg==
+ b=EJQhmJDxsaVZyxuzQ7bCw6d9txF0Op4z6Ny3vjoPWm5n29lbfmXP1Gj+Q7JnA+6RI0GWBsm+j4HVaX/1xls8oFA0STu6CrH7Um3Gam6AEKvHyKO0BKoJoGYO9I5ynPyceWOJUL45SQxCOQnuk+69jS//ttZBJM1Gxn973r9SR1RJgYVU3/XJvZBRUR7/eqmEoq7AiwW2tWjDQTfXC8yzuhVf15ndWwHZUuZvL/fxe1+zsSunvQXRJD5aLQJjfdTg2tsdbRpfTXnx/eXCZ+ZaCW5+6j3h168jUubzX1UmxV0FfEoE1DH6XW4CfmTdEr3nIfCNjxRaNoht6eLiz6Dzcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wV3KGYIiyZw0vyVJk1DI4tVq0R51or+//TKSLBLcgRk=;
- b=ZOal+4DPISuCePvdXfnwCI/o2B9atC2J1B5VGjg9SQErNm7X0UIGpnvltwunSA44iCjVLMapMB2YfGK/FJD24/59cuYygv0ty2BJYg6hy+I38xisN68FhTz7G35XTG/128f96KjeEDi1XAGTwHNQLcrVEbBlK5rX5cjFEfonJXBb9mBQu46baGD5kWq7kqeXHb80anC6Wjhvd6xBaV6joebv109saWKpECHwjm1vGzPskLto0SNTQgygHSfFnlpE1nf1yRSUb7NQH277rOFhSOJz+x2YxIxfVNI31nnVn2FJBBbD1ie4tFgmxnwkSgj5yZpAb6hu6SCxTqUYpcq6/w==
+ bh=h/7VUxxK/gr5mHt8uv27JTJ/cs9sk+zmexkvGe7bA40=;
+ b=HnPRp0X7nPS++AjnRT1Zqat67VkYo/l/6US91eQ2VcSXS18lij5GrfBXOHnWgR8q3KCWEGxEjAdjQOUfEAVSoKKa19YWFOxJocTT8BCzvqBw92C32Xeps94WPGu1S99DDPkvBtktu5FrUnj/j1yKj8DF7hkJ0n0buS0ekzBuwsXS/U3Rqi/nec7pHZSh0NxyGIqKqn7zhJsZ1rTzOtuJTv1wk2I3txCZWsTBRM8pi6z7Nd0bbE39hGwZ1Oh9uzZQ9cavxOOF1hw8sQQPXuFylyFM0cVuJW2M2hAo4l6gI2KfOCF1MG4JrpH3tPG3lw+1OadoUuiFHVqq3YRo87FAjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wV3KGYIiyZw0vyVJk1DI4tVq0R51or+//TKSLBLcgRk=;
- b=sjdy/8nHPwoRtaRQzECaqbFm8dUFF0SwSbX1r/3xl+saMqeWxsElG2AowwGEzzPqOxR+dy9858BvADN0is2aBCR9gtxfNt/WRmDVr3k2BKmil+WVJ46LnTM1o4Argac6EwNdPiHoHN1F6tY7PeiSso2aGGq7j5UYfDmIs/L+qAM=
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
- by DB9PR04MB9554.eurprd04.prod.outlook.com (2603:10a6:10:302::10) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4074.namprd11.prod.outlook.com (2603:10b6:5:5::11) by
+ BL3PR11MB6433.namprd11.prod.outlook.com (2603:10b6:208:3b9::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
- 2022 16:17:42 +0000
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::e5ca:22d0:52e2:15f5]) by AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::e5ca:22d0:52e2:15f5%3]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 16:17:42 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
+ 2022 16:18:07 +0000
+Received: from DM6PR11MB4074.namprd11.prod.outlook.com
+ ([fe80::97a1:8b3d:19fc:782a]) by DM6PR11MB4074.namprd11.prod.outlook.com
+ ([fe80::97a1:8b3d:19fc:782a%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 16:18:07 +0000
+From:   "Liao, Bard" <bard.liao@intel.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>
+CC:     "vinod.koul@linaro.org" <vinod.koul@linaro.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
-Subject: RE: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller
- driver
-Thread-Topic: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller
- driver
-Thread-Index: AQHYwmzT0d5rWoxlpEiRJzxdVpfwVa3VJ32AgAbZsVA=
-Date:   Mon, 12 Sep 2022 16:17:42 +0000
-Message-ID: <AM9PR04MB87939B9694274DB322823ACC88449@AM9PR04MB8793.eurprd04.prod.outlook.com>
-References: <20220907034856.3101570-1-Frank.Li@nxp.com>
-        <20220907034856.3101570-3-Frank.Li@nxp.com> <87fsh2qpq4.wl-maz@kernel.org>
-In-Reply-To: <87fsh2qpq4.wl-maz@kernel.org>
+        "Richard Fitzgerald" <rf@opensource.cirrus.com>
+Subject: RE: [PATCH] soundwire: bus: conditionally recheck UNATTACHED status
+Thread-Topic: [PATCH] soundwire: bus: conditionally recheck UNATTACHED status
+Thread-Index: AQHYvENpJk0QjjzpO0iQiU9SFxRzSq3bxT2AgABIVzA=
+Date:   Mon, 12 Sep 2022 16:18:07 +0000
+Message-ID: <DM6PR11MB4074CFFE2403AA0B15A30BC5FF449@DM6PR11MB4074.namprd11.prod.outlook.com>
+References: <20220830074224.2924179-1-yung-chuan.liao@linux.intel.com>
+ <1395a163-2e0e-2471-3932-0517a7f6797d@linux.intel.com>
+In-Reply-To: <1395a163-2e0e-2471-3932-0517a7f6797d@linux.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
+dlp-product: dlpe-windows
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8793:EE_|DB9PR04MB9554:EE_
-x-ms-office365-filtering-correlation-id: 44ed150e-4ad1-48d0-9eb4-08da94da521e
+x-ms-traffictypediagnostic: DM6PR11MB4074:EE_|BL3PR11MB6433:EE_
+x-ms-office365-filtering-correlation-id: 9fb57a9d-1cef-4509-0890-08da94da60b0
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xsbMEPaCkc5CaVAGT+sOLgIxU8aXJLKAd+ivNmA05L2iwl0Eh8b+dxykPBqhP+fs9PoyQrCf2rFieQ2QIReXbCpJXMHSCZajST9WJiDPzygGLapEY6Nap0vjeWmIEaY1dwp1sGq1BRGpInqvLGEPvyKr312vQ7oJ5VBxe/saxBK66s2h4/iBFFmg8LyXEcY4Id0Q0CmKGO8UlPVSdx15o00/8JX3bt8h9oPZ1wbrKyku7qBdrE6bOrTEmtQIfollNICzGldiZDE2boKEDGDDumTaplILgtQd0L8StJmhSFHXdqZ2eRHe9qkCI8b4gwaGUZntBu6sGzbSaToEsAWfWDvpJzk4iqytPIdAxgO47IJgmdiKaQCFEpMdOzW4fXKYGzwZKOl6+4+NddlsHPk36H/0bYOsVenfCPHb+og9KLu6FRLbGOZkBkM6SA/lmyOmNz7W7JaXo6cdJK1Uc8bHeVWW/OtSWUKtsxNCGCe2y87lWd/J5njgQ0Thh19n5lxzCyCArIKVEbR5gXb7xlvd4RQAtHj/tG8+aYsNExo4z76AZ7SuGwGLnM/7OfdNSN8DgzX395w5haWerrqrtUO+bMUG0X4oUevNd8T6Z388IpedigOcj7oyz4pzOI60C/zlSRCSBqIdObgkTiHBGLDZxpVEH4YvmXizq56ylQKx6TVXMN2ranQnjuXE9ESOYIzDxyivO0M5yS3/62dSGUXs5jpbb17kFwSp3oTb82NM5spnf3w6R6lHvbQWEHbZ+VUY2awbBthBgB4cK3trAtgn3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230017)(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(30864003)(5660300002)(7416002)(52536014)(44832011)(186003)(4326008)(2906002)(478600001)(33656002)(38070700005)(7696005)(6506007)(9686003)(71200400001)(83380400001)(53546011)(55236004)(86362001)(38100700002)(122000001)(8676002)(66446008)(66476007)(66946007)(66556008)(76116006)(64756008)(41300700001)(54906003)(6916009)(55016003)(316002)(8936002)(26005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: i6bC0/1hUjyxfaG7RSV8bJlavbnVGbsBYw+6cO+kuvl0wqhBNsFQMS3HA9y6vDliZvkthf51OzlI+SSn0/RtRbfBBUBlISH6SYoQWz8FhlsJcDWkElW7C+aVx0rezqsjhRZw71PmMstWoiIT2wIkW6+rrBG4DlxShBCF2Fze9Tj8/NhiLxKvYt48K8FGx69fWTvmdHTItSWu2kQ28G6fQ1/AKUVgEd0/ux2TEcQ9gGzBW3i26QU4FmBEYevKeXyx/VvoIlTt6XaCrNEbX7mIzcbRvensC9nx+RnBOwHNkVeRVMGhrNLx1JfkX1lUKsJp5F0K4gMCzJPJE6HlkdpnqWz8j4+Ym245S8iDOVW907MQhXH3gZ2ZvhDXoyMUUCbvd0JFakrT4pl12q9QGfpeZlJe8j7SZ1HKqiqPvLB/zj36J7qULoJbM5Q50LnX5UHZp6IkzI0AJI9ZtzL31UekLWMWviVpmBMd3SatJ14FpuibEPlDqdtqROUH66UcnkUArBEO9RtmRJTl8KDaq8NlmoGutd/5/nUUk6uzsjkzRwJ0L6gQU5Ztr9knrkgG/MyBQ9MUjMrKfIpQMOug9Ug4g8WXaG10bt09A5f8mVYITyOkOGznvuVk0OPtM+u8B942zsNioatNtRhZRhwxKjgYiUpczSl5auUZzaAS4TXuSATurnUcxVOTyjRldcmre87uCUy9WeV6f292WUWt9lzgMiAhVdap6IhGYZ/kcwwp/1YdBUjCVq5TMX8RdTnKTLglHiXdIj6Zmt/kTwrnEGVS56rYaJVvNTAfD49H8Qas+e4ZlNJGNFaBMZFZaI+Cd8iJ/xRtdjlusv3yVmePPXVjCA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4074.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230017)(376002)(136003)(396003)(39860400002)(366004)(346002)(71200400001)(54906003)(110136005)(6506007)(7696005)(186003)(64756008)(66556008)(66946007)(86362001)(5660300002)(38070700005)(8676002)(66446008)(66476007)(33656002)(55016003)(2906002)(38100700002)(26005)(9686003)(83380400001)(41300700001)(53546011)(52536014)(8936002)(966005)(316002)(478600001)(82960400001)(76116006)(122000001)(4326008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9MnIC85SGu+85/xgYYzd/yTxK4HiTeDoe47D2UKkdf19gJuWC/a0c35B8TWV?=
- =?us-ascii?Q?/QzUL3+nDc3fEyQbMP9em8UZpLBMrvX0j0OzYctRxW4V7KHlrUTYJL+r9hD9?=
- =?us-ascii?Q?pWsniprQC0+wZ1l52GhQbihtsqMt3WzDjUcdAyzllPG6oH+Rcz97c6uLBbHB?=
- =?us-ascii?Q?Y6hLTXjN0qkeO/qxG9ZXUoHvY4MG3j3nFQpcHz6G0M65YrBjDGk0hO3fUYEP?=
- =?us-ascii?Q?F18dV779eCkBQuFI40G8SvRYBp559khG73uhG17Gvrqye+isYYI2JckaEmRA?=
- =?us-ascii?Q?xU7+WggqMv9cu9QJDsRe82BYfYyP4Z1NDhcXGTPC6M69BadJmDT1OR6twa7y?=
- =?us-ascii?Q?pP733nTPJf7RPDZ1hCetYynifi1Oq1e3fQJPV4v4keJ6lypFNMMcGfHYPAGb?=
- =?us-ascii?Q?/09jm0dx2ZnBcUMF1W/eMP1Ac8hNxNVIhwlUrvZUglBjWgvdFygPHvloLh95?=
- =?us-ascii?Q?0/z3whnYQZUgDZ8vns39wIqq52US1CVPyFynwqskmj+zE8YcJ+d/3qlBHD5B?=
- =?us-ascii?Q?RuC9BlmXxYdP58R17EWCFUbwnQjr2gtbzcjmY85h/zrlMJqGUhKIefeuAsM1?=
- =?us-ascii?Q?5VUNbJlEzC9FhVRshgSE3uQFQxEciFvOi5xG9vZDdI/WFYqahSHWMOTxNI65?=
- =?us-ascii?Q?yD9Uo09EijwojIO58gnWzXPPJ9Jzq16t5Y/7s0lRjwa5P6BPArSh8bEL7kU2?=
- =?us-ascii?Q?xnX7/Bu+m8sXaoY/C4U6sg3Al2KNWhz9PaFa09ny2eEu+SR4VlPzHl1U56Ve?=
- =?us-ascii?Q?QrZczVFhruOpcTzBG5pIl2rxcbpujT7JMAGN0pShiV34udDEc1frHUle3rzv?=
- =?us-ascii?Q?XWodHrLO9fPIk4Sq8+DKv66KaA+c1RxvYRlurhJujH6xuKWl/TtXk2p/pc5h?=
- =?us-ascii?Q?AdXIHsMvaIlFOMzVy7Gp4vPQ4G1GAMGWg7mQEEL/mfnUeYmNqoJOqdTUb237?=
- =?us-ascii?Q?luzygobCIPwBVdsiXspb93q4BesSAmHk/t7mvA5k1FeuM+sIDOYQQ3mrHpcI?=
- =?us-ascii?Q?YpbcehQJgPxdH12QGp4ZcEtAjFXclYppdEq/kONYtkpsVifJYZ8g+nYr5laL?=
- =?us-ascii?Q?SWknEs81QNzP6jqe1IEceh+o/52g1tWCoHhhlW6/VxhQRd9dv2r9YcZx0D8Y?=
- =?us-ascii?Q?7lpCJI8Wv+wl9LSX2u0YjHPv/Q7tvkEFIiqk6mvJrj9qxwMtYnE9/DR20/f3?=
- =?us-ascii?Q?e33fQdXKdall+XhYHtK7vLLVYB/YMog4jqbX+B4NlJqI4QWmKN1rPxjQciqL?=
- =?us-ascii?Q?y8+/DxiRf28r3fEtYGNZBQYbswjxYNeEYJ/KC3EQxsZZJu7jlT8pPFT0G5JZ?=
- =?us-ascii?Q?cznIIPq70hTkOARxcJU/x4OpGcmG6vBtaPgmLElb9sMES9+AgBA1sHBZf3TI?=
- =?us-ascii?Q?UcxLo1LilHGUEYecMNkwlAC6lWMzq83Tt0RJiCmfHAEOCSSIST09B3tf2d2Q?=
- =?us-ascii?Q?gnozhi97rzqP6QnBIVBAy2fwgU3SsZqvZjCy5pmWWf/NTCERYDj1rbEa4iYS?=
- =?us-ascii?Q?FDsItrb/7YDl160APu43pSniy6CHeQeDZIHJZKM3mPHaS9nmqCZ+P1izX0OD?=
- =?us-ascii?Q?GH9IQ6wf7nNBJqXmNzw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NEJKdlR0dlh5cHZ6NTRxbVhCNWx2QnF6OGZPYzR0dVJVUmJIK2JOR2ZCRGY5?=
+ =?utf-8?B?R1B3cXNYV3BNdXhEVmRNcnVJZllXbEZ5ZGE4ckVVeFNEK0FucXZVRXdxM0Iv?=
+ =?utf-8?B?aDdsd3NCSk9HUXV2K21Jcitidzdzei83K0s4TzZyc0hjUU80bytibm92MDd3?=
+ =?utf-8?B?N3RMR1Y1Z01EdzN1NW5iSHQ1ajIvREtpYW9jNDJibWFhWGw1Q0tCTTlRTEF5?=
+ =?utf-8?B?eTVOQjhDRlNsRGlLajg0L1JTbS83aXFqU2liY1JtS3dHZE9xMkt6K1hKbmkz?=
+ =?utf-8?B?TExKTTJHOE9EVjMramhiTXpibXJkZlhXV3dvTW02SWozaVlOVTE3U0lhRDlO?=
+ =?utf-8?B?VUJzSTQ2YmI5RzRNTEZjVGxGaVNYNUJyeUVUQnZpVkh3Y2M4eG5vVHdRMUY0?=
+ =?utf-8?B?d3hQTmd3a2VJM2Q1c29yUEIyUHd6enBFY0xGQU0yS2MrSkJjZGEvb0ZsS1dl?=
+ =?utf-8?B?WVh0MXBqMlVESStrR1FoQTlwcXZsTTFtOUNWRE41VERvTEorbURURmcyTXIy?=
+ =?utf-8?B?TWdNQVJhemhoQkJTKy9ZSlZPSG5iNUpJdGJtTTJPSzdTU0ZVNER3TWdnNG0z?=
+ =?utf-8?B?aWxCU2FPSjBtSmd4K1RUY091Q1BFaVZGWXRFYkNlR0RRN25lR0J5QkpuTkxU?=
+ =?utf-8?B?VWh1czBVYmFCbkJkLzBIeFVQQkdKMlZncUZIQ1hweUpTWW5vSFVmUXZLZXZ3?=
+ =?utf-8?B?akY0S3Y3L1RVenhCRGlrM2NneVAyUmFjVmVlcmlVbVVJVTB5OVZTNjRIeTlL?=
+ =?utf-8?B?Rkc3SFN6WTRoNlh4REF2TXN0WXA1RUdVYkc5VytnU1JZTnpCRjhrME1id3Fy?=
+ =?utf-8?B?Y2IvdnhobUsvN08xQ25lSHUrRXNTT1M3YW9XVGo0MXVPSDQ1NFNyLzdwL1VP?=
+ =?utf-8?B?NDExbHNoNjVGclEvdDRDUTFGdWVJVmFFREo1RjA0KzM3K2lvbUlTcWh3UzRR?=
+ =?utf-8?B?NEw3ZFdnc3hIKy9IR0hKQXVaQW9XTElKeXdja2J2Zjh5NFRyWGp0akZjWlh2?=
+ =?utf-8?B?WHBiTjMvamF2WCtONnAzTjFneU5neTZxVnRQMmUzTDU1Mm9xMWtzUmR3dGNK?=
+ =?utf-8?B?ZGNLQTAyTXdmUFVGU3N5UEhnRzRuOW91SVJEdUlvWXA2TTE4OTFYdUNkOGRs?=
+ =?utf-8?B?azZ1MmFaZUx2bUszY2NySC9TSllCak5kSDl6VUEweFF0eHN4dnhJcFBTQm44?=
+ =?utf-8?B?SjdPdlh5T1ViWjdGdXRQbytnUEdVdVd2Y3MyZWZMTGpGTXZRMWZYb0k3YldP?=
+ =?utf-8?B?QTRscTdiemw1YlpHN0tTanVJQnlRWlZzMmsvZ2E3bE9pSHNpUnpBUHplOFdN?=
+ =?utf-8?B?VnpXNmJ6cjd4cWVKQitKOHhiQzl1WFhFZlZYVWFBcTlRTldTbkUvUEFGc081?=
+ =?utf-8?B?TWovTjJLMVo2WXVOSHlqS0t0REVmMVdmUmZHQWhkV1FwdU1VdTlCaWltbXlD?=
+ =?utf-8?B?WU9XcjNXY01GUlBoWVdlUTNaQUlwZ0lGVS9UdmNTWGJYK1NPb0hjcWFQRWlO?=
+ =?utf-8?B?QVFobEVGZzJ1VFd3ZWNmZUsxNzdwVXVTK3hHZlU4TmVBWEh2QVFXZkdCcEZ2?=
+ =?utf-8?B?NkFrY2RHcmxZUldZbmhHK1lFWjNHeXlMbmNMSlZuaHRMaXErMFIzbGZqbmFV?=
+ =?utf-8?B?ZlJ5THY3TnNwTmVBL1U4T3lDUG9mUllUNzVPVUVBYnpHOEZsdmhYNXp0K2dK?=
+ =?utf-8?B?YWtBMVljOXBObE1LWHNlVDFPMlphRHB4SjgyVVFvRmNOV1lrazNoelBmSmtX?=
+ =?utf-8?B?c25EQ1ZITWJKN0xzSXArNEM5UzdoQnB1RVBHQWZWVDBXVDI2N2FwZnZBVThS?=
+ =?utf-8?B?TC9wTG5ESERFZGxJSEcyNVRqNVlSWDYvRk9iNXlLQmtBaGFaSkJrZWljWTN0?=
+ =?utf-8?B?Ykh4Z2JvQWJwSmN3NjBkaWJQUk9iRGxhSVR2NjdjeE9Gck1ZOTFOdmNOY0Uv?=
+ =?utf-8?B?Z0M0K1RxUnM0eWNLd3JUeDNrRVFQUkdjT0lGL2N2dTYweTNxUXk1b0oyalNu?=
+ =?utf-8?B?NDlmMDJEaHZjdXdCc1dKbEZZMHFJcm1EN1ZNSjF6N3NPQitOL1BnQkhBeXpq?=
+ =?utf-8?B?N0lQd2FxeDF2Qng3UWREN3hKK3U1d2dkVW1yNDU4THNBS2tBb3NlNGsybVp1?=
+ =?utf-8?Q?F8j9n9EVHdJRke0JlKIbESfVG?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44ed150e-4ad1-48d0-9eb4-08da94da521e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2022 16:17:42.7397
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4074.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fb57a9d-1cef-4509-0890-08da94da60b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2022 16:18:07.1652
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6OyTe+OGcCSye2dLt4nMZEkBjz3f4ycUOSzg2o76CHsxmChC4YzZckkTp2nbsA3jG/QR+1NLIu6RQK2Ac+R5vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9554
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: LJUgRMOAsk+9Olzg9Yi6AfmvwluRVrVr/wKIfXVtF7GX+R913LG98UH8puHLkn3TG4t/bqbPi3LuGIq7XeuGxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6433
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Marc Zyngier <maz@kernel.org>
-> Sent: Thursday, September 8, 2022 2:40 AM
-> To: Frank Li <frank.li@nxp.com>
-> Cc: tglx@linutronix.de; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; kw@linux.com; bhelgaas@google.com; linux-
-> kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-pci@vger.kernel.org; Peng Fan
-> <peng.fan@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
-> jdmason@kudzu.us; kernel@pengutronix.de; festevam@gmail.com; dl-linux-
-> imx <linux-imx@nxp.com>; kishon@ti.com; lorenzo.pieralisi@arm.com;
-> ntb@lists.linux.dev; lznuaa@gmail.com; imx@lists.linux.dev;
-> manivannan.sadhasivam@linaro.org
-> Subject: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driv=
-er
->=20
-> Caution: EXT Email
->=20
-> On Wed, 07 Sep 2022 04:48:54 +0100,
-> Frank Li <Frank.Li@nxp.com> wrote:
-> >
-> > The MU block found in a number of Freescale/NXP SoCs supports
-> generating
-> > IRQs by writing data to a register
-> >
-> > This enables the MU block to be used as a MSI controller, by leveraging
-> > the platform-MSI API
->=20
-> Missing full stop after each sentence.
->=20
-> >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> >  drivers/irqchip/Kconfig          |   9 +
-> >  drivers/irqchip/Makefile         |   1 +
-> >  drivers/irqchip/irq-imx-mu-msi.c | 451
-> +++++++++++++++++++++++++++++++
-> >  3 files changed, 461 insertions(+)
-> >  create mode 100644 drivers/irqchip/irq-imx-mu-msi.c
-> >
-> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> > index 5e4e50122777d..e04c6521dce55 100644
-> > --- a/drivers/irqchip/Kconfig
-> > +++ b/drivers/irqchip/Kconfig
-> > @@ -470,6 +470,15 @@ config IMX_INTMUX
-> >       help
-> >         Support for the i.MX INTMUX interrupt multiplexer.
-> >
-> > +config IMX_MU_MSI
-> > +     bool "i.MX MU work as MSI controller"
->=20
-> Why bool? Doesn't it also work as a module?
->=20
-> > +     default y if ARCH_MXC
->=20
-> Why would this be selected by default?
->=20
-> > +     select IRQ_DOMAIN
-> > +     select IRQ_DOMAIN_HIERARCHY
-> > +     select GENERIC_MSI_IRQ_DOMAIN
-> > +     help
-> > +       MU work as MSI controller to do general doorbell
->=20
-> I'm not sure this is that generic. It really is limited to CPU-to-CPU
-> interrupts.
->=20
-> > +
-> >  config LS1X_IRQ
-> >       bool "Loongson-1 Interrupt Controller"
-> >       depends on MACH_LOONGSON32
-> > diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-> > index 5d8e21d3dc6d8..870423746c783 100644
-> > --- a/drivers/irqchip/Makefile
-> > +++ b/drivers/irqchip/Makefile
-> > @@ -98,6 +98,7 @@ obj-$(CONFIG_RISCV_INTC)            +=3D irq-riscv-in=
-tc.o
-> >  obj-$(CONFIG_SIFIVE_PLIC)            +=3D irq-sifive-plic.o
-> >  obj-$(CONFIG_IMX_IRQSTEER)           +=3D irq-imx-irqsteer.o
-> >  obj-$(CONFIG_IMX_INTMUX)             +=3D irq-imx-intmux.o
-> > +obj-$(CONFIG_IMX_MU_MSI)             +=3D irq-imx-mu-msi.o
-> >  obj-$(CONFIG_MADERA_IRQ)             +=3D irq-madera.o
-> >  obj-$(CONFIG_LS1X_IRQ)                       +=3D irq-ls1x.o
-> >  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)    +=3D irq-ti-sci-intr.o
-> > diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx=
--mu-
-> msi.c
-> > new file mode 100644
-> > index 0000000000000..82b55f6d87266
-> > --- /dev/null
-> > +++ b/drivers/irqchip/irq-imx-mu-msi.c
-> > @@ -0,0 +1,451 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Freescale MU worked as MSI controller
->=20
-> s/worked/used/
->=20
-> > + *
-> > + * Copyright (c) 2018 Pengutronix, Oleksij Rempel
-> <o.rempel@pengutronix.de>
-> > + * Copyright 2022 NXP
-> > + *   Frank Li <Frank.Li@nxp.com>
-> > + *   Peng Fan <peng.fan@nxp.com>
-> > + *
-> > + * Based on drivers/mailbox/imx-mailbox.c
-> > + */
-> > +#include <linux/clk.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/msi.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/irq.h>
-> > +#include <linux/irqchip/chained_irq.h>
-> > +#include <linux/irqchip.h>
-> > +#include <linux/irqdomain.h>
-> > +#include <linux/of_irq.h>
-> > +#include <linux/of_pci.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/spinlock.h>
-> > +#include <linux/dma-iommu.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/pm_domain.h>
->=20
-> Keep this list in alphabetical order.
->=20
-> > +
-> > +
-> > +#define IMX_MU_CHANS            4
-> > +
-> > +enum imx_mu_xcr {
-> > +     IMX_MU_GIER,
-> > +     IMX_MU_GCR,
-> > +     IMX_MU_TCR,
-> > +     IMX_MU_RCR,
-> > +     IMX_MU_xCR_MAX,
->=20
-> What is this last enum used for?
-
-[Frank Li] I will replace  4 in "u32     xCR[4]; " with IMX_MU_xCR_MAX
-
->=20
-> > +};
-> > +
-> > +enum imx_mu_xsr {
-> > +     IMX_MU_SR,
-> > +     IMX_MU_GSR,
-> > +     IMX_MU_TSR,
-> > +     IMX_MU_RSR,
-> > +};
-> > +
-> > +enum imx_mu_type {
-> > +     IMX_MU_V1 =3D BIT(0),
->=20
-> This is never used. Why?
->=20
-> > +     IMX_MU_V2 =3D BIT(1),
-> > +     IMX_MU_V2_S4 =3D BIT(15),
->=20
-> Same thing.
->=20
-> > +};
-> > +
-> > +/* Receive Interrupt Enable */
-> > +#define IMX_MU_xCR_RIEn(data, x) ((data->cfg->type) & IMX_MU_V2 ?
-> BIT(x) : BIT(24 + (3 - (x))))
-> > +#define IMX_MU_xSR_RFn(data, x) ((data->cfg->type) & IMX_MU_V2 ?
-> BIT(x) : BIT(24 + (3 - (x))))
-> > +
-> > +struct imx_mu_dcfg {
-> > +     enum imx_mu_type type;
-> > +     u32     xTR;            /* Transmit Register0 */
-> > +     u32     xRR;            /* Receive Register0 */
-> > +     u32     xSR[4];         /* Status Registers */
-> > +     u32     xCR[4];         /* Control Registers */
-> > +};
-> > +
-> > +struct imx_mu_msi {
-> > +     spinlock_t                      lock;
-> > +     raw_spinlock_t                  reglock;
->=20
-> Why two locks? Isn't one enough to protect both MSI allocation (which
-> happens once in a blue moon) and register access?
->=20
-> Also, where are these locks initialised?
->=20
-> > +     struct irq_domain               *msi_domain;
-> > +     void __iomem                    *regs;
-> > +     phys_addr_t                     msiir_addr;
-> > +     const struct imx_mu_dcfg        *cfg;
-> > +     unsigned long                   used;
-> > +     struct clk                      *clk;
-> > +};
-> > +
-> > +static void imx_mu_write(struct imx_mu_msi *msi_data, u32 val, u32 off=
-s)
-> > +{
-> > +     iowrite32(val, msi_data->regs + offs);
-> > +}
-> > +
-> > +static u32 imx_mu_read(struct imx_mu_msi *msi_data, u32 offs)
-> > +{
-> > +     return ioread32(msi_data->regs + offs);
-> > +}
-> > +
-> > +static u32 imx_mu_xcr_rmw(struct imx_mu_msi *msi_data, enum
-> imx_mu_xcr type, u32 set, u32 clr)
-> > +{
-> > +     unsigned long flags;
-> > +     u32 val;
-> > +
-> > +     raw_spin_lock_irqsave(&msi_data->reglock, flags);
-> > +     val =3D imx_mu_read(msi_data, msi_data->cfg->xCR[type]);
-> > +     val &=3D ~clr;
-> > +     val |=3D set;
-> > +     imx_mu_write(msi_data, val, msi_data->cfg->xCR[type]);
-> > +     raw_spin_unlock_irqrestore(&msi_data->reglock, flags);
-> > +
-> > +     return val;
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_mask_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_xcr_rmw(msi_data, IMX_MU_RCR, 0,
-> IMX_MU_xCR_RIEn(msi_data, data->hwirq));
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_unmask_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_xcr_rmw(msi_data, IMX_MU_RCR,
-> IMX_MU_xCR_RIEn(msi_data, data->hwirq), 0);
-> > +}
-> > +
-> > +static void imx_mu_msi_parent_ack_irq(struct irq_data *data)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     imx_mu_read(msi_data, msi_data->cfg->xRR + data->hwirq * 4);
-> > +}
-> > +
-> > +static struct irq_chip imx_mu_msi_irq_chip =3D {
-> > +     .name =3D "MU-MSI",
-> > +     .irq_ack =3D irq_chip_ack_parent,
-> > +};
-> > +
-> > +static struct msi_domain_ops imx_mu_msi_irq_ops =3D {
-> > +};
-> > +
-> > +static struct msi_domain_info imx_mu_msi_domain_info =3D {
-> > +     .flags  =3D (MSI_FLAG_USE_DEF_DOM_OPS |
-> MSI_FLAG_USE_DEF_CHIP_OPS),
-> > +     .ops    =3D &imx_mu_msi_irq_ops,
-> > +     .chip   =3D &imx_mu_msi_irq_chip,
-> > +};
-> > +
-> > +static void imx_mu_msi_parent_compose_msg(struct irq_data *data,
-> > +                                       struct msi_msg *msg)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(data);
-> > +     u64 addr =3D msi_data->msiir_addr + 4 * data->hwirq;
-> > +
-> > +     msg->address_hi =3D upper_32_bits(addr);
-> > +     msg->address_lo =3D lower_32_bits(addr);
-> > +     msg->data =3D data->hwirq;
-> > +}
-> > +
-> > +static int imx_mu_msi_parent_set_affinity(struct irq_data *irq_data,
-> > +                                const struct cpumask *mask, bool force=
-)
-> > +{
-> > +     return -EINVAL;
-> > +}
-> > +
-> > +static struct irq_chip imx_mu_msi_parent_chip =3D {
-> > +     .name           =3D "MU",
-> > +     .irq_mask       =3D imx_mu_msi_parent_mask_irq,
-> > +     .irq_unmask     =3D imx_mu_msi_parent_unmask_irq,
-> > +     .irq_ack        =3D imx_mu_msi_parent_ack_irq,
-> > +     .irq_compose_msi_msg    =3D imx_mu_msi_parent_compose_msg,
-> > +     .irq_set_affinity =3D imx_mu_msi_parent_set_affinity,
-> > +};
-> > +
-> > +static int imx_mu_msi_domain_irq_alloc(struct irq_domain *domain,
-> > +                                     unsigned int virq,
-> > +                                     unsigned int nr_irqs,
-> > +                                     void *args)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D domain->host_data;
-> > +     unsigned long flags;
-> > +     int pos, err =3D 0;
-> > +
-> > +     WARN_ON(nr_irqs !=3D 1);
-> > +
-> > +     spin_lock_irqsave(&msi_data->lock, flags);
-> > +     pos =3D find_first_zero_bit(&msi_data->used, IMX_MU_CHANS);
-> > +     if (pos < IMX_MU_CHANS)
-> > +             __set_bit(pos, &msi_data->used);
-> > +     else
-> > +             err =3D -ENOSPC;
-> > +     spin_unlock_irqrestore(&msi_data->lock, flags);
-> > +
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     irq_domain_set_info(domain, virq, pos,
-> > +                         &imx_mu_msi_parent_chip, msi_data,
-> > +                         handle_edge_irq, NULL, NULL);
-> > +     return 0;
-> > +}
-> > +
-> > +static void imx_mu_msi_domain_irq_free(struct irq_domain *domain,
-> > +                                    unsigned int virq, unsigned int nr=
-_irqs)
-> > +{
-> > +     struct irq_data *d =3D irq_domain_get_irq_data(domain, virq);
-> > +     struct imx_mu_msi *msi_data =3D irq_data_get_irq_chip_data(d);
-> > +     unsigned long flags;
-> > +
-> > +     spin_lock_irqsave(&msi_data->lock, flags);
-> > +     __clear_bit(d->hwirq, &msi_data->used);
-> > +     spin_unlock_irqrestore(&msi_data->lock, flags);
-> > +}
-> > +
-> > +static const struct irq_domain_ops imx_mu_msi_domain_ops =3D {
-> > +     .alloc  =3D imx_mu_msi_domain_irq_alloc,
-> > +     .free   =3D imx_mu_msi_domain_irq_free,
-> > +};
-> > +
-> > +static void imx_mu_msi_irq_handler(struct irq_desc *desc)
-> > +{
-> > +     struct imx_mu_msi *msi_data =3D irq_desc_get_handler_data(desc);
-> > +     struct irq_chip *chip =3D irq_desc_get_chip(desc);
-> > +     u32 status;
-> > +     int i;
-> > +
-> > +     status =3D imx_mu_read(msi_data, msi_data->cfg->xSR[IMX_MU_RSR]);
-> > +
-> > +     chained_irq_enter(chip, desc);
-> > +     for (i =3D 0; i < IMX_MU_CHANS; i++) {
-> > +             if (status & IMX_MU_xSR_RFn(msi_data, i))
-> > +                     generic_handle_domain_irq(msi_data->msi_domain, i=
-);
-> > +     }
-> > +     chained_irq_exit(chip, desc);
-> > +}
-> > +
-> > +static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct
-> device *dev)
-> > +{
-> > +     struct fwnode_handle *fwnodes =3D dev_fwnode(dev);
-> > +     struct irq_domain *parent;
-> > +
-> > +     /* Initialize MSI domain parent */
-> > +     parent =3D irq_domain_create_linear(fwnodes,
-> > +                                         IMX_MU_CHANS,
-> > +                                         &imx_mu_msi_domain_ops,
-> > +                                         msi_data);
-> > +     if (!parent) {
-> > +             dev_err(dev, "failed to create IRQ domain\n");
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
-> > +
-> > +     msi_data->msi_domain =3D platform_msi_create_irq_domain(
-> > +                             fwnodes,
-> > +                             &imx_mu_msi_domain_info,
-> > +                             parent);
->=20
-> nit: move the first argument after the opening bracket (longer lines
-> are fine).
->=20
-> > +
-> > +     if (!msi_data->msi_domain) {
-> > +             dev_err(dev, "failed to create MSI domain\n");
-> > +             irq_domain_remove(parent);
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     irq_domain_set_pm_device(msi_data->msi_domain, dev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/* Register offset of different version MU IP */
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx6sx =3D {
->=20
-> Why doesn't this have a type?
->=20
-> > +     .xTR    =3D 0x0,
-> > +     .xRR    =3D 0x10,
-> > +     .xSR    =3D {0x20, 0x20, 0x20, 0x20},
->=20
-> Since you defined enums for all the register offsets, please be
-> consistent and use them everywhere:
->=20
->         .xSR =3D {
->                 [IMX_MU_SR]     =3D 0x20,
->                 [IMX_MU_GSR]    =3D 0x20,
->                 [...]
->         },
->=20
-> > +     .xCR    =3D {0x24, 0x24, 0x24, 0x24},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx7ulp =3D {
-> > +     .xTR    =3D 0x20,
-> > +     .xRR    =3D 0x40,
-> > +     .xSR    =3D {0x60, 0x60, 0x60, 0x60},
-> > +     .xCR    =3D {0x64, 0x64, 0x64, 0x64},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp =3D {
-> > +     .type   =3D IMX_MU_V2,
-> > +     .xTR    =3D 0x200,
-> > +     .xRR    =3D 0x280,
-> > +     .xSR    =3D {0xC, 0x118, 0x124, 0x12C},
-> > +     .xCR    =3D {0x110, 0x114, 0x120, 0x128},
-> > +};
-> > +
-> > +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp_s4 =3D {
-> > +
-> > +     .type   =3D IMX_MU_V2 | IMX_MU_V2_S4,
-> > +     .xTR    =3D 0x200,
-> > +     .xRR    =3D 0x280,
-> > +     .xSR    =3D {0xC, 0x118, 0x124, 0x12C},
-> > +     .xCR    =3D {0x110, 0x114, 0x120, 0x128},
-> > +};
-> > +
-> > +static int __init imx_mu_of_init(struct device_node *dn,
-> > +                              struct device_node *parent,
-> > +                              const struct imx_mu_dcfg *cfg
-> > +                             )
->=20
-> Move closing bracket after 'cfg'.
->=20
-> > +{
-> > +     struct platform_device *pdev =3D of_find_device_by_node(dn);
-> > +     struct device_link *pd_link_a;
-> > +     struct device_link *pd_link_b;
-> > +     struct imx_mu_msi *msi_data;
-> > +     struct resource *res;
-> > +     struct device *pd_a;
-> > +     struct device *pd_b;
-> > +     struct device *dev;
-> > +     int ret;
-> > +     int irq;
-> > +
-> > +     if (!pdev)
-> > +             return -ENODEV;
->=20
-> How can that happen?
->=20
-> > +
-> > +     dev =3D &pdev->dev;
-> > +
-> > +     msi_data =3D devm_kzalloc(&pdev->dev, sizeof(*msi_data),
-> GFP_KERNEL);
-> > +     if (!msi_data)
-> > +             return -ENOMEM;
-> > +
-> > +     msi_data->cfg =3D cfg;
-> > +
-> > +     msi_data->regs =3D devm_platform_ioremap_resource_byname(pdev,
-> "processor-a-side");
-> > +     if (IS_ERR(msi_data->regs)) {
-> > +             dev_err(&pdev->dev, "failed to initialize 'regs'\n");
-> > +             return PTR_ERR(msi_data->regs);
-> > +     }
-> > +
-> > +     res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> "processor-b-side");
-> > +     if (!res)
-> > +             return -EIO;
-> > +
-> > +     msi_data->msiir_addr =3D res->start + msi_data->cfg->xTR;
-> > +
-> > +     irq =3D platform_get_irq(pdev, 0);
-> > +     if (irq <=3D 0)
-> > +             return -ENODEV;
-> > +
-> > +     platform_set_drvdata(pdev, msi_data);
-> > +
-> > +     msi_data->clk =3D devm_clk_get(dev, NULL);
-> > +     if (IS_ERR(msi_data->clk)) {
-> > +             if (PTR_ERR(msi_data->clk) !=3D -ENOENT)
-> > +                     return PTR_ERR(msi_data->clk);
-> > +
-> > +             msi_data->clk =3D NULL;
->=20
-> Why is it acceptable to continue with no clock?
->=20
-> > +     }
-> > +
-> > +     pd_a =3D dev_pm_domain_attach_by_name(dev, "processor-a-side");
-> > +     if (IS_ERR(pd_a))
-> > +             return PTR_ERR(pd_a);
-> > +
-> > +     pd_b =3D dev_pm_domain_attach_by_name(dev, "processor-b-side");
-> > +     if (IS_ERR(pd_b))
-> > +             return PTR_ERR(pd_b);
-> > +
-> > +     pd_link_a =3D device_link_add(dev, pd_a,
-> > +                     DL_FLAG_STATELESS |
-> > +                     DL_FLAG_PM_RUNTIME |
-> > +                     DL_FLAG_RPM_ACTIVE);
-> > +
-> > +     if (!pd_link_a) {
-> > +             dev_err(dev, "Failed to add device_link to mu a.\n");
-> > +             goto err_pd_a;
-> > +     }
-> > +
-> > +     pd_link_b =3D device_link_add(dev, pd_b,
-> > +                     DL_FLAG_STATELESS |
-> > +                     DL_FLAG_PM_RUNTIME |
-> > +                     DL_FLAG_RPM_ACTIVE);
-> > +
-> > +
-> > +     if (!pd_link_b) {
-> > +             dev_err(dev, "Failed to add device_link to mu a.\n");
-> > +             goto err_pd_b;
-> > +     }
-> > +
-> > +     ret =3D imx_mu_msi_domains_init(msi_data, dev);
-> > +     if (ret)
-> > +             goto err_dm_init;
-> > +
-> > +     irq_set_chained_handler_and_data(irq,
-> > +                                      imx_mu_msi_irq_handler,
-> > +                                      msi_data);
-> > +
-> > +     pm_runtime_enable(dev);
->=20
-> Shouldn't you enable the device PM before registering the chained
-> handler?
->=20
->         M.
->=20
-> --
-> Without deviation from the norm, progress is not possible.
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBQaWVycmUtTG91aXMgQm9zc2Fy
+dCA8cGllcnJlLWxvdWlzLmJvc3NhcnRAbGludXguaW50ZWwuY29tPg0KPiBTZW50OiBNb25kYXks
+IFNlcHRlbWJlciAxMiwgMjAyMiA0OjU4IEFNDQo+IFRvOiBCYXJkIExpYW8gPHl1bmctY2h1YW4u
+bGlhb0BsaW51eC5pbnRlbC5jb20+OyBhbHNhLWRldmVsQGFsc2EtcHJvamVjdC5vcmc7DQo+IHZr
+b3VsQGtlcm5lbC5vcmc7IGJyb29uaWVAa2VybmVsLm9yZw0KPiBDYzogdmlub2Qua291bEBsaW5h
+cm8ub3JnOyBMaWFvLCBCYXJkIDxiYXJkLmxpYW9AaW50ZWwuY29tPjsgbGludXgtDQo+IGtlcm5l
+bEB2Z2VyLmtlcm5lbC5vcmc7IFJpY2hhcmQgRml0emdlcmFsZCA8cmZAb3BlbnNvdXJjZS5jaXJy
+dXMuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBzb3VuZHdpcmU6IGJ1czogY29uZGl0aW9u
+YWxseSByZWNoZWNrIFVOQVRUQUNIRUQgc3RhdHVzDQo+IA0KPiBbdG9wIHBvc3RpbmddDQo+IEkg
+cmV2ZXJ0ZWQgdGhpcyBwYXRjaCBpbiB0aGUgU09GIHRyZWUgdG8gdXNlIFJpY2hhcmQgRml0emdl
+cmFsZCdzDQo+IHNlcmllcywgc2VlDQo+IA0KPiBodHRwczovL2dpdGh1Yi5jb20vdGhlc29mcHJv
+amVjdC9saW51eC9wdWxsLzM4MzYNCj4gDQo+IEkgZG9uJ3QgdGhpbmsgd2Ugd2FudCB0aGlzIHBh
+dGNoIHVwc3RyZWFtLCBkbyB3ZT8NCg0KQWdyZWUsIGxldCdzIGRvbid0IG1lcmdlIHRoaXMgdXBz
+dHJlYW0uDQoNCj4gDQo+IA0KPiBPbiA4LzMwLzIyIDA5OjQyLCBCYXJkIExpYW8gd3JvdGU6DQo+
+ID4gRnJvbTogUGllcnJlLUxvdWlzIEJvc3NhcnQgPHBpZXJyZS1sb3Vpcy5ib3NzYXJ0QGxpbnV4
+LmludGVsLmNvbT4NCj4gPg0KPiA+IEluIGNvbmZpZ3VyYXRpb25zIHdpdGggdHdvIGFtcGxpZmll
+cnMgb24gdGhlIHNhbWUgbGluaywgdGhlIEludGVsIENJDQo+ID4gcmVwb3J0cyBvY2Nhc2lvbmFs
+IGVudW1lcmF0aW9uL2luaXRpYWxpemF0aW9uIHRpbWVvdXRzIGR1cmluZw0KPiA+IHN1c3BlbmQt
+cmVzdW1lIHN0cmVzcyB0ZXN0cywgd2hlcmUgb25lIG9mIHRoZSB0d28gYW1wbGlmaWVycyBiZWNv
+bWVzDQo+ID4gVU5BVFRBQ0hFRCBpbW1lZGlhdGVseSBhZnRlciBiZWluZyBlbnVtZXJhdGVkLiBU
+aGlzIHByb2JsZW0gd2FzDQo+ID4gcmVwb3J0ZWQgYm90aCB3aXRoIE1heGltIGFuZCBSZWFsdGVr
+IGNvZGVjcywgd2hpY2ggcG9pbnRlZCBpbml0aWFsbHkNCj4gPiB0byBhIHByb2JsZW0gd2l0aCBz
+dGF0dXMgaGFuZGxpbmcgb24gdGhlIEludGVsIHNpZGUuDQo+ID4NCj4gPiBUaGUgQ2FkZW5jZSBJ
+UCBpbnRlZ3JhdGVkIG9uIEludGVsIHBsYXRmb3JtcyB0aHJvd3MgYW4gaW50ZXJydXB0IHdoZW4N
+Cj4gPiB0aGUgc3RhdHVzIGNoYW5nZXMsIGFuZCB0aGUgaW5mb3JtYXRpb24gaXMga2VwdCB3aXRo
+IHN0aWNreSBiaXRzIHVudGlsDQo+ID4gY2xlYXJlZC4gV2UgaW5pdGlhbGx5IGFkZGVkIG1vcmUg
+Y2hlY2tzIHRvIG1ha2Ugc3VyZSB0aGUgZWRnZQ0KPiA+IGRldGVjdGlvbiBkaWQgbm90IG1pc3Mg
+YW55IHRyYW5zaXRpb24sIGJ1dCB0aGF0IGRpZCBub3QgaW1wcm92ZSB0aGUNCj4gPiByZXN1bHRz
+IHNpZ25pZmljYW50bHkuDQo+ID4NCj4gPiBXaXRoIHRoZSByZWNlbnQgYWRkaXRpb24gb2YgdGhl
+IHJlYWRfcGluZ19zdGF0dXMoKSBjYWxsYmFjaywgd2Ugd2VyZQ0KPiA+IGFibGUgdG8gc2hvdyB0
+aGF0IHRoZSBzdGF0dXMgaW4gc3RpY2t5IGJpdHMgaXMgc2hvd24gYXMgVU5BVFRBQ0hFRA0KPiA+
+IGV2ZW4gdGhvdWdoIHRoZSBQSU5HIGZyYW1lcyBzaG93IHRoZSBwcm9ibGVtYXRpYyBkZXZpY2Ug
+YXMNCj4gPiBBVFRBQ0hFRC4gVGhhdCBjb21wbGV0ZWx5IGJyZWFrcyB0aGUgZW50aXJlIGxvZ2lj
+IHdoZXJlIHdlIGFzc3VtZWQNCj4gPiB0aGF0IGEgcGVyaXBoZXJhbCB3b3VsZCBhbHdheXMgcmUt
+YXR0YWNoIGFzIGRldmljZTAuIFRoZSByZXN1bWUNCj4gPiB0aW1lb3V0cyBtYWtlIHNlbnNlIGlu
+IHRoYXQgaW4gdGhvc2UgY2FzZXMsIHRoZQ0KPiA+IGVudW1lcmF0aW9uL2luaXRpYWxpemF0aW9u
+IG5ldmVyIGhhcHBlbnMgYSBzZWNvbmQgdGltZS4NCj4gPg0KPiA+IE9uZSBwb3NzaWJsZSBleHBs
+YW5hdGlvbiBpcyB0aGF0IHRoaXMgcHJvYmxlbSB0eXBpY2FsbHkgaGFwcGVucyB3aGVuIGENCj4g
+PiBidXMgY2xhc2ggaXMgcmVwb3J0ZWQsIHNvIGl0IGNvdWxkIHZlcnkgd2VsbCBiZSB0aGF0IHRo
+ZSBkZXRlY3Rpb24gaXMNCj4gPiBmb29sZWQgYnkgYSB0cmFuc2llbnQgZWxlY3RyaWNhbCBpc3N1
+ZSBvciBjb25mbGljdCBiZXR3ZWVuIHR3bw0KPiA+IHBlcmlwaGVyYWxzLg0KPiA+DQo+ID4gVGhp
+cyBwYXRjaCBjb25kaXRpb25hbGx5IGRvdWJsZS1jaGVja3MgdGhlIHN0YXR1cyByZXBvcnRlZCBp
+biB0aGUNCj4gPiBzdGlja3kgYml0cyB3aXRoIHRoZSBhY3R1YWwgUElORyBmcmFtZSBzdGF0dXMu
+IElmIHRoZSBwZXJpcGhlcmFsDQo+ID4gcmVwb3J0cyBhcyBhdHRhY2hlZCBpbiBQSU5HIGZyYW1l
+cywgdGhlIGVhcmx5IGRldGVjdGlvbiBiYXNlZCBvbg0KPiA+IHN0aWNreSBiaXRzIGlzIGRpc2Nh
+cmRlZC4NCj4gPg0KPiA+IE5vdGUgdGhhdCB0aGlzIHBhdGNoIG9ubHkgY29ycmVjdHMgaXNzdWVz
+IG9mIGZhbHNlIHBvc2l0aXZlcyBvbiB0aGUNCj4gPiBtYW5hZ2VyIHNpZGUuDQo+ID4NCj4gPiBJ
+ZiB0aGUgcGVyaXBoZXJhbCBsb3N0IGFuZCByZWdhaW4gc3luYywgdGhlbiBpdCB3b3VsZCByZXBv
+cnQgYXMNCj4gPiBhdHRhY2hlZCBvbiBEZXZpY2UwLiBBIHBlcmlwaGVyYWwgdGhhdCB3b3VsZCBu
+b3QgcmVzZXQgaXRzIGRldl9udW0NCj4gPiB3b3VsZCBub3QgYmUgY29tcGxpYW50IHdpdGggdGhl
+IE1JUEkgc3BlY2lmaWNhdGlvbi4NCj4gPg0KPiA+IEJ1Z0xpbms6IGh0dHBzOi8vZ2l0aHViLmNv
+bS90aGVzb2Zwcm9qZWN0L2xpbnV4L2lzc3Vlcy8zNjM4DQo+ID4gQnVnTGluazogaHR0cHM6Ly9n
+aXRodWIuY29tL3RoZXNvZnByb2plY3QvbGludXgvaXNzdWVzLzMzMjUNCj4gPiBTaWduZWQtb2Zm
+LWJ5OiBQaWVycmUtTG91aXMgQm9zc2FydCA8cGllcnJlLWxvdWlzLmJvc3NhcnRAbGludXguaW50
+ZWwuY29tPg0KPiA+IFJldmlld2VkLWJ5OiBSYW5kZXIgV2FuZyA8cmFuZGVyLndhbmdAaW50ZWwu
+Y29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEJhcmQgTGlhbyA8eXVuZy1jaHVhbi5saWFvQGxpbnV4
+LmludGVsLmNvbT4NCj4gPiAtLS0NCj4gPiBIaSBWaW5vZCwNCj4gPg0KPiA+IFlvdSB3aWxsIG5l
+ZWQgdGhlICJBU29DL3NvdW5kd2lyZTogbG9nIGFjdHVhbCBQSU5HIHN0YXR1cyBvbiByZXN1bWUg
+aXNzdWVzIg0KPiA+IHNlcmllcyB3aGljaCBpcyBhcHBsaWVkIGF0IEFTb0MgdHJlZSBiZWZvcmUg
+YXBwbGluZyB0aGlzIHBhdGNoLg0KPiA+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvc291bmR3aXJl
+L2J1cy5jICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKysrKw0KPiA+ICBkcml2ZXJzL3NvdW5k
+d2lyZS9pbnRlbC5jICAgICB8ICAxICsNCj4gPiAgaW5jbHVkZS9saW51eC9zb3VuZHdpcmUvc2R3
+LmggfCAgMyArKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAyMyBpbnNlcnRpb25zKCspDQo+ID4N
+Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zb3VuZHdpcmUvYnVzLmMgYi9kcml2ZXJzL3NvdW5k
+d2lyZS9idXMuYw0KPiA+IGluZGV4IDI3NzI5NzNlZWJiMS4uZDBkNDg2ZjA3NjczIDEwMDY0NA0K
+PiA+IC0tLSBhL2RyaXZlcnMvc291bmR3aXJlL2J1cy5jDQo+ID4gKysrIGIvZHJpdmVycy9zb3Vu
+ZHdpcmUvYnVzLmMNCj4gPiBAQCAtMTc2Nyw2ICsxNzY3LDI1IEBAIGludCBzZHdfaGFuZGxlX3Ns
+YXZlX3N0YXR1cyhzdHJ1Y3Qgc2R3X2J1cyAqYnVzLA0KPiA+ICAJCSAgICBzbGF2ZS0+c3RhdHVz
+ICE9IFNEV19TTEFWRV9VTkFUVEFDSEVEKSB7DQo+ID4gIAkJCWRldl93YXJuKCZzbGF2ZS0+ZGV2
+LCAiU2xhdmUgJWQgc3RhdGUgY2hlY2sxOg0KPiBVTkFUVEFDSEVELCBzdGF0dXMgd2FzICVkXG4i
+LA0KPiA+ICAJCQkJIGksIHNsYXZlLT5zdGF0dXMpOw0KPiA+ICsNCj4gPiArCQkJaWYgKGJ1cy0+
+cmVjaGVja191bmF0dGFjaGVkICYmIGJ1cy0+b3BzLQ0KPiA+cmVhZF9waW5nX3N0YXR1cykgew0K
+PiA+ICsJCQkJdTMyIHBpbmdfc3RhdHVzOw0KPiA+ICsNCj4gPiArCQkJCW11dGV4X2xvY2soJmJ1
+cy0+bXNnX2xvY2spOw0KPiA+ICsNCj4gPiArCQkJCXBpbmdfc3RhdHVzID0gYnVzLT5vcHMtPnJl
+YWRfcGluZ19zdGF0dXMoYnVzKTsNCj4gPiArDQo+ID4gKwkJCQltdXRleF91bmxvY2soJmJ1cy0+
+bXNnX2xvY2spOw0KPiA+ICsNCj4gPiArCQkJCXBpbmdfc3RhdHVzID4+PSAoaSAqIDIpOw0KPiA+
+ICsJCQkJcGluZ19zdGF0dXMgJj0gMHgzOw0KPiA+ICsNCj4gPiArCQkJCWlmIChwaW5nX3N0YXR1
+cyAhPSAwKSB7DQo+ID4gKwkJCQkJZGV2X3dhcm4oJnNsYXZlLT5kZXYsICJTbGF2ZSAlZCBzdGF0
+ZQ0KPiBpbiBQSU5HIGZyYW1lIGlzICVkLCBpZ25vcmluZyBlYXJsaWVyIGRldGVjdGlvblxuIiwN
+Cj4gPiArCQkJCQkJIGksIHBpbmdfc3RhdHVzKTsNCj4gPiArCQkJCQljb250aW51ZTsNCj4gPiAr
+CQkJCX0NCj4gPiArCQkJfQ0KPiA+ICAJCQlzZHdfbW9kaWZ5X3NsYXZlX3N0YXR1cyhzbGF2ZSwN
+Cj4gU0RXX1NMQVZFX1VOQVRUQUNIRUQpOw0KPiA+ICAJCX0NCj4gPiAgCX0NCj4gPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9zb3VuZHdpcmUvaW50ZWwuYyBiL2RyaXZlcnMvc291bmR3aXJlL2ludGVs
+LmMNCj4gPiBpbmRleCAyNWVjOWMyNzIyMzkuLjBjNmU2NzRkYmY4NSAxMDA2NDQNCj4gPiAtLS0g
+YS9kcml2ZXJzL3NvdW5kd2lyZS9pbnRlbC5jDQo+ID4gKysrIGIvZHJpdmVycy9zb3VuZHdpcmUv
+aW50ZWwuYw0KPiA+IEBAIC0xMzExLDYgKzEzMTEsNyBAQCBzdGF0aWMgaW50IGludGVsX2xpbmtf
+cHJvYmUoc3RydWN0IGF1eGlsaWFyeV9kZXZpY2UNCj4gKmF1eGRldiwNCj4gPg0KPiA+ICAJYnVz
+LT5saW5rX2lkID0gYXV4ZGV2LT5pZDsNCj4gPiAgCWJ1cy0+ZGV2X251bV9pZGFfbWluID0gSU5U
+RUxfREVWX05VTV9JREFfTUlOOw0KPiA+ICsJYnVzLT5yZWNoZWNrX3VuYXR0YWNoZWQgPSB0cnVl
+Ow0KPiA+DQo+ID4gIAlzZHdfY2Ruc19wcm9iZShjZG5zKTsNCj4gPg0KPiA+IGRpZmYgLS1naXQg
+YS9pbmNsdWRlL2xpbnV4L3NvdW5kd2lyZS9zZHcuaCBiL2luY2x1ZGUvbGludXgvc291bmR3aXJl
+L3Nkdy5oDQo+ID4gaW5kZXggYTJiMzFkMjVlYTI3Li41MWFjNzE5ODQyNjAgMTAwNjQ0DQo+ID4g
+LS0tIGEvaW5jbHVkZS9saW51eC9zb3VuZHdpcmUvc2R3LmgNCj4gPiArKysgYi9pbmNsdWRlL2xp
+bnV4L3NvdW5kd2lyZS9zZHcuaA0KPiA+IEBAIC04OTIsNiArODkyLDggQEAgc3RydWN0IHNkd19t
+YXN0ZXJfb3BzIHsNCj4gPiAgICogQGRldl9udW1faWRhX21pbjogaWYgc2V0LCBkZWZpbmVzIHRo
+ZSBtaW5pbXVtIHZhbHVlcyBmb3IgdGhlIElEQQ0KPiA+ICAgKiB1c2VkIHRvIGFsbG9jYXRlIHN5
+c3RlbS11bmlxdWUgZGV2aWNlIG51bWJlcnMuIFRoaXMgdmFsdWUgbmVlZHMgdG8gYmUNCj4gPiAg
+ICogaWRlbnRpY2FsIGFjcm9zcyBhbGwgU291bmRXaXJlIGJ1cyBpbiB0aGUgc3lzdGVtLg0KPiA+
+ICsgKiBAcmVjaGVja191bmF0dGFjaGVkOiBpZiBzZXQsIGRvdWJsZS1jaGVjayBVTkFUVEFDSEVE
+IHN0YXR1cyBjaGFuZ2VzDQo+ID4gKyAqIGJ5IHJlYWRpbmcgUElORyBmcmFtZSBzdGF0dXMuDQo+
+ID4gICAqLw0KPiA+ICBzdHJ1Y3Qgc2R3X2J1cyB7DQo+ID4gIAlzdHJ1Y3QgZGV2aWNlICpkZXY7
+DQo+ID4gQEAgLTkxNyw2ICs5MTksNyBAQCBzdHJ1Y3Qgc2R3X2J1cyB7DQo+ID4gIAlib29sIG11
+bHRpX2xpbms7DQo+ID4gIAlpbnQgaHdfc3luY19taW5fbGlua3M7DQo+ID4gIAlpbnQgZGV2X251
+bV9pZGFfbWluOw0KPiA+ICsJYm9vbCByZWNoZWNrX3VuYXR0YWNoZWQ7DQo+ID4gIH07DQo+ID4N
+Cj4gPiAgaW50IHNkd19idXNfbWFzdGVyX2FkZChzdHJ1Y3Qgc2R3X2J1cyAqYnVzLCBzdHJ1Y3Qg
+ZGV2aWNlICpwYXJlbnQsDQo=
