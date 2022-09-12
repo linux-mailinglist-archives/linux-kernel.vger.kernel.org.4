@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AF65B5EC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEB55B5ED0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiILRFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S229974AbiILRGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiILRFA (ORCPT
+        with ESMTP id S229955AbiILRGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:05:00 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500C14035
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:04:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso6698779wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=WSw0pG/esjCvtsqbCZ9krXSHuD6wI+jRIe9K2h4z8vE=;
-        b=M+3vZ3XYg3plZw4SCpqXxsMCFP0ST9C7W5K7z6MZpYYVMcxT+IUg/e6fUcHFz2osey
-         YF+Gv6HKoY8jTBAe6fewxh+f0iCDgtHVUMf3absPfnYtAAtubjczbpK1X+KfzE2NUjZ0
-         b2Wdo5D6cCJ0w9d6q4GjC36EX2pw7dMtmV3V0jcHdnGpDc9+lsPv/O3sMLY5wjErkFrs
-         nTWgTSLnjENbBX1QJv7RXL3gKZCsIeOt2vShbU3PfPaisCWQdT38SgY27Kt7QV2iGRNe
-         mnm3BEoSmHDK6m1j+EtsG1+4zDdih6yEoj7kwZVKQCo4abwBzVV4puZ1SvBJ85DP7Fdj
-         2/kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WSw0pG/esjCvtsqbCZ9krXSHuD6wI+jRIe9K2h4z8vE=;
-        b=D+nsT8q4xBOPnzYZsJ8hsmc3sNpd2P9RObLjEylQfcx3tC7cKJT1oLf/p4Bgxj4evj
-         zJp1gysh9XgklsRZUQI9bE84tTciFae1AcyjjfNqOddOrHw4+u74NA9uOU4dTj3R6k/1
-         K3RpbwUsTl28gyJ8OFkiTZt/pWpsqd25m7RORwoRyIjXBTkUMRnIyD9qYN6/gEzCipNz
-         GoQXx0rU0+3xUFkjZ3IXtHbVGuvut19zsUvvad7y2J9FnRBtBhmBnUznnp1MazMCxGBy
-         5g3jNZFA1bv5TjLsdHbl0eqZbmJl/DpsXqh/F3cRIfBTgce67cZZB5bGbgq+edjCD2Rf
-         lVdA==
-X-Gm-Message-State: ACgBeo1zMwIoUGEWqjbIUdZua2ew2GJjqlGw6iOo+rvDbXw0joL+f63O
-        8MNklu9KcO29cIDNTf9w7UWd
-X-Google-Smtp-Source: AA6agR6+rS18XLjMNWEqzEBtmPWOlkpQZncpaLMjiQ4cZn4b5Bcr1Cs3YLzaJ4GensI/rkTvZup/wQ==
-X-Received: by 2002:a05:600c:22c7:b0:3b4:92ba:ff99 with SMTP id 7-20020a05600c22c700b003b492baff99mr1414325wmg.190.1663002297558;
-        Mon, 12 Sep 2022 10:04:57 -0700 (PDT)
-Received: from thinkpad ([117.202.184.122])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c359000b003b486027c8asm5053277wmq.20.2022.09.12.10.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 10:04:56 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 22:34:37 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_rjendra@quicinc.com
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5] clk: qcom: Alwaya on pcie gdsc
-Message-ID: <20220912170437.GA36223@thinkpad>
-References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
- <1662713084-8106-6-git-send-email-quic_krichai@quicinc.com>
+        Mon, 12 Sep 2022 13:06:33 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 10:06:31 PDT
+Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C653E748;
+        Mon, 12 Sep 2022 10:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2798; q=dns/txt; s=iport;
+  t=1663002391; x=1664211991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zg0N9QY1/YwmHwfEqLW7DznXtLlh72g9kNKFhaMXYu0=;
+  b=ZW3Pm1QDXC6Rbrf8LoTipwTKlmLMtq2cs3BLkc8R/TR6yGhECG6nFJTi
+   eOrOv5vwN942lyykgF+sdD2s3GT2SQXinP+hjmxIVYdFcsTsgZsoWsZwu
+   5MzljTZcFC97n4g8ZqNmI0NaBJDoMf/JIeZfSXJOBgJvDp0qUOQn4pzKp
+   Q=;
+IronPort-Data: =?us-ascii?q?A9a23=3A4OTIM6rduGxxb/a4Ejip94QRdYJeBmKQZxIvg?=
+ =?us-ascii?q?KrLsJaIsI4StFCztgarIBmDP/rZZTege9wkbduy8E4Gu5/SzYUyGgBsrSwxE?=
+ =?us-ascii?q?CsSouPIVI+TRqvS04x+DSFioHqKZKzyU/GYRCwPZiKa907F3oTJ9yEmj/nVH?=
+ =?us-ascii?q?+SkUYYoBwgoLeNaYHZ54f5cs7ZRbr5A2bBVMivV0T/Ai5S31GyNg1aYBlkpB?=
+ =?us-ascii?q?5er83uDihhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251?=
+ =?us-ascii?q?juxExYFENiplPPwdVcHB++UNgmVgX0QUK+n6vRAjnVtieBga7xNMgEO12jhc?=
+ =?us-ascii?q?9NZkL2hsbS8QAEoM6nTkcwWUgJTFGd1OqguFLrvcSDm7pDPlByZG5fr67A0Z?=
+ =?us-ascii?q?K0sBqUc++BqESRN+OYeJTQlcB+OnaS1zai9R+0qgd4sROHnMZ0esXx81zzUJ?=
+ =?us-ascii?q?egpTIqFQKjQ49JcmjAqiahmB/HUZ4kVdRJsYQ7GbhkJPU0YYLomleG0i33+a?=
+ =?us-ascii?q?HtRrk6So6sw/kDQywpqzbzuN5zefdnibctPmVmRoG6A+2XiHjkVMdWezXyO9?=
+ =?us-ascii?q?XfEuwNltUsXQ6oIH7G+s/VtmlDWlyoYCQYdUh2wpvzRt6J3YPoHQ2R8x8bkh?=
+ =?us-ascii?q?fFaGJSXc+TA?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AqzpPRKgQV5qpuSBDI+sjs1MzqXBQXuEji2?=
+ =?us-ascii?q?hC6mlwRA09TyVXra+TddAgpHrJYVcqKRMdcL+7UpVoLUmwyXcx2/h0AV7AZn?=
+ =?us-ascii?q?iEhILLFuBfBOLZqlWKJ8S9zI5gPMxbHZSWZuedMbFSt7ec3OF9eOxQueVuN8?=
+ =?us-ascii?q?uT9IHj80s=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0CMAwBDbIJi/5FdJa1aHgEBCxIMQIF?=
+ =?us-ascii?q?EC4Ird1Q9QwOTMYIlA4ETigGFM4EAix0UgWgLAQEBDQEBOQkEAQGBToM0AoU?=
+ =?us-ascii?q?+AiU0CQ4BAgQBAQESAQEFAQEBAgEHBIEJE4VoDYZDAQUnEz8QCw4KLiE2BhM?=
+ =?us-ascii?q?agmSCYwMxD6tHeIEBMoEBg08BhEmBXwYUEIEYhhaISiccgUlEgRWCczc+giC?=
+ =?us-ascii?q?Bax+GVQSOAIdjOwNUgQUSgSFxAQgGBgcKBTIGAgwYFAQCExJTHgITDAocDlQ?=
+ =?us-ascii?q?ZDA8DEgMRAQcCCxIIFSwIAwIDCAMCAyMLAgMYCQcKAx0IChwSEBQCBAYNHws?=
+ =?us-ascii?q?IAxofLQkCBA4DQwgLCgMRBAMTGAsWCBAEBgMJLw0oCwMUDwEGAwYCBQUBAyA?=
+ =?us-ascii?q?DFAMFJwcDIQcLJg0NBBwHHQMDBSYDAgIbBwICAwIGFwYCAnEKKA0IBAgEHB4?=
+ =?us-ascii?q?lEwUCBzEFBC8CHgQFBhEJAhYCBgQFAgQEFgICEggCCCcbBxY2GQEFXQYLCSM?=
+ =?us-ascii?q?cLAsGBQYWAyZSBiIBlXYIggB7DgUUCBB7ShUEHzWga4IWnT9rg1aBQ4lXlFZ?=
+ =?us-ascii?q?LEYNkpGKWZoJKil2UfoRZAgQGBQIWgWE8gVkzGggbFTuCaBM+GQ+XJoVqJDE?=
+ =?us-ascii?q?CAQE3AgYLAQEDCY5SgkgBAQ?=
+X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
+   d="scan'208";a="801744397"
+Received: from rcdn-core-9.cisco.com ([173.37.93.145])
+  by rcdn-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 12 Sep 2022 17:05:26 +0000
+Received: from zorba ([10.25.129.98])
+        by rcdn-core-9.cisco.com (8.15.2/8.15.2) with ESMTPS id 28CH5OBg018035
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 12 Sep 2022 17:05:26 GMT
+Date:   Mon, 12 Sep 2022 10:05:24 -0700
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Rob Herring <robh+dt@kernel.org>, xe-linux-external@cisco.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver: of: overlay: demote message to warning
+Message-ID: <20220912170524.GX4320@zorba>
+References: <20220907230709.271889-1-danielwa@cisco.com>
+ <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
+ <20220908003510.GE4320@zorba>
+ <c0c66918-f55e-83e4-edea-b2d32fdb27a7@gmail.com>
+ <3fcea82c-f5cf-f066-67b9-08669c44a9c6@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1662713084-8106-6-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <3fcea82c-f5cf-f066-67b9-08669c44a9c6@gmail.com>
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
+X-Outbound-Node: rcdn-core-9.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,46 +94,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Rajendra
-
-On Fri, Sep 09, 2022 at 02:14:44PM +0530, Krishna chaitanya chundru wrote:
-> Make GDSC always on to ensure controller and its dependent clocks
-> won't go down during system suspend.
+On Mon, Sep 12, 2022 at 01:45:40AM -0500, Frank Rowand wrote:
+> On 9/8/22 12:55, Frank Rowand wrote:
+> > On 9/7/22 19:35, Daniel Walker wrote:
+> >> On Wed, Sep 07, 2022 at 06:54:02PM -0500, Frank Rowand wrote:
+> >>> On 9/7/22 18:07, Daniel Walker wrote:
+> >>>> This warning message shows by default on the vast majority of overlays
+> >>>> applied. Despite the text identifying this as a warning it is marked
+> >>>> with the loglevel for error. At Cisco we filter the loglevels to only
+> >>>> show error messages. We end up seeing this message but it's not really
+> >>>> an error.
+> >>>>
+> >>>> For this reason it makes sense to demote the message to the warning
+> >>>> loglevel.
+> >>>>
+> >>>> Cc: xe-linux-external@cisco.com
+> >>>> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> >>>> ---
+> >>>>  drivers/of/overlay.c | 2 +-
+> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+> >>>> index bd8ff4df723d..4ae276ed9a65 100644
+> >>>> --- a/drivers/of/overlay.c
+> >>>> +++ b/drivers/of/overlay.c
+> >>>> @@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
+> >>>>  	}
+> >>>>  
+> >>>>  	if (!of_node_check_flag(target->np, OF_OVERLAY))
+> >>>> -		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+> >>>> +		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+> >>>>  		       target->np, new_prop->name);
+> >>>>  
+> >>>>  	if (ret) {
+> >>>
+> >>> NACK
+> >>>
+> >>> This is showing a real problem with the overlay.
+> >>
+> >> What's the real problem ?
+> >>
+> >> Daniel
+> > 
+> > A memory leak when the overlay is removed.
+> > 
+> > I'll send a patch to update the overlay file in Documumentation/devicetree/ to provide
+> > more information about this.  If you don't see a patch by tomorrow, feel free to
+> > ping me.
+> > 
+> > -Frank
 > 
-
-You need to mention the SoC name in subject, otherwise one cannot know for
-which platform this patch applies to.
-
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
->  drivers/clk/qcom/gcc-sc7280.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> The good news is that your question prodded me to start improving the in kernel documentation
+> of overlays.  The promised patch is a rough start at:
 > 
-> diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
-> index 7ff64d4..2f781a2 100644
-> --- a/drivers/clk/qcom/gcc-sc7280.c
-> +++ b/drivers/clk/qcom/gcc-sc7280.c
-> @@ -3109,7 +3109,7 @@ static struct gdsc gcc_pcie_1_gdsc = {
->  		.name = "gcc_pcie_1_gdsc",
->  	},
->  	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = VOTABLE,
-> +	.flags = ALWAYS_ON,
-
-Rajendra, should we also put PCIe GDSC into retention state as you have done for
-USB [1]?
-
-Thanks,
-Mani
-
-[1] https://lore.kernel.org/all/20220901101756.28164-2-quic_rjendra@quicinc.com/
-
->  };
->  
->  static struct gdsc gcc_ufs_phy_gdsc = {
-> -- 
-> 2.7.4
+>    https://lore.kernel.org/all/20220912062615.3727029-1-frowand.list@gmail.com/
 > 
+> The bad news is that what I wrote doesn't explain the memory leak in any more detail.
+> If an overlay adds a property to a node in the base device tree then the memory
+> allocated to do the add will not be freed when the overlay is removed.  Since it is
+> possible to add and remove overlays multiple times, the ensuing size of the memory
+> leak is potentially unbounded.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Isn't this only a problem if you remove the overlay?
+
+if the dt fixup driver does have the ability to remove the overlay doesn't it
+have responsibility to free the memory? Or is it impossible to free the memory?
+
+Daniel
