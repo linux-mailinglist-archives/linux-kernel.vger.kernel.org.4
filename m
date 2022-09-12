@@ -2,162 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B455B5DE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90D75B5DE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiILQET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S229799AbiILQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiILQEQ (ORCPT
+        with ESMTP id S229514AbiILQH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:04:16 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2115.outbound.protection.outlook.com [40.107.102.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809CB3AB01;
-        Mon, 12 Sep 2022 09:04:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kxNWRh6PUde10E3IFbiU4B9wUvU7i43SiyJ6mbFs0J76R7Kx4MA7vfNWvPm9vRgaN905L7nF03jDuDJF+yDjfUWzb8nO9Qs49TI2pes8kJd4s9libXzO+BtcCjbTpOha7fdy/G1adcU2aJN946dw3rUi09E+bzFMXEbV7ppoNM4IT25bZTmk3Q6xuImfIN84TtXGchad8c1QQRHqwMBb3ecZKfmVvO8Mml+7NHgL/mF5UpA31lTh1EmY0iiWAZQXrhQ/KmUWO5QjQ8FOTh7FzGiiu8o1rFhxbo/4U5jfaZcgo+TPxJdF8kAzDyEBDxhJebTsZgwRNbhzDm6tLgS9Qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jwWP1tCiQfpXmADXkAnhf36v/4lAKx4/e1LVA77Mg/8=;
- b=kNVND7U5X+yhKI9AwSh72eKHccvPnRtEMbTVTY/o6YPfPxORr8V5lQJFCvBCjCfB/oO8IqsH8tt3+EsqATGplKZU8MA3szqjN97cJepmF1fHOVz7KexCKj8naXzzf716VxgxOzYaw+mRRcSamAl7Z4ewwcMu5VCRnKg64nzlX6nXkxS7eBwzoT9/jhvqWJXoQzbdx0OFP/v9wWFA8RrdGSvpVELe9Dy57X5dWM2UNpOUWzrWIw1tl1ppbobKKOGktI0F2PaWl2Hs6tZdBCYAqImRHv/4G05UZgbJzTiP1o1dr+I1rC3qRUnYca66WNqwRJ+bR1mvOGOu4o06ZOjFNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jwWP1tCiQfpXmADXkAnhf36v/4lAKx4/e1LVA77Mg/8=;
- b=FZdf6+ZuFNgoIhW5dpBkji01KPBhg67DuR3ChXIRr1uz9XGLe4Oi6obtHMJFDUktwxt1cmlVK10q8hojikxUVV1ZAFFUNC/8Yjg6EZwGPsvA8NuhD2mTXhin0uUrI+KXH47MeSc2C8zxcj/+SwEaE/auVgC3rGXadTeKqc6yUf0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CH0PR10MB5068.namprd10.prod.outlook.com
- (2603:10b6:610:c7::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Mon, 12 Sep
- 2022 16:04:11 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.020; Mon, 12 Sep 2022
- 16:04:11 +0000
-Date:   Mon, 12 Sep 2022 09:04:06 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
- for all ports
-Message-ID: <Yx9YdlrsLsBNPJzL@colin-ia-desktop>
-References: <20220911200244.549029-1-colin.foster@in-advantage.com>
- <20220911200244.549029-7-colin.foster@in-advantage.com>
- <Yx7yZESuK6Jh0Q8X@shell.armlinux.org.uk>
- <20220912101621.ttnsxmjmaor2cd7d@skbuf>
- <Yx9Uo9RiI7bRZvLC@colin-ia-desktop>
- <20220912155234.ds73xpn5ijjq3iif@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912155234.ds73xpn5ijjq3iif@skbuf>
-X-ClientProxiedBy: SJ0PR03CA0124.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::9) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Mon, 12 Sep 2022 12:07:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2E137F9C;
+        Mon, 12 Sep 2022 09:07:25 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CFkf24002919;
+        Mon, 12 Sep 2022 16:07:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Kamh4h/Xs7OaeCtYTOOC3EbILKlI9xSozmWlHXhWzmA=;
+ b=ON1ycWGmlTjqTHAkHzUWSgI2JO3/o/kKMBOl4TMN7naRrrUAFuk3MTnNIaK2cqekqo6w
+ T0x47n6gqOoXWTqaCRDdpUNeqwFy1Qc9y/hnngrpKxmKLXWNKM7kjG7ZbLBJsTesgiza
+ uMiv1EyHK5nh5aLwZDB9x4t3RCfywoKAJu/QMx1xnzwmHHtE438tWtyhwXVhGNBphxlo
+ wRX8Uu4RirM7ELhYprD7Y4AIfgwzVMF5SvFWgMMUYnaAcEigCQ7akMvt8stpXnnVrepy
+ hW6jTOApkNH7dV7SBW9yoTHQ8xd5de1MJoLgmVgL8kT4+Few5D7+BrTY++tzH3dbrQLz Iw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk0dddkr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 16:07:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CG74U7015431
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 16:07:04 GMT
+Received: from [10.216.1.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
+ 2022 09:06:57 -0700
+Message-ID: <7670b876-abcc-1b47-9277-96e4dd5e5dd4@quicinc.com>
+Date:   Mon, 12 Sep 2022 21:36:53 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 62f11276-aa51-4e21-812e-08da94d86e82
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5068:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /cABzw8cjHZIEW2PPGJQvhTSD/U69kgfEDDfXkkRq4FEeQrQTSno5KFcTXw2lANbAt7Z9EnO0YBxQhApM8C0bIHGNqvm++jqUoCI9NZaI6uwNKYiEgfoudsL+t2enK1mb7C98cEfM0iDet07e5SaWpFCmXIDJGx9Rx7o0NKzzaNoa+a36z2vAZJdjGwWOcTViwCUMktLd0jaI4WJcusFFPfPktkqXgWmQNeyoj683wg6PlmbRyF+LYDGCQViO7WZfBOEiQI/L+rIVEjqPh1w8Md0wzOKqRGx8I0iXsNzst7+DmHx1/gnkpo3x96zbrlpua3aSn7wBAv0IpmnN3H0eD76eG1KVnvRAcmaqDXrr976LOxbC8CPKowvhpjg83jYzOVi9U65/n8dNuz3SjjvQtNto60dqHtTKIghifIafFEk9JI2JnQm0mWKJVAQBt4cS/oJUudxHDVpy9h2uBNOIR79CR1imGlS2REYMyr511u1RN3S5S95GnPuRHWkHkw7CibiLQNpzmk6ceKUA25dBY46HYcowA01vDj9k7pAvjRGAd3p+t7EOQM8FI/9IDfCG/SAa1br48wo9rijAHu7vgn7KRBAO10PU3xKbva4/nwEkpSlGgfSGXAlL2KwaE5zUBOcZVfs2MEjCort0tw6WHGMT8IeqsgqSzFUaFJ4gx17hkNejMq8GHAJmX3HE69rs8iM1O7sCgWpx14bVILk0H61hNU+wdZAIlcxedIZvEs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(136003)(366004)(396003)(376002)(39840400004)(38100700002)(86362001)(8676002)(66556008)(66476007)(4326008)(66946007)(83380400001)(41300700001)(6512007)(6506007)(478600001)(6666004)(9686003)(26005)(6486002)(966005)(8936002)(316002)(54906003)(6916009)(186003)(2906002)(33716001)(44832011)(7416002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QqNMICxe+ntKrZmJD5E97lLtM2Pp8025jxOq94O/1bX63AiFhJkzU8BF0TPS?=
- =?us-ascii?Q?sGkrAi04AUhCIxHzhy5xECWRP7HUjT87d36j2PkRd4/AMwPqcr/qB5RKEXrQ?=
- =?us-ascii?Q?vm5FSCp+nOH95ajPgU/WTawh5Spi9GpD5GZGJkyhF258uUZo8jaeF6LeVVMy?=
- =?us-ascii?Q?X6i8OKwvStXikztrbM+OdIZx7SX9A8NEUzIeiva1fnYNxgzrSu78r0U9LFgo?=
- =?us-ascii?Q?NAea5Otqony7Drn/SN+cAZNRfIVsoBFYpMuyqGBvaA/mU0tn3XqCsoxqsEjr?=
- =?us-ascii?Q?m+5/xBJ/fjJsofLvZGMFmDmd5VJrWp3UW746SNYQK1m9Y6USHxDuo8qdXsWB?=
- =?us-ascii?Q?JCNqoiDC5mOe1VudnEPz0osSTGGBnTR6O7YUEF4CA/K+0iPym30esxYpVm07?=
- =?us-ascii?Q?Q+8ay8zsKkTbMXCt4RZ+vFxtnRBCzjGqKRzHGhuvUGb2sLAL+j8aF/vm8+kA?=
- =?us-ascii?Q?281CWdZjuclaeOuwJxvmn994lmpU/Cj8npmlOiE4F3vSIvadl+3mL1hUy7iI?=
- =?us-ascii?Q?Hf1oVKfIMPy/fMuncbVjYDyYR4rC23BaVGcAfWdBQyzwzbyyk9GTT8029L1e?=
- =?us-ascii?Q?elqPBzRwBBckxJ+Ji3cx0udBoMcrNKOhMQAGnzTnJoVTEhYWBnMuimpSAFRf?=
- =?us-ascii?Q?akhjtTXgswcc/oTJOVeWQ9vJaJqeRqmd4+X8DgK9C/W20KFFSftylw4mjuQl?=
- =?us-ascii?Q?/nyD63tP+iJhRGntea2lfrlGuw0QvT8oyBWgzzzLcv+4+QiZ3TucRtzvyBrL?=
- =?us-ascii?Q?QhvewU7kdWM3SXhXLZThi9ZSaIWUG7fKp+Enlay7vyuW+/Px2RDyLcElSPOP?=
- =?us-ascii?Q?pGnsVMr6QuxZBUf6JwjE36oL762HSAhbn8C6wYNy8DrXBvFAWR7w7Sc0w2NA?=
- =?us-ascii?Q?HdlAjDLnJ6pQejVj8n+z745gJs3C9Is6IJ9QUE1GLQTMwHoxO7WXfciJ7DR1?=
- =?us-ascii?Q?GKJd9y6rkIqF5X9nlLm87e/+QjquCBTOrUDJlMAiNOLksSnfuLLCrZ0gktke?=
- =?us-ascii?Q?g2cut7leibaDxyzHQUCOfTJ3IHiAVLHlLyBADWL9wtui1r2chQHu0NshhABR?=
- =?us-ascii?Q?WEMQvNwfgYXR6r3c3q7ZyBN0PeC3EVfFK5drkO6vmSiGuo0CZy0dXgB5I/+F?=
- =?us-ascii?Q?QXupFGf3r1EjBmuQbBM305uPyaznxIOceQaDDDyv6Kc2IWdpjAKsqPPHxmRZ?=
- =?us-ascii?Q?GAkg5vQK8ST7pFtG0RHAsKLTJNlgvgn2dPAYDzWEApktxmqMDdtI+iaEKGjA?=
- =?us-ascii?Q?refW46dDDV9qwO1ASKoEDz13GiOmBYPEVJgS05NBoa7xFfZslVHWD/gCO0Ht?=
- =?us-ascii?Q?FX2xt4ThxAJ8Glb7bqSDH2PMwaLjOzwpu+1/YvIvDwc7OKV5N6m0MCqMUhhD?=
- =?us-ascii?Q?IcYKdXY9GM2EsP7OREzgGkL/owp23MZCYZZj1INIuyOD5Z1gXf9KNA9MHqCR?=
- =?us-ascii?Q?tR/i8hYSzJZnkWLqtFjeIe0DJ1K8TCXdHVKmE6sZl2WF0gl67F0ZUnjIDh/x?=
- =?us-ascii?Q?yVkn6IDWd0j9RM85jTZnRNh3TXqTPVYZKFz27wlDXLX4MVnnAa7wZfCGaCVr?=
- =?us-ascii?Q?0TM8oTcslxyJEns/1DYElF52stYJcd6lS94Gdkt68mLroo2S/+ffbhxe46iO?=
- =?us-ascii?Q?Tg=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62f11276-aa51-4e21-812e-08da94d86e82
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 16:04:11.7052
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DvZI57TIbt3V7Ml9CcWvm0IKvULVPmbNFQQIAcRBLipWlFWr/RH8okvPbh4pg/paQSV49y7SwcRpOYhpSX8p//s1JIFhoenwV6wQnjFelhQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5068
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 1/5] PCI: qcom: Add system suspend and resume support
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+ <1662713084-8106-2-git-send-email-quic_krichai@quicinc.com>
+ <Yxt4Zv2ocKW1/Bf+@google.com>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <Yxt4Zv2ocKW1/Bf+@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MX7kIGqs_YWW26e2yWUAIt-lUhAOY7T4
+X-Proofpoint-ORIG-GUID: MX7kIGqs_YWW26e2yWUAIt-lUhAOY7T4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_11,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209120055
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 03:52:35PM +0000, Vladimir Oltean wrote:
-> On Mon, Sep 12, 2022 at 08:47:47AM -0700, Colin Foster wrote:
-> > > This is true. I am also a bit surprised at Colin's choices to
-> > > (a) not ask the netdev maintainers to pull into net-next the immutable
-> > >     branch that Lee provided here:
-> > >     https://lore.kernel.org/lkml/YxrjyHcceLOFlT%2Fc@google.com/
-> > >     and instead send some patches for review which are difficult to
-> > >     apply directly to any tree
-> > 
-> > As mentioned in the cover letter, I don't expect this to necessarily be
-> > ready by the next merge window. But seemingly I misjudged whether
-> > merging the net-next and Lee's tree would be more tedious for the netdev
-> > maintainers than looking at the RFC for reviewers. I'm trying to create
-> > as little hassle for people as I can. Apologies.
-> 
-> What is it exactly that is keeping this patch set from being ready for 6.1?
-> There's still time...
-> 
-> It mostly looks ok to me, I'm in the process of reviewing it. You
-> mentioned documentation in the cover letter; I suppose you're talking
-> about dt-schema? If so, I just started off by converting ocelot.txt to
-> mscc,ocelot.yaml, since I know that the conversion process is typically
-> a bit daunting to even start.
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220912153702.246206-1-vladimir.oltean@nxp.com/
 
-Yes - checkpatch correclty gave warnings about mscc,vsc7512-ext-switch being
-undocumented. Thanks for that patch - I just saw it! I'll wait for your
-review before I get optimistic. But if it boils down to separating the
-last patch (per Lee's suggestion) and adding the dt-bindings, maybe it
-could be ready in another round or two.
+On 9/9/2022 11:01 PM, Matthias Kaehlcke wrote:
+> On Fri, Sep 09, 2022 at 02:14:40PM +0530, Krishna chaitanya chundru wrote:
+>> Add suspend and resume syscore ops.
+>>
+>> When system suspends and if the link is in L1ss, disable the clocks
+>> and power down the phy so that system enters into low power state to
+>> save the maximum power. And when the system resumes, enable the clocks
+>> back and power on phy if they are disabled in the suspend path.
+>>
+>> we are doing this only when link is in l1ss but not in L2/L3 as
+>> nowhere we are forcing link to L2/L3 by sending PME turn off.
+>>
+>> is_suspended flag indicates if the clocks are disabled in the suspend
+>> path or not.
+>>
+>> There is access to Ep PCIe space to mask MSI/MSIX after pm suspend ops
+>> (getting hit by affinity changes while making CPUs offline during suspend,
+>> this will happen after devices are suspended (all phases of suspend ops)).
+>> When registered with pm ops there is a crash due to un-clocked access,
+>> as in the pm suspend op clocks are disabled. So, registering with syscore
+>> ops which will called after making CPUs offline.
+> My knowledge of PCI is limited, but given the issues you are seeing which
+> don't seem to impact other DWC drivers I wonder if keeping the link in
+> l1ss is the right thing to do. The intel, tegra and imx6 drivers all turn
+> the PME off, which IIUC results in the link to transition ot L2 or L3.
+> Shouldn't the QC driver do the same?
+The other dwc drivers are trying to turn off PME in the suspend and in 
+resume path
+they are trying to do link training again, this is what we have done 
+previously
+But this change is rejected by nvme developers because this will 
+decrease device life cycle
+(turning off the link and bringing up is treated as a power cycle of nvme).
+
+So we are trying this approach.
+>
+> Some more comments inline, for if the current approach moves forward.
+>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>> changes since v5:
+>> 	- Rebasing the code and replaced pm ops with syscore ops as
+>> 	  we are getting acciess to pci region after pm ops. syscore ops
+>> 	  will called after disabling non boot cpus and there is no pci
+>> 	  access after that.
+>> Changes since v4:
+>> 	- Rebasing the code and removed the supports_system_suspend flag
+>> 	- in the resume path as is_suspended will serve its purpose.
+>> Changes since v3:
+>> 	- Powering down the phy in suspend and powering it on resume to
+>> 	  acheive maximum power savings.
+>> Changes since v2:
+>> 	- Replaced the enable, disable clks ops with suspend and resume
+>> 	- Renamed support_pm_opsi flag  with supports_system_suspend.
+>> Changes since v1:
+>> 	- Fixed compilation errors.
+>> ---
+>>   drivers/pci/controller/dwc/pcie-qcom.c | 140 ++++++++++++++++++++++++++++++++-
+>>   1 file changed, 139 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>> index 39ca06f..6e04d0d 100644
+>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> @@ -27,6 +27,7 @@
+>>   #include <linux/reset.h>
+>>   #include <linux/slab.h>
+>>   #include <linux/types.h>
+>> +#include <linux/syscore_ops.h>
+>>   
+>>   #include "../../pci.h"
+>>   #include "pcie-designware.h"
+>> @@ -44,6 +45,9 @@
+>>   #define PCIE20_PARF_PM_CTRL			0x20
+>>   #define REQ_NOT_ENTR_L1				BIT(5)
+>>   
+>> +#define PCIE20_PARF_PM_STTS			0x24
+>> +#define PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB	BIT(8)
+>> +
+>>   #define PCIE20_PARF_PHY_CTRL			0x40
+>>   #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+>>   #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+>> @@ -122,6 +126,8 @@
+>>   
+>>   #define QCOM_PCIE_CRC8_POLYNOMIAL (BIT(2) | BIT(1) | BIT(0))
+>>   
+>> +static LIST_HEAD(qcom_pcie_list);
+>> +
+>>   struct qcom_pcie_resources_2_1_0 {
+>>   	struct clk_bulk_data clks[QCOM_PCIE_2_1_0_MAX_CLOCKS];
+>>   	struct reset_control *pci_reset;
+>> @@ -211,13 +217,21 @@ struct qcom_pcie_ops {
+>>   	void (*post_deinit)(struct qcom_pcie *pcie);
+>>   	void (*ltssm_enable)(struct qcom_pcie *pcie);
+>>   	int (*config_sid)(struct qcom_pcie *pcie);
+>> +	int (*suspend)(struct qcom_pcie *pcie);
+>> +	int (*resume)(struct qcom_pcie *pcie);
+>>   };
+>>   
+>>   struct qcom_pcie_cfg {
+>>   	const struct qcom_pcie_ops *ops;
+>> +	/*
+>> +	 * Flag ensures which devices will turn off clks, phy
+>> +	 * in system suspend.
+>> +	 */
+>> +	unsigned int supports_system_suspend:1;
+>>   };
+>>   
+>>   struct qcom_pcie {
+>> +	struct list_head list;	/* list to probed instances */
+>>   	struct dw_pcie *pci;
+>>   	void __iomem *parf;			/* DT parf */
+>>   	void __iomem *elbi;			/* DT elbi */
+>> @@ -225,10 +239,14 @@ struct qcom_pcie {
+>>   	struct phy *phy;
+>>   	struct gpio_desc *reset;
+>>   	const struct qcom_pcie_cfg *cfg;
+>> +	unsigned int is_suspended:1;
+>>   };
+>>   
+>>   #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+>>   
+>> +static int __maybe_unused qcom_pcie_syscore_op_suspend(void);
+>> +static void __maybe_unused qcom_pcie_syscore_op_resume(void);
+>> +
+>>   static void qcom_ep_reset_assert(struct qcom_pcie *pcie)
+>>   {
+>>   	gpiod_set_value_cansleep(pcie->reset, 1);
+>> @@ -1301,6 +1319,28 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
+>>   	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
+>>   }
+>>   
+>> +static int qcom_pcie_resume_2_7_0(struct qcom_pcie *pcie)
+>> +{
+>> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>> +	int ret;
+>> +
+>> +	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+>> +
+>> +	phy_power_on(pcie->phy);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_pcie_suspend_2_7_0(struct qcom_pcie *pcie)
+>> +{
+>> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>> +
+>> +	phy_power_off(pcie->phy);
+>> +
+>> +	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+>> +	return 0;
+>> +}
+>> +
+>>   static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>>   {
+>>   	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>> @@ -1594,6 +1634,8 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
+>>   	.deinit = qcom_pcie_deinit_2_7_0,
+>>   	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>>   	.config_sid = qcom_pcie_config_sid_sm8250,
+>> +	.suspend = qcom_pcie_suspend_2_7_0,
+>> +	.resume = qcom_pcie_resume_2_7_0,
+>>   };
+>>   
+>>   /* Qcom IP rev.: 2.9.0  Synopsys IP rev.: 5.00a */
+>> @@ -1613,6 +1655,11 @@ static const struct qcom_pcie_cfg cfg_1_9_0 = {
+>>   	.ops = &ops_1_9_0,
+>>   };
+>>   
+>> +static const struct qcom_pcie_cfg sc7280_cfg = {
+>> +	.ops = &ops_1_9_0,
+>> +	.supports_system_suspend = true,
+>> +};
+>> +
+>>   static const struct qcom_pcie_cfg cfg_2_1_0 = {
+>>   	.ops = &ops_2_1_0,
+>>   };
+>> @@ -1642,6 +1689,23 @@ static const struct dw_pcie_ops dw_pcie_ops = {
+>>   	.start_link = qcom_pcie_start_link,
+>>   };
+>>   
+>> +/*
+>> + * There is access to Ep PCIe space to mask MSI/MSIX after pm suspend
+>> + * ops.(getting hit by affinity changes while making CPUs offline during
+>> + * suspend, this will happen after devices are suspended
+>> + * (all phases of suspend ops)).
+>> + *
+>> + * When registered with pm ops there is a crash due to un-clocked access,
+>> + * as in the pm suspend op clocks are disabled.
+>> + *
+>> + * So, registering with syscore ops which will called after making
+>> + * CPU's offline.
+>> + */
+>> +static struct syscore_ops qcom_pcie_syscore_ops = {
+>> +	.suspend = qcom_pcie_syscore_op_suspend,
+>> +	.resume = qcom_pcie_syscore_op_resume,
+>> +};
+>> +
+>>   static int qcom_pcie_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>> @@ -1720,6 +1784,17 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>>   		goto err_phy_exit;
+>>   	}
+>>   
+>> +	/* Register for syscore ops only when first instance probed */
+>> +	if (list_empty(&qcom_pcie_list))
+>> +		register_syscore_ops(&qcom_pcie_syscore_ops);
+>> +
+>> +	/*
+>> +	 * Add the qcom_pcie list of each PCIe instance probed to
+>> +	 * the global list so that we use it iterate through each PCIe
+>> +	 * instance in the syscore ops.
+>> +	 */
+>> +	list_add_tail(&pcie->list, &qcom_pcie_list);
+>> +
+>>   	return 0;
+>>   
+>>   err_phy_exit:
+>> @@ -1731,6 +1806,69 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>>   	return ret;
+>>   }
+>>   
+>> +static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
+>> +{
+>> +	u32 val;
+>> +	struct dw_pcie *pci = pcie->pci;
+>> +	struct device *dev = pci->dev;
+>> +
+>> +	if (!pcie->cfg->supports_system_suspend)
+>> +		return 0;
+> This check could be done in qcom_pcie_syscore_op_suspend()
+sure , we will take of it in next patch.
+>
+>> +
+>> +	/* if the link is not active turn off clocks */
+>> +	if (!dw_pcie_link_up(pci)) {
+>> +		dev_info(dev, "Link is not active\n");
+> level info seems to verbose, it's not particularly interesting that the
+> link is not active, except for debugging.
+sure , we will take of it in next patch.
+>
+>> +		goto suspend;
+>> +	}
+>> +
+>> +	/* if the link is not in l1ss don't turn off clocks */
+>> +	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+>> +	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+>> +		dev_warn(dev, "Link is not in L1ss\n");
+>> +		return 0;
+>> +	}
+> I think the following would be clearer:
+>
+>    	if (dw_pcie_link_up(pci)) {
+> 		/* if the link is not in l1ss don't turn off clocks */
+> 		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> 		if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> 			dev_warn(dev, "Link is not in L1ss\n");
+> 			return 0;
+> 		}
+> 	} else {
+> 		dev_dbg(dev, "Link is not active\n");
+> 	}
+But as we are adding retry logic in other patch  with while loop this 
+logic will not be applicable.
+>> +
+>> +suspend:
+>> +	if (pcie->cfg->ops->suspend)
+>> +		pcie->cfg->ops->suspend(pcie);
+>> +
+>> +	pcie->is_suspended = true;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int __maybe_unused qcom_pcie_pm_resume(struct qcom_pcie *pcie)
+>> +{
+>> +	if (!pcie->is_suspended)
+>> +		return 0;
+>> +
+>> +	if (pcie->cfg->ops->resume)
+>> +		pcie->cfg->ops->resume(pcie);
+>> +
+>> +	pcie->is_suspended = false;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int __maybe_unused qcom_pcie_syscore_op_suspend(void)
+>> +{
+>> +	struct qcom_pcie *qcom_pcie;
+>> +
+>> +	list_for_each_entry(qcom_pcie, &qcom_pcie_list, list) {
+>> +		qcom_pcie_pm_suspend(qcom_pcie);
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static void __maybe_unused qcom_pcie_syscore_op_resume(void)
+>> +{
+>> +	struct qcom_pcie *qcom_pcie;
+>> +
+>> +	list_for_each_entry(qcom_pcie, &qcom_pcie_list, list) {
+>> +		qcom_pcie_pm_resume(qcom_pcie);
+>> +	}
+>> +}
+>> +
+>>   static const struct of_device_id qcom_pcie_match[] = {
+>>   	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+>>   	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+>> @@ -1742,7 +1880,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>>   	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+>>   	{ .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
+>>   	{ .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
+>> -	{ .compatible = "qcom,pcie-sc7280", .data = &cfg_1_9_0 },
+>> +	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+>>   	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
+>>   	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
+>>   	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
+>> -- 
+>> 2.7.4
+>>
