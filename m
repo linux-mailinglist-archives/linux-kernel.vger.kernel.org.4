@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D41E5B5C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0356F5B5C3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiILOc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S230047AbiILOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiILOcW (ORCPT
+        with ESMTP id S229591AbiILOcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:32:22 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0D5248;
-        Mon, 12 Sep 2022 07:32:22 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso5975916otb.6;
-        Mon, 12 Sep 2022 07:32:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=t2YwspAUEJbS9bWldAsROuxOz8niEIm2reQgAgYzGCU=;
-        b=fd2pMwc7MJX94th7ufOazHgcl5xTciKvZgQdL6r4BkaZ0/8Ve2VCwirPkQbOHCtKMZ
-         +Uu2D8Bmp+jisXpxT0StnITkOJazsNZv47LVaLte1bs9bk+95yn0fY8WrGiOdJYVho/r
-         rmjo2Gx46u5M+BFY2y/UrUk6nyR0udUL0p8lYfSMUI/9VdBppmPCcZddVcFn0posqHZX
-         fnhzd+A3Hg6qgCc3dpxsuD0rE+NYrJSu72BBmUvx6oTKwAc1WrMfF2pHwNQsB+5V7zbt
-         2l2/tIH20CKj70ix6RG14QsQzlh7UNW3F8ioi/qUWxTR+69c99+4imReRT+3SXoPk9mr
-         EZcg==
-X-Gm-Message-State: ACgBeo1pKTOcLN1qOs0KAdw02CULTT3CxjDjxUYrWD1j9JpEfzxiGz/a
-        srY3NuYKS3D1qPrnx7SZXw==
-X-Google-Smtp-Source: AA6agR5Tj+MTUbTBejFb9zYKTm4S39/GS0kXs6RYH4dvSuF3fD+tbpg+JtOz6Zz6P872LY5aRUZ7VQ==
-X-Received: by 2002:a05:6830:1496:b0:639:648a:55f4 with SMTP id s22-20020a056830149600b00639648a55f4mr10557961otq.370.1662993141339;
-        Mon, 12 Sep 2022 07:32:21 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t6-20020a4a8246000000b0044b491ccf97sm4142572oog.25.2022.09.12.07.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 07:32:20 -0700 (PDT)
-Received: (nullmailer pid 1227261 invoked by uid 1000);
-        Mon, 12 Sep 2022 14:32:19 -0000
-Date:   Mon, 12 Sep 2022 09:32:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v2 03/15] dt-bindings: memory: snps: Convert the schema
- to being generic
-Message-ID: <20220912143219.GC1170702-robh@kernel.org>
-References: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
- <20220910195659.11843-4-Sergey.Semin@baikalelectronics.ru>
+        Mon, 12 Sep 2022 10:32:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0D62E9E8;
+        Mon, 12 Sep 2022 07:32:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC2BCB80CAA;
+        Mon, 12 Sep 2022 14:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C622C433D6;
+        Mon, 12 Sep 2022 14:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662993162;
+        bh=ncuO1M5I6yJQVCdLgnE0oN45X8h9B0j2Tl5id4/B5mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PE0k+qHzmaQGYo80mVOe5B8M1ljcyhfAe7XeKc8NwID48J8UL/lf4WH6Sr0u7NdzB
+         NDYsFCdJ/jkXpFpCPyjOWwUgChZ2qbtXmcO18kppxBCSs6+3PsJ8XhfaoCsvqMEbN2
+         3Geyklr4MB8Q29Pm4kKWKAmXN70w6gAkRhwIrVK4=
+Date:   Mon, 12 Sep 2022 16:33:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     cgel.zte@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] USB: serial: ftdi_sio: remove the unneeded
+ result variable
+Message-ID: <Yx9DIpc3oTwhdRPi@kroah.com>
+References: <20220912133826.18517-1-xu.panda@zte.com.cn>
+ <Yx88s4TwEEt6luPY@kroah.com>
+ <Yx8/dtzrkRE4iFea@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220910195659.11843-4-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yx8/dtzrkRE4iFea@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 10:56:47PM +0300, Serge Semin wrote:
-> At the current state the DW uMCTL2 DDRC DT-schema can't be used as the
-> common one for all the IP-core-based devices due to the compatible string
-> property constraining the list of the supported device names. In order to
-> fix that we suggest to update the compatible property constraints so one
-> would permit having any value aside with the generic device names. At the
-> same time the generic DT-schema selection must be restricted to the
-> denoted generic devices only so not to permit the generic fallback
-> compatibles. Finally since the generic schema will be referenced from the
-> vendor-specific DT-bindings with possibly non-standard properties defined
-> it must permit having additional properties specified.
+On Mon, Sep 12, 2022 at 04:17:26PM +0200, Johan Hovold wrote:
+> On Mon, Sep 12, 2022 at 04:05:39PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Sep 12, 2022 at 01:38:27PM +0000, cgel.zte@gmail.com wrote:
+> > > From: Xu Panda <xu.panda@zte.com.cn>
+> > > 
+> > > Return the value usb_control_msg() directly instead of storing
+> > > it in another redundant variable.
+> > > 
+> > > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > > Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > -       rv = usb_control_msg(port->serial->dev,
+> > > -                           usb_sndctrlpipe(port->serial->dev, 0),
+> > > -                           FTDI_SIO_SET_BAUDRATE_REQUEST,
+> > > -                           FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> > > -                           value, index,
+> > > -                           NULL, 0, WDR_SHORT_TIMEOUT);
+> > > -       return rv;
+> > > +       return usb_control_msg(port->serial->dev,
+> > > +                              usb_sndctrlpipe(port->serial->dev, 0),
+> > > +                              FTDI_SIO_SET_BAUDRATE_REQUEST,
+> > > +                              FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+> > > +                              value, index,
+> > > +                              NULL, 0, WDR_SHORT_TIMEOUT);
+> > >  }
+> > 
+> > That's really not the correct use of the return value of
+> > usb_control_msg().  Can you fix this up to properly handle the return
+> > value, or better yet, use the usb_control_msg_send() call?
 > 
-> ---
-> 
-> Note alternatively we could drop the "additionalProperties" keyword
-> modification since currently there is no actual device available with the
-> properties not listed in the generic DT-schema.
+> It is actually correct since the buffer length is zero here (i.e. it
+> returns a negative errno or 0).
 
-Normally, this has required 2 schema files. However, I think you can 
-do something like this:
+Yeah, that's a hack :)
 
-if:
-  compatible:
-    enum:
-      - snps,ddrc-3.80a
-      - snps,dw-umctl2-ddrc
-      - xlnx,zynqmp-ddrc-2.40a
-then:
-  unevaluatedProperties: false
+> But I'm also ignoring patches from this email address as it is used by
+> multiple users, and of which none so far has replied to feedback (as if
+> it's all automated).
 
+Great, that's the correct thing to do here, thanks.
 
-But please make sure that actually catches undocumented properties 
-because unevaluateProperties under 'then' is not something I've tried.
-
-Rob
+greg k-h
