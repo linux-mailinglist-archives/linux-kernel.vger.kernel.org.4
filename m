@@ -2,124 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55795B5626
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3423F5B5625
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiILI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S230291AbiILI2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiILI1i (ORCPT
+        with ESMTP id S230372AbiILI1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:27:38 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D8F32BA7;
-        Mon, 12 Sep 2022 01:26:43 -0700 (PDT)
-Message-ID: <dcacaaf8-8d5c-00cd-f2b7-3a4258f5779c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662971133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 12 Sep 2022 04:27:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE812018B;
+        Mon, 12 Sep 2022 01:26:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5AD3B226F4;
+        Mon, 12 Sep 2022 08:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662971128; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TBY/n+1M8LwfiyqrH6vsAKHFwyw47fD1VJdk+JKwca8=;
-        b=lUazoE3OnpJzoP68QrKoMCIkSrmFo7MoeJxbRPyBf4+3E5q75cN5VpZHyk0LvVo9+EWuRs
-        Coqc27GVxoZyPOfXV7i35UpZbOdgEVx4MP+I6PgvXptFrJ8QD8sHGGgLDleUQJoDZ4AXGg
-        e4bF5hcdXKFK1bKL+SaGEivQSNTpS9Y=
-Date:   Mon, 12 Sep 2022 16:25:24 +0800
+        bh=AmLitHuJb9zxnWIayBW40PsD0jUE9DwA8Hdr0sEGwOU=;
+        b=DoGJkxDfS8XfTUElxx6PiNjpb2X45CJzrmVQgQyjUfEd8XVON3A+8NBcWMGeMM2qRBvqQB
+        m63S5+msQqnbKtyqz92C22+jPNZlb5OmqZjyUW3h/g0CAhil2eOE9RlgXNey0K1QfdUVCo
+        0xHKxm+B0SmDb4moMu07E9n/ggHZ6aw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662971128;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AmLitHuJb9zxnWIayBW40PsD0jUE9DwA8Hdr0sEGwOU=;
+        b=kLYQofUgp3PxTc+4vNeRg44Q5h3zZShQ4p9Ua4l1FOg6ZfwdqTghKlP1AeuLG1nuy8qvnw
+        0NSodnaIlG5cTQCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 471FF139E0;
+        Mon, 12 Sep 2022 08:25:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kphbEfjsHmNMKAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 12 Sep 2022 08:25:28 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6E889A067E; Mon, 12 Sep 2022 10:25:27 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 10:25:27 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.cz, tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2] ext4: Fix dir corruption when ext4_dx_add_entry()
+ fails
+Message-ID: <20220912082527.36ywlkeie5he6guq@quack3>
+References: <20220911045204.516460-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH 2/7] RDMA/rxe: Convert the triple tasklets to
- workqueues
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
-        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
-        zyjzyj2000@gmail.com
-Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        rpearsonhpe@gmail.com, yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
-        y-goto@fujitsu.com
-References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
- <41e5476f4f14a0b77f4a8c3826e3ef943bf7c173.1662461897.git.matsuda-daisuke@fujitsu.com>
- <0b3366e6-c0ae-7242-5006-b638e629972d@linux.dev>
- <fd1d7c49-a090-e8c7-415b-dfcda94ace9d@acm.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <fd1d7c49-a090-e8c7-415b-dfcda94ace9d@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220911045204.516460-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun 11-09-22 12:52:04, Zhihao Cheng wrote:
+> Following process may lead to fs corruption:
+> 1. ext4_create(dir/foo)
+>  ext4_add_nondir
+>   ext4_add_entry
+>    ext4_dx_add_entry
+>      a. add_dirent_to_buf
+>       ext4_mark_inode_dirty
+>       ext4_handle_dirty_metadata   // dir inode bh is recorded into journal
+>      b. ext4_append    // dx_get_count(entries) == dx_get_limit(entries)
+>        ext4_bread(EXT4_GET_BLOCKS_CREATE)
+>         ext4_getblk
+>          ext4_map_blocks
+>           ext4_ext_map_blocks
+>             ext4_mb_new_blocks
+>              dquot_alloc_block
+>               dquot_alloc_space_nodirty
+>                inode_add_bytes    // update dir's i_blocks
+>             ext4_ext_insert_extent
+> 	     ext4_ext_dirty  // record extent bh into journal
+>               ext4_handle_dirty_metadata(bh)
+> 	      // record new block into journal
+>        inode->i_size += inode->i_sb->s_blocksize   // new size(in mem)
+>      c. ext4_handle_dirty_dx_node(bh2)
+> 	// record dir's new block(dx_node) into journal
+>      d. ext4_handle_dirty_dx_node((frame - 1)->bh)
+>      e. ext4_handle_dirty_dx_node(frame->bh)
+>      f. do_split    // ret err!
+>      g. add_dirent_to_buf
+> 	 ext4_mark_inode_dirty(dir)  // update raw_inode on disk(skipped)
+> 2. fsck -a /dev/sdb
+>  drop last block(dx_node) which beyonds dir's i_size.
+>   /dev/sdb: recovering journal
+>   /dev/sdb contains a file system with errors, check forced.
+>   /dev/sdb: Inode 12, end of extent exceeds allowed value
+> 	(logical block 128, physical block 3938, len 1)
+> 3. fsck -fn /dev/sdb
+>  dx_node->entry[i].blk > dir->i_size
+>   Pass 2: Checking directory structure
+>   Problem in HTREE directory inode 12 (/dir): bad block number 128.
+>   Clear HTree index? no
+>   Problem in HTREE directory inode 12: block #3 has invalid depth (2)
+>   Problem in HTREE directory inode 12: block #3 has bad max hash
+>   Problem in HTREE directory inode 12: block #3 not referenced
+> 
+> Fix it by marking inode dirty directly inside ext4_append().
+> Fetch a reproducer in [Link].
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216466
+> CC: stable@vger.kernel.org
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 
-在 2022/9/11 23:08, Bart Van Assche 写道:
-> On 9/11/22 00:10, Yanjun Zhu wrote:
->> I also implemented a workqueue for rxe. IMO, can we add a variable to
->> decide to use tasklet or workqueue?
->>
->> If user prefer using tasklet, he can set the variable to use
->> tasklet. And the default is tasklet. Set the variable to another
->> value to use workqueue.
->
-> I'm in favor of removing all uses of the tasklet mechanism because of 
-> the disadvantages of that mechanism. See also:
-> * "Eliminating tasklets" (https://lwn.net/Articles/239633/).
-> * "Modernizing the tasklet API" (https://lwn.net/Articles/830964/).
-> * Sebastian Andrzej Siewior's opinion about tasklets 
-> (https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/).
+Thanks! The patch looks good. Feel free to add:
 
-Thanks, Bart
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-https://lwn.net/Articles/239633/ is to remove tasklet. But 
-https://lwn.net/Articles/240323/ describes the difference between 
-workqueue and tasklet.
+								Honza
 
-I am not sure whether the difference between tasklet and workqueue in 
-the link https://lwn.net/Articles/240323/ is resolved. If you know, 
-please also let me know.
-
-And in the link https://lwn.net/Articles/830964/ and 
-https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/, tasklet can 
-be replaced by workqueue, timers or thread interrupts.
-
-"
-
-In current kernels, tasklets can be replaced by workqueues, timers, or 
-threaded interrupts. If threaded interrupts are used, the work may just 
-be executed in the interrupt handler itself. Those newer mechanisms do 
-not have the disadvantages of tasklets and should satisfy the same 
-needs, so developers do not see a reason to keep tasklets. It seems that 
-any migration away from tasklets will be done one driver (or subsystem) 
-at a time. For example, Takashi Iwai already reported having the 
-conversion ready for sound drivers.
-
-"
-
-And in the link 
-https://lore.kernel.org/all/YvovfXMJQAUBsvBZ@linutronix.de/, Sebastian 
-thought that threaded interrupts are a good substitute to tasklet.
-
-To me, after I have implemented workqueue in rxe, I did not find any 
-benefits with workqueue. And sometime the latency is worse with workqueue.
-
-This is why I do not send the workqueue commits to upstream maillist.
-
-I am not sure whether it is a good idea to replace tasklet with 
-workqueue or not.
-
-Let me do more readings in linux upstream maillist.
-
-Zhu Yanjun
-
->
-> Thanks,
->
-> Bart.
->
+> ---
+>  v1->v2: mark inode dirty inside ext4_append().
+>  fs/ext4/namei.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index 3a31b662f661..0d0e41d2dee8 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -85,15 +85,20 @@ static struct buffer_head *ext4_append(handle_t *handle,
+>  		return bh;
+>  	inode->i_size += inode->i_sb->s_blocksize;
+>  	EXT4_I(inode)->i_disksize = inode->i_size;
+> +	err = ext4_mark_inode_dirty(handle, inode);
+> +	if (err)
+> +		goto out;
+>  	BUFFER_TRACE(bh, "get_write_access");
+>  	err = ext4_journal_get_write_access(handle, inode->i_sb, bh,
+>  					    EXT4_JTR_NONE);
+> -	if (err) {
+> -		brelse(bh);
+> -		ext4_std_error(inode->i_sb, err);
+> -		return ERR_PTR(err);
+> -	}
+> +	if (err)
+> +		goto out;
+>  	return bh;
+> +
+> +out:
+> +	brelse(bh);
+> +	ext4_std_error(inode->i_sb, err);
+> +	return ERR_PTR(err);
+>  }
+>  
+>  static int ext4_dx_csum_verify(struct inode *inode,
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
