@@ -2,63 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D305B5F84
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9355B5F8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiILRt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S229850AbiILRvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiILRtx (ORCPT
+        with ESMTP id S229766AbiILRvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:49:53 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5516C13D17
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:49:52 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3454e58fe53so110711797b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=jWgkwgfBD1+tHUCOkIKFWyMLrIoFRnNCeVp68JF8lTw=;
-        b=BUVPATAqZawD6Ha5mbfzj2LDvZFprW9spaYMcRAshkEpDRXnp0WO3Qp/lx+FLXAocl
-         r0NlcKtfir336riLHmWi7kPaAtVuF6yAqveDECKJrhBDEdgqJ5CQaC/HkE8R1OMMzOcc
-         Hjrhp6B34bS5/o2eT7hgcOVOLnoc1aGtgY0DX6jI10Vxdrb3SPhWj1EPNjVp5ss2dZTi
-         xk4UNstZeyimE1WQj61VDmAw8RDAXmdSHB0HmCSYLNpH2lQbC4OcXR9guPh8DM8eQwz9
-         jmFJe5Hg6o+8OuOm0FW9GpIrik9yN+sotk+eDuSwZmNsRtNuqyM3IbJ+FqvLSonZX7ch
-         IHag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=jWgkwgfBD1+tHUCOkIKFWyMLrIoFRnNCeVp68JF8lTw=;
-        b=LdZqf4TPKn5htZSXccqPUyJi8Sdew65tBM2ITa3oY4Q9rG5eo4aKCP9ZQ2eqzNWFzY
-         TWDJUoGEz3MOkLbModQcDF4+iRjYT+ASNAe0WhOjxuAjMYkLI9czZhfdeo9ohSXddU8V
-         z+fk96KfmKQVpRU6ZYqTvD5/7yjfGSlGvBfWkpqHGEwyLYPG0T+0/maSeaS2zzM8MX68
-         OZclBw7ezjGr33x3gBH/934hjCkRj3VoIb1+n33VeCpX0D13cXphdJSTtLNaAtXJTTRg
-         rgsFm6AuVYKg+9KMDTEJ5f8WjhKgsc2p5Ir2gDTiBK/PfWls3nwH2NctSdeTZIET69FI
-         dx1w==
-X-Gm-Message-State: ACgBeo1DhR3F8y/sK5rE6S4peUvmaYcpOpVCi+QcSZpZsyi82EBoa3ST
-        IwRVmHpmg9Yx+oo9TY2dRed58A5i2txEbzaJP6zNrGmLTEE=
-X-Google-Smtp-Source: AA6agR4ToJGdZDWJQc0dNFkx/4YlVB7nnr3hnS8aYKVz1xUs2QQ23S3v2xlSRwhhYNYiW2uzJgjfVqWVf4b+si1Joo8=
-X-Received: by 2002:a0d:fb86:0:b0:335:cdab:1a58 with SMTP id
- l128-20020a0dfb86000000b00335cdab1a58mr22641009ywf.270.1663004991520; Mon, 12
- Sep 2022 10:49:51 -0700 (PDT)
+        Mon, 12 Sep 2022 13:51:16 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA1620180;
+        Mon, 12 Sep 2022 10:51:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Og9mO7hQFjaDl6RUBoeJ+tEe42J8ChbIPmIme2tn775EsOJjvCGLhcfFMPX1E4pOrlxBCqE4ZGJHZWHsxGyaxGKSDyMcqUV/I0mS1BZJWDX8H9MwqbQsTjXQVAzmnBROBM1A4DA1sdTGdqakeQrBEiexDny3fiNLR+fKrHfNbvO38Ith0rPhTzDIvICCsPemaLbjwjCmQxuDyXbYdELEO27r+T/KoQ3Ag+FIGXc3pIfrNKalstsTkE8dbGio3qeIaqsA+5kGrnqqh1VhUBQ25Y2HXHPKPJIijJRRIFFiW6lacQQji3pollPCpjBGahpHZdMj4NlUqKzKMLjSw//Xgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y1rYEA0wToTLOz1wurSJMr3voKK79USIQen3JOPEz9M=;
+ b=cLSMZDQqw9SSJJvL5ENBXFBMx4AL42xWc5aW4MWVEhocUDd2Gs4lsjGPjSRqqfRJ18upLSY6Zwj1SpxHidQomtZdsTv+56i37jpabDmOFAwj7HKzIPmJIWGa24+eUlPOKsT98EGDboz4OiDt88MxuHZE0P224503Z6805ULavlVCB5ipAy7XvR+18a24/UXWTZp6GRWmd/ArL9h+SndQInHp86UhmgiwlHumsjeMqM9nkHeAucbdMbGKAWcUxZudG2h6Y4DVi2z2QT+yA6hnYJVcumJYhzuRGJL4vz424AQQecbcFTZJDnm7y/IBAuXOKnZfccooF6ZFpE2nGtUxYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y1rYEA0wToTLOz1wurSJMr3voKK79USIQen3JOPEz9M=;
+ b=CBscDcr1MdYo16EVsIiPfFhu4L4kBL378AeagthYJxGMOrUxWFlTrJttXo1ImGCG93OGAigGZXz28GxVki/qO/u4KdB70PECbq2IMncN54RG2AKKh1jLii53pBRCY1qv2poXM6h4tkrL475KRqnjtkSvy4vH7mo9+5H70NQctVs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PAXPR04MB8687.eurprd04.prod.outlook.com (2603:10a6:102:21e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
+ 2022 17:51:12 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 17:51:11 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        George McCollister <george.mccollister@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH net-next 0/3] Remove label = "cpu" from DSA dt-bindings
+Date:   Mon, 12 Sep 2022 20:50:55 +0300
+Message-Id: <20220912175058.280386-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BE0P281CA0002.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:a::12) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Tue, 13 Sep 2022 01:49:40 +0800
-Message-ID: <CAFcO6XOSwwe+4H5cCEdgj6KD+QutNMZA89rWXYvbQCsREqFqtQ@mail.gmail.com>
-Subject: A divide error bug in framebuffer_check
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PAXPR04MB8687:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecfe269f-9037-47d0-bd95-08da94e760ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lnXG3TE984kLVhJSVmeEpNsq1cbQp3uBPU4URqJ+1e1BrMBY1nL5x0jGAln+RM1/z7OsmFHdbSBT0hKnof7TFX0V1wiWHclqv52gGCR/7oOW1xHetf/WbbdmdjpFhwP4nn2Mw+rbrGB+YJNdZfMY0q7tdCHcC7TXjjKzuoAm44n9IJ+ySafAZv97dm98csa2MnVy+WbIG0Tqes1M2hHfLoVRIvf2JK1iuG9oDuK+Xm1X4QsERQ6nKkqCc4Zxlud1aG8gpwMPhlx0QuLJkN3vnk6q9QVmALud4PMJchvqKk+5ffieQkd6Hwac0fkaAn/QPMqLbGuurxq/d6fw2NN8HP3d9mW9Hmfgi4YsYvTaMUxs72QoBLiNtGtqriVs3sKxngpadMWkzXzA0pZJCN/wAlPJXnD5EEeCFXKOKjp0b2Rj+l2Hfn3fY+guyQgdtks3RYX/5qzrvRfpKmF0yMZ947T8geuYBcSZ14jbHxCIvupoavdzJQ0GxecMAZQC8D2z3kavijUo+V36G2E3q65MWmqxEAdmPjVnDzQE36HI712fN5ZqvGifDcz38q98QWjndu2mvhvCAkizHVg4Mx3do+NmJNxYfxmRby+RQkAFH6If3JUW23YxXx5dFYQu5+bMmiR8KR1nq3i4khKu5c7hV8YxYrdUrKXCGHyRwe1S29cFa2uAmXswfswEGk9Rjc/b7zNwZp5Ft3CtbPWPH7CVhVK6KDQpRKrt8fMLvUn5nxER9RwWQ3MxxqZ2NyQldLcIC3MaLbGMOk5ofrbBzF39PQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(6512007)(83380400001)(186003)(1076003)(6486002)(26005)(5660300002)(8936002)(6506007)(7406005)(52116002)(86362001)(41300700001)(478600001)(6666004)(2906002)(8676002)(38100700002)(2616005)(44832011)(54906003)(66946007)(38350700002)(66556008)(36756003)(7416002)(316002)(4326008)(66476007)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vkUP/bbzW9k5puzhgIQJRMzEqIx5O73QGIC+9lzBWFput1DqSQ9o5nosAIHg?=
+ =?us-ascii?Q?lOpwDAyPkwnUWYsBmbl9uaQKkY10JgawPuOrZhIrT+i6iUJJfzJWSLDDzleU?=
+ =?us-ascii?Q?PY4GsvhB4QjJN5kTFZ0C/IfVZ81TSK23fABtvOyPqk7BmFjcCZq2quIpyJ66?=
+ =?us-ascii?Q?bPIUPhSGivUysBsiUhTObTKeSTJl8j3H6VA2F2LVTBnjFEAvnSAigUlnjRTN?=
+ =?us-ascii?Q?84mtdHHfeJrT469ujNiV0sCXClSkKoUZtG1RodrXn3fKaP9kL04U7EBxvwzt?=
+ =?us-ascii?Q?hyh9clDaTHs64+yrY8OKdJ8ogzTGlkjKCV2wMrniXDzR2hubyqAkUcZEcmTR?=
+ =?us-ascii?Q?J/OOzvqiXyBC3hSvSul6xQB0JVdEnTu8C3VJbQzUE2TeThJoeIyKQMcVhV9r?=
+ =?us-ascii?Q?86UR2N5njuUrVLC+eOVkJxS8VSLkA1YtmdtKie3uBpg1kZJ/EWKx9b25mwnp?=
+ =?us-ascii?Q?VDFpohWv9Qy7b+LLmV2Y0ZpRmJ9RDuLqfzFmGwWyhCPBC6vtHurAVcMiXxHw?=
+ =?us-ascii?Q?ePEOVnKpHLTEzrkmx4QTXmJ3w2J1OJMstz6tOKq0kAeSIzG7gf7scT+bqeHl?=
+ =?us-ascii?Q?OFnzftXEUXqYe78t+a561G+6Ev+Th7AquR3ibE94x12laG5THXm4L/SvUWDc?=
+ =?us-ascii?Q?v4eeQ3k+Ekis/xUaTYyZn+90YPuWs8lHAsCb93W2Sn78MYYFA+tufW7hMWQ7?=
+ =?us-ascii?Q?VEEsEMYVx+n2soOrQEduFL/cuVRpZt26NrWrvzbw0+Q2ItLtrI+dcum0rzfD?=
+ =?us-ascii?Q?cJuw7Ql+quYj7BUKXUiQugCvAVvQQvlfaxg+EmwuZ01E5LYWAiLHrVHSCeQy?=
+ =?us-ascii?Q?u0UTRwQAqKbD9iYd5yfNvr5l11Mb50/C+GuvVJYuYVkqBd+nFKAujPCkYynA?=
+ =?us-ascii?Q?n9t22UU0zky8QPM7XUn+BzhVLNbOIM3Al6zDOQIsGny97xAKDU4hWI2lEKOl?=
+ =?us-ascii?Q?NsYIqR+J1NyNsR8QlYYPgFoAqAFJW6yM8kS5w66J3yF3Id3Jy5xXbx3/e8Gd?=
+ =?us-ascii?Q?icFKN5S4busagQX2v2VqZZySDILZVo2I3aO9xdTod7amOGeMALzr/fmFCT1C?=
+ =?us-ascii?Q?jwNO+24ovFGTUrRjU2/AsvI0XV+AJMOQH4qCToPYDG//29vRKS1nocUPzJQw?=
+ =?us-ascii?Q?5wl9wE2iMf8J4EWfPdcqQpvG4dFRpX69J5o7Tst6o0Us5OGbeSt3Ephb5tKP?=
+ =?us-ascii?Q?pPhbAeW4sMpTnb45GbwUEFPzsi8NWc/jNRTD4VduKvcY5VRB87CX9P/Ak4pN?=
+ =?us-ascii?Q?2dan4p379bA5Cjl39SHpo/EqokQ1cnHJg1K+SdBO7snBZ6lYgRhRATJX0lrH?=
+ =?us-ascii?Q?r8BsB+HGjJH0vLi++qlPeabGWNP5mTqcLBvuxB+lZ5JAq6cyT1JwFixWQ4Mu?=
+ =?us-ascii?Q?J4lELFCBxPIlLd4mhHvM+0VeMo5i/Ikd5D8tX+NU4NzycaUh9UOgk6OyBlFM?=
+ =?us-ascii?Q?+yd7D7FircLo20GyvXbF+Q1ekY3T224OAMiCjaW95TuqThCaqeh/DFgJeD/0?=
+ =?us-ascii?Q?EL5rM5N+UjNkJ6VGpff186yvXC/yJkD0VRBNc3bm48GyEq9xHJpJctQjOFy6?=
+ =?us-ascii?Q?fSECv3WaqZgk+wn+XAqkGRgOXXc6J0LkZK/ZGr9ZIaj4L5HJ4NFVyOn4qG+H?=
+ =?us-ascii?Q?eQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecfe269f-9037-47d0-bd95-08da94e760ec
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 17:51:11.2549
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lqNAZROk92iOOZIJLNrxXgXENB3p7PMnraE2hio9+B0Jh1aDEuhYXaWgI+WlpJwy9c7XHmrPDUj7Q1Cys8rUCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8687
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,159 +137,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, there is a divide error bug in framebuffer_check in
-drivers/gpu/drm/drm_framebuffer.c in the latest kernel.
-we can trigger it via drm_mode_addfb2 IOCTL.
-The call trace is drm_mode_addfb2 -> drm_internal_framebuffer_create
-->  framebuffer_check.
-let us see code below:
-```
-static int framebuffer_check(struct drm_device *dev,
-     const struct drm_mode_fb_cmd2 *r)
-{
-const struct drm_format_info *info;
-int i;
+As explained in more detail in patch 1/3, label = "cpu" is not part of
+DSA's device tree bindings, yet we have some checks in the dt-schema for
+mt7530 which are written as if it was.
 
-/* check if the format is supported at all */
-if (!__drm_format_info(r->pixel_format)) {
-DRM_DEBUG_KMS("bad framebuffer format %p4cc\n",
-      &r->pixel_format);
-return -EINVAL;
-}
+Reformulate those checks, and remove all occurrences of this seemingly
+used, but actually unused, property from the binding examples.
 
-if (r->width == 0) {
-DRM_DEBUG_KMS("bad framebuffer width %u\n", r->width);
-return -EINVAL;
-}
+Vladimir Oltean (3):
+  dt-bindings: net: dsa: mt7530: replace label = "cpu" with proper
+    checks
+  dt-bindings: net: dsa: mt7530: stop requiring phy-mode on CPU ports
+  dt-bindings: net: dsa: remove label = "cpu" from examples
 
-if (r->height == 0) {
-DRM_DEBUG_KMS("bad framebuffer height %u\n", r->height);
-return -EINVAL;
-}
-
-/* now let the driver pick its own format info */
-info = drm_get_format_info(dev, r);   //// [1] get info data
-
-for (i = 0; i < info->num_planes; i++) {
-unsigned int width = fb_plane_width(r->width, info, i);   ///  [2]
-unsigned int height = fb_plane_height(r->height, info, i); /// [3]
-unsigned int block_size = info->char_per_block[i];
-u64 min_pitch = drm_format_info_min_pitch(info, i, width);
- ......
-```
-the drm_get_format_info gets info data and would call
-__drm_format_info.see code below:
-__drm_format_info
-````
-const struct drm_format_info *__drm_format_info(u32 format)
-{
-static const struct drm_format_info formats[] = {
- .....
-{ .format = DRM_FORMAT_Q410, .depth = 0,
-  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-  .vsub = 0, .is_yuv = true },
-{ .format = DRM_FORMAT_Q401, .depth = 0,
-  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-  .vsub = 0, .is_yuv = true },
-......
-}
-unsigned int i;
-
-for (i = 0; i < ARRAY_SIZE(formats); ++i) {
-if (formats[i].format == format)
-return &formats[i];
-}
-
-return NULL;
-}
-```
-It would return a defined format.if format is that:
-```
-{ .format = DRM_FORMAT_Q410, .depth = 0,
-  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-  .vsub = 0, .is_yuv = true },
-{ .format = DRM_FORMAT_Q401, .depth = 0,
-  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-  .vsub = 0, .is_yuv = true },
-```
-we can see format.hsub and format.vsub all are NULL.
-
-[2] and [3], the fb_plane_width/height would process  info data, see
-fb_plane_width code below:
-```
-static int fb_plane_width(int width,
-  const struct drm_format_info *format, int plane)
-{
-if (plane == 0)
-return width;
-
-return DIV_ROUND_UP(width, format->hsub); //// [4]
-}
-```
-[4] it would call DIV_ROUND_UP, but format->hsub is NULL.
-
-##crash log
-[  211.845762][ T4677] divide error: 0000 [#1] PREEMPT SMP
-[  211.846194][ T4677] CPU: 1 PID: 4677 Comm: drm_internal_fr Not
-tainted 6.0.0-rc5 #15
-[  211.846732][ T4677] Hardware name: QEMU Standard PC (i440FX + PIIX,
-1996), BIOS 1.13.0-1ubuntu1 04/01/2014
-[  211.847396][ T4677] RIP: 0010:drm_internal_framebuffer_create+0x151/0x6a0
-[  211.847896][ T4677] Code: 00 0f b6 53 05 41 83 c5 01 41 39 d5 0f 8d
-10 02 00 00 45 85 ed 45 8b 7c 24 04 0f 84 6b 01 00 00 0f b6 4b 12 41
-8d 44 0f ff 99 <f7> f9 0f b1
-[  211.849390][ T4677] RSP: 0018:ffffc9000aaafd18 EFLAGS: 00010202
-[  211.849800][ T4677] RAX: 000000000000001e RBX: ffffffff83841768
-RCX: 0000000000000000
-[  211.850305][ T4677] RDX: 0000000000000000 RSI: 00000000ffffffff
-RDI: 00000000ffffffff
-[  211.850814][ T4677] RBP: 0000000000000000 R08: 0000000000000000
-R09: 0000000000000002
-[  211.851310][ T4677] R10: 0000000000000054 R11: 000000000007e2a0
-R12: ffffc9000aaafe50
-[  211.851810][ T4677] R13: 0000000000000001 R14: 0000000000001808
-R15: 000000000000001f
-[  211.852307][ T4677] FS:  0000000000dd7880(0000)
-GS:ffff88807ec00000(0000) knlGS:0000000000000000
-[  211.852885][ T4677] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  211.853277][ T4677] CR2: 0000000020000000 CR3: 0000000047fba000
-CR4: 00000000000006e0
-[  211.853783][ T4677] Call Trace:
-[  211.854027][ T4677]  <TASK>
-[  211.854244][ T4677]  ? find_held_lock+0x2b/0x80
-[  211.854538][ T4677]  drm_mode_addfb2+0x2f/0xd0
-[  211.854835][ T4677]  ? drm_mode_addfb_ioctl+0x10/0x10
-[  211.855210][ T4677]  drm_ioctl_kernel+0xac/0x140
-[  211.855501][ T4677]  drm_ioctl+0x21f/0x3e0
-[  211.855753][ T4677]  ? drm_mode_addfb_ioctl+0x10/0x10
-[  211.856058][ T4677]  __x64_sys_ioctl+0x7b/0xb0
-[  211.856388][ T4677]  do_syscall_64+0x35/0xb0
-[  211.856662][ T4677]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  211.857018][ T4677] RIP: 0033:0x44dcbd
-[  211.857286][ T4677] Code: 28 c3 e8 36 29 00 00 66 0f 1f 44 00 00 f3
-0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
-4c 24 08 0f 05 <48> 3d 01 f8
-[  211.858603][ T4677] RSP: 002b:00007ffeee92f738 EFLAGS: 00000213
-ORIG_RAX: 0000000000000010
-[  211.859179][ T4677] RAX: ffffffffffffffda RBX: 0000000000400530
-RCX: 000000000044dcbd
-[  211.859705][ T4677] RDX: 0000000020000000 RSI: 00000000c06864b8
-RDI: 0000000000000003
-[  211.860211][ T4677] RBP: 00007ffeee92f750 R08: 0000000000000000
-R09: 0000000000000000
-[  211.860708][ T4677] R10: 000000000000ffff R11: 0000000000000213
-R12: 0000000000403120
-[  211.861206][ T4677] R13: 0000000000000000 R14: 00000000004c5018
-R15: 0000000000000000
-
-
-Regards,
- butt3rflyh4ck.
-
+ .../devicetree/bindings/net/dsa/ar9331.txt    |  1 -
+ .../bindings/net/dsa/arrow,xrs700x.yaml       |  1 -
+ .../devicetree/bindings/net/dsa/brcm,b53.yaml |  2 --
+ .../net/dsa/hirschmann,hellcreek.yaml         |  1 -
+ .../devicetree/bindings/net/dsa/lan9303.txt   |  2 --
+ .../bindings/net/dsa/lantiq-gswip.txt         |  1 -
+ .../bindings/net/dsa/mediatek,mt7530.yaml     | 22 +++----------------
+ .../bindings/net/dsa/microchip,ksz.yaml       |  2 --
+ .../devicetree/bindings/net/dsa/qca8k.yaml    |  3 ---
+ .../devicetree/bindings/net/dsa/realtek.yaml  |  2 --
+ .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  1 -
+ .../bindings/net/dsa/vitesse,vsc73xx.txt      |  2 --
+ 12 files changed, 3 insertions(+), 37 deletions(-)
 
 -- 
-Active Defense Lab of Venustech
+2.34.1
+
