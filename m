@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08A25B5C1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609C85B5C20
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiILOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S229722AbiILOVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiILOUv (ORCPT
+        with ESMTP id S230114AbiILOVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:20:51 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA3224F2E;
-        Mon, 12 Sep 2022 07:20:50 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1278a61bd57so23748605fac.7;
-        Mon, 12 Sep 2022 07:20:50 -0700 (PDT)
+        Mon, 12 Sep 2022 10:21:46 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1582F590
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:21:45 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id t184so13036116yba.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lJ9faA7e8zJIwcDlhdQh8adJq8hVZtHCvAVg3S21zOk=;
+        b=GMffjmBINzXW4wKiEt9sAB0fRO0xnMraNQV1JWwmez047uFqfA1mkyrmp25vIHAyw4
+         8SPTW6iBqa+SCf5NyBp7QAUeW9WMCv6C9dBnxnBKzL0YZ5mW21C+IUJAzjQdY+34TLRN
+         bwxEMAHenjwdoovJzR8AnGcTNUCkxxnlpZ2lxzeF6Mmi4VTNFah/XRi39po+vk01eUC9
+         hP4cqRaDgK5rXuoJOwB8HmQMQneUC3O8Lxrb6mdy4OCovWyEMrvOqQyCAnFgviJ9riju
+         9my4BZpc2i4JKwyCh2km94KQZ6VG2RLxyuoycJuRwgViisM8QjGNgLP8BTaI4JxAbomT
+         tDxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=yaLHWCDdqtnwZ0Y8klbSULWFVxiLtCf1mt0pn0PChYk=;
-        b=UevkIKMo1qHJu45rDkYUL+9nvSVVjFBMhOEwTnnlUrVJKGQ09XIZHYiNOHQk0E+gd4
-         98mePrVI2KdDJKYSmRSxt7zWOYn8/QdUd/nDGeIz7DaOK8DXqVen06Xdh5K+tTqcyivJ
-         DCanw9IsSzUbujH4H9TkPdyDs1NRkKhJefq+YkVThYwJzghM5vCd+XynWgdxH7wqIFc1
-         uzK+DBFsHI8ohJDbJiYd5OYm+J5hy3uh2MKhDxqeoxpPNdSW+2qfrYTRgAE+YTefihl+
-         F/Ths5ou0Q71pLcojsHP8BxiUdH4MKDvExNlUJ9sFny+/OWUDURpvrhC8eK+ML1MSNZQ
-         oDqQ==
-X-Gm-Message-State: ACgBeo3jRASvVZqQOKAQ+hjhV262w/lawhpf8rVJSQeX1Qg7qAp/KKYM
-        Cbxi3JbsylCTSFeDlbkoow==
-X-Google-Smtp-Source: AA6agR5AHT1bcQ+tAGaGp2dlEU06tO9vze/HJbIBemYiF+fhs+xz3H+jrsIpHfV/9LzANynhLoow/g==
-X-Received: by 2002:a05:6808:2387:b0:347:c6d4:503d with SMTP id bp7-20020a056808238700b00347c6d4503dmr8886781oib.142.1662992449774;
-        Mon, 12 Sep 2022 07:20:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h20-20020a9d6414000000b0061d31170573sm4681362otl.20.2022.09.12.07.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 07:20:49 -0700 (PDT)
-Received: (nullmailer pid 1186216 invoked by uid 1000);
-        Mon, 12 Sep 2022 14:20:48 -0000
-Date:   Mon, 12 Sep 2022 09:20:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v2 02/15] dt-bindings: memory: snps: Extend schema with
- IRQs/resets/clocks props
-Message-ID: <20220912142048.GB1170702-robh@kernel.org>
-References: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
- <20220910195659.11843-3-Sergey.Semin@baikalelectronics.ru>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lJ9faA7e8zJIwcDlhdQh8adJq8hVZtHCvAVg3S21zOk=;
+        b=Cdr+jSZO1VStDmuDFWi35mZQE6l3X99hXxID1SKc1wXdOswpgrFFOff6Tk9tfJS68y
+         uHLLnOJSSHmqEICHad2J6gO2pSCmZ0mdUSQVLHxg+xOgDlRaFu46UyadvpaOhCLaiCo/
+         EQ7JT7m0mKmNa2GaaevgJt+rTr7lD6eCnR8uhXl6fmYKZV5jZnjh7aTLXkTZFb+zRyDk
+         MWuqhoqh8A8RlW7FidOVA3K1YRRc4mts7xseIIOkHOO0HnX+WM8V/M5tHo2lOwaiqwZU
+         kxMQstwkLc8NhlleUb8CpGp5u9P1ThqgXV3XOQMT9Z+eS0Nct4cdMkDgknsX21gHJUwJ
+         RmsQ==
+X-Gm-Message-State: ACgBeo1cdh0xXRU+iHScjkn/ncnKyYU2K+MX2lJ6qoip91OSwh9qWWt6
+        GduqmwvfhlE0VX9+0FDq/08an3M4APOc5UkdeEAEWw==
+X-Google-Smtp-Source: AA6agR5NA4wc1j6Ej5esHmZ2f6KA36eCWZgWzp7qp5vkridF/7amLEACIsBscIlhpDFCKa4NdZ3TlCSVCw9MxieW4KE=
+X-Received: by 2002:a25:3b04:0:b0:695:dc29:c206 with SMTP id
+ i4-20020a253b04000000b00695dc29c206mr21802092yba.523.1662992504813; Mon, 12
+ Sep 2022 07:21:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910195659.11843-3-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220912053755.156704-1-senozhatsky@chromium.org>
+In-Reply-To: <20220912053755.156704-1-senozhatsky@chromium.org>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Mon, 12 Sep 2022 10:20:49 -0400
+Message-ID: <CADyq12yWFMyTRCQmmGoLg7epvXRWu-XqKMS4N2vEomvvuWNpBA@mail.gmail.com>
+Subject: Re: [PATCH] zram: do not waste zram_table_entry flags bits
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 10:56:46PM +0300, Serge Semin wrote:
-> First of all the DW uMCTL2 DDRC IP-core supports the individual IRQ lines
-> for each standard event: ECC Corrected Error, ECC Uncorrected Error, ECC
-> Address Protection, Scrubber-Done signal, DFI Parity/CRC Error. It's
-> possible that the platform engineers merge them up in the IRQ controller
-> level. So let's add both configuration support to the DT-schema.
-> 
-> Secondly the DW uMCTL2 DDRC IP-core can have clock sources like APB
-> reference clock, AXI-ports clock, main DDRC core reference clock and
-> Scrubber low-power clock. In addition to that each clock domain can have a
-> dedicated reset signal. Let's add the properties for at least the denoted
-> clock sources and the corresponding reset controls.
-> 
-> Note the IRQs and the phandles order is deliberately not fixed since some
-> of the sources may be absent depending on the IP-core synthesize
-> parameters and the particular platform setups.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
+On Mon, Sep 12, 2022 at 1:38 AM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> zram_table_entry::flags stores object size in the lower bits and
+> zram pageflags in the upper bits. However, for some reason, we
+> use 24 lower bits, while maximum zram object size is PAGE_SIZE,
+> which requires PAGE_SHIFT bits (up to 16 on arm64). This wastes
+> 24 - PAGE_SHIFT bits that we can use for additional zram pageflags
+> instead.
+>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 > ---
-> 
-> Changelog v2:
-> - Replace "snps,ddrc-3.80a" compatible string with "snps,dw-umctl2-ddrc"
->   in the example.
-> - Move unrelated changes in to the dedicated patches. (@Krzysztof)
-> - Use the IRQ macros in the example. (@Krzysztof)
-> ---
->  .../snps,dw-umctl2-ddrc.yaml                  | 61 ++++++++++++++++++-
->  1 file changed, 60 insertions(+), 1 deletion(-)
+>  drivers/block/zram/zram_drv.h | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+> index b4eecef2a11f..138be8326866 100644
+> --- a/drivers/block/zram/zram_drv.h
+> +++ b/drivers/block/zram/zram_drv.h
+> @@ -30,16 +30,13 @@
+>
+>
+>  /*
+> - * The lower ZRAM_FLAG_SHIFT bits of table.flags is for
+> - * object size (excluding header), the higher bits is for
+> - * zram_pageflags.
+> - *
+> - * zram is mainly used for memory efficiency so we want to keep memory
+> - * footprint small so we can squeeze size and flags into a field.
+> + * ZRAM is mainly used for memory efficiency so we want to keep memory
+> + * footprint small and thus squeeze size and flags into a flags member.
+>   * The lower ZRAM_FLAG_SHIFT bits is for object size (excluding header),
+> - * the higher bits is for zram_pageflags.
+> + * which cannot be larger than PAGE_SIZE (requiring PAGE_SHIFT bits),
+> + * the higher bits are for zram_pageflags.
+>   */
+> -#define ZRAM_FLAG_SHIFT 24
+> +#define ZRAM_FLAG_SHIFT (PAGE_SHIFT + 1)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Why not just hard code 16 with an explanation that it cannot be
+increased further using the analysis you did in the other thread? It's
+going to be tricky to reason about how many free flag bits actually
+remain with PAGE_SHIFT across all architectures, especially given we
+have no architecture specific flags.
+
+>
+>  /* Flags for zram pages (table[page_no].flags) */
+>  enum zram_pageflags {
+> --
+> 2.37.2.789.g6183377224-goog
+>
