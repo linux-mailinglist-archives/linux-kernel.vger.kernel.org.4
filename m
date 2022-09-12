@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B875B58AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206E75B58AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiILKrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        id S229662AbiILKqt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Sep 2022 06:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiILKq6 (ORCPT
+        with ESMTP id S229531AbiILKqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:46:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2BA3134E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:46:56 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXgxc-0008D1-QD; Mon, 12 Sep 2022 12:46:40 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXgxW-000HXz-Og; Mon, 12 Sep 2022 12:46:33 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXgxU-000MJM-Il; Mon, 12 Sep 2022 12:46:32 +0200
-Date:   Mon, 12 Sep 2022 12:46:31 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Denys Zagorui <dzagorui@cisco.com>, Meng.Li@windriver.com,
-        lars@metafoo.de, Michael.Hennerich@analog.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: ltc2497: Fix reading conversion results
-Message-ID: <20220912104631.zysrv2qqxvsjfbxc@pengutronix.de>
-References: <20220815091647.1523532-1-dzagorui@cisco.com>
- <20220820130648.5b9bc66f@jic23-huawei>
+        Mon, 12 Sep 2022 06:46:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0B31EEB;
+        Mon, 12 Sep 2022 03:46:41 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MR3Cw4VPcz67NNV;
+        Mon, 12 Sep 2022 18:45:48 +0800 (CST)
+Received: from lhrpeml100003.china.huawei.com (7.191.160.210) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 12:46:39 +0200
+Received: from lhrpeml500002.china.huawei.com (7.191.160.78) by
+ lhrpeml100003.china.huawei.com (7.191.160.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 11:46:39 +0100
+Received: from lhrpeml500002.china.huawei.com ([7.191.160.78]) by
+ lhrpeml500002.china.huawei.com ([7.191.160.78]) with mapi id 15.01.2375.031;
+ Mon, 12 Sep 2022 11:46:38 +0100
+From:   Jonas Oberhauser <jonas.oberhauser@huawei.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
+CC:     Boqun Feng <boqun.feng@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
+ Models"
+Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAuR04A==
+Date:   Mon, 12 Sep 2022 10:46:38 +0000
+Message-ID: <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
+ <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
+ <674d0fda790d4650899e2fcf43894053@huawei.com>
+ <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
+ <YxynQmEL6e194Wuw@rowland.harvard.edu>
+In-Reply-To: <YxynQmEL6e194Wuw@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.45.157.136]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ezvf3oge3bxykhco"
-Content-Disposition: inline
-In-Reply-To: <20220820130648.5b9bc66f@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alan,
 
---ezvf3oge3bxykhco
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for the confusion.
 
-On Sat, Aug 20, 2022 at 01:06:48PM +0100, Jonathan Cameron wrote:
-> On Mon, 15 Aug 2022 09:16:47 +0000
-> Denys Zagorui <dzagorui@cisco.com> wrote:
->=20
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > After the result of the previous conversion is read the chip
-> > automatically starts a new conversion and doesn't accept new i2c
-> > transfers until this conversion is completed which makes the function
-> > return failure.
->=20
-> That's rather nasty.
->=20
-> Could we add a cheeky sleep in the other path to ensure there is always
-> time for the conversion to be done?  Not ideal, but might ensure
-> there isn't a known problem path without introducing much complexity.
+>  [...] it's certainly true (in all of these
+models) than for any finite number N, there is a feasible execution in which a loop runs for more than N iterations before the termination condition eventually becomes true.
+	
+Indeed; but more interestingly, as the Theorem 5.3 in "making weak memory models fair" states, under certain conditions it suffices to look at graphs where N=1 to decide whether a loop can run forever (despite all writes propagating to all cores eventually) or will always terminate.
 
-FTR: While the patch was originally authored by me, I don't currently
-have access to a machine with that chip. So currently there will be no
-incentive on my side to address this feedback.
+And since herd can generate all such graphs, herd could be extended to make that decision and output it, just like many other tools already do.
 
-Best regards
-Uwe
+To illuminate this on an example, consider the program sent by Peter earlier:
+	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Without the assumption that fr is prefix finite, the graph with infinitely many reads of thread 2 all reading the initial value (and hence being fr-before the store foo=1) would be allowed. However, the tools used to analyze the qspinlock all assume that fr is prefix finite, and hence that such a graph with infinitely many fr-before events does not exist. Because of that, all of the tools will say that this loop always terminates.
 
---ezvf3oge3bxykhco
-Content-Type: application/pgp-signature; name="signature.asc"
+However, if you change the code into the following:
 
------BEGIN PGP SIGNATURE-----
+	WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); while (!READ_ONCE(foo));
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMfDgQACgkQwfwUeK3K
-7AmQ6gf+NR1FwVMFUWi//G/dOvI5TtKnE0cBWo/3lgdWKrl4gI23fUrjPzLtj6NL
-gFNMKWNV9IXtcAlgqsupSgijpP1Z7Ekyy+J8tEmFEoxpSVwLD4f+teYSQfSsuufa
-GougDEpKASI4zg+IICkN1d7aqKb6oDbGEZgZyO1AxwveJka7h+Fs58m6dOd1F0LE
-VtxTJtNeQa5ZiNJBu51a6xKatwM/bksdyjDYhLbC7bH6pGZWxeHBQBt5o/3fNBVi
-L7gqYWoAhSvUMooGJaTOlJjtxsGvNBL1l4krxpsvhkjDWclfa+d3D2IUKklTWxGh
-y3WVQ5YzOb9nDZachCn/42qSkaE29Q==
-=4MJU
------END PGP SIGNATURE-----
+then even under the assumption of fr-prefix-finiteness, the coherence order in which WRITE_ONCE(foo, 1); is overwritten by WRITE_ONCE(foo, 0); of thread 2 would lead to non-terminating behaviors, and these are detected by those tools. Furthermore, if we synchronize the two stores as follows:
 
---ezvf3oge3bxykhco--
+	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); smp_store_release(&bar,1); while (!READ_ONCE(foo));
+
+then the graphs with that co become prohibited as they all have hb cycles, and the tools again will not detect any liveness violations. But if we go further and relax the release barrier as below
+
+
+	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); WRITE_ONCE(bar,1); while (!READ_ONCE(foo));
+
+then the hb cycle disappears, and the coherence order in which foo=0 overwrites foo=1 becomes allowed. Again, the tools will detect this and state that thread 2 could be stuck in its while loop forever.
+
+In each of these cases, the decision can be made by looking for a graph in which the loop is executed for one iteration which reads from foo=0, and checking whether that store is co-maximal. So in some sense this is all that is needed to express the idea that a program can run forever, even though only in some very limited (but common) circumstances, namely that the loop iteration that repeats forever does not create modifications to state that are observed outside the loop. Luckily this is a very common case, so these checks have proven quite useful in practice.
+
+The same kind of check could be implemented in herd together with either the implicit assumption that fr is prefix finite (like in other tools) or with some special syntax like
+
+prefix-finite fr | co as fairness
+
+which hopefully clears up the question below:
+
+> > From an engineering perspective, I think the only issue is that cat
+> > *currently* does not have any syntax for this,
+
+> Syntax for what?  The difference between wmb and mb?
+> [...]
+
+
+Thanks for your patience and hoping I explained it more clearly,
+
+jonas
