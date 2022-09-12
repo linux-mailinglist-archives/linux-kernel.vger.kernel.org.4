@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A145B59F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837095B5A06
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiILMIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S229923AbiILMN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiILMI3 (ORCPT
+        with ESMTP id S229751AbiILMNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:08:29 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B68B93340E;
-        Mon, 12 Sep 2022 05:08:28 -0700 (PDT)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 12 Sep 2022 21:08:28 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 2EBE420584CE;
-        Mon, 12 Sep 2022 21:08:28 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 21:08:28 +0900
-Received: from [10.212.158.44] (unknown [10.212.158.44])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 048DBB62A4;
-        Mon, 12 Sep 2022 21:08:26 +0900 (JST)
-Subject: Re: [PATCH v2 6/8] ARM: dts: uniphier: Add ahci controller and glue
- layer nodes for PXs2
-To:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        Olof Johansson <olof@lixom.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
- <20220912071511.1385-7-hayashi.kunihiko@socionext.com>
- <a8d5db25-9191-4af0-b9e0-77fb75493a7f@www.fastmail.com>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <0a3e5fe1-0099-ef11-29f4-0d3a64ae5e9a@socionext.com>
-Date:   Mon, 12 Sep 2022 21:10:40 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Mon, 12 Sep 2022 08:13:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A0733A0B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662984798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mrkO2o7NLCcYAn3dzHQJOYSP8ki543AiPRGrSsHduoY=;
+        b=XSEnU1qZsv3D0DwtCDA0BurA/dpM5xKoPfaNLexXfmNBnOuUwXnf0zP4nCapzfY7T9tA9U
+        n3lTDwVzPu5jFw6zowvvAzgRVJ5SRxj5waji86GtXLJO6fChJUl+SDuIJ0xmECGEtky08q
+        G5Ot+TPgPEuZ7cdLfLDeaEI8Ga0LguA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-146-fPG4ltTxOjK_xKdfMFGHXQ-1; Mon, 12 Sep 2022 08:13:13 -0400
+X-MC-Unique: fPG4ltTxOjK_xKdfMFGHXQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D7F43C0D848;
+        Mon, 12 Sep 2022 12:13:12 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.57])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 21BFE2166B26;
+        Mon, 12 Sep 2022 12:13:06 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+References: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+        <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
+        <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+        <20220908155605.GD8951@fieldses.org>
+        <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+        <20220908182252.GA18939@fieldses.org>
+        <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+        <20220909154506.GB5674@fieldses.org>
+        <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
+        <20220910145600.GA347@fieldses.org>
+        <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+Date:   Mon, 12 Sep 2022 14:13:05 +0200
+In-Reply-To: <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org> (Jeff
+        Layton's message of "Mon, 12 Sep 2022 07:42:16 -0400")
+Message-ID: <87a67423la.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <a8d5db25-9191-4af0-b9e0-77fb75493a7f@www.fastmail.com>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,65 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+* Jeff Layton:
 
-On 2022/09/12 17:36, Arnd Bergmann wrote:
-> On Mon, Sep 12, 2022, at 9:15 AM, Kunihiko Hayashi wrote:
->> Add ahci controller and glue layer nodes including reset and phy.
->> This supports for PXs2 and the boards without PXs2 vodka board that
->> doesn't implement any SATA connectors.
->>
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> +		ahci: ahci@65600000 {
->> +			compatible = "socionext,uniphier-pxs2-ahci",
->> +				     "generic-ahci";
->> +			status = "disabled";
->> +			reg = <0x65600000 0x10000>;
->> +			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&sys_clk 28>;
->> +			resets = <&sys_rst 28>, <&ahci_rst 0>;
->> +			ports-implemented = <1>;
->> +			phys = <&ahci_phy>;
->> +		};
->> +
->> +		ahci-glue@65700000 {
->> +			compatible = "socionext,uniphier-pxs2-ahci-glue",
->> +				     "simple-mfd";
-> 
-> Here as well, the "ahci-glue" name seems rather unusual for a node
-> name. What does it actually do, and why is this not just part of
-> the sata node?
+> To do this we'd need 2 64-bit fields in the on-disk and in-memory 
+> superblocks for ext4, xfs and btrfs. On the first mount after a crash,
+> the filesystem would need to bump s_version_max by the significant
+> increment (2^40 bits or whatever). On a "clean" mount, it wouldn't need
+> to do that.
+>
+> Would there be a way to ensure that the new s_version_max value has made
+> it to disk? Bumping it by a large value and hoping for the best might be
+> ok for most cases, but there are always outliers, so it might be
+> worthwhile to make an i_version increment wait on that if necessary. 
 
-According to ata/sata-common.yaml, "ahci@65600000" node for generic SATA
-host controller is better expressed as "sata@65600000". I'll fix it.
+How common are unclean shutdowns in practice?  Do ex64/XFS/btrfs keep
+counters in the superblocks for journal replays that can be read easily?
 
-However, "ahci-glue@65700000" is the integration of SATA related functions
-(reset and phy). Maybe "sata-controller" seems to be the best, but
-I couldn't find this usage.
+Several useful i_version applications could be negatively impacted by
+frequent i_version invalidation.
 
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			ranges = <0 0x65700000 0x100>;
->> +
->> +			ahci_rst: reset@0 {
->> +				compatible =
-> "socionext,uniphier-pxs2-ahci-reset";
-> 
-> I think the node name here should be "reset-controller@0".
+Thanks,
+Florian
 
-Yes, I'll fix it.
-
->> +
->> +			ahci_phy: phy@10 {
->> +				compatible =
-> "socionext,uniphier-pxs2-ahci-phy";
-> 
-> and "sata-phy@10" here.
-
-I'll fix it too.
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
