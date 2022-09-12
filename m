@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715795B57A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB33F5B57A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiILJ4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S229608AbiILJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiILJ4b (ORCPT
+        with ESMTP id S229919AbiILJ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:56:31 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F08DBCC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:56:30 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id t5so11866646edc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=B0+OE8VXDoRTxh9i6eriGohbYVJR3cjU3m0gr8M6bQU=;
-        b=kdvGPE8Of/ge0WhsAzI3BcvMQhAQVx75RN70Ut262Bd0Y3yYnZi7xnFEkfhhLXo0l7
-         bKGrlGbIpWb1gj8dwAYucqHPJYmFcfcnWV8LMwBb6RjkgdpYopM4OUgpw0vSwAg7Qb5V
-         Sq7DVuiSXE9+LcYQK508BZH18sqBFyFm1WVbHxmROdxPchBFVZ9DRxN/weMqu+LoWGW4
-         OFQmzleFBpcTwUb/KCZ3F9k3i5Hw/6Yh8anVyyCNzWKv5j4JIop9Gw7ND9yEPDjBtF0m
-         TdIPx5Bs5y+HwKXWy97L35a3199k5mZH/nNYibjkJOwkGVlvjHnyIbuXAlFMfqQhkC9W
-         tPUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=B0+OE8VXDoRTxh9i6eriGohbYVJR3cjU3m0gr8M6bQU=;
-        b=ysJU5aap1Qw4IeXekrZJKCk3yJK1/r29ZYpUj6Gmg+1/q7FsNJ1PKXaev/mTLMyX03
-         eFPjKT4ryODtC6A+uv64HYgK73RDLr/tWIT6Nm8cOMyayFM29+w/koo/xQmFqhmOBJ+N
-         536S40PPHLXd/uLsi9ewTVlL2AAfpEjspBTQK9a56705yzYBlPiw/dRni7XLLdqYAZWz
-         4Y5m8yyiyIJ3Ew6N0q59pkpPq1lkk1Hk6rKgr6lJyJd4xclxdddWwBtedf6JNwbJmMq3
-         oX8KZ90KP7acnfnnACIB07hejDyLAdLFcqxiqCj2X0xMQOE7LYoxRi9RZ16Tf7nXUqru
-         wwQQ==
-X-Gm-Message-State: ACgBeo1WDRMUQxEnZ5+W85q3km28QpsuRqsLH31hk3NjKKRVnXnkQDQt
-        KzCQ+g0Mhoyh1ttnJ8g5lZPMcy457EDZqJ2J9ua9RQ==
-X-Google-Smtp-Source: AA6agR5+RvJMt7gLbYMaWFWPzBly7Pn1NpOVb/B5jQlouqfeTSIiY9yQvRKZxEHDImxz9p+HDxLGR3s+rlAoQFYgTQA=
-X-Received: by 2002:a05:6402:354c:b0:451:d47f:653 with SMTP id
- f12-20020a056402354c00b00451d47f0653mr3272379edd.69.1662976588677; Mon, 12
- Sep 2022 02:56:28 -0700 (PDT)
+        Mon, 12 Sep 2022 05:56:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076C6180;
+        Mon, 12 Sep 2022 02:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662976618; x=1694512618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vkShfX+2NBduVhHbSZwihqpM/Kt1nti7IOAfsl2/4IA=;
+  b=RStD21JQEEjsAmPpU7S500XSa3SjDRb/FfVS6LgHaJ2Nk0Bv0FdNflHu
+   t3HaGZ4QT6Xe3/6NhQVcN/dmBOGejX+j/hQ9h6y0t2mlisvh+iEXW8u2F
+   f0EEDUODGdoKLCWmBRHSTJImkPtZcv2Dowc8TnQL73V7ICJTs9il7dSuO
+   qDJOClth5OpYfLu1snJruaf20i+BMcjNa3mgpBC+iJJn0NspSv+Ss244T
+   y0C3b4slfRAhyUAUOzVAGVZjR2RIsxkLkepnU/FuZIJXPYrKZDqt9b/Hb
+   EScu181OSaCZ2yTug0YIlu3q1jsLBarH/kL+LrGYlUNYVyRvpnZ0tKNan
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="278218266"
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="278218266"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 02:56:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,308,1654585200"; 
+   d="scan'208";a="567105183"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 12 Sep 2022 02:56:40 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXgBD-0002Nm-2I;
+        Mon, 12 Sep 2022 09:56:39 +0000
+Date:   Mon, 12 Sep 2022 17:56:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] kbuild: move -Wundef from KBUILD_CFLAGS to
+ KBUILD_CPPFLAGS
+Message-ID: <202209121730.ipnGRE83-lkp@intel.com>
+References: <20220905083619.672091-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20220909121329.42004-1-brgl@bgdev.pl> <20220909121329.42004-3-brgl@bgdev.pl>
- <YxykorLetCjAls/Z@sol> <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
- <Yx8Bj0+4STpklMc2@sol>
-In-Reply-To: <Yx8Bj0+4STpklMc2@sol>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 12 Sep 2022 11:56:17 +0200
-Message-ID: <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905083619.672091-2-masahiroy@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 11:53 AM Kent Gibson <warthog618@gmail.com> wrote:
->
+Hi Masahiro,
 
-[snip]
+I love your patch! Perhaps something to improve:
 
-> > >
-> > > My knee-jerk reaction here was to make the pid unsigned, as we never
-> > > pass a negative PID.
-> > > Keeping in mind that the existing kernel will return 0 for this field
-> > > (the existing padding), so 0 needs to be excluded from valid PIDs
-> > > anyway.
-> > >
-> > > Andy suggests returning -1 for kernel held lines.
-> > > In that case 0 would mean "old kernel", while -1 would mean "kernel
-> > > held".
-> > >
-> > > As libgpiod will have to convert the 0 to -1 when returning the PID to
-> > > user-space as a pid_t, I'm good with the uAPI using 0 to mean
-> > > "no PID available" for all cases. I'm still open to passing -1 for
-> > > kernel held is there is a use case for it, but I don't see one.
-> > >
-> >
-> > Using -1 sounds good but I've just realized there's a different
-> > problem. A process holding a file descriptor may fork and both the
-> > parent and the child will keep the same file descriptors open. Now
-> > we'll have two processes (with different PIDs) holding the same GPIO
-> > lines (specifically holding a file descriptor to the same anonymous
-> > inode).
-> >
-> > This already poses a problem for this patch as we'd need to return an
-> > array of PIDs which we don't have the space for but also is a
-> > situation which we haven't discussed previously IIRC - two processes
-> > keeping the same GPIO lines requested.
-> >
-> > I don't have any good idea on how to address this yet. One thing off
-> > the top of my head is: close the parent's file descriptor from kernel
-> > space (is it even possible?) on fork() (kind of like the close() on
-> > exec flag).
-> >
-> > I need to think about it more.
-> >
->
-> I thought the O_CLOEXEC was set on the request fds exactly to prevent this
-> case - only one process can hold the request fd.
->
+[auto build test WARNING on masahiroy-kbuild/for-next]
+[also build test WARNING on linus/master v6.0-rc5]
+[cannot apply to next-20220909]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-O_CLOEXEC means "close on exec" not "close on fork". When you fork,
-you inherit all file descriptors from your parent. Only once you call
-execve() are the fds with this flag closed *in the child*.
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbuild-move-Werror-from-KBUILD_CFLAGS-to-KBUILD_CPPFLAGS/20220905-164209
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: s390-randconfig-s052-20220911 (https://download.01.org/0day-ci/archive/20220912/202209121730.ipnGRE83-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/2f8ee1865d7d00ad27460d94056c7752cad8481f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Masahiro-Yamada/kbuild-move-Werror-from-KBUILD_CFLAGS-to-KBUILD_CPPFLAGS/20220905-164209
+        git checkout 2f8ee1865d7d00ad27460d94056c7752cad8481f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Bart
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/s390/boot/decompressor.c:28:7: sparse: sparse: undefined preprocessor identifier 'CONFIG_KERNEL_ZSTD'
+
+vim +/CONFIG_KERNEL_ZSTD +28 arch/s390/boot/decompressor.c
+
+1844c9bc0b2fed arch/s390/boot/compressed/misc.c         Martin Schwidefsky  2010-02-26  25  
+54f45214522ae7 arch/s390/boot/compressed/decompressor.c Vasily Gorbik       2021-06-16  26  #ifdef CONFIG_KERNEL_BZIP2
+1b3e3faf29d3ac arch/s390/boot/compressed/decompressor.c Mikhail Zaslonko    2020-01-30  27  #define BOOT_HEAP_SIZE	0x400000
+7b034d9c1b08b3 arch/s390/boot/compressed/decompressor.c Dimitri John Ledkov 2021-06-15 @28  #elif CONFIG_KERNEL_ZSTD
+7b034d9c1b08b3 arch/s390/boot/compressed/decompressor.c Dimitri John Ledkov 2021-06-15  29  #define BOOT_HEAP_SIZE	0x30000
+1844c9bc0b2fed arch/s390/boot/compressed/misc.c         Martin Schwidefsky  2010-02-26  30  #else
+1b3e3faf29d3ac arch/s390/boot/compressed/decompressor.c Mikhail Zaslonko    2020-01-30  31  #define BOOT_HEAP_SIZE	0x10000
+1844c9bc0b2fed arch/s390/boot/compressed/misc.c         Martin Schwidefsky  2010-02-26  32  #endif
+1844c9bc0b2fed arch/s390/boot/compressed/misc.c         Martin Schwidefsky  2010-02-26  33  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
