@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66985B54E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E585B54E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiILG5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S229729AbiILHAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiILG51 (ORCPT
+        with ESMTP id S229527AbiILHAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 02:57:27 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D686129836;
-        Sun, 11 Sep 2022 23:57:21 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z187so7688046pfb.12;
-        Sun, 11 Sep 2022 23:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=RH/VDeel2O1YnlzpP/dZvddnsVEsPqbgyyssL39vics=;
-        b=gOb/2EOHn/DXorTgYSkaeK/VP0b+XX5cx8PHCJXZwWKVQ/UlOotxXM2VVtmKmdcJqr
-         01FQqzVaQHC+N0ptiQjT/sTCtY5ZhOua1T3KdBpBc9wqNixcEhVA5FsiUcY64S9vfmvf
-         xM/QCRBFfBjzHB0Mf2uVlZLMclOKmqegY6rn6rKWYls9USHG345uJbaVzKjqBVYl8r9r
-         OdKDLuP9bxEUY8EWJt8mhgOyVOQtNCG08xImsPvYQ6do50kbpEjdCu9XROp0UycaBVMQ
-         Z9mMUqFhOu/lCHxqnOlmftitCXlEcXCCTAUJphXYhB8HNscg+/6QHhJHdfY4yuH1Rf+9
-         2CSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RH/VDeel2O1YnlzpP/dZvddnsVEsPqbgyyssL39vics=;
-        b=GdPcGmMz+qOOzrDiG/bZhdhT1Ug+TbNLlIaMc/8fXw3t7hIfuQbc/lFRm0LAcOpUVa
-         fNi6nDT5fvqhJ8vtVnbWP343gv+cuzm0UbwAmc7l98pPgm0Ix/XenwhA6Mgo1Ki5Kg+l
-         a5roOW0N91M/kob2mm7wDMnsadoNPPT3KgrLGljOdIksOVjbCMOeKqzJhKpRcMnrCtXW
-         rjzSMG3Kno5Q4P9b30A6iCq2W3IGXBGh71dKDtthteDxCxPBfXtth37hzZ0UUCyN4ywA
-         5LnonRiZ4Mo/6mJrUSR4ngPCZ8rB2tDkTh6KeqaTOrgWIh3ns+x2e5BkOpdpZM4RCUDP
-         Fcqg==
-X-Gm-Message-State: ACgBeo0MlqLZNALV/WDiZFCCUigS5v4G+4MUhV99Dx5faWyOZYJlZiZt
-        gPf7U3uHr2JcB0HeEITLefo=
-X-Google-Smtp-Source: AA6agR7KjZMWdwPDH/jae1lbcmTSopZmpnSqprgC0cuM0EYlmKFfX7MGzzvOWi7Gh5tpVwrGcgLpeA==
-X-Received: by 2002:a63:5620:0:b0:429:9ad7:b4f2 with SMTP id k32-20020a635620000000b004299ad7b4f2mr21948494pgb.162.1662965840685;
-        Sun, 11 Sep 2022 23:57:20 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:569:7171:597e:5b7:9ff9:1cd5])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b001743be790b4sm5044611pls.215.2022.09.11.23.57.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Sep 2022 23:57:20 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sre@kernel.org
-Cc:     mazziesaccount@gmail.com, alina_yu@richtek.com,
-        cy_huang@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v4 3/3] Documentation: power: rt9471: Document exported sysfs entries
-Date:   Mon, 12 Sep 2022 14:57:03 +0800
-Message-Id: <1662965823-17760-4-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1662965823-17760-1-git-send-email-u0084500@gmail.com>
-References: <1662965823-17760-1-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Mon, 12 Sep 2022 03:00:30 -0400
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625F3E099
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:00:27 -0700 (PDT)
+Received: from imsva.intranet.prolan.hu (imss.intranet.prolan.hu [10.254.254.252])
+        by fw2.prolan.hu (Postfix) with ESMTPS id CBF287F505;
+        Mon, 12 Sep 2022 09:00:21 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B7C134064;
+        Mon, 12 Sep 2022 09:00:21 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10EB53405A;
+        Mon, 12 Sep 2022 09:00:21 +0200 (CEST)
+Received: from fw2.prolan.hu (unknown [10.254.254.253])
+        by imsva.intranet.prolan.hu (Postfix) with ESMTPS;
+        Mon, 12 Sep 2022 09:00:21 +0200 (CEST)
+Received: from atlas.intranet.prolan.hu (atlas.intranet.prolan.hu [10.254.0.229])
+        by fw2.prolan.hu (Postfix) with ESMTPS id D951A7F505;
+        Mon, 12 Sep 2022 09:00:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=prolan.hu; s=mail;
+        t=1662966020; bh=kTBK0ARmVjg18iD+1nZbDolmxsHFuR3obhf/lZol4ok=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=WQVqdkHW+VqY+VJo125qNyqw0ZNbXheEUeioST2Ttzf1z8Nho9yArUzN1bRfSJmsr
+         gbIHMHL4T8GPdwnwEyQkiVkVsIpw5Qkire941N3/+JARXwezEl0kUafGYakIJvApLb
+         wPlEI2sJYSSRrwZySazcdXtyTx6ElD202KSwhniT0K3w96RxsnD2rD/wP8YvEwB3je
+         swRVJ/j/bPD0K99BgoSCueMe86BvS7+cyLg2akolpF0WgH3Xz5SKRhetK0OpBKA/gd
+         QYeZw3BIYYOQEOZqFurOR0RwPHPmx1kjJLT/TXl6iidAabXdt/dzIkieeA1oyGx318
+         KzipCukbFgIZQ==
+Received: from atlas.intranet.prolan.hu (10.254.0.229) by
+ atlas.intranet.prolan.hu (10.254.0.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id
+ 15.1.2507.12; Mon, 12 Sep 2022 09:00:20 +0200
+Received: from atlas.intranet.prolan.hu ([fe80::9c8:3400:4efa:8de7]) by
+ atlas.intranet.prolan.hu ([fe80::9c8:3400:4efa:8de7%11]) with mapi id
+ 15.01.2507.012; Mon, 12 Sep 2022 09:00:20 +0200
+From:   =?iso-8859-2?Q?Cs=F3k=E1s_Bence?= <Csokas.Bence@prolan.hu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: Linux 6.0-rc4
+Thread-Topic: Linux 6.0-rc4
+Thread-Index: AQHYxVzjiZP9/E6GFEWcqcE/R/hO3q3bXhfT
+Date:   Mon, 12 Sep 2022 07:00:20 +0000
+Message-ID: <7488bc1ff5b34b7aa79ef31c7d19f5f2@prolan.hu>
+References: <CAHk-=wiqix9N5P0BXrSSOXjPZxMh=wDDRJ3sgf=hutoTUx0nZQ@mail.gmail.com>
+ <20220905125637.GA2630968@roeck-us.net>
+ <CAHk-=whh=0FG6r_YJ4_1pq07b=bqN8gTExU5T_ys-SVn0CRDtQ@mail.gmail.com>
+ <752fba06-8ccc-d1e7-68d8-f141eece1230@roeck-us.net>,<CAHk-=wj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eheb3A9WHw@mail.gmail.com>
+In-Reply-To: <CAHk-=wj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eheb3A9WHw@mail.gmail.com>
+Accept-Language: hu-HU, en-US
+Content-Language: hu-HU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [152.66.172.55]
+x-esetresult: clean, is OK
+x-esetid: 37303A29971EF4566D7564
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,70 +85,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hey there, perpetrator here.
 
-Document the settings exported by rt9471 charger driver through sysfs entries:
-- sysoff_enable
-- charge_term_enable
-- port_detect_enable
+It seems b353b241f1eb9 is botched, and may be reverted. I am working
+on a replacement fix, but I am working remotely. Please do not revert
+f79959220fa5 just yet.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- Documentation/ABI/testing/sysfs-class-power | 44 +++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Bence
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index a9ce63c..1f8afe5 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -768,3 +768,47 @@ Description:
- 
- 		Access: Read
- 		Valid values: 1-31
-+
-+What:		/sys/class/power_supply/rt9471-*/sysoff_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9471 charger devices.
-+		If enabled and the input is removed, the internal battery FET is turned
-+		off to reduce the leakage from the BAT pin. See device datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9471-*/charge_term_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the charge termination function of rt9471 charger
-+		devices. If enabled, the battery charging current, and the battery voltage
-+		reachs charge termination condition, the internal battery FET will be turned off
-+		to optimize the battery life. See device datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9471-*/port_detect_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the USB BC12 port detect function of rt9471 charger
-+		devices. If enabled and VBUS is inserted, device will start to do the BC12
-+		port detect and report the usb port type when port detect is done. See
-+		datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
--- 
-2.7.4
-
+> Let's bring in the guilty party and related people..
+>=20
+> It looks like b353b241f1eb9 ("net: fec: Use a spinlock to guard
+> `fep->ptp_clk_on`") is not sufficient to fix the problems caused by
+> f79959220fa5 ("fec: Restart PPS after link state change"), and in fact
+> just causes more issues.
+>=20
+> By now I suspect that both of those just have to be reverted.
+>=20
+> Hmm?
+>=20
+>               Linus=
