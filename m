@@ -2,167 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846B85B63BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C155B63C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiILWdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S229542AbiILWfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiILWdS (ORCPT
+        with ESMTP id S229482AbiILWfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:33:18 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3077225E98;
-        Mon, 12 Sep 2022 15:33:18 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9AAC75C0086;
-        Mon, 12 Sep 2022 18:33:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 12 Sep 2022 18:33:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663021997; x=1663108397; bh=BlGpyGNetH
-        0dfu+MS0Zcjr8kjhe2OqZ2zMEm7PaX9oc=; b=fqatqgOuwf9G2nKhRG+hWQjz9d
-        tc8rMU//RxhIcAuW45zXjsJO3S9vZRbK/Xl4fgfh8sW3gAuG8ttc/O/iVsFXOuNt
-        LZWVT0MD2fX/LzvygJl+4K8x35j8MHq61lrtPsBcSPvhA6Zxg0nzERUCojoStaym
-        iGXuCdsUfpEzzsdGn1CCTGGceVQv0bPwJP6EaauqLk0q07Y3gBJN0AtaAzegX7pi
-        l2Ubwg9VvakVRGNTStWcV+8HjCNX5hURjx74zLKJR93a2A2MIcgOLjXwVz+Htiil
-        2RZ+sbyDigpbjWRaAZHTRd7UEWkJ+eylz3ZKl7ToEl4I8Yqo3fScktj6seuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663021997; x=1663108397; bh=BlGpyGNetH0dfu+MS0Zcjr8kjhe2
-        OqZ2zMEm7PaX9oc=; b=M3+yPT0yGtaeO8xyZAHQf6ksS7DJ+YTaqJMtskXz/Jw3
-        WXB4wwlbIcM0wHTZgLQUsSbPoqjem8zsxMNJ5eIDcmbzyRzqoIow0pcGuzFxzIyn
-        ah9pRQcO5LdYIIaJVis2hQd9a6ez7kJ3ERLads1kMcpzaoyU/IYVNM7FQpNftpYD
-        t2qEIhhgJJcbFU740JBS9ERI3vG64jricrQAAnoDiCwFG1xLzB0F0RqJGMcPqWCW
-        Zmdc/0KTks/m45iHdNt4tQ1qaK9Kg728lVCc2ZyaaGs7agJ5VKLINvvBUU7tZvMR
-        j6mPCkTG4ZazzDt5up4s9E0Q8jhPj6MOLjK9kNCacA==
-X-ME-Sender: <xms:rbMfY1A_m_I59xBEX9iQ7Msrd0RJ0MDTFJw-gWebhyRmqjbIi10VTA>
-    <xme:rbMfYzjxscxxknWDC2FSbn1nIlCKIwHXOsMo-qLxJokicB3B_dnbrkxJNXELwiX3P
-    TcklqKBVofTEhi7IzI>
-X-ME-Received: <xmr:rbMfYwldfO1GyylafwOey24_yWDzmu2yJRsnQNiD7K08kWq8iTSsES6MWQzG8duIxJrSM7tDD5gy5meua9CGjmExNxq3rfET>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedufedgudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:rbMfY_weubAiLYS5-0pn8RA1C_pBJUY9UlLyRu9uAug1yC53H-9Qpg>
-    <xmx:rbMfY6RdPOXfJ-1Mich6_IuyiIeggzZ4O7KeP6Km3pj0S98R2pbUaw>
-    <xmx:rbMfYybT6-K1a8mJAuMG4zARYT5nHFkLYH5BaQHc9sHL3iYfqCGRZQ>
-    <xmx:rbMfY3Q52pzHX0mH3AJQcWSvP5_gpKEmSVEC250coAB9Gxhf0pHDlw>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Sep 2022 18:33:17 -0400 (EDT)
-Date:   Mon, 12 Sep 2022 17:33:16 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2] ARM: dts: aspeed: yosemitev2: Enable i2c13 controller
-Message-ID: <Yx+zrEViePskgaWq@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220907123810.GA27621@hcl-ThinkPad-T495>
+        Mon, 12 Sep 2022 18:35:00 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B400418B02
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:34:59 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-127ba06d03fso27333893fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=JV7ELz4kPbM5zN+d1pRguKa83wMKNN5UKfm4nAD4taw=;
+        b=kCcu/2IKnox3u9+zK7lOqIRhYf9kr9vm3wsCj6PU5aFX4J98EbdN3EDa3TwpJ7UOjG
+         LrnkokkVHZ/HdP4mvJQ2zl1TorLnQAk/Lic9RGmM4+aEMy8t3Xqsv7q8wWAZIxh2/FZD
+         0z1+iOprlAiRrxc97dK6joWlmaz2nQNuCZN3oAHD0U8Dc1rt88vQ7gNJW/clEROtn1dK
+         CD8gBneUBtutD/k+d5MAGVg+hS3oWiIdHQfRYIBIi1dFinQQ9zcv7eyoc5ckeVBfgJVg
+         RbTcdNEaepR3KjIAZKGQrbYJDGgluBGDuKWchI8Ikd5THNJP7cFUPP5chxAU4/kooJ4S
+         RvYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=JV7ELz4kPbM5zN+d1pRguKa83wMKNN5UKfm4nAD4taw=;
+        b=bQx5+iX9xk3SJYY8DMFD2lz9jc2/uCSO1jtM35ZQNAQ8tiep7T+9RUAXXean+kw4Pn
+         0EEOSWQ7aS1qzrT3drS+F4xKP9qGk0VlVmxEy0N8KfZqTe1U/daPHk6uaHc1+IziherM
+         Ngnpn4LTYTVRQIbEYc+Gyl5EX5onGKRkYtHlfr2Ulkc/OOb8npGXC6yH5/QE/cqswU0c
+         OVYcjnAaqd0V/7O0XbHpG7J6kz1ZuSoSSyQeIcZmalkClY0rFFE6VuiGk4LwnsHWJYVz
+         lS8J/rcD7FzURvirGT6x4cuMIcs5grkTsa5dSzTwb5F9sPcPGhVwVCdMRXOQfSc4mkNz
+         Sk/Q==
+X-Gm-Message-State: ACgBeo2TP5isePkxq78CdimUTMurAQTLkYn6/enZf4DX1ldQTcw+hlE0
+        yQB55n2ENAWDd+8eTWWRci8=
+X-Google-Smtp-Source: AA6agR7JuQ8AmkzZbiUb9JdfEksEYlWBob/c8uwbXZHDEDVTUf++BgJE+mLxqMRCQ2uPr3LIKZ0eAg==
+X-Received: by 2002:aca:1810:0:b0:34f:b8d6:7999 with SMTP id h16-20020aca1810000000b0034fb8d67999mr230929oih.231.1663022098970;
+        Mon, 12 Sep 2022 15:34:58 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cd:8cb3:36b6:6fa1:2fec:e29b])
+        by smtp.gmail.com with ESMTPSA id ep15-20020a056870a98f00b00127ebb410a4sm6016444oab.11.2022.09.12.15.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 15:34:58 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: Fix memory leak in hpd_rx_irq_create_workqueue()
+Date:   Mon, 12 Sep 2022 19:34:32 -0300
+Message-Id: <20220912223433.630364-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yDAZokfzATjmbX/8"
-Content-Disposition: inline
-In-Reply-To: <20220907123810.GA27621@hcl-ThinkPad-T495>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If construction of the array of work queues to handle hpd_rx_irq offload
+work fails, we need to unwind. Destroy all the created workqueues and
+the allocated memory for the hpd_rx_irq_offload_work_queue struct array.
 
---yDAZokfzATjmbX/8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 8e794421bc98 ("drm/amd/display: Fork thread to offload work of hpd_rx_irq")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-On Wed, Sep 07, 2022 at 06:08:10PM +0530, Karthikeyan Pasupathi wrote:
-> Added IPMB-13 channel for Debug Card communication.
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 5140d9c2bf3b..6a2e455c5466 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -1295,13 +1295,21 @@ static struct hpd_rx_irq_offload_work_queue *hpd_rx_irq_create_workqueue(struct
+ 
+ 		if (hpd_rx_offload_wq[i].wq == NULL) {
+ 			DRM_ERROR("create amdgpu_dm_hpd_rx_offload_wq fail!");
+-			return NULL;
++			goto out_err;
+ 		}
+ 
+ 		spin_lock_init(&hpd_rx_offload_wq[i].offload_lock);
+ 	}
+ 
+ 	return hpd_rx_offload_wq;
++
++out_err:
++	for (i = 0; i < max_caps; i++) {
++		if (hpd_rx_offload_wq[i].wq)
++			destroy_workqueue(hpd_rx_offload_wq[i].wq);
++	}
++	kfree(hpd_rx_offload_wq);
++	return NULL;
+ }
+ 
+ struct amdgpu_stutter_quirk {
+-- 
+2.34.1
 
-Wouldn't this be better to be the title?  'enable OCP debug card'  Might
-need some reference to what an "OCP debug card" is in the commit
-message.
-
->=20
-> ---
-> --- v2-Updated the title
-> ---
->=20
-> ---
-> --- v1 - Initial draft.
-> ---
->=20
-> Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-> ---
->  arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/=
-arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> index 8864e9c312a8..84236df522dc 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> @@ -215,6 +215,17 @@
->  	};
->  };
-> =20
-> +&i2c13 {
-> +	status =3D "okay";
-> +	// Debug Card
-> +	multi-master;
-> +	ipmb13@10 {
-> +		compatible =3D "ipmb-dev";
-> +		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
->  &pwm_tacho {
->  	status =3D "okay";
->  	//FSC
-> --=20
-> 2.17.1
->=20
-
---=20
-Patrick Williams
-
---yDAZokfzATjmbX/8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmMfs6wACgkQqwNHzC0A
-wRmHKBAAlNXFcJtu9yCVKhFfr7GFurgvb0K/iScj3nGp1R13ZouYN4V5ud9h9jtI
-8KNzlfq1Rt7FnSWSejfGlty0dOQQViEnmz463uBRmNM4KTfMl+9P5MAGg+FJzNq9
-PUxnEIkKtOtC+rRq2PHXmbntqtkquE7q+cxkC8qVsgpUqDrAuDMA1W2cuc2kjZqz
-4Ork/zI3eSf/xP9jtvCXvIsqgKwPiXdtk5TMoftWYUAPatS3SCUN83ycKTLIfVEZ
-fFCcDlSpqPH5TeZYeOswMIPRQS+imyCUWaQOlEdbYEQlwFmzlgG6LV8/pFjkheoQ
-HgxsRKSL6xfVpCRPG5lnds5PKUdvLCpHi5YLnBb6Y5qg+5vt7BvLGqgjeZVc9AFZ
-u+t3FPIgmQ+v2CL/2P9/hff50cFFvYIyR2Vn+drH/ML1WOFNd380NQy3RtcPj+Fw
-eQZuln4EE3ShoQHme8zHVkmAtjXx9jLEt44ZpBnlkvT9PwVwX+rNm+Cj8MprFU+b
-RHMahDMNcf/HE4oT4M84YSW79N1ZWsBOctPC2Z1f23WTWf0Eywv4arqRZN45S0Vj
-G/KVJJZGzevDLdYUDuSi/b2UzKZa9u0xwDwtkV7iKqXkiKc+qcOyoY62S2avaf5p
-4UKD9C3Daw+CTDmfe89RdTYfLplB8Fk/czldTiyi5sRQychzpf4=
-=kf/G
------END PGP SIGNATURE-----
-
---yDAZokfzATjmbX/8--
