@@ -2,125 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704875B62FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4E85B6300
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiILVq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S229971AbiILVr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiILVqg (ORCPT
+        with ESMTP id S229777AbiILVrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:46:36 -0400
-Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258E54DB35
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:46:32 -0700 (PDT)
-Received: by mail-ua1-x949.google.com with SMTP id a8-20020ab04948000000b003b5de1448d2so3099013uad.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=ZzsIuf2L8X0Hmdw3PgLf1qkJbNjw53kAM7GLfDn/6w4=;
-        b=m+elMNqNnWLEd5kNCUD5IpaFS/ZkMMWc0X8niOARjMpxI/SNjXs+cKTSRihYCqThli
-         t5nc81UCWnLFXV6OTIzRDXGkejhKbvlPWU1fz9X8M02LElDQdRswB3rW8N0OVQMFquKi
-         +j1N90sq2aB2+2pKwbmT4o/k5/09zxG1A+/jB8fC5nkBEXtsGHpRSBl4jnt8oMJDFgT0
-         OWm60o1+LsnG5+ZslbU0TI7iBscPsATHg+j3iM73lhhJw4f+RFmfoKbEu5YIodfjd2+Q
-         +nkH7O+QFnU9P+uAPPiRjf6V6f7tOPD1P7kU07/mgw545fwodinJQ2/9X5xUNHGrTrmi
-         yKYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=ZzsIuf2L8X0Hmdw3PgLf1qkJbNjw53kAM7GLfDn/6w4=;
-        b=BRkP5rcUn8gZwauD/4ULdF5Dh6bQCbesD29NDqig6KK1znQnymNw5VycSvDlgZoOg3
-         UkrL+EvWGwyACYeK5BFeRKGV60da/+GXEgdOTMUENlOQxiJ78+SbRWgmOTrfwleDhVFd
-         UGB/VeNodPckJHO8yrurQMhcLtYj8i8FTOBzSr2PFzF/6AUBRoIuzLpNyzgCkSMr5A5L
-         sNjTjOU1ADV3U2bV0MSs2X+XjPbTKNmy7eyKX2RSZYrkcYyIsauxHfHEqfaJbrXjLdGo
-         MsmGcHF7z1w7AIY9ZnXcp4zpZK8bnJ86ye+7MNarSBRNXP8RX9U+5jdr0510vyOMq2Oq
-         JCGA==
-X-Gm-Message-State: ACgBeo2O+GzwuOFxGA/NvBr7QBN3vlREzii28ajF1pJBq9X1beuoIoEO
-        jckNu96TD2M29S27dTyI+wxZ6ZE5vg==
-X-Google-Smtp-Source: AA6agR5BRrFw/hDp3bp0PYSQ+93fns5/iKqfGLRQmOhU9pKj1FENW6Ed8n2oYJUC+0JJcVr5f4Ia+wOj1Q==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a05:6102:d89:b0:379:2914:9cfa with SMTP id
- d9-20020a0561020d8900b0037929149cfamr9465559vst.18.1663019190827; Mon, 12 Sep
- 2022 14:46:30 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 14:46:14 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220912214617.929240-1-nhuck@google.com>
-Subject: [PATCH] staging: rtl8723bs: Fix rtw_xmit_entry return type
-From:   Nathan Huckleberry <nhuck@google.com>
-Cc:     Nathan Huckleberry <nhuck@google.com>,
-        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 17:47:02 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C074D838;
+        Mon, 12 Sep 2022 14:47:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oNOc0W4fe118Lq+qjNp3CFCPF9OQWg6R7dSojfG3My06nHsIxuS402XfhPc/G4YITns94EDBaUdd9IUspVmgOOPoNgIolWyPcW7wCrp3jvcoddKYt/xD45SpI3dDdXO1jpx0TLnLNLVk+gmW3sJK2BKg6XgQd0cK1exzLqBRB1/Jh1/RRhazyz70saYBIs0DqhAAGLlL8lyr4BJ9UxmeGiUHyUiWAZ/0KPYnLBcZwhFCZre0K1bMcpz5oHNXPi8YPajVwe48dgAf40zE7tYfOLouyG1oNOxysnWCz+Oy01tljW0ubFaBRhCvJgYmAMq3SKxcjVidGnXHdvvh2g/9cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VM7E2ybbJYvJwT/it1c1P4gBvYGJJvYoQ2yKVw6Mp90=;
+ b=G5kemSnGv5rjjoogFg672/HFGirFYDhmE9d4i3Y/m2Wcgba5ReyCTPGZ0RyDSXHwHdKMdH4yEV+3zYPj7nCmh/QkiFJbWd3uPcPZNxdltUz9PJgLR7VPmdPUEBUOJwuRiKSRpOfr5KtZLNlOlf96PMyeBAOFNfWjvJtMvf2yTapnT2egyBZulX8OuFnsMAJdq+bhBvnrL28ujzFXeiresSzmC7vesO2HeEM4eQ+HdbFjPuSz3/Ndee9pEaSwIijnN39SEDu+m4nEnD6k9PHZCsiwOHYBdX5xgwuaGo6SL0s4/hR2uPbO2mI4do8NCK6IxWlP1dABMKgCcPb/6vPIDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VM7E2ybbJYvJwT/it1c1P4gBvYGJJvYoQ2yKVw6Mp90=;
+ b=yXcdBfT3xYUZ4bTFCD0l6Yt70bn4JxquERCiB+WYpHYqCMenpKJbbCJdZdOOo+EfO/+D4YcIo7NoO/dyy+1LjmyV2YeP8whhDvia33QkPuf/3dH4IzNloLiV94OWiQYQtLzyVaTF614tI+0dVzVITKkKGN/8Nb8RNDGy+5pCaTQ=
+Received: from DM6PR11CA0014.namprd11.prod.outlook.com (2603:10b6:5:190::27)
+ by CH0PR12MB5025.namprd12.prod.outlook.com (2603:10b6:610:d5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
+ 2022 21:46:56 +0000
+Received: from DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::dc) by DM6PR11CA0014.outlook.office365.com
+ (2603:10b6:5:190::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
+ Transport; Mon, 12 Sep 2022 21:46:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT055.mail.protection.outlook.com (10.13.173.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.13 via Frontend Transport; Mon, 12 Sep 2022 21:46:56 +0000
+Received: from ruby-95f9host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 12 Sep
+ 2022 16:46:55 -0500
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC:     <pbonzini@redhat.com>, <jon.grimm@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH] KVM: SVM: Fix x2apic logical cluster mode decoding and sanity check
+Date:   Mon, 12 Sep 2022 16:46:32 -0500
+Message-ID: <20220912214632.14880-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT055:EE_|CH0PR12MB5025:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c817b3d-944f-4cce-7a35-08da9508504a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OTGAB31oymUecwdVfget/hK4JBGuC/ef/y1kIxJXmFH72xUbt/132eUCA5aCypRowXqa5sZ8hApk+Toq/5DlIunomNrXbt7WF/4JWt2NmAQv+GY3BYtm4tUeWHlMYi8UfVPwTuuCEnsRbkaI9+uXvc1m9rSAIdsc/PEjoHGtSpPRUx4Q+OvNJsDtHVWARjcUygmBYTDCiZ3fZlmcoGYVnOB4QqLlxrsZVOsjwx9y5LwrIr1Xt18vFgsPZqRs+GGSlzQCa6d36qpOrcUF6kl7gXwKlitsTOMj1bJY/SsYz5bKvYHbXQdlJRLVAh2Me+e9Jzomppk7cQ5h5sgYpPq1v5W9JNxULcK8Edp7UFBBpEAnNKGZmtQ+1dbvBZDSsjchSfWcMuK6rKA1tw8/7ix2Ww+gpMpBpLWBO230jD3CGgA+dj4KiMNApQzbNq5foOGxOGddeLovANdYo1aY8vwz8Fyj+f/t9uEZwAJQAzN/3rYUvXoxV0K+MrbhLaRUw12K/rhzmwcxJ1u8uh5df8ngYg/FTNDD9NnwSR61mXH4vxzkdp6+qBfdwmUXxDlwUj0rbE0brxXjMYW+wDW6TZHn4Orqbr8GtQrerVz/X1kN8iTMxhHe8EHTt6nhhu9igph2xkNkIc7Htr6is901vsQTIIYRqo5HT7BbMwCbHUKFtGOkxYKp1JoZe68dSus/wMJyOtV8SgA3uh66+cg593nEWLzQECOOl1puPkK3CnCSxKTCUKWD7x+/4SCJYoXOOKWnoiZI2AmsS3zqNKmccDgJpPqTeMbftt4ivS53jfwj6kbmtkSv6KKoLTUDIEX8B0+1
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199015)(40470700004)(36840700001)(46966006)(6666004)(41300700001)(5660300002)(54906003)(70586007)(8676002)(70206006)(4326008)(2616005)(186003)(1076003)(86362001)(47076005)(82310400005)(426003)(16526019)(2906002)(8936002)(82740400003)(316002)(36860700001)(478600001)(36756003)(44832011)(7696005)(356005)(110136005)(40480700001)(26005)(83380400001)(81166007)(40460700003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 21:46:56.4744
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c817b3d-944f-4cce-7a35-08da9508504a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5025
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ndo_start_xmit field in net_device_ops is expected to be of type
-netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+When sending IPI in the X2APIC logical cluster mode, the destination
+APIC ID is encoded as:
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
+  * Cluster ID = ICRH[31:16]
+  * Logical ID = ICRH[15:0]
 
-The return type of rtw_xmit_entry should be changed from int to
-netdev_tx_t.
+Current logic incorrectly decode the ICRH, which causes VM running
+with x2AVIC support to fail to boot. Therefore, fix the decoding logic.
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+The commit 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+also added a check for multiple logical destinations before using
+the fast-path. However, the same logic is already existed prior to
+the commit. Therefore, remove redundant checking logic.
+
+Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 ---
- drivers/staging/rtl8723bs/os_dep/xmit_linux.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ arch/x86/kvm/svm/avic.c | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-index 530e7a6c67c5..472d3ac0179b 100644
---- a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-+++ b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-@@ -181,7 +181,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
- 	return true;
- }
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 6919dee69f18..45ab49d1f0b8 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -378,8 +378,8 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
  
--int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-+netdev_tx_t _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- {
- 	struct adapter *padapter = rtw_netdev_priv(pnetdev);
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-@@ -217,15 +217,12 @@ int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- 	dev_kfree_skb_any(pkt);
+ 		if (apic_x2apic_mode(source)) {
+ 			/* 16 bit dest mask, 16 bit cluster id */
+-			bitmap = dest & 0xFFFF0000;
+-			cluster = (dest >> 16) << 4;
++			bitmap = dest & 0xffff;
++			cluster = (dest & 0xffff0000) >> 16;
+ 		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
+ 			/* 8 bit dest mask*/
+ 			bitmap = dest;
+@@ -387,7 +387,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+ 		} else {
+ 			/* 4 bit desk mask, 4 bit cluster id */
+ 			bitmap = dest & 0xF;
+-			cluster = (dest >> 4) << 2;
++			cluster = (dest & 0xf0) >> 4;
+ 		}
  
- exit:
--	return 0;
-+	return NETDEV_TX_OK;
- }
- 
--int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-+netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- {
--	int ret = 0;
+ 		if (unlikely(!bitmap))
+@@ -420,18 +420,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+ 			 * For x2APIC logical mode, cannot leverage the index.
+ 			 * Instead, calculate physical ID from logical ID in ICRH.
+ 			 */
+-			int cluster = (icrh & 0xffff0000) >> 16;
+-			int apic = ffs(icrh & 0xffff) - 1;
 -
- 	if (pkt)
--		ret = _rtw_xmit_entry(pkt, pnetdev);
+-			/*
+-			 * If the x2APIC logical ID sub-field (i.e. icrh[15:0])
+-			 * contains anything but a single bit, we cannot use the
+-			 * fast path, because it is limited to a single vCPU.
+-			 */
+-			if (apic < 0 || icrh != (1 << apic))
+-				return -EINVAL;
 -
--	return ret;
-+		return _rtw_xmit_entry(pkt, pnetdev);
-+	return NETDEV_TX_OK;
- }
+-			l1_physical_id = (cluster << 4) + apic;
++			l1_physical_id = (cluster << 4) + (ffs(bitmap) - 1);
+ 		}
+ 	}
+ 
 -- 
-2.37.2.789.g6183377224-goog
+2.34.1
 
