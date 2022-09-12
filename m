@@ -2,97 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731475B638E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1B15B639E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 00:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiILWTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 18:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S230215AbiILWW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 18:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiILWTT (ORCPT
+        with ESMTP id S229544AbiILWW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:19:19 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8876F1FCC8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:18:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so4281722pjk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 15:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=GZ0Dp6bNMavCz8G/Vh2kzpN1KgGgT7JTNvQgTmQAPlI=;
-        b=Xj4Ka5yJAPeUxPPmQEVuECU48vRPrThJvunNyZAXnh3aURDS6/9cvsnGcIlrHrPoI8
-         1DxlWMnd3NyIStmlBQPh7buLsBE0+J/CL2s9lhcIDiVvYsmolItMAsZrRnbtol2bLRYE
-         aWug31ihhqBIkVbwOpwhayqG76YFy5UHb1AFTFm4OdsXS0MdtBAKJPn9+dNe3vwqwdAf
-         3dxBmXGRPXhjZ7H91REGlGWdziagih7nIEfNrNoprlKydyoLMXvAkWlgL8f3zJMZESSQ
-         cEuUollVy57b6Oh9jSdnayPiriu5FhxQYJplJ0XuEs4LONrMBP7aagwCU4OXPSXVmlZA
-         I/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=GZ0Dp6bNMavCz8G/Vh2kzpN1KgGgT7JTNvQgTmQAPlI=;
-        b=1+48hAXOU8ZLRQK3yb+btNnMc2var5BOp4hWXAAMrfQvky5OnSFO49HnoJCVkPNxCZ
-         Zt6WSNXmqkJvgnfpl1orj6JKkrJDjnUmC5qhpsBkwivL59wTBKtaDAXYCuDYSenpDJz9
-         4QTh0Tqik0YWYBUfT7kkbKwd+/a2u41mPKNx0p4fLqBiHaduxaIPik0KXNeb57jKQnsX
-         JMC99yAGw8c/Xat+4agsN568iIDJdZOzuIMuMtxGbwekYvmFfsV9FQ3/wcwFLj2OqElS
-         q7Cae1sWmsTEIF8ZQfcneFdn2oBAYVyJbcNt1AVqtv+cGrZv9MCn6LWpieNVZw4vkfwV
-         dw3g==
-X-Gm-Message-State: ACgBeo05DZNjoujqQ/HSmCcsgnVzLXMz9l3XedfzzE4CTG5IxB5UFygj
-        rHo6HCGW8VVcFPqfJeJZvYI=
-X-Google-Smtp-Source: AA6agR5K4tR/87pHFmAbAuVZkP948XJNjqTQ08I2np9T61pNInwzJ4zew6hYxVpUotOpWNHqNdnsjQ==
-X-Received: by 2002:a17:90a:e7ca:b0:202:c6c9:4750 with SMTP id kb10-20020a17090ae7ca00b00202c6c94750mr556951pjb.133.1663021099926;
-        Mon, 12 Sep 2022 15:18:19 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b00177efb56475sm6655088plg.85.2022.09.12.15.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 15:18:19 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Sep 2022 12:18:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com
-Subject: Re: [PATCH v3 6/8] sched/fair: Add sched group latency support
-Message-ID: <Yx+wKhhk5niBZMNO@slm.duckdns.org>
-References: <20220909130309.25458-1-vincent.guittot@linaro.org>
- <20220909130309.25458-7-vincent.guittot@linaro.org>
+        Mon, 12 Sep 2022 18:22:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894B6C74;
+        Mon, 12 Sep 2022 15:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663021345; x=1694557345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZHnBdvL1Q5ZuXvXrD8bo/Lv3Fr34CrpTTQTiZunheBU=;
+  b=jXdVnmEACBhJRiDLE8StqSdUAuqHnb/so2P5jYNtolDWpzBQYlBRqfF1
+   gGbiRvILkYj1yPbGSgY0TclD15YcWcpsfaOGifjOcvw+boTTD4niiQ2VF
+   O7Xx7sTex7CJY4EGLf90zvne6lpWPfx/UF+QwSNWsIZrJV1GcjkybaQWT
+   2UMOZ1NXYgcvwMoZldsORHcxJxy4j3SJarN0Yqpn4AMr9O7Ryp4d+J34d
+   xnxGLNqsqjmclthQBZiL7/sxsI9OQfpXQ4MGKeq+lVamVo8NAnlo44ix5
+   zppK9OWtd3ybreIjTLreo8CVbUuHNxCiyGu/pEp8efwCsnpl/SWuTYeSb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="285004023"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="285004023"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:22:24 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="944810102"
+Received: from aburgsta-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.208.142])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:22:19 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 120E810455B; Tue, 13 Sep 2022 01:22:17 +0300 (+03)
+Date:   Tue, 13 Sep 2022 01:22:17 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Message-ID: <20220912222217.u4oc6fry2pvp342v@box.shutemov.name>
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909130309.25458-7-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 09, 2022 at 12:27:06PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 928dcf7a20d9..8b5c59110321 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -5,16 +5,21 @@
+>  #define pr_fmt(fmt)     "tdx: " fmt
+>  
+>  #include <linux/cpufeature.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/mm.h>
+> +#include <linux/io.h>
+>  #include <asm/coco.h>
+>  #include <asm/tdx.h>
+>  #include <asm/vmx.h>
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <asm/pgtable.h>
+> +#include <uapi/asm/tdx.h>
+>  
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+>  #define TDX_GET_VEINFO			3
+> +#define TDX_GET_REPORT			4
+>  #define TDX_ACCEPT_PAGE			6
+>  
+>  /* TDX hypercall Leaf IDs */
+> @@ -775,3 +780,113 @@ void __init tdx_early_init(void)
+>  
+>  	pr_info("Guest detected\n");
+>  }
+> +
+> +static long tdx_get_report(void __user *argp)
+> +{
+> +	u8 *reportdata, *tdreport;
+> +	struct tdx_report_req req;
+> +	u8 reserved[7] = {0};
+> +	long ret;
+> +
+> +	if (copy_from_user(&req, argp, sizeof(req)))
+> +		return -EFAULT;
+> +
+> +	/*
+> +	 * Per TDX Module 1.0 specification, section titled
+> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
+> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
+> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
+> +	 * 0. Also check for valid user pointers and make sure
+> +	 * reserved entries values are zero.
+> +	 */
+> +	if (!req.reportdata || !req.tdreport || req.subtype ||
+> +		req.rpd_len != TDX_REPORTDATA_LEN ||
+> +		req.tdr_len != TDX_REPORT_LEN ||
+> +		memcmp(req.reserved, reserved, 7))
+> +		return -EINVAL;
 
-On Fri, Sep 09, 2022 at 03:03:07PM +0200, Vincent Guittot wrote:
-> +	{
-> +		.name = "latency",
-> +		.read_s64 = cpu_latency_read_s64,
-> +		.write_s64 = cpu_latency_write_s64,
-> +	},
+Maybe make several checks instead of the monstrous one?
 
-You're still using the nice value here, right? If so, can you please use the
-filename "latency.nice" so that it's consistent with "weight.nice"?
+!req.reportdata and !req.tdreport look redundant. copy_from/to_user() will
+catch them (and other bad address cases). And -EFAULT is more appropriate
+in this case.
 
-Thanks.
+> +
+> +	reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
+> +	if (!reportdata)
+> +		return -ENOMEM;
+> +
+> +	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
+> +	if (!tdreport) {
+> +		kfree(reportdata);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
+> +			   req.rpd_len)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+> +	 *
+> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
+> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
+> +	 * Specification for detailed information.
+> +	 */
+> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> +				virt_to_phys(reportdata), req.subtype,
+> +				0, NULL);
+> +	if (ret) {
+> +		ret = -EIO;
+
+The spec says that it generate an error if invalid operand or busy. Maybe
+translate the TDX error codes to errnos?
+
+BTW, regarding busy case: do we want to protect against two parallel
+TDX_GET_REPORT? What happens if we run the second TDX_GET_REPORT when the
+first hasn't complete?
+
+> +		goto out;
+> +	}
+> +
+> +	if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
+> +		ret = -EFAULT;
+> +
+> +out:
+> +	kfree(reportdata);
+> +	kfree(tdreport);
+> +	return ret;
+> +}
+> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
+> +			    unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	long ret = -ENOTTY;
+
+Not a typewriter? Huh?
+
+> +
+> +	switch (cmd) {
+> +	case TDX_CMD_GET_REPORT:
+> +		ret = tdx_get_report(argp);
+> +		break;
+> +	default:
+> +		pr_debug("cmd %d not supported\n", cmd);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
 
 -- 
-tejun
+  Kiryl Shutsemau / Kirill A. Shutemov
