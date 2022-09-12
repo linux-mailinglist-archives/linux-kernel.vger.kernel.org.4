@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401945B5C07
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F2C5B5C0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiILOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S230123AbiILORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiILOPu (ORCPT
+        with ESMTP id S229878AbiILOR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:15:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C055622BC2;
-        Mon, 12 Sep 2022 07:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662992141; x=1694528141;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6psuZt3LL48N+MNUEJzImROgem6VBVvCU+SupMM9vD8=;
-  b=mcr8OeG8tn8LXMiODvOvJ5AVAWW8tDyt73y6dINwe22KkB2fA4GuWCbB
-   WoLD9VDBHP9O/dZ9HKJGxjlatxnNaoBCnlxvd+jcTODboLCYE+6+GCuot
-   RovDCf2/DjxRNb57Giel9SfutzHcvbhDwHD7UZdjIdBQfsCMCzV3XshzY
-   0ZXkrRDa/LfaR3aCqh/0kwX+DD9VdmuSaKuRDKKxkHUJ6YM72rtwkJEVH
-   qDIGG1jaDKQ6XVqCznRFWDbWSGRbDnzzN112uMntdCvlVDuMsFNGC2FI2
-   g3zITKkyTG0Db9gWYHTzBxzlGlpqVabHiMQaZHf7cFPDNZHHq8fXUtJNM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298674803"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="298674803"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 07:15:41 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="616064415"
-Received: from snehate-mobl.amr.corp.intel.com (HELO [10.212.195.232]) ([10.212.195.232])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 07:15:41 -0700
-Message-ID: <8c699191-a424-32a1-8434-7b9b706ed6a4@linux.intel.com>
-Date:   Mon, 12 Sep 2022 07:15:40 -0700
+        Mon, 12 Sep 2022 10:17:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5E925C6B;
+        Mon, 12 Sep 2022 07:17:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A962B80D55;
+        Mon, 12 Sep 2022 14:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582EBC433D6;
+        Mon, 12 Sep 2022 14:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662992244;
+        bh=jTbsk7yoEK+AZ3vZc8ogcuLE+gwzEOpP/ZeZUQAejUI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N2TPTBsaMrUDjAOP8g3X0PYhgmGhVVWX1TIzIUvPGYLN7AmbGJxb2/Ic7DAZhyk42
+         eFq6z/JznWLmMAZgq1GXf9n9Wg/VGkhgbyHCGWX/007Zwc9Ux8qoBDAP6C23y0ewil
+         y5p02FwkM+hYHeoqwFOG2LkrcWBPDZLMveUnibioOokNllXzjEf6G1eddFSovN6I5K
+         P/cWAszPKXKx60FDqyoqqX4cRMSTPEBiFrEYOIu2SixK90Ad9briXm30zOTsT3Uy09
+         Qlue/SDeCQ2RUUFFdjBTSmNHI6Apo3H5rfm/b+2kpwAuvxDHWq38glaz9yvf0j7TN6
+         TX2iQZrkheScQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next] power: supply: bq25890: Fix enum conversion in bq25890_power_supply_set_property()
+Date:   Mon, 12 Sep 2022 07:15:53 -0700
+Message-Id: <20220912141553.1743568-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
- process
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "wander@redhat.com" <wander@redhat.com>,
-        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        "Cox, Philip" <philip.cox@canonical.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <8cb035b4e2cb1e5a49bab23ca7d06920e1585ec8.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <8cb035b4e2cb1e5a49bab23ca7d06920e1585ec8.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Clang warns:
 
+  drivers/power/supply/bq25890_charger.c:625:40: error: implicit conversion from enumeration type 'enum bq25890_fields' to different enumeration type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
+                  lval = bq25890_find_idx(val->intval, F_IINLIM);
+                         ~~~~~~~~~~~~~~~~              ^~~~~~~~
+  1 error generated.
 
-On 9/12/22 12:04 AM, Huang, Kai wrote:
->> +
->> +TDX Guest driver
->> +================
->> +
->> +The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
->> +device to allow user space to get certain TDX guest specific details
->> +(like attestation report, attestation quote or storage keys, etc).
-> Only TDX_CMD_GET_REPORT is supported now.  Whether GetQuote TDVMCALL should be
-> supported, or how should it be supported is unknown now.  Not to mention "get
-> the storage keys".
+Use the proper value from the right enumerated type, TBL_IINLIM, so
+there is no more implcit conversion. The numerical values of F_IINLIM
+and TBL_IINLIM happen to be the same so there is no change in behavior.
 
-The reason for adding them is to give an idea that this driver in future could
-be used for use cases other than GetReport. Query about possible use cases came up
-in a previous review about /dev/tdx-guest device name usage. So I thought it is
-better to give a clear idea on how this device may be used in the future.
+Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting IINLIM")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1707
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/power/supply/bq25890_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Maybe I can add a note that currently only attestation report is supported.
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index f5368be32843..e6bd60fef0f6 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -622,7 +622,7 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+-		lval = bq25890_find_idx(val->intval, F_IINLIM);
++		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
+ 		return bq25890_field_write(bq, F_IINLIM, lval);
+ 	default:
+ 		return -EINVAL;
 
-> 
-> I don't think you should put anything here now except "allow userspace to get
-> TDREPORT".
-> 
-
+base-commit: f52c4d5f0bb486bc515b5f8a56130aea69fb29db
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.37.3
+
