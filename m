@@ -2,176 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A63B5B5BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C995B5BFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiILOLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S230077AbiILOOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiILOLW (ORCPT
+        with ESMTP id S230000AbiILOOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:11:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4FFD00;
-        Mon, 12 Sep 2022 07:11:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41AEDB80D55;
-        Mon, 12 Sep 2022 14:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11EFC433C1;
-        Mon, 12 Sep 2022 14:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662991878;
-        bh=OtpVMG63/twYTBPtJm030JQK0As6OlhIeF6G6tO5hfo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OaqqLDwbkO4VC/jDcesIgP4kTYD6Nfh85TxxKofogLQ7XydWFSNnLrWVlpKx+QxQy
-         lx9Kk56VJeuFcv3c15xXCjpB+DX+1iCiEcTazL+ZX0X5YFJyhKX20rF11x00EfygKW
-         X6HF72k3LhwCUzVnMItGq6a2QKWzIrMRcpeSUa6SZO1S2O8YaBqTkvcX8jkPJgt4BG
-         WJvfeImAWDgqer/JfP48zuotOSbnelFLpdHTiuVbz1jeB8KbtPvGF7V2axxDRqcepO
-         uCn0Qu0HaO1k5pqQ3IM9M4hl5A7y4BQITjTyfrGDwnku2qb7KtkY/br3rMWQyxezr2
-         2uORJK3YSqT7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 34B1C5C06AB; Mon, 12 Sep 2022 07:11:16 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 07:11:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
- in explanation.txt
-Message-ID: <20220912141116.GK246308@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
- <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
- <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
+        Mon, 12 Sep 2022 10:14:42 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4E1B86E;
+        Mon, 12 Sep 2022 07:14:39 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1278a61bd57so23697169fac.7;
+        Mon, 12 Sep 2022 07:14:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zjUBlDf7L9Ynqi1H6fGKN/mNwcz/H/7eLC0Jbu7Mkrc=;
+        b=MVz5fKusp2X9lCGAYMLyHkHb+qCaP3oKXencGmS8tm8E8nK1BrNA5Tnh7osiLZwXdP
+         pkCevpaivPAnYYgyLmJa04zYqLRl0zZzBO+TDTh8tcNXRML6KScmtPv7wTPlp1zdBtsW
+         qmxBSTl07tl7qTHCKDUdN6X4xkDKz9hvS5mY8cD+BWT/p0kTx2lGFIv88SbJAUFK2ijL
+         1U+Hrp+Vv3PqigjDtlPwUgkkqsVagf9QprMqYrVDybB8oIEGArrHZ0KWZzPpk+cnzj2h
+         iKPibG0jw6BCLUvdCSm/Gc28f2lSLydq4e2ecHWUSPH5M7hUIHyN7XNrj19XXkY/QnMU
+         PyhA==
+X-Gm-Message-State: ACgBeo2piCT2rX36S6mrMOpefSFdFhQCEUEjb+DsCmcXa7e1jEa4OKbx
+        ihjKsvJEXpzEHkOpK+ga2g==
+X-Google-Smtp-Source: AA6agR52VoqB+17Gb0BUpHCSjA4obhxCNA59bFjHr4WfcACjZNkTiq/l3Kzt5b9km8c8ddT0yiL62g==
+X-Received: by 2002:a05:6808:1202:b0:345:b62b:3756 with SMTP id a2-20020a056808120200b00345b62b3756mr9487837oil.165.1662992079011;
+        Mon, 12 Sep 2022 07:14:39 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m26-20020a0568301e7a00b006339b36127dsm4654253otr.3.2022.09.12.07.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 07:14:38 -0700 (PDT)
+Received: (nullmailer pid 1164923 invoked by uid 1000);
+        Mon, 12 Sep 2022 14:14:37 -0000
+Date:   Mon, 12 Sep 2022 09:14:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v3 09/14] ASoC: dt-bindings:: qcom,q6asm: convert to
+ dtschema
+Message-ID: <20220912141437.GA1164860-robh@kernel.org>
+References: <20220908091946.44800-1-krzysztof.kozlowski@linaro.org>
+ <20220908091946.44800-10-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220908091946.44800-10-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:38:58PM +0100, Paul Heidekrüger wrote:
-> On 12. Sep 2022, at 12:38, Paul E. McKenney <paulmck@kernel.org> wrote:
+On Thu, 08 Sep 2022 11:19:41 +0200, Krzysztof Kozlowski wrote:
+> Convert Qualcomm Audio Stream Manager (Q6ASM) bindings to DT schema.
 > 
-> > On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekrüger wrote:
-> >> The current informal control dependency definition in explanation.txt is
-> >> too broad and, as discussed, needs to be updated.
-> >> 
-> >> Consider the following example:
-> >> 
-> >>> if(READ_ONCE(x))
-> >>>  return 42;
-> >>> 
-> >>> WRITE_ONCE(y, 42);
-> >>> 
-> >>> return 21;
-> >> 
-> >> The read event determines whether the write event will be executed "at
-> >> all" - as per the current definition - but the formal LKMM does not
-> >> recognize this as a control dependency.
-> >> 
-> >> Introduce a new definition which includes the requirement for the second
-> >> memory access event to syntactically lie within the arm of a non-loop
-> >> conditional.
-> >> 
-> >> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-> >> Cc: Marco Elver <elver@google.com>
-> >> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> >> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> >> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-> >> Cc: Martin Fink <martin.fink@in.tum.de>
-> >> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> >> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > Hearing no objections, I reverted the old version and replaced it
-> > with this version.  Thank you both!
-> > 
-> > 							Thanx, Paul
+> The original bindings documented:
+> 1. APR service node with compatibles: "qcom,q6asm" and
+>    "qcom,q6asm-v<MAJOR-NUMBER>.<MINOR-NUMBER>",
+> 2. actual DAIs child node with compatible "qcom,q6asm-dais".
 > 
-> Oh, wait, there was further discussion [1, 2], and we finally agreed on [3].
-> So [3] is the final version.
+> The conversion entirely drops (1) because the compatible is already
+> documented in bindings/soc/qcom/qcom,apr.yaml.  The
+> "qcom,q6asm-v<MAJOR-NUMBER>.<MINOR-NUMBER>" on the other hand is not
+> used at all - neither in existing DTS, nor in downstream sources - so
+> versions seems to be fully auto-detectable.
 > 
-> I think me sending a v2 immediately after the v1 led to this out-of-order
-> discussion - sorry!
+> Another change done in conversion is adding "iommus" property, which is
+> already used in DTS and Linux driver.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Expected warning because the qcom,apr.yaml is being fixed in next commit:
+> 
+>   Documentation/devicetree/bindings/sound/qcom,q6asm.example.dtb: apr: service@7: 'dais' does not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
+>     From schema: /home/krzk/dev/linux/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+> 
+> Changes since v2:
+> 1. Rename to qcom,q6asm-dais.yaml (Rob)
+> 2. Extend commit msg.
+> 
+> Changes since v1:
+> 1. New patch.
+> ---
+>  .../bindings/sound/qcom,q6asm-dais.yaml       | 112 ++++++++++++++++++
+>  .../devicetree/bindings/sound/qcom,q6asm.txt  |  70 -----------
+>  2 files changed, 112 insertions(+), 70 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm-dais.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.txt
+> 
 
-My bad, and thank you for checking and letting me know!
-
-I have reverted to the proper state.
-
-							Thanx, Paul
-
-> Many thanks,
-> Paul
-> 
-> [1]: https://lore.kernel.org/all/663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org/
-> [2]: https://lore.kernel.org/all/D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de/
-> [3]: https://lore.kernel.org/all/20220903165718.4186763-1-paul.heidekrueger@in.tum.de/
-> 
-> 
-> >> ---
-> >> 
-> >> v2:
-> >> - Fix typos
-> >> - Fix indentation of code snippet
-> >> 
-> >> v1:
-> >> @Alan, since I got it wrong the last time, I'm adding you as a co-developer after my
-> >> SOB. I'm sorry if this creates extra work on your side due to you having to
-> >> resubmit the patch now with your SOB if I understand correctly, but since it's
-> >> based on your wording from the other thread, I definitely wanted to give you
-> >> credit.
-> >> 
-> >> tools/memory-model/Documentation/explanation.txt | 7 ++++---
-> >> 1 file changed, 4 insertions(+), 3 deletions(-)
-> >> 
-> >> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> >> index ee819a402b69..0bca50cac5f4 100644
-> >> --- a/tools/memory-model/Documentation/explanation.txt
-> >> +++ b/tools/memory-model/Documentation/explanation.txt
-> >> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
-> >> through a pointer will depend on the value read earlier from that
-> >> pointer.
-> >> 
-> >> -Finally, a read event and another memory access event are linked by a
-> >> -control dependency if the value obtained by the read affects whether
-> >> -the second event is executed at all.  Simple example:
-> >> +Finally, a read event X and another memory access event Y are linked by
-> >> +a control dependency if Y syntactically lies within an arm of an if,
-> >> +else or switch statement and the condition guarding Y is either data or
-> >> +address-dependent on X.  Simple example:
-> >> 
-> >> 	int x, y;
-> >> 
-> >> --
-> >> 2.35.1
-> 
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
