@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84B55B57AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34A65B57AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiILJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 05:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S229971AbiILJ6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 05:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiILJ52 (ORCPT
+        with ESMTP id S229942AbiILJ6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:57:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B140B1E;
-        Mon, 12 Sep 2022 02:57:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 316BC611A3;
-        Mon, 12 Sep 2022 09:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020C4C433C1;
-        Mon, 12 Sep 2022 09:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662976646;
-        bh=oxNRRd+/qnc5PG+8zykOVxGBoTfoKYP7uOymT2bCbxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FbdpohZGzTH348w2x8A0rEPWMFgzO1xdYsIj01NJ9ckmQlWj/rYY+XhM/dfZXYT55
-         Ag8rRC2TKbdcl86Igyew/j7TrzKqQJqEW+0W/Ew4cRsa7lZxI052BvSW5RVsSzFD+Q
-         ztfoCeU0EgxePvUG751fUEVm6zkBi5qEnxq5QCdVaNcBKspV5ct/7tBXrbItN8tkhe
-         Xv8O8WV/Gaey61v+xqfS138v2gU9dOK1aoBQD0OIt4OQZRx3Jo3OzsfqPCclxHZNAs
-         0qPNYqLnJKLltu6bt23/EgcoD9VVl6mkdop/H8x3BszE9xqgx01thXaFZQjxcQzVuk
-         nWVxXjqgeRA4w==
-Date:   Mon, 12 Sep 2022 10:57:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V2 1/7] arm64/perf: Add register definitions for BRBE
-Message-ID: <Yx8Cgzr7lQdMLX+P@sirena.org.uk>
-References: <20220908051046.465307-1-anshuman.khandual@arm.com>
- <20220908051046.465307-2-anshuman.khandual@arm.com>
+        Mon, 12 Sep 2022 05:58:20 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D0663D8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:58:20 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id u23-20020a6be917000000b0069f4854e11eso4971228iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 02:58:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
+        b=MER5hBbS2xiwmECSoX6YOnHTVX9jlPRZ256sSUYp4Nw7+lm4H66BwVFiHz7NJy+qKH
+         uaDc8dFO2oO12AOy3nZap9osmPVwz96/WpD6ruUt3jyARg2dJrNvTYhRkG3PpVi3RKtP
+         HCawsBVuVN/Lt7jhGP2XXvBMkLdQAj9xxeU962SFRFh5lCC2M3zXFaZZmsQGryksbZAP
+         Jh2wzoaLO9LQq2ioiNr6kiyQ1jO6nSeoKXLVK1UAtoGoQe5xJxXwpQNvGcqerZ6SiI1O
+         9ae3JQMu+fT/xVw/UdK0OHeE3ngy1aUlf2rT65kSIeQL0Lb9HgSNyvrbfa4JQjdP4CM9
+         k7ug==
+X-Gm-Message-State: ACgBeo07kGkiQ5YbPAeGGbKVm9WmLelCqlLYO/l2o4Umu5DpGaKxBejw
+        zrRSJCuoT7up5cPN0N4jq1GFWccHFu3OVxOTPw2vd7pNduDn
+X-Google-Smtp-Source: AA6agR4qr9dkm6M3oYDOSvO8coQLPA1BsQMKdWJJqiJhKspO2yoRZ5JmSE3DAlXz/2suwmu0F2JYdUpnMxWLxR0jK4T+nn9+kInf
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dmQSrbmLl2fa1iHv"
-Content-Disposition: inline
-In-Reply-To: <20220908051046.465307-2-anshuman.khandual@arm.com>
-X-Cookie: One FISHWICH coming up!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:1349:b0:68a:ea6e:6448 with SMTP id
+ i9-20020a056602134900b0068aea6e6448mr11053528iov.61.1662976699622; Mon, 12
+ Sep 2022 02:58:19 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 02:58:19 -0700
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007369cf05e877ef45@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,34 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---dmQSrbmLl2fa1iHv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Sep 08, 2022 at 10:40:40AM +0530, Anshuman Khandual wrote:
-
-> ---
->  arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++++++++++++++++++
->  1 file changed, 222 insertions(+)
-
-Rather than manually encoding register definitions in sysreg.h
-can we add them to arch/arm64/tools/sysreg so that all the
-#defines and so on are generated instead?
-
---dmQSrbmLl2fa1iHv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMfAoIACgkQJNaLcl1U
-h9A04wf/SOgxJF9+6OYpMjh9mbiNsTbNTGbbkkCxc/qdLlCVOQaU7gPYldHik/ko
-OQuRpS8874xd3/lf6/y5fBDOCyovXDDh4tIoQjCQVr7zpS83t3fkIbIbC2Y3mOMc
-rmRUZ/7JEIi9MeydZu0tj5BnDqqsM5+afgOjbf0wa45veyakZoLp0xsCx28PrepI
-IEyGlgzJ3OlWiSYjq9yGqwb5YKKOw0dkC0T4fygwiiG5zecRxoUSoy4FbdFWv1yx
-9YSsjM8ScLnb7zTwztWpPu9ZXbOwRwTemYRJZvBrWU1MScuU/+Qc6NdWCixCnr0m
-S2k3IvEWnbeMt2bv1kP4cY5LvjR5/g==
-=9mtK
------END PGP SIGNATURE-----
-
---dmQSrbmLl2fa1iHv--
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.
