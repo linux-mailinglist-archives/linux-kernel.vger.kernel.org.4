@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EB75B5D3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF005B5D3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiILPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S230205AbiILPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiILPdI (ORCPT
+        with ESMTP id S229503AbiILPdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:33:08 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A167829C81;
-        Mon, 12 Sep 2022 08:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5vF4nOR7okjhrE/WI9Z86whidSR0qc+yOoCcLcC0enw=; b=diSA+9u3Z1hJnF3PkEmLt1Z+Dw
-        VULXwWOrkOZhK5gjSrwU0PpzhoDXP4X6wI9cUJ2RZYz2Vn7tESFZkaU5DK2/mHagnUzWQZcrlJP7d
-        n/TtjxjLZNoApHSZvkzyXA3cNsoTFSzZC/yknWZpYJ3Cg4LUj/ZqEnd+aRomup6okV1sxxIceIcKd
-        ZqHlqpEiZNMounKMwSNU/8tXymmB6hc14gO6RDDu4iBqLCd9LKLvUZUtkKiO1UjtfbcUM6Fn1rc8K
-        S4H5uxnIazS9KGT2+TQnM0KDWSHWV2lzmidwF/1eR0w62j7cBD2nhpT+6YAeNsPbtKWbl040vl1Hv
-        epiBwP4g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34268)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oXlQl-0001rB-Ts; Mon, 12 Sep 2022 16:33:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oXlQh-0008Dq-Pi; Mon, 12 Sep 2022 16:32:59 +0100
-Date:   Mon, 12 Sep 2022 16:32:59 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Mon, 12 Sep 2022 11:33:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF0028E23;
+        Mon, 12 Sep 2022 08:33:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 63116203C0;
+        Mon, 12 Sep 2022 15:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662996808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kozuecFuYGcaj4dmvVphhLmDqddAMEHY4So8DzM3m+A=;
+        b=xSGCDg4mGumtpFsXYWWYWKLnjJtrUpYMAN8BK30kG8qvorkziyEYkwXSI4qOjTSXPB93KA
+        3/On2InK0WuPDgrGtY0CSyvnCOTQmvVyTLnhZFVpbYRFRO3yN0H5uGETDfm1NLrUZsD/iN
+        E//Z5DubrCP2AaNfySW6Nvg6kjV780U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662996808;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kozuecFuYGcaj4dmvVphhLmDqddAMEHY4So8DzM3m+A=;
+        b=3VcY/WHXR6j0C/Jn49QCE3raFVIlSfKXqXJdOF38hAJhljnY11MPODqQoqFtNiA2Zn3o/+
+        FGyqL0e1cxQUC0CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C5F5139E0;
+        Mon, 12 Sep 2022 15:33:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l3UwEUhRH2NuYgAAMHmgww
+        (envelope-from <iivanov@suse.de>); Mon, 12 Sep 2022 15:33:28 +0000
+Date:   Mon, 12 Sep 2022 18:33:27 +0300
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [RFC v1 net-next 6/8] net: dsa: felix: populate mac_capabilities
- for all ports
-Message-ID: <Yx9RK0bDba4s02qn@shell.armlinux.org.uk>
-References: <20220911200244.549029-1-colin.foster@in-advantage.com>
- <20220911200244.549029-7-colin.foster@in-advantage.com>
- <Yx7yZESuK6Jh0Q8X@shell.armlinux.org.uk>
- <20220912101621.ttnsxmjmaor2cd7d@skbuf>
- <20220912114117.l2ufqv5forkpehif@skbuf>
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: bcm2835: fix bcm2835_clock_rate_from_divisor
+ declaration
+Message-ID: <20220912153327.b6yjpqofq52pzdz6@suse>
+References: <20220904141037.38816-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912114117.l2ufqv5forkpehif@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20220904141037.38816-1-stefan.wahren@i2se.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 11:41:18AM +0000, Vladimir Oltean wrote:
-> On Mon, Sep 12, 2022 at 01:16:21PM +0300, Vladimir Oltean wrote:
-> > > Therefore, I think you can drop this patch from your series and
-> > > you won't see any functional change.
-> > 
-> > This is true. I am also a bit surprised at Colin's choices to
-> > (b) split the work he submitted such that he populates mac_capabilities
-> >     but does not make any use of it (not call phylink_generic_validate
-> >     from anywhere). We try as much as possible to not leave dead code
-> >     behind in the mainline tree, even if future work is intended to
-> >     bring it to life. I do understand that this is an RFC so the patches
-> >     weren't intended to be applied as is, but it is still confusing to
-> >     review a change which, as you've correctly pointed out, has no
-> >     effect to the git tree as it stands.
+On 09-04 16:10, Stefan Wahren wrote:
+> Date: Sun,  4 Sep 2022 16:10:37 +0200
+> From: Stefan Wahren <stefan.wahren@i2se.com>
+> To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+>  <sboyd@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, Ray Jui
+>  <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Maxime Ripard
+>  <maxime@cerno.tech>
+> Cc: linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+>  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Stefan
+>  Wahren <stefan.wahren@i2se.com>
+> Subject: [PATCH] clk: bcm2835: fix bcm2835_clock_rate_from_divisor
+>  declaration
+> Message-Id: <20220904141037.38816-1-stefan.wahren@i2se.com>
 > 
-> Ah, I retract this comment; after actually looking at all the patches, I
-> do see that in patch 8/8, Colin does call phylink_generic_validate().
+> The return value of bcm2835_clock_rate_from_divisor is always unsigned
+> and also all caller expect this. So fix the declaration accordingly.
+> 
+> Fixes: 41691b8862e2 ("clk: bcm2835: Add support for programming the audio domain clocks")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-Good point, I obviously missed that in the series.
+Reviewed-by: Ivan T. Ivanov <iivanov@suse.de>
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
