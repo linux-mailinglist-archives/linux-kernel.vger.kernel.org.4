@@ -2,109 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1E65B5547
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C215B554A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiILHVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S229797AbiILHYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiILHVF (ORCPT
+        with ESMTP id S230005AbiILHXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:21:05 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6239E32053
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:18:10 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso11497407pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:18:10 -0700 (PDT)
+        Mon, 12 Sep 2022 03:23:52 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2FD31378;
+        Mon, 12 Sep 2022 00:21:05 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so11446066pjq.3;
+        Mon, 12 Sep 2022 00:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=FWAgKNPfCinc6qD4niSWvgkzCEX7z6+nrY4Z/gZWqPw=;
-        b=aB+Q8RfAzCbG3/IzAcmRHBx8p8ATtIqcqqtuUO1/4QC8QLbfCQH9UG8xfOaoy4IEET
-         q8z1MNtlvgloGUZpLuXSf6x9qlWLDmrKoPGXIQzWXMZq2oipE+mhtNZBK/JDtppyl8J2
-         44mE605hN0IuF/AuI8Dip+5YDQodVDbeFL8OTT9xx5Qxrgk5adikVCR7RIfKGawSfrKB
-         mkdHrcIlBM+qrLaVaBbDTGnoWHr9Zxlmazt1SKf3qjwOXLXxfmdmz3uNPIoZsFNzrlnc
-         J/kD8sdpfsbcSACsDDCJ9Z9D9zrmtYUJcV5cxH5w6NNgbd/2rs4F4CLCDHMPubub+v5S
-         mkEA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=5dtqxG1adEwAkwxzFfPz2UY5hEcWjHXC1xnhnKsqtNs=;
+        b=JSnp12K1bSNgmp+NodJK98vY0MXd9zjMqzUCEV/7Zu5q0JJ0rILUBjyL/aoNMrAJaX
+         6u1lDGufSOlUsmGlMzXCAFa68Rj7DIbYyf6dg7m//EyWS4fJctDywqqiFg6Cp9fC8UN3
+         ZkDqxQGojGtcxcMkQbvaf9XGbw7QdMrmnB6IFiU8/uQ7KDGw7CYgaUMSpABqegMOtB6X
+         c8JB/NTggLS1oH/WDf6Yp/A75sXgzpLlTWWSY4g5L9vbUAXMcb8TrJ06GvqqkethJu/j
+         IIusKxUI9lXTtWjsTPgRkLW7hYZjw6pwXY2pS7+9EkABea+8oZaQii67LC4LNYf+thPv
+         9aTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=FWAgKNPfCinc6qD4niSWvgkzCEX7z6+nrY4Z/gZWqPw=;
-        b=FbSNk+c1sUNXr8uBVCMd/1Pdstk5EillJ3V3XR6dKucyOljZ2Ws45vIomTBosiHtvi
-         WoVmnjstzmKMa4bcSUQrPOGGk74WtQo3soTdzeNxbdKRDJhUmhU/HO+win2hIZv74/OL
-         Vao0J48HHqx2UJTMkcY1FsSOcu1sxF9/h8M5p7QZKkvMNCwo0zTUBAZD/cmI0fZqetHo
-         LfadlYW1UQD3TZmePnPGbyz/p90AzTHwC9j7AYRCxstjHJFzDQcPcrDpwMy62vlJjo1X
-         6jmmIpDdH6K5KCoVt8CHvGF6X/w0uycwYB57gA3yurbUERfC6Pgiqj8VhlP5eApFYk6O
-         LZfw==
-X-Gm-Message-State: ACgBeo1+NdptOVBIjJaF4adCOcOb0O26V8+tFjVWp7z0CwYnADRZmWzU
-        e2Cm70STPU/rk//1NeZ9xmk=
-X-Google-Smtp-Source: AA6agR59s2thu9I42pAf4k79SXby4Cz8U1Ux40VIz0G/+JyFbLW4Mdp70WV6fkBD6X/sVpO8GdVdJw==
-X-Received: by 2002:a17:902:8f81:b0:178:1276:59e6 with SMTP id z1-20020a1709028f8100b00178127659e6mr12790503plo.94.1662967089533;
-        Mon, 12 Sep 2022 00:18:09 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id m17-20020a637d51000000b0042ff6b0cf4dsm4790142pgn.58.2022.09.12.00.18.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5dtqxG1adEwAkwxzFfPz2UY5hEcWjHXC1xnhnKsqtNs=;
+        b=uyfXRbX8g2/kOYeMWkTaOWIHJK9ZmVUS5lg/BxS4lwD1USI7tGcdGhwXpKqxwfEKyC
+         tfIGrvar/Ib+mnQ+BdusT2APwQMX9/mj5iYa3Iui6kIujWfakWa8WQCatpUy/EvBShpz
+         4OxLFnr2gWufxoT6ziaSOcBLc9pfAKUsqYeiUZKse/xuMG2eBW3UmS7RkOdn2aSlrl+c
+         m/YbfRrDXoeuUg1BGdVg+Enb7KXJ0jNrki/pAQqi6Bvs47PVV11Gqo155PKQq95qNpNZ
+         1cCpq8stwEN5CVFbMsm7j/NxSfdVDoP8vEWHoT3RIPyntAtRDDAM6+Q0cCuC8aH8PQkk
+         Njag==
+X-Gm-Message-State: ACgBeo2OSfjUMpZCmK7wmqooclg0tE9qhuW70YuaBjEXTaZElTdzlYY8
+        9xZrcYpQVRBVqjxCUyy9Un4=
+X-Google-Smtp-Source: AA6agR5FspMLLkInv03H8vC7TD75fHHvT2tTEjaNRJ+OByX7F0HXR5R8r6lvUy/nc2yaFBgP66cTfw==
+X-Received: by 2002:a17:90b:3ec2:b0:202:b123:29cc with SMTP id rm2-20020a17090b3ec200b00202b12329ccmr9744176pjb.167.1662967265366;
+        Mon, 12 Sep 2022 00:21:05 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g6-20020a17090a4b0600b001eee8998f2esm4444442pjh.17.2022.09.12.00.21.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 00:18:08 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 16:18:03 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Ben Luo <luoben@linux.alibaba.com>
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: return 0 when object pointer is NULL
-Message-ID: <Yx7dKxwxlNmCr9Ai@hyeyoo>
-References: <1662962379-16174-1-git-send-email-luoben@linux.alibaba.com>
+        Mon, 12 Sep 2022 00:21:04 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     varkabhadram@gmail.com
+Cc:     alex.aring@gmail.com, stefan@datenfreihafen.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] ieee802154: cc2520: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 07:20:42 +0000
+Message-Id: <20220912072041.16873-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1662962379-16174-1-git-send-email-luoben@linux.alibaba.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 01:59:39PM +0800, Ben Luo wrote:
-> NULL is definitly not a valid address
-> 
-> Signed-off-by: Ben Luo <luoben@linux.alibaba.com>
-> ---
->  mm/slub.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 862dbd9..50fad18 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -674,7 +674,7 @@ static inline int check_valid_pointer(struct kmem_cache *s,
->  	void *base;
->  
->  	if (!object)
-> -		return 1;
-> +		return 0;
->  
->  	base = slab_address(slab);
->  	object = kasan_reset_tag(object);
-> -- 
-> 1.8.3.1
-> 
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Hello Ben.
+Return the value cc2520_write_register() directly instead of storing it in
+another redundant variable.
 
-The return value is used to check if the @object has valid pointer
-in @slab. (used for debugging) the return value is 0 if valid, 1 if invalid.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ drivers/net/ieee802154/cc2520.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-It does not return a pointer. So changing it to 0 because 1 is invalid
-address does not make sense.
+diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
+index c69b87d3837d..abe331c795df 100644
+--- a/drivers/net/ieee802154/cc2520.c
++++ b/drivers/net/ieee802154/cc2520.c
+@@ -632,7 +632,6 @@ static int
+ cc2520_set_channel(struct ieee802154_hw *hw, u8 page, u8 channel)
+ {
+        struct cc2520_private *priv = hw->priv;
+-       int ret;
 
+        dev_dbg(&priv->spi->dev, "trying to set channel\n");
+
+@@ -640,10 +639,8 @@ cc2520_set_channel(struct ieee802154_hw *hw, u8 page, u8 channel)
+        WARN_ON(channel < CC2520_MINCHANNEL);
+        WARN_ON(channel > CC2520_MAXCHANNEL);
+
+-       ret = cc2520_write_register(priv, CC2520_FREQCTRL,
+-                                   11 + 5 * (channel - 11));
+-
+-       return ret;
++       return cc2520_write_register(priv, CC2520_FREQCTRL,
++                                    11 + 5 * (channel - 11));
+ }
+
+ static int
 -- 
-Thanks,
-Hyeonggon
+2.15.2
+
