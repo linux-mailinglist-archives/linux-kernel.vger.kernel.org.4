@@ -2,222 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F075B5C23
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795AE5B5C28
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 16:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiILOW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 10:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S229743AbiILO0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 10:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiILOWx (ORCPT
+        with ESMTP id S230076AbiILOZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 10:22:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CD9326CC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 07:22:51 -0700 (PDT)
+        Mon, 12 Sep 2022 10:25:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEA02D1C4;
+        Mon, 12 Sep 2022 07:25:55 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4622933915;
-        Mon, 12 Sep 2022 14:22:50 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E9892200FE;
+        Mon, 12 Sep 2022 14:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662992570; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1662992753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VGUypKVHeGpWpoCP7mLpRont+CgrqEM8rwaODFR4RRU=;
-        b=khfgAcmH/sB1H3iC0x+Y5oplmI6i+lHHgDPaL7+3zuqqsuBfOVK4CznLY9DnrLVfDxlgxW
-        NvNVGmUBmcyBREimNt0ndrIIugLexnHgj6kFLifEoY2u2Q8yfR77sDSF+0sd6t0fWJFFhe
-        cOxFgDv32DWI54kVGZRn3+qKbU0Gzjs=
+        bh=CQ816uq/z72h01vUJ3WqCOqE0rBSfyAYPOG1bRSmGEU=;
+        b=t7mrZjRhOopakSQTCP0Fl9xQuAjyYgCTr6Gzk4Iq3U3adDGwB/3yw8e6pUqOUyl1CAmcu+
+        4UnRA7+r6SS4W1tH1JxveYYCUw7Up4wr9eS4qCR0igZiGjYRWCn2+Cn/DVBkGofk4B6cUX
+        CnuWsecIrEeLgI4fMW0hGPcMBcMSKgg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662992570;
+        s=susede2_ed25519; t=1662992753;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VGUypKVHeGpWpoCP7mLpRont+CgrqEM8rwaODFR4RRU=;
-        b=TtIdFbjQJyTHZeXUkEa3KXsjsant03u98B0F0CVX9gXcfJ182HL1ZszjPyTOsSkbZmXOCY
-        /NHbmtGC3R71WBAQ==
+        bh=CQ816uq/z72h01vUJ3WqCOqE0rBSfyAYPOG1bRSmGEU=;
+        b=tIHy8hhDKDLLP+9AI60M7pgy8tF+VM0uyaFTyjEknOMr4UIr2yXj46OpMGsz774UkvH6de
+        8L2r3wZlsp/1ZMAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25C84139C8;
-        Mon, 12 Sep 2022 14:22:50 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A8DD139C8;
+        Mon, 12 Sep 2022 14:25:53 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id g0ohCLpAH2PcRQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 12 Sep 2022 14:22:50 +0000
-Message-ID: <d4c00bb6-03be-0348-6a75-c678608114f1@suse.de>
-Date:   Mon, 12 Sep 2022 16:22:49 +0200
+        id lqwYF3FBH2M6RwAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Mon, 12 Sep 2022 14:25:53 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id fe7b8088;
+        Mon, 12 Sep 2022 14:26:45 +0000 (UTC)
+References: <20220822094235.2690-1-lhenriques@suse.de>
+From:   =?utf-8?Q?Lu=C3=ADs?= Henriques <lhenriques@suse.de>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?Q?Lu=C3=ADs?= Henriques <lhenriques@suse.de>,
+        Baokun Li <libaokun1@huawei.com>
+Subject: Re: [PATCH v4] ext4: fix bug in extents parsing when eh_entries ==
+ 0 and eh_depth > 0
+Date:   Mon, 12 Sep 2022 15:23:14 +0100
+In-reply-to: <20220822094235.2690-1-lhenriques@suse.de>
+Message-ID: <87h71cwtwa.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-Content-Language: en-US
-To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220912101522.69482-1-javierm@redhat.com>
- <Yx8Ms2jhgwpiDqA6@intel.com> <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
- <Yx8Vo4x7frhbElPq@intel.com> <4002a4d6-04cb-b342-952f-b42ef3188df4@suse.de>
- <Yx8nXZnTDEwuPEvP@intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <Yx8nXZnTDEwuPEvP@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------RmvCyu9CQzHUTw4ek078r59I"
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------RmvCyu9CQzHUTw4ek078r59I
-Content-Type: multipart/mixed; boundary="------------TtTWUjEhbdYmQQfL23uX0vlu";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc: David Airlie <airlied@linux.ie>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <d4c00bb6-03be-0348-6a75-c678608114f1@suse.de>
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-References: <20220912101522.69482-1-javierm@redhat.com>
- <Yx8Ms2jhgwpiDqA6@intel.com> <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
- <Yx8Vo4x7frhbElPq@intel.com> <4002a4d6-04cb-b342-952f-b42ef3188df4@suse.de>
- <Yx8nXZnTDEwuPEvP@intel.com>
-In-Reply-To: <Yx8nXZnTDEwuPEvP@intel.com>
 
---------------TtTWUjEhbdYmQQfL23uX0vlu
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Ping?
 
-SGkNCg0KQW0gMTIuMDkuMjIgdW0gMTQ6MzQgc2NocmllYiBWaWxsZSBTeXJqw6Rsw6Q6DQo+
-IE9uIE1vbiwgU2VwIDEyLCAyMDIyIGF0IDAyOjA1OjM2UE0gKzAyMDAsIFRob21hcyBaaW1t
-ZXJtYW5uIHdyb3RlOg0KPj4gSGkNCj4+DQo+PiBBbSAxMi4wOS4yMiB1bSAxMzoxOCBzY2hy
-aWViIFZpbGxlIFN5cmrDpGzDpDoNCj4+PiBPbiBNb24sIFNlcCAxMiwgMjAyMiBhdCAwMTow
-NTo0NVBNICswMjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+Pj4gSGkNCj4+Pj4N
-Cj4+Pj4gQW0gMTIuMDkuMjIgdW0gMTI6NDAgc2NocmllYiBWaWxsZSBTeXJqw6Rsw6Q6DQo+
-Pj4+PiBPbiBNb24sIFNlcCAxMiwgMjAyMiBhdCAxMjoxNToyMlBNICswMjAwLCBKYXZpZXIg
-TWFydGluZXogQ2FuaWxsYXMgd3JvdGU6DQo+Pj4+Pj4gUHJvdmlkZXMgYSBkZWZhdWx0IHBs
-YW5lIHN0YXRlIGNoZWNrIGhhbmRsZXIgZm9yIHByaW1hcnkgcGxhbmVzIHRoYXQgYXJlIGEN
-Cj4+Pj4+PiBmdWxsc2NyZWVuIHNjYW5vdXQgYnVmZmVyIGFuZCB3aG9zZSBzdGF0ZSBzY2Fs
-ZSBhbmQgcG9zaXRpb24gY2FuJ3QgY2hhbmdlLg0KPj4+Pj4+DQo+Pj4+Pj4gVGhlcmUgYXJl
-IHNvbWUgZHJpdmVycyB0aGF0IGR1cGxpY2F0ZSB0aGlzIGxvZ2ljIGluIHRoZWlyIGhlbHBl
-cnMsIHN1Y2ggYXMNCj4+Pj4+PiBzaW1wbGVkcm0gYW5kIHNzZDEzMHguIEZhY3RvciBvdXQg
-dGhpcyBjb21tb24gY29kZSBpbnRvIGEgcGxhbmUgaGVscGVyIGFuZA0KPj4+Pj4+IG1ha2Ug
-ZHJpdmVycyB1c2UgaXQuDQo+Pj4+Pj4NCj4+Pj4+PiBTdWdnZXN0ZWQtYnk6IFRob21hcyBa
-aW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPj4+Pj4+IFNpZ25lZC1vZmYtYnk6
-IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0KPj4+Pj4+
-IC0tLQ0KPj4+Pj4+DQo+Pj4+Pj4gICAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fcGxhbmVfaGVs
-cGVyLmMgfCAyOSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPj4+Pj4+ICAgICBk
-cml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgIHwgMTggKy0tLS0tLS0tLS0tLS0t
-LS0tDQo+Pj4+Pj4gICAgIGRyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jICAgfCAy
-NSArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4+Pj4gICAgIGluY2x1ZGUvZHJtL2Ry
-bV9wbGFuZV9oZWxwZXIuaCAgICAgfCAgMiArKw0KPj4+Pj4+ICAgICA0IGZpbGVzIGNoYW5n
-ZWQsIDMzIGluc2VydGlvbnMoKyksIDQxIGRlbGV0aW9ucygtKQ0KPj4+Pj4+DQo+Pj4+Pj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fcGxhbmVfaGVscGVyLmMgYi9kcml2
-ZXJzL2dwdS9kcm0vZHJtX3BsYW5lX2hlbHBlci5jDQo+Pj4+Pj4gaW5kZXggYzc3ODU5Njdm
-NWJmLi5mYjQxZWVlNzQ2OTMgMTAwNjQ0DQo+Pj4+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L2RybV9wbGFuZV9oZWxwZXIuYw0KPj4+Pj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1f
-cGxhbmVfaGVscGVyLmMNCj4+Pj4+PiBAQCAtMjc4LDMgKzI3OCwzMiBAQCB2b2lkIGRybV9w
-bGFuZV9oZWxwZXJfZGVzdHJveShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSkNCj4+Pj4+PiAg
-ICAgCWtmcmVlKHBsYW5lKTsNCj4+Pj4+PiAgICAgfQ0KPj4+Pj4+ICAgICBFWFBPUlRfU1lN
-Qk9MKGRybV9wbGFuZV9oZWxwZXJfZGVzdHJveSk7DQo+Pj4+Pj4gKw0KPj4+Pj4+ICsvKioN
-Cj4+Pj4+PiArICogZHJtX3BsYW5lX2hlbHBlcl9hdG9taWNfY2hlY2soKSAtIEhlbHBlciB0
-byBjaGVjayBwcmltYXJ5IHBsYW5lcyBzdGF0ZXMNCj4+Pj4+PiArICogQHBsYW5lOiBwbGFu
-ZSB0byBjaGVjaw0KPj4+Pj4+ICsgKiBAbmV3X3N0YXRlOiBwbGFuZSBzdGF0ZSB0byBjaGVj
-aw0KPj4+Pj4NCj4+Pj4+IFRoYXQgaXMgbm90IGEgcGxhbmUgc3RhdGUuIEFsc28gc2hvdWxk
-IHMvbmV3Xy8vIHNpbmNlIGl0J3MganVzdA0KPj4+Pj4gdGhlIG92ZXJhbGwgYXRvbWljIHN0
-YXRlIHRoaW5nIHJhdGhlciB0aGFuIHNvbWUgbmV3IG9yIG9sZCBzdGF0ZS4NCj4+Pj4NCj4+
-Pj4gVXNpbmcgb25seSAnc3RhdGUnIGlzIG5vbi1pbnR1aXRpdmUgYW5kIGhhcyBsZWFkIHRv
-IGJ1Z3Mgd2hlcmUgc3ViLXN0YXRlDQo+Pj4+IHdhcyByZXRyaWV2ZWQgZnJvbSB0aGUgd3Jv
-bmcgc3RhdGUgaW5mb3JtYXRpb24uIFNvIHdlJ3ZlIGJlZW4gdXNpbmcNCj4+Pj4gJ25ld19z
-dGF0ZScgYW5kICdvbGRfc3RhdGUnIGV4cGxpY2l0bHkgaW4gc2V2ZXJhbCBwbGFjZXMgbm93
-Lg0KPj4+DQo+Pj4gVGhlcmUgaXMgbm8gb2xkIG9yIG5ldyBkcm1fYXRvbWljX3N0YXRlLiBJ
-dCBjb250YWlucyBib3RoLg0KPj4NCj4+IEkgKHZhZ3VlbHkpIHJlbWVtYmVyIGEgYnVnIHdo
-ZXJlIGEgZHJpdmVyIHRyaWVkDQo+PiBkcm1fYXRvbWljX2dldF9uZXdfcGxhbmVfc3RhdGUo
-KSB3aXRoIHRoZSAob2xkKSBzdGF0ZSB0aGF0J3MgcGFzc2VkIHRvDQo+PiBhdG9taWNfdXBk
-YXRlLiBJdCBkaWRuJ3QgcmV0dXJuIHRoZSBleHBlY3RlZCByZXN1bHRzIGFuZCBtb2Rlc2V0
-dGluZw0KPj4gZ2F2ZSBzbGlnaHRseSB3cm9uZyByZXN1bHRzLg0KPiANCj4gQXMgdGhlcmUg
-aXMgbm8gd3JvbmcgZHJtX2F0b21pY19zdGF0ZSB0byBwYXNzIEkgZG9uJ3QgdGhpbmsgaXQg
-Y291bGQNCj4gaGF2ZSBiZWVuIHRoZSBjYXNlLg0KPiANCj4+IFNvIHdlIGJlZ2FuIHRvIGJl
-IG1vcmUgcHJlY2lzZSBhYm91dCBuZXcNCj4+IGFuZCBvbGQuIEFuZCB3aGF0ZXZlciBpcyBz
-dG9yZWQgaW4gJ3BsYW5lLT5zdGF0ZScgaXMgdGhlbiBqdXN0ICd0aGUgc3RhdGUnLg0KPiAN
-Cj4gVGhlcmUgd2VyZSBjZXJ0YWlubHkgYSBsb3Qgb2YgY29uZnVzaW9uIGJlZm9yZSB0aGUg
-ZXhwbGljaXQgbmV3L29sZA0KPiBzdGF0ZSBzdHVmZiB3YXMgYWRkZWQgd2hldGhlciBmb28t
-PnN0YXRlL2V0Yy4gd2FzIHRoZSBvbGQgb3IgdGhlDQo+IG5ldyBzdGF0ZS4gQW5kIGxhYmVs
-aW5nIHRoaW5ncyBhcyBleHBsaWNpdGx5IG9sZCB2cy4gbmV3IHdoZW4gcGFzc2luZw0KPiBp
-biBpbmRpdmlkdWFsIG9iamVjdCBzdGF0ZXMgY2VydGFpbmx5IG1ha2VzIHNlbnNlLiBCdXQg
-dGhhdCBkb2Vzbid0DQo+IHJlYWxseSBoYXZlIGFueXRoaW5nIHRvIGRvIHdpdGggbWlzbGFi
-ZWxpbmcgdGhlIG92ZXJhbGwgZHJtX2F0b21pY19zdGF0ZS4NCj4gDQo+Pg0KPj4gSSB1bmRl
-cnN0YW5kIHRoYXQgdGhlIHNlbWFudGljcyBvZiBhdG9taWNfY2hlY2sgYXJlIGRpZmZlcmVu
-dCBmcm9tDQo+PiBhdG9taWNfdXBkYXRlLCBidXQgaXQgc3RpbGwgZG9lc24ndCBodXJ0IHRv
-IHRhbGsgb2YgbmV3X3N0YXRlIElNSE8uDQo+IA0KPiBJTU8gaXQncyBqdXN0IGNvbmZ1c2lu
-Zy4gTWFrZXMgdGhlIHJlYWRlciB0aGluayB0aGVyZSBpcyBzb21laG93DQo+IGRpZmZlcmVu
-dCBkcm1fYXRvbWljX3N0YXRlcyBmb3Igb2xkIHZzLiBuZXcgc3RhdGVzIHdoZW4gdGhlcmUg
-aXNuJ3QuDQo+IEkgYWxzbyB3b3VsZG4ndCBjYWxsIGl0IG5ld19zdGF0ZSBmb3IgLmF0b21p
-Y191cGRhdGUoKSBlaXRoZXIuDQo+IA0KPiBJbiBib3RoIGNhc2VzIHlvdSBoYXZlIHRoZSBv
-bGQgYW5kIG5ldyBzdGF0ZXMgaW4gdGhlcmUgYW5kIGhvdw0KPiBleGFjdGx5IHRoZXkgZ2V0
-IHVzZWQgaW4gdGhlIGhvb2tzIGlzIG1vcmUgb2YgYW4gaW1wbGVtZW50YXRpb24NCj4gZGV0
-YWlsLiBUaGUgb25seSBydWxlcyB5b3Ugd291bGQgaGF2ZSB0byBmb2xsb3cgaXMgdGhhdCBh
-dCB0aGUNCj4gZW5kIG9mIC5hdG9taWNfdXBkYXRlKCkgdGhlIGhhcmR3YXJlIHN0YXRlIG1h
-dGNoZXMgdGhlIG5ldyBzdGF0ZSwNCj4gYW5kIC5hdG9taWNfY2hlY2soKSBtYWtlcyBzdXJl
-IHRoZSB0cmFuc2l0aW9uIGZyb20gdGhlIG9sZCB0byB0aGUNCj4gbmV3IHN0YXRlIGlzIHBv
-c3NpYmxlLg0KDQogRnJvbSB3aGF0IEkgdW5kZXJzdGFuZDoNCg0KSW4gYXRvbWljX2NoZWNr
-KCksIHBsYW5lLT5zdGF0ZSBpcyB0aGUgY3VycmVudCBzdGF0ZSBhbmQgdGhlIHN0YXRlIA0K
-YXJndW1lbnQgaXMgdGhlIHN0YXRlIHRvIGJlIHZhbGlkYXRlZC4gQ2FsbGluZyANCmRybV9h
-dG9taWNfZ2V0X25ld19wbGFuZV9zdGF0ZSgpIHdpbGwgcmV0dXJuIHRoZSBwbGFuZSdzIG5l
-dyBzdGF0ZS4NCg0KSWYgeW91IGNhbGwgZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRl
-KCkgZnJvbSBhdG9taWNfY2hlY2soKSwgd2hhdCANCndpbGwgaXQgcmV0dXJuPw0KDQpJbiBh
-dG9taWNfdXBkYXRlKCkgcGxhbmUtPnN0YXRlIGlzIHRoZSBzdGF0ZSB0byBiZSBjb21taXR0
-ZWQgYW5kIHRoZSANCnN0YXRlIGFyZ3VtZW50IGlzIHRoZSBvbGQgc3RhdGUgYmVmb3JlIHRo
-ZSBzdGFydCBvZiB0aGUgYXRvbWljIGNvbW1pdC4gDQpBbmQgY2FsbGluZyBkcm1fYXRvbWlj
-X2dldF9uZXdfcGxhbmVfc3RhdGUoKSB3aWxsICpub3QqIHRoZSByZXR1cm4gdGhlIA0KcGxh
-bmUncyBuZXcgc3RhdGUgKGkuZS4sIHRoZSBvbmUgaW4gcGxhbmUtPnN0YXRlKSBJSVJDLiAo
-QXMgSSBtZW50aW9uZWQsIA0KdGhlcmUgd2FzIGEgcmVsYXRlZCBidWcgaW4gb25lIG9mIHRo
-ZSBkcml2ZXJzLikgU28gd2UgYmVnYW4gdG8gY2FsbCB0aGlzIA0KJ29sZF9zdGF0ZScuDQoN
-Ck15IHBvaW50IGlzOiB0aGUgc3RhdGUgcGFzc2VkIHRvIHRoZSBjaGVjayBhbmQgY29tbWl0
-IGZ1bmN0aW9ucyBhcmUgDQpkaWZmZXJlbnQgdGhpbmdzLCBldmVuIHRob3VnaCB0aGV5IGFw
-cGVhciB0byBiZSB0aGUgc2FtZS4NCg0KPiANCj4gSSd2ZSBwcm9wb3NlZCByZW5hbWluZyBk
-cm1fYXRvbWljX3N0YXRlIHRvIGVnLiBkcm1fYXRvbWljX3RyYW5zYWN0aW9uDQo+IGEgZmV3
-IHRpbWVzIGJlZm9yZSBidXQgbm8gb25lIHRvb2sgdGhlIGJhaXQgc28gZmFyLi4uDQo+IA0K
-DQpJZiB5b3UgcmVhbGx5IGRvbid0IGxpa2UgbmV3X3N0YXRlLCB0aGVuIGxldCdzIGNhbGwg
-aXQgc3RhdGVfdHguDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+I have written an fstest for this fix, but since it generates a corrupted
+image that crashes the kernel I'd rather have the bug fixed before
+submitting it.
 
---------------TtTWUjEhbdYmQQfL23uX0vlu--
+Cheers,
+--=20
+Lu=C3=ADs
 
---------------RmvCyu9CQzHUTw4ek078r59I
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Lu=C3=ADs Henriques <lhenriques@suse.de> writes:
 
------BEGIN PGP SIGNATURE-----
+> When walking through an inode extents, the ext4_ext_binsearch_idx() funct=
+ion
+> assumes that the extent header has been previously validated.  However, t=
+here
+> are no checks that verify that the number of entries (eh->eh_entries) is
+> non-zero when depth is > 0.  And this will lead to problems because the
+> EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in =
+this:
+>
+> [  135.245946] ------------[ cut here ]------------
+> [  135.247579] kernel BUG at fs/ext4/extents.c:2258!
+> [  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
+> [  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
+> [  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO=
+S rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+> [  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
+> [  135.256475] Code:
+> [  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
+> [  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 000000000=
+0000023
+> [  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff88800=
+46e922c
+> [  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff88800=
+2ca580c
+> [  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 000000000=
+0000024
+> [  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 000000000=
+0000000
+> [  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlG=
+S:0000000000000000
+> [  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 000000000=
+0170ea0
+> [  135.277952] Call Trace:
+> [  135.278635]  <TASK>
+> [  135.279247]  ? preempt_count_add+0x6d/0xa0
+> [  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
+> [  135.281612]  ? _raw_read_unlock+0x18/0x30
+> [  135.282704]  ext4_map_blocks+0x294/0x5a0
+> [  135.283745]  ? xa_load+0x6f/0xa0
+> [  135.284562]  ext4_mpage_readpages+0x3d6/0x770
+> [  135.285646]  read_pages+0x67/0x1d0
+> [  135.286492]  ? folio_add_lru+0x51/0x80
+> [  135.287441]  page_cache_ra_unbounded+0x124/0x170
+> [  135.288510]  filemap_get_pages+0x23d/0x5a0
+> [  135.289457]  ? path_openat+0xa72/0xdd0
+> [  135.290332]  filemap_read+0xbf/0x300
+> [  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
+> [  135.292192]  new_sync_read+0x103/0x170
+> [  135.293014]  vfs_read+0x15d/0x180
+> [  135.293745]  ksys_read+0xa1/0xe0
+> [  135.294461]  do_syscall_64+0x3c/0x80
+> [  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+> This patch simply adds an extra check in __ext4_ext_check(), verifying th=
+at
+> eh_entries is not 0 when eh_depth is > 0.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D215941
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216283
+> Cc: Baokun Li <libaokun1@huawei.com>
+> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+> ---
+>  fs/ext4/extents.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> Changes since v3:
+> - Fixed typo (I had 'eh_depth' instead of 'depth')
+>
+> Changes since v2:
+> - Dropped usage of le16_to_cpu() because we're comparing values against 0
+> - Use 'depth' instead of 'eh->eh_depth' because we've checked earlier that
+>   both have the same value.
+>
+>
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index c148bb97b527..5235974126bd 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function, un=
+signed int line,
+>  		error_msg =3D "invalid eh_entries";
+>  		goto corrupted;
+>  	}
+> +	if (unlikely((eh->eh_entries =3D=3D 0) && (depth > 0))) {
+> +		error_msg =3D "eh_entries is 0 but eh_depth is > 0";
+> +		goto corrupted;
+> +	}
+>  	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+>  		error_msg =3D "invalid extent entries";
+>  		goto corrupted;
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMfQLkFAwAAAAAACgkQlh/E3EQov+DP
-zg/+PpdEOQn07VVpi9r/Xsd9ih5pSapbjl7WxdV8rKz44xAddikkAYk7pQe9yxwxQAenrBohsRzm
-TC7K4VEDxDjbXVjIrHTJN6zLbt1WuFyFq8lzt7EZ4Dzcm1mGJVKbKSKN0R7vX6zYLxZcaom56DlN
-6j4q0D4h+kkwmWQnDWLr2cEBZDXeO4iPCrBGx90+rdNUAWllU62yhEJsIsqzGW9i9Az3j4m2xk8e
-gGMOUfFlXZ1sTJ15sivalE8z7mEdZLPjKGKENeEnOa7XUMytQoP6A8GFNRTybP5QOFN+KW3RZaJb
-pAFaz6eK9Z/zoi56t73INsDyczNZBoeeBEzQ6Ewm5C/2ogLDt9Y/su/YANr3W9OQ0o8UKKVHKkCW
-YQ//vwvWyBdYh9b1/12z0u9ppX4WWm8HtpvqgqwfHFTwS8DUJik4PHm+HxCjWJiywSdR9Q7uIlL5
-vRE3K+ZwvnNBtKW4gfli1JAdrMcveI75YHKgmlZvRtrVrmXZWBHO360rhlzGNSk1+AXq/6F7ZT7s
-UBbxcN1crZbjQoUrXzZiwrGzhJSqO6/IHummNSdjOtg4cBG+Zg418uRQYEaKJksn078HmwpxV3h8
-gFglDWXggBk/KGw3fHV7LBaf3xp9Ili6bZhe+2+Xy8ZAJND3acMISK7VEq3NNzUzomSFVgFKoNVn
-oUg=
-=sjP9
------END PGP SIGNATURE-----
-
---------------RmvCyu9CQzHUTw4ek078r59I--
