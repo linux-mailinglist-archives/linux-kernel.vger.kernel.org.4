@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6E55B5693
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20545B5694
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiILIsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S229965AbiILIsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiILIsQ (ORCPT
+        with ESMTP id S229961AbiILIsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:48:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1DB29C80;
-        Mon, 12 Sep 2022 01:48:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09986B80CAE;
-        Mon, 12 Sep 2022 08:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49142C433D7;
-        Mon, 12 Sep 2022 08:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662972491;
-        bh=8GAwrYOquzDVLIC6IiGx/D5QFTXPHg6puXqcd+RJ+SE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=laom6V04u71EH51bQtz9r9sbcJvRG3qSdoaL8BO6bbEzdBmPMW1HXLh3qgBtLPtCA
-         z4e+cgcwNa89lBePT0MvQ1aE/7zJohgv+JwgcGzwGKpJnqkA7I/9bgaEW4FgPEmUmj
-         eenyDj73tX1kK4UnA6vGv5lYLFOw3QGQJIa0sYn8xq7JwX6XZCCbz1cmkelFF0EtTM
-         IIWqgjfMeIYLmFGltLXbV4jKf4KZ6S315mOzUC/EPUapXTn8Ze65tCiyOfKglq6v27
-         /cdh1NSb8A7Q0VJXVVsyvRF/a7UDuaetjNaSEK+f4TaZ6pdncS4+TatOClCNPY/uaq
-         Hf2Vk16hgd5AQ==
-Received: by pali.im (Postfix)
-        id 2CCAE11D3; Mon, 12 Sep 2022 10:48:08 +0200 (CEST)
-Date:   Mon, 12 Sep 2022 10:48:08 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
- interrupt handler
-Message-ID: <20220912084808.mmi42l7sp657dz6i@pali>
-References: <20220709143151.qhoa7vjcidxadrvt@pali>
- <20220709234430.GA489657@bhelgaas>
- <20220710000659.vxmlsvoin26tdiqw@pali>
- <20220829165109.fzrgguchg4otbbab@pali>
- <20220911154516.tu2b7qhsnk6mdtui@pali>
- <Yx7nXJRHN1sWCkVq@lpieralisi>
+        Mon, 12 Sep 2022 04:48:42 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAB62AE29
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:48:40 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id p15-20020a056830130f00b006544f5228e3so5395486otq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=oIPlj77S7TL3EFKkzdGb3gdQ5LXHDMLWke3cCptq+uM=;
+        b=Phx26Sw0C0/q7KiFz7tbZrU15U/bIg1itlUhlajdilKJCe+ZEn0BY9dMFemw/JaFlM
+         D32lZi4+ywqgMBRKDKiKOxWMMgY9qXMhepZ296QYJeLrrPDBY6I/JBRtqcXRk46omA2l
+         dZQdUMgmJyDFxq4HLMQK3/dJzOtxq0jT+RSlo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=oIPlj77S7TL3EFKkzdGb3gdQ5LXHDMLWke3cCptq+uM=;
+        b=OGiPZNYRre7f7pT7KpHUpVBZrU+GUz6baE+iqd3whX/l47IHeXWJ4XR65su9cEXGo4
+         PmvB6ZIqe89OavetHVI2iAEQQqppYUuhIi4Hv6tmrORWEfUIFfDQebbsX7A3sIUXYL2d
+         iW29PGD2EmptmheITh0Radk0XiZfiFckjGcKEc3DmTv0NvGC9f9fxSUiySrmWG79pmEf
+         ZH9LbAZDFCB2iozNQuqqIFv9pFwZI2kFe7l0D5H7dsIml5U0yQoEanRBHYSyDGBwVxiE
+         59WfdJjr98Duy6f0UZ1vsdN/XBPW74R06KRIDl59hjLXj0x6zvUs0rjQurDX/OT7ud82
+         E8OA==
+X-Gm-Message-State: ACgBeo2dQp3pLomEkjU2KUKDIpj/D/nhbYeipJWAUKYFA3UphMseZMaV
+        t3x4S9RwS5uio9I5m9iYpX2ZUsDWvxZqUZkT4OPr7JuwjR4=
+X-Google-Smtp-Source: AA6agR5F+gCZuv+oh+Q6WUp78QErI7l6b0//NlbqS+axSsTAl9dE1LnsxdC4rhb30WDsYV4IXdBdq1EaHGjxO0jgTmM=
+X-Received: by 2002:a9d:51cc:0:b0:655:de5c:f2f3 with SMTP id
+ d12-20020a9d51cc000000b00655de5cf2f3mr1987188oth.237.1662972519102; Mon, 12
+ Sep 2022 01:48:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yx7nXJRHN1sWCkVq@lpieralisi>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220912072945.760949-1-yunjunlee@chromium.org> <87pmg1hvw7.wl-tiwai@suse.de>
+In-Reply-To: <87pmg1hvw7.wl-tiwai@suse.de>
+From:   YJ Lee <yunjunlee@chromium.org>
+Date:   Mon, 12 Sep 2022 16:48:27 +0800
+Message-ID: <CAPm_npbzeq8twNavfWfrAi-v8eky1QNivS7PKOocgxax+T4X3Q@mail.gmail.com>
+Subject: Re: [PATCH v1] ALSA: dummy: Add customizable volume min/max.
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        yuhsuan@chromium.org, whalechang@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,88 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 12 September 2022 10:01:32 Lorenzo Pieralisi wrote:
-> On Sun, Sep 11, 2022 at 05:45:16PM +0200, Pali Rohár wrote:
-> > On Monday 29 August 2022 18:51:09 Pali Rohár wrote:
-> > > On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
-> > > > On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
-> > > > > [+cc Marc, since he commented on this]
-> > > > > 
-> > > > > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
-> > > > > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
-> > > > > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
-> > > > > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
-> > > > > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
-> > > > > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
-> > > > > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
-> > > > > > > > >
-> > > > > > > > > This change fixes affinity support and allows to pin interrupts from
-> > > > > > > > > different PCIe controllers to different CPU cores.
-> > > > > > > > 
-> > > > > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
-> > > > > > > > of them need similar changes?  The commit log suggests that using
-> > > > > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
-> > > > > > > > the case and the real culprit is some other difference between mvebu
-> > > > > > > > and the other drivers.
-> > > > > > > 
-> > > > > > > And there is another reason to not use irq_set_chained_handler_and_data
-> > > > > > > and instead use devm_request_irq(). Armada XP has some interrupts
-> > > > > > > shared and it looks like that irq_set_chained_handler_and_data() API
-> > > > > > > does not handle shared interrupt sources too.
-> > > > > > > 
-> > > > > > > I can update commit message to mention also this fact.
-> > > > > > 
-> > > > > > Anything needed from me to improve this fix?
-> > > > > 
-> > > > > My impression from Marc's response [1] was that this patch would
-> > > > > "break the contract the kernel has with userspace" and he didn't think
-> > > > > this was acceptable.  But maybe I'm not understanding it correctly.
-> > > > 
-> > > > This is argument which Marc use when he does not have any argument.
-> > > > 
-> > > > Support for dedicated INTx into pci-mvebu.c was introduced just recently
-> > > > and I used irq_set_chained_handler_and_data() just because I thought it
-> > > > is a good idea and did not know about all those issues with it. So there
-> > > > cannot be any breakage by this patch.
-> > > > 
-> > > > I already converted other pci-aardvark.c driver to use
-> > > > irq_set_chained_handler_and_data() API because wanted it... But at the
-> > > > end _that conversion_ caused breakage of afinity support and so this
-> > > > conversion had to be reverted:
-> > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
-> > > > 
-> > > > Based on his past decisions, above suggestions which cause _real_
-> > > > breakage and his expressions like mvebu should be put into the trash,
-> > > > I'm not going to listen him anymore. The only breaking is done by him.
-> > > > 
-> > > > 
-> > > > There are two arguments why to not use irq_set_chained_handler_and_data:
-> > > > 
-> > > > 1) It does not support afinity and therefore has negative performance
-> > > >    impact on Armada platforms with more CPUs and more PCIe ports.
-> > > > 
-> > > > 2) It does not support shared interrupts and therefore it will break
-> > > >    hardware on which interrupt lines are shares (mostly Armada XP).
-> > > > 
-> > > > So these issues have to be fixed and currently I see only option to
-> > > > switch irq_set_chained_handler_and_data() to devm_request_irq() which I
-> > > > did in this fixup patch.
-> > > 
-> > > Any progress here? This patch is waiting here since end of May and if
-> > > something is going to be broken then it is this fact of ignoring reported
-> > > issues and proposed patch. Do you better solution how to fix commit
-> > > ec075262648f?
-> > 
-> > After two weeks I'm reminding this fix patch again...
-> 
-> There is no point complaining about something you were asked
-> to change, really - there is not.
-> 
-> You were given feedback, feel free to ignore it, it won't help
-> getting this patch upstream - it is as simple as that, sorry.
-> 
-> Thanks,
-> Lorenzo
+On Mon, Sep 12, 2022 at 3:52 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 12 Sep 2022 09:29:45 +0200,
+> YJ Lee wrote:
+> >
+> > Add module parameters to support customized min/max volume leveling,
+> > which will be useful to test devices with different volume granularity.
+> >
+> > Signed-off-by: YJ Lee <yunjunlee@chromium.org>
+> > ---
+> >  sound/drivers/dummy.c | 34 ++++++++++++++++++++++++----------
+> >  1 file changed, 24 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/sound/drivers/dummy.c b/sound/drivers/dummy.c
+> > index 2a7fc49c1a7c5..64fb2778f1e9a 100644
+> > --- a/sound/drivers/dummy.c
+> > +++ b/sound/drivers/dummy.c
+> > @@ -42,6 +42,8 @@ MODULE_LICENSE("GPL");
+> >  #define USE_CHANNELS_MAX     2
+> >  #define USE_PERIODS_MIN      1
+> >  #define USE_PERIODS_MAX      1024
+> > +#define USE_MIXER_VOLUME_LEVEL_MIN   -50
+> > +#define USE_MIXER_VOLUME_LEVEL_MAX   100
+> >
+> >  static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;   /* Index 0-MAX */
+> >  static char *id[SNDRV_CARDS] = SNDRV_DEFAULT_STR;    /* ID for this card */
+> > @@ -50,6 +52,8 @@ static char *model[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = NULL};
+> >  static int pcm_devs[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 1};
+> >  static int pcm_substreams[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 8};
+> >  //static int midi_devs[SNDRV_CARDS] = {[0 ... (SNDRV_CARDS - 1)] = 2};
+> > +static int mixer_volume_level_min = USE_MIXER_VOLUME_LEVEL_MIN;
+> > +static int mixer_volume_level_max = USE_MIXER_VOLUME_LEVEL_MAX;
+> >  #ifdef CONFIG_HIGH_RES_TIMERS
+> >  static bool hrtimer = 1;
+> >  #endif
+> > @@ -69,6 +73,10 @@ module_param_array(pcm_substreams, int, NULL, 0444);
+> >  MODULE_PARM_DESC(pcm_substreams, "PCM substreams # (1-128) for dummy driver.");
+> >  //module_param_array(midi_devs, int, NULL, 0444);
+> >  //MODULE_PARM_DESC(midi_devs, "MIDI devices # (0-2) for dummy driver.");
+> > +module_param(mixer_volume_level_min, int, 0444);
+>
+> I can imagine that the permission could be 0644, so that the
+> parameters can be changed dynamically via sysfs, too.  But it may skip
+> the sanity check at probe, hence more code would be needed, OTOH.
+>
+> So I applied the patch as is now.
+>
+>
+> thanks,
+>
+> Takashi
 
-I'm not sure if I understand you, what do you mean that all patches
-which depends on this are now automatically rejected or what?
+Thanks for the insight! Learned a lot from your kind explanation and
+constant help.
+
+Appreciated,
+YJ
