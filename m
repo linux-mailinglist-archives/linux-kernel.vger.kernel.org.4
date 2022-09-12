@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747D05B6002
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE1C5B6006
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiILSNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S229511AbiILSOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiILSNQ (ORCPT
+        with ESMTP id S229636AbiILSOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:13:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A60419B9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663006392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MIivuanKSjygaobAWTqz6Vlrz5BF6yE307kFzPCTliY=;
-        b=KhwxpNx5B3Ye2r8CCZQtWpI8BKNK6eFzYLr0q5HatB3YxE21/nwiqSIOXD4+3dVqXU6IeM
-        NqFCw05NnNP3n4xdm8t1Z/CCcAc1140aYszZGQHoSRH9sJHeBvk42lpjz1NlzOfDLjBAW6
-        ZbHNM6i9y6lcIrildlvF7jJo445MYaU=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-488-2g8OFTu7OketjDPiqLHnaA-1; Mon, 12 Sep 2022 14:13:11 -0400
-X-MC-Unique: 2g8OFTu7OketjDPiqLHnaA-1
-Received: by mail-lf1-f71.google.com with SMTP id h4-20020a05651211c400b00497abd0d657so3123574lfr.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:13:11 -0700 (PDT)
+        Mon, 12 Sep 2022 14:14:14 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B441D16
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:14:12 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z25so16245412lfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=pphKVd2FpUZgthqe9J2k6pHmxdMAUCIqGEtgJJp9FHk=;
+        b=MnO4fO2yLp8hCzWCwoN7+8I58BSrXzRDQtX2oBr5plpQqW3iCcpJER5OzI32hb/Po3
+         Pfk1xc4f1fyM5i2YiwsZfbZfChnvmtg0FOjhvAyhxL7j6jU7QNnVZSFCqYdHuWxD6W5I
+         ByeZ71lZN7P7d3aW4/kMuNhdiQ1eCjzqI0FA40iQUECBVxpXomjqZdBgPfSsTjoT7Zsn
+         jLtXai7D1pGYD25MRXnuTREMMtBJDpyx+xZt2lh07d6PmygFOXTYvdwzurS0zyumFT0i
+         A0sagUXCDQxjQa7lxDT+SVm6l4mvf53SecGCdYl4jiyl45EWo+qulv1l8zhsa05LTADu
+         HbZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MIivuanKSjygaobAWTqz6Vlrz5BF6yE307kFzPCTliY=;
-        b=JYoB7j49JMBLisR3CNvA/8yhIfAQBLlCNeKgvm0ndXAqn3SbMIt21if0vmT6y2Jtr1
-         JSy8upYkoWikcM3uxpLGqAL5t8+g9rYgJIueQqSj1VefqWk7zRff/SaVw4tc5CcTY18P
-         bIocZupgDfM932btAMK90zIOxkF+xGjqXFm6P+0dPyEc0G9v4V0E+09K9AuikQ9Y/yJM
-         UOMOJFMvl1/Ddhdv1+59Zd7ms8sMpjlSlLPf78PhnEnOhhj/tpXZ2uNcWls6N0RvmD8u
-         OvqQCamWSjZ+Hhc3ZXEdQl24y5eto3qv5lwiaB83rrJyfpi/IXEAGcYCaFlMUCUtrPSX
-         0h7g==
-X-Gm-Message-State: ACgBeo0tCm0AyKse04GP/jTWHMyBa5n6tpZY4ZXB5oJwiZH5E9ETl48X
-        mqg5KernwQVYGQS3DcyBb5ufGcDzQ6FvNMUrxouWajCx6ts9MUOjRtIT26dGJjrlNZkHDX883Kq
-        c6Fx2ytbtjZG0rpkKI/At9I4tHi4EWquuZHz5I7Kf
-X-Received: by 2002:a05:6512:3b1e:b0:49b:49d9:cb9e with SMTP id f30-20020a0565123b1e00b0049b49d9cb9emr877217lfv.201.1663006390234;
-        Mon, 12 Sep 2022 11:13:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5ppAN5/qdHGxQeudg4Zh5HihxK1wLBPBp6mq9A3a1ed9G1ccE8gIbz65FRZyZtWK+AopezeLNQh/bU8TMuMvk=
-X-Received: by 2002:a05:6512:3b1e:b0:49b:49d9:cb9e with SMTP id
- f30-20020a0565123b1e00b0049b49d9cb9emr877188lfv.201.1663006389976; Mon, 12
- Sep 2022 11:13:09 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=pphKVd2FpUZgthqe9J2k6pHmxdMAUCIqGEtgJJp9FHk=;
+        b=i5kHsrEchfGZfSRL6WxT/un6epkd3Ih1He0TiZyUKwIyneTYbV0slYYCepvpbcUuAW
+         pYZ8d3eiFtsvpcvLlv3dtF2ileMTix2IaeeHHJAVWuCiUkrCR0fUFQ7H1mvWflWlXROQ
+         shSX7FbXw0NZHteU/j1B75/7nABDlr2sqlFu6c9+kAzmS1oRJneQLgvezsyN9sJx5Gag
+         UNv/oYhFhNUGVFUqfJiAeCD/VY5UCd+XiLZnDRmDlWJifWMq+zMO/wLPjHPsZhBjFCwL
+         BYem35LjfiObCAthB/rQDNhFcXN4BD5W3v4iHyIJzN8fwO4bHrTcu+/NzMpmbbav2IrO
+         SXBg==
+X-Gm-Message-State: ACgBeo0Ss8BjnydJFhdDrZDyaIXIBu1NrBiJTcutAQcBaj7oeCdawaGQ
+        +Y2QfbxvTyvrgoMIUkhzhwx7Aw==
+X-Google-Smtp-Source: AA6agR5CudFSUa17zwUnzqBC9l/1i9sEoxDOfEdCr8sclosfn/oqi/m5pbihf9dVim/I0WqX2R/6Gw==
+X-Received: by 2002:a05:6512:3c88:b0:499:c78:5bb1 with SMTP id h8-20020a0565123c8800b004990c785bb1mr4872822lfv.503.1663006450720;
+        Mon, 12 Sep 2022 11:14:10 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id y26-20020a05651c221a00b0026ad1da0dc3sm1205812ljq.122.2022.09.12.11.14.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 11:14:10 -0700 (PDT)
+Message-ID: <2f658a69-a49c-67be-26b9-421095cde2b7@linaro.org>
+Date:   Mon, 12 Sep 2022 21:14:09 +0300
 MIME-Version: 1.0
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <YxdKiUzlfpHs3h3q@fedora> <Yv5PFz1YrSk8jxzY@bullseye> <20220908143652.tfyjjx2z6in6v66c@sgarzare-redhat>
- <YxuCVfFcRdWHeeh8@bullseye>
-In-Reply-To: <YxuCVfFcRdWHeeh8@bullseye>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Mon, 12 Sep 2022 20:12:58 +0200
-Message-ID: <CAGxU2F5HG_UouKzJNuvfeCASJ4j84qPY9-7-yFUpEtAJQSoxJg@mail.gmail.com>
-Subject: Re: Call to discuss vsock netdev/sk_buff [was Re: [PATCH 0/6]
- virtio/vsock: introduce dgrams, sk_buff, and qdisc]
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc:     Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in Makefile
+ and qcom/Kconfig
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, andersson@kernel.org,
+        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220911184232.3198957-1-bhupesh.sharma@linaro.org>
+ <CAA8EJpoM5nW=pVJB4zy4Jh9Q3gE4KOju2QVy_WtmUokKMyXtuw@mail.gmail.com>
+ <75a5789e-9100-b398-1df2-50d49823831c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <75a5789e-9100-b398-1df2-50d49823831c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,28 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 8:13 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
->
-> Hey Stefano, thanks for sending this out.
->
-> On Thu, Sep 08, 2022 at 04:36:52PM +0200, Stefano Garzarella wrote:
-> >
-> > Looking better at the KVM forum sched, I found 1h slot for Sep 15 at 16:30
-> > UTC.
-> >
-> > Could this work for you?
->
-> Unfortunately, I can't make this time slot.
+On 12/09/2022 20:11, Bhupesh Sharma wrote:
+> 
+> 
+> On 9/12/22 1:08 AM, Dmitry Baryshkov wrote:
+>> On Sun, 11 Sept 2022 at 21:42, Bhupesh Sharma 
+>> <bhupesh.sharma@linaro.org> wrote:
+>>>
+>>> Introduce CONFIG_QCOM_THERMAL to allow better control
+>>> over selection of various Qualcomm Thermal drivers
+>>> available inside qcom/ directory.
+>>>
+>>> This is a preparatory change to allow new drivers to
+>>> be added inside qcom/ directory in a more structured
+>>> fashion.
+>>>
+>>> Cc: Bjorn Andersson <andersson@kernel.org>
+>>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> Cc: Amit Kucheria <amitk@kernel.org>
+>>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>>   drivers/thermal/Makefile     |  2 +-
+>>>   drivers/thermal/qcom/Kconfig | 12 ++++++++++++
+>>>   2 files changed, 13 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+>>> index def8e1a0399c..a12b647be0d1 100644
+>>> --- a/drivers/thermal/Makefile
+>>> +++ b/drivers/thermal/Makefile
+>>> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)  += da9062-thermal.o
+>>>   obj-y                          += intel/
+>>>   obj-$(CONFIG_TI_SOC_THERMAL)   += ti-soc-thermal/
+>>>   obj-y                          += st/
+>>> -obj-$(CONFIG_QCOM_TSENS)       += qcom/
+>>> +obj-$(CONFIG_QCOM_THERMAL)     += qcom/
+>>
+>> Following other platforms around qcom, I think just `obj-y += qcom/`
+>> would work well enough.
+> 
+> I have no strong opinion on using `obj-y += qcom/` here, but I would
+> still like us to define a CONFIG_QCOM_THERMAL like flag in the 
+> qcom/Kconfig, similar to the ST platforms which use similar selection 
+> mechanism via 'CONFIG_ST_THERMAL'.
 
-No problem at all!
+`QCOM_THERMAL' is fine for me.
 
->
-> My schedule also opens up a lot the week of the 26th, especially between
-> 16:00 and 19:00 UTC, as well as after 22:00 UTC.
+> 
+> Thanks.
+> 
+>>>   obj-y                          += tegra/
+>>>   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+>>>   obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
+>>
 
-Great, that week works for me too.
-What about Sep 27 @ 16:00 UTC?
-
-Thanks,
-Stefano
+-- 
+With best wishes
+Dmitry
 
