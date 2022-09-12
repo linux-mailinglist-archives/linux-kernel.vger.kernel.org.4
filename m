@@ -2,94 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D905B59C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE85A5B59D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiILL7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S229774AbiILMBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiILL7n (ORCPT
+        with ESMTP id S229888AbiILMA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:59:43 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC1A1BD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:59:41 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id f131so12348468ybf.7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=K/aKpFogT1WEO7IHcvDcgP69nZzWBbW4PAonGtD0RYs=;
-        b=ZwoXycaLbjOzqTujT4LxBvY78NLY2eZSzwymD7l+qar9MEv3Q3JcgEfyssRTHEFCUn
-         cGIokAaaTyacO+z7dJuVF53PR0yeV2NkfQlb0dSVKDOt5WRqPo/M5hXZ4CFt7LEKVlS8
-         XH1zZ6BlbkDxSrK9tq7MhbO+SJyl00uiscjJ1kHvsiyrNWNBiBkEtQ4OAHmnakPLNUqL
-         oS0znJrCC6Y0suHv78j4Mlyh8Ua8aXuMNYGRLz6OtY9wVdKPHr///urSPumyI42gW/Wm
-         cq85asdwSDYzaX8ADsKsfiF3KKYJ8/ngwhI4YNwbl+Nn4H4YsKdNN8S2gjXkPw/h7fHf
-         TNzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=K/aKpFogT1WEO7IHcvDcgP69nZzWBbW4PAonGtD0RYs=;
-        b=tCyxK3yiWk78D3DGpyUSwrrsfmr39N96pDxN1UJLniDqpDH/U2eoYegvcpSwpflzJm
-         9OwbxywltgZ0kpL5E9J+owlFwIvL8Nd3FtD2ZdLbIQAkrDC7+gt0gu9soEQ+6Zlr4uy3
-         k6AAnK3PFSw38MYNuQPc+0ELAQKqXZ0O+cOk83OHeZMaUU0+vkx7wRjWLUgVkBf297x2
-         OQwPRhMSu6kM0lGZytib8vSBoPm130JUyRGMcnDH8/dOab7KZXd8w0rZPOojadguCToy
-         5+nFXEgkAa/4wTJCxRfbyUtukZk53XEGNbtWc90F4uydarV4Y3fx97wsHjwtAff4yMxi
-         vzxA==
-X-Gm-Message-State: ACgBeo3loTdbTlOagSZHIVSWk8mxyWhYr/xEc/eYDm5IhvhaYXKVLcWI
-        ixMiF7syGGuGy0YUDM0z8kj8opXojC66aWpHBz8k0f0TODw=
-X-Google-Smtp-Source: AA6agR6ZfsRlrhONwo+IdzTbb0XMtaVqfg+44mjigcJVtjbjZ2UzXjk8fEsfbwMZpzNNMhxDCEMWmys1gA2588Y5uNE=
-X-Received: by 2002:a25:3b46:0:b0:69c:a60e:2e57 with SMTP id
- i67-20020a253b46000000b0069ca60e2e57mr19367649yba.364.1662983981027; Mon, 12
- Sep 2022 04:59:41 -0700 (PDT)
+        Mon, 12 Sep 2022 08:00:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061003DBF8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:00:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oXi74-00089r-QC; Mon, 12 Sep 2022 14:00:30 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:75e7:62d4:691e:2f47])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B82F4E12EF;
+        Mon, 12 Sep 2022 12:00:28 +0000 (UTC)
+Date:   Mon, 12 Sep 2022 14:00:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
+ bcm_module_init()
+Message-ID: <20220912120020.dlxuryltw4sii635@pengutronix.de>
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
+ <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+ <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+ <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
+ <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
+ <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
+ <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
 MIME-Version: 1.0
-References: <CAHk-=wjG0js0MpsoH3-yvp05u_gXHu+uhkvqdAZDVb=9xUmX=g@mail.gmail.com>
-In-Reply-To: <CAHk-=wjG0js0MpsoH3-yvp05u_gXHu+uhkvqdAZDVb=9xUmX=g@mail.gmail.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Mon, 12 Sep 2022 12:59:05 +0100
-Message-ID: <CADVatmPAkS9ope2oOQHB8nKc_sx2MM9P6aSqxwdA5sgyqvCvvQ@mail.gmail.com>
-Subject: Re: Linux 6.0-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pfhkvun2s53jnksz"
+Content-Disposition: inline
+In-Reply-To: <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 11:05 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> It's Sunday afternoon, time for another -rc release.
->
-> Things look fairly normal for the rc5 timeframe, at least in number of
-> commits, and in the diffstat.
->
-> A bit over half the diff is drivers: GPU, rdma, iommu, networking,
-> sound, scsi... A little bit of everything.
->
-> The rest is the usual random fixes, with i2c doc updates standing out,
-> but also various DT updates, a few filesystem fixes (btrfs and erofs),
-> some core networking, and some tooling (perf and selftests).
->
-> Nothing looks particularly scary, so jump right in.
 
-clang build failure as reported in [1] is still there. Nathan has
-posted a patch series at [2] to fix it, but it has not landed yet.
+--pfhkvun2s53jnksz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 09.09.2022 17:04:06, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 09.09.22 05:58, Ziyang Xuan (William) wrote:
+> > >=20
+> > >=20
+> > > On 9/8/22 13:14, Ziyang Xuan (William) wrote:
+> > > > > Just another reference which make it clear that the reordering of=
+ function calls in your patch is likely not correct:
+> > > > >=20
+> > > > > https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_pac=
+ket.c#L4734
+> > > > >=20
+> > > > > static int __init packet_init(void)
+> > > > > {
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int rc;
+> > > > >=20
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D proto_re=
+gister(&packet_proto, 0);
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc)
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto out;
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D sock_reg=
+ister(&packet_family_ops);
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc)
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto out_proto;
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D register=
+_pernet_subsys(&packet_net_ops);
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc)
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto out_sock;
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D register=
+_netdevice_notifier(&packet_netdev_notifier);
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc)
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto out_pernet;
+> > > > >=20
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> > > > >=20
+> > > > > out_pernet:
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unregister_pern=
+et_subsys(&packet_net_ops);
+> > > > > out_sock:
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sock_unregister=
+(PF_PACKET);
+> > > > > out_proto:
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 proto_unregiste=
+r(&packet_proto);
+> > > > > out:
+> > > > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
+> > > > > }
+> > > > >=20
+>=20
+> > Yes=EF=BC=8Call these socket operations need time, most likely, registe=
+r_netdevice_notifier() and register_pernet_subsys() had been done.
+> > But it maybe not for some reasons, for example, cpu# that runs {raw,bcm=
+}_module_init() is stuck temporary,
+> > or pernet_ops_rwsem lock competition in register_netdevice_notifier() a=
+nd register_pernet_subsys().
+> >=20
+> > If the condition which I pointed happens, I think my solution can solve.
+> >=20
+>=20
+> No, I don't think so.
+>=20
+> We need to maintain the exact order which is depicted in the af_packet.c
+> code from above as the notifier call references the sock pointer.
 
-[1]. https://lore.kernel.org/lkml/YuwRyQYPCb1FD+mr@debian/#t
-[2]. https://lore.kernel.org/all/20220830203409.3491379-1-nathan@kernel.org/
+The notifier calls bcm_notifier() first, which will loop over the
+bcm_notifier_list. The list is empty if there are no sockets open, yet.
+So from my point of view this change looks fine.
 
+IMHO it's better to make a series where all these notifiers are moved in
+front of the respective socket proto_register().
 
--- 
-Regards
-Sudip
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--pfhkvun2s53jnksz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMfH1EACgkQrX5LkNig
+011qwAf/bGFObCZJbGqIckupWOK0uOipTVPxdIGEMiSjj0ojWIxPNhiTt3p8f9kg
+aoRrgyocaYHcp8fwvLNUPA6HSRJBqEMYTYCdulywYJmwTZ2OyHq9WfZm9N+zwBm+
+kfQojUHpcA2KIAd8bGgIGvqKv1WyW02ZhJIYGszz2YJZaUQMlPKhvmlJZnbszzxt
+8EJfXo46SgHM/ENd4M8LVZvpOTr21GDKeQH8mMeRMg79KPvJZKXG6hpUTaVpM7je
+pJueB4mnJfi2Q6pepE9inkhVL8F7H9AKxnkzNbmAwey2Hegy7ydw3OKeq/S1tzsl
+MkKaONSBw/jybsLpzlYLHTdgJsc57A==
+=5HUG
+-----END PGP SIGNATURE-----
+
+--pfhkvun2s53jnksz--
