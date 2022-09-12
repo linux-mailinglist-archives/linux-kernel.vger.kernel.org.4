@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9261B5B5846
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0825B5873
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiILK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S230338AbiILK36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiILK1F (ORCPT
+        with ESMTP id S230316AbiILK3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:27:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9003739B85;
-        Mon, 12 Sep 2022 03:26:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA5DC6601FDB;
-        Mon, 12 Sep 2022 11:26:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662978418;
-        bh=lsakC5tXlXnwjZ+SXxeOjNZ2MoFmMoIsT0zJ4vJo5oc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IoVq3MfDQ8Lq/69DJYionI4z0bCBxPZDwZDZXcK6CaMLDtptMrQZ9S5NcGnaCpV/E
-         WO5+MytT5DVhIi0Us7pHAB8we6kAYnpaWwY8hwFgcdCJXVEyLK6c0ducJz8cFqkxeg
-         XE2RyAGtqXhOSFTYIpcGorjtbtlc9AlwWH3OS9nfuSilhbqWdj7um0BRsHpGNuAaGH
-         7Nq0KTNWdziVMeQBdRRiLd1yjPga0SpRCN5OtcSgBcZcIfXkMq2qw0tUeRKkBAp2Ve
-         Q5s9ciPg0dH1qDawwpsraC04BLszfQGAERB7tF3uOpLxCQJVs+WAzITzDPOu+hUvVF
-         tBHfe49Mvg7og==
-Message-ID: <ed7ca57f-81c8-514d-2c64-26a4aa8e75d2@collabora.com>
-Date:   Mon, 12 Sep 2022 12:26:55 +0200
+        Mon, 12 Sep 2022 06:29:39 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494FB3B955;
+        Mon, 12 Sep 2022 03:29:15 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c2so8152293plo.3;
+        Mon, 12 Sep 2022 03:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=oUSmh1gw//zaj+S0sn3ELb0An6DYoYmCrSomQNeQSuo=;
+        b=EA1d6WDfsA/I0rOwkkwVViigvWKWbfIoo5lV9xdow/gQFG7q5gIhfauVCgqcfLxGPK
+         mFogrEI3GNpF1uhg+EgVRpi/kDQ5jnaEFQpqx+AgeD69pAsPPO0TtW5iyJIN2sayqdT5
+         eS+wjU9w7jnI7SCslNOsKtsDP+anHwoJRGCOp82BonPXbXpVpcTuLqu4+Hhsifyv1bIW
+         LOjaweGFwVn4VvublGXbfAuauibdvB33aRV8eXMzD8NPtf7NrDj95ML9Fz1+xRyXUXUF
+         aQWIaJHMTfqroG93ZqtKm38ovuTHD7195i/10tIlqvMa/rf/hrNRGveUTNl3MKixrAyw
+         xADg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=oUSmh1gw//zaj+S0sn3ELb0An6DYoYmCrSomQNeQSuo=;
+        b=naU6S3e5583S/wdERr8Oi+drwOeiauqOAxeUp5BaGjmc9kk2IpUiDmHtQu3NIgSEHg
+         w5bSSgV58WAMo1j+LLKE+0K2wm7/pOmuo2WRVWgj//I7En+p9DphOozPQh2XjhNaPQ9X
+         LAaxjZBUXzgEjmBzYLcP63gGQ3lNnT6cHL8B4t5S0/vN0jTrIoiUYztLuFhBk12Wg1mk
+         v5q+wIikHt1FJtwzsHM3XkKc/eEOxdknRUKOWGNHZ5n459iL6V+vNtMaCy1iAcresTfe
+         La5xowam44dWygGSjT+fWoqFUFjYP0JZQsJ57G2wsM+5wTRr0zMlnnGvoP/Ct2YnknRp
+         Pb9w==
+X-Gm-Message-State: ACgBeo0dwydRPBLOkBQqXGC9/9oPGO8UqMZewv164RANB5XtjR+xOmPg
+        sBG6QU6nbUgWWClgAs1NfYI=
+X-Google-Smtp-Source: AA6agR6V4RLuMPnEjiL2znn+YMQ6Vt1ZTsSN5ljSQfnyiLsiInyzIy5k4oKF51jCVKJ5b+RWN5/U6w==
+X-Received: by 2002:a17:902:b194:b0:176:d229:83bd with SMTP id s20-20020a170902b19400b00176d22983bdmr25286876plr.174.1662978554451;
+        Mon, 12 Sep 2022 03:29:14 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a2-20020aa79702000000b00537aa0fbb57sm5060850pfg.51.2022.09.12.03.29.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 03:29:14 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] usb: dwc3: gadget: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 10:28:55 +0000
+Message-Id: <20220912102854.18277-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 8/9] drm/mediatek: Add clear RELAY_MODE bit to set
- gamma
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220911153734.24243-1-jason-jh.lin@mediatek.com>
- <20220911153734.24243-9-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220911153734.24243-9-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/09/22 17:37, Jason-JH.Lin ha scritto:
-> Since the bootlaoder may set the RELAY_MODE to gamma be for the kerenl,
-> we have to clear the RELAY_MODE bit to make sure that the gamma is
-> enabled correctly.
-> 
-> Fixes: b10023b03082 ("FROMGIT: drm/mediatek: Separate gamma module")
+From: Xu Panda <xu.panda@zte.com.cn>
 
-This Fixes tag is invalid. Please fix.
+Return the value power_supply_set_property() directly instead of storing
+it in another redundant variable.
 
-Regards,
-Angelo
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ drivers/usb/dwc3/gadget.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3a344ba0b292..762a92470a01 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2868,7 +2868,6 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ {
+        struct dwc3             *dwc = gadget_to_dwc(g);
+        union power_supply_propval      val = {0};
+-       int                             ret;
+
+        if (dwc->usb2_phy)
+                return usb_phy_set_power(dwc->usb2_phy, mA);
+@@ -2877,9 +2876,7 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+                return -EOPNOTSUPP;
+
+        val.intval = 1000 * mA;
+-       ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+-
+-       return ret;
++       return power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+ }
+
+ /**
+-- 
+2.15.2
 
