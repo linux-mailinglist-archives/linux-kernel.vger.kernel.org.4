@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EE35B5879
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B0C5B587C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiILKbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S229796AbiILKdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiILKbQ (ORCPT
+        with ESMTP id S229502AbiILKc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:31:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C86C3C8F9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:30:51 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 266576601FD2;
-        Mon, 12 Sep 2022 11:30:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662978623;
-        bh=VxPiZ9dZ9acjfZPEAOYMYeBii8gbW8AfBShA+LhDdYg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AiDbBEUo0Aem90pzTbMOxyzSd1FzyRk4uKl2qd8lphZ8NVamc0TCZI+5+bCXU2yHz
-         GYOmZtPgqTtiNkUT2zzAdIT442Ke+904r76ELYMLVusyAAa8Y+acEeMGaT6QKI165w
-         YI1bo4a54Ljd/x8vDAoIQqiuYPiubDAeUm32sp1/j8dIP9LS88sfnS2slucMj3a4dq
-         /FJENgOKhd7tWltLw74VWQPixXRX+TTTs9cykX+tkkjALtxfQm5hfUIIa6mxE8jTej
-         kRisyfrmCToyMQ5muwNWodbxE9M82d0vD3KxYTP60HfQKFIiOsLF+OXE75jBQAxcix
-         mYs46vwtbO8Qw==
-Message-ID: <eb8173f6-74cb-3010-f1c2-5eac6939e1f7@collabora.com>
-Date:   Mon, 12 Sep 2022 12:30:21 +0200
+        Mon, 12 Sep 2022 06:32:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD6EEC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:32:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b35so12094238edf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=pa6W1YODU5uWUjf7zUhRw95uZp1QNrawRSVyyiW7Vl0=;
+        b=RbzFH4Z4USAJQAYUrNqiIlm2Ou3paeEKXx7EA6MqxzRIeMg5OYjW7hnVzCRokjI8Uh
+         UlSugb4mjNXVJA3f+6Stg4HhjA1g6w4rzssqcy+trVOXpReT/SWY/DhL00wgMFauBPY4
+         +9KqJAYCJwyhtrWvNCzGEsoSLnpJdz1zmnzBA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=pa6W1YODU5uWUjf7zUhRw95uZp1QNrawRSVyyiW7Vl0=;
+        b=coScyrooYXHcvxaEzCf64nXQcGtczuVhNYtGJwMgldFxsrfyWk/0q5xFsjrAepobfs
+         VclK/A5LZQDkodDvW7EuM8OPiqM/SCU9b00PTuBBl/0ED2tyV9KVcg6DL95k2yPY84Kh
+         NOxwQPtDY+y+kV7WQyIs2UIyxzehvua18Ur7GPiLDboL4HbDhDGHgdqnHyGc4j+GMVL3
+         o3zh2qti/PpsnQZFF/QmZtO3nZrdYFTWcCijJXmS/IG43bDC3mngmbgbzvor33ATA8da
+         I6qJAAeBuhKSM4UANwEKWLAFrlMTEoZ6F2SN+bkv0YQd5bt2GXDK6lrv5yP+Y8BGeV57
+         tJCA==
+X-Gm-Message-State: ACgBeo1WhUvTrknNIo06FVNJwDN9/FOwj0ZjhGUlyPHVHx+FIyeAKD3n
+        nE9go9RZCV/OG803xLkmM1wlOvOWqw/1gcbPjq+oKg==
+X-Google-Smtp-Source: AA6agR4M8kUfW+1+K71sRAnTB0B7zC1boeAgnNmeFDTIx6IxH5frVa+UGb0pWsh9PfgPzIod9Cpy0WGwITz9nMf2SRs=
+X-Received: by 2002:a05:6402:890:b0:44e:bb54:7f54 with SMTP id
+ e16-20020a056402089000b0044ebb547f54mr22112611edy.307.1662978777293; Mon, 12
+ Sep 2022 03:32:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] drm/bridge: it6505: use drm_debug_enabled() in
- it6505_debug_print()
-Content-Language: en-US
-To:     Hamza Mahfooz <someguy@effective-light.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org
-References: <20220910224816.15058-1-someguy@effective-light.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220910224816.15058-1-someguy@effective-light.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220908171153.670762-1-nfraprado@collabora.com>
+In-Reply-To: <20220908171153.670762-1-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 12 Sep 2022 18:32:46 +0800
+Message-ID: <CAGXv+5ERm1kXf+YgeDMOgkEY77Fx1o8FK=anWn22g7SAGXSfhw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] arm64: dts: mediatek: asurada: Enable internal display
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/09/22 00:48, Hamza Mahfooz ha scritto:
-> As made mention of in commit 9f0ac028410f ("drm/print: rename drm_debug
-> to __drm_debug to discourage use"), we shouldn't explicitly refer to
-> __drm_debug in this context. So, use drm_debug_enabled() instead.
-> 
-> Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-> Signed-off-by: Hamza Mahfooz <someguy@effective-light.com>
+On Fri, Sep 9, 2022 at 1:11 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+>
+> This series adds and enables all components required to have a working
+> internal display on the Asurada platform.
+>
+>
+> N=C3=ADcolas F. R. A. Prado (3):
+>   arm64: dts: mediatek: asurada: Add display regulators
+>   arm64: dts: mediatek: asurada: Add display backlight
+>   arm64: dts: mediatek: asurada: Enable internal display
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-
+Tested _remotely_ on Hayato, with EDID read back correctly.
