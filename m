@@ -2,109 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3DE5B58C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063E35B58D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiILKyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S229933AbiILKzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiILKyd (ORCPT
+        with ESMTP id S229869AbiILKz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:54:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7CCD86;
-        Mon, 12 Sep 2022 03:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662980070; x=1694516070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hlBDz53+flWgbd1kP2vmgg1tnZZa5Xxm55qgoo4qc9s=;
-  b=dIPYNesc2xZt7KeQw1jaf2uhrjVkgIfNX0/DAsa0vvescMQ8lS8/T5jg
-   sjZsv+ECSZxRIVw/3UVjImEiBxG9tmBfWRzVe/gmVxCq7s2foNa0wsR+q
-   6UFmvshu1anZ1i+eIxFSdm4s7EDIzbqptIGVzFPqJg6QUsQaXF/JQKmMb
-   9aQ2JvPYfLXyWsnrpcamrYths152PjxGUpyChYg+Ph4SmiUwHBwZbgT+T
-   xnzot4CJlpMAZiEAxzZT1WD/W06b8GWJVgeWs+IASJCNZCcu7cZR8SZ8s
-   GMzd+i0dSeuMbc128KjzwmatEW91RGc21CHonzXaJ9pCIffaxZG5dNrH7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="297837609"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="297837609"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:54:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="567122849"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:54:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oXh52-001JDf-2Y;
-        Mon, 12 Sep 2022 13:54:20 +0300
-Date:   Mon, 12 Sep 2022 13:54:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Yx8P3ABrwYaMBRhn@smile.fi.intel.com>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
- <YxesjfoBagiC3gGE@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2209081049290.61321@rhweight-WRK1>
- <Yxpbx0Tclqy4O9cR@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2209110850120.142336@rhweight-WRK1>
+        Mon, 12 Sep 2022 06:55:27 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF71900D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:55:24 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id by6so10031002ljb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 03:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=uODYllNYs6vH+/kP4ToqCRWAa9suYiwygYLIovAsVnU=;
+        b=g5fbjdZa+uRqiNsPW0QD54nGvN7X5aBbFAzzt0v+0YiKM55+91yR7pR/x/1kFFkQFa
+         PDWGSbEg3Hot7+eat0TLFcdROvwOW+1/mXiy8dFW66v1Yfs/O2y2K2kwkSzPLZa+v+CL
+         tbOCLnGjXC9j7Eiy+HSp7flLu5Efsj19mYkdWiGfFLW7npPqOtK3Hf00X84ZPZfXdQ40
+         HWI+QwpAqjra5/lqiZrtlwzDRvHrT1bbE5QnQsSnnuBYwEROC2mZXilwtTGqHLS3PBuL
+         LuYNy2zrrUDmQNecRjfxlA1JgSEiNErKvDJs17T6D5Vqs562DgVOLs+kqp0BrUQh4iEU
+         mt3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=uODYllNYs6vH+/kP4ToqCRWAa9suYiwygYLIovAsVnU=;
+        b=MHhDxqGqCSHox0/C6VQe8uXANypk3ydXBJJ0JqPdJCT7nS/p3NzR623uxcDiWio+1W
+         YVDO2xrQbj69z1kMjhMie1vcPhWpHarbltCQlrXarg6/qCwePtN992BPDFB5Z4nJn2eh
+         t5KUmjiwboXCoid2XxCuJ04ZOBBUkCVizwApNwJutb75LJZWmjIC1Xs96IwBxiyIqkv5
+         b6AnpLnw1GCEXjZfa2exObG1MWzMz5L39Il236xeGgCL/8h8eH6ise5Pi/FZl+OG9gCj
+         f2j4gpdEFcNnc8aSiqpd6Ow0T+1AeCAuZRETZal6dMmJohhiEPV7Lab4cwL93+i+HTCU
+         mIWQ==
+X-Gm-Message-State: ACgBeo0so10DBST1QjN82Q1rcHEq+tZ5lJRKzcDqMCnNVmH92FJgPC8p
+        lRwPA6jcOhPMYFo+/BXw4fQ8mw==
+X-Google-Smtp-Source: AA6agR7lep5ZcMDwaWlJ4ySJTisrqo0Rgf7jMEe3bPC10uTlj7rtt8SS/ZwEojVJGCAYkw9+IAP/Dg==
+X-Received: by 2002:a2e:9cda:0:b0:26b:e930:6f7d with SMTP id g26-20020a2e9cda000000b0026be9306f7dmr4201796ljj.436.1662980122396;
+        Mon, 12 Sep 2022 03:55:22 -0700 (PDT)
+Received: from [10.129.96.84] ([109.232.243.34])
+        by smtp.gmail.com with ESMTPSA id f17-20020a056512229100b00498fc3d4d15sm996417lfu.190.2022.09.12.03.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 03:55:21 -0700 (PDT)
+Message-ID: <cd363d98-74be-b42f-b1e1-c0f7e79f6011@linaro.org>
+Date:   Mon, 12 Sep 2022 12:55:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2209110850120.142336@rhweight-WRK1>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: media: i2c: document OV4689 DT
+ bindings
+Content-Language: en-US
+To:     Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Christian Hemp <c.hemp@phytec.de>,
+        Arec Kao <arec.kao@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Jimmy Su <jimmy.su@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220911200147.375198-1-mike.rudenko@gmail.com>
+ <20220911200147.375198-2-mike.rudenko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220911200147.375198-2-mike.rudenko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 08:56:41AM -0700, matthew.gerlach@linux.intel.com wrote:
-> On Fri, 9 Sep 2022, Andy Shevchenko wrote:
-> > On Thu, Sep 08, 2022 at 11:27:03AM -0700, matthew.gerlach@linux.intel.com wrote:
-> > > On Tue, 6 Sep 2022, Andy Shevchenko wrote:
-> > > > On Tue, Sep 06, 2022 at 12:04:26PM -0700, matthew.gerlach@linux.intel.com wrote:
-
-...
-
-> > > > > +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
-> > > > 
-> > > > Isn't this available via normal interfaces to user?
-> > > 
-> > > I am not sure what "normal interfaces to user" you are referring to.  The
-> > > code is just trying to read the frequency of the input clock to the uart
-> > > from a DFH paramter.
-> > 
-> > I mean dev_dbg() call. The user can get uart_clk via one of the UART/serial
-> > ABIs (don't remember which one, though).
+On 11/09/2022 22:01, Mikhail Rudenko wrote:
+> Add device-tree binding documentation for OV4689 image sensor driver,
+> and the relevant MAINTAINERS entries.
 > 
-> I don't think UART/serial ABIs to get the input clock frequency would be
-> available until after the call to serial8250_register_8250_port()
+> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
 
-Is it a problem?
+Too many "media" prefixes in the subject. Also you duplicated dt
+bindings as prefix and commit msg (skip the latter).
 
-> which needs the clock frequency as an input.
+> ---
+>  .../bindings/media/i2c/ovti,ov4689.yaml       | 141 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 148 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+> new file mode 100644
+> index 000000000000..376330b5572a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+> @@ -0,0 +1,141 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Omnivision OV4689 CMOS
+> +
+> +maintainers:
+> +  - Mikhail Rudenko <mike.rudenko@gmail.com>
+> +
+> +description: |
+> +  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
+> +  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
+> +  at 2688x1520 resolution. It is programmable through an I2C
+> +  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
+> +  connection.
+> +
+> +allOf:
+> +  - $ref: /schemas/media/video-interface-devices.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov4689
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      External clock (XVCLK) for the sensor, 6-64 MHz
+> +    maxItems: 1
+> +
+> +  clock-names: true
 
--- 
-With Best Regards,
-Andy Shevchenko
+This has to be strictly defined - which name you expect.
 
+> +
+> +  dovdd-supply:
+> +    description:
+> +      Digital I/O voltage supply, 1.7-3.0 V
+> +
+> +  avdd-supply:
+> +    description:
+> +      Analog voltage supply, 2.6-3.0 V
+> +
+> +  dvdd-supply:
+> +    description:
+> +      Digital core voltage supply, 1.1-1.3 V
+> +
+> +  powerdown-gpios:
+> +    maxItems: 1
 
+You can skip here maxItems - it is defined by gpio-consumer-common.
+
+> +    description:
+> +      GPIO connected to the powerdown pin (active low)
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      GPIO connected to the reset pin (active low)
+> +
+
+Best regards,
+Krzysztof
