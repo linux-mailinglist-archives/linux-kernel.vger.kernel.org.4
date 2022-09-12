@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B445B5542
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1E65B5547
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiILHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S229589AbiILHVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 03:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiILHTA (ORCPT
+        with ESMTP id S230205AbiILHVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:19:00 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BCD2E9ED
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:17:15 -0700 (PDT)
+        Mon, 12 Sep 2022 03:21:05 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6239E32053
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:18:10 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso11497407pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 00:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1662967035;
-  x=1694503035;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GL/r0e3Bljjih6Nhnen38jSQxiap0mNwoK1npXft9aY=;
-  b=eCg9++X3L2x9fR/Rbu3rdTMFwXdc3NH6RCGePhJ2JvzTt7lj/eSJSjjW
-   FGEXK6xFQmerodOUrLnw+UObuLn0io0mFkGjSPokuMBfTNVgtxOZr3HUN
-   oIpycaj8pjoX/PQ4pb1Vd3F4qVIY8SuPrVq23U4o8GFg3D4P5VtfhcXo1
-   j3x2opOzQynkiUQQPcg2N2MieeqkyjeGiLDH5C1C/NSc6JewkFNNpZYzy
-   MxCAOks9TRbbImLjtC4HGN0kmCrl55mUjzejaZWctI6g9K1JtUsKGSNVH
-   r7Z2U1HocaJbDK4SPplRCSR8qo0a8Uxgrv/j+NYcZf+focLlvCsCur65d
-   g==;
-Message-ID: <ae04a891-a626-0259-d39e-fc8045a7ca94@axis.com>
-Date:   Mon, 12 Sep 2022 09:17:12 +0200
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=FWAgKNPfCinc6qD4niSWvgkzCEX7z6+nrY4Z/gZWqPw=;
+        b=aB+Q8RfAzCbG3/IzAcmRHBx8p8ATtIqcqqtuUO1/4QC8QLbfCQH9UG8xfOaoy4IEET
+         q8z1MNtlvgloGUZpLuXSf6x9qlWLDmrKoPGXIQzWXMZq2oipE+mhtNZBK/JDtppyl8J2
+         44mE605hN0IuF/AuI8Dip+5YDQodVDbeFL8OTT9xx5Qxrgk5adikVCR7RIfKGawSfrKB
+         mkdHrcIlBM+qrLaVaBbDTGnoWHr9Zxlmazt1SKf3qjwOXLXxfmdmz3uNPIoZsFNzrlnc
+         J/kD8sdpfsbcSACsDDCJ9Z9D9zrmtYUJcV5cxH5w6NNgbd/2rs4F4CLCDHMPubub+v5S
+         mkEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FWAgKNPfCinc6qD4niSWvgkzCEX7z6+nrY4Z/gZWqPw=;
+        b=FbSNk+c1sUNXr8uBVCMd/1Pdstk5EillJ3V3XR6dKucyOljZ2Ws45vIomTBosiHtvi
+         WoVmnjstzmKMa4bcSUQrPOGGk74WtQo3soTdzeNxbdKRDJhUmhU/HO+win2hIZv74/OL
+         Vao0J48HHqx2UJTMkcY1FsSOcu1sxF9/h8M5p7QZKkvMNCwo0zTUBAZD/cmI0fZqetHo
+         LfadlYW1UQD3TZmePnPGbyz/p90AzTHwC9j7AYRCxstjHJFzDQcPcrDpwMy62vlJjo1X
+         6jmmIpDdH6K5KCoVt8CHvGF6X/w0uycwYB57gA3yurbUERfC6Pgiqj8VhlP5eApFYk6O
+         LZfw==
+X-Gm-Message-State: ACgBeo1+NdptOVBIjJaF4adCOcOb0O26V8+tFjVWp7z0CwYnADRZmWzU
+        e2Cm70STPU/rk//1NeZ9xmk=
+X-Google-Smtp-Source: AA6agR59s2thu9I42pAf4k79SXby4Cz8U1Ux40VIz0G/+JyFbLW4Mdp70WV6fkBD6X/sVpO8GdVdJw==
+X-Received: by 2002:a17:902:8f81:b0:178:1276:59e6 with SMTP id z1-20020a1709028f8100b00178127659e6mr12790503plo.94.1662967089533;
+        Mon, 12 Sep 2022 00:18:09 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id m17-20020a637d51000000b0042ff6b0cf4dsm4790142pgn.58.2022.09.12.00.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 00:18:08 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 16:18:03 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Ben Luo <luoben@linux.alibaba.com>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: return 0 when object pointer is NULL
+Message-ID: <Yx7dKxwxlNmCr9Ai@hyeyoo>
+References: <1662962379-16174-1-git-send-email-luoben@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ASoC: ts3a227e: allow enabling the jack detect in driver
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Astrid Rost <astrid.rost@axis.com>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <kernel@axis.com>,
-        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220909093001.13110-1-astrid.rost@axis.com>
- <Yxt7tfm6MRMaDthO@sirena.org.uk>
-From:   Astrid Rost <astridr@axis.com>
-In-Reply-To: <Yxt7tfm6MRMaDthO@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail04w.axis.com (10.20.40.10) To se-mail05w.axis.com
- (10.20.40.11)
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662962379-16174-1-git-send-email-luoben@linux.alibaba.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-
- > New properties need to be documented, I'm happy for that to be in the
- > existing document though obviously a conversion to YAML would be very
- > much appreciated.  However...
-
-Yes, I am doing the yaml conversion for the other patch.
-I guess this one - I will try to do differently.
-
-On 9/9/22 19:45, Mark Brown wrote:
-> ...this is something that should be done in the machine driver rather
-> than the CODEC, the way the device is wired up in an individual system
-> may be surprising or the system may have some more specific labelling
-> that can be usefully applied so this is all deferred to the card.
+On Mon, Sep 12, 2022 at 01:59:39PM +0800, Ben Luo wrote:
+> NULL is definitly not a valid address
 > 
-> It would sense to convert ts3a277e_enable_jack_detect() to be a
-> component set_jack() operation, that'd enable it to be used more easily
-> with generic cards (though I see that it's not yet wired up for
-> audio-graph-card unfortunately).
+> Signed-off-by: Ben Luo <luoben@linux.alibaba.com>
+> ---
+>  mm/slub.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 862dbd9..50fad18 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -674,7 +674,7 @@ static inline int check_valid_pointer(struct kmem_cache *s,
+>  	void *base;
+>  
+>  	if (!object)
+> -		return 1;
+> +		return 0;
+>  
+>  	base = slab_address(slab);
+>  	object = kasan_reset_tag(object);
+> -- 
+> 1.8.3.1
+> 
 
-Thank you! Yes, set_jack I did not see.
-I actually thinking of putting this into simple_card.c. But than it 
-needs to be really generic.
+Hello Ben.
 
-I will have a look.
+The return value is used to check if the @object has valid pointer
+in @slab. (used for debugging) the return value is 0 if valid, 1 if invalid.
 
-Astrid
+It does not return a pointer. So changing it to 0 because 1 is invalid
+address does not make sense.
 
-
+-- 
+Thanks,
+Hyeonggon
