@@ -2,173 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7650B5B54AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3385B54B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiILGps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S229520AbiILGpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiILGpn (ORCPT
+        with ESMTP id S229459AbiILGpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Sep 2022 02:45:43 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2051.outbound.protection.outlook.com [40.107.101.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7B715A39;
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C2B95B8;
         Sun, 11 Sep 2022 23:45:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ii5/csU7zz6h8a0xhkdnSXnMUvhu6M5BzPsse/LkmLKpSGvNE1XWvU0rRShDVUbeeVnLflsrbQ0Dn4AOOYZ74cXnIAgdDa6LLviTm6bjcLrefGbHoQgil1sHGa4DAphrF8+xfDlZOYU/sm2Kb3dwkh144hHssEgr2CLx2zgWaSQKf6Nq8HoXFRpfcK3R/fBaVJxk0P2s93d7Zjr07NPJ9ot2nMCynxW8DurtWuMuGXwuY4eojzjy152mdzOzx5w9RPy65kGLqNT8l5sDFF25nd/du+5tI4L28TQWc/86wsgo1le8nHjR6aZGATo2oVFOSVtag7vHin8+06QmozmSzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q0jElLVAmVYDnQvieoYt4WhuWsqmX6IWgiQ0ptz5EnY=;
- b=gMrxGEmF6VXRuekbohhRVLHomCrAFzf1DcQQ1FYuDWQbcOkfxxBy2phMwCmfST2VRVtI23oljbSemR/04IkYhCVeIng4iiT8aZXyu3rwWnopFH1RIvgQ3YycTM0v2YcJchZ6F6DPoIC0EdYYAC8FFDrc+OWi4LpP9Bl+VmT9GFSdjS7nwxKIZHF03Lswz6e6Z4Ja81RkqNmksXl1rLgkcpF5GqBxcsN5/J4Ya2yOjiXslmanD6iTg6J4PnflNuruahiekeNvTT18Uzu4VS8YSWDEaPFsIozJzzuyhCgLKzn8XjxP0Unhtr4C1P4zs2EHTHE0OF8s9mvOo77SV1HfCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q0jElLVAmVYDnQvieoYt4WhuWsqmX6IWgiQ0ptz5EnY=;
- b=5GiM1LFCu6FX6Lp9r3SngMytPwcW7zqDnr829VHW1Tgo2fVIxqy89pFoMtNiPDL3h7pbZGe9rg/NIeEqyIeZAxEdD8miJ0hXDP+vE7EK4MBfH33bs0ssNUYMx40dz3unDt1DxpH7h5pRb08UOMAmHxNd4RNy2QdwxvaLTpXl+tM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM4PR12MB6375.namprd12.prod.outlook.com (2603:10b6:8:a2::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Mon, 12 Sep
- 2022 06:45:41 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 06:45:40 +0000
-Message-ID: <43d23604-9def-251a-d733-0bed9a431f85@amd.com>
-Date:   Mon, 12 Sep 2022 08:45:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/6] dma-buf: set signaling bit for the stub fence
-Content-Language: en-US
-To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
- <20220909170845.4946-3-Arvind.Yadav@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220909170845.4946-3-Arvind.Yadav@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0179.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a0::16) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-12803ac8113so20908547fac.8;
+        Sun, 11 Sep 2022 23:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/OqphlDthIJI2RqLUN/nxefOOpSEEaymfSm7D+IizKA=;
+        b=nmZKbEBaPNiUzzDffjbekwxrmm6YC3LMNFQudNLnTg36FnsIMg046qGljB1fzjZQ/t
+         +96qzAfsUOl+iNvMHcT3DMr0I1XXrUVx5NCbN2uFS7gcREfadXL7XRZLlPXoNVaSedO3
+         NNoYlmTI4lO72poCR/PAwBTcmGq1AsB9MMYFgTzZ3O8fjKUTL+uM+G+88U33hXONVY9F
+         JB5a5WuyBTRSXSH/NEsvurSJW0+mHmIqfaVwHxf0b4eqVXri9RMbliZjfH7PkGD8+2mo
+         ZtkxTIYHD8f3/3HEwKIHxZf64oTYmh5czEsl3o+IuqZZ8UQ2yLcSueuRopLLWTFhhW2j
+         tzTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/OqphlDthIJI2RqLUN/nxefOOpSEEaymfSm7D+IizKA=;
+        b=gSh9tUv/jKrted1uv3+MNPtkblwUuE+QE7Fx9WEYQPiSrMk1QSEkze90PBZiG7oPoe
+         BNRiTRv47y0Qc1t+Thku5ESBRhhseniN6qUi5GLoI0RWGXzzs8P+gzKLedulTxQKCchJ
+         5XPyraPKe16xoAokWstz9V7Gyiowlosg2DQrN2yknPpObYUyZUz9S8LrWGYDfTngm4Dd
+         HG8bRojjCnhu5zMmMnEtK8rgd1T4qzgR/xHdd2zxCDxQ0CXhAMVY7mcie8BLDPYa4945
+         8Y/Z5qwuC1j21AAHP56CJb1zDNrN2w3YBOQV8X4RHGT55szeOKbrgt4CGLUsc4n4vOQL
+         /rSw==
+X-Gm-Message-State: ACgBeo2m0ukaTvQmzw/5ZF88M71deflQnb8YJ+x6f79jEZXmmkxb+4Vk
+        4OGxOCNBKqTYWUd7ErkX1xY=
+X-Google-Smtp-Source: AA6agR79MxHLd1nO4blkqAXiLWq78Jw+XI914wdGfM5RU4KVUAOF1DjVrQmr49w7Os+y248v4WofRw==
+X-Received: by 2002:a05:6870:438a:b0:127:ad56:b751 with SMTP id r10-20020a056870438a00b00127ad56b751mr11584429oah.200.1662965142289;
+        Sun, 11 Sep 2022 23:45:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:b5d7:d916:de6d:55a0? ([2600:1700:2442:6db0:b5d7:d916:de6d:55a0])
+        by smtp.gmail.com with ESMTPSA id p21-20020a9d6955000000b0063b31e8f457sm4140337oto.75.2022.09.11.23.45.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 23:45:41 -0700 (PDT)
+Message-ID: <3fcea82c-f5cf-f066-67b9-08669c44a9c6@gmail.com>
+Date:   Mon, 12 Sep 2022 01:45:40 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB6375:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1dcb196-d5bd-42b6-f3f2-08da948a686f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LtDTMJ7Wd9Kfn1U9vr3Y5Rt7fECYMp5XlxzKjwXFDzO/1uFGx8sgsKhdYb3dHyC/Wt+TL+n0skpe2Hhx8CMqBCnFrPCyhvI3m8StJe8HytpH3vVXUR39KFZQLNQMzGKDJ8JO/nBTlRxuqsz75+X38WRNoB8mtymEJ92d1WQ8OaUhdg3crd5N4n7/5pnl1htjPT9qT0tO8Ys8gSE9rv4jLaZ/7Fuq0sDlQeLjNSVOLRc+53Oh+j/CCKW5ZTi3IzdMxL6Err8kUmlPn4dF8hMfRCgfjRzYQu3dhboevXPS2xgo1geuLPZ3lT1M5SUiu9Ww+VHOlBfuRbs1Ej9arj8bvbqHDVvL3K9axohVO5QBiCDPr8iv7cAjIjDF7ZIa3+Q9eCbunqesAISSfzex67SsqX9MqoQDkq/jvb8m58dPKD0IOcyYK5zWdzPalIFOx69+/vZ1XZFA1qST/b1HZE0U0Ppxa4rVzpW4+DLf7AoeLK/eY2rc6Yax3sz9xtUu4uaj1xUVXNgqLIeWahZUGSK1apcYm19ls5mQVvZCalFP/uOTnNa4Hpy2bjYevI175nfhuHg/okdhpYdPGQyQ8UZt/B2BTmE2rMuxrbYbjVw838tzYkv3gCnVZwu+8W90lhOGDm1eRv5U/0hvLkqhmfFYihW0LRclg1nybVqzVcL6OU0v8hW0M3tD/tkK9tmZEzmFVBu+W0rhUFMqlLi3E/YUyHwLp1+1eecHeQeZY7R7FTH74EKlqBHYeQ1W7I+abWNJkDd+vMBDaDbKB8YJngdtD4IIL9Xur/Qep86xOR2mpK9caFM9NyFxwpNBY8MBH3Mk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(6666004)(8676002)(66946007)(38100700002)(921005)(316002)(66476007)(66556008)(2616005)(83380400001)(8936002)(5660300002)(2906002)(6486002)(41300700001)(6512007)(66574015)(478600001)(6506007)(86362001)(31696002)(31686004)(186003)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmlKbVVhQzJUY3VGdkRGS2FRaWpobzZnc1dDejRXajA1ZUlWQ0pwdHZKdW5z?=
- =?utf-8?B?RnB1cEdNTko2aFFkbldhS0FiNGRNRlMwRUcrNWdRRWR5UWNCSzhYNGdHak1O?=
- =?utf-8?B?ckhLSFhnM0RRNEZKSm5VVWlWVE50STlJRml0V2ljdnF6aktRSW9ndHZEZmR1?=
- =?utf-8?B?Slh5aUxGMXNnM2prWkpEeTRPRnc4a1h3c3FKZUpjSG14allIbnB4UEl6d2xY?=
- =?utf-8?B?VzJUN0dESmtETENoYlo5d2s2RlNmRGlkZUhaWVF2ZGEwUkorNTJ5NVRtdXlu?=
- =?utf-8?B?bWpQMmtYZE1QS3J5cmt1dmVhUEVzRncrQjUyR3ROVW5NbzhtM3JLUWcvMkNV?=
- =?utf-8?B?RWVhT01HeW05ZnlyY3BNZDBUTGk4RlNVL2NFd0IvWUhZbU5hM3Fic20wVUJk?=
- =?utf-8?B?dEx1eURkOEZUdDhMdytRaEpudWlIeXI2TUwxeHc4ZjlSSktDdnRUMGNkYmFR?=
- =?utf-8?B?bnVZYkVXQm1JQjNON3JHejdjSW5KU2RsWlVHbkMxbWY5Z3lwbHF6UlA3YTgr?=
- =?utf-8?B?c2dpSGJCaUVyNjE0ckVRaU0wZWR0dXpHMm1UYlJ1U1Zqcmlwa1NnYlF5NmVK?=
- =?utf-8?B?RkhPNngwL3J2Sjc5eGVDOXhVdEk5ZVE4bnZEZ0dNY2QvdHlHaTdHb2twMzh6?=
- =?utf-8?B?cTF1blM1d0ZJOHIwNUF3SDFocUorOUhkQnBvVVI1bnIrMWpoMWVOZzVpbEg2?=
- =?utf-8?B?SzdWQzJuaVo4M0prOUg3VDdIZjhEYVBibllGak8rM1VyNjFlYUNwVlpRVWc1?=
- =?utf-8?B?N3dBUmMzL1JueGJvSTNYQThrVUZ1Ums0Y2Q1VTB4ZFljNGJCTnQ2Z0xsbjhM?=
- =?utf-8?B?a0tMd01yZWVPc2hNbkFELzJjWlY4YW05OVBZYkF6SW9LNmxJYndjNnQ2YlBa?=
- =?utf-8?B?aHpkQjhqTmJ3bTdCcENEaFl6WWtrV1NRQVJmYmhjakQydlRINUI4SWRyT2RB?=
- =?utf-8?B?U3BoVm1EeXZSR2J4VjB2ZkFWUmg0T2pZRDMyK3RTblhvOWhnWjh4cjEvRHdy?=
- =?utf-8?B?QzJXYVY5clNubFo0alBTNmRhckppOGR2THlyNDVFcFRkb3dVcnMvcW5ESVEx?=
- =?utf-8?B?NDdzUWZyMWlISitGNDZReEVLRnkxallNcVNJNWR4WFdHRkVQVjQ0M1ZTa01D?=
- =?utf-8?B?UUp4b3M1UmlvZ2NXQzVJdG9NMWIzWW1JODBZUmlvbzJXQ3YwTFBDajZjS1Rq?=
- =?utf-8?B?b2xsbnEzc0NRK21Sb1hGbkowM1ZHN29xZi92ZE15M0hwNm9LR1A5Nm9IS1FB?=
- =?utf-8?B?WkxJdXEyVE9MMXBVZmsrR1Q0bzNQQlNFaEdZSHRtWWRWVG9jd0J4bHd6N3hr?=
- =?utf-8?B?RkRUZ1VaRXg5M1VBV1U3YnFWQ2tOOXJiWEZmMlFhKzhqVUM2dVVseDZld0E4?=
- =?utf-8?B?Z055SGx2dEh1SEpLRkxweEVXaVp4Vmw5ZTd0U2I5WTVtb2VDUDBQVjdVbzVu?=
- =?utf-8?B?ZkFQejhkY21IZ3NWeTNtc0JUZkVJVTV5RXNNWjJlMzBnQ2JScWlERkxLU0tw?=
- =?utf-8?B?cFp1ZHNoUkpSZFB6bFhFNjJtL3dZUGl0cnJBakR5MWMxbGZNYThvRlZDMUJG?=
- =?utf-8?B?TFY4M05vUHQ0VHgrSGxGWHVVaXJQYmM0cDNsTzZ3RkFlL2RuckxGOVVmUmFs?=
- =?utf-8?B?Yjh5aWJQK1RZSHlPNDF3K2plbUhhc0R3UEtJUHdrOW85NGNBRmMzdU9mQm9E?=
- =?utf-8?B?MGRoVk94UEpySEx2UVhhOUtsaFo1YklCR254blQyd2RCYi9sTE5ESzNYZGFo?=
- =?utf-8?B?a2xzTFMrTGNpbHA1VW10YUVzSEN0TjQ4Q2tFQjZIR0FzTVlxMWhzSVdCc091?=
- =?utf-8?B?M2xTcjNiYmIveStrNzlRVXBZZzhVSHV6NjJRdTl4V0dkeDE4SHFld0d0OVN3?=
- =?utf-8?B?QWhYSzNUN0wvM2kvNFIvK0JWc2JTZDJqbW5JRmVGOUZ1a3Vtekt4OFE2Zkl6?=
- =?utf-8?B?cnBEMnFkZDJ2Wjh4L0lUNW9BV05WeUxuSVRBdzh1Y25FOFRJSW1Ybm9LOE9w?=
- =?utf-8?B?N3FsK2pDWVNSSktrcTcvMndqbTdLV0JxaG9yY1Z1bUhZV2JHdmZBTlcvM1d3?=
- =?utf-8?B?SkxMS2N6ZXZWUXpGSlN4WUk4YlFFei9yUTJ5QjQrV2tCMGIzOXJpQ1VSdWpD?=
- =?utf-8?B?cjl5eGhBNXhyV1l5NW5DUHFycEIzcU1Db3pKa3ZiRWphcm5PWmc5Q25FT0dy?=
- =?utf-8?Q?ICK2Et61u4Tg6Gn5Zutp6zsF+H5dqc4HIKtEppDGVr0x?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1dcb196-d5bd-42b6-f3f2-08da948a686f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 06:45:40.7411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8mbEyPMl6rnpDhLC36N0Nn1KyFYyEGNSBgxWw9Yve9PEeKEaZk9jGY2D6o8tRVLQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6375
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] driver: of: overlay: demote message to warning
+Content-Language: en-US
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Rob Herring <robh+dt@kernel.org>, xe-linux-external@cisco.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220907230709.271889-1-danielwa@cisco.com>
+ <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
+ <20220908003510.GE4320@zorba>
+ <c0c66918-f55e-83e4-edea-b2d32fdb27a7@gmail.com>
+In-Reply-To: <c0c66918-f55e-83e4-edea-b2d32fdb27a7@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 09.09.22 um 19:08 schrieb Arvind Yadav:
-> Here's setting software signaling bit for the stub fence
-> which is always signaled. If this fence signaling bit is
-> not set then the AMD GPU scheduler will cause a GPU reset
-> due to a GPU scheduler cleanup activity timeout.
->
-> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+On 9/8/22 12:55, Frank Rowand wrote:
+> On 9/7/22 19:35, Daniel Walker wrote:
+>> On Wed, Sep 07, 2022 at 06:54:02PM -0500, Frank Rowand wrote:
+>>> On 9/7/22 18:07, Daniel Walker wrote:
+>>>> This warning message shows by default on the vast majority of overlays
+>>>> applied. Despite the text identifying this as a warning it is marked
+>>>> with the loglevel for error. At Cisco we filter the loglevels to only
+>>>> show error messages. We end up seeing this message but it's not really
+>>>> an error.
+>>>>
+>>>> For this reason it makes sense to demote the message to the warning
+>>>> loglevel.
+>>>>
+>>>> Cc: xe-linux-external@cisco.com
+>>>> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+>>>> ---
+>>>>  drivers/of/overlay.c | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+>>>> index bd8ff4df723d..4ae276ed9a65 100644
+>>>> --- a/drivers/of/overlay.c
+>>>> +++ b/drivers/of/overlay.c
+>>>> @@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
+>>>>  	}
+>>>>  
+>>>>  	if (!of_node_check_flag(target->np, OF_OVERLAY))
+>>>> -		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+>>>> +		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+>>>>  		       target->np, new_prop->name);
+>>>>  
+>>>>  	if (ret) {
+>>>
+>>> NACK
+>>>
+>>> This is showing a real problem with the overlay.
+>>
+>> What's the real problem ?
+>>
+>> Daniel
+> 
+> A memory leak when the overlay is removed.
+> 
+> I'll send a patch to update the overlay file in Documumentation/devicetree/ to provide
+> more information about this.  If you don't see a patch by tomorrow, feel free to
+> ping me.
+> 
+> -Frank
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+The good news is that your question prodded me to start improving the in kernel documentation
+of overlays.  The promised patch is a rough start at:
 
-> ---
->
-> Changes in v1 :
-> 1- Addressing Christian's comment to remove unnecessary callback.
-> 2- Replacing CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
-> 3- The version of this patch is also changed and previously
-> it was [PATCH 3/4]
->
-> Changes in v2 :
-> 1 - perviously using  __dma_fence_enable_signaling() for enable
-> signaling.
-> 2 - #ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH  removed
->
-> ---
->   drivers/dma-buf/dma-fence.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-> index 64c99739ad23..bead1a6e9f59 100644
-> --- a/drivers/dma-buf/dma-fence.c
-> +++ b/drivers/dma-buf/dma-fence.c
-> @@ -136,6 +136,10 @@ struct dma_fence *dma_fence_get_stub(void)
->   			       &dma_fence_stub_ops,
->   			       &dma_fence_stub_lock,
->   			       0, 0);
-> +
-> +		set_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
-> +			&dma_fence_stub.flags);
-> +
->   		dma_fence_signal_locked(&dma_fence_stub);
->   	}
->   	spin_unlock(&dma_fence_stub_lock);
+   https://lore.kernel.org/all/20220912062615.3727029-1-frowand.list@gmail.com/
 
+The bad news is that what I wrote doesn't explain the memory leak in any more detail.
+If an overlay adds a property to a node in the base device tree then the memory
+allocated to do the add will not be freed when the overlay is removed.  Since it is
+possible to add and remove overlays multiple times, the ensuing size of the memory
+leak is potentially unbounded.
+
+-Frank
