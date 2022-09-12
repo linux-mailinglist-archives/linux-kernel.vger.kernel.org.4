@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E76D5B61FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAB45B6203
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiILUEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 16:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S229718AbiILUGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 16:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiILUET (ORCPT
+        with ESMTP id S229588AbiILUGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 16:04:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5074F481ED
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 13:04:18 -0700 (PDT)
+        Mon, 12 Sep 2022 16:06:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A836521809
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 13:06:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4BCF61272
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4065C433D6;
-        Mon, 12 Sep 2022 20:04:14 +0000 (UTC)
-Date:   Mon, 12 Sep 2022 21:04:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4296127D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FFECC433D6;
+        Mon, 12 Sep 2022 20:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663013204;
+        bh=POm5i/TN6x7SZia4lCIH+aJnU08Ov/27rWDNjJHTN1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qd9upT6GqFOCIGNRHAi2HJWDE/w//dK4jcNazYGutioly7EMjZ+E0qVKokDfmf1VP
+         OiX1w8Ib5p9EMJcv+A5Vym6JkPK5BTR0kC9iNb/4Dq5puMW1bOujobSKkkas6ZPRue
+         rFw0DKVp5cgFW3I4fSF+l7tJ8JvUPQAZ9/Uxe52Y=
+Date:   Mon, 12 Sep 2022 13:06:43 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v4] arm64: mte: move register initialization to C
-Message-ID: <Yx+QutrpakTEyRjW@arm.com>
-References: <20220907003630.1115439-1-eugenis@google.com>
- <CAMn1gO4X93khAqOOvCJjWmm410rv8S5847GfsPckJwqtLSzc-Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMn1gO4X93khAqOOvCJjWmm410rv8S5847GfsPckJwqtLSzc-Q@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Andrey Konovalov <andreyknvl@google.com>,
+        andrey.konovalov@linux.dev
+Subject: Re: [PATCH mm v3 00/34] kasan: switch tag-based modes to stack ring
+ from per-object metadata
+Message-Id: <20220912130643.b7ababbaa341bf07a0a43089@linux-foundation.org>
+In-Reply-To: <CANpmjNM3RqQpvxvZ4+J9DYvMjcZwWjwEGakQb8U4DL+Eu=6K5A@mail.gmail.com>
+References: <cover.1662411799.git.andreyknvl@google.com>
+        <CA+fCnZdok0KzOfYmXHQMNFmiuU1H26y8=PaRZ+F0YqTbgxH1Ww@mail.gmail.com>
+        <CANpmjNM3RqQpvxvZ4+J9DYvMjcZwWjwEGakQb8U4DL+Eu=6K5A@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 05:54:13PM -0700, Peter Collingbourne wrote:
-> On Tue, Sep 6, 2022 at 5:36 PM Evgenii Stepanov <eugenis@google.com> wrote:
-> > If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
-> > CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
-> > in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
-> > in fact implement FEAT_MTE2, setting the system register like this may
-> > lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
-> > in the C function cpu_enable_mte which is called based on the sanitized
-> > version of the system register.
+On Mon, 12 Sep 2022 11:39:07 +0200 Marco Elver <elver@google.com> wrote:
+
+>
+> ...
+>
+> > Hi Andrew,
 > >
-> > There is no need for the rest of the MTE-related system register
-> > initialization to happen from assembly, with the exception of TCR_EL1,
-> > which must be set to include at least TBI1 because the secondary CPUs
-> > access KASan-allocated data structures early. Therefore, make the TCR_EL1
-> > initialization unconditional and move the rest of the initialization to
-> > cpu_enable_mte so that we no longer have a dependency on the unsanitized
-> > ID register value.
+> > Could you consider picking up this series into mm?
+> >
+> > Most of the patches have a Reviewed-by tag from Marco, and I've
+> > addressed the last few comments he had in v3.
+> >
+> > Thanks!
 > 
-> Moving the register initialization to C also fixes a bug where the
-> kernel's zeroing of TFSR_EL1 has no practical effect when the kernel
-> is started in VHE mode because the register is currently being zeroed
-> prior to the kernel enabling the redirect of TFSR_EL2 to TFSR_EL1 when
-> it enables VHE. As a result, without this patch it is possible to get
-> a spurious KASAN error report if TFSR_EL2 is non-zero out of reset.
+> I see them in -next, so they've been picked up?
 
-Oh, I think this is a side-effect of the nVHE patches. We added MTE in
-5.10 and __cpu_setup() was called at EL2 if the kernel was entered at
-EL2 - 3b714d24ef17 ("arm64: mte: CPU feature detection and initial
-sysreg configuration"). When nVHE turned up in 5.12, this was changed to
-to run __cpu_setup at EL1 and this only initialises TFSR_EL1.
-__finalise_el2 should have transferred TFSR_EL12.
+yup.
 
-I don't think there other registers we missed in __cpu_setup() but I
-haven't looked in detail.
+> FWIW, my concerns have been addressed, so for patches that don't yet
+> have my Reviewed:
+> 
+> 
+> Acked-by: Marco Elver <elver@google.com>
 
-So for this, we either move the reg initialisation to C or we fix
-__finalise_el2. I'm tempted to go with the former as long as the kernel
-doesn't read that register up to that point and complain of a spurious
-asynchronous fault.
-
--- 
-Catalin
+Updated, thanks.
