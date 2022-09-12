@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438385B62DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E725B62DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiILVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S229950AbiILViE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiILVhv (ORCPT
+        with ESMTP id S229894AbiILVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:37:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE144BD32
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:37:50 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id lc7so23325262ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=R2eR+zL2wRHc9ncPta4J1bGSX7YZcFCg5pJmVeSKDAk=;
-        b=ivNz0GcRtBBjVtRYxqIYlWxIhUEO5TPXYkDNBcBLYvYAsNY8+wDCappA395P46Z+e8
-         Z/XcYiHevUhxjLnBOw8pALKfjz6k9HyW6mvFaLcBny17l2C3qyuhfkiFW8SgWSSO+tmp
-         XvKXwXHiXRTwXg+DYGsjydVnS5MRkFYi4HNAk=
+        Mon, 12 Sep 2022 17:37:57 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6C4C60A;
+        Mon, 12 Sep 2022 14:37:56 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-12803ac8113so26942400fac.8;
+        Mon, 12 Sep 2022 14:37:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R2eR+zL2wRHc9ncPta4J1bGSX7YZcFCg5pJmVeSKDAk=;
-        b=f5NnbktbIzGt7FTRezcEaQzgpAO1JW0h2nskgMULt4Y74RFlEFCiqVqr513lTcy+hi
-         tDaVpdoc3Rq8B3wUTqlAcDMu6c/JF5XLgnFuyCuABygAJkm6xvlvlGw/x2pautBeLasI
-         Q2Verfe0CiKFa1nVyragl+XxC4y27qn1bDGEKM7AHYN8aU9CYOE4eceroqys7b357bUn
-         NJFYkUktnEYWDZzZ8NPy+PqZgzUe4DPJhnj8hZNvdPXq8vsE7KM5qLwLh1Z7p6JFpqBB
-         Hbf3PMfcDrs3/8+ZdACtcCwVxkzQ5iRdinPUSG/JAaVOn3AEl1D+MxT7sHe7H4Dm+IrL
-         b4qw==
-X-Gm-Message-State: ACgBeo0R2m7FKmKNU4jHEbJi0R/6EWN8nLcjArV+hwFBPsN4dyt0kPNe
-        a/oxTxOkH7xaDLuFYtSqwRJOG+csm416PhKLRdSGGw==
-X-Google-Smtp-Source: AA6agR7Jc96Ysk1hj97djcQcVnDrOPolRaN4o1Oti0xbAQg3oyFEQLmM6+USIjmjrEPxMn+KJ4TkyHRStISn+BHHdrw=
-X-Received: by 2002:a17:907:3e12:b0:741:66c4:5658 with SMTP id
- hp18-20020a1709073e1200b0074166c45658mr19754280ejc.486.1663018668683; Mon, 12
- Sep 2022 14:37:48 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=BHNK/xH+mhQJiZxZdU0ybg1u2AYkzOcqp8cQqgJ1qYc=;
+        b=tQcSsAxw8ASH0FSYkCRocrKGrO4hxyPXaoxkTCHiifDna4GtVY3taF7DIzFAH+3CEA
+         5+SdcBFhSeE/74+XFVWCJlx2DV9MeC2EdheSi5lqPfueOACB/L2uMMxevAuCX7HJYYxP
+         a58jMTC1cMUhPD2MTdGkqFQnayOpQfTRPTC+PesqTVZ6esKfyxiZlTUKgKFL+SvSkuu0
+         YrKYTfJorCBIE4zTHbcnhvOxIocBHWA26XMzHOU0fR48KR5sjFik49WziPAepzKFRTLP
+         ZK/lLiG++Q/Ao9pKjsu7aLH+Lt+ttEtYtVTiu6JGS6d7H16zmRqhn0UP+dOhSHFEg4+N
+         f5uQ==
+X-Gm-Message-State: ACgBeo1PJE4GtfDODhvgHX0kkf0485o17HzaKdm5L9lRlVS8e4Ukmf+7
+        X95MtHOcNuw9VOtBVRuaMQ==
+X-Google-Smtp-Source: AA6agR7Q2f7QGvzITg1wOOoy7fhFuc9v9GHyCZijQT0w2SIi0n8gG1E9UqGwLwefbawZKU/G6mw3zg==
+X-Received: by 2002:a05:6870:e616:b0:12b:82e8:dc53 with SMTP id q22-20020a056870e61600b0012b82e8dc53mr207070oag.276.1663018675791;
+        Mon, 12 Sep 2022 14:37:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u22-20020a056871009600b0012b342d1125sm5342647oaa.13.2022.09.12.14.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 14:37:55 -0700 (PDT)
+Received: (nullmailer pid 1943256 invoked by uid 1000);
+        Mon, 12 Sep 2022 21:37:54 -0000
+Date:   Mon, 12 Sep 2022 16:37:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [PATCH 2/4 v2] dt-bindings: memory: Add numeric LPDDR compatible
+ string variant
+Message-ID: <20220912213754.GA1942982-robh@kernel.org>
+References: <20220907232914.243502-1-jwerner@chromium.org>
+ <20220907232914.243502-2-jwerner@chromium.org>
 MIME-Version: 1.0
-References: <20220912213334.2703872-1-jthies@google.com>
-In-Reply-To: <20220912213334.2703872-1-jthies@google.com>
-From:   Benson Leung <bleung@chromium.org>
-Date:   Mon, 12 Sep 2022 14:37:36 -0700
-Message-ID: <CANLzEksE+YVjPGG6Or0_7pE5D9o+DmmDTZ1KZap2QGKSexiJNA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec: Log wake events during resume
-To:     Jameson Thies <jthies@google.com>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        pmalani@chromium.org, groeck@chromium.org, tzungbi@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907232914.243502-2-jwerner@chromium.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jameson,
-
-On Mon, Sep 12, 2022 at 2:34 PM Jameson Thies <jthies@google.com> wrote:
->
-> Update cros_ec_report_events_during_suspend to log wake events during
-> resume by calling pm_wakeup_event.
->
-
-Minor nit, isn't it more accurate to say that this change "signals" or
-"notifies" a wakeup event rather than just log? Log indicates some
-print to a logging service, which may happen, but as a side effect of
-the actual pm_wakeup_event call, which does something real on its own.
-
-Thanks,
-Benson
-
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> Reviewed-by: Prashant Malani <pmalani@chromium.org>
+On Wed, 07 Sep 2022 16:29:12 -0700, Julius Werner wrote:
+> This patch allows a new kind of compatible string for LPDDR parts in the
+> device tree bindings, in addition to the existing hardcoded
+> <vendor>,<part-number> strings. The new format contains manufacturer and
+> part (revision) information in numerical form, such as lpddr3-ff,0201
+> for an LPDDR3 part with manufacturer ID ff and revision ID 0201. This
+> helps cases where LPDDR parts are probed at runtime by boot firmware and
+> cannot be matched to hardcoded part numbers, such as the firmware on the
+> qcom/sc7280-herobrine boards does (which supports 4 different memory
+> configurations at the moment, and more are expected to be added later at
+> a point where the boot firmware can no longer be updated to specifically
+> accomodate them).
+> 
+> Signed-off-by: Julius Werner <jwerner@chromium.org>
 > ---
->  drivers/platform/chrome/cros_ec.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-> index 8aace50d446d..110df0fd4b00 100644
-> --- a/drivers/platform/chrome/cros_ec.c
-> +++ b/drivers/platform/chrome/cros_ec.c
-> @@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
->
->  static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
->  {
-> +       bool wake_event;
-> +
->         while (ec_dev->mkbp_event_supported &&
-> -              cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
-> +              cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
->                 blocking_notifier_call_chain(&ec_dev->event_notifier,
->                                              1, ec_dev);
-> +
-> +               if (wake_event && device_may_wakeup(ec_dev->dev))
-> +                       pm_wakeup_event(ec_dev->dev, 0);
-> +       }
->  }
->
->  /**
-> --
-> 2.37.2.789.g6183377224-goog
->
->
+>  .../memory-controllers/ddr/jedec,lpddr-props.yaml    | 10 ++++++++++
+>  .../memory-controllers/ddr/jedec,lpddr2.yaml         |  8 +++++---
+>  .../memory-controllers/ddr/jedec,lpddr3.yaml         | 12 ++++++++----
+>  3 files changed, 23 insertions(+), 7 deletions(-)
+> 
+> Changelog:
+> 
+> - v2
+>   - Updated commit message to describe intended use case as an example
+> 
 
-
--- 
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+Acked-by: Rob Herring <robh@kernel.org>
