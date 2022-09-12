@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC13C5B5595
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 09:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F475B53C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiILHya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 03:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S229512AbiILGH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiILHyZ (ORCPT
+        with ESMTP id S229447AbiILGH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 03:54:25 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E95220C5;
-        Mon, 12 Sep 2022 00:54:24 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id wc11so3647302ejb.4;
-        Mon, 12 Sep 2022 00:54:24 -0700 (PDT)
+        Mon, 12 Sep 2022 02:07:56 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304CB21E31
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:07:55 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id t70so7311561pgc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=SKzjbw9lRJgBcel5ZxP+EuDqjzgPYYKLm1vp+TeEmao=;
-        b=n+4YDeyora0QTIWMZOdeMAMixt9nmvLKpDxfVeUUkBvF4Ex9zyX41DuUAglc2eltdf
-         LWLE0hEE/8Rs81gOvk9UAzCiZvBys0amYrLicqrFiq7hDJajaf45axUmUMcnbO5BqrHw
-         lOJl3Iw/dmztLB0bE3zWt6lg12WzgEpFLNGz4YaeGfpHpblvap+WZyGlFOvhldZGCkmu
-         fKC/3/I2muEK9Za+KRGNZ8LzYQb6RZRe2PULuWJ8/Jt2ysgxZnQ6Vt6G2t1w0HMw/JKu
-         96yUeJqgAyogw9CBKBQsahfgdBWqNoaCW4q3bz7uJo6d9F8DBcYEadpPaPvZwPX+Bnt2
-         NI5g==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=heRnSh/ihPz3+Q+MxSXEW9Y8QcvUAW165V+3AmdWDkE=;
+        b=IotzQhJcjicWgQP5XMB/92HGjGlouQVWh7eoE8Bej5xDodZfchNwMswgQ/VZjg+bNJ
+         flPZn0Rjbs+CeV65AWIVvLp9lpWJb214z/YM8hZXah9l9E9/CeeEDlJQAjY8ULRQfGKf
+         smbZt0e13eKDmTLcO/8lTk2ZzyKc93hD3mqRE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=SKzjbw9lRJgBcel5ZxP+EuDqjzgPYYKLm1vp+TeEmao=;
-        b=sMhpKczLUSc5RvN6WUUGrP5P2INQwcCcCnVDUlbjWtwoITynnln1VCeVbNEAmunvbC
-         lzYDrPlcgGOLHXYKrIhhmNLAGAIwPzY9r5LOPa5RUHybxWuHrK/FW8Zo/lfk1a1dDsjg
-         5H1LA6N4a/rgVL5sSsNZx0FQj9doH8h9aERINSo2tp0+DqGwDBiUwpL8rK4munRWvpX8
-         yNGqUdw07lQQRmmLrH05SJd9ihiajlRQvHvdEWTZm/zw4J4uuFcc/8UM5RoXtU6GsSU2
-         A6+B3AWIStb/D1BjXy5u5ilOKog9BtuSUPpd05uuMWipPzH5GvIlbZZkUinhn6eIYSUs
-         valA==
-X-Gm-Message-State: ACgBeo2qU4PWAL1xcZivFDQmnclg2E5eU87BmnT4eyxEiuLU3LnzeVti
-        vCfcuh7FmMr88nNbYeFg3U4=
-X-Google-Smtp-Source: AA6agR7gMSwOQYP5VpYpYYXjbopehskWuSprT2EJjXvJiS/M74ODUvx6J/6HlC3OTPnt33bw3Arcsw==
-X-Received: by 2002:a17:906:dc93:b0:742:133b:42c3 with SMTP id cs19-20020a170906dc9300b00742133b42c3mr18127101ejc.502.1662969262925;
-        Mon, 12 Sep 2022 00:54:22 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id md10-20020a170906ae8a00b0073d753759fasm4052753ejb.172.2022.09.12.00.54.09
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=heRnSh/ihPz3+Q+MxSXEW9Y8QcvUAW165V+3AmdWDkE=;
+        b=4bMPCPIbEHwD8qiINBrrA/41URP1/16/oA6QRB34PeeiX+Nr8ph3Q9Jq2mghwq5+nD
+         6/99LICYi6sa/ZEjlHWFzUi8W3xfhCkKvZ0mKlnIhWddk2RxNsMKWqd/PaA4toWl6pBp
+         JGz/ptIun7h4Qg8bC9kYU+TwgT1zaXps0R5AtftWL7JPmKRu15/fGYydE6I94OjhXE7K
+         eod3i1ji84Zs9angCpyBWg553WTOzZlWQhEZuYbDiZTDwRqsbkXEwIEVDJoOQ11wlZG/
+         j48sA1n2PwgDVgAOgGuvqFGEM9rn2PjLPReFqKwDZn64akTnNdc+zUTTV5suiq5Qsxsb
+         99Fg==
+X-Gm-Message-State: ACgBeo1yrS0xzjVqir44wT0jgHXoZlJHYwPNzxMLdw7ByDRFGVLp1weV
+        4msvsWulZ4QMA5/TZ2GMIGTEgw==
+X-Google-Smtp-Source: AA6agR4QuFyNN1qZkl+zW7LinZvUDCkJQmpMsBN8qqIqAmQeTFDLoC8ZLMcOQIzRsjSoKKdumBtiyQ==
+X-Received: by 2002:a63:1953:0:b0:438:6e74:92e2 with SMTP id 19-20020a631953000000b004386e7492e2mr15594039pgz.150.1662962874712;
+        Sun, 11 Sep 2022 23:07:54 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:7b09:9fce:b16b:c111])
+        by smtp.gmail.com with ESMTPSA id f16-20020aa79d90000000b005403b8f4bacsm4361429pfq.137.2022.09.11.23.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 00:54:22 -0700 (PDT)
-Date:   Sun, 11 Sep 2022 13:54:52 +0200
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-wpan@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: Re: [PATCH 3/4] net-next: frags: add inetpeer frag_mem tracking
-Message-ID: <20220911115447.GA101734@debian>
-References: <20220829114648.GA2409@debian>
- <CANn89iLkfMUK8n5w00naST9J+KrLaAqqg2r0X9Sd-L0XzpLzSQ@mail.gmail.com>
- <20220901150115.GB31767@debian>
- <CANn89iKMe7WZS-Q4rzqEUUD+ANL6Fmb6BnFo8TvX7y_EVi=HOw@mail.gmail.com>
+        Sun, 11 Sep 2022 23:07:53 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 15:07:49 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Brian Geffon <bgeffon@google.com>, Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [RESEND RFC] zram: Allow rw_page when page isn't written back.
+Message-ID: <Yx7MtWdQ/WVE+EkG@google.com>
+References: <20220908125037.1119114-1-bgeffon@google.com>
+ <Yxr5oNaCwjn8cdFF@google.com>
+ <Yx63e2lxNmEB3UhE@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iKMe7WZS-Q4rzqEUUD+ANL6Fmb6BnFo8TvX7y_EVi=HOw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yx63e2lxNmEB3UhE@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:06:59AM -0700, Eric Dumazet wrote:
-> It can be disabled if needed, by changing ipfrag_max_dist sysctl.
+On (22/09/12 13:37), Sergey Senozhatsky wrote:
+> On (22/09/09 17:30), Sergey Senozhatsky wrote:
+> > > +++ b/drivers/block/zram/zram_drv.h
+> > > @@ -50,6 +50,7 @@ enum zram_pageflags {
+> > >  	ZRAM_UNDER_WB,	/* page is under writeback */
+> > >  	ZRAM_HUGE,	/* Incompressible page */
+> > >  	ZRAM_IDLE,	/* not accessed page since last idle marking */
+> > > +	ZRAM_NO_WB,	/* Do not allow page to be written back */
+> > >  
+> > >  	__NR_ZRAM_PAGEFLAGS,
+> > >  };
+> > 
+> > Unrelated but somehow related.
+> > 
+> > I wonder if it's time for us to introduce a dedicated, say u16,
+> > flags member to struct zram_table_entry. Unless my calculations
+> > are extremely wrong, we are about to run out of spare bits in
+> > zram_table_entry::flags on 32-bit systems.
+> 
+> Looking at it more - I wonder why do we define ZRAM_FLAG_SHIFT
+> as 24? This is far more than maximum zram object size. Our max
+> size needs PAGE_SHIFT bits (which is normally 12 bits, can be up
+> to 16 (for 64k arm64 pages)). So we probably can start defining
+> ZRAM_FLAG_SHIFT as (PAGE_SHIFT + 1).
+> 
+> Or am I missing something?
 
-I understand your reluctance to add another dependency on inetpeer.
+So I think what happened was that flags used to be a u8 member of
+zram_table_entry, commit d2d5e762c8990 merged u16 size (which was
+too large for object size) and u8 flags and just kept 8 bits for
+flags (and somehow assumed 32-bit long? 32 - 8)
 
-> Quite frankly IPv4 reassembly unit is a toy, I am always surprised
-> some applications are still relying on IP fragments.
-
-Do you think there's any room for improvement in IP fragments? I
-believe that it is possible to make frags less fragile and prone
-to overload in real-world scenarios.
+We definitely can store size in PAGE_SHIFT bits and have some
+extra spare bits for zram pageflags. Would have been even nicer
+if we could change type of flags from unsigned long to unsigned
+int, but bit_lock requires "volatile unsigned long *" data type,
+so because of bit_lock our zram_table_entriy is 4 extra bytes in
+size. Which probably isn't too bad; having extra pageflag bits
+on 32-bit systems is good news.
