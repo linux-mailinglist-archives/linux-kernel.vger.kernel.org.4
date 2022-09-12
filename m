@@ -2,86 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006A85B5BA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAC65B5BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 15:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiILNvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 09:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S229560AbiILNwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 09:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiILNvc (ORCPT
+        with ESMTP id S229764AbiILNwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 09:51:32 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C334183B5;
-        Mon, 12 Sep 2022 06:51:32 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 823D96033; Mon, 12 Sep 2022 09:51:31 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 823D96033
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1662990691;
-        bh=BCcOHKvxAW1IzfNYZs7R5fcMpz0xyKVDSP5+bCNB2vY=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=BNivq+2dffYxGwFrbIbzNTMDyqxbKJBuwJ19P++KVeq84Zmv4FAGo+4AqY/2H5tBR
-         zQQsDppJzaNDjrg6QGdsJ/T4xX4EyK7b/b6uGm9Z0aIvcMsO6amE/CIiqSaxGxLuso
-         DbeTGFEV6tEVIqhhEH6eBM3dKpln+kjwpt1atzn8=
-Date:   Mon, 12 Sep 2022 09:51:31 -0400
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Florian Weimer <fweimer@redhat.com>, Theodore Ts'o <tytso@mit.edu>,
-        Jan Kara <jack@suse.cz>, NeilBrown <neilb@suse.de>,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <20220912135131.GC9304@fieldses.org>
-References: <20220908155605.GD8951@fieldses.org>
- <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
- <20220908182252.GA18939@fieldses.org>
- <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
- <20220909154506.GB5674@fieldses.org>
- <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
- <20220910145600.GA347@fieldses.org>
- <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
- <87a67423la.fsf@oldenburg.str.redhat.com>
- <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
+        Mon, 12 Sep 2022 09:52:06 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E0230F55
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 06:52:03 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d12so8658396plr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 06:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=/4RJpDcHTnyeNgFQ8a9TRZhL70VzQaaPYPhwoY3FyM0=;
+        b=TT/m6xXUYiAmG34jqjtSaXSDf2ErMTttL2bICiiudLeZULeuX9LZLKa7GvR7pU2eYJ
+         A1cV+HEYw8E5U25Kal7cWv7o99RJwGhJflS8tDsgsiUO1R1fpfV/9AxP5XM/9VmSIWHF
+         LndIKnjDB/TfV/2LGrMB8m5SesZ1gd2MrLsqRlUsHNNHSe9pqf1Gb5D6AVAPag024n66
+         uUqxwN3viPsLuJlP2jaGQRJuJgnS8GeGRCv+5Pw+yIzOxndmffTgkEPdrPL6kA5LGdH6
+         oDq7Yx5RSg03t+LYPloL5LJTKfz89eTCfFmEperKI1J9qvMU5wEdFQ096hBYWRMRNCWW
+         Bf9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/4RJpDcHTnyeNgFQ8a9TRZhL70VzQaaPYPhwoY3FyM0=;
+        b=vFRVQsg3OrUoz1opjTQ/2nLO0SuzZILyiXvryMtpcoZBp3rxRVwmo/wikiXMmEMz88
+         2MMcMrJ2ODDsMLX7alX2Jzq5aWcnem6q/b6P35cmRcBtr1UUH3SUtwAVuXdRmjITD+vT
+         +Eoe9tQo+v47NqmaWHVNT+/xhfQnDDtlD32q/YondGM9QmXAugXNkotPk/OYQDprm6Ak
+         67QKoefC7HH0QZZLT0Wtpk9AdU870kH+sVcr41Ev0v+X0GFT7B7BTf0vNkL3PYL6v+IJ
+         ZV21laFiIHV7etFVgsDRirVd02KNSpncOC/3uJQ85HDnH9my8qGh4RMFhwmbH2bEI6T9
+         XZow==
+X-Gm-Message-State: ACgBeo0WoC9ILimysjYj/LkcqU6oObrzKooW1bX4EZ3TZLMYGJq/5gu1
+        TTwZCaXPqFSDI92bEaGuA3Kfyw==
+X-Google-Smtp-Source: AA6agR63dJVcPhgDPjTWPAQKsStqogFvfX4ClfDkxrf/euFjFsDLwH2JRPfk73V5+0JZvA7bYqxSAQ==
+X-Received: by 2002:a17:903:2285:b0:177:ab99:9e5 with SMTP id b5-20020a170903228500b00177ab9909e5mr25087264plh.121.1662990722436;
+        Mon, 12 Sep 2022 06:52:02 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b00174be817124sm6041785plf.221.2022.09.12.06.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 06:52:02 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 13:51:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] KVM: x86: Hyper-V invariant TSC control
+Message-ID: <Yx85fuFWR/X097SL@google.com>
+References: <20220831085009.1627523-1-vkuznets@redhat.com>
+ <20220831085009.1627523-2-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c71050e139a479e08ab7cf95e9e47da19a30687.camel@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220831085009.1627523-2-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 08:55:04AM -0400, Jeff Layton wrote:
-> Because of the "seen" flag, we have a 63 bit counter to play with. Could
-> we use a similar scheme to the one we use to handle when "jiffies"
-> wraps? Assume that we'd never compare two values that were more than
-> 2^62 apart? We could add i_version_before/i_version_after macros to make
-> it simple to handle this.
+On Wed, Aug 31, 2022, Vitaly Kuznetsov wrote:
+> Normally, genuine Hyper-V doesn't expose architectural invariant TSC
+> (CPUID.80000007H:EDX[8]) to its guests by default. A special PV MSR
+> (HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x40000118) and corresponding CPUID
+> feature bit (CPUID.0x40000003.EAX[15]) were introduced. When bit 0 of the
+> PV MSR is set, invariant TSC bit starts to show up in CPUID. When the
+> feature is exposed to Hyper-V guests, reenlightenment becomes unneeded.
+> 
+> Add the feature to KVM. Keep CPUID output intact when the feature
+> wasn't exposed to L1 and implement the required logic for hiding
+> invariant TSC when the feature was exposed and invariant TSC control
+> MSR wasn't written to. Copy genuine Hyper-V behavior and forbid to
+> disable the feature once it was enabled.
+> 
+> For the reference, for linux guests, support for the feature was added
+> in commit dce7cd62754b ("x86/hyperv: Allow guests to enable InvariantTSC").
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/cpuid.c            |  7 +++++++
+>  arch/x86/kvm/hyperv.c           | 19 +++++++++++++++++++
+>  arch/x86/kvm/hyperv.h           | 15 +++++++++++++++
+>  arch/x86/kvm/x86.c              |  4 +++-
+>  5 files changed, 45 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 2c96c43c313a..9098187e13aa 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1021,6 +1021,7 @@ struct kvm_hv {
+>  	u64 hv_reenlightenment_control;
+>  	u64 hv_tsc_emulation_control;
+>  	u64 hv_tsc_emulation_status;
+> +	u64 hv_invtsc;
 
-As far as I recall the protocol just assumes it can never wrap.  I guess
-you could add a new change_attr_type that works the way you describe.
-But without some new protocol clients aren't going to know what to do
-with a change attribute that wraps.
+For consistency with the other fields, should this be hv_tsc_invariant_control?
+>  
+>  	/* How many vCPUs have VP index != vCPU index */
+>  	atomic_t num_mismatched_vp_indexes;
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 75dcf7a72605..8ccd45fd66a9 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -1444,6 +1444,13 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
+>  			    (data & TSX_CTRL_CPUID_CLEAR))
+>  				*ebx &= ~(F(RTM) | F(HLE));
+>  		}
+> +		/*
+> +		 * Filter out invariant TSC (CPUID.80000007H:EDX[8]) for Hyper-V
+> +		 * guests if needed.
+> +		 */
+> +		if (function == 0x80000007 && kvm_hv_invtsc_filtered(vcpu))
 
-I think this just needs to be designed so that wrapping is impossible in
-any realistic scenario.  I feel like that's doable?
+This can be an else-if.  Kinda weird, but it could be written as
 
-If we feel we have to catch that case, the only 100% correct behavior
-would probably be to make the filesystem readonly.
+		else if (function = 0x80000007) {
+			if (kvm_hv_invtsc_filtered(vcpu))
+				*edx &= ~SF(CONSTANT_TSC)
+		}
 
---b.
+to make it a pure function+index check.
+
+> +			*edx &= ~(1 << 8);
+
+Ugh, scattered.  Can you add a kvm_only_cpuid_leafs entry so that the bit doesn't
+have to be open coded?
+
+> +
+>  	} else {
+>  		*eax = *ebx = *ecx = *edx = 0;
+>  		/*
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index ed804447589c..df90cd7501b9 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -991,6 +991,7 @@ static bool kvm_hv_msr_partition_wide(u32 msr)
+>  	case HV_X64_MSR_REENLIGHTENMENT_CONTROL:
+>  	case HV_X64_MSR_TSC_EMULATION_CONTROL:
+>  	case HV_X64_MSR_TSC_EMULATION_STATUS:
+> +	case HV_X64_MSR_TSC_INVARIANT_CONTROL:
+>  	case HV_X64_MSR_SYNDBG_OPTIONS:
+>  	case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
+>  		r = true;
+> @@ -1275,6 +1276,9 @@ static bool hv_check_msr_access(struct kvm_vcpu_hv *hv_vcpu, u32 msr)
+>  	case HV_X64_MSR_TSC_EMULATION_STATUS:
+>  		return hv_vcpu->cpuid_cache.features_eax &
+>  			HV_ACCESS_REENLIGHTENMENT;
+> +	case HV_X64_MSR_TSC_INVARIANT_CONTROL:
+> +		return hv_vcpu->cpuid_cache.features_eax &
+> +			HV_ACCESS_TSC_INVARIANT;
+>  	case HV_X64_MSR_CRASH_P0 ... HV_X64_MSR_CRASH_P4:
+>  	case HV_X64_MSR_CRASH_CTL:
+>  		return hv_vcpu->cpuid_cache.features_edx &
+> @@ -1402,6 +1406,17 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
+>  		if (!host)
+>  			return 1;
+>  		break;
+> +	case HV_X64_MSR_TSC_INVARIANT_CONTROL:
+> +		/* Only bit 0 is supported */
+> +		if (data & ~BIT_ULL(0))
+
+Can a #define be added instead of open coding bit 0?
+
+> +			return 1;
+> +
+
+Doesn't the host CPUID need to be honored on writes from the guest?
+
+> +		/* The feature can't be disabled from the guest */
+> +		if (!host && hv->hv_invtsc && !data)
+> +			return 1;
+> +
+> +		hv->hv_invtsc = data;
+> +		break;
+>  	case HV_X64_MSR_SYNDBG_OPTIONS:
+>  	case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
+>  		return syndbg_set_msr(vcpu, msr, data, host);
+> @@ -1577,6 +1592,9 @@ static int kvm_hv_get_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata,
+>  	case HV_X64_MSR_TSC_EMULATION_STATUS:
+>  		data = hv->hv_tsc_emulation_status;
+>  		break;
+> +	case HV_X64_MSR_TSC_INVARIANT_CONTROL:
+> +		data = hv->hv_invtsc;
+> +		break;
+>  	case HV_X64_MSR_SYNDBG_OPTIONS:
+>  	case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
+>  		return syndbg_get_msr(vcpu, msr, pdata, host);
+> @@ -2497,6 +2515,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>  			ent->eax |= HV_MSR_REFERENCE_TSC_AVAILABLE;
+>  			ent->eax |= HV_ACCESS_FREQUENCY_MSRS;
+>  			ent->eax |= HV_ACCESS_REENLIGHTENMENT;
+> +			ent->eax |= HV_ACCESS_TSC_INVARIANT;
+>  
+>  			ent->ebx |= HV_POST_MESSAGES;
+>  			ent->ebx |= HV_SIGNAL_EVENTS;
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index da2737f2a956..1a6316ab55eb 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -133,6 +133,21 @@ static inline bool kvm_hv_has_stimer_pending(struct kvm_vcpu *vcpu)
+>  			     HV_SYNIC_STIMER_COUNT);
+>  }
+>  
+> +/*
+> + * With HV_ACCESS_TSC_INVARIANT feature, invariant TSC (CPUID.80000007H:EDX[8])
+> + * is only observed after HV_X64_MSR_TSC_INVARIANT_CONTROL was written to.
+> + */
+> +static inline bool kvm_hv_invtsc_filtered(struct kvm_vcpu *vcpu)
+
+Can this be more strongly worded, e.g. maybe kvm_hv_is_invtsc_disabled()?  "Filtered"
+doesn't strictly mean disabled and makes it sound like there's something else that
+needs to act on the "filtering"
+
+> +{
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
+> +
+> +	if (hv_vcpu && hv_vcpu->cpuid_cache.features_eax & HV_ACCESS_TSC_INVARIANT)
+
+Ah, I almost missed the inner check.  Can you write this as:
+
+	if (!hv_vcpu)
+		return false;
+
+so that the potentially postive/happy path is at the end?  I.e. follow the common
+pattern of:
+
+	if (!something)
+		return -ERRNO;
+
+	return 0;
+
+> +		return !hv->hv_invtsc;
+
+Kinda silly, but I think it's worth checking the exact bit here.  I don't see how
+the TSC can get more invariant, but if another bit is added, this could silently
+break.  And probably no need to grab to_kvm_v() locally.
+
+	return to_kvm_hv(vcpu->kvm)->hv_invtsc;
+
+
+> +
+> +	return false;
+
+Shouldn't this be "return true" if HyperV is enabled but doesn't have the CPUID
+bit set?  I assume the expectation is that host userspace won't set the common
+INVTSC flag without also setting HV_ACCESS_TSC_INVARIANT, but it's confusing logic
+as is.
+
+All in all, I think this?
+
+	if (!hv_vcpu)
+		return false;
+
+	return hv_vcpu->cpuid_cache.features_eax & HV_ACCESS_TSC_INVARIANT &&
+	       to_kvm_hv(vcpu->kvm)->hv_invtsc & BIT(0);
+
+> +}
+> +
+>  void kvm_hv_process_stimers(struct kvm_vcpu *vcpu);
+>  
+>  void kvm_hv_setup_tsc_page(struct kvm *kvm,
