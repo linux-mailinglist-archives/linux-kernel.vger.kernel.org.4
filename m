@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4ED5B6310
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2D55B6231
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiILVt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S229809AbiILUbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 16:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiILVtz (ORCPT
+        with ESMTP id S229804AbiILUbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:49:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6FB7CF;
-        Mon, 12 Sep 2022 14:49:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MRKy22vMMz4xFt;
-        Tue, 13 Sep 2022 07:49:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663019388;
-        bh=CHb/HFS/YBUK6LYyCv0Ig6t6CoCQ9NnN9We46PpcpMM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gcuL+UE4DAC44wpK3nXAbvF2+K8mwss7m6RSNWaj8Mh8awM2Wt/FiEQf2vI9qPrnY
-         h/5aGQBKy+bfc0BS8MEjgJAHhu/shzbvce0n2hpOsptgWcxJTQNKx0F2N2FV/FLIX6
-         SpOIdzVbwdR2CAbCf35ZlU9hH8uoI9CBJiK1auFJZ1qFAmdHTLKQFFVg89Kc6/niwL
-         IlOLw8YTX9/eppj7U8UoqKtkLMot+bqQ6uYXyp+oVE9NWmlAIfgPhpcJ83VDjIpTS2
-         AUlCCsqj86uQnYPR07+4K1Fi+TPku0C2oWOxWOynty4hjlmoB9cqwzwOQjpkVRGxpz
-         C0++lys4Fdl6w==
-Date:   Tue, 13 Sep 2022 06:30:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v5 0/8] make statx() return DIO alignment information
-Message-ID: <20220913063025.4815466c@canb.auug.org.au>
-In-Reply-To: <Yx6DNIorJ86IWk5q@quark>
-References: <20220827065851.135710-1-ebiggers@kernel.org>
-        <YxfE8zjqkT6Zn+Vn@quark>
-        <Yx6DNIorJ86IWk5q@quark>
+        Mon, 12 Sep 2022 16:31:03 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E41E40BDA;
+        Mon, 12 Sep 2022 13:31:02 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11eab59db71so26493297fac.11;
+        Mon, 12 Sep 2022 13:31:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=g/UDc025mrWtsVvlPcb6aYSfww62RRfTqVjKHmF+7ik=;
+        b=EsEen5nISvmO0ABaX2SNdURd8DnrwgImalBNey5iakDA1lQaKH2gY60jOY4EzevB6S
+         Z016ONl1N9vi1TjYE4W9yt98S4pLWsrZUddMEoyDHmSb+Vha8yo1R9/Qo82M75InHb2t
+         lMdzEkzNHA3UEmv58CrI25tN+S+nASa3M73TmHIcuWSay8pie58mSFbHlVTLQB7/iYgk
+         ms7FPdzrwNiVeN8nd55sYFUI7LvJUgWGN+8aW8bcEwplUn6XxF8gIY4sFuxds6mzmZ30
+         O3alt3fVpp+VBP/I48d2akYvUWULHiOFIA7jISfAbnC/GihPma3thTSf468kwlrC8rgV
+         Rpng==
+X-Gm-Message-State: ACgBeo07dupwGtBoL3ClqXlIlfvIe9MsNeGwqLaaiXAUqADgBA65rL2D
+        x+08ES2rD2nOIEIpwiSVHg==
+X-Google-Smtp-Source: AA6agR6XF9RQcPY40kpUXoOfzj6E6g1w/ffzTwA+bpiGExL1d5D2Wgl6YDwnA5faBNqCRi9W1we/Pg==
+X-Received: by 2002:a05:6870:e413:b0:127:2f43:af44 with SMTP id n19-20020a056870e41300b001272f43af44mr66328oag.175.1663014661704;
+        Mon, 12 Sep 2022 13:31:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id el40-20020a056870f6a800b0012b19b888bfsm6316443oab.47.2022.09.12.13.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 13:31:01 -0700 (PDT)
+Received: (nullmailer pid 1782577 invoked by uid 1000);
+        Mon, 12 Sep 2022 20:31:00 -0000
+Date:   Mon, 12 Sep 2022 15:31:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org, YongHui Yu <yonghui.yu@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        devicetree@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v9 4/5] dt-bindings: nand: meson: convert txt to yaml
+Message-ID: <20220912203100.GA1782522-robh@kernel.org>
+References: <20220907080405.28240-1-liang.yang@amlogic.com>
+ <20220907080405.28240-5-liang.yang@amlogic.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ySqoajbBqbhy0s/Yyi/jEcM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907080405.28240-5-liang.yang@amlogic.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ySqoajbBqbhy0s/Yyi/jEcM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 07 Sep 2022 16:04:04 +0800, Liang Yang wrote:
+> convert the amlogic,meson-name.txt to amlogic,meson-nand.yaml
+> 
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  .../bindings/mtd/amlogic,meson-nand.txt       | 55 -----------
+>  .../bindings/mtd/amlogic,meson-nand.yaml      | 93 +++++++++++++++++++
+>  2 files changed, 93 insertions(+), 55 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+> 
 
-Hi Eric,
-
-On Sun, 11 Sep 2022 19:54:12 -0500 Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Tue, Sep 06, 2022 at 03:08:51PM -0700, Eric Biggers wrote:
-> > On Fri, Aug 26, 2022 at 11:58:43PM -0700, Eric Biggers wrote: =20
-> > > This patchset makes the statx() system call return direct I/O (DIO)
-> > > alignment information.  This allows userspace to easily determine
-> > > whether a file supports DIO, and if so with what alignment restrictio=
-ns. =20
-> >=20
-> > Al, any thoughts on this patchset, and do you plan to apply it for 6.1?=
-  Ideally
-> > this would go through the VFS tree.  If not, I suppose I'll need to hav=
-e it
-> > added to linux-next and send the pull request myself.
-> >=20
-> > - Eric =20
->=20
-> Seems that it's up to me, then.
->=20
-> Stephen, can you add my git branch for this patchset to linux-next?
->=20
-> URL: https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-> Branch: statx-dioalign
->=20
-> This is targeting the 6.1 merge window with a pull request to Linus.
-
-Added from today.
-
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---Sig_/ySqoajbBqbhy0s/Yyi/jEcM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMfluEACgkQAVBC80lX
-0GzrXAf9ESId1RmQujmRO/suIb7p60bPOkr5l/1EmdjlqHgMfXoP0bDKsbHNd3Do
-ZOf+Qj8BPc1KuPXgGEqZ8bWxEMOu5NtVl82bbhQwaMZbaObcE+CW34aaenRKRBCq
-kPAHrUAe3SGkuyVjQJFX0I0PdGe7WYoar4MhO3ULl1USnIEF0p6GCXXe1DvR2LRA
-6ZMdZbx+g9cPc2ya5lzpHLIkTaDSjjjE/blGA0UFuUYAyRUVEw0rGig1iPnQA+EP
-dr+aQ+9vZ1OICIy2tSpsplEl2Otk4rTA0EAB/BVYTDOBgMQQ6CLZN9o+1tHnmsuK
-/BZ7ql3uk0XzQR2n0awIeOjS13b5Sg==
-=u95+
------END PGP SIGNATURE-----
-
---Sig_/ySqoajbBqbhy0s/Yyi/jEcM--
+Reviewed-by: Rob Herring <robh@kernel.org>
