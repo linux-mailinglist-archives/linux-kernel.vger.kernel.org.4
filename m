@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223445B62F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3B65B62FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiILVqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
+        id S230153AbiILVq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiILVpy (ORCPT
+        with ESMTP id S230086AbiILVqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:45:54 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2B94D15E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:45:53 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-34577a9799dso84620997b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:45:53 -0700 (PDT)
+        Mon, 12 Sep 2022 17:46:03 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B544D15D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:46:02 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id k12-20020ab0538c000000b0039f64f6d1e2so3060479uaa.15
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date;
-        bh=6+LQgns1/8zpG0OHFak8nK3Ilwf0pwSl1GyfLOUBAHY=;
-        b=gGOw60e1rpYD6TuAGwTn1INOvUIO0roMQJqMvPDtHZ3UQnwRVcEe1E2Lonygj2xPXW
-         T7VejqP7YEWDwcM2Fw0dM+LChi/7jSBzA8TxU4xpos+N5cIog+peVDWDKeJJTVWPFwbx
-         KAhGqy4z6vXHqHuPEjqQWoPc0RbECfptY8slGI/T1vLbxRPMgkcxAzNu5UEZQV4IrNZy
-         wxpNB52VWIn4D0coKpwbjPGUtTqJK/KzpKl8wsoUZH/yBsIJRHbZsQAY824PpzXO/GZj
-         /wBhdzOvhDBBGqNi8VTCSjsE8Bq36E8sjeH3OlfjWBmBFmFLCdf4rr6irACkZCe9I/GC
-         sgJw==
+        bh=BRbgXY3xJYxM9YYiTldXX81aJSb/pUukVv6KYPaXnBg=;
+        b=c/M9m3cQtWs5Pnn2DrO9HkM+4nSNPHTWCmSZ8RxTIRbxl4TQ4reaDmHt9dhCCZDvAt
+         KOHpDRvuiZofWaeJnb1P0qL/9FBr3SxIHKnVvXfll3j8m+VSXT9jaDnQTgkm7We6BAwU
+         97lmsYms3QxSOHIf1CocBAMA03ggAZXO86m21rrwqgpxAluJOPTDLXjumCse3e6KlGbE
+         9hNowCqmyKuXvqIPv4G2OjslpKdi/cFk77Lf9nSY2/TmDhnOPFZicL0/oLzwPVRYLwmz
+         vuUEqG0HAolRHc+hAtf8adosPmO4qKlP6+JS7Ez2bQJ2VJEV2Mb7+8DRKl8ecfbnhiKJ
+         l2aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=6+LQgns1/8zpG0OHFak8nK3Ilwf0pwSl1GyfLOUBAHY=;
-        b=ii5pl/O+mvyrimAdh1rpCtZsqvzygsndixT2RWiIj6RMDS4yHr7/RvzytiF90T3Hjh
-         ARUSrztpnX8EJxyfin83zZOsWvNADHDYhAe7a4pU65m7KSp/tvYJ3TWtJMz8htI7pnDf
-         rfY/I+4V3S1/br5gnazZ6RLv7IJwoni5Yj+djnYwvoqRCzTIQI14E0HXFmnoohb0TvRa
-         SStFLxxGJHMG/n9LWIbmVne2EMhpyZ9syC55RyAvjz34w3O+UqJDASBvi6+Zu+q6Y1D/
-         QzYr70CPgZYgTLeHodC27O9ema2TnivczM2fILwH4Q4feq81BKvALQ4Qc5rgN5+noxdH
-         knTA==
-X-Gm-Message-State: ACgBeo3VZJtlZN2e7O1zh2jmlru3hTdLUwzqAjhkkAgGBJR8zIE+BTlg
-        fkruUw3RA6elTbUooiyDcRVOk+kurQ==
-X-Google-Smtp-Source: AA6agR5Wo0VhogpTx5DxeN1niodvB4431b9kJDUIXpDf7IRaH1XfCA4O7LgT46IBvWJGD/4wLke+g5aO3w==
+        bh=BRbgXY3xJYxM9YYiTldXX81aJSb/pUukVv6KYPaXnBg=;
+        b=UrBCvScu0pylB/8Myl9JP/ad/ehHPNflTjNccxSS5/es1ywUhZZjvIKOln2glPZysC
+         P+3mKGZf6J477axRVPLKnWtVTkiZmPnEjfpoL8g6YcGtQDtxYY4j2HZPkLVC66Ox6Hx4
+         1LXOdhCBzf+uDV05/ZFjL6KQqHQtZ7Pi845qJxtVVDDZnvAp6V/q2nMbtshc21QTdUjo
+         LXOHBM1vg+F+eRtxtlwqViwDeVCczZoDa+o7PIwYpkNIZIVjVTZW3IBrd4kquM6YJg0c
+         xrWhIDHlRMllQ9kOOazk3FCzxbVLpiwrTbavxB3NNpJDfvvXpn8eCarjaWckeWQ4K2sU
+         vmow==
+X-Gm-Message-State: ACgBeo3h2wt3H+uIc8GK4w4+zOPPyjYzqzXVQOaCG4TEJrYexg4zxEsB
+        AHimsG/u1figA3NJBZ6fXSEllnVTYg==
+X-Google-Smtp-Source: AA6agR5xBByy/fS0NrDukCjY5rekFdT4IFKnlapx4jdlHE1l/syccKxffvQh9NQO9JdsJbFrqsl3sAd60w==
 X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a25:b790:0:b0:66f:7978:f166 with SMTP id
- n16-20020a25b790000000b0066f7978f166mr23452698ybh.17.1663019152781; Mon, 12
- Sep 2022 14:45:52 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 14:45:44 -0700
+ (user=nhuck job=sendgmr) by 2002:a67:ec86:0:b0:398:4db6:61d with SMTP id
+ h6-20020a67ec86000000b003984db6061dmr6431963vsp.27.1663019161870; Mon, 12 Sep
+ 2022 14:46:01 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 14:45:56 -0700
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220912214548.929144-1-nhuck@google.com>
-Subject: [PATCH] Staging: rtl8192e: Fix return type of rtllib_xmit
+Message-ID: <20220912214559.929186-1-nhuck@google.com>
+Subject: [PATCH] staging: rtl8192u: Fix return type of ieee80211_xmit
 From:   Nathan Huckleberry <nhuck@google.com>
 Cc:     Nathan Huckleberry <nhuck@google.com>,
         Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Felix Schlepper <f3sch.git@outlook.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+        Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
@@ -78,7 +77,7 @@ netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 The mismatched return type breaks forward edge kCFI since the underlying
 function definition does not match the function hook definition.
 
-The return type of rtllib_xmit should be changed from int to
+The return type of ieee80211_xmit should be changed from int to
 netdev_tx_t.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
@@ -86,30 +85,30 @@ Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- drivers/staging/rtl8192e/rtllib_tx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 42f81b23a144..1b665afd309e 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -543,7 +543,7 @@ static u8 rtllib_current_rate(struct rtllib_device *ieee)
- 		return ieee->rate & 0x7F;
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+index 8602e3a6c837..e4b6454809a0 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+@@ -526,7 +526,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
+ 	}
  }
  
--static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
+-int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
  {
- 	struct rtllib_device *ieee = (struct rtllib_device *)
- 				     netdev_priv_rsl(dev);
-@@ -946,13 +946,13 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
+ 	struct ieee80211_device *ieee = netdev_priv(dev);
+ 	struct ieee80211_txb *txb = NULL;
+@@ -822,13 +822,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
  			if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
  				stats->tx_packets++;
- 				stats->tx_bytes += le16_to_cpu(txb->payload_size);
+ 				stats->tx_bytes += __le16_to_cpu(txb->payload_size);
 -				return 0;
 +				return NETDEV_TX_OK;
  			}
- 			rtllib_txb_free(txb);
+ 			ieee80211_txb_free(txb);
  		}
  	}
  
@@ -118,15 +117,6 @@ index 42f81b23a144..1b665afd309e 100644
  
   failed:
  	spin_unlock_irqrestore(&ieee->lock, flags);
-@@ -962,7 +962,7 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
- 
- }
- 
--int rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	memset(skb->cb, 0, sizeof(skb->cb));
- 	return rtllib_xmit_inter(skb, dev);
 -- 
 2.37.2.789.g6183377224-goog
 
