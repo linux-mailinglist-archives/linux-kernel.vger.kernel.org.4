@@ -2,272 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708AA5B5482
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937415B548A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 08:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiILG2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 02:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        id S229736AbiILGaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 02:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiILG1o (ORCPT
+        with ESMTP id S229679AbiILGaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 02:27:44 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B471573B;
-        Sun, 11 Sep 2022 23:27:02 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id j10so2657341qtv.4;
-        Sun, 11 Sep 2022 23:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=DDSVSFUDLu7+OVWbeRCI3LlbDJDT8qUS0omm4f+6IBo=;
-        b=iN+gG7tdDhB3UwAhcuzbb7FhAKkhCTRLv1wecbolTo67uZr5qc99VCuCo8bpbf5BGE
-         8BtxsDUjlsW/QTRaO5rdZyxMsBGCUNo25opKnfjd+lEm3BoI82JCDMcVslX4SDgv7fpV
-         kGjuy2i6+XOydcj2cflH3OVPS1acyuzBVYg/2/m4mbB37Nk6CZtmMEheITICTjnWBir9
-         04Gy7CXY55x/0s0z3NoWnhA6l1AmFxaTV8J53S+cUxWjncb3/YNG66sygW0bWbVGoRrY
-         RJUCswzfIw+KdtwB5Cmkrtbk+GxdoK4YhJFZ32bPJTlP428d71CnokCX/M9NwPzHV1O6
-         4z2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=DDSVSFUDLu7+OVWbeRCI3LlbDJDT8qUS0omm4f+6IBo=;
-        b=Q/f4ewYLqjpJOh9vwWhpkLiW7fLJDyOsbNHoepuqlYQUOSOd8cy2FbSVF0iUaNvC0J
-         TxbsxBkEsGYKdD7bgGMzrDJwD6YtKvcVjN419WoH+tMQVrJjl/VGCiCUMJvnVULK7i/t
-         KyT3Z/8iSbXt/M5Yo5/z8Opx2NxhvyywO45c0TvJXV3vHrHefdu2GGR+3T1LxCyRPaxR
-         p53R/nX8+3UFOIesakKz9e5nZL/qrODU7YZYisblZBW3rIyFB2yYsitLyFx2GLc5tOF+
-         9K1t1p2avf6SCP7i1XVUb+9vq1PpHxe8VwLhtPbudmx3VfJ1YRywVJwhka5gaXe3+bek
-         gQzg==
-X-Gm-Message-State: ACgBeo1eVGquDZIIXBykwR6CDO+B0KUSHpsfynmW3l61e9So2VbvmwuE
-        QfRWkASeBh9ayltbzKvTwDM=
-X-Google-Smtp-Source: AA6agR6fqKt4BFMeedcGDEfdW4+5f9TC+/YCYtnKJoy0f2tXw/36/VAz4n4EPggv4EibkVoc6Jd66Q==
-X-Received: by 2002:a05:622a:19a3:b0:35b:ad2f:6f46 with SMTP id u35-20020a05622a19a300b0035bad2f6f46mr6555805qtc.7.1662964021169;
-        Sun, 11 Sep 2022 23:27:01 -0700 (PDT)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:a464:4449:dc4c:dd3d])
-        by smtp.gmail.com with ESMTPSA id k22-20020ac84756000000b0035a6f14b3cesm5845109qtp.27.2022.09.11.23.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 23:27:00 -0700 (PDT)
-From:   frowand.list@gmail.com
-To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/1] of: expand overlay documentation
-Date:   Mon, 12 Sep 2022 01:26:15 -0500
-Message-Id: <20220912062615.3727029-1-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Sep 2022 02:30:03 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACB110FF0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Sep 2022 23:30:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NN6KBzqT83KIeNGN5oYYSDZGdV//V58exCNZYGNu+RRY3M5V0J9QC4PC/Bhlbo/k3Aeae3rfkEn2YK1KYnt9tY4FgRLvybkMC76K8ccXLqNQHQZriIGBZNVuOC5Yr5cqzzz0pn0VqAwhZcW5LMYpCHKeHtV5DSIckEI9zT1k+rUrCKUefEeQv1DuRjhXLhhTXIAuDtt9V2ocnglFzn9oDxA6w7H6AxiF67ZW4HAa8hmcdM/uOzMaW04Ib1/KsHOdd11LOHGYFRCJMEoPBngrNu/JD7fVl+QGVyH7oo5pLDh2DL/nrWWOkEntB+RZYROxWLjFNlYrmWbxAx4VlGc0iQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+4qTQQjyOum4civ6JjbRuMHNg7mRlXOMsayRhhcbhKM=;
+ b=b+iWUZnqhf+Sc2g2pELXprcqkOpM65tH8G0TxO1lmZrD64T/70piICRxx1MCCj4Bo65SmN8xbruXqz6sUTDTd3vQkf1XCk+8IH540g6QmP+QBNsVI5BmadBoV4uLqmaiz5C4FPSVpIFul7aw7ZOevgYgB059/HgCZgTns6axpGovTr1LKUcmniXCcYZrIj9z8Wa6VDMj8czDQOqLkEJ9wLBWYI/1YnC2/H7sVsSIvYUe0NJgWfw8/mZl8nbkA4jr+HXo7tUi8cyLB7SGi1PpqBzqqzGuCwytuDkSpFCEuDLTwbNtMS3/3GrevLo6naZ39aLh7GDQNmDzufDZgD9Utg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+4qTQQjyOum4civ6JjbRuMHNg7mRlXOMsayRhhcbhKM=;
+ b=HfYxyjb39P9gW6SjMMJ9Cx3R8WoYDehs+4u7y14GsF6AwHb6xGEZJaR0jjCgBkyijLkEBsOBJctJElJiNS+/TH6t3CXwklTEYrqbUeOkzfJno2nX7fUU7hFebSgWKSfvRgwegd32rMoY1Eu8h3hFCN9JAFKHdsSc/n4UFHPbAhU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN1PR12MB2381.namprd12.prod.outlook.com (2603:10b6:802:2f::13)
+ by SA0PR12MB4463.namprd12.prod.outlook.com (2603:10b6:806:92::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
+ 2022 06:30:00 +0000
+Received: from SN1PR12MB2381.namprd12.prod.outlook.com
+ ([fe80::c534:ae1c:f7a1:1f33]) by SN1PR12MB2381.namprd12.prod.outlook.com
+ ([fe80::c534:ae1c:f7a1:1f33%4]) with mapi id 15.20.5612.019; Mon, 12 Sep 2022
+ 06:30:00 +0000
+Message-ID: <bc788935-f1f7-35ed-6c3f-ac22dd3d2214@amd.com>
+Date:   Mon, 12 Sep 2022 11:59:50 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 5/5] sched/fair: Add exception for hints in load balancing
+ path
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
+        peterz@infradead.org, linux-mm@kvack.org,
+        vincent.guittot@linaro.org
+References: <20220910105326.1797-1-kprateek.nayak@amd.com>
+ <20220911080547.2709-1-hdanton@sina.com>
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20220911080547.2709-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0017.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::16) To SN1PR12MB2381.namprd12.prod.outlook.com
+ (2603:10b6:802:2f::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2381:EE_|SA0PR12MB4463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a1c2e2c-0e9d-4b7d-a939-08da948837c0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HmvNgjo+ao+HSG4R81YPDka+CpKCyQT1y/qkKxRDoGDEdZ8+6o1E29DexRO+qtk7i5fSsJeDBclCOX5QY///T4i1UxbZGSpyNXWx3ibI7+Rnl6gbrfsYiPcYQVZ5PJSSPAgOmJB6bdE+BfSzkWA8JBkYu7HP+lrn/KYrQGmscQQyfG2xpy7emvfQv/x8XsIpCmzs4oLZEw1tSjhl+wlJBuXsYbC1DCc6+dD8i2QyQFJ3VG0FShLgwFlgixlAUmOzEcNhBnPhB2Ew3tnEYkgLRXG11AXTmRGv8EqM+Ft5fFOHVDEVi7wEPVYk7Vbsto4fn7RU07TRr8BtGCIz2fe4O95U+IUERHq0o2ilclc2SlGi/kEgcr0WhjmJo/zAQIHALuLEvJBkzk/xXqdd10SpQbjLQnIzk52IFXKfPAXSq9goiEjGjfUHvU4fiPC0yIsculBCOjOtzcMSgin1qPLAnIVgzhsQFuslVmM+XBxbdh5HmhxNarKhQCfW5zCJjFSxRh0R8lrpJeq7BU3my7qO+h1GHDNiTWGr2p+bi5i19vaqvo93EH9sk4sA/ZaEUIkGsXqGw1g6jzdtN19aDk2DwdJw014TS1dLlu74vlHHITB4RYIFCMljoihwhWiti6bYd0zAo+33wU/yrLo8HlQPxnse9hFGlYA8Te9gGOrdmi/imbHVd6YUfnkJIdAQgfNT+9FLtb8HAWogd0rQ/Yt7lkPP6FmLvVox7FC3MBNK1sdu14sthnGqnc1N3KEqLk15t9T3T1vVlfxjo2FObUTekgPa8WDPNBPpFc9Cnc6Jkh8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(53546011)(6506007)(6666004)(6486002)(478600001)(6512007)(41300700001)(26005)(186003)(2616005)(5660300002)(8936002)(2906002)(6916009)(316002)(66476007)(66946007)(4326008)(38100700002)(66556008)(31686004)(86362001)(8676002)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzBhemxpSE54d3IyMEdLbE9FenhTS3NuTldrTnlPd3UwblFQbnh5WFhVV3FP?=
+ =?utf-8?B?STNpSEpjRVF6Tm42Z014RktJdmVya2ZjQVBSQTBLdTF6QlUwWXhocjZVWGF4?=
+ =?utf-8?B?SlMvRlkwcWcxNFVxTFg3ckxDcjYvU1RVaERocFJONUU4U2R1dTZkeU1SVHNU?=
+ =?utf-8?B?NXFnMVdCYi9TRnFLK050Vk9mL012cEVFWjRwVDRVamZjSVNXRHlUd3l3U3pv?=
+ =?utf-8?B?NzNPWndaTHhiYnRpTTlJTXFWUnlJazhBVjVLZUJycllOWUdyL0hOUm4vbzMw?=
+ =?utf-8?B?bVJROGQ3dDJENUNOVGU5STJjaTlQSzhkZ0dPVjNkaWN4QUs4dUdjRitYOVNp?=
+ =?utf-8?B?NUY5andLZEFlRytCTVM1TWk5bThCcTNwSXpaK2FjcytmQVlIWlZsOFJzL0h6?=
+ =?utf-8?B?dGpBMHhRbjA3THJyNHhlZGhtbW9BYlN2dGxEcnRqVFVyRXI5aExEdEp4bW1y?=
+ =?utf-8?B?ZGdaV0JzQTJYbEc1RThkY2pCeEExeVJkRzNQNi9GUU9VV1JxbGFtUEJuTzBa?=
+ =?utf-8?B?dC9iMVc4Zk5aWXpoRmcrbzBkTW4rRkZtYUJxWVNvc1hLTldoZG81VDk2cUxy?=
+ =?utf-8?B?NStSd0t2UUw4aGo1LzdSN1JFZHlSSlpUVzRQaVp6RDJ6bzZ6czJiMWlSNjkx?=
+ =?utf-8?B?bU5HSDdQdDlGa2NxNnBOZDFpd2VLNzVTUEJTTm8zL2hJQWVlZE5Kck5nK200?=
+ =?utf-8?B?bkg2YTMvZVZaVE53L1FKcFU5RVM0M0dZakljVTllbytLMy9CbndYNEJFbURT?=
+ =?utf-8?B?KzVIbUduOUZiNnMvcDNtZXJENnAvYzBFV25zT01Lb3VSWkpQN0RBUlFQZExK?=
+ =?utf-8?B?ekZOVElxanhZMnZrWm1yWGw1c0EzSnMxYUdUZ2xUbTc1WW9ZOXVPMm11RytM?=
+ =?utf-8?B?Um9ZNW9LM1dNekwzc2NZUktyeVY5VE85NGx3cVpZVlZKL1lFYlIwMUpDeVNF?=
+ =?utf-8?B?UmtycUJUNXd5ZWp6bFJvbUNCNldHS0doeGg2RGxndy9YWUtZblVVdXVPaURY?=
+ =?utf-8?B?OWE5ZlBQOVR0aUdha29DdVoyMU10YlpmUWFvemZnMnB1WUNTVFVNT01mYWRu?=
+ =?utf-8?B?Vy9oL3pKSVNBdE8wY0ZLUWdxT3VVNmF0emlnaGtzRFBROURNU0crZ0pJZkZT?=
+ =?utf-8?B?a2pnVnduQ2lwSzZlZ1BNL3RiZFpucDJsVk5wZXJHeGp3VUhLUWF4Z21JMXNF?=
+ =?utf-8?B?YkQ3TWRWWEplOHpXVTNHc1dRL1VIYzdRcmgzTHFiUWY2dkkwNFFEMVJ4MERl?=
+ =?utf-8?B?U2JSbnZUTWx5SDVxUzR4KzBCRXpzUkgxdkxia3VZR1dlWHE2dzVlaG9wLzNN?=
+ =?utf-8?B?enVIQkhZZDQ1bVBlWVhCcU5BbTg2MThCWjAxNXJ2MnVMZVlpdGYrSXJCVm4z?=
+ =?utf-8?B?NjRzR25yWE9VSERDZ2xmYWQyclFmSFZvQTFTb1JHLytnWDNxbVU4Sml2T1JN?=
+ =?utf-8?B?a3I1ZUt6bnVCajdlWkd5cC9weXdTNzJoVTVIckhicjJvMkkwOThqNkpSRHVh?=
+ =?utf-8?B?YlBLd1c5WlVYUFFVWnF1ZkJrbktSNEk1RW1BNVM5Zk5Ld2hXYTI0cHpwaEhj?=
+ =?utf-8?B?WVZ4LzJDdms3eVdISDkrcVRWeUMveHEwcCt6eVpUVWh4REJQaVUwMkdwZHB4?=
+ =?utf-8?B?NVpKZ0M4S0k2OHA1V3A4bGdjWlMvUHhrZWg3YktkWTlGT1lrRzBzNU9kN29B?=
+ =?utf-8?B?RS84YzFBb2Z1L25mWDhqYUx0dnFlcHNNUXQ2Yk9JVTZCSG1TR3l6Nm9vSDFL?=
+ =?utf-8?B?K1hxdXA1dWIrQmlyU0ljZGQyN1NCT0RVUU9odkc1MnFrbUNkaVdCS0J2RUZs?=
+ =?utf-8?B?TUM2Qkc5OEI4K0hydklCYnJrTHF2SnpPZXBWekFQUWJvbWtsNzd4TkJ6Q3Y1?=
+ =?utf-8?B?ekQ4L3pteGZIeC9HZ0xGbnM3c2I5TUpCOTFHRTlMa1VaZ25DVmE5dHd6L01h?=
+ =?utf-8?B?ckh5SzFXc0N2VFpUVmtGYUVYQ1U3Q0FvcUhvRUJ2RSt5S1lwaWlUTUhYTlIy?=
+ =?utf-8?B?U3IvaWJEcHIrYU9DbEZPQTJhTEtOeXpnWi94VHk0RjY3bVFOcGhPZ05LV2c5?=
+ =?utf-8?B?WjJtYUJYRW1zVStRb28rdVlJdFdqY2NqQWxxL2drK3RreUVzdGx1MVJ0dUN5?=
+ =?utf-8?Q?4qsLiZjOuhjXEOyLD4MDfjSrI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a1c2e2c-0e9d-4b7d-a939-08da948837c0
+X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2381.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 06:30:00.1776
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Cd4qI+5GAI5FeiFXwb49YibYbVkN7ZncvIz9r44M3ww3snvz0hGS1y1EoEykqebEXfJRFiEyKBjqrejYmkth6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4463
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+Hello Hillf,
 
-The overlay documentation is incomplete, start adding more content.
+Thank you for looking into this patch.
 
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
+On 9/11/2022 1:35 PM, Hillf Danton wrote:
+> On 10 Sep 2022 16:23:26 +0530 K Prateek Nayak <kprateek.nayak@amd.com> wrote:
+>> - Load balancing considerations
+>>
+>> If we have more tasks than the CPUs in the MC Domain, ignore the hint
+>> set by the user. This prevents losing the consolidation done at the
+>> wakeup time.
+> 
+> It is waste of time to cure ten pains with a pill in five days a week.
 
-I have not done a build and have not verified the formatting.
+This patch mainly tries to stop tasks with a wakeup hint being
+pulled apart by the load-balancer and then end up moving back again
+to the same LLC during subsequent wakeup leading to ping-ponging and
+lot of wasted migrations.
 
-This is a first stab to try to capture some of the content that I
-think should be added to the overlay documentation.  I wanted to
-give it some exposure instead of letting it languish outside of
-public view.
+This is not a complete solution in any form and was a stop-gap for
+this experiment. I bet there are better alternatives to handle hints
+in the load-balancing path.
+I'm all ears any suggestions from the community :)
 
- Documentation/devicetree/overlay-notes.rst | 142 +++++++++++++++++++--
- 1 file changed, 128 insertions(+), 14 deletions(-)
+> 
+>> @@ -7977,6 +7980,21 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
+>>  		return 0;
+>>  	}
+>>  
+>> +	/*
+>> +	 * Hints are followed only if the MC Domain is still ideal
+>> +	 * for the task.
+>> +	 */
+>> +	if (!env->ignore_hint) {
+>> +		/*
+>> +		 * Only consider the hints from the wakeup path to maintain
+>> +		 * data locality.
+>> +		 */
+>> +		if (READ_ONCE(p->hint) &
+>> +		    (PR_SCHED_HINT_WAKE_AFFINE | PR_SCHED_HINT_WAKE_HOLD))
+>> +			return 0;
+>> +	}
+> 
+> The wake hints are not honored during lb without PR_SCHED_HINT_IGNORE_LB set
+> then the scheduler works as you hint.
 
-diff --git a/Documentation/devicetree/overlay-notes.rst b/Documentation/devicetree/overlay-notes.rst
-index e139f22b363e..ac98923bf256 100644
---- a/Documentation/devicetree/overlay-notes.rst
-+++ b/Documentation/devicetree/overlay-notes.rst
-@@ -4,18 +4,117 @@
- Devicetree Overlay Notes
- ========================
- 
--This document describes the implementation of the in-kernel
-+This document provides information about device tree overlays.  This includes
-+both (1) applying the overlay to the base device tree blob before providing the
-+device tree blob to the kernel and (2) applying overlays to the base device
-+tree after the kernel has booted.
-+
-+Impact on both pre-boot and post-boot apply
-+-------------------------------------------
-+
-+The base devicetree is typically compiled by scripts/dtc with the "--symbols"
-+or "-@' option if an overlay will be applied to the base devicetree.  This
-+results in a larger device tree blob that contains symbolic information that
-+can be used when applying an overlay blob.  The size of the symbolic
-+information can be modest or very large, depending on the content of the
-+base device tree source.
-+
-+The device tree compiler processing of duplicate or conflicting source items
-+is very different than C compilers.  When an item occurs in more than one
-+location of the source then the final one encountered replaces any previous
-+occurences.  This provides a flexible ability to combine multiple include
-+files in various configurations to create device tree blobs that describe
-+similar but differing systems.  The downside of this flexibility is that it
-+can be difficult to determine exactly which location in which source file
-+results in an item in the compiled device tree blob.  The "--annotate", "-T",
-+and "-T -T" were added to the scripts/dtc compiler to provide information
-+about which particular source location describes each item in the compiled
-+output.  These options are only useful when combined with "-O dts" or
-+"--out-format dts".  There is no analogous option for scripts/fdtoverlay,
-+so the location of the source definition of any specific item after applying
-+an overlay to a base device tree blob is not available.
-+
-+A method of generating the --annotate information for one or more overlays
-+applied to a base device tree that might work is:
-+::
-+   ---- base.dts
-+   #include base.dtsi
-+
-+   ---- base.dtsi
-+   /* the actual source of the base dts */
-+
-+   ---- overlay.dts
-+   /plugin/
-+   #include overlay.dtsi
-+
-+   ---- overlay.dtsi
-+   /* the actual source of the overlay dts */
-+
-+   ---- base_and_overlay.dts
-+   #include base.dtsi
-+   #include overlay.dtsi
-+
-+   To generate the annotated device tree, use the command:
-+      scripts/dtc --annotate -O dts base_and_overlay.dts
-+
-+The downside of this method is that a unique base_and_overlay.dts is required
-+for each combination of a base device tree and the various combinations of
-+overlays that may be applied to the base device tree.  This could result
-+in a large number of base_and_overlay.dts files in the kernel source tree.
-+It is likely that each person who desires to debug the contents of overlays
-+applied to a base device tree would create the appropriate base_and_overlay.dts
-+file in the own development environment instead of maintaining them in the
-+kernel source tree.
-+
-+There is no guarantee that this method would generate a device tree
-+equivalent to a device tree created by scripts/fdtoverlay or a device tree
-+created post boot by applying an overlay because the overlay apply process
-+may implement different rules or restrictions than scripts/dtc does.
-+
-+Pre-boot overlay apply
-+-------------------------------------------
-+
-+One or more overlays may be applied to a base device tree by
-+scripts/fdtoverlay.  The resulting output DT blob can be provided to the
-+kernel for booting.
-+
-+This method is supported and is strongly encouraged.
-+
-+
-+Post-boot overlay apply
-+-------------------------------------------
-+
-+Run time overlay apply and run time overlay remove from user space are
-+not supported in the mainline kernel. There are out of tree patches to
-+implement this feature via an overlay manager. The overlay manager is used
-+successfully by many users for specific overlays on specific boards with
-+specific environments and use cases. However, there are many issues with
-+the Linux kernel overlay implementation due to incomplete and incorrect
-+code. The overlay manager has not been accepted in mainline due to these
-+issues. Once these issues are resolved, it is expected that some method
-+of run time overlay apply and overlay removal from user space will be
-+supported by the Linux kernel.
-+
-+For a more detailed description of kernel issues and the progress of
-+resolving the issues, see
-+::
-+   https://elinux.org/Frank%27s_Evolving_Overlay_Thoughts
-+
-+This method is only partially implemented, is fragile, and is strongly
-+discouraged.  The resulting system may or may not function as expected
-+and is not supported.  Fixes to issues resulting from this method may
-+or may not be accepted in the device tree kernel source code (eg in
-+drivers/of/).
-+
-+This section describes the implementation of the in-kernel
- device tree overlay functionality residing in drivers/of/overlay.c and is a
- companion document to Documentation/devicetree/dynamic-resolution-notes.rst[1]
- 
--How overlays work
-------------------
--
- A Devicetree's overlay purpose is to modify the kernel's live tree, and
- have the modification affecting the state of the kernel in a way that
- is reflecting the changes.
- Since the kernel mainly deals with devices, any new device node that result
--in an active device should have it created while if the device node is either
-+in an active device should have it created.  If the device node is either
- disabled or removed all together, the affected device should be deregistered.
- 
- Lets take an example where we have a foo board with the following base tree::
-@@ -104,22 +203,20 @@ The above bar.dts example modified to use target path syntax is::
- 
- 
- Overlay in-kernel API
----------------------------------
--
--The API is quite easy to use.
-+-------------------------------------------
- 
- 1) Call of_overlay_fdt_apply() to create and apply an overlay changeset. The
-    return value is an error or a cookie identifying this overlay.
- 
- 2) Call of_overlay_remove() to remove and cleanup the overlay changeset
--   previously created via the call to of_overlay_fdt_apply(). Removal of an
--   overlay changeset that is stacked by another will not be permitted.
-+   previously created via the call to of_overlay_fdt_apply(). Removal of
-+   overlay changesets must occur in the opposite order of apply (the
-+   most recently applied overlay changeset must be removed first).
- 
--Finally, if you need to remove all overlays in one-go, just call
--of_overlay_remove_all() which will remove every single one in the correct
--order.
-+If you need to remove all overlays in one-go, just call of_overlay_remove_all()
-+which will remove every single overlay changeset in the correct order.
- 
--There is the option to register notifiers that get called on
-+There is an option to register notifiers that get called on
- overlay operations. See of_overlay_notifier_register/unregister and
- enum of_overlay_notify_action for details.
- 
-@@ -142,9 +239,26 @@ Any other code that retains a pointer to the overlay nodes or data is
- considered to be a bug because after removing the overlay the pointer
- will refer to freed memory.
- 
-+All overlay related notifiers are subject to especially cautious review.
-+
- Users of overlays must be especially aware of the overall operations that
- occur on the system to ensure that other kernel code does not retain any
- pointers to the overlay nodes or data.  Any example of an inadvertent use
- of such pointers is if a driver or subsystem module is loaded after an
- overlay has been applied, and the driver or subsystem scans the entire
- devicetree or a large portion of it, including the overlay nodes.
-+
-+Post-boot overlay apply constraints
-+-------------------------------------------
-+
-+The post-boot overlay apply code constrains what a valid overlay may contain.
-+
-+This is a very incomplete list of such constraints.
-+
-+::
-+   - An overlay may not replace an existing node or property.  A special
-+     exception is that the value of the "status" property can be changed
-+     to "ok".  Whether this change will be properly detected and processed
-+     depends upon the relevant subsystem(s) and driver(s).
-+
-+   - An overlay may not add a property to an existing node.
--- 
-Frank Rowand <frank.rowand@sony.com>
+Are you suggesting we leave it to the user, to control whether the
+load-balancer can spread the task apart, even if hints are set,
+via another userspace hint "PR_SCHED_HINT_IGNORE_LB"?
 
+I had not considered it before but it may benefit some workloads.
+Again, this API is not the final API in any form but we can have
+a knob as you suggested that can be set for a class of workloads
+which may benefit from this behavior.
+
+> 
+> Hillf
+
+--
+Thanks and Regards,
+Prateek
