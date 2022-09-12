@@ -2,397 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B409A5B5823
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2B05B582E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiILKWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S229695AbiILKYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiILKWp (ORCPT
+        with ESMTP id S229842AbiILKYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:22:45 -0400
+        Mon, 12 Sep 2022 06:24:13 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C128027CDE;
-        Mon, 12 Sep 2022 03:22:40 -0700 (PDT)
-Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:15b7:c21a:ebde:697f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F3F357DE;
+        Mon, 12 Sep 2022 03:24:12 -0700 (PDT)
+Received: from mercury (unknown [185.122.133.20])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A2D4C6601FD9;
-        Mon, 12 Sep 2022 11:22:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.co.uk;
-        s=mail; t=1662978158;
-        bh=UZSzZq9Q+6e/i7RVSjeMTXqISz20Il2P5VGzwc5LoNQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XJHDwPIOw/IGVe5pVHzULd6qF0z/Z13ICdEEyrqbAxlFgNMPSJw9Wd61NdzUxCaqC
-         tt9KgZ/LrYh/N2AVglbQguujOME+RxH2Ahh7GmtUI++mNdRe+N3koYHVGs6aTEH0qy
-         geF/BJhTmT9wmWMvIX8TB0YuH5A9cchgnNbeKs5LlKKH1IYJagPhaUcFPCfXOoTJWF
-         7nAPMAP3PAiG9DOPTQhUgmtj6LBpC+RWRfkhlsO5t642luCGPH8Db4LM4V3tLz8gHs
-         zaMf1m5ekxKmIbPryUWdjEeDFaKGPOCag1ZuFaqvfgt+QlaV2INOOqRDeN0D5sVQOQ
-         cciK+KZt8ce8Q==
-From:   Martyn Welch <martyn.welch@collabora.co.uk>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Martyn Welch <martyn.welch@collabora.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] gpio: pca953x: Add support for PCAL6534
-Date:   Mon, 12 Sep 2022 11:22:22 +0100
-Message-Id: <20220912102223.1050418-5-martyn.welch@collabora.co.uk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220912102223.1050418-1-martyn.welch@collabora.co.uk>
-References: <20220912102223.1050418-1-martyn.welch@collabora.co.uk>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 23F4A6601FD2;
+        Mon, 12 Sep 2022 11:24:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662978251;
+        bh=wGBIlvKje4FgHqTdo2MburWH2bvJgnDyHAqqfxkP0yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MSBzYp8s99gXfGN5lZJrpXNDS7i0MFjnjP5ccBa7zLkGNKTJU7vNZMzNObIZ3AjMD
+         ZRPA+eXE7rj+nhMfMpi2qdru9eMKj9cMJ9VHNl6MOMqyqvSFHQpoYTDkbRLo4sYKjk
+         gAVm4qZa8blIyMFgD4nwahT9lT+8CHrI5ioAyAhAc7podq+Iiu0oc8LIY8ej9I4ixf
+         /WaK2BnKU4KygHuXdc1lHYdk3Jr2F0PE5TcLqvbRp9j+SQ2xHCMF+gUT/W/NMgTY0I
+         mMm0KxoDCrM/2+5c2bOZCgd2PouSmTprbUQxTwufEv7Zjv8cea4dLG/ShWumhcbuRA
+         kWoWLo09WYfKw==
+Received: by mercury (Postfix, from userid 1000)
+        id E32EA106084A; Mon, 12 Sep 2022 12:24:07 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 12:24:07 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jic23@kernel.org, lars@metafoo.de, broonie@kernel.org,
+        mazziesaccount@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v10 1/8] dt-bindings: power: supply: Add MediaTek MT6370
+ Charger
+Message-ID: <20220912102407.znzd2buqpkopvawp@mercury.elektranox.org>
+References: <cover.1662476695.git.chiaen_wu@richtek.com>
+ <3184e9e5f59edf41788bb95e2ad496772dc70a4a.1662476695.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zly4a6vosjjv2mrv"
+Content-Disposition: inline
+In-Reply-To: <3184e9e5f59edf41788bb95e2ad496772dc70a4a.1662476695.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martyn Welch <martyn.welch@collabora.com>
 
-Add support for the NXP PCAL6534. This device is broadly a 34-bit version
-of the PCAL6524. However, whilst the registers are broadly what you'd
-expect for a 34-bit version of the PCAL6524, the spacing of the registers
-has been compacted. This has the unfortunate effect of breaking the bit
-shift based mechanism that is employed to work out register locations used
-by the other chips supported by this driver. To accommodate ths, callback
-functions have been added to allow alterate implementations of
-pca953x_recalc_addr() and pca953x_check_register() for the PCAL6534.
+--zly4a6vosjjv2mrv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Datasheet: https://www.nxp.com/docs/en/data-sheet/PCAL6534.pdf
-Datasheet: https://www.diodes.com/assets/Datasheets/PI4IOE5V6534Q.pdf
-Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
----
+Hi,
 
-Changes in v2:
- - Removed stray change
- - Removed pi4ioe5v6534q ID (should use pcal6534)
- - Added callbacks to allow differing implementations of check_register and
-   recalc_addr to be provided
+On Tue, Sep 06, 2022 at 04:33:57PM +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>=20
+> Add MediaTek MT6370 Charger binding documentation.
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml      | 88 ++++++++++++++++=
+++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediat=
+ek,mt6370-charger.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt63=
+70-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,m=
+t6370-charger.yaml
+> new file mode 100644
+> index 0000000..bd09a0a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-char=
+ger.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.=
+yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger drive=
+r. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL=
+_UVP_D"
+> +      are required.
 
-Changes in v3:
- - Removed spurious newline
- - Shifted from ">" to ">=" to improve code readbility
- - Correct comment style
- - Remove spurious change to pca953x_recalc_addr()
- - Correct indentation
+This does not look like a useful description. It just lists the
+below in wrong order?
 
- drivers/gpio/gpio-pca953x.c | 136 +++++++++++++++++++++++++++++++-----
- 1 file changed, 117 insertions(+), 19 deletions(-)
+> +    items:
+> +      - description: BC1.2 done irq
+> +      - description: usb plug in irq
+> +      - description: mivr irq
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 1e8f038734e0..6398a5c888f6 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -66,6 +66,7 @@
- #define PCA_LATCH_INT		(PCA_PCAL | PCA_INT)
- #define PCA953X_TYPE		BIT(12)
- #define PCA957X_TYPE		BIT(13)
-+#define PCAL653X_TYPE		BIT(14)
- #define PCA_TYPE_MASK		GENMASK(15, 12)
- 
- #define PCA_CHIP_TYPE(x)	((x) & PCA_TYPE_MASK)
-@@ -91,6 +92,7 @@ static const struct i2c_device_id pca953x_id[] = {
- 
- 	{ "pcal6416", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6524", 24 | PCA953X_TYPE | PCA_LATCH_INT, },
-+	{ "pcal6534", 34 | PCAL653X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9535", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9554b", 8  | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9555a", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
-@@ -211,6 +213,10 @@ struct pca953x_chip {
- 	struct regulator *regulator;
- 
- 	const struct pca953x_reg_config *regs;
-+
-+	u8 (*recalc_addr)(struct pca953x_chip *chip, int reg, int off);
-+	bool (*check_reg)(struct pca953x_chip *chip, unsigned int reg,
-+			  u32 checkbank);
- };
- 
- static int pca953x_bank_shift(struct pca953x_chip *chip)
-@@ -288,6 +294,55 @@ static bool pca953x_check_register(struct pca953x_chip *chip, unsigned int reg,
- 	return true;
- }
- 
-+/*
-+ * Unfortunately, whilst the PCAL6534 chip (and compatibles) broadly follow the
-+ * same register layout as the PCAL6524, the spacing of the registers has been
-+ * fundamentally altered by compacting them and thus does not obey the same
-+ * rules, including being able to use bit shifting to determine bank. These
-+ * chips hence need special handling here.
-+ */
-+static bool pcal6534_check_register(struct pca953x_chip *chip, unsigned int reg,
-+				    u32 checkbank)
-+{
-+	int bank;
-+	int offset;
-+
-+	if (reg >= 0x30) {
-+		/*
-+		 * Reserved block between 14h and 2Fh does not align on
-+		 * expected bank boundaries like other devices.
-+		 */
-+		int temp = reg - 0x30;
-+
-+		bank = temp / NBANK(chip);
-+		offset = temp - (bank * NBANK(chip));
-+		bank += 8;
-+	} else if (reg >= 0x54) {
-+		/*
-+		 * Handle lack of reserved registers after output port
-+		 * configuration register to form a bank.
-+		 */
-+		int temp = reg - 0x54;
-+
-+		bank = temp / NBANK(chip);
-+		offset = temp - (bank * NBANK(chip));
-+		bank += 16;
-+	} else {
-+		bank = reg / NBANK(chip);
-+		offset = reg - (bank * NBANK(chip));
-+	}
-+
-+	/* Register is not in the matching bank. */
-+	if (!(BIT(bank) & checkbank))
-+		return false;
-+
-+	/* Register is not within allowed range of bank. */
-+	if (offset >= NBANK(chip))
-+		return false;
-+
-+	return true;
-+}
-+
- static bool pca953x_readable_register(struct device *dev, unsigned int reg)
- {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
-@@ -308,7 +363,7 @@ static bool pca953x_readable_register(struct device *dev, unsigned int reg)
- 			PCAL9xxx_BANK_IRQ_STAT;
- 	}
- 
--	return pca953x_check_register(chip, reg, bank);
-+	return chip->check_reg(chip, reg, bank);
- }
- 
- static bool pca953x_writeable_register(struct device *dev, unsigned int reg)
-@@ -328,7 +383,7 @@ static bool pca953x_writeable_register(struct device *dev, unsigned int reg)
- 		bank |= PCAL9xxx_BANK_IN_LATCH | PCAL9xxx_BANK_PULL_EN |
- 			PCAL9xxx_BANK_PULL_SEL | PCAL9xxx_BANK_IRQ_MASK;
- 
--	return pca953x_check_register(chip, reg, bank);
-+	return chip->check_reg(chip, reg, bank);
- }
- 
- static bool pca953x_volatile_register(struct device *dev, unsigned int reg)
-@@ -344,7 +399,7 @@ static bool pca953x_volatile_register(struct device *dev, unsigned int reg)
- 	if (chip->driver_data & PCA_PCAL)
- 		bank |= PCAL9xxx_BANK_IRQ_STAT;
- 
--	return pca953x_check_register(chip, reg, bank);
-+	return chip->check_reg(chip, reg, bank);
- }
- 
- static const struct regmap_config pca953x_i2c_regmap = {
-@@ -389,9 +444,42 @@ static u8 pca953x_recalc_addr(struct pca953x_chip *chip, int reg, int off)
- 	return regaddr;
- }
- 
-+/*
-+ * The PCAL6534 and compatible chips have altered bank alignment that doesn't
-+ * fit within the bit shifting scheme used for other devices.
-+ */
-+static u8 pcal6534_recalc_addr(struct pca953x_chip *chip, int reg, int off)
-+{
-+	int addr;
-+	int pinctrl;
-+
-+	addr = (reg & PCAL_GPIO_MASK) * NBANK(chip);
-+
-+	switch (reg) {
-+	case PCAL953X_OUT_STRENGTH:
-+	case PCAL953X_IN_LATCH:
-+	case PCAL953X_PULL_EN:
-+	case PCAL953X_PULL_SEL:
-+	case PCAL953X_INT_MASK:
-+	case PCAL953X_INT_STAT:
-+	case PCAL953X_OUT_CONF:
-+		pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x20;
-+		break;
-+	case PCAL6524_INT_EDGE:
-+	case PCAL6524_INT_CLR:
-+	case PCAL6524_IN_STATUS:
-+	case PCAL6524_OUT_INDCONF:
-+	case PCAL6524_DEBOUNCE:
-+		pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x1c;
-+		break;
-+	}
-+
-+	return pinctrl + addr + (off / BANK_SZ);
-+}
-+
- static int pca953x_write_regs(struct pca953x_chip *chip, int reg, unsigned long *val)
- {
--	u8 regaddr = pca953x_recalc_addr(chip, reg, 0);
-+	u8 regaddr = chip->recalc_addr(chip, reg, 0);
- 	u8 value[MAX_BANK];
- 	int i, ret;
- 
-@@ -409,7 +497,7 @@ static int pca953x_write_regs(struct pca953x_chip *chip, int reg, unsigned long
- 
- static int pca953x_read_regs(struct pca953x_chip *chip, int reg, unsigned long *val)
- {
--	u8 regaddr = pca953x_recalc_addr(chip, reg, 0);
-+	u8 regaddr = chip->recalc_addr(chip, reg, 0);
- 	u8 value[MAX_BANK];
- 	int i, ret;
- 
-@@ -428,7 +516,7 @@ static int pca953x_read_regs(struct pca953x_chip *chip, int reg, unsigned long *
- static int pca953x_gpio_direction_input(struct gpio_chip *gc, unsigned off)
- {
- 	struct pca953x_chip *chip = gpiochip_get_data(gc);
--	u8 dirreg = pca953x_recalc_addr(chip, chip->regs->direction, off);
-+	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
- 	u8 bit = BIT(off % BANK_SZ);
- 	int ret;
- 
-@@ -442,8 +530,8 @@ static int pca953x_gpio_direction_output(struct gpio_chip *gc,
- 		unsigned off, int val)
- {
- 	struct pca953x_chip *chip = gpiochip_get_data(gc);
--	u8 dirreg = pca953x_recalc_addr(chip, chip->regs->direction, off);
--	u8 outreg = pca953x_recalc_addr(chip, chip->regs->output, off);
-+	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
-+	u8 outreg = chip->recalc_addr(chip, chip->regs->output, off);
- 	u8 bit = BIT(off % BANK_SZ);
- 	int ret;
- 
-@@ -463,7 +551,7 @@ static int pca953x_gpio_direction_output(struct gpio_chip *gc,
- static int pca953x_gpio_get_value(struct gpio_chip *gc, unsigned off)
- {
- 	struct pca953x_chip *chip = gpiochip_get_data(gc);
--	u8 inreg = pca953x_recalc_addr(chip, chip->regs->input, off);
-+	u8 inreg = chip->recalc_addr(chip, chip->regs->input, off);
- 	u8 bit = BIT(off % BANK_SZ);
- 	u32 reg_val;
- 	int ret;
-@@ -480,7 +568,7 @@ static int pca953x_gpio_get_value(struct gpio_chip *gc, unsigned off)
- static void pca953x_gpio_set_value(struct gpio_chip *gc, unsigned off, int val)
- {
- 	struct pca953x_chip *chip = gpiochip_get_data(gc);
--	u8 outreg = pca953x_recalc_addr(chip, chip->regs->output, off);
-+	u8 outreg = chip->recalc_addr(chip, chip->regs->output, off);
- 	u8 bit = BIT(off % BANK_SZ);
- 
- 	mutex_lock(&chip->i2c_lock);
-@@ -491,7 +579,7 @@ static void pca953x_gpio_set_value(struct gpio_chip *gc, unsigned off, int val)
- static int pca953x_gpio_get_direction(struct gpio_chip *gc, unsigned off)
- {
- 	struct pca953x_chip *chip = gpiochip_get_data(gc);
--	u8 dirreg = pca953x_recalc_addr(chip, chip->regs->direction, off);
-+	u8 dirreg = chip->recalc_addr(chip, chip->regs->direction, off);
- 	u8 bit = BIT(off % BANK_SZ);
- 	u32 reg_val;
- 	int ret;
-@@ -550,8 +638,8 @@ static int pca953x_gpio_set_pull_up_down(struct pca953x_chip *chip,
- {
- 	enum pin_config_param param = pinconf_to_config_param(config);
- 
--	u8 pull_en_reg = pca953x_recalc_addr(chip, PCAL953X_PULL_EN, offset);
--	u8 pull_sel_reg = pca953x_recalc_addr(chip, PCAL953X_PULL_SEL, offset);
-+	u8 pull_en_reg = chip->recalc_addr(chip, PCAL953X_PULL_EN, offset);
-+	u8 pull_sel_reg = chip->recalc_addr(chip, PCAL953X_PULL_SEL, offset);
- 	u8 bit = BIT(offset % BANK_SZ);
- 	int ret;
- 
-@@ -914,13 +1002,13 @@ static int device_pca95xx_init(struct pca953x_chip *chip, u32 invert)
- 	u8 regaddr;
- 	int ret;
- 
--	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	regaddr = chip->recalc_addr(chip, chip->regs->output, 0);
- 	ret = regcache_sync_region(chip->regmap, regaddr,
- 				   regaddr + NBANK(chip) - 1);
- 	if (ret)
- 		goto out;
- 
--	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	regaddr = chip->recalc_addr(chip, chip->regs->direction, 0);
- 	ret = regcache_sync_region(chip->regmap, regaddr,
- 				   regaddr + NBANK(chip) - 1);
- 	if (ret)
-@@ -1039,6 +1127,14 @@ static int pca953x_probe(struct i2c_client *client,
- 		regmap_config = &pca953x_i2c_regmap;
- 	}
- 
-+	if (PCA_CHIP_TYPE(chip->driver_data) == PCAL653X_TYPE) {
-+		chip->recalc_addr = pcal6534_recalc_addr;
-+		chip->check_reg = pcal6534_check_register;
-+	} else {
-+		chip->recalc_addr = pca953x_recalc_addr;
-+		chip->check_reg = pca953x_check_register;
-+	}
-+
- 	chip->regmap = devm_regmap_init_i2c(client, regmap_config);
- 	if (IS_ERR(chip->regmap)) {
- 		ret = PTR_ERR(chip->regmap);
-@@ -1133,14 +1229,14 @@ static int pca953x_regcache_sync(struct device *dev)
- 	 * The ordering between direction and output is important,
- 	 * sync these registers first and only then sync the rest.
- 	 */
--	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	regaddr = chip->recalc_addr(chip, chip->regs->direction, 0);
- 	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
- 		return ret;
- 	}
- 
--	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	regaddr = chip->recalc_addr(chip, chip->regs->output, 0);
- 	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
-@@ -1149,7 +1245,7 @@ static int pca953x_regcache_sync(struct device *dev)
- 
- #ifdef CONFIG_GPIO_PCA953X_IRQ
- 	if (chip->driver_data & PCA_PCAL) {
--		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
-+		regaddr = chip->recalc_addr(chip, PCAL953X_IN_LATCH, 0);
- 		ret = regcache_sync_region(chip->regmap, regaddr,
- 					   regaddr + NBANK(chip) - 1);
- 		if (ret) {
-@@ -1158,7 +1254,7 @@ static int pca953x_regcache_sync(struct device *dev)
- 			return ret;
- 		}
- 
--		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
-+		regaddr = chip->recalc_addr(chip, PCAL953X_INT_MASK, 0);
- 		ret = regcache_sync_region(chip->regmap, regaddr,
- 					   regaddr + NBANK(chip) - 1);
- 		if (ret) {
-@@ -1216,6 +1312,7 @@ static int pca953x_resume(struct device *dev)
- #endif
- 
- /* convenience to stop overlong match-table lines */
-+#define OF_653X(__nrgpio, __int) ((void *)(__nrgpio | PCAL653X_TYPE | __int))
- #define OF_953X(__nrgpio, __int) (void *)(__nrgpio | PCA953X_TYPE | __int)
- #define OF_957X(__nrgpio, __int) (void *)(__nrgpio | PCA957X_TYPE | __int)
- 
-@@ -1240,6 +1337,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
- 
- 	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
-+	{ .compatible = "nxp,pcal6534", .data = OF_653X(34, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9554b", .data = OF_953X( 8, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9555a", .data = OF_953X(16, PCA_LATCH_INT), },
--- 
-2.35.1
+I had to lookup, that mivr is supposed to mean "minimum input voltage regul=
+ation"
+for Mediatek/Richtek. Please spell it out here.
 
+-- Sebastian
+
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
+> +    minItems: 1
+> +    items:
+> +      - description: |
+> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
+> +          range (1~22V)
+> +      - description: |
+> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
+> +          range (1~9.76V)
+> +      - description: the main system input voltage
+> +      - description: battery voltage
+> +      - description: battery temperature-sense input voltage
+> +      - description: IBUS current (required)
+> +      - description: battery current
+> +      - description: |
+> +          regulated output voltage to supply for the PWM low-side gate d=
+river
+> +          and the bootstrap capacitor
+> +      - description: IC junction temperature
+> +
+> +  io-channel-names:
+> +    minItems: 1
+> +    items:
+> +      - const: vbusdiv5
+> +      - const: vbusdiv2
+> +      - const: vsys
+> +      - const: vbat
+> +      - const: ts_bat
+> +      - const: ibus
+> +      - const: ibat
+> +      - const: chg_vddp
+> +      - const: temp_jc
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    description: OTG boost regulator.
+> +    unevaluatedProperties: false
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +
+> +    properties:
+> +      enable-gpios:
+> +        maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +...
+> --=20
+> 2.7.4
+>=20
+
+--zly4a6vosjjv2mrv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMfCMMACgkQ2O7X88g7
++prG+g/+IL/Rc+kycHrb7Jfw2EV0b6A+45R087Ob3Dy1Kf/LHxOHOeyD31c7AMTI
+aicts0U9FYihYjdXrnAVp32UYgCFQW3HWd0SEcLFqgKaU8Xa/5zy40rCqPmEhc1X
+PjU6pasOjIhT2uVxqTjdeI3rX7zatlnqAQBEkmRbdfCs9TZY2FPZVt/6916scKjl
+KzyHyHMaXM/I8BaADFri0bm0SCUSfiewje4R2T6qFYRPYQ3f2K0SJq2lJBDi2qp/
+JuFhd/DyvD6C5CrZrF80z6yL8m0XPXWLa58qPSTY8ytmoB7aECt+Xz9J4KFUJJpW
+AasdfJLmyITBw2c5YJ4tZTice8w3WzijRPI6RCmTgncB0t7NkEt4CXUosXI/A0Tv
+sM/o/17Av/2XvKbmMHCeoaPaPqnO6qo18aaHpBLbXHHTS503k1SOpYZFtzTPYO0Z
+5B09/S1HZGJ6qxcBPRwfzW0Pg9O2lrlKhaExg0RgInRpAZaYDJfC+7UP+oZfmr3K
+4P9wim6khdqaAg8b7tFcCYEvjFyIouV4ObwR69WZS6JFyjZAP5QKAOPhvGjn5RPK
+4rW77VttfIARWAjtRbqq7LU1N8yu2gwe2OwW6++TNnpS72cBhuKeNd3R9eyS7Ki+
+zko36FKuEdMnU5LCWUBDmbHXBvrovj++3N4s5qB5tZCSmvD+os8=
+=QiKk
+-----END PGP SIGNATURE-----
+
+--zly4a6vosjjv2mrv--
