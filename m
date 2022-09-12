@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5545B5DF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004885B5DE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 18:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiILQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 12:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S229852AbiILQLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 12:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiILQPp (ORCPT
+        with ESMTP id S229514AbiILQLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 12:15:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66663AE48;
-        Mon, 12 Sep 2022 09:15:44 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CFjau4031896;
-        Mon, 12 Sep 2022 16:15:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gnR+YojUuEd0bVWU42W0Pr2xBddSG3/PEPBepBydQ0k=;
- b=gNBopqY422xspqj+SNgn5fpVWhLiRWLuNfyKr8nDEqdB31v5+qblFRGOx0O0WkhKlR5w
- dZXNWzUNpUWvhbdHyEv8HEzf3TgKi6XfKCLhj0BbO/h/PsR9Ah66f2S48m+RJJ6ek9iE
- YuPxNxvaKiIuikl3Su6p5v7J8K/Aac/wdPSi7w+moZ1W9yI5TszXxfP/hWhHH1xyiSdh
- 53IiyewtrS4Em5b7zyTtnF/BUBGZkpO6NdO+ixFSxaCVPfzOYhxEUusQ+MSIRKBmWr41
- OQ8dydfa9B9Q1ADWTqNWx8sdyW8Vhk3LZ9N/eMnwiTGqoE545CuCPBqWIanzR7auK6Eq 3Q== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgkve5bee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 16:15:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28CGAc61019012
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 16:10:38 GMT
-Received: from [10.216.1.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
- 2022 09:10:34 -0700
-Message-ID: <af79fc4d-4996-bb2c-7388-2d9afd991e7a@quicinc.com>
-Date:   Mon, 12 Sep 2022 21:40:30 +0530
+        Mon, 12 Sep 2022 12:11:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFD7BF4C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 09:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662999110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eRONoSpfg6OqWWA5cH64+HEW7SQgK+9R0fHs9Js5AEY=;
+        b=AteJri0NhlFmY7ry8Afi4dM0/KzUFQZmuvdSCtmVJo16t+Qhn3wBf7RCCd7uH4Yl2M9ICY
+        L8lsvkIaNJsGLGOhihnoA8Yeq8FKkZ0jkpn24TifixioLPhAPU60G+IzGBe5O64wTkPlx0
+        TZqYUvJBbDhgRQWs7kG5mvPdjJG/+iI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-483-ci8qM0OYOPOwPuhamL1q9g-1; Mon, 12 Sep 2022 12:11:45 -0400
+X-MC-Unique: ci8qM0OYOPOwPuhamL1q9g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4DB8811E90;
+        Mon, 12 Sep 2022 16:11:43 +0000 (UTC)
+Received: from raketa.redhat.com (unknown [10.40.193.139])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B1607492B04;
+        Mon, 12 Sep 2022 16:11:41 +0000 (UTC)
+From:   Maurizio Lombardi <mlombard@redhat.com>
+To:     vbabka@suse.cz
+Cc:     linux-mm@kvack.org, rientjes@google.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, bigeasy@linutronix.de
+Subject: [PATCH V2] mm: slub: fix flush_cpu_slab()/__free_slab() invocations in task context.
+Date:   Mon, 12 Sep 2022 18:11:40 +0200
+Message-Id: <20220912161140.34281-1-mlombard@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 0/5] PCI: qcom: Add system suspend & resume support
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>
-References: <20220909195110.GA310839@bhelgaas>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20220909195110.GA310839@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pOrH7y_uVO0H9huKk6qwUGbjsy7BMYH_
-X-Proofpoint-GUID: pOrH7y_uVO0H9huKk6qwUGbjsy7BMYH_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_11,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- adultscore=0 mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209120055
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,62 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 5a836bf6b09f ("mm: slub: move flush_cpu_slab() invocations
+__free_slab() invocations out of IRQ context") moved all flush_cpu_slab()
+invocations to the global workqueue to avoid a problem related
+with deactivate_slab()/__free_slab() being called from an IRQ context
+on PREEMPT_RT kernels.
 
-On 9/10/2022 1:21 AM, Bjorn Helgaas wrote:
-> On Fri, Sep 09, 2022 at 02:14:39PM +0530, Krishna chaitanya chundru wrote:
->> Add suspend and resume syscore ops.
->>
->> When system suspends, and if the link is in L1ss, disable the clocks
->> and power down the phy so that system enters into low power state by
->> parking link in L1ss to save the maximum power. And when the system
->> resumes, enable the clocks back and power on phy if they are disabled
->> in the suspend path.
->>
->> we are doing this only when link is in l1ss but not in L2/L3 as
->> nowhere we are forcing link to L2/L3 by sending PME turn off.
->>
->> is_suspended flag indicates if the clocks are disabled in the suspend
->> path or not.
->>
->> There is access to Ep PCIe space to mask MSI/MSIX after pm suspend ops
->> (getting hit by affinity changes while making CPUs offline during suspend,
->> this will happen after devices are suspended (all phases of suspend ops)).
->> When registered with pm ops there is a crash due to un-clocked access,
->> as in the pm suspend op clocks are disabled. So, registering with syscore
->> ops which will called after making CPUs offline.
->>
->> Make GDSC always on to ensure controller and its dependent clocks
->> won't go down during system suspend.
->>
->> Krishna chaitanya chundru (5):
->>    PCI: qcom: Add system suspend and resume support
->>    PCI: qcom: Add retry logic for link to be stable in L1ss
->>    phy: core: Add support for phy power down & power up
->>    phy: qcom: Add power down/up callbacks to pcie phy
->>    clk: qcom: Alwaya on pcie gdsc
-> This seems fairly ugly because it doesn't fit nicely into the PM
-> framework.  Why is this a qcom-specific thing?  What about other
-> DWC-based controllers?
-We wanted to allow system S3 state by turning off all PCIe clocks but at 
-the same time
-retaining NVMe device in D0 state and PCIe link in l1ss state.
+When the flush_all_cpu_locked() function is called from a task context
+it may happen that a workqueue with WQ_MEM_RECLAIM bit set ends up
+flushing the global workqueue, this will cause a dependency issue.
 
-Here nothing really specific to DWC as PCIe controller remains intact.
+ workqueue: WQ_MEM_RECLAIM nvme-delete-wq:nvme_delete_ctrl_work [nvme_core]
+   is flushing !WQ_MEM_RECLAIM events:flush_cpu_slab
+ WARNING: CPU: 37 PID: 410 at kernel/workqueue.c:2637
+   check_flush_dependency+0x10a/0x120
+ Workqueue: nvme-delete-wq nvme_delete_ctrl_work [nvme_core]
+ RIP: 0010:check_flush_dependency+0x10a/0x120[  453.262125] Call Trace:
+ __flush_work.isra.0+0xbf/0x220
+ ? __queue_work+0x1dc/0x420
+ flush_all_cpus_locked+0xfb/0x120
+ __kmem_cache_shutdown+0x2b/0x320
+ kmem_cache_destroy+0x49/0x100
+ bioset_exit+0x143/0x190
+ blk_release_queue+0xb9/0x100
+ kobject_cleanup+0x37/0x130
+ nvme_fc_ctrl_free+0xc6/0x150 [nvme_fc]
+ nvme_free_ctrl+0x1ac/0x2b0 [nvme_core]
 
-And the Qcom PHY allows this scheme  (that is to retain the link state 
-in l1ss
-even though all pcie clocks are turned off).
+Fix this bug by creating a workqueue for the flush operation with
+the WQ_MEM_RECLAIM bit set.
 
-Since clocks are completely managed by qcom platform driver, we are 
-trying to manage them
-during S3/S0 transitions with PM callbacks.
->>   drivers/clk/qcom/gcc-sc7280.c            |   2 +-
->>   drivers/pci/controller/dwc/pcie-qcom.c   | 156 ++++++++++++++++++++++++++++++-
->>   drivers/phy/phy-core.c                   |  30 ++++++
->>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c |  50 ++++++++++
->>   include/linux/phy/phy.h                  |  20 ++++
->>   5 files changed, 256 insertions(+), 2 deletions(-)
->>
->> -- 
->> 2.7.4
->>
+v2: Create a workqueue with WQ_MEM_RECLAIM
+    instead of trying to revert the changes.
+
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+---
+ mm/slub.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 862dbd9af4f5..cdb8011884d0 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -310,6 +310,11 @@ static inline void stat(const struct kmem_cache *s, enum stat_item si)
+  */
+ static nodemask_t slab_nodes;
+ 
++/*
++ * Workqueue used for flush_cpu_slab().
++ */
++static struct workqueue_struct *flushwq;
++
+ /********************************************************************
+  * 			Core slab cache functions
+  *******************************************************************/
+@@ -2730,7 +2735,7 @@ static void flush_all_cpus_locked(struct kmem_cache *s)
+ 		INIT_WORK(&sfw->work, flush_cpu_slab);
+ 		sfw->skip = false;
+ 		sfw->s = s;
+-		schedule_work_on(cpu, &sfw->work);
++		queue_work_on(cpu, flushwq, &sfw->work);
+ 	}
+ 
+ 	for_each_online_cpu(cpu) {
+@@ -4858,6 +4863,8 @@ void __init kmem_cache_init(void)
+ 
+ void __init kmem_cache_init_late(void)
+ {
++	flushwq = create_workqueue("slub_flushwq");
++	BUG_ON(!flushwq);
+ }
+ 
+ struct kmem_cache *
+-- 
+2.31.1
+
