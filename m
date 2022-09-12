@@ -2,195 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B015B628B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24645B6295
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiILVLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S229482AbiILVMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiILVLe (ORCPT
+        with ESMTP id S229588AbiILVM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:11:34 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272E240561
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:11:33 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id j7so4953707vsr.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 14:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0y5HDghcAY9sylQGFFzoaSf/fyhWZ2sBWfqcl39LrAY=;
-        b=mxC/08asEEoQwpJK7YyrNORboVPuR1mQ9pckLYXNFM9ItzfU4KAedKMQxXi+Ppdh4t
-         v0Z7Zxg+FPrE4QWEkn3h2vRE2QSxRJ0KA9uGF3tCoeY4rRltXbSYzIcixWkksNF9t9wO
-         o/Lldc8HyGnQ/TfoPY4NVvRvTjwUSJv6LYnbbdm+CZDBg4SxDRWhnzoAZXExfNnWqjl3
-         VKk+DmQ57LYXuxE3Gn8Z8PZhuSKCPAh7obwz8x90stW22FYdXekkH/8340+EcuAMqBB/
-         E9dZa3mrQQROKHo+3gvj0DQYDL1uQDqK1BDwYySeYl6pZ3WO1qwYVKsgOpXdoDHSQRvt
-         YMOg==
+        Mon, 12 Sep 2022 17:12:29 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930A040565;
+        Mon, 12 Sep 2022 14:12:28 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1280590722dso26857805fac.1;
+        Mon, 12 Sep 2022 14:12:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0y5HDghcAY9sylQGFFzoaSf/fyhWZ2sBWfqcl39LrAY=;
-        b=0CKiUnS9vlkCA7qeOVdxGAyRBLlZBZJH6e4YML1+Y1RaaFrhm3lhQSx6Kv6p69AdV2
-         IW44ytM6M8lHTHy4+BWGMgum41Lxu2X2XCY5r4sZ7rbJXjwaC8CCy4WsmlbiSn5Au3N0
-         o0PxFjY2+CSlWjGkKI+k2PgCGYoG73B7XeGCF7za1H1fUXUMinwfnB3QBkCYvBua+02N
-         eCOnirixGFoLRnho330X6qpavIyIzEKxTAbG+FIBa5MXP0KCFfEkbft0yLRmt6pVNC4S
-         zndT82BJf30M0/VI6PdpCbzZ6DjpK7CgIfjQNefPK57BiPmYT84sdO8rmPdVi1LujUA9
-         XJvw==
-X-Gm-Message-State: ACgBeo3VgFgAnW1Yp3sEOZvugE2RC4jSSlVZPaCTEZPZPVtv+31JXRM4
-        0KWb1yLZgwiCea+R84ChVKD5nV0OCAKR/FGi7qU=
-X-Google-Smtp-Source: AA6agR5pilGGCrxIlDXL0vtrXfNYU1+8LLhhj8vm590FXQ+SqLj90vzQQRbHzbzkwJG/WG/xxQzVbLbSR7rfddViAoo=
-X-Received: by 2002:a05:6102:3a4c:b0:398:3098:a301 with SMTP id
- c12-20020a0561023a4c00b003983098a301mr7548545vsu.74.1663017092101; Mon, 12
- Sep 2022 14:11:32 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Nip0DqpF4pFkRZH+cZCKwsl/yHMaJf5IoaaXn/QNxSk=;
+        b=EA4/lT4fZgdAFSZckHI4+WzZzlAqPld7jfIcIyfTEF5Vyuc32sAKeWzHVFNTIym76C
+         OQ7zXTyo5JRzQq6CkpbNUU95A2SSV4aFMcXfh8TX0Jb18nC+T4hBZHetMBOAspQKZW1b
+         aVyCwH9j0+W+mwTvKuCzFOCn5WqaoIyLORwU+z+EreHtcdZIBbs2ZTYwF2EEHDQ/yknO
+         B2zQYzsCSkCcrmpKc08gf9QnIR/sf9YW6VXYkH2lg/gv9gaUJRoRtxmukjQ5wAKRx84I
+         pfu9ndrNScM0AHoBzNH4ldagIbL9dAuwomLLcI/Lj9Nh8G/gOi9Hs+nH7yGT0mzT4nDT
+         7HFw==
+X-Gm-Message-State: ACgBeo0KbgysU3Sm/SoPNiErJpp9BLKWj4Ba+qm7T7pdgCSxMtBTFECU
+        XkNi7cLhZFOG7tnLPL/mtQ==
+X-Google-Smtp-Source: AA6agR7BL/CQtAyYvQvcr+vIkRvAqs7VKLr+Xu8UpOBsWQGAV67Cg2TMBwDDp3CR4aFgS7C2yCTYNw==
+X-Received: by 2002:a05:6808:1996:b0:34f:c809:e298 with SMTP id bj22-20020a056808199600b0034fc809e298mr128276oib.184.1663017147764;
+        Mon, 12 Sep 2022 14:12:27 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c186-20020acab3c3000000b0034484c532c7sm4421093oif.32.2022.09.12.14.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 14:12:27 -0700 (PDT)
+Received: (nullmailer pid 1872059 invoked by uid 1000);
+        Mon, 12 Sep 2022 21:12:26 -0000
+Date:   Mon, 12 Sep 2022 16:12:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: Add Broadcom BCM4377 family
+ PCIe Bluetooth
+Message-ID: <20220912211226.GA1847448-robh@kernel.org>
+References: <20220907170935.11757-1-sven@svenpeter.dev>
+ <20220907170935.11757-3-sven@svenpeter.dev>
+ <bcb799ea-d58e-70dc-c5c2-daaff1b19bf5@linaro.org>
 MIME-Version: 1.0
-References: <20220912052852.1123868-1-jim.cromie@gmail.com>
- <20220912052852.1123868-3-jim.cromie@gmail.com> <87pmg06g2x.fsf@intel.com>
-In-Reply-To: <87pmg06g2x.fsf@intel.com>
-From:   jim.cromie@gmail.com
-Date:   Mon, 12 Sep 2022 15:11:05 -0600
-Message-ID: <CAJfuBxy5E0xPFH=bxaaXy2Q8LojBrqgr+su8wGq7rsv3m7_d_g@mail.gmail.com>
-Subject: Re: [PATCH v7 2/9] drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sean Paul <seanpaul@chromium.org>,
-        Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcb799ea-d58e-70dc-c5c2-daaff1b19bf5@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 4:29 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
->
-> On Sun, 11 Sep 2022, Jim Cromie <jim.cromie@gmail.com> wrote:
-> > Use DECLARE_DYNDBG_CLASSMAP across DRM:
-> >
-> >  - in .c files, since macro defines/initializes a record
-> >
-> >  - in drivers, $mod_{drv,drm,param}.c
-> >    ie where param setup is done, since a classmap is param related
-> >
-> >  - in drm/drm_print.c
-> >    since existing __drm_debug param is defined there,
-> >    and we ifdef it, and provide an elaborated alternative.
-> >
-> >  - in drm_*_helper modules:
-> >    dp/drm_dp - 1st item in makefile target
-> >    drivers/gpu/drm/drm_crtc_helper.c - random pick iirc.
-> >
-> > Since these modules all use identical CLASSMAP declarations (ie: names
-> > and .class_id's) they will all respond together to "class DRM_UT_*"
-> > query-commands:
+On Thu, Sep 08, 2022 at 01:19:17PM +0200, Krzysztof Kozlowski wrote:
+> On 07/09/2022 19:09, Sven Peter wrote:
+> > These chips are combined Wi-Fi/Bluetooth radios which expose a
+> > PCI subfunction for the Bluetooth part.
+> > They are found in Apple machines such as the x86 models with the T2
+> > chip or the arm64 models with the M1 or M2 chips.
+> > 
+> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > ---
+> > changes from v1:
+> >   - added apple,* pattern to brcm,board-type
+> >   - s/PCI/PCIe/
+> >   - fixed 1st reg cell inside the example to not contain the bus number
+> > 
+> > .../bindings/net/brcm,bcm4377-bluetooth.yaml  | 78 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 79 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > new file mode 100644
+> > index 000000000000..fb851f8e6bcb
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > @@ -0,0 +1,78 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/brcm,bcm4377-bluetooth.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom BCM4377 family PCIe Bluetooth Chips
+> > +
+> > +allOf:
+> > +  - $ref: bluetooth-controller.yaml#
+> 
+> Put it before properties (so after description).
+> 
+> > +
+> > +maintainers:
+> > +  - Sven Peter <sven@svenpeter.dev>
+> > +
+> > +description:
+> > +  This binding describes Broadcom BCM4377 family PCIe-attached bluetooth chips
+> > +  usually found in Apple machines. The Wi-Fi part of the chip is described in
+> > +  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - pci14e4,5fa0 # BCM4377
+> > +      - pci14e4,5f69 # BCM4378
+> > +      - pci14e4,5f71 # BCM4387
+> > +
+> > +  reg:
+> > +    description: PCI device identifier.
+> 
+> maxItems: X
 
+And drop the description.
 
->
-> The commit message could start off by saying each module needs to define
-> DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, ...). That is, IIUC.
->
+> 
+> > +
+> > +  brcm,board-type:
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    description: Board type of the Bluetooth chip. This is used to decouple
+> > +      the overall system board from the Bluetooth module and used to construct
+> > +      firmware and calibration data filenames.
+> > +      On Apple platforms, this should be the Apple module-instance codename
+> > +      prefixed by "apple,", e.g. "apple,atlantisb".
+> > +    pattern: '^apple,.*'
+> > +
+> > +  brcm,taurus-cal-blob:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    description: A per-device calibration blob for the Bluetooth radio. This
+> > +      should be filled in by the bootloader from platform configuration
+> > +      data, if necessary, and will be uploaded to the device.
+> > +      This blob is used if the chip stepping of the Bluetooth module does not
+> > +      support beamforming.
+> 
+> Isn't it:
+> s/beamforming/beam forming/
+> ?
+> 
+> > +
+> > +  brcm,taurus-bf-cal-blob:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    description: A per-device calibration blob for the Bluetooth radio. This
+> > +      should be filled in by the bootloader from platform configuration
+> > +      data, if necessary, and will be uploaded to the device.
+> > +      This blob is used if the chip stepping of the Bluetooth module supports
+> > +      beamforming.
+> 
+> Same here.
+> 
+> > +
+> > +  local-bd-address: true
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - local-bd-address
+> > +  - brcm,board-type
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pcie {
+> > +      #address-cells = <3>;
+> > +      #size-cells = <2>;
+> > +
+> > +      bluetooth@0,1 {
+> 
+> The unit address seems to be different than reg.
 
-Yes, I see your point.
-All the explanations missing here are in preceding commits,
-now in GregKHs  driver-core/driver-core-next tree,
-so I didnt resend them.
+Right, this says dev 0, func 1.
 
+dtc can check this, but IIRC it would need 'device_type = "pci";' 
+in the parent. So please add that, and verify you get a warning.
 
-> Where's DECLARE_DYNDBG_CLASSMAP defined? linux-next? What's it do? What
-> if multiple modules with that are actually builtin?
-
-The commit that adds the macro is at
-https://lore.kernel.org/lkml/20220904214134.408619-15-jim.cromie@gmail.com/
-
-there are many combos of builtin, Ive done at least several:
-with caveat that >98% of testing is on virtme (thanks for that tool)
-
-- test_dynamic_debug as module, and builtin.
-it has multiple macro uses, showing 1 kind of sharing
-
-- drm as builtin, drivers as modules
-that surely pulled in other drm-helpers as builtins
-
-- all loadable modules mostly.
-
-
->
-> The duplication and requirement that they're identical seems like an
-> error prone combo.
-
-I freely acknowledge(d) this is sub-optimal.
-There might be a best place for a single declaration that is in-scope
-across multiple modules, but I dont know the drm core/driver lifetime
-well enough to just drop this into that place.
-
-I may have complicated things by starting with a static struct holding
-the classmap, that choice was driven by:
-
-- static declaration into a section solved a problem where the class
-definitions
-were "registered" (term used in patchset, -v2-3?) too late to be available for
-     modprobe i915 dyndbg='class DRM_UT_CORE +p'
-but worked afterwards
-(also true for builtins and boot-time $mod.dyndbg='class notworking +p')
-
-Another subtlety - the "sharing" is due more to: drm_dbg(DRM_UT_*, "")
-Im not sure precisely how this might matter.
-
-I also had an "incompleteness" argument circling in my head - something like;
-you cant simultaneously allow a drm-wanna-be module to declare "DRM_UT_CORE"
-but disallow "DRM_UT_ILL_CONSIDERED".   I kind-of stopped there.
-
-Theres also an issue where multiple declarations in a module must
-avoid range overlap.
-I had no idea how to put that into a BUILD_BUG_ON.
-Its done manually, with commentary, in test-dynamic-debug.
-
-Maybe both issues can be improved somewhat by changing the macro
-to expect real ENUM symbols, (and stringify _VA_ARGS_ to init the classnames),
-not the quoted "DRM_UT_*"s it gets now.  That would also obsolete the _base,
-since its the value of DRM_UT_CORE (the 1st enum val).
-But that still leaves the enum vals enumerated, with possibility of
-omission or mixup,
-which unlike a spelling error wouldnt get caught, and would be wrong.
-
-I fiddled with the 1st part of that for a while, I lack the macro-fu,
-and punted.
-
-Im happy to try an alternative approach, particularly with elaborated
-suggestions.
-
-
->
-> Finally, the choice of placement in e.g. i915_params.c seems completely
-> arbitrary, and makes you wonder "what here requires this, nothing?".
-
-acknowledged - I put it there because the access to it is via a parameter,
-namely one that already affects it from a distance:
-   /sys/module/drm/parameters/debug - ie drm.dbg
-
-And its not even i915's parameter.
-
->
-> BR,
-> Jani.
->
-
-thanks,
-
->
-> >
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Rob
