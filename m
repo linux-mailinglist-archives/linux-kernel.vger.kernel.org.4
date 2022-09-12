@@ -2,230 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCDD5B5F0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08C95B5F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 19:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiILRRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 13:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S230108AbiILRSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 13:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiILRRE (ORCPT
+        with ESMTP id S229696AbiILRR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 13:17:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C31D32ABB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663003023; x=1694539023;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=OCRhjyRaSezwh5UjsskIDcbi2ofCllBYEE8k/+0NJT4=;
-  b=KWplQ5Lh2foe6kDMxOOCt32wM8liw1OymbZeoNHUdYbRoaQXwcUYxkxK
-   +iMi3hiE76qF/VEr7gh9+tgOoKKw1zaGndmqsLMnpJaCTOIFkyhQzyH4t
-   2/UXhJk/NeJertMLWf6BW49ByCPPMx1JZc46fue9GHpjQvTOi233tPh4Y
-   cnB+MoJs++r5qFSGKui477cFMfVdWn3aL/Kaqtv9La45DPQqqjMNEnf0Q
-   KhTROxI5A2j4Bxqh9tiKxNqlgKxuWGDi+kWdBn7E+wAknTCUgYAlAOjGR
-   pRMwbUHa+F+UAz/B9McYl5Eqc9uofhXpGPOWPNl+oKpqbkr/Z/MaAVfvm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="280941627"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="280941627"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 10:17:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="719843252"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga002.fm.intel.com with SMTP; 12 Sep 2022 10:16:59 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 20:16:58 +0300
-Date:   Mon, 12 Sep 2022 20:16:58 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-Message-ID: <Yx9pij4LmFHrq81V@intel.com>
-References: <20220912101522.69482-1-javierm@redhat.com>
- <Yx8Ms2jhgwpiDqA6@intel.com>
- <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
- <Yx8Vo4x7frhbElPq@intel.com>
- <4002a4d6-04cb-b342-952f-b42ef3188df4@suse.de>
- <Yx8nXZnTDEwuPEvP@intel.com>
- <d4c00bb6-03be-0348-6a75-c678608114f1@suse.de>
+        Mon, 12 Sep 2022 13:17:58 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCF332ABB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:17:58 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3454b0b1b6dso109444837b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 10:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+KtF588ZPlxi3VVUd2CaBCEItNHS+QL93SWbYzWuiuM=;
+        b=OXLJnC7mayQ65WmxSisAIogqRcQ50y/kjx+5g26ONLzrrq2Q/jiDnXAT1KKWCbb8Jf
+         +nuzmKjbrNq/nfKapg0jgxPf9zBCcHv3QqluUL2kRFnfXbKMcES7rrJTLbVLaa35AkI9
+         0YeJFc6cXyL3uHLQzu4t1U/kIeslqkMpdO4M20Dk5G7xCGWp+Q0kW53IQTdzSN2XNTaw
+         974o1kVfqaCiLZGJih2NzdMoFSFsSSLRiZYb/2/ExqrXspaRyi050tBMEuqFqCq5Itld
+         YUO+bw9RTg/N5dbFZhxDIUJLsXFm0T0ueEuWkw2lfrW7hjnMsLlcQ4VHSoudFqN0gP/9
+         H4QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+KtF588ZPlxi3VVUd2CaBCEItNHS+QL93SWbYzWuiuM=;
+        b=tcnI3TQjF2CzWFXfJoPsov+6SxHxUr1bq/rgZOSk1psdVVkq0oge/Px1RBuR032NQl
+         UfqCi9jAS+HqgHNtPT4aEX3oTujKiCY0mau4zzG/bbUADQXR+luTAbjm0cibwkJYE64V
+         G9c8HgB7YacAJu2yj4xdOqCTqYBjtNBZy52O1lXaV0UrziyT048hHfdQhwMrq6WNI1XP
+         qmD2KDUSMu7tYil+srIEG2h8vqX2Vw7QNltp3wbt2O87sWkUoTD4cs3aGmkvIK+vfsD0
+         aGZEuxvApj7VnJAfmRpi3fX/tUNRU0mZHW7BsUdO6o7OhaQ6NLOqkUQx8lfV/T1jFdQi
+         +OBA==
+X-Gm-Message-State: ACgBeo20QxKMt/j1p15Wb3zABe+a0JzFEmsb2vL2PDsHsfStgfdvUPDy
+        NXTsiWHQFtqRgbR7RWsZJFaC1R5SmAjSZgeTUkULPg==
+X-Google-Smtp-Source: AA6agR4D5ASo5SV687PploeOcD7X9IAMGVcRbK0zz96aMG1YV0rcPMcRo8kCdUAPctMbIU9aYVRA6+WzU4spKVB/8ZA=
+X-Received: by 2002:a81:9c2:0:b0:345:4830:1943 with SMTP id
+ 185-20020a8109c2000000b0034548301943mr23749159ywj.86.1663003077193; Mon, 12
+ Sep 2022 10:17:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d4c00bb6-03be-0348-6a75-c678608114f1@suse.de>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <fce40f8dbd160972fe01a1ff39d0c426c310e4b7.1662852281.git.andreyknvl@google.com>
+In-Reply-To: <fce40f8dbd160972fe01a1ff39d0c426c310e4b7.1662852281.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 12 Sep 2022 19:17:20 +0200
+Message-ID: <CANpmjNMmDyjmYLfqCNdrksbN9BndjerzNTfdKLDQS_7etrNXMA@mail.gmail.com>
+Subject: Re: [PATCH] kasan: better invalid/double-free report header
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 04:22:49PM +0200, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 12.09.22 um 14:34 schrieb Ville Syrjälä:
-> > On Mon, Sep 12, 2022 at 02:05:36PM +0200, Thomas Zimmermann wrote:
-> >> Hi
-> >>
-> >> Am 12.09.22 um 13:18 schrieb Ville Syrjälä:
-> >>> On Mon, Sep 12, 2022 at 01:05:45PM +0200, Thomas Zimmermann wrote:
-> >>>> Hi
-> >>>>
-> >>>> Am 12.09.22 um 12:40 schrieb Ville Syrjälä:
-> >>>>> On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
-> >>>>>> Provides a default plane state check handler for primary planes that are a
-> >>>>>> fullscreen scanout buffer and whose state scale and position can't change.
-> >>>>>>
-> >>>>>> There are some drivers that duplicate this logic in their helpers, such as
-> >>>>>> simpledrm and ssd130x. Factor out this common code into a plane helper and
-> >>>>>> make drivers use it.
-> >>>>>>
-> >>>>>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >>>>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >>>>>> ---
-> >>>>>>
-> >>>>>>     drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
-> >>>>>>     drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
-> >>>>>>     drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
-> >>>>>>     include/drm/drm_plane_helper.h     |  2 ++
-> >>>>>>     4 files changed, 33 insertions(+), 41 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
-> >>>>>> index c7785967f5bf..fb41eee74693 100644
-> >>>>>> --- a/drivers/gpu/drm/drm_plane_helper.c
-> >>>>>> +++ b/drivers/gpu/drm/drm_plane_helper.c
-> >>>>>> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
-> >>>>>>     	kfree(plane);
-> >>>>>>     }
-> >>>>>>     EXPORT_SYMBOL(drm_plane_helper_destroy);
-> >>>>>> +
-> >>>>>> +/**
-> >>>>>> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
-> >>>>>> + * @plane: plane to check
-> >>>>>> + * @new_state: plane state to check
-> >>>>>
-> >>>>> That is not a plane state. Also should s/new_// since it's just
-> >>>>> the overall atomic state thing rather than some new or old state.
-> >>>>
-> >>>> Using only 'state' is non-intuitive and has lead to bugs where sub-state
-> >>>> was retrieved from the wrong state information. So we've been using
-> >>>> 'new_state' and 'old_state' explicitly in several places now.
-> >>>
-> >>> There is no old or new drm_atomic_state. It contains both.
-> >>
-> >> I (vaguely) remember a bug where a driver tried
-> >> drm_atomic_get_new_plane_state() with the (old) state that's passed to
-> >> atomic_update. It didn't return the expected results and modesetting
-> >> gave slightly wrong results.
-> > 
-> > As there is no wrong drm_atomic_state to pass I don't think it could
-> > have been the case.
-> > 
-> >> So we began to be more precise about new
-> >> and old. And whatever is stored in 'plane->state' is then just 'the state'.
-> > 
-> > There were certainly a lot of confusion before the explicit new/old
-> > state stuff was added whether foo->state/etc. was the old or the
-> > new state. And labeling things as explicitly old vs. new when passing
-> > in individual object states certainly makes sense. But that doesn't
-> > really have anything to do with mislabeling the overall drm_atomic_state.
-> > 
-> >>
-> >> I understand that the semantics of atomic_check are different from
-> >> atomic_update, but it still doesn't hurt to talk of new_state IMHO.
-> > 
-> > IMO it's just confusing. Makes the reader think there is somehow
-> > different drm_atomic_states for old vs. new states when there isn't.
-> > I also wouldn't call it new_state for .atomic_update() either.
-> > 
-> > In both cases you have the old and new states in there and how
-> > exactly they get used in the hooks is more of an implementation
-> > detail. The only rules you would have to follow is that at the
-> > end of .atomic_update() the hardware state matches the new state,
-> > and .atomic_check() makes sure the transition from the old to the
-> > new state is possible.
-> 
->  From what I understand:
-> 
-> In atomic_check(), plane->state is the current state and the state 
-> argument is the state to be validated. Calling 
-> drm_atomic_get_new_plane_state() will return the plane's new state.
+On Sun, 11 Sept 2022 at 01:25, <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Update the report header for invalid- and double-free bugs to contain
+> the address being freed:
+>
+> BUG: KASAN: invalid-free in kfree+0x280/0x2a8
+> Free of addr ffff00000beac001 by task kunit_try_catch/99
 
-You should pretty much never use plane->state anywhere. Just use
-drm_atomic_get_{,old,new}_plane_state() & co. Outside of exceptional
-cases plane->state should only be accessed by duplicate_state()
-and swap_state().
+It wouldn't hurt showing a full before vs. after report here in the
+commit message for ease of reviewing.
 
-> 
-> If you call drm_atomic_get_old_plane_state() from atomic_check(), what 
-> will it return?
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Before swap state:
-- drm_atomic_get_old_plane_state() points to the same thing
-  as plane->state, or NULL if the plane is not part of the
-  drm_atomic_state
-- drm_atomic_get_new_plane_state() points to the newly
-  duplicated state only tracked within drm_atomic_state,
-  or NULL if the plane is not part of the drm_atomic_state
+Reviewed-by: Marco Elver <elver@google.com>
 
-After swap state:
-- drm_atomic_get_old_plane_state() still points to the same
-  thing as before, even though plane->state no longer points there.
-  This old state is no longer visible outside the drm_atomic_state
-  and will get destoyed when the drm_atomic_state gets nuked
-  once the commit has been done
-- drm_atomic_get_new_plane_state() still points to the same
-  thing as before, and now plane->state also points to it
-
-But all you really need to know is you have a transaction
-(drm_atomic_state) and each object taking part in it
-will have an old state (= the object's state before the
-transaction has been commited), and new state (= the object's
-state after the transaction has been commited).
-
-> 
-> In atomic_update() plane->state is the state to be committed and the 
-> state argument is the old state before the start of the atomic commit. 
-> And calling drm_atomic_get_new_plane_state() will *not* the return the 
-> plane's new state (i.e., the one in plane->state) IIRC. (As I mentioned, 
-> there was a related bug in one of the drivers.) So we began to call this 
-> 'old_state'.
-> 
-> My point is: the state passed to the check and commit functions are 
-> different things, even though they appear to be the same.
-> 
-> > 
-> > I've proposed renaming drm_atomic_state to eg. drm_atomic_transaction
-> > a few times before but no one took the bait so far...
-> > 
-> 
-> If you really don't like new_state, then let's call it state_tx.
-> 
-> Best regards
-> Thomas
-> 
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
-
-
-
-
--- 
-Ville Syrjälä
-Intel
+> ---
+>  mm/kasan/report.c         | 23 ++++++++++++++++-------
+>  mm/kasan/report_generic.c |  3 ++-
+>  mm/kasan/report_tags.c    |  2 +-
+>  3 files changed, 19 insertions(+), 9 deletions(-)
+>
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 39e8e5a80b82..df3602062bfd 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -175,17 +175,14 @@ static void end_report(unsigned long *flags, void *addr)
+>
+>  static void print_error_description(struct kasan_report_info *info)
+>  {
+> -       if (info->type == KASAN_REPORT_INVALID_FREE) {
+> -               pr_err("BUG: KASAN: invalid-free in %pS\n", (void *)info->ip);
+> -               return;
+> -       }
+> +       pr_err("BUG: KASAN: %s in %pS\n", info->bug_type, (void *)info->ip);
+>
+> -       if (info->type == KASAN_REPORT_DOUBLE_FREE) {
+> -               pr_err("BUG: KASAN: double-free in %pS\n", (void *)info->ip);
+> +       if (info->type != KASAN_REPORT_ACCESS) {
+> +               pr_err("Free of addr %px by task %s/%d\n",
+> +                       info->access_addr, current->comm, task_pid_nr(current));
+>                 return;
+>         }
+>
+> -       pr_err("BUG: KASAN: %s in %pS\n", info->bug_type, (void *)info->ip);
+>         if (info->access_size)
+>                 pr_err("%s of size %zu at addr %px by task %s/%d\n",
+>                         info->is_write ? "Write" : "Read", info->access_size,
+> @@ -420,6 +417,18 @@ static void complete_report_info(struct kasan_report_info *info)
+>         } else
+>                 info->cache = info->object = NULL;
+>
+> +       switch (info->type) {
+> +       case KASAN_REPORT_INVALID_FREE:
+> +               info->bug_type = "invalid-free";
+> +               break;
+> +       case KASAN_REPORT_DOUBLE_FREE:
+> +               info->bug_type = "double-free";
+> +               break;
+> +       default:
+> +               /* bug_type filled in by kasan_complete_mode_report_info. */
+> +               break;
+> +       }
+> +
+>         /* Fill in mode-specific report info fields. */
+>         kasan_complete_mode_report_info(info);
+>  }
+> diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
+> index 087c1d8c8145..043c94b04605 100644
+> --- a/mm/kasan/report_generic.c
+> +++ b/mm/kasan/report_generic.c
+> @@ -132,7 +132,8 @@ void kasan_complete_mode_report_info(struct kasan_report_info *info)
+>         struct kasan_alloc_meta *alloc_meta;
+>         struct kasan_free_meta *free_meta;
+>
+> -       info->bug_type = get_bug_type(info);
+> +       if (!info->bug_type)
+> +               info->bug_type = get_bug_type(info);
+>
+>         if (!info->cache || !info->object)
+>                 return;
+> diff --git a/mm/kasan/report_tags.c b/mm/kasan/report_tags.c
+> index d3510424d29b..ecede06ef374 100644
+> --- a/mm/kasan/report_tags.c
+> +++ b/mm/kasan/report_tags.c
+> @@ -37,7 +37,7 @@ void kasan_complete_mode_report_info(struct kasan_report_info *info)
+>         bool is_free;
+>         bool alloc_found = false, free_found = false;
+>
+> -       if (!info->cache || !info->object) {
+> +       if ((!info->cache || !info->object) && !info->bug_type) {
+>                 info->bug_type = get_common_bug_type(info);
+>                 return;
+>         }
+> --
+> 2.25.1
+>
