@@ -2,358 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0AD5B6211
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D40E5B6216
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 22:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiILURV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 16:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229718AbiILUTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 16:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiILURS (ORCPT
+        with ESMTP id S229575AbiILUTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 16:17:18 -0400
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1A12AC5D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 13:17:16 -0700 (PDT)
-Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
-        by m0050095.ppops.net-00190b01. (8.17.1.5/8.17.1.5) with ESMTP id 28CGn0s1000316;
-        Mon, 12 Sep 2022 21:17:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=PPtZHmCIQVuM9YXzLPNtRwdGAqaP/tT/4KH6zim4BTk=;
- b=J0a0BInST46lwTEIr0aqv3RDPnHNzZzbc/gn++frBD8awWms+RF0UxiEe2dSINuE/0Ul
- xA9klHjTwJu/NOFKI+q3hwjlk4r+pWtVammua4QSu6FgXqxvSki5PX/gtYg0laUE5tFw
- RKhQwNGCyyow5pczu6GvQEPB22usQC9T+vn0YgSKPSSRumn/GeHDmTzZ+Mg5ykATKjDs
- WPHJa4fC/c/4CyQsb8BbVntxkB/D9yqcFmH40HSv6v4g5419glK47rJrmlZeozCs8pnr
- 1S9MN1H9Kj3IqyHtQLeEUkp7/4Zgi4dVE4F21z9UqOnJMy5Xu/9/DU/fyFlasyPi8Zjm Zg== 
-Received: from prod-mail-ppoint7 (a72-247-45-33.deploy.static.akamaitechnologies.com [72.247.45.33] (may be forged))
-        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3jgk46s9gq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 21:17:03 +0100
-Received: from pps.filterd (prod-mail-ppoint7.akamai.com [127.0.0.1])
-        by prod-mail-ppoint7.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 28CIUslV017697;
-        Mon, 12 Sep 2022 16:17:02 -0400
-Received: from prod-mail-relay18.dfw02.corp.akamai.com ([172.27.165.172])
-        by prod-mail-ppoint7.akamai.com (PPS) with ESMTP id 3jgnxvdfbx-1;
-        Mon, 12 Sep 2022 16:17:02 -0400
-Received: from [0.0.0.0] (unknown [172.27.119.138])
-        by prod-mail-relay18.dfw02.corp.akamai.com (Postfix) with ESMTP id 38EF1FA;
-        Mon, 12 Sep 2022 20:17:01 +0000 (GMT)
-Message-ID: <0d9f644f-3d60-02c3-7ce0-01296757e181@akamai.com>
-Date:   Mon, 12 Sep 2022 16:17:00 -0400
+        Mon, 12 Sep 2022 16:19:44 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5712862C9;
+        Mon, 12 Sep 2022 13:19:40 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220912201926euoutp01a7ae25eeed7ec9a0399676e56d3c560a~UNmQet_Ic0050800508euoutp01M;
+        Mon, 12 Sep 2022 20:19:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220912201926euoutp01a7ae25eeed7ec9a0399676e56d3c560a~UNmQet_Ic0050800508euoutp01M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663013966;
+        bh=PAg2N7X8jaPGoKnLvD79GTUX1mP+7/MpAHQxRGtNnl8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uSBw6kQzj7xr6FSNv3NDQfoGbgaF69W+etYNf/EvzvV3Ewh1b6uaOwcTFt6uI8Yy2
+         3XAhYzaoZcRxszJ2P/fUlxqzd6opFff58NRqYcbwRgy23+A042MQ09/NEXOgrCFZrS
+         1+GSFM79tiVBSxtynx0V4iveKbp8DjH7Wl5sDfcM=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220912201920eucas1p26e83101f51203158b27d99d48f2d4bfc~UNmLoLDmz0921709217eucas1p2K;
+        Mon, 12 Sep 2022 20:19:20 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 7D.09.29727.8449F136; Mon, 12
+        Sep 2022 21:19:20 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220912201920eucas1p1ff844ab7a87a01fdb0ae98295e103147~UNmLHTMa61846118461eucas1p1P;
+        Mon, 12 Sep 2022 20:19:20 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220912201920eusmtrp2a9f8331adc07e70a5307a157c4d9a3b7~UNmLGiYGZ3256832568eusmtrp2Z;
+        Mon, 12 Sep 2022 20:19:20 +0000 (GMT)
+X-AuditID: cbfec7f2-205ff7000001741f-a1-631f9448459a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 4B.73.07473.8449F136; Mon, 12
+        Sep 2022 21:19:20 +0100 (BST)
+Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220912201919eusmtip257af44bf31986d3fa034a1b0b057c18a~UNmK1zLTA0560305603eusmtip28;
+        Mon, 12 Sep 2022 20:19:19 +0000 (GMT)
+From:   Lukasz Stelmach <l.stelmach@samsung.com>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: ax88796c: Fix return type of ax88796c_start_xmit
+Date:   Mon, 12 Sep 2022 22:19:07 +0200
+In-Reply-To: <20220912194031.808425-1-nhuck@google.com> (Nathan
+        Huckleberry's message of "Mon, 12 Sep 2022 12:40:30 -0700")
+Message-ID: <dleftjo7vkfiro.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 17/57] dyndbg: validate class FOO by checking with
- module
-Content-Language: en-US
-To:     jim.cromie@gmail.com
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>, robdclark@gmail.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Joe Perches <joe@perches.com>
-References: <20220904214134.408619-1-jim.cromie@gmail.com>
- <20220904214134.408619-18-jim.cromie@gmail.com>
- <2d3846cb-ff9a-3484-61a8-973799727d8f@akamai.com>
- <CAJfuBxzM=KKPbcks-aQLAJM0QVd5sjL-CucYbyFbeG5sgoCVjg@mail.gmail.com>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <CAJfuBxzM=KKPbcks-aQLAJM0QVd5sjL-CucYbyFbeG5sgoCVjg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_14,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 adultscore=0
- phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209120067
-X-Proofpoint-ORIG-GUID: NWqNNT8JvyIz1ZmPTHNe_ca5jdhHGLod
-X-Proofpoint-GUID: NWqNNT8JvyIz1ZmPTHNe_ca5jdhHGLod
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_14,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 impostorscore=0 adultscore=0 clxscore=1015 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209120068
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+        protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOKsWRmVeSWpSXmKPExsWy7djPc7oeU+STDR581rGYc76FxeLpsUfs
+        Fo+W+Vlc2NbHanF51xw2iydT9rNZtK98ymbxYcJ/JotjC8QsNh/+xGLx7fQbRotrX06zOPB4
+        bFl5k8lj56y77B4LNpV6bFrVyebxYvNMRo/3+66yeXzeJBfAHsVlk5Kak1mWWqRvl8CV8Xnm
+        F+aCjQIVWybvZWlgXMTXxcjJISFgInHl9FaWLkYuDiGBFYwSs77MZYRwvjBKrF/5hxnC+cwo
+        cXTJYbYuRg6wlhPTgiDiyxklZu5ayw7hPGeUuHV/CwtIEZuAnsTatREgK0QENCW+n3rJClLD
+        LNDILLH4/2FmkISwgJfEm3nPWUFsFgFViWdrtoDZnAK1Ei9OrwCbwytgLvH2Tj1IWFTAUuLP
+        s4/sIDavgKDEyZlPWEBsZoFciZnn34BdLSGwmlNizYWD7BC/uUjseHaSDcIWlnh1fAtUXEbi
+        /875TBAN7YwSTVcWskI4ExglPnc0MUFUWUvcOfcLqttRYuumh+wQ7/NJ3HgrCLGZT2LStunM
+        EGFeiY42IYhqFYl1/XtYIGwpid5XKxghbA+JRav2QgOri1Fi3faPrBMYFWYheWgWkodmAY1l
+        Bgbe+l36EGFtiWULXzND2LYS69a9Z1nAyLqKUTy1tDg3PbXYMC+1XK84Mbe4NC9dLzk/dxMj
+        ML2d/nf80w7Gua8+6h1iZOJgPMSoAtT8aMPqC4xSLHn5ealKIrzbVeWThXhTEiurUovy44tK
+        c1KLDzFKc7AoifMmZ25IFBJITyxJzU5NLUgtgskycXBKNTBZWhyasXvvX6OvCeu5TdkYFnx8
+        1pB6XbhhWd0Eictb9gdtzolr7VpkO13Rd7q6HNvu5KN35zAfZHree97Zt7vnjj03k+nEqXH7
+        axt2HJvZeLNqV1zuy+6josETX2qIHdm2+NR0v+X/+Qwt7sb8Zckv/ZFvfFe5Ylmo4d+N3/2Z
+        Vz/M+ezEYiZeGsZ1aeLXSSfEa5ov+Kaq8VzJEoyz+boqyPTgIg6/J0rPmHYlG3x7uH6OqZzz
+        E0XXa7N9t5+/fE0p8uz59MyWi0ZfZZV5E2eofTkck7HCb+aUlwkv2MsmfD949XBr72FLsw5H
+        nwfO21evCRGJYnzuHdPCbjEt8/8+k9g0k8Rlf35lu11Y+/i2EktxRqKhFnNRcSIAJyv3OuoD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7oeU+STDdq2sFvMOd/CYvH02CN2
+        i0fL/CwubOtjtbi8aw6bxZMp+9ks2lc+ZbP4MOE/k8WxBWIWmw9/YrH4dvoNo8W1L6dZHHg8
+        tqy8yeSxc9Zddo8Fm0o9Nq3qZPN4sXkmo8f7fVfZPD5vkgtgj9KzKcovLUlVyMgvLrFVija0
+        MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DL+DzzC3PBRoGKLZP3sjQwLuLrYuTg
+        kBAwkTgxLaiLkYtDSGApo8SB/ouMEHEpiZVz07sYOYFMYYk/17rYIGqeMkq8mvqVFaSGTUBP
+        Yu3aCJAaEQFNie+nXrKC1DALtDBL7Dh4mB0kISzgJfFm3nNWEFtIwEziwelmJhCbRUBV4tma
+        LWBxToFaieeH37GBzOQVMJd4e6ceJCwqYCnx59lHsDG8AoISJ2c+YQGxmQWyJb6ufs48gVFg
+        FpLULCSpWUCTmIFOWr9LHyKsLbFs4WtmCNtWYt269ywLGFlXMYqklhbnpucWG+oVJ+YWl+al
+        6yXn525iBEbltmM/N+9gnPfqo94hRiYOxkOMKkCdjzasvsAoxZKXn5eqJMK7XVU+WYg3JbGy
+        KrUoP76oNCe1+BCjKdBnE5mlRJPzgekiryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7
+        NbUgtQimj4mDU6qBaWO485MHHSn36zmzODZv7w0yEuX/fT9Lwenn4tMir1Oj2uanBNxJTMjI
+        WPFg/+2MVdmGm988/Zbu9o1j8oqSLdX3r8y+90j829/0j8r8AbPTHDfVeu0S2PKTnZMtjWHS
+        Yum82j9bxeO/n6r/9Wh/WuHyyaopSvPZmI2fu6hON7v04fSjd8duvBNWmLj9Ze/upLQco2Oq
+        VvfePTg1p2XyxyvL/NJTwjxqloSondYJXTPnW+FZVfds5TyfhPrbWjk1y3hXzRS41jXhzA9n
+        jUvzZtn/D6wLeV79qo37pOBTgdILQcdWd9Ve604MMv7YfqLxT+bWs3zFmqJiL9RuzJyS8XyO
+        q49NquTxrj9eFxZs8VFiKc5INNRiLipOBABw2qlpXwMAAA==
+X-CMS-MailID: 20220912201920eucas1p1ff844ab7a87a01fdb0ae98295e103147
+X-Msg-Generator: CA
+X-RootMTR: 20220912201920eucas1p1ff844ab7a87a01fdb0ae98295e103147
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220912201920eucas1p1ff844ab7a87a01fdb0ae98295e103147
+References: <20220912194031.808425-1-nhuck@google.com>
+        <CGME20220912201920eucas1p1ff844ab7a87a01fdb0ae98295e103147@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
+It was <2022-09-12 pon 12:40>, when Nathan Huckleberry wrote:
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev=
+).
+>
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+>
+> The return type of ax88796c_start_xmit should be changed from int to
+> netdev_tx_t.
+>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: [...]
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> ---
+>  drivers/net/ethernet/asix/ax88796c_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-On 9/9/22 16:44, jim.cromie@gmail.com wrote:
-> On Wed, Sep 7, 2022 at 12:19 PM Jason Baron <jbaron@akamai.com> wrote:
->>
->>
->>
->> On 9/4/22 17:40, Jim Cromie wrote:
->>> Add module-to-class validation:
->>>
->>>   #> echo class DRM_UT_KMS +p > /proc/dynamic_debug/control
->>>
->>> If a query has "class FOO", then ddebug_find_valid_class(), called
->>> from ddebug_change(), requires that FOO is known to module X,
->>> otherwize the query is skipped entirely for X.  This protects each
->>> module's class-space, other than the default:31.
->>>
->>> The authors' choice of FOO is highly selective, giving isolation
->>> and/or coordinated sharing of FOOs.  For example, only DRM modules
->>> should know and respond to DRM_UT_KMS.
->>>
->>> So this, combined with module's opt-in declaration of known classes,
->>> effectively privatizes the .class_id space for each module (or
->>> coordinated set of modules).
->>>
->>> Notes:
->>>
->>> For all "class FOO" queries, ddebug_find_valid_class() is called, it
->>> returns the map matching the query, and sets valid_class via an
->>> *outvar).
->>>
->>> If no "class FOO" is supplied, valid_class = _CLASS_DFLT.  This
->>> insures that legacy queries do not trample on new class'd callsites,
->>> as they get added.
->>
->>
->> Hi Jim,
->>
->> I'm wondering about the case where we have a callsite which is marked
->> as 'class foo', but the query string is done by say module and file, so:
->>
->> # echo "module bar file foo.c +p" > /proc/dynamic_debug_control
->>
->> With the proposed code, I think this ends up not enabling anything right?
-> 
-> correct - the only way to enable :    pr_debug_cls(CL_FOO, " ...")
-> is
->    echo class CL_FOO +p > control
-> 
-> 1st, existing dyndbg query uses, whether ad-hoc or scripted,
-> were not written in anticipation of new / classified subsystems.
-> 
-> 2nd, new class users dont want to sit in coach. no damn legroom.
-> 
-> 3rd, consider DRM, which already has drm.debug
-> ie:  /sys/module/drm/parameters/debug
-> and prefers it, at least by inertia.
-> protecting these new class'd callsites (3-5k of them)
-> from casual (unintended) manipulations of the kernel-wide
-> dyndbg state seems prudent, and a usability win.
-> 
-> Not everyone will use module bar, requiring "class foo"
-> guarantees that changes are intentional.
-> 
+Acked-by: Lukasz Stelmach <l.stelmach@samsung.com>
 
-I sort of get that your trying to protect these from unintended toggling,
-but I would say it's that's not really new with these statements,
-prr_debug() come and go before and I'm not aware of this is an issue.
-And in any case, a query can be modified.
+> diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethe=
+rnet/asix/ax88796c_main.c
+> index 6ba5b024a7be..f1d610efd69e 100644
+> --- a/drivers/net/ethernet/asix/ax88796c_main.c
+> +++ b/drivers/net/ethernet/asix/ax88796c_main.c
+> @@ -381,7 +381,7 @@ static int ax88796c_hard_xmit(struct ax88796c_device =
+*ax_local)
+>  	return 1;
+>  }
+>=20=20
+> -static int
+> +static netdev_tx_t
+>  ax88796c_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  {
+>  	struct ax88796c_device *ax_local =3D to_ax88796c_device(ndev);
 
-I think what bugs me is now query stuff works differently. Previously,
-all the query strings - 'module', 'file', 'line', 'format', were
-used as additional selectors, but now we have this new one 'class'
-that works differently as it's requited for pr_debug_cls() statements.
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
 
-> 
-> 
->> Because valid class is set to _DPRINTK_CLASS_DFLT and then:
->> 'dp->class_id != valid_class' is true?
->>
->> This seems confusing to me as a user as this doesn't work like the
->> other queries....so maybe we should only do the
->> 'dp->class_id != valid_class' check *if* query->class_string is set,
->> see below.
->>
-> 
-> Could you clarify whether you think this is a logic error
-> or a frame-of-reference difference as elaborated above ?
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-'frame-of-reference' I'm questioning the how 'class' works as mentioned
-above not the implementation.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-
--Jason
-
-> 
-> ISTM theres a place for a well-worded paragraph in doc
-> about the class distinction, perhaps a whole for-authors section.
-> 
-> 
-> 
->>
->>
->>>
->>> Also add a new column to control-file output, displaying non-default
->>> class-name (when found) or the "unknown _id:", if it has not been
->>> (correctly) declared with one of the declarator macros.
->>>
->>> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
->>> ---
->>>  lib/dynamic_debug.c | 76 ++++++++++++++++++++++++++++++++++++++++-----
->>>  1 file changed, 68 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
->>> index b71efd0b491d..db96ded78c3f 100644
->>> --- a/lib/dynamic_debug.c
->>> +++ b/lib/dynamic_debug.c
->>> @@ -56,6 +56,7 @@ struct ddebug_query {
->>>       const char *module;
->>>       const char *function;
->>>       const char *format;
->>> +     const char *class_string;
->>>       unsigned int first_lineno, last_lineno;
->>>  };
->>>
->>> @@ -136,15 +137,33 @@ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
->>>                       fmtlen--;
->>>       }
->>>
->>> -     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u\n",
->>> -              msg,
->>> -              query->function ?: "",
->>> -              query->filename ?: "",
->>> -              query->module ?: "",
->>> -              fmtlen, query->format ?: "",
->>> -              query->first_lineno, query->last_lineno);
->>> +     v3pr_info("%s: func=\"%s\" file=\"%s\" module=\"%s\" format=\"%.*s\" lineno=%u-%u class=%s\n",
->>> +               msg,
->>> +               query->function ?: "",
->>> +               query->filename ?: "",
->>> +               query->module ?: "",
->>> +               fmtlen, query->format ?: "",
->>> +               query->first_lineno, query->last_lineno, query->class_string);
->>>  }
->>>
->>> +static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
->>> +                                                       const char *class_string, int *class_id)
->>> +{
->>> +     struct ddebug_class_map *map;
->>> +     int idx;
->>> +
->>> +     list_for_each_entry(map, &dt->maps, link) {
->>> +             idx = match_string(map->class_names, map->length, class_string);
->>> +             if (idx >= 0) {
->>> +                     *class_id = idx + map->base;
->>> +                     return map;
->>> +             }
->>> +     }
->>> +     *class_id = -ENOENT;
->>> +     return NULL;
->>> +}
->>> +
->>> +#define __outvar /* filled by callee */
->>>  /*
->>>   * Search the tables for _ddebug's which match the given `query' and
->>>   * apply the `flags' and `mask' to them.  Returns number of matching
->>> @@ -159,6 +178,8 @@ static int ddebug_change(const struct ddebug_query *query,
->>>       unsigned int newflags;
->>>       unsigned int nfound = 0;
->>>       struct flagsbuf fbuf, nbuf;
->>> +     struct ddebug_class_map *map = NULL;
->>> +     int __outvar valid_class;
->>>
->>>       /* search for matching ddebugs */
->>>       mutex_lock(&ddebug_lock);
->>> @@ -169,9 +190,22 @@ static int ddebug_change(const struct ddebug_query *query,
->>>                   !match_wildcard(query->module, dt->mod_name))
->>>                       continue;
->>>
->>> +             if (query->class_string) {
->>> +                     map = ddebug_find_valid_class(dt, query->class_string, &valid_class);
->>> +                     if (!map)
->>> +                             continue;
->>
->> So remove the else here.
->>
->>> +             } else {
->>> +                     /* constrain query, do not touch class'd callsites */
->>> +                     valid_class = _DPRINTK_CLASS_DFLT;
->>> +             }
->>> +
->>>               for (i = 0; i < dt->num_ddebugs; i++) {
->>>                       struct _ddebug *dp = &dt->ddebugs[i];
->>>
->>> +                     /* match site against query-class */
->>> +                     if (dp->class_id != valid_class)
->>
->> And then make this: if (query->class_string && (dp->class_id != valid_class))
->>
->> thoughts?
->>
->>
->>> +                             continue;
->>> +>                    /* match against the source filename */
->>>                       if (query->filename &&
->>>                           !match_wildcard(query->filename, dp->filename) &&
->>> @@ -420,6 +454,8 @@ static int ddebug_parse_query(char *words[], int nwords,
->>>               } else if (!strcmp(keyword, "line")) {
->>>                       if (parse_linerange(query, arg))
->>>                               return -EINVAL;
->>> +             } else if (!strcmp(keyword, "class")) {
->>> +                     rc = check_set(&query->class_string, arg, "class");
->>>               } else {
->>>                       pr_err("unknown keyword \"%s\"\n", keyword);
->>>                       return -EINVAL;
->>> @@ -854,6 +890,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
->>>       return dp;
->>>  }
->>>
->>> +#define class_in_range(class_id, map)                                        \
->>> +     (class_id >= map->base && class_id < map->base + map->length)
->>> +
->>> +static const char *ddebug_class_name(struct ddebug_iter *iter, struct _ddebug *dp)
->>> +{
->>> +     struct ddebug_class_map *map;
->>> +
->>> +     list_for_each_entry(map, &iter->table->maps, link)
->>> +             if (class_in_range(dp->class_id, map))
->>> +                     return map->class_names[dp->class_id - map->base];
->>> +
->>> +     return NULL;
->>> +}
->>> +
->>>  /*
->>>   * Seq_ops show method.  Called several times within a read()
->>>   * call from userspace, with ddebug_lock held.  Formats the
->>> @@ -865,6 +915,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
->>>       struct ddebug_iter *iter = m->private;
->>>       struct _ddebug *dp = p;
->>>       struct flagsbuf flags;
->>> +     char const *class;
->>>
->>>       if (p == SEQ_START_TOKEN) {
->>>               seq_puts(m,
->>> @@ -877,7 +928,16 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
->>>                  iter->table->mod_name, dp->function,
->>>                  ddebug_describe_flags(dp->flags, &flags));
->>>       seq_escape_str(m, dp->format, ESCAPE_SPACE, "\t\r\n\"");
->>> -     seq_puts(m, "\"\n");
->>> +     seq_puts(m, "\"");
->>> +
->>> +     if (dp->class_id != _DPRINTK_CLASS_DFLT) {
->>> +             class = ddebug_class_name(iter, dp);
->>> +             if (class)
->>> +                     seq_printf(m, " class:%s", class);
->>> +             else
->>> +                     seq_printf(m, " class unknown, _id:%d", dp->class_id);
->>> +     }
->>> +     seq_puts(m, "\n");
->>>
->>>       return 0;
->>>  }
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmMflDwACgkQsK4enJil
+gBCQAgf+JuMtztJB1UODPRAMGslnlVGtuSPkAD34lYD2XiYUtEqSTnE2AvS7zRl6
+ciMUiYzMP3s00YwkM7wEwuGtIf93o/MmwlbkVV2fTQYAgh4hs74SVlgE7KR44FiT
+B+NCDuBWB1qnkR22d+xkmZShAFqhpHUPFoBY/hSqmz8/t2LIi7MCBh6/EAJOoqXi
+BQ4W8KlBpLqRwltkph2xvQxMTCc59l59IzXEIL5RE/fRaXfS+4SRxvTnhGHGaEKI
+IsBcjQ0OpfEw74CY/ysO7LFhF6rkSLp+7BeJYVwXks2jaondpKUg8fvfIwMKUYpM
+ODv8Xl5+ycmFhqzYZh901v5xPpvSEw==
+=8cv3
+-----END PGP SIGNATURE-----
+--=-=-=--
