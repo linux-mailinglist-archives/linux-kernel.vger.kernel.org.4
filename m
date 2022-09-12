@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567B65B56E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 10:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20775B56E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 11:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiILI6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 04:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S229950AbiILI74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 04:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiILI6n (ORCPT
+        with ESMTP id S229849AbiILI7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:58:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74343186EF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:58:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so11658068pja.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 01:58:42 -0700 (PDT)
+        Mon, 12 Sep 2022 04:59:52 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E98C6140;
+        Mon, 12 Sep 2022 01:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=9xXKuA/RuFEtQpMHeBL2xKtprriOHjs4a6CMxj7T1LE=;
-        b=B9SvQWz54Q8Fjsqm7tHuL2MioTs8PrE9sYDRrGOhVgVhUAK9gKTF1CzTUSU+4DN9fE
-         UzZ0s5pnsQ2HI9YYr8mazFVs1fMSI+GXEvJ1J9Y8Tx4JZ5Gu2oU9OMAgTxYcUwLYF/HY
-         USg5CJ/EcmSXNZlPGM7YMFF0QUTZvWJi2H0eDUE1/WJ9q1R3kOMZ21DW8/W2HnZRFjVh
-         eCrPwOXlfVnmXmHR+hxmRz2gL2php4RZ5/PHtpcNKd6S+4THdcmiAJs4Jorl7222RDbS
-         0jy/WAl7Ky2p6x61AZ0cCX3ZcCVTMDfwpAFGEF8LVrUps4CgZy2+lOiKTs+K4CWio6gl
-         Gwjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9xXKuA/RuFEtQpMHeBL2xKtprriOHjs4a6CMxj7T1LE=;
-        b=OxE6vcxONHHknCxo/S6NIeaV+VGOU7hDtg5RRstCx1mWJ7nUSjAdkjsQPJZRwLTXDU
-         pn6siJPun3SGK25OnhRU+nc88F63JhqEhRSbitenrOQtZOfGKgx+I9Mi4Z6b68254uRs
-         ImCbzEudjWCBNrToUXkhjqIxCB/mr7BuarYS+Ylo0O6YDLbqg6DjSq57PPEZrLMS9I00
-         vgkWg2L8Ay3TUHTR4v0Yl0wUP4B5O3lbTHicQnyGo+xKFNzEBgVma9cybsrnht/K7Mhq
-         WWNPpzxjJVbWf5OHwD4r2PLf6aSe6Da7qsoI3xF0FPpzj4ofoXZW49rKa6wyvahzYL2d
-         xONA==
-X-Gm-Message-State: ACgBeo0jr/GnZJwxwi6MoF9aWyzealejQJgA8yhFXeGMbJQtUiFlTYjS
-        L7uQKX4lTcqjODxoKHl7yi8=
-X-Google-Smtp-Source: AA6agR7rYUlTsgIRn6HiQ9hWEpTbYoeDhZAYi0FA4RkjDwfsFPHcxHaQjhmKTL9AEWM6OO5vJ0LoBA==
-X-Received: by 2002:a17:902:f641:b0:172:e2f8:7efb with SMTP id m1-20020a170902f64100b00172e2f87efbmr24718802plg.140.1662973121973;
-        Mon, 12 Sep 2022 01:58:41 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001730a1af0fbsm5446503pln.23.2022.09.12.01.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 01:58:40 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     mingo@redhat.com
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] sched: remove duplicate referenced header files
-Date:   Mon, 12 Sep 2022 08:58:24 +0000
-Message-Id: <20220912085823.17983-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662973189;
+  x=1694509189;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DKN6hL6vPsfgdb7gkkoqchU9wqq/XNLFTrAad6WRetQ=;
+  b=UXyF4t/PRC70Yfz6wCNuYq3H0wY0tjKQXX6xFuKzTsvPjQ+GuINUor/N
+   uPAe+wuRjYHaSi7GMKLvRp7wtbWwawpRjhba9HhIDyH021yrUu45n9tNU
+   FklVGhNlKdYDXdy+bWZDs102hU0BGzhSWp0afxE7UV/0j3yVFlkcZkNRT
+   ANXHXOnvuJHvAGhrEIw6skVaExwqPP4Vkq1OK5drvDzlVYzBGIkZDy6JO
+   deAlotsi4FpLKBW0pig5lyj+ts4FbWCR2bqI9a60OldNUrwiNIK87GA/k
+   VmdMzt1fFLS3d0cM+IaG8QC/jCg+b3AxqCFU5f+h0e/uo9O5CtBrQDmCY
+   Q==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Camel Guo <camel.guo@axis.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: [PATCH] i2c: exynos5: Calculate t_scl_l, t_scl_h according to i2c spec
+Date:   Mon, 12 Sep 2022 10:59:43 +0200
+Message-ID: <20220912085943.1098651-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Previously the duty cycle was divided equally into h_scl_l, t_scl_h.
+This makes the low period of the SCL clock in Fast Mode is only 1.25us
+which is way lower than the minimal value (1.3) specified in i2c
+specification. In order to make sure t_scl_l, t_scl_h always fullfill
+i2c specification, this commit calculates t_scl_l using this formula:
 
-linux/cgroup.h is included more than once,
-and linux/static_key.h is included more than once.
+t_scl_l = clk_cycle *
+    ((t_low_min + (scl_clock - t_low_min - t_high_min) / 2) / scl_clock)
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+where:
+t_low_min is the minimal value of low period of the SCL clock in us;
+t_high_min is the minimal value of high period of the SCL clock in us;
+scl_clock is converted from SCL clock frequency into us.
+
+Signed-off-by: Camel Guo <camel.guo@axis.com>
 ---
- kernel/sched/sched.h | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/i2c/busses/i2c-exynos5.c | 34 +++++++++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f616e0cec20c..ab75e421a96b 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -75,14 +75,9 @@
- #include "../workqueue_internal.h"
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index 4a6260d04db2..72bc8adea8d5 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -267,7 +267,7 @@ static void exynos5_i2c_clr_pend_irq(struct exynos5_i2c *i2c)
+  * exynos5_i2c_set_timing: updates the registers with appropriate
+  * timing values calculated
+  *
+- * Timing values for operation are calculated against either 100kHz
++ * Timing values for operation are calculated against 100kHz, 400kHz
+  * or 1MHz controller operating frequency.
+  *
+  * Returns 0 on success, -EINVAL if the cycle length cannot
+@@ -330,6 +330,23 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
+ 	 *
+ 	 * Constraints: 4 <= temp, 0 <= CLK_DIV < 256, 2 <= clk_cycle <= 510
+ 	 *
++	 * To split SCL clock into low, high periods appropriately, one
++	 * proportion factor for each I2C mode is used, which is calculated
++	 * using this formula.
++	 * ```
++	 * ((t_low_min + (scl_clock - t_low_min - t_high_min) / 2) / scl_clock)
++	 * ```
++	 * where:
++	 * t_low_min is the minimal value of low period of the SCL clock in us;
++	 * t_high_min is the minimal value of high period of the SCL clock in us;
++	 * scl_clock is converted from SCL clock frequency into us.
++	 *
++	 * Below are the proportion factors for these I2C modes:
++	 *                t_low_min, t_high_min, scl_clock, proportion
++	 * Standard Mode:     4.7us,      4.0us,      10us,      0.535
++	 * Fast Mode:         1.3us,      0.6us,     2.5us,       0.64
++	 * Fast-Plus Mode:    0.5us,     0.26us,       1us,       0.62
++	 *
+ 	 */
+ 	t_ftl_cycle = (readl(i2c->regs + HSI2C_CONF) >> 16) & 0x7;
+ 	temp = clkin / op_clk - 8 - t_ftl_cycle;
+@@ -343,8 +360,19 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
+ 		return -EINVAL;
+ 	}
+ 
+-	t_scl_l = clk_cycle / 2;
+-	t_scl_h = clk_cycle / 2;
++	/*
++	 * Scale clk_cycle to get t_scl_l using the proption factors for individual I2C modes.
++	 */
++	if (op_clk <= I2C_MAX_STANDARD_MODE_FREQ)
++		t_scl_l = clk_cycle * 535 / 1000;
++	else if (op_clk <= I2C_MAX_FAST_MODE_FREQ)
++		t_scl_l = clk_cycle * 64 / 100;
++	else
++		t_scl_l = clk_cycle * 62 / 100;
++
++	if (t_scl_l > 0xFF)
++		t_scl_l = 0xFF;
++	t_scl_h = clk_cycle - t_scl_l;
+ 	t_start_su = t_scl_l;
+ 	t_start_hd = t_scl_l;
+ 	t_stop_su = t_scl_l;
 
- #ifdef CONFIG_CGROUP_SCHED
--#include <linux/cgroup.h>
- #include <linux/psi.h>
- #endif
-
--#ifdef CONFIG_SCHED_DEBUG
--# include <linux/static_key.h>
--#endif
--
- #ifdef CONFIG_PARAVIRT
- # include <asm/paravirt.h>
- # include <asm/paravirt_api_clock.h>
+base-commit: ce888220d5c7a805e0e155302a318d5d23e62950
 -- 
-2.15.2
+2.30.2
 
