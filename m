@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AFC5B59E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5255B59E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiILMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S229463AbiILMDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiILMCq (ORCPT
+        with ESMTP id S230038AbiILMCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:02:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B4F3DBD2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:02:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oXi8p-0000HU-5f; Mon, 12 Sep 2022 14:02:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:75e7:62d4:691e:2f47])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A554E12F5;
-        Mon, 12 Sep 2022 12:02:18 +0000 (UTC)
-Date:   Mon, 12 Sep 2022 14:02:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Ziyang Xuan <william.xuanziyang@huawei.com>, edumazet@google.com,
-        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] can: bcm: check the result of can_send() in
- bcm_can_tx()
-Message-ID: <20220912120210.6oc4tbb7xjxhjihc@pengutronix.de>
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <5c0f2f1bd1dc7bbb9500afd4273e36378e00a35d.1662606045.git.william.xuanziyang@huawei.com>
- <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
+        Mon, 12 Sep 2022 08:02:53 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4ACC130546
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 05:02:45 -0700 (PDT)
+Received: (qmail 565895 invoked by uid 1000); 12 Sep 2022 08:02:43 -0400
+Date:   Mon, 12 Sep 2022 08:02:43 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Cc:     Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <Yx8f40ZAy2qX1V0+@rowland.harvard.edu>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
+ <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
+ <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
+ <674d0fda790d4650899e2fcf43894053@huawei.com>
+ <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
+ <YxynQmEL6e194Wuw@rowland.harvard.edu>
+ <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rnwntybvven35lb2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 12, 2022 at 10:46:38AM +0000, Jonas Oberhauser wrote:
+> Hi Alan,
+> 
+> Sorry for the confusion.
+> 
+> >  [...] it's certainly true (in all of these
+> models) than for any finite number N, there is a feasible execution in which a loop runs for more than N iterations before the termination condition eventually becomes true.
+> 	
+> Indeed; but more interestingly, as the Theorem 5.3 in "making weak memory models fair" states, under certain conditions it suffices to look at graphs where N=1 to decide whether a loop can run forever (despite all writes propagating to all cores eventually) or will always terminate.
 
---rnwntybvven35lb2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cool!
 
-On 08.09.2022 08:47:57, Oliver Hartkopp wrote:
-> Sorry, but NACK.
->=20
-> The curr_frame counter handles the sequence counter of multiplex messages.
->=20
-> Even when this single send attempt failed the curr_frame counter has to
-> continue.
->=20
-> For that reason the comment about statistics *before* the curr_frame++ mi=
-ght
-> be misleading.
->=20
-> A potential improvement could be:
->=20
-> 	if (!(can_send(skb, 1)))
+> And since herd can generate all such graphs, herd could be extended to make that decision and output it, just like many other tools already do.
+> 
+> To illuminate this on an example, consider the program sent by Peter earlier:
+> 	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
+> 
+> Without the assumption that fr is prefix finite, the graph with infinitely many reads of thread 2 all reading the initial value (and hence being fr-before the store foo=1) would be allowed. However, the tools used to analyze the qspinlock all assume that fr is prefix finite, and hence that such a graph with infinitely many fr-before events does not exist. Because of that, all of the tools will say that this loop always terminates.
+> 
+> However, if you change the code into the following:
+> 
+> 	WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); while (!READ_ONCE(foo));
+> 
+> then even under the assumption of fr-prefix-finiteness, the coherence order in which WRITE_ONCE(foo, 1); is overwritten by WRITE_ONCE(foo, 0); of thread 2 would lead to non-terminating behaviors, and these are detected by those tools. Furthermore, if we synchronize the two stores as follows:
+> 
+> 	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); smp_store_release(&bar,1); while (!READ_ONCE(foo));
+> 
+> then the graphs with that co become prohibited as they all have hb cycles, and the tools again will not detect any liveness violations. But if we go further and relax the release barrier as below
+> 
+> 
+> 	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); WRITE_ONCE(bar,1); while (!READ_ONCE(foo));
+> 
+> then the hb cycle disappears, and the coherence order in which foo=0 overwrites foo=1 becomes allowed. Again, the tools will detect this and state that thread 2 could be stuck in its while loop forever.
 
-Nitpick:
-In the kernel we usually assign the return value to a variable first,
-and evaluate this variable in the if ().
+Neat stuff; I'll have to think about this.
 
-> 		op->frames_abs++;
->=20
-> 	op->currframe++;
+> In each of these cases, the decision can be made by looking for a graph in which the loop is executed for one iteration which reads from foo=0, and checking whether that store is co-maximal. So in some sense this is all that is needed to express the idea that a program can run forever, even though only in some very limited (but common) circumstances, namely that the loop iteration that repeats forever does not create modifications to state that are observed outside the loop. Luckily this is a very common case, so these checks have proven quite useful in practice.
+> 
+> The same kind of check could be implemented in herd together with either the implicit assumption that fr is prefix finite (like in other tools) or with some special syntax like
+> 
+> prefix-finite fr | co as fairness
+> 
+> which hopefully clears up the question below:
+> 
+> > > From an engineering perspective, I think the only issue is that cat
+> > > *currently* does not have any syntax for this,
+> 
+> > Syntax for what?  The difference between wmb and mb?
+> > [...]
+> 
+> 
+> Thanks for your patience and hoping I explained it more clearly,
 
-Marc
+Yes indeed, thank you very much.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rnwntybvven35lb2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMfH78ACgkQrX5LkNig
-011kxwgAqOqSIZx3uPc8Kfl3nqztqUiLqG9DrtssBRQfFziA8lBSlDwcOip3QywP
-1VApIpOCREvpcVeIOqW8Iz8O+3Uo90Do2GXPSh+aciJo/PgSjnKFb69iwMHV5SI6
-2lSXs56tAGjIHKESrIQUpCIaYmDHJZIPjHY/NEh1nk9gR3X/lH1+w9ts2XJJ+v9w
-suTw/v1DneHJSmdIaCj+UgiZiLl64rTWjv4BwIDibavSkunvo5sc0o9QHiH8HnB9
-KFd8kBkcSMR5JhWay/J4RPo2KtMnlFy7vPEh2whyx7Kz5FRi8HY0pr1H0AQ2SUOk
-jqq4J6cSwerwHBplJDZIdCyfjcGkYw==
-=oJz8
------END PGP SIGNATURE-----
-
---rnwntybvven35lb2--
+Alan
