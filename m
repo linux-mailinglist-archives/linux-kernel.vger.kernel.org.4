@@ -2,112 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486CB5B588E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4E35B5893
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiILKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S229977AbiILKkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiILKjL (ORCPT
+        with ESMTP id S229496AbiILKkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:39:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAED21241;
-        Mon, 12 Sep 2022 03:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662979151; x=1694515151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w3vFwdYLxWsQ9bEvrr+2hHC3zOoyKWcZ+8GtDAo7dCU=;
-  b=FUx8SQDi+VRECKMNKEnrPkpJ8h77lUkDB8/1EhzRLRgCAce1DSqj4Ind
-   BPryJaJGJCURHbm3FycsO0pHttBthL2JYA3Gc3pyWRDDVwFzFM057WQ/0
-   q5e6cwGM4zx5BpkcOPdjxOeoA9PF0iigpQA+r5z5sc18qGcSg7Yxi+Lvs
-   02wmm6NEf9vXY/qVbeDUhq6JUtaIxBdRlMjKO2DYAH3LZfb+aLw9OE1B8
-   xcOSLczz7hBLTMW+a9Akn5SICrseaiOI62IR4CP3zubvMvh3b6Qoh2Ku7
-   M2uIDcFwt2hl7feJvxAJDH/pr7tI4wMYII6D4GU7+zKl+blDsBia4UnCg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="359558492"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="359558492"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:10 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="719712154"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:39:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oXgqC-001Irg-2C;
-        Mon, 12 Sep 2022 13:39:00 +0300
-Date:   Mon, 12 Sep 2022 13:39:00 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
-Message-ID: <Yx8MRPxPrNG1XRqV@smile.fi.intel.com>
-References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
- <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
- <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
+        Mon, 12 Sep 2022 06:40:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88A12495D;
+        Mon, 12 Sep 2022 03:40:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E01FB80C67;
+        Mon, 12 Sep 2022 10:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7AFC433D6;
+        Mon, 12 Sep 2022 10:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662979240;
+        bh=DIfVeEZaLk2MHz9A0QBEd0qnfu425kQdhOpMpcQXmiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f7yIlaBJhfHKhEAsCTDhsNQhEi+bsittT7YoYl5+IoUZ50/aKc5nasLsAl0drcB5j
+         pLE21tUBXYpl6eEskGqaZ1YNAh0Kc+zml48Z8bv9FU+PjM4Q0VCaCmp+hXl3ECFaLK
+         a4CUPHrD7f/xhh+3BAC2+4FwuLywAxsSy0rm3h4U+lqpuZq+23Bh/p3I0/fHLyTTaV
+         La89zSN/hjDIz0Mhuk4nWyVkV7PxgGzlv94KMJK6ight0dxglG0B9jDwoWJwBDWaOd
+         G1fNlQBfACK9/OQKd6UsyP1Pekcp6a+C8ICd0KvrSkEDNZnHRvlosPl4wco96L/ueM
+         gpIDcrvQZ7CZA==
+Date:   Mon, 12 Sep 2022 13:40:33 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
+ EAGAIN
+Message-ID: <Yx8MoYF3Jed5G+uo@kernel.org>
+References: <20220905020411.17290-1-jarkko@kernel.org>
+ <20220905020411.17290-2-jarkko@kernel.org>
+ <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
+ <Yxp4iIKjOQflQC2i@kernel.org>
+ <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
+ <Yxq6oAcGkg33tkb8@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yxq6oAcGkg33tkb8@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 06:32:10PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Fri, Sep 09, 2022 at 07:01:36AM +0300, Jarkko Sakkinen wrote:
+> On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
+> > Hi Jarkko,
+> > 
+> > On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
+> > > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
+> > >> Hi Jarkko and Haitao,
+> > >>
+> > >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
+> > >>> From: Haitao Huang <haitao.huang@linux.intel.com>
+> > >>>
+> > >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
+> > >>> may not finish in one shot and return EAGAIN error code
+> > >>> and count of bytes of EPC pages on that operations are
+> > >>> finished successfully.
+> > >>>
+> > >>> Change the unclobbered_vdso_oversubscribed_remove test
+> > >>> to rerun the ioctl()'s in a loop, updating offset and length
+> > >>> using the byte count returned in each iteration.
+> > >>>
+> > >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
+> > >>
+> > >> Should this patch be moved to the "critical fixes for v6.0" series?
+> > > 
+> > > I think not because it does not risk stability of the
+> > > kernel itself. It's "nice to have" but not mandatory.
+> > 
+> > ok, thank you for considering it.
+> > 
+> > ...
+> > 
+> > >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
+> > >>>  	modt_ioc.offset = heap->offset;
+> > >>>  	modt_ioc.length = heap->size;
+> > >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
+> > >>> -
+> > >>> +	count = 0;
+> > >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
+> > >>>  	       heap->size);
+> > >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > >>> -	errno_save = ret == -1 ? errno : 0;
+> > >>> +	do {
+> > >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > >>> +
+> > >>> +		errno_save = ret == -1 ? errno : 0;
+> > >>> +		if (errno_save != EAGAIN)
+> > >>> +			break;
+> > >>> +
+> > >>> +		EXPECT_EQ(modt_ioc.result, 0);
+> > >>
+> > >> If this check triggers then there is something seriously wrong and in that case
+> > >> it may also be that this loop may be unable to terminate or the error condition would
+> > >> keep appearing until the loop terminates (which may be many iterations). Considering
+> > >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
+> > >> similar to how ASSERT_EQ() is used in patch 5/5.
+> > >>
+> > >> Apart from that I think that this looks good.
+> > >>
+> > >> Thank you very much for adding this.
+> > >>
+> > >> Reinette
+> > > 
+> > > Hmm... I could along the lines:
+> > > 
+> > > /*
+> > >  * Get time since Epoch is milliseconds.
+> > >  */
+> > > unsigned long get_time(void)
+> > > {
+> > >     struct timeval start;
+> > > 
+> > >     gettimeofday(&start, NULL);
+> > > 
+> > >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
+> > > }
+> > > 
+> > > and
+> > > 
+> > > #define IOCTL_RETRY_TIMEOUT 100
+> > > 
+> > > In the test function:
+> > > 
+> > >         unsigned long start_time;
+> > > 
+> > >         /* ... */
+> > > 
+> > >         start_time = get_time();
+> > >         do {
+> > >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
+> > > 
+> > >                 /* ... */
+> > >         }
+> > > 
+> > >         /* ... */
+> > > 
+> > > What do you think?
+> > 
+> > I do think that your proposal can be considered for an additional check in this
+> > test but the way I understand it it does not address my feedback.
+> > 
+> > In this patch the flow is:
+> > 
+> > 	do {
+> > 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > 
+> > 		errno_save = ret == -1 ? errno : 0;
+> > 		if (errno_save != EAGAIN)
+> > 			break;
+> > 
+> > 		EXPECT_EQ(modt_ioc.result, 0);
+> > 		...
+> > 	} while ...
+> > 
+> > 
+> > If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
+> > and modt_ioc.result != 0. This should never happen because in the kernel
+> > (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
+> > when the ioctl() returns EFAULT.
+> > 
+> > In my opinion this check should be changed to:
+> > 		ASSERT_EQ(modt_ioc.result, 0);
+> 
+> Right, I missed this. It should be definitely ASSERT_EQ(().
 
-...
+I was thinking to add patch, which adds helper to calculate static
+content length from the last item of the segment table (offset + size)
+and replace total_length calculations in various tests. 
 
-> Tentatively applied as 6.1 material.
+I won't send a new version this week because I'm at Open Source Summit
+EU and Linux Security Summit EU.
 
-Thanks!
-
-> If there are updates, we'll make changes as they go.
-
-There is one at least to fix a warning in the perf patch. Should I resend
-a fixed patch, just a fix, or entire series with a fixed patch?
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+BR, Jarkko
