@@ -2,167 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4C65B592B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01625B592A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiILLTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S229614AbiILLTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiILLTJ (ORCPT
+        with ESMTP id S229642AbiILLTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:19:09 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507CB3AB24
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:19:08 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C8nO7H001345;
-        Mon, 12 Sep 2022 11:18:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
- bh=kh1hGnZU2bw/Ynwqjmie3bTRkp8mXgF/lXYo36O5Kes=;
- b=3Lm5T8KjEMZA6tW05FlwfvVN3rhrF0v/ADvCgAC/Vr8C1XADj2FznExTQXLnymAmUUac
- gtYrI6iV+LDxqiSRJ06lMrjjVjoo7iuRqCyz3QMt1WEPn/ruiF/RCrfkWLlAIXKZx9QB
- uTuCosQ6lU2ffKbRIRKOP2AvjDbHKgDuAlnTNHH2ev3JhfCU3Pd1aek8uMT+EHGQx7jL
- U4mV6Hw/3eLp29oNi5DZfLhQfSb3AQf6K8oYht2mlE1QlcZVKA06rhfqxXqnEd5/E4rW
- 2hu6axmbY6ooZxqjq7rL80pjDaIDFIAhM+NWs0mBhgXZxfx3s+xSzfoQKbS9QKy6xub0 KQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jgjf9u4ya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 11:18:49 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28C9rFdB021739;
-        Mon, 12 Sep 2022 11:18:48 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2041.outbound.protection.outlook.com [104.47.57.41])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jgk8n46v1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 11:18:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dMeM5tWPmDj9dvmquStaOeJXuE/BdMypcX08yBX7myr4Oub3AUzCQ2umtteF6I5Xw2VL3UAwwYVAflUOrEywdU/7enu3YX2fq97UEV1UK9D3uS2R87DfIK17JA9hkegLIlZvG3JtgRIa5fpVua+FDqZqORnvLMuNtwoGmagbStFjCCloY0oa6zUc6uiupiCIikKoIar0pGDsh1j3vw4VNuK1iukuE7AZP9saV/JV78fswSJ1qIPYgQVvh2dE6fXLAf4P9HrePir2McgDzf38sHA7J68DRaEapqyIZ2mEgEqVUYHN5A2WnNm4DcGEcATzAajR4au1rlMV2lQZxp4Z2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kh1hGnZU2bw/Ynwqjmie3bTRkp8mXgF/lXYo36O5Kes=;
- b=URasjq3SYkAHNWtzVey8jpxvtmSgTOkyKnkf10v/rcgk4BFKrvD3mJU/OdN4lGgi1oTOK0kH83YZ9PfoJedWRvmRpC8c6jrpyTK6EBt/RtpgiyKSM/fQ6Uo3c5NQJDRLTKGJd3sWrZCIQsCjk1F8Iz0a82Uu7Qq7V51A2BJ6uh664DcgCD1+UqJYJ9avUZr0HhQ8btgY408h6OvQosbE8zmehKQSDY2KSxxJ5+AEob737sR1CAsWmODuY0rtw3bYa3E+DLq8x8E21q56H/XxQDCZ72O0ntl+gmrFUAUhXAv5+OesUiCEgq2cq9BIld+VHReC/YaN2czwKApaFcwDyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kh1hGnZU2bw/Ynwqjmie3bTRkp8mXgF/lXYo36O5Kes=;
- b=MQKb2+zKOz2yLSHA46wh1/bsB35Ze1wP5Lri/vmdkFLij1XGWK6Kx10dII6UFOuhPskYjiFyEzlAJroJjGkjF8POdIvjbbAuoUWdGoQkyKJ4pGItYpT5IvwsOzw+M/sORt7fj8OLUF77T71b4sg/EG84mOO+nQMca0tX1o1wbUw=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MN2PR10MB4159.namprd10.prod.outlook.com
- (2603:10b6:208:1d7::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
- 2022 11:18:46 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 11:18:46 +0000
-Date:   Mon, 12 Sep 2022 14:18:39 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        changlianzhi@uniontech.com, dmitry.torokhov@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: vt: add a bounds checking in vt_do_kdgkb_ioctl()
-Message-ID: <Yx8Vj2GfGxehRAtR@kili>
-References: <20220908075403.27930-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=utf-8
+        Mon, 12 Sep 2022 07:19:04 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB3A2A432
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662981543; x=1694517543;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=apbHIdQHDWWREdLt5vj9vJHe5VmkPk8Hz5f49OWlcMA=;
+  b=fP6sVklyLcGZIHpnjruv26kbbQHeBpNPQMXkQ4muMo7ZXWpiiE7kI9b2
+   ZMi8Xi1OrJgnx2CbBixvOvHXQ9AYfPmV6DgbI+r2hJ/zv8uKUhlSRE/3E
+   t5WxSPtOkOuHBcs95W+vZ/IGvFYSKerUtX8Vc9Ro7jt42q786IoePEwLS
+   9U7rQNlFeooqlnmpiybnxadPRgGN9sk5U8s9BjM+YcSC98nAtKvfCzXUA
+   l37bL0etdcw/2vOv7YdWzgPRgIEE/zT4cw0RR4RaPiQzzeggKK0rCsyf3
+   aUxRpXUa7Hc3Q27d3lPmVrJZDUIShIIogGdJVF9nlI/V5vLjvf8YlTBmp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="284860960"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="284860960"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:19:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="758357843"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by fmsmga001.fm.intel.com with SMTP; 12 Sep 2022 04:19:00 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 14:18:59 +0300
+Date:   Mon, 12 Sep 2022 14:18:59 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
+ helper
+Message-ID: <Yx8Vo4x7frhbElPq@intel.com>
+References: <20220912101522.69482-1-javierm@redhat.com>
+ <Yx8Ms2jhgwpiDqA6@intel.com>
+ <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220908075403.27930-1-hbh25y@gmail.com>
-X-ClientProxiedBy: ZRAP278CA0004.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:10::14) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|MN2PR10MB4159:EE_
-X-MS-Office365-Filtering-Correlation-Id: b76c2baf-7a41-4b28-28d4-08da94b08e80
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jjh70KF2QenBeVmpu5UHsenCqqBkli80jeyyx9UkIyOr1D+7zuvhkRHX4AlsuH3t5SFb71tF2+9oWAyGMmK84VqkqB7/ImVRgZq/b1G6j6PkVdTqf++EOtzS0xX5PRHTmwmBA0qlbkN+zbBt5vVZdkaT0QYO+uEzh4s5nnuOmonetIzMRfc7YSQufjJIspiOIwhSGlgLwOBRUpZdcyBicRfip9OcU49quUZ8glj/oQf3UYAOOE0oHp5dZo2zCK/6YlRvdj5pcGcH2y3FnJKffpfmenIIZNSh0bBSzpbK3viAQFWImofLUXTJqHFd2pe8Kn3fQGlssynXvdo/vRvpvvDRt3aUp5NzjQ1PXM3NQJXIfelFMZ6JsIEJkaz4T/l4H7uNdOdTHS4nVsVmiZZLGUZaMiKywsL+2EZl2UxvDBpXXvv0aeI86NZy6k0HRgCG85t2YaEGUaTptlc2q/OlPm4804uiPS1B8FBz+LOpayR4DxDhuJyBaYFH5Y53Olkru8M1Lyl5Bi3xJINfFFhunMI0QKCUqMj7ieegn46js5QDXpuy7iVg3WRlruG87uiucvnI4oBdQ4csOcr5rqsS74vNBfIS0l+6k8zaX0HSyJH3sbaSOPGYg2qXoHPvK478bzkIXHJpg3VACEiSr6L2hzocUTzNOfN6hwIuJ2xhO6hhjlp8L6twNTc4rG64rqDTBWQiICQGxA1pVFeCmdEvzA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(39860400002)(136003)(346002)(366004)(396003)(84040400005)(26005)(6512007)(9686003)(33716001)(38100700002)(5660300002)(4744005)(66476007)(66946007)(8676002)(66556008)(4326008)(86362001)(44832011)(8936002)(83380400001)(6486002)(316002)(6506007)(6916009)(2906002)(186003)(478600001)(6666004)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEtFQlpCN2FNSFNjOFpGcWY0Nkh1MHF1eE4wcXV5dkhyMVpsa05pOUxmWjFP?=
- =?utf-8?B?cE9JUnBML00xUFpjTjlXNDJmTkxkWTZtU0JaalZXbGJNU0tJNFp3bFhxbk5X?=
- =?utf-8?B?WmdvZlBMYnowM2R4ejJHbTAwa1lvRDBiOVI3T0FVajgrV0Q2eElHNXJtUk1J?=
- =?utf-8?B?d1hoSlB0NlFEa2tBelBPR0hOOHdQWnp5QkJOZmRUNGpteko3WFlCeVovTmI2?=
- =?utf-8?B?MUJNTnQ1Z3VLczFnSXVhWXAzUWoyV1Iyd3hUdzl6UWk1YlVIUW9BY2YwUUtx?=
- =?utf-8?B?aTBuZTNRdmxOQ2Nnc0tpcWl3SmxGYkdHeS9JQ2lEL25qbEt1OHZ6ZnJXOXNP?=
- =?utf-8?B?VENPanhsN2lobzBKZExBZFZCSS9jUzhaOVVDWjR1b3VNK0ZjQXpsSW9Jdkdo?=
- =?utf-8?B?ejF4ZzhjQzd2dzRORXJ4aG9QTEVOSHg4aWlseGdjcWE5dDZpRm8zNGo2dnBv?=
- =?utf-8?B?Mm1Kc0RBY0M3QVZjakwvTG5hb3YrT3BQN0dQV0x0QjkwVTlEc2Q3VjFiMEtV?=
- =?utf-8?B?dDlkbWVrOXY0Y3FoRUhOUGVreHhqb21Dd2tDMWpIcEl3OURlVTdhbEN0TjVQ?=
- =?utf-8?B?RXJqbXlsVWdpYVllcmNwYXNGMFhSU3NBMUFDckxZRU5qMWpteElaTkoxM3dq?=
- =?utf-8?B?UjdBWDN6S1M1c0lObjBHMUVlcUlsK2NwbnFLOFVGUTdEa0NVWnRKdERLbzZY?=
- =?utf-8?B?ZDl1RFlhOWI2Mk5TbFJEVE9Bdjl5Y3liUUxlSHBzSUNpY014SDZCQnJZaGY4?=
- =?utf-8?B?ZFJkQ3A2SDU3eEdLNFRKd29teUlYalBvck5kL2lPMXJlVFBHVzFqbDdxMzYw?=
- =?utf-8?B?cTlMa1Y2dksyNWUyTnZINjF4VFpqYzQvM1hkdE0zSVdGeHpKaDBNVUR1VVFs?=
- =?utf-8?B?Ymg0c2FOdkNIMzJXYjdpVmNWSldwVEsxMjUvSmYwaXFDR1NRdGxQdXJ6NWtC?=
- =?utf-8?B?cll0S0NBck5EZDJ4eGdGWDlUQ1RnQ0Q5cXlSNHNmVGRJZi9WcEV1MC8vZmsz?=
- =?utf-8?B?TVlJRHdYU2RCL2FDMUVVV1dHZzNtUVhTM2t4a2ltTGVuTDZkTXdjSzhJMWJs?=
- =?utf-8?B?cW5xU1lKelY3c25lWEpFZHYweFE0eDNtWlNZcWJZQkZPWC9Xd0FNa2YwSTZj?=
- =?utf-8?B?U29BMy91TmhmdVNRVWI0Zk54cHZiYW5ZVmhqSWlhMnM4OHFxR2FrZHRYYzl1?=
- =?utf-8?B?cVdGa3lLTHdKNmJhUGRnamlVZnpQWCttK2lkczJQRmdFZUJibGZRdHdwNTUx?=
- =?utf-8?B?R01OM3ZXQnN1eGVsU2QrUms4WkNEMUQ4d2N0YzM5eWJpcTBZemJSRmpIMWF6?=
- =?utf-8?B?eVpHa1pNNUp4VlNSVGhTaHUwOEZyQUNMdnppQnJjUVZOc3d6b2lHK0NOeHhv?=
- =?utf-8?B?V2FkQzl2VkR3V0ZDUmpEVW02OUdZOWV5eWN2MjVJZDJ0V0JqLzNCQVhNYTYz?=
- =?utf-8?B?UDFNSlRtNXhYYzlGQ0RXTUpZS2FHVkI5RE5DcXB5UUIzUWQvdDcvUkUwVk5p?=
- =?utf-8?B?TXozZGhEcTJWTFBRT2dydXpQWXIwMGQrWXVwRzN0YmZpNzdkV0M1MHprUlQ0?=
- =?utf-8?B?L0xnZ1J3bjFZK1YwRVJkdVpIS1RTelFKWHdoMFVzU3VkdlVWbVl3dE5RK2FP?=
- =?utf-8?B?ak04MCs1TjQ5b2RVUm1zZThYSVh0TkUxSmovRGp4cXllK21ZdnVUNTl3bi9R?=
- =?utf-8?B?NU9WdnVaU3V1S3VCZDUxSzg3a1IrVHh6MFZHTUkxVEZjWkkxSll6cUJmNlV2?=
- =?utf-8?B?Ri9MQkJUelBhU1owbHFOTncxUURkTXBZOEpTVHkvZHNrcnFJWjV3WDRQTkRM?=
- =?utf-8?B?MDVUcjlCUzRWcERTdmFndW5iRXJtTnd3ZU83ZVpLQ0d1Y1FmRmdrZjgvQnRu?=
- =?utf-8?B?VjM1aEVJWkpKMG5VeWM3TFJ6WGROUHRLMEJRSmlET1dTU2cvbEZIbTkwYWFP?=
- =?utf-8?B?eXUvM0JVOHpNYVB1MmE3OW9UUjJlaHdpT3dEb1lKbWh0N3FKbVhuQS8vaWJD?=
- =?utf-8?B?NzJqdGhDWnBXTUsxRm1GVnRoUS9rNWJyaFB4TDFncmNZTmkrODRpeXRibzhl?=
- =?utf-8?B?ZDZldkgvOTFTSm13aGxRbno2OWRic2t2Q3hST1VDUFQzMXovbmZGaitBTjJp?=
- =?utf-8?Q?33TKzjW9PVsXU9epEy+XhVUyh?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b76c2baf-7a41-4b28-28d4-08da94b08e80
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 11:18:46.1326
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TylPAwZhZYYZzd7HXwM7MyvKcy7S7+UGzQvu72+KNkaCkc/PXh5JIlFGjtn8YjAFIiFxwJaFjHA3BF/nCKz3Fzi4Q9aeCkJr64n7KvNDS/c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4159
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_07,2022-09-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=623 spamscore=0 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209120038
-X-Proofpoint-GUID: 5kiZ1f9hVfOYUPtrBqNS9qXyDDn4sN-7
-X-Proofpoint-ORIG-GUID: 5kiZ1f9hVfOYUPtrBqNS9qXyDDn4sN-7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:54:03PM +0800, Hangyu Hua wrote:
-> As array_index_nospec's comments indicateï¼Œa bounds checking need to add
-> before calling array_index_nospec.
+On Mon, Sep 12, 2022 at 01:05:45PM +0200, Thomas Zimmermann wrote:
+> Hi
 > 
+> Am 12.09.22 um 12:40 schrieb Ville Syrjälä:
+> > On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
+> >> Provides a default plane state check handler for primary planes that are a
+> >> fullscreen scanout buffer and whose state scale and position can't change.
+> >>
+> >> There are some drivers that duplicate this logic in their helpers, such as
+> >> simpledrm and ssd130x. Factor out this common code into a plane helper and
+> >> make drivers use it.
+> >>
+> >> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> >> ---
+> >>
+> >>   drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
+> >>   drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
+> >>   drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
+> >>   include/drm/drm_plane_helper.h     |  2 ++
+> >>   4 files changed, 33 insertions(+), 41 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
+> >> index c7785967f5bf..fb41eee74693 100644
+> >> --- a/drivers/gpu/drm/drm_plane_helper.c
+> >> +++ b/drivers/gpu/drm/drm_plane_helper.c
+> >> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
+> >>   	kfree(plane);
+> >>   }
+> >>   EXPORT_SYMBOL(drm_plane_helper_destroy);
+> >> +
+> >> +/**
+> >> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
+> >> + * @plane: plane to check
+> >> + * @new_state: plane state to check
+> > 
+> > That is not a plane state. Also should s/new_// since it's just
+> > the overall atomic state thing rather than some new or old state.
+> 
+> Using only 'state' is non-intuitive and has lead to bugs where sub-state 
+> was retrieved from the wrong state information. So we've been using 
+> 'new_state' and 'old_state' explicitly in several places now.
 
-This commit message doesn't explain the impact to the user so the patch
-was going to be rejected based on just the commit message regardless of
-the actual code.
+There is no old or new drm_atomic_state. It contains both.
 
-regards,
-dan carpenter
+> 
+> Best regards
+> Thomas
+> 
+> > 
+> >> + *
+> >> + * Provides a default plane state check handler for primary planes whose atomic
+> >> + * state scale and position is not expected to change because the primary plane
+> >> + * is always a fullscreen scanout buffer.
+> >> + *
+> >> + * RETURNS:
+> >> + * Zero on success, or an errno code otherwise.
+> >> + */
+> >> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
+> >> +				  struct drm_atomic_state *new_state)
+> >> +{
+> >> +	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> >> +	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> >> +	struct drm_crtc_state *new_crtc_state = NULL;
+> >> +
+> >> +	if (new_crtc)
+> >> +		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> >> +
+> >> +	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> >> +						   DRM_PLANE_NO_SCALING,
+> >> +						   DRM_PLANE_NO_SCALING,
+> >> +						   false, false);
+> >> +}
+> >> +EXPORT_SYMBOL(drm_plane_helper_atomic_check);
+> >> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+> >> index 79e8e2017c68..28cf9c87f86d 100644
+> >> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> >> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+> >> @@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
+> >>   	return ret;
+> >>   }
+> >>   
+> >> -static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
+> >> -						     struct drm_atomic_state *new_state)
+> >> -{
+> >> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> >> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> >> -	struct drm_crtc_state *new_crtc_state = NULL;
+> >> -
+> >> -	if (new_crtc)
+> >> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> >> -
+> >> -	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> >> -						   DRM_PLANE_NO_SCALING,
+> >> -						   DRM_PLANE_NO_SCALING,
+> >> -						   false, false);
+> >> -}
+> >> -
+> >>   static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
+> >>   						       struct drm_atomic_state *old_state)
+> >>   {
+> >> @@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
+> >>   
+> >>   static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
+> >>   	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+> >> -	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
+> >> +	.atomic_check = drm_plane_helper_atomic_check,
+> >>   	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
+> >>   	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
+> >>   };
+> >> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
+> >> index 777ccd250871..ea5b3239a659 100644
+> >> --- a/drivers/gpu/drm/tiny/simpledrm.c
+> >> +++ b/drivers/gpu/drm/tiny/simpledrm.c
+> >> @@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
+> >>   	DRM_FORMAT_MOD_INVALID
+> >>   };
+> >>   
+> >> -static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
+> >> -						       struct drm_atomic_state *new_state)
+> >> -{
+> >> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+> >> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
+> >> -	struct drm_crtc_state *new_crtc_state = NULL;
+> >> -	int ret;
+> >> -
+> >> -	if (new_crtc)
+> >> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+> >> -
+> >> -	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+> >> -						  DRM_PLANE_NO_SCALING,
+> >> -						  DRM_PLANE_NO_SCALING,
+> >> -						  false, false);
+> >> -	if (ret)
+> >> -		return ret;
+> >> -	else if (!new_plane_state->visible)
+> >> -		return 0;
+> >> -
+> >> -	return 0;
+> >> -}
+> >> -
+> >>   static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
+> >>   							 struct drm_atomic_state *old_state)
+> >>   {
+> >> @@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
+> >>   
+> >>   static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
+> >>   	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+> >> -	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
+> >> +	.atomic_check = drm_plane_helper_atomic_check,
+> >>   	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
+> >>   	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
+> >>   };
+> >> diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
+> >> index 1781fab24dd6..7ba414655d69 100644
+> >> --- a/include/drm/drm_plane_helper.h
+> >> +++ b/include/drm/drm_plane_helper.h
+> >> @@ -41,5 +41,7 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
+> >>   int drm_plane_helper_disable_primary(struct drm_plane *plane,
+> >>   				     struct drm_modeset_acquire_ctx *ctx);
+> >>   void drm_plane_helper_destroy(struct drm_plane *plane);
+> >> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
+> >> +				  struct drm_atomic_state *new_state);
+> >>   
+> >>   #endif
+> >> -- 
+> >> 2.37.1
+> > 
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
 
+
+
+
+-- 
+Ville Syrjälä
+Intel
