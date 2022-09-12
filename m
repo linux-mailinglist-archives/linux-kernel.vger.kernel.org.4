@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B3D5B5831
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643D45B5833
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiILKY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S230192AbiILKYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiILKYS (ORCPT
+        with ESMTP id S230110AbiILKYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:24:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227ED275FA;
-        Mon, 12 Sep 2022 03:24:17 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2CD6E6601FD9;
-        Mon, 12 Sep 2022 11:24:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662978256;
-        bh=kiqQbnIn7/5ut/Bpv9ksnG72E+m6XZrvIdfMBPIWiDs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nWiUu98eh2uGOzmLk0SWdME8yzF3fTBfsXzrEQ87DFJjiBY1vOH7HPzJvISUPMfS6
-         xVPxZpve8trRoYmAvy599zNpzxcBF4Dx3jYO9peJC9GXm04aIzVbSQv5NEsAt8+k/3
-         0WdoGIuxzbP1IHImxfostd9DszbMyinHF+R1aH8HdlYdPuFlV8MRzG+Am+kXyhaQyM
-         VgLJt2fTJdictRb6SGPt3VCFU4VnEfy3kbWjafXVKTpmpQUEmES0+OSkWb5ML4KBo1
-         poYaGyMvWyrXJvKRgctf0Bq+o3EdggZL1UV2EY2eUJZq0Fueb68b2p9eXzyAqqZAug
-         On2OPOb0PpQOg==
-Message-ID: <97ac2b35-bb3b-360a-4078-f72146136a7f@collabora.com>
-Date:   Mon, 12 Sep 2022 12:24:12 +0200
+        Mon, 12 Sep 2022 06:24:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE346595;
+        Mon, 12 Sep 2022 03:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662978278; x=1694514278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rJ+vo42kIPEeK6pN9V49hqarJLzU45CCJvpzPtmdyZY=;
+  b=nnFIucTSVxD3l624SFtqd5oFOh0dACh3lLtZy0rdIym+1X/V4omPSuqs
+   SxdfyO3ik88Vq3uD8iNnw1I6EX/EenhTRA32HxTvjMLZiJcvalIiTmb9W
+   wIhKwMhupgwBaII8+aRnuknDEUXXYD5E5U7RSG4ZcVg755is3RvBes2/D
+   DhAYchffYopqBBGLMEAbVjMECXZFoMHzrtpmW41E5s36Z98doGaN2W998
+   gPvCgNyd+PgJU14MC7fSHE7W95ZYSzFxrKyR1kfiPRf2pq0NjzuP8Shbf
+   50RWhx147xMi14u9GrVBryJFbLitEaunbaECOWA1e8TX3h1EmZ3eD0Gxa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="296566941"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="296566941"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:24:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="684376969"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:24:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oXgcD-001IXP-0s;
+        Mon, 12 Sep 2022 13:24:33 +0300
+Date:   Mon, 12 Sep 2022 13:24:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH v1 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
+Message-ID: <Yx8I4RGIchUT1/7y@smile.fi.intel.com>
+References: <20220530173324.921-1-andriy.shevchenko@linux.intel.com>
+ <20220603181006.2c5cc6c4@jic23-huawei>
+ <20220620204225.34d40a3f@jic23-huawei>
+ <YxdM1KUFcdVlnKuO@smile.fi.intel.com>
+ <20220911105215.72bd79f3@jic23-huawei>
+ <Yx8IQHLBhIilMfEw@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 4/9] drm/mediatek: Add gamma support different lut_size
- for other SoC
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220911153734.24243-1-jason-jh.lin@mediatek.com>
- <20220911153734.24243-5-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220911153734.24243-5-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yx8IQHLBhIilMfEw@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,91 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/09/22 17:37, Jason-JH.Lin ha scritto:
-> 1. Add mtk_drm_gamma_get_lut_size() and remove MTK_LUT_SIZE macro.
-> 2. Add lut_size to gamma driver data for different SoC.
+On Mon, Sep 12, 2022 at 01:21:52PM +0300, Andy Shevchenko wrote:
+> On Sun, Sep 11, 2022 at 10:52:15AM +0100, Jonathan Cameron wrote:
+> > On Tue, 6 Sep 2022 16:36:20 +0300
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Mon, Jun 20, 2022 at 08:42:25PM +0100, Jonathan Cameron wrote:
+
+...
+
+> > > Any news on this one? Maybe I need to resend with the better commit message?
+> > 
+> > From glancing back at the thread, looks like you said you were going to send
+> > a v2 with property.h include.  I think the rest of the thread is concerned
+> > with a different issue entirely.
 > 
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> ---
->   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |  1 +
->   drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 22 +++++++++++++++++++--
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |  4 ++--
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 -
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  9 +++++++++
->   5 files changed, 32 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> index a83e5fbc8724..6a05bb56e693 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> @@ -51,6 +51,7 @@ void mtk_gamma_clk_disable(struct device *dev);
->   void mtk_gamma_config(struct device *dev, unsigned int w,
->   		      unsigned int h, unsigned int vrefresh,
->   		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
-> +unsigned int mtk_gamma_get_lut_size(struct device *dev);
->   void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state);
->   void mtk_gamma_set_common(struct device *dev, void __iomem *regs, struct drm_crtc_state *state);
->   void mtk_gamma_start(struct device *dev);
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> index f54a6a618348..e69d0b205b9a 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> @@ -24,10 +24,12 @@
->   #define DISP_GAMMA_LUT				0x0700
->   
->   #define LUT_10BIT_MASK				0x03ff
-> +#define LUT_SIZE_DEFAULT			512 /* for setting gamma lut from AAL */
->   
->   struct mtk_disp_gamma_data {
->   	bool has_dither;
->   	bool lut_diff;
-> +	u16 lut_size;
->   };
->   
->   /*
-> @@ -54,18 +56,32 @@ void mtk_gamma_clk_disable(struct device *dev)
->   	clk_disable_unprepare(gamma->clk);
->   }
->   
-> +unsigned int mtk_gamma_get_size(struct device *dev)
-> +{
-> +	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
-> +	unsigned int lut_size = LUT_SIZE_DEFAULT;
-> +
-> +	if (gamma && gamma->data)
-> +		lut_size = gamma->data->lut_size;
-> +
-> +	return lut_size;
-> +}
-> +
->   void mtk_gamma_set_common(struct device *dev, void __iomem *regs, struct drm_crtc_state *state)
->   {
->   	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
->   	bool lut_diff = false;
-> +	u16 lut_size = LUT_SIZE_DEFAULT;
+> Ah, I only read last messages in the thread and didn't realized that I have
+> some ARs to accomplish. OK, v2 will come soon, thanks!
 
-This makes us get a double assignment in case gamma->data is populated.
+After reading more of the thread I think this patch should be in a different
+form, so no v2 soon, needs more investigations.
 
->   	unsigned int i, reg;
->   	struct drm_color_lut *lut;
->   	void __iomem *lut_base;
->   	u32 word;
->   	u32 diff[3] = {0};
->   
-> -	if (gamma && gamma->data)
-> +	if (gamma && gamma->data) {
->   		lut_diff = gamma->data->lut_diff;
-> +		lut_size = gamma->data->lut_size;
-> +	}
-
-...you can avoid it like that:
-
-} else {
-	lut_size = LUT_SIZE_DEFAULT;
-}
-
-
-Regards,
-Angelo
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
