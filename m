@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9EB5B5825
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2DA5B5824
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiILKWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        id S230165AbiILKWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiILKWi (ORCPT
+        with ESMTP id S230138AbiILKWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:22:38 -0400
+        Mon, 12 Sep 2022 06:22:40 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177B9C47;
-        Mon, 12 Sep 2022 03:22:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F0E1B78F;
+        Mon, 12 Sep 2022 03:22:38 -0700 (PDT)
 Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:15b7:c21a:ebde:697f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC04F6601FDA;
-        Mon, 12 Sep 2022 11:22:35 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 638046601FD2;
+        Mon, 12 Sep 2022 11:22:37 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.co.uk;
-        s=mail; t=1662978155;
-        bh=TU6JM/HLEcHR93E8uXTEbS46UahmKIRFmCxlBOEK0EM=;
+        s=mail; t=1662978157;
+        bh=x+xhhAy+xm4eP4Lsekhf++pZ0A4JfXKUSpEZnbNaKNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fFV0YP+0m+mDBtPz0KnOFNugF6p+kB61K6b/Yl/qZS6HelH4nKUNXRc/iThlbSs15
-         hOYbMBI4i3koG+P4WkRSL48M7fRzJnLAa/ofTmWASg1FlBJODvFpli+nrlFtimlQnV
-         Rvt2uRD58EltRvXSQfIC7IiRIZzpCJYYOoi03eeDqCeHzsp6Uj2IdWilf7YkNvAqTw
-         W068A7KH6SGHq9mrmySxDt6kgK/rzKxMbruIJA5RD8JHmQXt9w9qPCxgJrtRIbbmNk
-         kInp7CQEMJ/+OLCRa/HhItj4eYuNmHNvQ/Hj6eAtDJbZHjoWf84bTywh6wjqd4Ln/2
-         Ncvj2mes51mIw==
+        b=QJx9B+N16Bb66itueVm/E1kW2DNWpg5AnGL77nI5uhnqkhpuf8rCky/yoPrhJXnPP
+         U0hHGlHOu6AYMCrmATvAjB81oGAv5sU/6+TWp0nhRxpXxHvdueVJ4uoFcS8dVdDxwZ
+         kfEV+mZtPp1aiwfLDwi8Cw5I6VcZUhu0V1Vwhlr+S1fvSrDGORs2Nj35f9pMLIuQxY
+         AQM1Z2O1TBEzW2JvBipJdCzcyoqJELSCw5Ipw56vtNd1cKhfY3+H3Vyh/4pBN+AShD
+         JVUzZ6zX/KCWvodtBTcJSgxzH0ztK8EvNG6RhUPojrPAgnYCdVHVtXXRaPfSJpLLpX
+         9L6EKoGVCFxdg==
 From:   Martyn Welch <martyn.welch@collabora.co.uk>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Martyn Welch <martyn.welch@collabora.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/5] gpio: pca953x: Fix pca953x_gpio_set_pull_up_down()
-Date:   Mon, 12 Sep 2022 11:22:20 +0100
-Message-Id: <20220912102223.1050418-3-martyn.welch@collabora.co.uk>
+Subject: [PATCH v3 4/5] gpio: pca953x: Swap if statements to save later complexity
+Date:   Mon, 12 Sep 2022 11:22:21 +0100
+Message-Id: <20220912102223.1050418-4-martyn.welch@collabora.co.uk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220912102223.1050418-1-martyn.welch@collabora.co.uk>
 References: <20220912102223.1050418-1-martyn.welch@collabora.co.uk>
@@ -57,66 +57,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Martyn Welch <martyn.welch@collabora.com>
 
-A previous fix, commit dc87f6dd058a ("gpio: pca953x: Fix
-pca953x_gpio_set_config"), identified that pinconf_to_config_param() needed
-to be used to isolate the config_param from the pinconf in
-pca953x_gpio_set_config(). This fix however did not consider that this
-would also be needed in pca953x_gpio_set_pull_up_down() to which it passes
-this config.
-
-Perform a similar call in pca953x_gpio_set_pull_up_down() to isolate the
-configuration parameter there as well, rather than passing it from
-pca953x_gpio_set_config() as the configuration argument may also be needed
-in pca953x_gpio_set_pull_up_down() at a later date.
+A later patch in the series adds support for a further chip type that
+shares some similarity with the PCA953X_TYPE. In order to keep the logic
+simple, swap over the if and else portions where checks are made against
+PCA953X_TYPE and instead check for PCA957X_TYPE.
 
 Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
 
 Changes in v2:
- - Re-order enum before u8
+ - None
 
 Changes in v3:
  - None
 
- drivers/gpio/gpio-pca953x.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/gpio/gpio-pca953x.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index ecd7d169470b..62367c9d6e99 100644
+index 62367c9d6e99..1e8f038734e0 100644
 --- a/drivers/gpio/gpio-pca953x.c
 +++ b/drivers/gpio/gpio-pca953x.c
-@@ -548,6 +548,8 @@ static int pca953x_gpio_set_pull_up_down(struct pca953x_chip *chip,
- 					 unsigned int offset,
- 					 unsigned long config)
- {
-+	enum pin_config_param param = pinconf_to_config_param(config);
-+
- 	u8 pull_en_reg = pca953x_recalc_addr(chip, PCAL953X_PULL_EN, offset);
- 	u8 pull_sel_reg = pca953x_recalc_addr(chip, PCAL953X_PULL_SEL, offset);
- 	u8 bit = BIT(offset % BANK_SZ);
-@@ -563,9 +565,9 @@ static int pca953x_gpio_set_pull_up_down(struct pca953x_chip *chip,
- 	mutex_lock(&chip->i2c_lock);
+@@ -293,13 +293,13 @@ static bool pca953x_readable_register(struct device *dev, unsigned int reg)
+ 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	u32 bank;
  
- 	/* Configure pull-up/pull-down */
--	if (config == PIN_CONFIG_BIAS_PULL_UP)
-+	if (param == PIN_CONFIG_BIAS_PULL_UP)
- 		ret = regmap_write_bits(chip->regmap, pull_sel_reg, bit, bit);
--	else if (config == PIN_CONFIG_BIAS_PULL_DOWN)
-+	else if (param == PIN_CONFIG_BIAS_PULL_DOWN)
- 		ret = regmap_write_bits(chip->regmap, pull_sel_reg, bit, 0);
- 	else
- 		ret = 0;
-@@ -573,7 +575,7 @@ static int pca953x_gpio_set_pull_up_down(struct pca953x_chip *chip,
- 		goto exit;
+-	if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
+-		bank = PCA953x_BANK_INPUT | PCA953x_BANK_OUTPUT |
+-		       PCA953x_BANK_POLARITY | PCA953x_BANK_CONFIG;
+-	} else {
++	if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
+ 		bank = PCA957x_BANK_INPUT | PCA957x_BANK_OUTPUT |
+ 		       PCA957x_BANK_POLARITY | PCA957x_BANK_CONFIG |
+ 		       PCA957x_BANK_BUSHOLD;
++	} else {
++		bank = PCA953x_BANK_INPUT | PCA953x_BANK_OUTPUT |
++		       PCA953x_BANK_POLARITY | PCA953x_BANK_CONFIG;
+ 	}
  
- 	/* Disable/Enable pull-up/pull-down */
--	if (config == PIN_CONFIG_BIAS_DISABLE)
-+	if (param == PIN_CONFIG_BIAS_DISABLE)
- 		ret = regmap_write_bits(chip->regmap, pull_en_reg, bit, 0);
- 	else
- 		ret = regmap_write_bits(chip->regmap, pull_en_reg, bit, bit);
+ 	if (chip->driver_data & PCA_PCAL) {
+@@ -316,12 +316,12 @@ static bool pca953x_writeable_register(struct device *dev, unsigned int reg)
+ 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	u32 bank;
+ 
+-	if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
+-		bank = PCA953x_BANK_OUTPUT | PCA953x_BANK_POLARITY |
+-			PCA953x_BANK_CONFIG;
+-	} else {
++	if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
+ 		bank = PCA957x_BANK_OUTPUT | PCA957x_BANK_POLARITY |
+ 			PCA957x_BANK_CONFIG | PCA957x_BANK_BUSHOLD;
++	} else {
++		bank = PCA953x_BANK_OUTPUT | PCA953x_BANK_POLARITY |
++			PCA953x_BANK_CONFIG;
+ 	}
+ 
+ 	if (chip->driver_data & PCA_PCAL)
+@@ -336,10 +336,10 @@ static bool pca953x_volatile_register(struct device *dev, unsigned int reg)
+ 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	u32 bank;
+ 
+-	if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE)
+-		bank = PCA953x_BANK_INPUT;
+-	else
++	if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE)
+ 		bank = PCA957x_BANK_INPUT;
++	else
++		bank = PCA953x_BANK_INPUT;
+ 
+ 	if (chip->driver_data & PCA_PCAL)
+ 		bank |= PCAL9xxx_BANK_IRQ_STAT;
+@@ -1070,13 +1070,12 @@ static int pca953x_probe(struct i2c_client *client,
+ 	/* initialize cached registers from their original values.
+ 	 * we can't share this chip with another i2c master.
+ 	 */
+-
+-	if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
+-		chip->regs = &pca953x_regs;
+-		ret = device_pca95xx_init(chip, invert);
+-	} else {
++	if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
+ 		chip->regs = &pca957x_regs;
+ 		ret = device_pca957x_init(chip, invert);
++	} else {
++		chip->regs = &pca953x_regs;
++		ret = device_pca95xx_init(chip, invert);
+ 	}
+ 	if (ret)
+ 		goto err_exit;
 -- 
 2.35.1
 
