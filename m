@@ -2,167 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4E85B6300
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EA95B6303
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 23:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiILVr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 17:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S229732AbiILVsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 17:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiILVrC (ORCPT
+        with ESMTP id S229890AbiILVsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 17:47:02 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C074D838;
-        Mon, 12 Sep 2022 14:47:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oNOc0W4fe118Lq+qjNp3CFCPF9OQWg6R7dSojfG3My06nHsIxuS402XfhPc/G4YITns94EDBaUdd9IUspVmgOOPoNgIolWyPcW7wCrp3jvcoddKYt/xD45SpI3dDdXO1jpx0TLnLNLVk+gmW3sJK2BKg6XgQd0cK1exzLqBRB1/Jh1/RRhazyz70saYBIs0DqhAAGLlL8lyr4BJ9UxmeGiUHyUiWAZ/0KPYnLBcZwhFCZre0K1bMcpz5oHNXPi8YPajVwe48dgAf40zE7tYfOLouyG1oNOxysnWCz+Oy01tljW0ubFaBRhCvJgYmAMq3SKxcjVidGnXHdvvh2g/9cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VM7E2ybbJYvJwT/it1c1P4gBvYGJJvYoQ2yKVw6Mp90=;
- b=G5kemSnGv5rjjoogFg672/HFGirFYDhmE9d4i3Y/m2Wcgba5ReyCTPGZ0RyDSXHwHdKMdH4yEV+3zYPj7nCmh/QkiFJbWd3uPcPZNxdltUz9PJgLR7VPmdPUEBUOJwuRiKSRpOfr5KtZLNlOlf96PMyeBAOFNfWjvJtMvf2yTapnT2egyBZulX8OuFnsMAJdq+bhBvnrL28ujzFXeiresSzmC7vesO2HeEM4eQ+HdbFjPuSz3/Ndee9pEaSwIijnN39SEDu+m4nEnD6k9PHZCsiwOHYBdX5xgwuaGo6SL0s4/hR2uPbO2mI4do8NCK6IxWlP1dABMKgCcPb/6vPIDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VM7E2ybbJYvJwT/it1c1P4gBvYGJJvYoQ2yKVw6Mp90=;
- b=yXcdBfT3xYUZ4bTFCD0l6Yt70bn4JxquERCiB+WYpHYqCMenpKJbbCJdZdOOo+EfO/+D4YcIo7NoO/dyy+1LjmyV2YeP8whhDvia33QkPuf/3dH4IzNloLiV94OWiQYQtLzyVaTF614tI+0dVzVITKkKGN/8Nb8RNDGy+5pCaTQ=
-Received: from DM6PR11CA0014.namprd11.prod.outlook.com (2603:10b6:5:190::27)
- by CH0PR12MB5025.namprd12.prod.outlook.com (2603:10b6:610:d5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
- 2022 21:46:56 +0000
-Received: from DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:190:cafe::dc) by DM6PR11CA0014.outlook.office365.com
- (2603:10b6:5:190::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
- Transport; Mon, 12 Sep 2022 21:46:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT055.mail.protection.outlook.com (10.13.173.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Mon, 12 Sep 2022 21:46:56 +0000
-Received: from ruby-95f9host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 12 Sep
- 2022 16:46:55 -0500
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-CC:     <pbonzini@redhat.com>, <jon.grimm@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] KVM: SVM: Fix x2apic logical cluster mode decoding and sanity check
-Date:   Mon, 12 Sep 2022 16:46:32 -0500
-Message-ID: <20220912214632.14880-1-suravee.suthikulpanit@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 12 Sep 2022 17:48:03 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD461836E;
+        Mon, 12 Sep 2022 14:48:01 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id s18so3894801plr.4;
+        Mon, 12 Sep 2022 14:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ju/BoI0cUOrilm7U0D3lKO4lFOs3ZMMqejXmhw4/Fak=;
+        b=ZpxMuXoij2XD+K0KoIjK2iZBsrCAMF4I2+j5wjiwVv5Es2oov1S88imhutEr5pf/dM
+         Y8XEyC8WtFUW/pWbbjfihJ5o32MV7VMOOFcVSZuLXSTR0Q+EsbmU0StS6ICVQF8QK3ag
+         vCuMmND3BYiWjndK3l/yzFvfn3UsteY699Wa6w2qQ9GoIv77vjTa/d/D/++twbuRIFSQ
+         X5ZGfM5wBlOLo9u6JLWWngKUNAuh7PRSZPfTUo6jLfg8X4i7rBMyzWDx/9XQHIFlUY2S
+         WmpuV2ePb4rra2f/psX2PqPmdBaoMvTc0E8hczDQlk/cldtSP7s0e89NAuTBvXmykz76
+         7SzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ju/BoI0cUOrilm7U0D3lKO4lFOs3ZMMqejXmhw4/Fak=;
+        b=PmhL09GjPagp3XOs8bm5QbROkFlQHEYq57EWcUGkwbca5woA3iZVPt91nx8YHSFvxF
+         XJ/fsxGyLBaEQFhQ0L8/RYwA5WpOUtfsLFkegkDGeEfhcm4z/KvJeydNpgxZBdpQmLy3
+         9WXd+G+ZRdyl4V1ACxGK6MbWVZu9UOw4ga6iVC+pBvSqE6YRwFW09id8fZoYbBDFLY0D
+         hc1QW8CeA4nbJKF2le73vfNiIHfCzvlQ1XciMXa7Tqzi64+s093VxpTjL3LVNNgfcNdr
+         4h1ztsb0Rc38AdYmAUu9ujoq3fMfE9EiKyXViOsqTa9gi7U/h1lOiS/QqjN8e4v+7qVm
+         hvZQ==
+X-Gm-Message-State: ACgBeo1E2kgPBPjLwUygH6/6z7tP6SLKA1MqnLydiBJTYWTuWEghX1Rq
+        y3N0cTQXS6nZrSVfi7keN3AzzqGdRZTFRaOBLxg=
+X-Google-Smtp-Source: AA6agR4gSCEGGERtYbfMrbUdD055rL9KFSXYCiEsKiEnI3ZsV82VHr/529eXK7hJ5BxmMY8NBYbSxomKComMuUX9EKc=
+X-Received: by 2002:a17:902:e5c1:b0:176:c2b3:6a4c with SMTP id
+ u1-20020a170902e5c100b00176c2b36a4cmr28810957plf.87.1663019280658; Mon, 12
+ Sep 2022 14:48:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT055:EE_|CH0PR12MB5025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c817b3d-944f-4cce-7a35-08da9508504a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OTGAB31oymUecwdVfget/hK4JBGuC/ef/y1kIxJXmFH72xUbt/132eUCA5aCypRowXqa5sZ8hApk+Toq/5DlIunomNrXbt7WF/4JWt2NmAQv+GY3BYtm4tUeWHlMYi8UfVPwTuuCEnsRbkaI9+uXvc1m9rSAIdsc/PEjoHGtSpPRUx4Q+OvNJsDtHVWARjcUygmBYTDCiZ3fZlmcoGYVnOB4QqLlxrsZVOsjwx9y5LwrIr1Xt18vFgsPZqRs+GGSlzQCa6d36qpOrcUF6kl7gXwKlitsTOMj1bJY/SsYz5bKvYHbXQdlJRLVAh2Me+e9Jzomppk7cQ5h5sgYpPq1v5W9JNxULcK8Edp7UFBBpEAnNKGZmtQ+1dbvBZDSsjchSfWcMuK6rKA1tw8/7ix2Ww+gpMpBpLWBO230jD3CGgA+dj4KiMNApQzbNq5foOGxOGddeLovANdYo1aY8vwz8Fyj+f/t9uEZwAJQAzN/3rYUvXoxV0K+MrbhLaRUw12K/rhzmwcxJ1u8uh5df8ngYg/FTNDD9NnwSR61mXH4vxzkdp6+qBfdwmUXxDlwUj0rbE0brxXjMYW+wDW6TZHn4Orqbr8GtQrerVz/X1kN8iTMxhHe8EHTt6nhhu9igph2xkNkIc7Htr6is901vsQTIIYRqo5HT7BbMwCbHUKFtGOkxYKp1JoZe68dSus/wMJyOtV8SgA3uh66+cg593nEWLzQECOOl1puPkK3CnCSxKTCUKWD7x+/4SCJYoXOOKWnoiZI2AmsS3zqNKmccDgJpPqTeMbftt4ivS53jfwj6kbmtkSv6KKoLTUDIEX8B0+1
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199015)(40470700004)(36840700001)(46966006)(6666004)(41300700001)(5660300002)(54906003)(70586007)(8676002)(70206006)(4326008)(2616005)(186003)(1076003)(86362001)(47076005)(82310400005)(426003)(16526019)(2906002)(8936002)(82740400003)(316002)(36860700001)(478600001)(36756003)(44832011)(7696005)(356005)(110136005)(40480700001)(26005)(83380400001)(81166007)(40460700003)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 21:46:56.4744
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c817b3d-944f-4cce-7a35-08da9508504a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5025
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000f537cc05ddef88db@google.com> <0000000000007d793405e87350df@google.com>
+In-Reply-To: <0000000000007d793405e87350df@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 12 Sep 2022 14:47:48 -0700
+Message-ID: <CAHbLzkp6BEaM8cFwLsCiYmGaR-LxbG8z-f_bz2ijL+K27zR4GQ@mail.gmail.com>
+Subject: Re: [syzbot] BUG: Bad page map (5)
+To:     syzbot <syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com>,
+        "Zach O'Keefe" <zokeefe@google.com>
+Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When sending IPI in the X2APIC logical cluster mode, the destination
-APIC ID is encoded as:
+On Sun, Sep 11, 2022 at 9:27 PM syzbot
+<syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has found a reproducer for the following issue on:
+>
+> HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17330430880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
+> dashboard link: https://syzkaller.appspot.com/bug?extid=915f3e317adb0e85835f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13397b77080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1793564f080000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com
+>
+> BUG: Bad page map in process syz-executor198  pte:8000000071c00227 pmd:74b30067
+> addr:0000000020563000 vm_flags:08100077 anon_vma:ffff8880547d2200 mapping:0000000000000000 index:20563
+> file:(null) fault:0x0 mmap:0x0 read_folio:0x0
+> CPU: 1 PID: 3614 Comm: syz-executor198 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_bad_pte.cold+0x2a7/0x2d0 mm/memory.c:565
+>  vm_normal_page+0x10c/0x2a0 mm/memory.c:636
+>  hpage_collapse_scan_pmd+0x729/0x1da0 mm/khugepaged.c:1199
+>  madvise_collapse+0x481/0x910 mm/khugepaged.c:2433
+>  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1062
+>  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1236
+>  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1415
+>  do_madvise mm/madvise.c:1428 [inline]
+>  __do_sys_madvise mm/madvise.c:1428 [inline]
+>  __se_sys_madvise mm/madvise.c:1426 [inline]
+>  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1426
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f770ba87929
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f770ba18308 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+> RAX: ffffffffffffffda RBX: 00007f770bb0f3f8 RCX: 00007f770ba87929
+> RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+> RBP: 00007f770bb0f3f0 R08: 00007f770ba18700 R09: 0000000000000000
+> R10: 00007f770ba18700 R11: 0000000000000246 R12: 00007f770bb0f3fc
+> R13: 00007ffc2d8b62ef R14: 00007f770ba18400 R15: 0000000000022000
+>  </TASK>
 
-  * Cluster ID = ICRH[31:16]
-  * Logical ID = ICRH[15:0]
+I think I figured out the problem. The reproducer actually triggered
+the below race in madvise_collapse():
 
-Current logic incorrectly decode the ICRH, which causes VM running
-with x2AVIC support to fail to boot. Therefore, fix the decoding logic.
+             CPU A
+        CPU B
+mmap 0x20000000 - 0x21000000 as anon
 
-The commit 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
-also added a check for multiple logical destinations before using
-the fast-path. However, the same logic is already existed prior to
-the commit. Therefore, remove redundant checking logic.
+       madvise_collapse is called on this area
 
-Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
----
- arch/x86/kvm/svm/avic.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+           Retrieve start and end address from the vma (NEVER updated
+later!)
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 6919dee69f18..45ab49d1f0b8 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -378,8 +378,8 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
- 
- 		if (apic_x2apic_mode(source)) {
- 			/* 16 bit dest mask, 16 bit cluster id */
--			bitmap = dest & 0xFFFF0000;
--			cluster = (dest >> 16) << 4;
-+			bitmap = dest & 0xffff;
-+			cluster = (dest & 0xffff0000) >> 16;
- 		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
- 			/* 8 bit dest mask*/
- 			bitmap = dest;
-@@ -387,7 +387,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
- 		} else {
- 			/* 4 bit desk mask, 4 bit cluster id */
- 			bitmap = dest & 0xF;
--			cluster = (dest >> 4) << 2;
-+			cluster = (dest & 0xf0) >> 4;
- 		}
- 
- 		if (unlikely(!bitmap))
-@@ -420,18 +420,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
- 			 * For x2APIC logical mode, cannot leverage the index.
- 			 * Instead, calculate physical ID from logical ID in ICRH.
- 			 */
--			int cluster = (icrh & 0xffff0000) >> 16;
--			int apic = ffs(icrh & 0xffff) - 1;
--
--			/*
--			 * If the x2APIC logical ID sub-field (i.e. icrh[15:0])
--			 * contains anything but a single bit, we cannot use the
--			 * fast path, because it is limited to a single vCPU.
--			 */
--			if (apic < 0 || icrh != (1 << apic))
--				return -EINVAL;
--
--			l1_physical_id = (cluster << 4) + apic;
-+			l1_physical_id = (cluster << 4) + (ffs(bitmap) - 1);
- 		}
- 	}
- 
--- 
-2.34.1
+           Collapsed the first 2M area and dropped mmap_lock
+Acquire mmap_lock
+mmap io_uring file at 0x20563000
+Release mmap_lock
 
+            Reacquire mmap_lock
+
+            revalidate vma pass since 0x20200000 + 0x200000 >
+0x20563000
+
+            scan the next 2M (0x20200000 - 0x20400000), but due to
+whatever reason it didn't release mmap_lock
+
+            scan the 3rd 2M area (start from 0x20400000)
+
+              actually scan the new vma created by io_uring since the
+end was never updated
+
+The below patch should be able to fix the problem (untested):
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 5f7c60b8b269..e708c5d62325 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -2441,8 +2441,10 @@ int madvise_collapse(struct vm_area_struct
+*vma, struct vm_area_struct **prev,
+                memset(cc->node_load, 0, sizeof(cc->node_load));
+                result = hpage_collapse_scan_pmd(mm, vma, addr, &mmap_locked,
+                                                 cc);
+-               if (!mmap_locked)
++               if (!mmap_locked) {
+                        *prev = NULL;  /* Tell caller we dropped mmap_lock */
++                       hend = vma->end & HPAGE_PMD_MASK;
++               }
+
+                switch (result) {
+                case SCAN_SUCCEED:
+
+
+>
+>
