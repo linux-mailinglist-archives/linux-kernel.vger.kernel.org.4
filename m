@@ -2,68 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6685B59F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85615B59F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 14:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiILMHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 08:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S229808AbiILMIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 08:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiILMHR (ORCPT
+        with ESMTP id S229502AbiILMIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 08:07:17 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DD932BAD;
-        Mon, 12 Sep 2022 05:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Z8frw41f+UOM2n0PSa8iYjBK8hFsCgjVi+qoP5r1cD8=; b=FIC7TCcE2+/NWD6ta+5QLIv4A5
-        J67MatHMWs99h8n3OcpdNXm4t3X/Dp2tB6Cuku4Tv0xVONqs9Lhv3Olcg2TyuPIF8HjayeJHh3aYH
-        8ELyqqcXBaNkfPq30+WaMZF/s9476FiUd1o/4LfUyhA4vVGkAI86RzvR1mjhHJVJEFl4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oXiDS-00GT9Q-Qv; Mon, 12 Sep 2022 14:07:06 +0200
-Date:   Mon, 12 Sep 2022 14:07:06 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH net 1/2] Revert "fec: Restart PPS after link state change"
-Message-ID: <Yx8g6vz/36glufFx@lunn.ch>
-References: <20220912070143.98153-1-francesco.dolcini@toradex.com>
- <20220912070143.98153-2-francesco.dolcini@toradex.com>
+        Mon, 12 Sep 2022 08:08:12 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1462032EE9;
+        Mon, 12 Sep 2022 05:08:09 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 12 Sep 2022 21:08:09 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 6048120584CE;
+        Mon, 12 Sep 2022 21:08:09 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 21:08:09 +0900
+Received: from [10.212.158.44] (unknown [10.212.158.44])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 1B5A9B62A4;
+        Mon, 12 Sep 2022 21:08:08 +0900 (JST)
+Subject: Re: [PATCH v2 2/8] ARM: dts: uniphier: Rename usb-phy node to
+ usb-glue
+To:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+        Olof Johansson <olof@lixom.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
+ <20220912071511.1385-3-hayashi.kunihiko@socionext.com>
+ <2a386281-5a49-4df6-bafe-ef9de0fb0ca5@www.fastmail.com>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <5040fdd1-3ca0-1659-a572-fcc9b64499f9@socionext.com>
+Date:   Mon, 12 Sep 2022 21:10:21 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912070143.98153-2-francesco.dolcini@toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2a386281-5a49-4df6-bafe-ef9de0fb0ca5@www.fastmail.com>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 09:01:42AM +0200, Francesco Dolcini wrote:
-> This reverts commit f79959220fa5fbda939592bf91c7a9ea90419040, this is
-> creating multiple issues, just not ready to be merged yet.
+Hi Arnd,
+
+Thank you for checking.
+
+On 2022/09/12 17:32, Arnd Bergmann wrote:
+> On Mon, Sep 12, 2022, at 9:15 AM, Kunihiko Hayashi wrote:
+>> Actual phy nodes are each child node. The parent node should be usb-glue
+>> node. This applies to the devicetre for Pro4 SoC.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> ---
+>>   arch/arm/boot/dts/uniphier-pro4.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/boot/dts/uniphier-pro4.dtsi
+>> b/arch/arm/boot/dts/uniphier-pro4.dtsi
+>> index a53b73ee93e9..cf62821c69ca 100644
+>> --- a/arch/arm/boot/dts/uniphier-pro4.dtsi
+>> +++ b/arch/arm/boot/dts/uniphier-pro4.dtsi
+>> @@ -376,7 +376,7 @@ pinctrl: pinctrl {
+>>   				compatible =
+> "socionext,uniphier-pro4-pinctrl";
+>>   			};
+>>
+>> -			usb-phy {
+>> +			usb-glue {
+>>   				compatible =
+> "socionext,uniphier-pro4-usb2-phy";
+>>   				#address-cells = <1>;
+>>   				#size-cells = <0>;
 > 
-> Link: https://lore.kernel.org/all/20220905180542.GA3685102@roeck-us.net/
-> Link: https://lore.kernel.org/all/CAHk-=wj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eheb3A9WHw@mail.gmail.com/
-> Fixes: f79959220fa5 ("fec: Restart PPS after link state change")
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Not sure about this one. What hardware does this node
+> actaully represent? I don't see any other soc dts files
+> refer to node names as 'glue', so there is probably a
+> better name for it. In the binding document, it's called
+> "usb-controller", but I'm not sure that is the right name
+> either.
+Surely, "glue" is uncommon, and "usb-controller" is suitable
+to represent the integration of usb-related functionality.
+I'll review the node names.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Thank you,
 
-    Andrew
+---
+Best Regards
+Kunihiko Hayashi
