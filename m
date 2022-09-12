@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A11E5B590E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AD15B5911
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiILLMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S230194AbiILLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiILLMG (ORCPT
+        with ESMTP id S230071AbiILLOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:12:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C002731DE5;
-        Mon, 12 Sep 2022 04:12:05 -0700 (PDT)
-Received: from mercury (unknown [185.122.133.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 56EBB6601FDD;
-        Mon, 12 Sep 2022 12:12:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662981124;
-        bh=Gp9A2fQl73ZyLrnlWhsrPpz2tEWHWALZC2NoG8+cS9g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j4BO6VgCytBp7s77/ESjAuP7e+bivpGEiU9tUgdbv6DiXFW5CtbnYyxoBHcm8VFV0
-         WDNvUQXWRY6BBnAKy7izR5A5FiWERGjrS6sR/FoZj1oJe2cOImFpLj+LQXTs4U589c
-         CK6f5OYpustIAUPF6uSSzJgTZJJGqX5AUaXvVPoFPwqsnsXCbE5nNKiEpAeYneZlwV
-         vhHoEFC6ChWrvfas4BXcZjD+7JM2CXDUHvrvBCI3HCO17zYWTDnT59gyDyzQPJL81B
-         SVNvKdAV4k4fjhmD9EZuyTBjkpd+6ahMAdO1PMWsyajPJ+mfP96/f8vXV/zur9DBET
-         VmRpcxhSAX0rQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 5D88F106084A; Mon, 12 Sep 2022 13:12:01 +0200 (CEST)
-Date:   Mon, 12 Sep 2022 13:12:01 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mazziesaccount@gmail.com, alina_yu@richtek.com,
-        cy_huang@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] Documentation: power: rt9471: Document exported
- sysfs entries
-Message-ID: <20220912111201.nxjgqzpa7pftzwlb@mercury.elektranox.org>
-References: <1661742391-11378-1-git-send-email-u0084500@gmail.com>
- <1661742391-11378-4-git-send-email-u0084500@gmail.com>
+        Mon, 12 Sep 2022 07:14:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0662F116D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662981284; x=1694517284;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=34Sy9c7OCYlkrL64QYSrisV6esBjhRFslEPAIn8tZ+E=;
+  b=MNSc1CaicgoEHzu/YB84A5SZUCdwAlSoXrQzYkYZvzarUM15smhvy/rL
+   eSJRNFinSo0CoT9GG9cAsyISy+DVhTmKtmdt/Lo/6aGvivFpRQ6xiLDi3
+   JiFQIjmtuKerRA+yooTSoLdSTpYuuIF5zsNFiNRad52Z3v5/lMheQDBBE
+   /kWTPghmMxrNySZaAjzplVJbxai5J9UD3iLcRdVFdEkQ+aiVqJOKEfvpH
+   x0RjmuiDSpGxZCPEsIQJ0kYA55c9Xa90rxggs93NQUwCvcfucmvfYkNl8
+   lK2yJhUoWis5dyjr/2kOsjOTEapJNYEKJtpw5sGusm9a4LU/5yjW7Dncb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="324071273"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="324071273"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:14:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="944592206"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Sep 2022 04:14:42 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXhOj-0002SF-2s;
+        Mon, 12 Sep 2022 11:14:41 +0000
+Date:   Mon, 12 Sep 2022 19:14:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Karthikeyan Ramasubramanian <kramasub@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Girish Mahadevan <girishm@codeaurora.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        Doug Anderson <dianders@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [jsarha:topic/cros-sof-v4.14 6580/9354] qcom_geni_serial.c:undefined
+ reference to `clk_set_rate'
+Message-ID: <202209121919.KFTYLA5V-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pameyxirnllnovkl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1661742391-11378-4-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,118 +66,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14
+head:   6f750b16c322c9191168a3a97c427c90581d9144
+commit: 12f34066295c18fea8f40973b522e260c86fefe7 [6580/9354] FROMGIT: tty: serial: msm_geni_serial: Add serial driver support for GENI based QUP
+config: m68k-randconfig-r034-20220911 (https://download.01.org/0day-ci/archive/20220912/202209121919.KFTYLA5V-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/12f34066295c18fea8f40973b522e260c86fefe7
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.14
+        git checkout 12f34066295c18fea8f40973b522e260c86fefe7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
---pameyxirnllnovkl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi,
+All errors (new ones prefixed by >>):
 
-On Mon, Aug 29, 2022 at 11:06:31AM +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
->=20
-> Document the settings exported by rt9471 charger driver through sysfs ent=
-ries:
-> - sysoff_enable
-> - charge_term_enable
-> - port_detect_enable
->=20
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 44 +++++++++++++++++++++++=
-++++++
->  1 file changed, 44 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index a9ce63c..1f8afe5 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -768,3 +768,47 @@ Description:
-> =20
->  		Access: Read
->  		Valid values: 1-31
-> +
-> +What:		/sys/class/power_supply/rt9471-*/sysoff_enable
-> +Date:		Sep 2022
-> +KernelVersion:	6.1
-> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
-> +Description:
-> +		This entry allows enabling the sysoff mode of rt9471 charger devices.
-> +		If enabled and the input is removed, the internal battery FET is turned
-> +		off to reduce the leakage from the BAT pin. See device datasheet for d=
-etails.
-> +
-> +		Access: Read, Write
-> +		Valid values:
-> +		- 1: enabled
-> +		- 0: disabled
+   drivers/tty/serial/8250/8250_dw.o: In function `dw8250_set_termios':
+   8250_dw.c:(.text+0x3e2): undefined reference to `clk_round_rate'
+   8250_dw.c:(.text+0x3f8): undefined reference to `clk_set_rate'
+   drivers/tty/serial/qcom_geni_serial.o: In function `qcom_geni_serial_cons_pm':
+   qcom_geni_serial.c:(.text+0x30a): undefined reference to `geni_se_resources_on'
+   qcom_geni_serial.c:(.text+0x31e): undefined reference to `geni_se_resources_off'
+   drivers/tty/serial/qcom_geni_serial.o: In function `qcom_geni_serial_port_setup':
+   qcom_geni_serial.c:(.text+0x86c): undefined reference to `geni_se_config_packing'
+   qcom_geni_serial.c:(.text+0x8ce): undefined reference to `geni_se_init'
+   qcom_geni_serial.c:(.text+0x8da): undefined reference to `geni_se_select_mode'
+   drivers/tty/serial/qcom_geni_serial.o: In function `qcom_geni_serial_set_termios':
+>> qcom_geni_serial.c:(.text+0xb8a): undefined reference to `clk_set_rate'
+   drivers/tty/serial/qcom_geni_serial.o: In function `qcom_geni_console_setup':
+   qcom_geni_serial.c:(.init.text+0x60): undefined reference to `geni_se_resources_on'
+   qcom_geni_serial.c:(.init.text+0x9e): undefined reference to `geni_se_resources_off'
+   drivers/tty/serial/mxs-auart.o: In function `mxs_auart_probe':
+   mxs-auart.c:(.text+0x5e8): undefined reference to `clk_set_rate'
+   drivers/tty/serial/owl-uart.o: In function `owl_uart_set_termios':
+   owl-uart.c:(.text+0x60c): undefined reference to `clk_set_rate'
+   drivers/spi/spi-sun4i.o: In function `sun4i_spi_transfer_one':
+   spi-sun4i.c:(.text+0x2a8): undefined reference to `clk_set_rate'
+   drivers/spi/spi-sun6i.o: In function `sun6i_spi_transfer_one':
+   spi-sun6i.c:(.text+0x2dc): undefined reference to `clk_set_rate'
+   drivers/usb/phy/phy-generic.o: In function `usb_phy_gen_create_phy':
+   phy-generic.c:(.text+0x3b2): undefined reference to `clk_set_rate'
+   drivers/i2c/busses/i2c-qcom-geni.o: In function `geni_i2c_xfer':
+   i2c-qcom-geni.c:(.text+0x6e0): undefined reference to `geni_se_select_mode'
+   i2c-qcom-geni.c:(.text+0x80a): undefined reference to `geni_se_rx_dma_prep'
+   i2c-qcom-geni.c:(.text+0x880): undefined reference to `geni_se_rx_dma_unprep'
+   i2c-qcom-geni.c:(.text+0x8f4): undefined reference to `geni_se_tx_dma_prep'
+   i2c-qcom-geni.c:(.text+0x972): undefined reference to `geni_se_tx_dma_unprep'
+   drivers/i2c/busses/i2c-qcom-geni.o: In function `geni_i2c_probe':
+   i2c-qcom-geni.c:(.text+0xbd0): undefined reference to `geni_se_resources_on'
+   i2c-qcom-geni.c:(.text+0xbfa): undefined reference to `geni_se_resources_off'
+   i2c-qcom-geni.c:(.text+0xc42): undefined reference to `geni_se_init'
+   i2c-qcom-geni.c:(.text+0xc56): undefined reference to `geni_se_config_packing'
+   drivers/media/v4l2-core/v4l2-clk.o: In function `v4l2_clk_set_rate':
+   v4l2-clk.c:(.text+0x37a): undefined reference to `clk_round_rate'
+   v4l2-clk.c:(.text+0x38c): undefined reference to `clk_set_rate'
 
-This is not a very good description of what the control does. When
-do you expect users to control this?
-
-> +What:		/sys/class/power_supply/rt9471-*/charge_term_enable
-> +Date:		Sep 2022
-> +KernelVersion:	6.1
-> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
-> +Description:
-> +		This entry allows enabling the charge termination function of rt9471 c=
-harger
-> +		devices. If enabled, the battery charging current, and the battery vol=
-tage
-> +		reachs charge termination condition, the internal battery FET will be =
-turned off
-> +		to optimize the battery life. See device datasheet for details.
-> +
-> +		Access: Read, Write
-> +		Valid values:
-> +		- 1: enabled
-> +		- 0: disabled
-
-Just write 0 to .../charge_term_current to disable it.
-No need for a custom property.
-
-> +What:		/sys/class/power_supply/rt9471-*/port_detect_enable
-> +Date:		Sep 2022
-> +KernelVersion:	6.1
-> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
-> +Description:
-> +		This entry allows enabling the USB BC12 port detect function of rt9471=
- charger
-> +		devices. If enabled and VBUS is inserted, device will start to do the =
-BC12
-> +		port detect and report the usb port type when port detect is done. See
-> +		datasheet for details.
-> +
-> +		Access: Read, Write
-> +		Valid values:
-> +		- 1: enabled
-> +		- 0: disabled
-
-Why would one want to disable this?
-Can't the driver just enable it unconditionally?
-
--- Sebastian
-
---pameyxirnllnovkl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMfE/wACgkQ2O7X88g7
-+poN5A//e2GwrsU29B5CvHNwF9pakLNcbw8DuGqSelVL2J3+8mEODmWMv1TWsxaU
-D4w898MpRUBS40c9wA+yt+Fu0HO9Cz9egXIGUJAmAVkD8x9HtaJ4WMLrOrxxwQsk
-Jt4o81fB6dGEeC1sQy7GVzLADTqHDk8nMziX7XmExXXxIT2XzolRFIagx63U3JSz
-+whjNgpxOUsEY24r8DpWe7V/bK4i55EU+9bx7uHH61453Wj0hLNuTV9lt5EHykha
-YlDUzgMogWAxavSI0r8sfNcaqlAsQ2Gcn/Tkj6RDDTR2WCycZrt4UrpNfKZDE8ic
-3GaI396kawRm6VzPz8MNMGNiw06CaI+nZP+jjK1SkY8BCk+4Hzu5WCqAoniBH6E1
-8n0Do7nOsIgOprMiBxlL6LOa2SadVLFaeufppHridMZhuB5n0y0CjWBj3ntAYv0u
-fv9Al8Y/Gv5vYuFedEjlBD+72oQltri2soeOVDXOfHDV2sp8MSEIP0eCOSj0htLk
-IGlWbqoVnrVf9EVNGe842DXZj0PjQtUGzEnnNOxdW3AgPCf9GqZPOw0EQns1dP6P
-bOnayVbdRolfvqgbedXvgygu3QOPlo0WKfWqY98HTjSUP66bCGPyGfGGg7GC3afY
-rQ4fAw4j8Cm16NYu59Zgc61zWRpzYISbU5CPYn8C0NthGn8u32Y=
-=xo/s
------END PGP SIGNATURE-----
-
---pameyxirnllnovkl--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
