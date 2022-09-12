@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673BA5B5991
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E007F5B5999
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiILLqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S230076AbiILLrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiILLqC (ORCPT
+        with ESMTP id S229984AbiILLrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:46:02 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94F13C17F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:46:01 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id wc11so4963284ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
-        b=dU6qTsmX+AR4sN4oTS+ciGVK85MYdIPdrKWG8ScWOgNhX7cCJ1mgYJErWyquyiWpR8
-         ZKKXhlelu5FWOHV4vLu1oUfC5+RQIt9Ek3b1XvEU2+pbFQS3DjW/sRiQ9mpmtYKFpISA
-         G7UoxEOCCHg4KJd2JKkNxXrmyhBpYN9IeX9zEGX+KAwnwG3rBFC7NbXuTA+I1IuDUlSI
-         PES1FOqjb1RRn8F8dtr/015vox2A4xpyxn7gc7vE/5NKqBqkl+LMINRYjncSuj+fqY18
-         7M4szXd5CGWL60jmccOgh2ugbDNV3xsSe7bSJjCGmWPXFnj1IGzRCjKMnDXz8tbBvJg3
-         R06Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
-        b=PPYxO7MmtcpIqP6lB+a2OxZmVbhfHpq07GGR+HqIR1bgiFZYpMrvHnGL3e0j1B7mHC
-         kFgIz7jsdDC3Rq6JAEe/6EMGrC+yecr4DhIXiageI+jGPrmFY9uHX+T0ye0dKKSX2+VI
-         GTg4oopIWDTQvo+0RdG6lswF8vfJOtL1AAON0MEU0zEBh/NTSHLaH8BEdofI0kVHTl5O
-         rV3HReO9lZhHAld+f6/zVfXc7g/esViFyKzNW9JqyNBbSHsH66ALAlxqTYECaSD7YHg6
-         TvtdJsJ2SH/8KOtUzi0fEdlF4QP+YPcaByGhK4MwAMhR2eB/LIKlY1cpC77PKiYjIPUp
-         hx5w==
-X-Gm-Message-State: ACgBeo1vqt7xkNd6GoOhSQ3c2ms9nvvU2NZgz9zqt4oBKHNqPwrnCgjt
-        S6uVSSk1m9v6PL7kSJVTxoJruL+CL6urFTvJimZr4Q==
-X-Google-Smtp-Source: AA6agR4itWEF5fG4C5Mcg4cNALXMb1B1eC0ZYWG9pXsheQJmPgQNvBk382aGfE0updA8rpqzChb4xjGhpIx3cChP2Gs=
-X-Received: by 2002:a17:907:94d0:b0:77e:c2e5:a35e with SMTP id
- dn16-20020a17090794d000b0077ec2e5a35emr1638818ejc.648.1662983160325; Mon, 12
- Sep 2022 04:46:00 -0700 (PDT)
+        Mon, 12 Sep 2022 07:47:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DFE3C8CA;
+        Mon, 12 Sep 2022 04:47:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F2B7611C2;
+        Mon, 12 Sep 2022 11:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 013F0C433D6;
+        Mon, 12 Sep 2022 11:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662983269;
+        bh=RDy0tUvA0Kec3HrshmYh6dhtgau20w88sb8xZPDcq3M=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=QcL0kolZpF80TRTIL37njbpkb1fVuZbc+YqZ0DgsJYHuemvN4AwwlrWj5+9FhgB8W
+         /zBSkRVBArwMY4WfX1EZOIDqPeOdtA9GKQmygshOKVru41b6lJqCOBe7ruimjd5ODp
+         /sD9WOXjaRfX7LtIc+cytwEY10Rzg/S8+1GdopyiGY0zO4obt9djnWSbik9DWCJr25
+         WKeRTYcIk3bKCDKoe4iS5vPvPAyvPA6cWe7wzdRjn7ll7gVWTQolRDbdXNZBeUrvMo
+         lzb7uAKFTpje9Ti4V+T4Bds4/OuzxAx6TAEFv+u7Y6pNtGTnudBapr7JcAE0FeTc/w
+         6gFdpQSsMDCqA==
+Date:   Mon, 12 Sep 2022 12:47:45 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [RESEND] HID: steam: Prevent NULL pointer dereference in
+ steam_{recv,send}_report
+Message-ID: <Yx8cYZnmnN09lD4A@google.com>
+References: <20220803111831.387506-1-lee@kernel.org>
 MIME-Version: 1.0
-References: <20220910224816.15058-1-someguy@effective-light.com> <eb8173f6-74cb-3010-f1c2-5eac6939e1f7@collabora.com>
-In-Reply-To: <eb8173f6-74cb-3010-f1c2-5eac6939e1f7@collabora.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 12 Sep 2022 13:45:49 +0200
-Message-ID: <CAG3jFyt-6-i1aYJ4ntTNqd__EnYejvMnfi_NEgXHOd+U9xtYJQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: it6505: use drm_debug_enabled() in it6505_debug_print()
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Hamza Mahfooz <someguy@effective-light.com>,
-        linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220803111831.387506-1-lee@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,4 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to drm-misc-next.
+On Wed, 03 Aug 2022, Lee Jones wrote:
+
+> It is possible for a malicious device to forgo submitting a Feature
+> Report.  The HID Steam driver presently makes no prevision for this
+> and de-references the 'struct hid_report' pointer obtained from the
+> HID devices without first checking its validity.  Let's change that.
+
+This patch has been floating around since the beginning of July.
+
+It fixes a real issue which was found by creating a virtual
+(software based) malicious device and registering it as a HID device.
+
+There is nothing preventing a real attacker from creating a H/W
+version of the device in order to instigate an out-of-bounds read,
+potentially leading to a data leak.
+
+Would someone be kind enough to review please?
+
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: linux-input@vger.kernel.org
+> Fixes: c164d6abf3841 ("HID: add driver for Valve Steam Controller")
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/hid/hid-steam.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-steam.c b/drivers/hid/hid-steam.c
+> index a3b151b29bd71..fc616db4231bb 100644
+> --- a/drivers/hid/hid-steam.c
+> +++ b/drivers/hid/hid-steam.c
+> @@ -134,6 +134,11 @@ static int steam_recv_report(struct steam_device *steam,
+>  	int ret;
+>  
+>  	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
+> +	if (!r) {
+> +		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (hid_report_len(r) < 64)
+>  		return -EINVAL;
+>  
+> @@ -165,6 +170,11 @@ static int steam_send_report(struct steam_device *steam,
+>  	int ret;
+>  
+>  	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
+> +	if (!r) {
+> +		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (hid_report_len(r) < 64)
+>  		return -EINVAL;
+>  
+
+-- 
+Lee Jones [李琼斯]
