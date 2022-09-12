@@ -2,370 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F7B5B5D1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C605B5D2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 17:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiILP3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 11:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S230255AbiILPbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 11:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiILP3b (ORCPT
+        with ESMTP id S229528AbiILPbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 11:29:31 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01444229;
-        Mon, 12 Sep 2022 08:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662996569; x=1694532569;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=hfayPL3j698ZNRxhwLICEuUsIz1m0Yd4sGU88/h2w7Y=;
-  b=Bd9oUONTgDxilgrFjAkvlU9+mralsnj09BGxwehEnvsen3lFLis6vcsb
-   T3xfUkO7z2jGK8svRB68v8SRuN3O29oIVkBFprZtRi/6wjXtQMobtQrjl
-   cnAnhvJLW3mPhztlDFGPbFFz3HIi3kjk2t4Y59TZzJB69Ih8fte7iyq4U
-   YM+Efj5zOQ4gEE5tYRHsKSW2GHPxMCYJeNmHW31HNnxegMMa6slyUjN3U
-   EZrdTLD5n2nnAb1yRDmQyF9XtW3N5/wOoKTNAC24TWd1Lr6au5+fr35la
-   +V+y4P+ZoUiX4lV4xCheQSomMq2psy212kIAEvPU5JTSlEC5CiVeaQ/BX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="361845066"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="361845066"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 08:29:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="719803601"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 08:29:27 -0700
-Date:   Mon, 12 Sep 2022 08:29:47 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <Yx2tSicH1M73cISi@yilunxu-OptiPlex-7050>
-Message-ID: <alpine.DEB.2.22.394.2209120817490.960392@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-6-matthew.gerlach@linux.intel.com> <Yx2tSicH1M73cISi@yilunxu-OptiPlex-7050>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 12 Sep 2022 11:31:39 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2135.outbound.protection.outlook.com [40.107.212.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91F524F26;
+        Mon, 12 Sep 2022 08:31:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QZqiwc7kfTbjT/Hsahp8H3xj1TxWcdoOCAo2Vzdx02ui1pu393gDPmWaEJTKGqcpkKFaNreBQ0NFQCxF5fvsRVhmWeOxXgswvQg4ixhTCBA0LmdVCZ+9GtLcFoeMjPlyBm+axKhpOu0Jb2agrqh7MNgOrSOnj46PLPTcHIV7t60JeQWbnn7NqbDtFiw79yU6bRLknwCd23cUltMWfDt0s7QxhZ12tBcfQe6uMunYkMoBW7g08teNCABtI7kTIhRX0vFroS/+NTfs1uuTbdnzcmxWIJU4Xo289tmEDjtlXnaaApvFMADXc3FraAA3xybIejXrjxcWUY9PhmBwRlaTmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VMM4aQ2qOlOdRMnOVuDDxHRke6Xf4+isFUh2fSYcH8A=;
+ b=V84q4r6zYDbphlSvSGHKzR1KvKxIzL2IhCoQyGEPFUYlqBsd6xH6kRw+wiHJxhUCZoHOl3myFDEuSUk9QKya5oj3AXbU9xfrPe/o6q5tzL3lLAzq608Cn3k44U3+PrdCO1Bf5Zqd6yZXg5+TbayFDy0IQo44f+c2+2UDAJ2h9Io7uJQJQ1d2lvCIeGhJuYhjFf6FbrNJpztFKUnbmJzCgTJ/X9h4DX+ZTFcsJe7I1zHpPN9uetFcYxjH1/QqyHd5G6ov4Hmi+ENh34IwZt0JFhuR60CdaEkbI7k/5RvX7PgCfLqq+wQ35O49LyZ+cG9c47tSgGHDxWK9zgU2fuuG9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VMM4aQ2qOlOdRMnOVuDDxHRke6Xf4+isFUh2fSYcH8A=;
+ b=spi56oFRDV1eCou4TB2Jx8cja89C4OsZkktzxgxGXP6fHIxgICwJLUxmL0u2CCsOzSBzErmdfQFqjTSPOPNmDynLUaKIFOKsusS/lccq6jFo0UCq3yu7ceuQ7acl+nPvvZxPszjhHubScV1pcdb2ipFZwjkMY4EZLau0J5zuKR4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by PH8PR10MB6600.namprd10.prod.outlook.com
+ (2603:10b6:510:223::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
+ 2022 15:31:35 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.020; Mon, 12 Sep 2022
+ 15:31:35 +0000
+Date:   Mon, 12 Sep 2022 08:31:30 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC v1 net-next 8/8] net: dsa: ocelot: add external ocelot
+ switch control
+Message-ID: <Yx9Q0mJyriAocj3L@colin-ia-desktop>
+References: <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-9-colin.foster@in-advantage.com>
+ <Yx8PIsInsR7oQqgh@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yx8PIsInsR7oQqgh@google.com>
+X-ClientProxiedBy: SJ0PR05CA0174.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b41d6e5d-f957-4248-a870-08da94d3e086
+X-MS-TrafficTypeDiagnostic: PH8PR10MB6600:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n/M2KZBd6ZpYBANnv6OK937mv+dFDa0Zd29eZK4RDZ8pLorerUKMu5OQfD5SIKFCiG+SeUMGWP1kMG2twyPfH3hZ0lG0BOw8cPJImkUWJxMcX9lCRVwHhTeTXtifwxtIrLSGMc2h74APyjCiAwWFSyvT4VzaIiH+QazRNeZ2v1O7oWvyGvG1fYglLaAsSnlyT252ZMtxTHTna99U3Cfovr6boPFA6SFP6aJsGS9T+h/IOCgrpxb2Sp88J8p/wyF0/aIwPIskKfiRzGJEwmKBrClBVkRiDndnAm0spNNmmItmRrAUvmCQujq4984cDyMb6GTXs6MLWRz4aIDlBrxTdzjdamAWXZ9MiIgZyHnSCZJHMywFPrxoCIQgSnr7/oRMrjhlpfRSVXJ35Vma3GahtGW3v8VJIIBhSJF3xrJqsIBMRlHN1gnr53h0P1iQnjm02nBpScPm2c0GTnxkyrgXl6YP+ERI2YTz4aW0/sQ8Rtb55+B1hVvvG3m52XUyJMzFvC1nKgVQLuy4NBi1qO/+olu7ImGedv5hMFjGheEDodia3SYWsN12ZZ0tnGCXrA6jCCcUGiiDjXuoZ//Idn6zIHdt3knBRgHqxNtIPunbS0IUzloQ4HNcxMibtSrfhRFvPx5xsR+TZNekt2WhngFV1mQ0/+1wjMpoWnM5tTSIO1XMKRyfR2wGu/7EG6lUTVC3Q4aSM6Rb/lxZ00uevC+y+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39840400004)(366004)(376002)(346002)(136003)(396003)(4326008)(38100700002)(66476007)(66946007)(66556008)(8676002)(86362001)(83380400001)(6512007)(9686003)(41300700001)(6506007)(478600001)(6486002)(6666004)(316002)(33716001)(54906003)(6916009)(2906002)(44832011)(186003)(26005)(5660300002)(7416002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVhVSGZsMmlFNHROU1pVR2dGVFlROTNkdzNOZjNtYzdlK0lrNnErOHpDNzFr?=
+ =?utf-8?B?d1hmZWpjTithaGNadW1VMzNkaU5GR092ZExkOGVYT2tNN3NLc2tNaDBCVkd4?=
+ =?utf-8?B?dkFvV0hNdENEc2hqVUcrY3BMeFhST04xMVBDeUxKTTE0WUJ1ZkRTVkkvYXVB?=
+ =?utf-8?B?U1ZncC93R2orM2JqQ0pOYmZEV1VhVkNyN1dCcnl3L3Y4OUUza0w2NnJFZFdy?=
+ =?utf-8?B?em9ZWFRXZ2d1TVk3bHpZVllxYmR0ajJ6NWliZHdxM0ZjS0hTRHZNRnQ5SmRh?=
+ =?utf-8?B?SU5mSG1YRmp5ZHpHOElSa2Q5MzVJU3B5bGQxMHMzV3ZmVUd1UnA0Q3k3dXp4?=
+ =?utf-8?B?N2RHblN3amtwVDdtZGZFOXVuQithMGVTeXpQK1hkR2VkTnBSRWliMHZSZVEz?=
+ =?utf-8?B?U2VEZENEY3VGM09kOW1uV1pFenU5NzFCNlRxa1dDTUs5RkRWY3l6MS9tVVVl?=
+ =?utf-8?B?WWdOZkpvcXk5VklNdmZ0VVlPa1JMaDFTYWVJNGZraVYyaXA2bm14QVVuQUVB?=
+ =?utf-8?B?dWNQUVRlVklsVkwwTkJaQlU3Um5GczJpRnkwNlY2QllZUENwNUNNVjlOaGdl?=
+ =?utf-8?B?bllEOCtvYXRQOWhXcFlTeko3ZmtUenZoSVVDeU5tSjQ5VGdhcFNqM0U5QWlT?=
+ =?utf-8?B?Vk1rUGx4Qk9lVXVXNFdlcTVUMElIUkllVnVPeEpOdHhLb0ZWZkJqemhweE95?=
+ =?utf-8?B?RS8yd1QyMmtLZWZMVk9peW1FUVR3NTA5bEFQK0JleWRkT1I0L2c4dnBGM3pF?=
+ =?utf-8?B?ekp5K0RwZ0FxM3FKR05NTkVEUWVEZ3hRWXZWa0tUenRva3FOZysrek05OXlD?=
+ =?utf-8?B?UzlUd1F3QmQvUUhpSFpVdDVoVkVEK3czK25rWE51ZFNUVCtLVHRMTDJlMytt?=
+ =?utf-8?B?dVFxRko0YzFEaHpWWW1Tam9JN2dLcXBrVHgyR1JKaWgyMVZ4Yzd4WXI5bGtS?=
+ =?utf-8?B?MjJLUDdpQldrNGpZWHlIQzUvd3hrYVJDVDA0SEYvRzJBTFg0SDJJdnJmcUVV?=
+ =?utf-8?B?NGREbU9oYjhtbUpHQmQ3YUkxT2ZJdXRCclo4VTFvcmU0WldYOEQvMnlPeDVy?=
+ =?utf-8?B?akJqdm9oTkhvV0FDYVB5VWVjb3B4RUhLM05DWkpVeGIwVCtZVTIzQ1NNSzZ3?=
+ =?utf-8?B?UFFZQlRySHlNSUgxZjVkd2VoM2xBT3YwRWx6b2VPWDhUbzRNZm5odEh0ZGJM?=
+ =?utf-8?B?VmxwdmhLMzFYK29PTmQ2T0pIOHRnODF2VTJ6ZllZeEpVVWxBS2VmaUdXbGxo?=
+ =?utf-8?B?TkQzMEJZY0dzZGZrelFJSktTaFg0RjJlNFE2cWl6MHkrczFDTE13K1RaUXlV?=
+ =?utf-8?B?MExicy9ubGxLYlREZWVtR1F2NVJ6aFpLWEVmVnQyLzlRc3FJRW90MTFldEMx?=
+ =?utf-8?B?cHE5VjhYWVVPaTdSd3dtd2dURWtWRE9iK2FBNmJ2UTJjRElYa3YvZi9tZWdR?=
+ =?utf-8?B?YU1EY3ZLdW1iR3ZOQTFyRGRRUloxQnRzZ1REYmdRbDJrVkV3RDhsMzhDRWhw?=
+ =?utf-8?B?NTQrdkpkR2tXNi9QN1Bvb2JxVTlROW1DUXlSZ1hJc2h3QVZ1M01xNWxtdGZl?=
+ =?utf-8?B?cFR3RGhPSXlZYkFRMWNMako5TnlvV2FBSmFoQ0RjQW9TNnFqUXR6bU1aNHV3?=
+ =?utf-8?B?c3N0T1VUcENiY1puTWYyYmZvT25LbVNMRXNYUUtSN0hMZW9EUi94MjR0azh3?=
+ =?utf-8?B?T0dUS2pvS2FBT2NHZG5FNGtMSWF6ZlcvY2cweE9NUjhhMFdVN3FUcHNmNHBa?=
+ =?utf-8?B?cU5NcVJVY2c4ZmNVSkJ5bkw4eWZZNUlPUXRQdkYxVTNVZEZ6VEVaQzM1OEtI?=
+ =?utf-8?B?NWkwZDhYUHY3d1oreWpTOHlNSHU4WjJBSnEvVyt2VDlLUUNMSitpb0xFdXdC?=
+ =?utf-8?B?cEZhcnhwY1ltTVR0K1lTTGZlak1FMWxXc29QS204MElQaFUyalJSa2lyLy9p?=
+ =?utf-8?B?T0g0Rm1BU1lXMTY0TGcxTFd2Z0FhOGJZRDFET2F4YWRJa1lqK29vS2hqdGJw?=
+ =?utf-8?B?TFRTUEYrME44Z3lkU1I3Zis1bWwycm1CZmFJcHNnQ0dlOHVrVG5LTkNDSi9X?=
+ =?utf-8?B?ZUorTFJtN0dlMlJhVXlzMWF1QkNoL2k2RGxCOWxVb2pyTHVOblg0R2dHTHQz?=
+ =?utf-8?B?eHhaaUk3dHlzTk9CVTVrcDZBa0tSSUQrTFlJSktLc3lwWDl6VHprSi9QQXBz?=
+ =?utf-8?B?Vmc9PQ==?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b41d6e5d-f957-4248-a870-08da94d3e086
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 15:31:35.5715
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qPZRt+SJ/gCFGKdjHMaiYWdEJNhb4TDtt/n6lpZOg63VrguwysweHNRYg9r+dMZUi018BqeAkFn185YeGhirAme3rMlKxAE8gJVGfyXgo48=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6600
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 12, 2022 at 11:51:14AM +0100, Lee Jones wrote:
+> On Sun, 11 Sep 2022, Colin Foster wrote:
+> 
+> > Add control of an external VSC7512 chip by way of the ocelot-mfd interface.
+> > 
+> > Currently the four copper phy ports are fully functional. Communication to
+> > external phys is also functional, but the SGMII / QSGMII interfaces are
+> > currently non-functional.
+> > 
+> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> > ---
+> > 
+> > v1 from previous RFC:
+> >     * Remove unnecessary byteorder and kconfig header includes.
+> >     * Create OCELOT_EXT_PORT_MODE_SERDES macro to match vsc9959.
+> >     * Utilize readx_poll_timeout for SYS_RESET_CFG_MEM_INIT.
+> >     * *_io_res struct arrays have been moved to the MFD files.
+> >     * Changes to utilize phylink_generic_validate() have been squashed.
+> >     * dev_err_probe() is used in the probe function.
+> >     * Make ocelot_ext_switch_of_match static.
+> >     * Relocate ocelot_ext_ops structure to be next to vsc7512_info, to
+> >       match what was done in other felix drivers.
+> >     * Utilize dev_get_regmap() instead of the obsolete
+> >       ocelot_init_regmap_from_resource() routine.
+> > 
+> > ---
+> >  drivers/mfd/ocelot-core.c           |   3 +
+> >  drivers/net/dsa/ocelot/Kconfig      |  14 ++
+> >  drivers/net/dsa/ocelot/Makefile     |   5 +
+> >  drivers/net/dsa/ocelot/ocelot_ext.c | 254 ++++++++++++++++++++++++++++
+> >  include/soc/mscc/ocelot.h           |   2 +
+> >  5 files changed, 278 insertions(+)
+> >  create mode 100644 drivers/net/dsa/ocelot/ocelot_ext.c
+> > 
+> > diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
+> > index aa7fa21b354c..b7b9f6855f74 100644
+> > --- a/drivers/mfd/ocelot-core.c
+> > +++ b/drivers/mfd/ocelot-core.c
+> > @@ -188,6 +188,9 @@ static const struct mfd_cell vsc7512_devs[] = {
+> >  		.use_of_reg = true,
+> >  		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
+> >  		.resources = vsc7512_miim1_resources,
+> > +	}, {
+> > +		.name = "ocelot-ext-switch",
+> > +		.of_compatible = "mscc,vsc7512-ext-switch",
+> >  	},
+> >  };
+> 
+> Please separate this out into its own patch.
 
+I'll do that.
 
-On Sun, 11 Sep 2022, Xu Yilun wrote:
-
-> On 2022-09-06 at 12:04:26 -0700, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a Device Feature List (DFL) bus driver for the Altera
->> 16550 implementation of UART.
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->>  drivers/tty/serial/8250/8250_dfl.c | 188 +++++++++++++++++++++++++++++
->>  drivers/tty/serial/8250/Kconfig    |   9 ++
->>  drivers/tty/serial/8250/Makefile   |   1 +
->>  include/linux/dfl.h                |   7 ++
->>  4 files changed, 205 insertions(+)
->>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
->>
->> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
->> new file mode 100644
->> index 000000000000..dcf6638a298c
->> --- /dev/null
->> +++ b/drivers/tty/serial/8250/8250_dfl.c
->> @@ -0,0 +1,188 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Driver for FPGA UART
->> + *
->> + * Copyright (C) 2022 Intel Corporation, Inc.
->> + *
->> + * Authors:
->> + *   Ananda Ravuri <ananda.ravuri@intel.com>
->> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> + */
->> +
->> +#include <linux/dfl.h>
->> +#include <linux/version.h>
->> +#include <linux/serial.h>
->> +#include <linux/serial_8250.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/bitfield.h>
->> +#include <linux/io-64-nonatomic-lo-hi.h>
->> +
->> +struct dfl_uart {
->> +	void __iomem   *csr_base;
->> +	u64             csr_addr;
->> +	unsigned int    csr_size;
->> +	struct device  *dev;
->> +	u64             uart_clk;
->> +	u64             fifo_len;
->> +	unsigned int    fifo_size;
->> +	unsigned int    reg_shift;
->> +	unsigned int    line;
->> +};
->> +
->> +int feature_uart_walk(struct dfl_uart *dfluart, resource_size_t max)
->> +{
->> +	void __iomem *param_base;
->> +	int off;
->> +	u64 v;
->> +
->> +	v = readq(dfluart->csr_base + DFHv1_CSR_ADDR);
->> +	dfluart->csr_addr = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
->> +
->> +	v = readq(dfluart->csr_base + DFHv1_CSR_SIZE_GRP);
->> +	dfluart->csr_size = FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v);
->
-> These are generic for DFHv1, so maybe we parse them in DFL generic code.
-
-I will look into moving this to the DFL generic code.
-
->
->> +
->> +	if (dfluart->csr_addr == 0 || dfluart->csr_size == 0) {
->> +		dev_err(dfluart->dev, "FIXME bad dfh address and size\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
->> +		dev_err(dfluart->dev, "missing required parameters\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	param_base = dfluart->csr_base + DFHv1_PARAM_HDR;
->
-> The same concern.
->
->> +
->> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_CLK_FRQ);
->> +	if (off < 0) {
->> +		dev_err(dfluart->dev, "missing CLK_FRQ param\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	dfluart->uart_clk = readq(param_base + off + DFHv1_PARAM_DATA);
->> +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
->
-> I see the DFHv1_PARAM_ID_CLK_FRQ defined in generic dfl.h, is this
-> param definition global to all features, or specific to uart?
-
-Certainly uart drivers need to know the input clock frequency in order to 
-properly calculate baud rate dividers, but drivers for other features/IP 
-blocks may need to know the input clock frequency as well.  On the other 
-hand not all drivers need to know the input clock frequency to the 
-feature/IP block.
-
->
-> Do we have clear definition of generic parameters vs feature specific
-> parameters?
-
-I don't think there is a clear definition of generic versus feature 
-specific, but a clock frequency and interrupt information it fairly 
-generic.
-
->
-> The concern here is to avoid duplicated parameter parsing for each driver.
-
-I understand the concern about avoiding duplicated parameter parsing.
-
-
->
-> Thanks,
-> Yilun
->
->> +
->> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_FIFO_LEN);
->> +	if (off < 0) {
->> +		dev_err(dfluart->dev, "missing FIFO_LEN param\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	dfluart->fifo_len = readq(param_base + off + DFHv1_PARAM_DATA);
->> +	dev_dbg(dfluart->dev, "UART_FIFO_ID fifo_len %llu\n", dfluart->fifo_len);
->> +
->> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
->> +	if (off < 0) {
->> +		dev_err(dfluart->dev, "missing REG_LAYOUT param\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	v = readq(param_base + off + DFHv1_PARAM_DATA);
->> +	dfluart->fifo_size = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
->> +	dfluart->reg_shift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
->> +	dev_dbg(dfluart->dev, "UART_LAYOUT_ID width %d shift %d\n",
->> +		dfluart->fifo_size, dfluart->reg_shift);
->> +
->> +	return 0;
->> +}
->> +
->> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
->> +{
->> +	struct device *dev = &dfl_dev->dev;
->> +	struct uart_8250_port uart;
->> +	struct dfl_uart *dfluart;
->> +	int ret;
->> +
->> +	memset(&uart, 0, sizeof(uart));
->> +
->> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
->> +	if (!dfluart)
->> +		return -ENOMEM;
->> +
->> +	dfluart->csr_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
->> +	if (IS_ERR(dfluart->csr_base)) {
->> +		dev_err(dev, "failed to get mem resource!\n");
->> +		return PTR_ERR(dfluart->csr_base);
->> +	}
->> +
->> +	dfluart->dev = dev;
->> +
->> +	ret = feature_uart_walk(dfluart, resource_size(&dfl_dev->mmio_res));
->> +	if (ret < 0) {
->> +		dev_err(dev, "failed to uart feature walk %d\n", ret);
->> +		return -EINVAL;
->> +	}
->> +
->> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
->> +
->> +	if (dfl_dev->num_irqs == 1)
->> +		uart.port.irq = dfl_dev->irqs[0];
->> +
->> +	switch (dfluart->fifo_len) {
->> +	case 32:
->> +		uart.port.type = PORT_ALTR_16550_F32;
->> +		break;
->> +
->> +	case 64:
->> +		uart.port.type = PORT_ALTR_16550_F64;
->> +		break;
->> +
->> +	case 128:
->> +		uart.port.type = PORT_ALTR_16550_F128;
->> +		break;
->> +
->> +	default:
->> +		dev_err(dev, "bad fifo_len %llu\n", dfluart->fifo_len);
->> +		return -EINVAL;
->> +	}
->> +
->> +	uart.port.iotype = UPIO_MEM32;
->> +	uart.port.membase = dfluart->csr_base + dfluart->csr_addr;
->> +	uart.port.mapsize = dfluart->csr_size;
->> +	uart.port.regshift = dfluart->reg_shift;
->> +	uart.port.uartclk = dfluart->uart_clk;
->> +
->> +	/* register the port */
->> +	ret = serial8250_register_8250_port(&uart);
->> +	if (ret < 0) {
->> +		dev_err(dev, "unable to register 8250 port %d.\n", ret);
->> +		return -EINVAL;
->> +	}
->> +	dev_info(dev, "serial8250_register_8250_port %d\n", ret);
->> +	dfluart->line = ret;
->> +	dev_set_drvdata(dev, dfluart);
->> +
->> +	return 0;
->> +}
->> +
->> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
->> +{
->> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
->> +
->> +	if (dfluart->line > 0)
->> +		serial8250_unregister_port(dfluart->line);
->> +}
->> +
->> +#define FME_FEATURE_ID_UART 0x24
->> +
->> +static const struct dfl_device_id dfl_uart_ids[] = {
->> +	{ FME_ID, FME_FEATURE_ID_UART },
->> +	{ }
->> +};
->> +
->> +static struct dfl_driver dfl_uart_driver = {
->> +	.drv = {
->> +		.name = "dfl-uart",
->> +	},
->> +	.id_table = dfl_uart_ids,
->> +	.probe = dfl_uart_probe,
->> +	.remove = dfl_uart_remove,
->> +};
->> +
->> +module_dfl_driver(dfl_uart_driver);
->> +
->> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
->> +MODULE_DESCRIPTION("DFL Intel UART driver");
->> +MODULE_AUTHOR("Intel Corporation");
->> +MODULE_LICENSE("GPL");
->> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
->> index d0b49e15fbf5..fbb59216ce7f 100644
->> --- a/drivers/tty/serial/8250/Kconfig
->> +++ b/drivers/tty/serial/8250/Kconfig
->> @@ -546,3 +546,12 @@ config SERIAL_OF_PLATFORM
->>  	  are probed through devicetree, including Open Firmware based
->>  	  PowerPC systems and embedded systems on architectures using the
->>  	  flattened device tree format.
->> +
->> +config SERIAL_8250_DFL
->> +	tristate "DFL bus driver for Altera 16550 UART"
->> +	depends on SERIAL_8250 && FPGA_DFL
->> +	help
->> +	  This option enables support for a Device Feature List (DFL) bus
->> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
->> +	  can be instantiated in a FPGA and then be discovered during
->> +	  enumeration of the DFL bus.
->> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
->> index bee908f99ea0..8e987b04820a 100644
->> --- a/drivers/tty/serial/8250/Makefile
->> +++ b/drivers/tty/serial/8250/Makefile
->> @@ -43,5 +43,6 @@ obj-$(CONFIG_SERIAL_8250_PXA)		+= 8250_pxa.o
->>  obj-$(CONFIG_SERIAL_8250_TEGRA)		+= 8250_tegra.o
->>  obj-$(CONFIG_SERIAL_8250_BCM7271)	+= 8250_bcm7271.o
->>  obj-$(CONFIG_SERIAL_OF_PLATFORM)	+= 8250_of.o
->> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
->>
->>  CFLAGS_8250_ingenic.o += -I$(srctree)/scripts/dtc/libfdt
->> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
->> index 5652879ab48e..d37636090fed 100644
->> --- a/include/linux/dfl.h
->> +++ b/include/linux/dfl.h
->> @@ -73,6 +73,13 @@
->>  #define DFHv1_PARAM_MSIX_STARTV	0x8
->>  #define DFHv1_PARAM_MSIX_NUMV	0xc
->>
->> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
->> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
->> +
->> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
->> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
->> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
->> +
->>  /**
->>   * enum dfl_id_type - define the DFL FIU types
->>   */
->> --
->> 2.25.1
->>
->
+> 
+> -- 
+> Lee Jones [李琼斯]
