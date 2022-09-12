@@ -2,251 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01625B592A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8352B5B5945
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 13:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiILLTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 07:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S230123AbiILL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 07:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiILLTE (ORCPT
+        with ESMTP id S229562AbiILL1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 07:19:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB3A2A432
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 04:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662981543; x=1694517543;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=apbHIdQHDWWREdLt5vj9vJHe5VmkPk8Hz5f49OWlcMA=;
-  b=fP6sVklyLcGZIHpnjruv26kbbQHeBpNPQMXkQ4muMo7ZXWpiiE7kI9b2
-   ZMi8Xi1OrJgnx2CbBixvOvHXQ9AYfPmV6DgbI+r2hJ/zv8uKUhlSRE/3E
-   t5WxSPtOkOuHBcs95W+vZ/IGvFYSKerUtX8Vc9Ro7jt42q786IoePEwLS
-   9U7rQNlFeooqlnmpiybnxadPRgGN9sk5U8s9BjM+YcSC98nAtKvfCzXUA
-   l37bL0etdcw/2vOv7YdWzgPRgIEE/zT4cw0RR4RaPiQzzeggKK0rCsyf3
-   aUxRpXUa7Hc3Q27d3lPmVrJZDUIShIIogGdJVF9nlI/V5vLjvf8YlTBmp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="284860960"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="284860960"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 04:19:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="758357843"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga001.fm.intel.com with SMTP; 12 Sep 2022 04:19:00 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 12 Sep 2022 14:18:59 +0300
-Date:   Mon, 12 Sep 2022 14:18:59 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/plane-helper: Add a drm_plane_helper_atomic_check()
- helper
-Message-ID: <Yx8Vo4x7frhbElPq@intel.com>
-References: <20220912101522.69482-1-javierm@redhat.com>
- <Yx8Ms2jhgwpiDqA6@intel.com>
- <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 12 Sep 2022 07:27:35 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF82D23178;
+        Mon, 12 Sep 2022 04:27:34 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28CBItZN008055;
+        Mon, 12 Sep 2022 11:27:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
+ b=G4NBw+f8VDDqQ6EjyH1xRp9TQ8qBH2tpqrisJH2/L1MBJc5GCBOTyltfNFj+8VgIzj8Q
+ JErR8EsYTsMhzCJmAKF2fyh3wxXvedIi5gnNKkqxVdqBeX99PAPGux8x51AEMbf0PwNj
+ 7ER79FtntjB2rzPW8SYcNTGt4V1ek6YMLj4JCRoaKUIH6eHYzGM0UfpKIYiJchmmV9wA
+ b2XETQeXKcj8E+gD3fn/0p92nVBb0ge82QvH5v0Zuv+VOx1MfNBacnmAjSN9b1Q4UXbe
+ yPXHHHnTYPNueFoLg6eQ/9Me3GW+POA55kp3XMYItgEfTbxiFOycVjd2AoIfsACjQfbM 6A== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jghc2k7ug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Sep 2022 11:27:05 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28C9rG6o029544;
+        Mon, 12 Sep 2022 11:27:05 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jgj5awpun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Sep 2022 11:27:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=icfrVnWyl2ufSRbKVRNsGVyQl+E9eFrXV2OPHQMoqmW38dEPgwE47PnspaZYaT5eSBVvWACNVNGvmdanLtG1xFvA8U1CRnCxjNa02HLTt5ma0ITNDNbDPKf+sH4Zahf1CF8IvGYm3H3KrllIO4z2Rn32wpG8NsNRn6LqtLXp6L34WWNXPi0vTMWU/NmATjzd3RYaVSN3U+7A/58MKWkCqsLGHlLuOdZya83s9CIjVvHuHrZJBbQi8djcb5nM9VLsTqfAu6mgbMYH1GH53LaE9cSvLSbpHrswyg5GZTv6/ViYJUBWge2lSZfVwGDPsHome9mwdXlw8JJY+vyAtMHV1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
+ b=TfsqBl8MPOOy2kruDmXLN+KE4X2Vxo1Zand5tjRVEDt4KBNVckKlPo0rZyFZ3pDX6251stjBcv28LETUbQbOwmLWVaMc1qO0pNgTM7cYvYi34EVoUCpFRoXSpkAw6Tr625gzFL4/ljbLA+/lQEX/w0/KDvGogqSf+anHa5Omg4xUlz0UgwwSsgqZMrGC//wg/naiJpKXjpXE+ApCNRt0hzckXMKrITPNPqbAwScdxNLXfkK+gFMDxHXt6mQrZrvCXh8+OU1il7SxgTOTGtzM3EoU08WBG79jCN5PDwJwi+AeCzsmVsLq1YG+96+SnbxHL93OBZw1y9L7e6LAUhauJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QwhAhppyPMDhvZvf6Ew+xbVwUeTU2A/e6iTQtM4Rq1Q=;
+ b=pm5l+RO4UCMUwdcYEtNJE3OcpCD4L3JWMBITvEM7ZvyNf/EuoudfQKNRouBbt9xOZX6MVWNFnvalYiPcbDIWHbNM9tLkBrJpPcupQmnrk2BiSl3rwnO/n23QoWQbPRx9EM2EKQ4UsjyvZTJ0tIKX7jEsacmEWvM5dKQAklZMpU8=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MW5PR10MB5668.namprd10.prod.outlook.com
+ (2603:10b6:303:1a3::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Mon, 12 Sep
+ 2022 11:27:03 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
+ 11:27:03 +0000
+Date:   Mon, 12 Sep 2022 14:26:46 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Yu Zhe <yuzhe@nfschina.com>
+Cc:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+Subject: Re: [PATCH] EDAC/altera: add platform_get_irq error checking
+Message-ID: <Yx8Xds2BrK7PNjXJ@kadam>
+References: <20220909053839.2293-1-yuzhe@nfschina.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6ce4e99-571b-e046-6f03-ab87bd173869@suse.de>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220909053839.2293-1-yuzhe@nfschina.com>
+X-ClientProxiedBy: JN2P275CA0044.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::32)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|MW5PR10MB5668:EE_
+X-MS-Office365-Filtering-Correlation-Id: 811550f8-d9f7-4206-8445-08da94b1b6f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JyrA5yNLidM4Y5X34IvYYU1OoUsaF471OlPVSCD2+CIkX/mRaHPVEIXk9VBWLRnX2FPjcLkGLeL/q9hkkmYVBr6Ko2ghjOAEqr6CWUcZavFA6+WSKwlESlFwlWXeDgPIQTlyqcU6eRosgBsAl/S1I97YlLwJbX3FR0epTYekwpQ1jANpbM0YQrjBLbP1W638IesEefqoI/N10QJnrBHAlEKPvYWIxQPNzuN+PEBx85lKVR+lEmzPAz5Qp0vQta8opUBJCKdQd9vC5sy6D5HazT5JneBzwkXRbVw+b/S3ghKHLBEV8jHEXlfOo/Sohw2SNXUbdwmy80p9mBIiq0B0iYBPKnfOsSLp4NREnVMA5AwcYUUalQmv39LCKLBo57Sq30Iawe7ypWSJr+JwV2wevibTkBb/01kyVC78zaDdNA4lHALMBfkaLA1i878hMHIA4KpDywqNrlVnDCuLKF+LOxuiLJRO6BGCcN+ZZvyhYoqSRK9HZz0Wp0FrDgevBw1Lg8SS98FCu6w4QgtLhpgljqg2L3E7GQr8e6prZSXVGgZw3L9g6W2ACU1BkmiUrLfNmqm8MKyLs5j8HspJ2mLC6mq7fSzC4IPE/4bKf/jwtTQwEWX9CJofrOG9XZn4b3qIP+g4khPAoFV6o4OnpPcrgDsnNCq4tJMXUEK9b5ss0TnTLuxWMCSJP5LTJ1UB0K9AIGmbAGGvpH7J3LSnwGttIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(39860400002)(396003)(346002)(136003)(366004)(316002)(6916009)(33716001)(8676002)(7416002)(5660300002)(38100700002)(66476007)(66946007)(4326008)(66556008)(8936002)(83380400001)(41300700001)(6486002)(478600001)(9686003)(6512007)(6666004)(6506007)(26005)(186003)(44832011)(86362001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DHxgjc8bYZ1z2tauk3iYaSVwYR25+XyahZDJtN2dCM+MgHqRdBwX3k9IIlsM?=
+ =?us-ascii?Q?LPWoRiAu8At2aJL2i5z664elI5JYCKfWxHfCDAoKO44TQrk63EO/2o459m08?=
+ =?us-ascii?Q?RUyyY16oDUh5qDD57S96QCH+n4KMJfn76dSQAjz/n430rLexrbm/0ldftOVU?=
+ =?us-ascii?Q?EIMzn14mvdqg9uzYLGGESsThMb3upZ6K35kHOri1OXH3GDLXrMaMN4l+G5Zq?=
+ =?us-ascii?Q?P0FEZ1pSb/ktEeo5pEYBcDWrUwGZrJoFO4sWWXAsrHGP/oJ81gXvJRPkj2bN?=
+ =?us-ascii?Q?Hfd2PR7KL0P3NNQIgIS0me92YRbEexPzG/GX3f+i7oE3XBrUl/1S35oqOGuk?=
+ =?us-ascii?Q?cxPii6OzBFitacgD1Kbwj0+cXVGS04BHtJOm1GDRoHzEZ5xKJObr/A25M5Ea?=
+ =?us-ascii?Q?nvAXkm+pW4UMFaUyy9TCMw64CDK5lUMsmFIPu0s4X9rajP6YRtTTily8KoBb?=
+ =?us-ascii?Q?iTZivdHQ04W70CHrvPPjG490GJfrfbwtgsDJ7D7eNrLEP7FogyJPOnD4Wyt2?=
+ =?us-ascii?Q?OWGOxIoTol1tyhNc69bx8znP0jkh2WdcszmJJ2/HZE5NwlQLhZyEfIVvWu79?=
+ =?us-ascii?Q?Sf2ACFhQsgdIWYfcAnEsxCw0SsJzh3PFc05UOCklwHRBV0pFmwcKNB78ozZQ?=
+ =?us-ascii?Q?HgJuJQWwLAcLJvz15iSuOM28mKSG8lHo7mihMUO1MtcFHn32S7orGJu+kdhU?=
+ =?us-ascii?Q?h0Qixp8XU+jsEzXBjlHmV7mVtjkJtKroVDbakXqJIiIFUUmqGlILya5ywvcZ?=
+ =?us-ascii?Q?Ji3/pzDvgOFJsMC7GTfonHW10rg/Ny3vrkb8tc180GXHnLVNLypwiYo8nBfK?=
+ =?us-ascii?Q?FMU8rOqo8zTaBrfQ9AGo3d6Afi5ljYyNwckgJK6N6sX5s4+YlFSZbil3jACP?=
+ =?us-ascii?Q?IRRSNFrBDn+gfPCbO0N3TgLJQG1a88E8yaOsFrewduS69KtdiE36KlibhIIu?=
+ =?us-ascii?Q?H8OLY9rVom2WNyV7FAX40WJLkjEMEzbS6/48D5QNEhCJag7dfXck7VQch8p8?=
+ =?us-ascii?Q?1dxakSY0cqWw/PSGEBqTuJJt9geCoFzvozQ5XRfV+XVOtbiF7IV77wk/GC3J?=
+ =?us-ascii?Q?IMpG1WjnU4jNaIDQZlCYQolB/krcZ6ilwhiEzmDxhsI+aHDdb8m46p/tuwxq?=
+ =?us-ascii?Q?B7FkLsMaYpJ9sOFqjGd3trHkVLzZaDtRUD29rwXEdK1L4rzOG9yK1yy/Xad0?=
+ =?us-ascii?Q?e881CuVUIAIPENTK1nTxuiF8tI0AQ39AwFtoOW+3fd802Ffv03mdrK69vAco?=
+ =?us-ascii?Q?sfA7pv+R5/frIHlJr2Zx3Fqzbz/wKlFiS5YlcAzae9NzgHNq49FUhxlwq7+a?=
+ =?us-ascii?Q?hzUdYFOMGXl/ux1NBlT6HUawjyUrVCcBzdhayac19VseghmioN9vt5XzO2Vd?=
+ =?us-ascii?Q?OGbaMxyIoQX/LDR2Wod0kBi7e5fAsYwI8mkCfUpF4hvIvkdx2IIqVNr+DUjp?=
+ =?us-ascii?Q?zQaweTnf6xFAGs3XyQd/9a6Qni36omS+It194easJYyuzIdl2+sI2qqiwXvl?=
+ =?us-ascii?Q?EP3sMSBazWXQfDxTTQwVTBRYls/mI1jCQhtssXj5DoBmuCgKLzvg5Nz7JcWk?=
+ =?us-ascii?Q?LkElvBpxPd/VYUxVrpvNjsoWssEjdrseYNxrSeSm?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 811550f8-d9f7-4206-8445-08da94b1b6f6
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 11:27:03.0764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JZQPXPQIysfgvSShhoRP0vkTHct0laqffnub1xasTaSkA/Co2KRUDZakIbrJq2nL0CPeCaANGqs/pmklq8sttmQbSodurn7NTI/lnoj5Ksc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5668
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_07,2022-09-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209120038
+X-Proofpoint-ORIG-GUID: kIxxc7mxmjIw_bkOAPnX-9CYW0BdfB0o
+X-Proofpoint-GUID: kIxxc7mxmjIw_bkOAPnX-9CYW0BdfB0o
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 01:05:45PM +0200, Thomas Zimmermann wrote:
-> Hi
+On Fri, Sep 09, 2022 at 01:38:38PM +0800, Yu Zhe wrote:
+> The platform_get_irq() function returns negative error codes on error,
+> check it.
 > 
-> Am 12.09.22 um 12:40 schrieb Ville Syrjälä:
-> > On Mon, Sep 12, 2022 at 12:15:22PM +0200, Javier Martinez Canillas wrote:
-> >> Provides a default plane state check handler for primary planes that are a
-> >> fullscreen scanout buffer and whose state scale and position can't change.
-> >>
-> >> There are some drivers that duplicate this logic in their helpers, such as
-> >> simpledrm and ssd130x. Factor out this common code into a plane helper and
-> >> make drivers use it.
-> >>
-> >> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >> ---
-> >>
-> >>   drivers/gpu/drm/drm_plane_helper.c | 29 +++++++++++++++++++++++++++++
-> >>   drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
-> >>   drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
-> >>   include/drm/drm_plane_helper.h     |  2 ++
-> >>   4 files changed, 33 insertions(+), 41 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
-> >> index c7785967f5bf..fb41eee74693 100644
-> >> --- a/drivers/gpu/drm/drm_plane_helper.c
-> >> +++ b/drivers/gpu/drm/drm_plane_helper.c
-> >> @@ -278,3 +278,32 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
-> >>   	kfree(plane);
-> >>   }
-> >>   EXPORT_SYMBOL(drm_plane_helper_destroy);
-> >> +
-> >> +/**
-> >> + * drm_plane_helper_atomic_check() - Helper to check primary planes states
-> >> + * @plane: plane to check
-> >> + * @new_state: plane state to check
-> > 
-> > That is not a plane state. Also should s/new_// since it's just
-> > the overall atomic state thing rather than some new or old state.
+> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> ---
+>  drivers/edac/altera_edac.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Using only 'state' is non-intuitive and has lead to bugs where sub-state 
-> was retrieved from the wrong state information. So we've been using 
-> 'new_state' and 'old_state' explicitly in several places now.
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index e7e8e624a436..79c7c97c7a46 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -355,6 +355,8 @@ static int altr_sdram_probe(struct platform_device *pdev)
+>  
+>  	/* Arria10 has a 2nd IRQ */
+>  	irq2 = platform_get_irq(pdev, 1);
+> +	if (irq2 < 0)
+> +		return irq2;
 
-There is no old or new drm_atomic_state. It contains both.
+This will break the driver.  Only certain hardware has the second IRQ.
+(Read the comments later in the probe).  In fact, the code works fine
+as-is because devm_request_irq() will fail later if this IRQ is
+required.
 
-> 
-> Best regards
-> Thomas
-> 
-> > 
-> >> + *
-> >> + * Provides a default plane state check handler for primary planes whose atomic
-> >> + * state scale and position is not expected to change because the primary plane
-> >> + * is always a fullscreen scanout buffer.
-> >> + *
-> >> + * RETURNS:
-> >> + * Zero on success, or an errno code otherwise.
-> >> + */
-> >> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
-> >> +				  struct drm_atomic_state *new_state)
-> >> +{
-> >> +	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> >> +	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> >> +	struct drm_crtc_state *new_crtc_state = NULL;
-> >> +
-> >> +	if (new_crtc)
-> >> +		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> >> +
-> >> +	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> >> +						   DRM_PLANE_NO_SCALING,
-> >> +						   DRM_PLANE_NO_SCALING,
-> >> +						   false, false);
-> >> +}
-> >> +EXPORT_SYMBOL(drm_plane_helper_atomic_check);
-> >> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-> >> index 79e8e2017c68..28cf9c87f86d 100644
-> >> --- a/drivers/gpu/drm/solomon/ssd130x.c
-> >> +++ b/drivers/gpu/drm/solomon/ssd130x.c
-> >> @@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
-> >>   	return ret;
-> >>   }
-> >>   
-> >> -static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
-> >> -						     struct drm_atomic_state *new_state)
-> >> -{
-> >> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> >> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> >> -	struct drm_crtc_state *new_crtc_state = NULL;
-> >> -
-> >> -	if (new_crtc)
-> >> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> >> -
-> >> -	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> >> -						   DRM_PLANE_NO_SCALING,
-> >> -						   DRM_PLANE_NO_SCALING,
-> >> -						   false, false);
-> >> -}
-> >> -
-> >>   static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
-> >>   						       struct drm_atomic_state *old_state)
-> >>   {
-> >> @@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
-> >>   
-> >>   static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
-> >>   	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
-> >> -	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
-> >> +	.atomic_check = drm_plane_helper_atomic_check,
-> >>   	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
-> >>   	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
-> >>   };
-> >> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-> >> index 777ccd250871..ea5b3239a659 100644
-> >> --- a/drivers/gpu/drm/tiny/simpledrm.c
-> >> +++ b/drivers/gpu/drm/tiny/simpledrm.c
-> >> @@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
-> >>   	DRM_FORMAT_MOD_INVALID
-> >>   };
-> >>   
-> >> -static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
-> >> -						       struct drm_atomic_state *new_state)
-> >> -{
-> >> -	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
-> >> -	struct drm_crtc *new_crtc = new_plane_state->crtc;
-> >> -	struct drm_crtc_state *new_crtc_state = NULL;
-> >> -	int ret;
-> >> -
-> >> -	if (new_crtc)
-> >> -		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
-> >> -
-> >> -	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-> >> -						  DRM_PLANE_NO_SCALING,
-> >> -						  DRM_PLANE_NO_SCALING,
-> >> -						  false, false);
-> >> -	if (ret)
-> >> -		return ret;
-> >> -	else if (!new_plane_state->visible)
-> >> -		return 0;
-> >> -
-> >> -	return 0;
-> >> -}
-> >> -
-> >>   static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
-> >>   							 struct drm_atomic_state *old_state)
-> >>   {
-> >> @@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
-> >>   
-> >>   static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
-> >>   	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
-> >> -	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
-> >> +	.atomic_check = drm_plane_helper_atomic_check,
-> >>   	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
-> >>   	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
-> >>   };
-> >> diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
-> >> index 1781fab24dd6..7ba414655d69 100644
-> >> --- a/include/drm/drm_plane_helper.h
-> >> +++ b/include/drm/drm_plane_helper.h
-> >> @@ -41,5 +41,7 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
-> >>   int drm_plane_helper_disable_primary(struct drm_plane *plane,
-> >>   				     struct drm_modeset_acquire_ctx *ctx);
-> >>   void drm_plane_helper_destroy(struct drm_plane *plane);
-> >> +int drm_plane_helper_atomic_check(struct drm_plane *plane,
-> >> +				  struct drm_atomic_state *new_state);
-> >>   
-> >>   #endif
-> >> -- 
-> >> 2.37.1
-> > 
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
+This code is not beautiful.  It should only request the IRQ in cases
+where it is present, but it used to work correctly and now it will be
+broken.
 
+regards,
+dan carpenter
 
-
-
--- 
-Ville Syrjälä
-Intel
