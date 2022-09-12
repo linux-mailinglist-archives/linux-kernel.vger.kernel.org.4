@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479675B581C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774A35B5821
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 12:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiILKWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 06:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S230124AbiILKWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 06:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiILKWK (ORCPT
+        with ESMTP id S230123AbiILKWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:22:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881B219008;
-        Mon, 12 Sep 2022 03:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662978129; x=1694514129;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4rxBZKYDOZuMKZRytFXmRlZ/iZ+Bdj+rZ4hPsk3ezMs=;
-  b=BTH2dlwA/z48aaS/xhdifxrXkw8I9SAKzHhU/XWjngw7oNGCsWgsRpwy
-   fUxmvgBSTWN/EhfVyb/0+0E6YSoH3ociFbuTpw09ITZM3djtLXNQVza9B
-   EzxAkgqyBMMhN56JitgVeZHb5J/cT/Z88keYCh6xNaSScmPSr4OgHFoeC
-   ZLKNrtJqaUKLwk0aUNaXyQjtoBO2MxjfD+Q1mVd5P+dUNW435LF6oBWIC
-   oVia3/Nzrp0gUBSt+YGejrTvlErs0F8HBoruP1PxAQHr516I/+L8TgK+N
-   vhhYAkcCaJtZyYbtVqqC/rRZGouB3iYDH8kqEwepYWPb3wHdzCo42mcR5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="284851957"
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="284851957"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:21:58 -0700
-X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
-   d="scan'208";a="649200810"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 03:21:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oXgZc-001IT9-1W;
-        Mon, 12 Sep 2022 13:21:52 +0300
-Date:   Mon, 12 Sep 2022 13:21:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v1 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
-Message-ID: <Yx8IQHLBhIilMfEw@smile.fi.intel.com>
-References: <20220530173324.921-1-andriy.shevchenko@linux.intel.com>
- <20220603181006.2c5cc6c4@jic23-huawei>
- <20220620204225.34d40a3f@jic23-huawei>
- <YxdM1KUFcdVlnKuO@smile.fi.intel.com>
- <20220911105215.72bd79f3@jic23-huawei>
+        Mon, 12 Sep 2022 06:22:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445CE1CB3C;
+        Mon, 12 Sep 2022 03:22:34 -0700 (PDT)
+Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:15b7:c21a:ebde:697f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D0D2D6601FD2;
+        Mon, 12 Sep 2022 11:22:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.co.uk;
+        s=mail; t=1662978153;
+        bh=UmkgFoL5ccaGlsU0tzCglPuAu5Sm6Tllr77E10a9Q80=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iQVRfQqbfm+2/b78amv8vqK0LwZsO76ECfwoycC4RvXDbMZjbqJBrSWvkjqQHFrl7
+         n+Dbf+hG62VWsj74sx1I+76ucBXR5lgRVhM/FJIO5UMi8LmmfQJzYUrmYQdmGhQcZX
+         TvIf3iFNsg2QNcD/G3mwMdthHib3pt84j9SLGqqBxF7VVjX4twiVa6qRSKeLgw0/jd
+         nS5ypIe7YAAMHXip9J/I/xPBXImYmiV0CigXymke+4hqlUzXGNcndG3FBtmM8yhsYC
+         9FqJNmGcIZktDzl3pzzCf+1+fnkGj9z1fwcKzW8i5/88WIeMS9y0RSv1F/GHz8zF2D
+         9MMQVRL/2xMbQ==
+From:   Martyn Welch <martyn.welch@collabora.co.uk>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/5] dt-bindings: vendor-prefixes: add Diodes
+Date:   Mon, 12 Sep 2022 11:22:18 +0100
+Message-Id: <20220912102223.1050418-1-martyn.welch@collabora.co.uk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220911105215.72bd79f3@jic23-huawei>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 10:52:15AM +0100, Jonathan Cameron wrote:
-> On Tue, 6 Sep 2022 16:36:20 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Mon, Jun 20, 2022 at 08:42:25PM +0100, Jonathan Cameron wrote:
+From: Martyn Welch <martyn.welch@collabora.com>
 
-...
+Diodes Incorporated is a manufacturer of application specific standard
+products within the discrete, logic, analog, and mixed-signal semiconductor
+markets.
 
-> > Any news on this one? Maybe I need to resend with the better commit message?
-> 
-> From glancing back at the thread, looks like you said you were going to send
-> a v2 with property.h include.  I think the rest of the thread is concerned
-> with a different issue entirely.
+https://www.diodes.com/
 
-Ah, I only read last messages in the thread and didn't realized that I have
-some ARs to accomplish. OK, v2 will come soon, thanks!
+Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
+Changes in v2:
+ - None
+
+Changes in v3:
+ - None
+
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 2f0151e9f6be..7ee9b7692ed1 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -328,6 +328,8 @@ patternProperties:
+     description: Digi International Inc.
+   "^digilent,.*":
+     description: Diglent, Inc.
++  "^diodes,.*":
++    description: Diodes, Inc.
+   "^dioo,.*":
+     description: Dioo Microcircuit Co., Ltd
+   "^dlc,.*":
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
