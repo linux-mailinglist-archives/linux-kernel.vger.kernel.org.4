@@ -2,104 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1D75B6147
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B945B6148
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 20:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiILSs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 14:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S230319AbiILSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 14:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiILSs1 (ORCPT
+        with ESMTP id S229715AbiILSs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 14:48:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374D2186F2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:48:26 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bn9so11646168ljb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ajtCtNcs3weh6Y8N5o6lcKpUrALT4dcANWcW4NXZ6zE=;
-        b=P/NMHCqKPibLKjl1SPZZBdBqH5dotxf3enKihGybHwv8/O9ykWM7srH1b9b8iLpPBN
-         IHQYSEVR3ajiMG7+YhlxNjQHzfwRFVAF1kZTQXAEtf5CD268GiBdDD8L1d1RayQcAon3
-         WtUH8cY8xntBhhBWcy/KN/D2nZyA9FyjM+/dU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ajtCtNcs3weh6Y8N5o6lcKpUrALT4dcANWcW4NXZ6zE=;
-        b=cf9zuJ3uVKESVdGcq+xQ8flQSWOoI3zyuJQ9sT3PIP4L5EIn0YpV9M5L1aHuZiy9AV
-         YrVJAFG1RfKX5XNv6YOQU34bD3uiH78syyVNU14rRVKDzvkSP2YEYnaotpQl/5y9SY08
-         yaVspSZGoV29HLtCZzdkIIPoWCECu/Y8pRMsKbdSqGfQwcPilShPNQtWPS5jSsJM97L1
-         FRW3TdS/+FMmbv5EDDazdDpWlbHwsbGEJa9HBvQZdexnwV4YvOtELGZjLyQs/a9HKTmV
-         Y3Hjsamnug1Uugjtn+0aTCHhIrDEqyGBRG/IfNgfcDH2T3q10kbRh9EI25VV84BRhoPE
-         MzRg==
-X-Gm-Message-State: ACgBeo3nkrM5RKvU2mJW46ZRk+L+nND9g3+l89QYaqdKlu0yWWlSZgOR
-        U5XX9YJptaSuDWO+fEzbKAlhGvRcW0j/ZxFH
-X-Google-Smtp-Source: AA6agR4jfrl0u0CYCDajikJNDklPzRlNBu9qDoYkG6jpDgorO98pIWmzEbIsI2q5HgaYB1sS/GulZg==
-X-Received: by 2002:a2e:2244:0:b0:26b:e1c0:8ae8 with SMTP id i65-20020a2e2244000000b0026be1c08ae8mr5138818lji.146.1663008504368;
-        Mon, 12 Sep 2022 11:48:24 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac25e27000000b0049aa7a56715sm749751lfg.267.2022.09.12.11.48.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 11:48:22 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id f11so16327280lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 11:48:22 -0700 (PDT)
-X-Received: by 2002:a05:6512:2303:b0:49b:ec39:c4ab with SMTP id
- o3-20020a056512230300b0049bec39c4abmr103166lfu.512.1663008502265; Mon, 12 Sep
- 2022 11:48:22 -0700 (PDT)
+        Mon, 12 Sep 2022 14:48:28 -0400
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8E220BE4;
+        Mon, 12 Sep 2022 11:48:26 -0700 (PDT)
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+        by mail.kmu-office.ch (Postfix) with ESMTPSA id 4A3DB5C1C72;
+        Mon, 12 Sep 2022 20:48:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
+        t=1663008504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v0+jlOHGoUYVB2p7DAI0aVwZbtklz5aXsFhcNoBGj/E=;
+        b=BgMpsHskTk00HIp1l2Os6znDblqR8c/hnKz8TWC2zQ73d8Us/F9qV8J+4LCmqUh1H5H+lp
+        suZ/fMlznj4wRN/WaMa5rr+jxBUxgMoHNVQHdzHrN45HXu5VSZx/dsr6SvK8Wikh7wqzuI
+        Ib5/An1AuSPEDy8t4rOCTBYoAo2qg8U=
 MIME-Version: 1.0
-References: <20220822180729.1.I8ac5abe3a4c1c6fd5c061686c6e883c22f69022c@changeid>
- <CAD=FV=W5X2XvvKT5tq+1ywJSmVB0TAHquGgn02uNmn4s-sqndg@mail.gmail.com> <CA+ASDXMetKHtL8Hm_=S7xPcHX19FDaCoXtHmh=E6i6pLEXQZ0g@mail.gmail.com>
-In-Reply-To: <CA+ASDXMetKHtL8Hm_=S7xPcHX19FDaCoXtHmh=E6i6pLEXQZ0g@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 12 Sep 2022 11:48:09 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXOMYGgaJSrxQUNFhN+9qT-kfedk_UJJnOO58iJpWdxu1w@mail.gmail.com>
-Message-ID: <CA+ASDXOMYGgaJSrxQUNFhN+9qT-kfedk_UJJnOO58iJpWdxu1w@mail.gmail.com>
-Subject: Re: [PATCH] Revert "drm: bridge: analogix/dp: add panel
- prepare/unprepare in suspend/resume time"
-To:     Doug Anderson <dianders@chromium.org>,
-        Zhang Zekun <zhangzekun11@huawei.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>, xuqiang36@huawei.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 12 Sep 2022 20:48:24 +0200
+From:   Stefan Agner <stefan@agner.ch>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 247/779] drm/meson: encoder_hdmi: switch to bridge
+ DRM_BRIDGE_ATTACH_NO_CONNECTOR
+In-Reply-To: <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
+References: <20220815180337.130757997@linuxfoundation.org>
+ <20220815180347.894058731@linuxfoundation.org>
+ <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
+Message-ID: <685b64f60375b69c5c790286f1386be3@agner.ch>
+X-Sender: stefan@agner.ch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:06 AM Brian Norris <briannorris@chromium.org> wrote:
-> On Thu, Aug 25, 2022 at 10:37 AM Doug Anderson <dianders@chromium.org> wrote:
-> > Given that this is _not_ an area that I'm an expert in nor is it an
-> > area where the consequences are super easy to analyze, I'm a little
-> > hesitant to apply this to drm-misc-next myself. Ideally someone more
-> > familiar with the driver would do it. However, if nobody steps up
-> > after a few weeks and nobody has yelled about this patch, I'll apply
-> > it.
+On 2022-09-12 18:08, Stefan Agner wrote:
+> On 2022-08-15 19:58, Greg Kroah-Hartman wrote:
+>> From: Neil Armstrong <narmstrong@baylibre.com>
+>>
+>> [ Upstream commit 0af5e0b41110e2da872030395231ab19c45be931 ]
+>>
+>> This implements the necessary change to no more use the embedded
+>> connector in dw-hdmi and use the dedicated bridge connector driver
+>> by passing DRM_BRIDGE_ATTACH_NO_CONNECTOR to the bridge attach call.
+>>
+>> The necessary connector properties are added to handle the same
+>> functionalities as the embedded dw-hdmi connector, i.e. the HDR
+>> metadata, the CEC notifier & other flags.
+>>
+>> The dw-hdmi output_port is set to 1 in order to look for a connector
+>> next bridge in order to get DRM_BRIDGE_ATTACH_NO_CONNECTOR working.
+> 
+> HDMI on ODROID-N2+ was working with v5.15.60, and stopped working with
+> v5.15.61. Reverting this commit (and two dependent refcount leak) to be
+> the culprit. Reverting just the refcount leaks is not enough to get HDMI
+> working, so I assume it is this commit.
+> 
+> I haven't investigated much beyond that, maybe its simple a case of a
+> missing kernel configuration? DRM_DISPLAY_CONNECTOR is compiled, and the
+> module display_connector is loaded, so that part seemed to have worked.
+> 
+> Any ideas welcome.
+> 
+> FWIW, I track the issue in the HAOS tracker at
+> https://github.com/home-assistant/operating-system/issues/2120.
 
-For this particular patch, I'd be interested in whether Zhang Zekun
-has any feedback (even a Tested-by?), since they were patching this
-function in the first place, which is why I paid attention:
+It seems that backporting commit 7cd70656d128 ("drm/bridge:
+display-connector: implement bus fmts callbacks") fixes the problem
+without reverting this commit.
 
-Subject: [PATCH -next] drm/bridge: Add missing clk_disable_unprepare()
-in analogix_dp_resume()
-https://lore.kernel.org/lkml/20220816064231.60473-1-zhangzekun11@huawei.com/
+@Greg, can we backport this commit as well?
 
-But in absence of that...it has now been a few weeks :)
+--
+Stefan
 
-I'll also mark this to come back to again in a week or two, in case
-somebody is still hoping to wait longer.
-
-Regards,
-Brian
+> 
+> --
+> Stefan
+> 
+>>
+>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>> Link:
+>> https://patchwork.freedesktop.org/patch/msgid/20211020123947.2585572-5-narmstrong@baylibre.com
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  drivers/gpu/drm/meson/Kconfig              |  2 +
+>>  drivers/gpu/drm/meson/meson_dw_hdmi.c      |  1 +
+>>  drivers/gpu/drm/meson/meson_encoder_hdmi.c | 81 +++++++++++++++++++++-
+>>  3 files changed, 82 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/meson/Kconfig b/drivers/gpu/drm/meson/Kconfig
+>> index 9f9281dd49f8..a4e1ed96e5e8 100644
+>> --- a/drivers/gpu/drm/meson/Kconfig
+>> +++ b/drivers/gpu/drm/meson/Kconfig
+>> @@ -6,9 +6,11 @@ config DRM_MESON
+>>  	select DRM_KMS_HELPER
+>>  	select DRM_KMS_CMA_HELPER
+>>  	select DRM_GEM_CMA_HELPER
+>> +	select DRM_DISPLAY_CONNECTOR
+>>  	select VIDEOMODE_HELPERS
+>>  	select REGMAP_MMIO
+>>  	select MESON_CANVAS
+>> +	select CEC_CORE if CEC_NOTIFIER
+>>
+>>  config DRM_MESON_DW_HDMI
+>>  	tristate "HDMI Synopsys Controller support for Amlogic Meson Display"
+>> diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>> b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>> index fb540a503efe..5cd2b2ebbbd3 100644
+>> --- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>> +++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+>> @@ -803,6 +803,7 @@ static int meson_dw_hdmi_bind(struct device *dev,
+>> struct device *master,
+>>  	dw_plat_data->input_bus_encoding = V4L2_YCBCR_ENC_709;
+>>  	dw_plat_data->ycbcr_420_allowed = true;
+>>  	dw_plat_data->disable_cec = true;
+>> +	dw_plat_data->output_port = 1;
+>>
+>>  	if (dw_hdmi_is_compatible(meson_dw_hdmi, "amlogic,meson-gxl-dw-hdmi") ||
+>>  	    dw_hdmi_is_compatible(meson_dw_hdmi, "amlogic,meson-gxm-dw-hdmi") ||
+>> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+>> b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+>> index db332fa4cd54..5e306de6f485 100644
+>> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+>> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
+>> @@ -14,8 +14,11 @@
+>>  #include <linux/regulator/consumer.h>
+>>  #include <linux/reset.h>
+>>
+>> +#include <media/cec-notifier.h>
+>> +
+>>  #include <drm/drm_atomic_helper.h>
+>>  #include <drm/drm_bridge.h>
+>> +#include <drm/drm_bridge_connector.h>
+>>  #include <drm/drm_device.h>
+>>  #include <drm/drm_edid.h>
+>>  #include <drm/drm_probe_helper.h>
+>> @@ -34,8 +37,10 @@ struct meson_encoder_hdmi {
+>>  	struct drm_encoder encoder;
+>>  	struct drm_bridge bridge;
+>>  	struct drm_bridge *next_bridge;
+>> +	struct drm_connector *connector;
+>>  	struct meson_drm *priv;
+>>  	unsigned long output_bus_fmt;
+>> +	struct cec_notifier *cec_notifier;
+>>  };
+>>
+>>  #define bridge_to_meson_encoder_hdmi(x) \
+>> @@ -50,6 +55,14 @@ static int meson_encoder_hdmi_attach(struct
+>> drm_bridge *bridge,
+>>  				 &encoder_hdmi->bridge, flags);
+>>  }
+>>
+>> +static void meson_encoder_hdmi_detach(struct drm_bridge *bridge)
+>> +{
+>> +	struct meson_encoder_hdmi *encoder_hdmi =
+>> bridge_to_meson_encoder_hdmi(bridge);
+>> +
+>> +	cec_notifier_conn_unregister(encoder_hdmi->cec_notifier);
+>> +	encoder_hdmi->cec_notifier = NULL;
+>> +}
+>> +
+>>  static void meson_encoder_hdmi_set_vclk(struct meson_encoder_hdmi
+>> *encoder_hdmi,
+>>  					const struct drm_display_mode *mode)
+>>  {
+>> @@ -298,9 +311,30 @@ static int meson_encoder_hdmi_atomic_check(struct
+>> drm_bridge *bridge,
+>>  	return 0;
+>>  }
+>>
+>> +static void meson_encoder_hdmi_hpd_notify(struct drm_bridge *bridge,
+>> +					  enum drm_connector_status status)
+>> +{
+>> +	struct meson_encoder_hdmi *encoder_hdmi =
+>> bridge_to_meson_encoder_hdmi(bridge);
+>> +	struct edid *edid;
+>> +
+>> +	if (!encoder_hdmi->cec_notifier)
+>> +		return;
+>> +
+>> +	if (status == connector_status_connected) {
+>> +		edid = drm_bridge_get_edid(encoder_hdmi->next_bridge,
+>> encoder_hdmi->connector);
+>> +		if (!edid)
+>> +			return;
+>> +
+>> +		cec_notifier_set_phys_addr_from_edid(encoder_hdmi->cec_notifier, edid);
+>> +	} else
+>> +		cec_notifier_phys_addr_invalidate(encoder_hdmi->cec_notifier);
+>> +}
+>> +
+>>  static const struct drm_bridge_funcs meson_encoder_hdmi_bridge_funcs = {
+>>  	.attach = meson_encoder_hdmi_attach,
+>> +	.detach = meson_encoder_hdmi_detach,
+>>  	.mode_valid = meson_encoder_hdmi_mode_valid,
+>> +	.hpd_notify = meson_encoder_hdmi_hpd_notify,
+>>  	.atomic_enable = meson_encoder_hdmi_atomic_enable,
+>>  	.atomic_disable = meson_encoder_hdmi_atomic_disable,
+>>  	.atomic_get_input_bus_fmts = meson_encoder_hdmi_get_inp_bus_fmts,
+>> @@ -313,6 +347,7 @@ static const struct drm_bridge_funcs
+>> meson_encoder_hdmi_bridge_funcs = {
+>>  int meson_encoder_hdmi_init(struct meson_drm *priv)
+>>  {
+>>  	struct meson_encoder_hdmi *meson_encoder_hdmi;
+>> +	struct platform_device *pdev;
+>>  	struct device_node *remote;
+>>  	int ret;
+>>
+>> @@ -337,6 +372,7 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
+>>  	meson_encoder_hdmi->bridge.funcs = &meson_encoder_hdmi_bridge_funcs;
+>>  	meson_encoder_hdmi->bridge.of_node = priv->dev->of_node;
+>>  	meson_encoder_hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
+>> +	meson_encoder_hdmi->bridge.interlace_allowed = true;
+>>
+>>  	drm_bridge_add(&meson_encoder_hdmi->bridge);
+>>
+>> @@ -353,17 +389,58 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
+>>  	meson_encoder_hdmi->encoder.possible_crtcs = BIT(0);
+>>
+>>  	/* Attach HDMI Encoder Bridge to Encoder */
+>> -	ret = drm_bridge_attach(&meson_encoder_hdmi->encoder,
+>> &meson_encoder_hdmi->bridge, NULL, 0);
+>> +	ret = drm_bridge_attach(&meson_encoder_hdmi->encoder,
+>> &meson_encoder_hdmi->bridge, NULL,
+>> +				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>  	if (ret) {
+>>  		dev_err(priv->dev, "Failed to attach bridge: %d\n", ret);
+>>  		return ret;
+>>  	}
+>>
+>> +	/* Initialize & attach Bridge Connector */
+>> +	meson_encoder_hdmi->connector = drm_bridge_connector_init(priv->drm,
+>> +							&meson_encoder_hdmi->encoder);
+>> +	if (IS_ERR(meson_encoder_hdmi->connector)) {
+>> +		dev_err(priv->dev, "Unable to create HDMI bridge connector\n");
+>> +		return PTR_ERR(meson_encoder_hdmi->connector);
+>> +	}
+>> +	drm_connector_attach_encoder(meson_encoder_hdmi->connector,
+>> +				     &meson_encoder_hdmi->encoder);
+>> +
+>>  	/*
+>>  	 * We should have now in place:
+>> -	 * encoder->[hdmi encoder bridge]->[dw-hdmi bridge]->[dw-hdmi connector]
+>> +	 * encoder->[hdmi encoder bridge]->[dw-hdmi bridge]->[display
+>> connector bridge]->[display connector]
+>>  	 */
+>>
+>> +	/*
+>> +	 * drm_connector_attach_max_bpc_property() requires the
+>> +	 * connector to have a state.
+>> +	 */
+>> +	drm_atomic_helper_connector_reset(meson_encoder_hdmi->connector);
+>> +
+>> +	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXL) ||
+>> +	    meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXM) ||
+>> +	    meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A))
+>> +		drm_connector_attach_hdr_output_metadata_property(meson_encoder_hdmi->connector);
+>> +
+>> +	drm_connector_attach_max_bpc_property(meson_encoder_hdmi->connector, 8, 8);
+>> +
+>> +	/* Handle this here until handled by drm_bridge_connector_init() */
+>> +	meson_encoder_hdmi->connector->ycbcr_420_allowed = true;
+>> +
+>> +	pdev = of_find_device_by_node(remote);
+>> +	if (pdev) {
+>> +		struct cec_connector_info conn_info;
+>> +		struct cec_notifier *notifier;
+>> +
+>> +		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
+>> +
+>> +		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
+>> +		if (!notifier)
+>> +			return -ENOMEM;
+>> +
+>> +		meson_encoder_hdmi->cec_notifier = notifier;
+>> +	}
+>> +
+>>  	dev_dbg(priv->dev, "HDMI encoder initialized\n");
+>>
+>>  	return 0;
