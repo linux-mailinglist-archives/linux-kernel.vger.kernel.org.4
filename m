@@ -2,116 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684DB5B61CF
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBBD5B61CE
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Sep 2022 21:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiILTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 15:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S229601AbiILTlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 15:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiILTkn (ORCPT
+        with ESMTP id S229677AbiILTk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 15:40:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7A5474EF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 12:40:43 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so9191635pjh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 12:40:43 -0700 (PDT)
+        Mon, 12 Sep 2022 15:40:57 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D7647BAE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 12:40:55 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so8073181ybs.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 12:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=d/S5H/WnwuAtOJeyIv4QvW6uZ9bAOFBVC/ltp5nTW3w=;
-        b=nfWOApm8lmP7/grPPcTtRVe3i6UdLx9/z++2xZm+r0VTJsQPwumy9LwQ+wrYTL1ypS
-         bbgzUUqJVfBQa6C6T+wEIFOh1tRzpo6D8bPx+F3yNiV0jsKpRwWlX6CjkTA2jwTB1w4Y
-         ouzykhXDEOS7zVFd2ky1L+wILQH/domnrwZzzB37i01Cv5Nynm9+kEuCrr+LfkkBdczw
-         jSWTRlRG2Xxy8TV38Mm30x+my1dHezraZSC5yXi+km14qYNMRK3edEhOOQQP1U6SFDJK
-         G/zsmpiN40hQ2W0PYiBBhaKJVfsybESpCYKI4D0pA7yp0nOH6BqosKW95srGkbrzuPCN
-         DWaQ==
+        d=google.com; s=20210112;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=W9p0zgnz9HiTB/0UdjjdirPbtTvGNOenVCLlAeF5/ks=;
+        b=kIb9mKHmh4VQUbwYfXIeufs0L7HoYm3h9bYoHWm+YV/YM7E2S/kT/MuCBTJZhvsFUN
+         Y9bE2nnTCELd6Uo5Yb0KZV6NJYg4VmwjsPKZf24YSXT0fN1sJ7YNzv5LW4IvYS41tEMU
+         OImAFif75ZIAry74Xs/FhQVBm+/YKcNT0FevROVA26L/Ca0YSjMlfBRJjjGuEOSZijRp
+         T/oOJjfZtZ+z7WwqOR3IW2awHC2aQ93LrxI2nDWUjvBq7hzurTfhaYQXZfQE5NHYGXtk
+         npwMfzAwfFoFGUd4Cox7D4F100e0zQUkv5uRq8ocq1AzOMqg2wXE0/r+aD6W0S+hpfqh
+         KCAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=d/S5H/WnwuAtOJeyIv4QvW6uZ9bAOFBVC/ltp5nTW3w=;
-        b=zf886t2aar2bON03QAjfciNdceUP4g3chKMJ9yKsx2CxNK7lyL4Oo21XQFI41cgbHy
-         elcyLZz3l6xcLhESVRRvxTelho+Xdf5gMn3DMUbdItRbSJVERcAwK5wyjBwYNyOBv/DR
-         ZerXGpIf5OYQRkJvbGwW9+XRxNqflPZbCDAe+xbAwiuNJ9bnvI1nzY05xU7g0J7nKE6N
-         gaISQjwW2kD2T7WlADEqUYxTEEY0yugLG2EgM5svj3n5CIqGFWgT9qjdCJKqrlJRz42y
-         dJdkdY/daksAFrBRpgRoHdkd2gEBVLXY7ile9jkPVK6i3NRq/jyav/nhFMKEZX8Lfo8T
-         ieSw==
-X-Gm-Message-State: ACgBeo0UMJ0d3tIz+L051qfA4gK6JvY371wDDSJacebQEq9fzgBjlnXu
-        YBcCNWtYjHMmlb4MMbgN+R1ZpA==
-X-Google-Smtp-Source: AA6agR6p+bCQrgePcLUw9z+y3E1IOowtxMAQqKpO2T9Bvunzp40co8HpWgjvMiZI96srWdyat5EaRw==
-X-Received: by 2002:a17:902:f684:b0:178:2fe:9f4b with SMTP id l4-20020a170902f68400b0017802fe9f4bmr18529717plg.60.1663011642598;
-        Mon, 12 Sep 2022 12:40:42 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902ec8c00b001709b9d292esm6486362plg.268.2022.09.12.12.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 12:40:42 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        andersson@kernel.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, rafael@kernel.org,
-        dmitry.baryshkov@linaro.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: [PATCH v2 2/2] MAINTAINERS: Update Qualcomm Thermal Driver entry
-Date:   Tue, 13 Sep 2022 01:10:28 +0530
-Message-Id: <20220912194028.3584378-2-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-References: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=W9p0zgnz9HiTB/0UdjjdirPbtTvGNOenVCLlAeF5/ks=;
+        b=WpYCIHtT4u/XroPnNYCMq0Sq4T/YC+U2L85xaW+qYoaZT7EZ3Fruhu7FamqlOEFg/+
+         saI7lEUs9poPGnIicoqE/1cREEXxoKYT/PLNdE2cCwAMbV5CeIu/m8USsmRwnKhZyzE4
+         BCWFBgKdIVAjUUg4vZZlXqcjB0MYtXUFXLxTBvAvrnGy2Ty+ujuifKy0kM7XJHX80FIn
+         JDueA5rmR/1kpmzjTIMq0lLhl9MeecCguNRHGO0NfHVTe4JyDJtxkgUE2tFyPqkjsHLZ
+         C7tKS5IXSzkRWQLivcCKR9bxZ+q1BpycyP1NxF2huQLILXtsq3YpB1m/HhtYvUQOHksQ
+         FaAw==
+X-Gm-Message-State: ACgBeo0wobB2BNxlW6DWRndhviZuRKdKe2TI3f+oRCzykzY/hNpI3G0T
+        8QAdpdHUmyQS/wzlleU5Ej0xwHmJQg==
+X-Google-Smtp-Source: AA6agR5tT07BLedJkk78QlwL8aAcT2zOwZ+TyghN3uTLRGF5Uit5WEI7B1ycrzrVCbXp9ca7l8J/GIJPlg==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a05:690c:812:b0:345:27dc:56e2 with SMTP id
+ bx18-20020a05690c081200b0034527dc56e2mr23623616ywb.313.1663011654220; Mon, 12
+ Sep 2022 12:40:54 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 12:40:30 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220912194031.808425-1-nhuck@google.com>
+Subject: [PATCH] net: ax88796c: Fix return type of ax88796c_start_xmit
+From:   Nathan Huckleberry <nhuck@google.com>
+Cc:     Nathan Huckleberry <nhuck@google.com>,
+        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        "=?UTF-8?q?=C5=81ukasz=20Stelmach?=" <l.stelmach@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since there are several Qualcomm Thermal drivers now available
-(for e.g. LMH, SPMI PMICs and TSENS) inside 'drivers/thermal/qcom'
-directory, so it makes sense to list all the supported dt-bindings
-YAML files here.
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-Also, the entry header is updated to better reflect the same.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+The return type of ax88796c_start_xmit should be changed from int to
+netdev_tx_t.
+
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- MAINTAINERS | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/asix/ax88796c_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d213a831133f..e72839f5629c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17043,12 +17043,16 @@ F:	Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
- F:	drivers/net/ethernet/qualcomm/rmnet/
- F:	include/linux/if_rmnet.h
+diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
+index 6ba5b024a7be..f1d610efd69e 100644
+--- a/drivers/net/ethernet/asix/ax88796c_main.c
++++ b/drivers/net/ethernet/asix/ax88796c_main.c
+@@ -381,7 +381,7 @@ static int ax88796c_hard_xmit(struct ax88796c_device *ax_local)
+ 	return 1;
+ }
  
--QUALCOMM TSENS THERMAL DRIVER
-+QUALCOMM THERMAL DRIVERS (TSENS, LMH and SPMI PMIC)
- M:	Amit Kucheria <amitk@kernel.org>
- M:	Thara Gopinath <thara.gopinath@gmail.com>
- L:	linux-pm@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
-+F:	Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-+F:	Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-+F:	Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
- F:	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
- F:	drivers/thermal/qcom/
- 
+-static int
++static netdev_tx_t
+ ax88796c_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ {
+ 	struct ax88796c_device *ax_local = to_ax88796c_device(ndev);
 -- 
-2.37.1
+2.37.2.789.g6183377224-goog
 
