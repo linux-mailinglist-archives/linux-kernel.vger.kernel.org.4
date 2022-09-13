@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F835B7498
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392FD5B7468
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbiIMPZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S236050AbiIMPXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbiIMPXC (ORCPT
+        with ESMTP id S235950AbiIMPWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:23:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6697C74F;
-        Tue, 13 Sep 2022 07:37:22 -0700 (PDT)
+        Tue, 13 Sep 2022 11:22:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61267B78B;
+        Tue, 13 Sep 2022 07:36:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D95BB614A3;
-        Tue, 13 Sep 2022 14:36:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DBFC433D6;
-        Tue, 13 Sep 2022 14:36:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15426614E0;
+        Tue, 13 Sep 2022 14:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2185EC433C1;
+        Tue, 13 Sep 2022 14:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079817;
-        bh=AQoDADaLPKvNoQ0TH0wMcQHRuHBQaajr4jYWAN6BNKw=;
+        s=korg; t=1663079683;
+        bh=rV+n4kd+7BD+xatHr5rme8y5xnzaeFBry0keN3r8Rlo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1d0bkPvjE2YjukTE10guc1zs17mdJgCj0FgfN4VhVkRXSKoSyd7bb3pGv1UJ7Olwv
-         4GiFGLq20WX7Jn++8zclW3fcQwZpRHricRmmsy48AuWxnoQNyBFSgqKVPEYXaUXgJ1
-         /cIxdHJ4/aN0LQqIUJY7mClY6UdNajTMDNAub2/8=
+        b=z5jgMslu3EH8ymxaAZWvaZZYdElf/C/s5kAiNpwr+jS+2GIAnn1gZ9G/bb6q+tNDb
+         98wbn3xjyEaSzJwudjnUkapGrDNT7YylHIO/0AS4/slpe9Y8Eh1nrlnM8pHhULLmv/
+         Pkrxijs5r4Z7at03bAzyGGZkogdbkio40celAgI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Zheng Wang <hackerzheng666@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 4.9 05/42] staging: rtl8712: fix use after free bugs
-Date:   Tue, 13 Sep 2022 16:07:36 +0200
-Message-Id: <20220913140342.516250467@linuxfoundation.org>
+        stable@vger.kernel.org, Stanislaw Gruszka <stf_xl@wp.pl>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 4.14 35/61] wifi: iwlegacy: 4965: corrected fix for potential off-by-one overflow in il4965_rs_fill_link_cmd()
+Date:   Tue, 13 Sep 2022 16:07:37 +0200
+Message-Id: <20220913140348.244519936@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Stanislaw Gruszka <stf_xl@wp.pl>
 
-commit e230a4455ac3e9b112f0367d1b8e255e141afae0 upstream.
+commit 6d0ef7241553f3553a0a2764c69b07892705924c upstream.
 
-_Read/Write_MACREG callbacks are NULL so the read/write_macreg_hdl()
-functions don't do anything except free the "pcmd" pointer.  It
-results in a use after free.  Delete them.
+This reverts commit a8eb8e6f7159c7c20c0ddac428bde3d110890aa7 as
+it can cause invalid link quality command sent to the firmware
+and address the off-by-one issue by fixing condition of while loop.
 
-Fixes: 2865d42c78a9 ("staging: r8712u: Add the new driver to the mainline kernel")
-Cc: stable <stable@kernel.org>
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/Yw4ASqkYcUhUfoY2@kili
+Cc: stable@vger.kernel.org
+Fixes: a8eb8e6f7159 ("wifi: iwlegacy: 4965: fix potential off-by-one overflow in il4965_rs_fill_link_cmd()")
+Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220815073737.GA999388@wp.pl
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/rtl8712/rtl8712_cmd.c |   36 ----------------------------------
- 1 file changed, 36 deletions(-)
+ drivers/net/wireless/intel/iwlegacy/4965-rs.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/drivers/staging/rtl8712/rtl8712_cmd.c
-+++ b/drivers/staging/rtl8712/rtl8712_cmd.c
-@@ -128,34 +128,6 @@ static void r871x_internal_cmd_hdl(struc
- 	kfree(pdrvcmd->pbuf);
- }
+--- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
++++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
+@@ -2424,7 +2424,7 @@ il4965_rs_fill_link_cmd(struct il_priv *
+ 		/* Repeat initial/next rate.
+ 		 * For legacy IL_NUMBER_TRY == 1, this loop will not execute.
+ 		 * For HT IL_HT_NUMBER_TRY == 3, this executes twice. */
+-		while (repeat_rate > 0) {
++		while (repeat_rate > 0 && idx < (LINK_QUAL_MAX_RETRY_NUM - 1)) {
+ 			if (is_legacy(tbl_type.lq_type)) {
+ 				if (ant_toggle_cnt < NUM_TRY_BEFORE_ANT_TOGGLE)
+ 					ant_toggle_cnt++;
+@@ -2443,8 +2443,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
+ 			    cpu_to_le32(new_rate);
+ 			repeat_rate--;
+ 			idx++;
+-			if (idx >= LINK_QUAL_MAX_RETRY_NUM)
+-				goto out;
+ 		}
  
--static u8 read_macreg_hdl(struct _adapter *padapter, u8 *pbuf)
--{
--	void (*pcmd_callback)(struct _adapter *dev, struct cmd_obj	*pcmd);
--	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
--
--	/*  invoke cmd->callback function */
--	pcmd_callback = cmd_callback[pcmd->cmdcode].callback;
--	if (!pcmd_callback)
--		r8712_free_cmd_obj(pcmd);
--	else
--		pcmd_callback(padapter, pcmd);
--	return H2C_SUCCESS;
--}
--
--static u8 write_macreg_hdl(struct _adapter *padapter, u8 *pbuf)
--{
--	void (*pcmd_callback)(struct _adapter *dev, struct cmd_obj	*pcmd);
--	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
--
--	/*  invoke cmd->callback function */
--	pcmd_callback = cmd_callback[pcmd->cmdcode].callback;
--	if (!pcmd_callback)
--		r8712_free_cmd_obj(pcmd);
--	else
--		pcmd_callback(padapter, pcmd);
--	return H2C_SUCCESS;
--}
--
- static u8 read_bbreg_hdl(struct _adapter *padapter, u8 *pbuf)
- {
- 	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
-@@ -224,14 +196,6 @@ static struct cmd_obj *cmd_hdl_filter(st
- 	pcmd_r = NULL;
+ 		il4965_rs_get_tbl_info_from_mcs(new_rate, lq_sta->band,
+@@ -2489,7 +2487,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
+ 		repeat_rate--;
+ 	}
  
- 	switch (pcmd->cmdcode) {
--	case GEN_CMD_CODE(_Read_MACREG):
--		read_macreg_hdl(padapter, (u8 *)pcmd);
--		pcmd_r = pcmd;
--		break;
--	case GEN_CMD_CODE(_Write_MACREG):
--		write_macreg_hdl(padapter, (u8 *)pcmd);
--		pcmd_r = pcmd;
--		break;
- 	case GEN_CMD_CODE(_Read_BBREG):
- 		read_bbreg_hdl(padapter, (u8 *)pcmd);
- 		break;
+-out:
+ 	lq_cmd->agg_params.agg_frame_cnt_limit = LINK_QUAL_AGG_FRAME_LIMIT_DEF;
+ 	lq_cmd->agg_params.agg_dis_start_th = LINK_QUAL_AGG_DISABLE_START_DEF;
+ 
 
 
