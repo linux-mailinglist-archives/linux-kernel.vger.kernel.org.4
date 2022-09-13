@@ -2,112 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78475B7CCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB18A5B7CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiIMVrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 17:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S229641AbiIMVxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 17:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIMVrD (ORCPT
+        with ESMTP id S229487AbiIMVxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 17:47:03 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B1A6C104
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 14:47:01 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id b23so4931552qtr.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 14:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=yocom-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=F9e72CVH8beHMQQ9IXxSTC+b48uudP1jPeUhAvu93N4=;
-        b=MfQk8WhferHWYJ/rhpAjkQ0kVV9pSpnd1O7rpsfH2zCQm9YTtgAgd01gMBUTw7hBip
-         qd0d9kkB1MtC09R4tetkVT5xxy3hjLfKUcQJLIBglqcOh3dVnklHegKtsjMDbbeGNfB/
-         KRJmAz75996OA746t0qychUO6zmbKyuCFJMpw/UqTqOZDi81K/lRV5m81hSfs2CYhNtk
-         dSoZ8mUI1/mmxhS2PUrW84MkaIb624zaU7ZkA8zPYRavoW2gYpheJR7HwsfhjEXkI7Mp
-         YB5jtYn6SCeLoIe8K54jSKU81BVpWE2n5AcnJ09n/VOZTmTKI4rSxiOYqDUXXrmu0RRd
-         fTLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=F9e72CVH8beHMQQ9IXxSTC+b48uudP1jPeUhAvu93N4=;
-        b=shgtbNMiXlKlhZi2pAoC2FqIdA5OFoCRlUCAXdlgVWhMeW/7NZNKSs5koPgQzDZKwa
-         onyVtKhbW0DPFFDZ8HbQtdKrbyGxwH0lk3CSqBwhV6snOKwXvOaf1ZVY8uObubVnUroJ
-         5PDtUBkAaJOxF4MqZmiKCSHWIH0WBUgGLb+mMiCWexzKih/E8eStcuWGQR2RQWKXoWgu
-         zJi05qHDZ1d3gOjw2s+tVIB5MyZr5Uv0YT4rTU6AfwZRtYgHtf3oHHInUFv0MffvWd4E
-         iNxtR2dqT2YAj4ymSgd6zEwxT9/EcO282l/BSLMK+7qa0RnHWscSHB533pvooiwz7IWb
-         xCnA==
-X-Gm-Message-State: ACgBeo2yrZ7AfqAKLGiF3p5yHwF6yJHZYzR0OPglgrFnWPHIsv0aLMfK
-        hIkyWfQgs6QxP6OOgoPTgFf9+kBfYqfeeN5pPCTbeA==
-X-Google-Smtp-Source: AA6agR75XlClAfp+/9d1/WfjZc6QSfduqs+XplBXecUZvYUkRbxx7wKY6AnjyU9P7u37HWbscJntZ7fcpzTD+r751/I=
-X-Received: by 2002:a05:622a:8e:b0:35b:acbe:cb48 with SMTP id
- o14-20020a05622a008e00b0035bacbecb48mr15207815qtw.390.1663105620672; Tue, 13
- Sep 2022 14:47:00 -0700 (PDT)
+        Tue, 13 Sep 2022 17:53:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6876D9FF;
+        Tue, 13 Sep 2022 14:53:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9093615B0;
+        Tue, 13 Sep 2022 21:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FC5C433C1;
+        Tue, 13 Sep 2022 21:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663105982;
+        bh=Xxpeh83ghyVDcQZqEqOkPGke5vxRqIieah6+QXlXYMc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=m8dxabHFp5ULuP6WVPkdHq/pklVKFakjrmD+SbtwbiclkVePpe6JtwAIIg9ofLhiE
+         aLCDo58f47IfpYxG1Dc/pYnE+HhT0q2Uq6w8zqZBo5gZ1Ycq/JPzvmri6zAk22eFE2
+         jRXu4hxSxF02khL3LBiUf/WEnXyzrsFD2Fw31SE9jUJYtBmUGTwbRke/fYoLfwiK8b
+         ADKQlfqRWd/BgsbHfAJ7Kw39MaxjfDe2llKNOR4iuz3REmytY75UhOUrUwrbVLNhhf
+         CYffVsOrkK5xQcJa43+ocqDG7FuzS7IlCZywBl4cOF5Dug/qcxtMGg7b4hYUgVJlu9
+         NyaSmZ8RPh8UQ==
+Date:   Tue, 13 Sep 2022 16:53:00 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] PCI: Add standard PCI Config Address macros
+Message-ID: <20220913215300.GA626928@bhelgaas>
 MIME-Version: 1.0
-References: <20220908173930.28940-1-nate@yocom.org>
-In-Reply-To: <20220908173930.28940-1-nate@yocom.org>
-From:   Nate Yocom <nate@yocom.org>
-Date:   Tue, 13 Sep 2022 14:46:49 -0700
-Message-ID: <CAF+10nJmefZ7pb38wTR3VD7LijzYati7eyTe9QZWEpK=sji9yA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] Input: joystick: xpad: Add X-Box Adaptive
- Controller support
-To:     dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hadess@hadess.net, benjamin.tissoires@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220913212421.yblwhgbd7zpdg5eo@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 10:39:25AM -0700, Nate Yocom wrote:
-> Adds support for the X-Box Adaptive Controller, which is protocol
-> compatible with the XTYPE_XBOXONE support in the driver with two deltas:
->
->  - The X-Box button sets 0x02 as its activation ID, where others set
->    0x01
->  - The controller has an additional Profile button with 4 active states,
->    which this change maps to an Axis control with 4 possible values
->
-> Patch series adds device to the supported table, adds support for the
-> Profile button, and adds support for the X-Box button as distinct
-> changes.
->
-> Signed-off-by: Nate Yocom <nate@yocom.org>
->
-> Nate Yocom (5):
->   Input: joystick: xpad: Add X-Box Adaptive support
->   Input: joystick: xpad: Add X-Box Adaptive XBox button
->   Input: joystick: xpad: Add ABS_PROFILE to uapi
->   Input: joystick: xpad: Add ABS_PROFILE to Docs
->   Input: joystick: xpad: Add X-Box Adaptive Profile button
->
->  v2: Fix warning Reported-by: kernel test robot <lkp@intel.com>
->  v3: Break into multi-part and remove VID/PID check for XBox button
->  v4: Rename Layer -> Profile as suggested by Bastien Nocera
->  v5: Add new ABS_PROFILE axis to uapi and use it for the profile button
->  v6: Add ABS_PROFILE to absolutes array and docs as requested by Dmitry
->
->  Documentation/input/event-codes.rst    |  6 ++++++
->  Documentation/input/gamepad.rst        |  6 ++++++
->  drivers/hid/hid-debug.c                |  3 ++-
->  drivers/input/joystick/xpad.c          | 15 ++++++++++++++-
->  include/uapi/linux/input-event-codes.h |  1 +
->  5 files changed, 29 insertions(+), 2 deletions(-)
->
->
-> base-commit: 26b1224903b3fb66e8aa564868d0d57648c32b15
-> --
-> 2.30.2
->
+On Tue, Sep 13, 2022 at 11:24:21PM +0200, Pali Rohár wrote:
+> On Tuesday 13 September 2022 16:11:43 Bjorn Helgaas wrote:
+> > On Sun, Sep 11, 2022 at 01:20:22PM +0200, Pali Rohár wrote:
+> > > Lot of PCI and PCIe controllers are using standard Config Address for PCI
+> > > Configuration Mechanism #1 (as defined inPCI Local Bus Specification) or
+> > > its extended version.
+> > > 
+> > > So introduce new macros PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() in
+> > > new include file linux/pci-conf1.h which can be suitable for PCI and PCIe
+> > > controllers which uses this type of access to PCI config space.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > >  include/linux/pci-conf1.h | 51 +++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 51 insertions(+)
+> > >  create mode 100644 include/linux/pci-conf1.h
+> > 
+> > This seems like a nice addition, but it would be nice if we could
+> > encapsulate it in drivers/pci.
+> > 
+> > I know it's parallel to the existing include/linux/pci-ecam.h.  I wish
+> > we could encapsulate *that* in drivers/pci, too.  For pci-ecam.h, I
+> > think the only things that prevent that are drivers/acpi/pci_mcfg.c,
+> > loongarch, and a few arm64 things.
+> 
+> As these macros describe original Intel x86 API, it can be used also in
+> arch/x86 PCI code.
 
-Dmitry et al, anything else I can do to see this through?  Thanks!
+I would love to see that happen, too, and that could be a reason to
+put pci-conf.h in include/linux.  But this series doesn't include
+that.
 
-- Nate
+> > I guess that's a long-winded way of saying that I think maybe we could
+> > put this in drivers/pci/pci.h even though the parallel ECAM stuff is
+> > in include/linux/pci-ecam.h.
+> 
+> Well, if you like this change, let me know where to put those new
+> macros, into which file and in which subdirectory, and I can prepare a
+> new patch version.
+
+drivers/pci/pci.h
+
+> But doing all those arm64, x86, ACPI cleanup is a huge cross-tree work
+> which I'm really not going to do...
+
+Of course not, I didn't suggest or expect that.  What I'm trying to
+point out is that I don't think we have very good reasons for
+pci-ecam.h to be public.  And therefore, I don't think we need
+pci-conf1.h to be next to it.
+
+Unless you want to convert the arch/x86 code to use them as well.  I'm
+not asking you to do that either, just that if you *did* do that, it
+would be an argument for keeping the macros where you put them.
+
+Bjorn
