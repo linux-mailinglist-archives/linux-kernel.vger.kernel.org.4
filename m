@@ -2,145 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204FF5B7A26
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148465B7A32
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiIMSwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S232801AbiIMSxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiIMSvx (ORCPT
+        with ESMTP id S232982AbiIMSw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:51:53 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D1513F9E;
-        Tue, 13 Sep 2022 11:36:07 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-127f5411b9cso34546683fac.4;
-        Tue, 13 Sep 2022 11:36:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NsKE+BEH4KxDRW88FUFgCoVeNl0M6BtUtpnnF6L+EYk=;
-        b=PPbkPSfW1hDiiPqLH9kK9sIJFeDY2iRLQOvcTafJ07rKg+GeVXNNg894bhw9aPiri9
-         +SbkLrhqov1V0euqs77hjslbg6r6eAkChJlBXU/QfrOsZZ87Wv66pakJwmpJ2JSWSbCq
-         fCdjEaeWdh7T+Y+ZTfEkfjLE6G07x0AlDMAkYeSg0ytHQPDtAfXGW7x2oh6oSHIG8cbY
-         BWre580BlRcmlaQ//JDqTbNu0B8+kinT61DYfi53jSSbyWQjDBwy10SB2nIlEP96MKNv
-         3J18B+sxwj4HctgamnOmiffZFEvj5zkEi6CZTIV9qJ8lDfsCm0f6/jaTLERknBgGlBWl
-         fFRg==
-X-Gm-Message-State: ACgBeo0Od7HAX92dO07LbsqzUK9CPRw4XDzSSa3faSAkRm4sB67cu/om
-        mDnedxc1BTgHD0CWTXncPA==
-X-Google-Smtp-Source: AA6agR4F9hbDNpEPKWtVF5rfUO9KvOelSHz3eMtkGVqZO0hzZpUIJ/ltVqY558YMHeovwK4OZUGfiA==
-X-Received: by 2002:a05:6870:608e:b0:12b:c0de:bc9d with SMTP id t14-20020a056870608e00b0012bc0debc9dmr378101oae.52.1663094167138;
-        Tue, 13 Sep 2022 11:36:07 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056870d1cb00b001276cea2320sm7379784oac.58.2022.09.13.11.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 11:36:06 -0700 (PDT)
-Received: (nullmailer pid 162606 invoked by uid 1000);
-        Tue, 13 Sep 2022 18:36:05 -0000
-Date:   Tue, 13 Sep 2022 13:36:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v6.0, take 2
-Message-ID: <20220913183605.GA155025-robh@kernel.org>
+        Tue, 13 Sep 2022 14:52:28 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B12344561;
+        Tue, 13 Sep 2022 11:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Nhmtl5U4i4aIMPF1bl0Sfg+C74cfK2TnIe+LlE37uRU=; b=eK0RlLHEjCIF0rUTBXogwTMNSv
+        IfpEnispYRuoUd9lahWonBcV7K9cdHI6PIehPePhbfbRsFa/b7lcN6npUcyF61eOuZMVQbjEAEzm3
+        AqpLwwOfknRGzfWmhClsPzpCvtGSPSs1mVQ+nWmpu4tMYAxrJ8NyyB14k6Q40vA2aqm1E5qBBu72N
+        59SstCz0pagKKcI63IKdWDEGjBPrOUOxtma1dmuW5iNKyhJG3F32oYdKqQS5uhj4nu0WVptuxc8fM
+        A6asMYDS2YyJXpmGCigZD2zcCFAvDFKtttW8X/3ZQ4AIv1QwiRyh4y2tus454mkIMCTdDuSyqLGiE
+        XzTjTmAA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYAnB-00EnsI-7s; Tue, 13 Sep 2022 18:37:53 +0000
+Message-ID: <e324fb96-bbf9-5ec6-78f3-9f298dac0644@infradead.org>
+Date:   Tue, 13 Sep 2022 11:37:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 5/5] platform/x86: dell: Add new dell-wmi-ddv driver
+Content-Language: en-US
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Armin Wolf <W_Armin@gmx.de>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "hmh@hmh.eng.br" <hmh@hmh.eng.br>,
+        "matan@svgalib.org" <matan@svgalib.org>,
+        "corentin.chary@gmail.com" <corentin.chary@gmail.com>,
+        "jeremy@system76.com" <jeremy@system76.com>,
+        "productdev@system76.com" <productdev@system76.com>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220912125342.7395-1-W_Armin@gmx.de>
+ <20220912125342.7395-6-W_Armin@gmx.de>
+ <b1b794b4-f6c3-7697-5d5a-b811809a9313@infradead.org>
+ <2aae0ae9-9608-675a-ec0c-6e7526e57363@gmx.de>
+ <MN0PR12MB6101CE9055DC152A6E96B2EDE2479@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <7224d38e-9b51-0f81-e113-72f065909ea0@infradead.org>
+ <4ec6d46f-b5c9-3c47-a102-6356e72c5225@amd.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <4ec6d46f-b5c9-3c47-a102-6356e72c5225@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
-
-Please pull a couple more DT fixes.
-
-Rob
 
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+On 9/13/22 11:30, Limonciello, Mario wrote:
+> On 9/13/2022 13:27, Randy Dunlap wrote:
+>>
+>>
+>> On 9/13/22 09:08, Limonciello, Mario wrote:
+>>> [Public]
+>>>
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: Armin Wolf <W_Armin@gmx.de>
+>>>> Sent: Tuesday, September 13, 2022 09:41
+>>>> To: Randy Dunlap <rdunlap@infradead.org>; hdegoede@redhat.com;
+>>>> markgross@kernel.org
+>>>> Cc: rafael@kernel.org; lenb@kernel.org; hmh@hmh.eng.br;
+>>>> matan@svgalib.org; corentin.chary@gmail.com; jeremy@system76.com;
+>>>> productdev@system76.com; platform-driver-x86@vger.kernel.org; linux-
+>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org
+>>>> Subject: Re: [PATCH 5/5] platform/x86: dell: Add new dell-wmi-ddv driver
+>>>>
+>>>> Am 12.09.22 um 23:56 schrieb Randy Dunlap:
+>>>>
+>>>>> Hi--
+>>>>>
+>>>>> On 9/12/22 05:53, Armin Wolf wrote:
+>>>>>> diff --git a/drivers/platform/x86/dell/Kconfig
+>>>> b/drivers/platform/x86/dell/Kconfig
+>>>>>> index 25421e061c47..209e63e347e2 100644
+>>>>>> --- a/drivers/platform/x86/dell/Kconfig
+>>>>>> +++ b/drivers/platform/x86/dell/Kconfig
+>>>>>> @@ -189,6 +189,19 @@ config DELL_WMI_DESCRIPTOR
+>>>>>>        default n
+>>>>>>        depends on ACPI_WMI
+>>>>>>
+>>>>>> +config DELL_WMI_DDV
+>>>>>> +    tristate "Dell WMI sensors Support"
+>>>>>> +    default m
+>>>>> You should (try to) justify default m, otherwise just
+>>>>> don't have a default for it.
+>>>>
+>>>> I have chosen default m since many other Dell platform drivers are being
+>>>> default m. Since this driver is not essential for normal operation,
+>>>> i will drop default m then.
+>>>
+>>> Actually Dell drivers directory are a bit unique in this regard.  There is a special
+>>> top level boolean.  I would suggest to keep it as is.
+>>>
+>>> Take a look at:
+>>> menuconfig X86_PLATFORM_DRIVERS_DELL
+>>>
+>>
+>> So all of those "default m" and "default y" drivers are *needed*
+>> as opposed to desirable?
+>>
+> 
+> It was supposed to be a convenience option, it's first introduced in f1e1ea516721d1.
+> 
+> So if you have a Dell laptop you set the one option and then get defaults for all those modules.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+oh well. whatever.
 
-are available in the Git repository at:
+thanks.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-6.0-2
+>>>>
+>>>> Armin Wolf
+>>>>
+>>>>>> +    depends on ACPI_BATTERY
+>>>>>> +    depends on ACPI_WMI
+>>>>>> +    help
+>>>>>> +      This option adds support for WMI-based sensors like
+>>>>>> +      battery temperature sensors found on some Dell notebooks.
+>>>>>> +      It also supports reading of the batteries ePPID.
+>>>>>> +
+>>>>>> +      To compile this drivers as a module, choose M here: the module will
+>>>>>> +      be called dell-wmi-ddv.
+>>
+>> thanks.
+> 
 
-for you to fetch changes up to de11663b75b0a8f1cfeb00d3b4acec9bd5a49cad:
-
-  dt-bindings: pinctrl: qcom: drop non-working codeaurora.org emails (2022-09-13 10:18:23 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for v6.0, take 2:
-
-- Update some stale binding maintainer emails
-
-- Fix property name error in apple,aic binding
-
-- Add missing param to of_dma_configure_id() stub
-
-- Fix an off-by-one error in unflatten_dt_nodes()
-
-----------------------------------------------------------------
-Janne Grunau (1):
-      dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
-
-Krzysztof Kozlowski (3):
-      dt-bindings: interconnect: fsl,imx8m-noc: drop Leonard Crestez
-      dt-bindings: power: qcom,rpmpd: drop non-working codeaurora.org emails
-      dt-bindings: pinctrl: qcom: drop non-working codeaurora.org emails
-
-Neil Armstrong (1):
-      MAINTAINERS: Update email of Neil Armstrong
-
-Sergey Shtylyov (1):
-      of: fdt: fix off-by-one error in unflatten_dt_nodes()
-
-Thierry Reding (1):
-      of/device: Fix up of_dma_configure_id() stub
-
- .mailmap                                             |  1 +
- .../arm/amlogic/amlogic,meson-gx-ao-secure.yaml      |  2 +-
- .../bindings/display/amlogic,meson-dw-hdmi.yaml      |  2 +-
- .../bindings/display/amlogic,meson-vpu.yaml          |  2 +-
- .../bindings/display/bridge/analogix,anx7814.yaml    |  2 +-
- .../bindings/display/bridge/ite,it66121.yaml         |  2 +-
- .../bindings/display/panel/sgd,gktw70sdae4se.yaml    |  2 +-
- .../devicetree/bindings/i2c/amlogic,meson6-i2c.yaml  |  2 +-
- .../bindings/interconnect/fsl,imx8m-noc.yaml         |  2 +-
- .../bindings/interrupt-controller/apple,aic.yaml     |  2 +-
- .../bindings/mailbox/amlogic,meson-gxbb-mhu.yaml     |  2 +-
- .../devicetree/bindings/media/amlogic,axg-ge2d.yaml  |  2 +-
- .../devicetree/bindings/media/amlogic,gx-vdec.yaml   |  2 +-
- .../bindings/media/amlogic,meson-gx-ao-cec.yaml      |  2 +-
- .../devicetree/bindings/mfd/khadas,mcu.yaml          |  2 +-
- .../devicetree/bindings/net/amlogic,meson-dwmac.yaml |  2 +-
- .../bindings/phy/amlogic,axg-mipi-dphy.yaml          |  2 +-
- .../bindings/phy/amlogic,meson-g12a-usb2-phy.yaml    |  2 +-
- .../phy/amlogic,meson-g12a-usb3-pcie-phy.yaml        |  2 +-
- .../pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml       |  1 -
- .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml        |  2 +-
- .../bindings/power/amlogic,meson-ee-pwrc.yaml        |  2 +-
- .../devicetree/bindings/power/qcom,rpmpd.yaml        |  2 +-
- .../bindings/reset/amlogic,meson-reset.yaml          |  2 +-
- .../devicetree/bindings/rng/amlogic,meson-rng.yaml   |  2 +-
- .../bindings/serial/amlogic,meson-uart.yaml          |  2 +-
- .../bindings/soc/amlogic/amlogic,canvas.yaml         |  2 +-
- .../bindings/spi/amlogic,meson-gx-spicc.yaml         |  2 +-
- .../bindings/spi/amlogic,meson6-spifc.yaml           |  2 +-
- .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml    |  2 +-
- .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml    |  2 +-
- MAINTAINERS                                          | 20 ++++++++++----------
- drivers/of/fdt.c                                     |  2 +-
- include/linux/of_device.h                            |  5 +++--
- 34 files changed, 44 insertions(+), 43 deletions(-)
+-- 
+~Randy
