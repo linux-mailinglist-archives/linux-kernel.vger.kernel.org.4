@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D501C5B6FE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C975B6FF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiIMOW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S233282AbiIMOWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbiIMOTm (ORCPT
+        with ESMTP id S233709AbiIMOTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:19:42 -0400
+        Tue, 13 Sep 2022 10:19:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27268DEDF;
-        Tue, 13 Sep 2022 07:14:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE8B65555;
+        Tue, 13 Sep 2022 07:14:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC4F614C1;
-        Tue, 13 Sep 2022 14:12:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4588EC43140;
-        Tue, 13 Sep 2022 14:12:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE6B461497;
+        Tue, 13 Sep 2022 14:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D71C433D6;
+        Tue, 13 Sep 2022 14:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078366;
-        bh=UerA8/O15XJcRsS8zRHWNxG9/WoeSjEnoJAUSy+EY9w=;
+        s=korg; t=1663078369;
+        bh=QQf0hwylFjIRj63wKXmW9XYh7DnbHSzJRNIvKsNtvDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vquDGNGkOMPH59lz3rijScRbwGFn0NOForv1bGyJ0K3yStCml6i0+DALCsgEiX3Cr
-         FlNeERmodV36yAzhjCqwCoHD9Hzbq4FPmrbBmSXGDA5RXgzIVCcKGicLM+eaK/jcOT
-         J1Ns+3l2wzxNLYMC34+1KtHDsqN1Xpo3X3QNaO2I=
+        b=wBffrZ1x/ekWDQaPgGnysIJpMlb4EmeTeEehP/aZ9kqiXR2VG651RhFaAlKZDzGb0
+         oIBpMypDA4nolXiUU2E9TonhaHqGTjKYYmz5CaIZp4St/zYio0Onn3/inMHyfQYrM2
+         JdNi9GnIpWmLOxzXfIB/FCP/pRXI1EsyeczZwXaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeffrey E Altman <jaltman@auristor.com>,
-        David Howells <dhowells@redhat.com>,
+        stable@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 112/192] afs: Use the operation issue time instead of the reply time for callbacks
-Date:   Tue, 13 Sep 2022 16:03:38 +0200
-Message-Id: <20220913140415.554897747@linuxfoundation.org>
+Subject: [PATCH 5.19 113/192] kunit: fix assert_type for comparison macros
+Date:   Tue, 13 Sep 2022 16:03:39 +0200
+Message-Id: <20220913140415.604560974@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
 References: <20220913140410.043243217@linuxfoundation.org>
@@ -55,122 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Sander Vanheule <sander@svanheule.net>
 
-[ Upstream commit 7903192c4b4a82d792cb0dc5e2779a2efe60d45b ]
+[ Upstream commit aded3cad909581c60335037112c4f86bbfe90f17 ]
 
-rxrpc and kafs between them try to use the receive timestamp on the first
-data packet (ie. the one with sequence number 1) as a base from which to
-calculate the time at which callback promise and lock expiration occurs.
+When replacing KUNIT_BINARY_*_MSG_ASSERTION() macros with
+KUNIT_BINARY_INT_ASSERTION(), the assert_type parameter was not always
+correctly transferred.  Specifically, the following errors were
+introduced:
+  - KUNIT_EXPECT_LE_MSG() uses KUNIT_ASSERTION
+  - KUNIT_ASSERT_LT_MSG() uses KUNIT_EXPECTATION
+  - KUNIT_ASSERT_GT_MSG() uses KUNIT_EXPECTATION
 
-However, we don't know how long it took for the server to send us the reply
-from it having completed the basic part of the operation - it might then,
-for instance, have to send a bunch of a callback breaks, depending on the
-particular operation.
+A failing KUNIT_EXPECT_LE_MSG() test thus prevents further tests from
+running, while failing KUNIT_ASSERT_{LT,GT}_MSG() tests do not prevent
+further tests from running.  This is contrary to the documentation,
+which states that failing KUNIT_EXPECT_* macros allow further tests to
+run, while failing KUNIT_ASSERT_* macros should prevent this.
 
-Fix this by using the time at which the operation is issued on the client
-as a base instead.  That should never be longer than the server's idea of
-the expiry time.
+Revert the KUNIT_{ASSERTION,EXPECTATION} switches to fix the behaviour
+for the affected macros.
 
-Fixes: 781070551c26 ("afs: Fix calculation of callback expiry time")
-Fixes: 2070a3e44962 ("rxrpc: Allow the reply time to be obtained on a client call")
-Suggested-by: Jeffrey E Altman <jaltman@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
+Fixes: 40f39777ce4f ("kunit: decrease macro layering for integer asserts")
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/flock.c     | 2 +-
- fs/afs/fsclient.c  | 2 +-
- fs/afs/internal.h  | 3 +--
- fs/afs/rxrpc.c     | 7 +------
- fs/afs/yfsclient.c | 3 +--
- 5 files changed, 5 insertions(+), 12 deletions(-)
+ include/kunit/test.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/afs/flock.c b/fs/afs/flock.c
-index c4210a3964d8b..bbcc5afd15760 100644
---- a/fs/afs/flock.c
-+++ b/fs/afs/flock.c
-@@ -76,7 +76,7 @@ void afs_lock_op_done(struct afs_call *call)
- 	if (call->error == 0) {
- 		spin_lock(&vnode->lock);
- 		trace_afs_flock_ev(vnode, NULL, afs_flock_timestamp, 0);
--		vnode->locked_at = call->reply_time;
-+		vnode->locked_at = call->issue_time;
- 		afs_schedule_lock_extension(vnode);
- 		spin_unlock(&vnode->lock);
- 	}
-diff --git a/fs/afs/fsclient.c b/fs/afs/fsclient.c
-index 4943413d9c5f7..7d37f63ef0f09 100644
---- a/fs/afs/fsclient.c
-+++ b/fs/afs/fsclient.c
-@@ -131,7 +131,7 @@ static void xdr_decode_AFSFetchStatus(const __be32 **_bp,
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 8ffcd7de96070..648dbb00a3008 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -863,7 +863,7 @@ do {									       \
  
- static time64_t xdr_decode_expiry(struct afs_call *call, u32 expiry)
- {
--	return ktime_divns(call->reply_time, NSEC_PER_SEC) + expiry;
-+	return ktime_divns(call->issue_time, NSEC_PER_SEC) + expiry;
- }
+ #define KUNIT_EXPECT_LE_MSG(test, left, right, fmt, ...)		       \
+ 	KUNIT_BINARY_INT_ASSERTION(test,				       \
+-				   KUNIT_ASSERTION,			       \
++				   KUNIT_EXPECTATION,			       \
+ 				   left, <=, right,			       \
+ 				   fmt,					       \
+ 				    ##__VA_ARGS__)
+@@ -1153,7 +1153,7 @@ do {									       \
  
- static void xdr_decode_AFSCallBack(const __be32 **_bp,
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index a6f25d9e75b52..28bdd0387e5ea 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -137,7 +137,6 @@ struct afs_call {
- 	bool			need_attention;	/* T if RxRPC poked us */
- 	bool			async;		/* T if asynchronous */
- 	bool			upgrade;	/* T to request service upgrade */
--	bool			have_reply_time; /* T if have got reply_time */
- 	bool			intr;		/* T if interruptible */
- 	bool			unmarshalling_error; /* T if an unmarshalling error occurred */
- 	u16			service_id;	/* Actual service ID (after upgrade) */
-@@ -151,7 +150,7 @@ struct afs_call {
- 		} __attribute__((packed));
- 		__be64		tmp64;
- 	};
--	ktime_t			reply_time;	/* Time of first reply packet */
-+	ktime_t			issue_time;	/* Time of issue of operation */
- };
+ #define KUNIT_ASSERT_LT_MSG(test, left, right, fmt, ...)		       \
+ 	KUNIT_BINARY_INT_ASSERTION(test,				       \
+-				   KUNIT_EXPECTATION,			       \
++				   KUNIT_ASSERTION,			       \
+ 				   left, <, right,			       \
+ 				   fmt,					       \
+ 				    ##__VA_ARGS__)
+@@ -1194,7 +1194,7 @@ do {									       \
  
- struct afs_call_type {
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index a5434f3e57c68..e3de7fea36435 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -347,6 +347,7 @@ void afs_make_call(struct afs_addr_cursor *ac, struct afs_call *call, gfp_t gfp)
- 	if (call->max_lifespan)
- 		rxrpc_kernel_set_max_life(call->net->socket, rxcall,
- 					  call->max_lifespan);
-+	call->issue_time = ktime_get_real();
- 
- 	/* send the request */
- 	iov[0].iov_base	= call->request;
-@@ -497,12 +498,6 @@ static void afs_deliver_to_call(struct afs_call *call)
- 			return;
- 		}
- 
--		if (!call->have_reply_time &&
--		    rxrpc_kernel_get_reply_time(call->net->socket,
--						call->rxcall,
--						&call->reply_time))
--			call->have_reply_time = true;
--
- 		ret = call->type->deliver(call);
- 		state = READ_ONCE(call->state);
- 		if (ret == 0 && call->unmarshalling_error)
-diff --git a/fs/afs/yfsclient.c b/fs/afs/yfsclient.c
-index fdc7d675b4b0c..11571cca86c19 100644
---- a/fs/afs/yfsclient.c
-+++ b/fs/afs/yfsclient.c
-@@ -232,8 +232,7 @@ static void xdr_decode_YFSCallBack(const __be32 **_bp,
- 	struct afs_callback *cb = &scb->callback;
- 	ktime_t cb_expiry;
- 
--	cb_expiry = call->reply_time;
--	cb_expiry = ktime_add(cb_expiry, xdr_to_u64(x->expiration_time) * 100);
-+	cb_expiry = ktime_add(call->issue_time, xdr_to_u64(x->expiration_time) * 100);
- 	cb->expires_at	= ktime_divns(cb_expiry, NSEC_PER_SEC);
- 	scb->have_cb	= true;
- 	*_bp += xdr_size(x);
+ #define KUNIT_ASSERT_GT_MSG(test, left, right, fmt, ...)		       \
+ 	KUNIT_BINARY_INT_ASSERTION(test,				       \
+-				   KUNIT_EXPECTATION,			       \
++				   KUNIT_ASSERTION,			       \
+ 				   left, >, right,			       \
+ 				   fmt,					       \
+ 				    ##__VA_ARGS__)
 -- 
 2.35.1
 
