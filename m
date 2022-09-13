@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E867A5B7082
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EEA5B720B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbiIMO1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S234551AbiIMOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiIMO0n (ORCPT
+        with ESMTP id S234601AbiIMOtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C2C5D110;
-        Tue, 13 Sep 2022 07:16:47 -0700 (PDT)
+        Tue, 13 Sep 2022 10:49:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF96714B;
+        Tue, 13 Sep 2022 07:25:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14EEDB80F4B;
-        Tue, 13 Sep 2022 14:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D233C433D6;
-        Tue, 13 Sep 2022 14:16:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26C73B80F10;
+        Tue, 13 Sep 2022 14:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF2AC433D7;
+        Tue, 13 Sep 2022 14:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078605;
-        bh=wgRZma+e4X5kCGxfMKh1BxeU5ur5lm00SFY+zuuMEMI=;
+        s=korg; t=1663078312;
+        bh=CWn4DWCZrdE99Iiqu5iA4dHZ/cYt7v+12OBJZMGeZ94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izy8OIRx+TI9ke3U2TtO03aLiVAg9ptMAlSlleKZTlJDJWvLsqmjCAK5hUttOZRck
-         JiK4JJieerqw72iG3jvEmt+pT5DjQ7xE1ewXE/4ZEyO2owGhOnyTyLnQuMqvyw2k43
-         xcupUdzmzTQVjA9J+QfaKFzyO1nkreVvqapy4dlw=
+        b=D86byUoAk8+wz6ncJjp84hG3Y/gt/alGAqBMVM+BMRd+1/ix/LVeL/oJUSdc+hkop
+         OYlQlFawFgiVVcFjLaNcywV22Jq3w8MqgcbtYmjEe4wPHFn3TBcNMWBJDbQAlxb2R9
+         EQC5GSBGvfNDoYCaXRZEAwgF6wNfNWbZzrXRoha4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.15 005/121] net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()
-Date:   Tue, 13 Sep 2022 16:03:16 +0200
-Message-Id: <20220913140357.557975060@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 091/192] soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
+Date:   Tue, 13 Sep 2022 16:03:17 +0200
+Message-Id: <20220913140414.498714443@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,45 +55,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Liang He <windhl@126.com>
 
-commit fe2c9c61f668cde28dac2b188028c5299cedcc1e upstream.
+[ Upstream commit 1085f5080647f0c9f357c270a537869191f7f2a1 ]
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  Fix this up to be much
-simpler logic and only create the root debugfs directory once when the
-driver is first accessed.  That resolves the memory leak and makes
-things more obvious as to what the intent is.
+In brcmstb_pm_probe(), there are two kinds of leak bugs:
 
-Cc: Marcin Wojtas <mw@semihalf.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: stable <stable@kernel.org>
-Fixes: 21da57a23125 ("net: mvpp2: add a debugfs interface for the Header Parser")
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(1) we need to add of_node_put() when for_each__matching_node() breaks
+(2) we need to add iounmap() for each iomap in fail path
+
+Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220707015620.306468-1-windhl@126.com
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c | 50 ++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 11 deletions(-)
 
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-@@ -700,10 +700,10 @@ void mvpp2_dbgfs_cleanup(struct mvpp2 *p
+diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+index 70ad0f3dce283..286f5d57c0cab 100644
+--- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
++++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+@@ -684,13 +684,14 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	const struct of_device_id *of_id = NULL;
+ 	struct device_node *dn;
+ 	void __iomem *base;
+-	int ret, i;
++	int ret, i, s;
  
- void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name)
- {
--	struct dentry *mvpp2_dir, *mvpp2_root;
-+	static struct dentry *mvpp2_root;
-+	struct dentry *mvpp2_dir;
- 	int ret, i;
+ 	/* AON ctrl registers */
+ 	base = brcmstb_ioremap_match(aon_ctrl_dt_ids, 0, NULL);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping AON_CTRL\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto aon_err;
+ 	}
+ 	ctrl.aon_ctrl_base = base;
  
--	mvpp2_root = debugfs_lookup(MVPP2_DRIVER_NAME, NULL);
- 	if (!mvpp2_root)
- 		mvpp2_root = debugfs_create_dir(MVPP2_DRIVER_NAME, NULL);
+@@ -700,8 +701,10 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 		/* Assume standard offset */
+ 		ctrl.aon_sram = ctrl.aon_ctrl_base +
+ 				     AON_CTRL_SYSTEM_DATA_RAM_OFS;
++		s = 0;
+ 	} else {
+ 		ctrl.aon_sram = base;
++		s = 1;
+ 	}
  
+ 	writel_relaxed(0, ctrl.aon_sram + AON_REG_PANIC);
+@@ -711,7 +714,8 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 				     (const void **)&ddr_phy_data);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping DDR PHY\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto ddr_phy_err;
+ 	}
+ 	ctrl.support_warm_boot = ddr_phy_data->supports_warm_boot;
+ 	ctrl.pll_status_offset = ddr_phy_data->pll_status_offset;
+@@ -731,17 +735,20 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, ddr_shimphy_dt_ids) {
+ 		i = ctrl.num_memc;
+ 		if (i >= MAX_NUM_MEMC) {
++			of_node_put(dn);
+ 			pr_warn("too many MEMCs (max %d)\n", MAX_NUM_MEMC);
+ 			break;
+ 		}
+ 
+ 		base = of_io_request_and_map(dn, 0, dn->full_name);
+ 		if (IS_ERR(base)) {
++			of_node_put(dn);
+ 			if (!ctrl.support_warm_boot)
+ 				break;
+ 
+ 			pr_err("error mapping DDR SHIMPHY %d\n", i);
+-			return PTR_ERR(base);
++			ret = PTR_ERR(base);
++			goto ddr_shimphy_err;
+ 		}
+ 		ctrl.memcs[i].ddr_shimphy_base = base;
+ 		ctrl.num_memc++;
+@@ -752,14 +759,18 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, brcmstb_memc_of_match) {
+ 		base = of_iomap(dn, 0);
+ 		if (!base) {
++			of_node_put(dn);
+ 			pr_err("error mapping DDR Sequencer %d\n", i);
+-			return -ENOMEM;
++			ret = -ENOMEM;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		of_id = of_match_node(brcmstb_memc_of_match, dn);
+ 		if (!of_id) {
+ 			iounmap(base);
+-			return -EINVAL;
++			of_node_put(dn);
++			ret = -EINVAL;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		ddr_seq_data = of_id->data;
+@@ -779,21 +790,24 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	dn = of_find_matching_node(NULL, sram_dt_ids);
+ 	if (!dn) {
+ 		pr_err("SRAM not found\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ret = brcmstb_init_sram(dn);
+ 	of_node_put(dn);
+ 	if (ret) {
+ 		pr_err("error setting up SRAM for PM\n");
+-		return ret;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ctrl.pdev = pdev;
+ 
+ 	ctrl.s3_params = kmalloc(sizeof(*ctrl.s3_params), GFP_KERNEL);
+-	if (!ctrl.s3_params)
+-		return -ENOMEM;
++	if (!ctrl.s3_params) {
++		ret = -ENOMEM;
++		goto s3_params_err;
++	}
+ 	ctrl.s3_params_pa = dma_map_single(&pdev->dev, ctrl.s3_params,
+ 					   sizeof(*ctrl.s3_params),
+ 					   DMA_TO_DEVICE);
+@@ -813,7 +827,21 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 
+ out:
+ 	kfree(ctrl.s3_params);
+-
++s3_params_err:
++	iounmap(ctrl.boot_sram);
++brcmstb_memc_err:
++	for (i--; i >= 0; i--)
++		iounmap(ctrl.memcs[i].ddr_ctrl);
++ddr_shimphy_err:
++	for (i = 0; i < ctrl.num_memc; i++)
++		iounmap(ctrl.memcs[i].ddr_shimphy_base);
++
++	iounmap(ctrl.memcs[0].ddr_phy_base);
++ddr_phy_err:
++	iounmap(ctrl.aon_ctrl_base);
++	if (s)
++		iounmap(ctrl.aon_sram);
++aon_err:
+ 	pr_warn("PM: initialization failed with code %d\n", ret);
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 
