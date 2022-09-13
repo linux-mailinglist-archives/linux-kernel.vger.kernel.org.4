@@ -2,179 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9145B7621
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258DE5B7750
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiIMQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S232280AbiIMRHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbiIMQIh (ORCPT
+        with ESMTP id S232305AbiIMRGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:08:37 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326341ADB6;
-        Tue, 13 Sep 2022 08:04:58 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id t70so11578131pgc.5;
-        Tue, 13 Sep 2022 08:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=qV3ZGmg1zNQF4NJliVmvkbfSsBnZ+qmZ9I0fy9mjfDg=;
-        b=Am8VQWNiEG3xriXjdc32ndwsblSx0UVSaTSVuBMIwm9hzxumvl790rss94dNC8Paei
-         o2cvxSn8jbpu/rrDWwsylkollhwpIIoXmWDuxbW5M951GbeA02baNogJCkrrOHbEGEXh
-         Vd23b4CDl43hYehyV8cRCxg5MF9/gEZGLXFbjMtu4T532GbUhpk5ZYg+Ipf/guLMqb2n
-         5gWJhEe9Wy7lgQjjwILWoPpZNwS7G71iWU2OF6n9LaeS5Ek7qCY+SZLSkxrFIzNP0hId
-         KSSaWY+jRcdwfZjRRc5lP4yzdOjLMc5FgxFbEE3IXl8ptWifsMIJWhL98DSZq6i4QvbH
-         iaTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=qV3ZGmg1zNQF4NJliVmvkbfSsBnZ+qmZ9I0fy9mjfDg=;
-        b=PDvSVa/oOMrZnRKPPdzctpjdakxXzGLDDNA+BDadfBgkSFr8GxaTxTxbcQE/7SYetS
-         OqyIY+wyvTH7K6iXivT40asFL//RoNd4qpFNvwwi/7Uk+HSuTd+ECZ+AoEUGhvQiK7cm
-         92//Uev/xd91JENRk/C5EYNt/JPmdh83IGAbsJaBxVDIePrw8VU3+phCzLVxnQi/+vDu
-         pStGWU8mSYiGaHad79uOSqfUJFuTLwpc53wSWJp3FdYcVxMWQQ2S5M6jfCNaow/7BruA
-         Y9F90zcVitWJ4OAqkkHfMjCUuBl/uE/1aOOeDXF1azc+dWY09KNN3ZfkdXlv8PeErm6k
-         eN3Q==
-X-Gm-Message-State: ACgBeo2yaYuiIZIrzRwcQT4dVKkzG7uFVDAXwYzOc0EwPimJGrKsGypw
-        bvO0siu6wQohl8mTWe1uqE25eI9XADU=
-X-Google-Smtp-Source: AA6agR6Qb2iWpcwBbB2Y6hbo8TDAlczOrUIUoBnM2YzfRTdt0fFm9tlDBwjC45xa7uK1dcuWSS7aQw==
-X-Received: by 2002:a17:902:e402:b0:176:e82f:3f4 with SMTP id m2-20020a170902e40200b00176e82f03f4mr32073796ple.107.1663080946817;
-        Tue, 13 Sep 2022 07:55:46 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id y6-20020aa793c6000000b00540b979c493sm8009767pff.55.2022.09.13.07.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:55:46 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 22:55:41 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
-Message-ID: <YyCZ7TN8fyVyuWXY@sol>
-References: <20220909121329.42004-1-brgl@bgdev.pl>
- <20220909121329.42004-3-brgl@bgdev.pl>
- <YxykorLetCjAls/Z@sol>
- <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
- <Yx8Bj0+4STpklMc2@sol>
- <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
- <Yx/nG5YsyCa+VXoj@sol>
- <CAMRc=MfoZQV-aHKSkAw6d_jPPbjn==oR0LA=irjuWLGzQiRP-w@mail.gmail.com>
- <YyCTmZocN/CY4Pg6@sol>
- <CAMRc=MdBRGW0skXOgPbZy=w4EiWcyKmKwKSZuAj+k4EtbPmvdg@mail.gmail.com>
+        Tue, 13 Sep 2022 13:06:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD09A72EEF;
+        Tue, 13 Sep 2022 08:56:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 901F9B80E1B;
+        Tue, 13 Sep 2022 14:58:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B62C433D7;
+        Tue, 13 Sep 2022 14:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663081100;
+        bh=X4LrdIPAkCosmlowIC581nEDNxjhrI7cVXFC6Z6+Dek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=saSk6+GNjnUs4yALADYwv4S3HA/Q+41UkbwqN7khJiYwmrhrtoerLqvtPOwXW6Xkd
+         Q/bGE12+ivd5I1VkbUfOQnLEPUP9Hf29OGBD82phcCKor1ekLsgNDkW7fVLzMqVuvt
+         2YYKzDtXHhhWBRC1fI3fd+gVnyzFOp0OV6J/hiYjlx0egwa5tUmfMCStA8xynRJ7LW
+         tLY/2b65kMbjD/X2Nm9TSvTUTImOrcfvG7gNXHhgzDQDANpNl2JLN5qVe8HuFB2mKD
+         CKIyygkbwaGmWTwb4TngQfc5dKs+8LCXAdTxGpyxWT7aPv8FdzoArfGTLOH+hJUcN6
+         dns+27ao/8RyQ==
+Date:   Tue, 13 Sep 2022 20:28:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power
+ up
+Message-ID: <YyCahxV+315zoSQG@matsya>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+ <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMRc=MdBRGW0skXOgPbZy=w4EiWcyKmKwKSZuAj+k4EtbPmvdg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:35:08PM +0200, Bartosz Golaszewski wrote:
-> On Tue, Sep 13, 2022 at 4:28 PM Kent Gibson <warthog618@gmail.com> wrote:
-> >
-> > On Tue, Sep 13, 2022 at 10:54:26AM +0200, Bartosz Golaszewski wrote:
-> > > On Tue, Sep 13, 2022 at 4:12 AM Kent Gibson <warthog618@gmail.com> wrote:
-> > > >
-> > > > On Mon, Sep 12, 2022 at 11:56:17AM +0200, Bartosz Golaszewski wrote:
-> > > > > On Mon, Sep 12, 2022 at 11:53 AM Kent Gibson <warthog618@gmail.com> wrote:
-> > > > > >
-> > > > >
-> > > > > [snip]
-> > > > >
-> > > > > > >
-> > > > > > > Using -1 sounds good but I've just realized there's a different
-> > > > > > > problem. A process holding a file descriptor may fork and both the
-> > > > > > > parent and the child will keep the same file descriptors open. Now
-> > > > > > > we'll have two processes (with different PIDs) holding the same GPIO
-> > > > > > > lines (specifically holding a file descriptor to the same anonymous
-> > > > > > > inode).
-> > > > > > >
-> > > > > > > This already poses a problem for this patch as we'd need to return an
-> > > > > > > array of PIDs which we don't have the space for but also is a
-> > > > > > > situation which we haven't discussed previously IIRC - two processes
-> > > > > > > keeping the same GPIO lines requested.
-> > > > > > >
-> > > > > > > I don't have any good idea on how to address this yet. One thing off
-> > > > > > > the top of my head is: close the parent's file descriptor from kernel
-> > > > > > > space (is it even possible?) on fork() (kind of like the close() on
-> > > > > > > exec flag).
-> > > > > > >
-> > > > > > > I need to think about it more.
-> > > > > > >
-> > > > > >
-> > > > > > I thought the O_CLOEXEC was set on the request fds exactly to prevent this
-> > > > > > case - only one process can hold the request fd.
-> > > > > >
-> > > > >
-> > > > > O_CLOEXEC means "close on exec" not "close on fork". When you fork,
-> > > > > you inherit all file descriptors from your parent. Only once you call
-> > > > > execve() are the fds with this flag closed *in the child*.
-> > > > >
-> > > >
-> > > > Ah, ok.
-> > > > You want to pass request fd ownership from parent to child??
-> > > > Why not lock ownership to the parent, so O_CLOFORK, were that
-> > > > available?
-> > > >
-> > >
-> > > Because what if we want to request a line and then daemonize i.e. fork
-> > > and exit in parent? It makes much more sense to keep the lines
-> > > requested in the child IMO.
-> > >
-> >
-> > Then you are doing it backwards - daemonize first ;-).
-> >
-> > Generally speaking, doesn't transfer of resource ownership to the forked
-> > child create havoc in multi-threaded apps? i.e. one thread requests a
-> > resource, another forks.  The parent thread unknowingly loses ownership,
-> > and the forked child process only starts with a replica of the forking
-> > thread.
-> >
-> 
-> Yeah, sounds like a bad idea.
-> 
-> > > During the BoF at Linux Plumbers it was suggested to use
-> > > /proc/$PID/fdinfo to expose the information about which lines are
-> > > requested but I can't figure out a way to do it elegantly.
-> > >
-> >
-> > Yeah, missed that :-(.
-> >
-> > Makes sense.
-> >
-> > As each request fd can contain multiple lines on a particular chip,
-> > you would need to identify the gpiochip and the offsets for that request.
-> > So two fields - the gpiochip path, and the list of offsets.
-> >
-> > Is that already too clunky or am I missing something?
-> >
-> 
-> It's worse than that - we don't know the character device's filesystem
-> path in gpiolib. Nor should we, as we can be in a different fs
-> namespace when checking it than in which we were when we opened the
-> device (which is also another concern for storing the path to the
-> character device in struct gpiod_chip - unless we specify explicitly
-> that it's the path that was used to open it). Since we don't know it -
-> we can only get it from the file descriptor that the requesting
-> process got after calling open() on the GPIO device. But this fd may
-> have been closed in the meantime. I think I opened a can of worms with
-> this one. :)
-> 
+On 09-09-22, 14:14, Krishna chaitanya chundru wrote:
+> Introducing phy power down/up callbacks for allowing to park the
+> link-state in L1ss without holding any PCIe resources during
+> system suspend.
 
-Forgot that we don't have the path readily available in the kernel -
-would device name suffice?
+where is the rest of the series, pls cc relevant folks on cover at
+least!
 
-Cheers,
-Kent.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/phy/phy-core.c  | 30 ++++++++++++++++++++++++++++++
+>  include/linux/phy/phy.h | 20 ++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index d93ddf1..1b0b757 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -441,6 +441,36 @@ int phy_set_speed(struct phy *phy, int speed)
+>  }
+>  EXPORT_SYMBOL_GPL(phy_set_speed);
+>  
+> +int phy_power_down(struct phy *phy)
+> +{
+> +	int ret;
+> +
+> +	if (!phy || !phy->ops->power_down)
+> +		return 0;
+> +
+> +	mutex_lock(&phy->mutex);
+> +	ret = phy->ops->power_down(phy);
+> +	mutex_unlock(&phy->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_power_down);
+
+I dont think this is a good idea as Dmitry already updated...
+
+> +
+> +int phy_power_up(struct phy *phy)
+> +{
+> +	int ret;
+> +
+> +	if (!phy || !phy->ops->power_up)
+> +		return 0;
+> +
+> +	mutex_lock(&phy->mutex);
+> +	ret = phy->ops->power_up(phy);
+> +	mutex_unlock(&phy->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_power_up);
+> +
+>  int phy_reset(struct phy *phy)
+>  {
+>  	int ret;
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index b141375..3a45f4d 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -76,6 +76,8 @@ union phy_configure_opts {
+>   * @set_mode: set the mode of the phy
+>   * @set_media: set the media type of the phy (optional)
+>   * @set_speed: set the speed of the phy (optional)
+> + * @power_down: parking the phy in power down state
+> + * @power_up: pulling back the phy from power down
+>   * @reset: resetting the phy
+>   * @calibrate: calibrate the phy
+>   * @release: ops to be performed while the consumer relinquishes the PHY
+> @@ -89,6 +91,8 @@ struct phy_ops {
+>  	int	(*set_mode)(struct phy *phy, enum phy_mode mode, int submode);
+>  	int	(*set_media)(struct phy *phy, enum phy_media media);
+>  	int	(*set_speed)(struct phy *phy, int speed);
+> +	int	(*power_down)(struct phy *phy);
+> +	int	(*power_up)(struct phy *phy);
+>  
+>  	/**
+>  	 * @configure:
+> @@ -226,6 +230,8 @@ int phy_init(struct phy *phy);
+>  int phy_exit(struct phy *phy);
+>  int phy_power_on(struct phy *phy);
+>  int phy_power_off(struct phy *phy);
+> +int phy_power_down(struct phy *phy);
+> +int phy_power_up(struct phy *phy);
+>  int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
+>  #define phy_set_mode(phy, mode) \
+>  	phy_set_mode_ext(phy, mode, 0)
+> @@ -349,6 +355,20 @@ static inline int phy_power_off(struct phy *phy)
+>  	return -ENOSYS;
+>  }
+>  
+> +static inline int phy_power_down(struct phy *phy)
+> +{
+> +	if (!phy)
+> +		return 0;
+> +	return -ENOSYS;
+> +}
+> +
+> +static inline int phy_power_up(struct phy *phy)
+> +{
+> +	if (!phy)
+> +		return 0;
+> +	return -ENOSYS;
+> +}
+> +
+>  static inline int phy_set_mode_ext(struct phy *phy, enum phy_mode mode,
+>  				   int submode)
+>  {
+> -- 
+> 2.7.4
+
+-- 
+~Vinod
