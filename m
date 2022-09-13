@@ -2,132 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A365F5B757F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64AD5B6ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiIMPpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S232396AbiIMOFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiIMPpH (ORCPT
+        with ESMTP id S231781AbiIMOFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:45:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146D65F7F6;
-        Tue, 13 Sep 2022 07:48:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CEBF614D1;
-        Tue, 13 Sep 2022 14:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE03C433C1;
-        Tue, 13 Sep 2022 14:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079109;
-        bh=XkQbDJaMEkaRdkohvyKxOTHcsS3Jp20F3IRQadi3+84=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a8OpAXWXCTLYCZL/LrbnHxDKrdyNjyDPsMio7ggFGrsbxSNElRsCedjniTS9qk15u
-         oaydv2ROX/uN0CsqDzWIhLUJBPa79H2+QaBperm5EWcQxIc2DbAPyo7vcXrNcV5HLM
-         8lvQfnsCyOadc/Hf/19Kf9RR3DFHV0+t59/xPN7s=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Leong <wmliang.tw@gmail.com>,
-        David Lebrun <dlebrun@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 62/79] ipv6: sr: fix out-of-bounds read when setting HMAC data.
-Date:   Tue, 13 Sep 2022 16:05:07 +0200
-Message-Id: <20220913140353.206087559@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:05:10 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B217AB5;
+        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1280590722dso32422347fac.1;
+        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=xaesEF6Lfa7W1zJ6vFq2YbimoamHUz/4xsPADg2pI8U=;
+        b=RwUD0q3JC+YmmFu5pL2OrGMDcPn/E2pVWwX0jNlBkd5Y29iohNZWJcgS+LM8GAW6Tu
+         wiTYmgRK7F9K8Edp8rCQ4602xjIQAY25bQHmBftPUXppAIhfYwVFtJmkhSjTw8ugBSFt
+         uEMjiWxmHWVvkd57VatGuJIqqjITGF6TIQRaCs15MMp6qkJ3+I+//zEmxm777zIUwRSu
+         HgKahI4FgJ8Q4mPolNv0IvlGcyQtu4B3Hjg4wKFHyGF6A3GEgvDZdYuIuTlyWSAoUii9
+         Ap3G+UySAmoXvZXp4kX1bTA+OImCjLBlZLGPm1r7O1rHYGAdq3gzxtiFpqaYte3L8P5v
+         yIag==
+X-Gm-Message-State: ACgBeo16qvksH6PBcM7XQBaCJuCx7SUwiY5bSLsUegkstgNtDh+KWYyL
+        3LaUUz9TPouz1cxK8JBCaw==
+X-Google-Smtp-Source: AA6agR5MZRUSO5U2/vJRsvdSOp4dyqOHS68xLdRjVDmKQUFF5s/TuXl3QUxdaeD4NpNEuWbsXwlnmw==
+X-Received: by 2002:a05:6808:21a2:b0:345:d23e:d2e2 with SMTP id be34-20020a05680821a200b00345d23ed2e2mr1526157oib.273.1663077908262;
+        Tue, 13 Sep 2022 07:05:08 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b003451c927e0dsm5119169oih.38.2022.09.13.07.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:05:07 -0700 (PDT)
+Received: (nullmailer pid 3590506 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:05:07 -0000
+Date:   Tue, 13 Sep 2022 09:05:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH RESEND v11 6/8] dt-bindings: clk: baikal-t1: Add DDR/PCIe
+ reset IDs
+Message-ID: <20220913140507.GA3590451-robh@kernel.org>
+References: <20220909192616.16542-1-Sergey.Semin@baikalelectronics.ru>
+ <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Lebrun <dlebrun@google.com>
+On Fri, 09 Sep 2022 22:26:14 +0300, Serge Semin wrote:
+> Aside with a set of the trigger-like resets Baikal-T1 CCU provides
+> additional directly controlled reset signals for the DDR and PCIe
+> controllers. As a preparation before adding these resets support to the
+> kernel let's extent the Baikal-T1 CCU IDs list with the new IDs, which
+> will be used to access the corresponding reset controls.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> 
+> ---
+> 
+> Changelog v11:
+> - This is a new patch created by detaching the DT-part from:
+> [PATCH v10 6/7] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+>   (@Krzysztof)
+> ---
+>  include/dt-bindings/reset/bt1-ccu.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-[ Upstream commit 84a53580c5d2138c7361c7c3eea5b31827e63b35 ]
-
-The SRv6 layer allows defining HMAC data that can later be used to sign IPv6
-Segment Routing Headers. This configuration is realised via netlink through
-four attributes: SEG6_ATTR_HMACKEYID, SEG6_ATTR_SECRET, SEG6_ATTR_SECRETLEN and
-SEG6_ATTR_ALGID. Because the SECRETLEN attribute is decoupled from the actual
-length of the SECRET attribute, it is possible to provide invalid combinations
-(e.g., secret = "", secretlen = 64). This case is not checked in the code and
-with an appropriately crafted netlink message, an out-of-bounds read of up
-to 64 bytes (max secret length) can occur past the skb end pointer and into
-skb_shared_info:
-
-Breakpoint 1, seg6_genl_sethmac (skb=<optimized out>, info=<optimized out>) at net/ipv6/seg6.c:208
-208		memcpy(hinfo->secret, secret, slen);
-(gdb) bt
- #0  seg6_genl_sethmac (skb=<optimized out>, info=<optimized out>) at net/ipv6/seg6.c:208
- #1  0xffffffff81e012e9 in genl_family_rcv_msg_doit (skb=skb@entry=0xffff88800b1f9f00, nlh=nlh@entry=0xffff88800b1b7600,
-    extack=extack@entry=0xffffc90000ba7af0, ops=ops@entry=0xffffc90000ba7a80, hdrlen=4, net=0xffffffff84237580 <init_net>, family=<optimized out>,
-    family=<optimized out>) at net/netlink/genetlink.c:731
- #2  0xffffffff81e01435 in genl_family_rcv_msg (extack=0xffffc90000ba7af0, nlh=0xffff88800b1b7600, skb=0xffff88800b1f9f00,
-    family=0xffffffff82fef6c0 <seg6_genl_family>) at net/netlink/genetlink.c:775
- #3  genl_rcv_msg (skb=0xffff88800b1f9f00, nlh=0xffff88800b1b7600, extack=0xffffc90000ba7af0) at net/netlink/genetlink.c:792
- #4  0xffffffff81dfffc3 in netlink_rcv_skb (skb=skb@entry=0xffff88800b1f9f00, cb=cb@entry=0xffffffff81e01350 <genl_rcv_msg>)
-    at net/netlink/af_netlink.c:2501
- #5  0xffffffff81e00919 in genl_rcv (skb=0xffff88800b1f9f00) at net/netlink/genetlink.c:803
- #6  0xffffffff81dff6ae in netlink_unicast_kernel (ssk=0xffff888010eec800, skb=0xffff88800b1f9f00, sk=0xffff888004aed000)
-    at net/netlink/af_netlink.c:1319
- #7  netlink_unicast (ssk=ssk@entry=0xffff888010eec800, skb=skb@entry=0xffff88800b1f9f00, portid=portid@entry=0, nonblock=<optimized out>)
-    at net/netlink/af_netlink.c:1345
- #8  0xffffffff81dff9a4 in netlink_sendmsg (sock=<optimized out>, msg=0xffffc90000ba7e48, len=<optimized out>) at net/netlink/af_netlink.c:1921
-...
-(gdb) p/x ((struct sk_buff *)0xffff88800b1f9f00)->head + ((struct sk_buff *)0xffff88800b1f9f00)->end
-$1 = 0xffff88800b1b76c0
-(gdb) p/x secret
-$2 = 0xffff88800b1b76c0
-(gdb) p slen
-$3 = 64 '@'
-
-The OOB data can then be read back from userspace by dumping HMAC state. This
-commit fixes this by ensuring SECRETLEN cannot exceed the actual length of
-SECRET.
-
-Reported-by: Lucas Leong <wmliang.tw@gmail.com>
-Tested: verified that EINVAL is correctly returned when secretlen > len(secret)
-Fixes: 4f4853dc1c9c1 ("ipv6: sr: implement API to control SR HMAC structure")
-Signed-off-by: David Lebrun <dlebrun@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/ipv6/seg6.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
-index d2f8138e5a73a..2278c0234c497 100644
---- a/net/ipv6/seg6.c
-+++ b/net/ipv6/seg6.c
-@@ -135,6 +135,11 @@ static int seg6_genl_sethmac(struct sk_buff *skb, struct genl_info *info)
- 		goto out_unlock;
- 	}
- 
-+	if (slen > nla_len(info->attrs[SEG6_ATTR_SECRET])) {
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
-+
- 	if (hinfo) {
- 		err = seg6_hmac_info_del(net, hmackeyid);
- 		if (err)
--- 
-2.35.1
-
-
-
+Acked-by: Rob Herring <robh@kernel.org>
