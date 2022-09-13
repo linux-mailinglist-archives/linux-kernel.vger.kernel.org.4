@@ -2,150 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099705B77CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8FA5B781C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiIMRYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S233244AbiIMRiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiIMRXY (ORCPT
+        with ESMTP id S232972AbiIMRh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:23:24 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3ED9A9F9;
-        Tue, 13 Sep 2022 09:10:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MRpL147CnzKHYR;
-        Wed, 14 Sep 2022 00:08:41 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgBHB4dxqyBjcEAeAw--.28569S6;
-        Wed, 14 Sep 2022 00:10:33 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH bpf-next v2 4/4] ftrace: Fix dead loop caused by direct call in ftrace selftest
-Date:   Tue, 13 Sep 2022 12:27:32 -0400
-Message-Id: <20220913162732.163631-5-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220913162732.163631-1-xukuohai@huaweicloud.com>
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+        Tue, 13 Sep 2022 13:37:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5665557
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:28:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id lz22so28832010ejb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dqfDDt++wd3GzkJu7/rH2NUyW4xMIcqqDJ6iLNC291s=;
+        b=MEim9D3xOue14jR/Jav6bQLoZi/hNv97yMe8hqfzvPzc9lQAfsx2Zldry2NXcUbKxT
+         /csasHK5KWlUXQAoqovKKkX2mks4iPUgvPkRYuFhZvN9tgd+BbyBQlNoYRO64IILlGaa
+         iOkKHn2BIsp33oxArNDx9ZgvjwS7iEZi/V1/JNM9uF7pH4ujynTaDtK+FLailmDNe5RL
+         Zch+ys2WnGEcCsPAcmPbPgFzQoioYhHAVsSD/UWuoL6i0g3zbYzuHlOqfCdpgKxDRwl2
+         imUO++qhtU7LBoXETJI9c15zGiOvYHQ88EFThaI+OkUlp2b4PIhhMfhvlBrM4h+KvFB8
+         cOzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dqfDDt++wd3GzkJu7/rH2NUyW4xMIcqqDJ6iLNC291s=;
+        b=tcjFoBiNUqc7QKTBhmW3wdZGtfGlDIM5eJGpHe5ZseRaPDZiGEIww7WzYbc9g0gLIi
+         TPVigrjnVZJ9eXZ91alDvRkSF1hEZc6TKyThnJf3GcseGvXH+5C3zG7gvfnAil0R952p
+         O4Am/tQta/VaG99S2HZg8r5zQxRHbUumL1cORPwe+hz9etfq5pf/VGc//WpjZn5iCOF8
+         HSC46h86A/B+BWiXXst0UZHGXDqkn1ov4tZHLmUo+cJimcT8H2eHWxtmkKtRA2++aZxy
+         SVkmCvFo08jKXAGSmkPeon0IBRprwPSirczL+yYZGgt52NPKsfMwB/nQImmHqhKukuCo
+         i1sA==
+X-Gm-Message-State: ACgBeo2RKv6DS5DZurs1F2hsX/UbQf1B46TOpdjLPpgEFe9XeBFy13uA
+        BlktNn57FaI4UAV6JSWQYY4z+g3W6Wj/N4wghNiRwg==
+X-Google-Smtp-Source: AA6agR5yM1bjKeeAHvCSktnAT6mnMkbq12RID7XquhX+ko1fNb/oSjoWD/MnTUKF+F1U1V3XtSvugn9aiIx0aMEHN9s=
+X-Received: by 2002:a17:907:a0c7:b0:77f:a9d2:9be2 with SMTP id
+ hw7-20020a170907a0c700b0077fa9d29be2mr4317058ejc.352.1663086519833; Tue, 13
+ Sep 2022 09:28:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBHB4dxqyBjcEAeAw--.28569S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3WrWUXr4fCr43XF47urg_yoW8tFWDpa
-        s3urnrKr15AF4kKas7u3W8CryUAwn8A343Kw1UG3sYvrZ8AryUKrZ2vrn7Z34DJa95C3y3
-        ZF42vr1rGr4UX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x02
-        67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YuqDMLF2AQyj4+N1@kroah.com> <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
+ <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com> <YyCequVJnV3p0Cpw@kroah.com>
+In-Reply-To: <YyCequVJnV3p0Cpw@kroah.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Tue, 13 Sep 2022 09:28:27 -0700
+Message-ID: <CAOesGMjQHhTUMBGHQcME4JBkZCof2NEQ4gaM1GWFgH40+LN9AQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Tue, Sep 13, 2022 at 8:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
+> > On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > > Saravana Kannan (11):
+> > > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
+> > > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
+> > > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
+> > > >       driver core: Add wait_for_init_devices_probe helper function
+> > > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+> > > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
+> > > >       driver core: Set fw_devlink.strict=1 by default
+> > > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
+> > > >       driver core: Delete driver_deferred_probe_check_state()
+> > > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
+> > > >       of: base: Avoid console probe delay when fw_devlink.strict=1
+> > >
+> > > The last patch in this list regresses my HoneyComb LX2K (ironically
+> > > the machine I do maintainer work on). It stops PCIe from probing, but
+> > > without a single message indicating why.
+> > >
+> > > The reason seems to be that the iommu-maps property doesn't get
+> > > patched up by my (older) u-boot, and thus isn't a valid reference.
+> > > System works fine without IOMMU, which is how I've ran it for a couple
+> > > of years.
+> > >
+> > > It's also extremely hard to diagnose out of the box because there are
+> > > *no error messages*. And there were no warnings leading up to this
+> > > strict enforcement.
+> > >
+> > > This "feature" seems to have been done backwards. The checks should
+> > > have been running (and not skipped due to the "optional" flag), but
+> > > also not causing errors, just warnings. That would have given users a
+> > > chance to know that this is something that needs to be fixed.
+> > >
+> > > And when you flip the switch, at least report what failed so that
+> > > people don't need to spend a whole night bisecting kernels, please.
+> > >
+> > > Greg, mind reverting just the last one? If I hit this, I presume
+> > > others would too.
+> >
+> > Apologies, wrong patch pointed out. The culprit is "driver core: Set
+> > fw_devlink.strict=1 by default", 71066545b48e42.
+>
+> Is this still an issue in -rc5?  A number of patches in the above series
+> was just reverted and hopefully should have resolved the issue you are
+> seeing.
 
-After direct call is enabled for arm64, ftrace selftest enters a
-dead loop:
+Unfortunately, I discovered this regression with -rc5 in the first
+place, so it's still there.
 
-<trace_selftest_dynamic_test_func>:
-00  bti     c
-01  mov     x9, x30                            <trace_direct_tramp>:
-02  bl      <trace_direct_tramp>    ---------->     ret
-                                                     |
-                                         lr/x30 is 03, return to 03
-                                                     |
-03  mov     w0, #0x0   <-----------------------------|
-     |                                               |
-     |                   dead loop!                  |
-     |                                               |
-04  ret   ---- lr/x30 is still 03, go back to 03 ----|
 
-The reason is that when the direct caller trace_direct_tramp() returns
-to the patched function trace_selftest_dynamic_test_func(), lr is still
-the address after the instrumented instruction in the patched function,
-so when the patched function exits, it returns to itself!
-
-To fix this issue, we need to restore lr before trace_direct_tramp()
-exits, so use a dedicated trace_direct_tramp() for arm64.
-
-Reported-by: Li Huafei <lihuafei1@huawei.com>
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- arch/arm64/include/asm/ftrace.h | 4 ++++
- kernel/trace/trace_selftest.c   | 2 ++
- 2 files changed, 6 insertions(+)
-
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index b07a3c24f918..15247f73bf54 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -128,6 +128,10 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
- #define ftrace_dummy_tramp ftrace_dummy_tramp
- extern void ftrace_dummy_tramp(void);
- 
-+#ifdef CONFIG_FTRACE_SELFTEST
-+#define trace_direct_tramp ftrace_dummy_tramp
-+#endif /* CONFIG_FTRACE_SELFTEST */
-+
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
- 
- #endif /* ifndef __ASSEMBLY__ */
-diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-index a2d301f58ced..092239bc373c 100644
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -785,8 +785,10 @@ static struct fgraph_ops fgraph_ops __initdata  = {
- };
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+#ifndef trace_direct_tramp
- noinline __noclone static void trace_direct_tramp(void) { }
- #endif
-+#endif
- 
- /*
-  * Pretty much the same than for the function tracer from which the selftest
--- 
-2.30.2
-
+-Olof
