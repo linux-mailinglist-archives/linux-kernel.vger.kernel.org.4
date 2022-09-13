@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2395B7676
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F185B7674
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiIMQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S231690AbiIMQ21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiIMQ1h (ORCPT
+        with ESMTP id S232009AbiIMQ15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:27:37 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6767B2A4;
-        Tue, 13 Sep 2022 08:23:03 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1280590722dso33060295fac.1;
-        Tue, 13 Sep 2022 08:23:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Wk/p18xJMNComokJnouExLqevPYgY3WIuHduT5z5UaE=;
-        b=LvEbm9VDVkG57pyliYr6qu0De9+H17QoDeY+ZGiTfH19xl10WNxXLxba7i6CPwUIan
-         K4bTqo9D/He0ijMI+02PCSsz+36dBeCcRdafk0kbElEuWjq2xpjJxh19v8UX9bPlQDay
-         N5j/92B0l23KVyMii0cXI6fkWqtuhEiTkMfXp6tRFvioO4euFe2CA9o2VBjmqYYGbrDM
-         qBZoSjn8B8VH5224e/xoinAZRLHl3Rrtm7PcRJvWNErMX1vgZuedNXyBASwAEfLQJQ3n
-         RZnaDI2mtJYdbaFIEIjQYjmMiBTe6c7F5cLGpLhPLmssUZIbapoZQGMDcmR4sjB6TRvc
-         K2nw==
-X-Gm-Message-State: ACgBeo2lH+htSpQuuVXVXyuBqzXpqmEf0OpBByKl2PTWNEy5472M0uDX
-        QvMSG2EztCdS9L+FH74RdHJZTOxiJg==
-X-Google-Smtp-Source: AA6agR7r0TwDiXVOXUGXZmyD9bayxsvjxqO1u/v0jvdTZFJic4WcZ4cxjERsdWDjKKY/rvsSto9+nA==
-X-Received: by 2002:a05:6870:170b:b0:127:6654:6768 with SMTP id h11-20020a056870170b00b0012766546768mr2004800oae.256.1663082455510;
-        Tue, 13 Sep 2022 08:20:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i34-20020a056870892200b0012644cc4feasm7055376oao.55.2022.09.13.08.20.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 08:20:55 -0700 (PDT)
-Received: (nullmailer pid 3752130 invoked by uid 1000);
-        Tue, 13 Sep 2022 15:20:54 -0000
-Date:   Tue, 13 Sep 2022 10:20:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH] dt-bindings: pci: qcom,pcie-ep: correct qcom,perst-regs
-Message-ID: <20220913152054.GA3736444-robh@kernel.org>
-References: <20220911135547.23106-1-krzysztof.kozlowski@linaro.org>
- <11e61fa5-f770-9c9f-23b9-3d1dcb205bc5@linaro.org>
+        Tue, 13 Sep 2022 12:27:57 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC80AE208;
+        Tue, 13 Sep 2022 08:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663082615; x=1694618615;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xv3LSLJmI60OwaQZNgO6wmG3l4up4OQb63JFCEM8X4Q=;
+  b=J7nmIPvcJmoGibWc1aqkwUtC6QNghmadigMSA6jhq/wl8GHQzgcPjVAV
+   QZSGS3NMJtxkts268Y3y7L9bs0UkSyKesx/aBX0qIiWugVhM93J4Tr0wN
+   SOO22aUGtfH2m6SfM4ese9D3llYXqNK+ecsZyUuIb6v3E2yQiu+uR4QIf
+   AehfrUA6iFjiQn8ivPxLPYYSUPcsPoKYGQpwBCIuc4NAJX4bM4//3kqvd
+   RerbOZQgfbDkB8NWU0pofa+XxhFd0sCYd32LPGi1jlwewvEQ8GdgXoUUO
+   vQC6DANfR64EQvVtkKGPSfsoytbS6smHF9GH4blh8xp0/ATLasyjognjt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="277897879"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="277897879"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 08:21:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="646969211"
+Received: from liweian-mobl.amr.corp.intel.com (HELO [10.209.26.112]) ([10.209.26.112])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 08:21:22 -0700
+Message-ID: <11c9a594-4012-c648-829b-6bd410d2415d@linux.intel.com>
+Date:   Tue, 13 Sep 2022 08:21:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11e61fa5-f770-9c9f-23b9-3d1dcb205bc5@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <f85dbb3636ad199ff5f6ea9bdf5e17261f66945d.camel@intel.com>
+ <d67b4273-e0a6-6b24-b96c-7a3193ae52f9@linux.intel.com>
+ <4a4ed638-d505-6f30-bf0f-a16a32d494a4@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <4a4ed638-d505-6f30-bf0f-a16a32d494a4@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 04:14:54PM +0200, Krzysztof Kozlowski wrote:
-> On 11/09/2022 15:55, Krzysztof Kozlowski wrote:
-> > qcom,perst-regs is an phandle array of one item with a phandle and its
-> > arguments.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > index 3d23599e5e91..077e002b07d3 100644
-> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > @@ -60,8 +60,10 @@ properties:
-> >                   enable registers
-> >      $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> >      items:
-> > -      minItems: 3
-> > -      maxItems: 3
-> > +      - items:
-> > +          - description: Syscon to TCSR system registers
-> > +          - description: Perst enable offset
-> > +          - description: Perst separateion enable offset
-> 
-> Unfortunately this still complains:
-> 
-> qcom-sdx55-t55.dtb: pcie-ep@40000000: qcom,perst-regs:0: [28] is too short
-> 
-> 
-> where 28 is the phandle...
+Hi,
 
-Meaning the dt is wrong or there's a tooling issue?
+On 9/13/22 2:01 AM, Dave Hansen wrote:
+> On 9/12/22 19:44, Sathyanarayanan Kuppuswamy wrote:
+>>> and include the header (<linux/string.h> ?) for memchr_inv()?
+>> One of the previous headers includes linux/string.h (I am not sure which one).
+>> So why include it explicitly?
+> Because it's a best practice.  What happens is that you ride along on
+> the coat tails of another #include, someone sees that include is no
+> longer used and removes it.  Then, your code is busted on some weird
+> .config.
+> 
+> *OR*, the header itself changes and doesn't #include the dependency you
+> need.
+> 
+> I guess you can go add this advice to Documentation/ if it's not there
+> already somewhere.
 
-Rob
+Ok. I will include it explicitly.
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
