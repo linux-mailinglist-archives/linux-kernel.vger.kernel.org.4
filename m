@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2035B7C58
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058CF5B7C5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiIMUzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S229456AbiIMUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIMUzo (ORCPT
+        with ESMTP id S229591AbiIMUzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:55:44 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DAE47BB5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:42 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i194-20020a253bcb000000b00676d86fc5d7so11044288yba.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:42 -0700 (PDT)
+        Tue, 13 Sep 2022 16:55:49 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD9543E4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:48 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id n33-20020ab013e4000000b0039f1bede4c9so3823547uae.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date;
-        bh=s33IIyZmc8+UOGDwcegpipUma0relN3TBfpMpfz2BtE=;
-        b=RjSvDvpURFWYgxGTp+hsMgMlof5mN8kvxLIrfLqX4X89vJU6vIXFtmx0+5iAbRnMOl
-         AmhQI6ePnBrDnOU4psWJxluoIzalZblllUZva2TEr4N95hjhgz8ZGbLOHTFqvjKegQex
-         HWb6RVL597rKKcH75a2RB2G/IRszLtafu+XLKFjl5XN0LrxBPn+c8Q69aA2uJCuI/Pre
-         OXID5G2XefTpi4prdWtlr5n9LEccAWLjjHsNyMBuF2bFZow0uM/4qIe4sCcbuQskeeTU
-         RRC0VCjDJWvklrNi5KxKkgKM/2yq4MoRMOQLvTqdqMcd8Wtu6wIc4NGkOeV8JKsRLtea
-         TIhg==
+        bh=B2mqYDiaNl85Fwjyeejod1j2C23kkV3KpQaZ/IDd3G0=;
+        b=n5/3ZUe5YW7iVEaFTC1C/QTXggGwKQwtjWMw3jPI0BgMfRYYaenAHMYA7hmpH78woh
+         lZrsAverREXV5LS1eNSZiEiLKiM+JXW0zOmxWAdX3LhCwLd9Qf/j9Y5hHtz2sPDqVpOO
+         3LE27kbTv/4DXc2cgdQMCkC3yessqW+eRLrKkgNWQ+Ghdk/GB4Xyotg4WWPaHI8nr0ZJ
+         DFR3Zt4imBoTKoWRLhRctbaodxm4ndTXJF9eHcqbrD4UR0gehFkZtZ22JU5AJxGutNXu
+         2/qLLlTx4A77Jsxp0TXTu22DWntV2xma0eZbyML/CoROivz9n2Cnhwlejron+u+9bLkh
+         E7/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=s33IIyZmc8+UOGDwcegpipUma0relN3TBfpMpfz2BtE=;
-        b=1zmrUmImkoib5g600ovLEjMQYLw17XobCgZdhIgUaOobnOsixf8j2U+kp5A0OWGHPK
-         oye5LexHfP8BNQC2r7NKto6Pc4vQOQe7UZHlk5oXc7fno2RwO/JhdEeLqRoV+Ghe2V4p
-         yTHzwCsP/vOMOO3lZ2JNoDa0jOQs3jQdFhxtvQwpQwL6r0G1TrONTu0eN5kVazhOq4vB
-         2kQguaF+PAFTlg6lyUMc8KDAzNjspHDxW7wt/lDx0TiIguH7iAT27oKn9eUgJ971zgXr
-         vRmgUre+T770ohI5VGMXMRnU1sElkNMQsHpbT3/rifv7hXDAXfS6Yla1ag2dr37iMQ3/
-         2UVA==
-X-Gm-Message-State: ACgBeo3W7ffFIVv53Dj8oehDDrqj8/Uame3r9KVeEijq8b1XWEMF4ttk
-        yGFOhNUoITUlwpkXzxREcHJKQ/j9og==
-X-Google-Smtp-Source: AA6agR5dsFGBClGYLD+8MsGw7ygyHU5aaKZYuov7XnCqBY5RuEfzGEGGFNkCWySIkMRmAQ8phfbVgpv1BQ==
+        bh=B2mqYDiaNl85Fwjyeejod1j2C23kkV3KpQaZ/IDd3G0=;
+        b=RqPsQkdEa1CLkb31Q+gdZ0UvKcwzFRkRehzQc4osslR5tP9bhihVigqRkM1p4i7zGX
+         9daTX66B+vpg5+CUepWE2JlTC86jwlNyG5R+c/OEzKB2dGHR/EVCSizWStboX31nzZnk
+         LNXHNDCxgHWISxQJtrJJt2jT918u7o8EEfT+rIWvS5JwKtrP1+r3HriZVDFnDZ7efKsS
+         cfJno0cVX/gYbTH9lGSBh2tlO1ppa1cvrXIDwBSORC7i6T7CJpMZQ1+mBZWv8G8mTlIn
+         6lXR+KkvbcbLxVP1DVFEak6JjcnkEcBmWpyw/dOKpoVxVpuw6evCTYxJO+6BaSmEbTey
+         MQsg==
+X-Gm-Message-State: ACgBeo23v+AbyUsEpU3pDuC2n2dDNBgZUl99eUyOy9IVUhZ+RhVegQiT
+        MHbwdOcOnXbrhlJlKPF0Y79onKYCeQ==
+X-Google-Smtp-Source: AA6agR6tnOJoQpNye/EaN3VzNTXwqOI2huVgh67Hj9kUaRNfdC+l6rBv/TSOXU4i5MQmCNQ7VhuyBZdcNQ==
 X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a25:a26a:0:b0:6ae:a723:f721 with SMTP id
- b97-20020a25a26a000000b006aea723f721mr15192009ybi.200.1663102541983; Tue, 13
- Sep 2022 13:55:41 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 13:55:27 -0700
+ (user=nhuck job=sendgmr) by 2002:a67:f6d5:0:b0:398:3cdb:3f99 with SMTP id
+ v21-20020a67f6d5000000b003983cdb3f99mr9320922vso.85.1663102547645; Tue, 13
+ Sep 2022 13:55:47 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 13:55:44 -0700
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913205531.155046-1-nhuck@google.com>
-Subject: [PATCH] drm/i915: Fix return type of mode_valid function hook
+Message-ID: <20220913205544.155106-1-nhuck@google.com>
+Subject: [PATCH] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
 From:   Nathan Huckleberry <nhuck@google.com>
 Cc:     Nathan Huckleberry <nhuck@google.com>,
         Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
@@ -79,39 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All of the functions used for intel_dvo_dev_ops.mode_valid have a return
-type of enum drm_mode_status, but the mode_valid field in the struct
-definition has a return type of int.
+The mode_valid field in drm_connector_helper_funcs is expected to be of
+type:
+enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+                                     struct drm_display_mode *mode);
 
 The mismatched return type breaks forward edge kCFI since the underlying
-function definitions do not match the function hook definition.
+function definition does not match the function hook definition.
 
-The return type of the mode_valid field should be changed from int to
-enum drm_mode_status.
+The return type of imx_tve_connector_mode_valid should be changed from
+int to enum drm_mode_status.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
 Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/imx/imx-tve.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-index d96c3cc46e50..50205f064d93 100644
---- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-+++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-@@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
- 	 *
- 	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
- 	 */
--	int (*mode_valid)(struct intel_dvo_device *dvo,
--			  struct drm_display_mode *mode);
-+	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
-+					   struct drm_display_mode *mode);
+diff --git a/drivers/gpu/drm/imx/imx-tve.c b/drivers/gpu/drm/imx/imx-tve.c
+index 6b34fac3f73a..ab4d1c878fda 100644
+--- a/drivers/gpu/drm/imx/imx-tve.c
++++ b/drivers/gpu/drm/imx/imx-tve.c
+@@ -218,8 +218,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
+ 	return ret;
+ }
  
- 	/*
- 	 * Callback for preparing mode changes on an output
+-static int imx_tve_connector_mode_valid(struct drm_connector *connector,
+-					struct drm_display_mode *mode)
++static enum drm_mode_status
++imx_tve_connector_mode_valid(struct drm_connector *connector,
++			     struct drm_display_mode *mode)
+ {
+ 	struct imx_tve *tve = con_to_tve(connector);
+ 	unsigned long rate;
 -- 
 2.37.2.789.g6183377224-goog
 
