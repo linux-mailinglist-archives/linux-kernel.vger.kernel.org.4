@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D238F5B7060
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC6F5B7016
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbiIMOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S233331AbiIMOUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbiIMO2k (ORCPT
+        with ESMTP id S233139AbiIMOSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:28:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91694696C5;
-        Tue, 13 Sep 2022 07:17:45 -0700 (PDT)
+        Tue, 13 Sep 2022 10:18:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6272610FDA;
+        Tue, 13 Sep 2022 07:13:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AC7E614D6;
-        Tue, 13 Sep 2022 14:17:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259D6C433D6;
-        Tue, 13 Sep 2022 14:17:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43BB4614B6;
+        Tue, 13 Sep 2022 14:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDB7C433C1;
+        Tue, 13 Sep 2022 14:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078661;
-        bh=KAQNNwhHGi/oFnB6JdG9CeVbc8sA1N98qSSDSfnaNpI=;
+        s=korg; t=1663078384;
+        bh=OI4I2cN6EuRYAILR7BIdBmMjdLZtAe/yXapB8JqRc7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/NhOSwu5qwof0A1r67JpXe9RIMFdhInoC2djAYSjtVGuH6SpmJDAEH8B9oINHxn2
-         Kp9VNNoitbK5zUDyOipBhQfnYwg1q8qMTTmQHcR3LTTuA4ci4aNK1zft/7cQLNNee6
-         3Ut4tZ1VcUzh+6MjN6LAlTMhpd7a7wPjqcZHnBhs=
+        b=cejLtTIUtQTOM1nmXKHFo8MSlZiDo93S7CmOD37wgHTP3Rszms77mqeihmfqrOKi6
+         AnC02o/38BknDooWS0QQ+GmPNVQdMuxJzhdo/uHil2/fIcCC7OaPZbhwX5Fw/5nalj
+         VnTECiWOS5UtO1d+JU748F8CSGxQ3WIqIeKOpnwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 033/121] btrfs: zoned: set pseudo max append zone limit in zone emulation mode
-Date:   Tue, 13 Sep 2022 16:03:44 +0200
-Message-Id: <20220913140358.775326883@linuxfoundation.org>
+        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Chandan <chandanx.rout@intel.com>
+Subject: [PATCH 5.19 119/192] ice: Fix DMA mappings leak
+Date:   Tue, 13 Sep 2022 16:03:45 +0200
+Message-Id: <20220913140415.912802693@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +58,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
 
-commit cac5c44c48c9fb9cc31bea15ebd9ef0c6462314f upstream.
+[ Upstream commit 7e753eb675f0523207b184558638ee2eed6c9ac2 ]
 
-The commit 7d7672bc5d10 ("btrfs: convert count_max_extents() to use
-fs_info->max_extent_size") introduced a division by
-fs_info->max_extent_size. This max_extent_size is initialized with max
-zone append limit size of the device btrfs runs on. However, in zone
-emulation mode, the device is not zoned then its zone append limit is
-zero. This resulted in zero value of fs_info->max_extent_size and caused
-zero division error.
+Fix leak, when user changes ring parameters.
+During reallocation of RX buffers, new DMA mappings are created for
+those buffers. New buffers with different RX ring count should
+substitute older ones, but those buffers were freed in ice_vsi_cfg_rxq
+and reallocated again with ice_alloc_rx_buf. kfree on rx_buf caused
+leak of already mapped DMA.
+Reallocate ZC with xdp_buf struct, when BPF program loads. Reallocate
+back to rx_buf, when BPF program unloads.
+If BPF program is loaded/unloaded and XSK pools are created, reallocate
+RX queues accordingly in XDP_SETUP_XSK_POOL handler.
 
-Fix the error by setting non-zero pseudo value to max append zone limit
-in zone emulation mode. Set the pseudo value based on max_segments as
-suggested in the commit c2ae7b772ef4 ("btrfs: zoned: revive
-max_zone_append_bytes").
+Steps for reproduction:
+while :
+do
+	for ((i=0; i<=8160; i=i+32))
+	do
+		ethtool -G enp130s0f0 rx $i tx $i
+		sleep 0.5
+		ethtool -g enp130s0f0
+	done
+done
 
-Fixes: 7d7672bc5d10 ("btrfs: convert count_max_extents() to use fs_info->max_extent_size")
-CC: stable@vger.kernel.org # 5.12+
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Naohiro Aota <naohiro.aota@wdc.com>
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 617f3e1b588c ("ice: xsk: allocate separate memory for XDP SW ring")
+Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Chandan <chandanx.rout@intel.com> (A Contingent Worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/zoned.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_base.c | 17 ------
+ drivers/net/ethernet/intel/ice/ice_main.c |  8 +++
+ drivers/net/ethernet/intel/ice/ice_xsk.c  | 63 +++++++++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_xsk.h  |  8 +++
+ 4 files changed, 79 insertions(+), 17 deletions(-)
 
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -392,10 +392,19 @@ int btrfs_get_dev_zone_info(struct btrfs
- 	 * since btrfs adds the pages one by one to a bio, and btrfs cannot
- 	 * increase the metadata reservation even if it increases the number of
- 	 * extents, it is safe to stick with the limit.
-+	 *
-+	 * With the zoned emulation, we can have non-zoned device on the zoned
-+	 * mode. In this case, we don't have a valid max zone append size. So,
-+	 * use max_segments * PAGE_SIZE as the pseudo max_zone_append_size.
- 	 */
--	zone_info->max_zone_append_size =
--		min_t(u64, (u64)bdev_max_zone_append_sectors(bdev) << SECTOR_SHIFT,
--		      (u64)bdev_max_segments(bdev) << PAGE_SHIFT);
-+	if (bdev_is_zoned(bdev)) {
-+		zone_info->max_zone_append_size = min_t(u64,
-+			(u64)bdev_max_zone_append_sectors(bdev) << SECTOR_SHIFT,
-+			(u64)bdev_max_segments(bdev) << PAGE_SHIFT);
-+	} else {
-+		zone_info->max_zone_append_size =
-+			(u64)bdev_max_segments(bdev) << PAGE_SHIFT;
-+	}
- 	if (!IS_ALIGNED(nr_sectors, zone_sectors))
- 		zone_info->nr_zones++;
+diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
+index 136d7911adb48..1e32438081780 100644
+--- a/drivers/net/ethernet/intel/ice/ice_base.c
++++ b/drivers/net/ethernet/intel/ice/ice_base.c
+@@ -7,18 +7,6 @@
+ #include "ice_dcb_lib.h"
+ #include "ice_sriov.h"
  
+-static bool ice_alloc_rx_buf_zc(struct ice_rx_ring *rx_ring)
+-{
+-	rx_ring->xdp_buf = kcalloc(rx_ring->count, sizeof(*rx_ring->xdp_buf), GFP_KERNEL);
+-	return !!rx_ring->xdp_buf;
+-}
+-
+-static bool ice_alloc_rx_buf(struct ice_rx_ring *rx_ring)
+-{
+-	rx_ring->rx_buf = kcalloc(rx_ring->count, sizeof(*rx_ring->rx_buf), GFP_KERNEL);
+-	return !!rx_ring->rx_buf;
+-}
+-
+ /**
+  * __ice_vsi_get_qs_contig - Assign a contiguous chunk of queues to VSI
+  * @qs_cfg: gathered variables needed for PF->VSI queues assignment
+@@ -519,11 +507,8 @@ int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
+ 			xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+ 					 ring->q_index, ring->q_vector->napi.napi_id);
+ 
+-		kfree(ring->rx_buf);
+ 		ring->xsk_pool = ice_xsk_pool(ring);
+ 		if (ring->xsk_pool) {
+-			if (!ice_alloc_rx_buf_zc(ring))
+-				return -ENOMEM;
+ 			xdp_rxq_info_unreg_mem_model(&ring->xdp_rxq);
+ 
+ 			ring->rx_buf_len =
+@@ -538,8 +523,6 @@ int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
+ 			dev_info(dev, "Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring %d\n",
+ 				 ring->q_index);
+ 		} else {
+-			if (!ice_alloc_rx_buf(ring))
+-				return -ENOMEM;
+ 			if (!xdp_rxq_info_is_reg(&ring->xdp_rxq))
+ 				/* coverity[check_return] */
+ 				xdp_rxq_info_reg(&ring->xdp_rxq,
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 3d45e075204e3..abc5d2b91f32b 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -2898,10 +2898,18 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
+ 			if (xdp_ring_err)
+ 				NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
+ 		}
++		/* reallocate Rx queues that are used for zero-copy */
++		xdp_ring_err = ice_realloc_zc_buf(vsi, true);
++		if (xdp_ring_err)
++			NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Rx resources failed");
+ 	} else if (ice_is_xdp_ena_vsi(vsi) && !prog) {
+ 		xdp_ring_err = ice_destroy_xdp_rings(vsi);
+ 		if (xdp_ring_err)
+ 			NL_SET_ERR_MSG_MOD(extack, "Freeing XDP Tx resources failed");
++		/* reallocate Rx queues that were used for zero-copy */
++		xdp_ring_err = ice_realloc_zc_buf(vsi, false);
++		if (xdp_ring_err)
++			NL_SET_ERR_MSG_MOD(extack, "Freeing XDP Rx resources failed");
+ 	} else {
+ 		/* safe to call even when prog == vsi->xdp_prog as
+ 		 * dev_xdp_install in net/core/dev.c incremented prog's
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index e48e29258450f..03ce85f6e6df8 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -192,6 +192,7 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 	err = ice_vsi_ctrl_one_rx_ring(vsi, false, q_idx, true);
+ 	if (err)
+ 		return err;
++	ice_clean_rx_ring(rx_ring);
+ 
+ 	ice_qvec_toggle_napi(vsi, q_vector, false);
+ 	ice_qp_clean_rings(vsi, q_idx);
+@@ -316,6 +317,62 @@ ice_xsk_pool_enable(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 	return 0;
+ }
+ 
++/**
++ * ice_realloc_rx_xdp_bufs - reallocate for either XSK or normal buffer
++ * @rx_ring: Rx ring
++ * @pool_present: is pool for XSK present
++ *
++ * Try allocating memory and return ENOMEM, if failed to allocate.
++ * If allocation was successful, substitute buffer with allocated one.
++ * Returns 0 on success, negative on failure
++ */
++static int
++ice_realloc_rx_xdp_bufs(struct ice_rx_ring *rx_ring, bool pool_present)
++{
++	size_t elem_size = pool_present ? sizeof(*rx_ring->xdp_buf) :
++					  sizeof(*rx_ring->rx_buf);
++	void *sw_ring = kcalloc(rx_ring->count, elem_size, GFP_KERNEL);
++
++	if (!sw_ring)
++		return -ENOMEM;
++
++	if (pool_present) {
++		kfree(rx_ring->rx_buf);
++		rx_ring->rx_buf = NULL;
++		rx_ring->xdp_buf = sw_ring;
++	} else {
++		kfree(rx_ring->xdp_buf);
++		rx_ring->xdp_buf = NULL;
++		rx_ring->rx_buf = sw_ring;
++	}
++
++	return 0;
++}
++
++/**
++ * ice_realloc_zc_buf - reallocate XDP ZC queue pairs
++ * @vsi: Current VSI
++ * @zc: is zero copy set
++ *
++ * Reallocate buffer for rx_rings that might be used by XSK.
++ * XDP requires more memory, than rx_buf provides.
++ * Returns 0 on success, negative on failure
++ */
++int ice_realloc_zc_buf(struct ice_vsi *vsi, bool zc)
++{
++	struct ice_rx_ring *rx_ring;
++	unsigned long q;
++
++	for_each_set_bit(q, vsi->af_xdp_zc_qps,
++			 max_t(int, vsi->alloc_txq, vsi->alloc_rxq)) {
++		rx_ring = vsi->rx_rings[q];
++		if (ice_realloc_rx_xdp_bufs(rx_ring, zc))
++			return -ENOMEM;
++	}
++
++	return 0;
++}
++
+ /**
+  * ice_xsk_pool_setup - enable/disable a buffer pool region depending on its state
+  * @vsi: Current VSI
+@@ -345,11 +402,17 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 	if_running = netif_running(vsi->netdev) && ice_is_xdp_ena_vsi(vsi);
+ 
+ 	if (if_running) {
++		struct ice_rx_ring *rx_ring = vsi->rx_rings[qid];
++
+ 		ret = ice_qp_dis(vsi, qid);
+ 		if (ret) {
+ 			netdev_err(vsi->netdev, "ice_qp_dis error = %d\n", ret);
+ 			goto xsk_pool_if_up;
+ 		}
++
++		ret = ice_realloc_rx_xdp_bufs(rx_ring, pool_present);
++		if (ret)
++			goto xsk_pool_if_up;
+ 	}
+ 
+ 	pool_failure = pool_present ? ice_xsk_pool_enable(vsi, pool, qid) :
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.h b/drivers/net/ethernet/intel/ice/ice_xsk.h
+index 21faec8e97db1..4edbe81eb6460 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.h
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.h
+@@ -27,6 +27,7 @@ bool ice_xsk_any_rx_ring_ena(struct ice_vsi *vsi);
+ void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring);
+ void ice_xsk_clean_xdp_ring(struct ice_tx_ring *xdp_ring);
+ bool ice_xmit_zc(struct ice_tx_ring *xdp_ring, u32 budget, int napi_budget);
++int ice_realloc_zc_buf(struct ice_vsi *vsi, bool zc);
+ #else
+ static inline bool
+ ice_xmit_zc(struct ice_tx_ring __always_unused *xdp_ring,
+@@ -72,5 +73,12 @@ ice_xsk_wakeup(struct net_device __always_unused *netdev,
+ 
+ static inline void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring) { }
+ static inline void ice_xsk_clean_xdp_ring(struct ice_tx_ring *xdp_ring) { }
++
++static inline int
++ice_realloc_zc_buf(struct ice_vsi __always_unused *vsi,
++		   bool __always_unused zc)
++{
++	return 0;
++}
+ #endif /* CONFIG_XDP_SOCKETS */
+ #endif /* !_ICE_XSK_H_ */
+-- 
+2.35.1
+
 
 
