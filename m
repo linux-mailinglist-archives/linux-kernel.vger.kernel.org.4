@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5065B7BDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1DF5B7BDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiIMUAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S229883AbiIMUAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIMT7I (ORCPT
+        with ESMTP id S229743AbiIMT7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:59:08 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A1786FF;
-        Tue, 13 Sep 2022 12:58:50 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id q11so6264314qkc.12;
-        Tue, 13 Sep 2022 12:58:50 -0700 (PDT)
+        Tue, 13 Sep 2022 15:59:17 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55678BF6;
+        Tue, 13 Sep 2022 12:58:54 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id d17so8539481qko.13;
+        Tue, 13 Sep 2022 12:58:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ed+iX/nv/XMEFygJ1SlfRX9x+uzs7Q6SqUw+PcSFA+Y=;
-        b=kTC2V8I0KbKQgYVpiMXWXobqHukHN5wc9G7pyTq0OXIlmxgzs1DdLdIuMurl376JOh
-         TI+sLZOsyYvKvgQV1mtsgOKDhgkCHY9vgTN75V+209rBR7AYRtArLxFXLQfDpntS8+77
-         1VJuC85XaAr9lDOJi4JPuZBYlxos4LmgTFUlBZzjlAHRPleIyKNPrsw1Q/TybKJ6LhLy
-         P7jZiatOzHC+C4lsh8jLuUsBJv4lBg9GwtABHfhEamUAOb2Eu3rURCtfJTb4hzSEiYzf
-         Mf68rOnlVxAV76vW2E0E1N4Dtdqb6V3ShGLPb0HbK61ur+zHBF+wQNqRrMeYo3aOEqsI
-         sQUw==
+        bh=0ytqVsMPjuVvTMmUHQDgw++YWpDMZOL8Z97lPlE2FVY=;
+        b=io9Nt4/RcZ2YZMphnT4cANVUYCQB6U7tpDHWWA0ymeRAMaiACQe59CDdxV3fKa+Hsn
+         xNls20lsFyfw6rNS33zM5vtcFodTEOrCxgBbNhbWX8T1mEeMX+VwfC33CIm+xfP758LM
+         zM7bYSmAZtJOGaBc2/pCs2H6YwEWsP5kO079m4wM+f6s/zfDbHxnmlkNGrxVR7sLq2J2
+         vi+KzltoxbcgQVb6NYjPdS8rs20FudQRcZ6AiEV/jd58a8RhxFomEIPJSEoUVrySG9CU
+         fGCpRyRxdV4msiy4sXSvtH2LCG/1JOnoJrLiDkFSx8Zr9e7tZ4S5+YfhjAOUxZaXHtxy
+         O3kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ed+iX/nv/XMEFygJ1SlfRX9x+uzs7Q6SqUw+PcSFA+Y=;
-        b=T20Otj5Ly/TC8a+VsTAB82tQyD56hLYzJ8A4iZBRUOyYuwJeTDyvVkJfEHZchkr9o6
-         ovTG9933VUDtGHgYWjS02Q2PzvykKjGg+0Xcf5ibS8YFftj7Lvdo8mI8IyeqEdEQQqmD
-         eOHN3hJvGlb59TdFRhlOU2NPZKO8xO9Rgg7k3BHXEV9VLL1gspkQTrZ8u7QmR3JApcXq
-         XoGDa/otK7QtsgqNQ1tNSYzu61A3bg76kCI76EIg2UuKYl+NfACgAVj5jBaZ1gSY8yTj
-         hZ8telwUlJk6v3baBvwa27UpL1fVEfRFib1tJe7DaAJNOEsRtvf4NYmtjFLdZfckWgpy
-         YmBQ==
-X-Gm-Message-State: ACgBeo2WYpA/Dl/zJgmMXFGqBPH6+kwbgNEU7VqoDjxR5ATWpXEDnboa
-        HFc2tVUeLx1KXCIVCtXzQ6w=
-X-Google-Smtp-Source: AA6agR6oL/h20WlhqK4D/I9yr1owRo+hnv02mOT7OtmgSO2hWSXNGrz7MzYBNL87UH+0Ca4e8ZJtlg==
-X-Received: by 2002:a05:620a:2956:b0:6ce:60f5:d887 with SMTP id n22-20020a05620a295600b006ce60f5d887mr4614697qkp.303.1663099129650;
-        Tue, 13 Sep 2022 12:58:49 -0700 (PDT)
+        bh=0ytqVsMPjuVvTMmUHQDgw++YWpDMZOL8Z97lPlE2FVY=;
+        b=ZQs7vf9Islv6Wbory1SqXuxXCb2rDP4tYv2q0p7RXJaDcwPblba2PqaDF/QkC5Q5aU
+         ldZ5JsmPRWL6PEprxVb/gLa6nE498IBUU6Qy58fFSQLaNbINQ7ljgyOUQCUbTKg5QPaL
+         felKmzP9PAglUrKUOryFmpnkAkmy+YzGZuoV4P5KIEBngbVlRnQIiz6QAERn6b3u6Gnb
+         TLZdWOHhXga0Zr8DC3MQU1sU9x5wpscl6nRKM619Hq5SdPZ33kK0xEy0+ykBSFtlRZHJ
+         6SZdkDzwx3ve0qHpmSyuQ1Bp1xd5zvSaXf0tpz4N2n26ReYN7Cje8U1Zq8kdcua/EXis
+         rCIA==
+X-Gm-Message-State: ACgBeo2kxXrTsxSI/YzgtnPtx8AJIce6cBZkX9Ct4xJvGQslSpRVRQl0
+        b7gB1WqYbHMBxwXgvXn3o9k=
+X-Google-Smtp-Source: AA6agR6d/FiwNOHoDQ8OKNxH916Sryp0qXJllILzqqegobMzkZRMGgPUcF2Qjw5zlXSo5I0Sdx+6eA==
+X-Received: by 2002:a05:620a:4407:b0:6cb:e111:32c2 with SMTP id v7-20020a05620a440700b006cbe11132c2mr18923399qkp.415.1663099133214;
+        Tue, 13 Sep 2022 12:58:53 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.46
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:58:49 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:52 -0700 (PDT)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
         Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: [PATCH 15/21] mm/page_alloc: allow base for movablecore
-Date:   Tue, 13 Sep 2022 12:55:02 -0700
-Message-Id: <20220913195508.3511038-16-opendmb@gmail.com>
+Subject: [PATCH 16/21] dt-bindings: reserved-memory: introduce designated-movable-block
+Date:   Tue, 13 Sep 2022 12:55:03 -0700
+Message-Id: <20220913195508.3511038-17-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913195508.3511038-1-opendmb@gmail.com>
 References: <20220913195508.3511038-1-opendmb@gmail.com>
@@ -94,119 +94,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A Designated Movable Block can be created by including the base
-address of the block when specifying a movablecore range on the
-kernel command line.
+Introduce designated-movable-block.yaml to document the
+devicetree binding for Designated Movable Block children of the
+reserved-memory node.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- .../admin-guide/kernel-parameters.txt         | 14 ++++++-
- mm/page_alloc.c                               | 38 ++++++++++++++++---
- 2 files changed, 45 insertions(+), 7 deletions(-)
+ .../designated-movable-block.yaml             | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 426fa892d311..8141fac7c7cb 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3312,7 +3312,7 @@
- 			reporting absolute coordinates, such as tablets
- 
- 	movablecore=	[KNL,X86,IA-64,PPC]
--			Format: nn[KMGTPE] | nn%
-+			Format: nn[KMGTPE] | nn[KMGTPE]@ss[KMGTPE] | nn%
- 			This parameter is the complement to kernelcore=, it
- 			specifies the amount of memory used for migratable
- 			allocations.  If both kernelcore and movablecore is
-@@ -3322,6 +3322,18 @@
- 			that the amount of memory usable for all allocations
- 			is not too small.
- 
-+			If @ss[KMGTPE] is included, memory within the region
-+			from ss to ss+nn will be designated as a movable block
-+			and included in ZONE_MOVABLE. Designated Movable Blocks
-+			must be aligned to pageblock_order. Designated Movable
-+			Blocks take priority over values of kernelcore= and are
-+			considered part of any memory specified by more general
-+			movablecore= values.
-+			Multiple Designated Movable Blocks may be specified,
-+			comma delimited.
-+			Example:
-+				movablecore=100M@2G,100M@3G,1G@1024G
+diff --git a/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml b/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
+new file mode 100644
+index 000000000000..42f846069a2e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reserved-memory/designated-movable-block.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	movable_node	[KNL] Boot-time switch to make hotplugable memory
- 			NUMA nodes to be movable. This means that the memory
- 			of such nodes will be usable only for movable
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 69753cc51e19..e38dd1b32771 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -8370,9 +8370,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
- }
- 
- static int __init cmdline_parse_core(char *p, unsigned long *core,
--				     unsigned long *percent)
-+				     unsigned long *percent, bool movable)
- {
--	unsigned long long coremem;
-+	unsigned long long coremem, address;
- 	char *endptr;
- 
- 	if (!p)
-@@ -8387,6 +8387,17 @@ static int __init cmdline_parse_core(char *p, unsigned long *core,
- 		*percent = coremem;
- 	} else {
- 		coremem = memparse(p, &p);
-+		if (movable && *p == '@') {
-+			address = memparse(++p, &p);
-+			if (*p != '\0' ||
-+			    !memblock_is_region_memory(address, coremem) ||
-+			    memblock_is_region_reserved(address, coremem))
-+				return -EINVAL;
-+			memblock_reserve(address, coremem);
-+			return dmb_reserve(address, coremem, NULL);
-+		} else if (*p != '\0') {
-+			return -EINVAL;
-+		}
- 		/* Paranoid check that UL is enough for the coremem value */
- 		WARN_ON((coremem >> PAGE_SHIFT) > ULONG_MAX);
- 
-@@ -8409,17 +8420,32 @@ static int __init cmdline_parse_kernelcore(char *p)
- 	}
- 
- 	return cmdline_parse_core(p, &required_kernelcore,
--				  &required_kernelcore_percent);
-+				  &required_kernelcore_percent, false);
- }
- 
- /*
-  * movablecore=size sets the amount of memory for use for allocations that
-- * can be reclaimed or migrated.
-+ * can be reclaimed or migrated. movablecore=size@base defines a Designated
-+ * Movable Block.
-  */
- static int __init cmdline_parse_movablecore(char *p)
- {
--	return cmdline_parse_core(p, &required_movablecore,
--				  &required_movablecore_percent);
-+	int ret = -EINVAL;
++title: /reserved-memory Designated Movable Block node binding
 +
-+	while (p) {
-+		char *k = strchr(p, ',');
++maintainers:
++  - devicetree-spec@vger.kernel.org
 +
-+		if (k)
-+			*k++ = 0;
++allOf:
++  - $ref: "reserved-memory.yaml"
 +
-+		ret = cmdline_parse_core(p, &required_movablecore,
-+					 &required_movablecore_percent, true);
-+		if (ret)
-+			break;
-+		p = k;
-+	}
++properties:
++  compatible:
++    const: designated-movable-block
++    description:
++      This indicates a region of memory meant to be placed into
++      ZONE_MOVABLE.
 +
-+	return ret;
- }
- 
- early_param("kernelcore", cmdline_parse_kernelcore);
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - reusable
++
++examples:
++  - |
++      reserved-memory {
++          #address-cells = <0x2>;
++          #size-cells = <0x2>;
++
++          DMB0@10800000 {
++               compatible = "designated-movable-block";
++               reusable;
++               reg = <0x0 0x10800000 0x0 0x2d800000>;
++          };
++
++          DMB1@40000000 {
++               compatible = "designated-movable-block";
++               reusable;
++               reg = <0x0 0x40000000 0x0 0x30000000>;
++          };
++
++          DMB2@80000000 {
++               compatible = "designated-movable-block";
++               reusable;
++               reg = <0x0 0x80000000 0x0 0x2fc00000>;
++          };
++      };
 -- 
 2.25.1
 
