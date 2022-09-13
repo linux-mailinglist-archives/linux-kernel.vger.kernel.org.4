@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64AD5B6ED2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F1A5B7186
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbiIMOFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S230424AbiIMOnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiIMOFK (ORCPT
+        with ESMTP id S229627AbiIMOmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:05:10 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B217AB5;
-        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1280590722dso32422347fac.1;
-        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xaesEF6Lfa7W1zJ6vFq2YbimoamHUz/4xsPADg2pI8U=;
-        b=RwUD0q3JC+YmmFu5pL2OrGMDcPn/E2pVWwX0jNlBkd5Y29iohNZWJcgS+LM8GAW6Tu
-         wiTYmgRK7F9K8Edp8rCQ4602xjIQAY25bQHmBftPUXppAIhfYwVFtJmkhSjTw8ugBSFt
-         uEMjiWxmHWVvkd57VatGuJIqqjITGF6TIQRaCs15MMp6qkJ3+I+//zEmxm777zIUwRSu
-         HgKahI4FgJ8Q4mPolNv0IvlGcyQtu4B3Hjg4wKFHyGF6A3GEgvDZdYuIuTlyWSAoUii9
-         Ap3G+UySAmoXvZXp4kX1bTA+OImCjLBlZLGPm1r7O1rHYGAdq3gzxtiFpqaYte3L8P5v
-         yIag==
-X-Gm-Message-State: ACgBeo16qvksH6PBcM7XQBaCJuCx7SUwiY5bSLsUegkstgNtDh+KWYyL
-        3LaUUz9TPouz1cxK8JBCaw==
-X-Google-Smtp-Source: AA6agR5MZRUSO5U2/vJRsvdSOp4dyqOHS68xLdRjVDmKQUFF5s/TuXl3QUxdaeD4NpNEuWbsXwlnmw==
-X-Received: by 2002:a05:6808:21a2:b0:345:d23e:d2e2 with SMTP id be34-20020a05680821a200b00345d23ed2e2mr1526157oib.273.1663077908262;
-        Tue, 13 Sep 2022 07:05:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b003451c927e0dsm5119169oih.38.2022.09.13.07.05.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:05:07 -0700 (PDT)
-Received: (nullmailer pid 3590506 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:05:07 -0000
-Date:   Tue, 13 Sep 2022 09:05:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH RESEND v11 6/8] dt-bindings: clk: baikal-t1: Add DDR/PCIe
- reset IDs
-Message-ID: <20220913140507.GA3590451-robh@kernel.org>
-References: <20220909192616.16542-1-Sergey.Semin@baikalelectronics.ru>
- <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
+        Tue, 13 Sep 2022 10:42:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7636D9F9;
+        Tue, 13 Sep 2022 07:22:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52D8DB80F98;
+        Tue, 13 Sep 2022 14:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19B5C433D7;
+        Tue, 13 Sep 2022 14:21:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663078876;
+        bh=NvuCnZsdy//Lgp/eK1ZTe2E40unrB1TaTfxhw1EWBGE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eMJJ27ByAfFBCxcakpNuXLXYvy4gxoAUIgr0/xb/sroc5f2QHrXg6wNSCSp9hEI2u
+         fNU5qxyA9bCt1JXBVCh8JtroD2bauDjxSaFQ1XxSf1RSuq1auhrwe59Zka43Ta7PD0
+         tVXG4T4tFmQ3FO5oTkXGYeXhl0UXw6bbSMGlCbR8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        D Scott Phillips <scott@os.amperecomputing.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
+Subject: [PATCH 5.15 116/121] arm64/bti: Disable in kernel BTI when cross section thunks are broken
+Date:   Tue, 13 Sep 2022 16:05:07 +0200
+Message-Id: <20220913140402.351314534@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 22:26:14 +0300, Serge Semin wrote:
-> Aside with a set of the trigger-like resets Baikal-T1 CCU provides
-> additional directly controlled reset signals for the DDR and PCIe
-> controllers. As a preparation before adding these resets support to the
-> kernel let's extent the Baikal-T1 CCU IDs list with the new IDs, which
-> will be used to access the corresponding reset controls.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> 
-> ---
-> 
-> Changelog v11:
-> - This is a new patch created by detaching the DT-part from:
-> [PATCH v10 6/7] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
->   (@Krzysztof)
-> ---
->  include/dt-bindings/reset/bt1-ccu.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
+From: Mark Brown <broonie@kernel.org>
 
-Acked-by: Rob Herring <robh@kernel.org>
+commit c0a454b9044fdc99486853aa424e5b3be2107078 upstream.
+
+GCC does not insert a `bti c` instruction at the beginning of a function
+when it believes that all callers reach the function through a direct
+branch[1]. Unfortunately the logic it uses to determine this is not
+sufficiently robust, for example not taking account of functions being
+placed in different sections which may be loaded separately, so we may
+still see thunks being generated to these functions. If that happens,
+the first instruction in the callee function will result in a Branch
+Target Exception due to the missing landing pad.
+
+While this has currently only been observed in the case of modules
+having their main code loaded sufficiently far from their init section
+to require thunks it could potentially happen for other cases so the
+safest thing is to disable BTI for the kernel when building with an
+affected toolchain.
+
+[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
+
+Reported-by: D Scott Phillips <scott@os.amperecomputing.com>
+[Bits of the commit message are lifted from his report & workaround]
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220905142255.591990-1-broonie@kernel.org
+Cc: <stable@vger.kernel.org> # v5.10+
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1626,6 +1626,8 @@ config ARM64_BTI_KERNEL
+ 	depends on CC_HAS_BRANCH_PROT_PAC_RET_BTI
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94697
+ 	depends on !CC_IS_GCC || GCC_VERSION >= 100100
++	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
++	depends on !CC_IS_GCC
+ 	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
+ 	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
+ 	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
+
+
