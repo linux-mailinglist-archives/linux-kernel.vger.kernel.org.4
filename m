@@ -2,98 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE30D5B7A85
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A55B7A59
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiIMTFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S233084AbiIMS6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiIMTFC (ORCPT
+        with ESMTP id S232020AbiIMS5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:05:02 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC653BD;
-        Tue, 13 Sep 2022 12:05:01 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DIGnwJ021401;
-        Tue, 13 Sep 2022 19:04:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=IpC2wUwUWey40UM6owh3a0MmnVlbpzDaWHe2xX0ctPE=;
- b=QOLInBaD1/SL3UUKhcGi5q7MOrbtlT65hvq6l5qcbWwE/o0+EIyY7qLK5ZRP/nNGNleI
- 4cwdWN0q2RsMnaYaMidOZJfEooHOYwOHzGzfP6WSjNOxms4UhipLn2DeEh3/6YhwGC0s
- HkenHkCPck2EixO7HFdN0MYDth43VEeyEXxFRdfbI3oEy0skqYrixKi2zLdtN/E0MQx+
- P7MR786vw5CHExmv780/U+pnY2GWqvwkQJLP2+m09W2M/K1ox86sOUJKg86c61tIIfti
- uLdX9iYZtyofgv1AM1yDXeY2dY6gVwg0+4Vxr8J0XyE6IKWFk0brzXDNFLe0ETdqup1T DA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0e039c-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 19:04:46 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28DIpRsd013211;
-        Tue, 13 Sep 2022 18:51:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3jj1ubxku9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 18:51:27 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DIlOsp009542;
-        Tue, 13 Sep 2022 18:51:27 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 28DIpR9P013203
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 18:51:27 +0000
-Received: from [10.110.52.115] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
- 2022 11:51:25 -0700
-Message-ID: <5b0543dc-4db8-aa33-d469-0e185c82b221@quicinc.com>
-Date:   Tue, 13 Sep 2022 11:51:24 -0700
+        Tue, 13 Sep 2022 14:57:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A64AEB4;
+        Tue, 13 Sep 2022 11:51:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B99E6B80EA6;
+        Tue, 13 Sep 2022 18:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4055C433D6;
+        Tue, 13 Sep 2022 18:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663095093;
+        bh=VpyC8lUP63HV4xeVdsJSfKE7jnXv9o0yRKVx04lPK5Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RICEpambJkz/GD/KM08LAU1KfanG8H+Ycjf0MNU8HEkyDZHW89q44bpcLfniSe6Bz
+         LFvr6ZVsH20fvRmBL23Q5Nh+SzuKVzW+zdv+DM9cyX0k9HR0E0kImJ3GkM1HGk0kVh
+         5MnDxAl/TlZlGZN4opSxi3TrKMgHM8LBrkeF+pGUZmCeowxewMrS+eOYyWEGifFmd2
+         ZWBKY5RQ9aXw1JXmsepYtTSusuJ6u8urTRZ7X0W8KKNxLpyOF63S+LWnyRdhqOwb+j
+         ONbeAoM7VFoo6TI4OhhvG39pbXsKglfPL70XxxScXqb2jMZu7CVrSe3A5CqjpXCvXT
+         gCROjv9XpD5YQ==
+Date:   Tue, 13 Sep 2022 13:51:30 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, rafael@kernel.org,
+        dmitry.baryshkov@linaro.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: Re: [PATCH v2 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in
+ Makefile and qcom/Kconfig
+Message-ID: <20220913185130.4eui3q2cvwjn4t7x@builder.lan>
+References: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 0/4] Make QMI message rules const
-Content-Language: en-US
-To:     Alex Elder <elder@ieee.org>, Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
- <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Pub-RnSfiPRai4Z1mkmYQFf4Rdu-yslM
-X-Proofpoint-GUID: Pub-RnSfiPRai4Z1mkmYQFf4Rdu-yslM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_09,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=888
- suspectscore=0 malwarescore=0 phishscore=0 clxscore=1011
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209130087
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,44 +58,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/2022 6:58 AM, Alex Elder wrote:
-> On 9/12/22 6:25 PM, Jeff Johnson wrote:
->> Change ff6d365898d ("soc: qcom: qmi: use const for struct
->> qmi_elem_info") allows QMI message encoding/decoding rules to be
->> const. So now update the definitions in the various client to take
->> advantage of this. Patches for ath10k and ath11k were perviously sent
->> separately.
+On Tue, Sep 13, 2022 at 01:10:27AM +0530, Bhupesh Sharma wrote:
+> Introduce CONFIG_QCOM_THERMAL to allow better control
+> over selection of various Qualcomm Thermal drivers
+> available inside qcom/ directory.
 > 
-> I have had this on my "to-do list" for ages.
-> The commit you mention updates the code to be
-> explicit about not modifying this data, which
-> is great.
+> This is a preparatory change to allow new drivers to
+> be added inside qcom/ directory in a more structured
+> fashion later-on.
 > 
-> I scanned over the changes, and I assume that
-> all you did was make every object having the
-> qmi_elem_info structure type be defined as
-> constant.
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+> - v1 can be viewed here: https://www.spinics.net/lists/kernel/msg4510793.html
+> - Fixed review comments from Dmitry received in v1.
 > 
-> Why aren't you changing the "ei_array" field in
-> the qmi_elem_info structure to be const?  Or the
-> "ei" field of the qmi_msg_handler structure?  And
-> the qmi_response_type_v01_ei array (and so on)?
+>  drivers/thermal/Makefile     |  2 +-
+>  drivers/thermal/qcom/Kconfig | 12 ++++++++++++
+>  2 files changed, 13 insertions(+), 1 deletion(-)
 > 
-> I like what you're doing, but can you comment
-> on what your plans are beyond this series?
-> Do you intend to make the rest of these fields
-> const?
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index def8e1a0399c..2506c6c8ca83 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+>  obj-y				+= intel/
+>  obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
+>  obj-y				+= st/
+> -obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+> +obj-y				+= qcom/
 
-Hi Alex,
-My primary focus is the ath* wireless drivers, and my primary goal was 
-to make the tables there const. So this series, along with the two 
-out-of-series patches for ath10k and ath11k complete that scope of work.
+This change makes sense to me. Please send this as a separate patch.
 
-The lack of the other changes to the QMI data structures is simply due 
-to me not looking in depth at the QMI code beyond the registration 
-interface.
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+>  obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+> index 2c7f3f9a26eb..ccfd090273c1 100644
+> --- a/drivers/thermal/qcom/Kconfig
+> +++ b/drivers/thermal/qcom/Kconfig
+> @@ -1,8 +1,17 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config QCOM_THERMAL
 
-I'll be happy to revisit this as a separate cleanup.
+As written here this would allow you to make things conditional on any
+Qualcomm thermal code being enabled in any form. But I'm afraid I don't
+understand the purpose of this.
 
-/jeff
+Alternatively if you had made below additions depends on QCOM_THERMAL
+this would have "cleaned up" the menuconfig slightly. But IMHO there
+isn't a lot of benefit to this (and we'd end up with people running
+without thermal drivers, as they forget to set CONFIG_QCOM_THERMAL).
 
+> +	tristate "Thermal drivers on Qualcomm Snapdragon series of SoCs"
+> +	help
+> +	  Support for thermal drivers on Qualcomm Snapdragon series of SoCs.
+> +	  There are several thermal sensors available on the Qualcomm Socs
+> +	  which can be used for thermal mitigation purposes.
+
+This help text indicates that the option actually changes something or
+enables some support for something, but afaict it doesn't.
+
+Regards,
+Bjorn
+> +
+>  config QCOM_TSENS
+>  	tristate "Qualcomm TSENS Temperature Alarm"
+>  	depends on NVMEM_QCOM_QFPROM
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables the thermal sysfs driver for the TSENS device. It shows
+>  	  up in Sysfs as a thermal zone with multiple trip points. Disabling the
+> @@ -15,6 +24,7 @@ config QCOM_SPMI_ADC_TM5
+>  	depends on OF && SPMI && IIO
+>  	select REGMAP_SPMI
+>  	select QCOM_VADC_COMMON
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables the thermal driver for the ADC thermal monitoring
+>  	  device. It shows up as a thermal zone with multiple trip points.
+> @@ -25,6 +35,7 @@ config QCOM_SPMI_TEMP_ALARM
+>  	tristate "Qualcomm SPMI PMIC Temperature Alarm"
+>  	depends on OF && SPMI && IIO
+>  	select REGMAP_SPMI
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables a thermal sysfs driver for Qualcomm plug-and-play (QPNP)
+>  	  PMIC devices. It shows up in sysfs as a thermal sensor with multiple
+> @@ -35,6 +46,7 @@ config QCOM_SPMI_TEMP_ALARM
+>  config QCOM_LMH
+>  	tristate "Qualcomm Limits Management Hardware"
+>  	depends on ARCH_QCOM && QCOM_SCM
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables initialization of Qualcomm limits management
+>  	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
+> -- 
+> 2.37.1
+> 
