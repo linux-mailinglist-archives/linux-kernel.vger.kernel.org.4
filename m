@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91905B749E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529FF5B757D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbiIMPZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S234471AbiIMPpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbiIMPXO (ORCPT
+        with ESMTP id S234609AbiIMPor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:23:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2FE6B166;
-        Tue, 13 Sep 2022 07:37:17 -0700 (PDT)
+        Tue, 13 Sep 2022 11:44:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1540555;
+        Tue, 13 Sep 2022 07:48:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB2E1B80FEF;
-        Tue, 13 Sep 2022 14:35:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EDAC433C1;
-        Tue, 13 Sep 2022 14:35:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E7C7614EF;
+        Tue, 13 Sep 2022 14:36:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5073DC433D6;
+        Tue, 13 Sep 2022 14:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079721;
-        bh=zYaDdJz9diUBs1H5IFFAx43U/MSdBjIdA6RKKH+n28M=;
+        s=korg; t=1663079809;
+        bh=+XPBrIOIZ3AEbHVdiyGfUYR8D1RWCPPH5kCaPunTPDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pZw4Vw0Zr4hjngWnaYgpgq/b+ubGV8bhoiEZuzpVlvTzB6bFxeXiumvVicrAb+1N1
-         kwhi1Zg5dyXsDyyKjMeJ1wTU/C6LCdsyojRUGr+GnictzRW4/y/+AxVCAP5nUooSmQ
-         s6Y5CSDxDMMPFGLEi/yy9lOzO7G3LP1Mj6UI+59U=
+        b=oEXoUr7GVMYKlCG8iFevTanV3TAPWuOjl8JFe5z1EHP1Brgp5vIf0PAO6ELPEL717
+         R7DAv6IAnWru5c0PNviE37HkiRN+AxxdnRXCgnFsV7va6NAkanw5M1EQ8F0LgpoOQ+
+         zBjz+Iz9/NP//psP+E3aFcP3T8NwoB+IDP3mmZCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Subject: [PATCH 4.14 49/61] driver core: Dont probe devices after bus_type.match() probe deferral
-Date:   Tue, 13 Sep 2022 16:07:51 +0200
-Message-Id: <20220913140348.921485984@linuxfoundation.org>
+        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.9 21/42] ALSA: seq: oss: Fix data-race for max_midi_devs access
+Date:   Tue, 13 Sep 2022 16:07:52 +0200
+Message-Id: <20220913140343.344878143@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaac J. Manjarres <isaacmanjarres@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 25e9fbf0fd38868a429feabc38abebfc6dbf6542 upstream.
+commit 22dec134dbfa825b963f8a1807ad19b943e46a56 upstream.
 
-Both __device_attach_driver() and __driver_attach() check the return
-code of the bus_type.match() function to see if the device needs to be
-added to the deferred probe list. After adding the device to the list,
-the logic attempts to bind the device to the driver anyway, as if the
-device had matched with the driver, which is not correct.
+ALSA OSS sequencer refers to a global variable max_midi_devs at
+creating a new port, storing it to its own field.  Meanwhile this
+variable may be changed by other sequencer events at
+snd_seq_oss_midi_check_exit_port() in parallel, which may cause a data
+race.
 
-If __device_attach_driver() detects that the device in question is not
-ready to match with a driver on the bus, then it doesn't make sense for
-the device to attempt to bind with the current driver or continue
-attempting to match with any of the other drivers on the bus. So, update
-the logic in __device_attach_driver() to reflect this.
+OTOH, this data race itself is almost harmless, as the access to the
+MIDI device is done via get_mdev() and it's protected with a refcount,
+hence its presence is guaranteed.
 
-If __driver_attach() detects that a driver tried to match with a device
-that is not ready to match yet, then the driver should not attempt to bind
-with the device. However, the driver can still attempt to match and bind
-with other devices on the bus, as drivers can be bound to multiple
-devices. So, update the logic in __driver_attach() to reflect this.
+Though, it's sill better to address the data-race from the code sanity
+POV, and this patch adds the proper spinlock for the protection.
 
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Cc: stable@vger.kernel.org
-Cc: Saravana Kannan <saravanak@google.com>
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-Link: https://lore.kernel.org/r/20220817184026.3468620-1-isaacmanjarres@google.com
+Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/CAEHB2493pZRXs863w58QWnUTtv3HHfg85aYhLn5HJHCwxqtHQg@mail.gmail.com
+Link: https://lore.kernel.org/r/20220823072717.1706-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/dd.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ sound/core/seq/oss/seq_oss_midi.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -632,6 +632,11 @@ static int __device_attach_driver(struct
- 	} else if (ret == -EPROBE_DEFER) {
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Device can't match with a driver right now, so don't attempt
-+		 * to match or bind with other drivers on the bus.
-+		 */
-+		return ret;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d", ret);
- 		return ret;
-@@ -774,6 +779,11 @@ static int __driver_attach(struct device
- 	} else if (ret == -EPROBE_DEFER) {
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d", ret);
- 		return ret;
+--- a/sound/core/seq/oss/seq_oss_midi.c
++++ b/sound/core/seq/oss/seq_oss_midi.c
+@@ -280,7 +280,9 @@ snd_seq_oss_midi_clear_all(void)
+ void
+ snd_seq_oss_midi_setup(struct seq_oss_devinfo *dp)
+ {
++	spin_lock_irq(&register_lock);
+ 	dp->max_mididev = max_midi_devs;
++	spin_unlock_irq(&register_lock);
+ }
+ 
+ /*
 
 
