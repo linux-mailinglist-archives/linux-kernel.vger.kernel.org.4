@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8ED55B7BFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F0B5B7C05
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiIMUHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
+        id S229776AbiIMULI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiIMUHt (ORCPT
+        with ESMTP id S229551AbiIMULH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:07:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD07A61734;
-        Tue, 13 Sep 2022 13:07:48 -0700 (PDT)
+        Tue, 13 Sep 2022 16:11:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F30642D3;
+        Tue, 13 Sep 2022 13:11:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 617B66157F;
-        Tue, 13 Sep 2022 20:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8026DC433C1;
-        Tue, 13 Sep 2022 20:07:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E114B61585;
+        Tue, 13 Sep 2022 20:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EEEC433D6;
+        Tue, 13 Sep 2022 20:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663099667;
-        bh=G7Kj4Lg7b02kkVZ4u+0wkU9az0+7xB4DQEPp/0r+LDQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OY7+U86MXLmloWdiPJD1Acy0SWjH20Ow6X7t++XTDUUK+MTFo63KqhfMDgvoliSxp
-         P58W2G+eftA9ly4Z0gZgTGUCv+N7RxpbFbZG4HJDGsdY3K8rgPFecDnhfzuOgIoi0Z
-         TKZxy22ETxBNdqXB/XnTcZbhcOVOAO+IPpn2Vk1PN0dDhLCwcCgwMmd/IplKi5LRCe
-         QnMEa1Ocs+Nz2c0FsQFYpmoS3hoVjW3AJBpzWzWvCRfppmHChiHXCzgp2+gtf5qfZ6
-         PZNhDYPT+SvPXPWPErY6lfIsoH5jNTaQsW9N3uIn2Hv4aiPTtMjnlmzAWrnEZnuqfA
-         CdrJN0+mASWKA==
-Date:   Tue, 13 Sep 2022 15:07:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        treding@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20220913200746.GA619956@bhelgaas>
+        s=k20201202; t=1663099865;
+        bh=4+HGjp25/cN2z21/49nNWSVIRVlNUxdlMA9fDjagpzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MmmWGxWOh91Qvorm6crbMaDED/E6pwg9MJXGkmKnBVe0Q6DkfBMStUAMjl0nMuqFc
+         lacaMubCGeElgsMLia23xkFVUqqC+yqTLsI1aj5Kqi1jG2znDk29BJitQMA51BLHPD
+         AKuWv7+vAeLd/N7VJEMSGHMcS9sNz325cYXDiqY4hI00z62jLY9SFz61GUcAgift3o
+         Sr8Bk4/rrywPwIui3Me/clCh/lowVBH/pZ6Fkq+4o/zgDlDUnzFypZrSbN9sESvdm9
+         Hyy5eeKChEFdrCz9lfTebap9Paj/c/gQe86NkaUsQx2rp9DHXqV/sRsWJ6RXf/2HKG
+         SCI9ZDZ1TgyRg==
+Date:   Tue, 13 Sep 2022 15:11:02 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v1 2/2] soc: qcom: mdt_loader: Move the memory allocation
+ into mdt loader
+Message-ID: <20220913201102.mjmtvsx5xyfcr5cw@builder.lan>
+References: <cover.1663007783.git.quic_gokukris@quicinc.com>
+ <2ba262668e86e58acb086c64fc759ba02b39a525.1663007783.git.quic_gokukris@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+In-Reply-To: <2ba262668e86e58acb086c64fc759ba02b39a525.1663007783.git.quic_gokukris@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,40 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > not having an endpoint connected to the slot is not an error.
-> > > So, changing the macro from dev_err to dev_info to log the event.
-> > 
-> > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > returned. So I don't think the log severity should be changed.
+On Mon, Sep 12, 2022 at 11:41:32AM -0700, Gokul krishna Krishnakumar wrote:
+> By moving the memory allocation to mdt loader we can simplify the scm
+> call, by just packing arguments provided to it from the clients for
+> making secuer world calls. We can also simplify the memory allocation
+> for the qcom metadata, by just doing one memory allocation in the
+> mdt loader.
 > 
-> Yes it is an error in the sense it is a timeout, but reporting an error
-> because nothing is attached to a PCI slot seems a bit noisy. Please note
-> that a similar change was made by the following commit and it also seems
-> appropriate here ...
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> ---
+>  drivers/remoteproc/qcom_q6v5_mss.c  |  2 +-
+>  drivers/soc/qcom/mdt_loader.c       | 41 ++++++++++++++++++++++++++++---------
+>  include/linux/soc/qcom/mdt_loader.h |  5 +++--
+>  3 files changed, 35 insertions(+), 13 deletions(-)
 > 
-> commit 4b16a8227907118e011fb396022da671a52b2272
-> Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> Date:   Tue Jun 18 23:32:06 2019 +0530
-> 
->     PCI: tegra: Change link retry log level to debug
-> 
-> 
-> BTW, we check for error messages in the dmesg output and this is a new error
-> seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> error, but in this case it seem more appropriate to make this a info or
-> debug level print.
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index fddb63c..1919bfc 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -947,7 +947,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  	int ret;
+>  	int i;
+>  
+> -	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
+> +	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev, NULL);
 
-Can you tell whether there's a device present, e.g., via Slot Status
-Presence Detect?  If there's nothing in the slot, I don't know why we
-would print anything at all.  If a card is present but there's no
-link, that's probably worthy of dev_info() or even dev_err().
+At the end of this function we invoke kfree(metadata), which would be
+bad if that comes from dma_alloc_coherent().
 
-I guess if you can tell the slot is empty, there's no point in even
-trying to start the link, so you could avoid both the message and the
-timeout by not even calling dw_pcie_wait_for_link().
+>  	if (IS_ERR(metadata))
+>  		return PTR_ERR(metadata);
+>  
+> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+[..]
+> @@ -160,9 +164,18 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
+>  	ehdr_size = phdrs[0].p_filesz;
+>  	hash_size = phdrs[hash_segment].p_filesz;
+>  
+> -	data = kmalloc(ehdr_size + hash_size, GFP_KERNEL);
+> -	if (!data)
+> -		return ERR_PTR(-ENOMEM);
+> +	/*
+> +	 * During the scm call memory protection will be enabled for the meta
+> +	 * data blob, so make sure it's physically contiguous, 4K aligned and
+> +	 * non-cachable to avoid XPU violations.
+> +	 */
+> +	scm_dev = qcom_get_scm_device();
 
+As LKP points out, I don't seem to have this function.
+
+> +	data = dma_alloc_coherent(scm_dev, ehdr_size + hash_size, mdata_phys,
+> +				       GFP_KERNEL);
+
+I am not thrilled about the idea of doing dma_alloc_coherent() in this
+file and dma_free_coherent() in the scm driver. Similarly, I consider
+these functions to operate in the context of the caller, so operating on
+the scm device's struct device isn't so nice.
+
+
+After trying various models I came to the conclusion that it was better
+to try to keep the MDT loader to just load MDT files, and move the
+SCM/PAS interaction out of that. Unfortunately we have a number of
+client drivers that would then need to (essentially) duplicate the
+content of qcom_mdt_pas_init() - so I left that in there.
+
+I still believe that keeping the MDT loader focused on loading MDTs is a
+good idea, but I'm open to any suggestions for improvements in the
+interaction between these different components.
+
+Regards,
 Bjorn
