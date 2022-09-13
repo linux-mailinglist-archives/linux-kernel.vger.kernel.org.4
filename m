@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7271A5B71D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE3A5B7163
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiIMOvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S234303AbiIMOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiIMOsj (ORCPT
+        with ESMTP id S234193AbiIMOfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:48:39 -0400
+        Tue, 13 Sep 2022 10:35:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12A69F4D;
-        Tue, 13 Sep 2022 07:25:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF5865555;
+        Tue, 13 Sep 2022 07:20:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B65E0B80F3B;
-        Tue, 13 Sep 2022 14:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C86C433C1;
-        Tue, 13 Sep 2022 14:23:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEB59B80FB5;
+        Tue, 13 Sep 2022 14:19:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D745C433D6;
+        Tue, 13 Sep 2022 14:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079032;
-        bh=DXF54WQlcK/aA3dHJYwUJ8ZCOz+KS60hmD4fshTAbLY=;
+        s=korg; t=1663078796;
+        bh=Hfp0IEw+QbmUcWV4SihUapHzQQnf43J0kCrFSKMNcR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EI26L6lbjmjejlLkS9UaPiAgXyfIj8dObayfzEBReThHrUQtfP6x+TUSsQQVjzlSI
-         N10+gY54lE5nAAWVho8LWjNxvYUkywcKy00Y8PmY4mpkzEjnOPEyVjalwgpHd7ulBw
-         RpvlYA+w7v4NVCnUWXHe+oS4eaWq5rQlNAkXY1YA=
+        b=wGmcBrwMbhjT4MSVmDkkVgWXl0VWJ+kZSwUsiVwu/y1SRxwIfNIncuddXj5PJnYsQ
+         NPN0y4Sh/nLAk/foOxfxLE/G4VZrWOfHsmgro6BEzbVvouZu6gg53WZqXj08/RzOxn
+         vllSz8VZwNfYcb4GhXWgpCZeFvSsG8wSS4voJS90=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 31/79] scsi: mpt3sas: Fix use-after-free warning
+        stable@vger.kernel.org, Paul Durrant <pdurrant@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 085/121] xen-netback: only remove hotplug-status when the vif is actually destroyed
 Date:   Tue, 13 Sep 2022 16:04:36 +0200
-Message-Id: <20220913140351.803187957@linuxfoundation.org>
+Message-Id: <20220913140401.023100271@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Paul Durrant <pdurrant@amazon.com>
 
-commit 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34 upstream.
+[ Upstream commit c55f34b6aec2a8cb47eadaffea773e83bf85de91 ]
 
-Fix the following use-after-free warning which is observed during
-controller reset:
+Removing 'hotplug-status' in backend_disconnected() means that it will be
+removed even in the case that the frontend unilaterally disconnects (which
+it is free to do at any time). The consequence of this is that, when the
+frontend attempts to re-connect, the backend gets stuck in 'InitWait'
+rather than moving straight to 'Connected' (which it can do because the
+hotplug script has already run).
+Instead, the 'hotplug-status' mode should be removed in netback_remove()
+i.e. when the vif really is going away.
 
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 23 PID: 5399 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
-
-Link: https://lore.kernel.org/r/20220906134908.1039-2-sreekanth.reddy@broadcom.com
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0f4558ae9187 ("Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"")
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c |    2 +-
+ drivers/net/xen-netback/xenbus.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -3501,6 +3501,7 @@ static struct fw_event_work *dequeue_nex
- 		fw_event = list_first_entry(&ioc->fw_event_list,
- 				struct fw_event_work, list);
- 		list_del_init(&fw_event->list);
-+		fw_event_work_put(fw_event);
- 	}
- 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
+index 990360d75cb64..e85b3c5d4acce 100644
+--- a/drivers/net/xen-netback/xenbus.c
++++ b/drivers/net/xen-netback/xenbus.c
+@@ -256,7 +256,6 @@ static void backend_disconnect(struct backend_info *be)
+ 		unsigned int queue_index;
  
-@@ -3559,7 +3560,6 @@ _scsih_fw_event_cleanup_queue(struct MPT
- 		if (cancel_work_sync(&fw_event->work))
- 			fw_event_work_put(fw_event);
+ 		xen_unregister_watchers(vif);
+-		xenbus_rm(XBT_NIL, be->dev->nodename, "hotplug-status");
+ #ifdef CONFIG_DEBUG_FS
+ 		xenvif_debugfs_delif(vif);
+ #endif /* CONFIG_DEBUG_FS */
+@@ -984,6 +983,7 @@ static int netback_remove(struct xenbus_device *dev)
+ 	struct backend_info *be = dev_get_drvdata(&dev->dev);
  
--		fw_event_work_put(fw_event);
- 	}
- 	ioc->fw_events_cleanup = 0;
- }
+ 	unregister_hotplug_status_watch(be);
++	xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
+ 	if (be->vif) {
+ 		kobject_uevent(&dev->dev.kobj, KOBJ_OFFLINE);
+ 		backend_disconnect(be);
+-- 
+2.35.1
+
 
 
