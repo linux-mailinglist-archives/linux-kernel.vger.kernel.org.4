@@ -2,107 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4AE5B6CBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EA45B6CC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiIMMHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S231996AbiIMMH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiIMMH3 (ORCPT
+        with ESMTP id S231997AbiIMMHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:07:29 -0400
-Received: from out0-137.mail.aliyun.com (out0-137.mail.aliyun.com [140.205.0.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6805F11C;
-        Tue, 13 Sep 2022 05:07:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047208;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.PEXKKLn_1663070841;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PEXKKLn_1663070841)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Sep 2022 20:07:21 +0800
-Date:   Tue, 13 Sep 2022 20:07:21 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
- in validate_direct_spte()
-Message-ID: <20220913120721.GA113257@k08j02272.eu95sqa>
-References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
- <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
- <YxjYWtgLZMxFBrjl@google.com>
+        Tue, 13 Sep 2022 08:07:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D2F5F211;
+        Tue, 13 Sep 2022 05:07:50 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRhxl2TlKzHntp;
+        Tue, 13 Sep 2022 20:05:47 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 20:07:47 +0800
+Subject: Re: [PATCH net] net: tun: limit first seg size to avoid oversized
+ linearization
+To:     Eric Dumazet <edumazet@google.com>
+CC:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Petar Penkov <peterpenkov96@gmail.com>,
+        Mahesh Bandewar <maheshb@google.com>
+References: <20220907015618.2140679-1-william.xuanziyang@huawei.com>
+ <CANn89iKPmDXvPzw9tYpiqHH7LegAgTb14fAiAqH8vAxZ3KsryA@mail.gmail.com>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <efc3708e-47d8-b3e8-08a9-40031d11b8ff@huawei.com>
+Date:   Tue, 13 Sep 2022 20:07:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxjYWtgLZMxFBrjl@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CANn89iKPmDXvPzw9tYpiqHH7LegAgTb14fAiAqH8vAxZ3KsryA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 01:43:54AM +0800, David Matlack wrote:
-> On Wed, Aug 24, 2022 at 05:29:18PM +0800, Hou Wenlong wrote:
-> > The spte pointing to the children SP is dropped, so the
-> > whole gfn range covered by the children SP should be flushed.
-> > Although, Hyper-V may treat a 1-page flush the same if the
-> > address points to a huge page, it still would be better
-> > to use the correct size of huge page. Also introduce
-> > a helper function to do range-based flushing when a direct
-> > SP is dropped, which would help prevent future buggy use
-> > of kvm_flush_remote_tlbs_with_address() in such case.
-> > 
-> > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
-> > Suggested-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index e418ef3ecfcb..a3578abd8bbc 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -260,6 +260,14 @@ void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
-> >  	kvm_flush_remote_tlbs_with_range(kvm, &range);
-> >  }
-> >  
-> > +/* Flush all memory mapped by the given direct SP. */
-> > +static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
-> > +{
-> > +	WARN_ON_ONCE(!sp->role.direct);
-> > +	kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
-> > +					   KVM_PAGES_PER_HPAGE(sp->role.level + 1));
+> On Tue, Sep 6, 2022 at 6:56 PM Ziyang Xuan
+> <william.xuanziyang@huawei.com> wrote:
+>>
+>> Recently, we found a syzkaller problem as following:
+>>
+>> ========================================================
+>> WARNING: CPU: 1 PID: 17965 at mm/page_alloc.c:5295 __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+>> ...
+>> Call trace:
+>>  __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+>>  __alloc_pages_node include/linux/gfp.h:550 [inline]
+>>  alloc_pages_node include/linux/gfp.h:564 [inline]
+>>  kmalloc_large_node+0x94/0x350 mm/slub.c:4038
+>>  __kmalloc_node_track_caller+0x620/0x8e4 mm/slub.c:4545
+>>  __kmalloc_reserve.constprop.0+0x1e4/0x2b0 net/core/skbuff.c:151
+>>  pskb_expand_head+0x130/0x8b0 net/core/skbuff.c:1654
+>>  __skb_grow include/linux/skbuff.h:2779 [inline]
+>>  tun_napi_alloc_frags+0x144/0x610 drivers/net/tun.c:1477
+>>  tun_get_user+0x31c/0x2010 drivers/net/tun.c:1835
+>>  tun_chr_write_iter+0x98/0x100 drivers/net/tun.c:2036
+>>
+>> It is because the first seg size of the iov_iter from user space is
+>> very big, it is 2147479538 which is bigger than the threshold value
+>> for bail out early in __alloc_pages(). And skb->pfmemalloc is true,
+>> __kmalloc_reserve() would use pfmemalloc reserves without __GFP_NOWARN
+>> flag. Thus we got a warning.
+>>
+>> I noticed that non-first segs size are required less than PAGE_SIZE in
+>> tun_napi_alloc_frags(). The first seg should not be a special case, and
+>> oversized linearization is also unreasonable. Limit the first seg size to
+>> PAGE_SIZE to avoid oversized linearization.
+>>
+>> Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP driver")
+>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>> ---
+>>  drivers/net/tun.c | 5 ++---
+>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>> index 259b2b84b2b3..7db515f94667 100644
+>> --- a/drivers/net/tun.c
+>> +++ b/drivers/net/tun.c
+>> @@ -1454,12 +1454,12 @@ static struct sk_buff *tun_napi_alloc_frags(struct tun_file *tfile,
+>>                                             size_t len,
+>>                                             const struct iov_iter *it)
+>>  {
+>> +       size_t linear = iov_iter_single_seg_count(it);
+>>         struct sk_buff *skb;
+>> -       size_t linear;
+>>         int err;
+>>         int i;
+>>
+>> -       if (it->nr_segs > MAX_SKB_FRAGS + 1)
+>> +       if (it->nr_segs > MAX_SKB_FRAGS + 1 || linear > PAGE_SIZE)
+>>                 return ERR_PTR(-EMSGSIZE);
+>>
 > 
-> nit: I think it would make sense to introduce
-> kvm_flush_remote_tlbs_gfn() in this patch since you are going to
-> eventually use it here anyway.
->
-OK, I'll do it in the next version. Thanks!
- 
-> > +}
-> > +
-> >  static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
-> >  			   unsigned int access)
-> >  {
-> > @@ -2341,7 +2349,7 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
-> >  			return;
-> >  
-> >  		drop_parent_pte(child, sptep);
-> > -		kvm_flush_remote_tlbs_with_address(vcpu->kvm, child->gfn, 1);
-> > +		kvm_flush_remote_tlbs_direct_sp(vcpu->kvm, child);
-> >  	}
-> >  }
-> >  
-> > -- 
-> > 2.31.1
-> > 
+> This does not look good to me.
+> 
+> Some drivers allocate 9KB+ for 9000 MTU, in a single allocation,
+> because the hardware is not SG capable in RX.
+
+So, do you mean that it does not matter and keep current status, or give a bigger size but PAGE_SIZE (usually 4KB size)?
+
+Would like to hear your advice.
+
+Thank you.
+
+> 
+>>         local_bh_disable();
+>> @@ -1468,7 +1468,6 @@ static struct sk_buff *tun_napi_alloc_frags(struct tun_file *tfile,
+>>         if (!skb)
+>>                 return ERR_PTR(-ENOMEM);
+>>
+>> -       linear = iov_iter_single_seg_count(it);
+>>         err = __skb_grow(skb, linear);
+>>         if (err)
+>>                 goto free;
+>> --
+>> 2.25.1
+>>
+> .
+> 
