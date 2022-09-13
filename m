@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9F5B717B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C735B704F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiIMOku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S233565AbiIMOYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbiIMOik (ORCPT
+        with ESMTP id S233606AbiIMOXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:38:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8546BCF6;
-        Tue, 13 Sep 2022 07:20:39 -0700 (PDT)
+        Tue, 13 Sep 2022 10:23:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187761125;
+        Tue, 13 Sep 2022 07:15:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14BBA614D8;
-        Tue, 13 Sep 2022 14:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EB3C4347C;
-        Tue, 13 Sep 2022 14:20:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C160B80F01;
+        Tue, 13 Sep 2022 14:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A34C433C1;
+        Tue, 13 Sep 2022 14:15:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078809;
-        bh=QDdtp/ZqL6fCM1DB3/nLULTonncCRFZSoOvtWM1ACcE=;
+        s=korg; t=1663078527;
+        bh=fiEddYsxSrl6iGnx31Ma41eqSTgoZ/tijxy7pq9biGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GazKaW/wahm8c9lor2Nba/0mE9xL1XabgIQwTFiOQhQxmIJ4uB0Do56El8RdAGTNW
-         01EN0U51PnK0zlXdLK/bjx+0CUOEx6yZbHB/D4j8v9yQ5m6Pv8D4958T24cXxjooYb
-         1oz1ZykcnV+Q1cL+TKm7Ao+AKrnUQ/X16uw2YvfI=
+        b=BsKWkhyk7A/zHLIyNy0iXvd4g4R/bRqJfCfshoGYLV8/q+ZQqc3dCMDUmAasmOjDz
+         w3c6FZ4aqJfFq0T1dxQBt/s8To4umwoVj48h7fUc6IkSUZdzPI2/0bFQ9nYIwgg1+G
+         pzOxaUKGR+DoHfUcwblXKUT4bKvVvV2nk+c0OjbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Chao Yu <chao@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        stable@vger.kernel.org, Eliav Farber <farbere@amazon.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 090/121] erofs: fix pcluster use-after-free on UP platforms
+Subject: [PATCH 5.19 175/192] hwmon: (mr75203) fix voltage equation for negative source input
 Date:   Tue, 13 Sep 2022 16:04:41 +0200
-Message-Id: <20220913140401.231959928@linuxfoundation.org>
+Message-Id: <20220913140418.761829835@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,114 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
+From: Eliav Farber <farbere@amazon.com>
 
-[ Upstream commit 2f44013e39984c127c6efedf70e6b5f4e9dcf315 ]
+[ Upstream commit 227a3a2fc31d8e4bb9c88d4804e19530af245b1b ]
 
-During stress testing with CONFIG_SMP disabled, KASAN reports as below:
+According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
+sheet, the minimum input signal is -100mv and maximum input signal
+is +1000mv.
 
-==================================================================
-BUG: KASAN: use-after-free in __mutex_lock+0xe5/0xc30
-Read of size 8 at addr ffff8881094223f8 by task stress/7789
+The equation used to convert the digital word to voltage uses mixed
+types (*val signed and n unsigned), and on 64 bit machines also has
+different size, since sizeof(u32) = 4 and sizeof(long) = 8.
 
-CPU: 0 PID: 7789 Comm: stress Not tainted 6.0.0-rc1-00002-g0d53d2e882f9 #3
-Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-Call Trace:
- <TASK>
-..
- __mutex_lock+0xe5/0xc30
-..
- z_erofs_do_read_page+0x8ce/0x1560
-..
- z_erofs_readahead+0x31c/0x580
-..
-Freed by task 7787
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x20/0x30
- kasan_set_free_info+0x20/0x40
- __kasan_slab_free+0x10c/0x190
- kmem_cache_free+0xed/0x380
- rcu_core+0x3d5/0xc90
- __do_softirq+0x12d/0x389
+So when measuring a negative input, n will be small enough, such that
+PVT_N_CONST * n < PVT_R_CONST, and the result of
+(PVT_N_CONST * n - PVT_R_CONST) will overflow to a very big positive
+32 bit number. Then when storing the result in *val it will be the same
+value just in 64 bit (instead of it representing a negative number which
+will what happen when sizeof(long) = 4).
 
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40
- __kasan_record_aux_stack+0x97/0xb0
- call_rcu+0x3d/0x3f0
- erofs_shrink_workstation+0x11f/0x210
- erofs_shrink_scan+0xdc/0x170
- shrink_slab.constprop.0+0x296/0x530
- drop_slab+0x1c/0x70
- drop_caches_sysctl_handler+0x70/0x80
- proc_sys_call_handler+0x20a/0x2f0
- vfs_write+0x555/0x6c0
- ksys_write+0xbe/0x160
- do_syscall_64+0x3b/0x90
+When -1023 <= (PVT_N_CONST * n - PVT_R_CONST) <= -1
+dividing the number by 1024 should result of in 0, but because ">> 10"
+is used, and the sign bit is used to fill the vacated bit positions, it
+results in -1 (0xf...fffff) which is wrong.
 
-The root cause is that erofs_workgroup_unfreeze() doesn't reset to
-orig_val thus it causes a race that the pcluster reuses unexpectedly
-before freeing.
+This change fixes the sign problem and supports negative values by
+casting n to long and replacing the shift right with div operation.
 
-Since UP platforms are quite rare now, such path becomes unnecessary.
-Let's drop such specific-designed path directly instead.
-
-Fixes: 73f5c66df3e2 ("staging: erofs: fix `erofs_workgroup_{try_to_freeze, unfreeze}'")
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Link: https://lore.kernel.org/r/20220902045710.109530-1-hsiangkao@linux.alibaba.com
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220908152449.35457-5-farbere@amazon.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/internal.h | 29 -----------------------------
- 1 file changed, 29 deletions(-)
+ drivers/hwmon/mr75203.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 9524e155b38fa..b77acf09726c6 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -143,7 +143,6 @@ struct erofs_workgroup {
- 	atomic_t refcount;
- };
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index be02f32bf143d..6d3b3c499ed83 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -201,8 +201,18 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 			return ret;
  
--#if defined(CONFIG_SMP)
- static inline bool erofs_workgroup_try_to_freeze(struct erofs_workgroup *grp,
- 						 int val)
- {
-@@ -172,34 +171,6 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
- 	return atomic_cond_read_relaxed(&grp->refcount,
- 					VAL != EROFS_LOCKED_MAGIC);
- }
--#else
--static inline bool erofs_workgroup_try_to_freeze(struct erofs_workgroup *grp,
--						 int val)
--{
--	preempt_disable();
--	/* no need to spin on UP platforms, let's just disable preemption. */
--	if (val != atomic_read(&grp->refcount)) {
--		preempt_enable();
--		return false;
--	}
--	return true;
--}
--
--static inline void erofs_workgroup_unfreeze(struct erofs_workgroup *grp,
--					    int orig_val)
--{
--	preempt_enable();
--}
--
--static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
--{
--	int v = atomic_read(&grp->refcount);
--
--	/* workgroup is never freezed on uniprocessor systems */
--	DBG_BUGON(v == EROFS_LOCKED_MAGIC);
--	return v;
--}
--#endif	/* !CONFIG_SMP */
- #endif	/* !CONFIG_EROFS_FS_ZIP */
+ 		n &= SAMPLE_DATA_MSK;
+-		/* Convert the N bitstream count into voltage */
+-		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
++		/*
++		 * Convert the N bitstream count into voltage.
++		 * To support negative voltage calculation for 64bit machines
++		 * n must be cast to long, since n and *val differ both in
++		 * signedness and in size.
++		 * Division is used instead of right shift, because for signed
++		 * numbers, the sign bit is used to fill the vacated bit
++		 * positions, and if the number is negative, 1 is used.
++		 * BIT(x) may not be used instead of (1 << x) because it's
++		 * unsigned.
++		 */
++		*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS);
  
- /* we strictly follow PAGE_SIZE and no buffer head yet */
+ 		return 0;
+ 	default:
 -- 
 2.35.1
 
