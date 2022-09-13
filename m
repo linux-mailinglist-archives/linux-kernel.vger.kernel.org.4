@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DB65B715A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B855B7062
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbiIMOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S234030AbiIMObm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234117AbiIMOfE (ORCPT
+        with ESMTP id S234110AbiIMO3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:35:04 -0400
+        Tue, 13 Sep 2022 10:29:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75E59592;
-        Tue, 13 Sep 2022 07:19:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1376269F7B;
+        Tue, 13 Sep 2022 07:18:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 392F3614B3;
-        Tue, 13 Sep 2022 14:18:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55983C433D7;
-        Tue, 13 Sep 2022 14:18:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD331614D3;
+        Tue, 13 Sep 2022 14:18:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29BFC433B5;
+        Tue, 13 Sep 2022 14:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078707;
-        bh=GBhZdVQKFkYi4K1BaepOob2Dy76b4kssTn/WlPLHfnk=;
+        s=korg; t=1663078710;
+        bh=jdQJzVCzjLUTb3ZpmMeyFG8CG9PEmt2WyOOQ37iFBTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJSf/chIfaBsQqmbz5QlbZbh133JMP1OzU3PGcNEBo0DEThlSFtrCs79IOm+7pqDa
-         hXPkFsTq5AGjua2+0W6LNvHAR8FZP/JKOrUKcu7at1Doxs0XfHGTzGQutmBPTJykWI
-         aNZ83JxRZa4MBrJp+r/bsQoiOL0wmHJJ/ZKGgA08=
+        b=Y2hrCpHHV5L/kOt67Up9LO12mClC8D5pPLkBxcfbrCOHt5S/2vcVIp9bTa45iUXoH
+         l/dZSQjUWeDkG+BEnpH1ulXjuK8GLxElRHTy5FiIRCKuIAg1qf6SnJK6Cuv5WrjtEA
+         wDP70Tl1Y62XvlNgWDb7tCxIrZa6Dn4sqZn6J3kg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marco Felsch <m.felsch@pengutronix.de>,
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/121] ARM: dts: imx6qdl-kontron-samx6i: remove duplicated node
-Date:   Tue, 13 Sep 2022 16:04:03 +0200
-Message-Id: <20220913140359.595066192@linuxfoundation.org>
+Subject: [PATCH 5.15 053/121] soc: imx: gpcv2: Assert reset before ungating clock
+Date:   Tue, 13 Sep 2022 16:04:04 +0200
+Message-Id: <20220913140359.635650807@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -55,42 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marco Felsch <m.felsch@pengutronix.de>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 204f67d86f55dd4fa757ed04757d7273f71a169c ]
+[ Upstream commit df88005bd81b80c944d185554e264a4b0f993c37 ]
 
-The regulator node 'regulator-3p3v-s0' was dupplicated. Remove it to
-clean the DTS.
+In case the power domain clock are ungated before the reset is asserted,
+the system might freeze completely. This is likely due to a device is an
+undefined state being attached to bus, which sporadically leads to a bus
+hang. Assert the reset before the clock are enabled to assure the device
+is in defined state before being attached to bus.
 
-Fixes: 2a51f9dae13d ("ARM: dts: imx6qdl-kontron-samx6i: Add iMX6-based Kontron SMARC-sAMX6i module")
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Fixes: fe58c887fb8ca ("soc: imx: gpcv2: add support for optional resets")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/soc/imx/gpcv2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-index b167b33bd108d..9a3e5f7827152 100644
---- a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-@@ -51,16 +51,6 @@
- 		vin-supply = <&reg_3p3v_s5>;
- 	};
+diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+index b4aa28420f2a8..4dc3a3f73511e 100644
+--- a/drivers/soc/imx/gpcv2.c
++++ b/drivers/soc/imx/gpcv2.c
+@@ -237,6 +237,8 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
+ 		}
+ 	}
  
--	reg_3p3v_s0: regulator-3p3v-s0 {
--		compatible = "regulator-fixed";
--		regulator-name = "V_3V3_S0";
--		regulator-min-microvolt = <3300000>;
--		regulator-max-microvolt = <3300000>;
--		regulator-always-on;
--		regulator-boot-on;
--		vin-supply = <&reg_3p3v_s5>;
--	};
--
- 	reg_3p3v_s5: regulator-3p3v-s5 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "V_3V3_S5";
++	reset_control_assert(domain->reset);
++
+ 	/* Enable reset clocks for all devices in the domain */
+ 	ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
+ 	if (ret) {
+@@ -244,7 +246,8 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
+ 		goto out_regulator_disable;
+ 	}
+ 
+-	reset_control_assert(domain->reset);
++	/* delays for reset to propagate */
++	udelay(5);
+ 
+ 	if (domain->bits.pxx) {
+ 		/* request the domain to power up */
 -- 
 2.35.1
 
