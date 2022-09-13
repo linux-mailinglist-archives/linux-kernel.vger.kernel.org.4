@@ -2,40 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410F95B6ACE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCDA5B6B2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiIMJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S231164AbiIMJvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiIMJgc (ORCPT
+        with ESMTP id S230027AbiIMJvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:36:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C4192B7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:36:31 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRdXB2NRyzNmFT
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:31:54 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 17:36:29 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <akinobu.mita@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [-next] fault-injection: using debugfs_create_xul() instead of debugfs_create_xl()
-Date:   Tue, 13 Sep 2022 17:47:47 +0800
-Message-ID: <1663062467-34262-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Tue, 13 Sep 2022 05:51:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18A1580A3;
+        Tue, 13 Sep 2022 02:50:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A4476134C;
+        Tue, 13 Sep 2022 09:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41990C433C1;
+        Tue, 13 Sep 2022 09:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663062658;
+        bh=LFc8VLcHvprYH28gDo1PjrF0ebxy+2UO+x/vOTan0wQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=toW6LVrvof6E3mcs+G1NnzlNd+IXWSRQs1dN0ITSZc7EsSpizN6XMa84z0POGWWt6
+         JRySY58G6lzpU1n21O8EhKBD1dis8us8urDzbCclbF7ncg9p6lAWZKNNMZLIR+14jQ
+         hLFE9SH6WE5/cUGsdDXrZlKTEowc50k+GyrZ8dv7xr1FkQ4Tcvfec/iRsFcKrdmJdF
+         CR54kstM97vCriYq11NtVCqfqBuIzsGxKAd8CalYEkYPwyIkSx4bmrkP1bPhw6MZee
+         7YSdNwGzhx5PDJWDZG4jlHqoRtBLOpqzbcoziVBMZ2/vgebcV+oByTJ78meXmC82N6
+         4Q0nfwBZxAR5Q==
+Date:   Tue, 13 Sep 2022 02:50:56 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     yangxingwu <xingwu.yang@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     ndesaulniers@google.com, trix@redhat.com, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] scripts/clang-tools: remove unused module
+Message-ID: <YyBSgNbJGRBNIL5I@dev-arch.thelio-3990X>
+References: <20220913040753.2198-1-xingwu.yang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913040753.2198-1-xingwu.yang@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,48 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using debugfs_create_xul() instead of debugfs_create_xl(), and del the
-local define debugfs_create_xl().
+On Tue, Sep 13, 2022 at 04:07:52AM +0000, yangxingwu wrote:
+> remove unused imported 'os' module
+> 
+> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- lib/fault-inject.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+Sure.
 
-diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index 9dd1dd1..dbb5409 100644
---- a/lib/fault-inject.c
-+++ b/lib/fault-inject.c
-@@ -185,14 +185,6 @@ static void debugfs_create_ul(const char *name, umode_t mode,
- 
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 
--DEFINE_SIMPLE_ATTRIBUTE(fops_xl, debugfs_ul_get, debugfs_ul_set, "0x%llx\n");
--
--static void debugfs_create_xl(const char *name, umode_t mode,
--			      struct dentry *parent, unsigned long *value)
--{
--	debugfs_create_file(name, mode, parent, value, &fops_xl);
--}
--
- static int debugfs_stacktrace_depth_set(void *data, u64 val)
- {
- 	*(unsigned long *)data =
-@@ -237,10 +229,10 @@ struct dentry *fault_create_debugfs_attr(const char *name,
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 	debugfs_create_stacktrace_depth("stacktrace-depth", mode, dir,
- 					&attr->stacktrace_depth);
--	debugfs_create_xl("require-start", mode, dir, &attr->require_start);
--	debugfs_create_xl("require-end", mode, dir, &attr->require_end);
--	debugfs_create_xl("reject-start", mode, dir, &attr->reject_start);
--	debugfs_create_xl("reject-end", mode, dir, &attr->reject_end);
-+	debugfs_create_xul("require-start", mode, dir, &attr->require_start);
-+	debugfs_create_xul("require-end", mode, dir, &attr->require_end);
-+	debugfs_create_xul("reject-start", mode, dir, &attr->reject_start);
-+	debugfs_create_xul("reject-end", mode, dir, &attr->reject_end);
- #endif /* CONFIG_FAULT_INJECTION_STACKTRACE_FILTER */
- 
- 	attr->dname = dget(dir);
--- 
-1.8.3.1
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+Masahiro, are you able to pick this up? The original was not cc'd to
+linux-kbuild but it is on lore:
+
+https://lore.kernel.org/20220913040753.2198-1-xingwu.yang@gmail.com/
+
+> ---
+>  scripts/clang-tools/run-clang-tools.py | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> index 1337cedca..bb78c9bde 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -12,7 +12,6 @@ compile_commands.json.
+>  import argparse
+>  import json
+>  import multiprocessing
+> -import os
+>  import subprocess
+>  import sys
+> 
+> --
+> 2.37.2
+> 
