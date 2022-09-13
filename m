@@ -2,92 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5827F5B6BF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178B45B6BF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiIMKwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S231414AbiIMKwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiIMKwO (ORCPT
+        with ESMTP id S231772AbiIMKwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:52:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572A33E1C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:52:13 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRgDG5kP3zkWvj;
-        Tue, 13 Sep 2022 18:48:14 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 13 Sep 2022 18:52:11 +0800
-Received: from [10.174.185.210] (10.174.185.210) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 18:52:10 +0800
-Subject: Re: A question about Cortex-A73 erratum 858921
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "wanghaibin.wang@huawei.com" <wanghaibin.wang@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cce62c36-c2f4-7e0e-ad6d-6eae98f45aee@huawei.com>
- <87czc4rb1x.wl-maz@kernel.org>
-From:   Kunkun Jiang <jiangkunkun@huawei.com>
-Message-ID: <7f9bc4fb-67f5-5989-21ba-0833bd3cdd78@huawei.com>
-Date:   Tue, 13 Sep 2022 18:52:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 13 Sep 2022 06:52:40 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFCF5E306
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:52:38 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so8619166pja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1jDUmJ+8foq+fRfrH/SDieomTLyd9X2Y+NSWOcN4vCw=;
+        b=ZadiryT/cM82fpVakpsZ68HnfwtdTldHLlK3HkjYx/3YBBUnkx50n/nW3a1wAOOxhr
+         v4o8tkny9b0KWKf1xqP8FshrgPOKH3g1totYypFDuG/iv829yYUKlt6A7iaEkOZZViYz
+         swZijaHtPyN4uvKfqbC8zmCJRRcvG6NSu2ib88p5LS+fbtvcJBqwjn5RI6kaFOB2IXhp
+         1GPgTfxsa4sNGZw4xnDEDr0udXwp/umcEGIl674qbxhtYLmAeSBmJAQGs8wOisHZJkb6
+         wroSrivYgqmyRANuoVGHKjEgQWL3bzdtrxIy/65ZVFY0KY4Z+9s3XbCfkBXQPbNKOIU5
+         RCog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1jDUmJ+8foq+fRfrH/SDieomTLyd9X2Y+NSWOcN4vCw=;
+        b=uF/5qj3aqXM6Lwj2KdpJphJL/w/9pF839SPI6vWvBf2x9DQFiaga5Vq0Hu+1VXhpZZ
+         Pi1v0b7vtcP8KbfBUbAoMh9zNs//HldkadDs7oEfgsPN2DpZP/QbCYOsHRlTRkPdnK12
+         mxEmW/Riv4qNEYvoEVaAdRfye7Svb5E4QBzhgLeFqErJGyty134LFekHboQW/kQxMOQD
+         QPnYIdpptQvmbFAjM5P+E3XllcRMr5ZMrfwBNiZHRjZJpIqnAlETRwRDjFONW2uAGZji
+         9denXp0J7tl6XBfZjaATenLCyRDlf/XHpSF6Jx/MM8wae3MixL3iv6TlbY1QR+eoxoQ/
+         TEdQ==
+X-Gm-Message-State: ACgBeo3rZsX4y91yIzWF/03dw5J+l2i7ekQYutTfRDvMPv6vpgW4cjCi
+        rDgj0CLUmspgzBQ5qIscjZWXKQ==
+X-Google-Smtp-Source: AA6agR538RUq0gUdqP78Um9aGmPv5eu/ZqomlxzfV1qPpglkwdqMluJhythI1berMCGcH5yqMqXgKA==
+X-Received: by 2002:a17:90b:4a48:b0:202:9bcb:b89c with SMTP id lb8-20020a17090b4a4800b002029bcbb89cmr3427387pjb.161.1663066357895;
+        Tue, 13 Sep 2022 03:52:37 -0700 (PDT)
+Received: from leoy-yangtze.lan (173.242.123.178.16clouds.com. [173.242.123.178])
+        by smtp.gmail.com with ESMTPSA id i123-20020a626d81000000b0053ae018a91esm7665515pfc.173.2022.09.13.03.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 03:52:37 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 18:52:32 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        mike.leach@linaro.org, alexander.shishkin@linux.intel.com,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] coresight: etm4x: Fix crash observed on Qcom ETM
+ parts with 'Low power override'
+Message-ID: <YyBg8JhNUnsaeKip@leoy-yangtze.lan>
+References: <20220825052232.11013-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <87czc4rb1x.wl-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.185.210]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825052232.11013-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Hi Bhupesh,
 
-Thank you for your reply, I've sent a fix.
-https://lore.kernel.org/all/20220913104723.332-1-jiangkunkun@huawei.com/
+On Thu, Aug 25, 2022 at 10:52:32AM +0530, Bhupesh Sharma wrote:
+> Some Qualcomm ETM implementations require skipping powering up
+> the trace unit, as the ETMs are in the same power domain as
+> their CPU cores.
+> 
+> Via commit 5214b563588e ("coresight: etm4x: Add support for
+> sysreg only devices"), the setting of 'skip_power_up' flag was
+> moved after the 'etm4_init_arch_data' function is called, whereas
+> the flag value is itself used inside the function. This causes
+> a crash when ETM mode 'Low-power state behavior override' is set
+> on some Qualcomm parts.
+> 
+> Fix the same.
+> 
+> Fixes: 5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  - v1 can be seen here: https://lore.kernel.org/lkml/20220803191236.3037591-1-bhupesh.sharma@linaro.org/
+>  - Addressed the review comments from Suzuki.
+>  - Rebased on linux-next.
+> 
+>  drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index d39660a3e50c..14c1c7869795 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -977,6 +977,16 @@ static bool etm4_init_sysreg_access(struct etmv4_drvdata *drvdata,
+>  	if (!cpu_supports_sysreg_trace())
+>  		return false;
+>  
+> +	/*
+> +	 * Some Qualcomm implementations require skipping powering up the trace unit,
+> +	 * as the ETMs are in the same power domain as their CPU cores.
+> +	 *
+> +	 * Since the 'skip_power_up' flag is used inside 'etm4_init_arch_data' function,
+> +	 * initialize it before the function is called.
+> +	 */
+> +	if (fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
+> +		drvdata->skip_power_up = true;
+> +
 
+I personally think this sentence should be placed in the function
+etm4_probe(), you need to move it just before smp call
+etm4_init_arch_data(), this can allow DT property "qcom,skip-power-up"
+to be respected.
+
+>  	/*
+>  	 * ETMs implementing sysreg access must implement TRCDEVARCH.
+>  	 */
+> @@ -1951,8 +1961,7 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
+>  		return -EINVAL;
+>  
+>  	/* TRCPDCR is not accessible with system instructions. */
+> -	if (!desc.access.io_mem ||
+> -	    fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
+> +	if (!desc.access.io_mem)
+>  		drvdata->skip_power_up = true;
+
+I prefer to move the condition checking for "desc.access.io_mem" to
+etm4_init_sysreg_access(), this can make sure the flag skip_power_up
+is set correctly based on property of system register access.
+
+A side topic, in the mainline kernel I found the value
+"desc.access.io_mem" is always zero (see the initialized value in
+etm4_probe() and etm4_init_sysreg_access()).  Should we initialize
+desc.access.io_mem to true in etm4_probe()?
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index d39660a3e50c..cf2555c50abb 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -1939,6 +1939,7 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
+        if (drvdata->cpu < 0)
+                return drvdata->cpu;
+ 
++       desc.access.io_mem = true;
+        init_arg.drvdata = drvdata;
+        init_arg.csa = &desc.access;
+        init_arg.pid = etm_pid;
+  
 Thanks,
-Kunkun Jiang
+Leo
 
-On 2022/9/9 20:23, Marc Zyngier wrote:
-> On Fri, 09 Sep 2022 08:31:43 +0100,
-> Kunkun Jiang <jiangkunkun@huawei.com> wrote:
->> Hi all,
->>
->> Recently I am learning the code related to Arm arch timer. I found that the
->> Cortex-A73 erratum 858921 does not set the corresponding callback functions:
->> set_next_event_phys and set_next_event_virt like other erratums. Won't it
->> get the wrong value when reading the counter during setting next event?
-> Yup, you're correct.
->
-> This is a regression introduced by a38b71b0833e
-> ("clocksource/drivers/arm_arch_timer: Move system register timer
-> programming over to CVAL"). We used to use the TVAL accessor which
-> doesn't need a read of the counter, while the switch to CVAL needs
-> one. Obviously, I didn't enough pay attention to the A73 erratum.
->
-> Please send in a fix for this.
->
-> Thanks,
->
-> 	M.
->
+>  	major = ETM_ARCH_MAJOR_VERSION(drvdata->arch);
+> -- 
+> 2.35.3
+> 
