@@ -2,64 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100B75B7A7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89445B7A93
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiIMTDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S230079AbiIMTJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiIMTC6 (ORCPT
+        with ESMTP id S229963AbiIMTJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:02:58 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB08FB;
-        Tue, 13 Sep 2022 12:02:27 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id A58596033; Tue, 13 Sep 2022 15:02:26 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org A58596033
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1663095746;
-        bh=S1FczSiJGn87g+MyReY8AFWKAt8dgGXuJUt9MX2WMo4=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=e9yfdhq+6MIfMZe4VyFmTjEOjj3+36k0s1aV+fmLjcr2i6FYzioUFT8UfPNKCO+Ow
-         nAIkCdL9TdB5u0UhxgLck/7e0iMf4o1u6orC4cYRddrUw+objnGjo2k7yJj8J3SBg6
-         cXM0mcrYl9Fp8X6LBi2TvwUP22Pnun1OwMazVq4A=
-Date:   Tue, 13 Sep 2022 15:02:26 -0400
-To:     NeilBrown <neilb@suse.de>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <20220913190226.GA11958@fieldses.org>
-References: <20220908155605.GD8951@fieldses.org>
- <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
- <20220908182252.GA18939@fieldses.org>
- <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
- <20220909154506.GB5674@fieldses.org>
- <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
- <20220910145600.GA347@fieldses.org>
- <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
- <20220913004146.GD3600936@dread.disaster.area>
- <166303374350.30452.17386582960615006566@noble.neil.brown.name>
+        Tue, 13 Sep 2022 15:09:32 -0400
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341EB1D0C7;
+        Tue, 13 Sep 2022 12:09:25 -0700 (PDT)
+Received: from imsva.intranet.prolan.hu (imss.intranet.prolan.hu [10.254.254.252])
+        by fw2.prolan.hu (Postfix) with ESMTPS id 6F8D97F458;
+        Tue, 13 Sep 2022 21:09:23 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5320D34064;
+        Tue, 13 Sep 2022 21:09:23 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 395903405A;
+        Tue, 13 Sep 2022 21:09:23 +0200 (CEST)
+Received: from fw2.prolan.hu (unknown [10.254.254.253])
+        by imsva.intranet.prolan.hu (Postfix) with ESMTPS;
+        Tue, 13 Sep 2022 21:09:23 +0200 (CEST)
+Received: from atlas.intranet.prolan.hu (atlas.intranet.prolan.hu [10.254.0.229])
+        by fw2.prolan.hu (Postfix) with ESMTPS id 077577F458;
+        Tue, 13 Sep 2022 21:09:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=prolan.hu; s=mail;
+        t=1663096163; bh=gcr1besCy5qG6Bb3Lbv9Z8Yk6ayOdWzKbJH3+PLUS0s=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=gnp9BMGfNTLam+gESMLUit5MMSnsZCe+ojSnGizzqLEt3vdBgQHT4GJaFj1y2ezJi
+         RYSIb4HuE3BVm5OeQKqbjB1BvsTmZ2/TCRA9QBPfTARWdTMvlRZeVCP6NheiTW1Rbv
+         ZPcEgrAdGSEOeuuKeBCcbZNM75t7BvZyb3l+y/fOSL7uFVESXq8DGLpNkXN9TeYKv8
+         IaKo8T3/qKe2mHoW1XtmXv6ZUFi+KPxW8+seRp/H4Cz0QaU7UgB5yg3UTLRq0kZQBp
+         X6CYJO+0nzSjWOImXEEMhiMsT9ysur9fV/dom+jKTr+E3hmeMaBuZaPHvutd9/Cejw
+         qeGjXcKWWDIHg==
+Received: from atlas.intranet.prolan.hu (10.254.0.229) by
+ atlas.intranet.prolan.hu (10.254.0.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id
+ 15.1.2507.12; Tue, 13 Sep 2022 21:09:22 +0200
+Received: from atlas.intranet.prolan.hu ([fe80::9c8:3400:4efa:8de7]) by
+ atlas.intranet.prolan.hu ([fe80::9c8:3400:4efa:8de7%11]) with mapi id
+ 15.01.2507.012; Tue, 13 Sep 2022 21:09:22 +0200
+From:   =?iso-8859-2?Q?Cs=F3k=E1s_Bence?= <Csokas.Bence@prolan.hu>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH 5.15 084/121] net: fec: Use a spinlock to guard
+ `fep->ptp_clk_on`
+Thread-Topic: [PATCH 5.15 084/121] net: fec: Use a spinlock to guard
+ `fep->ptp_clk_on`
+Thread-Index: AQHYx3vmuaPYHpMZD0W8vRjGbCgVN63dYleAgABWeZo=
+Date:   Tue, 13 Sep 2022 19:09:22 +0000
+Message-ID: <3ec73c64232f409babade38117551084@prolan.hu>
+References: <20220913140357.323297659@linuxfoundation.org>
+ <20220913140400.979880696@linuxfoundation.org>,<20220913155643.yxl27etklqql63fb@pengutronix.de>
+In-Reply-To: <20220913155643.yxl27etklqql63fb@pengutronix.de>
+Accept-Language: hu-HU, en-US
+Content-Language: hu-HU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [152.66.181.220]
+x-esetresult: clean, is OK
+x-esetid: 37303A29971EF4566D7765
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166303374350.30452.17386582960615006566@noble.neil.brown.name>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
+X-TM-AS-GCONF: 00
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,34 +84,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 11:49:03AM +1000, NeilBrown wrote:
-> Invalidating the client cache on EVERY unmount/mount could impose
-> unnecessary cost.  Imagine a client that caches a lot of data (several
-> large files) from a server which is expected to fail-over from one
-> cluster node to another from time to time.  Adding extra delays to a
-> fail-over is not likely to be well received.
-> 
-> I don't *know* this cost would be unacceptable, and I *would* like to
-> leave it to the filesystem to decide how to manage its own i_version
-> values.  So maybe XFS can use the LSN for a salt.  If people notice the
-> extra cost, they can complain.
+> If possible please drop this patch, a revert for this is pending. For
+> details see:
+>=20
+> https://lore.kernel.org/all/20220913141917.ukoid65sqao5f4lg@pengutronix.d=
+e/
 
-I'd expect complaints.
+Agreed, please hold off on this patch. An updated patch is in the works.
 
-NFS is actually even worse than this: it allows clients to reacquire
-file locks across server restart and unmount/remount, even though
-obviously the kernel will do nothing to prevent someone else from
-locking (or modifying) the file in between.
-
-Administrators are just supposed to know not to allow other applications
-access to the filesystem until nfsd's started.  It's always been this
-way.
-
-You can imagine all sorts of measures to prevent that, and if anyone
-wants to work on ways to prevent people from shooting themselves in the
-foot here, great.
-
-Just taking away the ability to cache or lock across reboots wouldn't
-make people happy, though....
-
---b.
+Bence=
