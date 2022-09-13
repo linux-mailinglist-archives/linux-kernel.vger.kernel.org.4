@@ -2,53 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB18A5B7CCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DF95B7CCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiIMVxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 17:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S229667AbiIMVzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 17:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIMVxE (ORCPT
+        with ESMTP id S229717AbiIMVyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 17:53:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6876D9FF;
-        Tue, 13 Sep 2022 14:53:03 -0700 (PDT)
+        Tue, 13 Sep 2022 17:54:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E264331E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 14:54:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9093615B0;
-        Tue, 13 Sep 2022 21:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FC5C433C1;
-        Tue, 13 Sep 2022 21:53:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 220ECB810EA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 21:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5B9C433D6;
+        Tue, 13 Sep 2022 21:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663105982;
-        bh=Xxpeh83ghyVDcQZqEqOkPGke5vxRqIieah6+QXlXYMc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=m8dxabHFp5ULuP6WVPkdHq/pklVKFakjrmD+SbtwbiclkVePpe6JtwAIIg9ofLhiE
-         aLCDo58f47IfpYxG1Dc/pYnE+HhT0q2Uq6w8zqZBo5gZ1Ycq/JPzvmri6zAk22eFE2
-         jRXu4hxSxF02khL3LBiUf/WEnXyzrsFD2Fw31SE9jUJYtBmUGTwbRke/fYoLfwiK8b
-         ADKQlfqRWd/BgsbHfAJ7Kw39MaxjfDe2llKNOR4iuz3REmytY75UhOUrUwrbVLNhhf
-         CYffVsOrkK5xQcJa43+ocqDG7FuzS7IlCZywBl4cOF5Dug/qcxtMGg7b4hYUgVJlu9
-         NyaSmZ8RPh8UQ==
-Date:   Tue, 13 Sep 2022 16:53:00 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] PCI: Add standard PCI Config Address macros
-Message-ID: <20220913215300.GA626928@bhelgaas>
+        s=k20201202; t=1663106076;
+        bh=ycEw7JynDo34GmuIv/leSXfixPw6mJwy50s6KoPFIzM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JvOyqRNlgDve60ECg+sQGQiPkA6QZcU9G3NcJ+ZzsEqoFQ33voD7dPMvyEt0QrwzW
+         fDRIpRFhpBTSlZ5J9IwHToYQ6syJZMFAJdWA4LTahz60WyVw2sPZX/DF4qbdK1AGn9
+         rssdNERTeO8OfvHjoWfWEZhq9eALOSiTvbfCzB7Dxt77ieoIwgUNpcGR4TX0Tw7IiN
+         QbsXH5x+x1G1iUolYqRRadZNHpZ8rjWUmmrOuonI2KCzf6mG1i+sB2M+mTAMUhEhaY
+         TI8swIrECVc+dkaDELvgwRudXjEyuTOkQkOJuVIaKMAtqtAlAKRm9BNK/orUYv47tn
+         RRdjCJmk5rYLw==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH for-mm-unstable] mm/damon/core: handle error from 'damon_fill_regions_holes()'
+Date:   Tue, 13 Sep 2022 21:54:20 +0000
+Message-Id: <20220913215420.57761-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220913212421.yblwhgbd7zpdg5eo@pali>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,58 +52,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 11:24:21PM +0200, Pali Rohár wrote:
-> On Tuesday 13 September 2022 16:11:43 Bjorn Helgaas wrote:
-> > On Sun, Sep 11, 2022 at 01:20:22PM +0200, Pali Rohár wrote:
-> > > Lot of PCI and PCIe controllers are using standard Config Address for PCI
-> > > Configuration Mechanism #1 (as defined inPCI Local Bus Specification) or
-> > > its extended version.
-> > > 
-> > > So introduce new macros PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() in
-> > > new include file linux/pci-conf1.h which can be suitable for PCI and PCIe
-> > > controllers which uses this type of access to PCI config space.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > >  include/linux/pci-conf1.h | 51 +++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 51 insertions(+)
-> > >  create mode 100644 include/linux/pci-conf1.h
-> > 
-> > This seems like a nice addition, but it would be nice if we could
-> > encapsulate it in drivers/pci.
-> > 
-> > I know it's parallel to the existing include/linux/pci-ecam.h.  I wish
-> > we could encapsulate *that* in drivers/pci, too.  For pci-ecam.h, I
-> > think the only things that prevent that are drivers/acpi/pci_mcfg.c,
-> > loongarch, and a few arm64 things.
-> 
-> As these macros describe original Intel x86 API, it can be used also in
-> arch/x86 PCI code.
+Commit 91fc6af21c61 ("mm/damon/core: avoid holes in newly set monitoring
+target ranges") in mm-unstable tree introduces
+'damon_fill_regions_holes()', which does not check failures of
+'damon_new_region()' call, so NULL dereferencing is available.  This
+commit fixes the issue by checking failure of the function and returning
+an error code.
 
-I would love to see that happen, too, and that could be a reason to
-put pci-conf.h in include/linux.  But this series doesn't include
-that.
+Reported-by: Coverity Static Analyzer CID 1524904
+Fixes: 91fc6af21c61 ("mm/damon/core: avoid holes in newly set monitoring target ranges") in mm-unstable
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> > I guess that's a long-winded way of saying that I think maybe we could
-> > put this in drivers/pci/pci.h even though the parallel ECAM stuff is
-> > in include/linux/pci-ecam.h.
-> 
-> Well, if you like this change, let me know where to put those new
-> macros, into which file and in which subdirectory, and I can prepare a
-> new patch version.
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 520d3bb22d91..3ef3d13e504b 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -173,7 +173,7 @@ static bool damon_intersect(struct damon_region *r,
+ /*
+  * Fill holes in regions with new regions.
+  */
+-static void damon_fill_regions_holes(struct damon_region *first,
++static int damon_fill_regions_holes(struct damon_region *first,
+ 		struct damon_region *last, struct damon_target *t)
+ {
+ 	struct damon_region *r = first;
+@@ -186,9 +186,12 @@ static void damon_fill_regions_holes(struct damon_region *first,
+ 		next = damon_next_region(r);
+ 		if (r->ar.end != next->ar.start) {
+ 			newr = damon_new_region(r->ar.end, next->ar.start);
++			if (!newr)
++				return -ENOMEM;
+ 			damon_insert_region(newr, r, next, t);
+ 		}
+ 	}
++	return 0;
+ }
+ 
+ /*
+@@ -207,6 +210,7 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ {
+ 	struct damon_region *r, *next;
+ 	unsigned int i;
++	int err;
+ 
+ 	/* Remove regions which are not in the new ranges */
+ 	damon_for_each_region_safe(r, next, t) {
+@@ -251,7 +255,9 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 			last->ar.end = ALIGN(range->end, DAMON_MIN_REGION);
+ 
+ 			/* fill possible holes in the range */
+-			damon_fill_regions_holes(first, last, t);
++			err = damon_fill_regions_holes(first, last, t);
++			if (err)
++				return err;
+ 		}
+ 	}
+ 	return 0;
+-- 
+2.25.1
 
-drivers/pci/pci.h
-
-> But doing all those arm64, x86, ACPI cleanup is a huge cross-tree work
-> which I'm really not going to do...
-
-Of course not, I didn't suggest or expect that.  What I'm trying to
-point out is that I don't think we have very good reasons for
-pci-ecam.h to be public.  And therefore, I don't think we need
-pci-conf1.h to be next to it.
-
-Unless you want to convert the arch/x86 code to use them as well.  I'm
-not asking you to do that either, just that if you *did* do that, it
-would be an argument for keeping the macros where you put them.
-
-Bjorn
