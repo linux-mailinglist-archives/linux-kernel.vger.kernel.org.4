@@ -2,87 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DAF5B78E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6ED5B78E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiIMRzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S231785AbiIMR4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiIMRzA (ORCPT
+        with ESMTP id S229990AbiIMRz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:55:00 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CE6E0C7;
-        Tue, 13 Sep 2022 09:54:42 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id l10so12423986plb.10;
-        Tue, 13 Sep 2022 09:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=tj/y2R3Cw/vtMo2CMiLLgLOFf+kwPiBNNxkBB8CDEbQ=;
-        b=Y3RK4X3XH624gow0ivIrqP3F39itnqDtSlYTamx3GD7bKVjqm6t2pdhRsdPLRc+5Kk
-         flSAsagunvM4xkaLqpriS0p+adIN/4jzO+yqzLYF6NqG8ejBDDA5wffXbC099hVwykm+
-         NjMOxSGAKwgpvE2hzucR8HIpsvC9x9m0EEXlA3dAUjsNm7Wg41WDaG5bV/VRlABs00W9
-         YXtN12sgohMiWPUkfwk1d22J/M1t8SNUH37I6lcs60lbQEJr2tfMv9ggjfWH26ZrKDcW
-         TE1vr7r9QvYfSOdVXkciMS+Eh6m+66Mmw++yqDIuT+VevfgbGe+d5cK83EaxYq/8Z7Iw
-         WFGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=tj/y2R3Cw/vtMo2CMiLLgLOFf+kwPiBNNxkBB8CDEbQ=;
-        b=H7k9va9rSuXhAXlJh0xIL19qEp+mEyxJOnZFBKMVAbgsk8JjzsiKQvHrv5lA9L+G24
-         XZpY2qPVYNpxHRmIMQsi8dNZmwtEVNNai93fbNFCRTEeB3LzKQHmoi8KSyhcy+MO5811
-         N96vqPa4GJrwMU1wb/LL3sysXoRZjhi36QClHBArXocVCju0DiTSU109/L2F5xc5p9lA
-         V67J7fahEvrzvk2YKbp18CmpJ1SqcROfad1KqvNJgz9lMPYiA/m/1aWHHLDnL+ZO6OML
-         HlWtczaQksliYgi5kRHZVaWixwYzfmBOe8sZ9VibSxcAkX8FKcyk1Ce8ofBXaN9ZK9ml
-         Nf6Q==
-X-Gm-Message-State: ACrzQf1KV+WLvkvdsVN5knU8OAwRYrfguhVbqydn67KpAKxuxP4sweYk
-        7EX4a6pv71Pjbtydm+fSXvRR1RbRLinIRw==
-X-Google-Smtp-Source: AMsMyM4BPXD1Zj3M7Hp//nlTHalCsLR69ABT2cT522VWfp1BCumGEWNGMr0caRucSDDzwSLZuXhXkQ==
-X-Received: by 2002:a17:90b:180d:b0:202:7cf6:9f9b with SMTP id lw13-20020a17090b180d00b002027cf69f9bmr220475pjb.160.1663088080547;
-        Tue, 13 Sep 2022 09:54:40 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:b126:15e1:55ae:d9eb])
-        by smtp.gmail.com with ESMTPSA id md22-20020a17090b23d600b0020061f4c907sm7586448pjb.7.2022.09.13.09.54.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 09:54:40 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 09:54:37 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Input: mtk-pmic-keys - Add support for MT6331 PMIC
- keys
-Message-ID: <YyC1zRlf+AUSFKnv@google.com>
-References: <20220913123941.385349-1-angelogioacchino.delregno@collabora.com>
+        Tue, 13 Sep 2022 13:55:56 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9646FA25;
+        Tue, 13 Sep 2022 09:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5bwtqtp6PJfttZvCLxCl1n6K+88dKkhKG6FejOezXrM=; b=JZRCVyn8It0XZ6n9xg+mNMZ0PJ
+        sO11Lg+9TW1Yz0MnDrjvBYNmcYzFyaR9khLCw2uxiP/XkWVP8MFKsjDOxHYBxZbQTeyXuiChBpjim
+        qT67E5ilPvyYWqV49KMHsvfwuphgb6zYhxbONUHl0HJpuW0ElEmqSBCFOSIWg8G18ARcyab/GqITL
+        mDi2zVCJjY7nphWLa0cI3yx6zt7ObdKaZK7cxxFo7JCAHaaO2l+zyPbnmZU3WQX2W2Kv+16pKzsbm
+        YGf6ezr97eC+ZSmCgM+YhsbI7dTp2NAngLheZqr91wJJQ+OpztYRf8VMTuLKg5xkrZA78MDmY9neY
+        D2wJLDgw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34298)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oY9CT-0003Jh-HK; Tue, 13 Sep 2022 17:55:55 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oY9CS-0000pS-Et; Tue, 13 Sep 2022 17:55:52 +0100
+Date:   Tue, 13 Sep 2022 17:55:52 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     mw@semihalf.com, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable <stable@kernel.org>
+Subject: Re: [PATCH net] net: mvpp2: debugfs: fix memory leak when using
+ debugfs_lookup()
+Message-ID: <YyC2GGbzEuCuZzMk@shell.armlinux.org.uk>
+References: <20220902134111.280657-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913123941.385349-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220902134111.280657-1-gregkh@linuxfoundation.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 02:39:41PM +0200, AngeloGioacchino Del Regno wrote:
-> Add support for PMIC Keys of the MT6331 PMIC.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+On Fri, Sep 02, 2022 at 03:41:11PM +0200, Greg Kroah-Hartman wrote:
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  Fix this up to be much
+> simpler logic and only create the root debugfs directory once when the
+> driver is first accessed.  That resolves the memory leak and makes
+> things more obvious as to what the intent is.
 
-Applied, thank you. But we also need to add the compatible to the list
-in Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+To clarify a bit more on the original patch rather than one of the
+backported stable patches of this.
+
+This patch introduces a bug, whereby if the driver is a module, and
+is inserted, binds to a device, then is removed and re-inserted,
+mvpp2_root will be NULL on the first call to mvpp2_dbgfs_init(),
+so we will attempt to call debugfs_create_dir(). However, the
+directory was already previously created, so this will fail, and
+mvpp2_root will be the EEXIST error pointer.
+
+Since we never clean up this directory, the original code does NOT
+result in a memory leak - since the increase in refcount caused by
+debugfs_lookup() has absolutely no effect - because we never remove
+this directory once it's been created.
+
+If the driver /did/ remove the directory when the module is removed,
+then yes, maybe there's an argument for this fix. However, as things
+currently stand, this is in no way a fix, but actually introduces a
+debugfs regression.
+
+Please can the change be reverted in mainline and all stable trees.
 
 Thanks.
 
 -- 
-Dmitry
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
