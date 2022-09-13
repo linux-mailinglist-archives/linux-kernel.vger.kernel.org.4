@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793AD5B787B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCD05B7861
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiIMRl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S232960AbiIMRm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiIMRko (ORCPT
+        with ESMTP id S233446AbiIMRl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:40:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37F5D4A;
-        Tue, 13 Sep 2022 09:34:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1C18B80EF6;
-        Tue, 13 Sep 2022 16:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10255C433C1;
-        Tue, 13 Sep 2022 16:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663086866;
-        bh=4yJETbBECttQFo+n2AKxq36MbZwpbmzoK/+wm/PtUoQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ToR+bgp2XhdybgWJOjGlIjjN1yZyXIFCXXbV1copC4mQWjRjM8IxiiR3cbldoDz0U
-         kkdAenU37q4bjV4zvV4As44zG1hW+gGFyf2Kj1BkBYjtY6/8XCG8bu3ZfB4eTJcJ9d
-         eQYz6AvsFyuNhyZAnzsOATFbCYbCTs1q6Rtfe73ruLnAEsNAP1cWVRvXEkuSxpFVuM
-         K/JKclINt+4fIA9JYNZK1pSAAug+GpFM0o8hXKJsNe+74PpUGxLNxuqCNQabeH4Zx9
-         sadSMDhixF8O9JMNwg8QDTOYtjhEz1iduaM2T571UjSJSWJfbqUtz1/xGo2znAYCjR
-         oNUmfjiYmeUBA==
-Date:   Tue, 13 Sep 2022 11:34:24 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_rjendra@quicinc.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5] clk: qcom: Alwaya on pcie gdsc
-Message-ID: <20220913163424.GA602259@bhelgaas>
+        Tue, 13 Sep 2022 13:41:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3971C6AA27
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:35:19 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oY8sR-0000Ue-O1; Tue, 13 Sep 2022 18:35:11 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oY8sQ-0005qY-Nl; Tue, 13 Sep 2022 18:35:10 +0200
+Date:   Tue, 13 Sep 2022 18:35:10 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [RESEND PATCH v5 1/2] dmaengine: mxs: use
+ platform_driver_register
+Message-ID: <20220913163510.GR6477@pengutronix.de>
+References: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912170437.GA36223@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,23 +59,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:34:37PM +0530, Manivannan Sadhasivam wrote:
-> + Rajendra
+Hi Dario,
+
+On Sun, Sep 04, 2022 at 04:10:19PM +0200, Dario Binacchi wrote:
+> Driver registration fails on SOC imx8mn as its supplier, the clock
+> control module, is probed later than subsys initcall level. This driver
+> uses platform_driver_probe which is not compatible with deferred probing
+> and won't be probed again later if probe function fails due to clock not
+> being available at that time.
 > 
-> On Fri, Sep 09, 2022 at 02:14:44PM +0530, Krishna chaitanya chundru wrote:
-> > Make GDSC always on to ensure controller and its dependent clocks
-> > won't go down during system suspend.
+> This patch replaces the use of platform_driver_probe with
+> platform_driver_register which will allow probing the driver later again
+> when the clock control module will be available.
 > 
-> You need to mention the SoC name in subject, otherwise one cannot know for
-> which platform this patch applies to.
+> Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Cc: stable@vger.kernel.org
 
-Also:
+How I see it v3 of this patch is perfectly fine and should be taken
+instead of this one. I just commented that to v3.
 
-s/Alwaya/Always/
-s/pcie/PCIe/
-s/gdsc/GDSC/ as you did in commit log
+Not sure if Vinod would take v3, or if you should resend v3 as v6
+instead. If you do, you can add my Acked-by.
 
-I might use "ALWAYS_ON" in the subject to make clear this refers to a
-specific flag, not a change in the code logic, e.g.,
+Vinod, please let us know what you prefer.
 
-  clk: qcom: gcc-sc7280: Mark PCIe GDSC clock ALWAYS_ON
+Sascha
+
+> 
+> ---
+> 
+> Changes in v5:
+> - Update the commit message.
+> - Add the patch "dmaengine: mxs: fix section mismatch" to remove the
+>   warning raised by this patch.
+> 
+> Changes in v4:
+> - Restore __init in front of mxs_dma_probe() definition.
+> - Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
+> - Update the commit message.
+> - Use builtin_platform_driver() instead of module_platform_driver().
+> 
+> Changes in v3:
+> - Restore __init in front of mxs_dma_init() definition.
+> 
+> Changes in v2:
+> - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+> 
+>  drivers/dma/mxs-dma.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+> index 994fc4d2aca4..18f8154b859b 100644
+> --- a/drivers/dma/mxs-dma.c
+> +++ b/drivers/dma/mxs-dma.c
+> @@ -839,10 +839,6 @@ static struct platform_driver mxs_dma_driver = {
+>  		.name	= "mxs-dma",
+>  		.of_match_table = mxs_dma_dt_ids,
+>  	},
+> +	.probe = mxs_dma_probe,
+>  };
+> -
+> -static int __init mxs_dma_module_init(void)
+> -{
+> -	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+> -}
+> -subsys_initcall(mxs_dma_module_init);
+> +builtin_platform_driver(mxs_dma_driver);
+> -- 
+> 2.32.0
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
