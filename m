@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43AB5B7084
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4285B5B7105
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbiIMObu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S231874AbiIMOk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiIMO31 (ORCPT
+        with ESMTP id S234501AbiIMOio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:29:27 -0400
+        Tue, 13 Sep 2022 10:38:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E608962AB7;
-        Tue, 13 Sep 2022 07:18:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AF86C11D;
+        Tue, 13 Sep 2022 07:20:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 370C8B80F3B;
-        Tue, 13 Sep 2022 14:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3488C433D6;
-        Tue, 13 Sep 2022 14:16:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6ED3B80EFC;
+        Tue, 13 Sep 2022 14:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448DDC433D6;
+        Tue, 13 Sep 2022 14:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078590;
-        bh=DQ3UWc+6JLXRSGG02z9nwZw4w9OJmIdrtpFzqqHqn88=;
+        s=korg; t=1663078850;
+        bh=isSUejFmC6YCkWSG1RxhFo0pAIfhZ7nb6G9Uj8+uiaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EXYwFYztOsBktufwOH5p/X/oDVemUGOmv8HvvmMfA0ogi5WNSwnTh1kezcKXdqTcZ
-         AmL4QQN57x72LlFwoolbVbB5HnPCz3vSlxQA+99w3vbRCf3DV3Uhbv6NhyYrYJQJoD
-         ebK6Z4MpFeay5V7gi7V41oZ6gviGbTjwScwgfSWg=
+        b=kaON+QM27G44xnL4/v2JBjtuFmhL3Q9vHBL2fvoJRUQcR2eIHft6skwK+kL+iVC0k
+         Qd4oP0mjjPrY55Wy27fFJCa3oXoR09E4pHuTC6Lcn9rOCVNjRG2Vdlk63GZ/KobEOa
+         tTu9ql+21OjE60gSNPXL0xYHI1tbiGqpSehO6T54=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gabe Teeger <Gabe.Teeger@amd.com>,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Saaem Rizvi <SyedSaaem.Rizvi@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.19 192/192] drm/amd/display: Removing assert statements for Linux
+        stable@vger.kernel.org, Chao Gao <chao.gao@intel.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 107/121] swiotlb: avoid potential left shift overflow
 Date:   Tue, 13 Sep 2022 16:04:58 +0200
-Message-Id: <20220913140419.637634768@linuxfoundation.org>
+Message-Id: <20220913140401.943247423@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,156 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saaem Rizvi <SyedSaaem.Rizvi@amd.com>
+From: Chao Gao <chao.gao@intel.com>
 
-commit 149f6d1a6035a7aa6595ac6eeb9c8f566b2103cd upstream.
+[ Upstream commit 3f0461613ebcdc8c4073e235053d06d5aa58750f ]
 
-[WHY]
-Assert statements causing several bugs on Linux DM
+The second operand passed to slot_addr() is declared as int or unsigned int
+in all call sites. The left-shift to get the offset of a slot can overflow
+if swiotlb size is larger than 4G.
 
-[HOW]
-Removing assert statement for Linux DM
-(ASSERT(result == VBIOSSMC_Result_OK)). Also adding
-logging statements for setting dcfclk.
+Convert the macro to an inline function and declare the second argument as
+phys_addr_t to avoid the potential overflow.
 
-Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216092
-Fixes: c1b972a18d05 ("drm/amd/display: Insert pulling smu busy status before sending another request")
-Reviewed-by: Gabe Teeger <Gabe.Teeger@amd.com>
-Acked-by: Solomon Chiu <solomon.chiu@amd.com>
-Signed-off-by: Saaem Rizvi <SyedSaaem.Rizvi@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 26a7e094783d ("swiotlb: refactor swiotlb_tbl_map_single")
+Signed-off-by: Chao Gao <chao.gao@intel.com>
+Reviewed-by: Dongli Zhang <dongli.zhang@oracle.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.c |    8 ++++++--
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/dcn301_smu.c          |    7 ++++++-
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_smu.c            |    8 ++++++--
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_smu.c          |    8 ++++++--
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c          |    8 ++++++--
- 5 files changed, 30 insertions(+), 9 deletions(-)
+ kernel/dma/swiotlb.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.c
-@@ -101,9 +101,9 @@ static int rn_vbios_smu_send_msg_with_pa
- 	uint32_t result;
- 
- 	result = rn_smu_wait_for_response(clk_mgr, 10, 200000);
--	ASSERT(result == VBIOSSMC_Result_OK);
- 
--	smu_print("SMU response after wait: %d\n", result);
-+	if (result != VBIOSSMC_Result_OK)
-+		smu_print("SMU Response was not OK. SMU response after wait received is: %d\n", result);
- 
- 	if (result == VBIOSSMC_Status_BUSY) {
- 		return -1;
-@@ -188,6 +188,10 @@ int rn_vbios_smu_set_hard_min_dcfclk(str
- 			VBIOSSMC_MSG_SetHardMinDcfclkByFreq,
- 			khz_to_mhz_ceil(requested_dcfclk_khz));
- 
-+#ifdef DBG
-+	smu_print("actual_dcfclk_set_mhz %d is set to : %d\n", actual_dcfclk_set_mhz, actual_dcfclk_set_mhz * 1000);
-+#endif
-+
- 	return actual_dcfclk_set_mhz * 1000;
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index e62fb7a4da694..018f140aaaf4e 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -435,7 +435,10 @@ static void swiotlb_bounce(struct device *dev, phys_addr_t tlb_addr, size_t size
+ 	}
  }
  
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/dcn301_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/dcn301_smu.c
-@@ -102,7 +102,8 @@ static int dcn301_smu_send_msg_with_para
+-#define slot_addr(start, idx)	((start) + ((idx) << IO_TLB_SHIFT))
++static inline phys_addr_t slot_addr(phys_addr_t start, phys_addr_t idx)
++{
++	return start + (idx << IO_TLB_SHIFT);
++}
  
- 	result = dcn301_smu_wait_for_response(clk_mgr, 10, 200000);
- 
--	smu_print("SMU response after wait: %d\n", result);
-+	if (result != VBIOSSMC_Result_OK)
-+		smu_print("SMU Response was not OK. SMU response after wait received is: %d\n", result);
- 
- 	if (result == VBIOSSMC_Status_BUSY) {
- 		return -1;
-@@ -179,6 +180,10 @@ int dcn301_smu_set_hard_min_dcfclk(struc
- 			VBIOSSMC_MSG_SetHardMinDcfclkByFreq,
- 			khz_to_mhz_ceil(requested_dcfclk_khz));
- 
-+#ifdef DBG
-+	smu_print("actual_dcfclk_set_mhz %d is set to : %d\n", actual_dcfclk_set_mhz, actual_dcfclk_set_mhz * 1000);
-+#endif
-+
- 	return actual_dcfclk_set_mhz * 1000;
- }
- 
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_smu.c
-@@ -108,9 +108,9 @@ static int dcn31_smu_send_msg_with_param
- 	uint32_t result;
- 
- 	result = dcn31_smu_wait_for_response(clk_mgr, 10, 200000);
--	ASSERT(result == VBIOSSMC_Result_OK);
- 
--	smu_print("SMU response after wait: %d\n", result);
-+	if (result != VBIOSSMC_Result_OK)
-+		smu_print("SMU Response was not OK. SMU response after wait received is: %d\n", result);
- 
- 	if (result == VBIOSSMC_Status_BUSY) {
- 		return -1;
-@@ -202,6 +202,10 @@ int dcn31_smu_set_hard_min_dcfclk(struct
- 			VBIOSSMC_MSG_SetHardMinDcfclkByFreq,
- 			khz_to_mhz_ceil(requested_dcfclk_khz));
- 
-+#ifdef DBG
-+	smu_print("actual_dcfclk_set_mhz %d is set to : %d\n", actual_dcfclk_set_mhz, actual_dcfclk_set_mhz * 1000);
-+#endif
-+
- 	return actual_dcfclk_set_mhz * 1000;
- }
- 
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_smu.c
-@@ -136,9 +136,9 @@ static int dcn315_smu_send_msg_with_para
- 	uint32_t result;
- 
- 	result = dcn315_smu_wait_for_response(clk_mgr, 10, 200000);
--	ASSERT(result == VBIOSSMC_Result_OK);
- 
--	smu_print("SMU response after wait: %d\n", result);
-+	if (result != VBIOSSMC_Result_OK)
-+		smu_print("SMU Response was not OK. SMU response after wait received is: %d\n", result);
- 
- 	if (result == VBIOSSMC_Status_BUSY) {
- 		return -1;
-@@ -205,6 +205,10 @@ int dcn315_smu_set_hard_min_dcfclk(struc
- 			VBIOSSMC_MSG_SetHardMinDcfclkByFreq,
- 			khz_to_mhz_ceil(requested_dcfclk_khz));
- 
-+#ifdef DBG
-+	smu_print("actual_dcfclk_set_mhz %d is set to : %d\n", actual_dcfclk_set_mhz, actual_dcfclk_set_mhz * 1000);
-+#endif
-+
- 	return actual_dcfclk_set_mhz * 1000;
- }
- 
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
-@@ -124,9 +124,9 @@ static int dcn316_smu_send_msg_with_para
- 	uint32_t result;
- 
- 	result = dcn316_smu_wait_for_response(clk_mgr, 10, 200000);
--	ASSERT(result == VBIOSSMC_Result_OK);
- 
--	smu_print("SMU response after wait: %d\n", result);
-+	if (result != VBIOSSMC_Result_OK)
-+		smu_print("SMU Response was not OK. SMU response after wait received is: %d\n", result);
- 
- 	if (result == VBIOSSMC_Status_BUSY) {
- 		return -1;
-@@ -191,6 +191,10 @@ int dcn316_smu_set_hard_min_dcfclk(struc
- 			VBIOSSMC_MSG_SetHardMinDcfclkByFreq,
- 			khz_to_mhz_ceil(requested_dcfclk_khz));
- 
-+#ifdef DBG
-+	smu_print("actual_dcfclk_set_mhz %d is set to : %d\n", actual_dcfclk_set_mhz, actual_dcfclk_set_mhz * 1000);
-+#endif
-+
- 	return actual_dcfclk_set_mhz * 1000;
- }
- 
+ /*
+  * Carefully handle integer overflow which can occur when boundary_mask == ~0UL.
+-- 
+2.35.1
+
 
 
