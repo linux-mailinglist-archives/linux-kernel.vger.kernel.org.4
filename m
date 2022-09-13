@@ -2,86 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FB35B6DD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCED25B6DD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiIMM7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S229575AbiIMNAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiIMM7B (ORCPT
+        with ESMTP id S231378AbiIMM7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:59:01 -0400
-Received: from out0-152.mail.aliyun.com (out0-152.mail.aliyun.com [140.205.0.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE9C41D20;
-        Tue, 13 Sep 2022 05:58:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047211;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.PEZ9oUN_1663073913;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PEZ9oUN_1663073913)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Sep 2022 20:58:33 +0800
-Date:   Tue, 13 Sep 2022 20:58:33 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] KVM: x86/mmu: Use 1 as the size of gfn range for
- tlb flushing in FNAME(invlpg)()
-Message-ID: <20220913125833.GC113257@k08j02272.eu95sqa>
-References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
- <8baa40dad8496abb2adb1096e0cf50dcc5f66802.1661331396.git.houwenlong.hwl@antgroup.com>
- <YxjXgERSNIk4ZaN+@google.com>
+        Tue, 13 Sep 2022 08:59:55 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674D4F590
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:59:53 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id jm11so11702861plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=xG9hg062b2ZIS+JDzyuJF9PDLmjCBLQtx5EPxF5Afdo=;
+        b=FrvzOOFuTsDxW1FIWU2/cr+lbtpLEpLNQu1O2Fyq5PwLA6HtIbHcqBfIHFLkmr1nZD
+         +qXuzx5UW0q8G/FpJK+ycBdP1GopWgWOcbciCYmEs64d/0MGpiTVuGIPvh5/0pVlcGUk
+         SeV/tErBE3Hbe085vAvSzHaVvUKUrKOWXyeeqIyp1GrqzoopDGAeom8hwAPZ+J8Xi26I
+         SNAmBSojnSFF5EUtn/qOIVXxKV4/IFLDfr1nNkh7AH4HktInbBTbRFe5J/8FOiFBTEzK
+         VuVOkCwZjfcNqIET+2GOxutqogTqmjm9xJomlQp46C69+C5FW93IjB10faMrRZ0OR/eF
+         UHlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=xG9hg062b2ZIS+JDzyuJF9PDLmjCBLQtx5EPxF5Afdo=;
+        b=ViScAezun5hBJW6CZBNA5sxPG98p/J0/GmGfeKliPFF8avE5pbfwVKe8inVba5phKG
+         Y6BfmrDiOJPU16gBYvlxEDJYGDhJdAT/Hnxwjl7G52CMz5yM9yWp9HUTfk+t9oHzT0Yf
+         uXA5CfG9UxlKK0TZlqEVB5fJe+Sh/U6Vv6Ogg6Fb/lrCS+VKRKE8ZK3fzw1eMOoo3RVn
+         /F43EAy1+KrL6MJBKVK5GL8+7bsPz7a0vLAlsLfV4t4fX7arh4sfbGqF8rPdgFeJFSKj
+         SNIg/ATjKhQft6Gsnqg6Ef3QvuhnnyLC2s2ZRIXa7L4f+tVe164Wd6suREpruTHnG28P
+         MAMw==
+X-Gm-Message-State: ACgBeo1XqIl2m2+K/bNMlF6kRfIUpfXHNtEym84Q0Ba0I4zMJxN4mgTS
+        UI0K5QAonQgv2t4sud2c+VjImA==
+X-Google-Smtp-Source: AA6agR5bhxWeNfqv9JPYlGg1fagPXBZrurfTVzo+IVWkH3d+2spTZ8UiMMiwfdk/y+jxRkZi4aAmnQ==
+X-Received: by 2002:a17:90a:1b6e:b0:1f5:1902:af92 with SMTP id q101-20020a17090a1b6e00b001f51902af92mr3984254pjq.238.1663073992788;
+        Tue, 13 Sep 2022 05:59:52 -0700 (PDT)
+Received: from [10.76.37.214] ([61.213.176.11])
+        by smtp.gmail.com with ESMTPSA id z8-20020aa79e48000000b0053b850b17c8sm7803611pfq.152.2022.09.13.05.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 05:59:52 -0700 (PDT)
+Message-ID: <23018405-bd62-45b6-d3d0-6f0acb5630f5@bytedance.com>
+Date:   Tue, 13 Sep 2022 20:59:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxjXgERSNIk4ZaN+@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [External] Re: [PATCH V2 5/5] erofs: support fscache based shared
+ domain
+To:     JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
+ <20220902105305.79687-6-zhujia.zj@bytedance.com>
+ <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 01:40:16AM +0800, David Matlack wrote:
-> On Wed, Aug 24, 2022 at 05:29:23PM +0800, Hou Wenlong wrote:
-> > Only SP with PG_LEVLE_4K level could be unsync, so the size of gfn range
-> > must be 1.
-> > 
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/paging_tmpl.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> > index 04149c704d5b..486a3163b1e4 100644
-> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> > @@ -937,7 +937,8 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
-> >  
-> >  			mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
-> >  			if (is_shadow_present_pte(old_spte))
-> > -				kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
-> > +				kvm_flush_remote_tlbs_gfn(vcpu->kvm,
-> > +					kvm_mmu_page_get_gfn(sp, sptep - sp->spt), 1);
-> 
-> The third argument to kvm_flush_remote_tlbs_gfn() is the level, not the
-> number of pages. But that aside, I don't understand why this patch is
-> necessary. kvm_flush_remote_tlbs_sptep() should already do the right
-> thing.
->
-Since only SP with PG_LEVEL_4K level could be unsync, so the level must
-be PG_LEVEL_4K, then sp->role.level access could be dropped. However,
-I'm not sure whether it is useful. I can drop it if it is useless.
 
-> >  
-> >  			if (!rmap_can_add(vcpu))
-> >  				break;
-> > -- 
-> > 2.31.1
-> > 
+
+在 2022/9/13 14:27, JeffleXu 写道:
+> 
+> 
+> On 9/2/22 6:53 PM, Jia Zhu wrote:
+>> Several erofs filesystems can belong to one domain, and data blobs can
+>> be shared among these erofs filesystems of same domain.
+>>
+>> Users could specify domain_id mount option to create or join into a domain.
+>>
+>> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+>> ---
+>>   fs/erofs/fscache.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++
+>>   fs/erofs/internal.h | 12 ++++++++
+>>   fs/erofs/super.c    | 10 +++++--
+>>   3 files changed, 93 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+>> index 439dd3cc096a..c01845808ede 100644
+>> --- a/fs/erofs/fscache.c
+>> +++ b/fs/erofs/fscache.c
+>> @@ -559,12 +559,27 @@ int erofs_fscache_register_cookie(struct super_block *sb,
+>>   void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>>   {
+>>   	struct erofs_fscache *ctx = *fscache;
+>> +	struct erofs_domain *domain;
+>>   
+>>   	if (!ctx)
+>>   		return;
+>> +	domain = ctx->domain;
+>> +	if (domain) {
+>> +		mutex_lock(&domain->mutex);
+>> +		/* Cookie is still in use */
+>> +		if (atomic_read(&ctx->anon_inode->i_count) > 1) {
+>> +			iput(ctx->anon_inode);
+>> +			mutex_unlock(&domain->mutex);
+>> +			return;
+>> +		}
+>> +		iput(ctx->anon_inode);
+>> +		kfree(ctx->name);
+>> +		mutex_unlock(&domain->mutex);
+>> +	}
+>>   
+>>   	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
+>>   	fscache_relinquish_cookie(ctx->cookie, false);
+>> +	erofs_fscache_domain_put(domain);
+>>   	ctx->cookie = NULL;
+>>   
+>>   	iput(ctx->inode);
+>> @@ -609,3 +624,61 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
+>>   	sbi->volume = NULL;
+>>   	sbi->domain = NULL;
+>>   }
+>> +
+>> +static int erofs_fscache_domain_init_cookie(struct super_block *sb,
+>> +		struct erofs_fscache **fscache, char *name, bool need_inode)
+>> +{
+>> +	int ret;
+>> +	struct inode *inode;
+>> +	struct erofs_fscache *ctx;
+>> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>> +	struct erofs_domain *domain = sbi->domain;
+>> +
+>> +	ret = erofs_fscache_register_cookie(sb, &ctx, name, need_inode);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ctx->name = kstrdup(name, GFP_KERNEL);
+>> +	if (!ctx->name)
+>> +		return -ENOMEM;
+> 
+> Shall we clean up the above registered cookie in the error path?
+> 
+If this step fails, error will be transmitted to vfs_get_tree() and
+erofs_kill_sb() will relinquish the cookie.
+>> +
+>> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
+>> +	if (!inode) {
+>> +		kfree(ctx->name);
+>> +		return -ENOMEM;
+>> +	}
+> 
+> Ditto.
+> 
+>> +
+>> +	ctx->domain = domain;
+>> +	ctx->anon_inode = inode;
+>> +	inode->i_private = ctx;
+>> +	erofs_fscache_domain_get(domain);
+>> +	*fscache = ctx;
+>> +	return 0;
+>> +}
+>> +
+>> +int erofs_domain_register_cookie(struct super_block *sb,
+>> +	struct erofs_fscache **fscache, char *name, bool need_inode)
+>> +{
+>> +	int err;
+>> +	struct inode *inode;
+>> +	struct erofs_fscache *ctx;
+>> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>> +	struct erofs_domain *domain = sbi->domain;
+>> +	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
+>> +
+>> +	mutex_lock(&domain->mutex);
+> 
+> What is domain->mutex used for?
+> 
+This lock is used to avoid race conditions between cookie's
+traverse/del/insert in the inode list.
+It seems to be possible to increase the granularity of the lock
+after v2's change "Only initialize one pseudo fs to manage anonymous 
+inodes(cookies).".
+> 
+>> +	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
+>> +		ctx = inode->i_private;
+>> +		if (!ctx)
+>> +			continue;
+>> +		if (!strcmp(ctx->name, name)) {
+>> +			*fscache = ctx;
+>> +			igrab(inode);
+>> +			mutex_unlock(&domain->mutex);
+>> +			return 0;
+>> +		}
+>> +	}
+>> +	err = erofs_fscache_domain_init_cookie(sb, fscache, name, need_inode);
+>> +	mutex_unlock(&domain->mutex);
+>> +	return err;
+>> +}
+>> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+>> index 2790c93ffb83..efa4f4ad77cc 100644
+>> --- a/fs/erofs/internal.h
+>> +++ b/fs/erofs/internal.h
+>> @@ -110,6 +110,9 @@ struct erofs_domain {
+>>   struct erofs_fscache {
+>>   	struct fscache_cookie *cookie;
+>>   	struct inode *inode;
+>> +	struct inode *anon_inode;
+> 
+> Why can't we reuse @inode for anon_inode?
+> 
+We use pseudo sb's anonymous inodes list to manage the cookie.
+Wouldn't it be a bit of messy if reuses erofs meta inode?
+> 
+>> +	struct erofs_domain *domain;
+>> +	char *name;
+>>   };
+>>   
+>>   struct erofs_sb_info {
+>> @@ -625,6 +628,9 @@ int erofs_fscache_register_domain(struct super_block *sb);
+>>   int erofs_fscache_register_cookie(struct super_block *sb,
+>>   				  struct erofs_fscache **fscache,
+>>   				  char *name, bool need_inode);
+>> +int erofs_domain_register_cookie(struct super_block *sb,
+>> +				  struct erofs_fscache **fscache,
+>> +				  char *name, bool need_inode);
+>>   void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
+>>   
+>>   extern const struct address_space_operations erofs_fscache_access_aops;
+>> @@ -646,6 +652,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
+>>   {
+>>   	return -EOPNOTSUPP;
+>>   }
+>> +static inline int erofs_domain_register_cookie(struct super_block *sb,
+>> +						struct erofs_fscache **fscache,
+>> +						char *name, bool need_inode)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+>>   
+>>   static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>>   {
+>> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+>> index 667a78f0ee70..11c5ba84567c 100644
+>> --- a/fs/erofs/super.c
+>> +++ b/fs/erofs/super.c
+>> @@ -245,8 +245,12 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
+>>   	}
+>>   
+>>   	if (erofs_is_fscache_mode(sb)) {
+>> -		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
+>> -				dif->path, false);
+>> +		if (sbi->opt.domain_id)
+>> +			ret = erofs_domain_register_cookie(sb, &dif->fscache, dif->path,
+>> +					false);
+>> +		else
+>> +			ret = erofs_fscache_register_cookie(sb, &dif->fscache, dif->path,
+>> +					false);
+>>   		if (ret)
+>>   			return ret;
+>>   	} else {
+>> @@ -726,6 +730,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>>   			err = erofs_fscache_register_domain(sb);
+>>   			if (err)
+>>   				return err;
+>> +			err = erofs_domain_register_cookie(sb, &sbi->s_fscache,
+>> +					sbi->opt.fsid, true);
+>>   		} else {
+>>   			err = erofs_fscache_register_fs(sb);
+>>   			if (err)
+> 
