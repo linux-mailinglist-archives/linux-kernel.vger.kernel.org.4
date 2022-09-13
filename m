@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C952A5B7018
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622C45B7029
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiIMOUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S233585AbiIMOXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiIMOSZ (ORCPT
+        with ESMTP id S233448AbiIMOXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:18:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1713E642FC;
-        Tue, 13 Sep 2022 07:13:14 -0700 (PDT)
+        Tue, 13 Sep 2022 10:23:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCD765267;
+        Tue, 13 Sep 2022 07:15:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 015B2614C0;
-        Tue, 13 Sep 2022 14:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C08AC433C1;
-        Tue, 13 Sep 2022 14:13:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 52F67CE1272;
+        Tue, 13 Sep 2022 14:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DA99C433C1;
+        Tue, 13 Sep 2022 14:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078392;
-        bh=G3oX5PNPUI/kOQTyVo/kiJLFuVAtcELIqKYOxDSVktw=;
+        s=korg; t=1663078394;
+        bh=4+LYtmP0CxGzLyk+tSZ/mf0FX8enKExZdAUzuzz+Om0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gxRJMSjYRWQ/+oIHwRqo0LgdUEUNRF3dQlFit2M2mnt8E+NWR9UgUpSoxoKRnnSok
-         95uhUxBiPMPEC4v63ZEQCl+Jzw1OGphAWidrx8YYBPDN1lJUmN+lHn7hGUHmfJaHcz
-         wOv4D5Ek+bC1DT9eY0G1f/o0Athdfl4VBVhiFDjs=
+        b=gaQbRnYHiOR9FCMt9aXiBICOc4IUGppHBsR6VdA5sZ2Y5QfPkWpyIVMrHCmMPTPzr
+         6+yOmgVBJa045WAB2WdK2SyzYeCNJdfKQ6aqRcyhYOtVH4snr2CvWtgOGGZvPk/1nX
+         HFcwo6NooJnaQZg2QOl4eh9Fd5YRDtPxVSt053wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
-        Helena Anna Dubel <helena.anna.dubel@intel.com>,
+        stable@vger.kernel.org, Jacob Keller <jacob.e.keller@intel.com>,
+        Patryk Piotrowski <patryk.piotrowski@intel.com>,
+        SlawomirX Laba <slawomirx.laba@intel.com>,
+        Vitaly Grinberg <vgrinber@redhat.com>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 121/192] i40e: Fix kernel crash during module removal
-Date:   Tue, 13 Sep 2022 16:03:47 +0200
-Message-Id: <20220913140416.018164427@linuxfoundation.org>
+Subject: [PATCH 5.19 122/192] iavf: Detach device during reset task
+Date:   Tue, 13 Sep 2022 16:03:48 +0200
+Message-Id: <20220913140416.072792672@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
 References: <20220913140410.043243217@linuxfoundation.org>
@@ -58,102 +62,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ivan Vecera <ivecera@redhat.com>
 
-[ Upstream commit fb8396aeda5872369a8ed6d2301e2c86e303c520 ]
+[ Upstream commit aa626da947e9cd30c4cf727493903e1adbb2c0a0 ]
 
-The driver incorrectly frees client instance and subsequent
-i40e module removal leads to kernel crash.
+iavf_reset_task() takes crit_lock at the beginning and holds
+it during whole call. The function subsequently calls
+iavf_init_interrupt_scheme() that grabs RTNL. Problem occurs
+when userspace initiates during the reset task any ndo callback
+that runs under RTNL like iavf_open() because some of that
+functions tries to take crit_lock. This leads to classic A-B B-A
+deadlock scenario.
 
-Reproducer:
-1. Do ethtool offline test followed immediately by another one
-host# ethtool -t eth0 offline; ethtool -t eth0 offline
-2. Remove recursively irdma module that also removes i40e module
-host# modprobe -r irdma
+To resolve this situation the device should be detached in
+iavf_reset_task() prior taking crit_lock to avoid subsequent
+ndos running under RTNL and reattach the device at the end.
 
-Result:
-[ 8675.035651] i40e 0000:3d:00.0 eno1: offline testing starting
-[ 8675.193774] i40e 0000:3d:00.0 eno1: testing finished
-[ 8675.201316] i40e 0000:3d:00.0 eno1: offline testing starting
-[ 8675.358921] i40e 0000:3d:00.0 eno1: testing finished
-[ 8675.496921] i40e 0000:3d:00.0: IRDMA hardware initialization FAILED init_state=2 status=-110
-[ 8686.188955] i40e 0000:3d:00.1: i40e_ptp_stop: removed PHC on eno2
-[ 8686.943890] i40e 0000:3d:00.1: Deleted LAN device PF1 bus=0x3d dev=0x00 func=0x01
-[ 8686.952669] i40e 0000:3d:00.0: i40e_ptp_stop: removed PHC on eno1
-[ 8687.761787] BUG: kernel NULL pointer dereference, address: 0000000000000030
-[ 8687.768755] #PF: supervisor read access in kernel mode
-[ 8687.773895] #PF: error_code(0x0000) - not-present page
-[ 8687.779034] PGD 0 P4D 0
-[ 8687.781575] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[ 8687.785935] CPU: 51 PID: 172891 Comm: rmmod Kdump: loaded Tainted: G        W I        5.19.0+ #2
-[ 8687.794800] Hardware name: Intel Corporation S2600WFD/S2600WFD, BIOS SE5C620.86B.0X.02.0001.051420190324 05/14/2019
-[ 8687.805222] RIP: 0010:i40e_lan_del_device+0x13/0xb0 [i40e]
-[ 8687.810719] Code: d4 84 c0 0f 84 b8 25 01 00 e9 9c 25 01 00 41 bc f4 ff ff ff eb 91 90 0f 1f 44 00 00 41 54 55 53 48 8b 87 58 08 00 00 48 89 fb <48> 8b 68 30 48 89 ef e8 21 8a 0f d5 48 89 ef e8 a9 78 0f d5 48 8b
-[ 8687.829462] RSP: 0018:ffffa604072efce0 EFLAGS: 00010202
-[ 8687.834689] RAX: 0000000000000000 RBX: ffff8f43833b2000 RCX: 0000000000000000
-[ 8687.841821] RDX: 0000000000000000 RSI: ffff8f4b0545b298 RDI: ffff8f43833b2000
-[ 8687.848955] RBP: ffff8f43833b2000 R08: 0000000000000001 R09: 0000000000000000
-[ 8687.856086] R10: 0000000000000000 R11: 000ffffffffff000 R12: ffff8f43833b2ef0
-[ 8687.863218] R13: ffff8f43833b2ef0 R14: ffff915103966000 R15: ffff8f43833b2008
-[ 8687.870342] FS:  00007f79501c3740(0000) GS:ffff8f4adffc0000(0000) knlGS:0000000000000000
-[ 8687.878427] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 8687.884174] CR2: 0000000000000030 CR3: 000000014276e004 CR4: 00000000007706e0
-[ 8687.891306] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 8687.898441] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 8687.905572] PKRU: 55555554
-[ 8687.908286] Call Trace:
-[ 8687.910737]  <TASK>
-[ 8687.912843]  i40e_remove+0x2c0/0x330 [i40e]
-[ 8687.917040]  pci_device_remove+0x33/0xa0
-[ 8687.920962]  device_release_driver_internal+0x1aa/0x230
-[ 8687.926188]  driver_detach+0x44/0x90
-[ 8687.929770]  bus_remove_driver+0x55/0xe0
-[ 8687.933693]  pci_unregister_driver+0x2a/0xb0
-[ 8687.937967]  i40e_exit_module+0xc/0xf48 [i40e]
-
-Two offline tests cause IRDMA driver failure (ETIMEDOUT) and this
-failure is indicated back to i40e_client_subtask() that calls
-i40e_client_del_instance() to free client instance referenced
-by pf->cinst and sets this pointer to NULL. During the module
-removal i40e_remove() calls i40e_lan_del_device() that dereferences
-pf->cinst that is NULL -> crash.
-Do not remove client instance when client open callbacks fails and
-just clear __I40E_CLIENT_INSTANCE_OPENED bit. The driver also needs
-to take care about this situation (when netdev is up and client
-is NOT opened) in i40e_notify_client_of_netdev_close() and
-calls client close callback only when __I40E_CLIENT_INSTANCE_OPENED
-is set.
-
-Fixes: 0ef2d5afb12d ("i40e: KISS the client interface")
+Fixes: 62fe2a865e6d ("i40evf: add missing rtnl_lock() around i40evf_set_interrupt_capability")
+Cc: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Patryk Piotrowski <patryk.piotrowski@intel.com>
+Cc: SlawomirX Laba <slawomirx.laba@intel.com>
+Tested-by: Vitaly Grinberg <vgrinber@redhat.com>
 Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-Tested-by: Helena Anna Dubel <helena.anna.dubel@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_client.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_client.c b/drivers/net/ethernet/intel/i40e/i40e_client.c
-index ea2bb0140a6eb..10d7a982a5b9b 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_client.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_client.c
-@@ -177,6 +177,10 @@ void i40e_notify_client_of_netdev_close(struct i40e_vsi *vsi, bool reset)
- 			"Cannot locate client instance close routine\n");
- 		return;
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 6d159334da9ec..981c43b204ff4 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -2789,6 +2789,11 @@ static void iavf_reset_task(struct work_struct *work)
+ 	int i = 0, err;
+ 	bool running;
+ 
++	/* Detach interface to avoid subsequent NDO callbacks */
++	rtnl_lock();
++	netif_device_detach(netdev);
++	rtnl_unlock();
++
+ 	/* When device is being removed it doesn't make sense to run the reset
+ 	 * task, just return in such a case.
+ 	 */
+@@ -2796,7 +2801,7 @@ static void iavf_reset_task(struct work_struct *work)
+ 		if (adapter->state != __IAVF_REMOVE)
+ 			queue_work(iavf_wq, &adapter->reset_task);
+ 
+-		return;
++		goto reset_finish;
  	}
-+	if (!test_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state)) {
-+		dev_dbg(&pf->pdev->dev, "Client is not open, abort close\n");
-+		return;
-+	}
- 	cdev->client->ops->close(&cdev->lan_info, cdev->client, reset);
- 	clear_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state);
- 	i40e_client_release_qvlist(&cdev->lan_info);
-@@ -429,7 +433,6 @@ void i40e_client_subtask(struct i40e_pf *pf)
- 				/* Remove failed client instance */
- 				clear_bit(__I40E_CLIENT_INSTANCE_OPENED,
- 					  &cdev->state);
--				i40e_client_del_instance(pf);
- 				return;
- 			}
- 		}
+ 
+ 	while (!mutex_trylock(&adapter->client_lock))
+@@ -2866,7 +2871,6 @@ static void iavf_reset_task(struct work_struct *work)
+ 
+ 	if (running) {
+ 		netif_carrier_off(netdev);
+-		netif_tx_stop_all_queues(netdev);
+ 		adapter->link_up = false;
+ 		iavf_napi_disable_all(adapter);
+ 	}
+@@ -2996,7 +3000,7 @@ static void iavf_reset_task(struct work_struct *work)
+ 	mutex_unlock(&adapter->client_lock);
+ 	mutex_unlock(&adapter->crit_lock);
+ 
+-	return;
++	goto reset_finish;
+ reset_err:
+ 	if (running) {
+ 		set_bit(__IAVF_VSI_DOWN, adapter->vsi.state);
+@@ -3007,6 +3011,10 @@ static void iavf_reset_task(struct work_struct *work)
+ 	mutex_unlock(&adapter->client_lock);
+ 	mutex_unlock(&adapter->crit_lock);
+ 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
++reset_finish:
++	rtnl_lock();
++	netif_device_attach(netdev);
++	rtnl_unlock();
+ }
+ 
+ /**
 -- 
 2.35.1
 
