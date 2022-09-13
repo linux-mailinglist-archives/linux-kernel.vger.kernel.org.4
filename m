@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A975B69A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92DD5B6990
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiIMIfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S230044AbiIMIaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiIMIft (ORCPT
+        with ESMTP id S231194AbiIMIaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:35:49 -0400
-X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Sep 2022 01:35:48 PDT
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3141984;
-        Tue, 13 Sep 2022 01:35:47 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 50155580C8B;
-        Tue, 13 Sep 2022 04:29:29 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 13 Sep 2022 04:29:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663057769; x=1663061369; bh=xKaS3qcdyI
-        pLMDP6PxAbEzVODr2BdJywglsILCX5fgo=; b=LtCr8MPS+qDZ4VeZgJ48KDXBir
-        4YErqxguk+UXugHrUdWpH3OrsZaN0x+mpG6kcyx583QjKJ2KeEdQXCfo7ob23CNO
-        y7ZGeokdTOZyquVra1dWA923vL1CRpHLA+ryqPEDVUqc09/cn4ROhXnRFMkua8Bj
-        ZV8Goj3iBCLBkGwVlSflk/Q+LAhdWV4mAEeyUxJZiYbF/UM65VFt3b+RvJRPWCdS
-        uHK6zu3fgHCUzCVtjwEhFUy3YRlR/Pcz/aiAXuvyMIUCajHKngiAIoj/AgOggQmW
-        BZKnGEvFMk8h2fvy5aKycPcw9QjiT636M7BZHN6rTJ5J/8EQ0d2wIbf57WWw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663057769; x=1663061369; bh=xKaS3qcdyIpLMDP6PxAbEzVODr2B
-        dJywglsILCX5fgo=; b=vczuyfQxl4/I6U8nbllWGt2X7SK85Cz9Tj7oWiJcJNuM
-        Bhk+thM4forH6SU4bBB7vjdG5RoCGI+3nJI1noQuFfxRajxHG0zphEQHzn7HR83x
-        PWz9IM+UO9MZTD69cZu9pmPmOuvBgyArc8Rw+S73DUZ2AUPP1XD5VNIpHhMMr6Ts
-        2tnEHDNWUIgRxhB4f23KOaE5gQh6FTNJN7h31p3qVvm4iLsOaE4MONrR5yPVBGax
-        pXmi4uE2vRLOVP8fJUr+U4X6fyr7SEV9vtmdXHeMx2jrUpBNTAQHh3yTXDc86rqb
-        vXKZUBF3uoQ3xnOb/DRsd9oNi2PSiqSP7JMsAFV6Ew==
-X-ME-Sender: <xms:aD8gY2PKbvM7QVGR-135n_yNJmd9aI5EK2GZpIXUTn2FiH3kZsp3kg>
-    <xme:aD8gY086O-V-HOEukY-7V1X9QrYrkkUfct7A1AsTzHl4vi9qEpthfXUJTxBszbynS
-    GXeVBgfYmc8_5hANz4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:aD8gY9QlzworIgwfFLA80kv_q88lp_h1eXqzoO_9weGItu_iMtorwA>
-    <xmx:aD8gY2v_grI0heg7xHkko3P-jecq5b5ieLYq-x_8F_urxXaxJA0V2g>
-    <xmx:aD8gY-emKDANxGZvtJgUztZDD17ZX8eajKTk-S2upt_aMyzgDUAnsQ>
-    <xmx:aT8gY1_nRSWQ5yNSSQDIJICGBNlAZKTDBpd2DFSfPvLlvSjwBp1EPA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B92E9B60086; Tue, 13 Sep 2022 04:29:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-929-g09f3e68182-fm-20220908.004-g09f3e681
-Mime-Version: 1.0
-Message-Id: <91244c88-d909-4e19-a058-b4f110e42ed7@www.fastmail.com>
-In-Reply-To: <YyAx17VNvDMyvgBV@shell.armlinux.org.uk>
-References: <20220913065910.15348-1-tangbin@cmss.chinamobile.com>
- <YyAx17VNvDMyvgBV@shell.armlinux.org.uk>
-Date:   Tue, 13 Sep 2022 10:29:08 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Russell King" <linux@armlinux.org.uk>,
-        "Tang Bin" <tangbin@cmss.chinamobile.com>
-Cc:     hongxing.zhu@nxp.com, l.stach@pengutronix.de,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>, robh@kernel.org,
-        kw@linux.com, "Shawn Guo" <shawnguo@kernel.org>,
-        bhelgaas@google.com, "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: imx6: Fix wrong check in imx6_pcie_attach_pd()
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 04:30:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DF201BC;
+        Tue, 13 Sep 2022 01:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E9EB6135A;
+        Tue, 13 Sep 2022 08:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B36A5C433D7;
+        Tue, 13 Sep 2022 08:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663057814;
+        bh=f8cbvegniSre6PNiF0ogaPf3CaNWmNQWhQF7CWp+T3s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bxnivyGRxio2Hsbge/ByEzeeqeH2LnPnkIljsIeeqGVJZJBxwJECdZpfyVNNwMGXN
+         hdPu5/aaL4Pm3kqJODp+dJWMySO/bwhu8sEypLYM4qGlFSA9DcNFLKHfL7bKvUa2Nz
+         B9+zrqh/LZzluhxH2G9+AXcZ/uFooVn2Z5D58yxQHTvD+J1wtOBjhNjt25cOrMdFQz
+         gSRGopcWCvGy+ARREr4AJK/aZXh8E93oC2svNte2CBNexWSSMx4+JH8BK11/LMbJn+
+         OFWleXas6te8T+NbnMhobs9+F05JhrJrzNMFvDDqVbc1Ya+Gdlq0AUmXFsa1FfVfCt
+         oK+BImdmZSkbw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F11BC73FED;
+        Tue, 13 Sep 2022 08:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2] mptcp: fix fwd memory accounting on coalesce
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166305781458.5487.11715290784826413918.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Sep 2022 08:30:14 +0000
+References: <20220906180404.1255873-1-matthieu.baerts@tessares.net>
+In-Reply-To: <20220906180404.1255873-1-matthieu.baerts@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        oliver.sang@intel.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022, at 9:31 AM, Russell King (Oracle) wrote:
-> On Tue, Sep 13, 2022 at 02:59:10PM +0800, Tang Bin wrote:
->> @@ -352,8 +352,8 @@ static int imx6_pcie_attach_pd(struct device *dev)
->>  	}
->>  
->>  	imx6_pcie->pd_pcie_phy = dev_pm_domain_attach_by_name(dev, "pcie_phy");
->> -	if (IS_ERR(imx6_pcie->pd_pcie_phy))
->> -		return PTR_ERR(imx6_pcie->pd_pcie_phy);
->> +	if (IS_ERR_OR_NULL(imx6_pcie->pd_pcie_phy))
->> +		return PTR_ERR(imx6_pcie->pd_pcie_phy) ? : -ENODATA;
->>  
->>  	link = device_link_add(dev, imx6_pcie->pd_pcie_phy,
->>  			DL_FLAG_STATELESS |
->
-> This change is unnecessary. If dev_pm_domain_attach_by_name() returns
-> Null, then device_link_add() will also return NULL, and the check for
-> a NULL link will then succeed. So the NULL case is already cleanly
-> handled.
->
-> So overall, your patch is unnecessary and introduces a bug rather than
-> fixing it. Therefore, you can discard the patch in its entirety.
+Hello:
 
-Agreed. On top of this, I would argue that any use of IS_ERR_OR_NULL()
-is an indication of a problem. If an interface requires using this,
-then we should generally fix the interface to have sane calling
-conventions, typically by ensuring that it consistently uses error
-pointers rather than NULL values to indicate an error.
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Some interfaces like this one return NULL to indicate that there
-is no object to return but there is no error. This is a somewhat
-confusing interface design and users tend to get it wrong the same
-way. It is probably a good idea for someone to go through
-the users of IS_ERR_OR_NULL() and see how many are wrong, and
-improve the error handling, or if they can be expressed in
-a more readable way that avoids IS_ERR_OR_NULL().
+On Tue,  6 Sep 2022 20:04:01 +0200 you wrote:
+> From: Paolo Abeni <pabeni@redhat.com>
+> 
+> The intel bot reported a memory accounting related splat:
+> 
+> [  240.473094] ------------[ cut here ]------------
+> [  240.478507] page_counter underflow: -4294828518 nr_pages=4294967290
+> [  240.485500] WARNING: CPU: 2 PID: 14986 at mm/page_counter.c:56 page_counter_cancel+0x96/0xc0
+> [  240.570849] CPU: 2 PID: 14986 Comm: mptcp_connect Tainted: G S                5.19.0-rc4-00739-gd24141fe7b48 #1
+> [  240.581637] Hardware name: HP HP Z240 SFF Workstation/802E, BIOS N51 Ver. 01.63 10/05/2017
+> [  240.590600] RIP: 0010:page_counter_cancel+0x96/0xc0
+> [  240.596179] Code: 00 00 00 45 31 c0 48 89 ef 5d 4c 89 c6 41 5c e9 40 fd ff ff 4c 89 e2 48 c7 c7 20 73 39 84 c6 05 d5 b1 52 04 01 e8 e7 95 f3
+> 01 <0f> 0b eb a9 48 89 ef e8 1e 25 fc ff eb c3 66 66 2e 0f 1f 84 00 00
+> [  240.615639] RSP: 0018:ffffc9000496f7c8 EFLAGS: 00010082
+> [  240.621569] RAX: 0000000000000000 RBX: ffff88819c9c0120 RCX: 0000000000000000
+> [  240.629404] RDX: 0000000000000027 RSI: 0000000000000004 RDI: fffff5200092deeb
+> [  240.637239] RBP: ffff88819c9c0120 R08: 0000000000000001 R09: ffff888366527a2b
+> [  240.645069] R10: ffffed106cca4f45 R11: 0000000000000001 R12: 00000000fffffffa
+> [  240.652903] R13: ffff888366536118 R14: 00000000fffffffa R15: ffff88819c9c0000
+> [  240.660738] FS:  00007f3786e72540(0000) GS:ffff888366500000(0000) knlGS:0000000000000000
+> [  240.669529] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  240.675974] CR2: 00007f966b346000 CR3: 0000000168cea002 CR4: 00000000003706e0
+> [  240.683807] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  240.691641] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  240.699468] Call Trace:
+> [  240.702613]  <TASK>
+> [  240.705413]  page_counter_uncharge+0x29/0x80
+> [  240.710389]  drain_stock+0xd0/0x180
+> [  240.714585]  refill_stock+0x278/0x580
+> [  240.718951]  __sk_mem_reduce_allocated+0x222/0x5c0
+> [  240.729248]  __mptcp_update_rmem+0x235/0x2c0
+> [  240.734228]  __mptcp_move_skbs+0x194/0x6c0
+> [  240.749764]  mptcp_recvmsg+0xdfa/0x1340
+> [  240.763153]  inet_recvmsg+0x37f/0x500
+> [  240.782109]  sock_read_iter+0x24a/0x380
+> [  240.805353]  new_sync_read+0x420/0x540
+> [  240.838552]  vfs_read+0x37f/0x4c0
+> [  240.842582]  ksys_read+0x170/0x200
+> [  240.864039]  do_syscall_64+0x5c/0x80
+> [  240.872770]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [  240.878526] RIP: 0033:0x7f3786d9ae8e
+> [  240.882805] Code: c0 e9 b6 fe ff ff 50 48 8d 3d 6e 18 0a 00 e8 89 e8 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> [  240.902259] RSP: 002b:00007fff7be81e08 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> [  240.910533] RAX: ffffffffffffffda RBX: 0000000000002000 RCX: 00007f3786d9ae8e
+> [  240.918368] RDX: 0000000000002000 RSI: 00007fff7be87ec0 RDI: 0000000000000005
+> [  240.926206] RBP: 0000000000000005 R08: 00007f3786e6a230 R09: 00007f3786e6a240
+> [  240.934046] R10: fffffffffffff288 R11: 0000000000000246 R12: 0000000000002000
+> [  240.941884] R13: 00007fff7be87ec0 R14: 00007fff7be87ec0 R15: 0000000000002000
+> [  240.949741]  </TASK>
+> [  240.952632] irq event stamp: 27367
+> [  240.956735] hardirqs last  enabled at (27366): [<ffffffff81ba50ea>] mem_cgroup_uncharge_skmem+0x6a/0x80
+> [  240.966848] hardirqs last disabled at (27367): [<ffffffff81b8fd42>] refill_stock+0x282/0x580
+> [  240.976017] softirqs last  enabled at (27360): [<ffffffff83a4d8ef>] mptcp_recvmsg+0xaf/0x1340
+> [  240.985273] softirqs last disabled at (27364): [<ffffffff83a4d30c>] __mptcp_move_skbs+0x18c/0x6c0
+> [  240.994872] ---[ end trace 0000000000000000 ]---
+> 
+> [...]
 
-     Arnd
+Here is the summary with links:
+  - [net,1/2] mptcp: fix fwd memory accounting on coalesce
+    https://git.kernel.org/netdev/net/c/7288ff6ec795
+  - [net,2/2] Documentation: mptcp: fix pm_type formatting
+    https://git.kernel.org/netdev/net/c/0727a9a5fbc1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
