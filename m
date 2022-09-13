@@ -2,123 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A655B65DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B639F5B65E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiIMC5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S230095AbiIMC7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiIMC5p (ORCPT
+        with ESMTP id S229607AbiIMC7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:57:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FC44F655
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663037864; x=1694573864;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=igZFmcra99pSCHBocBFCevoqU/tRbp9DHblEw52maIg=;
-  b=B7z6J4Za5nIyOoh9kF8YSsDOhtcS22EOKR0LdASdES+qoqfDgdQIbn2t
-   FO4FKsAiQTQYYW6Ov/ymN/JSMjoppg0IjuNnY9z8/Uag3DsWFT0/x3bOO
-   DbQKxAsBSDwoBu3p0z9m8SmRyAON2oNDFYe5EOvDQB8F0xt9t2+d066l/
-   Xz7AaYSDRcHW7pa8e3EaCFAT1qkuFX46A/1wqI41czEoCaUtsLm9JIHGz
-   Bl01chJKHdxoyLYaUF+PJyxhXoJYuNuOmCOLwVTxfBR/0gqp1b0DG43Er
-   7bn8Q5mzENdSIiGpS+CJ6nWbCeiOexazI/u/C7OaPhdtZfFrosRtmqi1G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="384317734"
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="384317734"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 19:57:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="567414232"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 12 Sep 2022 19:57:41 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXw7I-00038F-37;
-        Tue, 13 Sep 2022 02:57:40 +0000
-Date:   Tue, 13 Sep 2022 10:56:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 13/39]
- arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function
- 'tdx_mmio_readq'
-Message-ID: <202209131030.eVPnwS0j-lkp@intel.com>
+        Mon, 12 Sep 2022 22:59:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FD34F65B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:59:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D1BEB80E13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A873C433D7;
+        Tue, 13 Sep 2022 02:58:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663037939;
+        bh=Iuuhzzq+GhRVr/IvNg5kSnLKv8rP3SeJsSTWDYFcbh0=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=inEYw3f9y8DakPYxBvnlGpUl6JJckq91J5p6hIOUNDbGPw6BDpIBIHB1S+ijwegL7
+         I1QmOuBrsMkJX4qolz4w3CUfzBrDZ0IDiwMfx4OpUqUBMk/9ChXu1QC3uIoQU39roK
+         Az30b7douIb2pNnsZNd2eQxDyf/OH7I+n5464M9FfTM6gcZdkccEqxZEGA/AhJLJgp
+         tFn8/g656rsFcHNZqYD06fJzXLL8eRFHG5uAqkYohJKSoCljaddOJVpDci5lJye0sr
+         Ky8TZBMU9fg/5ZIiJs3XAtpYy+9LN3FHAykCeUJqcU0MTJ3Kpivy4a8DeWvZS6KJiv
+         n03vR26zgDNhQ==
+Message-ID: <934dca55-c3ec-56bb-63c4-83decd27d2f5@kernel.org>
+Date:   Tue, 13 Sep 2022 10:58:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: flush pending checkpoints when
+ freezing super
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220819231514.3609958-1-jaegeuk@kernel.org>
+ <YwaD7mJpMLhEm5wd@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YwaD7mJpMLhEm5wd@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andi,
+On 2022/8/25 4:02, Jaegeuk Kim wrote:
+> This avoids -EINVAL when trying to freeze f2fs.
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-FYI, the error/warning still remains.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   1f71e25a309e1f46dadb7c65e4383c3690dcd3be
-commit: 0cf382195475412201e134e2925bb276445a8460 [13/39] x86/tdx: Enable direct iomap MMIO optimizations
-config: x86_64-randconfig-r025-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131030.eVPnwS0j-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/0cf382195475412201e134e2925bb276445a8460
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 0cf382195475412201e134e2925bb276445a8460
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function 'tdx_write_msr' [-Wmissing-prototypes]
-   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-                ^
-   arch/x86/coco/tdx/tdx.c:298:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-   ^
-   static 
->> arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function 'tdx_mmio_readq' [-Wmissing-prototypes]
-   unsigned long tdx_mmio_readq(void __iomem* addr)
-                 ^
-   arch/x86/coco/tdx/tdx.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long tdx_mmio_readq(void __iomem* addr)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/tdx_mmio_readq +531 arch/x86/coco/tdx/tdx.c
-
-   530	
- > 531	unsigned long tdx_mmio_readq(void __iomem* addr)
-   532	{
-   533		unsigned long val;
-   534	
-   535		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
-   536			return 0xffffffffffffffff;
-   537		return val;
-   538	}
-   539	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
