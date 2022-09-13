@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B935B750E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B215B73FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbiIMPdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S235750AbiIMPQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbiIMPcR (ORCPT
+        with ESMTP id S235892AbiIMPOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:32:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1243D6CF60;
-        Tue, 13 Sep 2022 07:40:44 -0700 (PDT)
+        Tue, 13 Sep 2022 11:14:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034B45C9D8;
+        Tue, 13 Sep 2022 07:33:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5509FB80FA1;
-        Tue, 13 Sep 2022 14:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1C3C43147;
-        Tue, 13 Sep 2022 14:36:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8C7614F6;
+        Tue, 13 Sep 2022 14:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34043C433C1;
+        Tue, 13 Sep 2022 14:33:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079820;
-        bh=e28Tqsl9X5LrOAMbqEPA8WEGAyDGwUMRE/iZx5Q4Yck=;
+        s=korg; t=1663079595;
+        bh=VNkiXlupSnUv/zFQJS9XA2oRdoEVAlkzh7X/DSkhBZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aa+tKaQOl16/2ds1gSCEuJVgkR4fkK8buQ7+oGyZpxgaKha47FSQcM1sAK9U2yJa3
-         MBeRuXhv/URF2WyN1iU82bHRdLSaFPGfAx8ZgPuQBSpD4iHRBzLqe5kfma47siBAtM
-         Q+FtSFq2GwiDSBHXtCV4aEsQUSJaSfPEW+ihoeqA=
+        b=M5PYit+6t/80U6/FCiVgULOJ5nMvT7QssOxikvoBA3qcfJj3jCmJ8Sa9h9L8ZNpm5
+         UwA65welr4zU1jOQ/lSIbVide8WMHjPQf/GS3mxPJqj4tCdljGcoFV5ZP1vniA3cTF
+         fnwnWrDjEka2l4Tvb6mHczYLlgx628Q6qdCvB/r8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com,
-        stable <stable@kernel.org>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.9 06/42] vt: Clear selection before changing the font
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Subject: [PATCH 4.19 79/79] SUNRPC: use _bh spinlocking on ->transport_lock
 Date:   Tue, 13 Sep 2022 16:07:37 +0200
-Message-Id: <20220913140342.566361976@linuxfoundation.org>
+Message-Id: <20220913140352.684003075@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: "NeilBrown" <neilb@suse.de>
 
-commit 566f9c9f89337792070b5a6062dff448b3e7977f upstream.
+Prior to Linux 5.3, ->transport_lock in sunrpc required the _bh style
+spinlocks (when not called from a bottom-half handler).
 
-When changing the console font with ioctl(KDFONTOP) the new font size
-can be bigger than the previous font. A previous selection may thus now
-be outside of the new screen size and thus trigger out-of-bounds
-accesses to graphics memory if the selection is removed in
-vc_do_resize().
+When upstream 3848e96edf4788f772d83990022fa7023a233d83 was backported to
+stable kernels, the spin_lock/unlock calls should have been changed to
+the _bh version, but this wasn't noted in the patch and didn't happen.
 
-Prevent such out-of-memory accesses by dropping the selection before the
-various con_font_set() console handlers are called.
+So convert these lock/unlock calls to the _bh versions.
 
-Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
-Cc: stable <stable@kernel.org>
-Tested-by: Khalid Masum <khalid.masum.92@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Link: https://lore.kernel.org/r/YuV9apZGNmGfjcor@p100
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch is required for any stable kernel prior to 5.3 to which the
+above mentioned patch was backported.  Namely 4.9.y, 4.14.y, 4.19.y.
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 ---
- drivers/tty/vt/vt.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ net/sunrpc/xprt.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4183,9 +4183,11 @@ static int con_font_set(struct vc_data *
- 	console_lock();
- 	if (vc->vc_mode != KD_TEXT)
- 		rc = -EINVAL;
--	else if (vc->vc_sw->con_font_set)
-+	else if (vc->vc_sw->con_font_set) {
-+		if (vc_is_sel(vc))
-+			clear_selection();
- 		rc = vc->vc_sw->con_font_set(vc, &font, op->flags);
--	else
-+	} else
- 		rc = -ENOSYS;
- 	console_unlock();
- 	kfree(font.data);
-@@ -4212,9 +4214,11 @@ static int con_font_default(struct vc_da
- 		console_unlock();
- 		return -EINVAL;
- 	}
--	if (vc->vc_sw->con_font_default)
-+	if (vc->vc_sw->con_font_default) {
-+		if (vc_is_sel(vc))
-+			clear_selection();
- 		rc = vc->vc_sw->con_font_default(vc, &font, s);
--	else
-+	} else
- 		rc = -ENOSYS;
- 	console_unlock();
- 	if (!rc) {
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1550,9 +1550,9 @@ static void xprt_destroy(struct rpc_xprt
+ 	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
+ 	 * can only run *before* del_time_sync(), never after.
+ 	 */
+-	spin_lock(&xprt->transport_lock);
++	spin_lock_bh(&xprt->transport_lock);
+ 	del_timer_sync(&xprt->timer);
+-	spin_unlock(&xprt->transport_lock);
++	spin_unlock_bh(&xprt->transport_lock);
+ 
+ 	/*
+ 	 * Destroy sockets etc from the system workqueue so they can
 
 
