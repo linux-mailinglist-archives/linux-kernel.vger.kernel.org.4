@@ -2,52 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4235B6A42
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB755B6A44
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiIMJF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S231201AbiIMJGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiIMJFv (ORCPT
+        with ESMTP id S230088AbiIMJGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:05:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E74D543C5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:05:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oY1rE-0007zx-K3; Tue, 13 Sep 2022 11:05:28 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oY1rC-000SnT-KM; Tue, 13 Sep 2022 11:05:25 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oY1rA-000YSD-HX; Tue, 13 Sep 2022 11:05:24 +0200
-Date:   Tue, 13 Sep 2022 11:05:21 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     xinlei.lee@mediatek.com
-Cc:     thierry.reding@gmail.com, matthias.bgg@gmail.com,
-        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH] pwm: mtk-disp: Fix the parameters calculated  by the
- enabled flag of disp_pwm.
-Message-ID: <20220913090521.6ybohvgbehua4rgv@pengutronix.de>
-References: <1661745852-27323-1-git-send-email-xinlei.lee@mediatek.com>
+        Tue, 13 Sep 2022 05:06:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2227B5508B;
+        Tue, 13 Sep 2022 02:06:17 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MRct26DbQz14QXJ;
+        Tue, 13 Sep 2022 17:02:18 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 13 Sep
+ 2022 17:06:14 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <seanjc@google.com>, <pbonzini@redhat.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>
+CC:     <x86@kernel.org>, <hpa@zytor.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] KVM: x86: remove obsolete kvm_mmu_gva_to_gpa_fetch()
+Date:   Tue, 13 Sep 2022 17:05:37 +0800
+Message-ID: <20220913090537.25195-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ss3zheu2y6khfn6n"
-Content-Disposition: inline
-In-Reply-To: <1661745852-27323-1-git-send-email-xinlei.lee@mediatek.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -57,90 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There's no caller. Remove it.
 
---ss3zheu2y6khfn6n
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ arch/x86/include/asm/kvm_host.h |  2 --
+ arch/x86/kvm/x86.c              | 10 ----------
+ 2 files changed, 12 deletions(-)
 
-Hello,
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 2c96c43c313a..fe2ddc067fc9 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1896,8 +1896,6 @@ void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
+ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu);
+ gpa_t kvm_mmu_gva_to_gpa_read(struct kvm_vcpu *vcpu, gva_t gva,
+ 			      struct x86_exception *exception);
+-gpa_t kvm_mmu_gva_to_gpa_fetch(struct kvm_vcpu *vcpu, gva_t gva,
+-			       struct x86_exception *exception);
+ gpa_t kvm_mmu_gva_to_gpa_write(struct kvm_vcpu *vcpu, gva_t gva,
+ 			       struct x86_exception *exception);
+ gpa_t kvm_mmu_gva_to_gpa_system(struct kvm_vcpu *vcpu, gva_t gva,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 43a6a7efc6ec..b1649cd56ef1 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7063,16 +7063,6 @@ gpa_t kvm_mmu_gva_to_gpa_read(struct kvm_vcpu *vcpu, gva_t gva,
+ }
+ EXPORT_SYMBOL_GPL(kvm_mmu_gva_to_gpa_read);
+ 
+- gpa_t kvm_mmu_gva_to_gpa_fetch(struct kvm_vcpu *vcpu, gva_t gva,
+-				struct x86_exception *exception)
+-{
+-	struct kvm_mmu *mmu = vcpu->arch.walk_mmu;
+-
+-	u64 access = (static_call(kvm_x86_get_cpl)(vcpu) == 3) ? PFERR_USER_MASK : 0;
+-	access |= PFERR_FETCH_MASK;
+-	return mmu->gva_to_gpa(vcpu, mmu, gva, access, exception);
+-}
+-
+ gpa_t kvm_mmu_gva_to_gpa_write(struct kvm_vcpu *vcpu, gva_t gva,
+ 			       struct x86_exception *exception)
+ {
+-- 
+2.23.0
 
-On Mon, Aug 29, 2022 at 12:04:12PM +0800, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
->=20
-> In the original mtk_disp_pwm_get_state() function, the result of reading
-> con0 & BIT(0) is enabled as disp_pwm.=20
-> In order to conform to the register table, we should use the disp_pwm=20
-> base address as the enabled judgment.
-
-Do you want to say:
-
-	The enable bit of the hardware is bit 0 of the DISP_PWM_EN
-	register at offset 0 for all supported hardwares. Up to now the
-	bit was wrongly assumed to be in the CON0 register.
-
-?
-
-> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
->=20
-
-This newline is unusal.
-
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> ---
-> Base on the branch of Linux-next/master.
-> Split from series [1].
-> [1] https://patchwork.kernel.org/project/linux-mediatek/cover/1661239875-=
-19841-1-git-send-email-xinlei.lee@mediatek.com/
-> ---
-> ---
->  drivers/pwm/pwm-mtk-disp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-> index c605013..50425cd 100644
-> --- a/drivers/pwm/pwm-mtk-disp.c
-> +++ b/drivers/pwm/pwm-mtk-disp.c
-> @@ -197,7 +197,7 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *c=
-hip,
->  	rate =3D clk_get_rate(mdp->clk_main);
->  	con0 =3D readl(mdp->base + mdp->data->con0);
->  	con1 =3D readl(mdp->base + mdp->data->con1);
-> -	state->enabled =3D !!(con0 & BIT(0));
-> +	state->enabled =3D !!(readl(mdp->base) & BIT(0));
-
-I would expect this to better be:
-
-	state->enabled =3D !!(readl(mdp->base + DISP_PWM_EN) & BIT(0));
-
-which is the same for the compiler but a bit more descriptive for the
-human reader.
-
->  	clk_div =3D FIELD_GET(PWM_CLKDIV_MASK, con0);
->  	period =3D FIELD_GET(PWM_PERIOD_MASK, con1);
->  	/*
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ss3zheu2y6khfn6n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMgR84ACgkQwfwUeK3K
-7AmsfQf/TlNRXjA19E2+0tCASjyiQWsjnKiN3D+nPd9q8hTxXDbGyQ5KOtZWuUDZ
-+D4joVtIozL0FvlLaR/c745PZm3evjT1S4ZfjgMb+f1/ZSwAX3CyUR0DyRvLubMU
-niChOnS0K063Q8RShrCG8qaphmlSrp82HNKfyjt5aT2dvHBKkNo90llkn4BI5h2G
-p3t5fRn/OtbymDjCt7LsFtZqr5Fck5WiW7aTEkZrT5Wz6FQZ9TMbIgmC3X+wNenK
-cbCPPBfFPDADycZjWaZk3HYfG7P2O1cB595u3i87XeuTIZVAZg9F483lA9z7s4MT
-RecWGzcRbCOwRPgtwcI+jSK2WtP1jA==
-=JSbz
------END PGP SIGNATURE-----
-
---ss3zheu2y6khfn6n--
