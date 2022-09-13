@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C791E5B7208
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3365B70DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiIMOsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S234095AbiIMOdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiIMOqo (ORCPT
+        with ESMTP id S234094AbiIMOcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D8061B02;
-        Tue, 13 Sep 2022 07:24:24 -0700 (PDT)
+        Tue, 13 Sep 2022 10:32:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC9C5E65A;
+        Tue, 13 Sep 2022 07:19:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8911614DC;
-        Tue, 13 Sep 2022 14:22:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC102C433D6;
-        Tue, 13 Sep 2022 14:22:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CEE4B80EF8;
+        Tue, 13 Sep 2022 14:18:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1380BC433C1;
+        Tue, 13 Sep 2022 14:18:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078963;
-        bh=U0lw36v5K3lnpJ4xVPpX9D5MtIMf5s6/6zDt1oauxo8=;
+        s=korg; t=1663078733;
+        bh=ZwfKnGUADHDGj49UxtZZDTGFRgxd+FqsVmw7TCJYypg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HU/PaHaFt0zAQEdALDVcWLu7rjhiG2SubzysrAZpHZUdYbREyiBGz/IjWsR94PULo
-         9JlEex4JopZV8xRoKbpSQVk/IT5m+lx2ve/SEg/6jp6IYQFzW5Tsal77jzWQOepZWe
-         O/+uTmYKGM0Rxb22gibVXc7oCe/8SjgagKvY/23I=
+        b=F2i9aoE4T2CnmmPWsrh3d74V87lt9V2fqF6rzmDAQ211F/WYWkkuLyHt03tlZitQb
+         jbM/9OhEqjMSsEokM1DeoRViYKFeoFE5xpJRLCsw3FI8/MYl5IHgBK+dNvQcNCvU0Y
+         wUKBOFA5pKA4VL/DICVcMt+zaj0b69gwXDHTNHa8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 5.10 06/79] efi: capsule-loader: Fix use-after-free in efi_capsule_write
-Date:   Tue, 13 Sep 2022 16:04:11 +0200
-Message-Id: <20220913140350.600319961@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Frederic Schumacher <frederic.schumacher@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 061/121] ARM: at91: pm: fix self-refresh for sama7g5
+Date:   Tue, 13 Sep 2022 16:04:12 +0200
+Message-Id: <20220913140359.985143405@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,82 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-commit 9cb636b5f6a8cc6d1b50809ec8f8d33ae0c84c95 upstream.
+[ Upstream commit a02875c4cbd6f3d2f33d70cc158a19ef02d4b84f ]
 
-A race condition may occur if the user calls close() on another thread
-during a write() operation on the device node of the efi capsule.
+It has been discovered that on some parts, from time to time, self-refresh
+procedure doesn't work as expected. Debugging and investigating it proved
+that disabling AC DLL introduce glitches in RAM controllers which
+leads to unexpected behavior. This is confirmed as a hardware bug. DLL
+bypass disables 3 DLLs: 2 DX DLLs and AC DLL. Thus, keep only DX DLLs
+disabled. This introduce 6mA extra current consumption on VDDCORE when
+switching to any ULP mode or standby mode but the self-refresh procedure
+still works.
 
-This is a race condition that occurs between the efi_capsule_write() and
-efi_capsule_flush() functions of efi_capsule_fops, which ultimately
-results in UAF.
-
-So, the page freeing process is modified to be done in
-efi_capsule_release() instead of efi_capsule_flush().
-
-Cc: <stable@vger.kernel.org> # v4.9+
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
-Link: https://lore.kernel.org/all/20220907102920.GA88602@ubuntu/
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f0bbf17958e8 ("ARM: at91: pm: add self-refresh support for sama7g5")
+Suggested-by: Frederic Schumacher <frederic.schumacher@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Tested-by: Cristian Birsan <cristian.birsan@microchip.com>
+Link: https://lore.kernel.org/r/20220826083927.3107272-3-claudiu.beznea@microchip.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/capsule-loader.c |   31 +++++++------------------------
- 1 file changed, 7 insertions(+), 24 deletions(-)
+ arch/arm/mach-at91/pm_suspend.S | 24 +++++++++++++++++-------
+ include/soc/at91/sama7-ddr.h    |  4 ++++
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
---- a/drivers/firmware/efi/capsule-loader.c
-+++ b/drivers/firmware/efi/capsule-loader.c
-@@ -243,29 +243,6 @@ failed:
- }
- 
- /**
-- * efi_capsule_flush - called by file close or file flush
-- * @file: file pointer
-- * @id: not used
-- *
-- *	If a capsule is being partially uploaded then calling this function
-- *	will be treated as upload termination and will free those completed
-- *	buffer pages and -ECANCELED will be returned.
-- **/
--static int efi_capsule_flush(struct file *file, fl_owner_t id)
--{
--	int ret = 0;
--	struct capsule_info *cap_info = file->private_data;
--
--	if (cap_info->index > 0) {
--		pr_err("capsule upload not complete\n");
--		efi_free_all_buff_pages(cap_info);
--		ret = -ECANCELED;
--	}
--
--	return ret;
--}
--
--/**
-  * efi_capsule_release - called by file close
-  * @inode: not used
-  * @file: file pointer
-@@ -277,6 +254,13 @@ static int efi_capsule_release(struct in
- {
- 	struct capsule_info *cap_info = file->private_data;
- 
-+	if (cap_info->index > 0 &&
-+	    (cap_info->header.headersize == 0 ||
-+	     cap_info->count < cap_info->total_size)) {
-+		pr_err("capsule upload not complete\n");
-+		efi_free_all_buff_pages(cap_info);
-+	}
+diff --git a/arch/arm/mach-at91/pm_suspend.S b/arch/arm/mach-at91/pm_suspend.S
+index fdb4f63ecde4b..65cfcc19a936c 100644
+--- a/arch/arm/mach-at91/pm_suspend.S
++++ b/arch/arm/mach-at91/pm_suspend.S
+@@ -172,9 +172,15 @@ sr_ena_2:
+ 	/* Put DDR PHY's DLL in bypass mode for non-backup modes. */
+ 	cmp	r7, #AT91_PM_BACKUP
+ 	beq	sr_ena_3
+-	ldr	tmp1, [r3, #DDR3PHY_PIR]
+-	orr	tmp1, tmp1, #DDR3PHY_PIR_DLLBYP
+-	str	tmp1, [r3, #DDR3PHY_PIR]
 +
- 	kfree(cap_info->pages);
- 	kfree(cap_info->phys);
- 	kfree(file->private_data);
-@@ -324,7 +308,6 @@ static const struct file_operations efi_
- 	.owner = THIS_MODULE,
- 	.open = efi_capsule_open,
- 	.write = efi_capsule_write,
--	.flush = efi_capsule_flush,
- 	.release = efi_capsule_release,
- 	.llseek = no_llseek,
- };
++	/* Disable DX DLLs. */
++	ldr	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++	orr	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++
++	ldr	tmp1, [r3, #DDR3PHY_DX1DLLCR]
++	orr	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX1DLLCR]
+ 
+ sr_ena_3:
+ 	/* Power down DDR PHY data receivers. */
+@@ -221,10 +227,14 @@ sr_ena_3:
+ 	bic	tmp1, tmp1, #DDR3PHY_DSGCR_ODTPDD_ODT0
+ 	str	tmp1, [r3, #DDR3PHY_DSGCR]
+ 
+-	/* Take DDR PHY's DLL out of bypass mode. */
+-	ldr	tmp1, [r3, #DDR3PHY_PIR]
+-	bic	tmp1, tmp1, #DDR3PHY_PIR_DLLBYP
+-	str	tmp1, [r3, #DDR3PHY_PIR]
++	/* Enable DX DLLs. */
++	ldr	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++	bic	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++
++	ldr	tmp1, [r3, #DDR3PHY_DX1DLLCR]
++	bic	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX1DLLCR]
+ 
+ 	/* Enable quasi-dynamic programming. */
+ 	mov	tmp1, #0
+diff --git a/include/soc/at91/sama7-ddr.h b/include/soc/at91/sama7-ddr.h
+index f6542584ca139..f47a933df82ea 100644
+--- a/include/soc/at91/sama7-ddr.h
++++ b/include/soc/at91/sama7-ddr.h
+@@ -41,6 +41,10 @@
+ 
+ #define DDR3PHY_ZQ0SR0				(0x188)		/* ZQ status register 0 */
+ 
++#define	DDR3PHY_DX0DLLCR			(0x1CC)		/* DDR3PHY DATX8 DLL Control Register */
++#define	DDR3PHY_DX1DLLCR			(0x20C)		/* DDR3PHY DATX8 DLL Control Register */
++#define		DDR3PHY_DXDLLCR_DLLDIS		(1 << 31)	/* DLL Disable */
++
+ /* UDDRC */
+ #define UDDRC_STAT				(0x04)		/* UDDRC Operating Mode Status Register */
+ #define		UDDRC_STAT_SELFREF_TYPE_DIS	(0x0 << 4)	/* SDRAM is not in Self-refresh */
+-- 
+2.35.1
+
 
 
