@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C705F5B7017
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029E95B7088
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiIMOV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S233165AbiIMO21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiIMOSz (ORCPT
+        with ESMTP id S233744AbiIMO1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:18:55 -0400
+        Tue, 13 Sep 2022 10:27:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA771422DB;
-        Tue, 13 Sep 2022 07:13:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5B62A84;
+        Tue, 13 Sep 2022 07:17:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23E0C614AD;
-        Tue, 13 Sep 2022 14:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301D6C433C1;
-        Tue, 13 Sep 2022 14:13:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F08EF614B6;
+        Tue, 13 Sep 2022 14:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B399C433C1;
+        Tue, 13 Sep 2022 14:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078417;
-        bh=7B95i/Mb08UkbcQ6VvPgvAfVgeCIGs4fxEhdVSLHigs=;
+        s=korg; t=1663078625;
+        bh=clkQyZKh5bH63+URz0rVRixmIuxpZVkeNeCIrGtcjM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kgvDnNFW6LXmidcmoUTqUgsBMibcedrhVNcOXXT8CR7DXSAWtFqioOGrcG+84REOv
-         L+RPK1UZ3FqixQMB+M+R8pVmXgd1v0OEyRBl6EyEVtjdbKa8samC3vt/gFGB3gmEmZ
-         mACuUTW1CkKmozevPE3CtRr6LkTXSquzwi6ukWsQ=
+        b=u6+X/bTJHZR0r8qlh8RQ7AxMy2Tgw2fB+s2xeQvGaH+I1h2beznyamUtWq6Vy94RW
+         yNyx71QtUqXJH3KgECmsnQaMvciHvOHTE8vh4AhKXqv5ROnhxHh2VHBTvQy2CCq9/c
+         /WR+0UAfydr+F7b7ooW1639m+NBRC/NuqzESv2Bs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
+        stable@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 105/192] riscv: dts: microchip: use an mpfs specific l2 compatible
-Date:   Tue, 13 Sep 2022 16:03:31 +0200
-Message-Id: <20220913140415.200343560@linuxfoundation.org>
+Subject: [PATCH 5.15 021/121] cpufreq: check only freq_table in __resolve_freq()
+Date:   Tue, 13 Sep 2022 16:03:32 +0200
+Message-Id: <20220913140358.254160115@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
 
-[ Upstream commit 0dec364ffeb6149aae572ded1e34d4b444c23be6 ]
+[ Upstream commit 6ca7076fbfaeccce173aeab832d76b9e49e1034b ]
 
-PolarFire SoC does not have the same l2 cache controller as the fu540,
-featuring an extra interrupt. Appease the devicetree checker overlords
-by adding a PolarFire SoC specific compatible to fix the below sort of
-warnings:
+There is no need to check if the cpufreq driver implements callback
+cpufreq_driver::target_index. The logic in the __resolve_freq uses
+the frequency table available in the policy. It doesn't matter if the
+driver provides 'target_index' or 'target' callback. It just has to
+populate the 'policy->freq_table'.
 
-mpfs-polarberry.dtb: cache-controller@2010000: interrupts: [[1], [3], [4], [2]] is too long
+Thus, check only frequency table during the frequency resolving call.
 
-Fixes: 0fa6107eca41 ("RISC-V: Initial DTS for Microchip ICICLE board")
-Fixes: 34fc9cc3aebe ("riscv: dts: microchip: correct L2 cache interrupts")
-Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/boot/dts/microchip/mpfs.dtsi | 2 +-
+ drivers/cpufreq/cpufreq.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index 9f5bce1488d93..9bf37ef379509 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -161,7 +161,7 @@
- 		ranges;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index cddf7e13c2322..799431d287ee8 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
  
- 		cctrllr: cache-controller@2010000 {
--			compatible = "sifive,fu540-c000-ccache", "cache";
-+			compatible = "microchip,mpfs-ccache", "sifive,fu540-c000-ccache", "cache";
- 			reg = <0x0 0x2010000 0x0 0x1000>;
- 			cache-block-size = <64>;
- 			cache-level = <2>;
+ 	target_freq = clamp_val(target_freq, policy->min, policy->max);
+ 
+-	if (!cpufreq_driver->target_index)
++	if (!policy->freq_table)
+ 		return target_freq;
+ 
+ 	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
 -- 
 2.35.1
 
