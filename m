@@ -2,157 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCAA5B6D9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C915B6DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbiIMMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S231309AbiIMMu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIMMug (ORCPT
+        with ESMTP id S232091AbiIMMuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:50:36 -0400
-Received: from out0-153.mail.aliyun.com (out0-153.mail.aliyun.com [140.205.0.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA45252B0;
-        Tue, 13 Sep 2022 05:50:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047204;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.PEZRGO4_1663073428;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PEZRGO4_1663073428)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Sep 2022 20:50:28 +0800
-Date:   Tue, 13 Sep 2022 20:50:28 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] KVM: x86/mmu: Fix wrong start gfn of tlb flushing
- with range
-Message-ID: <20220913125028.GB113257@k08j02272.eu95sqa>
-References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
- <888399c78eab9d965657c5983f8096c707664c30.1661331396.git.houwenlong.hwl@antgroup.com>
- <YxjiJougYfG1seBT@google.com>
+        Tue, 13 Sep 2022 08:50:54 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9053340E;
+        Tue, 13 Sep 2022 05:50:49 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso8016137otv.1;
+        Tue, 13 Sep 2022 05:50:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=TDGyBDyfPixIxYDzqewpX7frNfmhICDZr1OjYSFlvRw=;
+        b=kadXAPz2cvlNXOSvLjlQAryUQyJo9toO7JU68s+k4NdN7+ckh0Y8lUtBRx1DGQvte7
+         SJ/P4dyp9aZC8bCVsvtsJtAkKInq+94jdAlE6usFJUiu4HyglECjiA4FJLPAJ0uM1+8X
+         59GAghD17vtxfVa+1T7G+KeDZ8TpHMJlvGWqyn9sh0JkmThT9cNcn1AupVlj0XZd75RY
+         3Kpq5jw+79KeVAlFwcC9b37zrdkba2hZj0ZJA5WlaFe3x6y5RCXC+z0a4t+k/E25mId0
+         nIo+SlcauNxmZK0RWV0LiNaOTinvebnBgAUADuovHOvtVoH7psl5o4WjV3Ej42JHioO9
+         sWSQ==
+X-Gm-Message-State: ACgBeo2WDb3pZvlQbRgvLIt2OzEHpnnkdzMHS9SdtgIIgnKxL/9PNQNf
+        5YY2AMTCvv/kJ0apX0NS+AkuB/4ayg==
+X-Google-Smtp-Source: AA6agR4tpDBuRtktxo52HcX0/YbGz9RPUouON9adgaM+A9gqO1/4lf7jy8u0QSurJrsG5OVjKB/tuQ==
+X-Received: by 2002:a9d:189:0:b0:655:d9e9:cd38 with SMTP id e9-20020a9d0189000000b00655d9e9cd38mr4432623ote.258.1663073448637;
+        Tue, 13 Sep 2022 05:50:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f5-20020a9d5e85000000b00636fd78dd57sm6008685otl.41.2022.09.13.05.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 05:50:48 -0700 (PDT)
+Received: (nullmailer pid 3471465 invoked by uid 1000);
+        Tue, 13 Sep 2022 12:50:47 -0000
+Date:   Tue, 13 Sep 2022 07:50:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/15] dt-bindings: hwlock: qcom-hwspinlock: add
+ support for MMIO on older SoCs
+Message-ID: <20220913125047.GA3471414-robh@kernel.org>
+References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
+ <20220909092035.223915-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxjiJougYfG1seBT@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220909092035.223915-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 02:25:42AM +0800, David Matlack wrote:
-> On Wed, Aug 24, 2022 at 05:29:21PM +0800, Hou Wenlong wrote:
-> > When a spte is dropped, the start gfn of tlb flushing should
-> > be the gfn of spte not the base gfn of SP which contains the
-> > spte. Also introduce a helper function to do range-based
-> > flushing when a spte is dropped, which would help prevent
-> > future buggy use of kvm_flush_remote_tlbs_with_address() in
-> > such case.
-> > 
-> > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
-> > Suggested-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c         | 20 +++++++++++++++-----
-> >  arch/x86/kvm/mmu/paging_tmpl.h |  3 +--
-> >  2 files changed, 16 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 3bcff56df109..e0b9432b9491 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -260,6 +260,18 @@ void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
-> >  	kvm_flush_remote_tlbs_with_range(kvm, &range);
-> >  }
-> >  
-> > +static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index);
-> > +
-> > +/* Flush the range of guest memory mapped by the given SPTE. */
-> > +static void kvm_flush_remote_tlbs_sptep(struct kvm *kvm, u64 *sptep)
-> > +{
-> > +	struct kvm_mmu_page *sp = sptep_to_sp(sptep);
-> > +	gfn_t gfn = kvm_mmu_page_get_gfn(sp, spte_index(sptep));
-> > +
-> > +	kvm_flush_remote_tlbs_with_address(kvm, gfn,
-> > +					   KVM_PAGES_PER_HPAGE(sp->role.level));
+On Fri, 09 Sep 2022 11:20:21 +0200, Krzysztof Kozlowski wrote:
+> Older Qualcomm SoCs have TCSR mutex registers with 0x80 stride, instead
+> of 0x1000.  Add dedicated compatibles for such case.  Unfortunately the
+> binding started using a generic "qcom,tcsr-mutex" compatible without
+> specifying the SoC part, thus it looks now quite inconsistent.
 > 
-> How is the range-based TLB flushing supposed to work with indirect MMUs?
-> When KVM is using shadow paging, the gfn here is not part of the actual
-> translation.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> For example, when TDP is disabled, KVM's shadow page tables translate
-> GVA to HPA. When Nested Virtualization is in use and running L2, KVM's
-> shadow page tables translate nGPA to HPA.
+> ---
 > 
-> Ah, I see x86_ops.tlb_remote_flush_with_range is only set when running
-> on Hyper-V and TDP is enabled (VMX checks enable_ept and SVM checks
-> npt_enabled). But it looks like the nested case might still be broken?
->
-Yeah, range based tlb flushing is only used on Hyper-V as Paolo said.
-Actually, I don't know how Hyper-V implements the range based tlb
-flushing hypercall, since KVM on Hyper-V is already nested, so gfn here
-is already nGPA. It seems that the current used TDP root is passed in
-hypercall, so maybe Hyper-V could do nGPA to HPA translation by looking
-up TDP page table. Then for nested case, it chould work well?
+> If anyone ever says "I want a generic compatible because I am sure all
+> devices are compatible", that's one more argument they are wrong. :)
+> ---
+>  .../bindings/hwlock/qcom-hwspinlock.yaml          | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
 
-> > +}
-> > +
-> >  /* Flush all memory mapped by the given direct SP. */
-> >  static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
-> >  {
-> > @@ -1156,8 +1168,7 @@ static void drop_large_spte(struct kvm *kvm, u64 *sptep, bool flush)
-> >  	drop_spte(kvm, sptep);
-> >  
-> >  	if (flush)
-> > -		kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
-> > -			KVM_PAGES_PER_HPAGE(sp->role.level));
-> > +		kvm_flush_remote_tlbs_sptep(kvm, sptep);
-> >  }
-> >  
-> >  /*
-> > @@ -1608,7 +1619,7 @@ static void __rmap_add(struct kvm *kvm,
-> >  	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
-> >  		kvm_zap_all_rmap_sptes(kvm, rmap_head);
-> >  		kvm_flush_remote_tlbs_with_address(
-> > -				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
-> > +				kvm, gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
-> >  	}
-> >  }
-> >  
-> > @@ -6402,8 +6413,7 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> >  			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
-> >  
-> >  			if (kvm_available_flush_tlb_with_range())
-> > -				kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
-> > -					KVM_PAGES_PER_HPAGE(sp->role.level));
-> > +				kvm_flush_remote_tlbs_sptep(kvm, sptep);
-> >  			else
-> >  				need_tlb_flush = 1;
-> >  
-> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> > index 39e0205e7300..04149c704d5b 100644
-> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> > @@ -937,8 +937,7 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
-> >  
-> >  			mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
-> >  			if (is_shadow_present_pte(old_spte))
-> > -				kvm_flush_remote_tlbs_with_address(vcpu->kvm,
-> > -					sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
-> > +				kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
-> >  
-> >  			if (!rmap_can_add(vcpu))
-> >  				break;
-> > -- 
-> > 2.31.1
-> > 
+Acked-by: Rob Herring <robh@kernel.org>
