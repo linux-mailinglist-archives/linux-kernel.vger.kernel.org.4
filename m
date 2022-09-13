@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582075B7518
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AED5B74F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiIMPdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S236176AbiIMP1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbiIMPcD (ORCPT
+        with ESMTP id S236367AbiIMPYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:32:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99817F0A4;
-        Tue, 13 Sep 2022 07:40:38 -0700 (PDT)
+        Tue, 13 Sep 2022 11:24:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509A37CB56;
+        Tue, 13 Sep 2022 07:37:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61D5DB80F4B;
-        Tue, 13 Sep 2022 14:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2709C433C1;
-        Tue, 13 Sep 2022 14:32:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9109B80FF1;
+        Tue, 13 Sep 2022 14:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C151C433C1;
+        Tue, 13 Sep 2022 14:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079569;
-        bh=VvSTHLgcd1Hfj+ta/4Id3kr+s9ZO/nWJjkvzyQW4gPE=;
+        s=korg; t=1663079732;
+        bh=RxGKZIj8w9RGrU9wWujCqb97C+0o+xW40upbXiX08Jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXqZyGs21V6IQ4vx+x45bP80LrCKUBZjVy3eoJaCenWMVJ9TlIHS4+tGvq4e6U7t2
-         v/nno8T+yKSJfDddImdPu1sX2XMEr9UU9t56amE/6f0d1dAX4jvVhQgH/Fy33Uc72z
-         TaCsAartNHGM7TrPdZ0facTunPhAcpR7+gmcS2HU=
+        b=kZEm8WRx52ZHrSJ3UOlVbAudC2w1aEi47PKXwnCljcLzBKmhNaJfdlWRMD5/AMgce
+         oOybvruauVBmaarEllVAtV56I2Y3KKRu3JDyapqKvbbFzXonhQ6Y5nHNKnra6n3CAs
+         69MJ0/HbZ5GMkH/FQZVXn+tKzidvwrZ5KObzKJn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-        Chris Mi <cmi@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 70/79] RDMA/mlx5: Set local port to one when accessing counters
-Date:   Tue, 13 Sep 2022 16:07:28 +0200
-Message-Id: <20220913140352.284380067@linuxfoundation.org>
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 4.14 27/61] s390: fix nospec table alignments
+Date:   Tue, 13 Sep 2022 16:07:29 +0200
+Message-Id: <20220913140347.857194457@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Mi <cmi@nvidia.com>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-[ Upstream commit 74b30b3ad5cec95d2647e796d10137438a098bc1 ]
+commit c9305b6c1f52060377c72aebe3a701389e9f3172 upstream.
 
-When accessing Ports Performance Counters Register (PPCNT),
-local port must be one if it is Function-Per-Port HCA that
-HCA_CAP.num_ports is 1.
+Add proper alignment for .nospec_call_table and .nospec_return_table in
+vmlinux.
 
-The offending patch can change the local port to other values
-when accessing PPCNT after enabling switchdev mode. The following
-syndrome will be printed:
+[hca@linux.ibm.com]: The problem with the missing alignment of the nospec
+tables exist since a long time, however only since commit e6ed91fd0768
+("s390/alternatives: remove padding generation code") and with
+CONFIG_RELOCATABLE=n the kernel may also crash at boot time.
 
- # cat /sys/class/infiniband/rdmap4s0f0/ports/2/counters/*
- # dmesg
- mlx5_core 0000:04:00.0: mlx5_cmd_check:756:(pid 12450): ACCESS_REG(0x805) op_mod(0x1) failed, status bad parameter(0x3), syndrome (0x1e5585)
+The above named commit reduced the size of struct alt_instr by one byte,
+so its new size is 11 bytes. Therefore depending on the number of cpu
+alternatives the size of the __alt_instructions array maybe odd, which
+again also causes that the addresses of the nospec tables will be odd.
 
-Fix it by setting local port to one for Function-Per-Port HCA.
+If the address of __nospec_call_start is odd and the kernel is compiled
+With CONFIG_RELOCATABLE=n the compiler may generate code that loads the
+address of __nospec_call_start with a 'larl' instruction.
 
-Fixes: 210b1f78076f ("IB/mlx5: When not in dual port RoCE mode, use provided port as native")
-Reviewed-by: Mark Bloch <mbloch@nvidia.com>
-Signed-off-by: Chris Mi <cmi@nvidia.com>
-Link: https://lore.kernel.org/r/6c5086c295c76211169e58dbd610fb0402360bab.1661763459.git.leonro@nvidia.com
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This will generate incorrect code since the 'larl' instruction only works
+with even addresses. In result the members of the nospec tables will be
+accessed with an off-by-one offset, which subsequently may lead to
+addressing exceptions within __nospec_revert().
+
+Fixes: f19fbd5ed642 ("s390: introduce execute-trampolines for branches")
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Link: https://lore.kernel.org/r/8719bf1ce4a72ebdeb575200290094e9ce047bcc.1661557333.git.jpoimboe@kernel.org
+Cc: <stable@vger.kernel.org> # 4.16
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/mlx5/mad.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/s390/kernel/vmlinux.lds.S |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/infiniband/hw/mlx5/mad.c b/drivers/infiniband/hw/mlx5/mad.c
-index cdf6e26ebc87d..fb6dcd12db254 100644
---- a/drivers/infiniband/hw/mlx5/mad.c
-+++ b/drivers/infiniband/hw/mlx5/mad.c
-@@ -216,6 +216,12 @@ static int process_pma_cmd(struct mlx5_ib_dev *dev, u8 port_num,
- 		mdev = dev->mdev;
- 		mdev_port_num = 1;
- 	}
-+	if (MLX5_CAP_GEN(dev->mdev, num_ports) == 1) {
-+		/* set local port to one for Function-Per-Port HCA. */
-+		mdev = dev->mdev;
-+		mdev_port_num = 1;
-+	}
-+
- 	/* Declaring support of extended counters */
- 	if (in_mad->mad_hdr.attr_id == IB_PMA_CLASS_PORT_INFO) {
- 		struct ib_class_port_info cpi = {};
--- 
-2.35.1
-
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -131,6 +131,7 @@ SECTIONS
+ 	/*
+ 	 * Table with the patch locations to undo expolines
+ 	*/
++	. = ALIGN(4);
+ 	.nospec_call_table : {
+ 		__nospec_call_start = . ;
+ 		*(.s390_indirect*)
 
 
