@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5419D5B71E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D485B720A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiIMOpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S229768AbiIMOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiIMOnL (ORCPT
+        with ESMTP id S234495AbiIMOnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:11 -0400
+        Tue, 13 Sep 2022 10:43:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5D86E8A1;
-        Tue, 13 Sep 2022 07:23:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CC36EF29;
+        Tue, 13 Sep 2022 07:23:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69061B80F99;
-        Tue, 13 Sep 2022 14:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE421C433D6;
-        Tue, 13 Sep 2022 14:21:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70956B80F97;
+        Tue, 13 Sep 2022 14:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF551C433D6;
+        Tue, 13 Sep 2022 14:23:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078891;
-        bh=vsGgolk2OaZZ7DlCcPkY5d1cR/C6iDKiS2+Kjwya+ZI=;
+        s=korg; t=1663078995;
+        bh=j90Uc8ZsfXepqIyM6WV/PLdAbU0hv1dUaJEvYkRqv3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sdQYh6EuZlmgdyAHdQQuSOn45P48UWWqz4qT1rWPU+ASACS+02M6zrTznOiFC/E6d
-         lutxcmK65HiuhD+pq22BBaNX2C4Kh6PGpaMiNoIfOcLq6CAoqii1a2f0Ec+AuoBjm+
-         GLcHLksJpB8loSzfcAtT+1neITuTdqZgQ1M4dAyU=
+        b=fi8cKhOIUemtJr0py/VlsBHftQnKxNad83bGELj9nkr/WydT+6LgXbVrkCidGG+RH
+         LxXSPyjUlgF9EWI+yLtL8h91sKVcm/rFbdl58AhtQu14tX9AP+j4YUMT91LpG2gqa0
+         1EuVEbp69x12Yy16IiCxigs7zWK2RrXeWtcdhd6k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
+        stable@vger.kernel.org,
+        Chengchang Tang <tangchengchang@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
         Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 096/121] RDMA/irdma: Return correct WC error for bind operation failure
+Subject: [PATCH 5.10 42/79] RDMA/hns: Fix supported page size
 Date:   Tue, 13 Sep 2022 16:04:47 +0200
-Message-Id: <20220913140401.482093083@linuxfoundation.org>
+Message-Id: <20220913140352.328257156@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sindhu-Devale <sindhu.devale@intel.com>
+From: Chengchang Tang <tangchengchang@huawei.com>
 
-[ Upstream commit dcb23bbb1de7e009875fdfac2b8a9808a9319cc6 ]
+[ Upstream commit 55af9d498556f0860eb89ffa7677e8d73f6f643f ]
 
-When a QP and a MR on a local host are in different PDs, the HW generates
-an asynchronous event (AE). The same AE is generated when a QP and a MW
-are in different PDs during a bind operation. Return the more appropriate
-IBV_WC_MW_BIND_ERR for the latter case by checking the OP type from the
-CQE in error.
+The supported page size for hns is (4K, 128M), not (4K, 2G).
 
-Fixes: 551c46edc769 ("RDMA/irdma: Add user/kernel shared libraries")
-Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Link: https://lore.kernel.org/r/20220906223244.1119-4-shiraz.saleem@intel.com
+Fixes: cfc85f3e4b7f ("RDMA/hns: Add profile support for hip08 driver")
+Link: https://lore.kernel.org/r/20220829105021.1427804-2-liangwenpeng@huawei.com
+Signed-off-by: Chengchang Tang <tangchengchang@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
 Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/uk.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/irdma/uk.c b/drivers/infiniband/hw/irdma/uk.c
-index 9b544a3b12886..7e6c3ba8df6ab 100644
---- a/drivers/infiniband/hw/irdma/uk.c
-+++ b/drivers/infiniband/hw/irdma/uk.c
-@@ -1068,6 +1068,7 @@ irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq, struct irdma_cq_poll_info *info)
- 	enum irdma_status_code ret_code;
- 	bool move_cq_head = true;
- 	u8 polarity;
-+	u8 op_type;
- 	bool ext_valid;
- 	__le64 *ext_cqe;
+diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
+index be7f2fe1e8839..8a92faeb3d237 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
+@@ -92,7 +92,7 @@
  
-@@ -1250,7 +1251,6 @@ irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq, struct irdma_cq_poll_info *info)
- 			do {
- 				__le64 *sw_wqe;
- 				u64 wqe_qword;
--				u8 op_type;
- 				u32 tail;
- 
- 				tail = qp->sq_ring.tail;
-@@ -1267,6 +1267,8 @@ irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq, struct irdma_cq_poll_info *info)
- 					break;
- 				}
- 			} while (1);
-+			if (op_type == IRDMA_OP_TYPE_BIND_MW && info->minor_err == FLUSH_PROT_ERR)
-+				info->minor_err = FLUSH_MW_BIND_ERR;
- 			qp->sq_flush_seen = true;
- 			if (!IRDMA_RING_MORE_WORK(qp->sq_ring))
- 				qp->sq_flush_complete = true;
+ #define HNS_ROCE_V2_QPC_TIMER_ENTRY_SZ		PAGE_SIZE
+ #define HNS_ROCE_V2_CQC_TIMER_ENTRY_SZ		PAGE_SIZE
+-#define HNS_ROCE_V2_PAGE_SIZE_SUPPORTED		0xFFFFF000
++#define HNS_ROCE_V2_PAGE_SIZE_SUPPORTED		0xFFFF000
+ #define HNS_ROCE_V2_MAX_INNER_MTPT_NUM		2
+ #define HNS_ROCE_INVALID_LKEY			0x100
+ #define HNS_ROCE_CMQ_TX_TIMEOUT			30000
 -- 
 2.35.1
 
