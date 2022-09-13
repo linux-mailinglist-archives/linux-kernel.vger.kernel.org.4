@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E76D5B6EFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C565B5B72AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiIMOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S234730AbiIMO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiIMOGO (ORCPT
+        with ESMTP id S234493AbiIMOw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:06:14 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91C65809E;
-        Tue, 13 Sep 2022 07:06:13 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1279948d93dso32314240fac.10;
-        Tue, 13 Sep 2022 07:06:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gPHBD3/yThDshlFcYv9k71widUkhofw1FDDYpv8K6pk=;
-        b=TUI5PpTIg8SVmLtA8lnwA9PB+tLf9VcA1y2TGwu5S8bY83wulWPMUec7LLJTodlls9
-         Z/R1fcSSv91xPOZxEb8olTolm+reKrB/l9CiF7bumvAR2kwaRxxW3TUsxzQTQ1AYZhWl
-         /dmC1kvSBHYUR+zEogeY5hDo9QmvA6MyKemqE7zu7d0Dpr0Jncod4h5lgQBRel+Sua16
-         9VNGLPyxb3V743Dww5s1O8nVNiW/cFNJ3pNgkBr5FngvmK2g8HAB5SNDVyY7VParuwY8
-         VZBK2pTayD19Y7vmNWL5hLpsg6FMIu4m3AR1aYwGN86C+uY9jzrrsgPyIZRknou9jZD2
-         yVvw==
-X-Gm-Message-State: ACgBeo09XMhY3aHrqwItqxRTIbh5Oyd4RalICD3iFIlZLcL20oHPth15
-        dchcJf3Ds465VKUtQNC2bg==
-X-Google-Smtp-Source: AA6agR7aYuCePPGemiIdeL1jOXYKj30AqVdS1PK/922ZOdsnkY7FMM5ZgzSpgpw9aw4LGK2gnAELfg==
-X-Received: by 2002:a05:6870:c884:b0:118:ae35:e200 with SMTP id er4-20020a056870c88400b00118ae35e200mr2011500oab.244.1663077973166;
-        Tue, 13 Sep 2022 07:06:13 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 5-20020a9d0d85000000b0063975d170a8sm5980941ots.7.2022.09.13.07.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:06:12 -0700 (PDT)
-Received: (nullmailer pid 3592371 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:06:11 -0000
-Date:   Tue, 13 Sep 2022 09:06:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     zhangqing@rock-chips.com, broonie@kernel.org,
-        u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org,
-        philipp.tomsich@vrull.eu, miquel.raynal@bootlin.com,
-        heiko@sntech.de, linux-mmc@vger.kernel.org, sjg@chromium.org,
-        linux-rockchip@lists.infradead.org, gregkh@linuxfoundation.org,
-        linux@roeck-us.net, linux-i2c@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
-        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
-        richard@nod.at, kever.yang@rock-chips.com,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        kishon@ti.com, linux-arm-kernel@lists.infradead.org,
-        jamie@jamieiles.com, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        vkoul@kernel.org, linux-usb@vger.kernel.org,
-        thierry.reding@gmail.com, vigneshr@ti.com, ulf.hansson@linaro.org
-Subject: Re: [PATCH v1 09/11] dt-bindings: phy: phy-rockchip-inno-usb2: add
- rockchip,rk3128-usb2phy
-Message-ID: <20220913140611.GA3592344-robh@kernel.org>
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
+        Tue, 13 Sep 2022 10:52:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C78072691;
+        Tue, 13 Sep 2022 07:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA6D614D9;
+        Tue, 13 Sep 2022 14:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0CCC433D6;
+        Tue, 13 Sep 2022 14:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663079196;
+        bh=6dg7wJM+9nVt3Tpc611yRQluapQBqk4vI5Av4ksEclA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dL2GIT/1OGtlEODVwzZvgrLynDRC5M2UoY9Ze5ca/dRSiCWeSe0EIWAvKAzT+MekM
+         ilQlU/1Ub2v4jPuE3ChlPw6YXEYdGe/wHkwlQKEC4Tijs/N6d35NLL78SXeHQQRwGX
+         o5MGRJsYOpw8MxDP6y9BtzAZ52WOANcBsxleSswg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 5.4 041/108] thunderbolt: Use the actual buffer in tb_async_error()
+Date:   Tue, 13 Sep 2022 16:06:12 +0200
+Message-Id: <20220913140355.408028920@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,13 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 00:01:45 +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-usb2phy compatible string.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  .../devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml          | 1 +
->  1 file changed, 1 insertion(+)
-> 
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+commit eb100b8fa8e8b59eb3e5fc7a5fd4a1e3c5950f64 upstream.
+
+The received notification packet is held in pkg->buffer and not in pkg
+itself. Fix this by using the correct buffer.
+
+Fixes: 81a54b5e1986 ("thunderbolt: Let the connection manager handle all notifications")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/thunderbolt/ctl.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -388,7 +388,7 @@ static void tb_ctl_rx_submit(struct ctl_
+ 
+ static int tb_async_error(const struct ctl_pkg *pkg)
+ {
+-	const struct cfg_error_pkg *error = (const struct cfg_error_pkg *)pkg;
++	const struct cfg_error_pkg *error = pkg->buffer;
+ 
+ 	if (pkg->frame.eof != TB_CFG_PKG_ERROR)
+ 		return false;
+
+
