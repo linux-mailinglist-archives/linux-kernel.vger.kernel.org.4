@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFC05B67F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4890A5B67F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiIMGcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S230407AbiIMGef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiIMGcp (ORCPT
+        with ESMTP id S230387AbiIMGec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:32:45 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCAB13F71
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 23:32:43 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3450a7358baso127530997b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 23:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UoQ28Kix9CadreRi69EyX+ldkRLWeLo2Q5k9iACgE4I=;
-        b=Y1Q89KwkYzAHSigQEYEXus5Ug+5BK8mK25+4i2lyKTage4SbMj2vPVOakyK3XRQqN0
-         XZBpGa5DBuVgbQDPbkC5p+eJYTETxHEO5atUNthgQxJI+RT9uCb6f/1V/UGSElsu0oy6
-         tbHdy7UsZtmSe3Af42ehQ186k1aFEEyrfJLfNkbTfMA0NJEkxakM3b8wPyj7wA/lE9Mu
-         ijxt+n/xhxH2Kn4rh5RwiN2t+sR9/KysFNGXcU+DR0wCk+9WJYK05vat0/ouEQQ+rRnT
-         iOfnP+L3T/tW0ctyKyydMPkkZYeSx8BbiLiWo2lIB94I7B0bMqLAzJqVz1GKxBGEnNmg
-         T3SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UoQ28Kix9CadreRi69EyX+ldkRLWeLo2Q5k9iACgE4I=;
-        b=PIMIfq8mL9/8Z1U+WgEXI6xv1IaFiy2xpk6IBdE1Xs0gGN3vtRFk3XsELjykLnUx+o
-         kh3MDMsqC1uPibY+o1wCVPZgY8OPxwPIFPO3TcS2EmbvPsGkAqeUUKzn8q+mAUVELZKd
-         a89vULlggV62AklX+1awn8YLaXqZcUYYIcEMfB1tZZAH6CVbI5sA5HIzyuY8FHgsCEw1
-         g5v0fzIi1FBuW4gvvzODxdOxHveRVbtcrvs9/uPKnxhIC1ee/pVgjI2D1Lkb4LJ1CKnH
-         28R26TG5uaN7yaJP1LT8idQmppJ3hbhMaphibf0Mo6Tk7dkpHjQXAvUWQZR0vwl1/J3T
-         bxCA==
-X-Gm-Message-State: ACgBeo1zmsCZFKVYjsmdRSwM6tN8rFSnJ8EEI+F+n8o91TWuA7ZA+7S1
-        mMKmba5kH3Di3rCgow4yZA4aMtpR18Jc7bmUW5I=
-X-Google-Smtp-Source: AA6agR7vJdcYJ1/d5RVqxccuCSAUIxaq24XEnGW9TXhYpfRs4skcLkMSg0t33aDJzr021LbOQwU+u1u2i7YknowD2Yw=
-X-Received: by 2002:a0d:df93:0:b0:348:f7a9:97db with SMTP id
- i141-20020a0ddf93000000b00348f7a997dbmr12350017ywe.268.1663050763139; Mon, 12
- Sep 2022 23:32:43 -0700 (PDT)
+        Tue, 13 Sep 2022 02:34:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8058D59;
+        Mon, 12 Sep 2022 23:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663050870; x=1694586870;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QYfnTDZixDt2VYVpTtju9Z1vn0nYiKFeDuEb4i2ER9c=;
+  b=PRltevjz3e9o/AR9/CP8zzVYi/eNTe3uy7nYK906S9GFKx7RRdAqcZZF
+   3TpsSLBcrssUGIePx7Icw72NZUyNSHbzzZh2dkOHQc6JvSuWRoRs+17qW
+   VW3EgKA8qdStFZf5HGjQKHECnaufRhHHMhKEEFUSPxRxfPQen6lup8H3d
+   mj6TovuCcX3lb9SpKgG2Efmmly6us6wZccRzvHgPPIzI8SjBPbh6XDRV/
+   C4bICTgjZ1zRLlLhvqB3sV6+/JHNsQ4OHXB6wso5FHNFggzW75i+KrQmI
+   4e3V7Z0x/jowlQNZ5iH5aleHV2tUTLR1rBrUYVRB/9hFAM2L8vnXeLpZF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="384348528"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="384348528"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:34:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="678426598"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.59.98])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:34:28 -0700
+Message-ID: <925b6e37-051f-927c-350a-cd767d88d72b@intel.com>
+Date:   Tue, 13 Sep 2022 09:34:24 +0300
 MIME-Version: 1.0
-References: <20220912214535.929116-1-nhuck@google.com>
-In-Reply-To: <20220912214535.929116-1-nhuck@google.com>
-From:   Nam Cao <namcaov@gmail.com>
-Date:   Tue, 13 Sep 2022 08:32:32 +0200
-Message-ID: <CA+sZ8B8RStBhofQ0=vvzH5FeQ66fj90DdCj9EQSaVErbVPLi7g@mail.gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: Fix return type of rtw_xmit_entry
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Ivan Safonov <insafonov@gmail.com>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] mmc: sdhci-pci-core: Disable cqe for ASUS 1100FK family
+ devices
+Content-Language: en-US
+To:     Patrick Thompson <ptf@google.com>,
+        Linux MMC development <linux-mmc@vger.kernel.org>
+Cc:     Sangwhan Moon <sxm@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220912212847.1337868-1-ptf@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220912212847.1337868-1-ptf@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,26 +67,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 11:45 PM Nathan Huckleberry <nhuck@google.com> wrote:
->
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
->
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
->
-> The return type of rtw_xmit_entry should be changed from int to
-> netdev_tx_t.
->
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+On 13/09/22 00:28, Patrick Thompson wrote:
+> From: ptf <ptf@google.com>
+> 
+> The CQE implementation for the eMMC in the ASUS 1100FK family of devices
+> is broken. This causes installations to fail and thus we are disabling
+> CQE for this family of devices.
+> 
+> Signed-off-by: Patrick Thompson <ptf@google.com>
 
-I am unable to apply your patch. I think because of this:
-3e0a6c4414ac ("staging: r8188eu: remove os_dep/xmit_linux.c").
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Can you update your git repo and resubmit?
+> ---
+> 
+> Hello,
+> 
+> I was hoping to get some advice on adapting this patch to target the
+> eMMC directly instead of a family of laptops. One idea is to use the
+> PCI-id of the controller (in this case [8086:4dc4]). Would that make
+> sense? Is there someone with more knowledge on the subject that could
+> confirm that the [8086:4dc4] device doesn't have a working CQE?
 
-Best regards,
-Nam
+In these cases the issue is suspected to be BIOS. Best solution is to
+disable CQE.
+
+> 
+> Thank you,
+> Patrick
+> 
+> 
+>  drivers/mmc/host/sdhci-pci-core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> index 622b7de96c7f..3ba0250559e7 100644
+> --- a/drivers/mmc/host/sdhci-pci-core.c
+> +++ b/drivers/mmc/host/sdhci-pci-core.c
+> @@ -890,7 +890,8 @@ static bool glk_broken_cqhci(struct sdhci_pci_slot *slot)
+>  {
+>  	return slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_GLK_EMMC &&
+>  	       (dmi_match(DMI_BIOS_VENDOR, "LENOVO") ||
+> -		dmi_match(DMI_SYS_VENDOR, "IRBIS"));
+> +		dmi_match(DMI_SYS_VENDOR, "IRBIS") ||
+> +		dmi_match(DMI_PRODUCT_FAMILY, "ASUS BR1100FKA"));
+>  }
+>  
+>  static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+
