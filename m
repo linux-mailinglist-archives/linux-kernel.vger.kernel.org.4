@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E328D5B6FF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752F85B72C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiIMOVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S234934AbiIMO5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiIMOSo (ORCPT
+        with ESMTP id S234850AbiIMOyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:18:44 -0400
+        Tue, 13 Sep 2022 10:54:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12316647C9;
-        Tue, 13 Sep 2022 07:13:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9312726AF;
+        Tue, 13 Sep 2022 07:27:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DAF9614AA;
-        Tue, 13 Sep 2022 14:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E5FC433D6;
-        Tue, 13 Sep 2022 14:12:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF915614AA;
+        Tue, 13 Sep 2022 14:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84A4C433C1;
+        Tue, 13 Sep 2022 14:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078330;
-        bh=W0IUbpfa6isdMD/ApcmvRRHVl5lwzEVmULFwTukoxn0=;
+        s=korg; t=1663078677;
+        bh=V/y6vfSDcUetwyJjbM6hcPYtOEU327f2QJuNariEauc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4b08iiBhe65vLTlLmUoSawM+yWcJKB/xlOKKRSpsIa7gKrx9sqbrYpJCAFEuw6+L
-         JVTM9AIIN4ThLJ8DuWs/zaVGkSQBf9qVAHMees5gxgiFRRqdrttyqGGXR5sNMztQz7
-         1xWnUddFt0db1buzYi3aGsfz+CZ0rIKT5vW/jHBg=
+        b=p8Bnz1+jLrmDYrgNb6WzdBpM48U+lhq8GFck4+rPrC5DUHnyuyxR6O/hHCfM2xnUt
+         QqiP/VFLL7AqlJwNIJ69gQyd6L4QyLFGv4K8iuTvh5kDsAWxrExymsKHwX+RSPXWPv
+         5ixJ85GBkzUdAt5769EOammcBIzfyAgyg5ETWcJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Frederic Schumacher <frederic.schumacher@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Zhenneng Li <lizhenneng@kylinos.cn>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 097/192] ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
-Date:   Tue, 13 Sep 2022 16:03:23 +0200
-Message-Id: <20220913140414.800469982@linuxfoundation.org>
+Subject: [PATCH 5.15 013/121] drm/radeon: add a force flush to delay work when radeon
+Date:   Tue, 13 Sep 2022 16:03:24 +0200
+Message-Id: <20220913140357.903708040@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,101 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Zhenneng Li <lizhenneng@kylinos.cn>
 
-[ Upstream commit 7a94b83a7dc551607b6c4400df29151e6a951f07 ]
+[ Upstream commit f461950fdc374a3ada5a63c669d997de4600dffe ]
 
-On SAMA7G5, when resuming from backup and self-refresh, the bootloader
-performs DDR PHY recalibration by restoring the value of ZQ0SR0 (stored
-in RAM by Linux before going to backup and self-refresh). It has been
-discovered that the current procedure doesn't work for all possible values
-that might go to ZQ0SR0 due to hardware bug. The workaround to this is to
-avoid storing some values in ZQ0SR0. Thus Linux will read the ZQ0SR0
-register and cache its value in RAM after processing it (using
-modified_gray_code array). The bootloader will restore the processed value.
+Although radeon card fence and wait for gpu to finish processing current batch rings,
+there is still a corner case that radeon lockup work queue may not be fully flushed,
+and meanwhile the radeon_suspend_kms() function has called pci_set_power_state() to
+put device in D3hot state.
+Per PCI spec rev 4.0 on 5.3.1.4.1 D3hot State.
+> Configuration and Message requests are the only TLPs accepted by a Function in
+> the D3hot state. All other received Requests must be handled as Unsupported Requests,
+> and all received Completions may optionally be handled as Unexpected Completions.
+This issue will happen in following logs:
+Unable to handle kernel paging request at virtual address 00008800e0008010
+CPU 0 kworker/0:3(131): Oops 0
+pc = [<ffffffff811bea5c>]  ra = [<ffffffff81240844>]  ps = 0000 Tainted: G        W
+pc is at si_gpu_check_soft_reset+0x3c/0x240
+ra is at si_dma_is_lockup+0x34/0xd0
+v0 = 0000000000000000  t0 = fff08800e0008010  t1 = 0000000000010000
+t2 = 0000000000008010  t3 = fff00007e3c00000  t4 = fff00007e3c00258
+t5 = 000000000000ffff  t6 = 0000000000000001  t7 = fff00007ef078000
+s0 = fff00007e3c016e8  s1 = fff00007e3c00000  s2 = fff00007e3c00018
+s3 = fff00007e3c00000  s4 = fff00007fff59d80  s5 = 0000000000000000
+s6 = fff00007ef07bd98
+a0 = fff00007e3c00000  a1 = fff00007e3c016e8  a2 = 0000000000000008
+a3 = 0000000000000001  a4 = 8f5c28f5c28f5c29  a5 = ffffffff810f4338
+t8 = 0000000000000275  t9 = ffffffff809b66f8  t10 = ff6769c5d964b800
+t11= 000000000000b886  pv = ffffffff811bea20  at = 0000000000000000
+gp = ffffffff81d89690  sp = 00000000aa814126
+Disabling lock debugging due to kernel taint
+Trace:
+[<ffffffff81240844>] si_dma_is_lockup+0x34/0xd0
+[<ffffffff81119610>] radeon_fence_check_lockup+0xd0/0x290
+[<ffffffff80977010>] process_one_work+0x280/0x550
+[<ffffffff80977350>] worker_thread+0x70/0x7c0
+[<ffffffff80977410>] worker_thread+0x130/0x7c0
+[<ffffffff80982040>] kthread+0x200/0x210
+[<ffffffff809772e0>] worker_thread+0x0/0x7c0
+[<ffffffff80981f8c>] kthread+0x14c/0x210
+[<ffffffff80911658>] ret_from_kernel_thread+0x18/0x20
+[<ffffffff80981e40>] kthread+0x0/0x210
+ Code: ad3e0008  43f0074a  ad7e0018  ad9e0020  8c3001e8  40230101
+ <88210000> 4821ed21
+So force lockup work queue flush to fix this problem.
 
-Fixes: d2d4716d8384 ("ARM: at91: pm: save ddr phy calibration data to securam")
-Suggested-by: Frederic Schumacher <frederic.schumacher@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220826083927.3107272-4-claudiu.beznea@microchip.com
+Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-at91/pm.c      | 36 ++++++++++++++++++++++++++++++++----
- include/soc/at91/sama7-ddr.h |  4 ++++
- 2 files changed, 36 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/radeon/radeon_device.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-index df6d673e83d56..f4501dea98b04 100644
---- a/arch/arm/mach-at91/pm.c
-+++ b/arch/arm/mach-at91/pm.c
-@@ -541,9 +541,41 @@ extern u32 at91_pm_suspend_in_sram_sz;
- 
- static int at91_suspend_finish(unsigned long val)
- {
-+	unsigned char modified_gray_code[] = {
-+		0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
-+		0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
-+		0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
-+		0x10, 0x11,
-+	};
-+	unsigned int tmp, index;
- 	int i;
- 
- 	if (soc_pm.data.mode == AT91_PM_BACKUP && soc_pm.data.ramc_phy) {
-+		/*
-+		 * Bootloader will perform DDR recalibration and will try to
-+		 * restore the ZQ0SR0 with the value saved here. But the
-+		 * calibration is buggy and restoring some values from ZQ0SR0
-+		 * is forbidden and risky thus we need to provide processed
-+		 * values for these (modified gray code values).
-+		 */
-+		tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
-+
-+		/* Store pull-down output impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
-+
-+		/* Store pull-up output impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
-+		/* Store pull-down on-die termination impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
-+		/* Store pull-up on-die termination impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
- 		/*
- 		 * The 1st 8 words of memory might get corrupted in the process
- 		 * of DDR PHY recalibration; it is saved here in securam and it
-@@ -1066,10 +1098,6 @@ static int __init at91_pm_backup_init(void)
- 		of_scan_flat_dt(at91_pm_backup_scan_memcs, &located);
- 		if (!located)
- 			goto securam_fail;
--
--		/* DDR3PHY_ZQ0SR0 */
--		soc_pm.bu->ddr_phy_calibration[0] = readl(soc_pm.data.ramc_phy +
--							  0x188);
+diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+index 4f0fbf6674316..92905ebb7b459 100644
+--- a/drivers/gpu/drm/radeon/radeon_device.c
++++ b/drivers/gpu/drm/radeon/radeon_device.c
+@@ -1617,6 +1617,9 @@ int radeon_suspend_kms(struct drm_device *dev, bool suspend,
+ 		if (r) {
+ 			/* delay GPU reset to resume */
+ 			radeon_fence_driver_force_completion(rdev, i);
++		} else {
++			/* finish executing delayed work */
++			flush_delayed_work(&rdev->fence_drv[i].lockup_work);
+ 		}
  	}
  
- 	return 0;
-diff --git a/include/soc/at91/sama7-ddr.h b/include/soc/at91/sama7-ddr.h
-index 2706bc48c0764..6ce3bd22f6c69 100644
---- a/include/soc/at91/sama7-ddr.h
-+++ b/include/soc/at91/sama7-ddr.h
-@@ -38,6 +38,10 @@
- #define		DDR3PHY_DSGCR_ODTPDD_ODT0	(1 << 20)	/* ODT[0] Power Down Driver */
- 
- #define DDR3PHY_ZQ0SR0				(0x188)		/* ZQ status register 0 */
-+#define DDR3PHY_ZQ0SR0_PDO_OFF			(0)		/* Pull-down output impedance select offset */
-+#define DDR3PHY_ZQ0SR0_PUO_OFF			(5)		/* Pull-up output impedance select offset */
-+#define DDR3PHY_ZQ0SR0_PDODT_OFF		(10)		/* Pull-down on-die termination impedance select offset */
-+#define DDR3PHY_ZQ0SRO_PUODT_OFF		(15)		/* Pull-up on-die termination impedance select offset */
- 
- #define	DDR3PHY_DX0DLLCR			(0x1CC)		/* DDR3PHY DATX8 DLL Control Register */
- #define	DDR3PHY_DX1DLLCR			(0x20C)		/* DDR3PHY DATX8 DLL Control Register */
 -- 
 2.35.1
 
