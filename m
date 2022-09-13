@@ -2,51 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901825B7307
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3785B6EE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbiIMPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S232404AbiIMOGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235217AbiIMO7b (ORCPT
+        with ESMTP id S232380AbiIMOF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:59:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EE974365;
-        Tue, 13 Sep 2022 07:29:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 10:05:58 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3E19001;
+        Tue, 13 Sep 2022 07:05:56 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D94D614D4;
-        Tue, 13 Sep 2022 14:25:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88EC8C433C1;
-        Tue, 13 Sep 2022 14:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079147;
-        bh=thDh15MSPH6KZKlEJMV8KoCLQ1nMTMaT1qagdRvUDu8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=okIjNpZRhfgAQuUnkigYOUql0hEtUb2Q5pP2G5pyhbOrGmce50yJ2CU79tzPS2fp4
-         eqv4JkXrt5yHZjnzPf4rxvDaGNfhBkn4Bmww1pyu70bK6BgLzEJfwWyq6fJTS4F+Ck
-         RkAgk67xFpPm4YRrXAVXL+6jEmw3FU3adrrcUOfU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Nicolas Diaz <nicolas.diaz@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>
-Subject: [PATCH 5.4 021/108] serial: fsl_lpuart: RS485 RTS polariy is inverse
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 162B261EA1932;
+        Tue, 13 Sep 2022 16:05:53 +0200 (CEST)
+Message-ID: <02604223-af8a-a86f-8873-19a4dbb3035b@molgen.mpg.de>
 Date:   Tue, 13 Sep 2022 16:05:52 +0200
-Message-Id: <20220913140354.519307517@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dell.Client.Kernel@dell.com,
+        Hans de Goede <hdegoede@redhat.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: boot performance: ACPI delays in boot up of Alder Lake laptop (Dell
+ XPS 13 9315)
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,39 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shenwei Wang <shenwei.wang@nxp.com>
-
-commit 846651eca073e2e02e37490a4a52752415d84781 upstream.
-
-The setting of RS485 RTS polarity is inverse in the current driver.
-
-When the property of 'rs485-rts-active-low' is enabled in the dts node,
-the RTS signal should be LOW during sending. Otherwise, if there is no
-such a property, the RTS should be HIGH during sending.
-
-Fixes: 03895cf41d18 ("tty: serial: fsl_lpuart: Add support for RS-485")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Nicolas Diaz <nicolas.diaz@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-Link: https://lore.kernel.org/r/20220805144529.604856-1-shenwei.wang@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/tty/serial/fsl_lpuart.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1277,9 +1277,9 @@ static int lpuart_config_rs485(struct ua
- 		 * Note: UART is assumed to be active high.
- 		 */
- 		if (rs485->flags & SER_RS485_RTS_ON_SEND)
--			modem &= ~UARTMODEM_TXRTSPOL;
--		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
- 			modem |= UARTMODEM_TXRTSPOL;
-+		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
-+			modem &= ~UARTMODEM_TXRTSPOL;
- 	}
- 
- 	/* Store the new configuration */
+Dear Linux folks,
 
 
+Just a heads-up, on the Dell XPS 13 9315 over half a second during boot 
+seem to be due to delays in firmware provided ACPI/ASL.
+
+     […]
+     [    0.000000] DMI: Dell Inc. XPS 9315/02GGG1, BIOS 1.1.3 05/11/2022
+     […]
+     [    0.220268] ACPI: PM: Power Resource [D3C]
+     [    0.472079] ACPI: PM: Power Resource [PIN]
+     […]
+     [    0.512316] pci 0000:00:07.1:   bridge window [mem
+0x74000000-0x960fffff]
+     [    0.512319] pci 0000:00:07.1:   bridge window [mem
+0x6040000000-0x6075ffffff 64bit pref]
+     [    0.888002] ACPI: EC: interrupt unblocked
+     [    0.888002] ACPI: EC: event unblocked
+     [    0.888062] ACPI: EC: EC_CMD/EC_SC=0x934, EC_DATA=0x930
+     [    0.888062] ACPI: EC: GPE=0x6e
+     […]
+
+I created two bug reports [1][2] for each of these delays. 
+Unfortunately, the device is used in production by a user, so I can’t do 
+any testing.
+
+Linux taking less than 0.5 seconds to execute on modern consumer 
+hardware still should be a goal in my opinion.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=216481
+[2]: https://bugzilla.kernel.org/show_bug.cgi?id=216482
