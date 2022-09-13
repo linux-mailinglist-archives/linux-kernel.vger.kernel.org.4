@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650065B744B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2742F5B74DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbiIMPXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S232198AbiIMP3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235899AbiIMPWR (ORCPT
+        with ESMTP id S231656AbiIMP1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:22:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A56D7C1CD;
-        Tue, 13 Sep 2022 07:36:55 -0700 (PDT)
+        Tue, 13 Sep 2022 11:27:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D377DF60;
+        Tue, 13 Sep 2022 07:38:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FC89614C0;
-        Tue, 13 Sep 2022 14:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50318C433B5;
-        Tue, 13 Sep 2022 14:35:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3162CB80FE1;
+        Tue, 13 Sep 2022 14:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E7EDC433B5;
+        Tue, 13 Sep 2022 14:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079711;
-        bh=c+8isZ6YTFjQhAE68z6WOk1AgkqlsJDOpn1OWpRm7yg=;
+        s=korg; t=1663079796;
+        bh=ysz1jOKMvZYF00xca0bynzbiuGanz8aiYjGSU62Dn08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RBuQVhVxt5cI0/Vw2sIypmb2xpvKCM8n4Dof1BXIZwd00S/eptn8Pga4eyuyu4+H4
-         5Kl/0J4mukJ92YZvhZry+jYmNOPzkKehcq9rcVj82W5qu01LwEqXPEJHyVC/ojsqyp
-         DImCPvokHwsb8JSz4EgaO282u5+0SOpSK5aG/XEk=
+        b=FRFVrDegazDo/gh4iUCyY4irmkTuNXG+C1D9PmNeMG7Ec+A/KT+FBUNtKKhviB8ru
+         7dGAwNwXp8doRsa5sZN+tC8tdHGwNn91zKBrQs0pVPa9oHvzKfz+IAdp6+UK4+nSMU
+         WPv9yVzZm5zG3DZEDSweU6rIpnMyECub06I8X73w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pattara Teerapong <pteerapong@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 45/61] ALSA: aloop: Fix random zeros in capture data when using jiffies timer
-Date:   Tue, 13 Sep 2022 16:07:47 +0200
-Message-Id: <20220913140348.726635924@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Rondreis <linhaoguo86@gmail.com>
+Subject: [PATCH 4.9 17/42] USB: core: Prevent nested device-reset calls
+Date:   Tue, 13 Sep 2022 16:07:48 +0200
+Message-Id: <20220913140343.138541841@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pattara Teerapong <pteerapong@chromium.org>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit 3e48940abee88b8dbbeeaf8a07e7b2b6be1271b3 upstream.
+commit 9c6d778800b921bde3bff3cff5003d1650f942d1 upstream.
 
-In loopback_jiffies_timer_pos_update(), we are getting jiffies twice.
-First time for playback, second time for capture. Jiffies can be updated
-between these two calls and if the capture jiffies is larger, extra zeros
-will be filled in the capture buffer.
+Automatic kernel fuzzing revealed a recursive locking violation in
+usb-storage:
 
-Change to get jiffies once and use it for both playback and capture.
+============================================
+WARNING: possible recursive locking detected
+5.18.0 #3 Not tainted
+--------------------------------------------
+kworker/1:3/1205 is trying to acquire lock:
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
 
-Signed-off-by: Pattara Teerapong <pteerapong@chromium.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220901144036.4049060-1-pteerapong@chromium.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+but task is already holding lock:
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+
+...
+
+stack backtrace:
+CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+check_deadlock kernel/locking/lockdep.c:3031 [inline]
+validate_chain kernel/locking/lockdep.c:3816 [inline]
+__lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
+lock_acquire kernel/locking/lockdep.c:5665 [inline]
+lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
+__mutex_lock_common kernel/locking/mutex.c:603 [inline]
+__mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
+r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
+usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+device_remove drivers/base/dd.c:545 [inline]
+device_remove+0x11f/0x170 drivers/base/dd.c:537
+__device_release_driver drivers/base/dd.c:1222 [inline]
+device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
+usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
+usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
+
+This turned out not to be an error in usb-storage but rather a nested
+device reset attempt.  That is, as the rtl8712 driver was being
+unbound from a composite device in preparation for an unrelated USB
+reset (that driver does not have pre_reset or post_reset callbacks),
+its ->remove routine called usb_reset_device() -- thus nesting one
+reset call within another.
+
+Performing a reset as part of disconnect processing is a questionable
+practice at best.  However, the bug report points out that the USB
+core does not have any protection against nested resets.  Adding a
+reset_in_progress flag and testing it will prevent such errors in the
+future.
+
+Link: https://lore.kernel.org/all/CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com/
+Cc: stable@vger.kernel.org
+Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YwkflDxvg0KWqyZK@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/drivers/aloop.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/usb/core/hub.c |   10 ++++++++++
+ include/linux/usb.h    |    2 ++
+ 2 files changed, 12 insertions(+)
 
---- a/sound/drivers/aloop.c
-+++ b/sound/drivers/aloop.c
-@@ -477,17 +477,18 @@ static unsigned int loopback_pos_update(
- 			cable->streams[SNDRV_PCM_STREAM_PLAYBACK];
- 	struct loopback_pcm *dpcm_capt =
- 			cable->streams[SNDRV_PCM_STREAM_CAPTURE];
--	unsigned long delta_play = 0, delta_capt = 0;
-+	unsigned long delta_play = 0, delta_capt = 0, cur_jiffies;
- 	unsigned int running, count1, count2;
- 
-+	cur_jiffies = jiffies;
- 	running = cable->running ^ cable->pause;
- 	if (running & (1 << SNDRV_PCM_STREAM_PLAYBACK)) {
--		delta_play = jiffies - dpcm_play->last_jiffies;
-+		delta_play = cur_jiffies - dpcm_play->last_jiffies;
- 		dpcm_play->last_jiffies += delta_play;
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5701,6 +5701,11 @@ re_enumerate_no_bos:
+  * the reset is over (using their post_reset method).
+  *
+  * Return: The same as for usb_reset_and_verify_device().
++ * However, if a reset is already in progress (for instance, if a
++ * driver doesn't have pre_ or post_reset() callbacks, and while
++ * being unbound or re-bound during the ongoing reset its disconnect()
++ * or probe() routine tries to perform a second, nested reset), the
++ * routine returns -EINPROGRESS.
+  *
+  * Note:
+  * The caller must own the device lock.  For example, it's safe to use
+@@ -5734,6 +5739,10 @@ int usb_reset_device(struct usb_device *
+ 		return -EISDIR;
  	}
  
- 	if (running & (1 << SNDRV_PCM_STREAM_CAPTURE)) {
--		delta_capt = jiffies - dpcm_capt->last_jiffies;
-+		delta_capt = cur_jiffies - dpcm_capt->last_jiffies;
- 		dpcm_capt->last_jiffies += delta_capt;
- 	}
++	if (udev->reset_in_progress)
++		return -EINPROGRESS;
++	udev->reset_in_progress = 1;
++
+ 	port_dev = hub->ports[udev->portnum - 1];
  
+ 	/*
+@@ -5798,6 +5807,7 @@ int usb_reset_device(struct usb_device *
+ 
+ 	usb_autosuspend_device(udev);
+ 	memalloc_noio_restore(noio_flag);
++	udev->reset_in_progress = 0;
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(usb_reset_device);
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -531,6 +531,7 @@ struct usb3_lpm_parameters {
+  * @level: number of USB hub ancestors
+  * @can_submit: URBs may be submitted
+  * @persist_enabled:  USB_PERSIST enabled for this device
++ * @reset_in_progress: the device is being reset
+  * @have_langid: whether string_langid is valid
+  * @authorized: policy has said we can use it;
+  *	(user space) policy determines if we authorize this device to be
+@@ -609,6 +610,7 @@ struct usb_device {
+ 
+ 	unsigned can_submit:1;
+ 	unsigned persist_enabled:1;
++	unsigned reset_in_progress:1;
+ 	unsigned have_langid:1;
+ 	unsigned authorized:1;
+ 	unsigned authenticated:1;
 
 
