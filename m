@@ -2,113 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F8E5B776C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0BE5B76B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiIMRMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S231666AbiIMQsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiIMRLh (ORCPT
+        with ESMTP id S231335AbiIMQrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:11:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3CE719AD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:00:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43CE6B80F6F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C16C433D6;
-        Tue, 13 Sep 2022 15:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663082129;
-        bh=9574kaSGiUpQ1RKeeeAf7bmjgJV7cpo3A99ptlG2Ccw=;
+        Tue, 13 Sep 2022 12:47:43 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C897606A2;
+        Tue, 13 Sep 2022 08:41:44 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id C272620B929D; Tue, 13 Sep 2022 08:15:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C272620B929D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1663082155;
+        bh=WTd0YT7pAoz6+7BUN2oTnacIxnBrjt3cagXvZkHwe44=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GVQSXgc1SwLvIiJiCD5KSewwiyO4s7/WwES4cFEGdhdMky9qaTLL60W9Vc26N/h9v
-         GHbMU5y75SAmzHJCbiS6FfBkGlbLICQIbmzIBpQnkFzfEhthi68ASmLBPuHJZPbvIu
-         d1usMpJZcffYdQgkkQJrJlMVzwiEhdTNP+i3JP0s=
-Date:   Tue, 13 Sep 2022 17:15:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Olof Johansson <olof@lixom.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
-Message-ID: <YyCequVJnV3p0Cpw@kroah.com>
-References: <YuqDMLF2AQyj4+N1@kroah.com>
- <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
- <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
+        b=YrI2ja/4BU+u+NWsYX5ro5uhm+4IimKhZK/vgeiSiAKvpxAyBRwyUEBEhqXLUyKLQ
+         mW3ieqiOY6/XCYrcHV5549Oat6uj3V7krsUzfqquajHFkBGmkez4ZQeehiE1riIIdg
+         OJ6686lkJu4Frsd8ORcbB1WZZhDuPjeHUU2YW2kY=
+Date:   Tue, 13 Sep 2022 08:15:55 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-hyperv@vger.kernel.org, airlied@linux.ie,
+        ssengar@microsoft.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mikelley@microsoft.com,
+        drawat.floss@gmail.com
+Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
+ VMs
+Message-ID: <20220913151555.GA22169@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+ <14302178-c797-8635-4325-070f78b7f805@suse.de>
+ <20220911162119.GB7754@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <34e6ccfe-d6a0-e832-14a9-0445b61db106@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <34e6ccfe-d6a0-e832-14a9-0445b61db106@suse.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
-> On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > > Saravana Kannan (11):
-> > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
-> > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
-> > >       driver core: Add wait_for_init_devices_probe helper function
-> > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
-> > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
-> > >       driver core: Set fw_devlink.strict=1 by default
-> > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
-> > >       driver core: Delete driver_deferred_probe_check_state()
-> > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
-> > >       of: base: Avoid console probe delay when fw_devlink.strict=1
-> >
-> > The last patch in this list regresses my HoneyComb LX2K (ironically
-> > the machine I do maintainer work on). It stops PCIe from probing, but
-> > without a single message indicating why.
-> >
-> > The reason seems to be that the iommu-maps property doesn't get
-> > patched up by my (older) u-boot, and thus isn't a valid reference.
-> > System works fine without IOMMU, which is how I've ran it for a couple
-> > of years.
-> >
-> > It's also extremely hard to diagnose out of the box because there are
-> > *no error messages*. And there were no warnings leading up to this
-> > strict enforcement.
-> >
-> > This "feature" seems to have been done backwards. The checks should
-> > have been running (and not skipped due to the "optional" flag), but
-> > also not causing errors, just warnings. That would have given users a
-> > chance to know that this is something that needs to be fixed.
-> >
-> > And when you flip the switch, at least report what failed so that
-> > people don't need to spend a whole night bisecting kernels, please.
-> >
-> > Greg, mind reverting just the last one? If I hit this, I presume
-> > others would too.
+On Mon, Sep 12, 2022 at 09:03:53AM +0200, Thomas Zimmermann wrote:
+> Hi
 > 
-> Apologies, wrong patch pointed out. The culprit is "driver core: Set
-> fw_devlink.strict=1 by default", 71066545b48e42.
+> Am 11.09.22 um 18:21 schrieb Saurabh Singh Sengar:
+> >On Sat, Sep 10, 2022 at 08:11:24PM +0200, Thomas Zimmermann wrote:
+> >>Hi
+> >>
+> >>Am 09.09.22 um 16:43 schrieb Saurabh Sengar:
+> >>>hyperv_setup_vram tries to remove conflicting framebuffer based on
+> >>>'screen_info'. As observed in past due to some bug or wrong setting
+> >>>in grub, the 'screen_info' fields may not be set for Gen1, and in such
+> >>>cases drm_aperture_remove_conflicting_framebuffers will not do anything
+> >>>useful.
+> >>>For Gen1 VMs, it should always be possible to get framebuffer
+> >>>conflict removed using PCI device instead.
+> >>>
+> >>>Fixes: a0ab5abced55 ("drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size")
+> >>>Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> >>>---
+> >>>  drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 24 ++++++++++++++++++++----
+> >>>  1 file changed, 20 insertions(+), 4 deletions(-)
+> >>>
+> >>>diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> >>>index 6d11e7938c83..b0cc974efa45 100644
+> >>>--- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> >>>+++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> >>>@@ -73,12 +73,28 @@ static int hyperv_setup_vram(struct hyperv_drm_device *hv,
+> >>>  			     struct hv_device *hdev)
+> >>>  {
+> >>>  	struct drm_device *dev = &hv->dev;
+> >>>+	struct pci_dev *pdev;
+> >>>  	int ret;
+> >>>-	drm_aperture_remove_conflicting_framebuffers(screen_info.lfb_base,
+> >>>-						     screen_info.lfb_size,
+> >>>-						     false,
+> >>>-						     &hyperv_driver);
+> >>>+	if (efi_enabled(EFI_BOOT)) {
+> >>>+		drm_aperture_remove_conflicting_framebuffers(screen_info.lfb_base,
+> >>>+							     screen_info.lfb_size,
+> >>
+> >>Using screen_info here seems wrong in any case. You want to remove
+> >>the framebuffer devices that conflict with your driver, which might
+> >>be unrelated to screen_info. AFAICT the correct solution would
+> >>always retrieve the PCI device for removal (i.e., always do the else
+> >>branch).
+> >
+> >In a Gen2 VM, the Hyper-V frame buffer device is presented only as a VMbus device.
+> >It's not presented as a PCI device like it is in a Gen1 VM. This would have worked
+> >if we had the frame buffer device available as PCI device in Gen2 but unfortunately
+> >thats not the case here.
+> 
+> Thanks for explaining. There is an instance of struct hv_device
+> passed to the probe function. I suspect you cannot get the
+> framebuffer range from this instance (e.g., via the device's
+> platform_data)?
+> 
+> If you absolutely can't get the actual memory region from the
+> device, it's better to remove all framebuffers via
+> drm_aperture_remove_framebuffers() than to use screen_info.
+> 
+> Best regards
+> Thomas
 
-Is this still an issue in -rc5?  A number of patches in the above series
-was just reverted and hopefully should have resolved the issue you are
-seeing.
+Thanks for your suggestion, and I thought of using drm_aperture_remove_framebuffers
+here, but this driver will be used in many different systems with many other graphics
+devices (GPU etc). Removing all the framebuffer is a bit blunt approach which may disturb
+the devices we are not intended to and which are even outside of the HyperV MMIO region.
+I feel this API use will be risky, and I would like to stick to the earlier method which
+is proven to be working for many years and we are sure it won't disturb anyone outside
+MMIO region.
 
-thanks,
+Regards,
+Saurabh
+> 
+> >
+> >Regards,
+> >Saurabh
+> >
+> >>
+> >>Best regard
+> >>Thomas
+> >>
+> >>>+							     false,
+> >>>+							     &hyperv_driver);
+> >>>+	} else {
+> >>>+		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT, PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+> >>>+		if (!pdev) {
+> >>>+			drm_err(dev, "Unable to find PCI Hyper-V video\n");
+> >>>+			return -ENODEV;
+> >>>+		}
+> >>>+
+> >>>+		ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &hyperv_driver);
+> >>>+		pci_dev_put(pdev);
+> >>>+		if (ret) {
+> >>>+			drm_err(dev, "Not able to remove boot fb\n");
+> >>>+			return ret;
+> >>>+		}
+> >>>+	}
+> >>>  	hv->fb_size = (unsigned long)hv->mmio_megabytes * 1024 * 1024;
+> >>
+> >>-- 
+> >>Thomas Zimmermann
+> >>Graphics Driver Developer
+> >>SUSE Software Solutions Germany GmbH
+> >>Maxfeldstr. 5, 90409 Nürnberg, Germany
+> >>(HRB 36809, AG Nürnberg)
+> >>Geschäftsführer: Ivo Totev
+> >
+> >
+> >
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
 
-greg k-h
+
+
