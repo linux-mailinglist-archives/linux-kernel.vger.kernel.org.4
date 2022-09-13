@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7202B5B7187
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7271A5B71D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiIMOnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S233227AbiIMOvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiIMOmJ (ORCPT
+        with ESMTP id S234366AbiIMOsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:42:09 -0400
+        Tue, 13 Sep 2022 10:48:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51646DACF;
-        Tue, 13 Sep 2022 07:22:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12A69F4D;
+        Tue, 13 Sep 2022 07:25:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A1BAB80F9B;
-        Tue, 13 Sep 2022 14:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0756BC433C1;
-        Tue, 13 Sep 2022 14:15:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B65E0B80F3B;
+        Tue, 13 Sep 2022 14:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C86C433C1;
+        Tue, 13 Sep 2022 14:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078511;
-        bh=1JNDSZ159f0NlIgztWiRuPXGCSt4cspPdHdovCGDwX4=;
+        s=korg; t=1663079032;
+        bh=DXF54WQlcK/aA3dHJYwUJ8ZCOz+KS60hmD4fshTAbLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k6G1Rq98VVy/B2HUs5y3/R3gIjFgavPMH1w16kZ9VnG+5KmFnzXVFEhL1WUCfYhgb
-         qvDoSR5tuuFnYG74m2qQNNR0x/9LjT4qAAi1tI0ClKuO1kbTaiXumYvYUIeefcyRW1
-         Ia59gKCAshR0Uw1gqL9be3r3Y9V3sMavJjkkvDco=
+        b=EI26L6lbjmjejlLkS9UaPiAgXyfIj8dObayfzEBReThHrUQtfP6x+TUSsQQVjzlSI
+         N10+gY54lE5nAAWVho8LWjNxvYUkywcKy00Y8PmY4mpkzEjnOPEyVjalwgpHd7ulBw
+         RpvlYA+w7v4NVCnUWXHe+oS4eaWq5rQlNAkXY1YA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Sperbeck <jsperbeck@google.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 169/192] iommu/amd: use full 64-bit value in build_completion_wait()
-Date:   Tue, 13 Sep 2022 16:04:35 +0200
-Message-Id: <20220913140418.452069037@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 31/79] scsi: mpt3sas: Fix use-after-free warning
+Date:   Tue, 13 Sep 2022 16:04:36 +0200
+Message-Id: <20220913140351.803187957@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Sperbeck <jsperbeck@google.com>
+From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-[ Upstream commit 94a568ce32038d8ff9257004bb4632e60eb43a49 ]
+commit 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34 upstream.
 
-We started using a 64 bit completion value.  Unfortunately, we only
-stored the low 32-bits, so a very large completion value would never
-be matched in iommu_completion_wait().
+Fix the following use-after-free warning which is observed during
+controller reset:
 
-Fixes: c69d89aff393 ("iommu/amd: Use 4K page for completion wait write-back semaphore")
-Signed-off-by: John Sperbeck <jsperbeck@google.com>
-Link: https://lore.kernel.org/r/20220801192229.3358786-1-jsperbeck@google.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 23 PID: 5399 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
+
+Link: https://lore.kernel.org/r/20220906134908.1039-2-sreekanth.reddy@broadcom.com
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/amd/iommu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 840831d5d2ad9..a0924144bac80 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -874,7 +874,8 @@ static void build_completion_wait(struct iommu_cmd *cmd,
- 	memset(cmd, 0, sizeof(*cmd));
- 	cmd->data[0] = lower_32_bits(paddr) | CMD_COMPL_WAIT_STORE_MASK;
- 	cmd->data[1] = upper_32_bits(paddr);
--	cmd->data[2] = data;
-+	cmd->data[2] = lower_32_bits(data);
-+	cmd->data[3] = upper_32_bits(data);
- 	CMD_SET_TYPE(cmd, CMD_COMPL_WAIT);
- }
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3501,6 +3501,7 @@ static struct fw_event_work *dequeue_nex
+ 		fw_event = list_first_entry(&ioc->fw_event_list,
+ 				struct fw_event_work, list);
+ 		list_del_init(&fw_event->list);
++		fw_event_work_put(fw_event);
+ 	}
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
  
--- 
-2.35.1
-
+@@ -3559,7 +3560,6 @@ _scsih_fw_event_cleanup_queue(struct MPT
+ 		if (cancel_work_sync(&fw_event->work))
+ 			fw_event_work_put(fw_event);
+ 
+-		fw_event_work_put(fw_event);
+ 	}
+ 	ioc->fw_events_cleanup = 0;
+ }
 
 
