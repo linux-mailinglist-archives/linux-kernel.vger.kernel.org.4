@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC745B6FF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFC45B70AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbiIMOWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S234017AbiIMObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiIMOT0 (ORCPT
+        with ESMTP id S234050AbiIMO3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:19:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BE160521;
-        Tue, 13 Sep 2022 07:14:12 -0700 (PDT)
+        Tue, 13 Sep 2022 10:29:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1081513E11;
+        Tue, 13 Sep 2022 07:18:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57239B80EFE;
-        Tue, 13 Sep 2022 14:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC919C433C1;
-        Tue, 13 Sep 2022 14:12:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37477614CB;
+        Tue, 13 Sep 2022 14:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C71C433D6;
+        Tue, 13 Sep 2022 14:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078359;
-        bh=tQW4SNwZ89AIkLk7gRX1QP1Z3Rl/XWfyV+Srb2aiF18=;
+        s=korg; t=1663078615;
+        bh=9BUB6F8qHCVRmkkXwqJ9eg/dFaiKKeYVazMEdqCcvko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d7+jiD9XGWvWbEPhDRftK2UWKRMBJxiFrR+CmrUQJelM6eVMjvPYCEPuOao2e1R86
-         2MrWyM7gmtl5ILznRgPrLo5jme9bA6IgifV0Ccd8H4LHD2W+AQJd2LWhmYOgErFJyX
-         13L7AxGsqjaaZ33si7VoXwmBcJwsz3IX7YaAPBDg=
+        b=mE3wksAZ3B5ClQBmgaXooVp7CzAvP7xUOdbtZ/RQMyz7Jm1wccbabrfv4FhGcPuBz
+         y1N2fwGXt4P34SqBzupbXFfdwA8RhNlmznOEaJYN0Ibbkt1I3oQsNg2xZsLaaAKi+2
+         qQU7aXunXiemLNo9HWQ1hc7rrg5iMBtYEN3OPBnU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 101/192] ARM: dts: at91: sama5d27_wlsom1: dont keep ldo2 enabled all the time
-Date:   Tue, 13 Sep 2022 16:03:27 +0200
-Message-Id: <20220913140415.000924524@linuxfoundation.org>
+Subject: [PATCH 5.15 017/121] parisc: Add runtime check to prevent PA2.0 kernels on PA1.x machines
+Date:   Tue, 13 Sep 2022 16:03:28 +0200
+Message-Id: <20220913140358.082052557@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 617a0d9fe6867bf5b3b7272629cd780c27c877d9 ]
+[ Upstream commit 591d2108f3abc4db9f9073cae37cf3591fd250d6 ]
 
-ldo2 is not used by any consumer on sama5d27_wlsom1 board, thus
-don't keep it enabled all the time.
+If a 32-bit kernel was compiled for PA2.0 CPUs, it won't be able to run
+on machines with PA1.x CPUs. Add a check and bail out early if a PA1.x
+machine is detected.
 
-Fixes: 5d4c3cfb63fe ("ARM: dts: at91: sama5d27_wlsom1: add SAMA5D27 wlsom1 and wlsom1-ek")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220826083927.3107272-8-claudiu.beznea@microchip.com
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/parisc/kernel/head.S | 43 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-index de0bef06af2c4..d6f364c6be94b 100644
---- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-+++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-@@ -177,7 +177,6 @@
- 				regulator-name = "LDO2";
- 				regulator-min-microvolt = <1800000>;
- 				regulator-max-microvolt = <3300000>;
--				regulator-always-on;
+diff --git a/arch/parisc/kernel/head.S b/arch/parisc/kernel/head.S
+index aa93d775c34db..598d0938449da 100644
+--- a/arch/parisc/kernel/head.S
++++ b/arch/parisc/kernel/head.S
+@@ -22,7 +22,7 @@
+ #include <linux/init.h>
+ #include <linux/pgtable.h>
  
- 				regulator-state-standby {
- 					regulator-on-in-suspend;
+-	.level	PA_ASM_LEVEL
++	.level	1.1
+ 
+ 	__INITDATA
+ ENTRY(boot_args)
+@@ -69,6 +69,47 @@ $bss_loop:
+ 	stw,ma          %arg2,4(%r1)
+ 	stw,ma          %arg3,4(%r1)
+ 
++#if !defined(CONFIG_64BIT) && defined(CONFIG_PA20)
++	/* This 32-bit kernel was compiled for PA2.0 CPUs. Check current CPU
++	 * and halt kernel if we detect a PA1.x CPU. */
++	ldi		32,%r10
++	mtctl		%r10,%cr11
++	.level 2.0
++	mfctl,w		%cr11,%r10
++	.level 1.1
++	comib,<>,n	0,%r10,$cpu_ok
++
++	load32		PA(msg1),%arg0
++	ldi		msg1_end-msg1,%arg1
++$iodc_panic:
++	copy		%arg0, %r10
++	copy		%arg1, %r11
++	load32		PA(init_stack),%sp
++#define MEM_CONS 0x3A0
++	ldw		MEM_CONS+32(%r0),%arg0	// HPA
++	ldi		ENTRY_IO_COUT,%arg1
++	ldw		MEM_CONS+36(%r0),%arg2	// SPA
++	ldw		MEM_CONS+8(%r0),%arg3	// layers
++	load32		PA(__bss_start),%r1
++	stw		%r1,-52(%sp)		// arg4
++	stw		%r0,-56(%sp)		// arg5
++	stw		%r10,-60(%sp)		// arg6 = ptr to text
++	stw		%r11,-64(%sp)		// arg7 = len
++	stw		%r0,-68(%sp)		// arg8
++	load32		PA(.iodc_panic_ret), %rp
++	ldw		MEM_CONS+40(%r0),%r1	// ENTRY_IODC
++	bv,n		(%r1)
++.iodc_panic_ret:
++	b .				/* wait endless with ... */
++	or		%r10,%r10,%r10	/* qemu idle sleep */
++msg1:	.ascii "Can't boot kernel which was built for PA8x00 CPUs on this machine.\r\n"
++msg1_end:
++
++$cpu_ok:
++#endif
++
++	.level	PA_ASM_LEVEL
++
+ 	/* Initialize startup VM. Just map first 16/32 MB of memory */
+ 	load32		PA(swapper_pg_dir),%r4
+ 	mtctl		%r4,%cr24	/* Initialize kernel root pointer */
 -- 
 2.35.1
 
