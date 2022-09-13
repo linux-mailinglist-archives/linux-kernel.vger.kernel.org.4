@@ -2,199 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0245B7B73
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1335B7B6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiIMTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S229828AbiIMTck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiIMTbi (ORCPT
+        with ESMTP id S229965AbiIMTcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:31:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701DE74BB7;
-        Tue, 13 Sep 2022 12:30:05 -0700 (PDT)
-Received: from dimapc.. (109-252-122-187.nat.spd-mgts.ru [109.252.122.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C9DD6601FF1;
-        Tue, 13 Sep 2022 20:29:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663097403;
-        bh=32DT79p8L1K15f6adhGbahiu94xS3zGj4oLq3s2Q/bk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RMDqnedVbqHb7nXTgtvUlemkGPaw5x7Ocza7HJwGwRyBSTSUoRCggPri0A1KoTJfR
-         hl6alpo8d9bxRC3Nl8mOBteOffY+Vgq+A2938CkdExRpcrvoNHA5EDYPTWxR7Dfl+b
-         57IsuZXJkgU+dsV9E9BYBQL3VBYcipoEMavmX+EJfPqfoficwCz+uIuqDVh8R+l9Rk
-         Srhijm0Ziy1k77ovcr3QnJx52fLHMAQ5+EHO2TLApf6k9a1uKpeCz4DbkaLraZP17O
-         YL5KE+sqZx/bRhDyqJzBd/K6NKc9HsD6DTBN/P5oC7axUA7QEOpLF9GNyaDCJeFQl5
-         RioIt2Y0cPdeQ==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tue, 13 Sep 2022 15:32:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C57A744;
+        Tue, 13 Sep 2022 12:30:25 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j12so12685448pfi.11;
+        Tue, 13 Sep 2022 12:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=D2vwqOzav4CEoHkfQCGRtdC0GM50sPPilT94bMdUvjM=;
+        b=nJFfUaF6joYDViuPYmXJaqGEJlU0aKCjzkr3/uyMC9FR9ZUCeiU6lS3mrMfSS4Go1o
+         SiSkoNKE5R5ET4HWPIxeSzfuZgImw9+hHPVK9fBD5/+vDZuxA6jiHw3bo5kTF1+dBQlZ
+         TS5umc5ag+/UI6pTHh1WG/To4VnRbxq/HQMSmSibFcAd18PhSLFnoVDh3J1KshAha1a+
+         wnA3bj6xcYuGGGl5RmHg4N+U8HDwZBujWXcw9F9BcT6w/pyKeXoraOqfxIPp0UBloZfH
+         uhlRMsg/kK6lgUpYpf02ev2ooi2sdcIqQuTMVpnWhp4CA3G3H2zEQNKuP88vZcHWhggU
+         bTeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=D2vwqOzav4CEoHkfQCGRtdC0GM50sPPilT94bMdUvjM=;
+        b=cjHFAWIo6yh2HlgZHwt25edT0QduAWXcDxsb7x0TJHHjU9hf0A1nVy/HzXx2x25hai
+         sfEnzU+/htRgf/IAB4vvrhDfrTNuDBhVsDujNieWMcq8Tg7bM8m03ntwbDiN9TqzvZn0
+         d4/VklwrMRi4Xnz/jO+OL2+4sw3gqceEXfvqqkeDTrLbGSP3YTPvyOINSxCVhRE8t+ZN
+         uvAc5Nqd/jikFs/ygBveoJcrJK7ZfBCYU5z2yXn/NVy3IauYS7BQg8XDcz7QKr12hEvt
+         AUsyJrOkf8clJGGTQQaRK8wHDMVTFr8Ec2jxi6wFyO7kE2FiMVj/nM2PL6Whm5l7IX1V
+         SEVg==
+X-Gm-Message-State: ACgBeo3Knd1daRFQ3gF3JmZFYWhkDfRJj16LfMAsJyBS0JfIOrph4/vN
+        0Cz+OoylR73ltQKkEYbHbwk=
+X-Google-Smtp-Source: AA6agR4QP3iZF1NpQyf3yZ97OjjUp3qIeT9bmLCVv/nJPirFI2hu6uRzc7OSRX8F7zr9GTrDGaNmKw==
+X-Received: by 2002:a63:80c6:0:b0:438:d512:e87c with SMTP id j189-20020a6380c6000000b00438d512e87cmr13605581pgd.619.1663097425170;
+        Tue, 13 Sep 2022 12:30:25 -0700 (PDT)
+Received: from ritvixpc.. ([2405:201:5c0b:6821:308b:e0f8:702c:13e6])
+        by smtp.gmail.com with ESMTPSA id r18-20020a170902c7d200b001745662d568sm8641452pla.278.2022.09.13.12.30.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 12:30:24 -0700 (PDT)
+From:   Ritwik Sahani <ritwik.shn.dev@gmail.com>
+Cc:     Ritwik Sahani <ritwik.shn.dev@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Ruhl Michael J <michael.j.ruhl@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 21/21] dma-buf: Remove obsoleted internal lock
-Date:   Tue, 13 Sep 2022 22:27:57 +0300
-Message-Id: <20220913192757.37727-22-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913192757.37727-1-dmitry.osipenko@collabora.com>
-References: <20220913192757.37727-1-dmitry.osipenko@collabora.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: move trailing statements to next line
+Date:   Wed, 14 Sep 2022 00:59:32 +0530
+Message-Id: <20220913192933.31694-1-ritwik.shn.dev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The internal dma-buf lock isn't needed anymore because the updated
-locking specification claims that dma-buf reservation must be locked
-by importers, and thus, the internal data is already protected by the
-reservation lock. Remove the obsoleted internal lock.
+Adhere to Linux kernel coding style.
 
-Acked-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Reported by checkpatch:
+ERROR: trailing statements should be on next line
+
+Signed-off-by: Ritwik Sahani <ritwik.shn.dev@gmail.com>
 ---
- drivers/dma-buf/dma-buf.c | 14 ++++----------
- include/linux/dma-buf.h   |  9 ---------
- 2 files changed, 4 insertions(+), 19 deletions(-)
+ .../hive_isp_css_common/host/input_system.c    | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index c359bdbdf5be..45462b988aec 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -657,7 +657,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+index 712e01c37870..4b426d938586 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+@@ -878,7 +878,8 @@ static input_system_err_t input_system_configure_channel(
+ 			return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+ 		}
  
- 	dmabuf->file = file;
+-		if (error != INPUT_SYSTEM_ERR_NO_ERROR) return error;
++		if (error != INPUT_SYSTEM_ERR_NO_ERROR)
++			return error;
+ 		// Input switch channel configurations must be combined in united config.
+ 		config.input_switch_cfg.hsync_data_reg[channel.source_cfg.csi_cfg.csi_port * 2]
+ 		    =
+@@ -1586,13 +1587,15 @@ static input_system_err_t input_system_configure_channel_sensor(
  
--	mutex_init(&dmabuf->lock);
- 	INIT_LIST_HEAD(&dmabuf->attachments);
+ 	status = set_source_type(&config.source_type, channel.source_type,
+ 				 &config.source_type_flags);
+-	if (status != INPUT_SYSTEM_ERR_NO_ERROR) return status;
++	if (status != INPUT_SYSTEM_ERR_NO_ERROR)
++		return status;
  
- 	mutex_lock(&db_list.lock);
-@@ -1503,7 +1502,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
- {
- 	struct iosys_map ptr;
--	int ret = 0;
-+	int ret;
+ 	// Check for conflicts on source (implicitly on multicast, capture unit and input buffer).
  
- 	iosys_map_clear(map);
+ 	status = set_csi_cfg(&config.csi_value[port], &channel.source_cfg.csi_cfg,
+ 			     &config.csi_flags[port]);
+-	if (status != INPUT_SYSTEM_ERR_NO_ERROR) return status;
++	if (status != INPUT_SYSTEM_ERR_NO_ERROR)
++		return status;
  
-@@ -1515,28 +1514,25 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
- 	if (!dmabuf->ops->vmap)
- 		return -EINVAL;
+ 	switch (channel.source_cfg.csi_cfg.buffering_mode) {
+ 	case INPUT_SYSTEM_FIFO_CAPTURE:
+@@ -1601,7 +1604,8 @@ static input_system_err_t input_system_configure_channel_sensor(
+ 		mux = INPUT_SYSTEM_MIPI_PORT0 + port;
+ 		status = input_system_multiplexer_cfg(&config.multiplexer, mux,
+ 						      &config.multiplexer_flags);
+-		if (status != INPUT_SYSTEM_ERR_NO_ERROR) return status;
++		if (status != INPUT_SYSTEM_ERR_NO_ERROR)
++			return status;
+ 		config.multicast[port] = INPUT_SYSTEM_CSI_BACKEND;
  
--	mutex_lock(&dmabuf->lock);
- 	if (dmabuf->vmapping_counter) {
- 		dmabuf->vmapping_counter++;
- 		BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
- 		*map = dmabuf->vmap_ptr;
--		goto out_unlock;
-+		return 0;
- 	}
+ 		// Shared resource, so it should be blocked.
+@@ -1616,7 +1620,8 @@ static input_system_err_t input_system_configure_channel_sensor(
+ 		mux = INPUT_SYSTEM_ACQUISITION_UNIT;
+ 		status = input_system_multiplexer_cfg(&config.multiplexer, mux,
+ 						      &config.multiplexer_flags);
+-		if (status != INPUT_SYSTEM_ERR_NO_ERROR) return status;
++		if (status != INPUT_SYSTEM_ERR_NO_ERROR)
++			return status;
+ 		config.multicast[port] = INPUT_SYSTEM_INPUT_BUFFER;
  
- 	BUG_ON(iosys_map_is_set(&dmabuf->vmap_ptr));
+ 		// Shared resource, so it should be blocked.
+@@ -1631,7 +1636,8 @@ static input_system_err_t input_system_configure_channel_sensor(
+ 		mux = INPUT_SYSTEM_ACQUISITION_UNIT;
+ 		status = input_system_multiplexer_cfg(&config.multiplexer, mux,
+ 						      &config.multiplexer_flags);
+-		if (status != INPUT_SYSTEM_ERR_NO_ERROR) return status;
++		if (status != INPUT_SYSTEM_ERR_NO_ERROR)
++			return status;
+ 		config.multicast[port] = INPUT_SYSTEM_INPUT_BUFFER;
  
- 	ret = dmabuf->ops->vmap(dmabuf, &ptr);
- 	if (WARN_ON_ONCE(ret))
--		goto out_unlock;
-+		return ret;
- 
- 	dmabuf->vmap_ptr = ptr;
- 	dmabuf->vmapping_counter = 1;
- 
- 	*map = dmabuf->vmap_ptr;
- 
--out_unlock:
--	mutex_unlock(&dmabuf->lock);
--	return ret;
-+	return 0;
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vmap, DMA_BUF);
- 
-@@ -1578,13 +1574,11 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map)
- 	BUG_ON(dmabuf->vmapping_counter == 0);
- 	BUG_ON(!iosys_map_is_equal(&dmabuf->vmap_ptr, map));
- 
--	mutex_lock(&dmabuf->lock);
- 	if (--dmabuf->vmapping_counter == 0) {
- 		if (dmabuf->ops->vunmap)
- 			dmabuf->ops->vunmap(dmabuf, map);
- 		iosys_map_clear(&dmabuf->vmap_ptr);
- 	}
--	mutex_unlock(&dmabuf->lock);
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap, DMA_BUF);
- 
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index f11b5bbc2f37..6fa8d4e29719 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -326,15 +326,6 @@ struct dma_buf {
- 	/** @ops: dma_buf_ops associated with this buffer object. */
- 	const struct dma_buf_ops *ops;
- 
--	/**
--	 * @lock:
--	 *
--	 * Used internally to serialize list manipulation, attach/detach and
--	 * vmap/unmap. Note that in many cases this is superseeded by
--	 * dma_resv_lock() on @resv.
--	 */
--	struct mutex lock;
--
- 	/**
- 	 * @vmapping_counter:
- 	 *
+ 		// Shared resource, so it should be blocked.
 -- 
-2.37.3
+2.34.1
 
