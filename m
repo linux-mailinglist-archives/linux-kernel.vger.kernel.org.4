@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8617E5B6586
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B285B6591
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiIMCXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S229937AbiIMC1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiIMCXg (ORCPT
+        with ESMTP id S229650AbiIMC1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:23:36 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A44A52DC9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:23:35 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MRRxP5xR6z14QZL;
-        Tue, 13 Sep 2022 10:19:37 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 13 Sep 2022 10:23:33 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 13 Sep 2022 10:23:33 +0800
-Subject: Re: [PATCH -next] habanalabs/gaudi2: fix free irq in error path in
- gaudi2_enable_msix()
-To:     Oded Gabbay <ogabbay@kernel.org>
-CC:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-References: <20220825133123.1874337-1-yangyingliang@huawei.com>
- <CAFCwf13WoDk6y435zmG5VQa1kRqDo1TA26ZhT5=bTp6qtQr8XQ@mail.gmail.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <6fef3c68-fea2-b5ee-5110-35648b32fe8b@huawei.com>
-Date:   Tue, 13 Sep 2022 10:23:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 12 Sep 2022 22:27:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7450152DD7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:27:07 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRS0l04YxzNm9d;
+        Tue, 13 Sep 2022 10:22:30 +0800 (CST)
+Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 13 Sep
+ 2022 10:27:05 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>,
+        <mhiramat@kernel.org>, <liaochang1@huawei.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <liaochang@huawei.com>, <chenguokai17@mails.ucas.ac.cn>
+Subject: [PATCH V2] riscv/kprobes: allocate detour buffer from module area
+Date:   Tue, 13 Sep 2022 10:23:34 +0800
+Message-ID: <20220913022334.83997-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <CAFCwf13WoDk6y435zmG5VQa1kRqDo1TA26ZhT5=bTp6qtQr8XQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.53]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+To address the limitation of PC-relative branch instruction
+on riscv architecture, detour buffer slot used for optprobes is
+allocated from a region, the distance of which from kernel should be
+less than 4GB.
 
-On 2022/8/29 18:14, Oded Gabbay wrote:
-> On Thu, Aug 25, 2022 at 4:23 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
->> Add two variables to store completion irq and event queue irq. And add
->> a new lable to free event queue irq in error path in gaudi2_enable_msix().
->>
->> Fixes: d7bb1ac89b2f ("habanalabs: add gaudi2 asic-specific code")
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   drivers/misc/habanalabs/gaudi2/gaudi2.c | 21 +++++++++++++--------
->>   1 file changed, 13 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
->> index 98336a1a84b0..54eca19b270b 100644
->> --- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
->> +++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
->> @@ -3518,6 +3518,7 @@ static int gaudi2_enable_msix(struct hl_device *hdev)
->>          struct asic_fixed_properties *prop = &hdev->asic_prop;
->>          struct gaudi2_device *gaudi2 = hdev->asic_specific;
->>          int rc, irq, i, j, user_irq_init_cnt;
->> +       int completion_irq, event_queue_irq;
->>          irq_handler_t irq_handler;
->>          struct hl_cq *cq;
->>
->> @@ -3532,17 +3533,19 @@ static int gaudi2_enable_msix(struct hl_device *hdev)
->>                  return rc;
->>          }
->>
->> -       irq = pci_irq_vector(hdev->pdev, GAUDI2_IRQ_NUM_COMPLETION);
->> +       completion_irq = pci_irq_vector(hdev->pdev, GAUDI2_IRQ_NUM_COMPLETION);
->>          cq = &hdev->completion_queue[GAUDI2_RESERVED_CQ_CS_COMPLETION];
->> -       rc = request_irq(irq, hl_irq_handler_cq, 0, gaudi2_irq_name(GAUDI2_IRQ_NUM_COMPLETION), cq);
->> +       rc = request_irq(completion_irq, hl_irq_handler_cq, 0,
->> +                        gaudi2_irq_name(GAUDI2_IRQ_NUM_COMPLETION), cq);
->>          if (rc) {
->>                  dev_err(hdev->dev, "Failed to request IRQ %d", irq);
-> Please fix the error prints to print the correct irq.
-OK.
-> And I think you should remove the "irq" local variable completely.
-'irq' will be used later, it can not be removed.
+For the time being, Modules region always live before the kernel.
+But Vmalloc region reside far from kernel, the distance is half of the
+kernel address space (See Documentation/riscv/vm-layout.rst), hence it
+needs to override the alloc_optinsn_page() to make sure allocate detour
+buffer from jump-safe region.
 
-Thanks,
-Yang
->
-> Oded
->
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+---
+v2:
+1. Avoid to depend on CONFIG_MODUELS.
+2. Override alloc_optinsn_page to allocate slot from jump-safe region.
+
+---
+ arch/riscv/kernel/probes/kprobes.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+index e6e950b7cf32..fd62b0b086d2 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -12,6 +12,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/bug.h>
+ #include <asm/patch.h>
++#include <asm/set_memory.h>
+ 
+ #include "decode-insn.h"
+ 
+@@ -84,6 +85,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ }
+ 
+ #ifdef CONFIG_MMU
++#ifdef CONFIG_OPTPROBES
++void *alloc_optinsn_page(void)
++{
++	void *page;
++
++	page = __vmalloc_node_range(PAGE_SIZE, 1, MODULES_VADDR,
++				    MODULES_END, GFP_KERNEL,
++				    PAGE_KERNEL, 0, NUMA_NO_NODE,
++				    __builtin_return_address(0));
++	if (!page)
++		return NULL;
++
++	set_vm_flush_reset_perms(page);
++	/*
++	 * First make the page read-only, and only then make it executable to
++	 * prevent it from being W+X in between.
++	 */
++	set_memory_ro((unsigned long)page, 1);
++	set_memory_x((unsigned long)page, 1);
++
++	return page;
++}
++#endif
++
+ void *alloc_insn_page(void)
+ {
+ 	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
+-- 
+2.17.1
+
