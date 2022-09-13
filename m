@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B215B73FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE5F5B74FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiIMPQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S236494AbiIMPaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235892AbiIMPOG (ORCPT
+        with ESMTP id S236501AbiIMP2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:14:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034B45C9D8;
-        Tue, 13 Sep 2022 07:33:40 -0700 (PDT)
+        Tue, 13 Sep 2022 11:28:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B213229;
+        Tue, 13 Sep 2022 07:39:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8C7614F6;
-        Tue, 13 Sep 2022 14:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34043C433C1;
-        Tue, 13 Sep 2022 14:33:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12931614C2;
+        Tue, 13 Sep 2022 14:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6B0C433D6;
+        Tue, 13 Sep 2022 14:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079595;
-        bh=VNkiXlupSnUv/zFQJS9XA2oRdoEVAlkzh7X/DSkhBZU=;
+        s=korg; t=1663079822;
+        bh=yncqrQpyzgj+vKIvrbJMO5mYWUXmnL5KckJVKPgN1Vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M5PYit+6t/80U6/FCiVgULOJ5nMvT7QssOxikvoBA3qcfJj3jCmJ8Sa9h9L8ZNpm5
-         UwA65welr4zU1jOQ/lSIbVide8WMHjPQf/GS3mxPJqj4tCdljGcoFV5ZP1vniA3cTF
-         fnwnWrDjEka2l4Tvb6mHczYLlgx628Q6qdCvB/r8=
+        b=xouu6KLAmheeirHMAaejvcCB/tGFujMoftrH9UvgqFf01JvcMrXEYjhVcGJZuII8w
+         6gslvgZ+3WG7YvL2AfR7Psio8BkQTGgqrYvs2QqvOjSGptp2z/JuPxBE1FgIQ3VrKH
+         9/3ha9o9iuT//DYJA0CoZqHgtVvot8HdT8sWKt44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Subject: [PATCH 4.19 79/79] SUNRPC: use _bh spinlocking on ->transport_lock
-Date:   Tue, 13 Sep 2022 16:07:37 +0200
-Message-Id: <20220913140352.684003075@linuxfoundation.org>
+        stable@vger.kernel.org, Niek Nooijens <niek.nooijens@omron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 07/42] USB: serial: ftdi_sio: add Omron CS1W-CIF31 device id
+Date:   Tue, 13 Sep 2022 16:07:38 +0200
+Message-Id: <20220913140342.633559937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "NeilBrown" <neilb@suse.de>
+From: Niek Nooijens <niek.nooijens@omron.com>
 
-Prior to Linux 5.3, ->transport_lock in sunrpc required the _bh style
-spinlocks (when not called from a bottom-half handler).
+commit 001047ea241a9646010b2744451dfbc7289542f3 upstream.
 
-When upstream 3848e96edf4788f772d83990022fa7023a233d83 was backported to
-stable kernels, the spin_lock/unlock calls should have been changed to
-the _bh version, but this wasn't noted in the patch and didn't happen.
+works perfectly with:
+modprobe ftdi_sio
+echo "0590 00b2" | tee
+/sys/module/ftdi_sio/drivers/usb-serial\:ftdi_sio/new_id > /dev/null
 
-So convert these lock/unlock calls to the _bh versions.
+but doing this every reboot is a pain in the ass.
 
-This patch is required for any stable kernel prior to 5.3 to which the
-above mentioned patch was backported.  Namely 4.9.y, 4.14.y, 4.19.y.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
-Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Signed-off-by: Niek Nooijens <niek.nooijens@omron.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sunrpc/xprt.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/serial/ftdi_sio.c     |    2 ++
+ drivers/usb/serial/ftdi_sio_ids.h |    6 ++++++
+ 2 files changed, 8 insertions(+)
 
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1550,9 +1550,9 @@ static void xprt_destroy(struct rpc_xprt
- 	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
- 	 * can only run *before* del_time_sync(), never after.
- 	 */
--	spin_lock(&xprt->transport_lock);
-+	spin_lock_bh(&xprt->transport_lock);
- 	del_timer_sync(&xprt->timer);
--	spin_unlock(&xprt->transport_lock);
-+	spin_unlock_bh(&xprt->transport_lock);
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1040,6 +1040,8 @@ static const struct usb_device_id id_tab
+ 	/* IDS GmbH devices */
+ 	{ USB_DEVICE(IDS_VID, IDS_SI31A_PID) },
+ 	{ USB_DEVICE(IDS_VID, IDS_CM31A_PID) },
++	/* Omron devices */
++	{ USB_DEVICE(OMRON_VID, OMRON_CS1W_CIF31_PID) },
+ 	/* U-Blox devices */
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ZED_PID) },
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ODIN_PID) },
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -661,6 +661,12 @@
+ #define INFINEON_TRIBOARD_TC2X7_PID	0x0043 /* DAS JTAG TriBoard TC2X7 V1.0 */
  
- 	/*
- 	 * Destroy sockets etc from the system workqueue so they can
+ /*
++ * Omron corporation (https://www.omron.com)
++ */
++ #define OMRON_VID			0x0590
++ #define OMRON_CS1W_CIF31_PID		0x00b2
++
++/*
+  * Acton Research Corp.
+  */
+ #define ACTON_VID		0x0647	/* Vendor ID */
 
 
