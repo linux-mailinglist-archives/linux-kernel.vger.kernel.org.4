@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024815B7820
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6F35B77C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiIMRhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S232724AbiIMRXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbiIMRgv (ORCPT
+        with ESMTP id S232858AbiIMRXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:36:51 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05lp2106.outbound.protection.outlook.com [104.47.17.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0184558B53;
-        Tue, 13 Sep 2022 09:26:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hi5dK6jCILfpYbbAPL/hOj95gYQrhvI3dK6MM4YTaMaqlcCABeDg9PsT+3teWvqX9JfnKzsKo4yhTCgnU86wykOpyPIMB52U4+/da0UgmW0HQCGJlQ6j5TiSKgXNgT6Uw5xgRyjkmwjC3qLkjQk8iikpyAHfgfTv75VxQr/vTdYe7OgXvtC9p8Zn/pViDOAOqfYbg5P8+4hf8opfm9gS91vgbEDHlVw1ajlvQ6Wcaf0RplzrM/o+hnlCv0mXZVGoxQJ6nBpMpSGUPAMraGtVpPIQyopocx6j7XAwMNVVguoKOG+PQyZNBunGiKYT5X4bW0FUesE7gSP3Xtc0vtMmJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bneaA6Can9EltQ9Idu83GL3ml+XS+3QAoChRHElZZ8c=;
- b=lGY2v2vxddUr5K0+aN/eZL0qM57SRVSvhCOWtxznzFlO7cNT53bE5Vf9C5Lu5rU2xT0RjpzLKthtCvFjxa6pwgg0cVdHMnOljxRodGjZXu28e0gtQxfmg2QKmqGS/ilVfHMsoXRnJJhOGabsrM1sQIEbJX3O3sy5my6xege/L76CAbK35uvSw/j5owTcWp+RNXbsuE0t7Ob1sqSNpjRkyZ+0bI5ycOfzNykz0WDyNh6rVAEhYG7ewZqBPbS0hNWF11PrpZtyQ1ASoJFjkB6GgwS2C5U5tyfMCb7LVnDZBK8iOJKi7ZZoOm3tXFGnh8P+Az7AnIgK4/uKQ6J18MHGOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bneaA6Can9EltQ9Idu83GL3ml+XS+3QAoChRHElZZ8c=;
- b=Hau5V3WfsHofCe1tvNMy8ovu1wHY3J3k2/KC4v+N015N+sejjbFS9FKtSa6QvSU1sd16ugOvkcIgfSreg0qMi8Fni5EYMWGKmib38mPXrsrbYw4tBSB00u+wIWdchPmBhBRRWvHDH6n/BmdXfOLwfCYe9d2JxE0eoYNuSeeCKu8=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB9PR04MB8362.eurprd04.prod.outlook.com (2603:10a6:10:241::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
- 2022 16:26:48 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 16:26:48 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        George McCollister <george.mccollister@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/3] dt-bindings: net: dsa: mt7530: replace label
- = "cpu" with proper checks
-Thread-Topic: [PATCH net-next 1/3] dt-bindings: net: dsa: mt7530: replace
- label = "cpu" with proper checks
-Thread-Index: AQHYxtA/dY6uSTfa90GnMoLAnp7gyK3dhMGAgAAI24A=
-Date:   Tue, 13 Sep 2022 16:26:48 +0000
-Message-ID: <20220913162647.zylrml4giqxgqngq@skbuf>
-References: <20220912175058.280386-1-vladimir.oltean@nxp.com>
- <20220912175058.280386-2-vladimir.oltean@nxp.com>
- <68902e34-8ef4-994b-8e89-d42b55aeaaec@arinc9.com>
-In-Reply-To: <68902e34-8ef4-994b-8e89-d42b55aeaaec@arinc9.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|DB9PR04MB8362:EE_
-x-ms-office365-filtering-correlation-id: beeabaaf-31b4-42a7-dfa8-08da95a4c1a7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E2s7m4klFFw38njZ6nx1bDbCW0BVKuz78/LXXPCXfulhiLgbmxpaD4qTkXQRBSdc2hZ7gsMbAstFtU3J3ISMngjC1PWo08uA8x4uo+Yz7GrwmSBP3vgLDbrGLo6IP8mFNM0I7N/DytO24LYyLEuwHAM4wzNiXVtfyLruuyDRA2QOFGQnCrZkG1LY9EDCS2GBP/TWn8bnvC4DXaArGbXmW8plMwm/GiUnVAb1h80FlLq5htSAu+gwEAY2ag9r8Fl+ZblOReYYDivW1j28OpfBXGXurAREF6budbWSt5elCrSd9VHX6NAzBy4QR/9RqdMnXy63fNVQ5XT1ukRiV+lOKWbseJ7K9DSGOJamvkETOfIIPuSyVkV8s6kDUP/f7R74LfbkbQUO6JSOb3Ife+n7F23JyYYfeht8a96jwHnfM7FLctY0bxNea51/2UCSUDDclNNtUwok00o3P0M8SUHkvjOem12u4V41kvbNIZzC9e/KM/PhMNuPorgU6oa3BEdG0mPTthoC3igbkWY/zcsEMCsSHNgK47Vkqt4rNNXKZJtTPb53a6mY3idV4ii40anrRETeAmXNDOT9a5xyKuznt1DtTli1ARUq/ShKPfDLJPuvP72hP1yGdYNJy3syY2PLLAC0FTJAEyqdeQN+Tw5UHuESQUXOxJDCVMh6UQ1vI5d9n4D149NPFgZE4UPbd3VOw3Kg9O6Eb9maoh8eGyGODDiInK93CYkArdnNMaq8vJA1lc6dYbOUROlHWqPAHOgm7sK6VKueDsYxv/hjX3D2dg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(366004)(376002)(39860400002)(136003)(396003)(346002)(451199015)(6512007)(66574015)(38070700005)(66476007)(478600001)(86362001)(44832011)(2906002)(4326008)(4744005)(41300700001)(66946007)(76116006)(8936002)(26005)(316002)(53546011)(71200400001)(6916009)(54906003)(1076003)(9686003)(5660300002)(186003)(91956017)(6506007)(6486002)(38100700002)(122000001)(66556008)(7406005)(7416002)(66446008)(64756008)(33716001)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWRDQklKekpnV0c2UmZiQWFoZGVub3I0RlJvOW1zOWo0Rng1anZZcjNNaGZT?=
- =?utf-8?B?ZllxWktYZW9WTGFrdWg5L0RDMFNhTkNLam5NcnIwa0NkUnluVUpsb2x5Ync2?=
- =?utf-8?B?UDU5RGNrMDR1QWlNSVA1QllHWGhVc3dwc3h4SDRKRURYdGM1YzNEb09yZmZv?=
- =?utf-8?B?bmJRMlVyZUlBeVM1bXJ1T1doM1k2eUIvT3lDdWMxRng3dU0vUVhwbXc4TUFk?=
- =?utf-8?B?U1ZQbXBqMHhJL1hkMVVoY3R2Z3I2WUNpNU0yVkJ4cWdDa29uUldXcTJqN2t1?=
- =?utf-8?B?UUV6QitkVDFFMHNDRG1pMi92TUJnMlZsYWp4MzhqMXF3aS9nWm4rcjZsNDRo?=
- =?utf-8?B?dktmVkg5VDMzSEE4VTd4K0hYaE1OMmRaVFkyVitUd2JrSVRIVUNBR2E0U0NP?=
- =?utf-8?B?RDJpRUxnSUQzUmh2UzJOMTJrVW96dU9NYmsxdWdqNWQ0NFB5YVV6SjRwL0dX?=
- =?utf-8?B?TFNWa2Z3UUFMQUVOU2RackIxbEhZcGd1RmlNUW9LZFBtSGRuSVVOYmsyTFFo?=
- =?utf-8?B?SzdMVkUrUjZZQTFkNHB2akJjNS9KK1E2dW8rRHRQby9GbTJFa29DWjdYNzd4?=
- =?utf-8?B?NGdTSEFjRnQxNEhPMmhiT04vNk1OQnBGelV5MmRPUmRlQ0E4S0xBYkFMLzZM?=
- =?utf-8?B?OC9DWDhhbG1QVTI3WG5NbjJWcWNscGl1SkxlMy93SWR3amlQcGdkMUcvbkdr?=
- =?utf-8?B?Y29XKzJFelpRY0dWMERKQmlUQWZEU1JsY21iSUs1UFkwdjRiRnlJdElnM0lh?=
- =?utf-8?B?b2tWSjVqSCtnaEp1UzZSTFA0NnFwNEpjN1NOdkYvc285aTdzSXYvNHhpSm1v?=
- =?utf-8?B?QkdEMFUveFByMDB0ekZlSXFLdEhpZVM0ajg5TUJxdTVRUHNWSVpLTVYraUdv?=
- =?utf-8?B?UE91Q3A2bXU5ZW9CN3h1b1JqUUJ4dlFOeG9TRUFnTXJLT3NSWDNLQUtqbURS?=
- =?utf-8?B?SG9XV1RDL3VhNzBYMEpobUVOQkNQa2xrdVRvMVBjVURWbHVOZW01eWR3bjFC?=
- =?utf-8?B?N3d2RUpRdlZwa2x3Vnp4NWlldXVHVE5rY0RraUJOTEROWENsUWU2Vko2Y2RT?=
- =?utf-8?B?VGtzZi8zU0ozcjYzbTZFdlVOTDlKSHM5NXFKOFhPUTRHYzdiWUdBV1ovR1hZ?=
- =?utf-8?B?Qm1FSHVGVHNHOVNxNVFCTDZUWWc4WlVSMkR0S3h1ck5OekU5cktjNHExcXNJ?=
- =?utf-8?B?eVQ4VVNIMTYvc1FBRjlEVVF3QjRwNzF0WlRmVkwvTUZvQ1NKTnc1L1pUY25Y?=
- =?utf-8?B?d0c2RWtWNEtxYTNlRjh4WDllWTRxUUZyaFp0SFJRN3VBMlI5WkZMd2JzSHA2?=
- =?utf-8?B?Q0JhWHVQTE9td1hYZU0zY3AwdGpwMXppTUV6UTJETDNaM0hmSEw2RmZuUFRp?=
- =?utf-8?B?SzNtNHFOTEtnd0ZCc1lBRmRwL0tpVWptQUwyUjMrclFEdmRWdFc5TndIbktF?=
- =?utf-8?B?UmpjQzQyeitZeFN3SCsvbWtCODN3VVg2RFFLWWtFRVEzeFB4VjFvdE1NRDkz?=
- =?utf-8?B?aHhKR09tdEI2THUwcnJPS1FKMnpyNVQ1aW1zdFB6dlBodGVCUVo4SjdWczky?=
- =?utf-8?B?T3owRk00YVRCczFYZnVRVTBSY0Q5Z0ZlZmJHK2NJbnZReUtEaytnK1NWRFZL?=
- =?utf-8?B?RWFTVGs0VVU3NVIxZzdHNlRLZFV3Wkwzd3g5WVgzckN6dzQxanlXSnhhRUU0?=
- =?utf-8?B?K1lzaHBneEpDTitSNmVlcHdpbWhneDRxYnFLaHZXUFpqMjV0VzYvdDR4ZFFm?=
- =?utf-8?B?TDJrUEQvMnFpMXovd1RFUnZRcnV1bTJxVDdYRGpncnlqNEUrVjhLKy9pTE9I?=
- =?utf-8?B?YU5kcHRIb21nNlpKN3B3MzJtWE1PcGZtR0dyeEV1YkFMZFZTWm5OLy9PWG1I?=
- =?utf-8?B?anVkdlNRYzlHS3NGT3pOODB4RGxjN09iRkhtZmFodjhKQm1yeFhBNnpMTm9S?=
- =?utf-8?B?Y2JJYXlWc3ZzNllwdEN0cFJhSnVqMnlGOGd2NFZwZUlobGtPSVJFVnlqa25z?=
- =?utf-8?B?d1Vub2ZwNHdESENQSU9WMGg4VlpTOU0xZlZFZ1gyanJsVXlQNnNoeG94Rlgw?=
- =?utf-8?B?OGUxTlRjbHcrSUJNL3E5UUx1Z2xjcmkxSmwrTUpYQjdNMUZKSnJaZEpTOUVD?=
- =?utf-8?B?NmRsaWxsbTdkU1FLaWhBUnBabDJvQVZONmZDM3FQV3dyMnM2cFV3UFNBOHds?=
- =?utf-8?B?ZVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FE384459A9982B42AB6021C4C6AFB193@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 13 Sep 2022 13:23:10 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145F99250;
+        Tue, 13 Sep 2022 09:10:30 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MRpLD0B7jzl56c;
+        Wed, 14 Sep 2022 00:08:52 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgBHB4dxqyBjcEAeAw--.28569S2;
+        Wed, 14 Sep 2022 00:10:26 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
+Date:   Tue, 13 Sep 2022 12:27:28 -0400
+Message-Id: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: beeabaaf-31b4-42a7-dfa8-08da95a4c1a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 16:26:48.2057
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ClUrXAsFlju+0P+KCQw3W0vzCG154eSzQm0AdxLvqoV6dNBuvIycTllmR/oIPYh9BzPVdIylYeebpaqiG97njQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8362
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBHB4dxqyBjcEAeAw--.28569S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW7JFWkKryUGFW8tryfXrb_yoW8XFy7pa
+        9rurn8Gr4UCFsakFyfu3Z7ury3Jw4kJry5Xa47A34Fkrn09FyUGr1SvrnxGw47JrZrJ3y2
+        gFyY9rWYgF1UXa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
+        x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6x
+        CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBTZXAgMTMsIDIwMjIgYXQgMDY6NTU6MDVQTSArMDMwMCwgQXLEsW7DpyDDnE5BTCB3
-cm90ZToNCj4gT24gMTIuMDkuMjAyMiAyMDo1MCwgVmxhZGltaXIgT2x0ZWFuIHdyb3RlOg0KPiA+
-IFRoZSBmYWN0IHRoYXQgc29tZSBEU0EgZGV2aWNlIHRyZWVzIHVzZSAnbGFiZWwgPSAiY3B1Iicg
-Zm9yIHRoZSBDUFUgcG9ydA0KPiA+IGlzIG5vdGhpbmcgYnV0IGJsaW5kIGNhcmdvIGN1bHQgY29w
-eWluZy4gVGhlICdsYWJlbCcgcHJvcGVydHkgd2FzIG5ldmVyDQo+ID4gcGFydCBvZiB0aGUgRFNB
-IERUIGJpbmRpbmdzIGZvciBhbnl0aGluZyBleGNlcHQgdGhlIHVzZXIgcG9ydHMsIHdoZXJlIGl0
-DQo+ID4gcHJvdmlkZWQgYSBoaW50IGFzIHRvIHdoYXQgbmFtZSB0aGUgY3JlYXRlZCBuZXRkZXZz
-IHNob3VsZCB1c2UuDQo+ID4gDQo+ID4gRFNBIGRvZXMgdXNlIHRoZSAiY3B1IiBwb3J0IGxhYmVs
-IHRvIGlkZW50aWZ5IGEgQ1BVIHBvcnQgaW4gZHNhX3BvcnRfcGFyc2UoKSwNCj4gPiBidXQgdGhp
-cyBpcyBvbmx5IGZvciBub24tT0YgY29kZSBwYXRocyAocGxhdGZvcm0gZGF0YSkuDQo+ID4gDQo+
-ID4gVGhlIHByb3BlciB3YXkgdG8gaWRlbnRpZnkgYSBDUFUgcG9ydCBpcyB0byBsb29rIGF0IHdo
-ZXRoZXIgdGhlDQo+ID4gJ2V0aGVybmV0JyBwaGFuZGxlIGlzIHByZXNlbnQuDQo+ID4gDQo+ID4g
-U2lnbmVkLW9mZi1ieTogVmxhZGltaXIgT2x0ZWFuIDx2bGFkaW1pci5vbHRlYW5AbnhwLmNvbT4N
-Cj4gDQo+IEkgcmVhbGlzZWQgImR0LWJpbmRpbmdzOiBuZXQ6IGRzYTogbXQ3NTMwOiIgcHJlZml4
-IGlzIHVzZWQgaGVyZSBpbnN0ZWFkIG9mDQo+IHRoZSB1c3VhbCAiZHQtYmluZGluZ3M6IG5ldDog
-ZHNhOiBtZWRpYXRlayxtdDc1MzA6Ii4gRG9lcyB0aGlzIG1hdHRlcj8NCg0KU2luY2UgIm10NzUz
-MCIgaW1wbGllcyAibWVkaWF0ZWsiLCBJIHByZWZlcnJlZCB0byBza2lwIGl0Lg==
+This series adds ftrace direct call for arm64, which is required to attach
+bpf trampoline to fentry.
+
+Although there is no agreement on how to support ftrace direct call on arm64,
+no patch has been posted except the one I posted in [1], so this series
+continues the work of [1] with the addition of long jump support. Now ftrace
+direct call works regardless of the distance between the callsite and custom
+trampoline.
+
+[1] https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
+
+v2:
+- Fix compile and runtime errors caused by ftrace_rec_arch_init
+
+v1: https://lore.kernel.org/bpf/20220913063146.74750-1-xukuohai@huaweicloud.com/
+
+Xu Kuohai (4):
+  ftrace: Allow users to disable ftrace direct call
+  arm64: ftrace: Support long jump for ftrace direct call
+  arm64: ftrace: Add ftrace direct call support
+  ftrace: Fix dead loop caused by direct call in ftrace selftest
+
+ arch/arm64/Kconfig                |   2 +
+ arch/arm64/Makefile               |   4 +
+ arch/arm64/include/asm/ftrace.h   |  35 ++++--
+ arch/arm64/include/asm/patching.h |   2 +
+ arch/arm64/include/asm/ptrace.h   |   6 +-
+ arch/arm64/kernel/asm-offsets.c   |   1 +
+ arch/arm64/kernel/entry-ftrace.S  |  39 ++++--
+ arch/arm64/kernel/ftrace.c        | 198 ++++++++++++++++++++++++++++--
+ arch/arm64/kernel/patching.c      |  14 +++
+ arch/arm64/net/bpf_jit_comp.c     |   4 +
+ include/linux/ftrace.h            |   2 +
+ kernel/trace/Kconfig              |   7 +-
+ kernel/trace/ftrace.c             |   9 +-
+ kernel/trace/trace_selftest.c     |   2 +
+ 14 files changed, 296 insertions(+), 29 deletions(-)
+
+-- 
+2.30.2
+
