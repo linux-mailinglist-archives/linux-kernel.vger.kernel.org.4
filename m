@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB045B703E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864DF5B7110
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbiIMOYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
+        id S234237AbiIMOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233476AbiIMOXW (ORCPT
+        with ESMTP id S233702AbiIMOfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:23:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B5655A7;
-        Tue, 13 Sep 2022 07:15:27 -0700 (PDT)
+        Tue, 13 Sep 2022 10:35:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F235FAEA;
+        Tue, 13 Sep 2022 07:20:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52DF9B80F88;
-        Tue, 13 Sep 2022 14:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16F0C433D6;
-        Tue, 13 Sep 2022 14:15:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBA8E614D6;
+        Tue, 13 Sep 2022 14:19:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC59C433D6;
+        Tue, 13 Sep 2022 14:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078514;
-        bh=JjA/cunnuRHMJOC0KjRtcwAviJuLaIAiBIt4OrhIw8c=;
+        s=korg; t=1663078799;
+        bh=s+XP21am/LXb51mlVaMH3pGu2LgtbxLxu+OcUur/RVo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Va+XWYn4tHlCpsKAbwCNy7r+ovSxPj/j+vsCaSd/B3SyfWB3t1m0qNv8/HeeLhSmx
-         21iPDHaQCRQS53Fw+ckph8vX5ik1V3uaBVuEhW3/HKecqDQMPhPNB6ocyaIxNinqQN
-         4ofiAm5fwoK2VNviGLMBdiKDp3284MLZgLvPNdnM=
+        b=WmkBjIhJfS51QmRKvapm07T8r+mVgd+NDE9kuS3IHBu8orhT8DnTaX1m+xHn8FOYP
+         GocZlyW/tkYOXRbkeeRS3jwhOMGVh7hN7RroRSQlmwfKXiOb/x+xAeVILvLGtObT+N
+         e9RVT1AAUQVYHPJ18Nfb8Guvqk/wYGOUslylhpnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
+        stable@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 170/192] s390/boot: fix absolute zero lowcore corruption on boot
-Date:   Tue, 13 Sep 2022 16:04:36 +0200
-Message-Id: <20220913140418.502281854@linuxfoundation.org>
+Subject: [PATCH 5.15 086/121] RDMA/siw: Pass a pointer to virt_to_page()
+Date:   Tue, 13 Sep 2022 16:04:37 +0200
+Message-Id: <20220913140401.064675561@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit 12dd19c159659ec9050f45dc8a2ff3c3917f4be3 ]
+[ Upstream commit 0d1b756acf60da5004c1e20ca4462f0c257bf6e1 ]
 
-Crash dump always starts on CPU0. In case CPU0 is offline the
-prefix page is not installed and the absolute zero lowcore is
-used. However, struct lowcore::mcesad is never assigned and
-stays zero. That leads to __machine_kdump() -> save_vx_regs()
-call silently stores vector registers to the absolute lowcore
-at 0x11b0 offset.
+Functions that work on a pointer to virtual memory such as
+virt_to_pfn() and users of that function such as
+virt_to_page() are supposed to pass a pointer to virtual
+memory, ideally a (void *) or other pointer. However since
+many architectures implement virt_to_pfn() as a macro,
+this function becomes polymorphic and accepts both a
+(unsigned long) and a (void *).
 
-Fixes: a62bc0739253 ("s390/kdump: add support for vector extension")
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+If we instead implement a proper virt_to_pfn(void *addr)
+function the following happens (occurred on arch/arm):
+
+drivers/infiniband/sw/siw/siw_qp_tx.c:32:23: warning: incompatible
+  integer to pointer conversion passing 'dma_addr_t' (aka 'unsigned int')
+  to parameter of type 'const void *' [-Wint-conversion]
+drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: passing argument
+  1 of 'virt_to_pfn' makes pointer from integer without a cast
+  [-Wint-conversion]
+drivers/infiniband/sw/siw/siw_qp_tx.c:538:36: warning: incompatible
+  integer to pointer conversion passing 'unsigned long long'
+  to parameter of type 'const void *' [-Wint-conversion]
+
+Fix this with an explicit cast. In one case where the SIW
+SGE uses an unaligned u64 we need a double cast modifying the
+virtual address (va) to a platform-specific uintptr_t before
+casting to a (void *).
+
+Fixes: b9be6f18cf9e ("rdma/siw: transmit path")
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220902215918.603761-1-linus.walleij@linaro.org
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/kernel/nmi.c   | 2 +-
- arch/s390/kernel/setup.c | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/infiniband/sw/siw/siw_qp_tx.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/arch/s390/kernel/nmi.c b/arch/s390/kernel/nmi.c
-index 53ed3884fe644..5d66e3947070c 100644
---- a/arch/s390/kernel/nmi.c
-+++ b/arch/s390/kernel/nmi.c
-@@ -63,7 +63,7 @@ static inline unsigned long nmi_get_mcesa_size(void)
-  * structure. The structure is required for machine check happening
-  * early in the boot process.
-  */
--static struct mcesa boot_mcesa __initdata __aligned(MCESA_MAX_SIZE);
-+static struct mcesa boot_mcesa __aligned(MCESA_MAX_SIZE);
+diff --git a/drivers/infiniband/sw/siw/siw_qp_tx.c b/drivers/infiniband/sw/siw/siw_qp_tx.c
+index 1f4e60257700e..7d47b521070b1 100644
+--- a/drivers/infiniband/sw/siw/siw_qp_tx.c
++++ b/drivers/infiniband/sw/siw/siw_qp_tx.c
+@@ -29,7 +29,7 @@ static struct page *siw_get_pblpage(struct siw_mem *mem, u64 addr, int *idx)
+ 	dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
  
- void __init nmi_alloc_mcesa_early(u64 *mcesad)
- {
-diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index 0a37f5de28631..3e0361db963ef 100644
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -486,6 +486,7 @@ static void __init setup_lowcore_dat_off(void)
- 	put_abs_lowcore(restart_data, lc->restart_data);
- 	put_abs_lowcore(restart_source, lc->restart_source);
- 	put_abs_lowcore(restart_psw, lc->restart_psw);
-+	put_abs_lowcore(mcesad, lc->mcesad);
+ 	if (paddr)
+-		return virt_to_page(paddr);
++		return virt_to_page((void *)paddr);
  
- 	lc->spinlock_lockval = arch_spin_lockval(0);
- 	lc->spinlock_index = 0;
+ 	return NULL;
+ }
+@@ -533,13 +533,23 @@ static int siw_tx_hdt(struct siw_iwarp_tx *c_tx, struct socket *s)
+ 					kunmap_local(kaddr);
+ 				}
+ 			} else {
+-				u64 va = sge->laddr + sge_off;
++				/*
++				 * Cast to an uintptr_t to preserve all 64 bits
++				 * in sge->laddr.
++				 */
++				uintptr_t va = (uintptr_t)(sge->laddr + sge_off);
+ 
+-				page_array[seg] = virt_to_page(va & PAGE_MASK);
++				/*
++				 * virt_to_page() takes a (void *) pointer
++				 * so cast to a (void *) meaning it will be 64
++				 * bits on a 64 bit platform and 32 bits on a
++				 * 32 bit platform.
++				 */
++				page_array[seg] = virt_to_page((void *)(va & PAGE_MASK));
+ 				if (do_crc)
+ 					crypto_shash_update(
+ 						c_tx->mpa_crc_hd,
+-						(void *)(uintptr_t)va,
++						(void *)va,
+ 						plen);
+ 			}
+ 
 -- 
 2.35.1
 
