@@ -2,67 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A4A5B6875
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8787C5B6889
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiIMHQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S230403AbiIMHTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiIMHQ3 (ORCPT
+        with ESMTP id S230518AbiIMHTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:16:29 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0762DAA0;
-        Tue, 13 Sep 2022 00:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663053388;
-  x=1694589388;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DG0FkOWLkuAWJO6aMBVGUAyCUusmS8pp7VWMlNga8H4=;
-  b=jG61ogHFuJeaWMgpZK68tAR6beEOmun0Fy3JQANFk5v8FnWpimLPnt/N
-   cJult+ARBpvinjkwEDNtIzu1F28nYv4/ZdvJ6meKvt3wEEWdbxghA96Ns
-   beevI0BNajoKykAB7z7J3ipKNp2HzDitFPSZAm8NNlhz2Bcc4bDH/7tRW
-   UmWxNuOEVmm2gUtzgLU/IYA95W4FBaKF+WJYslU4cZtFhgfuvHAHH5zas
-   qkIs6zzVeMCQ05KyDTngjZSOZciSlKbUCoV4bFr/3tSmS5iIiaVJ/GMN1
-   Pe3L24BQ1wDt7kVmVLOxSe+J6/DSHFlAqwS5dfFzWYNcVEZMAgnaCtZ1n
-   w==;
-Message-ID: <bdfa3f29-f63d-1fb7-f37b-0b4a1f6374b3@axis.com>
-Date:   Tue, 13 Sep 2022 09:16:25 +0200
+        Tue, 13 Sep 2022 03:19:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A78356EB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:19:15 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRZVX4l9xzkWql;
+        Tue, 13 Sep 2022 15:15:16 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
+ (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 13 Sep
+ 2022 15:19:12 +0800
+From:   Peng Wu <wupeng58@huawei.com>
+To:     <lee@kernel.org>, <linus.walleij@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
+        <wupeng58@huawei.com>
+Subject: [PATCH] mfd: htc-i2cpld: Fix an IS_ERR() vs NULL bug in htcpld_core_probe
+Date:   Tue, 13 Sep 2022 07:16:59 +0000
+Message-ID: <20220913071659.94677-1-wupeng58@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
- times
-Content-Language: en-US
-To:     Astrid Rost <Astrid.Rost@axis.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dylan Reid <dgreid@chromium.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel <kernel@axis.com>,
-        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220907135827.16209-1-astrid.rost@axis.com>
- <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
- <Yxn9o1MVMPnFO3PM@sirena.org.uk>
- <ac2bcca1-6997-2d17-b1d6-a5e81ced2613@linaro.org>
- <9a72bd22-9298-65ce-a894-540f98745a7e@linaro.org>
- <d521d40e-c79d-b044-44b7-6f10845f4268@axis.com>
-From:   Astrid Rost <astridr@axis.com>
-In-Reply-To: <d521d40e-c79d-b044-44b7-6f10845f4268@axis.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail05w.axis.com
- (10.20.40.11)
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500023.china.huawei.com (7.221.188.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,12 +45,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The gpiochip_request_own_desc() function returns error pointers on error,
+it doesn't return NULL.
 
-Hello,
+Fixes: 0ef5164a81fbf ("mfd/omap1: htc-i2cpld: Convert to a pure GPIO driver")
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+---
+ drivers/mfd/htc-i2cpld.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-I did the conversion from txt to YAML.
-It requests me to add as a maintainer?
+diff --git a/drivers/mfd/htc-i2cpld.c b/drivers/mfd/htc-i2cpld.c
+index 97d47715aa97..b45b1346ab54 100644
+--- a/drivers/mfd/htc-i2cpld.c
++++ b/drivers/mfd/htc-i2cpld.c
+@@ -567,23 +567,26 @@ static int htcpld_core_probe(struct platform_device *pdev)
+ 	htcpld->int_reset_gpio_hi = gpiochip_request_own_desc(&htcpld->chip[2].chip_out,
+ 							      7, "htcpld-core", GPIO_ACTIVE_HIGH,
+ 							      GPIOD_OUT_HIGH);
+-	if (!htcpld->int_reset_gpio_hi)
++	if (IS_ERR(htcpld->int_reset_gpio_hi)) {
+ 		/*
+ 		 * If it failed, that sucks, but we can probably
+ 		 * continue on without it.
+ 		 */
++		htcpld->int_reset_gpio_hi = NULL;
+ 		dev_warn(dev, "Unable to request int_reset_gpio_hi -- interrupts may not work\n");
+-
++	}
+ 
+ 	htcpld->int_reset_gpio_lo = gpiochip_request_own_desc(&htcpld->chip[2].chip_out,
+ 							      0, "htcpld-core", GPIO_ACTIVE_HIGH,
+ 							      GPIOD_OUT_LOW);
+-	if (!htcpld->int_reset_gpio_lo)
++	if (IS_ERR(htcpld->int_reset_gpio_lo)) {
+ 		/*
+ 		 * If it failed, that sucks, but we can probably
+ 		 * continue on without it.
+ 		 */
++		htcpld->int_reset_gpio_lo = NULL;
+ 		dev_warn(dev, "Unable to request int_reset_gpio_lo -- interrupts may not work\n");
++	}
+ 
+ 	dev_info(dev, "Initialized successfully\n");
+ 	return 0;
+-- 
+2.17.1
 
-Dylan was the original Author.
-
-Astrid
