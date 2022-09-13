@@ -2,239 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0885B67EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1455B67ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiIMG2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S230039AbiIMGaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiIMG16 (ORCPT
+        with ESMTP id S230112AbiIMG36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:27:58 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E1CE2B;
-        Mon, 12 Sep 2022 23:27:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPduYe-_1663050471;
-Received: from 30.221.130.76(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPduYe-_1663050471)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Sep 2022 14:27:52 +0800
-Message-ID: <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
-Date:   Tue, 13 Sep 2022 14:27:51 +0800
+        Tue, 13 Sep 2022 02:29:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C637F101D1;
+        Mon, 12 Sep 2022 23:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663050596; x=1694586596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ikP/DswIzxgBJQ51v92pm0x/nKKPwvvC69In5vmplKA=;
+  b=Jco+LU9TFnbsFXQdO9zPu2TTF9I7vwEtrEq1tCcjsff5Y3SyAtFZhWF1
+   kbPqpbGMMT2/6XnFcAx/buxpipJbIzPKxRSJMjrOY/J/EuA5OHrb58iH5
+   OllXNd02FCEUX/jH0kGhecLOUkz2e1EWpsPND4AxDlbFZS22HBgDIyNGQ
+   uLNUxxVFEMUdCg8EkHtFt954umYyhtA/2Wgjp6lNSTUq+Bur1cIyx5P+t
+   Dc65KoSi+ttqBJiAoBeUbL84EZIKv0yhsXttesBMSuTl+tShcKIRaUoSo
+   oCVwVCkS4mUGOHZLj6t8RVfBkc5zoLiya/LAOyyLI7ulUWTYp1eg794PB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="296786595"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="296786595"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:29:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="684733613"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 23:29:49 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXzQa-0003JY-2i;
+        Tue, 13 Sep 2022 06:29:48 +0000
+Date:   Tue, 13 Sep 2022 14:29:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     sean.wang@mediatek.com, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     kbuild-all@lists.01.org, sean.wang@mediatek.com,
+        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
+        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
+        abhishekpandit@google.com, michaelfsun@google.com,
+        abhishekpandit@chromium.org, mcchou@chromium.org,
+        shawnku@google.com, linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jing Cai <jing.cai@mediatek.com>
+Subject: Re: [PATCH 4/4] Bluetooth: btusb: mediatek: add MediaTek devcoredump
+ support
+Message-ID: <202209131404.9rjV6blJ-lkp@intel.com>
+References: <540fc6d93481e72e18b51f82f022ab34d57d5caa.1663020936.git.objelf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V2 5/5] erofs: support fscache based shared domain
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
- <20220902105305.79687-6-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220902105305.79687-6-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <540fc6d93481e72e18b51f82f022ab34d57d5caa.1663020936.git.objelf@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/sean-wang-mediatek-com/Bluetooth-btusb-mediatek-use-readx_poll_timeout-instead-of-open-coding/20220913-062200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+config: arc-randconfig-r043-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131404.9rjV6blJ-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d478461e2fd5fdd8d505c00c7864a421170a54bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review sean-wang-mediatek-com/Bluetooth-btusb-mediatek-use-readx_poll_timeout-instead-of-open-coding/20220913-062200
+        git checkout d478461e2fd5fdd8d505c00c7864a421170a54bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/bluetooth/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/bluetooth/btmtk.c: In function 'btmtk_coredump_notify':
+>> drivers/bluetooth/btmtk.c:111:14: error: 'HCI_DEVCOREDUMP_ACTIVE' undeclared (first use in this function); did you mean 'BTMTK_COREDUMP_ACTIVE'?
+     111 |         case HCI_DEVCOREDUMP_ACTIVE:
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+         |              BTMTK_COREDUMP_ACTIVE
+   drivers/bluetooth/btmtk.c:111:14: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/bluetooth/btmtk.c:114:14: error: 'HCI_DEVCOREDUMP_TIMEOUT' undeclared (first use in this function); did you mean 'HCI_LE_CONN_TIMEOUT'?
+     114 |         case HCI_DEVCOREDUMP_TIMEOUT:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~
+         |              HCI_LE_CONN_TIMEOUT
+>> drivers/bluetooth/btmtk.c:115:14: error: 'HCI_DEVCOREDUMP_ABORT' undeclared (first use in this function)
+     115 |         case HCI_DEVCOREDUMP_ABORT:
+         |              ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/bluetooth/btmtk.c:116:14: error: 'HCI_DEVCOREDUMP_DONE' undeclared (first use in this function)
+     116 |         case HCI_DEVCOREDUMP_DONE:
+         |              ^~~~~~~~~~~~~~~~~~~~
+   drivers/bluetooth/btmtk.c: In function 'btmtk_register_coredump':
+>> drivers/bluetooth/btmtk.c:376:9: error: implicit declaration of function 'hci_devcoredump_register' [-Werror=implicit-function-declaration]
+     376 |         hci_devcoredump_register(hdev, btmtk_coredump, btmtk_coredump_hdr,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bluetooth/btmtk.c: In function 'btmtk_process_coredump':
+>> drivers/bluetooth/btmtk.c:393:23: error: implicit declaration of function 'hci_devcoredump_init' [-Werror=implicit-function-declaration]
+     393 |                 err = hci_devcoredump_init(hdev, 1024000);
+         |                       ^~~~~~~~~~~~~~~~~~~~
+>> drivers/bluetooth/btmtk.c:397:44: error: 'struct hci_dev' has no member named 'dump'
+     397 |                 schedule_delayed_work(&hdev->dump.dump_timeout,
+         |                                            ^~
+>> drivers/bluetooth/btmtk.c:402:23: error: implicit declaration of function 'hci_devcoredump_append' [-Werror=implicit-function-declaration]
+     402 |                 err = hci_devcoredump_append(hdev, skb);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/bluetooth/btmtk.c:409:25: error: implicit declaration of function 'hci_devcoredump_complete' [-Werror=implicit-function-declaration]
+     409 |                         hci_devcoredump_complete(hdev);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-On 9/2/22 6:53 PM, Jia Zhu wrote:
-> Several erofs filesystems can belong to one domain, and data blobs can
-> be shared among these erofs filesystems of same domain.
-> 
-> Users could specify domain_id mount option to create or join into a domain.
-> 
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> ---
->  fs/erofs/fscache.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++
->  fs/erofs/internal.h | 12 ++++++++
->  fs/erofs/super.c    | 10 +++++--
->  3 files changed, 93 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index 439dd3cc096a..c01845808ede 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -559,12 +559,27 @@ int erofs_fscache_register_cookie(struct super_block *sb,
->  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
->  {
->  	struct erofs_fscache *ctx = *fscache;
-> +	struct erofs_domain *domain;
->  
->  	if (!ctx)
->  		return;
-> +	domain = ctx->domain;
-> +	if (domain) {
-> +		mutex_lock(&domain->mutex);
-> +		/* Cookie is still in use */
-> +		if (atomic_read(&ctx->anon_inode->i_count) > 1) {
-> +			iput(ctx->anon_inode);
-> +			mutex_unlock(&domain->mutex);
-> +			return;
-> +		}
-> +		iput(ctx->anon_inode);
-> +		kfree(ctx->name);
-> +		mutex_unlock(&domain->mutex);
-> +	}
->  
->  	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
->  	fscache_relinquish_cookie(ctx->cookie, false);
-> +	erofs_fscache_domain_put(domain);
->  	ctx->cookie = NULL;
->  
->  	iput(ctx->inode);
-> @@ -609,3 +624,61 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
->  	sbi->volume = NULL;
->  	sbi->domain = NULL;
->  }
-> +
-> +static int erofs_fscache_domain_init_cookie(struct super_block *sb,
-> +		struct erofs_fscache **fscache, char *name, bool need_inode)
-> +{
-> +	int ret;
-> +	struct inode *inode;
-> +	struct erofs_fscache *ctx;
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	struct erofs_domain *domain = sbi->domain;
-> +
-> +	ret = erofs_fscache_register_cookie(sb, &ctx, name, need_inode);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ctx->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ctx->name)
-> +		return -ENOMEM;
+vim +111 drivers/bluetooth/btmtk.c
 
-Shall we clean up the above registered cookie in the error path?
-
-> +
-> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
-> +	if (!inode) {
-> +		kfree(ctx->name);
-> +		return -ENOMEM;
-> +	}
-
-Ditto.
-
-> +
-> +	ctx->domain = domain;
-> +	ctx->anon_inode = inode;
-> +	inode->i_private = ctx;
-> +	erofs_fscache_domain_get(domain);
-> +	*fscache = ctx;
-> +	return 0;
-> +}
-> +
-> +int erofs_domain_register_cookie(struct super_block *sb,
-> +	struct erofs_fscache **fscache, char *name, bool need_inode)
-> +{
-> +	int err;
-> +	struct inode *inode;
-> +	struct erofs_fscache *ctx;
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	struct erofs_domain *domain = sbi->domain;
-> +	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
-> +
-> +	mutex_lock(&domain->mutex);
-
-What is domain->mutex used for?
-
-
-> +	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
-> +		ctx = inode->i_private;
-> +		if (!ctx)
-> +			continue;
-> +		if (!strcmp(ctx->name, name)) {
-> +			*fscache = ctx;
-> +			igrab(inode);
-> +			mutex_unlock(&domain->mutex);
-> +			return 0;
-> +		}
-> +	}
-> +	err = erofs_fscache_domain_init_cookie(sb, fscache, name, need_inode);
-> +	mutex_unlock(&domain->mutex);
-> +	return err;
-> +}
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 2790c93ffb83..efa4f4ad77cc 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -110,6 +110,9 @@ struct erofs_domain {
->  struct erofs_fscache {
->  	struct fscache_cookie *cookie;
->  	struct inode *inode;
-> +	struct inode *anon_inode;
-
-Why can't we reuse @inode for anon_inode?
-
-
-> +	struct erofs_domain *domain;
-> +	char *name;
->  };
->  
->  struct erofs_sb_info {
-> @@ -625,6 +628,9 @@ int erofs_fscache_register_domain(struct super_block *sb);
->  int erofs_fscache_register_cookie(struct super_block *sb,
->  				  struct erofs_fscache **fscache,
->  				  char *name, bool need_inode);
-> +int erofs_domain_register_cookie(struct super_block *sb,
-> +				  struct erofs_fscache **fscache,
-> +				  char *name, bool need_inode);
->  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
->  
->  extern const struct address_space_operations erofs_fscache_access_aops;
-> @@ -646,6 +652,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
->  {
->  	return -EOPNOTSUPP;
->  }
-> +static inline int erofs_domain_register_cookie(struct super_block *sb,
-> +						struct erofs_fscache **fscache,
-> +						char *name, bool need_inode)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->  
->  static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
->  {
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 667a78f0ee70..11c5ba84567c 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -245,8 +245,12 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
->  	}
->  
->  	if (erofs_is_fscache_mode(sb)) {
-> -		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
-> -				dif->path, false);
-> +		if (sbi->opt.domain_id)
-> +			ret = erofs_domain_register_cookie(sb, &dif->fscache, dif->path,
-> +					false);
-> +		else
-> +			ret = erofs_fscache_register_cookie(sb, &dif->fscache, dif->path,
-> +					false);
->  		if (ret)
->  			return ret;
->  	} else {
-> @@ -726,6 +730,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->  			err = erofs_fscache_register_domain(sb);
->  			if (err)
->  				return err;
-> +			err = erofs_domain_register_cookie(sb, &sbi->s_fscache,
-> +					sbi->opt.fsid, true);
->  		} else {
->  			err = erofs_fscache_register_fs(sb);
->  			if (err)
+   107	
+   108	static void btmtk_coredump_notify(struct hci_dev *hdev, int state)
+   109	{
+   110		switch (state) {
+ > 111		case HCI_DEVCOREDUMP_ACTIVE:
+   112			coredump_info.state = BTMTK_COREDUMP_ACTIVE;
+   113			break;
+ > 114		case HCI_DEVCOREDUMP_TIMEOUT:
+ > 115		case HCI_DEVCOREDUMP_ABORT:
+ > 116		case HCI_DEVCOREDUMP_DONE:
+   117			coredump_info.state = BTMTK_COREDUMP_INIT;
+   118			btmtk_reset_sync(coredump_info.hdev);
+   119			break;
+   120		}
+   121	}
+   122	
 
 -- 
-Thanks,
-Jingbo
+0-DAY CI Kernel Test Service
+https://01.org/lkp
