@@ -2,53 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9B25B69BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3958C5B69BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiIMIlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S230417AbiIMIlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiIMIk7 (ORCPT
+        with ESMTP id S231494AbiIMIke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:40:59 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F07F9580A4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:40:55 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAC3vRkDQiBjmmwwAg--.31010S2;
-        Tue, 13 Sep 2022 16:40:39 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     qiang.zhao@nxp.com, leoyang.li@nxp.com
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] soc: fsl: qe: return platform_driver_register
-Date:   Tue, 13 Sep 2022 16:40:28 +0800
-Message-Id: <20220913084028.1736387-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Sep 2022 04:40:34 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26BE3C15D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:40:32 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id k9so19625907wri.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=0zoWuvCgWu4ls1SKokP2SbGe8xuUJikmfcWhPEHtPYA=;
+        b=EepqB84lbNoqzWAIP+E+fTAyWgXpANMPOYwlMBKfYNiOFsC3LJ+dd9aR7XtNLMYoW6
+         4rLMYrNZIDFKecIG1YUlMgZT4OM+9nPKqVydK/uuj5KpG7bkpZIBoytccfVDe4G7pb39
+         gWSp7xJdhwy9D6eYH8iZczD5yzrhE6cRuKadjUqtjvnQCwdChiOo5f3kFPuTm53P+rZU
+         DQZ0mXN5sBtK/i4bOAX7iGVunuld/XnoH8pFNLzrIUZjjUn4pwNAeyKOrI/B81vxusjs
+         50lirQO4lh4yznWi/s31sXl5IjU30MyfjxBGIWGZJmXsiiKCOd/vyVGQ5BkoHxHCCoWk
+         9wGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0zoWuvCgWu4ls1SKokP2SbGe8xuUJikmfcWhPEHtPYA=;
+        b=CfMEfvTeI3XyRebcPF0Y1rfjKUZ2xPL55zbiTPrRhY0Sfn+/Y2hc/CZZaWBCMK2ObI
+         I8IPSPHLOaB3YrIe5AHN3mkn6mXJszQIxORak55aHGty4tWXHxxae+En10Y6LRHRw1qT
+         jpR7VBIlUammK6dnXBm+S1DmYbZ+vGS/CvCk49Pqkf+BwKaoaZsmoTikjA3tfhAuK+NW
+         zo96rRzri0nHcsEB461wN1LqN7l63UQOyoPmC/lpU1Drkw4ZfatXwPX9JvIsX+Bu6aVa
+         COd8j41wrz2A4LTq9QZlhzCW8iPAEIwR7nxuq1cMUGIhKHdMpj2f3mb7Yk0lG0YX3pAi
+         P7Wg==
+X-Gm-Message-State: ACgBeo1HzjsYHe4olqtI7WbnLRmEQ7mvIvywcOQM7FOiVqsALZUiqsn0
+        KOgRMF0hWBoWpzNSUhWpP18JVNRreIObwea/
+X-Google-Smtp-Source: AA6agR4wjHWTsVfVYAgYeb4n3rmhbDY2maDTSxTXR5Pv3YiPF33VSRisqICPlujHBunO3GiXhY2Atw==
+X-Received: by 2002:a5d:5987:0:b0:22a:46f5:1d95 with SMTP id n7-20020a5d5987000000b0022a46f51d95mr9254546wri.608.1663058431247;
+        Tue, 13 Sep 2022 01:40:31 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.70])
+        by smtp.gmail.com with ESMTPSA id cc17-20020a5d5c11000000b0022ac119fcc5sm975613wrb.60.2022.09.13.01.40.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 01:40:30 -0700 (PDT)
+Message-ID: <cc102d14-77a8-f97d-60c1-f0918656905f@linaro.org>
+Date:   Tue, 13 Sep 2022 10:40:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAC3vRkDQiBjmmwwAg--.31010S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4DurWUur18Jw1fuFyfJFb_yoWfGrb_Cr
-        4rX3W7Xr48ur93KF17tw43Zr929F90vrs3tF4Iqasxt34xtw17Xw45Zr43AF1kWr4rXFyU
-        KrnrurySkr13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] Documentation: process/submitting-patches: misspelling
+ "mesages"
+Content-Language: en-US
+To:     Rong Tao <rtoax@foxmail.com>, corbet@lwn.net
+Cc:     kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Erik Ekman <erik@kryo.se>, Jiri Kosina <jkosina@suse.cz>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <tencent_6A928C02229619E8099167DD5CCAA8D8BF0A@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_6A928C02229619E8099167DD5CCAA8D8BF0A@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,29 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_driver_register() can return error numbers,
-it should be better to return platform_driver_register()
-instead of return 0.
+On 13/09/2022 07:11, Rong Tao wrote:
+> Fix spelling mistakes, "mesages" should be spelled "messages".
+> 
+> Signed-off-by: Rong Tao <rtoax@foxmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: be7ecbd240b2 ("soc: fsl: qe: convert QE interrupt controller to platform_device")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/soc/fsl/qe/qe_ic.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+What is here exactly reported by lkp?
 
-diff --git a/drivers/soc/fsl/qe/qe_ic.c b/drivers/soc/fsl/qe/qe_ic.c
-index bbae3d39c7be..f17de6000ff2 100644
---- a/drivers/soc/fsl/qe/qe_ic.c
-+++ b/drivers/soc/fsl/qe/qe_ic.c
-@@ -481,7 +481,6 @@ static struct platform_driver qe_ic_driver =
- 
- static int __init qe_ic_of_init(void)
- {
--	platform_driver_register(&qe_ic_driver);
--	return 0;
-+	return platform_driver_register(&qe_ic_driver);
- }
- subsys_initcall(qe_ic_of_init);
--- 
-2.25.1
+Didn't you send a patch like that already or is this a v1? I saw
+something similar...
 
+Best regards,
+Krzysztof
