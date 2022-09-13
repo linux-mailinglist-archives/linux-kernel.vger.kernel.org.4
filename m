@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF8E5B6EB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C841F5B6EB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiIMN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S232356AbiIMN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiIMN6Y (ORCPT
+        with ESMTP id S232323AbiIMN6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:58:24 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A334DB3D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:23 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s10so13851313ljp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:23 -0700 (PDT)
+        Tue, 13 Sep 2022 09:58:35 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F9150059
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:32 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id t15-20020a4a96cf000000b0044e0142ec24so1945707ooi.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Xz00WUlNoMcvuGzmZoT3YtH17wlzSyS0xFHNgt419Gk=;
-        b=lUsjBgilev82eRTIjXeALpddVB70OObeUL+rQ+CVv5Xz7/Q4E6xSSEMA+oNJJAKPOe
-         BncPJ1pDrE40RjDYbevpdqqCaVYprSiklIRR89m40RyyKzVkl3z7N0t8REFBPPqGoGf3
-         IHb2qmPtSxCyptLqs0Y/1OZkm+P71HV8Bpd0JUYGUu7zThDlDWgL+wa488uVapxjXXhs
-         JRzlTL8byDtmXAo5+YgYLRG8qxnYBxI4zfCHdjT5RiCro07MjRhcjw2JSZIJfbQcmIJB
-         2hd0sWlXmFAFEkUjEhBsFE4Os15LDehHDOpBkXbsZ1aHdUWwySLa8Wf6YH/gWZEN9XOV
-         WScQ==
+        d=ieee.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=j4b3AwKXnbNOc68U591Ba49SYpbjEmsPStwHugruFXY=;
+        b=IY8xOwXpGjE0SdIJPzybMxmP4m2T8KAbKGM7JrPns4diuJRzQQdTrR9uBMLZMZ1lZO
+         K/HcgHm2G7ER+vdjQDjBa7FWLUTbtkNCQz2jT5oIF9qIbknckvE+l63mEgLKqMIJlf5J
+         fC+8+JnPKboKqHH/11hZPFYExWokI2U45amkI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Xz00WUlNoMcvuGzmZoT3YtH17wlzSyS0xFHNgt419Gk=;
-        b=gzTJg5h4yebNFtN1+td4hGeCcsi6FVj1209Ljq0G6yTt6/74d5YsqflDSfCjxtssnx
-         CdkT2CG9Ve33s/QK9O7/xQG9zdPePf4co56eREhiib81h36cYVD3p0i38eW262/F7N8k
-         o9CFx8fYDtpNKKS2zs8t8WmD4v0Rc8f4YT1DfekEJFCwE6VASOq0TXEgC199ywl59l1J
-         201olz7A5U2aAmIHix0csKZyII3MinEyZHL2NfP28JOl0G7tjy3qQarn9yMF7iPF+QXb
-         V7wrTdO4aTqcjTVE+MLiaAR0XA3Z1F5DZXLKAglSCoz9Ri6DpD8gtbSPf2iRe7nLtLdC
-         EcnA==
-X-Gm-Message-State: ACgBeo28X/Zr7j8lLviuE8jRDUSLQymj+GkBM1kBw9qbTG8i37ipI9z1
-        LbGZWqQw8Snd5jD/fhEYWjNezKTrwqhTOosaBpNVzQ==
-X-Google-Smtp-Source: AA6agR5QWnwHv7/mI5PgNzDnxLBkRSTaL9iTSsGQerlCdhGRn6rLQMQIjHYb/thVv6YxaFXuuAIQWCUykN5+EICUUB4=
-X-Received: by 2002:a2e:87d9:0:b0:26a:ceee:c77b with SMTP id
- v25-20020a2e87d9000000b0026aceeec77bmr9716521ljj.275.1663077502029; Tue, 13
- Sep 2022 06:58:22 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=j4b3AwKXnbNOc68U591Ba49SYpbjEmsPStwHugruFXY=;
+        b=GaYmRoZGXkq8qO44pFFedIPrfh/hX+gOWW5w7K8tuIidxrQYcLrF1SH0GZG3Ja3wMi
+         ucNgI5GuiNZdqzCV7VZZRk5R1z2lXghK6bBcP9/FpABCvA30u62eOHsFLEER7MuEiIaw
+         Y2FJ8s2Bq94cNkarm+8zkX9xCidiHh6BPTwdrsKhEqV2m6ZkEI5lXkscGf9Z/nKfRCjS
+         wfkJQ+G+jvuiU/9I43V8Z8iSeMXWqdN4Y1j+Afi03fxrWTr+kaGs5jRJfBRyMTsYUjCo
+         zkv1oL+FGH/OWGk2WC1sBQDdGtKp7DPSX118ZavWAaHlkdK1r89PvNrHxKXGaa/3KdBr
+         y6oA==
+X-Gm-Message-State: ACgBeo3/qE55/dTcq0DztylfNu/S1bp9qfGSuD4skx3lS7T6+jWNuTWd
+        x4SKreG+63696g7/c69GjlhV7Q==
+X-Google-Smtp-Source: AA6agR6Tr6upEAKirqfcck1pCLrIPjxxEXBfXhURgmYde0fXkAmfIiiM2LtbTbWlyIGlUU6Bd09Etg==
+X-Received: by 2002:a4a:8e81:0:b0:475:811f:3f9e with SMTP id p1-20020a4a8e81000000b00475811f3f9emr2603836ook.35.1663077511837;
+        Tue, 13 Sep 2022 06:58:31 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id k26-20020a056808069a00b0033a11fcb23bsm5212658oig.27.2022.09.13.06.58.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 06:58:31 -0700 (PDT)
+Message-ID: <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
+Date:   Tue, 13 Sep 2022 08:58:29 -0500
 MIME-Version: 1.0
-References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
- <8baa40dad8496abb2adb1096e0cf50dcc5f66802.1661331396.git.houwenlong.hwl@antgroup.com>
- <YxjXgERSNIk4ZaN+@google.com> <20220913125833.GC113257@k08j02272.eu95sqa>
-In-Reply-To: <20220913125833.GC113257@k08j02272.eu95sqa>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 13 Sep 2022 06:57:55 -0700
-Message-ID: <CALzav=c7Y_Do0vk_AtezYMBss6eRDGzyHovMYArXQ4JfmfKoOw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] KVM: x86/mmu: Use 1 as the size of gfn range for
- tlb flushing in FNAME(invlpg)()
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/4] Make QMI message rules const
+Content-Language: en-US
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 5:58 AM Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
->
-> On Thu, Sep 08, 2022 at 01:40:16AM +0800, David Matlack wrote:
-> > On Wed, Aug 24, 2022 at 05:29:23PM +0800, Hou Wenlong wrote:
-> > > Only SP with PG_LEVLE_4K level could be unsync, so the size of gfn range
-> > > must be 1.
-> > >
-> > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/paging_tmpl.h | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> > > index 04149c704d5b..486a3163b1e4 100644
-> > > --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> > > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> > > @@ -937,7 +937,8 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
-> > >
-> > >                     mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
-> > >                     if (is_shadow_present_pte(old_spte))
-> > > -                           kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
-> > > +                           kvm_flush_remote_tlbs_gfn(vcpu->kvm,
-> > > +                                   kvm_mmu_page_get_gfn(sp, sptep - sp->spt), 1);
-> >
-> > The third argument to kvm_flush_remote_tlbs_gfn() is the level, not the
-> > number of pages. But that aside, I don't understand why this patch is
-> > necessary. kvm_flush_remote_tlbs_sptep() should already do the right
-> > thing.
-> >
-> Since only SP with PG_LEVEL_4K level could be unsync, so the level must
-> be PG_LEVEL_4K, then sp->role.level access could be dropped. However,
-> I'm not sure whether it is useful. I can drop it if it is useless.
+On 9/12/22 6:25 PM, Jeff Johnson wrote:
+> Change ff6d365898d ("soc: qcom: qmi: use const for struct
+> qmi_elem_info") allows QMI message encoding/decoding rules to be
+> const. So now update the definitions in the various client to take
+> advantage of this. Patches for ath10k and ath11k were perviously sent
+> separately.
 
-Ah, I see. I would be surprised if avoiding the read of sp->role.level
-has any noticeable impact on VM performance so I vote to drop this patch.
+I have had this on my "to-do list" for ages.
+The commit you mention updates the code to be
+explicit about not modifying this data, which
+is great.
 
+I scanned over the changes, and I assume that
+all you did was make every object having the
+qmi_elem_info structure type be defined as
+constant.
 
->
-> > >
-> > >                     if (!rmap_can_add(vcpu))
-> > >                             break;
-> > > --
-> > > 2.31.1
-> > >
+Why aren't you changing the "ei_array" field in
+the qmi_elem_info structure to be const?  Or the
+"ei" field of the qmi_msg_handler structure?  And
+the qmi_response_type_v01_ei array (and so on)?
+
+I like what you're doing, but can you comment
+on what your plans are beyond this series?
+Do you intend to make the rest of these fields
+const?
+
+Thanks.
+
+					-Alex
+
+> This series depends upon:
+> https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=ff6d365898d4d31bd557954c7fc53f38977b491c
+> 
+> This is in the for-next banch of:
+> git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+> 
+> Hence this series is also based upon that tree/branch.
+> 
+> Jeff Johnson (4):
+>    net: ipa: Make QMI message rules const
+>    remoteproc: sysmon: Make QMI message rules const
+>    slimbus: qcom-ngd-ctrl: Make QMI message rules const
+>    soc: qcom: pdr: Make QMI message rules const
+> 
+>   drivers/net/ipa/ipa_qmi_msg.c    | 20 ++++++++++----------
+>   drivers/net/ipa/ipa_qmi_msg.h    | 20 ++++++++++----------
+>   drivers/remoteproc/qcom_sysmon.c |  8 ++++----
+>   drivers/slimbus/qcom-ngd-ctrl.c  |  8 ++++----
+>   drivers/soc/qcom/pdr_internal.h  | 20 ++++++++++----------
+>   5 files changed, 38 insertions(+), 38 deletions(-)
+> 
+
