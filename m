@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAD35B7804
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756655B762A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiIMRcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S229973AbiIMQK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiIMRcD (ORCPT
+        with ESMTP id S230423AbiIMQKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:32:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BB99F8F3;
-        Tue, 13 Sep 2022 09:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 12:10:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47EC9C8F4;
+        Tue, 13 Sep 2022 08:06:04 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0E73B80F9C;
-        Tue, 13 Sep 2022 15:04:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D9FC433D7;
-        Tue, 13 Sep 2022 15:04:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663081494;
-        bh=5LqduA3tskL2oNsFJWLd4UAprbXLVMGFZMgrSaQcZCM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=daSpTpqAy9o64y6S6etRmYK7vqNcaxzvmSRG6wMkKX/8IXcaqHFDFIuxz0hq6CVws
-         ZsbJCkiV9e5zN+1dtD2v9qsfTmKb6rRTJ2mB7IsLb2g70wXPVFS9HO2mmfMRQHvlOO
-         WnEj3YjFLw71nyXnWCype1gl0TgAdmSS6T94/YpqWmB5yeO2TSAh/zES24KE8ADZzJ
-         BMP3iai3RjTM5M2wcI7O3CWQQdYP5JVuLyGawHGzDAvJGGg4ekq0W1/n4MB+VRCyZn
-         FWq8Jn8CHhlJ1vtwAKaZ9pipRRhMvK326MeteeSUzZ/rgFYOLFRcaKvkY+OB6r3CfA
-         WmJYCrzagc0Dg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_srivasam@quicinc.com, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        srinivas.kandagatla@linaro.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, robh+dt@kernel.org, dianders@chromium.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, quic_rohkumar@quicinc.com
-Subject: Re: [PATCH v14 00/12] Add soundcard support for sc7280 based platforms.
-Date:   Tue, 13 Sep 2022 10:04:46 -0500
-Message-Id: <166308148204.625876.4441160183565553499.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1657200184-29565-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1657200184-29565-1-git-send-email-quic_srivasam@quicinc.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 30B4D6600014;
+        Tue, 13 Sep 2022 16:04:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663081496;
+        bh=Y7SuvEzRQqxCRPnos88wzHGHgs9hmIxCXEYqOBc1xyc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GAzdmAduclaUF2vAhKVmAbPYWRl0wOF3ZKgFs3+tvB9U3bX/hUlS9vjl5Tx9nFPAh
+         WUf0+4/Y518oaNrpprBqsNHq0+rog3z6UOr849afpr5xmPwBNoZ0SwgnaI9e/agbTz
+         ytZ/e6dzGz3foPlWzX7TV8/EpKHG/dfV8aa4DgnIqCQRMlBKAggORDsva1qgjrL9ea
+         wwanLhBsH74dF1cODN04c15VTE/0jo8I8sbzxsS0cpBtZJhQYLG1/gYH1nS5pkxypv
+         gGPJKlzG/+0bVvXN2z/dohhG2UW2dfP9gI7v2RV69bXAkWpkx5G3XgObZYOHuTRNFv
+         dgkOjba/n/EyA==
+Message-ID: <be9e629b-d6d8-7387-71d7-b597e95f12a1@collabora.com>
+Date:   Tue, 13 Sep 2022 17:04:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 2/3] iommu/mediatek: Introduce new flag
+ TF_PORT_TO_ADDR_MT8173
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        joro@8bytes.org
+Cc:     yong.wu@mediatek.com, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
+References: <20220913122428.374280-1-angelogioacchino.delregno@collabora.com>
+ <20220913122428.374280-3-angelogioacchino.delregno@collabora.com>
+ <29758c95-e77a-5105-f03e-22ea94d9a569@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <29758c95-e77a-5105-f03e-22ea94d9a569@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 18:52:52 +0530, Srinivasa Rao Mandadapu wrote:
-> This patch set is to add bolero digital macros, WCD and maxim codecs nodes
-> for audio on sc7280 based platforms.
+Il 13/09/22 16:00, Krzysztof Kozlowski ha scritto:
+> On 13/09/2022 14:24, AngeloGioacchino Del Regno wrote:
+>> In preparation for adding support for MT6795, add a new flag named
+>> TF_PORT_TO_ADDR_MT8173 and use that instead of checking for m4u_plat
+>> type in mtk_iommu_hw_init() to avoid seeing a long list of m4u_plat
+>> checks there in the future.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+>> ---
+>>   drivers/iommu/mtk_iommu.c | 6 ++++--
+>>   drivers/memory/mtk-smi.c  | 1 +
+>>   2 files changed, 5 insertions(+), 2 deletions(-)
+
+..snip..
+
+>> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+>> index 5a9754442bc7..cd415ed1f4ca 100644
+>> --- a/drivers/memory/mtk-smi.c
+>> +++ b/drivers/memory/mtk-smi.c
+>> @@ -462,6 +462,7 @@ static int mtk_smi_larb_sleep_ctrl_enable(struct mtk_smi_larb *larb)
+>>   	if (ret) {
+>>   		/* TODO: Reset this larb if it fails here. */
+>>   		dev_err(larb->smi.dev, "sleep ctrl is not ready(0x%x).\n", tmp);
+>> +		ret = -EAGAIN;
 > 
-> This patch set depends on:
->     [LPASS DTS: wcd related pinmux reorg]
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657389
->     [Clock DTS: reset control changes]
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
->     [Clock: External MCLK and reset control driver changes]
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=650267
->     [Clock DTS: lpasscc node disable and lpasscore node name changes]
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657325
-> 
-> [...]
+> Doesn't look related nor explained in commit msg.
 
-Applied, thanks!
+This is because it's not related.. not explained... and embarassing, as something
+went wrong during the rebase.
 
-[01/12] arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital macro codecs
-        commit: 12ef689f09abb50f0862c8e08138dd45cbf27233
-[02/12] arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD 1.0/2.0 and IDP boards
-        commit: d3219de8bcebe4057696a2f99ce90c8812114c78
-[03/12] arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD 3.0/3.1
-        commit: d5a959f96be1b27c81d6197d66624cd6cc146fe6
-[04/12] arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 1.0/2.0 and IDP boards
-        commit: f8b4eb64f2003e0a1fa5011009955d46f90af285
-[05/12] arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 3.0/3.1
-        commit: 0a3a56a93fd96cb3e3d42778f275e91750c242a7
-[06/12] arm64: dts: qcom: sc7280: Add max98360a codec for CRD 1.0/2.0 and IDP boards
-        commit: d6c006f510d9f29ff78761bb3ef50f14ebc05b7b
-[07/12] arm64: dts: qcom: sc7280: herobrine: Add max98360a codec node
-        commit: 14afeaf917375967bb84b4347cd8e4156b84c470
-[08/12] arm64: dts: qcom: sc7280: Add lpass cpu node
-        commit: aee6873edb93a3919706f70884e55880d8c727a5
-[09/12] arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 1.0/2.0 and IDP boards.
-        commit: 8cf4133bc1fbb6fbc695e4398b940caf3ec59ba5
-[10/12] arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 3.0/3.1
-        commit: f10c73ac6e90ca2343fc4f06b61ce8c1824c9bfd
-[11/12] arm64: dts: qcom: sc7280: Add sound node for CRD 1.0/2.0 and IDP boards
-        commit: ece7d81f2447f4fd4f5d5345e921036871babf2b
-[12/12] arm64: dts: qcom: sc7280: Add sound node for CRD 3.0/3.1
-        commit: 29e0b604f040ef794cd36d43b97bd9c040ed99e6
+Many thanks for pinging me about that, I'm immediately sending a new version.
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Regards,
+Angelo
+
+
