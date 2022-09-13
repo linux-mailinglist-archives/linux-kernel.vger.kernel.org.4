@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC0C5B78C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B535B78CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233575AbiIMRsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S232661AbiIMRtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233666AbiIMRsE (ORCPT
+        with ESMTP id S233638AbiIMRs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:48:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB846266E;
-        Tue, 13 Sep 2022 09:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1663087503;
-        bh=jBwficGryDBYoZ+eFIh2ke1IjpQ1mDZoKa0/4u6YIs0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=cp7Obo5CYd24dk1TOmt+Wkp+4F90x+sdJGLT5L7663W1z6Z1CmXDybSG5WFB9lYaT
-         L72pDy24Ydo3zBMb6qFxEMWA5DkQYd1OUAJGfAkEoQZQV+Pg0rRMxnR7c/mOc/4Rpn
-         zLQER8qwRpdTcKitQNCT7Q+GTmN1df3NIzwVjG08=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1p0IS82yut-00kB5N; Tue, 13
- Sep 2022 18:45:03 +0200
-Subject: Re: [PATCH 5/5] platform/x86: dell: Add new dell-wmi-ddv driver
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "hmh@hmh.eng.br" <hmh@hmh.eng.br>,
-        "matan@svgalib.org" <matan@svgalib.org>,
-        "corentin.chary@gmail.com" <corentin.chary@gmail.com>,
-        "jeremy@system76.com" <jeremy@system76.com>,
-        "productdev@system76.com" <productdev@system76.com>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220912125342.7395-1-W_Armin@gmx.de>
- <20220912125342.7395-6-W_Armin@gmx.de>
- <b1b794b4-f6c3-7697-5d5a-b811809a9313@infradead.org>
- <2aae0ae9-9608-675a-ec0c-6e7526e57363@gmx.de>
- <MN0PR12MB6101CE9055DC152A6E96B2EDE2479@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <9e603bfc-697b-2570-6f9e-f82ce109cd6e@gmx.de>
-Date:   Tue, 13 Sep 2022 18:45:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 13 Sep 2022 13:48:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67656785BB;
+        Tue, 13 Sep 2022 09:46:36 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id ge9so383250pjb.1;
+        Tue, 13 Sep 2022 09:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1i7O2Iok1YRMIALmDKILSSa+PDHh/TMXb1061x3zYsE=;
+        b=CnBAUl1bzznqlLH+uIrXNiplMZxlYvpJAvAQjQKLJnvplkOZ2ynXM+0h7XW+HluZ2w
+         qy76aDA63qVxDizV+hCBWv04bup9GqEVooYu/yevF4+tJwFeq8Zpiv1AXRTMlDCerIve
+         SZs1dNNwRC8Ux7M9IKhF42mUNRdOkiRt3iSpQLYspStIdifZuYs4tq53kILQhnA+MCOg
+         Az9PX0hUE+Ge2HyXVHDa0ixVyi/G2nDNUb2nEtVc6P4igWrlLrNSgEgZn7kvDlcBRjFE
+         QI3dm2LL9W6aacDBHgLhi8GoFbpjTVfurem7XBNjxde8VNzzf2wYhznDTLfqXvZjb+UG
+         a7aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1i7O2Iok1YRMIALmDKILSSa+PDHh/TMXb1061x3zYsE=;
+        b=MAPBC3+YwVslnWfWLCB9wgjhx5h/Oecqbz+KYcTOTYn/CtrgfsfOaBCXTgl3I70L9Z
+         j05tkm2gkhZSJVFupxgdSl2TlEpbmfWyFgo82UGvEQK74VpEZIlltKh+FAcAiSirMtrN
+         7JsRzAlp5egh1Tw8Asv59bT5UHNEFYBltRH2W3SOyQrTI2PX4k3L+cD/HCkzj3Pc/hxZ
+         HRFHL+PBycNRkoU7QH98j8OaO4pe+Sl01c/95ZUfr4ybIMxWIaHgD7B35MHGphLlMhlv
+         CSQm0b80pKq2pPCqdLFND6i1Fd2ROvXULkUFbjhnZ7lncJeLUWhgJoUC0mT4VzI8fSOk
+         vHSw==
+X-Gm-Message-State: ACgBeo2PbEFNcw/gaXCKVzXx6An/0YzwVYoKK/2VOqX0KBfnLSrkt5Tu
+        m2UQ4GckFIv6dzseFDRHywc=
+X-Google-Smtp-Source: AA6agR4xPFrTrwyEEGXJ0Po8UDRoOtBoEVgShqdqgx8z0EOiVUuaPegyx7QTzcMyskiHU7zkotfZrw==
+X-Received: by 2002:a17:902:e881:b0:178:2a6f:bc72 with SMTP id w1-20020a170902e88100b001782a6fbc72mr12859092plg.93.1663087595868;
+        Tue, 13 Sep 2022 09:46:35 -0700 (PDT)
+Received: from rog ([2a0a:edc0:0:701:a220:c777:e1f2:5de1])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b001782580ce9csm6707664pli.249.2022.09.13.09.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 09:46:35 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 18:46:25 +0200
+From:   Philipp Zabel <philipp.zabel@gmail.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        catalin@antebit.com, travisghansen@yahoo.com,
+        Shyam-sundar.S-k@amd.com, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] acpi/x86: s2idle: If a new AMD _HID is missing
+ assume Rembrandt
+Message-ID: <YyCz4V0xNyHyt80q@rog>
+References: <20220912172401.22301-1-mario.limonciello@amd.com>
+ <20220912172401.22301-3-mario.limonciello@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <MN0PR12MB6101CE9055DC152A6E96B2EDE2479@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:zTfD3ssnDkGcum1yD24gglWAs89Pvs7oHPLEr1di1BTxisAeUmN
- 9o3b2O1UnR8pW4719aLtz0LicHewgS9weI/sAD4VvUh5pIrY6E/vBodjQfLOUDXdNDUDKit
- VA+WD08DTLcc0AFuLrIu0PQyyepLal+wpx78VTPnSbcXurFl8JP0ekjdGAgdASy001he1i8
- 1dPnxsH4tHPCpV11hmCPQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pKZfZPA/e6Q=:VsgN4m/wQ4pbvJA/2QSVSX
- dMIeyYd7BoTaj3Yew8IF69cMN3s4AE+obaLeduF2TYA7dRGcPzUm0cZJgf0kEHYYjDXkThl3h
- TpYRiSj4Q5ltZ2xsSe+jvm5WuLGXls4ELflCB4BXzqu2LZhOAaDtwapmBkyVVhf5V1lTZ/DHF
- 1KNwvOtv+vaBq3wFUl2HJ86GnH7FQ97vp/EDqxCL22q3J2yzqVUDlGIDKdguxaID7UpfL+iUh
- CO/Lk3FREPHRDvNm/SX6U54vVZIeMwH1U6NBHN6jYV95+K08D1prTzoqb11ohHPDoEHLXzGGn
- VgSO24EvVyvRc68mogSrgilMSewN52zkmHk2ijH9e29EaCRqQzfOqob3D37IAlhBuDxl6t8jc
- D2CTv/1i4T5+QgmZ+4XNHxeqOsPMRAGAHV8b/DOOa/GxxGBgUaydNtiPstFBBEPHHM0dNvA09
- 6t5vO0AF9C2GYrii+OMApgbKe+V/p/I8cVudC7UpGBgSVPpo0+mMEfpnSvK/cc/ERGykkFJxU
- wDBS0Z3a7BEK0tMCUL1bOUp459wqOkhZuNpgByv2crCHJs13e3wZo43Ww58cEiJ5wpR4HACS5
- aUYyyzimHuG03JDdugUAR+SIC+lVSicMgf0MmdNmSIiL1dmSRObJAX7qziCCK8CMsMxH9NYZW
- TiecmDnXQEWgvEuephJ8Bo5WKtRAlxWsYD06Ic6cjmuuYoT4v2SRfN8jIIbRjgq7c0cB5WuJk
- Leiux4RyG1kVtdR4CZJkUslEu3XnOAHnj5P6KNo8umenLI+ZYDRED1MO0z2mV9Dd+9HlKoPWL
- dGU4LIzIovSVxK3j7FOyjwZwcd2nkCPtmpGllSisWp74YmYy9tKYVRAZG3ylhRgOQiRbBxCFS
- oX6ldKYrDyZdtbJz67s4geLnffQLOrIlDCEc1b9bjpZxOnwVQtz6/upvg7RS6HkMurymGIywp
- KUal3/Vj0JiVhL6/K6njx5MupEyI6F3rWZyK94Z58Pel2hqtFxLGcicacgAPXwbXyqofchuYI
- XlUdzJTJD7Y7vxuAxw9+ipf7QfZlZ9Wz41szZpEPW7eZXB2FYypay2czb8r1sJSbJgw7I5Uzl
- UraKAJA6vzJgIl7ZcuI5DyHxikE2vHX76MaM6m26LnTawXB7ie/VKk9hoWxbrKuIq22ogHKx7
- PAEvAOepiu+HMchDZwhMFf+MGn
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912172401.22301-3-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,63 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 13.09.22 um 18:08 schrieb Limonciello, Mario:
+Am Mon, Sep 12, 2022 at 12:23:56PM -0500 schrieb Mario Limonciello:
+> A mistake was made that only AMDI0007 was set to rev of "2", but
+> it should have been also set for AMDI008. If an ID is missing from
+> the _HID table, then assume it matches Rembrandt behavior.
+> 
+> This implicitly means that if any other behavior changes happen
+> in the future missing IDs must be added to that table.
+> 
+> Tested-by: catalin@antebit.com
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/acpi/x86/s2idle.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
+> index a7757551f750..a8256e5a0e8a 100644
+> --- a/drivers/acpi/x86/s2idle.c
+> +++ b/drivers/acpi/x86/s2idle.c
+> @@ -412,7 +412,7 @@ static int lps0_device_attach(struct acpi_device *adev,
+>  		if (dev_id != NULL)
+>  			data = (const struct amd_lps0_hid_device_data *) dev_id->driver_data;
+>  		else
+> -			return 0;
+> +			data = &amd_rembrandt;
 
-> [Public]
->
->
->
->> -----Original Message-----
->> From: Armin Wolf <W_Armin@gmx.de>
->> Sent: Tuesday, September 13, 2022 09:41
->> To: Randy Dunlap <rdunlap@infradead.org>; hdegoede@redhat.com;
->> markgross@kernel.org
->> Cc: rafael@kernel.org; lenb@kernel.org; hmh@hmh.eng.br;
->> matan@svgalib.org; corentin.chary@gmail.com; jeremy@system76.com;
->> productdev@system76.com; platform-driver-x86@vger.kernel.org; linux-
->> acpi@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH 5/5] platform/x86: dell: Add new dell-wmi-ddv driver
->>
->> Am 12.09.22 um 23:56 schrieb Randy Dunlap:
->>
->>> Hi--
->>>
->>> On 9/12/22 05:53, Armin Wolf wrote:
->>>> diff --git a/drivers/platform/x86/dell/Kconfig
->> b/drivers/platform/x86/dell/Kconfig
->>>> index 25421e061c47..209e63e347e2 100644
->>>> --- a/drivers/platform/x86/dell/Kconfig
->>>> +++ b/drivers/platform/x86/dell/Kconfig
->>>> @@ -189,6 +189,19 @@ config DELL_WMI_DESCRIPTOR
->>>>    	default n
->>>>    	depends on ACPI_WMI
->>>>
->>>> +config DELL_WMI_DDV
->>>> +	tristate "Dell WMI sensors Support"
->>>> +	default m
->>> You should (try to) justify default m, otherwise just
->>> don't have a default for it.
->> I have chosen default m since many other Dell platform drivers are being
->> default m. Since this driver is not essential for normal operation,
->> i will drop default m then.
-> Actually Dell drivers directory are a bit unique in this regard.  There is a special
-> top level boolean.  I would suggest to keep it as is.
->
-> Take a look at:
-> menuconfig X86_PLATFORM_DRIVERS_DELL
+Ah, please disregard my suggestion in the previous patch. I'd still use:
 
-Ok.
+		if (dev_id)
 
-Armin Wolf
+Reviewed-by: Philipp Zabel <philipp.zabel@gmail.com>
+Tested-by: Philipp Zabel <philipp.zabel@gmail.com> # GA402RJ
 
->> Armin Wolf
->>
->>>> +	depends on ACPI_BATTERY
->>>> +	depends on ACPI_WMI
->>>> +	help
->>>> +	  This option adds support for WMI-based sensors like
->>>> +	  battery temperature sensors found on some Dell notebooks.
->>>> +	  It also supports reading of the batteries ePPID.
->>>> +
->>>> +	  To compile this drivers as a module, choose M here: the module will
->>>> +	  be called dell-wmi-ddv.
+regards
+Philipp
