@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9243E5B7511
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6005B74B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiIMPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S236138AbiIMP3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbiIMPcK (ORCPT
+        with ESMTP id S236337AbiIMP1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:32:10 -0400
+        Tue, 13 Sep 2022 11:27:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B5F7F118;
-        Tue, 13 Sep 2022 07:40:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8457DF6F;
+        Tue, 13 Sep 2022 07:38:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0142EB80F1A;
-        Tue, 13 Sep 2022 14:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 575FFC433D6;
-        Tue, 13 Sep 2022 14:33:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D528B8100F;
+        Tue, 13 Sep 2022 14:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E6FC433C1;
+        Tue, 13 Sep 2022 14:36:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079587;
-        bh=reUpS03sK+iOiluB79gKV2t+j7afT4DYT/IaDQx99M4=;
+        s=korg; t=1663079814;
+        bh=kTlwYCdkvEMfgQrk4jUIzACSTPPkBkveoQ3qvraNI+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qfzVSm8ObK5D7Y47ziVTNV9v7qgN0xr4MRZTThplWPF182mTfD7CYEvggqrTvKh9v
-         ZJUenPFB1qD/dYUcZA0sgwT85RRlMcws0hrNRk6tT9Kkil7jNLUBVhJmqSobT4kYMa
-         bGrLglAME3x4QbpfkdUr7cTKnTYGaMUUv+zFknXc=
+        b=v8u7tUxaRVwMklX678qmZudeIYFF5jd/QK9Z2AaS2s+CbaaPRY8C2o0qAdKoxL5Sn
+         WmnGE7xEwSy0cieYyD7fgNhSEiSziEH3JZCbVdHkj5hMQeHuFYfWYxQrCk83OfOOR0
+         JtFWpztR7xNpOEANgC1rC4hokQVeRloEWquUzM5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH 4.19 77/79] x86/nospec: Fix i386 RSB stuffing
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Nicolas Diaz <nicolas.diaz@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>
+Subject: [PATCH 4.9 04/42] serial: fsl_lpuart: RS485 RTS polariy is inverse
 Date:   Tue, 13 Sep 2022 16:07:35 +0200
-Message-Id: <20220913140352.600717282@linuxfoundation.org>
+Message-Id: <20220913140342.463369308@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+From: Shenwei Wang <shenwei.wang@nxp.com>
 
-From: Peter Zijlstra <peterz@infradead.org>
+commit 846651eca073e2e02e37490a4a52752415d84781 upstream.
 
-commit 332924973725e8cdcc783c175f68cf7e162cb9e5 upstream.
+The setting of RS485 RTS polarity is inverse in the current driver.
 
-Turns out that i386 doesn't unconditionally have LFENCE, as such the
-loop in __FILL_RETURN_BUFFER isn't actually speculation safe on such
-chips.
+When the property of 'rs485-rts-active-low' is enabled in the dts node,
+the RTS signal should be LOW during sending. Otherwise, if there is no
+such a property, the RTS should be HIGH during sending.
 
-Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
-Reported-by: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net
-[bwh: Backported to 4.19/5.4:
- - __FILL_RETURN_BUFFER takes an sp parameter
- - Open-code __FILL_RETURN_SLOT]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Fixes: 03895cf41d18 ("tty: serial: fsl_lpuart: Add support for RS-485")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Nicolas Diaz <nicolas.diaz@nxp.com>
+Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+Link: https://lore.kernel.org/r/20220805144529.604856-1-shenwei.wang@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/nospec-branch.h |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/tty/serial/fsl_lpuart.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -35,6 +35,7 @@
-  * the optimal version — two calls, each with their own speculation
-  * trap should their return address end up getting used, in a loop.
-  */
-+#ifdef CONFIG_X86_64
- #define __FILL_RETURN_BUFFER(reg, nr, sp)	\
- 	mov	$(nr/2), reg;			\
- 771:						\
-@@ -55,6 +56,19 @@
- 	add	$(BITS_PER_LONG/8) * nr, sp;	\
- 	/* barrier for jnz misprediction */	\
- 	lfence;
-+#else
-+/*
-+ * i386 doesn't unconditionally have LFENCE, as such it can't
-+ * do a loop.
-+ */
-+#define __FILL_RETURN_BUFFER(reg, nr, sp)	\
-+	.rept nr;				\
-+	call	772f;				\
-+	int3;					\
-+772:;						\
-+	.endr;					\
-+	add	$(BITS_PER_LONG/8) * nr, sp;
-+#endif
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -951,9 +951,9 @@ static int lpuart_config_rs485(struct ua
+ 		 * Note: UART is assumed to be active high.
+ 		 */
+ 		if (rs485->flags & SER_RS485_RTS_ON_SEND)
+-			modem &= ~UARTMODEM_TXRTSPOL;
+-		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
+ 			modem |= UARTMODEM_TXRTSPOL;
++		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
++			modem &= ~UARTMODEM_TXRTSPOL;
+ 	}
  
- /* Sequence to mitigate PBRSB on eIBRS CPUs */
- #define __ISSUE_UNBALANCED_RET_GUARD(sp)	\
+ 	/* Store the new configuration */
 
 
