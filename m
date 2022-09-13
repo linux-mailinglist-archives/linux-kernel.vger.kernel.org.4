@@ -2,142 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6E75B6D0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB52B5B6D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiIMMSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S231993AbiIMMYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiIMMSo (ORCPT
+        with ESMTP id S230408AbiIMMYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:18:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7EAE0EC;
-        Tue, 13 Sep 2022 05:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663071520; x=1694607520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RbOTHa0oab0x7q8xNIhJEDOAprgx4UxPU54rnf2GoxU=;
-  b=2T1RUyOurtMbbXsCfo4H4JnCizwZSkz9QdbUqL6tg5wogU/RlDVrPlbs
-   32+/jE32/aQ6IowRM797m23fqnW60OU3nHnJMk35sbehNn66r3ptC6gMe
-   IRBVJep1CjDkzZtB77Uz0MoTkT9BQLCf78Dk4aiFHn8V/gLX1bM51Cuj1
-   loQxTIpAhasRm/YZ+pzlkKu36amzVefG5kH3xzY4d9IkAF/s5/BwYDB3k
-   N+SF2GXLVVHM2tBrMXMyK+PUbZv86ROpEZeZe73MRuDrHP82jqUm7Nd80
-   cKQx6rdA42XF+26VOJprhsqrt7JOm5kQStPTZFi5FzpaA2PASg+2ppd3k
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="176905062"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 05:18:39 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 13 Sep 2022 05:18:39 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 13 Sep 2022 05:18:39 -0700
-Date:   Tue, 13 Sep 2022 14:23:01 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <UNGLinuxDriver@microchip.com>, <andrew@lunn.ch>,
-        <davem@davemloft.net>, <edumazet@google.com>,
-        <hkallweit1@gmail.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH net-next] net: phy: micrel: Add interrupts support for
- LAN8804 PHY
-Message-ID: <20220913122301.362ap6zghpdpluci@soft-dev3-1.localhost>
-References: <20220912195650.466518-1-horatiu.vultur@microchip.com>
- <20220913081814.212548-1-michael@walle.cc>
+        Tue, 13 Sep 2022 08:24:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8323BF7E;
+        Tue, 13 Sep 2022 05:24:44 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F4366602002;
+        Tue, 13 Sep 2022 13:24:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663071883;
+        bh=lqKYHK+jQ54kghN28zfF/tumKglgXjRx6YmQ9KWbw+A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NynmfhUvfJWntxZ4sIiFXCjoUYUFJ3HGvqC4dWFXUEM2ogxiFTBWEmheTrdAZoJXi
+         fbYDwq0Lmt+0ySjrQkh+7tVJaJVvzKK9gaSthpGfJb+Kde6PnkZjEC/nKU6JrbvT3O
+         2i8AgOtftcd0pPnV1d1qrq2dw0IFV1bpa9pCcV829UphDsPJpwXbWEW2EwmOURzbEx
+         pstYrvisAem55dY/vP3zjMQNC/vy1Olp68u6e+uU9mZIiEDLuf2JoO5OfplU8UEoOD
+         Zzme72LTCLqO1BcAo8TMGjhSB0soalIXdh2uf6HyvChuoxFVihCgFVkKFnacn9NSNO
+         fGsvgw43oxf4w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     joro@8bytes.org
+Cc:     yong.wu@mediatek.com, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v5 0/3] MediaTek Helio X10 MT6795 - M4U/IOMMU Support
+Date:   Tue, 13 Sep 2022 14:24:25 +0200
+Message-Id: <20220913122428.374280-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220913081814.212548-1-michael@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 09/13/2022 10:18, Michael Walle wrote:
-> 
-> > Add support for interrupts for LAN8804 PHY.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  drivers/net/phy/micrel.c | 55 ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 55 insertions(+)
-> >
-> > diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> > index 7b8c5c8d013e..98e9bc101d96 100644
-> > --- a/drivers/net/phy/micrel.c
-> > +++ b/drivers/net/phy/micrel.c
-> > @@ -2676,6 +2676,59 @@ static int lan8804_config_init(struct phy_device *phydev)
-> >       return 0;
-> >  }
-> >
-> > +static irqreturn_t lan8804_handle_interrupt(struct phy_device *phydev)
-> > +{
-> > +     int status;
-> > +
-> > +     status = phy_read(phydev, LAN8814_INTS);
-> > +     if (status < 0) {
-> > +             phy_error(phydev);
-> > +             return IRQ_NONE;
-> > +     }
-> > +
-> > +     if (status > 0)
-> > +             phy_trigger_machine(phydev);
-> > +
-> > +     return IRQ_HANDLED;
-> > +}
-> > +
-> > +#define LAN8804_OUTPUT_CONTROL                       25
-> > +#define LAN8804_OUTPUT_CONTROL_INTR_BUFFER   BIT(14)
-> > +#define LAN8804_CONTROL                              31
-> > +#define LAN8804_CONTROL_INTR_POLARITY                BIT(14)
-> > +
-> > +static int lan8804_config_intr(struct phy_device *phydev)
-> > +{
-> > +     int err;
-> > +
-> > +     /* Change interrupt polarity */
-> > +     phy_write(phydev, LAN8804_CONTROL, LAN8804_CONTROL_INTR_POLARITY);
-> 
-> I assume you change the polarity to high active? Could you add a note?
-> The LAN966x nor the LAN8804 datasheet describe this bit. You might also add
-> a note, that this is an internal PHY and you cannot change the polarity on
-> the GIC. Which begs the question, is this really only an internal PHY or
-> can you actually buy it as a dedicated one. Then you'd change the polarity
-> in a really unusual way.
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
 
-That is correct, as you described it, I change the polarity to high.
-From what I know, you can't buy a dedicated PHY.
-I will add these notes in the next version.
+This series introduces support for the IOMMUs found on this SoC.
 
-> 
-> 
-> > +
-> > +     /* Change interrupt buffer type */
-> 
-> To what? Push-pull?
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
 
-Yes, I have changed it to push-pull.
-I will add a node in the next version.
+Changes in v5:
+ - Rebased on next-20220912
 
-> 
-> -michael
-> 
-> > +     phy_write(phydev, LAN8804_OUTPUT_CONTROL,
-> > +               LAN8804_OUTPUT_CONTROL_INTR_BUFFER);
-> > +
+Changes in v4:
+ - Retitled mtk_iommu commits to iommu/mediatek as suggested by Yong Wu
+ - Removed unused M4U_LARB5_ID definition
+ - Rebased on next-20220624 and
+   https://patchwork.kernel.org/project/linux-mediatek/list/?series=650969
+
+Changes in v3:
+ - Added new flag as suggested by Yong Wu
+ - Rebased on top of https://patchwork.kernel.org/project/linux-mediatek/list/?series=648784
+
+Changes in v2:
+ - Rebased on top of https://patchwork.kernel.org/project/linux-mediatek/list/?series=642681
+
+
+AngeloGioacchino Del Regno (3):
+  dt-bindings: mediatek: Add bindings for MT6795 M4U
+  iommu/mediatek: Introduce new flag TF_PORT_TO_ADDR_MT8173
+  iommu/mediatek: Add support for MT6795 Helio X10 M4Us
+ .../bindings/iommu/mediatek,iommu.yaml        |  4 +
+ drivers/iommu/mtk_iommu.c                     | 21 +++-
+ drivers/memory/mtk-smi.c                      |  1 +
+ include/dt-bindings/memory/mt6795-larb-port.h | 95 +++++++++++++++++++
+ 4 files changed, 119 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/memory/mt6795-larb-port.h
 
 -- 
-/Horatiu
+2.37.2
+
