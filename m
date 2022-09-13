@@ -2,44 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8BF5B6C44
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179885B6C49
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiIMLRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 07:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S231723AbiIMLTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 07:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiIMLR2 (ORCPT
+        with ESMTP id S231639AbiIMLTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:17:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E56758099
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:17:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56CDD1063;
-        Tue, 13 Sep 2022 04:17:34 -0700 (PDT)
-Received: from [10.163.58.193] (unknown [10.163.58.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B63B03F71A;
-        Tue, 13 Sep 2022 04:17:25 -0700 (PDT)
-Message-ID: <5ca3fb8f-2dbd-f6e1-8482-7e2fa4729b19@arm.com>
-Date:   Tue, 13 Sep 2022 16:47:22 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 16/16] mm/page_alloc: fix obsolete comment in
- deferred_pfn_valid()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-17-linmiaohe@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220909092451.24883-17-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 13 Sep 2022 07:19:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EEF248EA;
+        Tue, 13 Sep 2022 04:19:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36BD46142A;
+        Tue, 13 Sep 2022 11:19:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBC9C433D6;
+        Tue, 13 Sep 2022 11:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663067954;
+        bh=8WL+2ChhNqJlCeEkSghkmVAikI1JBjjo/JWZKZfMn+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UhfEBLtkgUc3lrz38hjnenMo+Rg51QOM1iTk1lKYeEgONVhVxyeH3CGOrJw68hTV6
+         7jHgezmYrca3LZj1v+4hhN791suCz3UG9K9vWr4AsXS8+NGkB++3IVcLjEfr/OhNj6
+         1DsTUc6SUW31x79tpKfQbuU5YMehEz8dafiHWM01nVwvKRPlzazhtlJbJxkotBnNYV
+         rBpHAmzgoUsvAcjspfavQ4X6fhp31cH6AVI6kKTsw14N2zZKnCIYrbm3WsuzNlzGN3
+         R9uNKDAjHumn5p9xb/T6kR2qfrskiGYaFTT+iCy2vrXySykOI/RxJ/3RC04WV2Qx5Q
+         tBP94Ih85TpVg==
+Date:   Tue, 13 Sep 2022 20:19:09 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     <catalin.marinas@arm.com>, <will@kernel.org>, <guoren@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>, <maz@kernel.org>,
+        <alexandru.elisei@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH V2 0/3] kprobe: Optimize the performance of patching ss
+Message-Id: <20220913201909.2c7e38a40e719461e3c19b12@kernel.org>
+In-Reply-To: <20220913033454.104519-1-liaochang1@huawei.com>
+References: <20220913033454.104519-1-liaochang1@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,36 +59,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 13 Sep 2022 11:34:51 +0800
+Liao Chang <liaochang1@huawei.com> wrote:
 
+> Single-step slot would not be used until kprobe is enabled, that means
+> no race condition occurs on it under SMP, hence it is safe to pacth ss
+> slot without stopping machine.
 
-On 9/9/22 14:54, Miaohe Lin wrote:
-> There are no architectures that can have holes in the memory map within
-> a pageblock since commit 859a85ddf90e ("mm: remove pfn_valid_within()
-> and CONFIG_HOLES_IN_ZONE"). Update the corresponding comment.
+All these patches look good to me, since single-step slot must not
+be executed until it is prepared.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+for this series.
+
+But I need Ack by each architecture maintainer.
+
+Thank you,
+
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-
-> ---
->  mm/page_alloc.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+> v2:
+> Backport riscv patch to cksy and arm64.
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 262e8972e019..4cc0232020d2 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1929,11 +1929,7 @@ static inline void __init pgdat_init_report_one_done(void)
->  /*
->   * Returns true if page needs to be initialized or freed to buddy allocator.
->   *
-> - * First we check if pfn is valid on architectures where it is possible to have
-> - * holes within pageblock_nr_pages. On systems where it is not possible, this
-> - * function is optimized out.
-> - *
-> - * Then, we check if a current large page is valid by only checking the validity
-> + * We check if a current large page is valid by only checking the validity
->   * of the head pfn.
->   */
->  static inline bool __init deferred_pfn_valid(unsigned long pfn)
+> Liao Chang (3):
+>   riscv/kprobe: Optimize the performance of patching single-step slot
+>   csky/kprobe: Optimize the performance of patching single-step slot
+>   arm64/kprobe: Optimize the performance of patching single-step slot
+> 
+>  arch/arm64/kernel/probes/kprobes.c | 5 ++---
+>  arch/csky/kernel/probes/kprobes.c  | 6 +++++-
+>  arch/riscv/kernel/probes/kprobes.c | 8 +++++---
+>  3 files changed, 12 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
