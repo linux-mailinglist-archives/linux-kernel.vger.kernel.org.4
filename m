@@ -2,166 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C8F5B6CB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A95A5B6C2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbiIMMBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S231578AbiIMLGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 07:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiIMMB1 (ORCPT
+        with ESMTP id S231207AbiIMLGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:01:27 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC646371A6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:01:26 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id t3so11593307ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=1pj33muzPsJpUhNcBT0o05+VQt0cQ00T/48YoaU8PHs=;
-        b=d/lOC17WeCAmAwvxW/N1bb7kaPeC/aK5SUy4mCsFXE+sUgxwzHqejSFjPte6c2BscC
-         Jsy19VHeRmjWLFSqi9P2NPitXTP7wZRBBRvM0rnquiMAsqhNBa3v5Ow/9ksWRcWqVw76
-         lHWGeMEzT0Msv8IbkZ5bqbrdwsBtu7ZZ2+mhg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1pj33muzPsJpUhNcBT0o05+VQt0cQ00T/48YoaU8PHs=;
-        b=V0GU4mL+At75JWwI12TqLrH1CbeUHkoAq8yNChVHNXOtuCM95s06nPLThIdarYKuiL
-         /10TsOBOvdElYv0CRnxnwUCDRkzRtgLK4S4oRJEEnqV5p/DCfB+/xhgRtoQWPPhM+k8F
-         85MUVOowtipghIFs2guZEEJ0ZHL/79L4eCljvRc8EFOO/WLeDDT0LD6SA45rg/RfLaeX
-         k341RYTnNcGvhSm9sE0gCeICTkkpVIk0ApflVplmIxjFV6PCohzzQ9ARyvbETjTg370t
-         XOs+ZyyeSNlWZf2r3+HrOBVE6/n94la1aFaMk0LujzwWg/tT0waMFpNUnzkduZrmxfUU
-         esPg==
-X-Gm-Message-State: ACgBeo2ou/7VRU7tG5lVGCkMijE1u1ha7c9iwXL+IIr6X37UMh5uF245
-        AySp/5s5ss4EuyMcIgLfr0kdJg==
-X-Google-Smtp-Source: AA6agR4lG2Wr58F5IZD2hOfAAdpXddSRPOIQgSQteCRZSJphcxFM58CRtQHLZjzUCr/58UBt/YhjQA==
-X-Received: by 2002:a17:903:22cc:b0:178:18a1:d16c with SMTP id y12-20020a17090322cc00b0017818a1d16cmr17420970plg.155.1663070485873;
-        Tue, 13 Sep 2022 05:01:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d21-20020a170902729500b0017441330392sm8058363pll.63.2022.09.13.05.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 05:01:24 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 05:01:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
-        chris@chris-wilson.co.uk, matthew.auld@intel.com,
-        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
-        nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
-        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
-        mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
-        vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com
-Subject: Re: [PATCH v10 3/9] compiler_types.h: Add assert_type to catch type
- mis-match while compiling
-Message-ID: <202209130455.E7CF976A@keescook>
-References: <20220909105913.752049-1-gwan-gyeong.mun@intel.com>
- <20220909105913.752049-4-gwan-gyeong.mun@intel.com>
+        Tue, 13 Sep 2022 07:06:42 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42A847B80
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663067201; x=1694603201;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=S+rR3hEdjXVGudyxEjdeHvn4EsXZj3Ige9BWWN070iA=;
+  b=TR5NEbYNnmmVTDqZUIkbs1bGXMyt443K05sLd/EY9M4wV6V+lRSol0/4
+   qeSD3oSdMtEGbXjB6pWWGRweVVdiMp+57qp73VDe7D7hfWnSVZQTXhvKt
+   YZ1cYFQx6B2HzCtN116RnEEiHZiyKPwZaLNQdZOs08seh/0wH1SeSwES/
+   QhSH+y5UjQcGSN2rVvQMH/rKro4/ZwwyS4ZqUs3L3xQPmiNpa8Cpax7CH
+   erHe7VuINwoBoY4lvRU6tJPv9mSpHn3LPo6O7qewxzXSd6xjT3KQpymhu
+   LJlSsYWSTlO4ggmRbZ+xXfAM1Up0QH5G/fABOgLZDmZcvWr8mhqmrJVhr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="277841482"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="277841482"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 04:06:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="678522118"
+Received: from linux-pnp-server-13.sh.intel.com ([10.239.176.176])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2022 04:06:37 -0700
+From:   Jiebin Sun <jiebin.sun@intel.com>
+To:     akpm@linux-foundation.org, vasily.averin@linux.dev,
+        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
+        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
+Subject: [PATCH v6 0/2] ipc/msg: mitigate the lock contention in ipc/msg
+Date:   Wed, 14 Sep 2022 03:25:36 +0800
+Message-Id: <20220913192538.3023708-1-jiebin.sun@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220902152243.479592-1-jiebin.sun@intel.com>
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220909105913.752049-4-gwan-gyeong.mun@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 07:59:07PM +0900, Gwan-gyeong Mun wrote:
-> It adds assert_type and assert_typable macros to catch type mis-match while
-> compiling. The existing typecheck() macro outputs build warnings, but the
-> newly added assert_type() macro uses the _Static_assert() keyword (which is
-> introduced in C11) to generate a build break when the types are different
-> and can be used to detect explicit build errors.
-> Unlike the assert_type() macro, assert_typable() macro allows a constant
-> value as the second argument.
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Cc: Matthew Auld <matthew.auld@intel.com>
-> Cc: Nirmoy Das <nirmoy.das@intel.com>
-> Cc: Jani Nikula <jani.nikula@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/compiler_types.h | 39 ++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 4f2a819fd60a..19cc125918bb 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -294,6 +294,45 @@ struct ftrace_likely_data {
->  /* Are two types/vars the same type (ignoring qualifiers)? */
->  #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
->  
-> +/**
-> + * assert_type - break compile if the first argument's data type and the second
-> + *               argument's data type are not the same
-> + *
-> + * @t1: data type or variable
-> + * @t2: data type or variable
-> + *
-> + * The first and second arguments can be data types or variables or mixed (the
-> + * first argument is the data type and the second argument is variable or vice
-> + * versa). It determines whether the first argument's data type and the second
-> + * argument's data type are the same while compiling, and it breaks compile if
-> + * the two types are not the same.
-> + * See also assert_typable().
-> + */
-> +#define assert_type(t1, t2) _Static_assert(__same_type(t1, t2))
-> +
-> +/**
-> + * assert_typable - break compile if the first argument's data type and the
-> + *                  second argument's data type are not the same
-> + *
-> + * @t: data type or variable
-> + * @n: data type or variable or constant value
-> + *
-> + * The first and second arguments can be data types or variables or mixed (the
-> + * first argument is the data type and the second argument is variable or vice
-> + * versa). Unlike the assert_type() macro, this macro allows a constant value
-> + * as the second argument. And if the second argument is a constant value, it
-> + * always passes. And it doesn't mean that the types are explicitly the same.
-> + * When a constant value is used as the second argument, if you need an
-> + * overflow check when assigning a constant value to a variable of the type of
-> + * the first argument, you can use the overflows_type() macro. When a constant
+Hi,
 
-I wonder if the overflows_type() check should happen in this test? It
-seems weird that assert_typable(u8, 1024) would pass...
+Here are two patches to mitigate the lock contention in ipc/msg.
 
-> + * value is not used as a second argument, it determines whether the first
-> + * argument's data type and the second argument's data type are the same while
-> + * compiling, and it breaks compile if the two types are not the same.
-> + * See also assert_type() and overflows_type().
-> + */
-> +#define assert_typable(t, n) _Static_assert(__builtin_constant_p(n) ||	\
-> +					    __same_type(t, typeof(n)))
+The 1st patch is to add the new interface percpu_counter_add_local and
+percpu_counter_sub_local. The batch size in percpu_counter_add_batch
+should be very large in heavy writing and rare reading case. Add the
+"_local" version, and mostly it will do local adding, reduce the global
+updating and mitigate lock contention in writing.
 
-Totally untested -- I'm not sure if this gets the right semantics for
-constant expressoins, etc...
+The 2nd patch is to use percpu_counter instead of atomic update in
+ipc/msg. The msg_bytes and msg_hdrs atomic counters are frequently
+updated when IPC msg queue is in heavy use, causing heavy cache bounce
+and overhead. Change them to percpu_counter greatly improve the
+performance. Since there is one percpu struct per namespace, additional
+memory cost is minimal. Reading of the count done in msgctl call, which
+is infrequent. So the need to sum up the counts in each CPU is
+infrequent.
 
-static_assert(__builtin_choose_expression(__builtin_constant_p(n), \
-			overflows_type(n, typeof(t)), \
-			__same_type(t, typeof(n))))
+Changes in v6:
+1. Revise the code comment of percpu_counter_add_local in patch 1/2.
+2. Get percpu_counter_sub_local from percpu_counter_add_local rather
+than that from percpu_counter_add_batch for SMP and percpu_counter_sub
+for non-SMP to reduce code modification.
+
+Changes in v5:
+1. Use INT_MAX as the large batch size in percpu_counter_local_add and
+percpu_counter_sub_local.
+2. Use the latest kernel 6.0-rc4 as the baseline for performance test.
+3. Move the percpu_counter_local_add and percpu_counter_sub_local from
+percpu_counter.c to percpu_counter.h.
+
+Changes in v3:
+1. Add comment and change log for the new function percpu_counter_add_local.
+Who should use it and who shouldn't.
+
+Changes in v2:
+1. Separate the original patch into two patches.
+2. Add error handling for percpu_counter_init.
+
+The performance gain increases as the threads of workload become larger.
+Performance gain: 3.99x
+
+CPU: ICX 8380 x 2 sockets
+Core number: 40 x 2 physical cores
+Benchmark: pts/stress-ng-1.4.0
+-- system v message passing (160 threads)
 
 
-Also, can you please add KUnit tests for these new helpers into
-lib/overflow_kunit.c?
+Regards
+Jiebin
 
--- 
-Kees Cook
