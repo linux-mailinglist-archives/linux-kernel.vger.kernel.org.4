@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264815B7389
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5995B72E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235463AbiIMPIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S235131AbiIMPDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235170AbiIMPHI (ORCPT
+        with ESMTP id S234810AbiIMPBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:07:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4AC754BF;
-        Tue, 13 Sep 2022 07:30:42 -0700 (PDT)
+        Tue, 13 Sep 2022 11:01:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A58E98;
+        Tue, 13 Sep 2022 07:29:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82269614B4;
-        Tue, 13 Sep 2022 14:29:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C972C433C1;
-        Tue, 13 Sep 2022 14:29:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED9C461494;
+        Tue, 13 Sep 2022 14:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02978C433C1;
+        Tue, 13 Sep 2022 14:29:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079366;
-        bh=W6VLe/hXXF3fX2MG1kNCDOhngH70KjD6bZGLtVEcEGQ=;
+        s=korg; t=1663079369;
+        bh=M5hartn5sc0ivAOrmjuDqfTK3eYU0BpZ1hEndnoIAjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRVAdNQuTs9BJe9+Z6z/8HE3CLA0S9I/Ni0Hw7y0L5THJ6Ywawhb7qOIvmPb8pF1B
-         MGe1RkrzV9QFw+ZhtdwmjE0CF/l5V3huOjNPci+2NKYdQPa6U2mNTYp3XODdVYJ9m2
-         8uBqfY7+PaEZ2oJHIUkg441GUWTXZoB4Gxpz6i44=
+        b=lCImXFWOmsKTCABcw/cidqKjeJ5n5d8vUcbMr3ddpoIFhXJZGinLw/gj4anwbbHVG
+         uBK1NfskBDM3UWCVeAPf7QDiFPsQ0NpIMYpzRJahcbL59Meo26zymtLQ9s3jCTZzZY
+         l17RdiFdtAlU3neRCpoAQ17xMkFJAS6i7glajl6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 106/108] sch_sfb: Also store skb len before calling child enqueue
-Date:   Tue, 13 Sep 2022 16:07:17 +0200
-Message-Id: <20220913140358.178768512@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.4 107/108] x86/nospec: Fix i386 RSB stuffing
+Date:   Tue, 13 Sep 2022 16:07:18 +0200
+Message-Id: <20220913140358.220874709@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
 References: <20220913140353.549108748@linuxfoundation.org>
@@ -57,49 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@toke.dk>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 2f09707d0c972120bf794cfe0f0c67e2c2ddb252 ]
+commit 332924973725e8cdcc783c175f68cf7e162cb9e5 upstream.
 
-Cong Wang noticed that the previous fix for sch_sfb accessing the queued
-skb after enqueueing it to a child qdisc was incomplete: the SFB enqueue
-function was also calling qdisc_qstats_backlog_inc() after enqueue, which
-reads the pkt len from the skb cb field. Fix this by also storing the skb
-len, and using the stored value to increment the backlog after enqueueing.
+Turns out that i386 doesn't unconditionally have LFENCE, as such the
+loop in __FILL_RETURN_BUFFER isn't actually speculation safe on such
+chips.
 
-Fixes: 9efd23297cca ("sch_sfb: Don't assume the skb is still around after enqueueing to child")
-Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Acked-by: Cong Wang <cong.wang@bytedance.com>
-Link: https://lore.kernel.org/r/20220905192137.965549-1-toke@toke.dk
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
+Reported-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net
+[bwh: Backported to 4.19/5.4:
+ - __FILL_RETURN_BUFFER takes an sp parameter
+ - Open-code __FILL_RETURN_SLOT]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_sfb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/nospec-branch.h |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
-index 085fe06da2a68..3aa6b4dcb1c8e 100644
---- a/net/sched/sch_sfb.c
-+++ b/net/sched/sch_sfb.c
-@@ -281,6 +281,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
- {
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -44,6 +44,7 @@
+  * the optimal version — two calls, each with their own speculation
+  * trap should their return address end up getting used, in a loop.
+  */
++#ifdef CONFIG_X86_64
+ #define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+ 	mov	$(nr/2), reg;			\
+ 771:						\
+@@ -64,6 +65,19 @@
+ 	add	$(BITS_PER_LONG/8) * nr, sp;	\
+ 	/* barrier for jnz misprediction */	\
+ 	lfence;
++#else
++/*
++ * i386 doesn't unconditionally have LFENCE, as such it can't
++ * do a loop.
++ */
++#define __FILL_RETURN_BUFFER(reg, nr, sp)	\
++	.rept nr;				\
++	call	772f;				\
++	int3;					\
++772:;						\
++	.endr;					\
++	add	$(BITS_PER_LONG/8) * nr, sp;
++#endif
  
- 	struct sfb_sched_data *q = qdisc_priv(sch);
-+	unsigned int len = qdisc_pkt_len(skb);
- 	struct Qdisc *child = q->qdisc;
- 	struct tcf_proto *fl;
- 	struct sfb_skb_cb cb;
-@@ -403,7 +404,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
- 	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
- 	ret = qdisc_enqueue(skb, child, to_free);
- 	if (likely(ret == NET_XMIT_SUCCESS)) {
--		qdisc_qstats_backlog_inc(sch, skb);
-+		sch->qstats.backlog += len;
- 		sch->q.qlen++;
- 		increment_qlen(&cb, q);
- 	} else if (net_xmit_drop_count(ret)) {
--- 
-2.35.1
-
+ #define __ISSUE_UNBALANCED_RET_GUARD(sp)	\
+ 	call	881f;				\
 
 
