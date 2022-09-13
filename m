@@ -2,164 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C855B6E4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CB05B6E76
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiIMNZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S232291AbiIMNfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbiIMNZJ (ORCPT
+        with ESMTP id S231561AbiIMNf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:25:09 -0400
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2424167DF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1663075502;
-        bh=tKBeLzzduMcJ2xyjvXECgZEYzh5G5fX2iEY9DXOhEvo=;
-        h=From:To:Cc:Subject:Date;
-        b=Z1tnJqefYecVBe2YrjoHXl7ap+zijkMd87FLE75nWw0Vs+SpLmHlGM3VTHWUnIUy7
-         2gQrX4hR6PcN/cDP6BmcFAUoJxEqCUDdxpT4AZVQIJ0njS5esf3Gi0LlZLpxmPvpH1
-         WJ5wSlqkM1L+1RV0QcdVBN6YiEk8buCoMce0SxVg=
-Received: from localhost.localdomain ([113.57.80.61])
-        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
-        id 63B064E3; Tue, 13 Sep 2022 21:24:59 +0800
-X-QQ-mid: xmsmtpt1663075499to3s5e6wz
-Message-ID: <tencent_DB57E4F270F4539485C32B05FDAF8394310A@qq.com>
-X-QQ-XMAILINFO: NhUkPfKlCtQwROWwfJomQifEGwo2y52og5ZUKGHHXcLbvEdXnjVaSekj5Q3DtY
-         f+ec5zYBR3jtZ+/542QwOi6WbVECojatOG74eO4VB6CGE6eiEWserR/d29n8+b1gq6in3Zpk8UIt
-         3haZeE0nDMfVzaKTigIEhPa/4GJEmbK0lEwtiQaMqJavdJS8EoAVwiLgj3injUVfVS/wq81b316L
-         W2D5Z3qZs28BJdGG1hhHjC7CNax3O9kCJfrpXmv93RZHScz0/1jK6y4oWuftJHKhZ0bWr2ewaWa7
-         aUZSEuADCQo8c5pQttGechZD1Y/2NWnrj3a5H+qmfgSBu02WnsvWh6zV3TvP0FMyMrfoGRSO5iET
-         HN5kf3AkT1j1jM9/fRjBdLXfDSEnDQUsAfQ72n+JtU5h3BIAY4QW9VKtU6wwLVIpefiZhW3fKhcU
-         D52dizTHjziUW0DTeHbantgxSxleC+u1GThpLch9A18Axxb31nPJHdmzQWWJq0ZlW9y8P8mwr8A5
-         dWs6xDbXsOTyNz+7/SY8mWCYW5DM9/stF2lsJjjlQ1FbexEoI9OiCZJaLB2kpjJenZNm+1omKct3
-         iEeaB+J3Jucm0/2RfD/bf/LhOWgFJb56VMK2JrJk1B7T8fDeSEZrz2AVesFgNVIJwlxjTJF/xU4n
-         16XxgEd+jnlGM/tpV9JSCwtwBQ6hEWU5BWamd3u4Kn9gzFgltXV915/kO+I8HxFmorMAhZKLxKNO
-         Woi4rxS9w6CVTg0WIezSWEjAS7xVs0XB4/KFO18v/11/iZh0TQtcr/zLg625bQCspzdzuetJ9l3u
-         aJZLM4KfllngosZfhloJdUnZ+Q+hMkr/rfBTWUGv4dd2r5sDuVL25vPcqgKTNq6HlqyYacVWaFDh
-         ssiSR4WhJnZyIVnmdZbXyE9XwGhovnaCc75cPrMXTpnHsNkjAfEhBZk7h5XgzSKDhFIuYVSkXK8R
-         cYK7FUGhw8UUd7vlPTwGwX0S0WDKY8rpSjziqVWgHNyelp0wqbTlY6Zk3gNx04e5A4WjCzGoz6m5
-         t/AzmhgQ==
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v4] staging: r8188eu: fix potential memory leak in _rtw_init_xmit_priv()
-Date:   Tue, 13 Sep 2022 21:24:05 +0800
-X-OQ-MSGID: <20220913132405.4387-1-xkernel.wang@foxmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 09:35:28 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEBFA1CB18;
+        Tue, 13 Sep 2022 06:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=U16LZwWLpP6lSvevS/
+        +MxEAX56p/rB2gXsgNI9JSmlA=; b=Jjc3nl8yoD3SdvdJaoZWQgc1oJ9jJFxh+n
+        HZllsfzPdf4qx3omA2tif9WgGjXTv/YyNYR0l2mrk6KL396ZpDu4Ct8ZFjd/9kKx
+        kzq1KqmDT+s8FBHwKIZm/Kt/28qDWjsimHhVZ0fRBV1e3uivSGa7tk+OiMOoPnbB
+        uSxxFjXUM=
+Received: from os-l3a203-yehs1-dev01.localdomain (unknown [103.244.59.1])
+        by smtp4 (Coremail) with SMTP id HNxpCgBHlobghiBjSmbecg--.6836S2;
+        Tue, 13 Sep 2022 21:34:24 +0800 (CST)
+From:   Xiaochun Lee <lixiaochun.2888@163.com>
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev
+Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiaochun Lee <lixc17@lenovo.com>
+Subject: [PATCH v1] PCI: Set no io resource for bridges that behind VMD controller
+Date:   Tue, 13 Sep 2022 21:24:45 +0800
+Message-Id: <1663075485-20591-1-git-send-email-lixiaochun.2888@163.com>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: HNxpCgBHlobghiBjSmbecg--.6836S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuryxCr1Dury8JryrKr4DJwb_yoWrZF4kpF
+        Wagw45Xr40qFy7tws3W3yxCFWFvan2yFWYyry7Xrnava18uFyUurnxAFy5XF4DJF1Dtw13
+        Xwn5Jrykua1DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U_sqAUUUUU=
+X-Originating-IP: [103.244.59.1]
+X-CM-SenderInfo: 5ol0xtprfk30aosymmi6rwjhhfrp/1tbioAF7QFjSPWUxggAAs7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Xiaochun Lee <lixc17@lenovo.com>
 
-In _rtw_init_xmit_priv(), there are several error paths for allocation
-failures just jump to the `exit` section. However, there is no action
-will be performed, so the allocated resources are not properly released,
-which leads to various memory leaks.
+When enable VMDs on Intel CPUs, VMD controllers(8086:28c0) be
+recognized by VMD driver and there are many failed messages of
+BAR 13 when scan the bridges and assign IO resource behind it
+as listed below, the bridge wants to get 0x6000 as its IO
+resource, but there is no IO resources on the host bridge.
 
-To properly release them, this patch unifies the error handling code and
-several error handling paths are added.
-According to the allocation sequence, if the validation fails, it will
-jump to its corresponding error tag to release the resources.
+VMD host bridge resources:
+vmd 0000:64:00.5: PCI host bridge to bus 10000:80
+pci_bus 10000:80: root bus resource [bus 80-9f]
+pci_bus 10000:80: root bus resource [mem 0xe0000000-0xe1ffffff]
+pci_bus 10000:80: root bus resource [mem 0x24ffff02010-0x24fffffffff 64bit]
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Failed messages of BAR#13:
+pci 10000:80:02.0: BAR 13: no space for [io  size 0x1000]
+pci 10000:80:02.0: BAR 13: failed to assign [io  size 0x1000]
+pci 10000:80:03.0: BAR 13: no space for [io  size 0x1000]
+pci 10000:80:03.0: BAR 13: failed to assign [io  size 0x1000]
+
+VMD-enabled root ports use
+Enhanced Configuration Access Mechanism (ECAM) access
+PCI Express configuration space, and offer VMD_CFGBAR as
+base of PCI Express configuration space for the bridges
+behind it. The configuration space includes IO resources,
+but these IO resources are not actually used on X86,
+especially the NVMes as device connected on this hot plug
+bridges, and it can result in BAR#13 assign IO resource
+failed. So we clear IO resources by setting an IO base value
+greater than limit to these bridges. Hence, we can leverage
+kernel parameter "pci=hpiosize=0KB" to avoid this failed
+messages show out.
+
+Signed-off-by: Xiaochun Lee <lixc17@lenovo.com>
 ---
-ChangeLog:
-v1->v2 update the description and adjust the sequence of patches.
-v2->v3 None to this patch, but some to another patch in this series.
-v3->v4 rebase the original series and merge them due to the missing check
-for kzalloc() in rtw_alloc_hwxmits() had been added.
- drivers/staging/r8188eu/core/rtw_xmit.c | 30 ++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ drivers/pci/quirks.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 9c39d08..9e70c79 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -134,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmitbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_frame_buf;
- 	}
- 
- 	pxmitpriv->pxmitbuf = (u8 *)ALIGN((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
-@@ -156,7 +156,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 			msleep(10);
- 			res = rtw_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
- 			if (res == _FAIL)
--				goto exit;
-+				goto free_xmitbuf;
- 		}
- 
- 		pxmitbuf->flags = XMIT_VO_QUEUE;
-@@ -174,7 +174,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmit_extbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_xmitbuf;
- 	}
- 
- 	pxmitpriv->pxmit_extbuf = (u8 *)ALIGN((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
-@@ -191,7 +191,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 		res = rtw_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
- 		if (res == _FAIL) {
- 			res = _FAIL;
--			goto exit;
-+			goto free_xmit_extbuf;
- 		}
- 
- 		list_add_tail(&pxmitbuf->list, &pxmitpriv->free_xmit_extbuf_queue.queue);
-@@ -202,7 +202,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (rtw_alloc_hwxmits(padapter)) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_xmit_extbuf;
- 	}
- 
- 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
-@@ -226,8 +226,26 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	rtl8188eu_init_xmit_priv(padapter);
- 
--exit:
-+	return _SUCCESS;
- 
-+free_xmit_extbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-+	while (i--) {
-+		rtw_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 4944798..f8a37f0 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5956,3 +5956,60 @@ static void aspm_l1_acceptable_latency(struct pci_dev *dev)
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
+ #endif
++
++#if defined(CONFIG_X86_64) || defined(CONFIG_X86)
++/*
++ * VMD-enabled root ports use Enhanced Configuration Access Mechanism (ECAM)
++ * access PCI Express configuration space, and offer VMD_CFGBAR as
++ * base of PCI Express configuration space for the bridges behind it.
++ * The configuration space includes IO resources, but these IO
++ * resources are not actually used on X86, especially the NVMes as
++ * device connnected on this hot plug bridges, and it can result
++ * in BAR#13 assign IO resource failed. So we clear IO resources
++ * by setting an IO base value greater than limit to these bridges.
++ * Hence, append kernel parameter "pci=hpiosize=0KB" can avoid
++ * this BAR#13 failed messages show out.
++ */
++static void quirk_vmd_no_iosize(struct pci_dev *bridge)
++{
++	u8 io_base_lo, io_limit_lo;
++	u16 io_low;
++	u32 io_upper16;
++	unsigned long io_mask,  base, limit;
++
++	io_mask = PCI_IO_RANGE_MASK;
++	if (bridge->io_window_1k)
++		io_mask = PCI_IO_1K_RANGE_MASK;
++
++	/* VMD Domain */
++	if (is_vmd(bridge->bus) && bridge->is_hotplug_bridge) {
++		pci_read_config_byte(bridge, PCI_IO_BASE, &io_base_lo);
++		pci_read_config_byte(bridge, PCI_IO_LIMIT, &io_limit_lo);
++		base = (io_base_lo & io_mask) << 8;
++		limit = (io_limit_lo & io_mask) << 8;
++		if (limit >= base) {
++			/* if there are defined io ports behind the bridge on x86,
++			 * we clear it, since there is only 64KB IO resource on it,
++			 * beyond that, hotplug io bridges don't needs IO port resource,
++			 * such as NVMes attach on it. So the corresponding range must be
++			 * turned off by writing base value greater than limit to the
++			 * bridge's base/limit registers.
++			 */
++
++			/* Clear upper 16 bits of I/O base/limit */
++			io_upper16 = 0;
++			/* set base value greater than limit */
++			io_low = 0x00f0;
++
++			/* Temporarily disable the I/O range before updating PCI_IO_BASE */
++			pci_write_config_dword(bridge, PCI_IO_BASE_UPPER16, 0x0000ffff);
++			/* Update lower 16 bits of I/O base/limit */
++			pci_write_config_word(bridge, PCI_IO_BASE, io_low);
++			/* Update upper 16 bits of I/O base/limit */
++			pci_write_config_dword(bridge, PCI_IO_BASE_UPPER16, io_upper16);
++		}
 +	}
-+	vfree(pxmitpriv->pallocated_xmit_extbuf);
-+	i = NR_XMITBUFF;
-+free_xmitbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-+	while (i--) {
-+		rtw_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmitbuf);
-+free_frame_buf:
-+	vfree(pxmitpriv->pallocated_frame_buf);
-+exit:
- 	return res;
- }
- 
++}
++DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_ANY_ID, PCI_ANY_ID,
++		PCI_CLASS_BRIDGE_PCI, 8, quirk_vmd_no_iosize);
++#endif
 -- 
+1.8.3.1
+
