@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D485B720A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7EC5B71D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiIMOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S230187AbiIMOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbiIMOnl (ORCPT
+        with ESMTP id S234521AbiIMOnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CC36EF29;
-        Tue, 13 Sep 2022 07:23:16 -0700 (PDT)
+        Tue, 13 Sep 2022 10:43:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D1865270;
+        Tue, 13 Sep 2022 07:23:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70956B80F97;
-        Tue, 13 Sep 2022 14:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF551C433D6;
-        Tue, 13 Sep 2022 14:23:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26A9C614D4;
+        Tue, 13 Sep 2022 14:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3F1C433C1;
+        Tue, 13 Sep 2022 14:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078995;
-        bh=j90Uc8ZsfXepqIyM6WV/PLdAbU0hv1dUaJEvYkRqv3U=;
+        s=korg; t=1663078893;
+        bh=1xKMPOAIjXAYy50nficxGkTThJt4JiSDavxh3hKYCTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fi8cKhOIUemtJr0py/VlsBHftQnKxNad83bGELj9nkr/WydT+6LgXbVrkCidGG+RH
-         LxXSPyjUlgF9EWI+yLtL8h91sKVcm/rFbdl58AhtQu14tX9AP+j4YUMT91LpG2gqa0
-         1EuVEbp69x12Yy16IiCxigs7zWK2RrXeWtcdhd6k=
+        b=GDfpoOkVYOAU1ZolNgzNdaWIYXASo3dYCfrGnexHGPOltOcvWISQshDk8N8eOKyWn
+         tR4n9BoFr5KTDdX2EXo3VWVF1pbOgooHawVYE3gre4Ovm8vpKeZuTtuK5R3NHZ0b53
+         i7xCmhZSKH/1al4vrEALZEmrvDDKQ1ohAexVcNRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Chengchang Tang <tangchengchang@huawei.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
+        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
         Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 42/79] RDMA/hns: Fix supported page size
-Date:   Tue, 13 Sep 2022 16:04:47 +0200
-Message-Id: <20220913140352.328257156@linuxfoundation.org>
+Subject: [PATCH 5.15 097/121] RDMA/irdma: Report RNR NAK generation in device caps
+Date:   Tue, 13 Sep 2022 16:04:48 +0200
+Message-Id: <20220913140401.523730787@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengchang Tang <tangchengchang@huawei.com>
+From: Sindhu-Devale <sindhu.devale@intel.com>
 
-[ Upstream commit 55af9d498556f0860eb89ffa7677e8d73f6f643f ]
+[ Upstream commit a261786fdc0a5bed2e5f994dcc0ffeeeb0d662c7 ]
 
-The supported page size for hns is (4K, 128M), not (4K, 2G).
+Report RNR NAK generation when device capabilities are queried
 
-Fixes: cfc85f3e4b7f ("RDMA/hns: Add profile support for hip08 driver")
-Link: https://lore.kernel.org/r/20220829105021.1427804-2-liangwenpeng@huawei.com
-Signed-off-by: Chengchang Tang <tangchengchang@huawei.com>
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
+Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Link: https://lore.kernel.org/r/20220906223244.1119-6-shiraz.saleem@intel.com
 Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_hw_v2.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/hw/irdma/verbs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-index be7f2fe1e8839..8a92faeb3d237 100644
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-@@ -92,7 +92,7 @@
- 
- #define HNS_ROCE_V2_QPC_TIMER_ENTRY_SZ		PAGE_SIZE
- #define HNS_ROCE_V2_CQC_TIMER_ENTRY_SZ		PAGE_SIZE
--#define HNS_ROCE_V2_PAGE_SIZE_SUPPORTED		0xFFFFF000
-+#define HNS_ROCE_V2_PAGE_SIZE_SUPPORTED		0xFFFF000
- #define HNS_ROCE_V2_MAX_INNER_MTPT_NUM		2
- #define HNS_ROCE_INVALID_LKEY			0x100
- #define HNS_ROCE_CMQ_TX_TIMEOUT			30000
+diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
+index adb0e0774256c..5275616398d83 100644
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -43,8 +43,11 @@ static int irdma_query_device(struct ib_device *ibdev,
+ 	props->max_sge_rd = hw_attrs->uk_attrs.max_hw_read_sges;
+ 	props->max_qp_rd_atom = hw_attrs->max_hw_ird;
+ 	props->max_qp_init_rd_atom = hw_attrs->max_hw_ord;
+-	if (rdma_protocol_roce(ibdev, 1))
++	if (rdma_protocol_roce(ibdev, 1)) {
++		props->device_cap_flags |= IB_DEVICE_RC_RNR_NAK_GEN;
+ 		props->max_pkeys = IRDMA_PKEY_TBL_SZ;
++	}
++
+ 	props->max_ah = rf->max_ah;
+ 	props->max_mcast_grp = rf->max_mcg;
+ 	props->max_mcast_qp_attach = IRDMA_MAX_MGS_PER_CTX;
 -- 
 2.35.1
 
