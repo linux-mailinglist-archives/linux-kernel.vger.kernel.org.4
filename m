@@ -2,107 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126785B67E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0885B67EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiIMG2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S230389AbiIMG2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiIMG1y (ORCPT
+        with ESMTP id S230342AbiIMG16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:27:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29E9CE2B;
-        Mon, 12 Sep 2022 23:27:52 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D5Dhom001855;
-        Tue, 13 Sep 2022 06:27:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=C+4it0DmVQbswpnSX/olWD/88Nw19wtLp+OFTkMLNSI=;
- b=BXgji06UjzZ4YYbTGJs/wTSTE0Yrl/32rZGWs4apDrQEFm5iaB9EYLX45h5q0uctfGif
- pEFUnerJutSAiXl3AQIDI/8U2Vbkk6LAhgyhihUEnPbd7HntJoyrBVFgvsJPyDdG7P7r
- SSqYy/xAvV71oosoawJEiGS6FsQ9CNTh7WvEAfgQYoQ3MLR5Z2fBjrrCjGNASmOapQ3K
- e0RH6tMVTnCrWkQb75kG6obnfCTITrrFybfXkMWqMow9todcC7ZXIGU5Bd1nOjfvfPNp
- +NLXOCloaqWFakt1RD7PJ+fiuk1cxwGsVfGVVkbOOI7m5hSO02LgW+C4icAqZgIY05mW +A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjbh196wa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 06:27:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28D6RgqF026477
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 06:27:42 GMT
-Received: from hyiwei-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 12 Sep 2022 23:27:39 -0700
-From:   Huang Yiwei <quic_hyiwei@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>
-CC:     <djakov@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <leo.yan@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Huang Yiwei <quic_hyiwei@quicinc.com>
-Subject: [PATCH] interconnect: qcom: Add the missing MODULE_LICENSE
-Date:   Tue, 13 Sep 2022 14:27:21 +0800
-Message-ID: <20220913062721.5986-1-quic_hyiwei@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 13 Sep 2022 02:27:58 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E1CE2B;
+        Mon, 12 Sep 2022 23:27:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPduYe-_1663050471;
+Received: from 30.221.130.76(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPduYe-_1663050471)
+          by smtp.aliyun-inc.com;
+          Tue, 13 Sep 2022 14:27:52 +0800
+Message-ID: <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
+Date:   Tue, 13 Sep 2022 14:27:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7GURRqOwL6WKteQywu6wrGBuT4zmN2LW
-X-Proofpoint-ORIG-GUID: 7GURRqOwL6WKteQywu6wrGBuT4zmN2LW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_02,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- phishscore=0 spamscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209130028
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V2 5/5] erofs: support fscache based shared domain
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
+        xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
+ <20220902105305.79687-6-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220902105305.79687-6-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since icc-common.c can be compiled as module, add the missing
-MODULE_LICENSE to avoid compile errors.
 
-Fixes: cb4805b5a5e4 ("interconnect: qcom: Move qcom_icc_xlate_extended() to a common file")
-Signed-off-by: Huang Yiwei <quic_hyiwei@quicinc.com>
----
- drivers/interconnect/qcom/icc-common.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/interconnect/qcom/icc-common.c b/drivers/interconnect/qcom/icc-common.c
-index 0822ce207b5d..f27f4fdc4531 100644
---- a/drivers/interconnect/qcom/icc-common.c
-+++ b/drivers/interconnect/qcom/icc-common.c
-@@ -5,6 +5,7 @@
- 
- #include <linux/of.h>
- #include <linux/slab.h>
-+#include <linux/module.h>
- 
- #include "icc-common.h"
- 
-@@ -32,3 +33,5 @@ struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void
- 	return ndata;
- }
- EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
-+
-+MODULE_LICENSE("GPL");
+On 9/2/22 6:53 PM, Jia Zhu wrote:
+> Several erofs filesystems can belong to one domain, and data blobs can
+> be shared among these erofs filesystems of same domain.
+> 
+> Users could specify domain_id mount option to create or join into a domain.
+> 
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+> ---
+>  fs/erofs/fscache.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++
+>  fs/erofs/internal.h | 12 ++++++++
+>  fs/erofs/super.c    | 10 +++++--
+>  3 files changed, 93 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index 439dd3cc096a..c01845808ede 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -559,12 +559,27 @@ int erofs_fscache_register_cookie(struct super_block *sb,
+>  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>  {
+>  	struct erofs_fscache *ctx = *fscache;
+> +	struct erofs_domain *domain;
+>  
+>  	if (!ctx)
+>  		return;
+> +	domain = ctx->domain;
+> +	if (domain) {
+> +		mutex_lock(&domain->mutex);
+> +		/* Cookie is still in use */
+> +		if (atomic_read(&ctx->anon_inode->i_count) > 1) {
+> +			iput(ctx->anon_inode);
+> +			mutex_unlock(&domain->mutex);
+> +			return;
+> +		}
+> +		iput(ctx->anon_inode);
+> +		kfree(ctx->name);
+> +		mutex_unlock(&domain->mutex);
+> +	}
+>  
+>  	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
+>  	fscache_relinquish_cookie(ctx->cookie, false);
+> +	erofs_fscache_domain_put(domain);
+>  	ctx->cookie = NULL;
+>  
+>  	iput(ctx->inode);
+> @@ -609,3 +624,61 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
+>  	sbi->volume = NULL;
+>  	sbi->domain = NULL;
+>  }
+> +
+> +static int erofs_fscache_domain_init_cookie(struct super_block *sb,
+> +		struct erofs_fscache **fscache, char *name, bool need_inode)
+> +{
+> +	int ret;
+> +	struct inode *inode;
+> +	struct erofs_fscache *ctx;
+> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+> +	struct erofs_domain *domain = sbi->domain;
+> +
+> +	ret = erofs_fscache_register_cookie(sb, &ctx, name, need_inode);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ctx->name = kstrdup(name, GFP_KERNEL);
+> +	if (!ctx->name)
+> +		return -ENOMEM;
+
+Shall we clean up the above registered cookie in the error path?
+
+> +
+> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
+> +	if (!inode) {
+> +		kfree(ctx->name);
+> +		return -ENOMEM;
+> +	}
+
+Ditto.
+
+> +
+> +	ctx->domain = domain;
+> +	ctx->anon_inode = inode;
+> +	inode->i_private = ctx;
+> +	erofs_fscache_domain_get(domain);
+> +	*fscache = ctx;
+> +	return 0;
+> +}
+> +
+> +int erofs_domain_register_cookie(struct super_block *sb,
+> +	struct erofs_fscache **fscache, char *name, bool need_inode)
+> +{
+> +	int err;
+> +	struct inode *inode;
+> +	struct erofs_fscache *ctx;
+> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+> +	struct erofs_domain *domain = sbi->domain;
+> +	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
+> +
+> +	mutex_lock(&domain->mutex);
+
+What is domain->mutex used for?
+
+
+> +	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
+> +		ctx = inode->i_private;
+> +		if (!ctx)
+> +			continue;
+> +		if (!strcmp(ctx->name, name)) {
+> +			*fscache = ctx;
+> +			igrab(inode);
+> +			mutex_unlock(&domain->mutex);
+> +			return 0;
+> +		}
+> +	}
+> +	err = erofs_fscache_domain_init_cookie(sb, fscache, name, need_inode);
+> +	mutex_unlock(&domain->mutex);
+> +	return err;
+> +}
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 2790c93ffb83..efa4f4ad77cc 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -110,6 +110,9 @@ struct erofs_domain {
+>  struct erofs_fscache {
+>  	struct fscache_cookie *cookie;
+>  	struct inode *inode;
+> +	struct inode *anon_inode;
+
+Why can't we reuse @inode for anon_inode?
+
+
+> +	struct erofs_domain *domain;
+> +	char *name;
+>  };
+>  
+>  struct erofs_sb_info {
+> @@ -625,6 +628,9 @@ int erofs_fscache_register_domain(struct super_block *sb);
+>  int erofs_fscache_register_cookie(struct super_block *sb,
+>  				  struct erofs_fscache **fscache,
+>  				  char *name, bool need_inode);
+> +int erofs_domain_register_cookie(struct super_block *sb,
+> +				  struct erofs_fscache **fscache,
+> +				  char *name, bool need_inode);
+>  void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
+>  
+>  extern const struct address_space_operations erofs_fscache_access_aops;
+> @@ -646,6 +652,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
+>  {
+>  	return -EOPNOTSUPP;
+>  }
+> +static inline int erofs_domain_register_cookie(struct super_block *sb,
+> +						struct erofs_fscache **fscache,
+> +						char *name, bool need_inode)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  
+>  static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>  {
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 667a78f0ee70..11c5ba84567c 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -245,8 +245,12 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
+>  	}
+>  
+>  	if (erofs_is_fscache_mode(sb)) {
+> -		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
+> -				dif->path, false);
+> +		if (sbi->opt.domain_id)
+> +			ret = erofs_domain_register_cookie(sb, &dif->fscache, dif->path,
+> +					false);
+> +		else
+> +			ret = erofs_fscache_register_cookie(sb, &dif->fscache, dif->path,
+> +					false);
+>  		if (ret)
+>  			return ret;
+>  	} else {
+> @@ -726,6 +730,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  			err = erofs_fscache_register_domain(sb);
+>  			if (err)
+>  				return err;
+> +			err = erofs_domain_register_cookie(sb, &sbi->s_fscache,
+> +					sbi->opt.fsid, true);
+>  		} else {
+>  			err = erofs_fscache_register_fs(sb);
+>  			if (err)
+
 -- 
-2.17.1
-
+Thanks,
+Jingbo
