@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52515B7BB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D405B7BBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiIMT6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S229964AbiIMT7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiIMT62 (ORCPT
+        with ESMTP id S229953AbiIMT6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:58:28 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D24F78200;
-        Tue, 13 Sep 2022 12:58:18 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id d15so9307283qka.9;
-        Tue, 13 Sep 2022 12:58:17 -0700 (PDT)
+        Tue, 13 Sep 2022 15:58:30 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76167822B;
+        Tue, 13 Sep 2022 12:58:21 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id ml1so10116352qvb.1;
+        Tue, 13 Sep 2022 12:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=5478I3WyUfDJcI1zhJnzCnFwBV1ia1XR+sLHu3XJI6Q=;
-        b=ngWpsEYVUBqyRCK+w+5Ame50HZp1DYM8gstxDexc5gHtIO2fEu4wX/+7Noqq7EWBX5
-         SX4JOXX5B1E8Qf1s/pvzk9Bz2iJJBgv4Hk3Ull+tKjmtldfM+s3z+vbM1B3di5w6gxjz
-         dcVCWO2NZ50adOCK8bPYxw3tCqWOsDx7M7cTAjTnYf/V4tSaPDhi8fqtVljCEiP5o1JE
-         EBkXOKZZNuxNzz6s5U3pOqHYezTLOaL4mQLClkKUJN8hT0raCVH32ZKrxQcROVGentqi
-         38kFA0gMphAG/6qqKzQ2VCttdNXcqVd0gmzjLhB0hmlMfPBCKPcE2Rytw17lBrFXHH3/
-         rqCA==
+        bh=hB/8CHaP3epa66ZDI7eIxcYHinx9lai7E+SzdR8JK34=;
+        b=DH5wOpdpiHaFFXY8TAT3JRecX64XiPNxiR/CcG1LrVu07Readvn0PWViKgBmDA60Pb
+         UBITk9aWlYro2ikNI4WmLJPOCXwQOqtprdUB0CzoJZ72kknTQx9o/RitCRSffQDxQ5Q6
+         VTZyKVoIHd28mrFZHIQl9dz1uLmu560sdtEcQWDtP1q9dt0hIGQCuqCTjE9fttuhjONt
+         0HIT34gX8eS66xaVSIttBxYAN/YQSf5UtfsLj6aZ6r0xFgT3C7geS9uBf8xzXOro8Ch1
+         QuB8O5yFa+P3URJ5XpTXammfwNsUv1UpGQMU/vjO4KV44uIZqk+ZBhqofvaHP1BLFOQP
+         ilEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=5478I3WyUfDJcI1zhJnzCnFwBV1ia1XR+sLHu3XJI6Q=;
-        b=ZdpfxQH5JMWc9atFLaVl342kjTClvqmVLm6tWN8jUEJSadOqlZRCjWzEKZ2gqlrXun
-         svhU85L1/UsjszGpxALGj7CavklIt/24+En7eaWEUs5VinJYbxMFgGZWmXOq6Jd91K+i
-         39r4he9C3wSa5mPX6jZ8AgJ3o0JM/frfMgOrLVGR4kGF/dcqJQbJ2Umv27AH9vmJKWw2
-         oZqHXTGes5RTFpEMNcNS7ldLFJtXfcLAqtvf3xpQ6kJwgzoqBkV3ty3ETMi9fCnks8px
-         aRtf5KgXyQkUx7Kn0VoolTHaRA7sxep65RQK6UyXYap8F5uYDdqMPx75F7cMo7/ei1qj
-         MALA==
-X-Gm-Message-State: ACgBeo3gHm0/c7qvp8ADIW3PPtIMJxy+4sB8U8lcgx5ldy86SKdunGTy
-        MYSxew3nscFHdY2tZ+F0N58=
-X-Google-Smtp-Source: AA6agR5yg7LQIQNFFYJ0sDmMy6v2CLDWuXatdLv4m+yPVXKNj8MYR/nHEcTFAbCbbhbRcvfawH5dww==
-X-Received: by 2002:a05:620a:4496:b0:6bb:8db4:6b49 with SMTP id x22-20020a05620a449600b006bb8db46b49mr24594751qkp.703.1663099096778;
-        Tue, 13 Sep 2022 12:58:16 -0700 (PDT)
+        bh=hB/8CHaP3epa66ZDI7eIxcYHinx9lai7E+SzdR8JK34=;
+        b=lsGCDxEQmPS3bvGU1uYNwbVPxKKD4cCzXQitNCv83Z4hxM31dWH2JuVcNPq3jKetCo
+         VaxxISkv0XiakRffnHQ0FIJe6o3lsQ7Gl+IGNoJlmAcd1I6yk9PFRhUuR2JQSWnGZ7Cx
+         wye9WTEZcu6J6uPg6oR+Uwkch+yhwSIEDMUEkk79+75u8Wn3+ss/tnvOK8NHSofHMcJq
+         G1OVzI+tCyZgwIKtqOZBPPw12G4qyQMBTB4Lca8ldOaadXlTFzGGReQ+WhNHF5hIee7v
+         eusCLXx6vH2/XpM245Vz/hpIcSr8letmTh5Ybk9YiuNia9+VGxFIq7W6cuH9yMn9TqBE
+         sxkA==
+X-Gm-Message-State: ACgBeo1agUzYEYbEGSyuozDVO4qiGXFPyX5MF8wrs/uzC6jW64WDzDgR
+        c+ajKkxtZLuUfQzWUmZ+TF0=
+X-Google-Smtp-Source: AA6agR4VzptNv0IdYnihlFGaNyhbElSt3SCLpuN9uI3qoIO24r77G7BDUS/ieSa0RDNa+EBnGiO84g==
+X-Received: by 2002:a0c:c98a:0:b0:4ac:9f4b:efed with SMTP id b10-20020a0cc98a000000b004ac9f4befedmr14045129qvk.35.1663099100395;
+        Tue, 13 Sep 2022 12:58:20 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.13
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:58:16 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:19 -0700 (PDT)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
         Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: [PATCH 06/21] mm/hugetlb: add hugepage isolation support
-Date:   Tue, 13 Sep 2022 12:54:53 -0700
-Message-Id: <20220913195508.3511038-7-opendmb@gmail.com>
+Subject: [PATCH 07/21] lib/show_mem.c: display MovableOnly
+Date:   Tue, 13 Sep 2022 12:54:54 -0700
+Message-Id: <20220913195508.3511038-8-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913195508.3511038-1-opendmb@gmail.com>
 References: <20220913195508.3511038-1-opendmb@gmail.com>
@@ -94,47 +94,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a range of pageblocks is isolated there is at most one
-hugepage that has only tail pages overlapping that range (i.e.
-a hugepage that overlaps the beginning of the range).
+The comment for commit c78e93630d15 ("mm: do not walk all of
+system memory during show_mem") indicates it "also corrects the
+reporting of HighMem as HighMem/MovableOnly as ZONE_MOVABLE has
+similar problems to HighMem with respect to lowmem/highmem
+exhaustion."
 
-However, that hugepage is the first migration target for an
-alloc_contig_range() attempt so it already receives special
-attention.
+Presuming the similar problems are with regard to the general
+exclusion of kernel allocations from either zone, I believe it
+makes sense to include all ZONE_MOVABLE memory even on systems
+without HighMem.
 
-Checking whether the pageblock containing the head of a hugepage
-is isolated is an inexpensive way to avoid hugepage allocations
-from isolated pageblocks which makes alloc_contig_range() more
-efficient.
+To the extent that this was the intent of the original commit I
+have included a "Fixes" tag, but it seems unnecessary to submit
+to linux-stable.
 
+Fixes: c78e93630d15 ("mm: do not walk all of system memory during show_mem")
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- mm/hugetlb.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ lib/show_mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index da80889e1436..2f354423f50f 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -33,6 +33,7 @@
- #include <linux/migrate.h>
- #include <linux/nospec.h>
- #include <linux/delayacct.h>
-+#include <linux/page-isolation.h>
+diff --git a/lib/show_mem.c b/lib/show_mem.c
+index 1c26c14ffbb9..337c870a5e59 100644
+--- a/lib/show_mem.c
++++ b/lib/show_mem.c
+@@ -27,7 +27,7 @@ void show_mem(unsigned int filter, nodemask_t *nodemask)
+ 			total += zone->present_pages;
+ 			reserved += zone->present_pages - zone_managed_pages(zone);
  
- #include <asm/page.h>
- #include <asm/pgalloc.h>
-@@ -1135,6 +1136,10 @@ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
- 		if (PageHWPoison(page))
- 			continue;
- 
-+		/* Check head pageblock isolation */
-+		if (is_migrate_isolate_page(page))
-+			continue;
-+
- 		list_move(&page->lru, &h->hugepage_activelist);
- 		set_page_refcounted(page);
- 		ClearHPageFreed(page);
+-			if (is_highmem_idx(zoneid))
++			if (zoneid == ZONE_MOVABLE || is_highmem_idx(zoneid))
+ 				highmem += zone->present_pages;
+ 		}
+ 	}
 -- 
 2.25.1
 
