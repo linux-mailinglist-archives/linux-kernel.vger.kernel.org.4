@@ -2,97 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930475B6813
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCBF5B6818
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiIMGmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S230488AbiIMGnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiIMGmM (ORCPT
+        with ESMTP id S230487AbiIMGnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:42:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9FD5852E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 23:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663051332; x=1694587332;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=daaV3WZWukjbgGvbQ73mOCe8nI4eaN3LDyARuyKPkhs=;
-  b=A1ALKGTk+MhkveQQTPMPCvDK6KF7/sGi7vIy244Sf2VqBCENdSeaSiFF
-   zWkiMTnh47/+4Tape8FuLt0/VJUGJj44KlNZ6hurgKpw4/X6ZTWJ/fV6X
-   XLftWTc8AHrO0bBqI2iiQubK6G25LA22RqGaML4x2kgcZ+NEVzzRjiYVc
-   yxfdfpKp2inuOCkOAaIwSHy0Y511FH2JanIjU1pLx2/KxJ860q0sxtZ+2
-   vwzx9CLM19+jSjd4JSTvNXy0kjGASnD7gwES5qkVapNgelAHt3fD+UnOa
-   CrC1+4QK4qtNdjSnu3Ukal9+yCvjSEjwQytM/+QkTexwyOTIooEhiT4Gy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324296495"
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="324296495"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:41:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="678428897"
-Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2022 23:41:56 -0700
-From:   shaoqin.huang@intel.com
-To:     rppt@kernel.org
-Cc:     Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] memblock test: Update TODO list
-Date:   Tue, 13 Sep 2022 14:41:32 +0800
-Message-Id: <20220913064138.407601-4-shaoqin.huang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220913064138.407601-1-shaoqin.huang@intel.com>
-References: <20220913064138.407601-1-shaoqin.huang@intel.com>
+        Tue, 13 Sep 2022 02:43:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993FC58DCA;
+        Mon, 12 Sep 2022 23:43:01 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D2hVHK008767;
+        Tue, 13 Sep 2022 06:42:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eXOZDRzg2RsNnXeweM+Pjekl64CFMxDYXgxSIun5DwQ=;
+ b=hJj+fqt/ICGitNsAQGYBR/x/coip63yTOGtVSKGz2cdh2m6ktszkuFHc2b4ofQ6APSdd
+ 3MpO3HoYnRIckEyA7c59qm0kyT0bnKucJEU8vc35xamupzxZ5LdtmYn3CuT8Dc2T2SF8
+ GPg77k9go81QT0IrBjk6aMt3gPbFQd078bGWXIjCAMicJ1ox6mJ6OhzvqCKtUu2CMHCj
+ MEtKPrGSAzoO+OVUojJlh3T0HPdXXbp/BWAQp1R4GgeZj/Re/7dsU1M44G2YZnqnjk/k
+ Q0f/esVeyoPlaUmqoam7ODlq0FHIbTqQ5T4k4GaT+ukJYGVrhgBgtp25NEEgt37qkM0M LA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjh9tgj7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 06:42:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28D6gn7H009087
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 06:42:49 GMT
+Received: from [10.216.15.227] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 12 Sep
+ 2022 23:42:43 -0700
+Message-ID: <49536ca8-ef98-9927-d1be-977ab5244c91@quicinc.com>
+Date:   Tue, 13 Sep 2022 12:12:32 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 5/5] clk: qcom: Alwaya on pcie gdsc
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Krishna chaitanya chundru" <quic_krichai@quicinc.com>
+CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mka@chromium.org>, <quic_vbadigan@quicinc.com>,
+        <quic_hemantk@quicinc.com>, <quic_nitegupt@quicinc.com>,
+        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+ <1662713084-8106-6-git-send-email-quic_krichai@quicinc.com>
+ <20220912170437.GA36223@thinkpad>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20220912170437.GA36223@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: P7jDaIjVJ2jzB4fEydZBASyNAW6KdZ2q
+X-Proofpoint-GUID: P7jDaIjVJ2jzB4fEydZBASyNAW6KdZ2q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_02,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=878 spamscore=0
+ priorityscore=1501 clxscore=1011 bulkscore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209130029
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
 
-Remove the completed items from TODO list.
+On 9/12/2022 10:34 PM, Manivannan Sadhasivam wrote:
+> + Rajendra
+> 
+> On Fri, Sep 09, 2022 at 02:14:44PM +0530, Krishna chaitanya chundru wrote:
+>> Make GDSC always on to ensure controller and its dependent clocks
+>> won't go down during system suspend.
+>>
+> 
+> You need to mention the SoC name in subject, otherwise one cannot know for
+> which platform this patch applies to.
+> 
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/gcc-sc7280.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+>> index 7ff64d4..2f781a2 100644
+>> --- a/drivers/clk/qcom/gcc-sc7280.c
+>> +++ b/drivers/clk/qcom/gcc-sc7280.c
+>> @@ -3109,7 +3109,7 @@ static struct gdsc gcc_pcie_1_gdsc = {
+>>   		.name = "gcc_pcie_1_gdsc",
+>>   	},
+>>   	.pwrsts = PWRSTS_OFF_ON,
+>> -	.flags = VOTABLE,
+>> +	.flags = ALWAYS_ON,
+> 
+> Rajendra, should we also put PCIe GDSC into retention state as you have done for
+> USB [1]?
 
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
----
- tools/testing/memblock/TODO | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+Yes, it looks like we should handle this the same way as we did with usb.
+Why are we removing the VOTABLE flag anyway?
 
-diff --git a/tools/testing/memblock/TODO b/tools/testing/memblock/TODO
-index 33044c634ea7..503cc96fcdc3 100644
---- a/tools/testing/memblock/TODO
-+++ b/tools/testing/memblock/TODO
-@@ -1,17 +1,10 @@
- TODO
- =====
- 
--1. Add tests trying to memblock_add() or memblock_reserve() 129th region.
--   This will trigger memblock_double_array(), make sure it succeeds.
--   *Important:* These tests require valid memory ranges, use dummy physical
--                memory block from common.c to implement them. It is also very
--                likely that the current MEM_SIZE won't be enough for these
--                test cases. Use realloc to adjust the size accordingly.
--
--2. Add test cases using this functions (implement them for both directions):
-+1. Add test cases using this functions (implement them for both directions):
-    + memblock_alloc_raw()
-    + memblock_alloc_exact_nid_raw()
-    + memblock_alloc_try_nid_raw()
- 
--3. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
-+2. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
-    for the new region
--- 
-2.34.1
-
+> 
+> Thanks,
+> Mani
+> 
+> [1] https://lore.kernel.org/all/20220901101756.28164-2-quic_rjendra@quicinc.com/
+> 
+>>   };
+>>   
+>>   static struct gdsc gcc_ufs_phy_gdsc = {
+>> -- 
+>> 2.7.4
+>>
+> 
