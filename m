@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02125B7CDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7D55B7CDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiIMWEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 18:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
+        id S229557AbiIMWF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 18:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiIMWEo (ORCPT
+        with ESMTP id S229785AbiIMWFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 18:04:44 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32843B4A9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:04:43 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 2-20020a17090a0b8200b001fdb8fd5f29so6140754pjr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=0/mpIJ2sZEnqGQU+eeGOiHwYV7wmza8JoOszk+ZskGw=;
-        b=La2UwnxAwzAIGGTRGxRY2aTrW3UyWe1vYGqQwnejHW/RqXhDz1yh045Mn5/TmsTyFn
-         PREzALzxxhe7wqsvV2a1r5msIKw6sh1z8ZWKRJ5DNUVYmntdMUA9YrYV6j06/m7A080i
-         epGrr40YmEFv3o+fBQzzB1Fpr3Qy9Iky4VNXrVsFtYVHU3yNQpO1m5j53EiNBDM0dpz8
-         nIxflgGMf6LG82a3G3gUhuBwzMrWb9jsiGf4tFbXP9duQ1vMSiKDLe8GBCuZ7atCjw+E
-         Keh51/YMhMoHFIqCkDl8sZLYfh3Kt73sC5xg2D6iUPAyZJ9hbWyA3JmmMvVIsSfHi40e
-         2WJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0/mpIJ2sZEnqGQU+eeGOiHwYV7wmza8JoOszk+ZskGw=;
-        b=YSoOx1jCUITJuv88W24Cke+4tnB8fr5Yy62Zg76Y+VpcZHywJ0zRuPxRlctbS6t0u3
-         5nS1mOq2i55HHzbv7V+1UlgkIWrTLQQjeMi5UW560KGyLh6ndMDwBz6c6Ope/JMxo3fQ
-         0cLlq+X/SefkEHmj7BofKACdDjXyCCjZMLFMloj35kVYJ0CAxUOs7MyJ6cMb4lRY6gRV
-         LsZqGlrYFSc31eczWhe6QN12qHMXmT4gHhcltUmhD2zkDEi8Bup986QA1v8yD+ds1B2W
-         +0PwEDo9Wy2iUza6NDBntK9g5ZiA6Sl/We/hjoub+yo5fuiago/ColmCbIwj/NCxwL9R
-         3INQ==
-X-Gm-Message-State: ACrzQf3fTb88Wj/JPCkFcfnQH4lKTlSiPxRbaO6M8MgBUD3taDv9U7+R
-        mPBDPSWHJWPfpvr2RO+8bMKM8gNQsBxg
-X-Google-Smtp-Source: AMsMyM67wH92vPtBbRZur6xn/xAJQLsTNPKQnIQuXSlrC9cCXreVggMRolS4xlStq9OL3cYYQ8CiMAMqWSAf
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a17:90b:1b12:b0:200:5dbd:adff with SMTP id
- nu18-20020a17090b1b1200b002005dbdadffmr1364786pjb.43.1663106682689; Tue, 13
- Sep 2022 15:04:42 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 15:04:33 -0700
-In-Reply-To: <20220913220433.3308871-1-jiangzp@google.com>
-Mime-Version: 1.0
-References: <20220913220433.3308871-1-jiangzp@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913150420.kernel.v1.1.I54824fdfb8de716a1d7d9eccecbbfb6e45b116a8@changeid>
-Subject: [kernel PATCH v1 1/1] Bluetooth: hci_sync: allow advertising during
- active scan without privacy
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org
-Cc:     Zhengping Jiang <jiangzp@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 18:05:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE324F27;
+        Tue, 13 Sep 2022 15:05:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8D1615F7;
+        Tue, 13 Sep 2022 22:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E47C433C1;
+        Tue, 13 Sep 2022 22:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663106712;
+        bh=svJ3QhlZ+eGSIesk3Dcw3WZz5vdXV48Ff+Kt607rrhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EwcGfadL8HcQKw0kb7zpOybsZcZYrz+7h/pCRqtcgjx2u8FdowQ0GmxYY6yTwT0TU
+         oQs1N6RCdk2X/1UNNe4b5xIv6UzHeWgKQW80G3C3Qs3vp+22WMjDxwwdjjbDa9/gr5
+         JE8++v+deMI7PsgPvuZJimqSdQL4XJcRzITdr9RLYLGEyfI6kSlBCwpfsJNGh0NEx7
+         jrzukbyPgJ4LDe8hMi1vfp1+psW6bbV40daCjeBH8OyZaOGer08pZPpvOnMLLeWXgT
+         D9iXSVxyn7GVm0qNrR1e31YkgShkCp+701nspO9iSKjnET+/2QTEEfJHboWy4pqp6n
+         qgHnWbNyrnsgA==
+Date:   Tue, 13 Sep 2022 15:05:10 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fortify: Adjust KUnit test for modular build
+Message-ID: <YyD+lu7Kq/Ga0N/V@dev-arch.thelio-3990X>
+References: <20220913173136.1926909-1-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913173136.1926909-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Address resolution will be paused during active scan to allow any
-advertising reports reach the host. If LL privacy is enabled,
-advertising will rely on the controller to generate new RPA.
+On Tue, Sep 13, 2022 at 10:31:36AM -0700, Kees Cook wrote:
+> A much better "unknown size" string pointer is available directly from
+> struct test, so use that instead of a global that isn't shared with
+> modules.
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://lore.kernel.org/lkml/YyCOHOchVuE/E7vS@dev-arch.thelio-3990X
+> Fixes: 875bfd5276f3 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Whoops! Thanks Nathan! :) This fixes it for your reproducer.
 
-If host is not using RPA, there is no need to stop advertising during
-active scan because there is no need to generate RPA in the controller.
+Confirmed :)
 
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
----
+Build-tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Changes in v1:
-- Check privacy flag when disable advertising
+Thanks for the quick fix!
 
- net/bluetooth/hci_sync.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 41b6d19c70b06..422f7c6911d9f 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -5351,7 +5351,7 @@ static int hci_active_scan_sync(struct hci_dev *hdev, uint16_t interval)
- 	/* Pause advertising since active scanning disables address resolution
- 	 * which advertising depend on in order to generate its RPAs.
- 	 */
--	if (use_ll_privacy(hdev)) {
-+	if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY)) {
- 		err = hci_pause_advertising_sync(hdev);
- 		if (err) {
- 			bt_dev_err(hdev, "pause advertising failed: %d", err);
--- 
-2.37.2.789.g6183377224-goog
-
+> ---
+>  lib/fortify_kunit.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+> index 99bc0ea60d27..409af07f340a 100644
+> --- a/lib/fortify_kunit.c
+> +++ b/lib/fortify_kunit.c
+> @@ -17,7 +17,6 @@
+>  
+>  #include <kunit/test.h>
+>  #include <linux/string.h>
+> -#include <linux/init.h>
+>  
+>  static const char array_of_10[] = "this is 10";
+>  static const char *ptr_of_11 = "this is 11!";
+> @@ -31,7 +30,7 @@ static void known_sizes_test(struct kunit *test)
+>  
+>  	KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
+>  	/* Externally defined and dynamically sized string pointer: */
+> -	KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen(test->name), SIZE_MAX);
+>  }
+>  
+>  /* This is volatile so the optimizer can't perform DCE below. */
+> -- 
+> 2.34.1
+> 
