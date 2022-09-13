@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC065B6AB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F04D5B6AB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiIMJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S230089AbiIMJap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiIMJaS (ORCPT
+        with ESMTP id S231281AbiIMJal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:30:18 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D6B205C6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:30:16 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D6ssnw011959;
-        Tue, 13 Sep 2022 04:29:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=cxJEoBEl4Vi+BihLQdSoluZlTabtxlkV9KL4mlVwNPw=;
- b=fj9g+idnhP89LHmyMvrW01Ya2ALSSWkYmvh85XH4Z1CS90/NpcOrSY0oXokHG0VPGHV9
- VCLHmWRDY/dgOcjwNSvcUrGd7+pIzAGq2/3oiugXlzfXRFngCRRmp1GSoQZULi64CgNd
- 7cxpScDx13uYBy7xrXEt4OY7LJFIN3hKBjZ8fQDI6iRtqh0WYt97LamwSdBN3pruovy5
- FlJv9w+ZQ8MDGRZwkdCq+GwKTPyRsy6/+r9S+Z9mbSvDueK38AgKruVcwEDt5/i8qhl9
- ntxIW2MnzOHa8oejJjXZo3nUow2x/bZS1JLLgCC/TZIVfSA6pC7cg9CMzfLCU3Bykltt MA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jgr01umgc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 04:29:40 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Tue, 13 Sep
- 2022 04:29:38 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
- Transport; Tue, 13 Sep 2022 04:29:38 -0500
-Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 65277468;
-        Tue, 13 Sep 2022 09:29:38 +0000 (UTC)
-Message-ID: <d0f32ac9-1de3-5047-b01a-04a68934a8a2@opensource.cirrus.com>
-Date:   Tue, 13 Sep 2022 10:29:38 +0100
+        Tue, 13 Sep 2022 05:30:41 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D155B05A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:30:39 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n8so1504408wmr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=+N+ujER/9JIZn1JwaBf+A/u+Qd6nR459uhJiQp3pSiY=;
+        b=LbGj1Sh4O3nW3xlqqLV1aGWl3y1uh/wNp/zfbXvAVph+Lt7FYiipo8a8Y4KiFCuL78
+         J1PV+v54JPkpq91+5hRbvJlPRFHOf7T7oLJxpCV8Cvgk21C/3lPVsmyl1j63yrl+G6kU
+         HCYT5psy/c7TCgQhjDk6pnhd8jkej0YNaBZU5anSGN3j7SlOaCaFXAw6oBp8/LBmRIsJ
+         IPXDMQRv2dC7cs0S/R3JXMT00c1TgTu2ktbaEq/W63UlIcHCgIvy2itCdYfk+d5u6uAc
+         KJ4gcyJcRy+QxMhIexv+9mq1rkim/71KVuBkhhmy/+VpC947qHLkV8QmWNWPiQoODPEw
+         xeHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+N+ujER/9JIZn1JwaBf+A/u+Qd6nR459uhJiQp3pSiY=;
+        b=2KjSvOS0v9otzqoOSPMHfc8KfycbXUZVTiqTf5/rI8yGxZnS4ftg1qTgbvlc05WtMu
+         Thrt96EAi2XSCuWY2GcGa12GF25qPlw6g5W6bmi64GekHmZq70d1Hm6k8cncrJm51z1v
+         s/83sLsgWJ/q+FueWMFwuA0L9Huppq8pmv8RDZNxpW5FS6oZPT5I1hshMkcpJaXeczs7
+         +E29jxBAl5kQi5X8fdc1wLurNOu3Csjl1yjITE6oAr4G8o7FyGYvEkiEncSQfEIxzgpK
+         d8NQw6+fQyOA5GpPQVBZIZ1ksphlCoacfK0hAvyL4yaMpqZDdUYMhFrFe4RF6VTxHU/M
+         76ZA==
+X-Gm-Message-State: ACgBeo2RldC95ovMR5cNXPefTFMoascnCTL6yOatB1WU4iVJbQz6I6RP
+        oNix1zOonqhU8+T3w3NkbZFz5A==
+X-Google-Smtp-Source: AA6agR6tMZYMePH2bDBrW9HnCXYv1LS4Q6LJWPEY4WvD7F+T3PP8mN06GXtMIEfH3JWwrQ3ncYwvNg==
+X-Received: by 2002:a05:600c:4606:b0:3b4:62b3:150b with SMTP id m6-20020a05600c460600b003b462b3150bmr1714539wmo.3.1663061437795;
+        Tue, 13 Sep 2022 02:30:37 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.70])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05600c4e5300b003a62bc1735asm13221868wmq.9.2022.09.13.02.30.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 02:30:37 -0700 (PDT)
+Message-ID: <f9e03913-b3dd-c82e-8c63-d912c0bbf443@linaro.org>
+Date:   Tue, 13 Sep 2022 11:30:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5/7] soundwire: intel: Don't disable interrupt until
- children are removed
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
+ SAM9260 compatibles to SAM9x60
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <lgirdwood@gmail.com>, <peter.ujfalusi@linux.intel.com>,
-        <ranjani.sridharan@linux.intel.com>,
-        <kai.vehmanen@linux.intel.com>, <daniel.baluta@nxp.com>,
-        <sanyog.r.kale@intel.com>, <broonie@kernel.org>
-CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>,
-        <sound-open-firmware@alsa-project.org>
-References: <20220907101402.4685-1-rf@opensource.cirrus.com>
- <20220907101402.4685-6-rf@opensource.cirrus.com>
- <c83fb25e-ef59-63e1-4223-648dab9885ea@linux.intel.com>
- <9de21235-c77d-f53f-3426-4a5927f484c9@opensource.cirrus.com>
- <9055c565-8616-8480-ea49-8db1b8707b34@linux.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <9055c565-8616-8480-ea49-8db1b8707b34@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: HXhpxVpPyXMEw5PzUMSjeFyU8M-pK2SG
-X-Proofpoint-ORIG-GUID: HXhpxVpPyXMEw5PzUMSjeFyU8M-pK2SG
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Sergiu.Moga@microchip.com, robh@kernel.org
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, richard.genoud@gmail.com,
+        radu_nicolae.pirea@upb.ro, gregkh@linuxfoundation.org,
+        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        jirislaby@kernel.org, admin@hifiphile.com,
+        Kavyasree.Kotagiri@microchip.com, Tudor.Ambarus@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-7-sergiu.moga@microchip.com>
+ <9aa29d74-b1fc-d00e-dee4-57f277a366ab@linaro.org>
+ <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
+ <20220909013644.GA3731620-robh@kernel.org>
+ <b6b044f6-de87-e85b-0b51-e957b90622ab@microchip.com>
+ <aa6d8c7d-1723-7674-2142-a5aafe30e570@linaro.org>
+ <77d38e3f-6d8c-dbb1-2e66-c768d95b5e35@microchip.com>
+ <5f8ca612-5a89-db3a-42f3-a0613c192a87@linaro.org>
+ <888b8ab9-f8cb-2e1f-465c-3cb97187fce0@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <888b8ab9-f8cb-2e1f-465c-3cb97187fce0@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 18:12, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 9/12/22 17:36, Richard Fitzgerald wrote:
->> On 12/09/2022 11:53, Pierre-Louis Bossart wrote:
->>>
->>>
->>> On 9/7/22 12:14, Richard Fitzgerald wrote:
->>>> The cadence_master code needs the interrupt to complete message
->>>> transfers.
->>>> When the bus driver is being removed child drivers are removed, and
->>>> their
->>>> remove actions might need bus transactions.
->>>>
->>>> Use the sdw_master_ops.remove callback to disable the interrupt handling
->>>> only after the child drivers have been removed.
->>>>
->>>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->>>> ---
->>>>    drivers/soundwire/intel.c | 9 ++++++++-
->>>>    1 file changed, 8 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
->>>> index 01be62fa6c83..d5e723a9c80b 100644
->>>> --- a/drivers/soundwire/intel.c
->>>> +++ b/drivers/soundwire/intel.c
->>>> @@ -1255,6 +1255,13 @@ static int intel_prop_read(struct sdw_bus *bus)
->>>>        return 0;
->>>>    }
->>>>    +static void intel_bus_remove(struct sdw_bus *bus)
->>>> +{
->>>> +    struct sdw_cdns *cdns = bus_to_cdns(bus);
->>>> +
->>>> +    sdw_cdns_enable_interrupt(cdns, false);
->>>
->>> don't you need to check for any on-going transactions on the bus?
->>>
+On 13/09/2022 11:19, Sergiu.Moga@microchip.com wrote:
 >>
->> As all the child drivers have removed, I think the only other place that
->> can generate bus transactions is the PING handler but
->> sdw_cdns_enable_interrupt(false) calls cancel_work_sync() to
->> cancel the cdns->work and it sets a flag so that it will not be
->> re-queued.
+>> Let me rephrase it:
 >>
->>> I wonder if there could be a corner case where there are no child
->>> devices but still a device physically attached to the bus. I am not sure
->>> if the 'no devices left' is a good-enough indication of no activity on
->>> the bus.
->>>
+>> What your commit is doing is requiring additional fallback compatibles.
+>> Therefore the commit msg should answer - why do you require additional
+>> fallback compatibles?
 >>
->> As above - yes there could, but sdw_cdns_enable_interrupt(false) will
->> cancel the work and stop it being re-queued.
 > 
-> Ah yes, I forgot that part, thanks!
 > 
+> The additional fallback compatibles are required because the driver in 
+> question only knows about the atmel,at91sam9260-usart compatible. 
+> Furthermore, it is also a better representation of the fact that the 
+> serial IP of 9x60 is an improvement over the serial IP of 9260 (it 
+> contains more hardware features not yet implemented in the driver).
+> 
+> 
+>> Incremental characteristics sound to me optional. I can increment
+>> sam9x60 with something or I can skip it. But you are not doing it...
+>> sam9x60 was already there and now you require a fallback.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> So, what is your opinion on the following commit message:
+> 
+> "Fix sam9x60 compatible list by adding the sam9260 compatibles as 
+> fallback, since the atmel_serial driver only knows of the latter's 
+> compatible. The atmel_serial driver only has knowledge of the sam9260 
+> compatible because it does not have the sam9x60's serial IP specific 
+> features implemented yet and adding an empty compatible without adding 
+> support specific to that compatible would be misleading. Thus prefer the 
+> fallback mechanism in the detriment of adding an empty compatible in the 
+> driver."
 
-... but I have noticed that there is a bug in
-sdw_cdns_enable_interrupt(). It doesn't ensure that the
-IRQ thread has seen the cdns->interrupt_enabled = false.
-I'll add a patch to fix that when I re-push this chain.
+It's fine. Also could work:
+
+"Require sam9260 fallback compatible for sam9x60, because sam9x60 is
+fully compatible with sam9260 and Linux driver requires the latter."
+
+If it fixes any observable issue like lack of driver binding to DTS, you
+can also mention that.
+
+Best regards,
+Krzysztof
