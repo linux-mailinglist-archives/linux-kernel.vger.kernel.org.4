@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA145B6C63
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F2E5B6C6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiIMLaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 07:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S231915AbiIMLhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 07:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiIMLaH (ORCPT
+        with ESMTP id S229782AbiIMLhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:30:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7826439B98;
-        Tue, 13 Sep 2022 04:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26F0EB80E8B;
-        Tue, 13 Sep 2022 11:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 777C0C43470;
-        Tue, 13 Sep 2022 11:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663068603;
-        bh=42XNTFrrvK+igHhL2KfxLoxvedsbp3aB3youitKlCzU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mhBp87gpSAlBDbr3TdP2iinPMoe6QF8zvMTo9CwRN3bdJTLIB2/Ry+R781MMfMAOY
-         DkaGqSqiFnVF76mFsZWmEduT7Qx7iLjpb+7f4Yds3jvuVQVJQaDCqcRzEVrsBXbSzL
-         GFSUIxgmrppCafBQvoEPxzCLqP4AbB8DpQMBCdwLAqgh0wtwF/50GaLNJVaDlm6I2c
-         Z9eKmLROn7NKv8I83LtDCvlQrb/6mLWbaNMfsSKFhLkpZSMOkxNBc5SZxzXHdu+kR1
-         2NhO3qZvvBwuXOQWRK16jGlymTnGl12lTFZbGoNMQNTQSowyAWyyGbZ4r5u0z4TMs4
-         XA9wj1wVy73rw==
-Date:   Tue, 13 Sep 2022 12:30:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V2 1/7] arm64/perf: Add register definitions for BRBE
-Message-ID: <YyBpuQdNBDLpjJWx@sirena.org.uk>
-References: <20220908051046.465307-1-anshuman.khandual@arm.com>
- <20220908051046.465307-2-anshuman.khandual@arm.com>
- <Yx8Cgzr7lQdMLX+P@sirena.org.uk>
- <95599654-a302-dd64-e1c8-4d9a723aed85@arm.com>
+        Tue, 13 Sep 2022 07:37:37 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B12EF24
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:37:35 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id g4so11091421pgc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=TjtzJA8TbY7YIwrLa9FdbYyvleadiqEs0UmHM7ohbZc=;
+        b=BWxKLsa1XK1/cCmSeyx+EuA4PQGqKnMl5MczYCNgXxoITrRmIaNfaJgkT6vTWgKUm3
+         //K4mS0KCIYwWpukBE8YlYwb1LVKcHBxLcT7LTDzcpWrGe/BqBQ7f7IIuyoq4QIFK/+t
+         u9zm3jNUZppy5wlz+8gQTf8zE4ISXF1AAHU0M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=TjtzJA8TbY7YIwrLa9FdbYyvleadiqEs0UmHM7ohbZc=;
+        b=oTppUlAWgkR+1dBJGxbSuu/irS0WQEKEoxB904tfRM0VdHm4ROT94sO++KrxorfVbO
+         RJPLweb96DI69x0MnqWPyxRO2QYOZubykMrEJnuHC9BCDFdcxRpBUenVkoqmBKHKNCIU
+         4isI0dTeqtT54e0PVhbedtr2JfAAvIzhoVha1h4CGJSKOWsXEEfowIFl4ul1oLxKHVqg
+         Jifu1ERMb0X9CKbYBXF8dvUtguVNEiA+WVg45ykRd5JZ5tM1OhTZKkt3dshXeusvSMBp
+         X2Nb9e2sMiVFqpdJmkY+yp7m3StE0pNNagB46NKQTvac6mlhA4lLbbVdnf5Rw8/SGKD/
+         gWMg==
+X-Gm-Message-State: ACgBeo3DAFkoBFdN6LX15s6SKB+Pc09fLCWttyhHYCFthpOgI+6inLgc
+        0stFu0ni1fxpVu3cA+YtYQwAXw==
+X-Google-Smtp-Source: AA6agR4f79z5in3SokyyTKik0/YG0LlAPBib+4YiUgNyGbueLKId6zSyyneA1SJVJH28LlqFjLjHfQ==
+X-Received: by 2002:a63:d94a:0:b0:412:6986:326e with SMTP id e10-20020a63d94a000000b004126986326emr27906686pgj.56.1663069055120;
+        Tue, 13 Sep 2022 04:37:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170902714100b001780e4e1a0fsm8116219plm.125.2022.09.13.04.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 04:37:34 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 04:37:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrei Vagin <avagin@google.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Revert "fs/exec: allow to unshare a time namespace
+ on vfork+exec"
+Message-ID: <202209130435.12231CE199@keescook>
+References: <20220913102551.1121611-1-avagin@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yfGsNmzYPSvOmyzg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <95599654-a302-dd64-e1c8-4d9a723aed85@arm.com>
-X-Cookie: One FISHWICH coming up!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220913102551.1121611-1-avagin@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,74 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 13, 2022 at 03:25:49AM -0700, Andrei Vagin wrote:
+> This reverts commits:
+> 133e2d3e81de ("fs/exec: allow to unshare a time namespace on vfork+exec")
+> 6342140db660 ("selftests/timens: add a test for vfork+exit")
+> 
+> Alexey pointed out a few undesirable side effects of the reverted change.
+> First, it doesn't take into account that CLONE_VFORK can be used with
+> CLONE_THREAD. Second, a child process doesn't enter a target time name-space,
+> if its parent dies before the child calls exec. It happens because the parent
+> clears vfork_done.
+> 
+> Eric W. Biederman suggests installing a time namespace as a task gets a new mm.
+> It includes all new processes cloned without CLONE_VM and all tasks that call
+> exec(). This is an user API change, but we think there aren't users that depend
+> on the old behavior.
 
---yfGsNmzYPSvOmyzg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Can we include that patch here as well?
 
-On Tue, Sep 13, 2022 at 11:54:09AM +0530, Anshuman Khandual wrote:
-> On 9/12/22 15:27, Mark Brown wrote:
-> > On Thu, Sep 08, 2022 at 10:40:40AM +0530, Anshuman Khandual wrote:
+> It is too late to make such changes in this release, so let's roll back
+> this patch and introduce the right one in the next release.
 
-> >>  arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++++++++++++++++++
-> >>  1 file changed, 222 insertions(+)
+Do you mean you'd like this revert to land for v6.0, and we should wait
+for the new API for later?
 
-> > Rather than manually encoding register definitions in sysreg.h
-> > can we add them to arch/arm64/tools/sysreg so that all the
-> > #defines and so on are generated instead?
-
-> SYS_[BRBINF<N>|BRBSRC<N>|BRBTGT<N>]_EL1 registers are encoded as per three
-> distinct formulas where <CRm> and <op2> are derived from corresponding <N>
-> Just wondering if those could be accommodated in arch/arm64/tools/sysreg ?
-
-It'd need some work on the script but if there's a reusable
-pattern there (I'd guess there might be) then adding some support
-for generating patterns like that seems like a sensible thing.
-
-> System register description via arch/arm64/tools/sysreg seems bit cryptic.
-
-It's very close to the way they're definied in the ARM, and I'd
-say a good bit easier than typing out all the individual defines
-and making sure there's no typos.
-
-> BTW, do we expect all existing sysreg definitions to move there ? Because
-> still there are many registers and their fields present in sysreg.h
-
-Yes, we expect all registers to be converted.  This process is
-onging and if you don't do it now someone will just have to go
-and convert it later.
-
-> Besides, there is also some benefit in being able to grep system registers
-> and their fields, across headers and implementations simultaneously.
-
-That's true.  On the other hand having consistently generated
-defines that are tied to the architecture means that people can
-look at the ARM and know that there's a define already provided
-without having to go check, and having everything generated in a
-very consistent fashion means that we can write helpers which
-take advantage of that fact - the SYSREG_FIELD_GET() and _PREP()
-helpers are an example of that, once James' series for the 32 bit
-ID registers lands we'll be able to start adding more for the
-cpufeature stuff.
-
-At the minute the major advantage is that you only have to cross
-check the input file with the architecture when reviewing, and
-that has a format that's very close to the architecture so is
-much easier to validate.
-
---yfGsNmzYPSvOmyzg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMgabgACgkQJNaLcl1U
-h9AvSgf+Oj93mMUlfykS+eT56crBYR5Zami1qCoWVgsH419ERrwTJLbcJZ4kpHxD
-T7XvMmjhrCrLQvLUg+GisRbh+1+FilBzMkrsCHAlQ86zlGhByaixPKq4lk/N/e4Z
-YBdPiiP3OhS74JO3h9Os6UB+G21vxjrHQBDtNbE0ZHEBGgrB42Ge/AlmlvgDUB76
-59dy4Z9SZ+CGZIUAdQxrivcd4c/tC5Ld8LPmSJR9fWl2wXkBIY7mA1bI1fVC5dp6
-aLJk1J98UdePlIRctcIH9gu7UjwkWtfPqdnIYZ8eCQlmfpBL2YF2eUiJoNqnlR+F
-on+zyETlin/QBU48W8F0xCY44AIj+Q==
-=0n7r
------END PGP SIGNATURE-----
-
---yfGsNmzYPSvOmyzg--
+-- 
+Kees Cook
