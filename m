@@ -2,72 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501575B6D6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02805B6D6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiIMMjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S232139AbiIMMjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIMMjO (ORCPT
+        with ESMTP id S232054AbiIMMjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:39:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0276024BCE;
-        Tue, 13 Sep 2022 05:39:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 08:39:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C40DDF9F;
+        Tue, 13 Sep 2022 05:39:47 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C2F61451;
-        Tue, 13 Sep 2022 12:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3601C433D6;
-        Tue, 13 Sep 2022 12:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663072752;
-        bh=VXIjPCa2kQ7oHQwQm/BZ4yK1duwVEMdgVhmEzngpzMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k3stjfb9gGQnqEjnrK4lGgGJ91Vtp6MFp2/aH2PEYJnauTMQGjqY6eC7o61Iq1gd8
-         4dH6MNSBd9ILciD6MsC87LWN1eOtwR/+NzN8NITF7IIcntZqQUZmY8xE1QeDVsK/22
-         FQ8H78kKqWizYZhWjXWIphHni0oB1fWtrqQW4yNln+ssrSmWexmo9ouOI01KSaUSsd
-         AGHEO3muttN5WjNo08FS+XT0ynoWzc/B3Zd7mO7oq/LedTX+IeCtIEWIaf1oTshF3S
-         lu1YwTYaBbb8PNzzYgPqv1Imw8Jt6pYl+A/CxDOGvXkV43fpehhlVdNzut9b2dGkIj
-         xT4yiVXOB8njg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oY5C2-0006N9-QP; Tue, 13 Sep 2022 14:39:11 +0200
-Date:   Tue, 13 Sep 2022 14:39:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Quectel BG95 0x0203 composition
-Message-ID: <YyB57gXxByYOuZlW@hovoldconsulting.com>
-References: <TYZPR06MB42704394860A86F0167F3E84867A9@TYZPR06MB4270.apcprd06.prod.outlook.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D20A56602004;
+        Tue, 13 Sep 2022 13:39:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663072786;
+        bh=4aHkfIG0KyeHeioBIbpPVvyCjS4/hravDIIXVa8y+co=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FoB378OLYcBw9msFo6rgSXlb52EcgjU/9ofr5v+VWUMz4z3ikf6OVhLBsFjL8YcJJ
+         12LP66OhY+GixrcsPGzBt41KPsRf2TKXulDVwvUZ7M0RxPxGeINNXYk1IUdIVNcXZX
+         s194ZkaN2z9lDROvw0z1BdlLx+kHRwwanWjkCeKRTeJVPMH5KvCEMDqcbhNrtkvdLF
+         fz2W2+4hLYm40i1KdNe4XX7CKvvAmyoJspWCjN5rqzwVerfNJGQAGCMRcT+n2rhk7/
+         iSWVJJn/d3rGvY4DiMf4mlah7JTgqTQyFwfJVaSo0mkZ/c3NIYzS+CeufUpCAiUHpm
+         32ZFnODAGs/9Q==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] Input: mtk-pmic-keys - Add support for MT6331 PMIC keys
+Date:   Tue, 13 Sep 2022 14:39:41 +0200
+Message-Id: <20220913123941.385349-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYZPR06MB42704394860A86F0167F3E84867A9@TYZPR06MB4270.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 09:49:43AM +0000, Carl Yin(殷张成) wrote:
-> Add support for the following Quectel BG95 composition:
-> 
-> 0x0203: Diag + GNSS + Modem + ECM
-> 
-> usb-devices output:
+Add support for PMIC Keys of the MT6331 PMIC.
 
-> Signed-off-by: Carl Yin <carl.yin@quectel.com>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+---
 
-Now applied, thanks.
+v3: Rebased on next-20220909, leftover patch from series
+    https://patchwork.kernel.org/project/linux-mediatek/list/?series=644591
 
-Johan
+ drivers/input/keyboard/mtk-pmic-keys.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
+index 6404081253ea..9b34da0ec260 100644
+--- a/drivers/input/keyboard/mtk-pmic-keys.c
++++ b/drivers/input/keyboard/mtk-pmic-keys.c
+@@ -9,6 +9,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/mfd/mt6323/registers.h>
++#include <linux/mfd/mt6331/registers.h>
+ #include <linux/mfd/mt6358/registers.h>
+ #include <linux/mfd/mt6397/core.h>
+ #include <linux/mfd/mt6397/registers.h>
+@@ -22,6 +23,10 @@
+ #define MTK_PMIC_PWRKEY_RST	BIT(6)
+ #define MTK_PMIC_HOMEKEY_RST	BIT(5)
+ 
++#define MTK_PMIC_MT6331_RST_DU_MASK	GENMASK(13, 12)
++#define MTK_PMIC_MT6331_PWRKEY_RST	BIT(9)
++#define MTK_PMIC_MT6331_HOMEKEY_RST	BIT(8)
++
+ #define MTK_PMIC_PWRKEY_INDEX	0
+ #define MTK_PMIC_HOMEKEY_INDEX	1
+ #define MTK_PMIC_MAX_KEY_COUNT	2
+@@ -72,6 +77,19 @@ static const struct mtk_pmic_regs mt6323_regs = {
+ 	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
+ };
+ 
++static const struct mtk_pmic_regs mt6331_regs = {
++	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
++		MTK_PMIC_KEYS_REGS(MT6331_TOPSTATUS, 0x2,
++				   MT6331_INT_MISC_CON, 0x4,
++				   MTK_PMIC_MT6331_PWRKEY_RST),
++	.keys_regs[MTK_PMIC_HOMEKEY_INDEX] =
++		MTK_PMIC_KEYS_REGS(MT6331_TOPSTATUS, 0x4,
++				   MT6331_INT_MISC_CON, 0x2,
++				   MTK_PMIC_MT6331_HOMEKEY_RST),
++	.pmic_rst_reg = MT6331_TOP_RST_MISC,
++	.rst_lprst_mask = MTK_PMIC_MT6331_RST_DU_MASK,
++};
++
+ static const struct mtk_pmic_regs mt6358_regs = {
+ 	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
+ 		MTK_PMIC_KEYS_REGS(MT6358_TOPSTATUS,
+@@ -255,6 +273,9 @@ static const struct of_device_id of_mtk_pmic_keys_match_tbl[] = {
+ 	}, {
+ 		.compatible = "mediatek,mt6323-keys",
+ 		.data = &mt6323_regs,
++	}, {
++		.compatible = "mediatek,mt6331-keys",
++		.data = &mt6331_regs,
+ 	}, {
+ 		.compatible = "mediatek,mt6358-keys",
+ 		.data = &mt6358_regs,
+-- 
+2.37.2
+
