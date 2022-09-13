@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785E65B6A85
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F525B6A31
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiIMJS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S231555AbiIMJAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiIMJS1 (ORCPT
+        with ESMTP id S231409AbiIMJAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:18:27 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A7BBB3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:18:25 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 736591A0836;
-        Tue, 13 Sep 2022 11:18:24 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3C9821A2C2B;
-        Tue, 13 Sep 2022 11:18:24 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id ADE2B180031F;
-        Tue, 13 Sep 2022 17:18:22 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: imx-card: Fix refcount issue with of_node_put
-Date:   Tue, 13 Sep 2022 17:00:01 +0800
-Message-Id: <1663059601-29259-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 05:00:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7A835282E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:00:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BDAA1063;
+        Tue, 13 Sep 2022 02:00:40 -0700 (PDT)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E31C3F73B;
+        Tue, 13 Sep 2022 02:00:31 -0700 (PDT)
+Message-ID: <8b115b79-f21b-645f-f1d2-faa493003b8a@arm.com>
+Date:   Tue, 13 Sep 2022 14:30:29 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 11/16] mm/page_alloc: make boot_nodestats static
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-12-linmiaohe@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220909092451.24883-12-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-imx_card_parse_of will search all the node with loop,
-if there is defer probe happen in the middle of loop,
-the previous released codec node will be released
-twice, then cause refcount issue.
 
-Here assign NULL to pointer of released nodes to fix
-the issue.
 
-Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- sound/soc/fsl/imx-card.c | 4 ++++
- 1 file changed, 4 insertions(+)
+On 9/9/22 14:54, Miaohe Lin wrote:
+> It's only used in mm/page_alloc.c now. Make it static.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
-index 14be29530fb5..3f128ced4180 100644
---- a/sound/soc/fsl/imx-card.c
-+++ b/sound/soc/fsl/imx-card.c
-@@ -698,6 +698,10 @@ static int imx_card_parse_of(struct imx_card_data *data)
- 		of_node_put(cpu);
- 		of_node_put(codec);
- 		of_node_put(platform);
-+
-+		cpu = NULL;
-+		codec = NULL;
-+		platform = NULL;
- 	}
- 
- 	return 0;
--- 
-2.34.1
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
+> ---
+>  mm/internal.h   | 2 --
+>  mm/page_alloc.c | 2 +-
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 2424fcde6538..43a441d35baf 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -864,8 +864,6 @@ int migrate_device_coherent_page(struct page *page);
+>   */
+>  struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
+>  
+> -DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+> -
+>  extern bool mirrored_kernelcore;
+>  
+>  static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 3417232afa45..7a8a6bb08a15 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6571,7 +6571,7 @@ static void per_cpu_pages_init(struct per_cpu_pages *pcp, struct per_cpu_zonesta
+>  #define BOOT_PAGESET_BATCH	1
+>  static DEFINE_PER_CPU(struct per_cpu_pages, boot_pageset);
+>  static DEFINE_PER_CPU(struct per_cpu_zonestat, boot_zonestats);
+> -DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+> +static DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+>  
+>  static void __build_all_zonelists(void *data)
+>  {
