@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79575B756B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8395B7315
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbiIMPmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S235117AbiIMPDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236705AbiIMPlX (ORCPT
+        with ESMTP id S235131AbiIMPBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:41:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F618305C;
-        Tue, 13 Sep 2022 07:45:55 -0700 (PDT)
+        Tue, 13 Sep 2022 11:01:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679DE74B8F;
+        Tue, 13 Sep 2022 07:29:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F5BAB80F02;
-        Tue, 13 Sep 2022 14:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 772ABC433D6;
-        Tue, 13 Sep 2022 14:32:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E116614D4;
+        Tue, 13 Sep 2022 14:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38ABEC433D6;
+        Tue, 13 Sep 2022 14:29:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079538;
-        bh=9BgiPP6OCpWvSkGqFHD61EJ8AiegDO/o1o7/clXSep4=;
+        s=korg; t=1663079364;
+        bh=D1i74k85RB2/DcShGmovdiYMpaaf7WOdaACl74xl/q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MgUt1iH0o/WJY6acfyaRQ4IIVV9dknx64giRZU7i4HjQEJCMHXlgp6JlD1p4HKNOI
-         q2fyvcNJV61RKNkQ+YzN7rZxcOeYoL4heikiT/cuW1H1CsQSOmOQP/wDrwZ5wVhcCk
-         OvZJU1gEWIH0Lg6UF0x/gyXbmhGHGpmNcSPlHR4I=
+        b=d8CJ+p/TkmmNJ1CFE+wUm09MrgSX3Y/2BBMMGkk+R+zFqqlHQKJkXAVmVOLnRIv4M
+         KitbwQHcay9NF13SjdZcLCr7fby2XBaiTrudd8s8HwPJ4ldy0LqiV/mwkO9VczIjSc
+         dJOtDzQoEzMuf9k3aU7RDrKFu4fr/zVpI8bWjfoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 57/79] ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
-Date:   Tue, 13 Sep 2022 16:07:15 +0200
-Message-Id: <20220913140351.660224693@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nagaraj Arankal <nagaraj.p.arankal@hpe.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        Yuchung Cheng <ycheng@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 105/108] tcp: fix early ETIMEDOUT after spurious non-SACK RTO
+Date:   Tue, 13 Sep 2022 16:07:16 +0200
+Message-Id: <20220913140358.137558685@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +59,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+From: Neal Cardwell <ncardwell@google.com>
 
-commit d29f59051d3a07b81281b2df2b8c9dfe4716067f upstream.
+[ Upstream commit 686dc2db2a0fdc1d34b424ec2c0a735becd8d62b ]
 
-The voice allocator sometimes begins allocating from near the end of the
-array and then wraps around, however snd_emu10k1_pcm_channel_alloc()
-accesses the newly allocated voices as if it never wrapped around.
+Fix a bug reported and analyzed by Nagaraj Arankal, where the handling
+of a spurious non-SACK RTO could cause a connection to fail to clear
+retrans_stamp, causing a later RTO to very prematurely time out the
+connection with ETIMEDOUT.
 
-This results in out of bounds access if the first voice has a high enough
-index so that first_voice + requested_voice_count > NUM_G (64).
-The more voices are requested, the more likely it is for this to occur.
+Here is the buggy scenario, expanding upon Nagaraj Arankal's excellent
+report:
 
-This was initially discovered using PipeWire, however it can be reproduced
-by calling aplay multiple times with 16 channels:
-aplay -r 48000 -D plughw:CARD=Live,DEV=3 -c 16 /dev/zero
+(*1) Send one data packet on a non-SACK connection
 
-UBSAN: array-index-out-of-bounds in sound/pci/emu10k1/emupcm.c:127:40
-index 65 is out of range for type 'snd_emu10k1_voice [64]'
-CPU: 1 PID: 31977 Comm: aplay Tainted: G        W IOE      6.0.0-rc2-emu10k1+ #7
-Hardware name: ASUSTEK COMPUTER INC P5W DH Deluxe/P5W DH Deluxe, BIOS 3002    07/22/2010
-Call Trace:
-<TASK>
-dump_stack_lvl+0x49/0x63
-dump_stack+0x10/0x16
-ubsan_epilogue+0x9/0x3f
-__ubsan_handle_out_of_bounds.cold+0x44/0x49
-snd_emu10k1_playback_hw_params+0x3bc/0x420 [snd_emu10k1]
-snd_pcm_hw_params+0x29f/0x600 [snd_pcm]
-snd_pcm_common_ioctl+0x188/0x1410 [snd_pcm]
-? exit_to_user_mode_prepare+0x35/0x170
-? do_syscall_64+0x69/0x90
-? syscall_exit_to_user_mode+0x26/0x50
-? do_syscall_64+0x69/0x90
-? exit_to_user_mode_prepare+0x35/0x170
-snd_pcm_ioctl+0x27/0x40 [snd_pcm]
-__x64_sys_ioctl+0x95/0xd0
-do_syscall_64+0x5c/0x90
-? do_syscall_64+0x69/0x90
-? do_syscall_64+0x69/0x90
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+(*2) Because no ACK packet is received, the packet is retransmitted
+     and we enter CA_Loss; but this retransmission is spurious.
 
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/3707dcab-320a-62ff-63c0-73fc201ef756@tasossah.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(*3) The ACK for the original data is received. The transmitted packet
+     is acknowledged.  The TCP timestamp is before the retrans_stamp,
+     so tcp_may_undo() returns true, and tcp_try_undo_loss() returns
+     true without changing state to Open (because tcp_is_sack() is
+     false), and tcp_process_loss() returns without calling
+     tcp_try_undo_recovery().  Normally after undoing a CA_Loss
+     episode, tcp_fastretrans_alert() would see that the connection
+     has returned to CA_Open and fall through and call
+     tcp_try_to_open(), which would set retrans_stamp to 0.  However,
+     for non-SACK connections we hold the connection in CA_Loss, so do
+     not fall through to call tcp_try_to_open() and do not set
+     retrans_stamp to 0. So retrans_stamp is (erroneously) still
+     non-zero.
+
+     At this point the first "retransmission event" has passed and
+     been recovered from. Any future retransmission is a completely
+     new "event". However, retrans_stamp is erroneously still
+     set. (And we are still in CA_Loss, which is correct.)
+
+(*4) After 16 minutes (to correspond with tcp_retries2=15), a new data
+     packet is sent. Note: No data is transmitted between (*3) and
+     (*4) and we disabled keep alives.
+
+     The socket's timeout SHOULD be calculated from this point in
+     time, but instead it's calculated from the prior "event" 16
+     minutes ago (step (*2)).
+
+(*5) Because no ACK packet is received, the packet is retransmitted.
+
+(*6) At the time of the 2nd retransmission, the socket returns
+     ETIMEDOUT, prematurely, because retrans_stamp is (erroneously)
+     too far in the past (set at the time of (*2)).
+
+This commit fixes this bug by ensuring that we reuse in
+tcp_try_undo_loss() the same careful logic for non-SACK connections
+that we have in tcp_try_undo_recovery(). To avoid duplicating logic,
+we factor out that logic into a new
+tcp_is_non_sack_preventing_reopen() helper and call that helper from
+both undo functions.
+
+Fixes: da34ac7626b5 ("tcp: only undo on partial ACKs in CA_Loss")
+Reported-by: Nagaraj Arankal <nagaraj.p.arankal@hpe.com>
+Link: https://lore.kernel.org/all/SJ0PR84MB1847BE6C24D274C46A1B9B0EB27A9@SJ0PR84MB1847.NAMPRD84.PROD.OUTLOOK.COM/
+Signed-off-by: Neal Cardwell <ncardwell@google.com>
+Signed-off-by: Yuchung Cheng <ycheng@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220903121023.866900-1-ncardwell.kernel@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/emu10k1/emupcm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/tcp_input.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
---- a/sound/pci/emu10k1/emupcm.c
-+++ b/sound/pci/emu10k1/emupcm.c
-@@ -137,7 +137,7 @@ static int snd_emu10k1_pcm_channel_alloc
- 	epcm->voices[0]->epcm = epcm;
- 	if (voices > 1) {
- 		for (i = 1; i < voices; i++) {
--			epcm->voices[i] = &epcm->emu->voices[epcm->voices[0]->number + i];
-+			epcm->voices[i] = &epcm->emu->voices[(epcm->voices[0]->number + i) % NUM_G];
- 			epcm->voices[i]->epcm = epcm;
- 		}
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index ff10edc85d648..0ebba83dbe220 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -2384,6 +2384,21 @@ static inline bool tcp_may_undo(const struct tcp_sock *tp)
+ 	return tp->undo_marker && (!tp->undo_retrans || tcp_packet_delayed(tp));
+ }
+ 
++static bool tcp_is_non_sack_preventing_reopen(struct sock *sk)
++{
++	struct tcp_sock *tp = tcp_sk(sk);
++
++	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
++		/* Hold old state until something *above* high_seq
++		 * is ACKed. For Reno it is MUST to prevent false
++		 * fast retransmits (RFC2582). SACK TCP is safe. */
++		if (!tcp_any_retrans_done(sk))
++			tp->retrans_stamp = 0;
++		return true;
++	}
++	return false;
++}
++
+ /* People celebrate: "We love our President!" */
+ static bool tcp_try_undo_recovery(struct sock *sk)
+ {
+@@ -2406,14 +2421,8 @@ static bool tcp_try_undo_recovery(struct sock *sk)
+ 	} else if (tp->rack.reo_wnd_persist) {
+ 		tp->rack.reo_wnd_persist--;
  	}
+-	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
+-		/* Hold old state until something *above* high_seq
+-		 * is ACKed. For Reno it is MUST to prevent false
+-		 * fast retransmits (RFC2582). SACK TCP is safe. */
+-		if (!tcp_any_retrans_done(sk))
+-			tp->retrans_stamp = 0;
++	if (tcp_is_non_sack_preventing_reopen(sk))
+ 		return true;
+-	}
+ 	tcp_set_ca_state(sk, TCP_CA_Open);
+ 	tp->is_sack_reneg = 0;
+ 	return false;
+@@ -2449,6 +2458,8 @@ static bool tcp_try_undo_loss(struct sock *sk, bool frto_undo)
+ 			NET_INC_STATS(sock_net(sk),
+ 					LINUX_MIB_TCPSPURIOUSRTOS);
+ 		inet_csk(sk)->icsk_retransmits = 0;
++		if (tcp_is_non_sack_preventing_reopen(sk))
++			return true;
+ 		if (frto_undo || tcp_is_sack(tp)) {
+ 			tcp_set_ca_state(sk, TCP_CA_Open);
+ 			tp->is_sack_reneg = 0;
+-- 
+2.35.1
+
 
 
