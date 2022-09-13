@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CE85B72FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745855B7489
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234907AbiIMPCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S236157AbiIMPY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235226AbiIMO7d (ORCPT
+        with ESMTP id S235961AbiIMPW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:59:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D55696E4;
-        Tue, 13 Sep 2022 07:29:02 -0700 (PDT)
+        Tue, 13 Sep 2022 11:22:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3769F7C33A;
+        Tue, 13 Sep 2022 07:37:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8053FB80FA1;
-        Tue, 13 Sep 2022 14:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF07C433D6;
-        Tue, 13 Sep 2022 14:28:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CF44614DA;
+        Tue, 13 Sep 2022 14:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E94EC433C1;
+        Tue, 13 Sep 2022 14:30:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079285;
-        bh=sDaOvwr6YJekxpEPBn7NfFtwuiIo6HkgI8ymFIIvqUE=;
+        s=korg; t=1663079443;
+        bh=tKxw0dJfvnSIpFKyNH3860YFtpR7E+jWI+k3mV1W6K4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pMNT1uVE0g5KB6aOEBRP0b5F23YaaAE3XnPH2NR32X/93Enb52zS+2W6V9eQjEMzo
-         kU5VXnTyiTo/xSOg18VkhE7oLrQKwAwyhVi6JQOsoIKlq3ia+Zm5kpLqQH6VsZN8Nu
-         Dc068XZvhgmISMWYJy/uLYgIF04FnuWL2dYGPbyY=
+        b=Jja9b6hSoq2fHCept0+XW74cg+DO0yioyOqHalM0HU9WWKB89UJhy6o5aRV4q8yTI
+         B9pePTFzINFs+NZdvHzthpkPNm7DWvB6WQgfXJGaYDtyzGo4TrGP/8V7mGaGwlFKoH
+         YHqJnUQ7rngSnyTGXMV0q5VRJx0N6BqYDzlTYVAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 074/108] arm64/signal: Raise limit on stack frames
-Date:   Tue, 13 Sep 2022 16:06:45 +0200
-Message-Id: <20220913140356.809652708@linuxfoundation.org>
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
+        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 28/79] clk: core: Fix runtime PM sequence in clk_core_unprepare()
+Date:   Tue, 13 Sep 2022 16:06:46 +0200
+Message-Id: <20220913140350.251932830@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit 7ddcaf78e93c9282b4d92184f511b4d5bee75355 ]
+[ Upstream commit 4b592061f7b3971c70e8b72fc42aaead47c24701 ]
 
-The signal code has a limit of 64K on the size of a stack frame that it
-will generate, if this limit is exceeded then a process will be killed if
-it receives a signal. Unfortunately with the advent of SME this limit is
-too small - the maximum possible size of the ZA register alone is 64K. This
-is not an issue for practical systems at present but is easily seen using
-virtual platforms.
+In the original commit 9a34b45397e5 ("clk: Add support for runtime PM"),
+the commit message mentioned that pm_runtime_put_sync() would be done
+at the end of clk_core_unprepare(). This mirrors the operations in
+clk_core_prepare() in the opposite order.
 
-Raise the limit to 256K, this is substantially more than could be used by
-any current architecture extension.
+However, the actual code that was added wasn't in the order the commit
+message described. Move clk_pm_runtime_put() to the end of
+clk_core_unprepare() so that it is in the correct order.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Link: https://lore.kernel.org/r/20220817182324.638214-2-broonie@kernel.org
-Signed-off-by: Will Deacon <will@kernel.org>
+Fixes: 9a34b45397e5 ("clk: Add support for runtime PM")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Link: https://lore.kernel.org/r/20220822081424.1310926-3-wenst@chromium.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/kernel/signal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/clk.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index f6d3278c1a4e0..92afd44db9dd8 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -91,7 +91,7 @@ static size_t sigframe_size(struct rt_sigframe_user_layout const *user)
-  * not taken into account.  This limit is not a guarantee and is
-  * NOT ABI.
-  */
--#define SIGFRAME_MAXSZ SZ_64K
-+#define SIGFRAME_MAXSZ SZ_256K
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 32606d1094fe4..53ac3a0e741d7 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -732,10 +732,9 @@ static void clk_core_unprepare(struct clk_core *core)
+ 	if (core->ops->unprepare)
+ 		core->ops->unprepare(core->hw);
  
- static int __sigframe_alloc(struct rt_sigframe_user_layout *user,
- 			    unsigned long *offset, size_t size, bool extend)
+-	clk_pm_runtime_put(core);
+-
+ 	trace_clk_unprepare_complete(core);
+ 	clk_core_unprepare(core->parent);
++	clk_pm_runtime_put(core);
+ }
+ 
+ static void clk_core_unprepare_lock(struct clk_core *core)
 -- 
 2.35.1
 
