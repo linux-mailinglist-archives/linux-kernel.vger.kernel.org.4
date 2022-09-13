@@ -2,162 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104AE5B6BD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246EA5B6BE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiIMKpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S231714AbiIMKp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiIMKpe (ORCPT
+        with ESMTP id S231734AbiIMKpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:45:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51C7F13F24;
-        Tue, 13 Sep 2022 03:45:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 665341063;
-        Tue, 13 Sep 2022 03:45:31 -0700 (PDT)
-Received: from [10.57.15.170] (unknown [10.57.15.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCBCC3F71A;
-        Tue, 13 Sep 2022 03:45:22 -0700 (PDT)
-Message-ID: <aa96eb55-4925-221f-1fb2-8226ea347c22@arm.com>
-Date:   Tue, 13 Sep 2022 11:45:17 +0100
+        Tue, 13 Sep 2022 06:45:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC43252FEA;
+        Tue, 13 Sep 2022 03:45:51 -0700 (PDT)
+Received: from mercury (unknown [185.122.133.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5E566660201C;
+        Tue, 13 Sep 2022 11:45:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663065950;
+        bh=XWn2qZ896q9hiNdpJzo3kQstEZh6ow+Bn3ZdhaKw+ac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NxYSH/wwoOVu7eMsDEbZCJptFfclJd1uiCHQy7w/ifFfgHvtr4p2qQTH04DvcJw6E
+         Z3GrA/gQGdoDc4amz9GXE8VtzqvnnYTluPrMzp8/lCOP74rvXVeRL66hkwbb+LSAoO
+         ybL47dYOZJxZZGEMaPCHroXU4XK2pK4wbqU5OTaUeA4lumToYy+T4YZz1NKTqD3GKx
+         4mozVf3zRlxy0rJHp0QApTSvQY3gANJR3hjXKW6c/So7ENXIBFKz3fLg86be/wBrqQ
+         5rhDuooxBXe7odVCugfzWXnqmYpFXh7E24qY6vnSag0xmT3btzJOQMbE+ejqq3EoSn
+         v52OSHcxqM0Ow==
+Received: by mercury (Postfix, from userid 1000)
+        id 3A2B7106084A; Tue, 13 Sep 2022 12:45:45 +0200 (CEST)
+Date:   Tue, 13 Sep 2022 12:45:45 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/2] power: supply: Add Lenovo Yoga C630 EC driver
+Message-ID: <20220913104545.2u6mcyy3bg4dp6ly@mercury.elektranox.org>
+References: <20220810030500.2793882-1-bjorn.andersson@linaro.org>
+ <20220810030500.2793882-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] dma-contiguous: add optional cma_name for cma= kernel
- parameter
-To:     Nate Drude <nate.d@variscite.com>, iommu@lists.linux.dev
-Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eran.m@variscite.com
-References: <20220912163805.4113238-1-nate.d@variscite.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220912163805.4113238-1-nate.d@variscite.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6ur2qv5grzx22o5g"
+Content-Disposition: inline
+In-Reply-To: <20220810030500.2793882-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-12 17:38, Nate Drude wrote:
-> When cma is defined in the device tree, the device tree node
-> name is used as the cma name. In the following example, the cma
-> will be named 'linux,cma':
-> 
-> linux,cma {
-> 	compatible = "shared-dma-pool";
-> 	reusable;
-> 	size = <0 0x3c000000>;
-> 	alloc-ranges = <0 0x40000000 0 0xC0000000>;
-> 	linux,cma-default;
-> };
-> 
-> And a device /dev/dma_heap/linux,cma is created.
-> 
-> However, when cma is provided by command line, a default
-> name of 'reserved' is used, and the device path changes to
-> /dev/dma_heap/reserved.
 
-If userspace expects the CMA heap driver to expose a consistent name for 
-CMA heaps, shouldn't it be the CMA heap driver's responsibility to 
-expose a consistent name for CMA heaps? Tinkering with the core CMA code 
-doesn't feel like the right approach.
+--6ur2qv5grzx22o5g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Furthermore, given that DT reserved-memory nodes carrying the 
-"linux-cma-default" property equally can (and do) have different names 
-as well, that or fixing userspace really are the only robust options.
+Hi,
 
-Thanks,
-Robin.
+[+Cc Lee Jones, DRI devel]
 
-> This is problematic because some user space applications,
-> like gstreamer plugins, are expecting /dev/dma_heap/linux,cma.
-> 
-> This parameter allows overriding the default 'reserved' name.
-> 
-> Signed-off-by: Nate Drude <nate.d@variscite.com>
+On Tue, Aug 09, 2022 at 10:05:00PM -0500, Bjorn Andersson wrote:
+> The Qualcomm Snapdragon-based Lenovo Yoga C630 has some sort of EC
+> providing AC-adapter and battery status, as well as USB Type-C altmode
+> notifications for Displayport operation.
+>=20
+> The Yoga C630 ships with Windows, where these operations primarily are
+> implemented in ACPI, but due to various issues with the hardware
+> representation therein it's not possible to run Linux on this
+> information. As such this is a best-effort re-implementation of these
+> operations, based on the register map expressed in ACPI and a fair
+> amount of trial and error.
+>=20
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->   .../admin-guide/kernel-parameters.txt         |  7 +++++++
->   kernel/dma/contiguous.c                       | 21 ++++++++++++++++++-
->   2 files changed, 27 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 51397a320f5e..975ec862d071 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -644,6 +644,13 @@
->   			altogether. For more information, see
->   			kernel/dma/contiguous.c
->   
-> +	cma_name=	Override the cma heap name
-> +			Format: <string>
-> +			When passing the cma kernel parameter, the default
-> +			cma name is 'reserved'. This parameter allows it to
-> +			be overriden to align with the device tree name,
-> +			like 'linux,cma'.
+> [...]
+> +	val =3D yoga_c630_ec_read8(ec, LENOVO_EC_BAT_ATTRIBUTES);
+> +	if (val < 0)
+> +		goto out_unlock;
+> +	ec->unit_ma =3D val & LENOVO_EC_BAT_ATTR_UNIT_IS_MA;
+> +	if (!ec->unit_ma)
+> +		ec->scale =3D 1000;
+> +	else
+> +		ec->scale =3D 1;
+
+Since I'm not sure how much of information was gained by reverse
+engineering: Is this really milliamps vs microamps and not milliamps
+vs milliwatt? SBS batteries usually report either mA or mW.
+
+> [...]
+> +	case POWER_SUPPLY_PROP_SERIAL_NUMBER:
+> +		val->strval =3D "05072018";
+> +		break;
+
+why is this hardcoded? :)
+
+> [...]
+> +	device_for_each_child_node(dev, fwnode) {
+> +		ret =3D fwnode_property_read_u32(fwnode, "reg", &port);
+> +		if (ret < 0)
+> +			continue;
 > +
->   	cma_pernuma=nn[MG]
->   			[ARM64,KNL,CMA]
->   			Sets the size of kernel per-numa memory area for
-> diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
-> index 3d63d91cba5c..e89819ec183e 100644
-> --- a/kernel/dma/contiguous.c
-> +++ b/kernel/dma/contiguous.c
-> @@ -74,6 +74,7 @@ static const phys_addr_t size_bytes __initconst =
->   static phys_addr_t  size_cmdline __initdata = -1;
->   static phys_addr_t base_cmdline __initdata;
->   static phys_addr_t limit_cmdline __initdata;
-> +static char name_cmdline[CMA_MAX_NAME] = "reserved";
->   
->   static int __init early_cma(char *p)
->   {
-> @@ -96,6 +97,24 @@ static int __init early_cma(char *p)
->   }
->   early_param("cma", early_cma);
->   
-> +static int __init early_cma_name(char *p)
-> +{
-> +	if (!p) {
-> +		pr_err("Config string not provided\n");
-> +		return -EINVAL;
-> +	}
+> +		/* Got multiple ports, but altmode is only possible on port 1 */
+> +		if (port !=3D 1)
+> +			continue;
 > +
-> +	if (!strlen(p)) {
-> +		pr_err("cma_name must have at least one character\n");
-> +		return -EINVAL;
-> +	}
+> +		ec->bridge.funcs =3D &yoga_c630_ec_bridge_funcs;
+> +		ec->bridge.of_node =3D to_of_node(fwnode);
+> +		ec->bridge.ops =3D DRM_BRIDGE_OP_HPD;
+> +		ec->bridge.type =3D DRM_MODE_CONNECTOR_USB;
 > +
-> +	snprintf(name_cmdline, CMA_MAX_NAME, p);
-> +
-> +	return 0;
-> +}
-> +early_param("cma_name", early_cma_name);
-> +
->   #ifdef CONFIG_DMA_PERNUMA_CMA
->   
->   static struct cma *dma_contiguous_pernuma_area[MAX_NUMNODES];
-> @@ -231,7 +250,7 @@ int __init dma_contiguous_reserve_area(phys_addr_t size, phys_addr_t base,
->   	int ret;
->   
->   	ret = cma_declare_contiguous(base, size, limit, 0, 0, fixed,
-> -					"reserved", res_cma);
-> +					name_cmdline, res_cma);
->   	if (ret)
->   		return ret;
->   
+> +		ret =3D devm_drm_bridge_add(dev, &ec->bridge);
+> +		if (ret) {
+> +			dev_err(dev, "failed to register drm bridge\n");
+> +			fwnode_handle_put(fwnode);
+> +			return ret;
+> +		}
+
+I wonder if DRM people want to see this in drivers/gpu/drm/bridge.
+Maybe it's better to make this a MFD driver?
+
+> [...]
+
+-- Sebastian
+
+--6ur2qv5grzx22o5g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMgX1QACgkQ2O7X88g7
++pr5vQ//fDjgrXSthbPeBloXcYtJikgwQMMWl0FwW5NYB29nx5TezAmEzspHNNIM
+0gldgNtpsQeNWKmkjvXwdBAs2KaApf9kxIEZJx/CxLO1bgm8FtWmqkCVdevXMonr
+Xyg+JF+nmbQsV9tYGNljoGsA/OxfjzKPEZKGSxZaA+8o9LPZYYssvJJFJ7BId+/8
+HVc1Ac5ODJWSeNseyzM93BTQb62EsaQFj4Rvi01CCSGVQdEWkHPEirNlwlCx4IKf
+8vZ5IHiELU7YwRJ9pTJHUvrioD49+n1UdewOAvVHdpo+jDpxIpSKotfsY1AaZw+n
+Ls7mS8wPJRoy22+Ooo53FdrdYY5pRKLCMSJOoSnvuixkhBEL+2NTb5dDjDjIJ15x
+M5fOQvWs5xavZbEjaiF63gXL+4dvzXVZ6hKhULrZYSPtEvjeg4ThND2HkzyO8M/x
+MZ1qVYdFx9Ux86gBD6gEeFajnXpFqTDPq8zskHqZje3+5VmJUtX3wZJyhuixHfSb
+0kThEoByuJsRjEpldK0kp5jnX4MNkBAMPDGKu0zdjUppJh1ixB6gqelNj/eUHdr0
+iYm2KVlx6oLvMqmBTf7TgFZdAF6hjYee43eLnwBVN9UxLcT4CRgmQbll/MEDeuN8
+OHK9qivKSMUQQ6q/dr7tUu3sAg6WOPfBFh8m4LdEjPIAVDkPd3c=
+=jQoj
+-----END PGP SIGNATURE-----
+
+--6ur2qv5grzx22o5g--
