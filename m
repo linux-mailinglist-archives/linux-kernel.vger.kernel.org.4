@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FC25B6789
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BC85B678E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiIMFzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 01:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S230114AbiIMF4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 01:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiIMFzQ (ORCPT
+        with ESMTP id S229763AbiIMF4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 01:55:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3267A1A077;
-        Mon, 12 Sep 2022 22:55:15 -0700 (PDT)
+        Tue, 13 Sep 2022 01:56:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B0A2AE34
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:56:43 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C3B835BD68;
-        Tue, 13 Sep 2022 05:55:13 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7267F3476C;
+        Tue, 13 Sep 2022 05:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663048513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1663048602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PEWNwbzjWeLj0qnwYTZiQaz7IsDhE8koHkL/e891+oM=;
-        b=zBNotOhyiplSJ/cwzJCNF0DVVdJXoBs0z4b9kH0kfgXoKRz34forrEU4zAYr/TO3WRULhC
-        v24chUFJon16poZhJIA7WqwDzlNjRZP8TTNgi0xY5piNYBWLGC5LqQGkL0a/64eqzVOnjI
-        xpJ5pY2u6zAXYLCiXHjMieEGkgTXXf8=
+        bh=SLo8BjkjRwsCH6ZjTtBLy++2jK4z6ufyzvByLLk7MRE=;
+        b=oIr1CxGzMoekLjdUSypsNdn+mmJcBNyAMkGB6eMcr0hENrrDcKzyIIc7a+ffthPtqDpLWX
+        uQ+mIR9FmSBBP0KTadeD/ONWux/2SriwcFy4THcphWFyT3KBBKD6pug/l/xJ6jerGiu2bo
+        M666cN0VKj38NGeHJVcdF+skbg69wRo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663048513;
+        s=susede2_ed25519; t=1663048602;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PEWNwbzjWeLj0qnwYTZiQaz7IsDhE8koHkL/e891+oM=;
-        b=0woo0GTrt5R4seMYDdsFq9kSa7fqTXCcoMfqzjJXiHTZCCVLPl1yQUd1I+wUYRpJRp68Mi
-        NHM7GqbxSjBIZ9Aw==
+        bh=SLo8BjkjRwsCH6ZjTtBLy++2jK4z6ufyzvByLLk7MRE=;
+        b=/fhA3T9IHns1qjxbyV3XpU2/6HH28CBKD7U5zPvgVWnyhgvaY0t5Dv3GgS8tvpAN4e6RBC
+        2aYTZ1+0ofbXOvCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 608E013AB5;
-        Tue, 13 Sep 2022 05:55:13 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38000139B3;
+        Tue, 13 Sep 2022 05:56:42 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZnzgFkEbIGMXXwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 13 Sep 2022 05:55:13 +0000
-Date:   Tue, 13 Sep 2022 07:55:12 +0200
-Message-ID: <87edwfhl8f.wl-tiwai@suse.de>
+        id AtHdDJobIGNqXwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 13 Sep 2022 05:56:42 +0000
+Date:   Tue, 13 Sep 2022 07:56:41 +0200
+Message-ID: <87czbzhl5y.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Mohan Kumar <mkumard@nvidia.com>
-Cc:     <tiwai@suse.com>, <perex@perex.cz>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: hda/tegra: set depop delay for tegra
-In-Reply-To: <20220913053641.23299-1-mkumard@nvidia.com>
-References: <20220913053641.23299-1-mkumard@nvidia.com>
+To:     huangwenhui <huangwenhuia@uniontech.com>
+Cc:     perex@perex.cz, tiwai@suse.com, jeremy.szu@canonical.com,
+        hui.wang@canonical.com, wse@tuxedocomputers.com, cam@neo-zeon.de,
+        kailang@realtek.com, tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Huawei WRT-WX9
+In-Reply-To: <20220913054622.15979-1-huangwenhuia@uniontech.com>
+References: <20220913054622.15979-1-huangwenhuia@uniontech.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sep 2022 07:36:41 +0200,
-Mohan Kumar wrote:
+On Tue, 13 Sep 2022 07:46:22 +0200,
+huangwenhui wrote:
 > 
-> Reduce the suspend time by setting depop delay to 10ms for
-> tegra.
+> Fixes headphone and headset microphone detection on Huawei WRT-WX9.
 > 
-> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
 
-Applied now, thanks.
+Thanks, applied now.
 
 
 Takashi
