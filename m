@@ -2,174 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B775B7C19
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E9B5B7C27
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiIMUOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S229585AbiIMUVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIMUOc (ORCPT
+        with ESMTP id S229436AbiIMUVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:14:32 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2069.outbound.protection.outlook.com [40.107.100.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A42E81;
-        Tue, 13 Sep 2022 13:14:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W0W9gcGtgouzkcYitQvelVnWUgXV+ergxt+r0hNgYqAaz5b9NV5wYHyZpBTT9JHyViMBwvCCa/eBul839emHv87ND1OAa9iQa6EDzKygyf6njrHAYv6KrLbi4DA8hsTSpddJ9uk0t5rhlmkOMZt+2oU/6Kjs0RGUXif7Rs410IiuUxn/W16gRMju7ZPhS5tE3vQLSM82AOpagiHeCAvzwXI+eI5x8doJL1+FOKAny65sm1wRY7+rrpGeuEkkGxX3HtF0l/GbBK+yHLYrXUJXqBW4N7T3R6bVW/G1C9UspVTQ3ZTJ/jtNjfgYaNqFuJ8gNIU7MnGyjRpGiJr/4yA3hA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CaTwuI0wJ8PsgDH78M0+Kd2G+N13tGAbF0jfExwcd9Q=;
- b=JTFF9CDzl1XNd27BamnFrZlBkpWi9DwK3xvwQQr+i9tK5HRACfqrAbkJ+xiL15njtxmFMtPlmLSGxqScNQpo3a1NmOJfTAAHt4bW1LZRbKd+yIS1iKzAHkApGptPMkOt7ud4fN7LIzXl0P6OFrVAam8UTfRy6uEDx3ykVp2Wkg2JcLPeyyIAtSCpBqPg5RyZ9pzU/m8d8AjF4oFHUXs4AsykkOOv06e6QP8k6TGUOsM3Ik0jEdNQe38ifjbWMLr+biNlQBRMtTNWZUNx1Mulu0jshqhEWdUYtpBALa0YqCI2/agscXRwP9CZpaY3EnARfnSdPGI9BHS6TelGPmJEYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CaTwuI0wJ8PsgDH78M0+Kd2G+N13tGAbF0jfExwcd9Q=;
- b=N8v4UfDxdAxT9+evl/cLRcJtjFtXRiNIEt5Gw4RptWmafh/9ddMfzobTQnnQNvzn+9obf/KlCOORCYDBeT20IbcBQtDBxBJnby4YL6m8MKtM5msWtHyukMtSECL8k2DSz6AO0W4V8aFTsCLjGlhfvOFFPpAPLiYxAk4DpzMZXymKKhw2ytIIUfwD4o/U5LoSkva6kUXgx2CMztDuPXptn5s4fkJI94d0HwXLGS5cAOBh0sowG6STNgm9YsKXMfekPYdnJmHh0EzmmBR9TrS/jFe6edMdHIwfcv4p4GmHIocYc7ZRjzBDly1YRyyr01n1TwuN245Gpuc2IszkuTav4g==
-Received: from DM6PR06CA0063.namprd06.prod.outlook.com (2603:10b6:5:54::40) by
- BY5PR12MB4260.namprd12.prod.outlook.com (2603:10b6:a03:206::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Tue, 13 Sep
- 2022 20:14:29 +0000
-Received: from DM6NAM11FT072.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:54:cafe::e6) by DM6PR06CA0063.outlook.office365.com
- (2603:10b6:5:54::40) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
- Transport; Tue, 13 Sep 2022 20:14:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- DM6NAM11FT072.mail.protection.outlook.com (10.13.173.181) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5632.12 via Frontend Transport; Tue, 13 Sep 2022 20:14:28 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.38; Tue, 13 Sep 2022 20:14:28 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 13:14:27 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29 via Frontend
- Transport; Tue, 13 Sep 2022 13:14:26 -0700
-Date:   Tue, 13 Sep 2022 13:14:24 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-CC:     <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-        <will@kernel.org>, <robin.murphy@arm.com>, <robdclark@gmail.com>,
-        <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>, <matthias.bgg@gmail.com>,
-        <heiko@sntech.de>, <orsonzhai@gmail.com>,
-        <baolin.wang@linux.alibaba.com>, <zhang.lyra@gmail.com>,
-        <thierry.reding@gmail.com>, <jgg@nvidia.com>,
-        <sricharan@codeaurora.org>, <yong.wu@mediatek.com>,
-        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <tglx@linutronix.de>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        <thunder.leizhen@huawei.com>, <christophe.jaillet@wanadoo.fr>,
-        <yangyingliang@huawei.com>, <jon@solid-run.com>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH 4/5] iommu: Regulate errno in ->attach_dev callback
- functions
-Message-ID: <YyDkoIqWb8fy+vsi@Asurada-Nvidia>
-References: <20220913082448.31120-1-nicolinc@nvidia.com>
- <20220913082448.31120-5-nicolinc@nvidia.com>
- <YyB3F/o3RfymqiFW@myrica>
+        Tue, 13 Sep 2022 16:21:35 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B17642DA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p3so756384iof.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hvA7f1e70eZNisribXBaUlpwC7EMEv0cHfgluSEMJ+0=;
+        b=VPYxLNq/A8L3gEZHrUwDcoUnPkNmYHwG9R7k93b4XkSnlgyVRTTuF0O77jbNmGZoIO
+         fdkM8HmeOpQpWtqZPyf/TvCIxnU02BuqCVAm/R7KpqMDY9pXP01TznUpG3VpHJ9t/OYj
+         eUOiHs7lGwCuJU0/YT9WAeKvqZ79yq/a06L8Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hvA7f1e70eZNisribXBaUlpwC7EMEv0cHfgluSEMJ+0=;
+        b=ExkZvUmw852caeftAMfombCbCWnfrFHHJtgID0t5lSFtJaFhDPYmvIFvKIoM4uP6Gx
+         Xy4xX5PKNwxrSMdw5fq9X3rcLZJtghljwJ/UDJ5IUudrl3eUcFDHdKJwkLVV1WPw2K4K
+         0aLLLgeYfFAdMTuWW3GINKqlWJaIwl4BsWyf0nTSEWbGUj3SMnFVLtjztwdU4QCnDwt0
+         4crJQxuSOjnl83POLqRXfMgV4JJepaXTvU8bZGhD/QIww5I1Kq14S+TtH95qOVrAxm5M
+         FYRuPPrqnM0hSF8vo1+2M2f2gMMYR56PRNkJgJjqOPqc4N/+/cD9Cb4IwaCp7fXTXrH8
+         63Zg==
+X-Gm-Message-State: ACgBeo3094dGJhDMe8sRurafS5h5/OVb8BlzTRsgetFyHnkJfsLKNMlC
+        wfMnulS4TQCmAj8BsD0VKPZGhA==
+X-Google-Smtp-Source: AA6agR7bLInJc4dGlF3FU+bR5qg/fCB3+Slbgvu5j48T3Dz25FTGl4WwJnDiLCEX7WWA0v0QFQAfow==
+X-Received: by 2002:a05:6602:2f13:b0:6a1:730a:dd9d with SMTP id q19-20020a0566022f1300b006a1730add9dmr3702301iow.114.1663100492023;
+        Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id d4-20020a0566022be400b006a102cb4900sm5436906ioy.39.2022.09.13.13.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 13:21:31 -0700 (PDT)
+Message-ID: <ac428312-745c-490e-dfb4-2208913c27c1@ieee.org>
+Date:   Tue, 13 Sep 2022 15:21:30 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YyB3F/o3RfymqiFW@myrica>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT072:EE_|BY5PR12MB4260:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4703a67a-e720-4dfa-0d73-08da95c48ffc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6qCaUCdCcKwNBEVKug5omqqSzwtcs5qotqWAWOdPUsiUU+b5X9b9X9FApoisW60BKxnCtCKDG3VAXmlOv3COtXpax9VfS6ssZUxaTs3ZxnyewpwIxhr6ukJtNB8Sc4ACKc3qZMEaBEANkGSyH0yh8zX5sHjs/eFFoskc1Ojc3rQPB5TKD2Enp0faQ4JgggIQfqu7hmsdCnAE2RMokjfEbBcoWxaUwDcsNK/BOroFj1VsoWzMnrtu8g6z8fZTd9Fd8Wod2zHo51tbqo9r9qxJjC2KiJgPYDGXEkVcG0tZwfUWlMIvqG2Kw27eu1775NLfTHH5RE5tEl6y5HCOvElkgPMpd6gDpGjPurJVDhmHNTOXX1khrrCDZjMPbdRpCewO8jVA0ShHR0ce/3vMtrSCHnRqWGfBoQJaJaDWd5gGrYnL9WIW533AU+4R18xYzE87QOvrVgavwvONZbvOVpD/fm7X30EaUSWNFADA6xAlcVgextO0a0bZrj2dHxcxvuYZ9X02RJEJlb8jhOwFVVNmejAi+EN3d0qvzDWx5k29GpOVWHqXWScb1VXc2OTyBKquMWloNtc0Ecs4zeMGOpk+LnRmkeFZ8qYgqPS+GHPrj/IRzPEVm2pr2OieMTADt1JivSXw8HSXhEWTaCut0hnmO8oF3wvqj5sx6qM2x+eP/g9bF4GBWVzj9gQHAngVWn1wN6ryqIkE1qlvxE5b10IOHQphUYSqw94QcHpiwjWA4RSkKaQRercgekqWF7XNkfwhzDcSt85tmv3fBwtdjoVs3pA8WkXwc3k//rKXJ+aY4MQKx1a8i8H0+Xl5TgJojjbIt8n2kcl0y4cX+OlQzkJ/Yg==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(36840700001)(46966006)(40470700004)(356005)(186003)(26005)(83380400001)(426003)(336012)(8936002)(7406005)(36860700001)(81166007)(41300700001)(86362001)(55016003)(478600001)(40460700003)(8676002)(2906002)(47076005)(5660300002)(54906003)(316002)(9686003)(7416002)(82740400003)(6916009)(70586007)(4326008)(82310400005)(70206006)(33716001)(40480700001)(36900700001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 20:14:28.7041
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4703a67a-e720-4dfa-0d73-08da95c48ffc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT072.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4260
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/4] Make QMI message rules const
+Content-Language: en-US
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+ <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
+ <5b0543dc-4db8-aa33-d469-0e185c82b221@quicinc.com>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <5b0543dc-4db8-aa33-d469-0e185c82b221@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean,
+On 9/13/22 1:51 PM, Jeff Johnson wrote:
+> On 9/13/2022 6:58 AM, Alex Elder wrote:
+>> On 9/12/22 6:25 PM, Jeff Johnson wrote:
+>>> Change ff6d365898d ("soc: qcom: qmi: use const for struct
+>>> qmi_elem_info") allows QMI message encoding/decoding rules to be
+>>> const. So now update the definitions in the various client to take
+>>> advantage of this. Patches for ath10k and ath11k were perviously sent
+>>> separately.
+>>
+>> I have had this on my "to-do list" for ages.
+>> The commit you mention updates the code to be
+>> explicit about not modifying this data, which
+>> is great.
+>>
+>> I scanned over the changes, and I assume that
+>> all you did was make every object having the
+>> qmi_elem_info structure type be defined as
+>> constant.
+>>
+>> Why aren't you changing the "ei_array" field in
+>> the qmi_elem_info structure to be const?  Or the
+>> "ei" field of the qmi_msg_handler structure?  And
+>> the qmi_response_type_v01_ei array (and so on)?
+>>
+>> I like what you're doing, but can you comment
+>> on what your plans are beyond this series?
+>> Do you intend to make the rest of these fields
+>> const?
+> 
+> Hi Alex,
+> My primary focus is the ath* wireless drivers, and my primary goal was 
+> to make the tables there const. So this series, along with the two 
+> out-of-series patches for ath10k and ath11k complete that scope of work.
+> 
+> The lack of the other changes to the QMI data structures is simply due 
+> to me not looking in depth at the QMI code beyond the registration 
+> interface.
+> 
+> I'll be happy to revisit this as a separate cleanup.
 
-On Tue, Sep 13, 2022 at 01:27:03PM +0100, Jean-Philippe Brucker wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> Hi Nicolin,
-> 
-> On Tue, Sep 13, 2022 at 01:24:47AM -0700, Nicolin Chen wrote:
-> > Following the new rules in include/linux/iommu.h kdocs, update all drivers
-> > ->attach_dev callback functions to return ENODEV error code for all device
-> > specific errors. It particularly excludes EINVAL from being used for such
-> > error cases. For the same purpose, also replace one EINVAL with ENOMEM in
-> > mtk_iommu driver.
-> >
-> > Note that the virtio-iommu does a viommu_domain_map_identity() call, which
-> > returns either 0 or ENOMEM at this moment. Change to "return ret" directly
-> > to allow it to pass an EINVAL in the future.
-> [...]
-> > diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
-> > index 80151176ba12..874c01634d2b 100644
-> > --- a/drivers/iommu/virtio-iommu.c
-> > +++ b/drivers/iommu/virtio-iommu.c
-> > @@ -696,7 +696,7 @@ static int viommu_domain_finalise(struct viommu_endpoint *vdev,
-> >               if (ret) {
-> >                       ida_free(&viommu->domain_ids, vdomain->id);
-> >                       vdomain->viommu = NULL;
-> > -                     return -EOPNOTSUPP;
-> > +                     return ret;
-> 
-> I think in the future it will be too easy to forget about the constrained
-> return value of attach() while modifying some other part of the driver,
-> and let an external helper return EINVAL. So I'd rather not propagate ret
-> from outside of viommu_domain_attach() and finalise().
-> 
-> For the same reason I do prefer this solution over EMEDIUMTYPE, because
-> it's too tempting to use exotic errno when they seem appropriate instead
-> of boring ENODEV and EINVAL. The alternative would be adding a special
-> purpose code to linux/errno.h, similarly to EPROBE_DEFER, but that might
-> be excessive.
-> 
-> Since we can't guarantee that APIs like virtio or ida won't ever return
-> EINVAL, we should set all return values:
+Sounds good to me.  Like I said I've wanted to do this
+myself, and as long as you've gotten this far I'd like
+to see it taken to completion.  Compile-testing is most
+likely sufficient to make sure you got it right.
 
-Thanks for the inputs. Assuming your attached patch isn't officially
-sent, I will group it into my next version.
+I cherry-picked the one commit, and downloaded the series
+and found no new build warnings.  Checkpatch would prefer
+you used "ff6d365898d4" rather than "ff6d365898d" for the
+commit ID, but that's OK.
 
-Similarly, I will also double check other drivers, to make sure all
-of them have explicit return values, other than "ret".
+Anyway, for the whole series:
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+
+> /jeff
+> 
+
