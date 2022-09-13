@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA3C5B70A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62085B71D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbiIMO1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S230253AbiIMOq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiIMO0x (ORCPT
+        with ESMTP id S234485AbiIMOnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:26:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3488361D80;
-        Tue, 13 Sep 2022 07:17:01 -0700 (PDT)
+        Tue, 13 Sep 2022 10:43:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D025FF61;
+        Tue, 13 Sep 2022 07:23:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04DDC614B3;
-        Tue, 13 Sep 2022 14:15:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2C8C433D6;
-        Tue, 13 Sep 2022 14:15:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4718EB80F01;
+        Tue, 13 Sep 2022 14:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86792C433D6;
+        Tue, 13 Sep 2022 14:23:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078539;
-        bh=WGaXiGtqgHgRtcWmM+ueCPynVJnTPIDS2BAH7VQdfcg=;
+        s=korg; t=1663078989;
+        bh=MwsHQc3uWoUbyndXOnzRD7slKc7OkYglxxOZJ8zhHts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGwbi2Nq+wOxtRZ/UZARjO6FGagDY6f904KuX9hnGH2xJpiBn3xVxKJr8ILxSTd+z
-         QI4RZipzOBTMC54mkmmbnD/fzQhGLqqrgVEuB8sMst43C1A3ZXRNbCmkZtcZ7xsUpk
-         pb2p4HFvutCXldPGzADi84Oe9Ae9ZHafKGhuCUmw=
+        b=H8pmpOP1fG2wlcA+gFLm3CX/Hnqh1dEhFiKkuco/00xoqdE/INvVrRZmvLGAXBBK2
+         943BMXciyzcDOMFTqVp25yTed0jIjlokuEi4dB+F+aORwyFsdULjyPDSMlzt1CF5X8
+         956/yyI950MObuRYU2paYPHg30PL5G5cU3dfC/PI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Michael Guralnik <michaelgur@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 179/192] perf evlist: Always use arch_evlist__add_default_attrs()
+Subject: [PATCH 5.10 40/79] RDMA/cma: Fix arguments order in net device validation
 Date:   Tue, 13 Sep 2022 16:04:45 +0200
-Message-Id: <20220913140418.963060947@linuxfoundation.org>
+Message-Id: <20220913140352.236013769@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,129 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Michael Guralnik <michaelgur@nvidia.com>
 
-[ Upstream commit a9c1ecdabc4f2ef04ef5334b8deb3a5c5910136d ]
+[ Upstream commit 27cfde795a96aef1e859a5480489944b95421e46 ]
 
-Current perf stat uses the evlist__add_default_attrs() to add the
-generic default attrs, and uses arch_evlist__add_default_attrs() to add
-the Arch specific default attrs, e.g., Topdown for x86.
+Fix the order of source and destination addresses when resolving the
+route between server and client to validate use of correct net device.
 
-It works well for the non-hybrid platforms. However, for a hybrid
-platform, the hard code generic default attrs don't work.
+The reverse order we had so far didn't actually validate the net device
+as the server would try to resolve the route to itself, thus always
+getting the server's net device.
 
-Uses arch_evlist__add_default_attrs() to replace the
-evlist__add_default_attrs(). The arch_evlist__add_default_attrs() is
-modified to invoke the same __evlist__add_default_attrs() for the
-generic default attrs. No functional change.
+The issue was discovered when running cm applications on a single host
+between 2 interfaces with same subnet and source based routing rules.
+When resolving the reverse route the source based route rules were
+ignored.
 
-Add default_null_attrs[] to indicate the arch specific attrs.
-No functional change for the arch specific default attrs either.
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220721065706.2886112-4-zhengjun.xing@linux.intel.com
-Signed-off-by: Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Stable-dep-of: f0c86a2bae4f ("perf stat: Fix L2 Topdown metrics disappear for raw events")
+Fixes: f887f2ac87c2 ("IB/cma: Validate routing of incoming requests")
+Link: https://lore.kernel.org/r/1c1ec2277a131d277ebcceec987fd338d35b775f.1661251872.git.leonro@nvidia.com
+Signed-off-by: Michael Guralnik <michaelgur@nvidia.com>
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/arch/x86/util/evlist.c | 7 ++++++-
- tools/perf/builtin-stat.c         | 6 +++++-
- tools/perf/util/evlist.c          | 9 +++++++--
- tools/perf/util/evlist.h          | 7 +++++--
- 4 files changed, 23 insertions(+), 6 deletions(-)
+ drivers/infiniband/core/cma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index 68f681ad54c1e..777bdf182a582 100644
---- a/tools/perf/arch/x86/util/evlist.c
-+++ b/tools/perf/arch/x86/util/evlist.c
-@@ -8,8 +8,13 @@
- #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
- #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index 3c40aa50cd60c..b5fa19a033c0a 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -1722,8 +1722,8 @@ cma_ib_id_from_event(struct ib_cm_id *cm_id,
+ 		}
  
--int arch_evlist__add_default_attrs(struct evlist *evlist)
-+int arch_evlist__add_default_attrs(struct evlist *evlist,
-+				   struct perf_event_attr *attrs,
-+				   size_t nr_attrs)
- {
-+	if (nr_attrs)
-+		return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
-+
- 	if (!pmu_have_event("cpu", "slots"))
- 		return 0;
- 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 5f0333a8acd8a..5aacb7ed8c24a 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1778,6 +1778,9 @@ static int add_default_attributes(void)
- 	(PERF_COUNT_HW_CACHE_OP_PREFETCH	<<  8) |
- 	(PERF_COUNT_HW_CACHE_RESULT_MISS	<< 16)				},
- };
-+
-+	struct perf_event_attr default_null_attrs[] = {};
-+
- 	/* Set attrs if no event is selected and !null_run: */
- 	if (stat_config.null_run)
- 		return 0;
-@@ -1959,7 +1962,8 @@ static int add_default_attributes(void)
- 			return -1;
- 
- 		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
--		if (arch_evlist__add_default_attrs(evsel_list) < 0)
-+		/* Platform specific attrs */
-+		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
- 			return -1;
- 	}
- 
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 48af7d379d822..efa5f006b5c61 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -342,9 +342,14 @@ int __evlist__add_default_attrs(struct evlist *evlist, struct perf_event_attr *a
- 	return evlist__add_attrs(evlist, attrs, nr_attrs);
- }
- 
--__weak int arch_evlist__add_default_attrs(struct evlist *evlist __maybe_unused)
-+__weak int arch_evlist__add_default_attrs(struct evlist *evlist,
-+					  struct perf_event_attr *attrs,
-+					  size_t nr_attrs)
- {
--	return 0;
-+	if (!nr_attrs)
-+		return 0;
-+
-+	return __evlist__add_default_attrs(evlist, attrs, nr_attrs);
- }
- 
- struct evsel *evlist__find_tracepoint_by_id(struct evlist *evlist, int id)
-diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-index 1bde9ccf4e7da..129095c0fe6d3 100644
---- a/tools/perf/util/evlist.h
-+++ b/tools/perf/util/evlist.h
-@@ -107,10 +107,13 @@ static inline int evlist__add_default(struct evlist *evlist)
- int __evlist__add_default_attrs(struct evlist *evlist,
- 				     struct perf_event_attr *attrs, size_t nr_attrs);
- 
-+int arch_evlist__add_default_attrs(struct evlist *evlist,
-+				   struct perf_event_attr *attrs,
-+				   size_t nr_attrs);
-+
- #define evlist__add_default_attrs(evlist, array) \
--	__evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
-+	arch_evlist__add_default_attrs(evlist, array, ARRAY_SIZE(array))
- 
--int arch_evlist__add_default_attrs(struct evlist *evlist);
- struct evsel *arch_evlist__leader(struct list_head *list);
- 
- int evlist__add_dummy(struct evlist *evlist);
+ 		if (!validate_net_dev(*net_dev,
+-				 (struct sockaddr *)&req->listen_addr_storage,
+-				 (struct sockaddr *)&req->src_addr_storage)) {
++				 (struct sockaddr *)&req->src_addr_storage,
++				 (struct sockaddr *)&req->listen_addr_storage)) {
+ 			id_priv = ERR_PTR(-EHOSTUNREACH);
+ 			goto err;
+ 		}
 -- 
 2.35.1
 
