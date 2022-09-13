@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D285B6BA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3931B5B6BAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiIMKaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S231428AbiIMKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiIMKaL (ORCPT
+        with ESMTP id S230494AbiIMKdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:30:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074412127A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:30:10 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oY3B0-0004De-Db; Tue, 13 Sep 2022 12:29:58 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oY3Az-0001xh-BK; Tue, 13 Sep 2022 12:29:57 +0200
-Date:   Tue, 13 Sep 2022 12:29:57 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH V3 0/2] clk: imx: introduce fsl,always-on-clocks
-Message-ID: <20220913102957.sir37bsdr5sayxal@pengutronix.de>
-References: <20220913092136.1706263-1-peng.fan@oss.nxp.com>
+        Tue, 13 Sep 2022 06:33:18 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDA85D0CB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:33:17 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a41so5040040edf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date;
+        bh=+IOkPYBVudVE123a/Rn57DKbqImHDs6xTaqKWEnTeaU=;
+        b=Sey68H9AaYkmlDEsTrSHR0ricClTUgDJuFwE7wv6y37CNohLB1oSZVOAhHJhXgciLd
+         Pdv4Fe+tAlVuwGQAbW2t1leQ6Q0XHvxMbDR53fAHeq29jC1ObEMV4duIdRfr1M4bvxiz
+         GeZaRTB8WRrIodK7RQOm8UBHRCJszuUf32qBXYrDUA/dKZpPlYC6/waUK1MBdd9fYAIj
+         3DbYAUUrd5HR42XDTn5OCfOfnfInijHgdelahQvjlIW3oTpEhlGIfM9V3by0ESzdsLNK
+         bkof22AHwi+B1A1auPIfX8JFTkuroHl1xhF9yha/qMLa7d4XR8FePSA5vXraZOIU8KZc
+         sBPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+IOkPYBVudVE123a/Rn57DKbqImHDs6xTaqKWEnTeaU=;
+        b=IJ3LN19Dtrt2U5OEFrsnY1CNzmk6eqGLmGxNjadZANB8SrXhv6IXhQmCFT6AnZpQ1M
+         20jzd7n4m4VE8uvLIi3SOQypToaMxQ2rYu+x51zVIoq5006e+YuY9bB7QJXe8ixdavPs
+         7aY01+9AZQOr9GgcROiUhJFCZsQ41Z5lCDUmQEJEg5i3rQNuuISUoiEE7j09dMd7+MnB
+         hC8aTOTokIpGkZbFWxauJlJ1/2QhwGrxzmAj40tp9e7LQFg2/mhFBrZorjFmHnK1gFm5
+         cU9I1MDCvVtzYZ3Jb/dIgY5HXCicwM63YT0qX4EW5s88lH9lL0fBXX1CLKuw3Y0TSROX
+         ZvPw==
+X-Gm-Message-State: ACgBeo08wiml4BAP/lmkgdZ3DOxpawtDmnV5SogTnD8EiVlCoV8hJRb7
+        Km6Ya6p/DT7hacmvDKhnaxDV/3KwjBfMtgXw+IM=
+X-Google-Smtp-Source: AA6agR6hB3xruOUIyKlv91G9UmtJkjcan5icUjuFCtulfpXXnxiuMoD6qwTF9paWCRdmXe0Rv8Z421pd+uL9FNa88ts=
+X-Received: by 2002:aa7:d3d3:0:b0:44e:baab:54d9 with SMTP id
+ o19-20020aa7d3d3000000b0044ebaab54d9mr25380532edr.43.1663065195965; Tue, 13
+ Sep 2022 03:33:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913092136.1706263-1-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: oyebuchikalu29@gmail.com
+Received: by 2002:a17:907:961c:0:0:0:0 with HTTP; Tue, 13 Sep 2022 03:33:15
+ -0700 (PDT)
+From:   Hannah Wilson <hannahwilson11254@gmail.com>
+Date:   Tue, 13 Sep 2022 10:33:15 +0000
+X-Google-Sender-Auth: DtZStylnndtMDPL4vvzpLF3plck
+Message-ID: <CAOkQLHUMuyZY-7DAF_jK75xWd2q=hOuYiY+yX7J7oL+5bw=jpw@mail.gmail.com>
+Subject: Hello My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,73 +67,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+Hello My Dear,
 
-On 22-09-13, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> V3:
->  Rename to fsl,always-on-clocks 
-> 
-> V2:
->  Use protected-clocks
->  https://lore.kernel.org/all/20220816130327.2987710-1-peng.fan@oss.nxp.com/
-> 
-> V1:
->  Use fsl,protected-clocks
->  https://lore.kernel.org/all/20220815033632.1687854-1-peng.fan@oss.nxp.com/
-> 
-> There are two cases that I wanna this property could serve:
-> Virtualization: root cell linux run in parallel with inmate cell
-> AMP: M7/4 runs in parallel with A53
-> 
-> The major case is:
-> Jailhouse hypervisor only support partition, so devices are partitioned.
-> But there is only CCM module that provides clock, the CCM is handled by
-> root cell linux, need make sure the root cell linux not shutdown the
-> clocks using by inmate cell.
-> 
-> I was thinking whether need to provide a rate entry to ask root cell
-> configure the clk rate for inmate cell. But NXP downstream not have it,
-> see https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/clk/imx/clk-imx8mp.c?h=lf-5.15.y#n690
-> So just leave the property as uint32-array.
+It is my pleasure to communicate with you, I know that this message
+will be a surprise to you my name is Mrs.Hannah Wilson David, I am
+diagnosed with ovarian cancer which my doctor have confirmed that I
+have only some weeks to live so I have decided you handover the sum
+of($12,000.000 ) through I decided handover the money in my account to
+you for help of the orphanage homes and the needy once
 
-Can you please check my recent proposal? I recently stumbled over such
-an issue on the mx8mm-evk as well but with the 32k clock provided by the
-pmic. Unfortunately I forgot to add you to the to list, I will change
-that. If that proposal will fix your problem, I would like to go the
-generic way.
+Please   kindly reply me here as soon as possible to enable me give
+you more information but before handing over my bank to you please
+assure me that you will only take 40%  of the money and share the rest
+to the poor orphanage home and the needy once, thank you am waiting to
+hear from you
 
-https://patchwork.kernel.org/project/linux-clk/list/?series=676522
-
-Regards,
-  Marco
-
-
-> 
-> This patchset could also benifit AMP case, check the two commits
-> commit 19565ea12d61 ("clk: imx: add mcore_booted module paratemter")
-> commit d097cc045b64 ("clk: imx8mp: remove SYS PLL 1/2 clock gates")
-> Although I not plan to drop the upper two patches, this patchset
-> exposes opportunity for better power consumption.
-> 
-> Peng Fan (2):
->   dt-bindings: clock: imx8m/imx93: introduce fsl,always-on-clocks
->     property
->   clk: imx: support fsl,always-on-clocks
-> 
->  .../bindings/clock/imx8m-clock.yaml           |  4 ++++
->  .../bindings/clock/imx93-clock.yaml           |  4 ++++
->  drivers/clk/imx/clk-imx8mm.c                  |  2 ++
->  drivers/clk/imx/clk-imx8mn.c                  |  2 ++
->  drivers/clk/imx/clk-imx8mp.c                  |  2 ++
->  drivers/clk/imx/clk-imx8mq.c                  |  2 ++
->  drivers/clk/imx/clk.c                         | 21 +++++++++++++++++++
->  drivers/clk/imx/clk.h                         |  2 ++
->  8 files changed, 39 insertions(+)
-> 
-> -- 
-> 2.37.1
-> 
-> 
-> 
+Mrs,Hannah Wilson David.
