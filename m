@@ -2,234 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0BC5B6ABF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5B95B6ACB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiIMJeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S231445AbiIMJfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiIMJeD (ORCPT
+        with ESMTP id S230248AbiIMJfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:34:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5185F5B05E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663061641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K9tJ9sQhd6nvPP4b0Ne81nbqJQEp2juSZk9CIj/eGcA=;
-        b=YcjDzlbJTCagwgxly8tkZednpf0WArZl0+4kLi/MK/1oV9AZ69IW3iKqNb0Wj5acJo7qaH
-        TUr1uxDqpI8acRibdCnt2zSexN3RBQTc8s5l2aGKcJrESlmyyFzrw2CLmWWneJAxV9g0rg
-        XS6vbo0f2uoN6r8Vchzz9X6uYRPsz9c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-43-jxmeXWVPMMiI2j9LiX5lMw-1; Tue, 13 Sep 2022 05:33:59 -0400
-X-MC-Unique: jxmeXWVPMMiI2j9LiX5lMw-1
-Received: by mail-wm1-f69.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so6220455wmq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:33:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=K9tJ9sQhd6nvPP4b0Ne81nbqJQEp2juSZk9CIj/eGcA=;
-        b=aXu7NK7lu/ayc5oCdeb3edvjWsIdfFJjrhRHn5hUe1iwaWPrSU7xPdRpwp05hRoGiF
-         ubU9g+LmmhQds3XxE8rP8CYwvPIHejmfYhXlGrHVmGGDs+s6htoUCbXzlqcAiiTBtNB3
-         MzxgZOSF0rc2snU7Ni/wz8xyBXUo4fs/0twV8+6pvUoeb856VidMnAXVdeOLJ+4i2z8z
-         +zmgJQkUHI3M6cKS3qhqNPmqEznQJvaBSURQFHcWVoJ3AluWWdlTPCuEw2r/hbspz1SK
-         yPJGMDilxnFgMIvOoUcpETp+QbjGh7Vl+OWkDHd8DfLypfuIw2ZTbFqfjDH2lYYpiQbL
-         t4Rw==
-X-Gm-Message-State: ACgBeo1aKJ8Thi4H5CVKg6ePzCHTf2Y5BMKszMIEClLAv54x1Jq2zJdo
-        PvmG5cDLtCpuIpHcQ3k1sioBg5mTMCdVXnG/D8KOUTkOD/3KvhdPJlBzlw+LLvvQGrRIUt3NVYe
-        iqmMolKhUIuvIYJShA+QQvUz/QQKDuLGsgUN8YKRec+Z+G3xx/H5GoN0k831hSQkT9vzCfU47Sg
-        M=
-X-Received: by 2002:a5d:6d50:0:b0:225:89b2:a03a with SMTP id k16-20020a5d6d50000000b0022589b2a03amr18613879wri.51.1663061637243;
-        Tue, 13 Sep 2022 02:33:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4eOBQBD+/cVY3kS1nmoR6/Cp/Tyj03Enj/AhHo+tzC7Qbs4FUAC9zmUaM42HPjmCbgZdD4Uw==
-X-Received: by 2002:a5d:6d50:0:b0:225:89b2:a03a with SMTP id k16-20020a5d6d50000000b0022589b2a03amr18613853wri.51.1663061636997;
-        Tue, 13 Sep 2022 02:33:56 -0700 (PDT)
-Received: from minerva.access.network ([185.122.133.20])
-        by smtp.gmail.com with ESMTPSA id o16-20020a056000011000b0021e4829d359sm9752455wrx.39.2022.09.13.02.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 02:33:56 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v2] drm/plane-helper: Add a drm_plane_helper_atomic_check() helper
-Date:   Tue, 13 Sep 2022 11:33:39 +0200
-Message-Id: <20220913093339.106625-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 13 Sep 2022 05:35:36 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC15717ABF;
+        Tue, 13 Sep 2022 02:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663061733; x=1694597733;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
+  b=Hliegv7cy3qomQoJglFbtNr8W+odDsuAkJ/3QvL4HOJW50VtmUuQuK46
+   CDdPetGUUoWJo952Ou4mjoPSwZuPBFwIRk456dKnAbVwTwVjM7Chfkzah
+   oYws+2KdwdnVxeKs7dzBFw4GDl8OTyJNlxz/OX0+KfKCsukqrolNWBB+e
+   G/yit1H5jNUKy5FunRO+R1UZK5UwsjgrPf8PlK1RS5qt40/v8HoJxfWO9
+   qmqMc5z/BJZPkT8X9lJR80s3e5I2ASsdaZ/W2bISSVC8P6yIcRS7lz4sT
+   vVVyKTGC4mI7zR5UjjFX4e0hJSmKcp8finx5duYHyKdMgmdzrmUk59YX4
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="180264256"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 02:35:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 02:35:32 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 13 Sep 2022 02:35:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LeOozOhZnhvOBER+ghRl1juh+0VbuE6Y0pB3l6HxABmi3XYMx2yyp+6tIzRhm9gcedUZ3JUvLBRwimUx+0qYqsjyBYnlHpcfrDcFO6aFOl3JzydPZ69vc2pzdyOGgY2bR7ofPtZjDv95bnonU9e/eoQiPOEX/Ej3V4PkCpoV9QKa/e2u3xjeZGh2lbsRJC0E4GycuLM7l8a11/Tnfvo7O59bmV8OPlectwDbq7iHbgPv29caF6ETlsCRs07J/qJN07V75pdSeGpoO6orI8RJLlCjzIS0W5U2kwKegvR+e6Fzdt74/ocKZ4IE6aHBzMonJTFtb1u1FCTW68oC6QF/EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
+ b=oFkLI/ZPstwHgMcwBTADXmiPmBQi6LSt98guT8K3XUfGPL5js/tRfqOqh7G6kVOOuBc8hljXsVJoilqxGaiX9F5Z+g9BnOWBbtQ1myXu3X7rdL5NJrIRVNZlgs7gU8Z4CLoKSMD98SCSK8qMoqSlFP4e6LswJNm0hEyO5EetbCt6NSMR8wpCUtjjpOjMAK1i9G3pGSM1FpsfZ8GqTCcoazRSiaxH9+lEsK8HhQjBleULzEW26Q1BuITM7AOcAyk0r71de0+FUroR4x65i0WfULBPk5nbz15Fwj2sbb4MbJL346UfSi4NkfIskFXhJvA8dh7ZKTCKcvYAEL7pJT00LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
+ b=co14MTtj6IthUW0QrGPnpAJ/XrDNovj4nKoOC8uUtudT47XjM1rDKrYQj90WgGXUTpdtiEhyOurSTZT/XztnoOZBnbG4zNnh6/NhhA+wSlZB0X+SxSNbS0O6bwT27kUL2C7/CqF65/AVLJn5V1GszSQDbqTvVUKsCCIHGDK3rrk=
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
+ by MW4PR11MB5871.namprd11.prod.outlook.com (2603:10b6:303:188::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
+ 2022 09:35:28 +0000
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::e8ff:82ac:b76d:c61c]) by BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::e8ff:82ac:b76d:c61c%4]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 09:35:28 +0000
+From:   <Sergiu.Moga@microchip.com>
+To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>
+CC:     <lee@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Claudiu.Beznea@microchip.com>, <richard.genoud@gmail.com>,
+        <radu_nicolae.pirea@upb.ro>, <gregkh@linuxfoundation.org>,
+        <broonie@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <jirislaby@kernel.org>, <admin@hifiphile.com>,
+        <Kavyasree.Kotagiri@microchip.com>, <Tudor.Ambarus@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
+ SAM9260 compatibles to SAM9x60
+Thread-Topic: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
+ SAM9260 compatibles to SAM9x60
+Thread-Index: AQHYwfjCQbG755VmlEGUqK2TrhMH7a3VeaSAgAAuKICAAK1+AIAFHfCAgAAyC4CAACijAIABTCEAgAAF4YCAAAMZAIAAAVuA
+Date:   Tue, 13 Sep 2022 09:35:27 +0000
+Message-ID: <bf1d7b3e-c542-fbe1-d904-e11f1d1d5ec2@microchip.com>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-7-sergiu.moga@microchip.com>
+ <9aa29d74-b1fc-d00e-dee4-57f277a366ab@linaro.org>
+ <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
+ <20220909013644.GA3731620-robh@kernel.org>
+ <b6b044f6-de87-e85b-0b51-e957b90622ab@microchip.com>
+ <aa6d8c7d-1723-7674-2142-a5aafe30e570@linaro.org>
+ <77d38e3f-6d8c-dbb1-2e66-c768d95b5e35@microchip.com>
+ <5f8ca612-5a89-db3a-42f3-a0613c192a87@linaro.org>
+ <888b8ab9-f8cb-2e1f-465c-3cb97187fce0@microchip.com>
+ <f9e03913-b3dd-c82e-8c63-d912c0bbf443@linaro.org>
+In-Reply-To: <f9e03913-b3dd-c82e-8c63-d912c0bbf443@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR11MB2758:EE_|MW4PR11MB5871:EE_
+x-ms-office365-filtering-correlation-id: 3d3e9886-25aa-4525-7421-08da956b4b10
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8iNt661UGAwEpBAqTSxAAHjUdwwgDKIkz95a4wYNcKSLXK5/X8KOXDDLi5mF9Ke0iFlnMs37CrQ9WZseKqPhuYqCTjOJgBut4urrVZCinwosJLXHDEsOsnjze2SaDxQ7oHml31T83/IONNRiqLt3ZAIuC6kJpOB/esS2AXKhG5dBnFXOHhvasghVASbpyRqg3uJLutN8nPNZ1yXlTuLTTiCOZAbHezRm4XSpipjGcII7SpfH5at7kMJbVvpUgNbtYdbIrExKFjel4QDTwDch4b4/As2OxFVh17KRVkgCW/LxkF+qJBEXfmurTLw+wAaWWV8BeOi901xaPlgDup41ZdE+pyLWGMUG6awBwSO3Nw8HjBdlcIlsYbR0Yn9BVDBAXipsnwJ8DSVD4tI+tm19dW2nc3v5dOSMIEgI9K2bpVpwbiPR8V8BkFzJr8aQNXzr3aNV3Ja73zBgFppAhXJoDnl/J4Noe0+OImLgq9L99aH2U4heEwKqDlosYwfhBq9+5NCX568WbuDRWJOWcu9AjrYkplDXWGMK8zVWWWfJIZWXq735ky2pMYrIu+qyDh8nWZBb+S+BSf8Npl7HaSBPFKrqugFAMcdRH4DamDr/nDG8gXKMOX+A3uRNbm7/pLxvh8Id0CalZUDjN1sf3bEBTijJjyhtQf44BmVt7rrsZ2E/tZswRx5zkugdJRgfETtfZwU2AznKPWazt9S9eeEi+WnJcveSpUrwHxgCTapbZnUtZlyvNTuiY0RtPtiXVpsyEFUiDIaoITa48YjPFA2qwCfmvBOHO5U+DR97BjX5i14=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(346002)(39860400002)(396003)(451199015)(4326008)(31686004)(71200400001)(122000001)(478600001)(6486002)(38100700002)(8936002)(5660300002)(6512007)(66476007)(186003)(66946007)(64756008)(26005)(66556008)(2616005)(110136005)(6506007)(7416002)(76116006)(38070700005)(53546011)(41300700001)(86362001)(31696002)(83380400001)(36756003)(8676002)(66446008)(91956017)(54906003)(2906002)(316002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnhZVnlZRk5UeUZDSm1JTmxXRFZsUEtkNnR1Z3pnSm16QnJocE9sVFF6VndU?=
+ =?utf-8?B?QTlDWlE2Mlk4ZXR6bFlzMW96V2JKd1ByY2tFWld0K29iQ3pNSElSTlJpbG9r?=
+ =?utf-8?B?U1JFblBhSFpKVXQ5cTc5S3l2bC8zelZldzhsaWpTSXRabDlOcGorWkVndU9H?=
+ =?utf-8?B?Y3BxNk9TZ0NzMEVxZDlnejROaUNqczNiTXlEa29CRDR5NmpyN2x0aTUva3Ey?=
+ =?utf-8?B?RFQxTk9QQlNEN0NuOWRUOE5QQlVVZG1pN2IycVBDRkZMcjhYNTFhVEJ2RjdJ?=
+ =?utf-8?B?MWJ3WXR3L2l4ZHNPZE0zVWNEb1BTQlpVa3FCaXRFYmlST2NBM0xzVXd4Z0Ni?=
+ =?utf-8?B?MHRGVEJWaG5rdU1NbVRvK0NEYnlhczgvMVltdFlIVTA5U0M1bnFEWDY3amRH?=
+ =?utf-8?B?ZUFzRUl5b0NMS3Btams1Q29vazJnR0hadkVOQzZUZmxibWM5Mm5sdjhRaVdz?=
+ =?utf-8?B?YzBMY3Q4eXl3cFpwNGpUd3lOcWVsWjl3Rlc3SHk5cUMwVzNGSXpDN3JXWlRy?=
+ =?utf-8?B?OFozTUJWMVZSSkhXT3dLa2szR3kzcXpQTk9EY2c0TXhHaXE3VmE5aFkvSnJJ?=
+ =?utf-8?B?bThUeFZ0VGh5Nm9rbDkzekx2cFQraDBvZ05lOUZYUjh2S1dhSUtVSGJoZ0xp?=
+ =?utf-8?B?ZElkUVNDK3RXVnpWeXRSZEZzaGwrNStnVnBDRnd4OGU4c0RFS0NWQjV0K244?=
+ =?utf-8?B?eTR1ZzNEUnN3Q2VzdlZUcGE0Zm1WZU5NRWdqaG1WSGttQldrdFpJRDFFWDd1?=
+ =?utf-8?B?WXlJNHVtdjZqR29vQVF5cWJnOHlaVHR0Rmg4S2lHMG1vYjVTWmJZR2VwL1pT?=
+ =?utf-8?B?cXlDd2ppTFNINEszeG1ZSWN6RzllVWwyYjFtQ0V3anhtK3dUZXFyTUFPQnR5?=
+ =?utf-8?B?anZjcGZoNW1LY09pbFRBVVh2UXdOSnF1WFhwYm01MjBEVGpQcG1rK1B5OC8z?=
+ =?utf-8?B?Njg3QU1iUUJMNlVyZEFSUmNITkpKQ0k0WTV6NnZEaGFac2U3d0pHeE94UHQv?=
+ =?utf-8?B?MThFWmhJVkZsZ2ZXdXlPL2hNaHVzbVREWE9NTE1Fa3F0ZTVzS25ZaE5keFhW?=
+ =?utf-8?B?ZmFRM0U4ZHRaQWhjUjZmejd6eWZ1Wm52eGpLb09KKy96SXdNRUgzZkFaNnJq?=
+ =?utf-8?B?Q2F3RzZXWnVVODVJZjVkTmRWWE9oNGk2TkV5YkVBVTRDTVlkSXhDUHFPTldu?=
+ =?utf-8?B?OXFsSjUyZjhJMm4ycWdZNkJjOENOc3VYZmsrdE9qUGJZVktvb3RoOTZYcWhT?=
+ =?utf-8?B?SGRoY21POU1Va0lJNS9DTktDRDdoV3hzSzZBNW5CbG9iYzZ4UnhXaGVQWENF?=
+ =?utf-8?B?blNVZnQzSHFJdkZEcHVNamRJSC82Q1FTUHVjQ21Ed2tmM0Y2dkhyMHB2dlpW?=
+ =?utf-8?B?aFdBRFJucGhURTB6U2c1dUh3d3JFVE16TUYrOWlZUllUMVlhcFNoQThzTXdD?=
+ =?utf-8?B?Mm91Nk1xdStzd1kxVjVWVTlNZEF0a05QWkNBU1k1Q1lnNkJCL3FaOWRXWDNm?=
+ =?utf-8?B?VVdhdWw3Y1hxUTRXMTB1WFVSVTFRVFNrNVJxSURtQlpVdytmY05oVU5YbXdR?=
+ =?utf-8?B?c0FBVGduU0dUcXVNbWlNZW9tbFZ3ZVhOUzFOK05TOTI1T2dxVHB3RmgvOEpo?=
+ =?utf-8?B?SDY2clZKaEs3dFc1RHhtUm9kbnE5cEJnZFFtQldJSUJpcDdUYUc5TTZ0QVZD?=
+ =?utf-8?B?cEhPV1htMFkvdzVjcFNoNlRDQ3lEN3JBbWRMdFdUUmhEc2NOT2VKTGhqYzJk?=
+ =?utf-8?B?aFBYZmkxZ21XZnpWcHhJWERLOUlyMWVILzRiVmgxc3hTcXpDMG5QbmNPZmtH?=
+ =?utf-8?B?Umt4RlVrdTlESThEbXIyVE9hMUVnQlBIY1poTDZKTlFiZVk0eXFid29ZSGpp?=
+ =?utf-8?B?V1N6UHViNlpNMUI0MCtpTnZlMjlUckJxMDNhZWRkMHpmNnRlZ0ROdHdWRm5p?=
+ =?utf-8?B?VDZWanVJdnY5S3l6eld3N3Azb01ocTRQNWNDbUtQbVpGeU5CcHVLN211b0tu?=
+ =?utf-8?B?aHVhbUJyMjFnMi8wdi9PWEFxSjJ1MFl0OERlT3NrK0d5Y1d0SFJvV1BFWWhT?=
+ =?utf-8?B?dVlZaDJISDI5VmpBR0tKVVJPU3BGK2JhNi9kbmJqWUJndUo4MHF6L1FlbHNi?=
+ =?utf-8?Q?UZ2L8/hpEazmkjeXYyJkRupeA?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1E0DE51AB51E024085C466D33B77780C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d3e9886-25aa-4525-7421-08da956b4b10
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 09:35:27.9286
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cxWwZPGVbyjZvGG2sh8UahuhUnv8xxQJah/j067zbTkcPngBs59lQEjCIa1XhzTSnTEp7sPK1qS5eqOGsQxQ8qnEQVSAOFNAiO39nMOLsDQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5871
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provides a default plane state check handler for primary planes that are a
-fullscreen scanout buffer and whose state scale and position can't change.
-
-There are some drivers that duplicate this logic in their helpers, such as
-simpledrm and ssd130x. Factor out this common code into a plane helper and
-make drivers use it.
-
-Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
-
-Changes in v2:
-- Fix `new_state` field comment (Ville Syrjälä).
-- Rename `new_state` to just `state` (Ville Syrjälä).
-
- drivers/gpu/drm/drm_plane_helper.c | 28 ++++++++++++++++++++++++++++
- drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
- drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
- include/drm/drm_plane_helper.h     |  1 +
- 4 files changed, 31 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
-index c7785967f5bf..2165390863f4 100644
---- a/drivers/gpu/drm/drm_plane_helper.c
-+++ b/drivers/gpu/drm/drm_plane_helper.c
-@@ -278,3 +278,31 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
- 	kfree(plane);
- }
- EXPORT_SYMBOL(drm_plane_helper_destroy);
-+
-+/**
-+ * drm_plane_helper_atomic_check() - Helper to check primary planes states
-+ * @plane: plane to check
-+ * @state: atomic state object
-+ *
-+ * Provides a default plane state check handler for primary planes whose atomic
-+ * state scale and position is not expected to change because the primary plane
-+ * is always a fullscreen scanout buffer.
-+ *
-+ * RETURNS:
-+ * Zero on success, or an errno code otherwise.
-+ */
-+int drm_plane_helper_atomic_check(struct drm_plane *plane, struct drm_atomic_state *state)
-+{
-+	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
-+	struct drm_crtc *new_crtc = new_plane_state->crtc;
-+	struct drm_crtc_state *new_crtc_state = NULL;
-+
-+	if (new_crtc)
-+		new_crtc_state = drm_atomic_get_new_crtc_state(state, new_crtc);
-+
-+	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
-+						   DRM_PLANE_NO_SCALING,
-+						   DRM_PLANE_NO_SCALING,
-+						   false, false);
-+}
-+EXPORT_SYMBOL(drm_plane_helper_atomic_check);
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index 79e8e2017c68..28cf9c87f86d 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
- 	return ret;
- }
- 
--static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
--						     struct drm_atomic_state *new_state)
--{
--	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
--	struct drm_crtc *new_crtc = new_plane_state->crtc;
--	struct drm_crtc_state *new_crtc_state = NULL;
--
--	if (new_crtc)
--		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
--
--	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
--						   DRM_PLANE_NO_SCALING,
--						   DRM_PLANE_NO_SCALING,
--						   false, false);
--}
--
- static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
- 						       struct drm_atomic_state *old_state)
- {
-@@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
- 
- static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
- 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
--	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
-+	.atomic_check = drm_plane_helper_atomic_check,
- 	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
- 	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
- };
-diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-index 777ccd250871..ea5b3239a659 100644
---- a/drivers/gpu/drm/tiny/simpledrm.c
-+++ b/drivers/gpu/drm/tiny/simpledrm.c
-@@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
- 	DRM_FORMAT_MOD_INVALID
- };
- 
--static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
--						       struct drm_atomic_state *new_state)
--{
--	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
--	struct drm_crtc *new_crtc = new_plane_state->crtc;
--	struct drm_crtc_state *new_crtc_state = NULL;
--	int ret;
--
--	if (new_crtc)
--		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
--
--	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
--						  DRM_PLANE_NO_SCALING,
--						  DRM_PLANE_NO_SCALING,
--						  false, false);
--	if (ret)
--		return ret;
--	else if (!new_plane_state->visible)
--		return 0;
--
--	return 0;
--}
--
- static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
- 							 struct drm_atomic_state *old_state)
- {
-@@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
- 
- static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
- 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
--	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
-+	.atomic_check = drm_plane_helper_atomic_check,
- 	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
- 	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
- };
-diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
-index 1781fab24dd6..7760b27b0323 100644
---- a/include/drm/drm_plane_helper.h
-+++ b/include/drm/drm_plane_helper.h
-@@ -41,5 +41,6 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
- int drm_plane_helper_disable_primary(struct drm_plane *plane,
- 				     struct drm_modeset_acquire_ctx *ctx);
- void drm_plane_helper_destroy(struct drm_plane *plane);
-+int drm_plane_helper_atomic_check(struct drm_plane *plane, struct drm_atomic_state *state);
- 
- #endif
--- 
-2.37.1
-
+T24gMTMuMDkuMjAyMiAxMjozMCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMTMv
+MDkvMjAyMiAxMToxOSwgU2VyZ2l1Lk1vZ2FAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+Pg0KPj4+
+IExldCBtZSByZXBocmFzZSBpdDoNCj4+Pg0KPj4+IFdoYXQgeW91ciBjb21taXQgaXMgZG9pbmcg
+aXMgcmVxdWlyaW5nIGFkZGl0aW9uYWwgZmFsbGJhY2sgY29tcGF0aWJsZXMuDQo+Pj4gVGhlcmVm
+b3JlIHRoZSBjb21taXQgbXNnIHNob3VsZCBhbnN3ZXIgLSB3aHkgZG8geW91IHJlcXVpcmUgYWRk
+aXRpb25hbA0KPj4+IGZhbGxiYWNrIGNvbXBhdGlibGVzPw0KPj4+DQo+Pg0KPj4NCj4+IFRoZSBh
+ZGRpdGlvbmFsIGZhbGxiYWNrIGNvbXBhdGlibGVzIGFyZSByZXF1aXJlZCBiZWNhdXNlIHRoZSBk
+cml2ZXIgaW4NCj4+IHF1ZXN0aW9uIG9ubHkga25vd3MgYWJvdXQgdGhlIGF0bWVsLGF0OTFzYW05
+MjYwLXVzYXJ0IGNvbXBhdGlibGUuDQo+PiBGdXJ0aGVybW9yZSwgaXQgaXMgYWxzbyBhIGJldHRl
+ciByZXByZXNlbnRhdGlvbiBvZiB0aGUgZmFjdCB0aGF0IHRoZQ0KPj4gc2VyaWFsIElQIG9mIDl4
+NjAgaXMgYW4gaW1wcm92ZW1lbnQgb3ZlciB0aGUgc2VyaWFsIElQIG9mIDkyNjAgKGl0DQo+PiBj
+b250YWlucyBtb3JlIGhhcmR3YXJlIGZlYXR1cmVzIG5vdCB5ZXQgaW1wbGVtZW50ZWQgaW4gdGhl
+IGRyaXZlcikuDQo+Pg0KPj4NCj4+PiBJbmNyZW1lbnRhbCBjaGFyYWN0ZXJpc3RpY3Mgc291bmQg
+dG8gbWUgb3B0aW9uYWwuIEkgY2FuIGluY3JlbWVudA0KPj4+IHNhbTl4NjAgd2l0aCBzb21ldGhp
+bmcgb3IgSSBjYW4gc2tpcCBpdC4gQnV0IHlvdSBhcmUgbm90IGRvaW5nIGl0Li4uDQo+Pj4gc2Ft
+OXg2MCB3YXMgYWxyZWFkeSB0aGVyZSBhbmQgbm93IHlvdSByZXF1aXJlIGEgZmFsbGJhY2suDQo+
+Pj4NCj4+PiBCZXN0IHJlZ2FyZHMsDQo+Pj4gS3J6eXN6dG9mDQo+Pg0KPj4gU28sIHdoYXQgaXMg
+eW91ciBvcGluaW9uIG9uIHRoZSBmb2xsb3dpbmcgY29tbWl0IG1lc3NhZ2U6DQo+Pg0KPj4gIkZp
+eCBzYW05eDYwIGNvbXBhdGlibGUgbGlzdCBieSBhZGRpbmcgdGhlIHNhbTkyNjAgY29tcGF0aWJs
+ZXMgYXMNCj4+IGZhbGxiYWNrLCBzaW5jZSB0aGUgYXRtZWxfc2VyaWFsIGRyaXZlciBvbmx5IGtu
+b3dzIG9mIHRoZSBsYXR0ZXIncw0KPj4gY29tcGF0aWJsZS4gVGhlIGF0bWVsX3NlcmlhbCBkcml2
+ZXIgb25seSBoYXMga25vd2xlZGdlIG9mIHRoZSBzYW05MjYwDQo+PiBjb21wYXRpYmxlIGJlY2F1
+c2UgaXQgZG9lcyBub3QgaGF2ZSB0aGUgc2FtOXg2MCdzIHNlcmlhbCBJUCBzcGVjaWZpYw0KPj4g
+ZmVhdHVyZXMgaW1wbGVtZW50ZWQgeWV0IGFuZCBhZGRpbmcgYW4gZW1wdHkgY29tcGF0aWJsZSB3
+aXRob3V0IGFkZGluZw0KPj4gc3VwcG9ydCBzcGVjaWZpYyB0byB0aGF0IGNvbXBhdGlibGUgd291
+bGQgYmUgbWlzbGVhZGluZy4gVGh1cyBwcmVmZXIgdGhlDQo+PiBmYWxsYmFjayBtZWNoYW5pc20g
+aW4gdGhlIGRldHJpbWVudCBvZiBhZGRpbmcgYW4gZW1wdHkgY29tcGF0aWJsZSBpbiB0aGUNCj4+
+IGRyaXZlci4iDQo+IA0KPiBJdCdzIGZpbmUuIEFsc28gY291bGQgd29yazoNCj4gDQo+ICJSZXF1
+aXJlIHNhbTkyNjAgZmFsbGJhY2sgY29tcGF0aWJsZSBmb3Igc2FtOXg2MCwgYmVjYXVzZSBzYW05
+eDYwIGlzDQo+IGZ1bGx5IGNvbXBhdGlibGUgd2l0aCBzYW05MjYwIGFuZCBMaW51eCBkcml2ZXIg
+cmVxdWlyZXMgdGhlIGxhdHRlci4iDQo+IA0KDQoNClRoaXMgdmVyc2lvbiBsb29rcyBiZXR0ZXIg
+aW5kZWVkLiBTdW1zIGl0IGFsbCB1cCBhbmQgaXMgb25seSAyIGxpbmVzIDopLiANClRoYW5rIHlv
+dSB2ZXJ5IG11Y2ggZm9yIHRoZSBzdWdnZXN0aW9uIGl0IGlzIGdyZWF0bHkgYXBwZWNpYXRlZC4N
+Cg0KDQo+IElmIGl0IGZpeGVzIGFueSBvYnNlcnZhYmxlIGlzc3VlIGxpa2UgbGFjayBvZiBkcml2
+ZXIgYmluZGluZyB0byBEVFMsIHlvdQ0KPiBjYW4gYWxzbyBtZW50aW9uIHRoYXQuDQo+IA0KPiBC
+ZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KDQoNClRoYW5rcywNCglTZXJnaXUNCg==
