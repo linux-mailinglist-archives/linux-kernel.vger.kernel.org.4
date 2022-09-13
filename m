@@ -2,149 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA5A5B79F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C245B79F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiIMSpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S231574AbiIMSqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiIMSpY (ORCPT
+        with ESMTP id S231305AbiIMSpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:45:24 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60053.outbound.protection.outlook.com [40.107.6.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F1272FF5;
-        Tue, 13 Sep 2022 11:25:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NEZ61zWH1xhk6X/flD86TjFPXeShSolwl59Pv39fZvmUGaF04mEJO2caDTTgE/CGtdmG5bpwlbcDHzzsDMr1BfT6DTnpATgPignVXPtHR8TdKkwub0jUn5yxCYs8Igj871CmtT12+NZRSeM87lDjlGYTScfxG1Zn8UTpuikg4VoeBFE5v4ohX69F94lLam8UUtF/yuYt2lu1/ZSuI7wrFxRTzOgKVQ60GGbTxVb5rNsMCnwaFjGVGPBN4vJ4Wy3Q8stJbuIX51VUMRAh/ZDyLy5r9OxnJz82qERN+HwbI/bnbtU1wWvrhY06M2ehZYfhstYT/62qSc+D1R9wG2c89w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7JJb0+KLIkszdvuFJ8NTPM1cCUfVgIzleKkqxxBKF0A=;
- b=AMpRU2Mv2eYpOaDZSL0z2SYol0zqWFNcjCIaflF4LABwr/mnFe1iXzxoc73MuinDRB56Ueg3Vzc1FWVgNSRm2Xh6MARNmr4xy8C7u2ax8KV17FmZ0o3vG+4wJucr5ac3R4J/zFtZN/KghEbN+nYaxkieP+KOb+YAIfj9qxliPfDmNaDUYdBwTuCupLTGmNHZNarIFHmfl48DUa/gzMXDTpexC4h1wws/Z0VX6+BlrE63TBy5cwy3pGcM960VMAEiMAOmMZu0SbY+VUDINGNIP8OwRETpkl6Oldzowcie3VuoaLOvNCGqkMoOaGjGA2gVgEIZaBMtVKu5B9Jqst8mEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=variscite.com; dmarc=pass action=none
- header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7JJb0+KLIkszdvuFJ8NTPM1cCUfVgIzleKkqxxBKF0A=;
- b=m7hI0u0X+aOzKXeKOUUxVDIbZ50ZCD7D6ls6gSs/KhMO/hofOEPUEyTEPXimOj3Rv9qIpd3PVoMvZdU7VAkf6Fc643Noi4Bv/FSs8jbavOU7ChRbPqRbr1wEdR3/1gbYrd39Ffb8JdV5sesoXoQw7frCphwHZMlc2m+G9AT/EDrsfg/OgPNZMj1MrzGeEHstpnWATprCOMBarUdH4OEpek/wWy8eePUoMzqHB/WKwZaIwCIpbc4s1MbTnVljocx+a+PFKvhmAfHaF+MdQVd1AS/z0GbYbUcpH96d5kDfH8/vhaLQ9b8HiVQ3UiLuH1vxPJ4z7nYmdcu5LaiGBK3E3A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=variscite.com;
-Received: from DB9PR08MB6825.eurprd08.prod.outlook.com (2603:10a6:10:2af::9)
- by DB9PR08MB6716.eurprd08.prod.outlook.com (2603:10a6:10:2a9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Tue, 13 Sep
- 2022 18:25:07 +0000
-Received: from DB9PR08MB6825.eurprd08.prod.outlook.com
- ([fe80::a88a:b945:e903:42a8]) by DB9PR08MB6825.eurprd08.prod.outlook.com
- ([fe80::a88a:b945:e903:42a8%9]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 18:25:07 +0000
-From:   Nate Drude <nate.d@variscite.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     eran.m@variscite.com, Nate Drude <nate.d@variscite.com>
-Subject: [PATCH v2 2/2] gpio: pca953x: introduce support for nxp,pcal6408
-Date:   Tue, 13 Sep 2022 13:24:36 -0500
-Message-Id: <20220913182436.589713-2-nate.d@variscite.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913182436.589713-1-nate.d@variscite.com>
-References: <20220913182436.589713-1-nate.d@variscite.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH0PR03CA0020.namprd03.prod.outlook.com
- (2603:10b6:610:b0::25) To DB9PR08MB6825.eurprd08.prod.outlook.com
- (2603:10a6:10:2af::9)
+        Tue, 13 Sep 2022 14:45:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF2D7B2A4;
+        Tue, 13 Sep 2022 11:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663093533; x=1694629533;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UblfnalyvGKyzOm1JXwjImFfqo89UXQzpAJ/gqq3rxM=;
+  b=kwlm2fhz1G36SiEAWp+TpWcgKAyaeZejAO3NJ9OmC/sgxQ3JkrHvvnKw
+   qQQW3xuFQ2iUkp+nzYW9XxFqRlNx1+BF+riFybks1ThzW01Oz642hurxi
+   6BsrWeV4LZ94YBMzaqIRrzp6TFWXD1bvUxPIkq9yB6LjWSCVB3uI4UCIW
+   mofIXTM6f3LtNnhmcTGq47v2NrupUnmfyqn5Sx3jQIefRqnZenIT5elfV
+   bGtQFLBX2TKjTgmzhaXVWO+nFPgIs+bQsT/9o9YUHYApHIOoRtt+ku2/z
+   PMRH4tosrz2w+5/GOHxTTdAM4JhjoZ4nmaBzvq0t3zZh0kkyN4Jsv911N
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299554408"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="299554408"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 11:25:32 -0700
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="792030996"
+Received: from ewcubbag-mobl2.amr.corp.intel.com (HELO [10.209.57.220]) ([10.209.57.220])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 11:25:31 -0700
+Message-ID: <a687a458-9bd2-472f-2243-9ab0fea8b8c4@linux.intel.com>
+Date:   Tue, 13 Sep 2022 11:25:31 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR08MB6825:EE_|DB9PR08MB6716:EE_
-X-MS-Office365-Filtering-Correlation-Id: 801f8038-c19c-459a-7677-08da95b548e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2H1w+5h5nPB4AxBlagomEfc+t5mCfAvu/WixxV/7Ot0DGpofVZ7P7iq9gSNUKse3EUWYQNW7MXdm21qefYIXB7YfeKWorx5vMrVk+cHet+tZNELR3xGs0V0xhjL2yqbtTLajEyj+wnE60JsCKECtkCQe+pSo4aiUyVQWoJo+r/XFGa3q21ezSTHklgRoJhFg5/xF1rNPRneR/cmm6ahXwdFa/9G464RBDHTMAbw93Q6XUYwTU4n56xAhgGAD2juNS/Al1mH1CgkBohHGUnnkuUpmyO10EsiaBiBc8flecDkifmZXemR0wsJQB2KYfUvZPI3y3Ed4/PDcjmNnGaZo1O27KCBEwLXrdYKWbp823JJzzBKagw8g6QlXtA175v1V+9lpK62U74gq9acAR38HIHvs5lKXe0rbhJfT8suYjnkJds71vqpxL+fJHGZvYyHHD7rn+6Q5ZZ1cgAdyylXWaxzLv5NRv9PhLOrAub2sYfdqZP5UAwCXpLn8fnQ8Qm9082lDSTmnHRrioizo5CW+NmN67nPrwprvxoOBR+qlA8wy6lajYPfYuy4bU1wUt4a1TQaKM/Gy9sAkIBRn+f+pofKvhzKj/echihmldqoz2dOXOJPMrqTpg2GJz34QU/Va1JqYjiryk9/DEQYA/NQ5wzViLlEWN8ipshz9C+soHEwsTfIeFQwiaslOhpJev9s0MdKOA3XDBQkI6+/75JXIUOeDYTj+W6nr5vZazh5L00s3xuCkC+YCZ1J4XCW4z4xT3xIEJWza+eCdtFGHeEpLig==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6825.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39850400004)(136003)(366004)(396003)(346002)(451199015)(316002)(1076003)(6506007)(2616005)(2906002)(52116002)(8936002)(66946007)(4326008)(38350700002)(38100700002)(110136005)(8676002)(107886003)(66556008)(36756003)(5660300002)(6666004)(66476007)(186003)(478600001)(41300700001)(6512007)(86362001)(6486002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DNjnQgn1JHg0DGPy0OwfdR8D9j5TngU5ju1dYPoaL3H89L94R610lmY5Te17?=
- =?us-ascii?Q?XTo0XGrCqMakDHCRkrWIaTYg/eDg8Dlyja14SxBJqHgPTf/BbsYuXxnz7z86?=
- =?us-ascii?Q?6H1GWShJnMrOhbw5wDaGdcaprHqG3lsiEmMSczY+VNF3WwYqcKWX+gNMMNuo?=
- =?us-ascii?Q?nreOf1306eFEpJ94yb5jczUqD/7DXTW1tbG2MxVbSa2jGntQCIG2isDIjzPw?=
- =?us-ascii?Q?t/6HmV5KCAAtl0zrpLD22qxpM6ytb9YViklDpmdXmq5eITdtnpNBC7lKFsNf?=
- =?us-ascii?Q?aoFVNT8hKqi+ucvAGvahYJj6vEdZTisEhC+EX4jN8n3QkSOUGK8G2Qsq7oul?=
- =?us-ascii?Q?kMWYXKvKwSU8hHviLHg48SoEtdnd6O6nKLW1pyb0CYeIBGPw40Q2oGSW13nM?=
- =?us-ascii?Q?WprR65ixstVQ3tqwD1gJ78OEqn7ixx1UbNNd2BIQvQBxnzN3+8X8ILhvxEan?=
- =?us-ascii?Q?ZwAl8rp4fdoslAdkZkfeEz9casp6Um6PDUyzXvoGn23WYJYfiuQF+0n1H0gm?=
- =?us-ascii?Q?E1f9ZjTFqud7U957c4Foxyl5krUyiHiLrI1u4ytX+jkXfboIBpakXtaIT86O?=
- =?us-ascii?Q?YlB0F16z6HsgWJfcTL08K3kye9rcq848G1t3Cfp/Ok7Dr/F+JzjrIN3NMezK?=
- =?us-ascii?Q?ZuOdAqkW4Q1Idf8DTZTvah6/goZqv5XgR1U+a4/lt/IUej1I0qkLaLrV2mJJ?=
- =?us-ascii?Q?onjM/3bw06cT6xddmFXuHpXsfMeZTGcyvoPA+eS9VMfNzJirHG5jTp5yTDSt?=
- =?us-ascii?Q?bMdiXyBkqhjMwMRkZVc1TgatEDAUJRmuyETX7M1IgEpBroFAjrBDIeLhcAEN?=
- =?us-ascii?Q?LG/LvpV0OZUpGCMn21jG1CjkQtqbrPXPg6v4nRm3j4el8R9n0ZdDswtjsIPw?=
- =?us-ascii?Q?ZQZTueKUY9a/xPsn4yTNXW310CYoa512mmTZwGS8WgTcZuF4e7HAPs0eRZi7?=
- =?us-ascii?Q?Sxg0TMiz5U7eHQIGR2EeZowr1yuDCIP9zmkPj969N/BYsmcTF5yjl3Z4MbWg?=
- =?us-ascii?Q?egZgTGx+UB07mR+z3mRp/vBo27fcS+PgpaDxpN14C4mrdLxWGFLldVLhJyf/?=
- =?us-ascii?Q?cYRcOzmcBe1ZZoHEVpEdghqq6z41QWfu8l9EPMbR6n2E0uoQO9ak+4yUr6DU?=
- =?us-ascii?Q?FVmhVqORZ2s0PoUifWjzpjZ1M+TX0zIMbWfvj4+PujbVHpEsw7ba1DDJ+RpA?=
- =?us-ascii?Q?ZcZg9cRMDF1d2IjypCAaQRMibRTCxamYQSr28tbPpFtw75hchrEdfOUa2nT3?=
- =?us-ascii?Q?Me2QrZAC1g9sdLHXtwJ/zBCbiJe7o16b2ySCIN7Ng8ZT0RDgaDswoKoNbo4H?=
- =?us-ascii?Q?wQ3SE4WMwSJF9RYP+yAD0ZMav5OCMTU4cDxJZC0w2yEOHrnKMznDySzzXP07?=
- =?us-ascii?Q?aBwGFr7od+Fpp++jbfXg2Dtubs7Ujzh+qYepoTD76u83YHV29S3ov1aJi5FW?=
- =?us-ascii?Q?8eBtsl/ew+7Xh1Dr8pIUQyZErZCO3YNueI4vWv0t7o6CZICblLElEGkE7BN9?=
- =?us-ascii?Q?Qwgu6RR26wHLJL06gv9ZaiLVstOJUWtZ4ss/l86c/ByPwvQN9hRuggUsXm33?=
- =?us-ascii?Q?A8PATKPkATgcZjx87WjUd5ZitCLZwX041jp/KVJl?=
-X-OriginatorOrg: variscite.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 801f8038-c19c-459a-7677-08da95b548e0
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR08MB6825.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 18:25:07.2822
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qx0/gyMw3LaNmFea0N6VzzGX2OFaA78tVSSNk/Pyw9ajcbhLxL70KtrHv7+8TuVP0Ahki5SyoiOp5mkolKUIiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6716
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
+ process
+Content-Language: en-US
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220913175440.wahcdmaumeqjgzmh@box>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220913175440.wahcdmaumeqjgzmh@box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NXP PCAL6408 is the 8-bit version of PCAL6416.
 
-Signed-off-by: Nate Drude <nate.d@variscite.com>
----
- drivers/gpio/gpio-pca953x.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 2925f4d8cef3..ba012ac7cd8c 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -89,6 +89,7 @@ static const struct i2c_device_id pca953x_id[] = {
- 	{ "pca9575", 16 | PCA957X_TYPE | PCA_INT, },
- 	{ "pca9698", 40 | PCA953X_TYPE, },
- 
-+	{ "pcal6408", 8 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6416", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6524", 24 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9535", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
-@@ -1243,6 +1244,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
- 	{ .compatible = "nxp,pca9575", .data = OF_957X(16, PCA_INT), },
- 	{ .compatible = "nxp,pca9698", .data = OF_953X(40, 0), },
- 
-+	{ .compatible = "nxp,pcal6408", .data = OF_953X(8, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
+On 9/13/22 10:54 AM, Kirill A . Shutemov wrote:
+> On Fri, Sep 09, 2022 at 12:27:08PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> Document details about TDX attestation process and related user API
+>> support.
+> 
+> "related user API support" sounds wrong to me.
+> 
+> Maybe just "related userspace API"?
+
+Ok
+
+> 
+>> Attestation details can be found in Guest-Host-Communication Interface
+>> (GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
+>> attestation".
+>>
+>> [Bagas Sanjaya fixed htmldocs warning]
+>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+>> ---
+>>
+>> Change since v12:
+>>  * None
+>>
+>> Changes since v11:
+>>  * Fixed htmldocs warnings.
+>>
+>>  Documentation/x86/tdx.rst | 75 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 75 insertions(+)
+>>
+>> diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+>> index b8fa4329e1a5..c9e3ecf86e0b 100644
+>> --- a/Documentation/x86/tdx.rst
+>> +++ b/Documentation/x86/tdx.rst
+>> @@ -210,6 +210,81 @@ converted to shared on boot.
+>>  For coherent DMA allocation, the DMA buffer gets converted on the
+>>  allocation. Check force_dma_unencrypted() for details.
+>>  
+>> +Attestation
+>> +===========
+>> +
+>> +Attestation is used to verify the TDX guest trustworthiness to other
+>> +entities before provisioning secrets to the guest. For example, a key
+>> +server may request for attestation before releasing the encryption keys
+>> +to mount the encrypted rootfs or secondary drive.
+> 
+> Maybe "may request attestation quote before ..."?
+> 
+>> +TDX module records the state of the TDX guest in various stages of guest
+>> +boot process using build time measurement register (MRTD) and runtime
+>> +measurement registers (RTMR). Measurements related to guest initial
+>> +configuration and firmware image is recorded in the MRTD register.
+>> +Measurements related to initial state, kernel image, firmware image,
+>> +command line options, initrd, ACPI tables, etc are recorded in RTMR
+>> +registers. For more details, please refer to TDX Virtual Firmware design
+>> +specification, sec titled "TD Measurement".
+>> +
+>> +At TDX guest runtime, the Intel TDX module reuses the Intel SGX attestation
+>> +infrastructure to provide support for attesting to these measurements as
+>> +described below.
+>> +
+>> +The attestation process consists of two steps: TDREPORT generation and
+>> +Quote generation.
+>> +
+>> +TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
+>> +from the TDX module. TDREPORT is a fixed-size data structure generated by
+>> +the TDX module which contains guest-specific information (such as build
+>> +and boot measurements), platform security version, and the MAC to protect
+>> +the integrity of the TDREPORT.
+>> +
+>> +After getting the TDREPORT, the second step of the attestation process
+>> +is to send it to the QE to generate the Quote. TDREPORT by design can only
+> 
+> The first use of QE abbreviation is before it is defined. -EPARSE.
+
+Yes. I already noticed it and fixed it.
+
+> 
+>> +be verified on local platform as the MAC key is bound to the platform. To
+>> +support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
+>> +Enclave (QE) to verify the TDREPORT locally and convert it to a remote
+>> +verifiable Quote. Method of sending TDREPORT to QE is implemenentation
+>> +specific. Attestation software can choose whatever communication channel
+>> +available (i.e. vsock or hypercall) to send the TDREPORT to QE and receive
+>> +the Quote.
+>> +
+>> +To allow userspace attestation agent get the TDREPORT, TDX guest driver
+>> +exposes an IOCTL (TDX_CMD_GET_REPORT) interface via /dev/tdx-guest misc
+>> +device.
+>> +
+>> +TDX Guest driver
+>> +================
+>> +
+>> +The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
+>> +device to allow user space to get certain TDX guest specific details
+>> +(like attestation report, attestation quote or storage keys, etc).
+>> +
+>> +In this section, for each supported IOCTL, following information is
+>> +provided along with generic description.
+> 
+> "for each" looks strange as we only have single IOCTL.
+
+I just want to give an overview of IOCTL documentation. Although we have
+only one IOCTL now, we have plans to extend it in near future. At least
+VERIFYEREPORT IOCTL will be added soon. Do you think I should still
+fix it? How about the following?
+
+In this section, in addition to generic information of IOCTL, following
+details are provided.
+
+> 
+>> +:Input parameters: Parameters passed to the IOCTL and related details.
+>> +:Output: Details about output data and return value (with details
+>> +         about the non common error values).
+>> +
+>> +TDX_CMD_GET_REPORT
+>> +------------------
+>> +
+>> +:Input parameters: struct tdx_report_req
+>> +:Output: Upon successful execution, TDREPORT data is copied to
+>> +         tdx_report_req.tdreport and returns 0 or returns
+>> +         -EIO on TDCALL failure and standard error number on
+>> +         other common failures.
+>> +
+>> +The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
+>> +get the TDX guest measurements data (with few other info) in the format
+>> +of TDREPORT_STRUCT. It uses TDCALL[TDG.MR.REPORT] to get the TDREPORT
+>> +from the TDX Module.
+>> +
+>> +Format of TDREPORT_STRUCT can be found in TDX 1.0 Module specification,
+>> +sec titled "TDREPORT_STRUCT".
+>> +
+> 
+
 -- 
-2.37.3
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
