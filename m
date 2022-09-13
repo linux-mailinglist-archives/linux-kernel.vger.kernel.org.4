@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732775B7474
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097825B72FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236136AbiIMPY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S232941AbiIMPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236017AbiIMPW4 (ORCPT
+        with ESMTP id S235117AbiIMO7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:22:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B487C31F;
-        Tue, 13 Sep 2022 07:37:15 -0700 (PDT)
+        Tue, 13 Sep 2022 10:59:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4D37435F;
+        Tue, 13 Sep 2022 07:28:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6294614E3;
-        Tue, 13 Sep 2022 14:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34DDC433D6;
-        Tue, 13 Sep 2022 14:30:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADCACB80F10;
+        Tue, 13 Sep 2022 14:27:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1844FC433D6;
+        Tue, 13 Sep 2022 14:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079414;
-        bh=hTIDCkkY+yz035+KYOS7FOKTLAS//Yd9joPVGfX1drQ=;
+        s=korg; t=1663079259;
+        bh=BfJiQhLhwrKqxBQes+zZPYx3vVbxiZ69uhmlnacsYLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2IRC1V7f1pivTex3EnKzJRgFe1PXdvdXkS64xWUhJT6C5HRzEzj7evITpYrAld/L
-         CyqQjQfamrcQNX1JdcTvU77JonM2zDBRbavv6YATXsKORThONK7nO/Sv/PRFbwP1A0
-         wwI/Rq8ryBVDPEmaj7kTlcJLMBMVlBv2qU8VHHGE=
+        b=y5oeKTjWx2PezWI+BR338LIH4cne+Ng3PdwMlwyVqJFq3Tfqxu+Re67on+U5cLrP5
+         DSuYBPqAVl8i54FbnOydUSts40tfvjtT+wZD0JtKOu4Bg1IoqpAFfyrGeuEb1XfBwF
+         r1R1W9B2Dx6lRZUlNdNO1zPMAwbheB8Np2WKEgK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 17/79] tcp: annotate data-race around challenge_timestamp
-Date:   Tue, 13 Sep 2022 16:06:35 +0200
-Message-Id: <20220913140349.707980737@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Woithe <jwoithe@just42.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.4 065/108] USB: serial: ch341: fix lost character on LCR updates
+Date:   Tue, 13 Sep 2022 16:06:36 +0200
+Message-Id: <20220913140356.414321363@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 8c70521238b7863c2af607e20bcba20f974c969b ]
+commit 8e83622ae7ca481c76c8fd9579877f6abae64ca2 upstream.
 
-challenge_timestamp can be read an written by concurrent threads.
+Disable LCR updates for pre-0x30 devices which use a different (unknown)
+protocol for line control and where the current register write causes
+the next received character to be lost.
 
-This was expected, but we need to annotate the race to avoid potential issues.
+Note that updating LCR using the INIT command has no effect on these
+devices either.
 
-Following patch moves challenge_timestamp and challenge_count
-to per-netns storage to provide better isolation.
-
-Fixes: 354e4aa391ed ("tcp: RFC 5961 5.2 Blind Data Injection Attack Mitigation")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Acked-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Jonathan Woithe <jwoithe@just42.net>
+Tested-by: Jonathan Woithe <jwoithe@just42.net>
+Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
+Cc: stable@vger.kernel.org      # 4.10
+Signed-off-by: Johan Hovold <johan@kernel.org>
+[ johan: adjust context to 5.4 ]
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/serial/ch341.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index e1d065ea5a158..0be9d5d3c032f 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -3468,11 +3468,11 @@ static void tcp_send_challenge_ack(struct sock *sk, const struct sk_buff *skb)
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -96,7 +96,9 @@ struct ch341_private {
+ 	u8 mcr;
+ 	u8 msr;
+ 	u8 lcr;
++
+ 	unsigned long quirks;
++	u8 version;
+ };
  
- 	/* Then check host-wide RFC 5961 rate limit. */
- 	now = jiffies / HZ;
--	if (now != challenge_timestamp) {
-+	if (now != READ_ONCE(challenge_timestamp)) {
- 		u32 ack_limit = READ_ONCE(net->ipv4.sysctl_tcp_challenge_ack_limit);
- 		u32 half = (ack_limit + 1) >> 1;
+ static void ch341_set_termios(struct tty_struct *tty,
+@@ -182,6 +184,9 @@ static int ch341_set_baudrate_lcr(struct
+ 	if (r)
+ 		return r;
  
--		challenge_timestamp = now;
-+		WRITE_ONCE(challenge_timestamp, now);
- 		WRITE_ONCE(challenge_count, half + prandom_u32_max(ack_limit));
- 	}
- 	count = READ_ONCE(challenge_count);
--- 
-2.35.1
-
++	if (priv->version < 0x30)
++		return 0;
++
+ 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
+ 	if (r)
+ 		return r;
+@@ -233,7 +238,9 @@ static int ch341_configure(struct usb_de
+ 	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
+ 	if (r < 0)
+ 		goto out;
+-	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
++
++	priv->version = buffer[0];
++	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
+ 
+ 	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
+ 	if (r < 0)
 
 
