@@ -2,106 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBD5B6AE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598C25B6AEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiIMJjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S231719AbiIMJkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiIMJje (ORCPT
+        with ESMTP id S231417AbiIMJkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:39:34 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2A10E9;
-        Tue, 13 Sep 2022 02:39:31 -0700 (PDT)
-Received: from letrec.thunk.org ([185.122.133.20])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28D9cu5U003944
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 05:38:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1663061946; bh=G7mfMTxIhO2dJDEzf6XiznIO1C37bfNYVMZnFYYDpfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Y6+LcTEHkFj2wDbDzypsKBa9asmbb+u9juMHKg/la5ygB9di9baoPrd7VsSQ4J4rq
-         O3CPHqjPzIpUq7+6bePkemcvx00k04ANvoHk06kgSuxF+xjvcdL4SmzfwkprV00hzf
-         oBlG0nNC/6UE+zcALHHnyykTa5afqLKozgNsm5vNYO2JeaWb3TFqmh+NHFYyQxG4QB
-         z9tvj/8dF9pGJk4lewP2AZElY4oQUwLqXJZCyzRnO34YGbGES+UlFPNBEpcgh30Gjo
-         qgK6OTNSq/Yi1PCL811322LaNiQN473z3jZTj0GjzbUY4XCEGPD1uEPr8uk5AL+wIX
-         kOBun6/6OYd3g==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 6C7A48C3288; Tue, 13 Sep 2022 05:38:56 -0400 (EDT)
-Date:   Tue, 13 Sep 2022 05:38:56 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>, Jan Kara <jack@suse.cz>,
-        adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <YyBPsDZoEL5yDc3G@mit.edu>
-References: <20220908182252.GA18939@fieldses.org>
- <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
- <20220909154506.GB5674@fieldses.org>
- <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
- <20220910145600.GA347@fieldses.org>
- <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
- <20220913004146.GD3600936@dread.disaster.area>
- <166303374350.30452.17386582960615006566@noble.neil.brown.name>
- <20220913024109.GF3600936@dread.disaster.area>
- <166303985824.30452.7333958999671590160@noble.neil.brown.name>
+        Tue, 13 Sep 2022 05:40:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC1AE002;
+        Tue, 13 Sep 2022 02:40:07 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRddK6QTJzmVCX;
+        Tue, 13 Sep 2022 17:36:21 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 17:40:05 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
+ hisilicon,hisi-i2c
+To:     chenweilong <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
+References: <20220909074842.281232-1-chenweilong@huawei.com>
+ <20220909074842.281232-2-chenweilong@huawei.com>
+ <58bd3483-3830-bb64-d7d6-5c0f1126de73@huawei.com>
+ <c644d852-6d33-9de0-c99b-9cdffa081b99@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <3f830fcb-90b6-3359-583d-ed24975c72ca@huawei.com>
+Date:   Tue, 13 Sep 2022 17:40:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166303985824.30452.7333958999671590160@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c644d852-6d33-9de0-c99b-9cdffa081b99@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 01:30:58PM +1000, NeilBrown wrote:
-> On Tue, 13 Sep 2022, Dave Chinner wrote:
-> > 
-> > Indeed, we know there are many systems out there that mount a
-> > filesystem, preallocate and map the blocks that are allocated to a
-> > large file, unmount the filesysetm, mmap the ranges of the block
-> > device and pass them to RDMA hardware, then have sensor arrays rdma
-> > data directly into the block device.....
+On 2022/9/13 17:08, chenweilong wrote:
+> On 2022/9/13 15:59, Yicong Yang wrote:
+>> On 2022/9/9 15:48, Weilong Chen wrote:
+>>> Add the new compatible for HiSilicon common i2c.
+>>>
+>>> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+>>> ---
+>>>  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
+>>>  1 file changed, 67 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>>> new file mode 100644
+>>> index 000000000000..f1cb6a4c70d1
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>>> @@ -0,0 +1,67 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
+>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>> +
+>>> +title: HiSilicon common IIC controller Device Tree Bindings
+>>> +
+>>> +maintainers:
+>>> +  - yangyicong@huawei.com
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: hisilicon,hisi-i2c
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  clk_rate:
+>>> +    default: 0xEE6B280
+>>> +
+>>> +  clock-frequency:
+>>> +    default: 400000
+>>> +
+>>> +  i2c-sda-falling-time-ns:
+>>> +    default: 343
+>>> +
+>>> +  i2c-scl-falling-time-ns:
+>>> +    default: 203
+>>> +
+>>> +  i2c-sda-hold-time-ns:
+>>> +    default: 0x33E
+>>> +
+>>> +  i2c-scl-rising-time-ns:
+>>> +    default: 365
+>>> +
+>>> +  i2c-digital-filter-width-ns:
+>>> +    default: 0
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - interrupts
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    i2c1: i2c@5038B0000{
+>>> +      compatible = "hisilicon,hisi-i2c";
+>>> +      reg = <0x38B0000 0x10000>;
+>>> +      interrupts = <0x0 120 0x4>;
+>>> +      i2c-sda-falling-time-ns = <56>;
+>>> +      i2c-scl-falling-time-ns = <56>;
+>>> +      i2c-sda-hold-time-ns = <56>;
+>>> +      i2c-scl-rising-time-ns = <56>;
+>> The values used here are different from above. Are they used on different
+>> products?
+> Yes, it's a specific config for new product.
+>>> +      i2c-digital-filter;
+>> Should we discard the empty properties or is it necessary to have it?
+>>
+>> Others looks good to me, but the device tree experts may have some comments.
+>>
+>> This binding file should also be listed in the MAINTAINERS file.
+>>
+>> Thanks.
 > 
-> And this tool doesn't update the i_version?  Sounds like a bug.
+> No, i2c-digital-filter is needed to fix the error:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.example.dtb: i2c@5038B0000: 'i2c-digital-filter' is a dependency of 'i2c-digital-filter-width-ns'
+> 
+> And, I'll update the MAINTAINERS file.
+> 
 
-Tools that do this include "grub" and "lilo".  Fortunately, most
-people aren't trying to export their /boot directory over NFS.  :-P
+ok. Thanks for the explanation.
 
-That being said, all we can strive for is "good enough" and not
-"perfection".  So if I were to add a "crash counter" to the ext4
-superblock, I can make sure it gets incremented (a) whenever the
-journal is replayed (assuming that we decide to use lazytime-style
-update for i_version for performance reasons), or (b) when fsck needs
-to fix some file system inconsistency, or (c) when some external tool
-like debugfs or fuse2fs is modifying the file system.
-
-Will this get *everything*?  No.  For example, in addition Linux boot
-loaders, there might be userspace which uses FIEMAP to get the
-physical blocks #'s for a file, and then reads and writes to those
-blocks using a kernel-bypass interface for high-speed SSDs, for
-example.  I happen to know of thousands of machines that are doing
-this with ext4 in production today, so this isn't hypothetical
-example; fortuntely, they aren't exporting their file system over NFS,
-nor are they likely to do so.  :-)
-
-		    	    	      		   - Ted
+> Thanks.
+> 
+>>> +      i2c-digital-filter-width-ns = <0x0>;
+>>> +      clk_rate = <0x0 0xEE6B280>;
+>>> +      clock-frequency = <400000>;
+>>> +    };
+>>>
+>> .
+> 
+> 
+> .
+> 
