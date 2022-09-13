@@ -2,144 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F6F5B77FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4C45B769F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbiIMR3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S231645AbiIMQmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiIMR3X (ORCPT
+        with ESMTP id S231392AbiIMQmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:29:23 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9439F8CD;
-        Tue, 13 Sep 2022 09:18:37 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 13 Sep 2022 12:42:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F3BB6A2;
+        Tue, 13 Sep 2022 08:36:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 38E4161EA1932;
-        Tue, 13 Sep 2022 17:23:16 +0200 (CEST)
-Message-ID: <178704d0-b5fd-f750-b77e-fece6c6d81dd@molgen.mpg.de>
-Date:   Tue, 13 Sep 2022 17:23:15 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 561DE34767;
+        Tue, 13 Sep 2022 15:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663082706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8uml+CVHSR1wkzzme+MP9OE2CB2kv9GNNkNDVSC2Jhw=;
+        b=gxAeCBLX08pgFySLUZACNomI6Ddk2SYoNhQBeN5kLkJl1/9b410GO5/RlNRxQP5J0j6BFl
+        PAKxIZarXE0/HKWwy/czi8b1DyAgteMRkaGEKXS1OxLiyH1DaUnghbWY2f/SpGpclPHjOP
+        7gIhj1zFnCs4KRvUNlGTiQk5l9pNe+4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663082706;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8uml+CVHSR1wkzzme+MP9OE2CB2kv9GNNkNDVSC2Jhw=;
+        b=Pt3q5cTuskqU2g7OaTOA+KoMdRQSKJ3TfV0U2MW7wlJYiwiZlfiVypN1oLx0KvgYiYCCvY
+        l2eckFzBb4Txg7Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 276BB139B3;
+        Tue, 13 Sep 2022 15:25:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z7aoCNKgIGNxVAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 13 Sep 2022 15:25:06 +0000
+Message-ID: <8faee19d-8aa0-af31-15eb-170d83b4d445@suse.de>
+Date:   Tue, 13 Sep 2022 17:25:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300
- Series Chipset SATA Controller
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Mario Limonciello <Mario.Limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
- <20220321212431.13717-3-pmenzel@molgen.mpg.de>
- <BL1PR12MB5157DDFD5E75360F032346D3E2169@BL1PR12MB5157.namprd12.prod.outlook.com>
- <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
- <5fb6af7b-d84f-cbae-7eb1-543f3a7e53e4@molgen.mpg.de>
- <d9837420-1cbb-ed5e-7043-985d9eb9d065@opensource.wdc.com>
- <b3e4435d-335c-1aba-1920-c225b46d09e7@molgen.mpg.de>
- <f6c78650-f22f-fcaf-a660-b1fc4ea7f641@molgen.mpg.de>
- <22f69d9a-7d0d-a408-70b3-11295f14b82d@opensource.wdc.com>
- <67950993-2eb9-c180-7c80-98c9954c9b22@molgen.mpg.de>
- <85f8c8cb-b4b9-b3ed-e79f-a1a161c9b672@opensource.wdc.com>
- <65012735-0a92-1071-e8e0-9d101c247a64@molgen.mpg.de>
- <3135eed0-b7e3-42fa-5b6c-80360f34e428@opensource.wdc.com>
- <893fe832-d522-112e-53ec-0f030c15af0d@molgen.mpg.de>
- <318b0452-9814-6276-95a5-10478e5a1b7d@opensource.wdc.com>
+Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
+ VMs
 Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <318b0452-9814-6276-95a5-10478e5a1b7d@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, airlied@linux.ie,
+        ssengar@microsoft.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mikelley@microsoft.com,
+        drawat.floss@gmail.com
+References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+ <14302178-c797-8635-4325-070f78b7f805@suse.de>
+ <20220911162119.GB7754@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <34e6ccfe-d6a0-e832-14a9-0445b61db106@suse.de>
+ <20220913151555.GA22169@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220913151555.GA22169@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------RhuwoH4ibrfjV3Z8rFPaCZME"
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Damien,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------RhuwoH4ibrfjV3Z8rFPaCZME
+Content-Type: multipart/mixed; boundary="------------c5kaYCxuNu0VgFQcC7kg0Pmk";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, airlied@linux.ie, ssengar@microsoft.com,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ mikelley@microsoft.com, drawat.floss@gmail.com
+Message-ID: <8faee19d-8aa0-af31-15eb-170d83b4d445@suse.de>
+Subject: Re: [PATCH] drm/hyperv: Don't rely on screen_info.lfb_base for Gen1
+ VMs
+References: <1662734639-27164-1-git-send-email-ssengar@linux.microsoft.com>
+ <14302178-c797-8635-4325-070f78b7f805@suse.de>
+ <20220911162119.GB7754@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <34e6ccfe-d6a0-e832-14a9-0445b61db106@suse.de>
+ <20220913151555.GA22169@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20220913151555.GA22169@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 
+--------------c5kaYCxuNu0VgFQcC7kg0Pmk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Am 01.09.22 um 00:13 schrieb Damien Le Moal:
-> On 8/30/22 18:05, Paul Menzel wrote:
+SGkNCg0KQW0gMTMuMDkuMjIgdW0gMTc6MTUgc2NocmllYiBTYXVyYWJoIFNpbmdoIFNlbmdh
+cjoNCj4gT24gTW9uLCBTZXAgMTIsIDIwMjIgYXQgMDk6MDM6NTNBTSArMDIwMCwgVGhvbWFz
+IFppbW1lcm1hbm4gd3JvdGU6DQo+PiBIaQ0KPj4NCj4+IEFtIDExLjA5LjIyIHVtIDE4OjIx
+IHNjaHJpZWIgU2F1cmFiaCBTaW5naCBTZW5nYXI6DQo+Pj4gT24gU2F0LCBTZXAgMTAsIDIw
+MjIgYXQgMDg6MTE6MjRQTSArMDIwMCwgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4+
+IEhpDQo+Pj4+DQo+Pj4+IEFtIDA5LjA5LjIyIHVtIDE2OjQzIHNjaHJpZWIgU2F1cmFiaCBT
+ZW5nYXI6DQo+Pj4+PiBoeXBlcnZfc2V0dXBfdnJhbSB0cmllcyB0byByZW1vdmUgY29uZmxp
+Y3RpbmcgZnJhbWVidWZmZXIgYmFzZWQgb24NCj4+Pj4+ICdzY3JlZW5faW5mbycuIEFzIG9i
+c2VydmVkIGluIHBhc3QgZHVlIHRvIHNvbWUgYnVnIG9yIHdyb25nIHNldHRpbmcNCj4+Pj4+
+IGluIGdydWIsIHRoZSAnc2NyZWVuX2luZm8nIGZpZWxkcyBtYXkgbm90IGJlIHNldCBmb3Ig
+R2VuMSwgYW5kIGluIHN1Y2gNCj4+Pj4+IGNhc2VzIGRybV9hcGVydHVyZV9yZW1vdmVfY29u
+ZmxpY3RpbmdfZnJhbWVidWZmZXJzIHdpbGwgbm90IGRvIGFueXRoaW5nDQo+Pj4+PiB1c2Vm
+dWwuDQo+Pj4+PiBGb3IgR2VuMSBWTXMsIGl0IHNob3VsZCBhbHdheXMgYmUgcG9zc2libGUg
+dG8gZ2V0IGZyYW1lYnVmZmVyDQo+Pj4+PiBjb25mbGljdCByZW1vdmVkIHVzaW5nIFBDSSBk
+ZXZpY2UgaW5zdGVhZC4NCj4+Pj4+DQo+Pj4+PiBGaXhlczogYTBhYjVhYmNlZDU1ICgiZHJt
+L2h5cGVydiA6IFJlbW92aW5nIHRoZSByZXN0cnVjdGlvbiBvZiBWUkFNIGFsbG9jYXRpb24g
+d2l0aCBQQ0kgYmFyIHNpemUiKQ0KPj4+Pj4gU2lnbmVkLW9mZi1ieTogU2F1cmFiaCBTZW5n
+YXIgPHNzZW5nYXJAbGludXgubWljcm9zb2Z0LmNvbT4NCj4+Pj4+IC0tLQ0KPj4+Pj4gICBk
+cml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVydl9kcm1fZHJ2LmMgfCAyNCArKysrKysrKysr
+KysrKysrKysrKy0tLS0NCj4+Pj4+ICAgMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMo
+KyksIDQgZGVsZXRpb25zKC0pDQo+Pj4+Pg0KPj4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+Z3B1L2RybS9oeXBlcnYvaHlwZXJ2X2RybV9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS9oeXBl
+cnYvaHlwZXJ2X2RybV9kcnYuYw0KPj4+Pj4gaW5kZXggNmQxMWU3OTM4YzgzLi5iMGNjOTc0
+ZWZhNDUgMTAwNjQ0DQo+Pj4+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vaHlwZXJ2L2h5cGVy
+dl9kcm1fZHJ2LmMNCj4+Pj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9oeXBlcnYvaHlwZXJ2
+X2RybV9kcnYuYw0KPj4+Pj4gQEAgLTczLDEyICs3MywyOCBAQCBzdGF0aWMgaW50IGh5cGVy
+dl9zZXR1cF92cmFtKHN0cnVjdCBoeXBlcnZfZHJtX2RldmljZSAqaHYsDQo+Pj4+PiAgIAkJ
+CSAgICAgc3RydWN0IGh2X2RldmljZSAqaGRldikNCj4+Pj4+ICAgew0KPj4+Pj4gICAJc3Ry
+dWN0IGRybV9kZXZpY2UgKmRldiA9ICZodi0+ZGV2Ow0KPj4+Pj4gKwlzdHJ1Y3QgcGNpX2Rl
+diAqcGRldjsNCj4+Pj4+ICAgCWludCByZXQ7DQo+Pj4+PiAtCWRybV9hcGVydHVyZV9yZW1v
+dmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKHNjcmVlbl9pbmZvLmxmYl9iYXNlLA0KPj4+
+Pj4gLQkJCQkJCSAgICAgc2NyZWVuX2luZm8ubGZiX3NpemUsDQo+Pj4+PiAtCQkJCQkJICAg
+ICBmYWxzZSwNCj4+Pj4+IC0JCQkJCQkgICAgICZoeXBlcnZfZHJpdmVyKTsNCj4+Pj4+ICsJ
+aWYgKGVmaV9lbmFibGVkKEVGSV9CT09UKSkgew0KPj4+Pj4gKwkJZHJtX2FwZXJ0dXJlX3Jl
+bW92ZV9jb25mbGljdGluZ19mcmFtZWJ1ZmZlcnMoc2NyZWVuX2luZm8ubGZiX2Jhc2UsDQo+
+Pj4+PiArCQkJCQkJCSAgICAgc2NyZWVuX2luZm8ubGZiX3NpemUsDQo+Pj4+DQo+Pj4+IFVz
+aW5nIHNjcmVlbl9pbmZvIGhlcmUgc2VlbXMgd3JvbmcgaW4gYW55IGNhc2UuIFlvdSB3YW50
+IHRvIHJlbW92ZQ0KPj4+PiB0aGUgZnJhbWVidWZmZXIgZGV2aWNlcyB0aGF0IGNvbmZsaWN0
+IHdpdGggeW91ciBkcml2ZXIsIHdoaWNoIG1pZ2h0DQo+Pj4+IGJlIHVucmVsYXRlZCB0byBz
+Y3JlZW5faW5mby4gQUZBSUNUIHRoZSBjb3JyZWN0IHNvbHV0aW9uIHdvdWxkDQo+Pj4+IGFs
+d2F5cyByZXRyaWV2ZSB0aGUgUENJIGRldmljZSBmb3IgcmVtb3ZhbCAoaS5lLiwgYWx3YXlz
+IGRvIHRoZSBlbHNlDQo+Pj4+IGJyYW5jaCkuDQo+Pj4NCj4+PiBJbiBhIEdlbjIgVk0sIHRo
+ZSBIeXBlci1WIGZyYW1lIGJ1ZmZlciBkZXZpY2UgaXMgcHJlc2VudGVkIG9ubHkgYXMgYSBW
+TWJ1cyBkZXZpY2UuDQo+Pj4gSXQncyBub3QgcHJlc2VudGVkIGFzIGEgUENJIGRldmljZSBs
+aWtlIGl0IGlzIGluIGEgR2VuMSBWTS4gVGhpcyB3b3VsZCBoYXZlIHdvcmtlZA0KPj4+IGlm
+IHdlIGhhZCB0aGUgZnJhbWUgYnVmZmVyIGRldmljZSBhdmFpbGFibGUgYXMgUENJIGRldmlj
+ZSBpbiBHZW4yIGJ1dCB1bmZvcnR1bmF0ZWx5DQo+Pj4gdGhhdHMgbm90IHRoZSBjYXNlIGhl
+cmUuDQo+Pg0KPj4gVGhhbmtzIGZvciBleHBsYWluaW5nLiBUaGVyZSBpcyBhbiBpbnN0YW5j
+ZSBvZiBzdHJ1Y3QgaHZfZGV2aWNlDQo+PiBwYXNzZWQgdG8gdGhlIHByb2JlIGZ1bmN0aW9u
+LiBJIHN1c3BlY3QgeW91IGNhbm5vdCBnZXQgdGhlDQo+PiBmcmFtZWJ1ZmZlciByYW5nZSBm
+cm9tIHRoaXMgaW5zdGFuY2UgKGUuZy4sIHZpYSB0aGUgZGV2aWNlJ3MNCj4+IHBsYXRmb3Jt
+X2RhdGEpPw0KPj4NCj4+IElmIHlvdSBhYnNvbHV0ZWx5IGNhbid0IGdldCB0aGUgYWN0dWFs
+IG1lbW9yeSByZWdpb24gZnJvbSB0aGUNCj4+IGRldmljZSwgaXQncyBiZXR0ZXIgdG8gcmVt
+b3ZlIGFsbCBmcmFtZWJ1ZmZlcnMgdmlhDQo+PiBkcm1fYXBlcnR1cmVfcmVtb3ZlX2ZyYW1l
+YnVmZmVycygpIHRoYW4gdG8gdXNlIHNjcmVlbl9pbmZvLg0KPj4NCj4+IEJlc3QgcmVnYXJk
+cw0KPj4gVGhvbWFzDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbiwgYW5kIEkg
+dGhvdWdodCBvZiB1c2luZyBkcm1fYXBlcnR1cmVfcmVtb3ZlX2ZyYW1lYnVmZmVycw0KPiBo
+ZXJlLCBidXQgdGhpcyBkcml2ZXIgd2lsbCBiZSB1c2VkIGluIG1hbnkgZGlmZmVyZW50IHN5
+c3RlbXMgd2l0aCBtYW55IG90aGVyIGdyYXBoaWNzDQo+IGRldmljZXMgKEdQVSBldGMpLiBS
+ZW1vdmluZyBhbGwgdGhlIGZyYW1lYnVmZmVyIGlzIGEgYml0IGJsdW50IGFwcHJvYWNoIHdo
+aWNoIG1heSBkaXN0dXJiDQo+IHRoZSBkZXZpY2VzIHdlIGFyZSBub3QgaW50ZW5kZWQgdG8g
+YW5kIHdoaWNoIGFyZSBldmVuIG91dHNpZGUgb2YgdGhlIEh5cGVyViBNTUlPIHJlZ2lvbi4N
+Cj4gSSBmZWVsIHRoaXMgQVBJIHVzZSB3aWxsIGJlIHJpc2t5LCBhbmQgSSB3b3VsZCBsaWtl
+IHRvIHN0aWNrIHRvIHRoZSBlYXJsaWVyIG1ldGhvZCB3aGljaA0KPiBpcyBwcm92ZW4gdG8g
+YmUgd29ya2luZyBmb3IgbWFueSB5ZWFycyBhbmQgd2UgYXJlIHN1cmUgaXQgd29uJ3QgZGlz
+dHVyYiBhbnlvbmUgb3V0c2lkZQ0KPiBNTUlPIHJlZ2lvbi4NCg0KQnV0IHRoZSBwcm9ibGVt
+IHdpdGggdGhlIGN1cnJlbnQgY29kZSBpcyB0aGF0IHlvdSBhbHNvIHJlbW92ZSB0aGUgZHJp
+dmVyIA0KdGhhdCBjb3ZlcnMgdGhlIGJvb3QtdXAgZ3JhcGhpY3MsIGV2ZW4gaWYgaXQncyBu
+b3QgZXZlbiBhIGh5cGVydiBkZXZpY2UuIA0KVGhhdCdzIHdoeSBJIHNhaWQgdGhhdCB5b3Ug
+c2hvdWxkIHRyeSB0byBkZXRlY3QgaWYgdGhlIGh5cGVydiBkZXZpY2UgDQp5b3UncmUgY3Jl
+YXRpbmcgYWN0dWFsbHkgdXNlcyB0aGUgc2NyZWVuX2luZm8gd2hlbiB5b3UgY3JlYXRlIHRo
+ZSBkZXZpY2UuDQoNClNldCB0aGF0IGluZm9ybWF0aW9uIGFzIGRldmljZSBkYXRhIGFuZCBs
+b29rIGl0IHVwIGluIHRoZSBoeXBlcnYtZHJtIA0KZHJpdmVyLiBJZiBubyBzdWNoIHNjcmVl
+bl9pbmZvIGRhdGEgaXMgYXR0YWNoZWQgdG8gdGhlIGRldmljZSwgeW91IGRvbid0IA0KaGF2
+ZSB0byByZW1vdmUgY29uZmxpY3RpbmcgZnJhbWVidWZmZXJzIGF0IGFsbC4NCg0KQmVzdCBy
+ZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gUmVnYXJkcywNCj4gU2F1cmFiaA0KPj4NCj4+Pg0K
+Pj4+IFJlZ2FyZHMsDQo+Pj4gU2F1cmFiaA0KPj4+DQo+Pj4+DQo+Pj4+IEJlc3QgcmVnYXJk
+DQo+Pj4+IFRob21hcw0KPj4+Pg0KPj4+Pj4gKwkJCQkJCQkgICAgIGZhbHNlLA0KPj4+Pj4g
+KwkJCQkJCQkgICAgICZoeXBlcnZfZHJpdmVyKTsNCj4+Pj4+ICsJfSBlbHNlIHsNCj4+Pj4+
+ICsJCXBkZXYgPSBwY2lfZ2V0X2RldmljZShQQ0lfVkVORE9SX0lEX01JQ1JPU09GVCwgUENJ
+X0RFVklDRV9JRF9IWVBFUlZfVklERU8sIE5VTEwpOw0KPj4+Pj4gKwkJaWYgKCFwZGV2KSB7
+DQo+Pj4+PiArCQkJZHJtX2VycihkZXYsICJVbmFibGUgdG8gZmluZCBQQ0kgSHlwZXItViB2
+aWRlb1xuIik7DQo+Pj4+PiArCQkJcmV0dXJuIC1FTk9ERVY7DQo+Pj4+PiArCQl9DQo+Pj4+
+PiArDQo+Pj4+PiArCQlyZXQgPSBkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX3Bj
+aV9mcmFtZWJ1ZmZlcnMocGRldiwgJmh5cGVydl9kcml2ZXIpOw0KPj4+Pj4gKwkJcGNpX2Rl
+dl9wdXQocGRldik7DQo+Pj4+PiArCQlpZiAocmV0KSB7DQo+Pj4+PiArCQkJZHJtX2Vycihk
+ZXYsICJOb3QgYWJsZSB0byByZW1vdmUgYm9vdCBmYlxuIik7DQo+Pj4+PiArCQkJcmV0dXJu
+IHJldDsNCj4+Pj4+ICsJCX0NCj4+Pj4+ICsJfQ0KPj4+Pj4gICAJaHYtPmZiX3NpemUgPSAo
+dW5zaWduZWQgbG9uZylodi0+bW1pb19tZWdhYnl0ZXMgKiAxMDI0ICogMTAyNDsNCj4+Pj4N
+Cj4+Pj4gLS0gDQo+Pj4+IFRob21hcyBaaW1tZXJtYW5uDQo+Pj4+IEdyYXBoaWNzIERyaXZl
+ciBEZXZlbG9wZXINCj4+Pj4gU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQo+Pj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KPj4+PiAo
+SFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQo+Pj4+IEdlc2Now6RmdHNmw7xocmVyOiBJdm8g
+VG90ZXYNCj4+Pg0KPj4+DQo+Pj4NCj4+DQo+PiAtLSANCj4+IFRob21hcyBaaW1tZXJtYW5u
+DQo+PiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3YXJlIFNvbHV0
+aW9ucyBHZXJtYW55IEdtYkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
+R2VybWFueQ0KPj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2VzY2jDpGZ0c2bD
+vGhyZXI6IEl2byBUb3Rldg0KPiANCj4gDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
+DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
+ZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0K
+KEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
+dg0K
 
-[…]
+--------------c5kaYCxuNu0VgFQcC7kg0Pmk--
 
->> Am 01.06.22 um 10:58 schrieb Damien Le Moal:
->>> On 6/1/22 01:18, Paul Menzel wrote:
->>>>>>> With that in mind, I am not planning to apply your previous patches
->>>>>>> for 5.18, as they would conflict and would only end up being churn
->>>>>>> since the delay removal by default will undo your changes.
->>>>>> Obviously, I do not agree, as this would give the a little bit more
->>>>>> testing already, if changing the default is a good idea. Also, if the
->>>>>> conflict will be hard to resolve, I happily do it (the patches could
->>>>>> even be reverted on top – git commits are cheap and easy to handle).
->>>>>
->>>>> The conflict is not hard to resolve. The point is that my patches changing
->>>>> the default to no debounce delay completely remove the changes of your
->>>>> patch to do the same for one or some adapters. So adding your patches now
->>>>> and then my patches on top does not make much sense at all.
->>>>>
->>>>> If too many problems show up and I end up reverting/removing the patches,
->>>>> then I will be happy to take your patches for the adapter you tested. Note
->>>>> that *all* the machines I have tested so far are OK without a debounce
->>>>> delay too. So we could add them too... And endup with a long list of
->>>>> adapters that use the default ahci driver without debounce delay. The goal
->>>>> of changing the default to no delay is to avoid that. So far, the adapters
->>>>> I have identified that need the delay have their own declaration, so we
->>>>> only need to add a flag there. Simpler change that listing up adapters
->>>>> that are OK without the delay.
->>>>>
->>>>>> Anyway, I wrote my piece, but you are the maintainer, so it’s your call
->>>>>> and I stop bothering you.
->>>>
->>>> I just wanted to inquire about the status of your changes? I do not find
->>>> them in your `for-5.19` branch. As they should be tested in linux-next
->>>> before the merge window opens, if these are not ready yet, could you
->>>> please apply my (tested) patches?
->>>
->>> I could, but 5.19 now has an updated libata.force kernel parameter that
->>> allows one to disable the debounce delay for a particular port or for all
->>> ports of an adapter. See libata.force=x.y:nodbdelay for a port y of
->>> adapter x or libata.force=x:nodbdelay for all ports of adapter x.
->>
->> This is commit 3af9ca4d341d (ata: libata-core: Improve link flags forced
->> settings) [1]. Thank you, this is really useful, but easily overlooked. ;-)
->>
->>> I still plan to revisit the arbitrary link debounce timers but I prefer to
->>> have the power management cleanup applied first. The reason is that link
->>> debounce depends on PHY readiness, which itself depends heavily on power
->>> mode transitions. My plan is to get this done during this cycle for
->>> release with 5.20 and then fix on top the arbitrary delays for 5.21.
->>
->> Nice. Can you share the current status?
-> 
-> No progress. I need to put together a series with all the patches that
-> were sent already. Unless Mario can resend something ?
+--------------RhuwoH4ibrfjV3Z8rFPaCZME
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-No reply from Mario.
+-----BEGIN PGP SIGNATURE-----
 
->>> Is the libata.force solution OK for you until we have a final more solid
->>> fix that can benefit most modern adapters (and not just the ones you
->>> identified)? If you do have a use case that needs a "nodbdelay" horkage
->>> due to some constraint in the field, then I will apply your patches, but
->>> they likely will be voided by coming changes. Let me know.
->>
->> I think, applying the patch would be an improvement, as people wouldn’t
->> need to update their Linux kernel command line, and I do not mind, if it
->> gets reverted/dropped later.
-> 
-> Let's see were the lpm stuff goes first.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMgoNEFAwAAAAAACgkQlh/E3EQov+AD
+HA//aLM0BQSKd6p4ssLbdaT92iWRGrLkQnFhvQcjbl4yCkXq1p1bGpkbNllxTowsvYhwC+UTgmtU
+lRIBUNfj1hWyTGPsNts3Sa9l5ocHk2Uitcg5jDxnUu0EePMgOHKCJIkJECKMmKgXE0Wgmw9HjOtk
+TooJKzJZteaZUsQ3W64GjxjCNVXLnp3PPrLr4Rog02mEea5PaVvewtEQe216XxGC5Uk1Kdh5VJfd
+YdSGdxNGDYRCizoWhQdLazIxLZRK/Aq20iOQ+ZMvmiWTcrFagxrH5Zyes/RSV51kQtMbR+l1Y7Bc
+6InCxl5F9lsGeLQZGPSPpHbC5zjU4CbZIxymO7Vonca3Y+Z87i8LzHGRJW9VCFMHhkP5EDdLZxEH
+OqhD48PsE2FiSaU5rqhw206V260qnxkTkyat61uimqf2huhnsKtgYyPKb9j8NTBQFT53M8Itu0XJ
+lfKqm54khhWyqXaL4JyfhyET1WzMQJSnnM3DOnoUn/rGV1WHZH7nwfcqJgXtS6qIJvNSug1tSmNk
+6W7IPc4NnFbX+IbEJmvyeWvrcDaw6ijCny3GkKDZwo/Ler6eeaQPL5Ge2gYsovh5xPqMDEOF9HOv
+V4pdMYj0LJEZ2HxXRO852SvQXDkhf/zIz8OWT2v7uPrTUIH0Ta10PLBihb51FD7pGlp3K53wsmx3
+ffo=
+=a+kJ
+-----END PGP SIGNATURE-----
 
-It shouldn’t be too much hassle to adapt the lpm series after the patch 
-is applied.
-
-
-Kind regards,
-
-Paul
+--------------RhuwoH4ibrfjV3Z8rFPaCZME--
