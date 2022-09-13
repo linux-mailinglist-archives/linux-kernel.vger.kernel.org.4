@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537F45B724E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75DD5B737C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiIMOw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S235263AbiIMPGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234647AbiIMOtV (ORCPT
+        with ESMTP id S235449AbiIMPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:49:21 -0400
+        Tue, 13 Sep 2022 11:04:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FB37171F;
-        Tue, 13 Sep 2022 07:25:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415831B7A8;
+        Tue, 13 Sep 2022 07:30:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDCF1B80F03;
-        Tue, 13 Sep 2022 14:11:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E31C433D7;
-        Tue, 13 Sep 2022 14:11:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71997B80F93;
+        Tue, 13 Sep 2022 14:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA860C433D7;
+        Tue, 13 Sep 2022 14:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078318;
-        bh=x4HinmjdF9alckJW2lAnscTOasT9TBJsF2wnAY7Ru5k=;
+        s=korg; t=1663078613;
+        bh=73lWbTdiqKnYoZ9jmUkpJuJBRTOaCYWnNn+0KzdRaHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uU4YCIdqHROBlbU6+9xt2L28DRpneZ7+o/K/vTPy9CeH/1x6GjX2yBz/O6zg67rYj
-         +OI6BK5BDpBhCXTmwnys76rzRf5O0wZt3xutQaNflYVrSYRbMBtw9Coe8y7YK/2T2q
-         vVgfCEJf8Vh76AV8L5R2yterUUhK9VpkgPly9IqQ=
+        b=xicWPR3+uyMgakO/cAZv6s++b0y0uxrONzsBF4WnXy4gu/k3M9hRgLkInRfx61j/I
+         Gzzn6oC/SStgSxgJaZ2IRLLrC+GWndBo8hS0bFcTdyz42Bm44p1vAe/TBnfF0yNKi8
+         5q24s1YO1fs8WDqM/eZ895oEc8mOPs+zP/od+W5w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenpeng Liang <liangwenpeng@huawei.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 093/192] RDMA/hns: Fix wrong fixed value of qp->rq.wqe_shift
+Subject: [PATCH 5.15 008/121] scsi: qla2xxx: Disable ATIO interrupt coalesce for quad port ISP27XX
 Date:   Tue, 13 Sep 2022 16:03:19 +0200
-Message-Id: <20220913140414.598757371@linuxfoundation.org>
+Message-Id: <20220913140357.688926516@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenpeng Liang <liangwenpeng@huawei.com>
+From: Tony Battersby <tonyb@cybernetics.com>
 
-[ Upstream commit 0c8b5d6268d92d141bfd64d21c870d295a84dee1 ]
+[ Upstream commit 53661ded2460b414644532de6b99bd87f71987e9 ]
 
-The value of qp->rq.wqe_shift of HIP08 is always determined by the number
-of sge. So delete the wrong branch.
+This partially reverts commit d2b292c3f6fd ("scsi: qla2xxx: Enable ATIO
+interrupt handshake for ISP27XX")
 
-Fixes: cfc85f3e4b7f ("RDMA/hns: Add profile support for hip08 driver")
-Fixes: 926a01dc000d ("RDMA/hns: Add QP operations support for hip08 SoC")
-Link: https://lore.kernel.org/r/20220829105021.1427804-3-liangwenpeng@huawei.com
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
+For some workloads where the host sends a batch of commands and then
+pauses, ATIO interrupt coalesce can cause some incoming ATIO entries to be
+ignored for extended periods of time, resulting in slow performance,
+timeouts, and aborted commands.
+
+Disable interrupt coalesce and re-enable the dedicated ATIO MSI-X
+interrupt.
+
+Link: https://lore.kernel.org/r/97dcf365-89ff-014d-a3e5-1404c6af511c@cybernetics.com
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Reviewed-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_qp.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_qp.c b/drivers/infiniband/hw/hns/hns_roce_qp.c
-index 48d3616a6d71d..7bee7f6c5e702 100644
---- a/drivers/infiniband/hw/hns/hns_roce_qp.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_qp.c
-@@ -462,11 +462,8 @@ static int set_rq_size(struct hns_roce_dev *hr_dev, struct ib_qp_cap *cap,
- 	hr_qp->rq.max_gs = roundup_pow_of_two(max(1U, cap->max_recv_sge) +
- 					      hr_qp->rq.rsv_sge);
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 7ab3c9e4d4783..b86f6e1f21b5c 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -6961,14 +6961,8 @@ qlt_24xx_config_rings(struct scsi_qla_host *vha)
  
--	if (hr_dev->caps.max_rq_sg <= HNS_ROCE_SGE_IN_WQE)
--		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz);
--	else
--		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
--					    hr_qp->rq.max_gs);
-+	hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
-+				    hr_qp->rq.max_gs);
- 
- 	hr_qp->rq.wqe_cnt = cnt;
- 	if (hr_dev->caps.flags & HNS_ROCE_CAP_FLAG_RQ_INLINE &&
+ 	if (ha->flags.msix_enabled) {
+ 		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
+-			if (IS_QLA2071(ha)) {
+-				/* 4 ports Baker: Enable Interrupt Handshake */
+-				icb->msix_atio = 0;
+-				icb->firmware_options_2 |= cpu_to_le32(BIT_26);
+-			} else {
+-				icb->msix_atio = cpu_to_le16(msix->entry);
+-				icb->firmware_options_2 &= cpu_to_le32(~BIT_26);
+-			}
++			icb->msix_atio = cpu_to_le16(msix->entry);
++			icb->firmware_options_2 &= cpu_to_le32(~BIT_26);
+ 			ql_dbg(ql_dbg_init, vha, 0xf072,
+ 			    "Registering ICB vector 0x%x for atio que.\n",
+ 			    msix->entry);
 -- 
 2.35.1
 
