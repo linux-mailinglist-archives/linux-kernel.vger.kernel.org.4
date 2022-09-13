@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A815B72CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528965B6F11
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbiIMO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S232426AbiIMOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234916AbiIMOy1 (ORCPT
+        with ESMTP id S232532AbiIMOGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:54:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A8961DA8;
-        Tue, 13 Sep 2022 07:27:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A12B6149A;
-        Tue, 13 Sep 2022 14:27:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCFCC433C1;
-        Tue, 13 Sep 2022 14:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079224;
-        bh=HIwObJix9snZnRkVEs8M9xKIS0QUfoTij0k/p3Vp2Ns=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uM/vAbnfheuMmFiwIBiXACB0HgEHzwb0BnVkHzAHdGRg3Zq0nrYJT/wSUbcHmzQzq
-         JvFPrixhoa+OVD2LVr3ylD8YK7JJrhNYm1rwXbf1qcysKA83UrwOgl8UGp6hDQx9qC
-         Gev6L+8H/H/yNuBzlVUZ6ztxnV1S43Q4IGIaezeA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 5.4 051/108] s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages
-Date:   Tue, 13 Sep 2022 16:06:22 +0200
-Message-Id: <20220913140355.826614561@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:06:34 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729F259270;
+        Tue, 13 Sep 2022 07:06:26 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id v2-20020a056830090200b006397457afecso8129800ott.13;
+        Tue, 13 Sep 2022 07:06:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=XwWk5SoJuKv1MY6V80vnF8Lyms9Ev4e9+aisy0cJdGI=;
+        b=ZLzJiFLC1STgyfRQgZyaRFzYSZHY87KW6/gvpvUjEj2nUln8r6HpuR6pk9vuZfCtg5
+         uukOboIkUxZk/ZU6dY3C2m/eDyCKvQshjnavsBjMev0T+AdIeg1UXL7vziO+wLDapGKq
+         ZxZXliPqMCVN/+o02Ux20IUNSyDdGjVPeUGjyRepHSuVtrYjxGhs+m1XJFUyMuZ4IysE
+         x5eVRZoH2Jf04Sa+rnZP1nz6uEGDCdaJod+aygP3VIdLVkC2b8kI/t1apu3gDQyyeAtT
+         veC8FEEdtg8GyNqQ0eFEtQnOP/nx3dr2mY3GJ4fOySySYKaCtLO4scsMkWRCZFnU8Vjx
+         OLXA==
+X-Gm-Message-State: ACgBeo0Jr2c0Yg+KZqyT3OlrcnmDuid9KJfKleOVyRGfuvNPHIi3ZtCb
+        GkasbpM+QXWBP4NkeGGIvw==
+X-Google-Smtp-Source: AA6agR5SWl6Oj+EGjpBSFta1Oh0daG7E4brT6mZmxxChyVqbTbfzFGLGAKFSANHqFwdD6yPA4tgYRw==
+X-Received: by 2002:a9d:d89:0:b0:654:fc7e:f4ec with SMTP id 9-20020a9d0d89000000b00654fc7ef4ecmr8772019ots.49.1663077985195;
+        Tue, 13 Sep 2022 07:06:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x88-20020a9d20e1000000b00637032a39a3sm5891387ota.6.2022.09.13.07.06.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:06:24 -0700 (PDT)
+Received: (nullmailer pid 3592810 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:06:23 -0000
+Date:   Tue, 13 Sep 2022 09:06:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-usb@vger.kernel.org, miquel.raynal@bootlin.com,
+        wim@linux-watchdog.org, linux-phy@lists.infradead.org,
+        robh+dt@kernel.org, linux@roeck-us.net, linux-pwm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, richard@nod.at,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, vkoul@kernel.org, vigneshr@ti.com,
+        u.kleine-koenig@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, heiko@sntech.de,
+        sjg@chromium.org, linux-kernel@vger.kernel.org, broonie@kernel.org,
+        ulf.hansson@linaro.org, philipp.tomsich@vrull.eu, kishon@ti.com,
+        jamie@jamieiles.com, linux-i2c@vger.kernel.org,
+        zhangqing@rock-chips.com, thierry.reding@gmail.com,
+        kever.yang@rock-chips.com, gregkh@linuxfoundation.org,
+        linux-watchdog@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v1 08/11] dt-bindings: arm: rockchip: pmu: add
+ rockchip,rk3128-pmu
+Message-ID: <20220913140623.GA3592754-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <faf2b30e-1a1a-0dc1-04ce-f40e5d758718@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <faf2b30e-1a1a-0dc1-04ce-f40e5d758718@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+On Sat, 10 Sep 2022 00:01:52 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-pmu compatible string.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/rockchip/pmu.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-commit 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c upstream.
-
-The alignment check in prepare_hugepage_range() is wrong for 2 GB
-hugepages, it only checks for 1 MB hugepage alignment.
-
-This can result in kernel crash in __unmap_hugepage_range() at the
-BUG_ON(start & ~huge_page_mask(h)) alignment check, for mappings
-created with MAP_FIXED at unaligned address.
-
-Fix this by correctly handling multiple hugepage sizes, similar to the
-generic version of prepare_hugepage_range().
-
-Fixes: d08de8e2d867 ("s390/mm: add support for 2GB hugepages")
-Cc: <stable@vger.kernel.org> # 4.8+
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/s390/include/asm/hugetlb.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
---- a/arch/s390/include/asm/hugetlb.h
-+++ b/arch/s390/include/asm/hugetlb.h
-@@ -35,9 +35,11 @@ static inline bool is_hugepage_only_rang
- static inline int prepare_hugepage_range(struct file *file,
- 			unsigned long addr, unsigned long len)
- {
--	if (len & ~HPAGE_MASK)
-+	struct hstate *h = hstate_file(file);
-+
-+	if (len & ~huge_page_mask(h))
- 		return -EINVAL;
--	if (addr & ~HPAGE_MASK)
-+	if (addr & ~huge_page_mask(h))
- 		return -EINVAL;
- 	return 0;
- }
-
-
+Acked-by: Rob Herring <robh@kernel.org>
