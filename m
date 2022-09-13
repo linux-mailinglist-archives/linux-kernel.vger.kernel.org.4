@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9985B74D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9F75B7527
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbiIMP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S232853AbiIMPcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbiIMP0D (ORCPT
+        with ESMTP id S236508AbiIMPb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:26:03 -0400
+        Tue, 13 Sep 2022 11:31:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CEE7DF4B;
-        Tue, 13 Sep 2022 07:38:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B687E820;
+        Tue, 13 Sep 2022 07:40:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8631CB80FE3;
-        Tue, 13 Sep 2022 14:34:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFADC433C1;
-        Tue, 13 Sep 2022 14:34:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93BE3B80F6F;
+        Tue, 13 Sep 2022 14:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C465FC433C1;
+        Tue, 13 Sep 2022 14:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079673;
-        bh=JYuxi9O3FdJnifusqhvtJkC+4XphOyrht8mntGp0LCI=;
+        s=korg; t=1663079585;
+        bh=QVUIIIchCxxeuUgwWdiExksNAQBR6e7xgJ2M8dTQg50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UCDqudbAM2Fxy9sT82X0MEDvtjf6rWOCqV0RO8AKYkNLM4BXKVhNfthbahBNlvkHw
-         rzLrYFBaj92m/Plj78l12/OgndJpwXuMPAr84r4BEZl25VgxG+2YNmnhmjBVkDNKa9
-         klBTzWqENSOVTfoqfJ7z4mRbK6EId+yBLq9t5YII=
+        b=hEGcNpHHRuXatl3hTBnqi53B16yleG8ua70/oD1toP4s3qBTu+ZEiZjHHDaBlZOY/
+         4epYEqPRWho0Tsjtm8XiZS7xxCSrCm6OlFztT1UHe6objRyM2cPkSwFtIJdj65Lcj8
+         DBhZm/HEmr6KgAmMYQI9hfZIIvsVDJUuwJWd7izU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 4.14 31/61] net: mac802154: Fix a condition in the receive path
-Date:   Tue, 13 Sep 2022 16:07:33 +0200
-Message-Id: <20220913140348.048092061@linuxfoundation.org>
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 76/79] usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
+Date:   Tue, 13 Sep 2022 16:07:34 +0200
+Message-Id: <20220913140352.554689442@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit f0da47118c7e93cdbbc6fb403dd729a5f2c90ee3 upstream.
+From: Johan Hovold <johan+linaro@kernel.org>
 
-Upon reception, a packet must be categorized, either it's destination is
-the host, or it is another host. A packet with no destination addressing
-fields may be valid in two situations:
-- the packet has no source field: only ACKs are built like that, we
-  consider the host as the destination.
-- the packet has a valid source field: it is directed to the PAN
-  coordinator, as for know we don't have this information we consider we
-  are not the PAN coordinator.
+commit  a872ab303d5ddd4c965f9cd868677781a33ce35a upstream.
 
-There was likely a copy/paste error made during a previous cleanup
-because the if clause is now containing exactly the same condition as in
-the switch case, which can never be true. In the past the destination
-address was used in the switch and the source address was used in the
-if, which matches what the spec says.
+The Qualcomm dwc3 runtime-PM implementation checks the xhci
+platform-device pointer in the wakeup-interrupt handler to determine
+whether the controller is in host mode and if so triggers a resume.
 
-Cc: stable@vger.kernel.org
-Fixes: ae531b9475f6 ("ieee802154: use ieee802154_addr instead of *_sa variants")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20220826142954.254853-1-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+After a role switch in OTG mode the xhci platform-device would have been
+freed and the next wakeup from runtime suspend would access the freed
+memory.
+
+Note that role switching is executed from a freezable workqueue, which
+guarantees that the pointer is stable during suspend.
+
+Also note that runtime PM has been broken since commit 2664deb09306
+("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+incidentally also prevents this issue from being triggered.
+
+Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+Cc: stable@vger.kernel.org      # 4.18
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220804151001.23612-5-johan+linaro@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[ johan: adjust context for 5.4 ]
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac802154/rx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-qcom.c |   14 +++++++++++++-
+ drivers/usb/dwc3/host.c      |    1 +
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
---- a/net/mac802154/rx.c
-+++ b/net/mac802154/rx.c
-@@ -52,7 +52,7 @@ ieee802154_subif_frame(struct ieee802154
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -173,6 +173,14 @@ static int dwc3_qcom_register_extcon(str
+ 	return 0;
+ }
  
- 	switch (mac_cb(skb)->dest.mode) {
- 	case IEEE802154_ADDR_NONE:
--		if (mac_cb(skb)->dest.mode != IEEE802154_ADDR_NONE)
-+		if (hdr->source.mode != IEEE802154_ADDR_NONE)
- 			/* FIXME: check if we are PAN coordinator */
- 			skb->pkt_type = PACKET_OTHERHOST;
- 		else
++/* Only usable in contexts where the role can not change. */
++static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
++{
++	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
++
++	return dwc->xhci;
++}
++
+ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+ {
+ 	if (qcom->hs_phy_irq) {
+@@ -280,7 +288,11 @@ static irqreturn_t qcom_dwc3_resume_irq(
+ 	if (qcom->pm_suspended)
+ 		return IRQ_HANDLED;
+ 
+-	if (dwc->xhci)
++	/*
++	 * This is safe as role switching is done from a freezable workqueue
++	 * and the wakeup interrupts are disabled as part of resume.
++	 */
++	if (dwc3_qcom_is_host(qcom))
+ 		pm_runtime_resume(&dwc->xhci->dev);
+ 
+ 	return IRQ_HANDLED;
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -142,4 +142,5 @@ void dwc3_host_exit(struct dwc3 *dwc)
+ 	phy_remove_lookup(dwc->usb3_generic_phy, "usb3-phy",
+ 			  dev_name(dwc->dev));
+ 	platform_device_unregister(dwc->xhci);
++	dwc->xhci = NULL;
+ }
 
 
