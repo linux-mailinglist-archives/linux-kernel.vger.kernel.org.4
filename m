@@ -2,127 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01605B6890
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1C95B6894
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiIMHUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S229887AbiIMHVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiIMHUo (ORCPT
+        with ESMTP id S230058AbiIMHVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:20:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3413B962;
-        Tue, 13 Sep 2022 00:20:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90DC861336;
-        Tue, 13 Sep 2022 07:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09D6C433C1;
-        Tue, 13 Sep 2022 07:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663053642;
-        bh=8E4O++2S6FWEnxjwuILlmwZ5txcSLR8D7sk53WBMDXQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DbfN+Zsij52xBRMio9UjMnddcvrW6l9KE1bas+PuyClOTdyacgCwG7an4RMBeFzgq
-         ZkmufTzGX5eXiWuUaeu60mAi6OuZ/eofEFLww/gnvV28K02ZOqeVzU1jDiJpgZ+kBR
-         e4HsovoyZhSSU7WfsnpwNEsRFJ7OS+J9NTRwS1lbBnN8a+QkUCKdK+uqAN5pmLwPbL
-         RahtWxI+J/aAuBwYRPhi449p37AjDnVGuSGY2ZtO2qDn8fW4E9HxEOJLwPc6qg9vZJ
-         1n/dpiaPWA9L2Qy6akJJFp424t4k9GnNptI+XZHTxWnqTc7YsFCa71oldb5vsEgiQ5
-         29EgLxVTHYqIA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oY0Do-0000nJ-Jh; Tue, 13 Sep 2022 09:20:40 +0200
-Date:   Tue, 13 Sep 2022 09:20:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 4/7] drm/msm/dp: fix aux-bus EP lifetime
-Message-ID: <YyAvSKTBGdVIjaHW@hovoldconsulting.com>
-References: <20220912154046.12900-1-johan+linaro@kernel.org>
- <20220912154046.12900-5-johan+linaro@kernel.org>
- <e60f0053-3801-bf33-5841-69f16215fa00@linaro.org>
- <69526798-93df-a4f9-c385-c9bf490cc709@kali.org>
+        Tue, 13 Sep 2022 03:21:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BD843E54
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663053704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ylh9ncmGPJOsB78thI/3cAGzV/njJPkYV/mAwkDnPyI=;
+        b=gDVmlbDJXUfXsuQGBiGKARgTX1WTp4oyGju5w1ihYXyGRvcNmBSJq83rznWP0iGG+MZp4k
+        HwxORjssqNi3toMzXH2xzPv91GjcLSXJpFDn9xvp7ubYqS/SJTEXbUOoQn+hI2BVALhLj6
+        4iMJoROGIoXTEot7kWd12FbBcQiwc+E=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-126-67RR7IzrMQ-EVv3PtEFCUA-1; Tue, 13 Sep 2022 03:21:42 -0400
+X-MC-Unique: 67RR7IzrMQ-EVv3PtEFCUA-1
+Received: by mail-lf1-f71.google.com with SMTP id i33-20020a0565123e2100b00498fb105ef4so3520494lfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:21:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ylh9ncmGPJOsB78thI/3cAGzV/njJPkYV/mAwkDnPyI=;
+        b=vHzhHCOJEfRSBOKduQUOZLc4IuziVvwJHWJYYQUxif0Wsxdw4NGDb/01BjsO1F2t9d
+         oT0rboGSJUsWps26aa/GrHBn7OeRBXybrfBU6I7D5yLCiqUDNtKgjMzvffyf6pNY257v
+         LSeF6cYqfVDAtwaL9FZahfWSKhuto+LIYCmLXdxefI3H+/kum4iyshq9mmKA1LLcKW5i
+         qoDRZkTF7hMIMkDQZRc74mLBn6vhq0Nj5fDj5ROo0Q0pHlzRqGOy+9Km4/MyslYMCsZF
+         lnMKv/HnY7Mv/oU9fH7+IqbXpcsRM40fUilUKVG8qNIqKU7KiWGmCN/6lpmDgkFFX7MV
+         04IQ==
+X-Gm-Message-State: ACgBeo3p8Sk5d8NGdZObM5fMTi0s/bkjAiMkyvnrRdwYsa926+POyJ1Z
+        KXjcrp2ItAUe+2mix7xXulPT70/HL8lzOcoklaG+pz+0Ld/D2JVhX64sat5VnVVych4/UmWc0lh
+        XIH4vW+448aeEnsBGD+4knXE=
+X-Received: by 2002:a2e:a887:0:b0:26a:871b:a16d with SMTP id m7-20020a2ea887000000b0026a871ba16dmr9391586ljq.482.1663053701204;
+        Tue, 13 Sep 2022 00:21:41 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6r+REe45FUvXnaTS9jVKKwZjNZFId41bNwnokkT3n1YTbgrJnWiH8KnqDSyjREPFSzn6xt4g==
+X-Received: by 2002:a2e:a887:0:b0:26a:871b:a16d with SMTP id m7-20020a2ea887000000b0026a871ba16dmr9391578ljq.482.1663053700977;
+        Tue, 13 Sep 2022 00:21:40 -0700 (PDT)
+Received: from [192.168.1.121] (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
+        by smtp.gmail.com with ESMTPSA id o1-20020a05651205c100b0048b0099f40fsm1522618lfo.216.2022.09.13.00.21.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 00:21:40 -0700 (PDT)
+Message-ID: <64964b86-1fef-3550-a224-081f8e0e5e52@redhat.com>
+Date:   Tue, 13 Sep 2022 10:21:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] hmm-tests: Fix migrate_dirty_page test
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220913052203.177071-1-apopple@nvidia.com>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <20220913052203.177071-1-apopple@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <69526798-93df-a4f9-c385-c9bf490cc709@kali.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 04:55:58PM -0500, Steev Klimaszewski wrote:
-> 
-> On 9/12/22 1:10 PM, Dmitry Baryshkov wrote:
-> > On 12/09/2022 18:40, Johan Hovold wrote:
-> >> Device-managed resources allocated post component bind must be tied to
-> >> the lifetime of the aggregate DRM device or they will not necessarily be
-> >> released when binding of the aggregate device is deferred.
-> >>
-> >> This can lead resource leaks or failure to bind the aggregate device
-> >> when binding is later retried and a second attempt to allocate the
-> >> resources is made.
-> >>
-> >> For the DP aux-bus, an attempt to populate the bus a second time will
-> >> simply fail ("DP AUX EP device already populated").
-> >>
-> >> Fix this by amending the DP aux interface and tying the lifetime of the
-> >> EP device to the DRM device rather than DP controller platform device.
-> >
-> > Doug, could you please take a look?
-> >
-> > For me this is another reminder/pressure point that we should populate 
-> > the AUX BUS from the probe(), before binding the components together.
-> >
-> >>
-> >> Fixes: c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
-> >> Cc: stable@vger.kernel.org      # 5.19
-> >> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >> ---
-> >>   drivers/gpu/drm/bridge/parade-ps8640.c   | 2 +-
-> >>   drivers/gpu/drm/display/drm_dp_aux_bus.c | 5 +++--
-> >>   drivers/gpu/drm/msm/dp/dp_display.c      | 3 ++-
-> >>   include/drm/display/drm_dp_aux_bus.h     | 6 +++---
-> >>   4 files changed, 9 insertions(+), 7 deletions(-)
 
-> This breaks builds which have ti-sn65dsi86 included:
-> 
-> drivers/gpu/drm/bridge/ti-sn65dsi86.c:628:50: error: passing argument 1 
-> of 'devm_of_dp_aux_populate_ep_devices' from incompatible argument type.
-> 
-> As well,
-> 
-> drivers/gpu/drm/bridge/ti-sn65dsi86.c:628:15: error: too few arguments 
-> to function 'devm_of_dp_aux_populate_ep_devices'
 
-Thanks for reporting this. I messed up and apparently only grepped for
-devm_of_dp_aux_populate_bus() and not the
-devm_of_dp_aux_populate_ep_devices() wrapper when searching for users.
+On 13.9.2022 8.22, Alistair Popple wrote:
+> As noted by John Hubbard the original test relied on side effects of the
+> implementation of migrate_vma_setup() to detect if pages had been
+> swapped to disk or not. This is subject to change in future so
+> explicitly check for swap entries via pagemap instead. Fix a spelling
+> mistake while we're at it.
+> 
+> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> Fixes: 5cc88e844e87 ("selftests/hmm-tests: add test for dirty bits")
+> ---
+>   tools/testing/selftests/vm/hmm-tests.c | 50 +++++++++++++++++++++++---
+>   1 file changed, 46 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftests/vm/hmm-tests.c
+> index 70fdb49b59ed..b5f6a7dc1f12 100644
+> --- a/tools/testing/selftests/vm/hmm-tests.c
+> +++ b/tools/testing/selftests/vm/hmm-tests.c
+> @@ -1261,9 +1261,47 @@ static int destroy_cgroup(void)
+>   	return 0;
+>   }
+>   
+> +static uint64_t get_pfn(int fd, uint64_t ptr)
+> +{
+> +	uint64_t pfn;
+> +	int ret;
+> +
+> +	ret = pread(fd, &pfn, sizeof(ptr),
+> +		(uint64_t) ptr / getpagesize() * sizeof(ptr));
+> +	if (ret != sizeof(ptr))
+> +		return 0;
+> +
+> +	return pfn;
+> +}
+> +
+> +#define PAGEMAP_SWAPPED (1ULL << 62)
+> +
+> +/* Returns true if at least one page in the range is on swap */
+> +static bool pages_swapped(void *ptr, unsigned long pages)
+> +{
+> +	uint64_t pfn;
+> +	int fd = open("/proc/self/pagemap", O_RDONLY);
+> +	unsigned long i;
+> +
+> +	if (fd < 0)
+> +		return false;
+> +
+> +	for (i = 0; i < pages; i++) {
+> +		pfn = get_pfn(fd, (uint64_t) ptr + i * getpagesize());
+> +
+> +		if (pfn & PAGEMAP_SWAPPED) {
+> +			close(fd);
+> +			return true;
+> +		}
+> +	}
+> +
+> +	close(fd);
+> +	return false;
+> +}
+> +
+>   /*
+>    * Try and migrate a dirty page that has previously been swapped to disk. This
+> - * checks that we don't loose dirty bits.
+> + * checks that we don't lose dirty bits.
+>    */
+>   TEST_F(hmm, migrate_dirty_page)
+>   {
+> @@ -1300,6 +1338,10 @@ TEST_F(hmm, migrate_dirty_page)
+>   
+>   	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
+>   
+> +	/* Make sure at least some pages got paged to disk. */
+> +	if (!pages_swapped(buffer->ptr, npages))
+> +		SKIP(return, "Pages weren't swapped when they should have been");
+> +
+>   	/* Fault pages back in from swap as clean pages */
+>   	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+>   		tmp += ptr[i];
+> @@ -1309,10 +1351,10 @@ TEST_F(hmm, migrate_dirty_page)
+>   		ptr[i] = i;
+>   
+>   	/*
+> -	 * Attempt to migrate memory to device, which should fail because
+> -	 * hopefully some pages are backed by swap storage.
+> +	 * Attempt to migrate memory to device. This might fail if some pages
+> +	 * are/were backed by swap but that's ok.
+>   	 */
+> -	ASSERT_TRUE(hmm_migrate_sys_to_dev(self->fd, buffer, npages));
+> +	hmm_migrate_sys_to_dev(self->fd, buffer, npages);
+>   
+>   	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
+>   
 
-Johan
+
+Reviewed-by: Mika Penttilä <mpenttil@redhat.com>
+
