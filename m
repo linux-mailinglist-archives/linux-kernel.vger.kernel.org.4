@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B6D5B66EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 06:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411285B66EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 06:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiIME1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 00:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S229569AbiIME1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 00:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiIME1C (ORCPT
+        with ESMTP id S230337AbiIME1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 00:27:02 -0400
+        Tue, 13 Sep 2022 00:27:05 -0400
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6858D550A0;
-        Mon, 12 Sep 2022 21:23:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D3D558DF8;
+        Mon, 12 Sep 2022 21:23:43 -0700 (PDT)
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:28 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id AFB8A20584CE;
-        Tue, 13 Sep 2022 13:23:28 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:28 +0900
+  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:29 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 107A520584CE;
+        Tue, 13 Sep 2022 13:23:29 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:29 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 4C451B62AE;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 82C3DB62A4;
         Tue, 13 Sep 2022 13:23:28 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 01/10] arm64: dts: uniphier: Rename pvtctl node to thermal-sensor
-Date:   Tue, 13 Sep 2022 13:23:12 +0900
-Message-Id: <20220913042321.4817-2-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 02/10] arm64: dts: uniphier: Rename usb-phy node for USB2 to usb-controller
+Date:   Tue, 13 Sep 2022 13:23:13 +0900
+Message-Id: <20220913042321.4817-3-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
 References: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
@@ -48,41 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pvtctl node belongs to thermal-sensor, so the node name should be
-renamed to thermal-sensor.
+Actual phy nodes are each child node. The parent node should be
+usb-controller node as a representation of the phy integration.
+This applies to the devicetree for LD11 SoC.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 2 +-
- arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-index 8f2c1c1e2c64..debab9f0e3e1 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-@@ -715,7 +715,7 @@ watchdog {
- 				compatible = "socionext,uniphier-wdt";
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+index 15dcfc259854..16d281cae31d 100644
+--- a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
++++ b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+@@ -530,7 +530,7 @@ pinctrl: pinctrl {
+ 				compatible = "socionext,uniphier-ld11-pinctrl";
  			};
  
--			pvtctl: pvtctl {
-+			pvtctl: thermal-sensor {
- 				compatible = "socionext,uniphier-ld20-thermal";
- 				interrupts = <0 3 4>;
- 				#thermal-sensor-cells = <0>;
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index ba75adedbf79..e96e7ed98717 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -545,7 +545,7 @@ watchdog {
- 				compatible = "socionext,uniphier-wdt";
- 			};
- 
--			pvtctl: pvtctl {
-+			pvtctl: thermal-sensor {
- 				compatible = "socionext,uniphier-pxs3-thermal";
- 				interrupts = <0 3 4>;
- 				#thermal-sensor-cells = <0>;
+-			usb-phy {
++			usb-controller {
+ 				compatible = "socionext,uniphier-ld11-usb2-phy";
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
 -- 
 2.25.1
 
