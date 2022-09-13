@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF3A5B7239
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B9E5B6FE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232907AbiIMOrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S233420AbiIMOVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiIMOqe (ORCPT
+        with ESMTP id S233363AbiIMOSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:46:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F2B2AD9;
-        Tue, 13 Sep 2022 07:24:31 -0700 (PDT)
+        Tue, 13 Sep 2022 10:18:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DAA5E65F;
+        Tue, 13 Sep 2022 07:13:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D346EB80F9E;
-        Tue, 13 Sep 2022 14:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31626C433D6;
-        Tue, 13 Sep 2022 14:17:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB907614B0;
+        Tue, 13 Sep 2022 14:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C03C43141;
+        Tue, 13 Sep 2022 14:12:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078669;
-        bh=rWYNn6AX8qGZFR6CUEwmBFpxhkx5iTNWaMTbeQLzUWA=;
+        s=korg; t=1663078327;
+        bh=qcGCLlxipgxnD4S81lIQustGzJ34flUL6TAVGT84gaM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SOUouC6MbGN36pn9jCGHxVDM1dY5GO/BhvSUlqpo+As8gtxIsO+mMMm5BYM6l9hTl
-         DUom/pevo0ZPNCB45EAC1B2OrWaC+snaW3Trm3dyJKqXAYgfweGYGgpbJp44PIQclc
-         a4SzNTDezprICF5Q9xjA9G04FFjgbgDiX0CPKmQo=
+        b=gd74AnXyTCjuE15BEqhIkQVzXy5/gHdV1ObdRI6gwNLs/x9Z434mltMGuO3zndxqS
+         7lafVF5D2tcnJqHj0gHW7ZjJ57apdk/jUklC3PN78oPu6xWScF4xYAFIccaGnaQ6+w
+         Cw5081hsBzTPT6inSruiYxJRcMPIjUthwRCk8tCg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeffy Chen <jeffy.chen@rock-chips.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        stable@vger.kernel.org,
+        Frederic Schumacher <frederic.schumacher@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 010/121] drm/gem: Fix GEM handle release errors
-Date:   Tue, 13 Sep 2022 16:03:21 +0200
-Message-Id: <20220913140357.774864736@linuxfoundation.org>
+Subject: [PATCH 5.19 096/192] ARM: at91: pm: fix self-refresh for sama7g5
+Date:   Tue, 13 Sep 2022 16:03:22 +0200
+Message-Id: <20220913140414.749501170@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,132 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffy Chen <jeffy.chen@rock-chips.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit ea2aa97ca37a9044ade001aef71dbc06318e8d44 ]
+[ Upstream commit a02875c4cbd6f3d2f33d70cc158a19ef02d4b84f ]
 
-Currently we are assuming a one to one mapping between dmabuf and
-GEM handle when releasing GEM handles.
+It has been discovered that on some parts, from time to time, self-refresh
+procedure doesn't work as expected. Debugging and investigating it proved
+that disabling AC DLL introduce glitches in RAM controllers which
+leads to unexpected behavior. This is confirmed as a hardware bug. DLL
+bypass disables 3 DLLs: 2 DX DLLs and AC DLL. Thus, keep only DX DLLs
+disabled. This introduce 6mA extra current consumption on VDDCORE when
+switching to any ULP mode or standby mode but the self-refresh procedure
+still works.
 
-But that is not always true, since we would create extra handles for the
-GEM obj in cases like gem_open() and getfb{,2}().
-
-A similar issue was reported at:
-https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
-
-Another problem is that the imported dmabuf might not always have
-gem_obj->dma_buf set, which would cause leaks in
-drm_gem_remove_prime_handles().
-
-Let's fix these for now by using handle to find the exact map to remove.
-
-Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220819072834.17888-1-jeffy.chen@rock-chips.com
+Fixes: f0bbf17958e8 ("ARM: at91: pm: add self-refresh support for sama7g5")
+Suggested-by: Frederic Schumacher <frederic.schumacher@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Tested-by: Cristian Birsan <cristian.birsan@microchip.com>
+Link: https://lore.kernel.org/r/20220826083927.3107272-3-claudiu.beznea@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_gem.c      | 17 +----------------
- drivers/gpu/drm/drm_internal.h |  4 ++--
- drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
- 3 files changed, 15 insertions(+), 26 deletions(-)
+ arch/arm/mach-at91/pm_suspend.S | 24 +++++++++++++++++-------
+ include/soc/at91/sama7-ddr.h    |  4 ++++
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index 6410563a9cb6f..dbd19a34b517b 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -167,21 +167,6 @@ void drm_gem_private_object_init(struct drm_device *dev,
- }
- EXPORT_SYMBOL(drm_gem_private_object_init);
- 
--static void
--drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct drm_file *filp)
--{
--	/*
--	 * Note: obj->dma_buf can't disappear as long as we still hold a
--	 * handle reference in obj->handle_count.
--	 */
--	mutex_lock(&filp->prime.lock);
--	if (obj->dma_buf) {
--		drm_prime_remove_buf_handle_locked(&filp->prime,
--						   obj->dma_buf);
--	}
--	mutex_unlock(&filp->prime.lock);
--}
--
- /**
-  * drm_gem_object_handle_free - release resources bound to userspace handles
-  * @obj: GEM object to clean up.
-@@ -252,7 +237,7 @@ drm_gem_object_release_handle(int id, void *ptr, void *data)
- 	if (obj->funcs->close)
- 		obj->funcs->close(obj, file_priv);
- 
--	drm_gem_remove_prime_handles(obj, file_priv);
-+	drm_prime_remove_buf_handle(&file_priv->prime, id);
- 	drm_vma_node_revoke(&obj->vma_node, file_priv);
- 
- 	drm_gem_object_handle_put_unlocked(obj);
-diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
-index 17f3548c8ed25..d05e6a5b66873 100644
---- a/drivers/gpu/drm/drm_internal.h
-+++ b/drivers/gpu/drm/drm_internal.h
-@@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device *dev, void *data,
- 
- void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv);
- void drm_prime_destroy_file_private(struct drm_prime_file_private *prime_fpriv);
--void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
--					struct dma_buf *dma_buf);
-+void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
-+				 uint32_t handle);
- 
- /* drm_drv.c */
- struct drm_minor *drm_minor_acquire(unsigned int minor_id);
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index d6c7f4f9a7a29..a350310b65d89 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -187,29 +187,33 @@ static int drm_prime_lookup_buf_handle(struct drm_prime_file_private *prime_fpri
- 	return -ENOENT;
- }
- 
--void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
--					struct dma_buf *dma_buf)
-+void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
-+				 uint32_t handle)
- {
- 	struct rb_node *rb;
- 
--	rb = prime_fpriv->dmabufs.rb_node;
-+	mutex_lock(&prime_fpriv->lock);
+diff --git a/arch/arm/mach-at91/pm_suspend.S b/arch/arm/mach-at91/pm_suspend.S
+index abe4ced33edaf..ffed4d9490428 100644
+--- a/arch/arm/mach-at91/pm_suspend.S
++++ b/arch/arm/mach-at91/pm_suspend.S
+@@ -172,9 +172,15 @@ sr_ena_2:
+ 	/* Put DDR PHY's DLL in bypass mode for non-backup modes. */
+ 	cmp	r7, #AT91_PM_BACKUP
+ 	beq	sr_ena_3
+-	ldr	tmp1, [r3, #DDR3PHY_PIR]
+-	orr	tmp1, tmp1, #DDR3PHY_PIR_DLLBYP
+-	str	tmp1, [r3, #DDR3PHY_PIR]
 +
-+	rb = prime_fpriv->handles.rb_node;
- 	while (rb) {
- 		struct drm_prime_member *member;
- 
--		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
--		if (member->dma_buf == dma_buf) {
-+		member = rb_entry(rb, struct drm_prime_member, handle_rb);
-+		if (member->handle == handle) {
- 			rb_erase(&member->handle_rb, &prime_fpriv->handles);
- 			rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
- 
--			dma_buf_put(dma_buf);
-+			dma_buf_put(member->dma_buf);
- 			kfree(member);
--			return;
--		} else if (member->dma_buf < dma_buf) {
-+			break;
-+		} else if (member->handle < handle) {
- 			rb = rb->rb_right;
- 		} else {
- 			rb = rb->rb_left;
- 		}
- 	}
++	/* Disable DX DLLs. */
++	ldr	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++	orr	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX0DLLCR]
 +
-+	mutex_unlock(&prime_fpriv->lock);
- }
++	ldr	tmp1, [r3, #DDR3PHY_DX1DLLCR]
++	orr	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX1DLLCR]
  
- void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv)
+ sr_ena_3:
+ 	/* Power down DDR PHY data receivers. */
+@@ -221,10 +227,14 @@ sr_ena_3:
+ 	bic	tmp1, tmp1, #DDR3PHY_DSGCR_ODTPDD_ODT0
+ 	str	tmp1, [r3, #DDR3PHY_DSGCR]
+ 
+-	/* Take DDR PHY's DLL out of bypass mode. */
+-	ldr	tmp1, [r3, #DDR3PHY_PIR]
+-	bic	tmp1, tmp1, #DDR3PHY_PIR_DLLBYP
+-	str	tmp1, [r3, #DDR3PHY_PIR]
++	/* Enable DX DLLs. */
++	ldr	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++	bic	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX0DLLCR]
++
++	ldr	tmp1, [r3, #DDR3PHY_DX1DLLCR]
++	bic	tmp1, tmp1, #DDR3PHY_DXDLLCR_DLLDIS
++	str	tmp1, [r3, #DDR3PHY_DX1DLLCR]
+ 
+ 	/* Enable quasi-dynamic programming. */
+ 	mov	tmp1, #0
+diff --git a/include/soc/at91/sama7-ddr.h b/include/soc/at91/sama7-ddr.h
+index 9e17247474fa9..2706bc48c0764 100644
+--- a/include/soc/at91/sama7-ddr.h
++++ b/include/soc/at91/sama7-ddr.h
+@@ -39,6 +39,10 @@
+ 
+ #define DDR3PHY_ZQ0SR0				(0x188)		/* ZQ status register 0 */
+ 
++#define	DDR3PHY_DX0DLLCR			(0x1CC)		/* DDR3PHY DATX8 DLL Control Register */
++#define	DDR3PHY_DX1DLLCR			(0x20C)		/* DDR3PHY DATX8 DLL Control Register */
++#define		DDR3PHY_DXDLLCR_DLLDIS		(1 << 31)	/* DLL Disable */
++
+ /* UDDRC */
+ #define UDDRC_STAT				(0x04)		/* UDDRC Operating Mode Status Register */
+ #define		UDDRC_STAT_SELFREF_TYPE_DIS	(0x0 << 4)	/* SDRAM is not in Self-refresh */
 -- 
 2.35.1
 
