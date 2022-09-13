@@ -2,130 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFE35B661B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712495B6620
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiIMD2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S229557AbiIMDav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 23:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiIMD1u (ORCPT
+        with ESMTP id S229500AbiIMDas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:27:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A455245D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:27:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23A88612FF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5180DC433C1;
-        Tue, 13 Sep 2022 03:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663039667;
-        bh=XhianKc+s3BOBPZ/LhWL7qQatN3+FBFhoFTJSc6MEio=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WHsYfaIfJs44MIk5iBOgm4Dh5ZLRcGjiey97f26KSJCu5N9hKgQ7KSGqIzTWQL/vc
-         /u2tC1pU1cPCkKuUAv6XI9okrH1szR/q7QbGqYpLCQrIb3LF63WqnfEEATZQlcjfX5
-         +0wpLnTywR8xsPVyXt/Cg464PnP40FbnDnJAAYaxHbvbU4GPonkz4kzJJWlP3keqF1
-         8xfyJNQWRc3I+oMfF8dWwTy2wB1p9BhzjCzmVRAvfS/ZhQyqPa8g9XyplQBBJgbhQq
-         qJX0IvuPtK2/lTCksE8AFvts6CsEB52Z4pP/sZ2uW96daPUoKF1vUaPQn75Nm4bUI8
-         ZQ/9fxJXLt4Xw==
-Message-ID: <6cfc1406-7239-69d0-42dc-a9d61c1ea54d@kernel.org>
-Date:   Tue, 13 Sep 2022 11:27:36 +0800
+        Mon, 12 Sep 2022 23:30:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F34BA76;
+        Mon, 12 Sep 2022 20:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663039846; x=1694575846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rvqAqZpTqInXF16KLzlc3IVvUN6JPd0bgtJFosO4hGE=;
+  b=B/eVaQyDU/fPqxzb6dOjMIW7/BZoIL5RwFTNpmXpP/7vHH8CQVcl6nVD
+   zvPGRIpKiGDjdyjmRyxg7grKCq36K3AAJsfUW+/xQ+yS559MN2aPSa+Lo
+   uPX0HD/rBMn+oncMtRjXeqUAQygTjnnDTTtJSSetP9CZvKgLVmF8oOilU
+   GcrKzJ/BJl9nIn8yazkvNaayyZaLNsCdeuQvoDMEuHDlfX2WgA8XidFmD
+   bXxeef3VN+CONAgpbMYrJdLNWGLiDzTf8BZBK8AKERvs7JxBqGUbb1IFs
+   to8aEIBo1pPTuhXVIZnHzIwqMyygu055Mpx+Tdldj2BSf/xkgSpKv9KZ6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324268690"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="324268690"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 20:30:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="684689796"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 20:30:43 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXwdG-0003AV-2u;
+        Tue, 13 Sep 2022 03:30:42 +0000
+Date:   Tue, 13 Sep 2022 11:30:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     SEO HOYOUNG <hy50.seo@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
+Cc:     kbuild-all@lists.01.org, SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: Re: [PATCH v1] scsi: ufs: add a variant operation in struct
+ ufs_hba_variant_ops
+Message-ID: <202209131145.uQlsf9Uv-lkp@intel.com>
+References: <20220912140000.95483-1-hy50.seo@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-Content-Language: en-US
-To:     "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
-        David Rientjes <rientjes@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>
-References: <20220830141009.150075-1-chao@kernel.org>
- <BAC9CE6A-5873-429F-ACE2-E0A9E507D807@linux.dev>
- <dbef29b2-ab0a-c3df-638c-381916a0d15a@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <dbef29b2-ab0a-c3df-638c-381916a0d15a@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912140000.95483-1-hy50.seo@samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/9 5:25, Vlastimil Babka (SUSE) wrote:
-> On 8/31/22 05:09, Muchun Song wrote:
->>
->>
->>> On Aug 30, 2022, at 22:10, Chao Yu <chao@kernel.org> wrote:
-> 
-> Please use scripts/get_maintainer.pl next time, I could have missed this.
+Hi SEO,
 
-Oh, my bad, will Cc all maintainers next time.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next krzk/for-next linus/master v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
->>> From: Chao Yu <chao.yu@oppo.com>
->>>
->>> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
->>> out-of-memory, if it fails, return errno correctly rather than
->>> triggering panic via BUG_ON();
->>
->> I tend to agree with you. A mount operation shouldn’t panic the
->> kernel.
-> 
-> Hmm kmalloc(64) shouldn't normally due that due to the the underlying page
-> allocation falling into the "too small to fail" category, wonder if
-> syzkaller was doing anything special here?
-> 
-> But yeah we should get rid of all BUG_ONs eventually, just not sure if
-> stable@ is needed here.
-> 
->>>
->>> kernel BUG at mm/slub.c:5893!
->>> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->>>
->>> Call trace:
->>> sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->>> __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->>> create_cache mm/slab_common.c:229 [inline]
->>> kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->>> kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->>> f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->>> f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->>> f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->>> mount_bdev+0x1b8/0x210 fs/super.c:1400
->>> f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->>> legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->>> vfs_get_tree+0x40/0x140 fs/super.c:1530
->>> do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->>> path_mount+0x358/0x914 fs/namespace.c:3370
->>> do_mount fs/namespace.c:3383 [inline]
->>> __do_sys_mount fs/namespace.c:3591 [inline]
->>> __se_sys_mount fs/namespace.c:3568 [inline]
->>> __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
->>>
->>> Cc: <stable@kernel.org>
->>> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
->>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
->>
->> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
->>
->> Thanks.
->>
->>
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/SEO-HOYOUNG/scsi-ufs-add-a-variant-operation-in-struct-ufs_hba_variant_ops/20220913-101855
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220913/202209131145.uQlsf9Uv-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/60f9cc2a287e2bfe58c8355519797a9071b00afa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review SEO-HOYOUNG/scsi-ufs-add-a-variant-operation-in-struct-ufs_hba_variant_ops/20220913-101855
+        git checkout 60f9cc2a287e2bfe58c8355519797a9071b00afa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/ufs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/ufs/host/ufs-exynos.c: In function 'exynos_ufs_check_int_error':
+   drivers/ufs/host/ufs-exynos.c:1388:17: error: 'val' undeclared (first use in this function)
+    1388 |                 val = hci_readl(ufs, HCI_AH8_STATE);
+         |                 ^~~
+   drivers/ufs/host/ufs-exynos.c:1388:17: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/ufs/host/ufs-exynos.c:1392:40: warning: assignment to 'bool *' {aka '_Bool *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    1392 |                          queue_eh_work = true;
+         |                                        ^
+>> drivers/ufs/host/ufs-exynos.c:1383:67: warning: parameter 'queue_eh_work' set but not used [-Wunused-but-set-parameter]
+    1383 | static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
+         |                                                             ~~~~~~^~~~~~~~~~~~~
+
+
+vim +1392 drivers/ufs/host/ufs-exynos.c
+
+  1382	
+> 1383	static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
+  1384	{
+  1385		struct exynos_ufs *ufs = ufshcd_get_variant(hba);
+  1386	
+  1387		if (ufshcd_is_auto_hibern8_supported(hba)) {
+  1388			val = hci_readl(ufs, HCI_AH8_STATE);
+  1389	
+  1390			if (val & HCI_AH8_STATE_ERROR) {
+  1391				 ufshcd_set_link_broken(hba);
+> 1392				 queue_eh_work = true;
+  1393			}
+  1394		}
+  1395	}
+  1396	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
