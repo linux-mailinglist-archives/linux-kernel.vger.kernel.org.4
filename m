@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66BA5B7935
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F2D5B7933
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbiIMSL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S229890AbiIMSLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbiIMSLJ (ORCPT
+        with ESMTP id S231616AbiIMSLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:11:09 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E3A72B7C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:01 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p18so12490354plr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:01 -0700 (PDT)
+        Tue, 13 Sep 2022 14:11:13 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E717436B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b75so7150118pfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XQ8hIFG6q5WKMN5Ns4E0eRv8QKNJMaYAAhMqE3kUHyU=;
-        b=Zwd2T64CMlOt2t6v2YUv91XYfNgJbAxGmsslT3ZAOs6w6EZg8t5Fqp8Nqh8dVEKNAA
-         FqB9RVgbnB5pAyE57yYcdPvNa3eK64heDwFxyr1qvrUFEBWY/8t5kaRgEGMu0OsOUvVk
-         rgmlIr3av1kFrhsoQVo6gw7QSDja6eytLvufYelEZXhwBU4yEEmu36iJOPKR+NAcJx6R
-         UDEu5dpNkDEBF3pPNPSxZTIce6cEgmE6LsXYTBHQXL8MNOnp2+etsTirEjdR8SZnElid
-         DzmhxcVu6uxPtGGYRT57qjG2E7JL8PUIeaqgsNR5nSimhHdOf0kfcFDwQ3j+5j9EWE+Z
-         Y2fA==
+        bh=PvnL+9cGl2OZT8JmDVYUgH6KLMONpy7QbVIbld3HZFU=;
+        b=j3yjGxUKh7EVbd/drrPml3FFgsu3DnYW8P+O2OaGRYDdqd3l137D7BK70Pf8P/24UP
+         dMxhOL4B8tYRjki/wGriHL4u6ehhm1PYBVxBrikecmI28KWGeL3EKHS1ypANQtFIbLkw
+         VHRWxMT6SLNe3SMd1Y0HnS7hfmk4PsDowqW7SeQQ5hL0L9TIbEwgfjVEtakLkWHUgFoL
+         QzFAhlbH5vidkGrl3jzkrO4f3KtmEauIsGmMl+jrDuTLSXmDxQPTZvKxuGPrl0C4XtOJ
+         7ktOc3rR1MdJjhdOt4h2PGiB6FmW5ETm00zr9btBRywo3X9QSB2dh72Wwm7CxdJvFjM6
+         NWqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=XQ8hIFG6q5WKMN5Ns4E0eRv8QKNJMaYAAhMqE3kUHyU=;
-        b=XxrJ6qYEl45KiIfTPAbw1U9jhfKtyl5eudoSoUhsDWEwt1S49P3Wo1uMkVidSO3aer
-         fLiATzUYV5BUwVgxDhCQOVotfO/xfvucUGj8juVF1cdIrmjXsizQ0FdWdxy8f+aZkJdE
-         VLBNt8KGvNWxeLzpEWHqJFkru/jt2o1ijlmb5sgg049LLJHXo9F8f1IvqQ1V/crjBtmn
-         2rGcu/FHoZ9VRtFSH6lcuhdTzeAkYKNIyr3Ms0PymnqCoivZ7sdzjRLaS93Wa3UIAWXL
-         yl4+83FD9Mo9u5ZMKf5p50BDvdAsjGAo8/P9eDnld9E8Mf3ZpbeCzttapy3BHnbTjIzT
-         MAVw==
-X-Gm-Message-State: ACgBeo0srT7kzo5ptrJGIRxObhf0uUMonX3eHLjs7ge2GolXsP+9u6Wj
-        j/CBJsfxF7bzMQIJJpcMnRiKcpukz6X/3w==
-X-Google-Smtp-Source: AA6agR6R65XTgekQohxDq76X9er4kMYytxvwLwcHqbE3PUPmsCOvUZYFcycYI1IHpgWbWwLDaTiQlw==
-X-Received: by 2002:a17:902:820a:b0:178:456e:138 with SMTP id x10-20020a170902820a00b00178456e0138mr4704863pln.145.1663089480839;
-        Tue, 13 Sep 2022 10:18:00 -0700 (PDT)
+        bh=PvnL+9cGl2OZT8JmDVYUgH6KLMONpy7QbVIbld3HZFU=;
+        b=Q/V/ymo0p3w3cxbE5G25XLtGkkfMLFXCw2Kw8XrrnPnPUQVMkD1rk5ApkrFEx87Vfc
+         ZWL5UXP7kXKSZl79+sSpFB7okQQAB1Swn8ukILWDfBsnRwfn7tkW0fpmugxeCwacpsTu
+         RuL2YYsLMzuwFSosehKuRtpUbdYcYR0I2yG4vAjXPIWwZKIzVX236BLYsNeTYWyWR1ld
+         g5kISgdQTCt69H0YOc77G8JFY5PIDuq2zU/IP8QOVj+dO3Ir+uWBcrul6m3GZLbK0NdW
+         DNag+rL9ObQ5iqnpm4682L4kZcsE8y0mTmJShI+gIgoAeDFhOpKUL/LQU1wpZCmthZz0
+         Q9iw==
+X-Gm-Message-State: ACgBeo0M9kfnNPIj5GtpJ+OjL/UDdQp2HfT6GRqy5xpOhc1uvyMbehfB
+        VeidU+c3QMMQR7pRXdGkzJZ28xVMBeBX5Q==
+X-Google-Smtp-Source: AA6agR6B/WSFLIxR901//HPrAt3VSA3sOqUTNRD0eNW0Z+2tGsFw55Mv/bRaEXkKYDPo2/O0ISVF0g==
+X-Received: by 2002:a05:6a00:21d1:b0:542:b916:c48f with SMTP id t17-20020a056a0021d100b00542b916c48fmr13625403pfj.56.1663089482159;
+        Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.17.59
+        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 10:18:00 -0700 (PDT)
+        Tue, 13 Sep 2022 10:18:01 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
         Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
-Subject: [PATCH 1/3] vmw_balloon: access reset_required through READ/WRITE_ONCE
-Date:   Tue, 13 Sep 2022 02:43:04 -0700
-Message-Id: <20220913094306.317734-2-namit@vmware.com>
+Subject: [PATCH 2/3] vmw_balloon: exit if initalization fails
+Date:   Tue, 13 Sep 2022 02:43:05 -0700
+Message-Id: <20220913094306.317734-3-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913094306.317734-1-namit@vmware.com>
 References: <20220913094306.317734-1-namit@vmware.com>
@@ -75,66 +75,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-reset_required might be accessed concurrently, at least through debugfs.
-While there is no apparent functional risk, avoid any potential race,
-even if it is benign.
+In certain VMware hypervisor variants the balloon might not be
+supported. In such cases initialization would fail, but resources would
+keep being unnecessarily wasted. The balloon driver would retry
+reinitialization every second for no reason.
 
-Use READ_ONCE() and WRITE_ONCE() when accessing reset_required.
+Initialize the balloon once during init, before starting the worker. If
+initialization fails, put out a message and fail gracefully.
 
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- drivers/misc/vmw_balloon.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/misc/vmw_balloon.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 61a2be712bf7..7fa91983c567 100644
+index 7fa91983c567..762442b9ece8 100644
 --- a/drivers/misc/vmw_balloon.c
 +++ b/drivers/misc/vmw_balloon.c
-@@ -492,7 +492,7 @@ __vmballoon_cmd(struct vmballoon *b, unsigned long cmd, unsigned long arg1,
+@@ -1416,7 +1416,7 @@ static void vmballoon_pop(struct vmballoon *b)
+  * is not  empty) and then restarting protocol. This operation normally
+  * happens when host responds with VMW_BALLOON_ERROR_RESET to a command.
+  */
+-static void vmballoon_reset(struct vmballoon *b)
++static int vmballoon_reset(struct vmballoon *b)
+ {
+ 	int error;
  
- 	/* mark reset required accordingly */
- 	if (status == VMW_BALLOON_ERROR_RESET)
--		b->reset_required = true;
-+		WRITE_ONCE(b->reset_required, true);
+@@ -1427,11 +1427,13 @@ static void vmballoon_reset(struct vmballoon *b)
+ 	/* free all pages, skipping monitor unlock */
+ 	vmballoon_pop(b);
  
- 	return status;
- }
-@@ -965,7 +965,7 @@ static int64_t vmballoon_change(struct vmballoon *b)
- 	 * Otherwise we might get huge positives instead of negatives
- 	 */
+-	if (vmballoon_send_start(b, VMW_BALLOON_CAPABILITIES))
++	error = vmballoon_send_start(b, VMW_BALLOON_CAPABILITIES);
++	if (error)
+ 		goto unlock;
  
--	if (b->reset_required)
-+	if (READ_ONCE(b->reset_required))
- 		return 0;
- 
- 	/* consider a 2MB slack on deflate, unless the balloon is emptied */
-@@ -1446,7 +1446,7 @@ static void vmballoon_reset(struct vmballoon *b)
- 	}
- 
+ 	if ((b->capabilities & VMW_BALLOON_BATCHED_CMDS) != 0) {
+-		if (vmballoon_init_batching(b)) {
++		error = vmballoon_init_batching(b);
++		if (error) {
+ 			/*
+ 			 * We failed to initialize batching, inform the monitor
+ 			 * about it by sending a null capability.
+@@ -1448,8 +1450,7 @@ static void vmballoon_reset(struct vmballoon *b)
  	vmballoon_stats_gen_inc(b, VMW_BALLOON_STAT_RESET);
--	b->reset_required = false;
-+	WRITE_ONCE(b->reset_required, false);
+ 	WRITE_ONCE(b->reset_required, false);
  
- 	error = vmballoon_vmci_init(b);
- 	if (error)
-@@ -1473,7 +1473,7 @@ static void vmballoon_work(struct work_struct *work)
- 	struct vmballoon *b = container_of(dwork, struct vmballoon, dwork);
- 	int64_t change = 0;
+-	error = vmballoon_vmci_init(b);
+-	if (error)
++	if (vmballoon_vmci_init(b))
+ 		pr_err_once("failed to initialize vmci doorbell\n");
  
--	if (b->reset_required)
-+	if (READ_ONCE(b->reset_required))
- 		vmballoon_reset(b);
+ 	if (vmballoon_send_guest_id(b))
+@@ -1457,6 +1458,7 @@ static void vmballoon_reset(struct vmballoon *b)
  
- 	down_read(&b->conf_sem);
-@@ -1666,7 +1666,7 @@ static int vmballoon_debug_show(struct seq_file *f, void *offset)
- 		   VMW_BALLOON_CAPABILITIES);
- 	seq_printf(f, "%-22s: %#16lx\n", "used capabilities", b->capabilities);
- 	seq_printf(f, "%-22s: %16s\n", "is resetting",
--		   b->reset_required ? "y" : "n");
-+		   READ_ONCE(b->reset_required) ? "y" : "n");
+ unlock:
+ 	up_write(&b->conf_sem);
++	return error;
+ }
  
- 	/* format size info */
- 	seq_printf(f, "%-22s: %16lu\n", "target", READ_ONCE(b->target));
+ /**
+@@ -1879,6 +1881,23 @@ static int __init vmballoon_init(void)
+ 	if (x86_hyper_type != X86_HYPER_VMWARE)
+ 		return -ENODEV;
+ 
++	INIT_LIST_HEAD(&balloon.huge_pages);
++	spin_lock_init(&balloon.comm_lock);
++	init_rwsem(&balloon.conf_sem);
++	balloon.vmci_doorbell = VMCI_INVALID_HANDLE;
++	balloon.batch_page = NULL;
++	balloon.page = NULL;
++	balloon.reset_required = true;
++
++	/*
++	 * Reset the balloon to check that it is indeed supported.
++	 */
++	error = vmballoon_reset(&balloon);
++	if (error) {
++		pr_err("memory ballooning is disabled");
++		goto fail;
++	}
++
+ 	INIT_DELAYED_WORK(&balloon.dwork, vmballoon_work);
+ 
+ 	error = vmballoon_register_shrinker(&balloon);
+@@ -1892,14 +1911,6 @@ static int __init vmballoon_init(void)
+ 	balloon_devinfo_init(&balloon.b_dev_info);
+ 	vmballoon_compaction_init(&balloon);
+ 
+-	INIT_LIST_HEAD(&balloon.huge_pages);
+-	spin_lock_init(&balloon.comm_lock);
+-	init_rwsem(&balloon.conf_sem);
+-	balloon.vmci_doorbell = VMCI_INVALID_HANDLE;
+-	balloon.batch_page = NULL;
+-	balloon.page = NULL;
+-	balloon.reset_required = true;
+-
+ 	queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
+ 
+ 	vmballoon_debugfs_init(&balloon);
 -- 
 2.25.1
 
