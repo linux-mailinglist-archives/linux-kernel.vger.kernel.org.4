@@ -2,160 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C885B6BFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C885B6C10
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiIMKzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S231806AbiIMK5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiIMKzK (ORCPT
+        with ESMTP id S231795AbiIMK5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:55:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A509B1A38F;
-        Tue, 13 Sep 2022 03:55:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE1B11063;
-        Tue, 13 Sep 2022 03:55:14 -0700 (PDT)
-Received: from [10.57.77.29] (unknown [10.57.77.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4D373F71A;
-        Tue, 13 Sep 2022 03:55:06 -0700 (PDT)
-Message-ID: <e44d0bd6-7809-59db-0133-1c6c9ba8cd55@arm.com>
-Date:   Tue, 13 Sep 2022 11:55:05 +0100
+        Tue, 13 Sep 2022 06:57:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890305F106
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663066623; x=1694602623;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4/5yU65PNToNKBZpi7K7o11Xt1HGqwoLvIgK+IKEV1Y=;
+  b=EcnCZagDxNhpQERPmfP660ZDBW52JBBnR464Folj+GBvUNMgl0d8Sk0y
+   6n3+hZjWc3Jf3WHpwby5WKZDgWOr1E+v+2fEKzQMVBqjDqaEAgFWX+1i8
+   psxpsHHazh04S+w5mgZjn6GwDJddWc77KjU6LRgrE5l8s0GCL5jveDAVM
+   PLAi/lrJnbryCLoC6hfkC8qV3h/sI1/GznMDnTRBEAzUnRM2AwL9xh5fO
+   Y34DfI0beskHJeqE/0eDUM5EhSthgN2PVZbOTjgTJooDPVXiFzj8av4dd
+   33YKyHmMnC95ZNz4xZzO2zMwidS/vesWQLbmmWHkd0uf1xV805gyK76EJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="299445686"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="299445686"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 03:57:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="678517514"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2022 03:57:01 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oY3bB-0003WO-0c;
+        Tue, 13 Sep 2022 10:57:01 +0000
+Date:   Tue, 13 Sep 2022 18:56:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matteo Croce <mcroce@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 1/42] string.c:undefined reference to `_mcount'
+Message-ID: <202209131806.Fx9g1fDl-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 0/7] arm64/perf: Enable branch stack sampling
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <20220908051046.465307-1-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220908051046.465307-1-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/esmil/linux visionfive
+head:   044c1f5e968de7d30940431fbb90da599074ea1c
+commit: c247f6e6c7ba6abb92177ba2a742f60a3244d6d2 [1/42] riscv: optimized memcpy
+config: riscv-randconfig-c023-20220911 (https://download.01.org/0day-ci/archive/20220913/202209131806.Fx9g1fDl-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On 08/09/2022 06:10, Anshuman Khandual wrote:
-> This series enables perf branch stack sampling support on arm64 platform
-> via a new arch feature called Branch Record Buffer Extension (BRBE). All
-> relevant register definitions could be accessed here.
-> 
-> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> 
-> This series applies on v6.0-rc4 after the BRBE related perf ABI changes series
-> (V7) that was posted earlier, and a branch sample filter helper patch.
-> 
-> https://lore.kernel.org/all/20220824044822.70230-1-anshuman.khandual@arm.com/
-> 
-> https://lore.kernel.org/all/20220906084414.396220-1-anshuman.khandual@arm.com/
-> 
-> Following issues have been resolved
-> 
-> - Jame's concerns regarding permission inadequacy related to perfmon_capable()
-> - Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
+All errors (new ones prefixed by >>):
 
-I don't see the resolution to this one. I'm not 100% sure of the code
-path used for LBR, but I think you just need to take perf_allow_kernel()
-into account somewhere to make this command have the same result with
-BRBE. Is there any contention that the permissions shouldn't behave in
-the same way across platforms? This is when perf_event_paranoid < 2:
+   riscv64-linux-ld: arch/riscv/purgatory/purgatory.ro: in function `.L247':
+>> string.c:(.text+0x2240): undefined reference to `_mcount'
 
-Intel:
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
+   Selected by [y]:
+   - DRM_TTM_HELPER [=y] && HAS_IOMEM [=y] && DRM [=y]
+   - DRM_HISI_HIBMC [=y] && HAS_IOMEM [=y] && DRM [=y] && PCI [=y] && (ARM64 || COMPILE_TEST [=y])
 
-  $ perf record -j any -- ls
-
-  [ perf record: Woken up 1 times to write data ]
-  [ perf record: Captured and wrote 0.014 MB perf.data (16 samples) ]
-
-Arm:
-
-  $ perf record -j any -- ls
-
-  Error:
-  No permission to enable cycles event.
-
-> 
-> Following issues remain inconclusive
-> 
-> - Rob's concerns regarding the series structure, arm_pmu callbacks based framework
-> 
-> Changes in V2:
-> 
-> - Dropped branch sample filter helpers consolidation patch from this series 
-> - Added new hw_perf_event.flags element ARMPMU_EVT_PRIV to cache perfmon_capable()
-> - Use cached perfmon_capable() while configuring BRBE branch record filters
-> 
-> Changes in V1:
-> 
-> https://lore.kernel.org/linux-arm-kernel/20220613100119.684673-1-anshuman.khandual@arm.com/
-> 
-> - Added CONFIG_PERF_EVENTS wrapper for all branch sample filter helpers
-> - Process new perf branch types via PERF_BR_EXTEND_ABI
-> 
-> Changes in RFC V2:
-> 
-> https://lore.kernel.org/linux-arm-kernel/20220412115455.293119-1-anshuman.khandual@arm.com/
-> 
-> - Added branch_sample_priv() while consolidating other branch sample filter helpers
-> - Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
-> - Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
-> - Added documentation for struct arm_pmu changes, updated commit message
-> - Updated commit message for BRBE detection infrastructure patch
-> - PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
-> - Branch privilege state capture mechanism has now moved inside the driver
-> 
-> Changes in RFC V1:
-> 
-> https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: James Clark <james.clark@arm.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Anshuman Khandual (7):
->   arm64/perf: Add register definitions for BRBE
->   arm64/perf: Update struct arm_pmu for BRBE
->   arm64/perf: Update struct pmu_hw_events for BRBE
->   driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
->   arm64/perf: Drive BRBE from perf event states
->   arm64/perf: Add BRBE driver
->   arm64/perf: Enable branch stack sampling
-> 
->  arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++
->  arch/arm64/kernel/perf_event.c  |  48 ++++
->  drivers/perf/Kconfig            |  11 +
->  drivers/perf/Makefile           |   1 +
->  drivers/perf/arm_pmu.c          |  82 +++++-
->  drivers/perf/arm_pmu_brbe.c     | 448 ++++++++++++++++++++++++++++++++
->  drivers/perf/arm_pmu_brbe.h     | 259 ++++++++++++++++++
->  drivers/perf/arm_pmu_platform.c |  34 +++
->  include/linux/perf/arm_pmu.h    |  67 +++++
->  9 files changed, 1169 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/perf/arm_pmu_brbe.c
->  create mode 100644 drivers/perf/arm_pmu_brbe.h
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
