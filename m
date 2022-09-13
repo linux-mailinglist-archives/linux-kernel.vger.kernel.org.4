@@ -2,118 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063D65B75E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790055B761F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiIMP6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
+        id S231675AbiIMQIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiIMP6B (ORCPT
+        with ESMTP id S233025AbiIMQI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:58:01 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66C992F4C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:57:02 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id p12-20020a170902e74c00b00177f3be2825so8562234plf.17
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=cvJEnjTXhlWXDO7hFwpFHy53bcFzxR1mBtrl5AKvvps=;
-        b=WHm/6D6ARpjPd/cEbWmZhCHS72PbANzTsxUSf4b7+nXr0kutRzr1TG9ZvI3Q6Ew4+o
-         u4s4MgKcwejHN7wZz8QQVfM9DQth2kxFo/ZTeq/tlj+C5PQvu95GeX4lwVY/CXiW0vJk
-         qKVS/u7l2clyrLlZMmpvEet2bARk8XwGjuGCEKViLqObSeBODiTFGzUpOGUKmPBQ3Bki
-         6IFQEEUUbFx4rKoBQ+TYhiI+kaKogJCOTlguWFiGNeid0wD2bzzYu26osGPZs8HgIsdK
-         mH6Kjdbjt7Bh0tZN1aU8D42KudrleRawLRywmhFwFZCOIwO8QFSA9s+e8/kgQLKyzdMN
-         A1EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=cvJEnjTXhlWXDO7hFwpFHy53bcFzxR1mBtrl5AKvvps=;
-        b=RXx/U3qHbNpMw4s/NLbr+Sx5t4ASFOD3Y1WEtn1nDKW5zydkL4RWAlzgeDotUBuhT7
-         +AX97jVaXXI/nFNZBueHWIQ/HHT8p3C0i5Bf7+JiNwrfYaiQ7GogP1WwBY4TM73jFjYJ
-         4OxZ4cLJWU6OIzPebUChByZa/EAG4TF0y25cQVrGg8YvuZa8J+JswbVyM3jLp2DZZ6e0
-         xnn/DAZIToUEHuFwBi8sDH+kUiVZfInE1wyOHqdfZJJkwJbLzS9N4R7wt3xMh34/z17Z
-         DwnN9F55VJT1yq3CttCAm+Zl0jCmgYpiWlU07D4bApb26Z0uMkLiEfTPRw02KqzPpTRS
-         BWhw==
-X-Gm-Message-State: ACgBeo0xVxQSTHGjI25n6meRtl/OJU0o1pv8z+3qCHEyjeB+FLVjPXRC
-        eVzOPsnWeF8jV4VIcUj6AbwcBzXTzMM=
-X-Google-Smtp-Source: AA6agR7fODZawl72r3SMpSlBhegJYwwMxyYRozj9aUC7ch9LdPpMMVnRzuFBzMmDU2bRbz5cy4mtdWyADpE=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
- (user=jthies job=sendgmr) by 2002:aa7:9d9a:0:b0:53e:8bc5:afb7 with SMTP id
- f26-20020aa79d9a000000b0053e8bc5afb7mr30628956pfq.54.1663080954632; Tue, 13
- Sep 2022 07:55:54 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 14:55:49 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913145549.2839948-1-jthies@google.com>
-Subject: [PATCH v3] platform/chrome: cros_ec: Notify the PM of wake events
- during resume
-From:   Jameson Thies <jthies@google.com>
-To:     chrome-platform@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
-        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
-        Jameson Thies <jthies@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 12:08:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33228231;
+        Tue, 13 Sep 2022 08:04:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1A647CE126C;
+        Tue, 13 Sep 2022 14:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A835C433C1;
+        Tue, 13 Sep 2022 14:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663078387;
+        bh=gunEe1nh5wFT9m/QHESeKsh9cUJrJDWi/ZcgBwYbPvE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=y4vKSsp3oBL4XbaQuYXlFDKbc6XDY8sXfluEy7jPudZgTIUmhjak1LNwXk7gr+17A
+         M9Kn+gWsk2HmHq82AKN7DOlPmUrqiALbgVQbUs2shlEljJXlqoebrPQ9HbLU70Oegu
+         hH3zF05WxyGmzcXkv6Hw7Uj8cCJwZ385MOAsHIX8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 102/192] ARM: dts: at91: sama5d2_icp: dont keep vdd_other enabled all the time
+Date:   Tue, 13 Sep 2022 16:03:28 +0200
+Message-Id: <20220913140415.050368782@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
+User-Agent: quilt/0.67
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cros_ec_handle_event in the cros_ec driver can notify the PM of wake
-events. When a device is suspended, cros_ec_handle_event will not check
-MKBP events. Instead, received MKBP events are checked during resume by
-cros_ec_report_events_during_suspend. But
-cros_ec_report_events_during_suspend cannot notify the PM if received
-events are wake events, causing wake events to not be reported if
-received while the device is suspended.
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Update cros_ec_report_events_during_suspend to notify the PM of wake
-events during resume by calling pm_wakeup_event.
+[ Upstream commit 3d074b750d2b4c91962f10ea1df1c289ce0d3ce8 ]
 
-Signed-off-by: Jameson Thies <jthies@google.com>
+VDD_OTHER is not connected to any on board consumer thus it is not
+needed to keep it enabled all the time.
+
+Fixes: 68a95ef72cef ("ARM: dts: at91: sama5d2-icp: add SAMA5D2-ICP")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220826083927.3107272-9-claudiu.beznea@microchip.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ arch/arm/boot/dts/at91-sama5d2_icp.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changes since v1:
-- Updated wording in commit message from "Log" to "Notify PM of".
-
-Changes since v2:
-- Removed Reviewed-by tag and provided more context for the update in
-  the commit message.
----
- drivers/platform/chrome/cros_ec.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index 8aace50d446d..110df0fd4b00 100644
---- a/drivers/platform/chrome/cros_ec.c
-+++ b/drivers/platform/chrome/cros_ec.c
-@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
+diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+index 64d5ae179bec9..492456e195a37 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+@@ -258,7 +258,6 @@
+ 					regulator-max-microvolt = <1850000>;
+ 					regulator-initial-mode = <2>;
+ 					regulator-allowed-modes = <2>, <4>;
+-					regulator-always-on;
  
- static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
- {
-+	bool wake_event;
-+
- 	while (ec_dev->mkbp_event_supported &&
--	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
-+	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
- 		blocking_notifier_call_chain(&ec_dev->event_notifier,
- 					     1, ec_dev);
-+
-+		if (wake_event && device_may_wakeup(ec_dev->dev))
-+			pm_wakeup_event(ec_dev->dev, 0);
-+	}
- }
- 
- /**
+ 					regulator-state-standby {
+ 						regulator-on-in-suspend;
 -- 
-2.37.2.789.g6183377224-goog
+2.35.1
+
+
 
