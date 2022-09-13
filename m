@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787C75B722D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B565B70D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiIMOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S233794AbiIMO1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiIMOnc (ORCPT
+        with ESMTP id S233766AbiIMO0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB5D6E8A2;
-        Tue, 13 Sep 2022 07:23:14 -0700 (PDT)
+        Tue, 13 Sep 2022 10:26:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B20A67469;
+        Tue, 13 Sep 2022 07:17:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCCADB80F99;
-        Tue, 13 Sep 2022 14:23:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2387BC433C1;
-        Tue, 13 Sep 2022 14:23:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 638D7614B2;
+        Tue, 13 Sep 2022 14:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB82C433C1;
+        Tue, 13 Sep 2022 14:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078992;
-        bh=/kK+PK1CTeymdSj7Q7fco8uU/odJSlu1OgbFvwydZNg=;
+        s=korg; t=1663078541;
+        bh=nwEjTRfM2KzfiJetdsq1wWf1SwWuqHNYI9pB7SCD7IE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F7vMJgP6N1fAIYYMKUS4RtBZG5u7nb0viN+6gx8uq+6ToKMh909JujCrpnyH/Q42Z
-         chua2xMGt4riK5hg/1wC5eHgftDetlD3iodeeWO/IaELjShMrs3Cr6dy/gDh5q6SeK
-         pV9ktYhWVrYw70gPSe9sXcaTkVQtQrY/d8bf661c=
+        b=DrB3XjEruWjqz/iQleCepP/2KQGwUPbU20xCr75EwgsRtHAlq6120ybe84tQa7iPw
+         TxnqWVtnWJW5XZ9XhDh9Yjypx+2gEJXqEUW76zXXljbf1RIDCUWrfd71f1VkzGobnA
+         EgeT5HrhQLTMGPLw7BXogbADxVxVeTxYhPowzREY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Alexander Shishkin <alexander.shishkin@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 41/79] soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
+Subject: [PATCH 5.19 180/192] perf stat: Fix L2 Topdown metrics disappear for raw events
 Date:   Tue, 13 Sep 2022 16:04:46 +0200
-Message-Id: <20220913140352.277554990@linuxfoundation.org>
+Message-Id: <20220913140419.016363032@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,161 +62,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-[ Upstream commit 1085f5080647f0c9f357c270a537869191f7f2a1 ]
+[ Upstream commit f0c86a2bae4fd12bfa8bad4d43fb59fb498cdd14 ]
 
-In brcmstb_pm_probe(), there are two kinds of leak bugs:
+In perf/Documentation/perf-stat.txt, for "--td-level" the default "0" means
+the max level that the current hardware support.
 
-(1) we need to add of_node_put() when for_each__matching_node() breaks
-(2) we need to add iounmap() for each iomap in fail path
+So we need initialize the stat_config.topdown_level to TOPDOWN_MAX_LEVEL
+when “--td-level=0” or no “--td-level” option. Otherwise, for the
+hardware with a max level is 2, the 2nd level metrics disappear for raw
+events in this case.
 
-Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220707015620.306468-1-windhl@126.com
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+The issue cannot be observed for the perf stat default or "--topdown"
+options. This commit fixes the raw events issue and removes the
+duplicated code for the perf stat default.
+
+Before:
+
+ # ./perf stat -e "cpu-clock,context-switches,cpu-migrations,page-faults,instructions,cycles,ref-cycles,branches,branch-misses,{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}" sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+              1.03 msec cpu-clock                        #    0.001 CPUs utilized
+                 1      context-switches                 #  966.216 /sec
+                 0      cpu-migrations                   #    0.000 /sec
+                60      page-faults                      #   57.973 K/sec
+         1,132,112      instructions                     #    1.41  insn per cycle
+           803,872      cycles                           #    0.777 GHz
+         1,909,120      ref-cycles                       #    1.845 G/sec
+           236,634      branches                         #  228.640 M/sec
+             6,367      branch-misses                    #    2.69% of all branches
+         4,823,232      slots                            #    4.660 G/sec
+         1,210,536      topdown-retiring                 #     25.1% Retiring
+           699,841      topdown-bad-spec                 #     14.5% Bad Speculation
+         1,777,975      topdown-fe-bound                 #     36.9% Frontend Bound
+         1,134,878      topdown-be-bound                 #     23.5% Backend Bound
+           189,146      topdown-heavy-ops                #  182.756 M/sec
+           662,012      topdown-br-mispredict            #  639.647 M/sec
+         1,097,048      topdown-fetch-lat                #    1.060 G/sec
+           416,121      topdown-mem-bound                #  402.063 M/sec
+
+       1.002423690 seconds time elapsed
+
+       0.002494000 seconds user
+       0.000000000 seconds sys
+
+After:
+
+ # ./perf stat -e "cpu-clock,context-switches,cpu-migrations,page-faults,instructions,cycles,ref-cycles,branches,branch-misses,{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}" sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+              1.13 msec cpu-clock                        #    0.001 CPUs utilized
+                 1      context-switches                 #  882.128 /sec
+                 0      cpu-migrations                   #    0.000 /sec
+                61      page-faults                      #   53.810 K/sec
+         1,137,612      instructions                     #    1.29  insn per cycle
+           881,477      cycles                           #    0.778 GHz
+         2,093,496      ref-cycles                       #    1.847 G/sec
+           236,356      branches                         #  208.496 M/sec
+             7,090      branch-misses                    #    3.00% of all branches
+         5,288,862      slots                            #    4.665 G/sec
+         1,223,697      topdown-retiring                 #     23.1% Retiring
+           767,403      topdown-bad-spec                 #     14.5% Bad Speculation
+         2,053,322      topdown-fe-bound                 #     38.8% Frontend Bound
+         1,244,438      topdown-be-bound                 #     23.5% Backend Bound
+           186,665      topdown-heavy-ops                #      3.5% Heavy Operations       #     19.6% Light Operations
+           725,922      topdown-br-mispredict            #     13.7% Branch Mispredict      #      0.8% Machine Clears
+         1,327,400      topdown-fetch-lat                #     25.1% Fetch Latency          #     13.7% Fetch Bandwidth
+           497,775      topdown-mem-bound                #      9.4% Memory Bound           #     14.1% Core Bound
+
+       1.002701530 seconds time elapsed
+
+       0.002744000 seconds user
+       0.000000000 seconds sys
+
+Fixes: 63e39aa6ae103451 ("perf stat: Support L2 Topdown events")
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220826140057.3289401-1-zhengjun.xing@linux.intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/bcm/brcmstb/pm/pm-arm.c | 50 ++++++++++++++++++++++-------
- 1 file changed, 39 insertions(+), 11 deletions(-)
+ tools/perf/builtin-stat.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-index c6ec7d95bcfcc..722fd54e537cf 100644
---- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-+++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-@@ -681,13 +681,14 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	const struct of_device_id *of_id = NULL;
- 	struct device_node *dn;
- 	void __iomem *base;
--	int ret, i;
-+	int ret, i, s;
- 
- 	/* AON ctrl registers */
- 	base = brcmstb_ioremap_match(aon_ctrl_dt_ids, 0, NULL);
- 	if (IS_ERR(base)) {
- 		pr_err("error mapping AON_CTRL\n");
--		return PTR_ERR(base);
-+		ret = PTR_ERR(base);
-+		goto aon_err;
- 	}
- 	ctrl.aon_ctrl_base = base;
- 
-@@ -697,8 +698,10 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 		/* Assume standard offset */
- 		ctrl.aon_sram = ctrl.aon_ctrl_base +
- 				     AON_CTRL_SYSTEM_DATA_RAM_OFS;
-+		s = 0;
- 	} else {
- 		ctrl.aon_sram = base;
-+		s = 1;
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 5aacb7ed8c24a..82e14faecc3e4 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1944,6 +1944,9 @@ static int add_default_attributes(void)
+ 		free(str);
  	}
  
- 	writel_relaxed(0, ctrl.aon_sram + AON_REG_PANIC);
-@@ -708,7 +711,8 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 				     (const void **)&ddr_phy_data);
- 	if (IS_ERR(base)) {
- 		pr_err("error mapping DDR PHY\n");
--		return PTR_ERR(base);
-+		ret = PTR_ERR(base);
-+		goto ddr_phy_err;
- 	}
- 	ctrl.support_warm_boot = ddr_phy_data->supports_warm_boot;
- 	ctrl.pll_status_offset = ddr_phy_data->pll_status_offset;
-@@ -728,17 +732,20 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	for_each_matching_node(dn, ddr_shimphy_dt_ids) {
- 		i = ctrl.num_memc;
- 		if (i >= MAX_NUM_MEMC) {
-+			of_node_put(dn);
- 			pr_warn("too many MEMCs (max %d)\n", MAX_NUM_MEMC);
- 			break;
- 		}
- 
- 		base = of_io_request_and_map(dn, 0, dn->full_name);
- 		if (IS_ERR(base)) {
-+			of_node_put(dn);
- 			if (!ctrl.support_warm_boot)
- 				break;
- 
- 			pr_err("error mapping DDR SHIMPHY %d\n", i);
--			return PTR_ERR(base);
-+			ret = PTR_ERR(base);
-+			goto ddr_shimphy_err;
- 		}
- 		ctrl.memcs[i].ddr_shimphy_base = base;
- 		ctrl.num_memc++;
-@@ -749,14 +756,18 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	for_each_matching_node(dn, brcmstb_memc_of_match) {
- 		base = of_iomap(dn, 0);
- 		if (!base) {
-+			of_node_put(dn);
- 			pr_err("error mapping DDR Sequencer %d\n", i);
--			return -ENOMEM;
-+			ret = -ENOMEM;
-+			goto brcmstb_memc_err;
- 		}
- 
- 		of_id = of_match_node(brcmstb_memc_of_match, dn);
- 		if (!of_id) {
- 			iounmap(base);
--			return -EINVAL;
-+			of_node_put(dn);
-+			ret = -EINVAL;
-+			goto brcmstb_memc_err;
- 		}
- 
- 		ddr_seq_data = of_id->data;
-@@ -776,21 +787,24 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	dn = of_find_matching_node(NULL, sram_dt_ids);
- 	if (!dn) {
- 		pr_err("SRAM not found\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto brcmstb_memc_err;
- 	}
- 
- 	ret = brcmstb_init_sram(dn);
- 	of_node_put(dn);
- 	if (ret) {
- 		pr_err("error setting up SRAM for PM\n");
--		return ret;
-+		goto brcmstb_memc_err;
- 	}
- 
- 	ctrl.pdev = pdev;
- 
- 	ctrl.s3_params = kmalloc(sizeof(*ctrl.s3_params), GFP_KERNEL);
--	if (!ctrl.s3_params)
--		return -ENOMEM;
-+	if (!ctrl.s3_params) {
-+		ret = -ENOMEM;
-+		goto s3_params_err;
-+	}
- 	ctrl.s3_params_pa = dma_map_single(&pdev->dev, ctrl.s3_params,
- 					   sizeof(*ctrl.s3_params),
- 					   DMA_TO_DEVICE);
-@@ -810,7 +824,21 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 
- out:
- 	kfree(ctrl.s3_params);
--
-+s3_params_err:
-+	iounmap(ctrl.boot_sram);
-+brcmstb_memc_err:
-+	for (i--; i >= 0; i--)
-+		iounmap(ctrl.memcs[i].ddr_ctrl);
-+ddr_shimphy_err:
-+	for (i = 0; i < ctrl.num_memc; i++)
-+		iounmap(ctrl.memcs[i].ddr_shimphy_base);
++	if (!stat_config.topdown_level)
++		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
 +
-+	iounmap(ctrl.memcs[0].ddr_phy_base);
-+ddr_phy_err:
-+	iounmap(ctrl.aon_ctrl_base);
-+	if (s)
-+		iounmap(ctrl.aon_sram);
-+aon_err:
- 	pr_warn("PM: initialization failed with code %d\n", ret);
- 
- 	return ret;
+ 	if (!evsel_list->core.nr_entries) {
+ 		if (target__has_cpu(&target))
+ 			default_attrs0[0].config = PERF_COUNT_SW_CPU_CLOCK;
+@@ -1960,8 +1963,6 @@ static int add_default_attributes(void)
+ 		}
+ 		if (evlist__add_default_attrs(evsel_list, default_attrs1) < 0)
+ 			return -1;
+-
+-		stat_config.topdown_level = TOPDOWN_MAX_LEVEL;
+ 		/* Platform specific attrs */
+ 		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
+ 			return -1;
 -- 
 2.35.1
 
