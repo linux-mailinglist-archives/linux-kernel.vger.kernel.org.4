@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A6C5B7490
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68C95B73B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbiIMPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S235574AbiIMPMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiIMPW4 (ORCPT
+        with ESMTP id S230115AbiIMPKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:22:56 -0400
+        Tue, 13 Sep 2022 11:10:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CC57C304;
-        Tue, 13 Sep 2022 07:37:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E617821D;
+        Tue, 13 Sep 2022 07:32:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8B7614B2;
-        Tue, 13 Sep 2022 14:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6773C4314B;
-        Tue, 13 Sep 2022 14:21:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D826614A8;
+        Tue, 13 Sep 2022 14:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D91C433C1;
+        Tue, 13 Sep 2022 14:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078896;
-        bh=ZCj8EpiWE4HdoEoR65ksFhQ1zBYwbSb8ZDqJZlmL7c8=;
+        s=korg; t=1663078898;
+        bh=aVUuVMh2ZLmIwX+5ejz94R5HzVm9nu/nwMUZ/Qmoexo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vNnsLwNfwUuY1W1kuj/S42iF7r9r6uw9+FEQnpw/pZWfIevF0wxebaoYP8KUSKKX0
-         8URkf0/06RmMYcXT4AaM9ugYtjEGGNk5uAhLWNVLCbUyPAegNt7MZPWao3b8BqUyDT
-         eOfX75qXyDyd+T3tsSqQ0/fvXoQwy5r2Js87Bd5U=
+        b=wAMJhnIdxm4V5u/uuKGCcAUjX5iGuHrmOVe3TylEZDmNllQ3lTDC7ZioQiPhMFoy/
+         uToir2jL38qPQRNmWVjxf+PDHclv1Tvee8SGgOcW9zgIp9ptS7TvT5vrImWeiB2LhK
+         X+EBKKrx6WkD3pFcni63dZ+eMF/P2QmhFj36fu3c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 098/121] sch_sfb: Also store skb len before calling child enqueue
-Date:   Tue, 13 Sep 2022 16:04:49 +0200
-Message-Id: <20220913140401.565417803@linuxfoundation.org>
+Subject: [PATCH 5.15 099/121] perf script: Fix Cannot print iregs field for hybrid systems
+Date:   Tue, 13 Sep 2022 16:04:50 +0200
+Message-Id: <20220913140401.607238757@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -57,47 +63,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@toke.dk>
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-[ Upstream commit 2f09707d0c972120bf794cfe0f0c67e2c2ddb252 ]
+[ Upstream commit 82b2425fad2dd47204b3da589b679220f8aacc0e ]
 
-Cong Wang noticed that the previous fix for sch_sfb accessing the queued
-skb after enqueueing it to a child qdisc was incomplete: the SFB enqueue
-function was also calling qdisc_qstats_backlog_inc() after enqueue, which
-reads the pkt len from the skb cb field. Fix this by also storing the skb
-len, and using the stored value to increment the backlog after enqueueing.
+Commit b91e5492f9d7ca89 ("perf record: Add a dummy event on hybrid
+systems to collect metadata records") adds a dummy event on hybrid
+systems to fix the symbol "unknown" issue when the workload is created
+in a P-core but runs on an E-core. The added dummy event will cause
+"perf script -F iregs" to fail. Dummy events do not have "iregs"
+attribute set, so when we do evsel__check_attr, the "iregs" attribute
+check will fail, so the issue happened.
 
-Fixes: 9efd23297cca ("sch_sfb: Don't assume the skb is still around after enqueueing to child")
-Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Acked-by: Cong Wang <cong.wang@bytedance.com>
-Link: https://lore.kernel.org/r/20220905192137.965549-1-toke@toke.dk
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+The following commit [1] has fixed a similar issue by skipping the attr
+check for the dummy event because it does not have any samples anyway. It
+works okay for the normal mode, but the issue still happened when running
+the test in the pipe mode. In the pipe mode, it calls process_attr() which
+still checks the attr for the dummy event. This commit fixed the issue by
+skipping the attr check for the dummy event in the API evsel__check_attr,
+Otherwise, we have to patch everywhere when evsel__check_attr() is called.
+
+Before:
+
+  #./perf record -o - --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf script -F iregs |head -5
+  Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot print 'iregs' field.
+  0x120 [0x90]: failed to process type: 64
+  #
+
+After:
+
+  # ./perf record -o - --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf script -F iregs |head -5
+  ABI:2    CX:0x55b8efa87000    DX:0x55b8efa7e000    DI:0xffffba5e625efbb0    R8:0xffff90e51f8ae100
+  ABI:2    CX:0x7f1dae1e4000    DX:0xd0    DI:0xffff90e18c675ac0    R8:0x71
+  ABI:2    CX:0xcc0    DX:0x1    DI:0xffff90e199880240    R8:0x0
+  ABI:2    CX:0xffff90e180dd7500    DX:0xffff90e180dd7500    DI:0xffff90e180043500    R8:0x1
+  ABI:2    CX:0x50    DX:0xffff90e18c583bd0    DI:0xffff90e1998803c0    R8:0x58
+  #
+
+[1]https://lore.kernel.org/lkml/20220831124041.219925-1-jolsa@kernel.org/
+
+Fixes: b91e5492f9d7ca89 ("perf record: Add a dummy event on hybrid systems to collect metadata records")
+Suggested-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220908070030.3455164-1-zhengjun.xing@linux.intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/sch_sfb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/perf/builtin-script.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
-index 0d761f454ae8b..2829455211f8c 100644
---- a/net/sched/sch_sfb.c
-+++ b/net/sched/sch_sfb.c
-@@ -281,6 +281,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
- {
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index cb3d81adf5ca8..c6c40191933d4 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -435,6 +435,9 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+ 	struct perf_event_attr *attr = &evsel->core.attr;
+ 	bool allow_user_set;
  
- 	struct sfb_sched_data *q = qdisc_priv(sch);
-+	unsigned int len = qdisc_pkt_len(skb);
- 	struct Qdisc *child = q->qdisc;
- 	struct tcf_proto *fl;
- 	struct sfb_skb_cb cb;
-@@ -403,7 +404,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
- 	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
- 	ret = qdisc_enqueue(skb, child, to_free);
- 	if (likely(ret == NET_XMIT_SUCCESS)) {
--		qdisc_qstats_backlog_inc(sch, skb);
-+		sch->qstats.backlog += len;
- 		sch->q.qlen++;
- 		increment_qlen(&cb, q);
- 	} else if (net_xmit_drop_count(ret)) {
++	if (evsel__is_dummy_event(evsel))
++		return 0;
++
+ 	if (perf_header__has_feat(&session->header, HEADER_STAT))
+ 		return 0;
+ 
 -- 
 2.35.1
 
