@@ -2,134 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7947C5B6E78
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188095B6E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbiIMNgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S232321AbiIMNgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbiIMNgI (ORCPT
+        with ESMTP id S232317AbiIMNgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:36:08 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA335756D;
-        Tue, 13 Sep 2022 06:36:03 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 642A73200970;
-        Tue, 13 Sep 2022 09:36:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 13 Sep 2022 09:36:03 -0400
+        Tue, 13 Sep 2022 09:36:25 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F0B578B6;
+        Tue, 13 Sep 2022 06:36:24 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 92E015C0165;
+        Tue, 13 Sep 2022 09:36:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 13 Sep 2022 09:36:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        mendozajonas.com; h=cc:cc:content-transfer-encoding:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1663076161; x=1663162561; bh=vzmZrlkHVtjeQn3abrVkqwXk0
-        KmGWfY5VV/JgXRRvwg=; b=Pp56YvG51SfqJDwsGEBeqMqh1abGYWmLEX2DlX9KO
-        3aNocjuVTHKXfgPYTR9kyCvN4WW1tPYR7ZaKryizlpLFaKCeo6f6yKYDWTmabo9C
-        3U6yBibyQr7/HjvfzIJIFzQwLsETd/bOkPoJt8zBuD9AnRK59/NV5KIc6G+m7vzJ
-        HKEH35Sr8/+CNjm2U0JIQNqDJv4TdFh5hNnDqOQ4fQiJVhT1IHtiBcU5c7O1B2UX
-        0u2y3eZ/turgo0nJTxuYMsXrcT0bRl14uO0uXLKYSNlSGkDm6cxp89BaLVOFLB46
-        0judMWj4QYSUJjcpZm65w+hTvG6JQG3WXOF48CKjEK9cg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663076161; x=
-        1663162561; bh=vzmZrlkHVtjeQn3abrVkqwXk0KmGWfY5VV/JgXRRvwg=; b=O
-        CUxH1Trj83doNkxwJqvUzsBeOGw+E8+s/lhgrkD5abMEAJxZ0Z4CJFUadGwc6fVd
-        xysmN2vXL9lbQ3eBU82GzteGrL6TtZzLyM0aLA+pWk5osYP/EaK4B2NgJHEMtzx7
-        xrr/dxmgRZyI/b4EVNt7zlXSRZwae+ojsQ3/TpoZ0vclWS2kmVweQVu5MKVWuwki
-        9UZkorDk+cE4YWIglbpLX2JA363e3bzNh3jkzhQyjMNkU/9gA2WyzCzwdVYl6R5W
-        vopIK3mrGn4RRPVn1b/PssMykV2tDSxyG81yylQ2SNrZBbyrvC/FgoBxNj0aFpor
-        bbNjXvUwVJDxtVBjsbzUQ==
-X-ME-Sender: <xms:QYcgY_mFaV69a75Wa-nVBeECxoVw8QugkKxVYURI3R9-4tcOzqzVtw>
-    <xme:QYcgYy3dzbgryeKhBqVCj9nHCJqq1BXzB3QNjleB9X6bbCAKj9Fge5zVozawmzSca
-    gwVtRosIC4lt20VHA>
-X-ME-Received: <xmr:QYcgY1ryOYe340pnkS6Ehu8FNJ9P1XphUyvzdD3hoyqNuK4s3OPaOniJ-O713gY>
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663076183; x=
+        1663162583; bh=Tc0xVHPsREMfS7uj8Z2PW8B/PBM01asP+Nsn6MzfR0o=; b=r
+        GhhcP3aZj/0sP2D4/h+WRgh7wExihpOYP7qcV3LQcEI0rY+L/5skGRoSuf+oYUjV
+        hdvVV+/1Wl46Qdz/77jnXUplPOGlGDHaTUkaB9Cp1NjLSuR5a85ZV5VRmLwHIG8V
+        dnxfPLqgnMWczNxm442z895Gw3WTNXGbiXzFCY7KA5wbNLP4o7/KPbkdxnydeMgf
+        1NBGyxOM183OqEeOlGbQZa9+lqhX5/1fTFHFjAX06wbgvPcH/hCuCR7kkiFm+lor
+        GMRY94HRUizfwn2E31cPXJA2MzoMnoqrz+1lh9eNNtYRIHTJltx29jPY+zmMyuKL
+        DsSopt2eXvPC7pT5lPkUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663076183; x=1663162583; bh=Tc0xVHPsREMfS7uj8Z2PW8B/PBM0
+        1asP+Nsn6MzfR0o=; b=mxO4UwB6KgMan8JCywEwkBkA1UrDDtHz/D8l62ibI+J6
+        oeBPN+Z4I1p4WPRASDl7CHp6TMcomBhIIaaChQPJFsE+nKaLGfvp3any/QQORi9D
+        T+l+37vm9GQ8A4esLCYFTacK+g6M/QgJ1LNLY407ARpkpRd0+3ttAbkGpU+lobzq
+        No2PkVU9WgxT5ASXpZldNqswt1nv6e1qhmL1oNDKP/I01tjrwgaPiDunD4QP/U/b
+        qqw5JY91tXStTZCgn3rYhJDxDvzCEIktrU226SuU0fJzW6BHaG0+V0viqXvvWe+t
+        W796riM3UtFJEsdHPbmTw7bL1gG5AEGZMoUOOfSj9w==
+X-ME-Sender: <xms:V4cgY4d7nywV6OjyWM6jWF-r3PAQDdLu2MZdAtuUcCLdDnM4G80wdA>
+    <xme:V4cgY6P-TIOk4BSixSi6zdIh9CTHvAuG9juxX0RvOR5SjV6zd9UHZdcYtFNrvnDDR
+    VGScM_Bghz-BNc>
+X-ME-Received: <xmr:V4cgY5g1MyQ4bBkq9RytBDxlbBfKGaXYecHqvWW-JIYo0d4dduoOB1IvkJeo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugedgieekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgfjghfkfggtgfgsehtqhhmtddtreejnecuhfhrohhmpefurghm
-    ucfovghnughoiigrqdflohhnrghsuceoshgrmhesmhgvnhguohiirghjohhnrghsrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeehudevffeuieefffehteekfeekledvhfehteejgeeg
-    gedthfdvkeetleevhfelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehsrghmsehmvghnughoiigrjhhonhgrshdrtghomh
-X-ME-Proxy: <xmx:QYcgY3l4RF_SIBsvB2BRvDvytnHxZI_UucK6D2jA1aqUEJKhwyc4uA>
-    <xmx:QYcgY93FM06nfRIOlCNrNqBrDFqSXOPwFq1VI965HuVK34W7LNVWIw>
-    <xmx:QYcgY2tpcl7hcL8rH5BMD235zPvPNgiMeiRQSDmGQlDan87_xtjtZA>
-    <xmx:QYcgY3pbGIyxoh2i_GroednbvhWhIBvmaZwWTUJ0C8KEVDaMLGkNFA>
-Feedback-ID: iab794258:Fastmail
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:V4cgY9_N9-j8nx1nNqJ5DDsNzxlIedPy4Cw88--W-Vdheys8vKn46w>
+    <xmx:V4cgY0vGUDwLD28seUY_HtRxYOaDS6J8N3YtPnTjSAdgI40_4JNUnA>
+    <xmx:V4cgY0FslpieESCcdVMYHaXsnsO_SF0mAOdz1LApoNTx16zk9VhLTw>
+    <xmx:V4cgY-UIE7m_KlBV-zh6o6arpppQK4XMMDcVDbDUXeXBIskhTlWRiA>
+Feedback-ID: iac594737:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Sep 2022 09:36:01 -0400 (EDT)
-Date:   Tue, 13 Sep 2022 14:35:59 +0100
-From:   Sam Mendoza-Jonas <sam@mendozajonas.com>
-To:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>,
-        Paul Fertser <fercerpav@gmail.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/ncsi: Add Intel OS2BMC OEM command
-User-Agent: K-9 Mail for Android
-In-Reply-To: <36c12486-57d4-c11d-474f-f26a7de8e59a@linux.intel.com>
-References: <20220909025716.2610386-1-jiaqing.zhao@linux.intel.com> <YxrWPfErV7tKRjyQ@home.paul.comp> <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com> <Yxrun9LRcFv2QntR@home.paul.comp> <36c12486-57d4-c11d-474f-f26a7de8e59a@linux.intel.com>
-Message-ID: <F7F5AD32-901B-440A-8B1D-30C4283F18CD@mendozajonas.com>
+ 13 Sep 2022 09:36:22 -0400 (EDT)
+Date:   Tue, 13 Sep 2022 09:36:18 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Ard Biesheuvel <ardb@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH] Add support for ESRT loading under Xen
+Message-ID: <YyCHVdoStC7pGnXA@itl-email>
+References: <20220825215218.1606-1-demi@invisiblethingslab.com>
+ <c2a22672-b9dd-7aa4-b61e-ccb0faaa3b01@suse.com>
+ <YwkKiFIKHG4IcCmH@itl-email>
+ <2a1a9e8c-0635-e207-e858-0e0bd1df0f11@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HB29iMzKquh2KHmV"
+Content-Disposition: inline
+In-Reply-To: <2a1a9e8c-0635-e207-e858-0e0bd1df0f11@suse.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On September 13, 2022 3:12:06 AM GMT+01:00, Jiaqing Zhao <jiaqing=2Ezhao@li=
-nux=2Eintel=2Ecom> wrote:
->
->
->On 2022-09-09 15:43, Paul Fertser wrote:
->> Hello,
->>=20
->> On Fri, Sep 09, 2022 at 03:34:53PM +0800, Jiaqing Zhao wrote:
->>>> Can you please outline some particular use cases for this feature?
->>>>
->>> It enables access between host and BMC when BMC shares the network con=
-nection
->>> with host using NCSI, like accessing BMC via HTTP or SSH from host=2E=
-=20
->>=20
->> Why having a compile time kernel option here more appropriate than
->> just running something like "/usr/bin/ncsi-netlink --package 0
->> --channel 0 --index 3 --oem-payload 00000157200001" (this example uses
->> another OEM command) on BMC userspace startup?
->>=20
->
->Using ncsi-netlink is one way, but the package and channel id is undeterm=
-ined
->as it is selected at runtime=2E Calling the netlink command on a nonexist=
-ent
->package/channel may lead to kernel panic=2E
 
-If so, that would be a bug :)
+--HB29iMzKquh2KHmV
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Sep 2022 09:36:18 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Jan Beulich <jbeulich@suse.com>
+Cc: linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org, Ard Biesheuvel <ardb@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH] Add support for ESRT loading under Xen
 
->
->Why I prefer the kernel option is that it applies the config to all ncsi
->devices by default when setting up them=2E This reduces the effort and ke=
-eps
->compatibility=2E Lots of things in current ncsi kernel driver can be done=
- via
->commands from userspace, but I think it is not a good idea to have a driv=
-er
->resides on both kernel and userspace=2E
+On Tue, Sep 06, 2022 at 08:49:54AM +0200, Jan Beulich wrote:
+> On 26.08.2022 20:01, Demi Marie Obenour wrote:
+> > On Fri, Aug 26, 2022 at 09:53:29AM +0200, Jan Beulich wrote:
+> >> On 25.08.2022 23:52, Demi Marie Obenour wrote:
+> >>> @@ -40,6 +41,38 @@
+> >>> =20
+> >>>  #define efi_data(op)	(op.u.efi_runtime_call)
+> >>> =20
+> >>> +static_assert(XEN_PAGE_SHIFT =3D=3D EFI_PAGE_SHIFT,
+> >>> +              "Mismatch between EFI_PAGE_SHIFT and XEN_PAGE_SHIFT");
+> >>> +
+> >>> +bool xen_efi_mem_desc_lookup(u64 phys_addr, efi_memory_desc_t *md)
+> >>> +{
+> >>> +	struct xen_platform_op op =3D {
+> >>> +		.cmd =3D XENPF_firmware_info,
+> >>> +		.u.firmware_info =3D {
+> >>> +			.type =3D XEN_FW_EFI_INFO,
+> >>> +			.index =3D XEN_FW_EFI_MEM_INFO,
+> >>> +			.u.efi_info.mem.addr =3D phys_addr,
+> >>> +			.u.efi_info.mem.size =3D ((u64)-1ULL) - phys_addr,
+> >>> +		}
+> >>> +	};
+> >>> +	union xenpf_efi_info *info =3D &op.u.firmware_info.u.efi_info;
+> >>> +	int rc;
+> >>> +
+> >>> +	memset(md, 0, sizeof(*md)); /* initialize md even on failure */
+> >>> +	rc =3D HYPERVISOR_platform_op(&op);
+> >>> +	if (rc) {
+> >>> +		pr_warn("Could not obtain information on address %llu from Xen: "
+> >>> +			"error %d\n", phys_addr, rc);
+> >>> +		return false;
+> >>> +	}
+> >>> +
+> >>> +	md->attribute =3D info->mem.attr;
+> >>> +	md->type =3D info->mem.type;
+> >>> +	md->num_pages =3D info->mem.size >> XEN_PAGE_SHIFT;
+> >>> +	md->phys_addr =3D info->mem.addr;
+> >>
+> >> As indicated in reply to your patch changing XEN_FW_EFI_MEM_INFO in
+> >> the hypervisor: While this may fit the ESRT purpose, the address you
+> >> return here is not necessarily the start of the region, and hence
+> >> this function is not a general Xen replacement for the non-Xen
+> >> function. Therefore I think it also shouldn't give the impression of
+> >> doing so.
+> >=20
+> > Is this just a matter of renaming the function?
+>=20
+> Besides renaming the function perhaps it also shouldn't give the
+> impression of being generally usable. I would expect it to be a static
+> helper somewhere, or even be expanded inline.
 
-BMCs are of course in their own world and there's already some examples of=
- the config option, but how would a system owner be able to disable this wi=
-thout reflashing the BMC?
+I would be fine with doing this, but I didn=E2=80=99t want to litter esrt.c=
+ with
+Xen-specific code.  IIUC Linux prefers to avoid #ifdef in .c files.
 
+> >  Is it possible to
+> > implement the original function with the current hypervisor?
+>=20
+> Yes, but doing so would be ugly: You'd need to "bisect" your way to
+> the start of the region.
+>=20
+> As an aside (I think I did point this out before): Can you please
+> adjust the way your mail program sends mails? When I respond to your
+> mail (using Thunderbird), I find all the people previously on Cc on
+> the To: list, while your address is lost. As indicated I believe
+> this is a result of the Mail-Followup-To: tag your reply came with
+> (and I further think that TB's treatment of that tag is a reasonable
+> one, albeit perhaps there are other reasonable treatments as well; I
+> am not aware of this tag having any formally specified treatment).
+
+This was a misconfiguration on my end: I marked xen-devel as subscribed
+in my muttrc.  I fixed this and also unset followup_to, so the
+Mail-Followup-To header should no longer be generated.  Please let me
+know if this is still a problem.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--HB29iMzKquh2KHmV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmMgh1QACgkQsoi1X/+c
+IsEMWg/+K/M5YDFYGZvZG8t9UVyp5AVxc+to/61bec+l2gPk2YyH3Bz4pd4Co1hH
+1ZfIIW0nybYkWTXacg26fTMYqg7124vu+VH9mOEmfDp7ZmjWg/QvMYjOEevEQcFQ
+SWPhLavQ1pQvJJJacNrEtbk7ivAvYFaKzLPs4yvseBR9r3JyWFQU2fZfbDgi7Q9y
+XmuUxqVNerg5/9RQOn2d/+N8J4Bs8v1hclkr/J3KS7a44qukUa28TIEjlhbU3h3b
+WM+8zuTN/ksbHQ6/wWaG8KXt5+4UemsQhYOsgI/42eaM4YjjAPL/6d3Vb/bnr1cT
+Lk1A1/IXrMVq10GzZZ47sKnnZRD0t9QvXyP16trFJFPoNC2IniFyKfbm1cj5zrOl
+DJgvlRzNuFlTA3tHA+U9TW2HZ2xw9reQHWSGUmlB2q0JQ69ZiXOGT57WX5qPSepR
+OBXrf0yORshR6UkVewsQgPeGn7jzWpxFlR3y2NpZH1BOp6mVRIhKg6i6GRZqmCai
+/M+1IMFZn2CrNBxowxMGkn6Ixh5Zfz71/UTAArx1Ad7VUvrtnC2z/yCBUJ4JcSuQ
+hr9FnW/4TNH7OuB/Txm0smyJv4G9UUtSl932lqnOaqkPH12aXDJxjhtxH8y+hLga
+vU/DZwgOfeGRXHP4LBtP8cDDmDsModBrHDGOJQWd175eTbKiRiY=
+=7Q0Y
+-----END PGP SIGNATURE-----
+
+--HB29iMzKquh2KHmV--
