@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6077F5B6811
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489CC5B6812
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiIMGmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S230095AbiIMGmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiIMGmI (ORCPT
+        with ESMTP id S230471AbiIMGmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:42:08 -0400
+        Tue, 13 Sep 2022 02:42:12 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21DB53D3D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 23:42:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586DF58526
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 23:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663051327; x=1694587327;
+  t=1663051331; x=1694587331;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hj1h+6xFFazhwZdF3cst9SX/EiCK6lsmLCgWcuSVcwA=;
-  b=T+ln/3lp/Ts+ye98eY+zPNkoi16jmRe2dZhJVzR8n5TRi5zatP3vw7SY
-   Q2jAD2IhMoZCDtSHQsjJ4XHD1xSW4fBJeUiwqIZbXi2KUeRu0H1KPm5DZ
-   VzsIH+JBgWJdjT3dsotc8btf0By/xS8ANgT/TlZYFNR1uBE4Wp3ITVBZ5
-   eV20mFOVF3bJ/t3Y2PmPS7KgR/MCuYVDVN4K589mONQeBjmo0bQC6DrUW
-   loEZEAy0wBIZsKSugx2FQ233KmA6/ZAPkS5uxPJmytXQwcqyedhE5yowU
-   SwpnIoVu0FQ5hFJgURiM0bDC9qr5qOzF+7OdomBbgt8LMgdXiJmO9lVwl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324296435"
+  bh=C4y1rYIKX4fqF3zCci/fAjCkU8Jw0wyitSdCTFzi5Ss=;
+  b=mjSob+YMQYY64k3ihyki+pZfl863gax3uHEjNt2/LFUbjM7KgfQV0CMI
+   e1JsANF+WLhlHPLUZL6UmH1pwOuFf7WHhM5sgZJ2L9yIagDQIAE7f6Kmt
+   NTVzMysNuxmVzv0TYZfmgzTy+vPAFOfm1tp7Dlqxthp4KLzGFCgq02PJx
+   UGrJIrsrS9bHgpKrYWv+d7ryZu37wzzXLDmQQAn0SWDLAC7ODY6O2nJZY
+   nWdeV3V6kkCRnib5B3FFIf0XlHMxK6mOdEFGf8nrPA8OnQlW9TCQJvEmu
+   0kqdbjzm47icjKmow91RVNIuS6oRb6u5ujoHfzKkDs6Tvg85OmuuSRCnh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324296478"
 X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="324296435"
+   d="scan'208";a="324296478"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:41:52 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:41:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="678428774"
+   d="scan'208";a="678428866"
 Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2022 23:41:49 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2022 23:41:53 -0700
 From:   shaoqin.huang@intel.com
 To:     rppt@kernel.org
 Cc:     Shaoqin Huang <shaoqin.huang@intel.com>,
@@ -45,9 +45,9 @@ Cc:     Shaoqin Huang <shaoqin.huang@intel.com>,
         Rebecca Mckeever <remckee0@gmail.com>,
         David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] memblock test: Add test to memblock_add() 129th region
-Date:   Tue, 13 Sep 2022 14:41:30 +0800
-Message-Id: <20220913064138.407601-2-shaoqin.huang@intel.com>
+Subject: [PATCH v3 2/3] memblock test: Add test to memblock_reserve() 129th region
+Date:   Tue, 13 Sep 2022 14:41:31 +0800
+Message-Id: <20220913064138.407601-3-shaoqin.huang@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220913064138.407601-1-shaoqin.huang@intel.com>
 References: <20220913064138.407601-1-shaoqin.huang@intel.com>
@@ -65,44 +65,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Shaoqin Huang <shaoqin.huang@intel.com>
 
-Add 129th region into the memblock, and this will trigger the
+Reserve 129th region in the memblock, and this will trigger the
 memblock_double_array() function, this needs valid memory regions. So
-using dummy_physical_memory_init() to allocate a large enough memory
-region, and split it into a large enough memory which can be choosed by
-memblock_double_array(), and the left memory will be split into small
-memory region, and add them into the memblock. It make sure the
-memblock_double_array() will always choose the valid memory region that
-is allocated by the dummy_physical_memory_init().
-So memblock_double_array() must success.
+using dummy_physical_memory_init() to allocate a valid memory region.
+At the same time, reserve 128 faked memory region, and make sure these
+reserved region not intersect with the valid memory region. So
+memblock_double_array() will choose the valid memory region, and it will
+success.
 
-Another thing should be done is to restore the memory.regions after
-memblock_double_array(), due to now the memory.regions is pointing to a
-memory region allocated by dummy_physical_memory_init(). And it will
-affect the subsequent tests if we don't restore the memory region. So
-simply record the origin region, and restore it after the test.
+Also need to restore the reserved.regions after memblock_double_array(),
+to make sure the subsequent tests can run as normal.
 
 Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
 ---
- tools/testing/memblock/tests/basic_api.c | 96 ++++++++++++++++++++++++
- tools/testing/memblock/tests/common.c    |  7 +-
- tools/testing/memblock/tests/common.h    |  3 +
- 3 files changed, 104 insertions(+), 2 deletions(-)
+ tools/testing/memblock/tests/basic_api.c | 90 ++++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
 diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-index a13a57ba0815..7120fd8e47b1 100644
+index 7120fd8e47b1..1924524ad868 100644
 --- a/tools/testing/memblock/tests/basic_api.c
 +++ b/tools/testing/memblock/tests/basic_api.c
-@@ -423,6 +423,101 @@ static int memblock_add_near_max_check(void)
+@@ -895,6 +895,95 @@ static int memblock_reserve_near_max_check(void)
  	return 0;
  }
  
 +/*
-+ * A test that trying to add the 129th memory block.
++ * A test that trying to reserve the 129th memory block.
 + * Expect to trigger memblock_double_array() to double the
 + * memblock.memory.max, find a new valid memory as
-+ * memory.regions.
++ * reserved.regions.
 + */
-+static int memblock_add_many_check(void)
++static int memblock_reserve_many_check(void)
 +{
 +	int i;
 +	void *orig_region;
@@ -110,144 +103,92 @@ index a13a57ba0815..7120fd8e47b1 100644
 +		.base = SZ_16K,
 +		.size = MEM_SIZE,
 +	};
-+	phys_addr_t new_memory_regions_size;
-+	phys_addr_t base, size, block_size;
++	phys_addr_t memory_base = SZ_128K;
++	phys_addr_t new_reserved_regions_size;
 +
 +	PREFIX_PUSH();
 +
 +	reset_memblock_regions();
 +	memblock_allow_resize();
 +
++	/* Add a valid memory region used by double_array(). */
 +	dummy_physical_memory_init();
-+	/*
-+	 * We allocated enough memory by using dummy_physical_memory_init(), and
-+	 * split it into small block. First we split a large enough memory block
-+	 * as the memory region which will be choosed by memblock_double_array().
-+	 */
-+	base = PAGE_ALIGN(dummy_physical_memory_base());
-+	new_memory_regions_size = PAGE_ALIGN(INIT_MEMBLOCK_REGIONS * 2 *
-+					     sizeof(struct memblock_region));
-+	memblock_add(base, new_memory_regions_size);
-+
-+	/*
-+	 * For the left memory, we split them into small block and add them into
-+	 * memblock later.
-+	 */
-+	base += new_memory_regions_size;
-+	size = MEM_SIZE - new_memory_regions_size;
-+	block_size = size / (INIT_MEMBLOCK_REGIONS * 2);
-+
-+	orig_region = memblock.memory.regions;
++	memblock_add(dummy_physical_memory_base(), MEM_SIZE);
 +
 +	for (i = 0; i < INIT_MEMBLOCK_REGIONS; i++) {
-+		/*
-+		 * Add these small block to fulfill the memblock. We keep an
-+		 * interval between the nearby memory to avoid being merged.
-+		 */
-+		memblock_add(base + block_size * (2 * i + 1), block_size);
++		/* Reserve some fakes memory region to fulfill the memblock. */
++		memblock_reserve(memory_base, MEM_SIZE);
 +
-+		ASSERT_EQ(memblock.memory.cnt, i + 2);
-+		ASSERT_EQ(memblock.memory.total_size, new_memory_regions_size +
-+						      (i + 1) * block_size);
++		ASSERT_EQ(memblock.reserved.cnt, i + 1);
++		ASSERT_EQ(memblock.reserved.total_size, (i + 1) * MEM_SIZE);
++
++		/* Keep the gap so these memory region will not be merged. */
++		memory_base += MEM_SIZE * 2;
 +	}
 +
-+	/*
-+	 * At there, memblock_double_array() has been succeed, check if it
-+	 * update the memory.max.
-+	 */
-+	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
++	orig_region = memblock.reserved.regions;
 +
-+	/* memblock_double_array() will reserve the memory it used. Check it. */
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, new_memory_regions_size);
++	/* This reserve the 129 memory_region, and makes it double array. */
++	memblock_reserve(memory_base, MEM_SIZE);
++
++	/*
++	 * This is the memory region size used by the doubled reserved.regions,
++	 * and it has been reserved due to it has been used. The size is used to
++	 * calculate the total_size that the memblock.reserved have now.
++	 */
++	new_reserved_regions_size = PAGE_ALIGN((INIT_MEMBLOCK_REGIONS * 2) *
++					sizeof(struct memblock_region));
++	/*
++	 * The double_array() will find a free memory region as the new
++	 * reserved.regions, and the used memory region will be reserved, so
++	 * there will be one more region exist in the reserved memblock. And the
++	 * one more reserved region's size is new_reserved_regions_size.
++	 */
++	ASSERT_EQ(memblock.reserved.cnt, INIT_MEMBLOCK_REGIONS + 2);
++	ASSERT_EQ(memblock.reserved.total_size, (INIT_MEMBLOCK_REGIONS + 1) * MEM_SIZE +
++						new_reserved_regions_size);
++	ASSERT_EQ(memblock.reserved.max, INIT_MEMBLOCK_REGIONS * 2);
 +
 +	/*
 +	 * Now memblock_double_array() works fine. Let's check after the
-+	 * double_array(), the memblock_add() still works as normal.
++	 * double_array(), the memblock_reserve() still works as normal.
 +	 */
-+	memblock_add(r.base, r.size);
-+	ASSERT_EQ(memblock.memory.regions[0].base, r.base);
-+	ASSERT_EQ(memblock.memory.regions[0].size, r.size);
++	memblock_reserve(r.base, r.size);
++	ASSERT_EQ(memblock.reserved.regions[0].base, r.base);
++	ASSERT_EQ(memblock.reserved.regions[0].size, r.size);
 +
-+	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 2);
-+	ASSERT_EQ(memblock.memory.total_size, INIT_MEMBLOCK_REGIONS * block_size +
-+					      new_memory_regions_size +
-+					      MEM_SIZE);
-+	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
++	ASSERT_EQ(memblock.reserved.cnt, INIT_MEMBLOCK_REGIONS + 3);
++	ASSERT_EQ(memblock.reserved.total_size, (INIT_MEMBLOCK_REGIONS + 2) * MEM_SIZE +
++						new_reserved_regions_size);
++	ASSERT_EQ(memblock.reserved.max, INIT_MEMBLOCK_REGIONS * 2);
 +
 +	dummy_physical_memory_cleanup();
 +
 +	/*
-+	 * The current memory.regions is occupying a range of memory that
++	 * The current reserved.regions is occupying a range of memory that
 +	 * allocated from dummy_physical_memory_init(). After free the memory,
 +	 * we must not use it. So restore the origin memory region to make sure
 +	 * the tests can run as normal and not affected by the double array.
 +	 */
-+	memblock.memory.regions = orig_region;
-+	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
++	memblock.reserved.regions = orig_region;
++	memblock.reserved.cnt = INIT_MEMBLOCK_REGIONS;
 +
 +	test_pass_pop();
 +
 +	return 0;
 +}
 +
- static int memblock_add_checks(void)
+ static int memblock_reserve_checks(void)
  {
  	prefix_reset();
-@@ -438,6 +533,7 @@ static int memblock_add_checks(void)
- 	memblock_add_twice_check();
- 	memblock_add_between_check();
- 	memblock_add_near_max_check();
-+	memblock_add_many_check();
+@@ -909,6 +998,7 @@ static int memblock_reserve_checks(void)
+ 	memblock_reserve_twice_check();
+ 	memblock_reserve_between_check();
+ 	memblock_reserve_near_max_check();
++	memblock_reserve_many_check();
  
  	prefix_pop();
  
-diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-index eec6901081af..2de6a2b6efd2 100644
---- a/tools/testing/memblock/tests/common.c
-+++ b/tools/testing/memblock/tests/common.c
-@@ -5,8 +5,6 @@
- #include <linux/memory_hotplug.h>
- #include <linux/build_bug.h>
- 
--#define INIT_MEMBLOCK_REGIONS			128
--#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
- #define PREFIXES_MAX				15
- #define DELIM					": "
- 
-@@ -84,6 +82,11 @@ void dummy_physical_memory_cleanup(void)
- 	free(memory_block.base);
- }
- 
-+phys_addr_t dummy_physical_memory_base(void)
-+{
-+	return (phys_addr_t)memory_block.base;
-+}
-+
- static void usage(const char *prog)
- {
- 	BUILD_BUG_ON(ARRAY_SIZE(help_opts) != ARRAY_SIZE(long_opts) - 1);
-diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
-index 78128e109a95..ba14dc989ae9 100644
---- a/tools/testing/memblock/tests/common.h
-+++ b/tools/testing/memblock/tests/common.h
-@@ -11,6 +11,8 @@
- #include <../selftests/kselftest.h>
- 
- #define MEM_SIZE SZ_16K
-+#define INIT_MEMBLOCK_REGIONS			128
-+#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
- 
- enum test_flags {
- 	/* No special request. */
-@@ -104,6 +106,7 @@ void reset_memblock_attributes(void);
- void setup_memblock(void);
- void dummy_physical_memory_init(void);
- void dummy_physical_memory_cleanup(void);
-+phys_addr_t dummy_physical_memory_base(void);
- void parse_args(int argc, char **argv);
- 
- void test_fail(void);
 -- 
 2.34.1
 
