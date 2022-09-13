@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3C55B6A46
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3A25B6A48
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiIMJGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S231402AbiIMJHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiIMJGd (ORCPT
+        with ESMTP id S230408AbiIMJHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:06:33 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601D55095
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1663059990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mTAKWZxrTR4aLotQeR306wv06XVq5Q1W4FyW8YJ7oiU=;
-        b=SoSzNACoWlcQYTS44NAj5ZfdG8zlNx1kC46r2aEJGlt5X+yQYD3ILTX59RYKfTDdj8XmfY
-        gmt0A6Zrtml0Ik/hTwTej0tc2I5zVzltyBpS/f6Rk4gjLUVtkU5g2SX2lu5qDEpvrR4uK1
-        RjLee9i5wfiBG0gJOAXXZnvT8/JDOzA9vsDIrThi/fZa/yNIo5HTnd3tlsbA/WgEg73Z3X
-        PKnkP/7AAm3NIcyU8dDRGCXRP/LXGgoVCc0gow/KMJ5RCDp9qwaBm9p9cme6S5o0JhJQ4V
-        i/qHKa2dopXAARy3cIb3OX1Xe+BaSTES6T9HTTmJ+05jCgeX5VZ4Re7gB9pPhQ==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-608-xsSsPUECPFOa3iDlInHszw-1; Tue, 13 Sep 2022 05:06:28 -0400
-X-MC-Unique: xsSsPUECPFOa3iDlInHszw-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Tue, 13 Sep 2022 02:06:24 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <hpa@zytor.com>,
-        <linux-lgm-soc@maxlinear.com>, Rahul Tanwar <rtanwar@maxlinear.com>
-Subject: [PATCH] x86/devicetree: Add support for boot time interrupt mode config
-Date:   Tue, 13 Sep 2022 17:06:20 +0800
-Message-ID: <20220913090620.9193-1-rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 13 Sep 2022 05:07:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A515509B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:07:18 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [89.101.193.68])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0E94F6602006;
+        Tue, 13 Sep 2022 10:07:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663060037;
+        bh=4FYzYAq78L/H37k97U6Zxjw0N7leWulRRE9rHyIP+b0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g6ExAZPeFs9W5nvE3hrCzpUx1HHIy/t6o+Mp/Q7InLnxuQMPVNqFYaQoa/mVuP2CO
+         J7zrBoPvNwO1owzSNOMhRcuDns6vf/Ao7Ipqqo8zDfh/O30dqmlrbLA/O7DNXvzlIG
+         iWFULEMLF1kDf6sEqq2QG9E/W3dIfQWqbkNlL6zo2BuRAKUSXChDZ4lGyJU+0838Ad
+         NdJ0FFhl6iOfu4HZFvcP3wtnbrHySA0YoLSk/dxR3BZFL1yjDveMzC25zJRaqteoBg
+         Bg2sSYM18gS1nO2CHtpmPQrE5m2bB5n2nK/TqnsKt7/GA7Vyv3+dmJ8jOdAPWNqb/T
+         Z1gCg+qHVwoRA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH] soc: imx: imx8m-blk-ctrl: Defer probe if 'bus' genpd is not yet ready
+Date:   Tue, 13 Sep 2022 11:06:55 +0200
+Message-Id: <20220913090655.39778-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presently, init/boot time interrupt delivery mode is enumerated only
-for ACPI enabled systems by parsing MADT table or for older systems
-by parsing MP table. But for OF based x86 systems, it is assumed &
-fixed to legacy PIC mode.
+Depending of the boot sequence 'bus' genpd could be probed after imx8m-blk-ctrl
+which led driver probe to fail. Change the returned error to allow
+to defer the probe in this case.
 
-Add support for configuration of init time interrupt delivery mode
-for x86 OF based systems by introducing a new boolean property
-'intel,no-imcr' for interrupt-controller node of local APIC. This
-property emulates IMCRP Bit 7 of MP feature info byte 2 of MP
-floating pointer structure.
-
-Defaults to legacy PIC mode if absent. Configures it to virtual wire
-compatibility mode if present.
-
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- arch/x86/kernel/devicetree.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/soc/imx/imx8m-blk-ctrl.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 5cd51f25f446..de14015317f8 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -167,7 +167,15 @@ static void __init dtb_lapic_setup(void)
- =09=09=09return;
- =09}
- =09smp_found_config =3D 1;
--=09pic_mode =3D 1;
-+=09if (of_property_read_bool(dn, "intel,no-imcr")) {
-+=09=09pr_info("    Virtual Wire compatibility mode.\n");
-+=09=09pic_mode =3D 0;
-+=09}
-+=09else {
-+=09=09pr_info("    IMCR and PIC compatibility mode.\n");
-+=09=09pic_mode =3D 1;
-+=09}
-+
- =09register_lapic_address(lapic_addr);
- }
-=20
---=20
-2.17.1
+diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+index dff7529268e4..99f5226a465b 100644
+--- a/drivers/soc/imx/imx8m-blk-ctrl.c
++++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+@@ -215,8 +215,7 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
+ 
+ 	bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
+ 	if (IS_ERR(bc->bus_power_dev))
+-		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
+-				     "failed to attach power domain \"bus\"\n");
++		return -EPROBE_DEFER;
+ 
+ 	for (i = 0; i < bc_data->num_domains; i++) {
+ 		const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
+-- 
+2.32.0
 
