@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC8F5B7567
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3348B5B7303
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiIMPjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S231574AbiIMPBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236723AbiIMPis (ORCPT
+        with ESMTP id S235182AbiIMO7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:38:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA84D186F3;
-        Tue, 13 Sep 2022 07:44:43 -0700 (PDT)
+        Tue, 13 Sep 2022 10:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AFC74375;
+        Tue, 13 Sep 2022 07:28:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95253614EA;
-        Tue, 13 Sep 2022 14:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC43C433C1;
-        Tue, 13 Sep 2022 14:30:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24416B80F9F;
+        Tue, 13 Sep 2022 14:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6698EC433C1;
+        Tue, 13 Sep 2022 14:27:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079424;
-        bh=qUDf5XTkMr1y3mYRDLD8wyQJgOaBBW1W3YD8wCMg+Ko=;
+        s=korg; t=1663079264;
+        bh=LszwIUf0eKjljYdr0JRDc31G7ffCLdWv84uL0twAOtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SopX2Q+5zCHd5dLoPS+tM5a9R8mVjATtkEon8LRpKvdCSnozkCohW0MqYoSt8GhNO
-         Xd7c1NjiBaa8IWGa9+FYFb90ZLm3sD3HflphxFpInUJZbPgJ1bXR+NgIxt4kHnMLGA
-         bg7E7ARHYUhcczaQ72H/sr+Dyr9Hr6AJTri/pgug=
+        b=Q4VKmnzT2acJg1EfGdjh5yvAOJ+iC2DvD12fsrkM9hOCnw0UDEzmuauugKSgh0X3a
+         RFXk4n4XTQsovO0+e8BAn5LLj6hQFeRl3GNJKYQS38DwPLk6I/p/KGTBETzRhRqIXZ
+         TDpuxbl+Gyn+F1T0MUxcBL6XkKEe6YFMSXP92cE4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Nicolas Diaz <nicolas.diaz@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>
-Subject: [PATCH 4.19 20/79] serial: fsl_lpuart: RS485 RTS polariy is inverse
+        stable@vger.kernel.org, Sumit Saxena <sumit.saxena@broadcom.com>,
+        Guixin Liu <kanie@linux.alibaba.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 067/108] scsi: megaraid_sas: Fix double kfree()
 Date:   Tue, 13 Sep 2022 16:06:38 +0200
-Message-Id: <20220913140349.855097989@linuxfoundation.org>
+Message-Id: <20220913140356.497622082@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shenwei Wang <shenwei.wang@nxp.com>
+From: Guixin Liu <kanie@linux.alibaba.com>
 
-commit 846651eca073e2e02e37490a4a52752415d84781 upstream.
+[ Upstream commit 8c499e49240bd93628368c3588975cfb94169b8b ]
 
-The setting of RS485 RTS polarity is inverse in the current driver.
+When allocating log_to_span fails, kfree(instance->ctrl_context) is called
+twice. Remove redundant call.
 
-When the property of 'rs485-rts-active-low' is enabled in the dts node,
-the RTS signal should be LOW during sending. Otherwise, if there is no
-such a property, the RTS should be HIGH during sending.
-
-Fixes: 03895cf41d18 ("tty: serial: fsl_lpuart: Add support for RS-485")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Nicolas Diaz <nicolas.diaz@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-Link: https://lore.kernel.org/r/20220805144529.604856-1-shenwei.wang@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/1659424729-46502-1-git-send-email-kanie@linux.alibaba.com
+Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/fsl_lpuart.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1102,9 +1102,9 @@ static int lpuart_config_rs485(struct ua
- 		 * Note: UART is assumed to be active high.
- 		 */
- 		if (rs485->flags & SER_RS485_RTS_ON_SEND)
--			modem &= ~UARTMODEM_TXRTSPOL;
--		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
- 			modem |= UARTMODEM_TXRTSPOL;
-+		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
-+			modem &= ~UARTMODEM_TXRTSPOL;
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index a78a702511faa..944273f60d224 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -5182,7 +5182,6 @@ megasas_alloc_fusion_context(struct megasas_instance *instance)
+ 		if (!fusion->log_to_span) {
+ 			dev_err(&instance->pdev->dev, "Failed from %s %d\n",
+ 				__func__, __LINE__);
+-			kfree(instance->ctrl_context);
+ 			return -ENOMEM;
+ 		}
  	}
- 
- 	/* Store the new configuration */
+-- 
+2.35.1
+
 
 
