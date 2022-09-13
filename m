@@ -2,98 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50815B64B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 02:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D475B64DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 03:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiIMA5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 20:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
+        id S229777AbiIMBBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 21:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiIMA51 (ORCPT
+        with ESMTP id S229771AbiIMBAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 20:57:27 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB38D2CE04;
-        Mon, 12 Sep 2022 17:57:26 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id b17so5481120ilh.0;
-        Mon, 12 Sep 2022 17:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3FYZZ9kIkwc/JXTwVRSMlvQxtVggGrYH2HuC/wMgOdI=;
-        b=NYFdQ/VJ7Ustan9+kh9NBj5xKkAcAprM+EvkVz+OEu9s2jc6odB1P1d9eCn3LB1BSF
-         HVwiHNCWN9cjxHJmBFkuGDtng69dDzlhKuC2jwgo4GQZxAVPJBs8HWj0t+V1LaxAxs0h
-         fFzq8E+L/Iwynedl8mokiGkDK8GhKaqxYO4+06Qzopn3UqEYs4e3QSLI98/TP93vRhnH
-         p/3tjR4/o30yQRI+pgkK66f9TPe2ty2CUVfUKB9vVPaN12bYG5fpQzr1r6zU60mkOa4r
-         tHT7faSnWb7dT6wgasw41T4hZHlyYGkxCRjjtSc6R2brP983LSm90ZpydP1mFqjapNg4
-         x0lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3FYZZ9kIkwc/JXTwVRSMlvQxtVggGrYH2HuC/wMgOdI=;
-        b=TSMflBuMmn150lkQlQHIDJnawJu4ZhFFGLiV8f42iLWdclDGrHBuqftznKXyhyyQkN
-         A1JBkiW5/IUuMiIX4ZYji8n8pLWjOh5qqsoDoMe+Xs3GyzksCxEatKwzGD4E3J1TCJdZ
-         a5nNBMTKevuC7mjmkveJ184uQvTaz4fbLDvEEN30tMGZbwm4erEuViGWaVbfzc08RX4Z
-         iQ6U5IVX6Fjg5dWmPw1rLGpDizBXj8xy04Kr6JYB8HNm+OabvLpcKX88wGTTS2DDKtIS
-         yzEgA7EGxFjTQaM3z2sMhSMcgWA9TgYnWYX2oION8UodnzI6qQk4OppDBVPxTdI1D+mw
-         p/XQ==
-X-Gm-Message-State: ACgBeo0fEzwA8ZLsKel3MoJaC9/nYsQwgvHf0AR7S+uYspGWvitkMEgh
-        v2dsvN2et4KXXjVg9NGp+iHJnDag9BE0enaNw/4=
-X-Google-Smtp-Source: AA6agR6SJcFGOPeHNpTXOJTMM+Xw4YyKLch0Jy65glm5EtFs0KwR0qKARwrTjxI1ZMWWuta6h3Fz3P1HYwtmdRzoY7o=
-X-Received: by 2002:a92:ca0b:0:b0:2f1:da1d:c229 with SMTP id
- j11-20020a92ca0b000000b002f1da1dc229mr12079489ils.145.1663030646372; Mon, 12
- Sep 2022 17:57:26 -0700 (PDT)
+        Mon, 12 Sep 2022 21:00:52 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2542C51A20;
+        Mon, 12 Sep 2022 18:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663030849; x=1694566849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ezLCKwkUBdNCoq39097eIEjcGDCqTdmZcynP14rPVWY=;
+  b=dEAsdcvPNpQnWlRIacB/K+Ish63Hwzc3uOPqw54D5l+2Hpq2w8a6uRU3
+   mIt1DW7bC4Sgrn32G4BMTPRzJX8nDHxR+EszpK0cllfbGUkU4RNf1tMqO
+   oyoTas/j/9HT1Raj786tHjOG9b5IQG1GO8c6UR+2acY6G/Q7XG4SDFENH
+   MUm/WZT843ua1pMq2pjBaNgOTahL57FMZ0ERB5Dt7xionALlzeIHj77cQ
+   W06+Uk7tjtpOAT0d5DIXmMBJ04unf20N8k509cYn3kwTjA5U7YS1A21gi
+   LwXW1Lbi29X0fSuEgcBMgDQtrPiGWpwtj4DpRUhVJILhT+0/YH5xp2Jce
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="299345081"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="299345081"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:00:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="684652243"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 18:00:38 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXuI1-00032x-2a;
+        Tue, 13 Sep 2022 01:00:37 +0000
+Date:   Tue, 13 Sep 2022 09:00:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@acpica.org
+Cc:     kbuild-all@lists.01.org, Len Brown <lenb@kernel.org>,
+        Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: Re: [PATCH v2 7/8] spi: pxa2xx: Refactor _UID handling to use
+ acpi_dev_uid_to_integer()
+Message-ID: <202209130810.dgrshDMB-lkp@intel.com>
+References: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220912214510.929070-1-nhuck@google.com>
-In-Reply-To: <20220912214510.929070-1-nhuck@google.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Tue, 13 Sep 2022 03:57:17 +0300
-Message-ID: <CAHNKnsQFdd6uuqYfYcwLRY_RViOFWoT_mSK7v6sb02LeNvY5WQ@mail.gmail.com>
-Subject: Re: [PATCH] net: wwan: t7xx: Fix return type of t7xx_ccmni_start_xmit
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:45 AM Nathan Huckleberry <nhuck@google.com> wrote:
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
->
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
->
-> The return type of t7xx_ccmni_start_xmit should be changed from int to
-> netdev_tx_t.
->
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Hi Andy,
 
-Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on wsa/i2c/for-next broonie-spi/for-next efi/next linus/master v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-buildonly-randconfig-r006-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130810.dgrshDMB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/ea7999676bc9f75bb4165358cda640b340fe34d0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
+        git checkout ea7999676bc9f75bb4165358cda640b340fe34d0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/spi/spi-pxa2xx.c: In function 'pxa2xx_spi_init_pdata':
+>> drivers/spi/spi-pxa2xx.c:1457:24: warning: unused variable 'dev' [-Wunused-variable]
+    1457 |         struct device *dev = &pdev->dev;
+         |                        ^~~
+
+
+vim +/dev +1457 drivers/spi/spi-pxa2xx.c
+
+  1452	
+  1453	static struct pxa2xx_spi_controller *
+  1454	pxa2xx_spi_init_pdata(struct platform_device *pdev)
+  1455	{
+  1456		struct pxa2xx_spi_controller *pdata;
+> 1457		struct device *dev = &pdev->dev;
+  1458		struct ssp_device *ssp;
+  1459		struct resource *res;
+  1460		struct device *parent = pdev->dev.parent;
+  1461		struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
+  1462		const struct pci_device_id *pcidev_id = NULL;
+  1463		enum pxa_ssp_type type;
+  1464		const void *match;
+  1465		int status;
+  1466		u64 uid;
+  1467	
+  1468		if (pcidev)
+  1469			pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
+  1470	
+  1471		match = device_get_match_data(&pdev->dev);
+  1472		if (match)
+  1473			type = (enum pxa_ssp_type)match;
+  1474		else if (pcidev_id)
+  1475			type = (enum pxa_ssp_type)pcidev_id->driver_data;
+  1476		else
+  1477			return ERR_PTR(-EINVAL);
+  1478	
+  1479		pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+  1480		if (!pdata)
+  1481			return ERR_PTR(-ENOMEM);
+  1482	
+  1483		ssp = &pdata->ssp;
+  1484	
+  1485		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+  1486		ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
+  1487		if (IS_ERR(ssp->mmio_base))
+  1488			return ERR_CAST(ssp->mmio_base);
+  1489	
+  1490		ssp->phys_base = res->start;
+  1491	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
