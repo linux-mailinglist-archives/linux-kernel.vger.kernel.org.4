@@ -2,93 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3765B674A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7708A5B674E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiIMFZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 01:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S229967AbiIMF1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 01:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiIMFZH (ORCPT
+        with ESMTP id S229533AbiIMF1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 01:25:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D431B780;
-        Mon, 12 Sep 2022 22:25:05 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y3so24945010ejc.1;
-        Mon, 12 Sep 2022 22:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=CYG+gCQrNaZX712OWhKDDc9oytVFjJznZ+Wqaxz+G2w=;
-        b=eVBAQtKp8A6UusDfiUzUBOJBjzt0eDI9jd+RDy1VOKE3bpFzyvN9sCDjp4892H8yE8
-         rDyIGGPMEaavoDFn7s4RYBonGnUkfmHLOZM1DXMphXTjMjaeLoyfGeiKsp/En+dwtwJx
-         Qi0ZeA2SWLgXxPGQ6YhVcmsxleI7umGfoTW9dHWiL6qzWzkROh+WSYwTHv1C02SfywKl
-         KUMPgYTi8HRbB4Dzk5Y6noG8dMbJUQPteSlMGtAS2uxeR7bbRwf8I8/Ywc9FFH10OTC/
-         d700nf8ZgqSN0NJ2K1g9mVJlIeKGzShU873PFhhOGimJeb2Hz2n1qLr4/3c8PuXPa9q8
-         pPNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=CYG+gCQrNaZX712OWhKDDc9oytVFjJznZ+Wqaxz+G2w=;
-        b=aPYGQ8gN5ZBjR5wZ1YyN6FiFmBQf1B+zy5WsL5xLSfJOyngQGmzs8FyL6zbxAGbu8Y
-         YGToMoiF8jSz7FIvlWm5J0R8o3IUKrLdezG7iswXhlU7fPUDG1E9abuOIbA54Pnxxqx/
-         VYvqEIfQjdCKjqJPJ/juzSAKkz56SWLliw0/wq7RYwFpGUXfp2tky7cXA1a9CKd87gGo
-         V2f/MkMdP9LENyu42cCHWd1SdKzTVaLn2kLZPiUmwKHwSsKUiLDnoPyKL5v0Dfkc8yTZ
-         +1mO5lTMPVMVeLYZoZeix5dDtBlMNe2DlSV3PEgRUQUWuPA990CoaRJjeJ+P3NChnf2s
-         /IMQ==
-X-Gm-Message-State: ACgBeo07q/1jF7STnsTIMom3Nvi50aZo5gaJnzOXHN9HaYpCypCk4Ds5
-        vl6ks+UgaaqUM+TO7Jl4IzbjzTIKqKQ=
-X-Google-Smtp-Source: AA6agR5zAa3oSAhpnAjqb9RISRRQDjjY4Oz0nWxMzo/2HvJrrULrbQuhYQ7u9bdsmtdwbkGgbc1C+g==
-X-Received: by 2002:a17:907:2cd2:b0:770:8363:1f38 with SMTP id hg18-20020a1709072cd200b0077083631f38mr20181284ejc.381.1663046703828;
-        Mon, 12 Sep 2022 22:25:03 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id tl1-20020a170907c30100b0077fde38993asm624953ejc.152.2022.09.12.22.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 22:25:03 -0700 (PDT)
-Message-ID: <df6751b4-32cb-4bad-07e1-c0ad8a852f25@gmail.com>
-Date:   Tue, 13 Sep 2022 07:25:01 +0200
+        Tue, 13 Sep 2022 01:27:01 -0400
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F36B205DE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:27:00 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id XyRkouUZN3VQxXyRko1dbL; Tue, 13 Sep 2022 07:26:58 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 13 Sep 2022 07:26:58 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <4b87891d-b475-0ad6-db36-a9c1f334c785@wanadoo.fr>
+Date:   Tue, 13 Sep 2022 07:26:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 0/1] mtd: mtdpart: Fix cosmetic print
-To:     Adrian Zaharia <Adrian.Zaharia@windriver.com>,
-        linux-mtd@lists.infradead.org
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        jani.nurminen@windriver.com, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
+Content-Language: en-US
+To:     Chao Yu <chao@kernel.org>,
+        "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Chao Yu <chao.yu@oppo.com>, muchun.song@linux.dev
+References: <20220830141009.150075-1-chao@kernel.org>
+ <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
+ <e14a916c-a597-5328-2d79-39274fbdad35@kernel.org>
+From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <e14a916c-a597-5328-2d79-39274fbdad35@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+
+Le 13/09/2022 à 05:42, Chao Yu a écrit :
+> On 2022/9/10 0:47, Christophe JAILLET wrote:
+>> Le 30/08/2022 à 16:10, Chao Yu a écrit :
+>>> From: Chao Yu <chao.yu@oppo.com>
+>>>
+>>> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
+>>> out-of-memory, if it fails, return errno correctly rather than
+>>> triggering panic via BUG_ON();
+>>>
+>>> kernel BUG at mm/slub.c:5893!
+>>> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+>>>
+>>> Call trace:
+[...]
+>>>
+>>> Cc: <stable@kernel.org>
+>>> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
+>>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>>> ---
+>>>   mm/slub.c | 5 ++++-
+>>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/mm/slub.c b/mm/slub.c
+>>> index 862dbd9af4f5..e6f3727b9ad2 100644
+>>> --- a/mm/slub.c
+>>> +++ b/mm/slub.c
+>>> @@ -5890,7 +5890,8 @@ static char *create_unique_id(struct 
+>>> kmem_cache *s)
+>>>       char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
+>>
+>> Hi,
+>>
+>> looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+>>
+>> The 2nd BUG_ON at the end of the function could certainly be just 
+>> removed as well or remplaced by a:
+>>         if (p > name + ID_STR_LENGTH - 1) {
+>>          kfree(name);
+>>          return -E<something>;
+>>      }
+>
+> Hi Christophe, Vlastimil,
+>
+> Should I include this in v3? or may be in another patch?
+
 Hi,
 
-On 25.08.2022 08:04, Adrian Zaharia wrote:
-> The print of the MTD partitions during boot are off-by-one for the size.
-> This patch fixes this issue and shows the real last offset.
-> 
-> Jani Nurminen (1):
->    mtd: mtdpart: Fix cosmetic print
-> 
->   drivers/mtd/mtdpart.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> 
-> base-commit: 072e51356cd5a4a1c12c1020bc054c99b98333df
+My own preference would be for 3 patches.
 
-this cover latter (0/1) is rather useless. Doesn't say anything more
-than actual (and the only) patch 1/1.
+Yours, as-is.
+It fixes a specific issue spotted by syzbot.
+
+Another one for removing a BUG_ON() (that, IIUC can't happen!)
+Mostly a clean-up or a good practice in order to remove BUG_ON() from 
+the kernel we it can be handled another way.
+
+Eventually a 3rd one for reducing ID_STR_LENGTH.
+I guess that it is safe to reduce it to 32 or 16, but the impact on RL 
+would be so small, that I wonder if it worth proposing it.
+
+Just my 2c,
+
+CJ
+
+
+
+>
+> Thanks,
+>
+>>
+>> Just my 2c,
+>>
+>> CJ
+>>
+>>>       char *p = name;
+>>> -    BUG_ON(!name);
+>>> +    if (!name)
+>>> +        return ERR_PTR(-ENOMEM);
+>>>       *p++ = ':';
+>>>       /*
+>>> @@ -5948,6 +5949,8 @@ static int sysfs_slab_add(struct kmem_cache *s)
+>>>            * for the symlinks.
+>>>            */
+>>>           name = create_unique_id(s);
+>>> +        if (IS_ERR(name))
+>>> +            return PTR_ERR(name);
+>>>       }
+>>>       s->kobj.kset = kset;
+>>
