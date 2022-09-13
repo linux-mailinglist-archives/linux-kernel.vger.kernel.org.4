@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E56A5B738A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFD95B742E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbiIMPKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S235216AbiIMPOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235695AbiIMPJE (ORCPT
+        with ESMTP id S235534AbiIMPL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:09:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0189177540;
-        Tue, 13 Sep 2022 07:31:38 -0700 (PDT)
+        Tue, 13 Sep 2022 11:11:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDCA197;
+        Tue, 13 Sep 2022 07:32:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 892A9B80F02;
-        Tue, 13 Sep 2022 14:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D44C43140;
-        Tue, 13 Sep 2022 14:14:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E74AA614D3;
+        Tue, 13 Sep 2022 14:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B02C433D6;
+        Tue, 13 Sep 2022 14:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078456;
-        bh=QVfWmvO8kgJgY3aFKPNUlaDBsJjL74N0VE5S1zVPeLU=;
+        s=korg; t=1663078970;
+        bh=4q8krE1FsncwNTfSC0uky0pPAGgOhmkWebSZonlFBbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0cF641/0JrR0tBOhZjLJEo81VerzzD7LrJtCgr/DRUpuMOcHSlf7Lp/B9SWFkc3xA
-         SAcgL+EeAgRfrXmeLClkxnrHAc26twRG42yECiGrBJstrGZvslafi7mlbO4TZ1znmV
-         hdwn9ogNj7hqvMYTtALk6qsNecB918xWw3cFvPxk=
+        b=2LOonye27NuAXi2l+9iG2JiGZ3XdQV0o/1XBdzt3yrb4jlEdlgvmcE0J6G6wCf4JD
+         eER6FrYr/hcWYp9roaj2bqs/OFL8R0/JGF2teFoRH1D3WNyBZ9ieLHI9+WWjCSHnKf
+         rJS0FsfU5i47XWzFwu8XLp4D1FJt4PAsLNFSOXjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 147/192] net: ethernet: mtk_eth_soc: check max allowed hash in mtk_ppe_check_skb
-Date:   Tue, 13 Sep 2022 16:04:13 +0200
-Message-Id: <20220913140417.345778357@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Fengwei Yin <fengwei.yin@intel.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>, stable@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 09/79] fs: only do a memory barrier for the first set_buffer_uptodate()
+Date:   Tue, 13 Sep 2022 16:04:14 +0200
+Message-Id: <20220913140350.748373924@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit f27b405ef43319a3ceefc2123245201a63ed4e00 ]
+commit 2f79cdfe58c13949bbbb65ba5926abfe9561d0ec upstream.
 
-Even if max hash configured in hw in mtk_ppe_hash_entry is
-MTK_PPE_ENTRIES - 1, check theoretical OOB accesses in
-mtk_ppe_check_skb routine
+Commit d4252071b97d ("add barriers to buffer_uptodate and
+set_buffer_uptodate") added proper memory barriers to the buffer head
+BH_Uptodate bit, so that anybody who tests a buffer for being up-to-date
+will be guaranteed to actually see initialized state.
 
-Fixes: c4f033d9e03e9 ("net: ethernet: mtk_eth_soc: rework hardware flow table management")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, that commit didn't _just_ add the memory barrier, it also ended
+up dropping the "was it already set" logic that the BUFFER_FNS() macro
+had.
+
+That's conceptually the right thing for a generic "this is a memory
+barrier" operation, but in the case of the buffer contents, we really
+only care about the memory barrier for the _first_ time we set the bit,
+in that the only memory ordering protection we need is to avoid anybody
+seeing uninitialized memory contents.
+
+Any other access ordering wouldn't be about the BH_Uptodate bit anyway,
+and would require some other proper lock (typically BH_Lock or the folio
+lock).  A reader that races with somebody invalidating the buffer head
+isn't an issue wrt the memory ordering, it's a serialization issue.
+
+Now, you'd think that the buffer head operations don't matter in this
+day and age (and I certainly thought so), but apparently some loads
+still end up being heavy users of buffer heads.  In particular, the
+kernel test robot reported that not having this bit access optimization
+in place caused a noticeable direct IO performance regression on ext4:
+
+  fxmark.ssd_ext4_no_jnl_DWTL_54_directio.works/sec -26.5% regression
+
+although you presumably need a fast disk and a lot of cores to actually
+notice.
+
+Link: https://lore.kernel.org/all/Yw8L7HTZ%2FdE2%2Fo9C@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Tested-by: Fengwei Yin <fengwei.yin@intel.com>
+Cc: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: stable@kernel.org
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mediatek/mtk_ppe.h | 3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/buffer_head.h |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.h b/drivers/net/ethernet/mediatek/mtk_ppe.h
-index 1f5cf1c9a9475..69ffce04d6306 100644
---- a/drivers/net/ethernet/mediatek/mtk_ppe.h
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.h
-@@ -293,6 +293,9 @@ mtk_ppe_check_skb(struct mtk_ppe *ppe, struct sk_buff *skb, u16 hash)
- 	if (!ppe)
- 		return;
- 
-+	if (hash > MTK_PPE_HASH_MASK)
+--- a/include/linux/buffer_head.h
++++ b/include/linux/buffer_head.h
+@@ -137,6 +137,17 @@ BUFFER_FNS(Defer_Completion, defer_compl
+ static __always_inline void set_buffer_uptodate(struct buffer_head *bh)
+ {
+ 	/*
++	 * If somebody else already set this uptodate, they will
++	 * have done the memory barrier, and a reader will thus
++	 * see *some* valid buffer state.
++	 *
++	 * Any other serialization (with IO errors or whatever that
++	 * might clear the bit) has to come from other state (eg BH_Lock).
++	 */
++	if (test_bit(BH_Uptodate, &bh->b_state))
 +		return;
 +
- 	now = (u16)jiffies;
- 	diff = now - ppe->foe_check_time[hash];
- 	if (diff < HZ / 10)
--- 
-2.35.1
-
++	/*
+ 	 * make it consistent with folio_mark_uptodate
+ 	 * pairs with smp_load_acquire in buffer_uptodate
+ 	 */
 
 
