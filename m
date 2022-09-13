@@ -2,49 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828475B7979
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DB15B797C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiIMS2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S231705AbiIMS1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiIMS05 (ORCPT
+        with ESMTP id S231797AbiIMS0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:26:57 -0400
+        Tue, 13 Sep 2022 14:26:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37C1659C5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:45:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62B7DF24;
+        Tue, 13 Sep 2022 10:44:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 415C6B80CBC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92E0C43142;
-        Tue, 13 Sep 2022 17:45:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63E21B81095;
+        Tue, 13 Sep 2022 17:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FC1C433D6;
+        Tue, 13 Sep 2022 17:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663091101;
-        bh=kK1sxLOXEkaoDNnV++Rope2Ec8RZDVijxu5erLk09sQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdVSywTxsq0Xeh3ZASYyycbEgiYJiKaQ5ta5McLxvRu2AiXwWQowXtIqqKC41LuQw
-         hNgbHrDkc2xHScq2yRGwn6raCF4mMNpeuEtyZd4GNyM1cuxyYgOG5mgrURSS4LNa8D
-         IK+Ip4ztkqRC7f8WiHYYRDMxavuASn6po6rLCFsQuPVfL7U/D40W7VsMfLMcCT6rjp
-         Pie2gHvvQwJBFQq4xoJaJ6J5hEuuMj7Nn3eTT1yiN1/HuRhLEdLX5ZLyQPMDwAXDcO
-         PHWGYlKXvIW2ZUztbr9nMwaqDBkUGZuq57AAB7uZrwRhk/K5KawdsTv8P/lpsXOSZm
-         Sez7g0v2A+9Mg==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
-        linux-mm@kvack.org
-Subject: [PATCH 09/22] mm/damon: implement a monitoring attributes module parameters generator macro
-Date:   Tue, 13 Sep 2022 17:44:36 +0000
-Message-Id: <20220913174449.50645-10-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220913174449.50645-1-sj@kernel.org>
-References: <20220913174449.50645-1-sj@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1663091079;
+        bh=hvvNtLef5JyDw6JZ44jNYYoGvekWe6nVJNHmLeq2uJE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fWaR1m7xBq1XesUNbibQzGM/xCuS7x6kez+gaPbU2sNuoLF5eW+3uodpOyNimt8BC
+         a6DWFDcszVOk57rDu+zx6uI5PF9aDJGjlSZSNrh3hdgMSK4j8RzWSf1m96TFYNhThe
+         kdUox2mo/VMSAlvQBhnxhXAqO1By0iTwyX8HrfFKt69z2+WaId8LSzcQjEOZgrlCuo
+         sRLMXgHX4QjznlvfOZsIAP8Q/LwwHymoBGXNg/G0Or9J2h+2wyUExx+QgMLgpP6Dc3
+         uthhf/6PeJ0OvcQnTKMD+cRSF3Q2008eCzG21K2eqAvvceeHKyce1eNb0eSY3QvN0Z
+         DFvVIefdMIM3g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oY9xc-00A1nz-SG;
+        Tue, 13 Sep 2022 18:44:36 +0100
+Date:   Tue, 13 Sep 2022 18:44:36 +0100
+Message-ID: <871qsfuq2j.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+        "lznuaa@gmail.com" <lznuaa@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
+Subject: Re: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driver
+In-Reply-To: <AM9PR04MB879393DEDC03A5C092C81DA888449@AM9PR04MB8793.eurprd04.prod.outlook.com>
+References: <20220907034856.3101570-1-Frank.Li@nxp.com>
+        <20220907034856.3101570-3-Frank.Li@nxp.com>
+        <87fsh2qpq4.wl-maz@kernel.org>
+        <AM9PR04MB879338D6D4B55A74CD002E6D88409@AM9PR04MB8793.eurprd04.prod.outlook.com>
+        <877d2dvs0d.wl-maz@kernel.org>
+        <AM9PR04MB879393DEDC03A5C092C81DA888449@AM9PR04MB8793.eurprd04.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: frank.li@nxp.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev, lznuaa@gmail.com, imx@lists.linux.dev, manivannan.sadhasivam@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,40 +94,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON_RECLAIM and DAMON_LRU_SORT have module parameters for monitoring
-attributes that having same names.  This commot implements a macro for
-generating such module parameters so that we can reuse later.
+On Mon, 12 Sep 2022 16:53:40 +0100,
+Frank Li <frank.li@nxp.com> wrote:
+> 
+> > > [Frank Li] I remember you said that irq-chip can't be removed.
+> > > So I am not sure why need build as module.
+> > 
+> > Not being removed doesn't mean it cannot be built as a module and
+> > loaded on demand. Why should I be forced to have this driver built-in
+> > if my kernel is used on a variety of systems, only one of them having
+> > this device?
+> 
+> [Frank Li] A problem, platform_msi_create_irq_domain have NOT export
+> to let module Call it.
+> https://elixir.bootlin.com/linux/latest/source/drivers/base/platform-msi.c#L122
+> 
+> Do you want to me add EXPORT_SYMBOL_GPL for it  OR keep "bool" here? 
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/damon/modules-common.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 mm/damon/modules-common.h
+Please add a patch exporting the missing symbols, and make the think
+modular.
 
-diff --git a/mm/damon/modules-common.h b/mm/damon/modules-common.h
-new file mode 100644
-index 000000000000..0abd0636bc64
---- /dev/null
-+++ b/mm/damon/modules-common.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Common Primitives for DAMON Modules
-+ *
-+ * Author: SeongJae Park <sj@kernel.org>
-+ */
-+
-+#include <linux/moduleparam.h>
-+
-+#define DEFINE_DAMON_MODULES_MON_ATTRS_PARAMS(attrs)			\
-+	module_param_named(sample_interval, attrs.sample_interval,	\
-+			ulong, 0600);					\
-+	module_param_named(aggr_interval, attrs.aggr_interval, ulong,	\
-+			0600);						\
-+	module_param_named(min_nr_regions, attrs.min_nr_regions, ulong,	\
-+			0600);						\
-+	module_param_named(max_nr_regions, attrs.max_nr_regions, ulong,	\
-+			0600);
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
