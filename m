@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712495B6620
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C5A5B6625
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiIMDav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S230145AbiIMDbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 23:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiIMDas (ORCPT
+        with ESMTP id S230124AbiIMDbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:30:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F34BA76;
-        Mon, 12 Sep 2022 20:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663039846; x=1694575846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rvqAqZpTqInXF16KLzlc3IVvUN6JPd0bgtJFosO4hGE=;
-  b=B/eVaQyDU/fPqxzb6dOjMIW7/BZoIL5RwFTNpmXpP/7vHH8CQVcl6nVD
-   zvPGRIpKiGDjdyjmRyxg7grKCq36K3AAJsfUW+/xQ+yS559MN2aPSa+Lo
-   uPX0HD/rBMn+oncMtRjXeqUAQygTjnnDTTtJSSetP9CZvKgLVmF8oOilU
-   GcrKzJ/BJl9nIn8yazkvNaayyZaLNsCdeuQvoDMEuHDlfX2WgA8XidFmD
-   bXxeef3VN+CONAgpbMYrJdLNWGLiDzTf8BZBK8AKERvs7JxBqGUbb1IFs
-   to8aEIBo1pPTuhXVIZnHzIwqMyygu055Mpx+Tdldj2BSf/xkgSpKv9KZ6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324268690"
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="324268690"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 20:30:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="684689796"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 20:30:43 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXwdG-0003AV-2u;
-        Tue, 13 Sep 2022 03:30:42 +0000
-Date:   Tue, 13 Sep 2022 11:30:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     SEO HOYOUNG <hy50.seo@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Cc:     kbuild-all@lists.01.org, SEO HOYOUNG <hy50.seo@samsung.com>
-Subject: Re: [PATCH v1] scsi: ufs: add a variant operation in struct
- ufs_hba_variant_ops
-Message-ID: <202209131145.uQlsf9Uv-lkp@intel.com>
-References: <20220912140000.95483-1-hy50.seo@samsung.com>
+        Mon, 12 Sep 2022 23:31:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4509D2FFF5;
+        Mon, 12 Sep 2022 20:31:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B133920F49;
+        Tue, 13 Sep 2022 03:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663039870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ndgrk0VyINRbdMDLbO7l+2EY0nnzKQILkdX+lROM4VA=;
+        b=D5hQtSVB84872NWPUpgtY00czjq4HsvsBIr9rk8RSxBRplc2NpkS+Hu6+gZUqMDyzVnKik
+        LwMboydU+7qPo2tpYbBb9O8GMLzcyPJnC7dWI02jwBBYc99W/PAYQMWWBYZSx0cnuH9jqi
+        O2/Ebe7v1cJsj1xELWoQ8i411CizawE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663039870;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ndgrk0VyINRbdMDLbO7l+2EY0nnzKQILkdX+lROM4VA=;
+        b=N0gs0x3S8B8VEKQKEbSS/O8mzZ4fMxgFLeyBC06RZkXhl9gC6dsEmRE0DjDXS/MiQS8tHs
+        OsFNtGuvgyAoUdDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8358A13A86;
+        Tue, 13 Sep 2022 03:31:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8tDhDXb5H2OFNQAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 13 Sep 2022 03:31:02 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912140000.95483-1-hy50.seo@samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Dave Chinner" <david@fromorbit.com>
+Cc:     "Jeff Layton" <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, "Jan Kara" <jack@suse.cz>,
+        adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <20220913024109.GF3600936@dread.disaster.area>
+References: <20220908155605.GD8951@fieldses.org>,
+ <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>,
+ <20220908182252.GA18939@fieldses.org>,
+ <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>,
+ <20220909154506.GB5674@fieldses.org>,
+ <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>,
+ <20220910145600.GA347@fieldses.org>,
+ <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>,
+ <20220913004146.GD3600936@dread.disaster.area>,
+ <166303374350.30452.17386582960615006566@noble.neil.brown.name>,
+ <20220913024109.GF3600936@dread.disaster.area>
+Date:   Tue, 13 Sep 2022 13:30:58 +1000
+Message-id: <166303985824.30452.7333958999671590160@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SEO,
+On Tue, 13 Sep 2022, Dave Chinner wrote:
+> 
+> Indeed, we know there are many systems out there that mount a
+> filesystem, preallocate and map the blocks that are allocated to a
+> large file, unmount the filesysetm, mmap the ranges of the block
+> device and pass them to RDMA hardware, then have sensor arrays rdma
+> data directly into the block device. Then when the measurement
+> application is done they walk the ondisk metadata to remove the
+> unwritten flags on the extents, mount the filesystem again and
+> export the file data to a HPC cluster for post-processing.....
 
-Thank you for the patch! Perhaps something to improve:
+And this tool doesn't update the i_version?  Sounds like a bug.
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next krzk/for-next linus/master v6.0-rc5 next-20220912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> So how does the filesystem know whether data the storage contains
+> for it's files has been modified while it is unmounted and so needs
+> to change the salt?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/SEO-HOYOUNG/scsi-ufs-add-a-variant-operation-in-struct-ufs_hba_variant_ops/20220913-101855
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220913/202209131145.uQlsf9Uv-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/60f9cc2a287e2bfe58c8355519797a9071b00afa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review SEO-HOYOUNG/scsi-ufs-add-a-variant-operation-in-struct-ufs_hba_variant_ops/20220913-101855
-        git checkout 60f9cc2a287e2bfe58c8355519797a9071b00afa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/ufs/
+How does it know that no data is modified while it *is* mounted?  Some
+assumptions have to be made.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> The short answer is that it can't, and so we cannot make assumptions
+> that a unmount/mount cycle has not changed the filesystem in any
+> way....
 
-All warnings (new ones prefixed by >>):
+If a mount-count is the best that XFS can do, then that is certainly
+what it should use.
 
-   drivers/ufs/host/ufs-exynos.c: In function 'exynos_ufs_check_int_error':
-   drivers/ufs/host/ufs-exynos.c:1388:17: error: 'val' undeclared (first use in this function)
-    1388 |                 val = hci_readl(ufs, HCI_AH8_STATE);
-         |                 ^~~
-   drivers/ufs/host/ufs-exynos.c:1388:17: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/ufs/host/ufs-exynos.c:1392:40: warning: assignment to 'bool *' {aka '_Bool *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    1392 |                          queue_eh_work = true;
-         |                                        ^
->> drivers/ufs/host/ufs-exynos.c:1383:67: warning: parameter 'queue_eh_work' set but not used [-Wunused-but-set-parameter]
-    1383 | static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
-         |                                                             ~~~~~~^~~~~~~~~~~~~
-
-
-vim +1392 drivers/ufs/host/ufs-exynos.c
-
-  1382	
-> 1383	static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
-  1384	{
-  1385		struct exynos_ufs *ufs = ufshcd_get_variant(hba);
-  1386	
-  1387		if (ufshcd_is_auto_hibern8_supported(hba)) {
-  1388			val = hci_readl(ufs, HCI_AH8_STATE);
-  1389	
-  1390			if (val & HCI_AH8_STATE_ERROR) {
-  1391				 ufshcd_set_link_broken(hba);
-> 1392				 queue_eh_work = true;
-  1393			}
-  1394		}
-  1395	}
-  1396	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+NeilBrown
