@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B625B7144
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ED55B6FF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbiIMOgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S233543AbiIMOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiIMOfL (ORCPT
+        with ESMTP id S233718AbiIMOTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:35:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3186526B;
-        Tue, 13 Sep 2022 07:20:08 -0700 (PDT)
+        Tue, 13 Sep 2022 10:19:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AB642D3;
+        Tue, 13 Sep 2022 07:14:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB85614B0;
-        Tue, 13 Sep 2022 14:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA03CC433C1;
-        Tue, 13 Sep 2022 14:18:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37179B80EFE;
+        Tue, 13 Sep 2022 14:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B46BC433D6;
+        Tue, 13 Sep 2022 14:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078738;
-        bh=CBO3TCOWh/DXPy4PCC85CrWuQrKGGpIDuhFaDzTf4Ng=;
+        s=korg; t=1663078464;
+        bh=6aA7CnVTcpXodXHxy4KVbkMf2SFC+nIXweQBADRBJnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pGzYrVnsf7GARUCLdusk5oWxjNb1dC3JyAYCoGuVcn/ZHa9SZYjsnv8qldpVJEkoH
-         /zd1QrJUKkfeIiZdU+19t3ZquH5SdyYqn2uwr++YhtHnh6FtgtoFeaVWWpy59pn5Qg
-         2ycGh2Im23ZIl2g73y2vLqcgec5k+N2XCHaJYzPA=
+        b=uK6x42GTfP7aov+9Dqo8PBmJw7Oxx9he2c3koBUFCq9g83EeHAtZIBwbIrTLuPo5A
+         Tu8+DUAPT6uP/65Aa9aejaBclE1pDjYZkG6OAwHQHqhHbmP6/wnaJIuL/INB+wrf4O
+         kPtL0XdC9PkDHyg2VcTinDRtUpb8iHDVyY9aD/uo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 063/121] ARM: dts: at91: sama5d27_wlsom1: specify proper regulator output ranges
-Date:   Tue, 13 Sep 2022 16:04:14 +0200
-Message-Id: <20220913140400.074592051@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 149/192] io_uring: recycle kbuf recycle on tw requeue
+Date:   Tue, 13 Sep 2022 16:04:15 +0200
+Message-Id: <20220913140417.446810476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit addf7efec23af2b67547800aa232d551945e7de2 ]
+[ Upstream commit 336d28a8f38013a069f2d46e73aaa1880ef17a47 ]
 
-Min and max output ranges of regulators need to satisfy board
-requirements not PMIC requirements. Thus adjust device tree to
-cope with this.
+When we queue a request via tw for execution it's not going to be
+executed immediately, so when io_queue_async() hits IO_APOLL_READY
+and queues a tw but doesn't try to recycle/consume the buffer some other
+request may try to use the the buffer.
 
-Fixes: 5d4c3cfb63fe ("ARM: dts: at91: sama5d27_wlsom1: add SAMA5D27 wlsom1 and wlsom1-ek")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220826083927.3107272-5-claudiu.beznea@microchip.com
+Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/a19bc9e211e3184215a58e129b62f440180e9212.1662480490.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ io_uring/io_uring.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-index 025a78310e3ab..70513caf3e8d0 100644
---- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-+++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-@@ -68,8 +68,8 @@
- 		regulators {
- 			vdd_3v3: VDD_IO {
- 				regulator-name = "VDD_IO";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -87,8 +87,8 @@
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index cd155b7e1346d..effe3570a051f 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -8260,6 +8260,7 @@ static void io_queue_async(struct io_kiocb *req, int ret)
  
- 			vddio_ddr: VDD_DDR {
- 				regulator-name = "VDD_DDR";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <1850000>;
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -110,8 +110,8 @@
- 
- 			vdd_core: VDD_CORE {
- 				regulator-name = "VDD_CORE";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <1850000>;
-+				regulator-min-microvolt = <1250000>;
-+				regulator-max-microvolt = <1250000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -152,8 +152,8 @@
- 
- 			LDO1 {
- 				regulator-name = "LDO1";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-always-on;
- 
- 				regulator-state-standby {
-@@ -167,8 +167,8 @@
- 
- 			LDO2 {
- 				regulator-name = "LDO2";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-always-on;
- 
- 				regulator-state-standby {
+ 	switch (io_arm_poll_handler(req, 0)) {
+ 	case IO_APOLL_READY:
++		io_kbuf_recycle(req, 0);
+ 		io_req_task_queue(req);
+ 		break;
+ 	case IO_APOLL_ABORTED:
 -- 
 2.35.1
 
