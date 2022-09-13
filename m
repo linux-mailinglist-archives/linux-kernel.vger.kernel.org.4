@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED8E5B7070
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02665B724B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiIMO0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S231949AbiIMOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiIMOY3 (ORCPT
+        with ESMTP id S231167AbiIMOop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:24:29 -0400
+        Tue, 13 Sep 2022 10:44:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFF861B3E;
-        Tue, 13 Sep 2022 07:16:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553136F26C;
+        Tue, 13 Sep 2022 07:24:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3354D614AA;
-        Tue, 13 Sep 2022 14:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D038C433C1;
-        Tue, 13 Sep 2022 14:14:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50C746149A;
+        Tue, 13 Sep 2022 14:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676ABC433D7;
+        Tue, 13 Sep 2022 14:22:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078481;
-        bh=tK8jLGZFxiUqU/KoBQfv11nDAqZn1XjBbRjfZ2PNCcY=;
+        s=korg; t=1663078932;
+        bh=F4JNBWRRsruom+7qycrtF3bC1w50tyrEdpDUdXtc/3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IPGyl6M1xVp0Zr1sF/aCGLL8WMYm4XjI0xw3tzwrNRDDSbgjtOvBaOcstMDu03PoT
-         rYcdAuwBrL8j3SjRWgCTC9AJO0wtgsbi9j1Fa13GROBPjC1ck3HHbJm6lwlWTCOnXN
-         T0MhjWP2WWn3AwZ39dqiWJ8s8G3+e3r8b33exy94=
+        b=CZ/x0Fdel7GhwYi/+F5W1zulaJ8iGUMnpvUPGW7dfkNRTTWRO/kfdlq6ysf3GhvRE
+         Mmn83LOxQZQPR1JhUm0Y9emm6tu08DNH9meOn7igSknm/9U3YsYNX8coSc7c7Jp65W
+         RCZ9QAzcAMSWZO25D8Xi79nED0KJI7LaUIkHtHTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.19 156/192] hwmon: (tps23861) fix byte order in resistance register
+        stable@vger.kernel.org, Li Qiong <liqiong@nfschina.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 17/79] parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()
 Date:   Tue, 13 Sep 2022 16:04:22 +0200
-Message-Id: <20220913140417.798773592@linuxfoundation.org>
+Message-Id: <20220913140351.129225955@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+From: Li Qiong <liqiong@nfschina.com>
 
-commit 1f05f65bddd6958d25b133f886da49c1d4bff3fa upstream.
+[ Upstream commit d46c742f827fa2326ab1f4faa1cccadb56912341 ]
 
-The tps23861 registers are little-endian, and regmap_read_bulk() does
-not do byte order conversion. On BE machines, the bytes were swapped,
-and the interpretation of the resistance value was incorrect.
+As the possible failure of the kmalloc(), it should be better
+to fix this error path, check and return '-ENOMEM' error code.
 
-To make it work on both big and little-endian machines, use
-le16_to_cpu() to convert the resitance register to host byte order.
-
-Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Fixes: fff7b8ab22554 ("hwmon: add Texas Instruments TPS23861 driver")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220905142806.110598-1-mr.nuke.me@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Li Qiong <liqiong@nfschina.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/tps23861.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/parisc/ccio-dma.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
---- a/drivers/hwmon/tps23861.c
-+++ b/drivers/hwmon/tps23861.c
-@@ -489,18 +489,20 @@ static char *tps23861_port_poe_plus_stat
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index b916fab9b1618..ffd5000c23d39 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -1380,15 +1380,17 @@ ccio_init_resource(struct resource *res, char *name, void __iomem *ioaddr)
+ 	}
+ }
  
- static int tps23861_port_resistance(struct tps23861_data *data, int port)
+-static void __init ccio_init_resources(struct ioc *ioc)
++static int __init ccio_init_resources(struct ioc *ioc)
  {
--	u16 regval;
-+	unsigned int raw_val;
-+	__le16 regval;
+ 	struct resource *res = ioc->mmio_region;
+ 	char *name = kmalloc(14, GFP_KERNEL);
+-
++	if (unlikely(!name))
++		return -ENOMEM;
+ 	snprintf(name, 14, "GSC Bus [%d/]", ioc->hw_path);
  
- 	regmap_bulk_read(data->regmap,
- 			 PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * (port - 1),
- 			 &regval,
- 			 2);
+ 	ccio_init_resource(res, name, &ioc->ioc_regs->io_io_low);
+ 	ccio_init_resource(res + 1, name, &ioc->ioc_regs->io_io_low_hv);
++	return 0;
+ }
  
--	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, regval)) {
-+	raw_val = le16_to_cpu(regval);
-+	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, raw_val)) {
- 	case PORT_RESISTANCE_RSN_OTHER:
--		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB) / 10000;
-+		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB) / 10000;
- 	case PORT_RESISTANCE_RSN_LOW:
--		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB_LOW) / 10000;
-+		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB_LOW) / 10000;
- 	case PORT_RESISTANCE_RSN_SHORT:
- 	case PORT_RESISTANCE_RSN_OPEN:
- 	default:
+ static int new_ioc_area(struct resource *res, unsigned long size,
+@@ -1543,7 +1545,10 @@ static int __init ccio_probe(struct parisc_device *dev)
+ 		return -ENOMEM;
+ 	}
+ 	ccio_ioc_init(ioc);
+-	ccio_init_resources(ioc);
++	if (ccio_init_resources(ioc)) {
++		kfree(ioc);
++		return -ENOMEM;
++	}
+ 	hppa_dma_ops = &ccio_ops;
+ 
+ 	hba = kzalloc(sizeof(*hba), GFP_KERNEL);
+-- 
+2.35.1
+
 
 
