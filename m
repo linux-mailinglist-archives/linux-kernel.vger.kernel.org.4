@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFC45B70AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35F5B7152
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiIMObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S234260AbiIMOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiIMO3D (ORCPT
+        with ESMTP id S234065AbiIMOfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:29:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1081513E11;
-        Tue, 13 Sep 2022 07:18:28 -0700 (PDT)
+        Tue, 13 Sep 2022 10:35:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92007677;
+        Tue, 13 Sep 2022 07:20:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37477614CB;
-        Tue, 13 Sep 2022 14:16:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C71C433D6;
-        Tue, 13 Sep 2022 14:16:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70946B80E22;
+        Tue, 13 Sep 2022 14:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD5EC433C1;
+        Tue, 13 Sep 2022 14:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078615;
-        bh=9BUB6F8qHCVRmkkXwqJ9eg/dFaiKKeYVazMEdqCcvko=;
+        s=korg; t=1663078412;
+        bh=aowFWu6QphHH2BKBxF8cckcYeRK70J23D7jr4WHtX7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mE3wksAZ3B5ClQBmgaXooVp7CzAvP7xUOdbtZ/RQMyz7Jm1wccbabrfv4FhGcPuBz
-         y1N2fwGXt4P34SqBzupbXFfdwA8RhNlmznOEaJYN0Ibbkt1I3oQsNg2xZsLaaAKi+2
-         qQU7aXunXiemLNo9HWQ1hc7rrg5iMBtYEN3OPBnU=
+        b=oBQsE2MBiZXp87+ZRDZkw+FTWQHKxFaHJIR7g/DV9wu2Y5864RoSXaCClDZ1+7dB7
+         apinliaa/H3uOQgkIvlTP226jDBfOwt1MY2fNw7DNysrwkW9NK4AyKxGdnreU0xkAg
+         7d48/5dr9skN397EeuPni4xJSP4qoIOqDoz9UMDQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Harsh Modi <harshmodi@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 017/121] parisc: Add runtime check to prevent PA2.0 kernels on PA1.x machines
-Date:   Tue, 13 Sep 2022 16:03:28 +0200
-Message-Id: <20220913140358.082052557@linuxfoundation.org>
+Subject: [PATCH 5.19 103/192] netfilter: br_netfilter: Drop dst references before setting.
+Date:   Tue, 13 Sep 2022 16:03:29 +0200
+Message-Id: <20220913140415.101344902@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,81 +56,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Harsh Modi <harshmodi@google.com>
 
-[ Upstream commit 591d2108f3abc4db9f9073cae37cf3591fd250d6 ]
+[ Upstream commit d047283a7034140ea5da759a494fd2274affdd46 ]
 
-If a 32-bit kernel was compiled for PA2.0 CPUs, it won't be able to run
-on machines with PA1.x CPUs. Add a check and bail out early if a PA1.x
-machine is detected.
+The IPv6 path already drops dst in the daddr changed case, but the IPv4
+path does not. This change makes the two code paths consistent.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
+Further, it is possible that there is already a metadata_dst allocated from
+ingress that might already be attached to skbuff->dst while following
+the bridge path. If it is not released before setting a new
+metadata_dst, it will be leaked. This is similar to what is done in
+bpf_set_tunnel_key() or ip6_route_input().
+
+It is important to note that the memory being leaked is not the dst
+being set in the bridge code, but rather memory allocated from some
+other code path that is not being freed correctly before the skb dst is
+overwritten.
+
+An example of the leakage fixed by this commit found using kmemleak:
+
+unreferenced object 0xffff888010112b00 (size 256):
+  comm "softirq", pid 0, jiffies 4294762496 (age 32.012s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 80 16 f1 83 ff ff ff ff  ................
+    e1 4e f6 82 ff ff ff ff 00 00 00 00 00 00 00 00  .N..............
+  backtrace:
+    [<00000000d79567ea>] metadata_dst_alloc+0x1b/0xe0
+    [<00000000be113e13>] udp_tun_rx_dst+0x174/0x1f0
+    [<00000000a36848f4>] geneve_udp_encap_recv+0x350/0x7b0
+    [<00000000d4afb476>] udp_queue_rcv_one_skb+0x380/0x560
+    [<00000000ac064aea>] udp_unicast_rcv_skb+0x75/0x90
+    [<000000009a8ee8c5>] ip_protocol_deliver_rcu+0xd8/0x230
+    [<00000000ef4980bb>] ip_local_deliver_finish+0x7a/0xa0
+    [<00000000d7533c8c>] __netif_receive_skb_one_core+0x89/0xa0
+    [<00000000a879497d>] process_backlog+0x93/0x190
+    [<00000000e41ade9f>] __napi_poll+0x28/0x170
+    [<00000000b4c0906b>] net_rx_action+0x14f/0x2a0
+    [<00000000b20dd5d4>] __do_softirq+0xf4/0x305
+    [<000000003a7d7e15>] __irq_exit_rcu+0xc3/0x140
+    [<00000000968d39a2>] sysvec_apic_timer_interrupt+0x9e/0xc0
+    [<000000009e920794>] asm_sysvec_apic_timer_interrupt+0x16/0x20
+    [<000000008942add0>] native_safe_halt+0x13/0x20
+
+Florian Westphal says: "Original code was likely fine because nothing
+ever did set a skb->dst entry earlier than bridge in those days."
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Harsh Modi <harshmodi@google.com>
+Acked-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/kernel/head.S | 43 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ net/bridge/br_netfilter_hooks.c | 2 ++
+ net/bridge/br_netfilter_ipv6.c  | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/arch/parisc/kernel/head.S b/arch/parisc/kernel/head.S
-index aa93d775c34db..598d0938449da 100644
---- a/arch/parisc/kernel/head.S
-+++ b/arch/parisc/kernel/head.S
-@@ -22,7 +22,7 @@
- #include <linux/init.h>
- #include <linux/pgtable.h>
+diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
+index ff47790366497..f20f4373ff408 100644
+--- a/net/bridge/br_netfilter_hooks.c
++++ b/net/bridge/br_netfilter_hooks.c
+@@ -384,6 +384,7 @@ static int br_nf_pre_routing_finish(struct net *net, struct sock *sk, struct sk_
+ 				/* - Bridged-and-DNAT'ed traffic doesn't
+ 				 *   require ip_forwarding. */
+ 				if (rt->dst.dev == dev) {
++					skb_dst_drop(skb);
+ 					skb_dst_set(skb, &rt->dst);
+ 					goto bridged_dnat;
+ 				}
+@@ -413,6 +414,7 @@ static int br_nf_pre_routing_finish(struct net *net, struct sock *sk, struct sk_
+ 			kfree_skb(skb);
+ 			return 0;
+ 		}
++		skb_dst_drop(skb);
+ 		skb_dst_set_noref(skb, &rt->dst);
+ 	}
  
--	.level	PA_ASM_LEVEL
-+	.level	1.1
+diff --git a/net/bridge/br_netfilter_ipv6.c b/net/bridge/br_netfilter_ipv6.c
+index e4e0c836c3f51..6b07f30675bb0 100644
+--- a/net/bridge/br_netfilter_ipv6.c
++++ b/net/bridge/br_netfilter_ipv6.c
+@@ -197,6 +197,7 @@ static int br_nf_pre_routing_finish_ipv6(struct net *net, struct sock *sk, struc
+ 			kfree_skb(skb);
+ 			return 0;
+ 		}
++		skb_dst_drop(skb);
+ 		skb_dst_set_noref(skb, &rt->dst);
+ 	}
  
- 	__INITDATA
- ENTRY(boot_args)
-@@ -69,6 +69,47 @@ $bss_loop:
- 	stw,ma          %arg2,4(%r1)
- 	stw,ma          %arg3,4(%r1)
- 
-+#if !defined(CONFIG_64BIT) && defined(CONFIG_PA20)
-+	/* This 32-bit kernel was compiled for PA2.0 CPUs. Check current CPU
-+	 * and halt kernel if we detect a PA1.x CPU. */
-+	ldi		32,%r10
-+	mtctl		%r10,%cr11
-+	.level 2.0
-+	mfctl,w		%cr11,%r10
-+	.level 1.1
-+	comib,<>,n	0,%r10,$cpu_ok
-+
-+	load32		PA(msg1),%arg0
-+	ldi		msg1_end-msg1,%arg1
-+$iodc_panic:
-+	copy		%arg0, %r10
-+	copy		%arg1, %r11
-+	load32		PA(init_stack),%sp
-+#define MEM_CONS 0x3A0
-+	ldw		MEM_CONS+32(%r0),%arg0	// HPA
-+	ldi		ENTRY_IO_COUT,%arg1
-+	ldw		MEM_CONS+36(%r0),%arg2	// SPA
-+	ldw		MEM_CONS+8(%r0),%arg3	// layers
-+	load32		PA(__bss_start),%r1
-+	stw		%r1,-52(%sp)		// arg4
-+	stw		%r0,-56(%sp)		// arg5
-+	stw		%r10,-60(%sp)		// arg6 = ptr to text
-+	stw		%r11,-64(%sp)		// arg7 = len
-+	stw		%r0,-68(%sp)		// arg8
-+	load32		PA(.iodc_panic_ret), %rp
-+	ldw		MEM_CONS+40(%r0),%r1	// ENTRY_IODC
-+	bv,n		(%r1)
-+.iodc_panic_ret:
-+	b .				/* wait endless with ... */
-+	or		%r10,%r10,%r10	/* qemu idle sleep */
-+msg1:	.ascii "Can't boot kernel which was built for PA8x00 CPUs on this machine.\r\n"
-+msg1_end:
-+
-+$cpu_ok:
-+#endif
-+
-+	.level	PA_ASM_LEVEL
-+
- 	/* Initialize startup VM. Just map first 16/32 MB of memory */
- 	load32		PA(swapper_pg_dir),%r4
- 	mtctl		%r4,%cr24	/* Initialize kernel root pointer */
 -- 
 2.35.1
 
