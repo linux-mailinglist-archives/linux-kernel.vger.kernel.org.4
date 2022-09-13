@@ -2,154 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594415B69D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892105B69D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiIMItD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S229627AbiIMItk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiIMIs4 (ORCPT
+        with ESMTP id S231494AbiIMItS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:48:56 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC73481C5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:48:55 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 13 Sep 2022 16:48:54 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 28D8mnYw017681;
-        Tue, 13 Sep 2022 16:48:49 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from VirtualBox.internal.ite.com.tw (192.168.70.46) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Tue, 13 Sep 2022 16:48:50 +0800
-From:   allen <allen.chen@ite.com.tw>
-CC:     Allen Chen <allen.chen@ite.com.tw>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] drm/bridge: add it6505 driver to read data-lanes and max-pixel-clock-khz from dt
-Date:   Tue, 13 Sep 2022 16:48:35 +0800
-Message-ID: <20220913084835.78490-3-allen.chen@ite.com.tw>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220913084835.78490-1-allen.chen@ite.com.tw>
-References: <20220913084835.78490-1-allen.chen@ite.com.tw>
+        Tue, 13 Sep 2022 04:49:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8BD65C945
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:49:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7922EED1;
+        Tue, 13 Sep 2022 01:49:16 -0700 (PDT)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E68CD3F73B;
+        Tue, 13 Sep 2022 01:49:07 -0700 (PDT)
+Message-ID: <d7e018c9-a6cc-fac3-0325-589aa4e43916@arm.com>
+Date:   Tue, 13 Sep 2022 14:19:05 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.70.46]
-X-ClientProxiedBy: CSBMAIL1.internal.ite.com.tw (192.168.65.58) To
- CSBMAIL1.internal.ite.com.tw (192.168.65.58)
-X-TM-SNTS-SMTP: 069AB609ACB3102B3EBC13ACA92CA85376184F7D7B3ADB0003D6A1F4488D40972002:8
-X-MAIL: mse.ite.com.tw 28D8mnYw017681
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 09/16] mm/page_alloc: use local variable zone_idx directly
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-10-linmiaohe@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220909092451.24883-10-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: allen chen <allen.chen@ite.com.tw>
 
-Add driver to read data-lanes and max-pixel-clock-khz from dt property
-to restrict output bandwidth.
 
-Signed-off-by: Allen chen <allen.chen@ite.com.tw>
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
----
- drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
- 1 file changed, 32 insertions(+), 3 deletions(-)
+On 9/9/22 14:54, Miaohe Lin wrote:
+> Use local variable zone_idx directly since it holds the exact value of
+> zone_idx(). No functional change intended.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 2767b70fa2cb..cfa25a176a29 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -436,6 +436,8 @@ struct it6505 {
- 	bool powered;
- 	bool hpd_state;
- 	u32 afe_setting;
-+	u32 max_dpi_pixel_clock;
-+	u32 max_lane_count;
- 	enum hdcp_state hdcp_status;
- 	struct delayed_work hdcp_work;
- 	struct work_struct hdcp_wait_ksv_list;
-@@ -1475,7 +1477,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
- 	it6505->lane_count = link->num_lanes;
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
- 			     it6505->lane_count);
--	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-+	it6505->lane_count = min_t(int, it6505->lane_count,
-+				   it6505->max_lane_count);
- 
- 	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-@@ -2901,7 +2904,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
- 	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
- 		return MODE_NO_INTERLACE;
- 
--	if (mode->clock > DPI_PIXEL_CLK_MAX)
-+	if (mode->clock > it6505->max_dpi_pixel_clock)
- 		return MODE_CLOCK_HIGH;
- 
- 	it6505->video_info.clock = mode->clock;
-@@ -3066,6 +3069,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
- {
- 	struct device *dev = &it6505->client->dev;
- 	u32 *afe_setting = &it6505->afe_setting;
-+	u32 *max_lane_count = &it6505->max_lane_count;
-+	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
- 
- 	it6505->lane_swap_disabled =
- 		device_property_read_bool(dev, "no-laneswap");
-@@ -3081,7 +3086,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
- 	} else {
- 		*afe_setting = 0;
- 	}
--	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-+
-+	if (device_property_read_u32(dev, "data-lanes",
-+				     max_lane_count) == 0) {
-+		if (*max_lane_count > 4 || *max_lane_count == 3) {
-+			dev_err(dev, "max lane count error, use default");
-+			*max_lane_count = MAX_LANE_COUNT;
-+		}
-+	} else {
-+		*max_lane_count = MAX_LANE_COUNT;
-+	}
-+
-+	if (device_property_read_u32(dev, "max-pixel-clock-khz",
-+				     max_dpi_pixel_clock) == 0) {
-+		if (*max_dpi_pixel_clock > 297000) {
-+			dev_err(dev, "max pixel clock error, use default");
-+			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+		}
-+	} else {
-+		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+	}
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
-+			     it6505->afe_setting, it6505->max_lane_count);
-+	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
-+			     it6505->max_dpi_pixel_clock);
- }
- 
- static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
--- 
-2.25.1
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 94baf33da865..3417232afa45 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6878,7 +6878,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
+>  	unsigned long start = jiffies;
+>  	int nid = pgdat->node_id;
+>  
+> -	if (WARN_ON_ONCE(!pgmap || zone_idx(zone) != ZONE_DEVICE))
+> +	if (WARN_ON_ONCE(!pgmap || zone_idx != ZONE_DEVICE))
+>  		return;
+>  
+>  	/*
