@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8CB5B7CED
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C8C5B7CF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiIMWQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 18:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S229575AbiIMWTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 18:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIMWPm (ORCPT
+        with ESMTP id S229436AbiIMWTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 18:15:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FCF74B9A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663107331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDL/AgTFWdm+PP/N7/EovNn2CFq5LCV9poLaDqClvoQ=;
-        b=Swq9zW3+kK8ekgJu/MuuNmv5Q4R5+9954dWssFTghwnBOeHzeguj6I7+8L6OmPFqaoRCR9
-        MznQ1xkbnx6rWouEyKhPJmZ3YomvlD1uNk+gsEenP2cGqX7SrQlFHyrTFcmNLMlUg3//zV
-        OefhiML68Lkz+P+qeno5rJXcgKzer44=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-241-LdyeGKxnNkyn9SuCEOOmkA-1; Tue, 13 Sep 2022 18:15:22 -0400
-X-MC-Unique: LdyeGKxnNkyn9SuCEOOmkA-1
-Received: by mail-ej1-f71.google.com with SMTP id sc31-20020a1709078a1f00b0077ef3eec7d7so2917788ejc.16
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:15:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=IDL/AgTFWdm+PP/N7/EovNn2CFq5LCV9poLaDqClvoQ=;
-        b=e+MhXtDacNG9l8/pTNoPruSw2rKbn6HgzbIKACm+pv4rsk/5sxgOMzNrwk+052ugb1
-         BXJ5yD3BJ6c5+kJEyd5j+qwMkD7dLXTPiTNZLHx4Jgedx3QQE8plTDQ4qV2pl6QJW6ZG
-         JbhRLzrhs0BeeGSou6Ojh5INeOLLp7P1H43xkAQPRXPzjtYf8j8iDwdeDESOaObv0pty
-         +bcu/rsP+JM1h3uYOhC4W9pYNPTq8iEb4jsjPfmxmUvgbIK5bHTzF6mEaEneVY9sQmg4
-         LLYG+nuXKwyAzS4lnv77gDyE69WvUY8MnfeOJ2Tqj6KcdGWWCEjrVWL9TpP/nBXw1jgM
-         LkXQ==
-X-Gm-Message-State: ACgBeo0f2FysTvIDofGNk1Y35PzKlAwXxGpe+nHi/7QIHA1WIUq6WABb
-        zST7S24TNCydguQ5sHwMzcWdbWLvQPp1sGqhHv0FOQgfkNZTJWUSu6UbRRgPlTPQcOowLc1Gfdr
-        HuVtlgjiczw5N0fxIlS+7oZM7
-X-Received: by 2002:a17:907:b0e:b0:77a:d97d:9afc with SMTP id h14-20020a1709070b0e00b0077ad97d9afcmr12925513ejl.199.1663107321098;
-        Tue, 13 Sep 2022 15:15:21 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4JrvdPCBd450Ne/WjVuyF2pyNqC+OiG8iXf5IJ2s1pVhR/kJe8SiZhf2Ce+d/6Pv1DDaJDow==
-X-Received: by 2002:a17:907:b0e:b0:77a:d97d:9afc with SMTP id h14-20020a1709070b0e00b0077ad97d9afcmr12925509ejl.199.1663107320962;
-        Tue, 13 Sep 2022 15:15:20 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id g17-20020a170906c19100b0073dbc35a0desm6628493ejz.100.2022.09.13.15.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 15:15:20 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v2 6/6] drm/arm/hdlcd: debugfs: protect device resources after removal
-Date:   Wed, 14 Sep 2022 00:14:56 +0200
-Message-Id: <20220913221456.147937-7-dakr@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913221456.147937-1-dakr@redhat.com>
-References: <20220913221456.147937-1-dakr@redhat.com>
+        Tue, 13 Sep 2022 18:19:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688E1A38F;
+        Tue, 13 Sep 2022 15:19:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7C1AB810F4;
+        Tue, 13 Sep 2022 22:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E8FC433C1;
+        Tue, 13 Sep 2022 22:19:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663107558;
+        bh=vOM7sqZItl/trS+7jw/NfA7mCPUKtLKs8p8juFEz1LQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=PqY2sMOHIFT9Hb81j94J0rf9pS4s4sfT4NMscI+2mfmuako+a2b4cqOx8dG/wawnr
+         Jh5hfF3unFix49Lcr+LmcEVF6JQ+zzbUJj/toSoRvoTw/5VVUpbrR+xLpAu3fZauyk
+         Rx8/zEI88uPJ/xbsGWJTH2tyyZ7PzfNw0miGbHeXfoVKCy50rqL7VeYow23AQUEnq4
+         n/hKChC9+JbfnKuz5cl04SNOvomK8erZlvC948pmx9bnHood+2BbE8a07mJ5/Ue7fe
+         LCJW18jHOZcHWunYifNqxyn1pYn/oFCUMLwPNzLJF4XSCJR4oIHlec/buR4H9G26Lo
+         cO2ze6p4tuRDw==
+Date:   Tue, 13 Sep 2022 17:19:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     maz@kernel.org, tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
+        lznuaa@gmail.com, imx@lists.linux.dev,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v10 5/6] PCI: endpoint: makeup pci-epf-vntb.c
+Message-ID: <20220913221916.GA627631@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913210957.3493826-6-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,46 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Hardware) resources which are bound to the driver and device lifecycle
-must not be accessed after the device and driver are unbound.
+In subject, capitalize and change "makeup" to "Clean up":
 
-However, the DRM device isn't freed as long as the last user didn't
-close it, hence userspace can still call into the driver.
+  PCI: endpoint: pci-epf-vntb: Clean up
 
-Therefore protect the critical sections which are accessing those
-resources with drm_dev_enter() and drm_dev_exit().
+On Tue, Sep 13, 2022 at 04:09:56PM -0500, Frank Li wrote:
+> Remove unused field: epf_db_phy.
+> Remove __iomem before epf_db.
+> Remove dupicate check if (readl(ntb->epf_db + i * 4)).
+> Using readl_relaxed instead of readl.
+> Using marco ENTRY_SIZE instead of number 4 at all place.
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/arm/hdlcd_drv.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Add "()" after function names.
 
-diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
-index e41def6d47cc..020c7d0c70a5 100644
---- a/drivers/gpu/drm/arm/hdlcd_drv.c
-+++ b/drivers/gpu/drm/arm/hdlcd_drv.c
-@@ -204,11 +204,19 @@ static int hdlcd_show_pxlclock(struct seq_file *m, void *arg)
- 	struct drm_info_node *node = (struct drm_info_node *)m->private;
- 	struct drm_device *drm = node->minor->dev;
- 	struct hdlcd_drm_private *hdlcd = drm_to_hdlcd_priv(drm);
--	unsigned long clkrate = clk_get_rate(hdlcd->clk);
--	unsigned long mode_clock = hdlcd->crtc.mode.crtc_clock * 1000;
-+	unsigned long clkrate, mode_clock;
-+	int idx;
-+
-+	if (!drm_dev_enter(drm, &idx))
-+		return -ENODEV;
-+
-+	clkrate = clk_get_rate(hdlcd->clk);
-+	mode_clock = hdlcd->crtc.mode.crtc_clock * 1000;
- 
- 	seq_printf(m, "hw  : %lu\n", clkrate);
- 	seq_printf(m, "mode: %lu\n", mode_clock);
-+
-+	drm_dev_exit(idx);
- 	return 0;
- }
- 
--- 
-2.37.3
+s/marco/macro/
 
+It would be nice if "ENTRY_SIZE" had a hint about what kind of entry
+we're talking about.
+
+Since this is a collection of random cleanups, I noticed a typo in
+epf_ntb_configure_interrupt() kernel-doc: s/capaiblity/capability/
+
+The struct epf_ntb_ctrl definition is also whitespace-damaged.  The
+members of struct epf_ntb_ctrl and struct epf_ntb should follow the
+same indentation style.  Some members of struct epf_ntb_ctrl are
+indented with a tab, others with space.  Either make them all tabs and
+indent struct epf_ntb similarly, or indent the struct epf_ntb_ctrl
+members with a single space.
+
+The comments in the file have a whole collection of ways to spell
+vhost: Virtual Host, VHOST, VHost, vHOST, vhost.  Make them all the
+same, please.  You can use "Virtual Host (VHOST)" or whatever the
+first time if you want to use the short version later.
+
+Same for host/HOST/etc.  I don't want to read things like this:
+
+  @ntb: NTB device that facilitates communication between HOST and vHOST2
+
+  Wrapper to initialize a particular EPC interface and start the
+  workqueue to check for commands from host.
+
+and wonder whether "host" is supposed to be the same as "HOST".  Also,
+why does that say "vHOST*2*"?
+
+There are several instances of "HOST1" and "HOST2" (and "vHOST2").
+Should those appear somewhere in the diagram at the top of the file?
+
+The diagram starts with "/**" which means it's kernel-doc, but the
+diagram is not kernel-doc.  Please run this:
+
+  scripts/kernel-doc -v -none drivers/pci/endpoint/functions/pci-epf-vntb.c
+
+and fix all the warnings.
+
+Bjorn
