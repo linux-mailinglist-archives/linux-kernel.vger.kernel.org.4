@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159285B6DB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDFD5B6DB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiIMMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S231882AbiIMMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiIMMvo (ORCPT
+        with ESMTP id S231207AbiIMMxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:51:44 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F66F550BA;
-        Tue, 13 Sep 2022 05:51:36 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso1907440ooo.12;
-        Tue, 13 Sep 2022 05:51:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rCib1oPKNeqwhjgyZPg5qrlZWJuZ4oIqDxh1dHYtZ8M=;
-        b=YJjNmBeGRepVHpfk/808zSHgzfVr/6Pjd6Wj6cVcjvwYe6gOt+26O8AiG0oGHamVaW
-         XEMv/8BqrLrc16Py4Sr9WOZpp9AKec7Hg73KgcO97Nk3hLlfe1nwWX/LHEa6VmkrJ22o
-         2SXtJA67ll516pZ2iv5IbVIiqydlqs6ay/l+MbKjkkSkdCCti13udJ8q4KMNEdG0EQmt
-         wLDzTy1569VnyO7O9A81xJYBb3Fx6g2dQV6LO+wHR6Xt1AUBVhX2W3u2wcZ1sxVh69wT
-         OO87Knpoh5JqjVA1jbn0xZ2mJlKBEfXlwabXqzD+gN9kkVIhIt0PPNLW7DebvMn/26NC
-         IhUg==
-X-Gm-Message-State: ACgBeo2VueXRyRv9Kj7VjJVXJWZJPRlTyayTfgvWeLtCuvkESXPJzLDS
-        Xqqfa3ZRQARBOFqCR5CgyQ==
-X-Google-Smtp-Source: AA6agR5mi7Jah20YgSuPWfVOtUnnTXJ+PFtSuNgGWRT9VPeGRubhOqoZaY45lklY7gFU99uh/CFu1w==
-X-Received: by 2002:a4a:ae01:0:b0:44d:fb9b:ecfd with SMTP id z1-20020a4aae01000000b0044dfb9becfdmr10935773oom.64.1663073495394;
-        Tue, 13 Sep 2022 05:51:35 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w8-20020a9d5388000000b00616e2d2204csm5879427otg.21.2022.09.13.05.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 05:51:35 -0700 (PDT)
-Received: (nullmailer pid 3472863 invoked by uid 1000);
-        Tue, 13 Sep 2022 12:51:34 -0000
-Date:   Tue, 13 Sep 2022 07:51:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/15] dt-bindings: hwlock: qcom-hwspinlock: correct
- example indentation
-Message-ID: <20220913125134.GA3472817-robh@kernel.org>
-References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
- <20220909092035.223915-3-krzysztof.kozlowski@linaro.org>
+        Tue, 13 Sep 2022 08:53:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521EB52DC4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:53:18 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 12:53:14 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663073596;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jy7yKsA4zbBJAHnwTbtPZlibswqQuh312rB6ckiooQ4=;
+        b=tFyS4Rset0eMFmFVXpuQu5N/iFybSWHu3UKCcQ/8L95jNmIzWEa/KYzP5ggdpmthyNoeOc
+        uWyTCsNExjw10iawLneFDlZoK5WdbOxUMfzcuXRcwlHiSLPsExml4vlIrAlqL27b95SbJ/
+        hRFdbVzQy+M3LS3Vg1CnUXHqh7RCH+H8KYuDhf1t4f1YDjGPGZC+W/kWbvJcnocQexjrZJ
+        Co0pn+PB/16TFMR/iFF/c98tsx23mT/rC+EnP4E+0Md+yd9gkTFFxf4b8FOfaoZwgcMlVB
+        /z8VLtyY+DN0zNfLSOu54ajsHkFiuf9k1O1P3Bz7QzvtOWFzyOuwkpSDd5irUQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663073596;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jy7yKsA4zbBJAHnwTbtPZlibswqQuh312rB6ckiooQ4=;
+        b=7Fk5+pSGVjxSMnvT+H6zawA9Mto6LbMnO+VslSRZUtPuVWlD6GB3OUvLcJ3n4W3sAcwr/A
+        /84QOmZNmkRqmxDA==
+From:   "irqchip-bot for Huacai Chen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip: Select downstream irqchip
+ drivers for LoongArch CPU
+Cc:     kernel test robot <lkp@intel.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220808085319.3350111-1-chenhuacai@loongson.cn>
+References: <20220808085319.3350111-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909092035.223915-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <166307359441.401.13393713212108483468.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 11:20:22 +0200, Krzysztof Kozlowski wrote:
-> Use some consistent indentation (4-space) for DTS example.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/hwlock/qcom-hwspinlock.yaml    | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Acked-by: Rob Herring <robh@kernel.org>
+Commit-ID:     8d5356f9820dc48578fc50077f5a34905386e47f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8d5356f9820dc48578fc50077f5a34905386e47f
+Author:        Huacai Chen <chenhuacai@loongson.cn>
+AuthorDate:    Mon, 08 Aug 2022 16:53:19 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Mon, 12 Sep 2022 16:50:55 +01:00
+
+irqchip: Select downstream irqchip drivers for LoongArch CPU
+
+LoongArch irqchips have a fixed hierarchy which currently can't be
+described by ACPI tables, so upstream irqchip drivers call downstream
+irqchip drivers' initialization directly. As a result, the top level
+(CPU-level) irqchip driver should explicitly select downstream drivers
+to avoid build errors.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220808085319.3350111-1-chenhuacai@loongson.cn
+---
+ drivers/irqchip/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 66b9fa4..2549daa 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -561,6 +561,11 @@ config IRQ_LOONGARCH_CPU
+ 	select GENERIC_IRQ_CHIP
+ 	select IRQ_DOMAIN
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
++	select LOONGSON_LIOINTC
++	select LOONGSON_EIOINTC
++	select LOONGSON_PCH_PIC
++	select LOONGSON_PCH_MSI
++	select LOONGSON_PCH_LPC
+ 	help
+ 	  Support for the LoongArch CPU Interrupt Controller. For details of
+ 	  irq chip hierarchy on LoongArch platforms please read the document
