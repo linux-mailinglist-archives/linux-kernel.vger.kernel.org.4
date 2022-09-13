@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3880F5B74C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6E25B7555
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbiIMP1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S235734AbiIMPk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236389AbiIMPYX (ORCPT
+        with ESMTP id S234219AbiIMPkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:24:23 -0400
+        Tue, 13 Sep 2022 11:40:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0447C77E;
-        Tue, 13 Sep 2022 07:38:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B503F1FA;
+        Tue, 13 Sep 2022 07:45:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CAFDB80FE9;
-        Tue, 13 Sep 2022 14:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB69C433D7;
-        Tue, 13 Sep 2022 14:35:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC7A1B81017;
+        Tue, 13 Sep 2022 14:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3684CC433C1;
+        Tue, 13 Sep 2022 14:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079760;
-        bh=B4v2k0MQDhnx5OGQ3ksnlEvQQ/YjEEZ8HW8wTgiRqb4=;
+        s=korg; t=1663079762;
+        bh=M73bX+LP+zY4u4erhlSkaoaIApdxC197uCSuRUq4k/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogoRzYj6SkKTnDXyrAdYyM0SK6Eq4ahYsa7b/QkOSGarRNpOhpfYHKNAKqqqUwngM
-         b340fCS1r5xbiOV6cyvyRHskCMqHt/rL2zEHFMRsveF7x6gJO+nxrXCbKAfDyN6Rcz
-         a9qHFYTZMaazMW8WI5vNoOMIH2fO+T3GP6ixqeMY=
+        b=rVU7+uIxeJLobHdFCEpbgt9kD1u6OoegvBixR1EdGucVdqEXN8HLIUhN4TP+TkDol
+         F2bui9t5LWY2Z1qUdLXCluiLkiyRPjyoyR5NMQtGeoPw6eWbJLSCHDE0jrejG83vP2
+         xPLQuTZ6wJujRdIhsOuNyeTBpNQRCC7NLu1w8CNU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Nagaraj Arankal <nagaraj.p.arankal@hpe.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Eric Dumazet <edumazet@google.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Cong Wang <cong.wang@bytedance.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 55/61] tcp: fix early ETIMEDOUT after spurious non-SACK RTO
-Date:   Tue, 13 Sep 2022 16:07:57 +0200
-Message-Id: <20220913140349.208264349@linuxfoundation.org>
+Subject: [PATCH 4.14 56/61] sch_sfb: Also store skb len before calling child enqueue
+Date:   Tue, 13 Sep 2022 16:07:58 +0200
+Message-Id: <20220913140349.260391735@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
 References: <20220913140346.422813036@linuxfoundation.org>
@@ -59,127 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neal Cardwell <ncardwell@google.com>
+From: Toke Høiland-Jørgensen <toke@toke.dk>
 
-[ Upstream commit 686dc2db2a0fdc1d34b424ec2c0a735becd8d62b ]
+[ Upstream commit 2f09707d0c972120bf794cfe0f0c67e2c2ddb252 ]
 
-Fix a bug reported and analyzed by Nagaraj Arankal, where the handling
-of a spurious non-SACK RTO could cause a connection to fail to clear
-retrans_stamp, causing a later RTO to very prematurely time out the
-connection with ETIMEDOUT.
+Cong Wang noticed that the previous fix for sch_sfb accessing the queued
+skb after enqueueing it to a child qdisc was incomplete: the SFB enqueue
+function was also calling qdisc_qstats_backlog_inc() after enqueue, which
+reads the pkt len from the skb cb field. Fix this by also storing the skb
+len, and using the stored value to increment the backlog after enqueueing.
 
-Here is the buggy scenario, expanding upon Nagaraj Arankal's excellent
-report:
-
-(*1) Send one data packet on a non-SACK connection
-
-(*2) Because no ACK packet is received, the packet is retransmitted
-     and we enter CA_Loss; but this retransmission is spurious.
-
-(*3) The ACK for the original data is received. The transmitted packet
-     is acknowledged.  The TCP timestamp is before the retrans_stamp,
-     so tcp_may_undo() returns true, and tcp_try_undo_loss() returns
-     true without changing state to Open (because tcp_is_sack() is
-     false), and tcp_process_loss() returns without calling
-     tcp_try_undo_recovery().  Normally after undoing a CA_Loss
-     episode, tcp_fastretrans_alert() would see that the connection
-     has returned to CA_Open and fall through and call
-     tcp_try_to_open(), which would set retrans_stamp to 0.  However,
-     for non-SACK connections we hold the connection in CA_Loss, so do
-     not fall through to call tcp_try_to_open() and do not set
-     retrans_stamp to 0. So retrans_stamp is (erroneously) still
-     non-zero.
-
-     At this point the first "retransmission event" has passed and
-     been recovered from. Any future retransmission is a completely
-     new "event". However, retrans_stamp is erroneously still
-     set. (And we are still in CA_Loss, which is correct.)
-
-(*4) After 16 minutes (to correspond with tcp_retries2=15), a new data
-     packet is sent. Note: No data is transmitted between (*3) and
-     (*4) and we disabled keep alives.
-
-     The socket's timeout SHOULD be calculated from this point in
-     time, but instead it's calculated from the prior "event" 16
-     minutes ago (step (*2)).
-
-(*5) Because no ACK packet is received, the packet is retransmitted.
-
-(*6) At the time of the 2nd retransmission, the socket returns
-     ETIMEDOUT, prematurely, because retrans_stamp is (erroneously)
-     too far in the past (set at the time of (*2)).
-
-This commit fixes this bug by ensuring that we reuse in
-tcp_try_undo_loss() the same careful logic for non-SACK connections
-that we have in tcp_try_undo_recovery(). To avoid duplicating logic,
-we factor out that logic into a new
-tcp_is_non_sack_preventing_reopen() helper and call that helper from
-both undo functions.
-
-Fixes: da34ac7626b5 ("tcp: only undo on partial ACKs in CA_Loss")
-Reported-by: Nagaraj Arankal <nagaraj.p.arankal@hpe.com>
-Link: https://lore.kernel.org/all/SJ0PR84MB1847BE6C24D274C46A1B9B0EB27A9@SJ0PR84MB1847.NAMPRD84.PROD.OUTLOOK.COM/
-Signed-off-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Yuchung Cheng <ycheng@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220903121023.866900-1-ncardwell.kernel@gmail.com
+Fixes: 9efd23297cca ("sch_sfb: Don't assume the skb is still around after enqueueing to child")
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Acked-by: Cong Wang <cong.wang@bytedance.com>
+Link: https://lore.kernel.org/r/20220905192137.965549-1-toke@toke.dk
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_input.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ net/sched/sch_sfb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 906d26794d007..c6d49ec38a56a 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -2425,6 +2425,21 @@ static inline bool tcp_may_undo(const struct tcp_sock *tp)
- 	return tp->undo_marker && (!tp->undo_retrans || tcp_packet_delayed(tp));
- }
- 
-+static bool tcp_is_non_sack_preventing_reopen(struct sock *sk)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+
-+	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
-+		/* Hold old state until something *above* high_seq
-+		 * is ACKed. For Reno it is MUST to prevent false
-+		 * fast retransmits (RFC2582). SACK TCP is safe. */
-+		if (!tcp_any_retrans_done(sk))
-+			tp->retrans_stamp = 0;
-+		return true;
-+	}
-+	return false;
-+}
-+
- /* People celebrate: "We love our President!" */
- static bool tcp_try_undo_recovery(struct sock *sk)
+diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+index 8f924defa98d0..9962a49989938 100644
+--- a/net/sched/sch_sfb.c
++++ b/net/sched/sch_sfb.c
+@@ -284,6 +284,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
  {
-@@ -2445,14 +2460,8 @@ static bool tcp_try_undo_recovery(struct sock *sk)
  
- 		NET_INC_STATS(sock_net(sk), mib_idx);
- 	}
--	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
--		/* Hold old state until something *above* high_seq
--		 * is ACKed. For Reno it is MUST to prevent false
--		 * fast retransmits (RFC2582). SACK TCP is safe. */
--		if (!tcp_any_retrans_done(sk))
--			tp->retrans_stamp = 0;
-+	if (tcp_is_non_sack_preventing_reopen(sk))
- 		return true;
--	}
- 	tcp_set_ca_state(sk, TCP_CA_Open);
- 	tp->is_sack_reneg = 0;
- 	return false;
-@@ -2486,6 +2495,8 @@ static bool tcp_try_undo_loss(struct sock *sk, bool frto_undo)
- 			NET_INC_STATS(sock_net(sk),
- 					LINUX_MIB_TCPSPURIOUSRTOS);
- 		inet_csk(sk)->icsk_retransmits = 0;
-+		if (tcp_is_non_sack_preventing_reopen(sk))
-+			return true;
- 		if (frto_undo || tcp_is_sack(tp)) {
- 			tcp_set_ca_state(sk, TCP_CA_Open);
- 			tp->is_sack_reneg = 0;
+ 	struct sfb_sched_data *q = qdisc_priv(sch);
++	unsigned int len = qdisc_pkt_len(skb);
+ 	struct Qdisc *child = q->qdisc;
+ 	struct tcf_proto *fl;
+ 	struct sfb_skb_cb cb;
+@@ -406,7 +407,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
+ 	ret = qdisc_enqueue(skb, child, to_free);
+ 	if (likely(ret == NET_XMIT_SUCCESS)) {
+-		qdisc_qstats_backlog_inc(sch, skb);
++		sch->qstats.backlog += len;
+ 		sch->q.qlen++;
+ 		increment_qlen(&cb, q);
+ 	} else if (net_xmit_drop_count(ret)) {
 -- 
 2.35.1
 
