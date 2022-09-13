@@ -2,152 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9774D5B65A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD8E5B65C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiIMCdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S229577AbiIMCmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiIMCdi (ORCPT
+        with ESMTP id S229949AbiIMClt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:33:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3E452E5D;
-        Mon, 12 Sep 2022 19:33:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD413612FE;
-        Tue, 13 Sep 2022 02:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C51C433C1;
-        Tue, 13 Sep 2022 02:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663036416;
-        bh=ZDvCgiFrql+qDgOo1QGy7zMojVL4tdh1vZx8YEL/VII=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=redTRotvVXGPYvrWNBYIzMaT+xVKiI/0oYKvSZQR775pTGflycJSTD7HjXbEnCXCW
-         BhBdvyNb1aVlCWPgPIHy1GitaiL+KS4EKiQUxbYBHELneFnWzi/DFB2LP2tdK+6F/F
-         n2XkZsN60cEyJjtvZ53PRhW3OAybAQm7Fqt9caxzwOjbEt9q2SGpwEoaJe/6H6ZXRB
-         mU8Af3azOrHMLVFcZsotx2nHNv43VMgi+ly9YpA6vCTTDj0ZBhp2WInexEf3j+AnNp
-         ZbSjfmKVM8Osoqx1htTn45w7OEPEwqTa0uf2WlqenQEwvGrqD6/JJLDO/STCa8Sex6
-         wgPax2UYgH8Sw==
-Message-ID: <a03417f6-e4fa-2b1a-34f8-bd5d52c1e853@kernel.org>
-Date:   Tue, 13 Sep 2022 10:33:29 +0800
+        Mon, 12 Sep 2022 22:41:49 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8819952FCF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:41:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TsDTEcjnzblio2Im3niYfwNYdNWFO22/rnylF3UwAdw3Ail5LTB4poZBN1mE9V/LK+cc5+fkhBnqgL1lQYv+yo0rK1PLMiTnkUtSv+fsZojb5lbXv/Ndphl7DpD91F51Vi5VfjyfN6cZpcmfkHz72fT5u6/TIc027TRddnJP6fo5qKZbbeFiN1qcCNz4vkZwgoXZeznqpwKwyvzt3/u0vnUo7gz7kUpj1cWYehlOjxWbipGwJLAKl0RXxY9LGLIqsW7TAqKb1jQPoaJg7+vgVn/5Z/e8XPkAqwynZIfi9xhQC7opPpzTVDwtzFBOd00AEY3RIqwdvQ0nowKjkFBmWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=omC3X8HEN0/85hiLEF8vpnKf8kJzMNRLkGhZuYwV5/Q=;
+ b=SINj4nvvOEY6teKBcadJNhKc4Z+3q21V0DRYkFO8E1F/q1lP7yDzt3f9CmP85dRR8SmoIYI9TPcdbG3RO4OvNSTIvN3rPVsyDGShbSOqwLyQadE7lJ3mmgibshOGHRIJSNtqqiifwUczJmyIPM7nW1bv+6PIMOBWudUKkgL6ARhi66OWQq1Rh9GYeCUkFDbaU/tq6mV/oowQh27AAafx3oYugL7qN0WA/cecLF7VGnemBdjukFs0KP5w8LWSPL41VBaLCZUFl6MNIR0Uu0uLW1AnFZSLLRAzmnd9Tw2vaMeIibJZ+WX7Wtc2UoDnvG6XyJ3g2lYMU4vk059a4b66lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=omC3X8HEN0/85hiLEF8vpnKf8kJzMNRLkGhZuYwV5/Q=;
+ b=elhpZwE3E57GnAGsVYhU3wa566794MfSNSgsJI90rReyTB041J/A/LAaL0knQYX2vMqgR3hNprd4F/UMUaSRmz4mmh1RMOQdwv1ButJPKslSEYb75yIPD5Lm21yKjhZrnp1qr5ycbN8FHb9kak8iilLVzg50Qn2NjQpFoLosaC+iKHAyed1WBMEp5mvzRPkR5kwRbqMksJNfg6KeF8dHXCSI8HWMQpPdSAYcVb2X3YlaTfaxE0vzVBCYXMuWPj7nL0eB3FH5Xz6qdmEMlqYzlpoCbi9LJAuQ7jnqOpgsNvHrMlqREEYpPTcc/RZcqRvJjEggPiUreAoKzUzP159CEw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by CH0PR12MB5387.namprd12.prod.outlook.com (2603:10b6:610:d6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Tue, 13 Sep
+ 2022 02:41:41 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::243c:a9ba:2442:8974]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::243c:a9ba:2442:8974%6]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 02:41:41 +0000
+References: <9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com>
+ <68cf1d70f3fb8ce4e3c1a4899c19df4f6c382a13.1662078528.git-series.apopple@nvidia.com>
+ <f81f6f90-81ad-7b77-a74d-e9d5d6e3bc94@nvidia.com>
+ <87mtbb5soy.fsf@nvdebian.thelocal>
+ <90a0441e-47ad-007f-06c1-b30e5f7bb692@nvidia.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4 4/4] selftests/hmm-tests: Add test for dirty bits
+Date:   Tue, 13 Sep 2022 12:33:40 +1000
+In-reply-to: <90a0441e-47ad-007f-06c1-b30e5f7bb692@nvidia.com>
+Message-ID: <87czc0m1wd.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0365.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::10) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] f2fs: fix to detect obsolete inner inode during
- fill_super()
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
-References: <20220908105334.98572-1-chao@kernel.org>
- <Yx9SVsxVzNErMDpv@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yx9SVsxVzNErMDpv@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|CH0PR12MB5387:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb83a520-b19d-48fe-2db5-08da95317d18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BANjnYoEB68rwRPwWEp68uKdZ8LkPf7pWy90KmlxxfQffcOOtA5uoZuLiQeRw+D/MDN3ADiSC5Uqh/fH5jUUTkE5ZRyt9bRAbRROPQeaUb8WTYBWoY/pJb6UnAix+FmNh5iM2l+wYR84hlta0DOSbx2/ohzgu5JWAZsXlOiJEgDZrxLYWzTntMUaMtkuDW8oBomnM5zgqt3rK2OhkM6zTIS9SZtNgLbzqZghDW5AHC/1xxQbSUAluqZ9a1myyi/Qs1KsOYio+D+DzPok0tEjCIT9gtokTCg6srD2ba9cDmBEUdNSz0924k5yzLXEYSr4P1VsmFQPo+dEI9tdkzpJ3MyuG+3WYPv7fvcUnTfhxt+14Kzsq3n5LP0bR9kLKbozqD79GOYnozO6fUEtg42Y0aLQalc9YDXHUrRi7IcSthMpi3MzTWQ02yZYdhUtUP6j5lYd76WGhWXg34ycbw4tBFfenWnyNeSs6tYX0zTQffWFJixTgb4b2NJ3Kx6vY9UJ7Y0M1XrJcfkG9/U7rXNsjZ3Y58Cg+G0r15hF28JfI0m6nepOjtHOYL5GYxxRgfc46zSyfWebQDa80NXbarhtNZM/7NhcKZICLc3EniKTCCgOTxHYRhmkESb4WzzPNka30yeZItgkMDvHT8WOiE/JlNL0jD41bfJxW+84nw1ybw1lr6+5PAfEGXq7UKiFGow/IwvuUiTQmjbFzo+Hwdsb+8qg7rHUojYFS9Co/5xmxIeSq/QLEYFOD01KSbp6LcQYwX65ZztpPRIgGb0kQORBGg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(451199015)(8676002)(66476007)(2906002)(9686003)(86362001)(41300700001)(316002)(53546011)(6862004)(6486002)(186003)(6636002)(6506007)(6512007)(26005)(66946007)(5660300002)(54906003)(83380400001)(8936002)(478600001)(7416002)(4326008)(66556008)(38100700002)(14143004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KaCH68r1cOfK6xkHEEUmKitGj0h5DWYR3Ure1vwz20giz4+xCugEV/DcRoZu?=
+ =?us-ascii?Q?a9l2L97a/9YBaltC34p9/LMIoKKy5FndVHpRTAyzKT7i5uUHa193FNVZb0RU?=
+ =?us-ascii?Q?OmYhMoqdK1EXjqXwz60sF4z1X6OQP4D343j6kyLbyvlhgIODB7w0tqiVJHg1?=
+ =?us-ascii?Q?lcUN+2Q1cCSEJXkEQsartvLC+Z0cr5RLK6QZejL6b8LfvmC2AV8JASEfo7/j?=
+ =?us-ascii?Q?/h8mXPBfvpSRtBgzHSvrW4+z2zTz8muOTex0mSn6wxWkuo09IsYHndHE8YCl?=
+ =?us-ascii?Q?GqiX+T1pvt4vq3DJKzdlfGOgOVLZixU06OmC2tD2SyX6PPTOJAp20C3OY5Dc?=
+ =?us-ascii?Q?WZQIq2Tc937SorP+yTz+jWObLyuqLmKWMr96kVEcv3DkkwkbcayPCp/m8ud+?=
+ =?us-ascii?Q?EixS8u6cb4esKlAmnRKGR5ElpZqeI8bByJMtmilyRCB+sYQUPbLT44arUmge?=
+ =?us-ascii?Q?UxK9ZssHbkgJFb3QvjMFTlNZQf/iNu4AL5GsWvSzc4Tb9tba1NkK1MNHDSMG?=
+ =?us-ascii?Q?tUC2zoBMDKRl/Cek+NinNsCz2r9XzUnZe/Y1bxcAgO8OvmkepoChxmPsRpsP?=
+ =?us-ascii?Q?MPi93x4BnJTQs/tyOzcGtBXgMNMBaLFEOS+Y48MCdg4rm4z+zZWMx+bK1RaB?=
+ =?us-ascii?Q?R0jRBcbNKnuv9kA37Jm3R+AeI5S+wbiJdIJDlkoPeJf4+jw8veULydKdQ4AG?=
+ =?us-ascii?Q?2Hii9ybyPO64dmi0Gnjr9fbWP89JUZj4VvWgqLwt6MfEEEKGrettg8+5czF7?=
+ =?us-ascii?Q?cXYz5YdGC+nwgPBdtKgYJkYBp51LlB81te0pVXRyYSek87+uzZeIgWqnHWUo?=
+ =?us-ascii?Q?vNtvjMaDHV1NT910rz9jR6auuN9ISOXCpL7dk1Co72OTsCTuzjMwLn3iH9oj?=
+ =?us-ascii?Q?28sKj8Uf7YvkVNYoajMHTZ0dwPPBnOhKZWQs1rLQzN+ZA9qFEitH5yoMvZvY?=
+ =?us-ascii?Q?GTtELIliy/sdDlkdu0WhLYtGjG7dr8tU7vbGEJwyvET73wOXipQGdTtNlwll?=
+ =?us-ascii?Q?4vr3PjK84ir2lQjE+n8dAO26OnHhocKntgv0bWJl4/ZMUt/8KtnddonFeMJy?=
+ =?us-ascii?Q?OFR3g1cCoYEVL7zd08rRLiLIS/8dAmlgngVT0vQmhFwJpkeP4lRbf0mafTmf?=
+ =?us-ascii?Q?2k4tOTLfFsVN0IiLybGQZUheP73T1C/kcj/5BTVbYwizktoXYa+aHKy72xxb?=
+ =?us-ascii?Q?7AMg7qdzSxa2409jSXcApJqXt35Z44tBo+kMpwPhdKXNVH3WGHhwS7vFPsd0?=
+ =?us-ascii?Q?ENIIejwtnchbdaVGLNEpLnByLZsOTQXgNaMhNcS1vK6C4cgEGC5hUXHJJkYM?=
+ =?us-ascii?Q?kFkmgPiYFoQjPfaMYcvuuNzyzyscVYhpJ3qihqcWCpWinh1z9D/n1zAfWtAP?=
+ =?us-ascii?Q?XDnbcRvTrqHWAHZFN4SKfrjihXcHyZ98OwRtz1xY6R2RCtlXup5fhfLY2if/?=
+ =?us-ascii?Q?fxazVUZ+SVvo1h0sut9v++SEPNVoEmE8Fr5hvrIopPJYYObpVmlD22eo/Bbv?=
+ =?us-ascii?Q?0viQydzOTjFCAdnqgKP3aJtBjhCKME1EQRgPWMCF2j3hXTqzfIvhjOD/wIo/?=
+ =?us-ascii?Q?l+A+28gE5+fzZISAzZWcUf7XK3TjQ7BHEWit9+ND?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb83a520-b19d-48fe-2db5-08da95317d18
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 02:41:41.4612
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yKCoKgiYhGEnYEqOLpmZcT5nVh4BQ/vm+PtYfcPE8Al7Y3r6J91eg8NlXT9Jm8QRA6DkAqDE9HDdt2stL1Xizg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5387
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/12 23:37, Jaegeuk Kim wrote:
-> On 09/08, Chao Yu wrote:
->> Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
->> all the time to fix the below panic.
->>
->> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->> Mem abort info:
->>    ESR = 0x0000000086000004
->>    EC = 0x21: IABT (current EL), IL = 32 bits
->>    SET = 0, FnV = 0
->>    EA = 0, S1PTW = 0
->>    FSC = 0x04: level 0 translation fault
->> user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
->> [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->> Internal error: Oops: 86000004 [#1] PREEMPT SMP
->> Modules linked in:
->> CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
->> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> pc : 0x0
->> lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
->> sp : ffff800012783970
->> x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
->> x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
->> x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
->> x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
->> x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
->> x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
->> x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
->> x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
->> x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
->> x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
->> Call trace:
->>   0x0
->>   set_page_dirty+0x38/0xbc mm/folio-compat.c:62
->>   f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
->>   do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
->>   f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
->>
->> The root cause is, quoted from Jaegeuk:
->>
->> It turned out there is a bug in reiserfs which doesn't free the root
->> inode (ino=2). That leads f2fs to find an ino=2 with the previous
->> superblock point used by reiserfs. That stale inode has no valid
->> mapping that f2fs can use, result in kernel panic.
->>
->> This patch adds sanity check in f2fs_iget() to avoid finding stale
->> inode during inner inode initialization.
->>
->> Cc: stable@vger.kernel.org
->> Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
->> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->>   fs/f2fs/inode.c | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
->> index ccb29034af59..df1a82fbfaf2 100644
->> --- a/fs/f2fs/inode.c
->> +++ b/fs/f2fs/inode.c
->> @@ -493,6 +493,17 @@ struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino)
->>   	struct inode *inode;
->>   	int ret = 0;
->>   
->> +	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
->> +					ino == F2FS_COMPRESS_INO(sbi)) {
->> +		inode = ilookup(sb, ino);
->> +		if (inode) {
->> +			iput(inode);
->> +			f2fs_err(sbi, "there is obsoleted inner inode %lu cached in hash table",
->> +					ino);
->> +			return ERR_PTR(-EFSCORRUPTED);
-> 
-> Well, this does not indicate f2fs is corrupted. I'd rather expect to fix
-> reiserfs instead of f2fs workaround which hides the bug.
 
-Well, is there a fixing patch for reiserfs? If not, how about applying this
-patch first, later, we can revert it after reiserfs has been fixed.
+John Hubbard <jhubbard@nvidia.com> writes:
 
-Thanks,
+> On 9/7/22 04:13, Alistair Popple wrote:
+>>>> +	/*
+>>>> +	 * Attempt to migrate memory to device, which should fail because
+>>>> +	 * hopefully some pages are backed by swap storage.
+>>>> +	 */
+>>>> +	ASSERT_TRUE(hmm_migrate_sys_to_dev(self->fd, buffer, npages));
+>>>
+>>> Are you really sure that you want to assert on that? Because doing so
+>>> guarantees a test failure if and when we every upgrade the kernel to
+>>> be able to migrate swap-backed pages. And I seem to recall that this
+>>> current inability to migrate swap-backed pages is considered a flaw
+>>> to be fixed, right?
+>> Right, that's a good point. I was using failure (ASSERT_TRUE) here as a
+>> way of detecting that at least some pages are swap-backed, because if no
+>> pages end up being swap-backed the test is invalid.
+>
+> Yes. But "invalid" or "waived" is a much different test result than
+> "failed".
 
-> 
->> +		}
->> +	}
->> +
->>   	inode = iget_locked(sb, ino);
->>   	if (!inode)
->>   		return ERR_PTR(-ENOMEM);
->> -- 
->> 2.25.1
+True. Unfortunately our test framework needs some love as I don't think
+it's possible to return a result of "invalid" or "waived". We can skip a
+test though, so that might be the best option here.
+
+>> I'm not really sure what to do about it though. It's likely the fix for
+>
+> Remove the assert. If the test framework allows and you prefer, you
+> can print a warning.
+>
+>> swap-backed migration may make this bug impossible to hit anyway,
+>> because the obvious fix is to just drop the pages from the swapcache
+>> during migration which would force writeback during subsequent reclaim.
+>> So I'm inclined to leave this here even if it only serves to remind us
+>> about it when we do fix migration of swap-backed pages, because we will
+>> of course run hmm-tests before submitting that fix :-) We can then
+>> either fix the test or drop it if we think it's no longer possible to
+>> hit.
+>
+> Oh no no no, please. This is not how to do tests. If you want a TODO
+> list somewhere, there are other ways. But tests that require maintenance
+> when you change something are an anti-pattern.
+
+Fair enough, I think what you're asking for is a higher level test that
+doesn't rely on implementation side-effects. I wrote this test mostly to
+discover if we could hit problems with the current implementation hence
+why it's a bit messy.
+
+But I think I can fix this up without relying on implementation
+side-effects - really I just want to confirm that at least some pages
+got swapped to disk which I can do via looking at /proc/self/pagemap.
+
+ - Alistair
+
+> thanks,
