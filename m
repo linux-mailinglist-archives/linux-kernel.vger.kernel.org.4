@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EFE5B74F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8945B7581
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236389AbiIMP2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S236701AbiIMPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236344AbiIMP0O (ORCPT
+        with ESMTP id S234634AbiIMPpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:26:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041A7D7B2;
-        Tue, 13 Sep 2022 07:38:30 -0700 (PDT)
+        Tue, 13 Sep 2022 11:45:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A547A8688F;
+        Tue, 13 Sep 2022 07:48:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC71B80FBD;
-        Tue, 13 Sep 2022 14:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B2AC433D6;
-        Tue, 13 Sep 2022 14:36:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D77E614D0;
+        Tue, 13 Sep 2022 14:35:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60720C433C1;
+        Tue, 13 Sep 2022 14:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079770;
-        bh=/TwwsSZbhnBs+zIYOt3WyFteOAs2G6YYtTmToocFnig=;
+        s=korg; t=1663079747;
+        bh=vhBPoo9+TLK9+hQbWq1b8y3SJghTY07Qom1m3j2Diu0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cYyQRtrMruymrG5kohaKjlXtsCnMdFVhwjare7Q57JUf4wA0Sn+ADqNb2zwM7JzUI
-         iq0unDdlQ8VytS9xvajx2Dl2IlbeTOrl11WRppXXiRqgDkxbOczJxH9LNQXA1YS+Bb
-         yN4QqRrxOZ64cNJS2yNSB57Ogok9b6UdinyXoTDo=
+        b=Z+FltSt8Utehy9wpZbmKy+qVKwelQL4Dk06HWXLvl3gTgBDmNywLGP2RFJok0oWRK
+         EmJfLE/IVh8+lrxUOiPWNh81NNpNOkuRt78t5O/3cxtseHMtkvkxnY1tI3oudw19WQ
+         g0v+Qlda1p/WjvRXqGJReCyGEIV0/2xlQFM6RLNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Woithe <jwoithe@just42.net>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.14 59/61] USB: serial: ch341: fix disabled rx timer on older devices
-Date:   Tue, 13 Sep 2022 16:08:01 +0200
-Message-Id: <20220913140349.407381238@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 60/61] MIPS: loongson32: ls1c: Fix hang during startup
+Date:   Tue, 13 Sep 2022 16:08:02 +0200
+Message-Id: <20220913140349.452979631@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
 References: <20220913140346.422813036@linuxfoundation.org>
@@ -54,45 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Yang Ling <gnaygnil@gmail.com>
 
-commit 41ca302a697b64a3dab4676e01d0d11bb184737d upstream.
+[ Upstream commit 35508d2424097f9b6a1a17aac94f702767035616 ]
 
-At least one older CH341 appears to have the RX timer enable bit
-inverted so that setting it disables the RX timer and prevents the FIFO
-from emptying until it is full.
+The RTCCTRL reg of LS1C is obselete.
+Writing this reg will cause system hang.
 
-Only set the RX timer enable bit for devices with version newer than
-0x27 (even though this probably affects all pre-0x30 devices).
-
-Reported-by: Jonathan Woithe <jwoithe@just42.net>
-Tested-by: Jonathan Woithe <jwoithe@just42.net>
-Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
-Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
-Cc: stable@vger.kernel.org      # 4.10
-Signed-off-by: Johan Hovold <johan@kernel.org>
-[ johan: backport to 5.4 ]
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 60219c563c9b6 ("MIPS: Add RTC support for Loongson1C board")
+Signed-off-by: Yang Ling <gnaygnil@gmail.com>
+Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
+Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/ch341.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/mips/loongson32/ls1c/board.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -179,8 +179,12 @@ static int ch341_set_baudrate_lcr(struct
- 	/*
- 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
- 	 * has been received unless bit 7 is set.
-+	 *
-+	 * At least one device with version 0x27 appears to have this bit
-+	 * inverted.
- 	 */
--	a |= BIT(7);
-+	if (priv->version > 0x27)
-+		a |= BIT(7);
+diff --git a/arch/mips/loongson32/ls1c/board.c b/arch/mips/loongson32/ls1c/board.c
+index eb2d913c694fd..2d9675a6782c3 100644
+--- a/arch/mips/loongson32/ls1c/board.c
++++ b/arch/mips/loongson32/ls1c/board.c
+@@ -19,7 +19,6 @@ static struct platform_device *ls1c_platform_devices[] __initdata = {
+ static int __init ls1c_platform_init(void)
+ {
+ 	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
+-	ls1x_rtc_set_extclk(&ls1x_rtc_pdev);
  
- 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, a);
- 	if (r)
+ 	return platform_add_devices(ls1c_platform_devices,
+ 				   ARRAY_SIZE(ls1c_platform_devices));
+-- 
+2.35.1
+
 
 
