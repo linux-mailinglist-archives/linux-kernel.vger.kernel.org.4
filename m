@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B561B5B74CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B76205B7467
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbiIMPaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S235965AbiIMPVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbiIMP2N (ORCPT
+        with ESMTP id S235934AbiIMPUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:28:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5E37DF67;
-        Tue, 13 Sep 2022 07:39:08 -0700 (PDT)
+        Tue, 13 Sep 2022 11:20:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53665E318;
+        Tue, 13 Sep 2022 07:36:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 387E2B81023;
-        Tue, 13 Sep 2022 14:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843C6C433C1;
-        Tue, 13 Sep 2022 14:37:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07A2EB80FEC;
+        Tue, 13 Sep 2022 14:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75119C43470;
+        Tue, 13 Sep 2022 14:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079824;
-        bh=xb/kDkB5vl+8gb6N6n6DpXSufRWAX6XRdb2BtOxI2rs=;
+        s=korg; t=1663079690;
+        bh=pVGX3lUAokxnhXBJdkUrS/2va8kh1ON7b6FM2FZm/c0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SiqVKc93EJ2bl6/8eO+sistP9n0JojUYwAmFFm+aAn2YMCWZx96PwezQPIthTzmuV
-         42+hvfn+cabi4Ngec/4GjAOGcR1O4vof9GyvBiFGv+7/wn9iH9H9Qik0gkDcIQwvgq
-         ihzJ1GtYJWEpAZu/MrQEuenOrsPh6DjU8wvD9MH0=
+        b=wWXg42sK3iDQphrsQ6O0g5ohNMInGt7ZGgXpfOg8gSenE3wZozJLreI2s7LbuTjc9
+         ZkJFmA/ohJcZ2vdVKkAbwjUoKtA7HHC3lSOgenljmVQZoktcUfGrUgsy+jcvTnvPHH
+         V3FOZOQxLBXENYHhi3jMJmZafGwkDgZEriO/GtOY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Candice Li <candice.li@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 08/42] hwmon: (gpio-fan) Fix array out of bounds access
-Date:   Tue, 13 Sep 2022 16:07:39 +0200
-Message-Id: <20220913140342.697010061@linuxfoundation.org>
+Subject: [PATCH 4.14 38/61] drm/amdgpu: Check num_gfx_rings for gfx v9_0 rb setup.
+Date:   Tue, 13 Sep 2022 16:07:40 +0200
+Message-Id: <20220913140348.387247447@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,98 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Candice Li <candice.li@amd.com>
 
-[ Upstream commit f233d2be38dbbb22299192292983037f01ab363c ]
+[ Upstream commit c351938350ab9b5e978dede2c321da43de7eb70c ]
 
-The driver does not check if the cooling state passed to
-gpio_fan_set_cur_state() exceeds the maximum cooling state as
-stored in fan_data->num_speeds. Since the cooling state is later
-used as an array index in set_fan_speed(), an array out of bounds
-access can occur.
-This can be exploited by setting the state of the thermal cooling device
-to arbitrary values, causing for example a kernel oops when unavailable
-memory is accessed this way.
+No need to set up rb when no gfx rings.
 
-Example kernel oops:
-[  807.987276] Unable to handle kernel paging request at virtual address ffffff80d0588064
-[  807.987369] Mem abort info:
-[  807.987398]   ESR = 0x96000005
-[  807.987428]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  807.987477]   SET = 0, FnV = 0
-[  807.987507]   EA = 0, S1PTW = 0
-[  807.987536]   FSC = 0x05: level 1 translation fault
-[  807.987570] Data abort info:
-[  807.987763]   ISV = 0, ISS = 0x00000005
-[  807.987801]   CM = 0, WnR = 0
-[  807.987832] swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000001165000
-[  807.987872] [ffffff80d0588064] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
-[  807.987961] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[  807.987992] Modules linked in: cmac algif_hash aes_arm64 algif_skcipher af_alg bnep hci_uart btbcm bluetooth ecdh_generic ecc 8021q garp stp llc snd_soc_hdmi_codec brcmfmac vc4 brcmutil cec drm_kms_helper snd_soc_core cfg80211 snd_compress bcm2835_codec(C) snd_pcm_dmaengine syscopyarea bcm2835_isp(C) bcm2835_v4l2(C) sysfillrect v4l2_mem2mem bcm2835_mmal_vchiq(C) raspberrypi_hwmon sysimgblt videobuf2_dma_contig videobuf2_vmalloc fb_sys_fops videobuf2_memops rfkill videobuf2_v4l2 videobuf2_common i2c_bcm2835 snd_bcm2835(C) videodev snd_pcm snd_timer snd mc vc_sm_cma(C) gpio_fan uio_pdrv_genirq uio drm fuse drm_panel_orientation_quirks backlight ip_tables x_tables ipv6
-[  807.988508] CPU: 0 PID: 1321 Comm: bash Tainted: G         C        5.15.56-v8+ #1575
-[  807.988548] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
-[  807.988574] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  807.988608] pc : set_fan_speed.part.5+0x34/0x80 [gpio_fan]
-[  807.988654] lr : gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
-[  807.988691] sp : ffffffc008cf3bd0
-[  807.988710] x29: ffffffc008cf3bd0 x28: ffffff80019edac0 x27: 0000000000000000
-[  807.988762] x26: 0000000000000000 x25: 0000000000000000 x24: ffffff800747c920
-[  807.988787] x23: 000000000000000a x22: ffffff800369f000 x21: 000000001999997c
-[  807.988854] x20: ffffff800369f2e8 x19: ffffff8002ae8080 x18: 0000000000000000
-[  807.988877] x17: 0000000000000000 x16: 0000000000000000 x15: 000000559e271b70
-[  807.988938] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-[  807.988960] x11: 0000000000000000 x10: ffffffc008cf3c20 x9 : ffffffcfb60c741c
-[  807.989018] x8 : 000000000000000a x7 : 00000000ffffffc9 x6 : 0000000000000009
-[  807.989040] x5 : 000000000000002a x4 : 0000000000000000 x3 : ffffff800369f2e8
-[  807.989062] x2 : 000000000000e780 x1 : 0000000000000001 x0 : ffffff80d0588060
-[  807.989084] Call trace:
-[  807.989091]  set_fan_speed.part.5+0x34/0x80 [gpio_fan]
-[  807.989113]  gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
-[  807.989199]  cur_state_store+0x84/0xd0
-[  807.989221]  dev_attr_store+0x20/0x38
-[  807.989262]  sysfs_kf_write+0x4c/0x60
-[  807.989282]  kernfs_fop_write_iter+0x130/0x1c0
-[  807.989298]  new_sync_write+0x10c/0x190
-[  807.989315]  vfs_write+0x254/0x378
-[  807.989362]  ksys_write+0x70/0xf8
-[  807.989379]  __arm64_sys_write+0x24/0x30
-[  807.989424]  invoke_syscall+0x4c/0x110
-[  807.989442]  el0_svc_common.constprop.3+0xfc/0x120
-[  807.989458]  do_el0_svc+0x2c/0x90
-[  807.989473]  el0_svc+0x24/0x60
-[  807.989544]  el0t_64_sync_handler+0x90/0xb8
-[  807.989558]  el0t_64_sync+0x1a0/0x1a4
-[  807.989579] Code: b9403801 f9402800 7100003f 8b35cc00 (b9400416)
-[  807.989627] ---[ end trace 8ded4c918658445b ]---
-
-Fix this by checking the cooling state and return an error if it
-exceeds the maximum cooling state.
-
-Tested on a Raspberry Pi 3.
-
-Fixes: b5cf88e46bad ("(gpio-fan): Add thermal control hooks")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Link: https://lore.kernel.org/r/20220830011101.178843-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Candice Li <candice.li@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/gpio-fan.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 685568b1236d4..f78e677b858e8 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -422,6 +422,9 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 	if (!fan_data)
- 		return -EINVAL;
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index 53186c5e1066b..bb0d32b4be74d 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -1514,7 +1514,8 @@ static void gfx_v9_0_gpu_init(struct amdgpu_device *adev)
  
-+	if (state >= fan_data->num_speed)
-+		return -EINVAL;
-+
- 	set_fan_speed(fan_data, state);
- 	return 0;
- }
+ 	gfx_v9_0_tiling_mode_table_init(adev);
+ 
+-	gfx_v9_0_setup_rb(adev);
++	if (adev->gfx.num_gfx_rings)
++		gfx_v9_0_setup_rb(adev);
+ 	gfx_v9_0_get_cu_info(adev, &adev->gfx.cu_info);
+ 
+ 	/* XXX SH_MEM regs */
 -- 
 2.35.1
 
