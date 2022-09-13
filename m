@@ -2,137 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C841F5B6EB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5695B6EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiIMN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S232323AbiIMN7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiIMN6f (ORCPT
+        with ESMTP id S232345AbiIMN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:58:35 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F9150059
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:32 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id t15-20020a4a96cf000000b0044e0142ec24so1945707ooi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=j4b3AwKXnbNOc68U591Ba49SYpbjEmsPStwHugruFXY=;
-        b=IY8xOwXpGjE0SdIJPzybMxmP4m2T8KAbKGM7JrPns4diuJRzQQdTrR9uBMLZMZ1lZO
-         K/HcgHm2G7ER+vdjQDjBa7FWLUTbtkNCQz2jT5oIF9qIbknckvE+l63mEgLKqMIJlf5J
-         fC+8+JnPKboKqHH/11hZPFYExWokI2U45amkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=j4b3AwKXnbNOc68U591Ba49SYpbjEmsPStwHugruFXY=;
-        b=GaYmRoZGXkq8qO44pFFedIPrfh/hX+gOWW5w7K8tuIidxrQYcLrF1SH0GZG3Ja3wMi
-         ucNgI5GuiNZdqzCV7VZZRk5R1z2lXghK6bBcP9/FpABCvA30u62eOHsFLEER7MuEiIaw
-         Y2FJ8s2Bq94cNkarm+8zkX9xCidiHh6BPTwdrsKhEqV2m6ZkEI5lXkscGf9Z/nKfRCjS
-         wfkJQ+G+jvuiU/9I43V8Z8iSeMXWqdN4Y1j+Afi03fxrWTr+kaGs5jRJfBRyMTsYUjCo
-         zkv1oL+FGH/OWGk2WC1sBQDdGtKp7DPSX118ZavWAaHlkdK1r89PvNrHxKXGaa/3KdBr
-         y6oA==
-X-Gm-Message-State: ACgBeo3/qE55/dTcq0DztylfNu/S1bp9qfGSuD4skx3lS7T6+jWNuTWd
-        x4SKreG+63696g7/c69GjlhV7Q==
-X-Google-Smtp-Source: AA6agR6Tr6upEAKirqfcck1pCLrIPjxxEXBfXhURgmYde0fXkAmfIiiM2LtbTbWlyIGlUU6Bd09Etg==
-X-Received: by 2002:a4a:8e81:0:b0:475:811f:3f9e with SMTP id p1-20020a4a8e81000000b00475811f3f9emr2603836ook.35.1663077511837;
-        Tue, 13 Sep 2022 06:58:31 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id k26-20020a056808069a00b0033a11fcb23bsm5212658oig.27.2022.09.13.06.58.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 06:58:31 -0700 (PDT)
-Message-ID: <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
-Date:   Tue, 13 Sep 2022 08:58:29 -0500
+        Tue, 13 Sep 2022 09:59:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB432A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:59:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 328B0B80EC1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0FFC433C1;
+        Tue, 13 Sep 2022 13:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663077566;
+        bh=vFobcfiHZDpwdf9zYUnaAawgPz1u8B6UNqZWjZa3X9s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DbkSclphuGT8hI5iPmkVbuWOM/ho1V8sk6LIowQ/sF3hHozEQRnUbgn6bqHPp3U+k
+         Tv/IQam/vqeW53JSVjG8Doqw5pauj7aOUm7b0S2umN+vLsX8SWvS1el1pg/Q+wdFtu
+         5JlDpRR9j7MWdDW/1E/Nvq+1nqAoMi+GpgzPzFlo1oOAMu/nGEvsBioCSSvGE9kwY3
+         0tJvaqsTuGDS1OKk3Ja8K/mbWRCQgqeLxq1Nn3JEc50YlHoKj0RJKmV0ob3H6U5GaZ
+         yjYTU0Cc/hKiXHcpCSn4qHfRfVduo+/pWBjyo8EUaEHjoaFr3Vm2kUAy6iJLvif+2b
+         MQ8Oc64MlI+eA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [RFC PATCH v2] f2fs: record need_fsck in super_block
+Date:   Tue, 13 Sep 2022 21:59:19 +0800
+Message-Id: <20220913135919.2445544-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/4] Make QMI message rules const
-Content-Language: en-US
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 6:25 PM, Jeff Johnson wrote:
-> Change ff6d365898d ("soc: qcom: qmi: use const for struct
-> qmi_elem_info") allows QMI message encoding/decoding rules to be
-> const. So now update the definitions in the various client to take
-> advantage of this. Patches for ath10k and ath11k were perviously sent
-> separately.
+Once CP_ERROR_FLAG is set, checkpoint is disallowed to be triggered to
+persist CP_FSCK_FLAG, fsck won't repair the image due to lack of
+CP_FSCK_FLAG.
 
-I have had this on my "to-do list" for ages.
-The commit you mention updates the code to be
-explicit about not modifying this data, which
-is great.
+This patch proposes to persist newly introduced SB_NEED_FSCK flag into
+super block if CP_ERROR_FLAG and SBI_NEED_FSCK is set, later, once fsck
+detect this flag, it can check and repair corrupted image in time.
 
-I scanned over the changes, and I assume that
-all you did was make every object having the
-qmi_elem_info structure type be defined as
-constant.
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- remove unneeded codes.
+ fs/f2fs/checkpoint.c    |  6 +++++-
+ fs/f2fs/f2fs.h          |  1 +
+ fs/f2fs/super.c         | 26 ++++++++++++++++++++++++++
+ include/linux/f2fs_fs.h |  5 ++++-
+ 4 files changed, 36 insertions(+), 2 deletions(-)
 
-Why aren't you changing the "ei_array" field in
-the qmi_elem_info structure to be const?  Or the
-"ei" field of the qmi_msg_handler structure?  And
-the qmi_response_type_v01_ei array (and so on)?
-
-I like what you're doing, but can you comment
-on what your plans are beyond this series?
-Do you intend to make the rest of these fields
-const?
-
-Thanks.
-
-					-Alex
-
-> This series depends upon:
-> https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=ff6d365898d4d31bd557954c7fc53f38977b491c
-> 
-> This is in the for-next banch of:
-> git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
-> 
-> Hence this series is also based upon that tree/branch.
-> 
-> Jeff Johnson (4):
->    net: ipa: Make QMI message rules const
->    remoteproc: sysmon: Make QMI message rules const
->    slimbus: qcom-ngd-ctrl: Make QMI message rules const
->    soc: qcom: pdr: Make QMI message rules const
-> 
->   drivers/net/ipa/ipa_qmi_msg.c    | 20 ++++++++++----------
->   drivers/net/ipa/ipa_qmi_msg.h    | 20 ++++++++++----------
->   drivers/remoteproc/qcom_sysmon.c |  8 ++++----
->   drivers/slimbus/qcom-ngd-ctrl.c  |  8 ++++----
->   drivers/soc/qcom/pdr_internal.h  | 20 ++++++++++----------
->   5 files changed, 38 insertions(+), 38 deletions(-)
-> 
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index c3119e4c890c..0836fce40394 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -30,8 +30,12 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
+ {
+ 	f2fs_build_fault_attr(sbi, 0, 0);
+ 	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+-	if (!end_io)
++	if (!end_io) {
+ 		f2fs_flush_merged_writes(sbi);
++
++		if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
++			f2fs_update_sb_flags(sbi, SB_NEED_FSCK);
++	}
+ }
+ 
+ /*
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index dee7b67a17a6..1960a98c7555 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3556,6 +3556,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+ int f2fs_quota_sync(struct super_block *sb, int type);
+ loff_t max_file_blocks(struct inode *inode);
+ void f2fs_quota_off_umount(struct super_block *sb);
++void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag);
+ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+ int f2fs_sync_fs(struct super_block *sb, int sync);
+ int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index b8e5fe244596..c99ba840593d 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -3846,6 +3846,32 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+ 	return err;
+ }
+ 
++void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag)
++{
++	unsigned short s_flags;
++	int err;
++
++	if (le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags) & SB_NEED_FSCK)
++		return;
++
++	f2fs_down_write(&sbi->sb_lock);
++
++	s_flags = le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags);
++
++	if (s_flags & SB_NEED_FSCK)
++		goto out_unlock;
++
++	F2FS_RAW_SUPER(sbi)->s_flags = cpu_to_le16(s_flags | SB_NEED_FSCK);
++
++	err = f2fs_commit_super(sbi, false);
++	if (err) {
++		f2fs_warn(sbi, "f2fs_commit_super fails to persist flag: %u, err:%d", flag, err);
++		F2FS_RAW_SUPER(sbi)->s_flags = s_flags;
++	}
++out_unlock:
++	f2fs_up_write(&sbi->sb_lock);
++}
++
+ static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+ {
+ 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+index d445150c5350..124176e2a42c 100644
+--- a/include/linux/f2fs_fs.h
++++ b/include/linux/f2fs_fs.h
+@@ -73,6 +73,8 @@ struct f2fs_device {
+ 	__le32 total_segments;
+ } __packed;
+ 
++#define SB_NEED_FSCK			0x00000001	/* need fsck */
++
+ struct f2fs_super_block {
+ 	__le32 magic;			/* Magic Number */
+ 	__le16 major_ver;		/* Major Version */
+@@ -116,7 +118,8 @@ struct f2fs_super_block {
+ 	__u8 hot_ext_count;		/* # of hot file extension */
+ 	__le16  s_encoding;		/* Filename charset encoding */
+ 	__le16  s_encoding_flags;	/* Filename charset encoding flags */
+-	__u8 reserved[306];		/* valid reserved region */
++	__le16 s_flags;			/* super block flags */
++	__u8 reserved[304];		/* valid reserved region */
+ 	__le32 crc;			/* checksum of superblock */
+ } __packed;
+ 
+-- 
+2.25.1
 
