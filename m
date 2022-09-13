@@ -2,168 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13005B6484
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 02:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC715B648E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 02:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiIMAZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 20:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S230016AbiIMAaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 20:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiIMAZT (ORCPT
+        with ESMTP id S229528AbiIMA34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 20:25:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BD414D13;
-        Mon, 12 Sep 2022 17:25:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Mon, 12 Sep 2022 20:29:56 -0400
+Received: from mail.stoffel.org (li1843-175.members.linode.com [172.104.24.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA18DA44D;
+        Mon, 12 Sep 2022 17:29:46 -0700 (PDT)
+Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MRPPK5TYQz4xGF;
-        Tue, 13 Sep 2022 10:25:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663028710;
-        bh=NeXKKKQHkquOZMHuSEMBOlA+2Tpk5LBwXb2iR79KQI4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=imxlOwiXkgIVnTcAXpEH7zp5iCQTbNXvGYXCkA43vM3nDM/6xkDkD9l3+gUr+9tuT
-         1OVdP6Ffy9sscyTXiGiVNSi+bl5USOFso+00CWfBYoqHAU6+zwwyEqB0/9rTk7MsKO
-         lQTCc62ZDWCpEfVuQ2dhRvAE0rpr776BcHZmc6uMDkqgA+vS4bRxKkh1lbSdrs73zc
-         wt4d/0gHratFT61XgMuVp5OlTdQhMS4sPuRHRDd3bOh/E3vpoJg8gp3qBLlEyaWGT6
-         5L0yZj4S9fT0gj482jBYYeqeWViCfyLdMexxFEatEnFC6gUXXRg+gYJtvVjiLHJKFp
-         loLcQwUbSS0KQ==
-Date:   Tue, 13 Sep 2022 10:25:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the nfsd tree with the cel-fixes tree
-Message-ID: <20220913102507.3295ce32@canb.auug.org.au>
+        by mail.stoffel.org (Postfix) with ESMTPSA id 4DF9A21929;
+        Mon, 12 Sep 2022 20:29:45 -0400 (EDT)
+Received: by quad.stoffel.org (Postfix, from userid 1000)
+        id D11BBA7E89; Mon, 12 Sep 2022 20:29:44 -0400 (EDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x71jjIHH/OQo31x58HL2qMX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <25375.52984.799523.310665@quad.stoffel.home>
+Date:   Mon, 12 Sep 2022 20:29:44 -0400
+From:   "John Stoffel" <john@stoffel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-Reply-To: <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+References: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+        <20220908083326.3xsanzk7hy3ff4qs@quack3>
+        <YxoIjV50xXKiLdL9@mit.edu>
+        <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+        <20220908155605.GD8951@fieldses.org>
+        <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+        <20220908182252.GA18939@fieldses.org>
+        <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+        <20220909154506.GB5674@fieldses.org>
+        <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>
+        <20220910145600.GA347@fieldses.org>
+        <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>
+X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/x71jjIHH/OQo31x58HL2qMX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+>>>>> "Jeff" == Jeff Layton <jlayton@kernel.org> writes:
 
-Hi all,
+> On Sat, 2022-09-10 at 10:56 -0400, J. Bruce Fields wrote:
+>> On Fri, Sep 09, 2022 at 12:36:29PM -0400, Jeff Layton wrote:
+>> > On Fri, 2022-09-09 at 11:45 -0400, J. Bruce Fields wrote:
+>> > > On Thu, Sep 08, 2022 at 03:07:58PM -0400, Jeff Layton wrote:
+>> > > > On Thu, 2022-09-08 at 14:22 -0400, J. Bruce Fields wrote:
+>> > > > > On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
+>> > > > > > Yeah, ok. That does make some sense. So we would mix this into the
+>> > > > > > i_version instead of the ctime when it was available. Preferably, we'd
+>> > > > > > mix that in when we store the i_version rather than adding it afterward.
+>> > > > > > 
+>> > > > > > Ted, how would we access this? Maybe we could just add a new (generic)
+>> > > > > > super_block field for this that ext4 (and other filesystems) could
+>> > > > > > populate at mount time?
+>> > > > > 
+>> > > > > Couldn't the filesystem just return an ino_version that already includes
+>> > > > > it?
+>> > > > > 
+>> > > > 
+>> > > > Yes. That's simple if we want to just fold it in during getattr. If we
+>> > > > want to fold that into the values stored on disk, then I'm a little less
+>> > > > clear on how that will work.
+>> > > > 
+>> > > > Maybe I need a concrete example of how that will work:
+>> > > > 
+>> > > > Suppose we have an i_version value X with the previous crash counter
+>> > > > already factored in that makes it to disk. We hand out a newer version
+>> > > > X+1 to a client, but that value never makes it to disk.
+>> > > > 
+>> > > > The machine crashes and comes back up, and we get a query for i_version
+>> > > > and it comes back as X. Fine, it's an old version. Now there is a write.
+>> > > > What do we do to ensure that the new value doesn't collide with X+1? 
+>> > > 
+>> > > I was assuming we could partition i_version's 64 bits somehow: e.g., top
+>> > > 16 bits store the crash counter.  You increment the i_version by: 1)
+>> > > replacing the top bits by the new crash counter, if it has changed, and
+>> > > 2) incrementing.
+>> > > 
+>> > > Do the numbers work out?  2^16 mounts after unclean shutdowns sounds
+>> > > like a lot for one filesystem, as does 2^48 changes to a single file,
+>> > > but people do weird things.  Maybe there's a better partitioning, or
+>> > > some more flexible way of maintaining an i_version that still allows you
+>> > > to identify whether a given i_version preceded a crash.
+>> > > 
+>> > 
+>> > We consume one bit to keep track of the "seen" flag, so it would be a
+>> > 16+47 split. I assume that we'd also reset the version counter to 0 when
+>> > the crash counter changes? Maybe that doesn't matter as long as we don't
+>> > overflow into the crash counter.
+>> > 
+>> > I'm not sure we can get away with 16 bits for the crash counter, as
+>> > it'll leave us subject to the version counter wrapping after a long
+>> > uptimes. 
+>> > 
+>> > If you increment a counter every nanosecond, how long until that counter
+>> > wraps? With 63 bits, that's 292 years (and change). With 16+47 bits,
+>> > that's less than two days. An 8+55 split would give us ~416 days which
+>> > seems a bit more reasonable?
+>> 
+>> Though now it's starting to seem a little limiting to allow only 2^8
+>> mounts after unclean shutdowns.
+>> 
+>> Another way to think of it might be: multiply that 8-bit crash counter
+>> by 2^48, and think of it as a 64-bit value that we believe (based on
+>> practical limits on how many times you can modify a single file) is
+>> gauranteed to be larger than any i_version that we gave out before the
+>> most recent crash.
+>> 
+>> Our goal is to ensure that after a crash, any *new* i_versions that we
+>> give out or write to disk are larger than any that have previously been
+>> given out.  We can do that by ensuring that they're equal to at least
+>> that old maximum.
+>> 
+>> So think of the 64-bit value we're storing in the superblock as a
+>> ceiling on i_version values across all the filesystem's inodes.  Call it
+>> s_version_max or something.  We also need to know what the maximum was
+>> before the most recent crash.  Call that s_version_max_old.
+>> 
+>> Then we could get correct behavior if we generated i_versions with
+>> something like:
+>> 
+>> i_version++;
+>> if (i_version < s_version_max_old)
+>> i_version = s_version_max_old;
+>> if (i_version > s_version_max)
+>> s_version_max = i_version + 1;
+>> 
+>> But that last step makes this ludicrously expensive, because for this to
+>> be safe across crashes we need to update that value on disk as well, and
+>> we need to do that frequently.
+>> 
+>> Fortunately, s_version_max doesn't have to be a tight bound at all.  We
+>> can easily just initialize it to, say, 2^40, and only bump it by 2^40 at
+>> a time.  And recognize when we're running up against it way ahead of
+>> time, so we only need to say "here's an updated value, could you please
+>> make sure it gets to disk sometime in the next twenty minutes"?
+>> (Numbers made up.)
+>> 
+>> Sorry, that was way too many words.  But I think something like that
+>> could work, and make it very difficult to hit any hard limits, and
+>> actually not be too complicated??  Unless I missed something.
+>> 
 
-Today's linux-next merge of the nfsd tree got a conflict in:
+> That's not too many words -- I appreciate a good "for dummies"
+> explanation!
 
-  fs/nfsd/vfs.c
+> A scheme like that could work. It might be hard to do it without a
+> spinlock or something, but maybe that's ok. Thinking more about how we'd
+> implement this in the underlying filesystems:
 
-between commit:
+> To do this we'd need 2 64-bit fields in the on-disk and in-memory 
+> superblocks for ext4, xfs and btrfs. On the first mount after a crash,
+> the filesystem would need to bump s_version_max by the significant
+> increment (2^40 bits or whatever). On a "clean" mount, it wouldn't need
+> to do that.
 
-  00801cd92d91 ("NFSD: fix regression with setting ACLs.")
+> Would there be a way to ensure that the new s_version_max value has made
+> it to disk? Bumping it by a large value and hoping for the best might be
+> ok for most cases, but there are always outliers, so it might be
+> worthwhile to make an i_version increment wait on that if necessary. 
 
-from the cel-fixes tree and commit:
 
-  e9de96c3df55 ("NFSD: Refactor nfsd_setattr()")
+Would it be silly to steal the same idea from the DNS folks where they
+can wrap the 32 bit serial number around by incrementing it by a large
+amount, pushing the out the change, then incrementing back down to 1
+to wrap the counter?  
 
-from the nfsd tree.
+I just worry about space limited counters that don't automatically
+wrap, or allow people to force them to wrap gracefully with out major
+hassles.
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+But I come at this all from the IT side of things, not the
+programming/kernel side.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/nfsd/vfs.c
-index 19f28c33e44d,8eda499de545..000000000000
---- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@@ -343,6 -339,44 +343,48 @@@ nfsd_get_write_access(struct svc_rqst *
-  	return nfserrno(get_write_access(inode));
-  }
- =20
-+ static int __nfsd_setattr(struct dentry *dentry, struct iattr *iap)
-+ {
-+ 	int host_err;
-+=20
-+ 	if (iap->ia_valid & ATTR_SIZE) {
-+ 		/*
-+ 		 * RFC5661, Section 18.30.4:
-+ 		 *   Changing the size of a file with SETATTR indirectly
-+ 		 *   changes the time_modify and change attributes.
-+ 		 *
-+ 		 * (and similar for the older RFCs)
-+ 		 */
-+ 		struct iattr size_attr =3D {
-+ 			.ia_valid	=3D ATTR_SIZE | ATTR_CTIME | ATTR_MTIME,
-+ 			.ia_size	=3D iap->ia_size,
-+ 		};
-+=20
-+ 		if (iap->ia_size < 0)
-+ 			return -EFBIG;
-+=20
-+ 		host_err =3D notify_change(&init_user_ns, dentry, &size_attr, NULL);
-+ 		if (host_err)
-+ 			return host_err;
-+ 		iap->ia_valid &=3D ~ATTR_SIZE;
-+=20
-+ 		/*
-+ 		 * Avoid the additional setattr call below if the only other
-+ 		 * attribute that the client sends is the mtime, as we update
-+ 		 * it as part of the size change above.
-+ 		 */
-+ 		if ((iap->ia_valid & ~ATTR_MTIME) =3D=3D 0)
-+ 			return 0;
-+ 	}
-+=20
- -	iap->ia_valid |=3D ATTR_CTIME;
- -	return notify_change(&init_user_ns, dentry, iap, NULL);
-++	if (iap->ia_valid) {
-++		iap->ia_valid |=3D ATTR_CTIME;
-++		return notify_change(&init_user_ns, dentry, iap, NULL);
-++	}
-++
-++	return 0;
-+ }
-+=20
-  /*
-   * Set various file attributes.  After this call fhp needs an fh_put.
-   */
-@@@ -357,9 -391,10 +399,10 @@@ nfsd_setattr(struct svc_rqst *rqstp, st
-  	int		accmode =3D NFSD_MAY_SATTR;
-  	umode_t		ftype =3D 0;
-  	__be32		err;
- -	int		host_err;
- +	int		host_err =3D 0;
-  	bool		get_write_count;
-  	bool		size_change =3D (iap->ia_valid & ATTR_SIZE);
-+ 	int		retries;
- =20
-  	if (iap->ia_valid & ATTR_SIZE) {
-  		accmode |=3D NFSD_MAY_WRITE|NFSD_MAY_OWNER_OVERRIDE;
-
---Sig_/x71jjIHH/OQo31x58HL2qMX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMfzeMACgkQAVBC80lX
-0GzJDAf9Hyc6QBzR86G/Z7ndvUx49p9y/mnBZTfPeOgl18HOWrrC3BAkqpaB+ao1
-DitKIgKPp/1E+UmEC/ktkMeHD5Ri3ClQGrO8SYc/K4ZO7ag14gFubwhoTYUkGqdd
-XpO6YscYq0xyPFupIhY+pDJ0QSHmZbHix32COOsu9rUXWJAjYWFLcV2md3c7ff9c
-3nHrmZ6SXunFoff0iV0zAnA6gM5JndukLzq6CL2W1j2SptW2L50lkoIiRWUxe+Uh
-8giWxFxtzSmPH8l/yp/9dFO3b/gTP3bOoBVHjX2bJ87N4NNim47kVsCTvDRQGmO5
-UisODRbl7/W39+8ZGiq9jGVZxq+M4w==
-=tlT4
------END PGP SIGNATURE-----
-
---Sig_/x71jjIHH/OQo31x58HL2qMX--
+John
