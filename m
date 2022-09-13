@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC345B6A62
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF3E5B6A65
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiIMJLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S231579AbiIMJMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbiIMJLR (ORCPT
+        with ESMTP id S231247AbiIMJM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:11:17 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6918758520
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:11:14 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAXH_MxSSBjcaoyAg--.30754S2;
-        Tue, 13 Sep 2022 17:11:13 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] mfd: sm501: Add check for platform_driver_register
-Date:   Tue, 13 Sep 2022 17:11:12 +0800
-Message-Id: <20220913091112.1739138-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAXH_MxSSBjcaoyAg--.30754S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4DKF4DAr4DtFWUZw13urg_yoWfGrb_CF
-        18WFyxGr45CFna9F17A343ZryFkFs09rs3uF1IqFy3t343trnaqr4UZr47A3W8Cr1xAFnr
-        KrnFkrWfCryakjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeWrWUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 05:12:28 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA5E57247
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:12:28 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q63so10732957pga.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=T1+v0d/bxtpbeCpIjM7V3ktpjxkQkVAXdQmTNVJDAEM=;
+        b=phX5QoGvrNy8xpfI2gGMivSlFzgn3B5KbixZo5B8ab4PmEcHRaJI5Xn//4ecpyMkvS
+         TDb5xDOb7i8TR/v2wL5OfewuXvO5oZzLiSVmui3RyPBzT/LaG8LOWgD6knLib2JpwciC
+         YWznC/Ri0Wg75EEX3UL4/nQ1/H3FH+ey1fVYGwGtr+QH3qwfKs9Q2LTjy3GowQsqVK1X
+         pdSeaTID5rLESOBz491DeR4F2B1NwlqfqJhpU0BBQ77N7ST9pr5mpUu3qpHMs+0H+Peo
+         eOWN37qPRjeta1YAHD8sywB9ByVvp0V042QT9YtnygbO3GzDX/2sPzU8x7CNJ3SeCHY2
+         Eh3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=T1+v0d/bxtpbeCpIjM7V3ktpjxkQkVAXdQmTNVJDAEM=;
+        b=qrptjiJ/W1KO1PwVf8ef+b6s/MatEBVTA4+77n95E7yUlXGZ1zRkQb8nZzQH03zhzy
+         kSwc3Fp2PadkaH+Sj8a4C8USmEqEt/jC6tyShxQPFj+wO2zogYfqqucQEwmVizGIf1dw
+         puViy4aDaAI5xKPXL1lEWWSOSc9vZa/Lg+RvAsT7VZHkfHDOFQ0lLW9n+m8XvmlPbR8x
+         34J0nRGTJwipdFdGWjUeybGnBjZjy74fSjxDiklul3e03CvvNv/i9TjRpfNJYUEhauW5
+         5YRsbZntVlyQl8zY+pPPJYjAeQc0TfSKu6T3tzUSqBll3YyGCfho/18y8kZKklv66R69
+         OJ6A==
+X-Gm-Message-State: ACgBeo2rfY/NzC8ik9qqTuupo4NdtUbjdrFpxKlVyztVBRKZPeRhM+E7
+        fJPXod2eVCkqt1EUxejpQg==
+X-Google-Smtp-Source: AA6agR5vqxeVAERvE5UY3Z9wKqtcjV3CopPOxGu5qgq+1b8ZMvv336BLhUadurdXvgHg2vM52RgT2A==
+X-Received: by 2002:aa7:8397:0:b0:535:933b:54c with SMTP id u23-20020aa78397000000b00535933b054cmr31422247pfm.38.1663060347431;
+        Tue, 13 Sep 2022 02:12:27 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b0015e8d4eb1d5sm7804661plk.31.2022.09.13.02.12.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Sep 2022 02:12:26 -0700 (PDT)
+From:   xiakaixu1987@gmail.com
+X-Google-Original-From: kaixuxia@tencent.com
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
+Subject: [PATCH 0/4] mm/damon: code simplifications and cleanups
+Date:   Tue, 13 Sep 2022 17:11:23 +0800
+Message-Id: <1663060287-30201-1-git-send-email-kaixuxia@tencent.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_driver_register() can return error numbers,
-it should be better to check platform_driver_register()
-and deal with the exception.
+From: Kaixu Xia <kaixuxia@tencent.com>
 
-Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/mfd/sm501.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+This patchset contains some code simplifications and cleanups
+for DAMON.
 
-diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
-index bc0a2c38653e..3ac4508a6742 100644
---- a/drivers/mfd/sm501.c
-+++ b/drivers/mfd/sm501.c
-@@ -1720,7 +1720,12 @@ static struct platform_driver sm501_plat_driver = {
- 
- static int __init sm501_base_init(void)
- {
--	platform_driver_register(&sm501_plat_driver);
-+	int ret;
-+
-+	ret = platform_driver_register(&sm501_plat_driver);
-+	if (ret < 0)
-+		return ret;
-+
- 	return pci_register_driver(&sm501_pci_driver);
- }
- 
+Kaixu Xia (4):
+  mm/damon: simplify the parameter passing for 'prepare_access_checks'
+  mm/damon/sysfs: simplify the variable 'pid' assignment operation
+  mm/damon/core: simplify the kdamond stop mechanism by removing 'done'
+  mm/damon/vaddr: indicate the target is invalid when 'nr_regions' is
+    zero
+
+ mm/damon/core.c  | 24 +++++++++---------------
+ mm/damon/paddr.c |  5 ++---
+ mm/damon/sysfs.c | 11 ++++-------
+ mm/damon/vaddr.c |  9 ++++++---
+ 4 files changed, 21 insertions(+), 28 deletions(-)
+
 -- 
-2.25.1
+2.27.0
 
