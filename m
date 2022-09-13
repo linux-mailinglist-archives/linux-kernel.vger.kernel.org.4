@@ -2,87 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2875B75DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063D65B75E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiIMP5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S230424AbiIMP6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235240AbiIMP4q (ORCPT
+        with ESMTP id S236354AbiIMP6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:56:46 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906E790816;
-        Tue, 13 Sep 2022 07:56:19 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11eab59db71so32749431fac.11;
-        Tue, 13 Sep 2022 07:56:19 -0700 (PDT)
+        Tue, 13 Sep 2022 11:58:01 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66C992F4C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:57:02 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p12-20020a170902e74c00b00177f3be2825so8562234plf.17
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=cvJEnjTXhlWXDO7hFwpFHy53bcFzxR1mBtrl5AKvvps=;
+        b=WHm/6D6ARpjPd/cEbWmZhCHS72PbANzTsxUSf4b7+nXr0kutRzr1TG9ZvI3Q6Ew4+o
+         u4s4MgKcwejHN7wZz8QQVfM9DQth2kxFo/ZTeq/tlj+C5PQvu95GeX4lwVY/CXiW0vJk
+         qKVS/u7l2clyrLlZMmpvEet2bARk8XwGjuGCEKViLqObSeBODiTFGzUpOGUKmPBQ3Bki
+         6IFQEEUUbFx4rKoBQ+TYhiI+kaKogJCOTlguWFiGNeid0wD2bzzYu26osGPZs8HgIsdK
+         mH6Kjdbjt7Bh0tZN1aU8D42KudrleRawLRywmhFwFZCOIwO8QFSA9s+e8/kgQLKyzdMN
+         A1EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2/8jBgH5RIn75yN488C2+nFWx/pd5MIa7k/cppE49Xc=;
-        b=IylgFFqiMqhJtvMhyWG7SacuzseFzceVslDMByZF3ur4yJrP0mWnKmmCozFs4u1Aub
-         hPL6yfuWWi1avOVfrknon89FAp89Orl9gNnGuQf8W/a3K4mXmd7dtDbN3Ywjm8cVNUjH
-         zmkmi68Zczh7N4iZUvikMku396+MorHd6Dy5sIzjhhmi2IzK3dks//vS//vc8A74eUVw
-         4mF13hQRNersuEFYVNMyG6JA4f1MI5+AfKaNMzq16hW2bi5YEFCfDeI0BGFVftNSxwGa
-         1FCu6se4uP9et9f1Tzo7ZXBx/dEn2ehpplJwGesIuXkeAyCQtXYv00Zf1Lfyavx/sbq1
-         CkMg==
-X-Gm-Message-State: ACgBeo1nmtuxPDzfKIP4/uInftlKZB09lcjykrubsxZ2puiJUSPb0pPX
-        pAmP+E2ybo/uIebIaG95tQ==
-X-Google-Smtp-Source: AA6agR6YnP6ot9GFC2YmsPAFaS8mzStQhLIBYsq7Zg+QUzJJFdErvSL6rj1KCpYcElzx/lMxYLblxA==
-X-Received: by 2002:a05:6870:f203:b0:10b:ad04:57ff with SMTP id t3-20020a056870f20300b0010bad0457ffmr1944683oao.219.1663080893771;
-        Tue, 13 Sep 2022 07:54:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q125-20020acac083000000b003437e4f2510sm5203060oif.11.2022.09.13.07.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:54:53 -0700 (PDT)
-Received: (nullmailer pid 3659687 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:54:52 -0000
-Date:   Tue, 13 Sep 2022 09:54:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v4 15/15] dt-bindings: soc: qcom: apr: add missing
- properties
-Message-ID: <20220913145452.GA3659654-robh@kernel.org>
-References: <20220910091428.50418-1-krzysztof.kozlowski@linaro.org>
- <20220910091428.50418-16-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910091428.50418-16-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=cvJEnjTXhlWXDO7hFwpFHy53bcFzxR1mBtrl5AKvvps=;
+        b=RXx/U3qHbNpMw4s/NLbr+Sx5t4ASFOD3Y1WEtn1nDKW5zydkL4RWAlzgeDotUBuhT7
+         +AX97jVaXXI/nFNZBueHWIQ/HHT8p3C0i5Bf7+JiNwrfYaiQ7GogP1WwBY4TM73jFjYJ
+         4OxZ4cLJWU6OIzPebUChByZa/EAG4TF0y25cQVrGg8YvuZa8J+JswbVyM3jLp2DZZ6e0
+         xnn/DAZIToUEHuFwBi8sDH+kUiVZfInE1wyOHqdfZJJkwJbLzS9N4R7wt3xMh34/z17Z
+         DwnN9F55VJT1yq3CttCAm+Zl0jCmgYpiWlU07D4bApb26Z0uMkLiEfTPRw02KqzPpTRS
+         BWhw==
+X-Gm-Message-State: ACgBeo0xVxQSTHGjI25n6meRtl/OJU0o1pv8z+3qCHEyjeB+FLVjPXRC
+        eVzOPsnWeF8jV4VIcUj6AbwcBzXTzMM=
+X-Google-Smtp-Source: AA6agR7fODZawl72r3SMpSlBhegJYwwMxyYRozj9aUC7ch9LdPpMMVnRzuFBzMmDU2bRbz5cy4mtdWyADpE=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
+ (user=jthies job=sendgmr) by 2002:aa7:9d9a:0:b0:53e:8bc5:afb7 with SMTP id
+ f26-20020aa79d9a000000b0053e8bc5afb7mr30628956pfq.54.1663080954632; Tue, 13
+ Sep 2022 07:55:54 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 14:55:49 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220913145549.2839948-1-jthies@google.com>
+Subject: [PATCH v3] platform/chrome: cros_ec: Notify the PM of wake events
+ during resume
+From:   Jameson Thies <jthies@google.com>
+To:     chrome-platform@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        Jameson Thies <jthies@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 11:14:28 +0200, Krzysztof Kozlowski wrote:
-> The APR bindings were not describing all properties already used in DTS:
-> 1. Add qcom,glink-channels, qcom,smd-channels and qcom,intents (widely
->    used).
-> 2. Add power-domains for MSM8996.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../bindings/soc/qcom/qcom,apr.yaml           | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
+cros_ec_handle_event in the cros_ec driver can notify the PM of wake
+events. When a device is suspended, cros_ec_handle_event will not check
+MKBP events. Instead, received MKBP events are checked during resume by
+cros_ec_report_events_during_suspend. But
+cros_ec_report_events_during_suspend cannot notify the PM if received
+events are wake events, causing wake events to not be reported if
+received while the device is suspended.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Update cros_ec_report_events_during_suspend to notify the PM of wake
+events during resume by calling pm_wakeup_event.
+
+Signed-off-by: Jameson Thies <jthies@google.com>
+---
+
+Changes since v1:
+- Updated wording in commit message from "Log" to "Notify PM of".
+
+Changes since v2:
+- Removed Reviewed-by tag and provided more context for the update in
+  the commit message.
+---
+ drivers/platform/chrome/cros_ec.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d..110df0fd4b00 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
+ 
+ static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
+ {
++	bool wake_event;
++
+ 	while (ec_dev->mkbp_event_supported &&
+-	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
++	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
+ 		blocking_notifier_call_chain(&ec_dev->event_notifier,
+ 					     1, ec_dev);
++
++		if (wake_event && device_may_wakeup(ec_dev->dev))
++			pm_wakeup_event(ec_dev->dev, 0);
++	}
+ }
+ 
+ /**
+-- 
+2.37.2.789.g6183377224-goog
+
