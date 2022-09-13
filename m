@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB9C5B7238
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9DB5B7236
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiIMOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S234544AbiIMOup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbiIMOsh (ORCPT
+        with ESMTP id S234273AbiIMOsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:48:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E56E61B15;
-        Tue, 13 Sep 2022 07:25:07 -0700 (PDT)
+        Tue, 13 Sep 2022 10:48:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F53FA3F;
+        Tue, 13 Sep 2022 07:25:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7A6BB80FA1;
-        Tue, 13 Sep 2022 14:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43FF8C433C1;
-        Tue, 13 Sep 2022 14:25:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B75BA614B4;
+        Tue, 13 Sep 2022 14:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD11BC433D6;
+        Tue, 13 Sep 2022 14:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079103;
-        bh=eFF1w39b4W6ZFP4m4PXlHMW5JZxP51WaskoYl5p5TFw=;
+        s=korg; t=1663079106;
+        bh=GMkAOvpeS2Q4DXNwpdWazj8uVwJMqhidTuecDSVaYYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qRtrKvvZU4il0H2L3O0XI1uYM2AUW6lN2Zfvsb8QE3ciEiIX1cuie7l9O72CH4osA
-         kFKvvF26U4jtJUUtcdFVCG9oiTVHDucL8BHU/Yp/mBAz6Q5JLpfAxltQCUEZ1k2qOC
-         MmLNYBxxYOIXsUlpq+QaPl/I2WXRD1kacP0XekS0=
+        b=mYqJUxN0g6hD+5HtSCZqz+eGIKzBThq+wP7BuTSJtbuttqaaaKNN4XH9ZwOWECv44
+         gU3ZfEUlFDkMOVwD2RmJbMMLSl8DUqLD5oFSToE+PXsj7nL6MjUh2XTol8CxW/KRMc
+         UpNfCS0p2Oy7BRyo/uyz5rIXMtiDgkik3eg/gTAE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Durrant <pdurrant@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 60/79] xen-netback: only remove hotplug-status when the vif is actually destroyed
-Date:   Tue, 13 Sep 2022 16:05:05 +0200
-Message-Id: <20220913140353.111060203@linuxfoundation.org>
+Subject: [PATCH 5.10 61/79] RDMA/siw: Pass a pointer to virt_to_page()
+Date:   Tue, 13 Sep 2022 16:05:06 +0200
+Message-Id: <20220913140353.160139198@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
 References: <20220913140350.291927556@linuxfoundation.org>
@@ -55,47 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Durrant <pdurrant@amazon.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit c55f34b6aec2a8cb47eadaffea773e83bf85de91 ]
+[ Upstream commit 0d1b756acf60da5004c1e20ca4462f0c257bf6e1 ]
 
-Removing 'hotplug-status' in backend_disconnected() means that it will be
-removed even in the case that the frontend unilaterally disconnects (which
-it is free to do at any time). The consequence of this is that, when the
-frontend attempts to re-connect, the backend gets stuck in 'InitWait'
-rather than moving straight to 'Connected' (which it can do because the
-hotplug script has already run).
-Instead, the 'hotplug-status' mode should be removed in netback_remove()
-i.e. when the vif really is going away.
+Functions that work on a pointer to virtual memory such as
+virt_to_pfn() and users of that function such as
+virt_to_page() are supposed to pass a pointer to virtual
+memory, ideally a (void *) or other pointer. However since
+many architectures implement virt_to_pfn() as a macro,
+this function becomes polymorphic and accepts both a
+(unsigned long) and a (void *).
 
-Fixes: 0f4558ae9187 ("Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"")
-Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+If we instead implement a proper virt_to_pfn(void *addr)
+function the following happens (occurred on arch/arm):
+
+drivers/infiniband/sw/siw/siw_qp_tx.c:32:23: warning: incompatible
+  integer to pointer conversion passing 'dma_addr_t' (aka 'unsigned int')
+  to parameter of type 'const void *' [-Wint-conversion]
+drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: passing argument
+  1 of 'virt_to_pfn' makes pointer from integer without a cast
+  [-Wint-conversion]
+drivers/infiniband/sw/siw/siw_qp_tx.c:538:36: warning: incompatible
+  integer to pointer conversion passing 'unsigned long long'
+  to parameter of type 'const void *' [-Wint-conversion]
+
+Fix this with an explicit cast. In one case where the SIW
+SGE uses an unaligned u64 we need a double cast modifying the
+virtual address (va) to a platform-specific uintptr_t before
+casting to a (void *).
+
+Fixes: b9be6f18cf9e ("rdma/siw: transmit path")
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220902215918.603761-1-linus.walleij@linaro.org
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/xen-netback/xenbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/sw/siw/siw_qp_tx.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index ca261e0fc9c9b..9ee9ce0493fe6 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -256,7 +256,6 @@ static void backend_disconnect(struct backend_info *be)
- 		unsigned int queue_index;
+diff --git a/drivers/infiniband/sw/siw/siw_qp_tx.c b/drivers/infiniband/sw/siw/siw_qp_tx.c
+index 7989c4043db4e..3c3ae5ef29428 100644
+--- a/drivers/infiniband/sw/siw/siw_qp_tx.c
++++ b/drivers/infiniband/sw/siw/siw_qp_tx.c
+@@ -29,7 +29,7 @@ static struct page *siw_get_pblpage(struct siw_mem *mem, u64 addr, int *idx)
+ 	dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
  
- 		xen_unregister_watchers(vif);
--		xenbus_rm(XBT_NIL, be->dev->nodename, "hotplug-status");
- #ifdef CONFIG_DEBUG_FS
- 		xenvif_debugfs_delif(vif);
- #endif /* CONFIG_DEBUG_FS */
-@@ -984,6 +983,7 @@ static int netback_remove(struct xenbus_device *dev)
- 	struct backend_info *be = dev_get_drvdata(&dev->dev);
+ 	if (paddr)
+-		return virt_to_page(paddr);
++		return virt_to_page((void *)paddr);
  
- 	unregister_hotplug_status_watch(be);
-+	xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
- 	if (be->vif) {
- 		kobject_uevent(&dev->dev.kobj, KOBJ_OFFLINE);
- 		backend_disconnect(be);
+ 	return NULL;
+ }
+@@ -523,13 +523,23 @@ static int siw_tx_hdt(struct siw_iwarp_tx *c_tx, struct socket *s)
+ 					kunmap(p);
+ 				}
+ 			} else {
+-				u64 va = sge->laddr + sge_off;
++				/*
++				 * Cast to an uintptr_t to preserve all 64 bits
++				 * in sge->laddr.
++				 */
++				uintptr_t va = (uintptr_t)(sge->laddr + sge_off);
+ 
+-				page_array[seg] = virt_to_page(va & PAGE_MASK);
++				/*
++				 * virt_to_page() takes a (void *) pointer
++				 * so cast to a (void *) meaning it will be 64
++				 * bits on a 64 bit platform and 32 bits on a
++				 * 32 bit platform.
++				 */
++				page_array[seg] = virt_to_page((void *)(va & PAGE_MASK));
+ 				if (do_crc)
+ 					crypto_shash_update(
+ 						c_tx->mpa_crc_hd,
+-						(void *)(uintptr_t)va,
++						(void *)va,
+ 						plen);
+ 			}
+ 
 -- 
 2.35.1
 
