@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216745B6B94
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B7E5B6B8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiIMK0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S231283AbiIMKZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiIMK0G (ORCPT
+        with ESMTP id S230494AbiIMKZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:26:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EEF5A2D9;
-        Tue, 13 Sep 2022 03:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663064762; x=1694600762;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ARgoLmEbhTA7goAGgTKJDoKZwOFyACEiJhXaXvPcn+4=;
-  b=KdXS8FaZ+vo6T/5hCWIksLuwBH8PDMqbETvyIhOM6CCP+H7Of99znozS
-   vlLiGDBKZlqAWH6jFYxZieVyHEjSc1P5Td/hID1sNN739bDGCZ87r7DBj
-   jutysx4uZAoolU1+XVAM1WIJRx2bmrD7XLgLKCpIntE0qyydkScX6cQTW
-   mgXJT1OJbYtkETtFs1JMxknEgSF7eFaECK5BILLaZWWs5rZCvOdDGnRH1
-   Pv9yA7wZyb0F73DnUNXjFM9BLvj/qHOKOSjzpN+xpeW4qAi+7ljndW/O6
-   GxN+L3yy/Us19t9mgFb2UYw5oHVJnKZiuOtjpJ2q2xeobuvdzXCe2RsPH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359827124"
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="359827124"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 03:26:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="649609317"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Sep 2022 03:26:00 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oY379-0003U3-1K;
-        Tue, 13 Sep 2022 10:25:59 +0000
-Date:   Tue, 13 Sep 2022 18:25:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, irusskikh@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
- aq_ndev_close()
-Message-ID: <202209131828.hYRSPYF2-lkp@intel.com>
-References: <20220913063941.83611-1-niejianglei2021@163.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913063941.83611-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Sep 2022 06:25:56 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26915927E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:25:55 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id j11-20020a17090a738b00b001faeb619f6eso5383712pjg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=MDx7DiqqlQBBDK5vXnsY4Li3nGa6YqWYJsSlvRR0dgI=;
+        b=bRleO/diLA7l5EowhCnk0MioXpbQrrLmUn6FcOCG4LTErYM1XP+dCDEFv2BFEnes4N
+         krlG9RO+ch9LCGN73ukIKi21DSYhcYoi6Gg9fY167j73oaTjzrNV6m5D7bhKsCSSCbKL
+         tsFfDo8WUf0qKiGNDy5FwfjqXZ2knpKOJp2c4zCU8sKQ1x9J8bhno9FpfSwwVHBQt6xB
+         smSSl0p2lpSKnwqwWWjtEJbiHkacwUuLhka38w00L27Ia/SJBi8nIjZsRENebU1MOA2Z
+         3C9JVIVEu+i3egvqP7xEv7ZgqxGSnOi6/ZZTXyqmVOVV/QiZVXqXXv9aSmB1d8bE8sTK
+         xOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=MDx7DiqqlQBBDK5vXnsY4Li3nGa6YqWYJsSlvRR0dgI=;
+        b=iQ6ghvYNaDDYUG44an8VEi6vv1xo/rIblKKhWpv406m7/kRVshjX9jaV7GdVak/YE9
+         oBChgNbCxzG130rRUE0n6b4DyTd4eno/b36MQynewsSRFW3zJ9ljco2bj40pUylI0dId
+         YplkIM3kKWe5lnYbMeZ/omEb01Fg8l1woQB611CS+ytbgfzsGunsaXXW6C9oedXbVp+x
+         fkz7UbQSv/ahF79oqI5bVn3BBuJe8J49X/AySnobZKURSy5pc5RcSavcu2ZC34NM/YnI
+         y7VtYlrzFMPQe39kiAdt/ftULFmNOdnqinaP/CK7lhspvnpz4sWdxKMqU6FaDzk4ahza
+         5MkQ==
+X-Gm-Message-State: ACgBeo0o52i991xviIKeTsS8ZzugRc1j1APaMsSvmKX9PxY3uQ2kntaz
+        NGNY9ocB/ItDFj95ICknZjv4ib6MJyU=
+X-Google-Smtp-Source: AA6agR5Ecnlfj4VFDm6pgRrK1VOTRGYoarGlL6bQXuNZYAgfLdRYYbeI2C1rzFGsaK1addb3ja92LPG7dWI=
+X-Received: from avagin.kir.corp.google.com ([2620:15c:29:204:d94b:8d9d:2b23:6608])
+ (user=avagin job=sendgmr) by 2002:a17:90b:10a:b0:200:2849:235f with SMTP id
+ p10-20020a17090b010a00b002002849235fmr208304pjz.1.1663064755004; Tue, 13 Sep
+ 2022 03:25:55 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 03:25:49 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220913102551.1121611-1-avagin@google.com>
+Subject: [PATCH 0/2] Revert "fs/exec: allow to unshare a time namespace on vfork+exec"
+From:   Andrei Vagin <avagin@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Andrei Vagin <avagin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianglei,
+This reverts commits:
+133e2d3e81de ("fs/exec: allow to unshare a time namespace on vfork+exec")
+6342140db660 ("selftests/timens: add a test for vfork+exit")
 
-Thank you for the patch! Perhaps something to improve:
+Alexey pointed out a few undesirable side effects of the reverted change.
+First, it doesn't take into account that CLONE_VFORK can be used with
+CLONE_THREAD. Second, a child process doesn't enter a target time name-space,
+if its parent dies before the child calls exec. It happens because the parent
+clears vfork_done.
 
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master linus/master v6.0-rc5 next-20220912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Eric W. Biederman suggests installing a time namespace as a task gets a new mm.
+It includes all new processes cloned without CLONE_VM and all tasks that call
+exec(). This is an user API change, but we think there aren't users that depend
+on the old behavior.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 169ccf0e40825d9e465863e4707d8e8546d3c3cb
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220913/202209131828.hYRSPYF2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/e1ce8c41446db3a7dd59206ff9c8a75baf7be067
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
-        git checkout e1ce8c41446db3a7dd59206ff9c8a75baf7be067
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
+It is too late to make such changes in this release, so let's roll back
+this patch and introduce the right one in the next release.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Andrei Vagin (2):
+  Revert "selftests/timens: add a test for vfork+exit"
+  Revert "fs/exec: allow to unshare a time namespace on vfork+exec"
 
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/aquantia/atlantic/aq_main.c: In function 'aq_ndev_close':
->> drivers/net/ethernet/aquantia/atlantic/aq_main.c:99:1: warning: label 'err_exit' defined but not used [-Wunused-label]
-      99 | err_exit:
-         | ^~~~~~~~
-
-
-vim +/err_exit +99 drivers/net/ethernet/aquantia/atlantic/aq_main.c
-
-97bde5c4f909a5 David VomLehn  2017-01-23   90  
-97bde5c4f909a5 David VomLehn  2017-01-23   91  static int aq_ndev_close(struct net_device *ndev)
-97bde5c4f909a5 David VomLehn  2017-01-23   92  {
-97bde5c4f909a5 David VomLehn  2017-01-23   93  	struct aq_nic_s *aq_nic = netdev_priv(ndev);
-7b0c342f1f6754 Nikita Danilov 2019-11-07   94  	int err = 0;
-97bde5c4f909a5 David VomLehn  2017-01-23   95  
-97bde5c4f909a5 David VomLehn  2017-01-23   96  	err = aq_nic_stop(aq_nic);
-837c637869bef2 Nikita Danilov 2019-11-07   97  	aq_nic_deinit(aq_nic, true);
-97bde5c4f909a5 David VomLehn  2017-01-23   98  
-97bde5c4f909a5 David VomLehn  2017-01-23  @99  err_exit:
-97bde5c4f909a5 David VomLehn  2017-01-23  100  	return err;
-97bde5c4f909a5 David VomLehn  2017-01-23  101  }
-97bde5c4f909a5 David VomLehn  2017-01-23  102  
+ fs/exec.c                                   |  7 --
+ kernel/fork.c                               |  5 +-
+ kernel/nsproxy.c                            |  3 +-
+ tools/testing/selftests/timens/Makefile     |  2 +-
+ tools/testing/selftests/timens/vfork_exec.c | 90 ---------------------
+ 5 files changed, 3 insertions(+), 104 deletions(-)
+ delete mode 100644 tools/testing/selftests/timens/vfork_exec.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2.789.g6183377224-goog
+
