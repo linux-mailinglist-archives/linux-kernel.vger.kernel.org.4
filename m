@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D49A5B7162
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E56A5B738A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbiIMOfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S235595AbiIMPKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiIMOeV (ORCPT
+        with ESMTP id S235695AbiIMPJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:34:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF66BC2B;
-        Tue, 13 Sep 2022 07:20:01 -0700 (PDT)
+        Tue, 13 Sep 2022 11:09:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0189177540;
+        Tue, 13 Sep 2022 07:31:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62F686149A;
-        Tue, 13 Sep 2022 14:18:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECE6C433D6;
-        Tue, 13 Sep 2022 14:18:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 892A9B80F02;
+        Tue, 13 Sep 2022 14:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D44C43140;
+        Tue, 13 Sep 2022 14:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078735;
-        bh=ktxErZz43iB8qesudctyKI8eIJIjDE+yqoXMuOXV9Sk=;
+        s=korg; t=1663078456;
+        bh=QVfWmvO8kgJgY3aFKPNUlaDBsJjL74N0VE5S1zVPeLU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ufKbEFt3Ij5zL4Qhl7LBJrelxhShWd7oR34JvnbB+W6P7LtrN6kJq4OKRXpUj1Irf
-         TI8vGBp5wtPWtaU6+/lfYvNZUSJdIG/oG2dlK5mfVGgqmaQ7a6RglpYIWtSfV4XLdi
-         4zr26DdSsCtWTcuRKGE5X6WlAFji4ruh0TkaZewk=
+        b=0cF641/0JrR0tBOhZjLJEo81VerzzD7LrJtCgr/DRUpuMOcHSlf7Lp/B9SWFkc3xA
+         SAcgL+EeAgRfrXmeLClkxnrHAc26twRG42yECiGrBJstrGZvslafi7mlbO4TZ1znmV
+         hdwn9ogNj7hqvMYTtALk6qsNecB918xWw3cFvPxk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Frederic Schumacher <frederic.schumacher@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 062/121] ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
+Subject: [PATCH 5.19 147/192] net: ethernet: mtk_eth_soc: check max allowed hash in mtk_ppe_check_skb
 Date:   Tue, 13 Sep 2022 16:04:13 +0200
-Message-Id: <20220913140400.028569571@linuxfoundation.org>
+Message-Id: <20220913140417.345778357@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,101 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 7a94b83a7dc551607b6c4400df29151e6a951f07 ]
+[ Upstream commit f27b405ef43319a3ceefc2123245201a63ed4e00 ]
 
-On SAMA7G5, when resuming from backup and self-refresh, the bootloader
-performs DDR PHY recalibration by restoring the value of ZQ0SR0 (stored
-in RAM by Linux before going to backup and self-refresh). It has been
-discovered that the current procedure doesn't work for all possible values
-that might go to ZQ0SR0 due to hardware bug. The workaround to this is to
-avoid storing some values in ZQ0SR0. Thus Linux will read the ZQ0SR0
-register and cache its value in RAM after processing it (using
-modified_gray_code array). The bootloader will restore the processed value.
+Even if max hash configured in hw in mtk_ppe_hash_entry is
+MTK_PPE_ENTRIES - 1, check theoretical OOB accesses in
+mtk_ppe_check_skb routine
 
-Fixes: d2d4716d8384 ("ARM: at91: pm: save ddr phy calibration data to securam")
-Suggested-by: Frederic Schumacher <frederic.schumacher@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220826083927.3107272-4-claudiu.beznea@microchip.com
+Fixes: c4f033d9e03e9 ("net: ethernet: mtk_eth_soc: rework hardware flow table management")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-at91/pm.c      | 36 ++++++++++++++++++++++++++++++++----
- include/soc/at91/sama7-ddr.h |  4 ++++
- 2 files changed, 36 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_ppe.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-index ed1050404ef0a..c8cc993ca8ca1 100644
---- a/arch/arm/mach-at91/pm.c
-+++ b/arch/arm/mach-at91/pm.c
-@@ -350,9 +350,41 @@ extern u32 at91_pm_suspend_in_sram_sz;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.h b/drivers/net/ethernet/mediatek/mtk_ppe.h
+index 1f5cf1c9a9475..69ffce04d6306 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.h
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.h
+@@ -293,6 +293,9 @@ mtk_ppe_check_skb(struct mtk_ppe *ppe, struct sk_buff *skb, u16 hash)
+ 	if (!ppe)
+ 		return;
  
- static int at91_suspend_finish(unsigned long val)
- {
-+	unsigned char modified_gray_code[] = {
-+		0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
-+		0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
-+		0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
-+		0x10, 0x11,
-+	};
-+	unsigned int tmp, index;
- 	int i;
- 
- 	if (soc_pm.data.mode == AT91_PM_BACKUP && soc_pm.data.ramc_phy) {
-+		/*
-+		 * Bootloader will perform DDR recalibration and will try to
-+		 * restore the ZQ0SR0 with the value saved here. But the
-+		 * calibration is buggy and restoring some values from ZQ0SR0
-+		 * is forbidden and risky thus we need to provide processed
-+		 * values for these (modified gray code values).
-+		 */
-+		tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
++	if (hash > MTK_PPE_HASH_MASK)
++		return;
 +
-+		/* Store pull-down output impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
-+
-+		/* Store pull-up output impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
-+		/* Store pull-down on-die termination impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
-+		/* Store pull-up on-die termination impedance select. */
-+		index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
-+		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-+
- 		/*
- 		 * The 1st 8 words of memory might get corrupted in the process
- 		 * of DDR PHY recalibration; it is saved here in securam and it
-@@ -841,10 +873,6 @@ static int __init at91_pm_backup_init(void)
- 		of_scan_flat_dt(at91_pm_backup_scan_memcs, &located);
- 		if (!located)
- 			goto securam_fail;
--
--		/* DDR3PHY_ZQ0SR0 */
--		soc_pm.bu->ddr_phy_calibration[0] = readl(soc_pm.data.ramc_phy +
--							  0x188);
- 	}
- 
- 	return 0;
-diff --git a/include/soc/at91/sama7-ddr.h b/include/soc/at91/sama7-ddr.h
-index f47a933df82ea..72d19887ab810 100644
---- a/include/soc/at91/sama7-ddr.h
-+++ b/include/soc/at91/sama7-ddr.h
-@@ -40,6 +40,10 @@
- #define		DDR3PHY_DSGCR_ODTPDD_ODT0	(1 << 20)	/* ODT[0] Power Down Driver */
- 
- #define DDR3PHY_ZQ0SR0				(0x188)		/* ZQ status register 0 */
-+#define DDR3PHY_ZQ0SR0_PDO_OFF			(0)		/* Pull-down output impedance select offset */
-+#define DDR3PHY_ZQ0SR0_PUO_OFF			(5)		/* Pull-up output impedance select offset */
-+#define DDR3PHY_ZQ0SR0_PDODT_OFF		(10)		/* Pull-down on-die termination impedance select offset */
-+#define DDR3PHY_ZQ0SRO_PUODT_OFF		(15)		/* Pull-up on-die termination impedance select offset */
- 
- #define	DDR3PHY_DX0DLLCR			(0x1CC)		/* DDR3PHY DATX8 DLL Control Register */
- #define	DDR3PHY_DX1DLLCR			(0x20C)		/* DDR3PHY DATX8 DLL Control Register */
+ 	now = (u16)jiffies;
+ 	diff = now - ppe->foe_check_time[hash];
+ 	if (diff < HZ / 10)
 -- 
 2.35.1
 
