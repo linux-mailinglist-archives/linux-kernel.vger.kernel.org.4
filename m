@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0601F5B663E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4945B663F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIMDmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S229943AbiIMDmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 23:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIMDmP (ORCPT
+        with ESMTP id S229821AbiIMDmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A0513D31
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:42:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1ECA9B80CB1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2227C433C1;
-        Tue, 13 Sep 2022 03:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663040531;
-        bh=VUeq6MUzXB3MhRWXQ1REV1K4QwHMVaOsxFDEM74s2JM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EQ7adyotaOphDX46uv9SLP9FXSj7XTK0+OvL+hiaeepzepf6FMmqcAZJuORYxsoqL
-         QGKm+7lx121CEUPtZ6WN21dExX2Ju8x2yQ60Nx7xcP6obu3F6QerPdFMyXPyXQsXXQ
-         VwcSjxRwCkWCkj3SZdqV2MGXjUaXtdLW4cQ5q6ZabcLYDZx+NuswOALS4ALnihXCSQ
-         bAYATikAnNwroYqQ3LDlXlPAJm58OycpOnN5RWm0u4R9JjmIzdVYDcg/AncOVws4Ft
-         91/nAde33ArG3aT5zPxKXYRn4kXXG8b0/Rbx2ZiyYihQ6kqKxQYQ6AwhGiEMi44/XM
-         6yE/2b/TtQW4g==
-Message-ID: <e14a916c-a597-5328-2d79-39274fbdad35@kernel.org>
-Date:   Tue, 13 Sep 2022 11:42:04 +0800
+        Mon, 12 Sep 2022 23:42:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A6213D31
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663040565; x=1694576565;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BY6WsLfR0t4CqcDwDVpt9wqeo7EYjBtMpwaUfTOvTDM=;
+  b=lrN1cMYUKe0TDScQI0xUz2wdGnEXUnNSbmFq76m2VL/VvjzzxRyBj20P
+   eBeac48jOySITKYPSAgf9Afv7BC1wxzoBJTkvVdVTinnMOdGf3BvPFWOz
+   XZRDmgWewFU0d/2DpBmbWRfLuZ+ekrOGm//G4Nw+4c06cptndelrD2VGw
+   LM8a6svrjpUvT78z6Fqd7TG1/GamsfrAkwWdoDyqAiyQ/ouRK9nW1kdPM
+   9uxDcJ1JfVUaled/QpxOYN4t2dJ4ICaS7ad+mregvnQhPlwG+6tW6UAzE
+   sVf8hW7fL1GaNOPfyX18DDMxdOBO5cYWTURW4zITGSptupnO/JE8dm5Lx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="281046587"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="281046587"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 20:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="944889181"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Sep 2022 20:42:43 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXwot-0003At-0E;
+        Tue, 13 Sep 2022 03:42:43 +0000
+Date:   Tue, 13 Sep 2022 11:42:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 16/39]
+ arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for
+ function 'kvm_unit_test_debug_init'
+Message-ID: <202209131158.hc5Q4EtT-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        Chao Yu <chao.yu@oppo.com>, muchun.song@linux.dev
-References: <20220830141009.150075-1-chao@kernel.org>
- <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/10 0:47, Christophe JAILLET wrote:
-> Le 30/08/2022 à 16:10, Chao Yu a écrit :
->> From: Chao Yu <chao.yu@oppo.com>
->>
->> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
->> out-of-memory, if it fails, return errno correctly rather than
->> triggering panic via BUG_ON();
->>
->> kernel BUG at mm/slub.c:5893!
->> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->>
->> Call trace:
->>   sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->>   __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->>   create_cache mm/slab_common.c:229 [inline]
->>   kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->>   kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->>   f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->>   f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->>   f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->>   mount_bdev+0x1b8/0x210 fs/super.c:1400
->>   f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->>   legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->>   vfs_get_tree+0x40/0x140 fs/super.c:1530
->>   do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->>   path_mount+0x358/0x914 fs/namespace.c:3370
->>   do_mount fs/namespace.c:3383 [inline]
->>   __do_sys_mount fs/namespace.c:3591 [inline]
->>   __se_sys_mount fs/namespace.c:3568 [inline]
->>   __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
->>
->> Cc: <stable@kernel.org>
->> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
->> Signed-off-by: Chao Yu <chao.yu@oppo.com>
->> ---
->>   mm/slub.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/slub.c b/mm/slub.c
->> index 862dbd9af4f5..e6f3727b9ad2 100644
->> --- a/mm/slub.c
->> +++ b/mm/slub.c
->> @@ -5890,7 +5890,8 @@ static char *create_unique_id(struct kmem_cache *s)
->>       char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
-> 
-> Hi,
-> 
-> looks that ID_STR_LENGTH could even be reduced to 32 or 16.
-> 
-> The 2nd BUG_ON at the end of the function could certainly be just removed as well or remplaced by a:
->         if (p > name + ID_STR_LENGTH - 1) {
->          kfree(name);
->          return -E<something>;
->      }
+Hi Alexander,
 
-Hi Christophe, Vlastimil,
+FYI, the error/warning still remains.
 
-Should I include this in v3? or may be in another patch?
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   1f71e25a309e1f46dadb7c65e4383c3690dcd3be
+commit: 5091d7c6068bf030df54dc48b303a1d25a7ef0a0 [16/39] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-randconfig-r025-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131158.hc5Q4EtT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/5091d7c6068bf030df54dc48b303a1d25a7ef0a0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout 5091d7c6068bf030df54dc48b303a1d25a7ef0a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
-Thanks,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> Just my 2c,
-> 
-> CJ
-> 
->>       char *p = name;
->> -    BUG_ON(!name);
->> +    if (!name)
->> +        return ERR_PTR(-ENOMEM);
->>       *p++ = ':';
->>       /*
->> @@ -5948,6 +5949,8 @@ static int sysfs_slab_add(struct kmem_cache *s)
->>            * for the symlinks.
->>            */
->>           name = create_unique_id(s);
->> +        if (IS_ERR(name))
->> +            return PTR_ERR(name);
->>       }
->>       s->kobj.kset = kset;
-> 
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for function 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
+   int __init kvm_unit_test_debug_init(void)
+              ^
+   arch/x86/coco/tdx/tdx-tests.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init kvm_unit_test_debug_init(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
+
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
