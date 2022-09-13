@@ -2,144 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E9B5B7C27
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851AB5B7C2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiIMUVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S229780AbiIMUXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIMUVf (ORCPT
+        with ESMTP id S229734AbiIMUXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:21:35 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B17642DA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p3so756384iof.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
+        Tue, 13 Sep 2022 16:23:18 -0400
+Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09777647E5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:23:15 -0700 (PDT)
+Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-1225219ee46so35353011fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:23:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
+        d=kali.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=hvA7f1e70eZNisribXBaUlpwC7EMEv0cHfgluSEMJ+0=;
-        b=VPYxLNq/A8L3gEZHrUwDcoUnPkNmYHwG9R7k93b4XkSnlgyVRTTuF0O77jbNmGZoIO
-         fdkM8HmeOpQpWtqZPyf/TvCIxnU02BuqCVAm/R7KpqMDY9pXP01TznUpG3VpHJ9t/OYj
-         eUOiHs7lGwCuJU0/YT9WAeKvqZ79yq/a06L8Q=
+        bh=6X33VZ9xVlzasDbOaFozkt+4gqxM1mm4FvPj9a+zgss=;
+        b=hJ/3uTYUr+vuvwzF4Q2GgiFbAuB2lW1NlkbB9S6lLQCf3jZxqHSFGiJHWgeb4M7Ajy
+         And+dqPXJ9KASQDFhQEOLx9eebbFE4QezQE8pcq50oXDtrXRvOvYMpdoyxdHK1BewraC
+         89mp1O4VBXPfw21kBZONEEPhBa+yHEwlXfI70SuJPocETURRIDMfWuOEYhKPRR0yfFl8
+         um0CV4CfKSfeX5u3+Ry//tpKCS+lr5EJlGcv7Qw47tPgV6YwM2VBELMbrzxAJmI+l1yQ
+         +IJTg97nDYqjYw6448qp21eMXNbtHoEnnCfW8KBLunyehbpkIsGg2vk9glNktcBvz1yQ
+         p/zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=hvA7f1e70eZNisribXBaUlpwC7EMEv0cHfgluSEMJ+0=;
-        b=ExkZvUmw852caeftAMfombCbCWnfrFHHJtgID0t5lSFtJaFhDPYmvIFvKIoM4uP6Gx
-         Xy4xX5PKNwxrSMdw5fq9X3rcLZJtghljwJ/UDJ5IUudrl3eUcFDHdKJwkLVV1WPw2K4K
-         0aLLLgeYfFAdMTuWW3GINKqlWJaIwl4BsWyf0nTSEWbGUj3SMnFVLtjztwdU4QCnDwt0
-         4crJQxuSOjnl83POLqRXfMgV4JJepaXTvU8bZGhD/QIww5I1Kq14S+TtH95qOVrAxm5M
-         FYRuPPrqnM0hSF8vo1+2M2f2gMMYR56PRNkJgJjqOPqc4N/+/cD9Cb4IwaCp7fXTXrH8
-         63Zg==
-X-Gm-Message-State: ACgBeo3094dGJhDMe8sRurafS5h5/OVb8BlzTRsgetFyHnkJfsLKNMlC
-        wfMnulS4TQCmAj8BsD0VKPZGhA==
-X-Google-Smtp-Source: AA6agR7bLInJc4dGlF3FU+bR5qg/fCB3+Slbgvu5j48T3Dz25FTGl4WwJnDiLCEX7WWA0v0QFQAfow==
-X-Received: by 2002:a05:6602:2f13:b0:6a1:730a:dd9d with SMTP id q19-20020a0566022f1300b006a1730add9dmr3702301iow.114.1663100492023;
-        Tue, 13 Sep 2022 13:21:32 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id d4-20020a0566022be400b006a102cb4900sm5436906ioy.39.2022.09.13.13.21.30
+        bh=6X33VZ9xVlzasDbOaFozkt+4gqxM1mm4FvPj9a+zgss=;
+        b=YDJnfOfovrcQ7jTNUq3j0Z28I9CBv3k5cx3/gOZBktDNH4KKExHKrEEQ5cC0VIb/Rq
+         SwIxwdXLCCh89YdzEsscR/QCYsuMKSf9MfPJkrH09D/uQpFLvWd+tGBygnpXOnMPEKfC
+         cZ+Il63Lg0/oNTHWrMisZw1h0sSvMwMaZQvEOi9hwbkon56uoANWvyptBY+AJXWkNcDr
+         5rSusqBEIbP6HDLHcKM/heoSp7eMQ43mO7Y5Shgebi20AlJ3QHWkexkX6kH5H3dLcrOH
+         H/794TlpB9+mI3tAFLImbGGzybXF0X700AjrbkTLchrJB2qpLLs+NnWfI7MgD/TaIGhz
+         xJHg==
+X-Gm-Message-State: ACgBeo1iKDXMcp75oTp3/7vTVnKGxwpEA/tptsy8vqqhk9KrDc/pZOBF
+        NX23FEItFe3DoZWhip72BWricQ==
+X-Google-Smtp-Source: AA6agR4sE6iO299k1441Fl9TgoF2WviuxUixje8L0+45xbHkQDDXYigU7ZN+I2PbTcMNCSwZcbhUEA==
+X-Received: by 2002:a05:6870:64a2:b0:12b:7db:b8e1 with SMTP id cz34-20020a05687064a200b0012b07dbb8e1mr546286oab.212.1663100594351;
+        Tue, 13 Sep 2022 13:23:14 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id d3-20020a9d5e03000000b00636d4e8d480sm6377224oti.19.2022.09.13.13.23.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 13:21:31 -0700 (PDT)
-Message-ID: <ac428312-745c-490e-dfb4-2208913c27c1@ieee.org>
-Date:   Tue, 13 Sep 2022 15:21:30 -0500
+        Tue, 13 Sep 2022 13:23:13 -0700 (PDT)
+Message-ID: <ca6a97c5-1abe-b215-0ff2-443f4ed9a25f@kali.org>
+Date:   Tue, 13 Sep 2022 15:23:10 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/4] Make QMI message rules const
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
 Content-Language: en-US
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
- <f2fa19a1-4854-b270-0776-38993dece03f@ieee.org>
- <5b0543dc-4db8-aa33-d469-0e185c82b221@quicinc.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <5b0543dc-4db8-aa33-d469-0e185c82b221@quicinc.com>
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20220913085320.8577-1-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 1:51 PM, Jeff Johnson wrote:
-> On 9/13/2022 6:58 AM, Alex Elder wrote:
->> On 9/12/22 6:25 PM, Jeff Johnson wrote:
->>> Change ff6d365898d ("soc: qcom: qmi: use const for struct
->>> qmi_elem_info") allows QMI message encoding/decoding rules to be
->>> const. So now update the definitions in the various client to take
->>> advantage of this. Patches for ath10k and ath11k were perviously sent
->>> separately.
->>
->> I have had this on my "to-do list" for ages.
->> The commit you mention updates the code to be
->> explicit about not modifying this data, which
->> is great.
->>
->> I scanned over the changes, and I assume that
->> all you did was make every object having the
->> qmi_elem_info structure type be defined as
->> constant.
->>
->> Why aren't you changing the "ei_array" field in
->> the qmi_elem_info structure to be const?  Or the
->> "ei" field of the qmi_msg_handler structure?  And
->> the qmi_response_type_v01_ei array (and so on)?
->>
->> I like what you're doing, but can you comment
->> on what your plans are beyond this series?
->> Do you intend to make the rest of these fields
->> const?
-> 
-> Hi Alex,
-> My primary focus is the ath* wireless drivers, and my primary goal was 
-> to make the tables there const. So this series, along with the two 
-> out-of-series patches for ath10k and ath11k complete that scope of work.
-> 
-> The lack of the other changes to the QMI data structures is simply due 
-> to me not looking in depth at the QMI code beyond the registration 
-> interface.
-> 
-> I'll be happy to revisit this as a separate cleanup.
+Hi Johan,
 
-Sounds good to me.  Like I said I've wanted to do this
-myself, and as long as you've gotten this far I'd like
-to see it taken to completion.  Compile-testing is most
-likely sufficient to make sure you got it right.
+On 9/13/22 3:53 AM, Johan Hovold wrote:
+> The MSM DRM driver is currently broken in multiple ways with respect to
+> probe deferral. Not only does the driver currently fail to probe again
+> after a late deferral, but due to a related use-after-free bug this also
+> triggers NULL-pointer dereferences.
+>
+> These bugs are not new but have become critical with the release of
+> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
+> yet been loaded.
+>
+> The underlying problem is lifetime issues due to careless use of
+> device-managed resources.
+>
+> Specifically, device-managed resources allocated post component bind
+> must be tied to the lifetime of the aggregate DRM device or they will
+> not necessarily be released when binding of the aggregate device is
+> deferred.
+>
+> The following call chain and pseudo code serves as an illustration of
+> the problem:
+>
+>   - platform_probe(pdev1)
+>     - dp_display_probe()
+>       - component_add()
+>
+>   - platform_probe(pdev2) 				// last component
+>     - dp_display_probe()					// d0
+>         - component_add()
+>           - try_to_bring_up_aggregate_device()
+> 	   - devres_open_group(adev->parent)		// d1
+>
+> 	   - msm_drm_bind()
+> 	     - msm_drm_init()
+> 	       - component_bind_all()
+> 	         - for_each_component()
+> 		   - component_bind()
+> 		     - devres_open_group(&pdev->dev)	// d2
+> 	             - dp_display_bind()
+> 		       - devm_kzalloc(&pdev->dev)	// a1, OK
+> 		     - devres_close_group(&pdev->dev)	// d3
+>
+> 	       - dpu_kms_hw_init()
+> 	         - for_each_panel()
+> 	           - msm_dp_modeset_init()
+> 		     - dp_display_request_irq()
+> 		       - devm_request_irq(&pdev->dev)	// a2, BUG
+> 		     - if (pdev == pdev2 && condition)
+> 		       - return -EPROBE_DEFER;
+>
+> 	      - if (error)
+>   	        - component_unbind_all()
+> 	          - for_each_component()
+> 		    - component_unbind()
+> 		      - dp_display_unbind()
+> 		      - devres_release_group(&pdev->dev) // d4, only a1 is freed
+>
+>             - if (error)
+> 	     - devres_release_group(adev->parent)	// d5
+>
+> The device-managed allocation a2 is buggy as its lifetime is tied to the
+> component platform device and will not be released when the aggregate
+> device bind fails (e.g. due to a probe deferral).
+>
+> When pdev2 is later probed again, the attempt to allocate the IRQ a
+> second time will fail for pdev1 (which is still bound to its platform
+> driver).
+>
+> This series fixes the lifetime issues by tying the lifetime of a2 (and
+> similar allocations) to the lifetime of the aggregate device so that a2
+> is released at d5.
+>
+> In some cases, such has for the DP IRQ, the above situation can also be
+> avoided by moving the allocation in question to the platform driver
+> probe (d0) or component bind (between d2 and d3). But as doing so is not
+> a general fix, this can be done later as a cleanup/optimisation.
+>
+> Johan
+>
+> Changes in v2
+>   - use a custom devres action instead of amending the AUX bus interface
+>     (Doug)
+>   - split sanity check fixes and cleanups per bridge type (Dmitry)
+>   - add another Fixes tag for the missing bridge counter reset (Dmitry)
+>
+>
+> Johan Hovold (10):
+>    drm/msm: fix use-after-free on probe deferral
+>    drm/msm/dp: fix memory corruption with too many bridges
+>    drm/msm/dsi: fix memory corruption with too many bridges
+>    drm/msm/hdmi: fix memory corruption with too many bridges
+>    drm/msm/dp: fix IRQ lifetime
+>    drm/msm/dp: fix aux-bus EP lifetime
+>    drm/msm/dp: fix bridge lifetime
+>    drm/msm/hdmi: fix IRQ lifetime
+>    drm/msm/dp: drop modeset sanity checks
+>    drm/msm/dsi: drop modeset sanity checks
+>
+>   drivers/gpu/drm/msm/dp/dp_display.c | 26 +++++++++++++++++++-------
+>   drivers/gpu/drm/msm/dp/dp_parser.c  |  6 +++---
+>   drivers/gpu/drm/msm/dp/dp_parser.h  |  5 +++--
+>   drivers/gpu/drm/msm/dsi/dsi.c       |  9 +++++----
+>   drivers/gpu/drm/msm/hdmi/hdmi.c     |  7 ++++++-
+>   drivers/gpu/drm/msm/msm_drv.c       |  1 +
+>   6 files changed, 37 insertions(+), 17 deletions(-)
+>
+I've tested this on both sc8180x (Lenovo Flex 5G) and sdm850 (Lenovo 
+Yoga C630), and both of them show the same issue:
 
-I cherry-picked the one commit, and downloaded the series
-and found no new build warnings.  Checkpatch would prefer
-you used "ff6d365898d4" rather than "ff6d365898d" for the
-commit ID, but that's OK.
+[ 7.449305] platform ae9a000.displayport-controller: Fixing up cyclic 
+dependency with ae01000.mdp [ 7.454344] Unable to handle kernel NULL 
+pointer dereference at virtual address 0000000000000008 [ 7.454406] Mem 
+abort info: [ 7.454423] ESR = 0x0000000096000004 [ 7.454446] EC = 0x25: 
+DABT (current EL), IL = 32 bits [ 7.454475] SET = 0, FnV = 0 [ 7.454494] 
+EA = 0, S1PTW = 0 [ 7.454512] FSC = 0x04: level 0 translation fault [ 
+7.454539] Data abort info: [ 7.454556] ISV = 0, ISS = 0x00000004 [ 
+7.454577] CM = 0, WnR = 0 [ 7.454595] user pgtable: 4k pages, 48-bit 
+VAs, pgdp=0000000101504000 [ 7.454629] [0000000000000008] 
+pgd=0000000000000000, p4d=0000000000000000 [ 7.454669] Internal error: 
+Oops: 96000004 [#1] PREEMPT SMP [ 7.454700] Modules linked in: 
+i2c_hid_of i2c_hid leds_qcom_lpg led_class_multicolor rtc_pm8xxx msm 
+mdt_loader gpu_sched drm_dp_aux_bus drm_display_helper drm_kms_helper 
+drm phy_qcom_edp llcc_qcom i2c_qcom_geni phy_qcom_qmp_combo 
+phy_qcom_snps_femto_v2 phy_qcom_qmp_ufs phy_qcom_qmp_pcie ufs_qcom 
+pwm_bl [ 7.454860] CPU: 2 PID: 76 Comm: kworker/u16:2 Not tainted 
+5.19.0-rc8-next-20220728 #26 [ 7.454902] Hardware name: LENOVO 
+82AK/LNVNB161216, BIOS EACN43WW(V1.15) 09/13/2021 [ 7.454941] Workqueue: 
+events_unbound deferred_probe_work_func [ 7.454982] pstate: 40400005 
+(nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--) [ 7.455020] pc : 
+dp_display_request_irq+0x50/0xdc [msm] [ 7.455145] lr : 
+dp_display_request_irq+0x2c/0xdc [msm] [ 7.455265] sp : ffff800008c1bb30 
+[ 7.455285] x29: ffff800008c1bb30 x28: 0000000000000000 x27: 
+0000000000000000 [ 7.455327] x26: ffffc9c918420000 x25: ffffc9c9186ec570 
+x24: 000000000000003a [ 7.455368] x23: ffffc9c918811d30 x22: 
+ffff2a5806baa998 x21: ffff2a5806ba3410 [ 7.455410] x20: ffff2a5806baa880 
+x19: ffff2a5806baa998 x18: ffffffffffffffff [ 7.455451] x17: 
+0000000000000038 x16: ffffc9c9164eeb24 x15: ffffffffffffffff [ 7.455492] 
+x14: ffff2a5806bc3004 x13: ffff2a5806bc3000 x12: 0000000000000000 [ 
+7.455533] x11: 0000000000000040 x10: ffffc9c918493080 x9 : 
+ffffc9c918493078 [ 7.455574] x8 : ffff2a5800681b88 x7 : 0000000000000000 
+x6 : ffff2a5806baa880 [ 7.455616] x5 : ffffc9c8ca2de000 x4 : 
+0000000000080004 x3 : 0000000000000000 [ 7.455656] x2 : ffffc9c8ca296000 
+x1 : 00000000000000a8 x0 : 0000000000000000 [ 7.455698] Call trace: [ 
+7.455714] dp_display_request_irq+0x50/0xdc [msm] [ 7.455834] 
+dp_display_probe+0xf8/0x4a4 [msm] [ 7.455950] platform_probe+0x6c/0xc4 [ 
+7.455976] really_probe+0xbc/0x2d4 [ 7.455999] 
+__driver_probe_device+0x78/0xe0 [ 7.456025] 
+driver_probe_device+0x3c/0x13c [ 7.456051] 
+__device_attach_driver+0xb8/0x120 [ 7.456077] bus_for_each_drv+0x78/0xd0 
+[ 7.456105] __device_attach+0x9c/0x1a0 [ 7.456129] 
+device_initial_probe+0x18/0x2c [ 7.456154] bus_probe_device+0x9c/0xa4 [ 
+7.456178] deferred_probe_work_func+0x88/0xc0 [ 7.456204] 
+process_one_work+0x1d4/0x330 [ 7.456231] worker_thread+0x70/0x42c [ 
+7.456255] kthread+0x10c/0x110 [ 7.456278] ret_from_fork+0x10/0x20 [ 
+7.456306] Code: aa1403e6 f2a00104 f0000225 f0ffffe2 (f9400400) [ 
+7.456341] ---[ end trace 0000000000000000 ]---
 
-Anyway, for the whole series:
+This is from the sc8180x, sdm850 is the same call stack, just with 
+different addresses.
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+I do have 
+https://lore.kernel.org/all/20220712132258.671263-1-dmitry.baryshkov@linaro.org/ 
+applied here which makes the 10th patch not apply cleanly.
 
-
-> /jeff
-> 
+It fails actually, but I applied it manually here.
 
