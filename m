@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369035B757B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382255B7522
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiIMPpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S236614AbiIMPb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiIMPog (ORCPT
+        with ESMTP id S236653AbiIMP3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:44:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE042ACA;
-        Tue, 13 Sep 2022 07:48:38 -0700 (PDT)
+        Tue, 13 Sep 2022 11:29:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5B8B846;
+        Tue, 13 Sep 2022 07:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5058B614A3;
-        Tue, 13 Sep 2022 14:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69395C433C1;
-        Tue, 13 Sep 2022 14:37:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D852FB80F9C;
+        Tue, 13 Sep 2022 14:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312F7C43140;
+        Tue, 13 Sep 2022 14:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079861;
-        bh=3mnMXcJ1JR2zRL724pWgzy9GrDeUP+GY3DLcHW2IKn4=;
+        s=korg; t=1663079757;
+        bh=gF/NFCBwJR+rpMhh5ZAUWokS9BviWbSmkaDiQ6eEz5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TQqp0QizyqjisFo01CiqSjHFZEIBFkZqSW/HFbmqUY+q/WTa9s6MLf+NnhN/0g8EM
-         7bXbf3sLG/2xDKrBFjHEfhEA2NYbCmu6N7+phqdZyHPeFprY5FG5V+yjYc2C6dXW/I
-         U5XSIxvGybZKxawkvrlKFlLCrGTFHjJmr8EBXDa8=
+        b=xdxW8yCjhJVEDk7PIjrpyJNQwuFGX+TN1VUINxbp9qHzsI5fa4yGoNQNr0TN2YV0m
+         7LyIYRhIkTQ6vz1EcKK5WHmTXzn5TaQ9KUw/6gmiip9EnXei70ok7FKqsmZ96LEkVT
+         OHiJgo+IxEj7Ce5/MudLW6vaue8VaM/TNJ58q1Yo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yee Lee <yee.lee@mediatek.com>
-Subject: [PATCH 4.9 24/42] Revert "mm: kmemleak: take a full lowmem check in kmemleak_*_phys()"
-Date:   Tue, 13 Sep 2022 16:07:55 +0200
-Message-Id: <20220913140343.512632876@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Leong <wmliang.tw@gmail.com>,
+        David Lebrun <dlebrun@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 54/61] ipv6: sr: fix out-of-bounds read when setting HMAC data.
+Date:   Tue, 13 Sep 2022 16:07:56 +0200
+Message-Id: <20220913140349.162337924@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,85 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yee Lee <yee.lee@mediatek.com>
+From: David Lebrun <dlebrun@google.com>
 
-This reverts commit 23c2d497de21f25898fbea70aeb292ab8acc8c94.
+[ Upstream commit 84a53580c5d2138c7361c7c3eea5b31827e63b35 ]
 
-Commit 23c2d497de21 ("mm: kmemleak: take a full lowmem check in
-kmemleak_*_phys()") brought false leak alarms on some archs like arm64
-that does not init pfn boundary in early booting. The final solution
-lands on linux-6.0: commit 0c24e061196c ("mm: kmemleak: add rbtree and
-store physical address for objects allocated with PA").
+The SRv6 layer allows defining HMAC data that can later be used to sign IPv6
+Segment Routing Headers. This configuration is realised via netlink through
+four attributes: SEG6_ATTR_HMACKEYID, SEG6_ATTR_SECRET, SEG6_ATTR_SECRETLEN and
+SEG6_ATTR_ALGID. Because the SECRETLEN attribute is decoupled from the actual
+length of the SECRET attribute, it is possible to provide invalid combinations
+(e.g., secret = "", secretlen = 64). This case is not checked in the code and
+with an appropriately crafted netlink message, an out-of-bounds read of up
+to 64 bytes (max secret length) can occur past the skb end pointer and into
+skb_shared_info:
 
-Revert this commit before linux-6.0. The original issue of invalid PA
-can be mitigated by additional check in devicetree.
+Breakpoint 1, seg6_genl_sethmac (skb=<optimized out>, info=<optimized out>) at net/ipv6/seg6.c:208
+208		memcpy(hinfo->secret, secret, slen);
+(gdb) bt
+ #0  seg6_genl_sethmac (skb=<optimized out>, info=<optimized out>) at net/ipv6/seg6.c:208
+ #1  0xffffffff81e012e9 in genl_family_rcv_msg_doit (skb=skb@entry=0xffff88800b1f9f00, nlh=nlh@entry=0xffff88800b1b7600,
+    extack=extack@entry=0xffffc90000ba7af0, ops=ops@entry=0xffffc90000ba7a80, hdrlen=4, net=0xffffffff84237580 <init_net>, family=<optimized out>,
+    family=<optimized out>) at net/netlink/genetlink.c:731
+ #2  0xffffffff81e01435 in genl_family_rcv_msg (extack=0xffffc90000ba7af0, nlh=0xffff88800b1b7600, skb=0xffff88800b1f9f00,
+    family=0xffffffff82fef6c0 <seg6_genl_family>) at net/netlink/genetlink.c:775
+ #3  genl_rcv_msg (skb=0xffff88800b1f9f00, nlh=0xffff88800b1b7600, extack=0xffffc90000ba7af0) at net/netlink/genetlink.c:792
+ #4  0xffffffff81dfffc3 in netlink_rcv_skb (skb=skb@entry=0xffff88800b1f9f00, cb=cb@entry=0xffffffff81e01350 <genl_rcv_msg>)
+    at net/netlink/af_netlink.c:2501
+ #5  0xffffffff81e00919 in genl_rcv (skb=0xffff88800b1f9f00) at net/netlink/genetlink.c:803
+ #6  0xffffffff81dff6ae in netlink_unicast_kernel (ssk=0xffff888010eec800, skb=0xffff88800b1f9f00, sk=0xffff888004aed000)
+    at net/netlink/af_netlink.c:1319
+ #7  netlink_unicast (ssk=ssk@entry=0xffff888010eec800, skb=skb@entry=0xffff88800b1f9f00, portid=portid@entry=0, nonblock=<optimized out>)
+    at net/netlink/af_netlink.c:1345
+ #8  0xffffffff81dff9a4 in netlink_sendmsg (sock=<optimized out>, msg=0xffffc90000ba7e48, len=<optimized out>) at net/netlink/af_netlink.c:1921
+...
+(gdb) p/x ((struct sk_buff *)0xffff88800b1f9f00)->head + ((struct sk_buff *)0xffff88800b1f9f00)->end
+$1 = 0xffff88800b1b76c0
+(gdb) p/x secret
+$2 = 0xffff88800b1b76c0
+(gdb) p slen
+$3 = 64 '@'
 
-The false alarm report is as following: Kmemleak output: (Qemu/arm64)
-unreferenced object 0xffff0000c0170a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
-  hex dump (first 32 bytes):
- 62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
-    [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
-    [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
-    [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
-    [<(____ptrval____)>] kobject_add+0x84/0x100
-    [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
-    [<(____ptrval____)>] of_core_init+0x68/0x104
-    [<(____ptrval____)>] driver_init+0x28/0x48
-    [<(____ptrval____)>] do_basic_setup+0x14/0x28
-    [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
-    [<(____ptrval____)>] kernel_init+0x20/0x1a0
-    [<(____ptrval____)>] ret_from_fork+0x10/0x20
+The OOB data can then be read back from userspace by dumping HMAC state. This
+commit fixes this by ensuring SECRETLEN cannot exceed the actual length of
+SECRET.
 
-This pacth is also applicable to linux-5.17.y/linux-5.18.y/linux-5.19.y
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Yee Lee <yee.lee@mediatek.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Lucas Leong <wmliang.tw@gmail.com>
+Tested: verified that EINVAL is correctly returned when secretlen > len(secret)
+Fixes: 4f4853dc1c9c1 ("ipv6: sr: implement API to control SR HMAC structure")
+Signed-off-by: David Lebrun <dlebrun@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/kmemleak.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/ipv6/seg6.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1130,7 +1130,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
- void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
- 			       gfp_t gfp)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_alloc(__va(phys), size, min_count, gfp);
- }
- EXPORT_SYMBOL(kmemleak_alloc_phys);
-@@ -1141,7 +1141,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
-  */
- void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_free_part(__va(phys), size);
- }
- EXPORT_SYMBOL(kmemleak_free_part_phys);
-@@ -1152,7 +1152,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
-  */
- void __ref kmemleak_not_leak_phys(phys_addr_t phys)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_not_leak(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_not_leak_phys);
-@@ -1163,7 +1163,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
-  */
- void __ref kmemleak_ignore_phys(phys_addr_t phys)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_ignore(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_ignore_phys);
+diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
+index fdeb90dd1c824..9c45165fe79bb 100644
+--- a/net/ipv6/seg6.c
++++ b/net/ipv6/seg6.c
+@@ -129,6 +129,11 @@ static int seg6_genl_sethmac(struct sk_buff *skb, struct genl_info *info)
+ 		goto out_unlock;
+ 	}
+ 
++	if (slen > nla_len(info->attrs[SEG6_ATTR_SECRET])) {
++		err = -EINVAL;
++		goto out_unlock;
++	}
++
+ 	if (hinfo) {
+ 		err = seg6_hmac_info_del(net, hmackeyid);
+ 		if (err)
+-- 
+2.35.1
+
 
 
