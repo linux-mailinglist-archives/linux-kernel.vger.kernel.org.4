@@ -2,136 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE8E5B7934
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4C25B7915
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiIMSMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S231910AbiIMSCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiIMSLW (ORCPT
+        with ESMTP id S230145AbiIMSBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:11:22 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187B779EC9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:04 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id v1so12502509plo.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=3ZodDSu6Cw5hgKhb4h9fYDsQ0BBEjxdpwaIiLy4Endc=;
-        b=RAdhZsbxcXy9FNvxHeLOh50hx7eC9LAPfpuSPoZggO0QhJdrVW+IcJ3UgIVjAIM2TZ
-         ss3TwsJgXUTGZWLTULS7aM166J6Dn/RyMsmVHuJu1NW6aYXCU+sI41nAe+27GSZqE9p0
-         f0MVv0MBHctbYJOAUnhIsKv/RXCNoa3/OFf31x/BhyElHAZgGE3kIycQC5z648KACPFj
-         aMNi8z/Ic1J21tMSr709IYAbdXi/7Mvs1DNaj2QyMQfbESJ54sPbwh41NUZQeBYmXF/w
-         8yZx0rGqsOUwEofguW05YvyUd13zDVdDX/wQykmokSiAy9jsoJTQ9/G2h+nES3hiKEyj
-         htpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=3ZodDSu6Cw5hgKhb4h9fYDsQ0BBEjxdpwaIiLy4Endc=;
-        b=6IWL4dfH3SFoE2KyZY+ER3/0+GzTRv95MZ6vonpfa12bpkFW6IxuJmb7OE9p0tIhgD
-         jyBT4WNiZjxZMNi/6d4geiA4xUkI5ypxUNmEZBs80PUn2Bp8IiJw0hIyjTqoHSCXVS+r
-         jrwN2wUMk3uWZaFEtS45o4TGPQALyEzToNeELcjMY7QwLD98i5k5XhFKZaW2ENgTlJ9d
-         X7GvPm38b3OrRXkbiQ243nl48WLQl+2uxaWcdLuGRE6X0tZv+7AGTLiFOGvBx/+zgd6h
-         ckwmgpsWePWyiOJZh9LY7nkgqqrd4EqVzoBRS985o+B4Y7NXQczqIZ2vB82LHUeUwVpx
-         M47A==
-X-Gm-Message-State: ACrzQf266EVDUI1Hro3UV9xEfsBavtpVqj62W23cJ5PilBoESaA9NWnI
-        LJha3WtzkeXJWf9GJcmbr6mHFp4k8ptAjg==
-X-Google-Smtp-Source: AMsMyM5YvOwt78O+hZ4wxWriRsafI7QgmSTmB6I//55n/kYzrhAa7rSVgFfXAffFia5CzE0NVm6SiA==
-X-Received: by 2002:a17:90a:39c9:b0:1fa:c50d:11f4 with SMTP id k9-20020a17090a39c900b001fac50d11f4mr314167pjf.166.1663089483248;
-        Tue, 13 Sep 2022 10:18:03 -0700 (PDT)
-Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
-From:   Nadav Amit <nadav.amit@gmail.com>
-X-Google-Original-From: Nadav Amit
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
-Subject: [PATCH 3/3] vmw_balloon: open-code vmballoon_compaction_init()
-Date:   Tue, 13 Sep 2022 02:43:06 -0700
-Message-Id: <20220913094306.317734-4-namit@vmware.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220913094306.317734-1-namit@vmware.com>
-References: <20220913094306.317734-1-namit@vmware.com>
+        Tue, 13 Sep 2022 14:01:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5805AABD45
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:02:55 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DGlEDR031892;
+        Tue, 13 Sep 2022 17:02:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Uq3skbboDhKZ8FFGCxQ4C3VXYnnb0vVBTlq5zNym1dw=;
+ b=Rm6q2eGQ+2zWejWYmkt6NokLHT/kmPqOXgI0pIit6vrcWDSqkAsBbhHlT5T7kGhCo1LZ
+ FT62H9vOuj6N8pYqQAfAKf8MBXsn/BJB1TKSTVcgPFfOPKh+7tig3XI3bVrSdmu97gwZ
+ je1hHq/gMHBrQruhAcfiyYr0d1VKVdFNznUCk0+SGTTJo7tVESE7ErfqMT8bCue3lOrS
+ J5Uh48+u7LCuym2veK2F2JMlGtPSLQ3Rn4hSLqyJUOkNlW2oJqWbmTsFKR3aE6X37p7J
+ jSRe96sErkCjcEOnmDvbqvpAWBjsuMEnNfH/wD4k2lvT+iNmVlBYCbC/q4xduZFCfQa6 zQ== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjwpjgek0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 17:02:44 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28DGodCR015481;
+        Tue, 13 Sep 2022 17:02:43 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma05wdc.us.ibm.com with ESMTP id 3jgj7a5ak6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 17:02:43 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28DH2hRk10683006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Sep 2022 17:02:43 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0AC1112063;
+        Tue, 13 Sep 2022 17:02:42 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4FDE112065;
+        Tue, 13 Sep 2022 17:02:42 +0000 (GMT)
+Received: from localhost (unknown [9.65.113.132])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Sep 2022 17:02:42 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Michal =?utf-8?Q?Such=C3=A1nek?= <msuchanek@suse.de>
+Cc:     Laurent Dufour <ldufour@linux.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, Lee@kitsune.suse.cz,
+        Chun-Yi <jlee@suse.com>
+Subject: Re: [PATCH] powerpc/pseries: add lparctl driver for
+ platform-specific functions
+In-Reply-To: <20220913163343.GA28810@kitsune.suse.cz>
+References: <20220730000458.130938-1-nathanl@linux.ibm.com>
+ <0ead0cd1-f6f6-ecf0-65d9-f3d9366e258c@linux.ibm.com>
+ <87k07dl1f6.fsf@linux.ibm.com> <20220913091302.GY28810@kitsune.suse.cz>
+ <87v8prtgcj.fsf@linux.ibm.com> <20220913163343.GA28810@kitsune.suse.cz>
+Date:   Tue, 13 Sep 2022 12:02:42 -0500
+Message-ID: <87sfkvtdfx.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6ZRsEUPm8Y16IVezpCsku13IaMzYke_1
+X-Proofpoint-GUID: 6ZRsEUPm8Y16IVezpCsku13IaMzYke_1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_09,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130075
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+Michal Such=C3=A1nek <msuchanek@suse.de> writes:
+> On Tue, Sep 13, 2022 at 10:59:56AM -0500, Nathan Lynch wrote:
+>> Michal Such=C3=A1nek <msuchanek@suse.de> writes:
+>>=20
+>> > On Fri, Aug 12, 2022 at 02:14:21PM -0500, Nathan Lynch wrote:
+>> >> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> >> > Le 30/07/2022 =C3=A0 02:04, Nathan Lynch a =C3=A9crit=C2=A0:
+>> >> >> +static long lparctl_get_sysparm(struct lparctl_get_system_paramet=
+er __user *argp)
+>> >> >> +{
+>> >> >> +	struct lparctl_get_system_parameter *gsp;
+>> >> >> +	long ret;
+>> >> >> +	int fwrc;
+>> >> >> +
+>> >> >> +	/*
+>> >> >> +	 * Special case to allow user space to probe the command.
+>> >> >> +	 */
+>> >> >> +	if (argp =3D=3D NULL)
+>> >> >> +		return 0;
+>> >> >> +
+>> >> >> +	gsp =3D memdup_user(argp, sizeof(*gsp));
+>> >> >> +	if (IS_ERR(gsp)) {
+>> >> >> +		ret =3D PTR_ERR(gsp);
+>> >> >> +		goto err_return;
+>> >> >> +	}
+>> >> >> +
+>> >> >> +	ret =3D -EINVAL;
+>> >> >> +	if (gsp->rtas_status !=3D 0)
+>> >> >> +		goto err_free;
+>> >> >> +
+>> >> >> +	do {
+>> >> >> +		static_assert(sizeof(gsp->data) <=3D sizeof(rtas_data_buf));
+>> >> >> +
+>> >> >> +		spin_lock(&rtas_data_buf_lock);
+>> >> >> +		memset(rtas_data_buf, 0, sizeof(rtas_data_buf));
+>> >> >> +		memcpy(rtas_data_buf, gsp->data, sizeof(gsp->data));
+>> >> >> +		fwrc =3D rtas_call(rtas_token("ibm,get-system-parameter"), 3, 1,
+>> >> >> +				 NULL, gsp->token, __pa(rtas_data_buf),
+>> >> >> +				 sizeof(gsp->data));
+>> >> >> +		if (fwrc =3D=3D 0)
+>> >> >> +			memcpy(gsp->data, rtas_data_buf, sizeof(gsp->data));
+>> >> >
+>> >> > May be the amount of data copied out to the user space could be
+>> >> > gsp->length. This would prevent copying 4K bytes all the time.
+>> >> >
+>> >> > In a more general way, the size of the RTAS buffer is quite big, an=
+d I'm
+>> >> > wondering if all the data need to be copied back and forth to the k=
+ernel.
+>> >> >
+>> >> > Unless there are a high frequency of calls this doesn't make sense,=
+ and
+>> >> > keeping the code simple might be the best way. Otherwise limiting t=
+he bytes
+>> >> > copied could help a bit.
+>> >>=20
+>> >> This is not intended to be a high-bandwidth interface and I don't thi=
+nk
+>> >> there's much of a performance concern here, so I'd rather just keep t=
+he
+>> >> copy sizes involved constant.
+>> >
+>> > But that's absolutely horrible!
+>>=20
+>> ?
+>>=20
+>> > The user wants the VPD data, all of it. And you only give one page with
+>> > this interface.
+>>=20
+>> The code here is for system parameters, which have a known maximum size,
+>> unlike VPD. There's no code for VPD retrieval in this patch.
+>
+> But we do need to support the calls that return multiple pages of data.
+>
+> If the new driver supports only the simple calls it's a failure.
 
-Following commit 68f2736a85832 ("mm: Convert all PageMovable users to
-movable_operations"), the code of vmballoon_compaction_init() is very
-simple and does not worth a separate function.
+Michal, will you please moderate your tone? I think you can communicate
+your concerns without calling my work "absolutely horrible" or a
+"failure". Thanks.
 
-Instead, open code vmballoon_compaction_init. As migratepage is always
-defined, use IS_ENABLED(), which makes the code easier to read. No
-functional change is intended.
+Anyway, of course I intend to support the more complex calls, but
+supporting the simple calls actually unbreaks a lot of stuff.
 
-Signed-off-by: Nadav Amit <namit@vmware.com>
----
- drivers/misc/vmw_balloon.c | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
+>> But I'm happy to constructively discuss how a VPD ioctl interface should
+>> work.
+>>=20
+>> > Worse, the call is not reentrant so you need to lock against other use=
+rs
+>> > calling the call while the current caller is retrieving the inidividual
+>> > pagaes.
+>> >
+>> > You could do that per process, but then processes with userspace
+>> > threading would want the data as well so you would have to save the
+>> > arguments of the last call, and compare to arguments of any subsequent
+>> > call to determine if you can let it pass or block.
+>> >
+>> > And when you do all that there will be a process that retrieves a coup=
+le
+>> > of pages and goes out for lunch or loses interest completely, blocking
+>> > out everyone from accessing the interface at all.
+>>=20
+>> Right, the ibm,get-vpd RTAS function is tricky to expose to user space.
+>>=20
+>> It needs to be called repeatedly until all data has been returned, 4KB
+>> at a time.
+>>=20
+>> Only one ibm,get-vpd sequence can be in progress at any time. If an
+>> ibm,get-vpd sequence is begun while another sequence is already
+>> outstanding, the first one is invalidated -- I would guess -1 or some
+>> other error is returned on its next call.
+>>=20
+>> So a new system-call level interface for VPD retrieval probably should
+>> not expose the repeating sequence-based nature of the RTAS function to
+>> user space, to prevent concurrent clients from interfering with each
+>> other. That implies that the kernel should buffer the VPD results
+>> internally; at least that's the only idea I've had so far. Open to
+>> other suggestions.
+>
+> It can save the data to an user-supplied buffer until all data is
+> transferred or the buffer space runs out.
 
-diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 762442b9ece8..46212cd09854 100644
---- a/drivers/misc/vmw_balloon.c
-+++ b/drivers/misc/vmw_balloon.c
-@@ -1848,28 +1848,6 @@ static int vmballoon_migratepage(struct balloon_dev_info *b_dev_info,
- 	return ret;
- }
- 
--/**
-- * vmballoon_compaction_init() - initialized compaction for the balloon.
-- *
-- * @b: pointer to the balloon.
-- *
-- * If during the initialization a failure occurred, this function does not
-- * perform cleanup. The caller must call vmballoon_compaction_deinit() in this
-- * case.
-- *
-- * Return: zero on success or error code on failure.
-- */
--static __init void vmballoon_compaction_init(struct vmballoon *b)
--{
--	b->b_dev_info.migratepage = vmballoon_migratepage;
--}
--
--#else /* CONFIG_BALLOON_COMPACTION */
--static inline void vmballoon_compaction_init(struct vmballoon *b)
--{
--}
--#endif /* CONFIG_BALLOON_COMPACTION */
--
- static int __init vmballoon_init(void)
- {
- 	int error;
-@@ -1909,7 +1887,9 @@ static int __init vmballoon_init(void)
- 	 * balloon_devinfo_init() .
- 	 */
- 	balloon_devinfo_init(&balloon.b_dev_info);
--	vmballoon_compaction_init(&balloon);
-+
-+	if (IS_ENABLED(CONFIG_BALLOON_COMPACTION))
-+		b->b_dev_info.migratepage = vmballoon_migratepage;
- 
- 	queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
- 
--- 
-2.25.1
-
+Yes, of course, thanks. Assuming user space can discover the appropriate
+buffer size, which should be possible.
