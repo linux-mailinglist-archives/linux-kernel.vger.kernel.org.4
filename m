@@ -2,173 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7295B658F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653AE5B6593
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIMCZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S229650AbiIMC1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiIMCZ1 (ORCPT
+        with ESMTP id S229456AbiIMC1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8069042AF0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:25:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 12 Sep 2022 22:27:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CED52E47;
+        Mon, 12 Sep 2022 19:27:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A32A612FD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12935C433D6;
-        Tue, 13 Sep 2022 02:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663035923;
-        bh=n7s2YM0FbSs9gTxsnZ/8IzTSbkACg4whGgnweAhPvw8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DPPo//cr8RapvpQvsM/jlU7VI9ukvcTwr/I5lMieKw7ADjVdv6kvqfIXwvz2oa1ZU
-         4zOkYQNvY39IGCNWN3P/RpEOblKPJ7QgxVkzkDX8eDywqSnMHx+GZKKnBFKbCTZOdV
-         VIH2uqpxa11AaZ2gEefpisQKvc6IOq6oLH0rA687MY7qljYMSfpL3/EuEun7bqiF3F
-         XK8WEqYRI636YoCrCFrV1SUfZSKRsfNmXug5L9+T625/1baU6MXlhuvDpeO1Si25c8
-         +kDErdWkIE+F9tiMoRzQlSzuhNMzLg35fZ/PDkdroduJXhbslJv4Y5LQ6Et3gBeAWf
-         UCNlS5/9logbw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
-Subject: [PATCH] f2fs: fix to do sanity check on summary info
-Date:   Tue, 13 Sep 2022 10:25:13 +0800
-Message-Id: <20220913022513.2162885-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MRS6c5Y6qz4x1F;
+        Tue, 13 Sep 2022 12:27:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663036057;
+        bh=O0UBRh/JKj2cfgD0Xh2XLss1jScWUyYlrf3LDv/g6yY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gA/vdPzXjdVgWzPYMKDuz0w2cBonVX9b6zoT1YPI/5RDJ5WjP7SGTVgB7nURqb+Rw
+         5eo/UEermpOxiGMF8JPkPZ2UgMc0X/AcANc7p1KfzIErp3ZTM9+IUZBhh68bQpxaNk
+         42fB/ATM2DePxFo7wdPbkrGQ0hcFneyfeMchTwOw3DhPLOXkld1txKNUSKrAF7FnmS
+         JqXzjEeYAF/7MmwK83An7k/WfeTGQzhKboCE1c2bJuGh3GRiVz6VQQf0X7HRdkvBUg
+         8rkUTWEzcR+J/S90DiOO/+5kLnVThdXOv/vpMeS+gpo++IC7Y+Oe2h77R7tIvTIex1
+         l3rrQ3imwJbsA==
+Date:   Tue, 13 Sep 2022 12:27:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Neil Brown <neilb@suse.de>
+Subject: Re: linux-next: manual merge of the nfsd tree with the cel-fixes
+ tree
+Message-ID: <20220913122734.431114ef@canb.auug.org.au>
+In-Reply-To: <2D1DCBBA-FC98-49D7-82CE-9CDA31BB72B6@oracle.com>
+References: <20220913102507.3295ce32@canb.auug.org.au>
+        <2D1DCBBA-FC98-49D7-82CE-9CDA31BB72B6@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NpK.SyNga.aF8h.P.IqyCm9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Wenqing Liu reported in bugzilla:
+--Sig_/NpK.SyNga.aF8h.P.IqyCm9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=216456
+Hi Chuck,
 
-BUG: KASAN: use-after-free in recover_data+0x63ae/0x6ae0 [f2fs]
-Read of size 4 at addr ffff8881464dcd80 by task mount/1013
+On Tue, 13 Sep 2022 01:47:01 +0000 Chuck Lever III <chuck.lever@oracle.com>=
+ wrote:
+>
+> nfsd's for-next is currently based on v6.0-rc5, which does not have
+> 00801cd92d91 ("NFSD: fix regression with setting ACLs.") yet. Next
+> week I will rebase nfsd's for-next on v6.0-rc6, which should resolve
+> this conflict. I will test the conflict resolution with the usual suite
+> of NFSD check-in tests before pushing that update to for-next.
 
-CPU: 3 PID: 1013 Comm: mount Tainted: G        W          6.0.0-rc4 #1
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
-Call Trace:
- dump_stack_lvl+0x45/0x5e
- print_report.cold+0xf3/0x68d
- kasan_report+0xa8/0x130
- recover_data+0x63ae/0x6ae0 [f2fs]
- f2fs_recover_fsync_data+0x120d/0x1fc0 [f2fs]
- f2fs_fill_super+0x4665/0x61e0 [f2fs]
- mount_bdev+0x2cf/0x3b0
- legacy_get_tree+0xed/0x1d0
- vfs_get_tree+0x81/0x2b0
- path_mount+0x47e/0x19d0
- do_mount+0xce/0xf0
- __x64_sys_mount+0x12c/0x1a0
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Why not just merge the cel-fixes tree into the nfsd tree (with this
+fixup in the merge) and not pick up all the rest of -rc6.  Also will
+save a rebase ;-)
 
-The root cause is: in fuzzed image, SSA table is corrupted: ofs_in_node
-is larger than ADDRS_PER_PAGE(), result in out-of-range access on 4k-size
-page.
+--=20
+Cheers,
+Stephen Rothwell
 
-- recover_data
- - do_recover_data
-  - check_index_in_prev_nodes
-   - f2fs_data_blkaddr
+--Sig_/NpK.SyNga.aF8h.P.IqyCm9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-This patch adds sanity check on summary info in recovery and GC flow
-in where the flows rely on them.
+-----BEGIN PGP SIGNATURE-----
 
-After patch:
-[   29.310883] F2FS-fs (loop0): Inconsistent ofs_in_node:65286 in summary, ino:0, nid:6, max:1018
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMf6pcACgkQAVBC80lX
+0GxDvAf7BRN9hIkgL469ZK9f5afI+x/v95Ei8gsjbo8GwDHcI2ZTaAJ61A0swVVt
+mlXe0s3ztHSnrWewuTxjFDr8nvgiq7iOOCaIbqawtqXdqcvpnjqmBbUEOiKglzOm
+9KLQaN91p5kHbZfieg9gsWXJ0nV5OrBltdyVw8xGEx8hGRl1godG7ue+eJE07ZAM
+XgHLnZrLEcFMyCcgW/gCUgIIaxiFAMBt15daIJFt+I1fuP82okmvJ04Vx3FCjjeY
+s3PDnhXd+QzffOuJif959/GqgEeC/77qTxbDkGFd4Ri74JI3l2QTjGy7UBGNpEcj
+pjG3uhf8iAjaRIIoISxorbygC3ZsDQ==
+=bW7v
+-----END PGP SIGNATURE-----
 
-Cc: <stable@kernel.org>
-Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/f2fs/gc.c       | 10 +++++++++-
- fs/f2fs/recovery.c | 15 ++++++++++++---
- 2 files changed, 21 insertions(+), 4 deletions(-)
-
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index fd400d148afb..3a820e5cdaee 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1078,7 +1078,7 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
- {
- 	struct page *node_page;
- 	nid_t nid;
--	unsigned int ofs_in_node;
-+	unsigned int ofs_in_node, max_addrs;
- 	block_t source_blkaddr;
- 
- 	nid = le32_to_cpu(sum->nid);
-@@ -1104,6 +1104,14 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
- 		return false;
- 	}
- 
-+	max_addrs = IS_INODE(node_page) ? DEF_ADDRS_PER_INODE :
-+						DEF_ADDRS_PER_BLOCK;
-+	if (ofs_in_node >= max_addrs) {
-+		f2fs_err(sbi, "Inconsistent ofs_in_node:%u in summary, ino:%u, nid:%u, max:%u",
-+			ofs_in_node, dni->ino, dni->nid, max_addrs);
-+		return false;
-+	}
-+
- 	*nofs = ofs_of_node(node_page);
- 	source_blkaddr = data_blkaddr(NULL, node_page, ofs_in_node);
- 	f2fs_put_page(node_page, 1);
-diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
-index 8326003e6918..9b361fff30aa 100644
---- a/fs/f2fs/recovery.c
-+++ b/fs/f2fs/recovery.c
-@@ -474,7 +474,7 @@ static int check_index_in_prev_nodes(struct f2fs_sb_info *sbi,
- 	struct dnode_of_data tdn = *dn;
- 	nid_t ino, nid;
- 	struct inode *inode;
--	unsigned int offset;
-+	unsigned int offset, ofs_in_node, max_addrs;
- 	block_t bidx;
- 	int i;
- 
-@@ -501,15 +501,24 @@ static int check_index_in_prev_nodes(struct f2fs_sb_info *sbi,
- got_it:
- 	/* Use the locked dnode page and inode */
- 	nid = le32_to_cpu(sum.nid);
-+	ofs_in_node = le16_to_cpu(sum.ofs_in_node);
-+
-+	max_addrs = ADDRS_PER_PAGE(dn->node_page, dn->inode);
-+	if (ofs_in_node >= max_addrs) {
-+		f2fs_err(sbi, "Inconsistent ofs_in_node:%u in summary, ino:%u, nid:%u, max:%u",
-+			ofs_in_node, ino, nid, max_addrs);
-+		return -EFSCORRUPTED;
-+	}
-+
- 	if (dn->inode->i_ino == nid) {
- 		tdn.nid = nid;
- 		if (!dn->inode_page_locked)
- 			lock_page(dn->inode_page);
- 		tdn.node_page = dn->inode_page;
--		tdn.ofs_in_node = le16_to_cpu(sum.ofs_in_node);
-+		tdn.ofs_in_node = ofs_in_node;
- 		goto truncate_out;
- 	} else if (dn->nid == nid) {
--		tdn.ofs_in_node = le16_to_cpu(sum.ofs_in_node);
-+		tdn.ofs_in_node = ofs_in_node;
- 		goto truncate_out;
- 	}
- 
--- 
-2.25.1
-
+--Sig_/NpK.SyNga.aF8h.P.IqyCm9--
