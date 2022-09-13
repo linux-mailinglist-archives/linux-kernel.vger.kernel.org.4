@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375235B6EC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30105B6EC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiIMOCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S232365AbiIMOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiIMOCI (ORCPT
+        with ESMTP id S231469AbiIMOCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Sep 2022 10:02:08 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EE19295;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28946205E8;
         Tue, 13 Sep 2022 07:02:08 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1274E6600371;
-        Tue, 13 Sep 2022 15:02:05 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 281E96602006;
+        Tue, 13 Sep 2022 15:02:06 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1663077726;
-        bh=YMzqTfx36K6R8VoijWH17yCMGbQdDaXJE9npEtTCxNk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=is8SAIoah/Lz9cHjty/dsUbPzT+VU1laMksOVCvzyKquI5AMxF8DdkDUzDBXCWcJe
-         SgrtCqZrDfGTM9yyNT32jN6wd3GYuAcWKrfbXUijLiYtet91ZdgdduNt1GyPaiPTma
-         LRasMK2JJz72pbna+/FxwCmJ/+PxiRfPs0VWyS1xdnvRL3EF1kLaZxKAZgIojayYlZ
-         MxPHOIbbUHZ/ce89ItzJXezKawFBh6k+RxS0z7odKpvT6PtnN0kW/gIKLqOHh2HlNQ
-         VCRu+PJRqLSEOxSNr0WRwiJFuiQuJOAvC92OOF4B/S7qcE21i6F5KU6LS8B3pPpmmc
-         OSBbj56aZmyLQ==
+        bh=ErT3ESbOa0vk9bZS+9TSr45Pf6iZdWC5H+hlE0INnY0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RJYmSs73FepwOwIMBcXJo14SVTarVl0tD9gnZ1PTlzIo2FTtmK1owHlvYSENheeBF
+         opGwe37fjNsT4xRnC3Lg50PKtRmhjbxEmr5u3i1Yc+djPcqstgBvwN89imroO0+9w2
+         L92faVBBCMJMKpX5mC8ZNXEzpFYWJb4NiU8+WBaTy98atXRHukmMLya5Ay9bEXNNb+
+         HTzKRA3YPzCwFWsffE3cMkU+3AOdT0bVG6PbWIzznpWKWxhHgd8YVgC85RPanwH/hy
+         WPApudvvt+iWgH2UCDJrzeGjFq5IUQSvPXUSegNf8Pu40KUuBwg444gEsl+B5aGdKs
+         Uo8obMwIWxARg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -42,10 +42,12 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         p.zabel@pengutronix.de, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 0/2] MediaTek Helio X10 MT6795 - Display Mutex
-Date:   Tue, 13 Sep 2022 16:01:19 +0200
-Message-Id: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/2] dt-bindings: soc: mediatek: Add display mutex support for MT6795
+Date:   Tue, 13 Sep 2022 16:01:20 +0200
+Message-Id: <20220913140121.403637-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
+References: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,19 +59,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds display mutex arrays and compatibles for the
-MediaTek Helio X10 (MT6795).
+Add compatible for MT6795 Helio X10 SoC.
 
-Tested on Sony Xperia M5 smartphone.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
-AngeloGioacchino Del Regno (2):
-  dt-bindings: soc: mediatek: Add display mutex support for MT6795
-  soc: mediatek: mutex: Add support for MT6795 Helio X10 display mutex
-
- .../bindings/soc/mediatek/mediatek,mutex.yaml    |  1 +
- drivers/soc/mediatek/mtk-mutex.c                 | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+index 234fa5dc07c2..9241e5fc7cff 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
++++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+@@ -26,6 +26,7 @@ properties:
+     enum:
+       - mediatek,mt2701-disp-mutex
+       - mediatek,mt2712-disp-mutex
++      - mediatek,mt6795-disp-mutex
+       - mediatek,mt8167-disp-mutex
+       - mediatek,mt8173-disp-mutex
+       - mediatek,mt8183-disp-mutex
 -- 
 2.37.2
 
