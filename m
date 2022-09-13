@@ -2,88 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528965B6F11
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFA05B7529
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiIMOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S236437AbiIMPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbiIMOGe (ORCPT
+        with ESMTP id S236450AbiIMPbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:06:34 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729F259270;
-        Tue, 13 Sep 2022 07:06:26 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id v2-20020a056830090200b006397457afecso8129800ott.13;
-        Tue, 13 Sep 2022 07:06:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=XwWk5SoJuKv1MY6V80vnF8Lyms9Ev4e9+aisy0cJdGI=;
-        b=ZLzJiFLC1STgyfRQgZyaRFzYSZHY87KW6/gvpvUjEj2nUln8r6HpuR6pk9vuZfCtg5
-         uukOboIkUxZk/ZU6dY3C2m/eDyCKvQshjnavsBjMev0T+AdIeg1UXL7vziO+wLDapGKq
-         ZxZXliPqMCVN/+o02Ux20IUNSyDdGjVPeUGjyRepHSuVtrYjxGhs+m1XJFUyMuZ4IysE
-         x5eVRZoH2Jf04Sa+rnZP1nz6uEGDCdaJod+aygP3VIdLVkC2b8kI/t1apu3gDQyyeAtT
-         veC8FEEdtg8GyNqQ0eFEtQnOP/nx3dr2mY3GJ4fOySySYKaCtLO4scsMkWRCZFnU8Vjx
-         OLXA==
-X-Gm-Message-State: ACgBeo0Jr2c0Yg+KZqyT3OlrcnmDuid9KJfKleOVyRGfuvNPHIi3ZtCb
-        GkasbpM+QXWBP4NkeGGIvw==
-X-Google-Smtp-Source: AA6agR5SWl6Oj+EGjpBSFta1Oh0daG7E4brT6mZmxxChyVqbTbfzFGLGAKFSANHqFwdD6yPA4tgYRw==
-X-Received: by 2002:a9d:d89:0:b0:654:fc7e:f4ec with SMTP id 9-20020a9d0d89000000b00654fc7ef4ecmr8772019ots.49.1663077985195;
-        Tue, 13 Sep 2022 07:06:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x88-20020a9d20e1000000b00637032a39a3sm5891387ota.6.2022.09.13.07.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:06:24 -0700 (PDT)
-Received: (nullmailer pid 3592810 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:06:23 -0000
-Date:   Tue, 13 Sep 2022 09:06:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-usb@vger.kernel.org, miquel.raynal@bootlin.com,
-        wim@linux-watchdog.org, linux-phy@lists.infradead.org,
-        robh+dt@kernel.org, linux@roeck-us.net, linux-pwm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, richard@nod.at,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, vkoul@kernel.org, vigneshr@ti.com,
-        u.kleine-koenig@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, heiko@sntech.de,
-        sjg@chromium.org, linux-kernel@vger.kernel.org, broonie@kernel.org,
-        ulf.hansson@linaro.org, philipp.tomsich@vrull.eu, kishon@ti.com,
-        jamie@jamieiles.com, linux-i2c@vger.kernel.org,
-        zhangqing@rock-chips.com, thierry.reding@gmail.com,
-        kever.yang@rock-chips.com, gregkh@linuxfoundation.org,
-        linux-watchdog@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v1 08/11] dt-bindings: arm: rockchip: pmu: add
- rockchip,rk3128-pmu
-Message-ID: <20220913140623.GA3592754-robh@kernel.org>
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <faf2b30e-1a1a-0dc1-04ce-f40e5d758718@gmail.com>
+        Tue, 13 Sep 2022 11:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDE27E32F;
+        Tue, 13 Sep 2022 07:40:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B16CAB80F79;
+        Tue, 13 Sep 2022 14:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AF0C433D7;
+        Tue, 13 Sep 2022 14:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663079227;
+        bh=jadoyS5Jys6NwC2j2TPXHDv5rg9uq2urJQhz5GjqPsA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gM0qpB9xO9+4WqpoltIj4f5HkmN/DAA9O4jZWJXYadFrBby5hx1ZQBEiBtwc1rrRD
+         0N9pN2AoZtAnQyfCppghdJqVfdDnvLiegL2CypwKAbPiSS0Wkkb6BuX2rYi7Qfh2Io
+         gWTa3PYNwgg5sQoivXqL5uqYnUIYZPZJ0K7QTTKA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.4 052/108] s390: fix nospec table alignments
+Date:   Tue, 13 Sep 2022 16:06:23 +0200
+Message-Id: <20220913140355.869723357@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faf2b30e-1a1a-0dc1-04ce-f40e5d758718@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 00:01:52 +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-pmu compatible string.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip/pmu.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Acked-by: Rob Herring <robh@kernel.org>
+commit c9305b6c1f52060377c72aebe3a701389e9f3172 upstream.
+
+Add proper alignment for .nospec_call_table and .nospec_return_table in
+vmlinux.
+
+[hca@linux.ibm.com]: The problem with the missing alignment of the nospec
+tables exist since a long time, however only since commit e6ed91fd0768
+("s390/alternatives: remove padding generation code") and with
+CONFIG_RELOCATABLE=n the kernel may also crash at boot time.
+
+The above named commit reduced the size of struct alt_instr by one byte,
+so its new size is 11 bytes. Therefore depending on the number of cpu
+alternatives the size of the __alt_instructions array maybe odd, which
+again also causes that the addresses of the nospec tables will be odd.
+
+If the address of __nospec_call_start is odd and the kernel is compiled
+With CONFIG_RELOCATABLE=n the compiler may generate code that loads the
+address of __nospec_call_start with a 'larl' instruction.
+
+This will generate incorrect code since the 'larl' instruction only works
+with even addresses. In result the members of the nospec tables will be
+accessed with an off-by-one offset, which subsequently may lead to
+addressing exceptions within __nospec_revert().
+
+Fixes: f19fbd5ed642 ("s390: introduce execute-trampolines for branches")
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Link: https://lore.kernel.org/r/8719bf1ce4a72ebdeb575200290094e9ce047bcc.1661557333.git.jpoimboe@kernel.org
+Cc: <stable@vger.kernel.org> # 4.16
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/s390/kernel/vmlinux.lds.S |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -124,6 +124,7 @@ SECTIONS
+ 	/*
+ 	 * Table with the patch locations to undo expolines
+ 	*/
++	. = ALIGN(4);
+ 	.nospec_call_table : {
+ 		__nospec_call_start = . ;
+ 		*(.s390_indirect*)
+
+
