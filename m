@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387015B69E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9587B5B69E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiIMIuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S230426AbiIMIxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIMIuu (ORCPT
+        with ESMTP id S230176AbiIMIxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:50:50 -0400
+        Tue, 13 Sep 2022 04:53:15 -0400
 Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167F057890
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:50:47 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id c11so19577669wrp.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:50:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BE315A15
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:53:13 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bz13so19633396wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Ohjc9dEdH44oeiSaUzXYNAwgxLv5Lg5idMppRaZ9XgA=;
-        b=H808Dg3rwQCarMzG/PWEUqyNlqs2cBSV17PuIMFqjM3kvWX45qIqUmhvWUU4v04vXS
-         0eJroHx8Kdni1sh7tVSm9UXlpW5kpdCGAO1krmaBES063TG628AYqm139SIne85TKeYv
-         ItPvqqmnsktPAlPmNZUmB7wXEe4ZwSDtZeaanDdV52Mp8yYScAuDg3SZtSIG0d6Jxxrx
-         8g6vbtffCehAae/JJ/eaTXBkNzVo9hgNCLia3fM8O1jVdHSQHgRCJfvfRH5F88kFzhjV
-         oVbt3qDSM0KmLwlbv3r17rs9tgX6gUBtI+BE1sr7+t0qG484rKgw7Cs3B8uATWIJSJ1c
-         rUwA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=azC3OpX+ocJnqGlUVkroBeUS6+13tkOgr8/lWb+Xicg=;
+        b=CnKwgA/mbHL9Almjw1DSuSGEYSmKl9Iq8NfkWJUeClytOwW3/7yxgXeNkAVQLue3bj
+         JzQqU9R2+XZwW2eUXsHW74y3X11U7HJc0WecMJZuykQUYnSHJRCdstFEh6uORHP42Gic
+         aTCb0zb6A0ruPhQWyjP7c5Dp+AvCbTnl7vOcUQTUJ+BpMjQzED/aFbYZCfBU8nCCwL+X
+         L7GG6xsyyGNOKt0rjgW3+CeJcUVipgCzCDP5Nk/4H6CAR7jw6Nd0vRj+m6x+2mfumO6y
+         XpKjFhb6q7SbTZP5eumlHEBjZwTt6cr8KXiC8nYXmVqEmpxMfQWO/AJ9d5SGevyvl+ro
+         3lYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ohjc9dEdH44oeiSaUzXYNAwgxLv5Lg5idMppRaZ9XgA=;
-        b=Lg583bLLK9l1l8gro5W7SI3IjqdRA8Z25k46GqtP0jyUrVJ60sCbuQt7o9kHpct1sn
-         WBtSDcWxA14s7mKOtPIZgolbAw9cTETm6nirSVUaCYkI/BY9lRVfovQN5Hg7mLGmfqLx
-         NGMn8ZCFJYs52ZngFCqD6oV5mTViP35cHWuSYOT4ZrV/fsHfYhC0I2H33t8gRkHicsY/
-         GEIpT4pG6gn9Cxb956KuUGAPV97nPqeYgS72VvAMBDmhQKjmlcp19o+9JesdkpNoP/g3
-         In0KONTUclk/eAorhK1JoLrF2hNwU82qvzDCVNv/5BDQqMpMkg0A/ztJhRJpEpaIirNs
-         2AYQ==
-X-Gm-Message-State: ACgBeo0SEcIuPLhGX+W86Zhj4R0tje63ovxpRvyXiikvsyzj2pPffGNC
-        Rez3ZWc1ryz+2SNRt+CCpNR17CIHlffDoRQC
-X-Google-Smtp-Source: AA6agR4hv6qBRnUNqNnuJw0oXOGkLN22P0OlaGd2jb4dYMuQ1e1O4+iJDjQISHd8l/vJyW+uxepzSA==
-X-Received: by 2002:a5d:6c63:0:b0:22a:4247:1e7c with SMTP id r3-20020a5d6c63000000b0022a42471e7cmr10784681wrz.625.1663059045577;
-        Tue, 13 Sep 2022 01:50:45 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.70])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c4fd300b003b3180551c8sm12549252wmq.40.2022.09.13.01.50.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 01:50:45 -0700 (PDT)
-Message-ID: <1a683d12-eee9-e35b-3808-4856fe4dc0f2@linaro.org>
-Date:   Tue, 13 Sep 2022 10:50:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/4] dt-bindings: net: qcom,ethqos: Convert bindings to
- yaml
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, netdev@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=azC3OpX+ocJnqGlUVkroBeUS6+13tkOgr8/lWb+Xicg=;
+        b=aMdNvM6O+zpLduXEdamju5nIqWPnQbHMQSHfRBsTG6Ey+Rx/Yezict3a/YkPNM+xXt
+         8c/Q3GZKYXtJTvWKfWa9y3mWpdX4K38VgAScR2rWW447Tcgh0ro0NNi2eWMW20qmy8/I
+         A85f7Z6N/kRXw5qj8roB6grdggXhIJ+YbVos18y032Sbm9cDQ5BHz5566Ce/NvZ9TaNW
+         KOd/p3hHuBodiZNgN8eAQNLRZztgx8ndDcnkMr0uD+9/R6kITfdODwKp6xsEVztbd3G2
+         94CRbIDLPHE5lH7FkqBhP3gbLjC3Cekkn0jA7WDhpdrOKayKvnuOVmzi30SprpM7Xbp5
+         c+Ng==
+X-Gm-Message-State: ACgBeo1LsiNKiCAUFZUtHavb03YjgxfnVW0W1HyQq6WZMJgt6An4DiIf
+        f9qdNUmkUqNVsDXAc7k/yZ5kpw==
+X-Google-Smtp-Source: AA6agR4JTvt0MyWnrTpdIvyaEir07R+t1Om4Y/PUJNRhCgeMmd1+aL6UdxJ611ZblMJUgGQlcHUBBg==
+X-Received: by 2002:a05:6000:156d:b0:228:de9a:6698 with SMTP id 13-20020a056000156d00b00228de9a6698mr18187443wrz.311.1663059192328;
+        Tue, 13 Sep 2022 01:53:12 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d430e000000b00228dcf471e8sm9659675wrq.56.2022.09.13.01.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 01:53:11 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 11:53:09 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
- <20220907204924.2040384-2-bhupesh.sharma@linaro.org>
- <dcf449f5-ad28-d262-98d5-72c6ba2b7aea@linaro.org>
- <ccd6f6c2-458d-832a-7299-d9d9ffb652a8@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ccd6f6c2-458d-832a-7299-d9d9ffb652a8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
+        Bharath Kumar <bkumar@qti.qualcomm.com>,
+        Himateja Reddy <hmreddy@quicinc.com>,
+        Anirudh Raghavendra <araghave@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 00/10] misc: fastrpc: Add audiopd support
+Message-ID: <YyBE9eU9W8rAzn7q@linaro.org>
+References: <20220909133938.3518520-1-abel.vesa@linaro.org>
+ <20220912170827.GA1470954-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912170827.GA1470954-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,251 +84,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 19:28, Bhupesh Sharma wrote:
-> Hi Krzysztof,
+On 22-09-12 12:08:27, Rob Herring wrote:
+> On Fri, Sep 09, 2022 at 04:39:28PM +0300, Abel Vesa wrote:
+> > This patchset adds audiopd support to fastrpc.
+> > 
+> > The v2 of this patchset is here:
+> > https://lore.kernel.org/all/20220902154900.3404524-1-abel.vesa@linaro.org/
+> > 
+> > Abel Vesa (10):
+> >   misc: fastrpc: Rename audio protection domain to root
+> >   misc: fastrpc: Add reserved mem support
+> >   dt-bindings: misc: fastrpc: Document memory-region property
+> >   misc: fastrpc: Add fastrpc_remote_heap_alloc
+> >   misc: fastrpc: Use fastrpc_map_put in fastrpc_map_create on fail
+> >   misc: fastrpc: Rework fastrpc_req_munmap
+> >   misc: fastrpc: Add support for audiopd
+> >   misc: fastrpc: Safekeep mmaps on interrupted invoke
+> >   misc: fastrpc: Add mmap request assigning for static PD pool
+> >   misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
 > 
-> Thanks for your comments.
-> 
-> On 9/8/22 8:08 PM, Krzysztof Kozlowski wrote:
->> On 07/09/2022 22:49, Bhupesh Sharma wrote:
->>> Convert Qualcomm ETHQOS Ethernet devicetree binding to YAML.
->>>
->>> Cc: Bjorn Andersson <andersson@kernel.org>
->>> Cc: Rob Herring <robh@kernel.org>
->>> Cc: Vinod Koul <vkoul@kernel.org>
->>> Cc: David Miller <davem@davemloft.net>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> ---
->>>   .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ---------
->>>   .../devicetree/bindings/net/qcom,ethqos.yaml  | 139 ++++++++++++++++++
->>
->> You need to update maintainers - old path.
-> 
-> Sure, my bad. Will do in v2.
-> 
->>>   2 files changed, 139 insertions(+), 66 deletions(-)
->>>   delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
->>>   create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.txt b/Documentation/devicetree/bindings/net/qcom,ethqos.txt
->>> deleted file mode 100644
->>> index 1f5746849a71..000000000000
->>> --- a/Documentation/devicetree/bindings/net/qcom,ethqos.txt
->>> +++ /dev/null
->>> @@ -1,66 +0,0 @@
->>> -Qualcomm Ethernet ETHQOS device
->>> -
->>> -This documents dwmmac based ethernet device which supports Gigabit
->>> -ethernet for version v2.3.0 onwards.
->>> -
->>> -This device has following properties:
->>> -
->>> -Required properties:
->>> -
->>> -- compatible: Should be one of:
->>> -		"qcom,qcs404-ethqos"
->>> -		"qcom,sm8150-ethqos"
->>> -
->>> -- reg: Address and length of the register set for the device
->>> -
->>> -- reg-names: Should contain register names "stmmaceth", "rgmii"
->>> -
->>> -- clocks: Should contain phandle to clocks
->>> -
->>> -- clock-names: Should contain clock names "stmmaceth", "pclk",
->>> -		"ptp_ref", "rgmii"
->>> -
->>> -- interrupts: Should contain phandle to interrupts
->>> -
->>> -- interrupt-names: Should contain interrupt names "macirq", "eth_lpi"
->>> -
->>> -Rest of the properties are defined in stmmac.txt file in same directory
->>> -
->>> -
->>> -Example:
->>> -
->>> -ethernet: ethernet@7a80000 {
->>> -	compatible = "qcom,qcs404-ethqos";
->>> -	reg = <0x07a80000 0x10000>,
->>> -		<0x07a96000 0x100>;
->>> -	reg-names = "stmmaceth", "rgmii";
->>> -	clock-names = "stmmaceth", "pclk", "ptp_ref", "rgmii";
->>> -	clocks = <&gcc GCC_ETH_AXI_CLK>,
->>> -		<&gcc GCC_ETH_SLAVE_AHB_CLK>,
->>> -		<&gcc GCC_ETH_PTP_CLK>,
->>> -		<&gcc GCC_ETH_RGMII_CLK>;
->>> -	interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>,
->>> -			<GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
->>> -	interrupt-names = "macirq", "eth_lpi";
->>> -	snps,reset-gpio = <&tlmm 60 GPIO_ACTIVE_LOW>;
->>> -	snps,reset-active-low;
->>> -
->>> -	snps,txpbl = <8>;
->>> -	snps,rxpbl = <2>;
->>> -	snps,aal;
->>> -	snps,tso;
->>> -
->>> -	phy-handle = <&phy1>;
->>> -	phy-mode = "rgmii";
->>> -
->>> -	mdio {
->>> -		#address-cells = <0x1>;
->>> -		#size-cells = <0x0>;
->>> -		compatible = "snps,dwmac-mdio";
->>> -		phy1: phy@4 {
->>> -			device_type = "ethernet-phy";
->>> -			reg = <0x4>;
->>> -		};
->>> -	};
->>> -
->>> -};
->>> diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
->>> new file mode 100644
->>> index 000000000000..f05df9b0d106
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
->>> @@ -0,0 +1,139 @@
->>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/net/qcom,ethqos.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Ethernet ETHQOS device
->>> +
->>> +maintainers:
->>> +  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> +
->>> +description:
->>> +  This binding describes the dwmmac based Qualcomm ethernet devices which
->>> +  support Gigabit ethernet (version v2.3.0 onwards).
->>> +
->>> +  So, this file documents platform glue layer for dwmmac stmmac based Qualcomm
->>> +  ethernet devices.
->>> +
->>> +allOf:
->>> +  - $ref: "snps,dwmac.yaml#"
->>
->> No need for quotes.
-> 
-> Ok.
-> 
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - qcom,qcs404-ethqos
->>> +      - qcom,sm8150-ethqos
->>> +
->>> +  reg: true
->>
->> I think both devices use two reg spaces.
-> 
-> On this platform the two reg spaces are 64-bit, whereas for other
-> platforms based on dwmmac, for e.g. stm32 have 32-bit address space.
+> How do you expect this series to be merged? Please spell it out to the 
+> maintainers. If you don't, Greg is just going to tell you the series 
+> doesn't apply (because qcom,fastrpc.yaml only exists in my tree), drop 
+> it, and move on to the next thing in his queue.
 
-Then for this platform this should be made specific/constrained, so it
-must be two items.
+Yeah, you are right. I should've mentioned that dt-bindings patch goes through
+your tree while all the others go through Greg's tree. Sorry about that.
+
+Greg, if you want I can resend this patchset without the dt-bindings, now
+that it was applied by Rob to his tree.
 
 > 
->>> +
->>> +  reg-names:
->>> +    minItems: 1
->>
->> Why allowing only one item?
-> 
-> Ok, let me remove this in v2.
+> Anyways, I've applied the binding patch. Who knew fastrpc was going to 
+> be so popular this cycle...
 
-And then as well you allow only one item... This should be specific. If
-not - why?
+Thanks for applying the binding patch.
 
 > 
->>> +    items:
->>> +      - const: stmmaceth
->>> +      - const: rgmii
->>> +
->>> +  interrupts: true
->>
->> This should be specific/fixed.
->>
->>> +
->>> +  interrupt-names: true
->>
->> This should be specific/fixed.
-> 
-> These are same as in $ref: "snps,dwmac.yaml#", so
-> do we really need to specify them here? I remember on the sdhci-msm
-> YAML patch review, Rob mentioned that we should just set the property to 
-> true, in such cases.
-
-But it is not specific in dwmac.yaml. You use "xxx: true" when you want
-to accept property from other schema, assuming it is defined there
-properly. However the snps,dwmac does not define it in specific way
-because it expects specific implementation to narrow the details.
-
-> 
-> Am I missing something here?
-> 
->>> +
->>> +  clocks:
->>> +    minItems: 1
->>> +    maxItems: 4
->>
->> Why such flexibility?
-> 
-> Ok, let me just keep 'maxItems: 4' here for now.
-> 
->>> +
->>> +  clock-names:
->>> +    minItems: 1
->>> +    items:
->>> +      - const: stmmaceth
->>> +      - const: pclk
->>> +      - const: ptp_ref
->>> +      - const: rgmii
->>> +
->>> +  iommus:
->>> +    minItems: 1
->>> +    maxItems: 2
->>
->> Aren't we using only one MMU?
-> 
-> It was just for future compatibility, but I get your point.
-> Let me keep the 'maxItems: 1' here for now.
-> 
->>> +
->>> +  mdio: true
->>> +
->>> +  phy-handle: true
->>> +
->>> +  phy-mode: true
->>> +
->>> +  snps,reset-gpio: true
->>> +
->>> +  snps,tso:
->>> +    $ref: /schemas/types.yaml#/definitions/flag
->>> +    description:
->>> +      Enables the TSO feature otherwise it will be managed by MAC HW capability register.
->>> +
->>> +  power-domains: true
->>> +
->>> +  resets: true
->>> +
->>> +  rx-fifo-depth: true
->>> +
->>> +  tx-fifo-depth: true
->>
->> You do not list all these properties, because you use
->> unevaluatedProperties. Drop all of these "xxx :true".
-> 
-> Same query as above. May be I am missing something here.
-
-You do not list any properties:true from other schema, if you use
-unevaluatedProperties:false.
-
-
-Best regards,
-Krzysztof
+> Rob
