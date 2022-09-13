@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC645B7210
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037385B7099
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiIMOp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S233731AbiIMO0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiIMOnI (ORCPT
+        with ESMTP id S233790AbiIMOYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F118B6E2DC;
-        Tue, 13 Sep 2022 07:22:56 -0700 (PDT)
+        Tue, 13 Sep 2022 10:24:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D900067147;
+        Tue, 13 Sep 2022 07:16:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F501B80F01;
-        Tue, 13 Sep 2022 14:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C847BC433D6;
-        Tue, 13 Sep 2022 14:22:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53C42614A8;
+        Tue, 13 Sep 2022 14:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE3DC433C1;
+        Tue, 13 Sep 2022 14:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078975;
-        bh=PgDM3ajWpuFY3hObR9Y+9AgEDoWVeiUNMjT7ZyVTZBQ=;
+        s=korg; t=1663078569;
+        bh=xrCHL+BLvlHDlXvusu0C3Y2fmAN2cpBtZ40KfBa73aM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dn/D7ujaZ0ReXabIN/HhM/6A/wFVCWinmAPHFXoscYCX4NehwwV7Q30sUXZGTRT3K
-         1G4tVXBkkHg/lqyagfCOjhzhVzH95vGmFCYcZcugpgblASg+tJJ9Jw7tiH2I1pFnlf
-         aLYtIgFcIZ2KD6f4d+UGLi6XianAsQ/9wjn/2HPk=
+        b=1S5t5ayw5LfXLIGTgOvErR+fkGz98CkkBpQn0yjPmQvWIG7i3Y7nIo3vP22CGdKrs
+         bJbyTlDKrKJ7lhUb4qZ0inA/hariCKcPRP/KKUsc0e7aZGCNz999smHXWvjSAEvohs
+         SFyjhsHMVoLZ9uYJTbbnn+6Jlh0kNhkoIbdhhhq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongxiang Ke <kdx.glider@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 26/79] ALSA: usb-audio: Fix an out-of-bounds bug in __snd_usb_parse_audio_interface()
+        stable@vger.kernel.org,
+        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
+        Jan Sokolowski <jan.sokolowski@intel.com>,
+        Bharathi Sreenivas <bharathi.sreenivas@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 165/192] i40e: Fix ADQ rate limiting for PF
 Date:   Tue, 13 Sep 2022 16:04:31 +0200
-Message-Id: <20220913140351.564581137@linuxfoundation.org>
+Message-Id: <20220913140418.251010088@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongxiang Ke <kdx.glider@gmail.com>
+From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
 
-commit e53f47f6c1a56d2af728909f1cb894da6b43d9bf upstream.
+[ Upstream commit 45bb006d3c924b1201ed43c87a96b437662dcaa8 ]
 
-There may be a bad USB audio device with a USB ID of (0x04fa, 0x4201) and
-the number of it's interfaces less than 4, an out-of-bounds read bug occurs
-when parsing the interface descriptor for this device.
+Fix HW rate limiting for ADQ.
+Fallback to kernel queue selection for ADQ, as it is network stack
+that decides which queue to use for transmit with ADQ configured.
+Reset PF after creation of VMDq2 VSIs required for ADQ, as to
+reprogram TX queue contexts in i40e_configure_tx_ring.
+Without this patch PF would limit TX rate only according to TC0.
 
-Fix this by checking the number of interfaces.
-
-Signed-off-by: Dongxiang Ke <kdx.glider@gmail.com>
-Link: https://lore.kernel.org/r/20220906024928.10951-1-kdx.glider@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a9ce82f744dc ("i40e: Enable 'channel' mode in mqprio for TC configs")
+Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+Signed-off-by: Jan Sokolowski <jan.sokolowski@intel.com>
+Tested-by: Bharathi Sreenivas <bharathi.sreenivas@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/stream.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 3 +++
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 3 ++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/sound/usb/stream.c
-+++ b/sound/usb/stream.c
-@@ -1106,7 +1106,7 @@ static int __snd_usb_parse_audio_interfa
- 	 * Dallas DS4201 workaround: It presents 5 altsettings, but the last
- 	 * one misses syncpipe, and does not produce any sound.
- 	 */
--	if (chip->usb_id == USB_ID(0x04fa, 0x4201))
-+	if (chip->usb_id == USB_ID(0x04fa, 0x4201) && num >= 4)
- 		num = 4;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index 45c56832c14fd..1aaf0c5ddf6cf 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -6536,6 +6536,9 @@ static int i40e_configure_queue_channels(struct i40e_vsi *vsi)
+ 			vsi->tc_seid_map[i] = ch->seid;
+ 		}
+ 	}
++
++	/* reset to reconfigure TX queue contexts */
++	i40e_do_reset(vsi->back, I40E_PF_RESET_FLAG, true);
+ 	return ret;
  
- 	for (i = 0; i < num; i++) {
+ err_free:
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index af69ccc6e8d2f..07f1e209d524d 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -3689,7 +3689,8 @@ u16 i40e_lan_select_queue(struct net_device *netdev,
+ 	u8 prio;
+ 
+ 	/* is DCB enabled at all? */
+-	if (vsi->tc_config.numtc == 1)
++	if (vsi->tc_config.numtc == 1 ||
++	    i40e_is_tc_mqprio_enabled(vsi->back))
+ 		return netdev_pick_tx(netdev, skb, sb_dev);
+ 
+ 	prio = skb->priority;
+-- 
+2.35.1
+
 
 
