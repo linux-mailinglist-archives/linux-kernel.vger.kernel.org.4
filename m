@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF3C5B7753
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9475B7752
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbiIMRHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S232341AbiIMRHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbiIMRHP (ORCPT
+        with ESMTP id S232426AbiIMRG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:07:15 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70348FD45;
-        Tue, 13 Sep 2022 08:56:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663084516; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ZNzr5cS4PoJX7wrZG10Q6TWliR6BgVKQGmJuJp6wuGoslH4+TGng3s7jrnaGjRAjmw8Cqce1vIQesxOOuRys2c0xIjKoLqD8VIMI/z+Vvyk5fPOiUOmyaF0lNPgGlxgta20Z8p6bP6V72G/cE7GGwKAkmtO2rsN821TMmut9+Po=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663084516; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=UXdtqi6HBBB/B8fCTaBiJara3bZ6zFCee1eqkkfM+Lc=; 
-        b=hcfi3ncwg7YEepO9spUIwS0TzNYzpTjD7lhEM6GdDYCcD3xuGxEiCg/BISASXeVTIno+/zSHDRLI2e1tOD+E1WstQ2nY0p8hxcHU++1J9mBqwvpjZp+q7XJqOKNDL4d4uA3KtqXh6FT8hfVyDsBcZmh/Q4eke3eKPE8LxGDjt88=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663084516;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=UXdtqi6HBBB/B8fCTaBiJara3bZ6zFCee1eqkkfM+Lc=;
-        b=Rbar/MDmOBryUQ8XdW0t8OZeH1xMp9m57JRXhs5Ql7oy9JFxA4Gmtr6nBPgfJo8M
-        dMRrOpaoHgxk3W5qOgIb02mEPXxdKfV9OAZXuzxB2cL/BF2Btq526hRzzuSrGruYGDd
-        Tg1ed8yk6TOc5UguU++CudJuGlqe87qZvKo9iTAk=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1663084512771268.36068470563725; Tue, 13 Sep 2022 08:55:12 -0700 (PDT)
-Message-ID: <68902e34-8ef4-994b-8e89-d42b55aeaaec@arinc9.com>
-Date:   Tue, 13 Sep 2022 18:55:05 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next 1/3] dt-bindings: net: dsa: mt7530: replace label
- = "cpu" with proper checks
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        George McCollister <george.mccollister@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 13 Sep 2022 13:06:56 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A2E8F95D;
+        Tue, 13 Sep 2022 08:56:19 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127d10b4f19so33228200fac.9;
+        Tue, 13 Sep 2022 08:56:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q2pzBTs8AUPnlW7L4Dy5QX/7RTSl832U+8XEa+jPF14=;
+        b=3TliU4ej1/Mv6yRhY0IRdutabqZiFzRCWABtJhLBqXaquTDSgK/PEDn49vfsVu1lsN
+         3uBxjAppMIxBzoIVAnyox1O6b6dUdt/zQftl3re/PkOXnAcouDn3ulHPs5NqwG5cu+w4
+         oUIonfFNO6F4ShJ2fxDk5tn84zyULl6nCmyP4B7CFyckc4qvUigNTxN6iHGNrtvP1T5X
+         UQafCUcWel2HC0MrAebcfENrMtSU7qDfqkQEgUyR9CMFLtiQpc3TJA75mE3lnJJhyNhg
+         yroVxB8V1Z3bgQkfHmhhGDxiXwx/U4wls9qa/ZVfvYUmOGQcdO+yuU/k/PpLa2Cd2YcA
+         LiGg==
+X-Gm-Message-State: ACgBeo23lOLupB6imJ6Lr5HS/fVyPSWzqUOydHOkAJ8tPKYsn3bK45PC
+        i2JcnOAj3apSPBAegBiXeTtQwuMBIA==
+X-Google-Smtp-Source: AA6agR73VBx3kyn5Mb+AYg6v7nseXC+ZG770Imn8LWQNahhPuIqiBSVJh2wKMMSrn+66t6bBMt2fRA==
+X-Received: by 2002:a05:6808:2084:b0:34f:93ea:fac5 with SMTP id s4-20020a056808208400b0034f93eafac5mr1757751oiw.256.1663084528271;
+        Tue, 13 Sep 2022 08:55:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i4-20020a9d53c4000000b00654625c0c4dsm6103755oth.17.2022.09.13.08.55.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 08:55:27 -0700 (PDT)
+Received: (nullmailer pid 3808048 invoked by uid 1000);
+        Tue, 13 Sep 2022 15:55:27 -0000
+Date:   Tue, 13 Sep 2022 10:55:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20220912175058.280386-1-vladimir.oltean@nxp.com>
- <20220912175058.280386-2-vladimir.oltean@nxp.com>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20220912175058.280386-2-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: stm32: add missing entries for
+ gpio subnodes
+Message-ID: <20220913155527.GA3807992-robh@kernel.org>
+References: <20220913074639.31932-1-alexandre.torgue@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913074639.31932-1-alexandre.torgue@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.09.2022 20:50, Vladimir Oltean wrote:
-> The fact that some DSA device trees use 'label = "cpu"' for the CPU port
-> is nothing but blind cargo cult copying. The 'label' property was never
-> part of the DSA DT bindings for anything except the user ports, where it
-> provided a hint as to what name the created netdevs should use.
+On Tue, 13 Sep 2022 09:46:39 +0200, Alexandre Torgue wrote:
+> Add "interrupt-controller" and gpio-line-names to gpio subnodes in order to
+> fix dtb validation.
 > 
-> DSA does use the "cpu" port label to identify a CPU port in dsa_port_parse(),
-> but this is only for non-OF code paths (platform data).
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 > 
-> The proper way to identify a CPU port is to look at whether the
-> 'ethernet' phandle is present.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I realised "dt-bindings: net: dsa: mt7530:" prefix is used here instead 
-of the usual "dt-bindings: net: dsa: mediatek,mt7530:". Does this matter?
-
-Arınç
+Acked-by: Rob Herring <robh@kernel.org>
