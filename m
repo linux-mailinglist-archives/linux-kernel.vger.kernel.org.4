@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2D15B78E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83695B78E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiIMRxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S233294AbiIMRx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiIMRwg (ORCPT
+        with ESMTP id S232816AbiIMRwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:52:36 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC04C6AA35
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:52:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b21so12428122plz.7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:52:05 -0700 (PDT)
+        Tue, 13 Sep 2022 13:52:41 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BB371720
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:52:24 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id e187so12481119ybh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:52:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=mOxAMUogtoyYUzgUNAUeU/aryd/IVil8/scHRPr/eFw=;
-        b=aarOS6S7gYd7JGHJjJgCzUOjml0HcNO0Qmcym4j8zO0MvyOYbMrv0NxMtO2a/biFeQ
-         o0Xqn+dWFXNJzrgeE2QE0cSXP23X8q+mc2+Y6jcWYs42+TLO57Qj5PF0GOfSZ+W3oDop
-         Hjd10pmYMHhG34tcVzS6yGrrZp3Jgsl5RznXwu3BH0iHpUWU+Bce0fwXz7z4e4xFEDuO
-         nGFvSS7r9yJdv+sDJ0OrxlFZKj9accAm479+GhXPR0rBu3//OAY6e+jcJ1GhJdtdGVpp
-         RqTSvPnZpP/tVL/Uljnzi5t/dbPPqTDnARrx5Om9TX8+H8yd08jvpc3rKWAzudTSlLp8
-         qvnw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=CAUHAKvsliDqt6Bith7BoZVpURh1bCvkOtmvTYLFN94=;
+        b=GEgSCNg5HmYJ4ERFLxTXHVSrDewcSpNo6KSQQtQd4onLJNSCMdYM0UgxwjfCxZSqjl
+         ZMLTaEGWcQFtF+qiAH0g8YpfD5lStrL3EJ28Qy2KuTx3ipLWZ1/CVx92UI8GHlS86yfW
+         CoYE+eZhVkClgNGW9t5dXws31eOi/5RQCIY6ZdCqw6OdoogqVsZ7du9r4EdBu+e+Yvhx
+         CfBfmWZHeF9W+oeCgpNL6xNwu62QOsfm6CA6MH4ZrbmQkZsZjigM85CMF/Vgl7o43MRP
+         IyWBn9JsLuCRJFDHqlEbyGMp6uq+LtI4qIsswrb1FoYi/cWD+ZUiCT7rq3IWGvQQyugD
+         ZH5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=mOxAMUogtoyYUzgUNAUeU/aryd/IVil8/scHRPr/eFw=;
-        b=spGzN04JnSOAa/wUPsIwAFgH2OWiZ3XU0IR+4ksCTohbgPDnh9xFjap5LELzUwYWH9
-         gEg5CgZoF3gLY5iHaukEoxmTN9JVPNQbeyJB5HZjenpWDoh7KSBQPJQb3RRWN9UrL7gA
-         5UMFhM/kswrDM6Ndz4uhQSqCcaU1LgojNLz90Rw3F/4+akXysTnokPlF/rB0uqPUrPsp
-         CGOFmTxWRap9mthGaW030/X/72KJQLoPG7c+sMevT82Mcn0Gq0PbIkJBmqYskDkXQeqb
-         afdf7hXgcQcVp465d2+pTXME8G13zSuzAFR8qpWnsL2Jl5PbQZc+wrgPF1aCa5kZ9jbu
-         O31A==
-X-Gm-Message-State: ACgBeo3L+BCbwtGSu6UTmMv/UQJONBs0Q4GfrC8ZmYqMk9+brNW0EXeA
-        NB6807ivEOqDrIcqwU8a4nRY
-X-Google-Smtp-Source: AA6agR5G8ywMFC6Ev8+ovqpgBABc21gMNzFuXa9i0WAbkzl9/zuBT2661JF0GnSjQQYvMlf9iMJogg==
-X-Received: by 2002:a17:903:186:b0:178:2ca7:fae5 with SMTP id z6-20020a170903018600b001782ca7fae5mr11829857plg.173.1663087925186;
-        Tue, 13 Sep 2022 09:52:05 -0700 (PDT)
-Received: from workstation ([117.202.184.122])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b0017854cee6ebsm335327plg.72.2022.09.13.09.52.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Sep 2022 09:52:04 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 22:21:59 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20220913165159.GH25849@workstation>
-References: <20220913101237.4337-1-vidyas@nvidia.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CAUHAKvsliDqt6Bith7BoZVpURh1bCvkOtmvTYLFN94=;
+        b=tR+9sjqz5thNIe7aiF35g0Av2izhkxrZAtMKAgwk7su3XXwq2+0SzAPPfowaCiINxD
+         Lvpiv2r0Mq9DwsX2sVqfqMbH+aqNKj6h+kWsGl1Zlg7zOs2pDepoKvvgsfjCqFMmid4m
+         jEkBc6PEh0D7VriddpBYgUFj/XP0agvM84x1gWJfHrzO/o0pinwwIc1258Kl+LTJy6lU
+         RH43Jn4b51xnjR1uJRh/vYtZopU11CkPihsfK0LCPV94NUxICvBAQcPDo5dnbTs6e/dw
+         k4ktx1a4Q9qFRx/R1C0y8iGCMF9s/DL7cHPv0JEtr0ZXiM8C8VXbCEpkEHCIFiythHRc
+         jhmQ==
+X-Gm-Message-State: ACgBeo2cg3w51FazbtAbm9oU8Gqv9fRUfI9YClvplqYN7B7maajwIfNg
+        G5EzKrO1xKPykBM+c112eYbLBZjy19/cLZAM9r++do0yMZ0=
+X-Google-Smtp-Source: AA6agR6W986Sl3YkCKIGso9iEy5VyE1ic/Mx10Iso5iivFtJnBsPgRN21CKXWch+AY1iGVom6ZR0doWkpT/b6MOU390=
+X-Received: by 2002:a25:230d:0:b0:6a9:1d4d:6594 with SMTP id
+ j13-20020a25230d000000b006a91d4d6594mr28014766ybj.616.1663087943592; Tue, 13
+ Sep 2022 09:52:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913101237.4337-1-vidyas@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <cover.1662724786.git.namcaov@gmail.com> <c3a7d9963b1c38c5f493786d7268c430617412dd.1662724786.git.namcaov@gmail.com>
+ <Yxt/3FOysEbwCm9T@kroah.com> <CA+sZ8B8Y1ZGou1Y4tQYJC1Wp_2MVdYKO0Bd3SfxMAU1DF+mz_g@mail.gmail.com>
+ <Yx2NY0RBWLqH3rDK@kroah.com>
+In-Reply-To: <Yx2NY0RBWLqH3rDK@kroah.com>
+From:   Nam Cao <namcaov@gmail.com>
+Date:   Tue, 13 Sep 2022 18:52:12 +0200
+Message-ID: <CA+sZ8B8-hsNXY-nFffvGMLJXmsAa9L+gnEK1ZdC7PztG1dd03Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] staging: vt6655: remove unnecessary volatile qualifier
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> not having an endpoint connected to the slot is not an error.
-> So, changing the macro from dev_err to dev_info to log the event.
-> 
+On Sun, Sep 11, 2022 at 9:25 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Sep 11, 2022 at 09:12:44AM +0200, Nam Cao wrote:
+> > On Fri, Sep 9, 2022 at 8:03 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Fri, Sep 09, 2022 at 02:17:55PM +0200, Nam Cao wrote:
+> > > > Remove volatile qualifier for the member rd0 of struct vnt_rx_desc,
+> > > > because there is no reason it must be volatile.
+> > > >
+> > > > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > > > ---
+> > > >  drivers/staging/vt6655/desc.h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/staging/vt6655/desc.h b/drivers/staging/vt6655/desc.h
+> > > > index 17a40c53b8ff..3f0f287b1693 100644
+> > > > --- a/drivers/staging/vt6655/desc.h
+> > > > +++ b/drivers/staging/vt6655/desc.h
+> > > > @@ -182,7 +182,7 @@ struct vnt_rdes1 {
+> > > >
+> > > >  /* Rx descriptor*/
+> > > >  struct vnt_rx_desc {
+> > > > -     volatile struct vnt_rdes0 rd0;
+> > > > +     struct vnt_rdes0 rd0;
+> > >
+> > > You can not just remove this without describing _WHY_ it is ok to do so.
+> > >
+> > > Have you properly determined why it is, or is not, ok to use volatile
+> > > here?
+> >
+> > I did not carefully look at the volatile usage here. After looking at it
+> > again, using volatile is actually valid: the structure resides on coherent
+> > memory.
+>
+> Are you sure?  That's a very odd thing for a driver to need.  Looks like
+> they are allocating some dma memory and then pointing structures on top
+> of that memory.  Why would you need to have "volatile" markings on a
+> structure definition for that?
 
-But the link up not happening is an actual error and -ETIMEDOUT is being
-returned. So I don't think the log severity should be changed.
+These structures are the ring buffer descriptors, which are dma-mapped and
+their values may be changed by the hardware. For example, the field "owner" of
+struct vnt_rdes0 is set to OWNED_BY_NIC by CPU, and then set to OWNED_BY_HOST
+by hardware when new data arrives (at least that's why I can guess based on
+the codes). So I think volatile is needed.
 
-Thanks,
-Mani
+Please let me know if you think I'm wrong, because I have just recently
+educated myself on DMA mapping.
 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 650a7f22f9d0..25154555aa7a 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
->  	}
->  
->  	if (retries >= LINK_WAIT_MAX_RETRIES) {
-> -		dev_err(pci->dev, "Phy link never came up\n");
-> +		dev_info(pci->dev, "Phy link never came up\n");
->  		return -ETIMEDOUT;
->  	}
->  
-> -- 
-> 2.17.1
-> 
+Best regards,
+Nam
