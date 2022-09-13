@@ -2,149 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B74C5B7D8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E815B7D52
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiIMXhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S229669AbiIMXEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIMXg5 (ORCPT
+        with ESMTP id S229586AbiIMXEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:36:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243C33E3C;
-        Tue, 13 Sep 2022 16:36:56 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DNMRi9016447;
-        Tue, 13 Sep 2022 23:36:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=QDluYs9EIrWXj5kwYq7EJZq+XOtXveaKEk1PTPlIhsk=;
- b=YcoCMWZS41WvZftzE7mBuQO6ToHgy1Rwn5kg2ijWizmAO2ITAC/CidkSztk4pXS28ZVk
- bD3PZsOFLt7xtNXLkMmme4Pr1V5YUO/r/AmMzocl79X/z9tWApjrxGHyrUO6SP/JhOgw
- Af2r7D6nmGY1pnUUawNVuFEnLnF+nSai5mebq+e4dK4bU4Ba9e86XRhH2LQ0v+oLJakL
- duwLajymcbq++xuULVoQ39z5eeTKKNBl2RhghmwMfDto+K0supA1dp/uwOiDSup8GHJH
- xDWCJTs0FzTL6r/uD5GMtwYGC9iLH8xAyqw1ri3cTLpwvTzKCG48DPX21Chbsz2p/B+1 +A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymgn79-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 23:36:40 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28DN1Onp000852;
-        Tue, 13 Sep 2022 23:01:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jjqbt2j7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 23:01:24 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DN0TVc032424;
-        Tue, 13 Sep 2022 23:01:24 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 28DN1OxS000846
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 23:01:24 +0000
-Received: from [10.111.167.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
- 2022 16:01:21 -0700
-Message-ID: <2ce64f0a-8e31-4019-8d3e-49ca3ddd4766@quicinc.com>
-Date:   Tue, 13 Sep 2022 16:01:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH] drm/msm: Fix return type of
- mdp4_lvds_connector_mode_valid
-Content-Language: en-US
-To:     Nathan Huckleberry <nhuck@google.com>
-CC:     <freedreno@lists.freedesktop.org>,
-        Dan Carpenter <error27@gmail.com>,
-        David Airlie <airlied@linux.ie>, Tom Rix <trix@redhat.com>,
-        <llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-References: <20220913205551.155128-1-nhuck@google.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220913205551.155128-1-nhuck@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
-X-Proofpoint-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_10,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209130109
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 19:04:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B02319281
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:04:40 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b14-20020a056902030e00b006a827d81fd8so11382644ybs.17
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=VoIodNAnmmutIkoqOpnBoW0YBXYHtgCdR1yf8yeK5IQ=;
+        b=keReOhtGhNji5tpwnM1NBgoLrnTcw0fB05edrdBxdXd89kfrGDmh9S+lIJO8X70vyW
+         X4GjgmPzU4uLtqi9XWWUbzu8WPf/9dQ3IbCTMo7m3ENFp8NIRL5UMmVvyqLyR+6moG/C
+         Trl4CnP+H+2TckeDnVWjII67+zTZFKhADz8B3t9A5yd4hinzfXWl9YlK39WEKEYdhaXu
+         NHL5u+cLCQ3e6Sv+ZYYX8IoXZ+tn5ztv/RHryVg7xr7/U+i1bn2EceKQ9Qtc2S5gy11/
+         QC19KAOC+I/Qxv4O8YWJxq3xB2D1U7+HSjOGGmb2C03FwQOvVg2ShEoCLcTLDf2gcVHm
+         10tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=VoIodNAnmmutIkoqOpnBoW0YBXYHtgCdR1yf8yeK5IQ=;
+        b=CKF6DDkG0e5JEbQjw4F5QKVqB3+L+0kaAQzfGSFYjot3NRbN3hrPOvBbl/8+w7+h49
+         ytF0S7uTgIjyItxoPs4ZVVZ5C3EOrD8NJt/9AVjhkCVRRgYMTJUlS6KG2lkySmNaOL+2
+         9v1UoeJ7R+rUjIq8AhyuG1un47+NAg6bxFdZYfy9TQ6IwX5Hdh8OAIWsv0tkoE/+8tWO
+         VCmdt+w13uWKm6QekcCrZD1Fudx1PbHlQiP1PQQS0irhpjA+gdMdXARzfl70fdJ2a7lM
+         XrzLSyjZQUoWsGM0KHgtG7Bb21r9Fx/tobskR3UqSFyq8oZy/oAjVNaCZB6LbaRygTPE
+         3i6Q==
+X-Gm-Message-State: ACgBeo1Ej91K+9wS2ew6ekSJFN07lW5A+YUuenC5FQDFdJNaODc80/4+
+        l4dypDKIvNgHKOO973yiiZz9vCj5Ew==
+X-Google-Smtp-Source: AA6agR6kRk1tNy6FLgwlWguPj9/VwK8Nu6tWQw7CkASTOM2LQwF+7naqkL6EsbmyXuuaDYitWR62XutLSQ==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a25:8a85:0:b0:671:715e:a1b0 with SMTP id
+ h5-20020a258a85000000b00671715ea1b0mr27208374ybl.98.1663110279353; Tue, 13
+ Sep 2022 16:04:39 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 16:04:12 -0700
+In-Reply-To: <YyEFu8uzoxK64p0Y@dev-arch.thelio-3990X>
+Mime-Version: 1.0
+References: <YyEFu8uzoxK64p0Y@dev-arch.thelio-3990X>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220913230412.225957-1-nhuck@google.com>
+Subject: [PATCH v2] staging: octeon: Fix return type of cvm_oct_xmit and cvm_oct_xmit_pow
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     nathan@kernel.org
+Cc:     error27@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        llvm@lists.linux.dev, ndesaulniers@google.com, nhuck@google.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-Thanks for the patch.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-On 9/13/2022 1:55 PM, Nathan Huckleberry wrote:
-> The mode_valid field in drm_connector_helper_funcs is expected to be of
-> type:
-> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
->                                       struct drm_display_mode *mode);
-> 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
-> 
-> The return type of mdp4_lvds_connector_mode_valid should be changed from
-> int to enum drm_mode_status.
-> 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
+from int to netdev_tx_t.
 
- From what I can see this one has been this way since lvds support was 
-added. Hence this should have
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-Fixes: 3e87599b68e7 ("drm/msm/mdp4: add LVDS panel support")
+Changes v1 -> v2:
+ - Update function signatures in ethernet-tx.h.
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> index 7288041dd86a..7444b75c4215 100644
-> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
->   	return ret;
->   }
->   
-> -static int mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
-> -				 struct drm_display_mode *mode)
-> +static enum drm_mode_status
-> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
-> +			       struct drm_display_mode *mode)
->   {
->   	struct mdp4_lvds_connector *mdp4_lvds_connector =
->   			to_mdp4_lvds_connector(connector);
+---
+ drivers/staging/octeon/ethernet-tx.c | 4 ++--
+ drivers/staging/octeon/ethernet-tx.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/octeon/ethernet-tx.c b/drivers/staging/octeon/ethernet-tx.c
+index 1ad94c5060b5..a36e36701c74 100644
+--- a/drivers/staging/octeon/ethernet-tx.c
++++ b/drivers/staging/octeon/ethernet-tx.c
+@@ -125,7 +125,7 @@ static void cvm_oct_free_tx_skbs(struct net_device *dev)
+  *
+  * Returns Always returns NETDEV_TX_OK
+  */
+-int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	union cvmx_pko_command_word0 pko_command;
+ 	union cvmx_buf_ptr hw_buffer;
+@@ -506,7 +506,7 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
+  * @dev:    Device info structure
+  * Returns Always returns zero
+  */
+-int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct octeon_ethernet *priv = netdev_priv(dev);
+ 	void *packet_buffer;
+diff --git a/drivers/staging/octeon/ethernet-tx.h b/drivers/staging/octeon/ethernet-tx.h
+index 78936e9b33b0..6c524668f65a 100644
+--- a/drivers/staging/octeon/ethernet-tx.h
++++ b/drivers/staging/octeon/ethernet-tx.h
+@@ -5,8 +5,8 @@
+  * Copyright (c) 2003-2007 Cavium Networks
+  */
+ 
+-int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
+-int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
++netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
++netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
+ int cvm_oct_transmit_qos(struct net_device *dev, void *work_queue_entry,
+ 			 int do_free, int qos);
+ void cvm_oct_tx_initialize(void);
+-- 
+2.37.2.789.g6183377224-goog
+
