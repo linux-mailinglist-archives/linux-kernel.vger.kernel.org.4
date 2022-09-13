@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F2D5B7933
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE8E5B7934
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiIMSLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        id S231994AbiIMSMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbiIMSLN (ORCPT
+        with ESMTP id S231749AbiIMSLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:11:13 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E717436B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b75so7150118pfb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
+        Tue, 13 Sep 2022 14:11:22 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187B779EC9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:04 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id v1so12502509plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=PvnL+9cGl2OZT8JmDVYUgH6KLMONpy7QbVIbld3HZFU=;
-        b=j3yjGxUKh7EVbd/drrPml3FFgsu3DnYW8P+O2OaGRYDdqd3l137D7BK70Pf8P/24UP
-         dMxhOL4B8tYRjki/wGriHL4u6ehhm1PYBVxBrikecmI28KWGeL3EKHS1ypANQtFIbLkw
-         VHRWxMT6SLNe3SMd1Y0HnS7hfmk4PsDowqW7SeQQ5hL0L9TIbEwgfjVEtakLkWHUgFoL
-         QzFAhlbH5vidkGrl3jzkrO4f3KtmEauIsGmMl+jrDuTLSXmDxQPTZvKxuGPrl0C4XtOJ
-         7ktOc3rR1MdJjhdOt4h2PGiB6FmW5ETm00zr9btBRywo3X9QSB2dh72Wwm7CxdJvFjM6
-         NWqw==
+        bh=3ZodDSu6Cw5hgKhb4h9fYDsQ0BBEjxdpwaIiLy4Endc=;
+        b=RAdhZsbxcXy9FNvxHeLOh50hx7eC9LAPfpuSPoZggO0QhJdrVW+IcJ3UgIVjAIM2TZ
+         ss3TwsJgXUTGZWLTULS7aM166J6Dn/RyMsmVHuJu1NW6aYXCU+sI41nAe+27GSZqE9p0
+         f0MVv0MBHctbYJOAUnhIsKv/RXCNoa3/OFf31x/BhyElHAZgGE3kIycQC5z648KACPFj
+         aMNi8z/Ic1J21tMSr709IYAbdXi/7Mvs1DNaj2QyMQfbESJ54sPbwh41NUZQeBYmXF/w
+         8yZx0rGqsOUwEofguW05YvyUd13zDVdDX/wQykmokSiAy9jsoJTQ9/G2h+nES3hiKEyj
+         htpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=PvnL+9cGl2OZT8JmDVYUgH6KLMONpy7QbVIbld3HZFU=;
-        b=Q/V/ymo0p3w3cxbE5G25XLtGkkfMLFXCw2Kw8XrrnPnPUQVMkD1rk5ApkrFEx87Vfc
-         ZWL5UXP7kXKSZl79+sSpFB7okQQAB1Swn8ukILWDfBsnRwfn7tkW0fpmugxeCwacpsTu
-         RuL2YYsLMzuwFSosehKuRtpUbdYcYR0I2yG4vAjXPIWwZKIzVX236BLYsNeTYWyWR1ld
-         g5kISgdQTCt69H0YOc77G8JFY5PIDuq2zU/IP8QOVj+dO3Ir+uWBcrul6m3GZLbK0NdW
-         DNag+rL9ObQ5iqnpm4682L4kZcsE8y0mTmJShI+gIgoAeDFhOpKUL/LQU1wpZCmthZz0
-         Q9iw==
-X-Gm-Message-State: ACgBeo0M9kfnNPIj5GtpJ+OjL/UDdQp2HfT6GRqy5xpOhc1uvyMbehfB
-        VeidU+c3QMMQR7pRXdGkzJZ28xVMBeBX5Q==
-X-Google-Smtp-Source: AA6agR6B/WSFLIxR901//HPrAt3VSA3sOqUTNRD0eNW0Z+2tGsFw55Mv/bRaEXkKYDPo2/O0ISVF0g==
-X-Received: by 2002:a05:6a00:21d1:b0:542:b916:c48f with SMTP id t17-20020a056a0021d100b00542b916c48fmr13625403pfj.56.1663089482159;
-        Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
+        bh=3ZodDSu6Cw5hgKhb4h9fYDsQ0BBEjxdpwaIiLy4Endc=;
+        b=6IWL4dfH3SFoE2KyZY+ER3/0+GzTRv95MZ6vonpfa12bpkFW6IxuJmb7OE9p0tIhgD
+         jyBT4WNiZjxZMNi/6d4geiA4xUkI5ypxUNmEZBs80PUn2Bp8IiJw0hIyjTqoHSCXVS+r
+         jrwN2wUMk3uWZaFEtS45o4TGPQALyEzToNeELcjMY7QwLD98i5k5XhFKZaW2ENgTlJ9d
+         X7GvPm38b3OrRXkbiQ243nl48WLQl+2uxaWcdLuGRE6X0tZv+7AGTLiFOGvBx/+zgd6h
+         ckwmgpsWePWyiOJZh9LY7nkgqqrd4EqVzoBRS985o+B4Y7NXQczqIZ2vB82LHUeUwVpx
+         M47A==
+X-Gm-Message-State: ACrzQf266EVDUI1Hro3UV9xEfsBavtpVqj62W23cJ5PilBoESaA9NWnI
+        LJha3WtzkeXJWf9GJcmbr6mHFp4k8ptAjg==
+X-Google-Smtp-Source: AMsMyM5YvOwt78O+hZ4wxWriRsafI7QgmSTmB6I//55n/kYzrhAa7rSVgFfXAffFia5CzE0NVm6SiA==
+X-Received: by 2002:a17:90a:39c9:b0:1fa:c50d:11f4 with SMTP id k9-20020a17090a39c900b001fac50d11f4mr314167pjf.166.1663089483248;
+        Tue, 13 Sep 2022 10:18:03 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.18.00
+        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.18.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 10:18:01 -0700 (PDT)
+        Tue, 13 Sep 2022 10:18:02 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
         Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
-Subject: [PATCH 2/3] vmw_balloon: exit if initalization fails
-Date:   Tue, 13 Sep 2022 02:43:05 -0700
-Message-Id: <20220913094306.317734-3-namit@vmware.com>
+Subject: [PATCH 3/3] vmw_balloon: open-code vmballoon_compaction_init()
+Date:   Tue, 13 Sep 2022 02:43:06 -0700
+Message-Id: <20220913094306.317734-4-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913094306.317734-1-namit@vmware.com>
 References: <20220913094306.317734-1-namit@vmware.com>
@@ -75,105 +75,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-In certain VMware hypervisor variants the balloon might not be
-supported. In such cases initialization would fail, but resources would
-keep being unnecessarily wasted. The balloon driver would retry
-reinitialization every second for no reason.
+Following commit 68f2736a85832 ("mm: Convert all PageMovable users to
+movable_operations"), the code of vmballoon_compaction_init() is very
+simple and does not worth a separate function.
 
-Initialize the balloon once during init, before starting the worker. If
-initialization fails, put out a message and fail gracefully.
+Instead, open code vmballoon_compaction_init. As migratepage is always
+defined, use IS_ENABLED(), which makes the code easier to read. No
+functional change is intended.
 
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- drivers/misc/vmw_balloon.c | 37 ++++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 13 deletions(-)
+ drivers/misc/vmw_balloon.c | 26 +++-----------------------
+ 1 file changed, 3 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 7fa91983c567..762442b9ece8 100644
+index 762442b9ece8..46212cd09854 100644
 --- a/drivers/misc/vmw_balloon.c
 +++ b/drivers/misc/vmw_balloon.c
-@@ -1416,7 +1416,7 @@ static void vmballoon_pop(struct vmballoon *b)
-  * is not  empty) and then restarting protocol. This operation normally
-  * happens when host responds with VMW_BALLOON_ERROR_RESET to a command.
-  */
--static void vmballoon_reset(struct vmballoon *b)
-+static int vmballoon_reset(struct vmballoon *b)
- {
- 	int error;
- 
-@@ -1427,11 +1427,13 @@ static void vmballoon_reset(struct vmballoon *b)
- 	/* free all pages, skipping monitor unlock */
- 	vmballoon_pop(b);
- 
--	if (vmballoon_send_start(b, VMW_BALLOON_CAPABILITIES))
-+	error = vmballoon_send_start(b, VMW_BALLOON_CAPABILITIES);
-+	if (error)
- 		goto unlock;
- 
- 	if ((b->capabilities & VMW_BALLOON_BATCHED_CMDS) != 0) {
--		if (vmballoon_init_batching(b)) {
-+		error = vmballoon_init_batching(b);
-+		if (error) {
- 			/*
- 			 * We failed to initialize batching, inform the monitor
- 			 * about it by sending a null capability.
-@@ -1448,8 +1450,7 @@ static void vmballoon_reset(struct vmballoon *b)
- 	vmballoon_stats_gen_inc(b, VMW_BALLOON_STAT_RESET);
- 	WRITE_ONCE(b->reset_required, false);
- 
--	error = vmballoon_vmci_init(b);
--	if (error)
-+	if (vmballoon_vmci_init(b))
- 		pr_err_once("failed to initialize vmci doorbell\n");
- 
- 	if (vmballoon_send_guest_id(b))
-@@ -1457,6 +1458,7 @@ static void vmballoon_reset(struct vmballoon *b)
- 
- unlock:
- 	up_write(&b->conf_sem);
-+	return error;
+@@ -1848,28 +1848,6 @@ static int vmballoon_migratepage(struct balloon_dev_info *b_dev_info,
+ 	return ret;
  }
  
- /**
-@@ -1879,6 +1881,23 @@ static int __init vmballoon_init(void)
- 	if (x86_hyper_type != X86_HYPER_VMWARE)
- 		return -ENODEV;
- 
-+	INIT_LIST_HEAD(&balloon.huge_pages);
-+	spin_lock_init(&balloon.comm_lock);
-+	init_rwsem(&balloon.conf_sem);
-+	balloon.vmci_doorbell = VMCI_INVALID_HANDLE;
-+	balloon.batch_page = NULL;
-+	balloon.page = NULL;
-+	balloon.reset_required = true;
-+
-+	/*
-+	 * Reset the balloon to check that it is indeed supported.
-+	 */
-+	error = vmballoon_reset(&balloon);
-+	if (error) {
-+		pr_err("memory ballooning is disabled");
-+		goto fail;
-+	}
-+
- 	INIT_DELAYED_WORK(&balloon.dwork, vmballoon_work);
- 
- 	error = vmballoon_register_shrinker(&balloon);
-@@ -1892,14 +1911,6 @@ static int __init vmballoon_init(void)
- 	balloon_devinfo_init(&balloon.b_dev_info);
- 	vmballoon_compaction_init(&balloon);
- 
--	INIT_LIST_HEAD(&balloon.huge_pages);
--	spin_lock_init(&balloon.comm_lock);
--	init_rwsem(&balloon.conf_sem);
--	balloon.vmci_doorbell = VMCI_INVALID_HANDLE;
--	balloon.batch_page = NULL;
--	balloon.page = NULL;
--	balloon.reset_required = true;
+-/**
+- * vmballoon_compaction_init() - initialized compaction for the balloon.
+- *
+- * @b: pointer to the balloon.
+- *
+- * If during the initialization a failure occurred, this function does not
+- * perform cleanup. The caller must call vmballoon_compaction_deinit() in this
+- * case.
+- *
+- * Return: zero on success or error code on failure.
+- */
+-static __init void vmballoon_compaction_init(struct vmballoon *b)
+-{
+-	b->b_dev_info.migratepage = vmballoon_migratepage;
+-}
 -
+-#else /* CONFIG_BALLOON_COMPACTION */
+-static inline void vmballoon_compaction_init(struct vmballoon *b)
+-{
+-}
+-#endif /* CONFIG_BALLOON_COMPACTION */
+-
+ static int __init vmballoon_init(void)
+ {
+ 	int error;
+@@ -1909,7 +1887,9 @@ static int __init vmballoon_init(void)
+ 	 * balloon_devinfo_init() .
+ 	 */
+ 	balloon_devinfo_init(&balloon.b_dev_info);
+-	vmballoon_compaction_init(&balloon);
++
++	if (IS_ENABLED(CONFIG_BALLOON_COMPACTION))
++		b->b_dev_info.migratepage = vmballoon_migratepage;
+ 
  	queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
  
- 	vmballoon_debugfs_init(&balloon);
 -- 
 2.25.1
 
