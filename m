@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896405B7D81
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8BB5B7D82
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiIMXYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S229814AbiIMX0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIMXYR (ORCPT
+        with ESMTP id S229456AbiIMX0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:24:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9778227DE6;
-        Tue, 13 Sep 2022 16:24:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 13 Sep 2022 19:26:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4907171701;
+        Tue, 13 Sep 2022 16:26:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 111195C81A;
-        Tue, 13 Sep 2022 23:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663111455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lCZbTt8MqzDxXBhNECVaeYq92wrfjuXQyXb1QCL9L08=;
-        b=xlbgGCcX1vaqfVo0T7/7HHkGJClHbYwVmCkEjYU+yukwvWlmi/KV4I9oCfaEa4wMX0rAE+
-        SEsmeldoOIOeCxP5qYRC+CdkHQdKTtaC4+4AbfA5fyhqvZZp3SIKD2vcprwsRNYTCxFz9M
-        JLUB3aTflnqVKCKYq+IrL7uyVXYqhBc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663111455;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lCZbTt8MqzDxXBhNECVaeYq92wrfjuXQyXb1QCL9L08=;
-        b=f3V4jz9cjD4/+YabArl2nlr3TvCKBf+HRA2DIYhIcYM7hGDyhFP9+9JyddEfjRtGauQ9MS
-        eeY+o8dgRHryQzBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5AC313AB5;
-        Tue, 13 Sep 2022 23:24:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DEmgFxYRIWMlZgAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 13 Sep 2022 23:24:06 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2D9BB8117D;
+        Tue, 13 Sep 2022 23:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA731C433D6;
+        Tue, 13 Sep 2022 23:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663111568;
+        bh=MKctTCCNB0zUHFjYAFLnoWEYFaMOJC3oZ8vlBp9GnrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=En+foSMdKI8Cm8iTxy3UXjB0XEFCrepqECzxWueLigjoRHXBzHkbaVNaKVMpRJTYF
+         gYiLEZb4sVQLj0BkH3s9jiXTtX/QZjTVnZnABCaW8/4OubH+THJrxKF1Gd9WUnOCMS
+         Y/sMQ8XW18aKmN52aVxdeoVh2igiNs0bZM5ixvYd5GCP/eUNbwVl2e/hsNTV+uOjYo
+         u24C4q72ArBYHA+blb6JhpKCZvb8rDjdZxmCEQuRm6wUXn6JlbqA6pVswoxoC4mj1V
+         7JJS+nXBHr125rUu874rnRQHdVIh+lTZgyNx+17Z4kpDfohOrEol6lj34kfqG4kVDt
+         49X9IX4ziNShg==
+Date:   Tue, 13 Sep 2022 16:26:06 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] openvswitch: Change the return type for vport_ops.send
+ function hook to int
+Message-ID: <YyERjpSlz+MVCULd@dev-arch.thelio-3990X>
+References: <20220913230739.228313-1-nhuck@google.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Dave Chinner" <david@fromorbit.com>,
-        "Trond Myklebust" <trondmy@hammerspace.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>
-References: <91e31d20d66d6f47fe12c80c34b1cffdfc202b6a.camel@hammerspace.com>,
- <166268467103.30452.1687952324107257676@noble.neil.brown.name>,
- <166268566751.30452.13562507405746100242@noble.neil.brown.name>,
- <29a6c2e78284e7947ddedf71e5cb9436c9330910.camel@hammerspace.com>,
- <8d638cb3c63b0d2da8679b5288d1622fdb387f83.camel@hammerspace.com>,
- <166270570118.30452.16939807179630112340@noble.neil.brown.name>,
- <33d058be862ccc0ccaf959f2841a7e506e51fd1f.camel@kernel.org>,
- <166285038617.30452.11636397081493278357@noble.neil.brown.name>,
- <2e34a7d4e1a3474d80ee0402ed3bc0f18792443a.camel@kernel.org>,
- <166302538820.30452.7783524836504548113@noble.neil.brown.name>,
- <20220913011518.GE3600936@dread.disaster.area>,
- <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>
-Date:   Wed, 14 Sep 2022 09:24:02 +1000
-Message-id: <166311144203.20483.1888757883086697314@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913230739.228313-1-nhuck@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022, Jeff Layton wrote:
->
-> At that point, bumping i_version both before and after makes a bit more
-> sense, since it better ensures that a change will be noticed, whether
-> the related read op comes before or after the statx.
+On Tue, Sep 13, 2022 at 04:07:38PM -0700, Nathan Huckleberry wrote:
+> All usages of the vport_ops struct have the .send field set to
+> dev_queue_xmit or internal_dev_recv.  Since most usages are set to
+> dev_queue_xmit, the function hook should match the signature of
+> dev_queue_xmit.
+> 
+> The only call to vport_ops->send() is in net/openvswitch/vport.c and it
+> throws away the return value.
+> 
+> This mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+> 
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-How does bumping it before make any sense at all?  Maybe it wouldn't
-hurt much, but how does it help anyone at all?
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-  i_version must appear to change no sooner than the change it reflects
-  becomes visible and no later than the request which initiated that
-  change is acknowledged as complete.
-
-Why would that definition ever not be satisfactory?
-
-NeilBrown
+> ---
+>  net/openvswitch/vport-internal_dev.c | 2 +-
+>  net/openvswitch/vport.h              | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/openvswitch/vport-internal_dev.c b/net/openvswitch/vport-internal_dev.c
+> index 35f42c9821c2..74c88a6baa43 100644
+> --- a/net/openvswitch/vport-internal_dev.c
+> +++ b/net/openvswitch/vport-internal_dev.c
+> @@ -190,7 +190,7 @@ static void internal_dev_destroy(struct vport *vport)
+>  	rtnl_unlock();
+>  }
+>  
+> -static netdev_tx_t internal_dev_recv(struct sk_buff *skb)
+> +static int internal_dev_recv(struct sk_buff *skb)
+>  {
+>  	struct net_device *netdev = skb->dev;
+>  
+> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+> index 7d276f60c000..6ff45e8a0868 100644
+> --- a/net/openvswitch/vport.h
+> +++ b/net/openvswitch/vport.h
+> @@ -132,7 +132,7 @@ struct vport_ops {
+>  	int (*set_options)(struct vport *, struct nlattr *);
+>  	int (*get_options)(const struct vport *, struct sk_buff *);
+>  
+> -	netdev_tx_t (*send) (struct sk_buff *skb);
+> +	int (*send)(struct sk_buff *skb);
+>  	struct module *owner;
+>  	struct list_head list;
+>  };
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
