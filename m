@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B585B71D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD12D5B7202
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiIMOqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S231530AbiIMOrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234455AbiIMOnh (ORCPT
+        with ESMTP id S234565AbiIMOn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0D1ADA2;
-        Tue, 13 Sep 2022 07:23:09 -0700 (PDT)
+        Tue, 13 Sep 2022 10:43:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C496EF38;
+        Tue, 13 Sep 2022 07:23:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3A5E614DD;
-        Tue, 13 Sep 2022 14:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD8D6C433D7;
-        Tue, 13 Sep 2022 14:21:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE504B80E22;
+        Tue, 13 Sep 2022 14:23:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 482FEC433D6;
+        Tue, 13 Sep 2022 14:23:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078906;
-        bh=HS2roA9G01cpdQH+6ACcYZ8syFpKwUpCdVOO2iIMwL8=;
+        s=korg; t=1663079015;
+        bh=UI+gRuv3zcDmPY0ND7q4jXM2pRFR+veYZDyYtkFqn/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CfaPzT0neyo87N65iyIIk9zDEuwVFhqjBYdvkJ3ju6cWVFRlRdxJw84tDhtgTZew8
-         B3J8ALEgn3KFWup4me7FdITW90vUhAE1hQlNctTOUM32OcCcvBX4oytyb5vww07hiY
-         5DSIWkSYHA6VcZoUC6RHJ9+S6ab9ApJ4rPC966NQ=
+        b=pxk4xNudGlRlt5SiVD98GT4DrmEki2HvSHEsDc9j0K/SAvjt5m3P1tbHnQtwzKlCx
+         bszeNT07iJERqyDdXpg7HbyUDtEj9uQXvaDgA/m5PaLnsiFR79c4Uk/lu5E/Ryyv9M
+         SNNTpdodmkEoXoe466uRLApNQmKe39iI5sOZwDG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 102/121] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
-Date:   Tue, 13 Sep 2022 16:04:53 +0200
-Message-Id: <20220913140401.736044368@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+5fcdbfab6d6744c57418@syzkaller.appspotmail.com,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 49/79] netfilter: nf_tables: clean up hook list when offload flags check fails
+Date:   Tue, 13 Sep 2022 16:04:54 +0200
+Message-Id: <20220913140352.621056306@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 5c5c2baad2b55cc0a4b190266889959642298f79 upstream.
+[ Upstream commit 77972a36ecc4db7fc7c68f0e80714263c5f03f65 ]
 
-A recent change in clang strengthened its -Wbitfield-constant-conversion
-to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
-only be 0 or -1, not 1:
+splice back the hook list so nft_chain_release_hook() has a chance to
+release the hooks.
 
-  sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
-          dev->gclk_enabled = 1;
-                            ^ ~
-  1 error generated.
+BUG: memory leak
+unreferenced object 0xffff88810180b100 (size 96):
+  comm "syz-executor133", pid 3619, jiffies 4294945714 (age 12.690s)
+  hex dump (first 32 bytes):
+    28 64 23 02 81 88 ff ff 28 64 23 02 81 88 ff ff  (d#.....(d#.....
+    90 a8 aa 83 ff ff ff ff 00 00 b5 0f 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff83a8c59b>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff83a8c59b>] nft_netdev_hook_alloc+0x3b/0xc0 net/netfilter/nf_tables_api.c:1901
+    [<ffffffff83a9239a>] nft_chain_parse_netdev net/netfilter/nf_tables_api.c:1998 [inline]
+    [<ffffffff83a9239a>] nft_chain_parse_hook+0x33a/0x530 net/netfilter/nf_tables_api.c:2073
+    [<ffffffff83a9b14b>] nf_tables_addchain.constprop.0+0x10b/0x950 net/netfilter/nf_tables_api.c:2218
+    [<ffffffff83a9c41b>] nf_tables_newchain+0xa8b/0xc60 net/netfilter/nf_tables_api.c:2593
+    [<ffffffff83a3d6a6>] nfnetlink_rcv_batch+0xa46/0xd20 net/netfilter/nfnetlink.c:517
+    [<ffffffff83a3db79>] nfnetlink_rcv_skb_batch net/netfilter/nfnetlink.c:638 [inline]
+    [<ffffffff83a3db79>] nfnetlink_rcv+0x1f9/0x220 net/netfilter/nfnetlink.c:656
+    [<ffffffff83a13b17>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+    [<ffffffff83a13b17>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
+    [<ffffffff83a13fd6>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
+    [<ffffffff83865ab6>] sock_sendmsg_nosec net/socket.c:714 [inline]
+    [<ffffffff83865ab6>] sock_sendmsg+0x56/0x80 net/socket.c:734
+    [<ffffffff8386601c>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2482
+    [<ffffffff8386a918>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2536
+    [<ffffffff8386aaa8>] __sys_sendmsg+0x88/0x100 net/socket.c:2565
+    [<ffffffff845e5955>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845e5955>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-The actual value of the field is never checked, just that it is not
-zero, so there is not a real bug here. However, it is simple enough to
-silence the warning by making the bitfield unsigned, which matches the
-mchp-spdifrx driver.
-
-Fixes: 06ca24e98e6b ("ASoC: mchp-spdiftx: add driver for S/PDIF TX Controller")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1686
-Link: https://github.com/llvm/llvm-project/commit/82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20220810010809.2024482-1-nathan@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d54725cd11a5 ("netfilter: nf_tables: support for multiple devices per netdev hook")
+Reported-by: syzbot+5fcdbfab6d6744c57418@syzkaller.appspotmail.com
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/mchp-spdiftx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_tables_api.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/sound/soc/atmel/mchp-spdiftx.c
-+++ b/sound/soc/atmel/mchp-spdiftx.c
-@@ -196,7 +196,7 @@ struct mchp_spdiftx_dev {
- 	struct clk				*pclk;
- 	struct clk				*gclk;
- 	unsigned int				fmt;
--	int					gclk_enabled:1;
-+	unsigned int				gclk_enabled:1;
- };
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 1b039476e4d6a..b8e7e1c5c08a8 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -1971,8 +1971,10 @@ static int nft_basechain_init(struct nft_base_chain *basechain, u8 family,
+ 	chain->flags |= NFT_CHAIN_BASE | flags;
+ 	basechain->policy = NF_ACCEPT;
+ 	if (chain->flags & NFT_CHAIN_HW_OFFLOAD &&
+-	    !nft_chain_offload_support(basechain))
++	    !nft_chain_offload_support(basechain)) {
++		list_splice_init(&basechain->hook_list, &hook->list);
+ 		return -EOPNOTSUPP;
++	}
  
- static inline int mchp_spdiftx_is_running(struct mchp_spdiftx_dev *dev)
+ 	flow_block_init(&basechain->flow_block);
+ 
+-- 
+2.35.1
+
 
 
