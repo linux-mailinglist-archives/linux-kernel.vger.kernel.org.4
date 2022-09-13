@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246C05B69BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C4E5B69C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiIMIkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S230312AbiIMIlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiIMIjn (ORCPT
+        with ESMTP id S231359AbiIMIlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:39:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EE662E9;
-        Tue, 13 Sep 2022 01:39:38 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRcGY3Gx7zNm7c;
-        Tue, 13 Sep 2022 16:35:01 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Tue, 13 Sep 2022 04:41:07 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BFC1E3F5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:41:03 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D88iXB007635;
+        Tue, 13 Sep 2022 01:40:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PPS06212021;
+ bh=UDsHn+9Q4/Sb44o7PGK24bSEg208rNW403NXgpY8lDE=;
+ b=bG8XvUx2kRU1NezMtCDLmeiDknljQmkek+28NZ+9QUlOc59/TVphcTUhrEWRqy7WXhuY
+ ALjqBhIt1d/IaemuryxqQLS6ZwX6SoW8piAEkRZ37oNY8fhFT0zZ7CEKZxj+PAUOP08f
+ NwcDYo/EmWd2CBqSlaVLz7KZMvW2A+Df4qzmw0oO638+gsY3FWy89JMIvgcFciaZBXoo
+ BpHIGYdnQ00JnfD79lD6rci0QzjgWB+D0pS6MLkhRCOT26WYZrGP6mPEn/7x2mMH2hVY
+ cWwa6AUftwLV6BAov90puZSJRnXyNj183hCH9d0IpyDKW/5M2yCqLgTznpK/iC2SbuPA ew== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3jgnv6at2s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 13 Sep 2022 01:40:26 -0700
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 13 Sep 2022 16:39:36 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 13 Sep 2022 16:39:35 +0800
-Message-ID: <67867ce9-55f5-e81f-ada9-ea22d31d4f10@huawei.com>
-Date:   Tue, 13 Sep 2022 16:39:35 +0800
+ 15.1.2242.12; Tue, 13 Sep 2022 01:40:25 -0700
+Received: from pek-ywang12-d1.wrs.com (128.224.32.146) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Tue, 13 Sep 2022 01:40:24 -0700
+From:   <yaliang.wang@windriver.com>
+To:     <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
+        <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mtd: spi-nor: gigadevice: gd25q256: replace gd25q256_default_init with gd25q256_post_bfpt
+Date:   Tue, 13 Sep 2022 16:40:23 +0800
+Message-ID: <20220913084023.2451929-1-yaliang.wang@windriver.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] sched: Move numa_balancing sysctls to its own file
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220908072531.87916-1-wangkefeng.wang@huawei.com>
- <YxqDa+WALRr8L7Q8@bombadil.infradead.org>
- <679d8f0c-f8cc-d43e-5467-c32a78bcb850@huawei.com>
- <d99630ed-0753-da9e-ab03-848b66bc3c63@huawei.com>
- <YxuXqF63RIMstdEN@bombadil.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YxuXqF63RIMstdEN@bombadil.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: uQ_sJLHkaE_jWWPTxhnn7fO7D111R8Mt
+X-Proofpoint-ORIG-GUID: uQ_sJLHkaE_jWWPTxhnn7fO7D111R8Mt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_03,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=919 mlxscore=0 spamscore=0 adultscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130038
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yaliang Wang <Yaliang.Wang@windriver.com>
 
-On 2022/9/10 3:44, Luis Chamberlain wrote:
-> On Fri, Sep 09, 2022 at 11:37:41AM +0800, Kefeng Wang wrote:
->> On 2022/9/9 9:46, Kefeng Wang wrote:
->>> On 2022/9/9 8:06, Luis Chamberlain wrote:
->>>> On Thu, Sep 08, 2022 at 03:25:31PM +0800, Kefeng Wang wrote:
->>>>> The sysctl_numa_balancing_promote_rate_limit and sysctl_numa_balancing
->>>>> are part of sched, move them to its own file.
->>>>>
->>>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>> There is quite a bit of random cleanup on each kernel release
->>>> for sysctls to do things like what you just did. Because of this it
->>>> has its
->>>> own tree to help avoid conflicts. Can you base your patches on the
->>>> sysctl-testing branch here and re-submit:
->>> Found this when reading memory tiering code，sure to re-submit based
->>> your branch,
->>>
->>> thanks.
->>>
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
->>>>
->> Hi Luis，the numa_balancing_promote_rate_limit_MBps from commit 1db91dd846e0
->> “memory tiering: rate limit NUMA migration throughput”only on
->> linux-next（from mm repo），
->>
->> 1）only send sysctl_numa_balancing changes based on your branch
->> or
->>
->> 2）queued this patch from mm repo if no objection， Cc'ed Andrew
->>
->> Which one do your like, or other options, thanks.
-> 2) as that would give more testing to the new code as well. We can deal
-> with merge conflicts on my tree later.
+When utilizing PARSE_SFDP to initialize the flash parameter, the
+deprecated initializing method spi_nor_init_params_deprecated() and the
+function spi_nor_manufacturer_init_params() within it will never be
+executed, which results in the default_init hook function will also never
+be executed. As we do have quad enable function defined in BFPT, the
+post_bfpt hook will be the right place to tweak the function.
 
-Thanks Luis.
+Cc: stable@vger.kernel.org
+Fixes: 047275f7de18 ("mtd: spi-nor: gigadevice: gd25q256: Init flash based on SFDP")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yaliang Wang <Yaliang.Wang@windriver.com>
+---
+ drivers/mtd/spi-nor/gigadevice.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Hi Andrew, could you help to pick it up to your tree :)
+diff --git a/drivers/mtd/spi-nor/gigadevice.c b/drivers/mtd/spi-nor/gigadevice.c
+index 119b38e6fc2a..bdc4d73424af 100644
+--- a/drivers/mtd/spi-nor/gigadevice.c
++++ b/drivers/mtd/spi-nor/gigadevice.c
+@@ -8,19 +8,24 @@
+ 
+ #include "core.h"
+ 
+-static void gd25q256_default_init(struct spi_nor *nor)
++static int
++gd25q256_post_bfpt(struct spi_nor *nor,
++		   const struct sfdp_parameter_header *bfpt_header,
++		   const struct sfdp_bfpt *bfpt)
+ {
+ 	/*
+ 	 * Some manufacturer like GigaDevice may use different
+ 	 * bit to set QE on different memories, so the MFR can't
+ 	 * indicate the quad_enable method for this case, we need
+-	 * to set it in the default_init fixup hook.
++	 * to set it in the post_bfpt fixup hook.
+ 	 */
+ 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
++
++	return 0;
+ }
+ 
+ static const struct spi_nor_fixups gd25q256_fixups = {
+-	.default_init = gd25q256_default_init,
++	.post_bfpt = gd25q256_post_bfpt,
+ };
+ 
+ static const struct flash_info gigadevice_nor_parts[] = {
+-- 
+2.34.1
 
->
->    Luis
-> .
