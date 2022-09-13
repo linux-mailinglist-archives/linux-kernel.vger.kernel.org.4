@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD175B66F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 06:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE405B66F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 06:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiIME2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 00:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        id S229933AbiIME26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 00:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIME1L (ORCPT
+        with ESMTP id S230130AbiIME1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 00:27:11 -0400
+        Tue, 13 Sep 2022 00:27:21 -0400
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4057358DD4;
-        Mon, 12 Sep 2022 21:23:57 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:29 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id B76212059027;
-        Tue, 13 Sep 2022 13:23:29 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:29 +0900
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D1C258528;
+        Mon, 12 Sep 2022 21:24:04 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:30 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 1591120584CE;
+        Tue, 13 Sep 2022 13:23:30 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:30 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 55F5FB62A4;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 86397B62AE;
         Tue, 13 Sep 2022 13:23:29 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 06/10] arm64: dts: uniphier: Add ahci controller nodes for PXs3
-Date:   Tue, 13 Sep 2022 13:23:17 +0900
-Message-Id: <20220913042321.4817-7-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 07/10] arm64: dts: uniphier: Add USB-device support for PXs3 reference board
+Date:   Tue, 13 Sep 2022 13:23:18 +0900
+Message-Id: <20220913042321.4817-8-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
 References: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
@@ -48,127 +48,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ahci core controller and glue layer nodes including reset-controller
-and sata-phy.
+PXs3 reference board can change each USB port 0 and 1 to device mode
+with jumpers. Prepare devicetree sources for USB port 0 and 1.
 
-This supports for PXs3 and the boards.
+This specifies dr_mode, pinctrl, and some quirks and removes nodes for
+unused phys and vbus-supply properties.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../boot/dts/socionext/uniphier-pxs3-ref.dts  |  8 ++
- .../boot/dts/socionext/uniphier-pxs3.dtsi     | 80 +++++++++++++++++++
- 2 files changed, 88 insertions(+)
+ arch/arm/boot/dts/uniphier-pinctrl.dtsi       | 10 +++++
+ arch/arm64/boot/dts/socionext/Makefile        |  4 +-
+ .../socionext/uniphier-pxs3-ref-gadget0.dts   | 41 +++++++++++++++++++
+ .../socionext/uniphier-pxs3-ref-gadget1.dts   | 40 ++++++++++++++++++
+ 4 files changed, 94 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-index 506c7b9ff50d..1ced6190ab2b 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-@@ -137,6 +137,14 @@ nand@0 {
+diff --git a/arch/arm/boot/dts/uniphier-pinctrl.dtsi b/arch/arm/boot/dts/uniphier-pinctrl.dtsi
+index c0fd029b37e5..f909ec2e5333 100644
+--- a/arch/arm/boot/dts/uniphier-pinctrl.dtsi
++++ b/arch/arm/boot/dts/uniphier-pinctrl.dtsi
+@@ -196,11 +196,21 @@ pinctrl_usb0: usb0 {
+ 		function = "usb0";
  	};
- };
  
-+&ahci0 {
-+	status = "okay";
++	pinctrl_usb0_device: usb0-device {
++		groups = "usb0_device";
++		function = "usb0";
++	};
++
+ 	pinctrl_usb1: usb1 {
+ 		groups = "usb1";
+ 		function = "usb1";
+ 	};
+ 
++	pinctrl_usb1_device: usb1-device {
++		groups = "usb1_device";
++		function = "usb1";
++	};
++
+ 	pinctrl_usb2: usb2 {
+ 		groups = "usb2";
+ 		function = "usb2";
+diff --git a/arch/arm64/boot/dts/socionext/Makefile b/arch/arm64/boot/dts/socionext/Makefile
+index dda3da33614b..33989a9643ac 100644
+--- a/arch/arm64/boot/dts/socionext/Makefile
++++ b/arch/arm64/boot/dts/socionext/Makefile
+@@ -5,4 +5,6 @@ dtb-$(CONFIG_ARCH_UNIPHIER) += \
+ 	uniphier-ld20-akebi96.dtb \
+ 	uniphier-ld20-global.dtb \
+ 	uniphier-ld20-ref.dtb \
+-	uniphier-pxs3-ref.dtb
++	uniphier-pxs3-ref.dtb \
++	uniphier-pxs3-ref-gadget0.dtb \
++	uniphier-pxs3-ref-gadget1.dtb
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts
+new file mode 100644
+index 000000000000..7069f51bc120
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier PXs3 Reference Board (for USB-Device #0)
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++/dts-v1/;
++#include "uniphier-pxs3-ref.dts"
++
++/ {
++	model = "UniPhier PXs3 Reference Board (USB-Device #0)";
 +};
 +
-+&ahci1 {
-+	status = "okay";
++/* I2C3 pinctrl is shared with USB*VBUSIN */
++&i2c3 {
++	status = "disabled";
 +};
 +
- &pinctrl_ether_rgmii {
- 	tx {
- 		pins = "RGMII0_TXCLK", "RGMII0_TXD0", "RGMII0_TXD1",
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index bd5c1e3b64b0..c93b380fce94 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -596,6 +596,86 @@ mdio1: mdio {
- 			};
- 		};
- 
-+		ahci0: sata@65600000 {
-+			compatible = "socionext,uniphier-pxs3-ahci",
-+				     "generic-ahci";
-+			status = "disabled";
-+			reg = <0x65600000 0x10000>;
-+			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&sys_clk 28>;
-+			resets = <&sys_rst 28>, <&ahci0_rst 0>;
-+			ports-implemented = <1>;
-+			phys = <&ahci0_phy>;
-+		};
++&usb0 {
++	status = "okay";
++	dr_mode = "peripheral";
++	pinctrl-0 = <&pinctrl_usb0_device>;
++	snps,dis_enblslpm_quirk;
++	snps,dis_u2_susphy_quirk;
++	snps,dis_u3_susphy_quirk;
++	snps,usb2_gadget_lpm_disable;
++	phy-names = "usb2-phy", "usb3-phy";
++	phys = <&usb0_hsphy0>, <&usb0_ssphy0>;
++};
 +
-+		sata-controller@65700000 {
-+			compatible = "socionext,uniphier-pxs3-ahci-glue",
-+				     "simple-mfd";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x65700000 0x100>;
++&usb0_hsphy0 {
++	/delete-property/ vbus-supply;
++};
 +
-+			ahci0_rst: reset-controller@0 {
-+				compatible = "socionext,uniphier-pxs3-ahci-reset";
-+				reg = <0x0 0x4>;
-+				clock-names = "link";
-+				clocks = <&sys_clk 28>;
-+				reset-names = "link";
-+				resets = <&sys_rst 28>;
-+				#reset-cells = <1>;
-+			};
++&usb0_ssphy0 {
++	/delete-property/ vbus-supply;
++};
 +
-+			ahci0_phy: sata-phy@10 {
-+				compatible = "socionext,uniphier-pxs3-ahci-phy";
-+				reg = <0x10 0x10>;
-+				clock-names = "link", "phy";
-+				clocks = <&sys_clk 28>, <&sys_clk 30>;
-+				reset-names = "link", "phy";
-+				resets = <&sys_rst 28>, <&sys_rst 30>;
-+				#phy-cells = <0>;
-+			};
-+		};
++/delete-node/ &usb0_hsphy1;
++/delete-node/ &usb0_ssphy1;
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts
+new file mode 100644
+index 000000000000..a3cfa8113ffb
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier PXs3 Reference Board (for USB-Device #1)
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 +
-+		ahci1: sata@65800000 {
-+			compatible = "socionext,uniphier-pxs3-ahci",
-+				     "generic-ahci";
-+			status = "disabled";
-+			reg = <0x65800000 0x10000>;
-+			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&sys_clk 29>;
-+			resets = <&sys_rst 29>, <&ahci1_rst 0>;
-+			ports-implemented = <1>;
-+			phys = <&ahci1_phy>;
-+		};
++/dts-v1/;
++#include "uniphier-pxs3-ref.dts"
 +
-+		sata-controller@65900000 {
-+			compatible = "socionext,uniphier-pxs3-ahci-glue",
-+				     "simple-mfd";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x65900000 0x100>;
++/ {
++	model = "UniPhier PXs3 Reference Board (USB-Device #1)";
++};
 +
-+			ahci1_rst: reset-controller@0 {
-+				compatible = "socionext,uniphier-pxs3-ahci-reset";
-+				reg = <0x0 0x4>;
-+				clock-names = "link";
-+				clocks = <&sys_clk 29>;
-+				reset-names = "link";
-+				resets = <&sys_rst 29>;
-+				#reset-cells = <1>;
-+			};
++/* I2C3 pinctrl is shared with USB*VBUSIN */
++&i2c3 {
++	status = "disabled";
++};
 +
-+			ahci1_phy: sata-phy@10 {
-+				compatible = "socionext,uniphier-pxs3-ahci-phy";
-+				reg = <0x10 0x10>;
-+				clock-names = "link", "phy";
-+				clocks = <&sys_clk 29>, <&sys_clk 30>;
-+				reset-names = "link", "phy";
-+				resets = <&sys_rst 29>, <&sys_rst 30>;
-+				#phy-cells = <0>;
-+			};
-+		};
++&usb1 {
++	status = "okay";
++	dr_mode = "peripheral";
++	pinctrl-0 = <&pinctrl_usb1_device>;
++	snps,dis_enblslpm_quirk;
++	snps,dis_u2_susphy_quirk;
++	snps,dis_u3_susphy_quirk;
++	snps,usb2_gadget_lpm_disable;
++	phy-names = "usb2-phy", "usb3-phy";
++	phys = <&usb1_hsphy0>, <&usb1_ssphy0>;
++};
 +
- 		usb0: usb@65a00000 {
- 			compatible = "socionext,uniphier-dwc3", "snps,dwc3";
- 			status = "disabled";
++&usb1_hsphy0 {
++	/delete-property/ vbus-supply;
++};
++
++&usb1_ssphy0 {
++	/delete-property/ vbus-supply;
++};
++
++/delete-node/ &usb1_hsphy1;
 -- 
 2.25.1
 
