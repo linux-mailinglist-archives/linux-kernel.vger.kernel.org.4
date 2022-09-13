@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177595B7526
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1425B74EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiIMPcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S232225AbiIMPaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236610AbiIMPbZ (ORCPT
+        with ESMTP id S236448AbiIMP2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:31:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617787DF71;
-        Tue, 13 Sep 2022 07:40:09 -0700 (PDT)
+        Tue, 13 Sep 2022 11:28:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0087E024;
+        Tue, 13 Sep 2022 07:39:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE86E614AE;
-        Tue, 13 Sep 2022 14:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1471C43143;
-        Tue, 13 Sep 2022 14:38:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47196B81028;
+        Tue, 13 Sep 2022 14:37:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA5BC433D6;
+        Tue, 13 Sep 2022 14:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079883;
-        bh=sZQYElcGS/DOQWicjtPM/97X2vpvcYwfPlGU+gxOP9w=;
+        s=korg; t=1663079835;
+        bh=UeHv/2YhX2iYZyWaL3dsktPLTRlG4WzUCdAc14li1Jo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e13lwEDcR6QS1to75aAob5WPqUSFs323ZQXgv/QgGWNvv1rKlbGUCmlsPMQY52pJv
-         d8gjpjf6pC9JsHb0Lhrc7M8X4ZofUvCdnbm4l9g2431Oq4W/edUqsoyDulv+B4VFmo
-         tzqZ34SXxeTsuMrQA+Zfwu3Lz2ZJjewdvk0oXYuU=
+        b=QUU3+9Vuw5hD8iywgKR3wuz1xxzXo+Jwfvw2HGpqKao9x1+N2qHsokTLjmMbDVe++
+         ENEuORNIcwtasm3/2K1sk/fOK6OBIPX8LhHTeyc6QWZXGmgc5U5Qk/fIJKegsJorpy
+         qJ35XniLHUfB+WTV4ct0WZIEOzrzDdWg1zUqcw7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongxiang Ke <kdx.glider@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 31/42] ALSA: usb-audio: Fix an out-of-bounds bug in __snd_usb_parse_audio_interface()
-Date:   Tue, 13 Sep 2022 16:08:02 +0200
-Message-Id: <20220913140343.923046119@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.9 32/42] scsi: mpt3sas: Fix use-after-free warning
+Date:   Tue, 13 Sep 2022 16:08:03 +0200
+Message-Id: <20220913140343.988546211@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 References: <20220913140342.228397194@linuxfoundation.org>
@@ -54,34 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongxiang Ke <kdx.glider@gmail.com>
+From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-commit e53f47f6c1a56d2af728909f1cb894da6b43d9bf upstream.
+commit 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34 upstream.
 
-There may be a bad USB audio device with a USB ID of (0x04fa, 0x4201) and
-the number of it's interfaces less than 4, an out-of-bounds read bug occurs
-when parsing the interface descriptor for this device.
+Fix the following use-after-free warning which is observed during
+controller reset:
 
-Fix this by checking the number of interfaces.
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 23 PID: 5399 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
 
-Signed-off-by: Dongxiang Ke <kdx.glider@gmail.com>
-Link: https://lore.kernel.org/r/20220906024928.10951-1-kdx.glider@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220906134908.1039-2-sreekanth.reddy@broadcom.com
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/stream.c |    2 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/usb/stream.c
-+++ b/sound/usb/stream.c
-@@ -502,7 +502,7 @@ int snd_usb_parse_audio_interface(struct
- 	 * Dallas DS4201 workaround: It presents 5 altsettings, but the last
- 	 * one misses syncpipe, and does not produce any sound.
- 	 */
--	if (chip->usb_id == USB_ID(0x04fa, 0x4201))
-+	if (chip->usb_id == USB_ID(0x04fa, 0x4201) && num >= 4)
- 		num = 4;
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -2776,6 +2776,7 @@ static struct fw_event_work *dequeue_nex
+ 		fw_event = list_first_entry(&ioc->fw_event_list,
+ 				struct fw_event_work, list);
+ 		list_del_init(&fw_event->list);
++		fw_event_work_put(fw_event);
+ 	}
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
  
- 	for (i = 0; i < num; i++) {
+@@ -2812,7 +2813,6 @@ _scsih_fw_event_cleanup_queue(struct MPT
+ 		if (cancel_work_sync(&fw_event->work))
+ 			fw_event_work_put(fw_event);
+ 
+-		fw_event_work_put(fw_event);
+ 	}
+ }
+ 
 
 
