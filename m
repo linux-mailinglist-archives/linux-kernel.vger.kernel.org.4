@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C035B7100
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A065B71FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiIMOfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S231862AbiIMOvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbiIMOeG (ORCPT
+        with ESMTP id S234473AbiIMOsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81441D0DB;
-        Tue, 13 Sep 2022 07:19:54 -0700 (PDT)
+        Tue, 13 Sep 2022 10:48:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687B6F546;
+        Tue, 13 Sep 2022 07:25:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F32D614D2;
-        Tue, 13 Sep 2022 14:18:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46925C433D6;
-        Tue, 13 Sep 2022 14:18:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 575BEB80EFE;
+        Tue, 13 Sep 2022 14:14:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB63BC433C1;
+        Tue, 13 Sep 2022 14:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078692;
-        bh=Rirw/bFiPmGRnPlDblleTREFXFCNfTozAJlpW8/c6j8=;
+        s=korg; t=1663078484;
+        bh=hzHlMCpsGdkKTK0zWkUiYLwjSnS2cs+6PTOMwwjV36o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CHonDZxhyi4FyXz9pttz8JUA8QzM8f7dipmvAmHfMUb+Bn7lu3SIesbjwrVB4f5Qv
-         Sg4dzTmYwtStjjhj9S0aiTq/wPwXNml7zNK26RuXn3GNMMX9Y/4MMzi27RiRqDJxKM
-         w2uz5Ldi5QD20R6QIZd6Te1YXyIH3+2WPiVogm1E=
+        b=1Y65BphkXOiWidwIvQXWli0bquotHl85G9zu5RCEOuZsM44h6hRuY0d+GmLqpV1xl
+         SJzS/WL9WsS60JuRgOgeN4h7sAQxsi8SGD67OSNxbgMJFthiJGBUTvuHvXDfq6F4TB
+         TMQ/NF481LyOCS6nrNnHJZsHnt71qPIB1pdev6W8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 046/121] cgroup: Elide write-locking threadgroup_rwsem when updating csses on an empty subtree
-Date:   Tue, 13 Sep 2022 16:03:57 +0200
-Message-Id: <20220913140359.341799961@linuxfoundation.org>
+Subject: [PATCH 5.19 132/192] btrfs: zoned: fix mounting with conventional zones
+Date:   Tue, 13 Sep 2022 16:03:58 +0200
+Message-Id: <20220913140416.588500662@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +56,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 
-[ Upstream commit 671c11f0619e5ccb380bcf0f062f69ba95fc974a ]
+[ Upstream commit 6ca64ac2763149fb66c0b4bf12f5e0977a88e51d ]
 
-cgroup_update_dfl_csses() write-lock the threadgroup_rwsem as updating the
-csses can trigger process migrations. However, if the subtree doesn't
-contain any tasks, there aren't gonna be any cgroup migrations. This
-condition can be trivially detected by testing whether
-mgctx.preloaded_src_csets is empty. Elide write-locking threadgroup_rwsem if
-the subtree is empty.
+Since commit 6a921de58992 ("btrfs: zoned: introduce
+space_info->active_total_bytes"), we're only counting the bytes of a
+block group on an active zone as usable for metadata writes. But on a
+SMR drive, we don't have active zones and short circuit some of the
+logic.
 
-After this optimization, the usage pattern of creating a cgroup, enabling
-the necessary controllers, and then seeding it with CLONE_INTO_CGROUP and
-then removing the cgroup after it becomes empty doesn't need to write-lock
-threadgroup_rwsem at all.
+This leads to an error on mount, because we cannot reserve space for
+metadata writes.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
+Fix this by also setting the BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE bit in the
+block-group's runtime flag if the zone is a conventional zone.
+
+Fixes: 6a921de58992 ("btrfs: zoned: introduce space_info->active_total_bytes")
+Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cgroup.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ fs/btrfs/zoned.c | 81 ++++++++++++++++++++++++------------------------
+ 1 file changed, 40 insertions(+), 41 deletions(-)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 416dd7db3fb2c..baebd1c7667b7 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2949,12 +2949,11 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
- 	struct cgroup_subsys_state *d_css;
- 	struct cgroup *dsct;
- 	struct css_set *src_cset;
-+	bool has_tasks;
+diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+index 4949e0d82923d..1386362fad3b8 100644
+--- a/fs/btrfs/zoned.c
++++ b/fs/btrfs/zoned.c
+@@ -1187,7 +1187,7 @@ int btrfs_ensure_empty_zones(struct btrfs_device *device, u64 start, u64 size)
+  * offset.
+  */
+ static int calculate_alloc_pointer(struct btrfs_block_group *cache,
+-				   u64 *offset_ret)
++				   u64 *offset_ret, bool new)
+ {
+ 	struct btrfs_fs_info *fs_info = cache->fs_info;
+ 	struct btrfs_root *root;
+@@ -1197,6 +1197,21 @@ static int calculate_alloc_pointer(struct btrfs_block_group *cache,
  	int ret;
- 
- 	lockdep_assert_held(&cgroup_mutex);
- 
--	percpu_down_write(&cgroup_threadgroup_rwsem);
--
- 	/* look up all csses currently attached to @cgrp's subtree */
- 	spin_lock_irq(&css_set_lock);
- 	cgroup_for_each_live_descendant_pre(dsct, d_css, cgrp) {
-@@ -2965,6 +2964,16 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
- 	}
- 	spin_unlock_irq(&css_set_lock);
+ 	u64 length;
  
 +	/*
-+	 * We need to write-lock threadgroup_rwsem while migrating tasks.
-+	 * However, if there are no source csets for @cgrp, changing its
-+	 * controllers isn't gonna produce any task migrations and the
-+	 * write-locking can be skipped safely.
++	 * Avoid  tree lookups for a new block group, there's no use for it.
++	 * It must always be 0.
++	 *
++	 * Also, we have a lock chain of extent buffer lock -> chunk mutex.
++	 * For new a block group, this function is called from
++	 * btrfs_make_block_group() which is already taking the chunk mutex.
++	 * Thus, we cannot call calculate_alloc_pointer() which takes extent
++	 * buffer locks to avoid deadlock.
 +	 */
-+	has_tasks = !list_empty(&mgctx.preloaded_src_csets);
-+	if (has_tasks)
-+		percpu_down_write(&cgroup_threadgroup_rwsem);
++	if (new) {
++		*offset_ret = 0;
++		return 0;
++	}
 +
- 	/* NULL dst indicates self on default hierarchy */
- 	ret = cgroup_migrate_prepare_dst(&mgctx);
- 	if (ret)
-@@ -2984,7 +2993,8 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
- 	ret = cgroup_migrate_execute(&mgctx);
- out_finish:
- 	cgroup_migrate_finish(&mgctx);
--	percpu_up_write(&cgroup_threadgroup_rwsem);
-+	if (has_tasks)
-+		percpu_up_write(&cgroup_threadgroup_rwsem);
- 	return ret;
- }
+ 	path = btrfs_alloc_path();
+ 	if (!path)
+ 		return -ENOMEM;
+@@ -1332,6 +1347,13 @@ int btrfs_load_block_group_zone_info(struct btrfs_block_group *cache, bool new)
+ 		else
+ 			num_conventional++;
  
++		/*
++		 * Consider a zone as active if we can allow any number of
++		 * active zones.
++		 */
++		if (!device->zone_info->max_active_zones)
++			__set_bit(i, active);
++
+ 		if (!is_sequential) {
+ 			alloc_offsets[i] = WP_CONVENTIONAL;
+ 			continue;
+@@ -1398,45 +1420,23 @@ int btrfs_load_block_group_zone_info(struct btrfs_block_group *cache, bool new)
+ 			__set_bit(i, active);
+ 			break;
+ 		}
+-
+-		/*
+-		 * Consider a zone as active if we can allow any number of
+-		 * active zones.
+-		 */
+-		if (!device->zone_info->max_active_zones)
+-			__set_bit(i, active);
+ 	}
+ 
+ 	if (num_sequential > 0)
+ 		cache->seq_zone = true;
+ 
+ 	if (num_conventional > 0) {
+-		/*
+-		 * Avoid calling calculate_alloc_pointer() for new BG. It
+-		 * is no use for new BG. It must be always 0.
+-		 *
+-		 * Also, we have a lock chain of extent buffer lock ->
+-		 * chunk mutex.  For new BG, this function is called from
+-		 * btrfs_make_block_group() which is already taking the
+-		 * chunk mutex. Thus, we cannot call
+-		 * calculate_alloc_pointer() which takes extent buffer
+-		 * locks to avoid deadlock.
+-		 */
+-
+ 		/* Zone capacity is always zone size in emulation */
+ 		cache->zone_capacity = cache->length;
+-		if (new) {
+-			cache->alloc_offset = 0;
+-			goto out;
+-		}
+-		ret = calculate_alloc_pointer(cache, &last_alloc);
+-		if (ret || map->num_stripes == num_conventional) {
+-			if (!ret)
+-				cache->alloc_offset = last_alloc;
+-			else
+-				btrfs_err(fs_info,
++		ret = calculate_alloc_pointer(cache, &last_alloc, new);
++		if (ret) {
++			btrfs_err(fs_info,
+ 			"zoned: failed to determine allocation offset of bg %llu",
+-					  cache->start);
++				  cache->start);
++			goto out;
++		} else if (map->num_stripes == num_conventional) {
++			cache->alloc_offset = last_alloc;
++			cache->zone_is_active = 1;
+ 			goto out;
+ 		}
+ 	}
+@@ -1504,13 +1504,6 @@ int btrfs_load_block_group_zone_info(struct btrfs_block_group *cache, bool new)
+ 		goto out;
+ 	}
+ 
+-	if (cache->zone_is_active) {
+-		btrfs_get_block_group(cache);
+-		spin_lock(&fs_info->zone_active_bgs_lock);
+-		list_add_tail(&cache->active_bg_list, &fs_info->zone_active_bgs);
+-		spin_unlock(&fs_info->zone_active_bgs_lock);
+-	}
+-
+ out:
+ 	if (cache->alloc_offset > fs_info->zone_size) {
+ 		btrfs_err(fs_info,
+@@ -1535,10 +1528,16 @@ int btrfs_load_block_group_zone_info(struct btrfs_block_group *cache, bool new)
+ 		ret = -EIO;
+ 	}
+ 
+-	if (!ret)
++	if (!ret) {
+ 		cache->meta_write_pointer = cache->alloc_offset + cache->start;
+-
+-	if (ret) {
++		if (cache->zone_is_active) {
++			btrfs_get_block_group(cache);
++			spin_lock(&fs_info->zone_active_bgs_lock);
++			list_add_tail(&cache->active_bg_list,
++				      &fs_info->zone_active_bgs);
++			spin_unlock(&fs_info->zone_active_bgs_lock);
++		}
++	} else {
+ 		kfree(cache->physical_map);
+ 		cache->physical_map = NULL;
+ 	}
 -- 
 2.35.1
 
