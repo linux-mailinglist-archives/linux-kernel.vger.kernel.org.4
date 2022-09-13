@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F105B74C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9CF5B750D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiIMP1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S236604AbiIMPbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbiIMPZI (ORCPT
+        with ESMTP id S236618AbiIMP3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:25:08 -0400
+        Tue, 13 Sep 2022 11:29:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B077C746;
-        Tue, 13 Sep 2022 07:38:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF046CD26;
+        Tue, 13 Sep 2022 07:39:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E739B80F9B;
-        Tue, 13 Sep 2022 14:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F20C433C1;
-        Tue, 13 Sep 2022 14:36:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F055B8101F;
+        Tue, 13 Sep 2022 14:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00E1C433D6;
+        Tue, 13 Sep 2022 14:37:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079765;
-        bh=i4owNBJFPeA129+EzqzI5ObJxYWEQ7OAGlm2GLeaV2M=;
+        s=korg; t=1663079880;
+        bh=c+8isZ6YTFjQhAE68z6WOk1AgkqlsJDOpn1OWpRm7yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DB+gGqZHBTVB8RJxyyGpIC6Nkc3tIXq0Ooki0eBMirg3S3A4KWa6LetSsdjjLY7ts
-         xnaWIhcreazjIisIlOwTZiG2QH4y320K9kCFcp/MFfFbqzD+gtCpOAHF/6tlS0vywZ
-         IvFjNkF1/rtIcLUGkExA3ha5a9nBXu1W4m0uJrQ4=
+        b=sLtMoaSa9OBnb0sOkOxe+x6Y4u4Q7Pf7NqkUDefXDML1QacdQLQnwv9sZLNzjHp/h
+         MrvJdGrvCY1AbQQTrGMoG0CHSzLSFz0YlFmzM8LejNCPF3yrwy01RkSJ+py5INy9kQ
+         v3CDZdUNO6KJnYv8sPkIrRA/v364Mm+fLutbD+HI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4.14 57/61] usb: dwc3: fix PHY disable sequence
-Date:   Tue, 13 Sep 2022 16:07:59 +0200
-Message-Id: <20220913140349.314560446@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pattara Teerapong <pteerapong@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.9 30/42] ALSA: aloop: Fix random zeros in capture data when using jiffies timer
+Date:   Tue, 13 Sep 2022 16:08:01 +0200
+Message-Id: <20220913140343.856407916@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Pattara Teerapong <pteerapong@chromium.org>
 
-commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
+commit 3e48940abee88b8dbbeeaf8a07e7b2b6be1271b3 upstream.
 
-Generic PHYs must be powered-off before they can be tore down.
+In loopback_jiffies_timer_pos_update(), we are getting jiffies twice.
+First time for playback, second time for capture. Jiffies can be updated
+between these two calls and if the capture jiffies is larger, extra zeros
+will be filled in the capture buffer.
 
-Similarly, suspending legacy PHYs after having powered them off makes no
-sense.
+Change to get jiffies once and use it for both playback and capture.
 
-Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-dwc3_probe() error-path sequences that got this wrong.
-
-Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-path with respect to powering off the PHYs.
-
-Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-Cc: stable@vger.kernel.org      # 4.8
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
-[ johan: adjust context to 4.14 ]
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Pattara Teerapong <pteerapong@chromium.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220901144036.4049060-1-pteerapong@chromium.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c |   20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ sound/drivers/aloop.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -656,15 +656,15 @@ static void dwc3_core_exit(struct dwc3 *
- {
- 	dwc3_event_buffers_cleanup(dwc);
+--- a/sound/drivers/aloop.c
++++ b/sound/drivers/aloop.c
+@@ -477,17 +477,18 @@ static unsigned int loopback_pos_update(
+ 			cable->streams[SNDRV_PCM_STREAM_PLAYBACK];
+ 	struct loopback_pcm *dpcm_capt =
+ 			cable->streams[SNDRV_PCM_STREAM_CAPTURE];
+-	unsigned long delta_play = 0, delta_capt = 0;
++	unsigned long delta_play = 0, delta_capt = 0, cur_jiffies;
+ 	unsigned int running, count1, count2;
  
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
- 	usb_phy_set_suspend(dwc->usb2_phy, 1);
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
-+
-+	usb_phy_shutdown(dwc->usb2_phy);
-+	usb_phy_shutdown(dwc->usb3_phy);
-+	phy_exit(dwc->usb2_generic_phy);
-+	phy_exit(dwc->usb3_generic_phy);
- }
++	cur_jiffies = jiffies;
+ 	running = cable->running ^ cable->pause;
+ 	if (running & (1 << SNDRV_PCM_STREAM_PLAYBACK)) {
+-		delta_play = jiffies - dpcm_play->last_jiffies;
++		delta_play = cur_jiffies - dpcm_play->last_jiffies;
+ 		dpcm_play->last_jiffies += delta_play;
+ 	}
  
- static bool dwc3_core_is_valid(struct dwc3 *dwc)
-@@ -1288,16 +1288,16 @@ static int dwc3_probe(struct platform_de
- err5:
- 	dwc3_event_buffers_cleanup(dwc);
+ 	if (running & (1 << SNDRV_PCM_STREAM_CAPTURE)) {
+-		delta_capt = jiffies - dpcm_capt->last_jiffies;
++		delta_capt = cur_jiffies - dpcm_capt->last_jiffies;
+ 		dpcm_capt->last_jiffies += delta_capt;
+ 	}
  
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
- 	usb_phy_set_suspend(dwc->usb2_phy, 1);
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
- 
-+	usb_phy_shutdown(dwc->usb2_phy);
-+	usb_phy_shutdown(dwc->usb3_phy);
-+	phy_exit(dwc->usb2_generic_phy);
-+	phy_exit(dwc->usb3_generic_phy);
-+
- 	dwc3_ulpi_exit(dwc);
- 
- err4:
 
 
