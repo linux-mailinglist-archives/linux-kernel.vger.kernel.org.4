@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3C25B743C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836665B7317
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbiIMPUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S235009AbiIMPAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiIMPS3 (ORCPT
+        with ESMTP id S235010AbiIMO6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:18:29 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3D79639;
-        Tue, 13 Sep 2022 07:35:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663078468; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=MzaZa2WQtlRdTzi8tOfC68cBb2Ceoq6HZIXuoCniI+UsmBlEUbgdTUFEOxA590gw9Pkcar2YZbgmIEmsMwzn1UDx4dLmZGbJpUClfgRoA/UizsILxKXFKZCTGCLfQuaKzp2mzW7Feuf4YthZSwMsgrph7tTMfCQEIxiYGXOAgI0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663078468; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=iRLdT3aU1LgBOiMK66KmiIjapaD8BSf3ORp6HQO/xhk=; 
-        b=Sj5M2WrMUU+xzkit+73aGwdT5nu/lb4tQWW2BkXNSiUw3IAWLUjAXu3yLzksNdXTOVQYcuswid9kOcnoOEqhK5IlWpdjn6Daazn4YVItxhN5Bl1dgN3caDWft4BkSv+U8i3VAkAa2Z3e+tI7i7unmqyNsFCTi1vGnMC0WM7d0kE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663078468;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=iRLdT3aU1LgBOiMK66KmiIjapaD8BSf3ORp6HQO/xhk=;
-        b=Z090IQ4OFjTbEZuFX9rMNBgs8TJ77OP+I4U3QyGJ6LrvNASxlc80n3qUxvS9b9Wb
-        Vcdv4RuDMGcAgUY6YQmt8UEF+2T+JJS0CKujOiF0PzkHo8EMTPZ6wfAb2tJKNCnXyr3
-        8B2kSgl5I/iPVFSPw0gFtcd3//DoDMQ2QfqTs43Y=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1663078466851413.63336965516294; Tue, 13 Sep 2022 07:14:26 -0700 (PDT)
-Message-ID: <8a323fc4-bf98-a808-899a-957438b0d792@arinc9.com>
-Date:   Tue, 13 Sep 2022 17:14:19 +0300
+        Tue, 13 Sep 2022 10:58:55 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A2B67C97;
+        Tue, 13 Sep 2022 07:28:36 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11e9a7135easo32544794fac.6;
+        Tue, 13 Sep 2022 07:28:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zYRS5/+Q00Jt+sqvHB1fjEMsS/sAzxnNY3oApp6VsX4=;
+        b=BDR0mhRW0cZNaNfmjAann9vKWXeLTkg8G8vI1awTj8pz/GDwkR3cK29FJghbA8RlAk
+         Vv6Rmd6Uwmcc6Uuc6sY0MxTpHn2MunKE4aXels7LbXsAGaOdo7dmmpV1kz5pjAkgnmFQ
+         6gyBnn39DThc73eIFjhxhH0kMV8Wb6tiDJdun2E8rRSc0V/AnUIV5CM3JK+WhtT9Rcmm
+         bhtHdsdd4jI161DBuSFcodN9OdBI0/r96rpu7RJhE8i/eXM/56BG6qsNJPDkSqNExxHz
+         vrA+b08LI/8IlVxJOGYMmg87BrTNdTrMnk/fZoo2zXiOWjl/6BkYhI06lhsfL6QCpuUu
+         J1Dg==
+X-Gm-Message-State: ACgBeo3pZ04ZQ0KZa0OFBe4YcYHxfLx51hXFtV9ZUB+NLbMVpHBgj4Av
+        4vHRYP6vQhW5UcLQmnoA/czu+59jjw==
+X-Google-Smtp-Source: AA6agR6hOpZPvoPt2Eb14Hvai4q1Lk4rE7+yyu9TNmztp+7DqLeOhYDLvEKfa24JcgVwwqI0QlyFNw==
+X-Received: by 2002:a05:6808:15aa:b0:34f:b7e3:26f5 with SMTP id t42-20020a05680815aa00b0034fb7e326f5mr1747211oiw.22.1663078560574;
+        Tue, 13 Sep 2022 07:16:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i34-20020a056870892200b0012644cc4feasm6980943oao.55.2022.09.13.07.15.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:15:59 -0700 (PDT)
+Received: (nullmailer pid 3606168 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:15:58 -0000
+Date:   Tue, 13 Sep 2022 09:15:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kishon@ti.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        sjg@chromium.org, heiko@sntech.de, linux-watchdog@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, broonie@kernel.org,
+        miquel.raynal@bootlin.com, linux-rockchip@lists.infradead.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, richard@nod.at, ulf.hansson@linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhangqing@rock-chips.com,
+        jamie@jamieiles.com, thierry.reding@gmail.com,
+        linux-mmc@vger.kernel.org, robh+dt@kernel.org,
+        kever.yang@rock-chips.com, linux-spi@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, philipp.tomsich@vrull.eu,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        u.kleine-koenig@pengutronix.de, vigneshr@ti.com
+Subject: Re: [PATCH v1 04/11] dt-bindings: mmc: rockchip: add
+ rockchip,rk3128-dw-mshc
+Message-ID: <20220913141558.GA3606130-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next 3/3] dt-bindings: net: dsa: remove label = "cpu"
- from examples
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        George McCollister <george.mccollister@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220912175058.280386-1-vladimir.oltean@nxp.com>
- <20220912175058.280386-4-vladimir.oltean@nxp.com>
- <b11e86c6-ff35-2103-cebe-ebe5f737d9de@arinc9.com>
- <20220913133122.gzs2uhuk626eazee@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20220913133122.gzs2uhuk626eazee@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.09.2022 16:31, Vladimir Oltean wrote:
-> On Tue, Sep 13, 2022 at 11:20:04AM +0300, Arınç ÜNAL wrote:
->> Is there also a plan to remove this from every devicetree on mainline that
->> has got this property on the CPU port?
->>
->> I'd like to do the same on the DTs on OpenWrt.
+On Sat, 10 Sep 2022 00:02:14 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-dw-mshc compatible string.
 > 
-> I don't really have the time to split patches towards every individual
-> platform maintainer and follow up with them until such patches would get
-> accepted. I would encourage such an initiative coming from somebody else,
-> though.
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Understood, I think I can deal with this.
-
-Arınç
+Acked-by: Rob Herring <robh@kernel.org>
