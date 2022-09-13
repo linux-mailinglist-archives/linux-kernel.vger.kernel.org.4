@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121465B7562
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9E35B7481
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiIMPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S236097AbiIMPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiIMPiT (ORCPT
+        with ESMTP id S235782AbiIMPTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:38:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48B16F249;
-        Tue, 13 Sep 2022 07:44:19 -0700 (PDT)
+        Tue, 13 Sep 2022 11:19:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E337AC37;
+        Tue, 13 Sep 2022 07:36:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B480B614B5;
-        Tue, 13 Sep 2022 14:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DA3C433D6;
-        Tue, 13 Sep 2022 14:31:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DA43B80F9D;
+        Tue, 13 Sep 2022 14:34:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A263FC433C1;
+        Tue, 13 Sep 2022 14:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079502;
-        bh=AMvkWcumkyw9/k0EQQQuY6LBmsfboRqftOvewoCknF0=;
+        s=korg; t=1663079661;
+        bh=fl+1UOIJlFEE2wyNt2W4lBZHymVKH/kugNQe66C4Z6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YRW6twSggyTVCRhUYEtRCqVrgl5CpXYQ3nN5JJ8Ux/shAc3N3RKcJlv08QrXyFA0t
-         6U1s0l/9ormHJnS9vw6SqDhnsaaLhcGK35xAN9UzhRpE3rMc+s9fsks6GTarlvNvSa
-         TQV11e+S539qqxuZbhUgccm9Y6dlllvXtDDwV1PE=
+        b=qw0qJYEyS/kEYm8morrU2ImrdBBQJeOI4dcoigJHY3AIN3ysKukEg0QjJG+V+WWb3
+         Z3eHrYpAyNAcOb5CQ/hVg/LKQwM+WiqR4k8GkYpvp+B23I1v9D/XgXJcx4f31e5gID
+         Ss+9f+m4hKSKyOS4xEv1ZpN7rNZ8lvbHFNl4L3hM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Qiong <liqiong@nfschina.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 51/79] parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 07/61] ethernet: rocker: fix sleep in atomic context bug in neigh_timer_handler
 Date:   Tue, 13 Sep 2022 16:07:09 +0200
-Message-Id: <20220913140351.370430390@linuxfoundation.org>
+Message-Id: <20220913140346.835357179@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Qiong <liqiong@nfschina.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit d46c742f827fa2326ab1f4faa1cccadb56912341 ]
+[ Upstream commit c0955bf957be4bead01fae1d791476260da7325d ]
 
-As the possible failure of the kmalloc(), it should be better
-to fix this error path, check and return '-ENOMEM' error code.
+The function neigh_timer_handler() is a timer handler that runs in an
+atomic context. When used by rocker, neigh_timer_handler() calls
+"kzalloc(.., GFP_KERNEL)" that may sleep. As a result, the sleep in
+atomic context bug will happen. One of the processes is shown below:
 
-Signed-off-by: Li Qiong <liqiong@nfschina.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+ofdpa_fib4_add()
+ ...
+ neigh_add_timer()
+
+(wait a timer)
+
+neigh_timer_handler()
+ neigh_release()
+  neigh_destroy()
+   rocker_port_neigh_destroy()
+    rocker_world_port_neigh_destroy()
+     ofdpa_port_neigh_destroy()
+      ofdpa_port_ipv4_neigh()
+       kzalloc(sizeof(.., GFP_KERNEL) //may sleep
+
+This patch changes the gfp_t parameter of kzalloc() from GFP_KERNEL to
+GFP_ATOMIC in order to mitigate the bug.
+
+Fixes: 00fc0c51e35b ("rocker: Change world_ops API and implementation to be switchdev independant")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/parisc/ccio-dma.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/rocker/rocker_ofdpa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
-index 6efab7a06c5fc..73ee74d6e7a3d 100644
---- a/drivers/parisc/ccio-dma.c
-+++ b/drivers/parisc/ccio-dma.c
-@@ -1390,15 +1390,17 @@ ccio_init_resource(struct resource *res, char *name, void __iomem *ioaddr)
- 	}
- }
+diff --git a/drivers/net/ethernet/rocker/rocker_ofdpa.c b/drivers/net/ethernet/rocker/rocker_ofdpa.c
+index 0653b70723a34..5dad40257e12e 100644
+--- a/drivers/net/ethernet/rocker/rocker_ofdpa.c
++++ b/drivers/net/ethernet/rocker/rocker_ofdpa.c
+@@ -1277,7 +1277,7 @@ static int ofdpa_port_ipv4_neigh(struct ofdpa_port *ofdpa_port,
+ 	bool removing;
+ 	int err = 0;
  
--static void __init ccio_init_resources(struct ioc *ioc)
-+static int __init ccio_init_resources(struct ioc *ioc)
- {
- 	struct resource *res = ioc->mmio_region;
- 	char *name = kmalloc(14, GFP_KERNEL);
--
-+	if (unlikely(!name))
-+		return -ENOMEM;
- 	snprintf(name, 14, "GSC Bus [%d/]", ioc->hw_path);
- 
- 	ccio_init_resource(res, name, &ioc->ioc_regs->io_io_low);
- 	ccio_init_resource(res + 1, name, &ioc->ioc_regs->io_io_low_hv);
-+	return 0;
- }
- 
- static int new_ioc_area(struct resource *res, unsigned long size,
-@@ -1552,7 +1554,10 @@ static int __init ccio_probe(struct parisc_device *dev)
+-	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
++	entry = kzalloc(sizeof(*entry), GFP_ATOMIC);
+ 	if (!entry)
  		return -ENOMEM;
- 	}
- 	ccio_ioc_init(ioc);
--	ccio_init_resources(ioc);
-+	if (ccio_init_resources(ioc)) {
-+		kfree(ioc);
-+		return -ENOMEM;
-+	}
- 	hppa_dma_ops = &ccio_ops;
- 	dev->dev.platform_data = kzalloc(sizeof(struct pci_hba_data), GFP_KERNEL);
  
 -- 
 2.35.1
