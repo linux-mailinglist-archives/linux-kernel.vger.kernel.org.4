@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA505B73C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926355B73EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiIMPGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S233412AbiIMPQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235460AbiIMPEa (ORCPT
+        with ESMTP id S235692AbiIMPNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:04:30 -0400
+        Tue, 13 Sep 2022 11:13:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8636B74DFB;
-        Tue, 13 Sep 2022 07:30:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD649786F9;
+        Tue, 13 Sep 2022 07:33:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C476149A;
-        Tue, 13 Sep 2022 14:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD13C433D7;
-        Tue, 13 Sep 2022 14:28:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1852A614D6;
+        Tue, 13 Sep 2022 14:32:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30053C433D6;
+        Tue, 13 Sep 2022 14:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079326;
-        bh=KdpYtd+jmTFPcmWqdbfPFjXB/QNUWpEo26EFllndTjs=;
+        s=korg; t=1663079556;
+        bh=ywg4X3ww0hbVDWBYpXvULTqy1piXGikF37PiF8yD7tc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qwC1cMRL4mGaV1mAvVXGU+oC4LMD273UcOKoOFxheuhvZARorDqa4SCvv6eG4fM3u
-         aZayPjZyMU0hvTKaRpoeMr4SgJDIQh4BrAUgKixCuBpGBQsh+b+94yxynuvbKtj2/T
-         VLd9rWW1Ugc1+PRpsQLSiaY4DOVdVLZMwAX2qi/k=
+        b=HM3Ird5/PL17B3781Fb2abu1ZXHS2G15GvY6Aw1qUm9guwpsFhVsZhXxJKihhfhTG
+         pPAZh0wRYjPViN937gxRDD9nsCDt25YYbNEXfzb+xxauHtMjl/K4IRCKk3C18D8Y4M
+         pveRenHi7QHfSy9RmxrNTKEIdZuVeLPtv5qnWEkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.4 083/108] scsi: mpt3sas: Fix use-after-free warning
-Date:   Tue, 13 Sep 2022 16:06:54 +0200
-Message-Id: <20220913140357.192235125@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Ranquet <granquet@baylibre.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH 4.19 37/79] usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
+Date:   Tue, 13 Sep 2022 16:06:55 +0200
+Message-Id: <20220913140350.703108730@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Pablo Sun <pablo.sun@mediatek.com>
 
-commit 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34 upstream.
+commit c1e5c2f0cb8a22ec2e14af92afc7006491bebabb upstream.
 
-Fix the following use-after-free warning which is observed during
-controller reset:
+Fix incorrect pin assignment values when connecting to a monitor with
+Type-C receptacle instead of a plug.
 
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 23 PID: 5399 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
+According to specification, an UFP_D receptacle's pin assignment
+should came from the UFP_D pin assignments field (bit 23:16), while
+an UFP_D plug's assignments are described in the DFP_D pin assignments
+(bit 15:8) during Mode Discovery.
 
-Link: https://lore.kernel.org/r/20220906134908.1039-2-sreekanth.reddy@broadcom.com
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+For example the LG 27 UL850-W is a monitor with Type-C receptacle.
+The monitor responds to MODE DISCOVERY command with following
+DisplayPort Capability flag:
+
+        dp->alt->vdo=0x140045
+
+The existing logic only take cares of UPF_D plug case,
+and would take the bit 15:8 for this 0x140045 case.
+
+This results in an non-existing pin assignment 0x0 in
+dp_altmode_configure.
+
+To fix this problem a new set of macros are introduced
+to take plug/receptacle differences into consideration.
+
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
+Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Link: https://lore.kernel.org/r/20220804034803.19486-1-macpaul.lin@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/typec/altmodes/displayport.c |    4 ++--
+ include/linux/usb/typec_dp.h             |    5 +++++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -3238,6 +3238,7 @@ static struct fw_event_work *dequeue_nex
- 		fw_event = list_first_entry(&ioc->fw_event_list,
- 				struct fw_event_work, list);
- 		list_del_init(&fw_event->list);
-+		fw_event_work_put(fw_event);
- 	}
- 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -91,8 +91,8 @@ static int dp_altmode_configure(struct d
+ 	case DP_STATUS_CON_UFP_D:
+ 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
+ 		conf |= DP_CONF_UFP_U_AS_UFP_D;
+-		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
+-			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
++		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
++				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
+ 		break;
+ 	default:
+ 		break;
+--- a/include/linux/usb/typec_dp.h
++++ b/include/linux/usb/typec_dp.h
+@@ -68,6 +68,11 @@ enum {
+ #define DP_CAP_USB			BIT(7)
+ #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
+ #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
++/* Get pin assignment taking plug & receptacle into consideration */
++#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
++			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
++#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
++			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
  
-@@ -3272,7 +3273,6 @@ _scsih_fw_event_cleanup_queue(struct MPT
- 		if (cancel_work_sync(&fw_event->work))
- 			fw_event_work_put(fw_event);
- 
--		fw_event_work_put(fw_event);
- 	}
- }
- 
+ /* DisplayPort Status Update VDO bits */
+ #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
 
 
