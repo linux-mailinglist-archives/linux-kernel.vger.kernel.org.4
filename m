@@ -2,97 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20F45B7C3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EDE5B7C4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiIMUfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S229473AbiIMUry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIMUfQ (ORCPT
+        with ESMTP id S229457AbiIMUrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:35:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2048.outbound.protection.outlook.com [40.107.94.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABF349B4C;
-        Tue, 13 Sep 2022 13:35:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f35NFTxXZhRZySGVe6YnMfEpMYHuBYBryVXnzhn2bMCvEzjMFY4/R5x2/x/hEFNymgAR+fQScZ/MPSKLQawtjHugJP6K/UiqtZDcyt8HPT3vH8mkPVQy0+y0wd4Ch7gc+TQENUNr/Atq+Sr4YJE/BDx0usjHDpaM/EHheOK7W7KfPDZ0hnEx/t8d0hkc9PlVB7OuKAzUTuMFq/ypgAEyiKmeBzPqGjhaUHttftXvPEHXBdit50RP2FiUfMNDgxMby6BgYc8i6qvFwc4wQNmhtFGCtzyNvjn18YzDpTTAUmy6lHHVgCn6kculXUui7y8LY2YiT8C/a42iRN+9mXpB7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6w8AF9uYrfJOn3m9JlmpsEL2pD/0Yr0gU1UHpOTVdWw=;
- b=Xi+vTsa/nk9OOqWhYCKn4Bx7dxHI9KvE80mGz/3Kd+8wnkjOhCeDmO6WZ38SQYCRsNndxlHhgf+pmARW2SHJOQNL9dtAxTXZOPGZdysUT77maVmeJ0u8oxWjYfZq/2A5/pGdZoiRfT4uwGvDJj1w71IwfrznAIWxit+Og9DIoXJk06M6yJx9iRJrDTWXbky6qocES6eCrjUnmNeQXSzemAv2Lh5xUkDowgjgrWK2x80kTJr3A4Xw8Lw/6gGFbUNrWxqGUcI7qqubOxtYMA/rcL42aDQmriAg5UY2XwotXEDPH2c5yt402XPR9sAkHsKXvQ7pNlcO1kNd2g/NMdge9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6w8AF9uYrfJOn3m9JlmpsEL2pD/0Yr0gU1UHpOTVdWw=;
- b=t8n84PCl0iP5kw38kwKYA5b8wEodm1pCBJ6qVpLvDhhHRftUFIAe0VkZgsTbZKR8DHQI7QeTIZpfNzrXqXIDxHYYyHkGjiYEnIKidnoUcnCuuUwWfTEUoiS5GAyJYQLcXu6qcz/vk5+WyJWh+Okw/an4ygzxuqRJ87J7sjPbxIM=
-Received: from MW4P223CA0024.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::29)
- by DM4PR12MB6616.namprd12.prod.outlook.com (2603:10b6:8:8e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
- 2022 20:35:11 +0000
-Received: from CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::c1) by MW4P223CA0024.outlook.office365.com
- (2603:10b6:303:80::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22 via Frontend
- Transport; Tue, 13 Sep 2022 20:35:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT007.mail.protection.outlook.com (10.13.174.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Tue, 13 Sep 2022 20:35:10 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 13 Sep
- 2022 15:35:09 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Puma Hsu <pumahsu@google.com>
-CC:     "Artem S . Tashkinov" <aros@gmx.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] xhci: Don't show warning for reinit on known broken suspend
-Date:   Tue, 13 Sep 2022 15:35:15 -0500
-Message-ID: <20220913203515.451-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Sep 2022 16:47:51 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1850874CFF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:47:50 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id y9so10206970qvo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=sIW0jOj9f2zyE3XbbwArWS7yU2vU8DbR4RLobl61rlE=;
+        b=W19uCO3pR1SMidtgHfI2O4k1qUJbea2ZLFaTiP0KGphrTeFlMLoWfLAqyba3T3gqeF
+         dEFpxJsRqVtLXCtxqDzQAOGCVN0Yxq4ZqfxC/qRxDbdfDrlqUH1Bzl2ojo47NXaGoq4h
+         oPGH9U3AupA0OVh9Ugk6917bb3ZPxCvjl2KRub1j+Gli78hK7lPmGJINicWKftGyVqsr
+         Zk2rd/A2eL7/uqErExT8IoUOuj2yGO3M5HRHEGOtnkstq2NN5cHkAZ/lSd6R8ofmo9wH
+         V9Vopl3ru4YRwy7gadCWVvNzNpIZJ/mqCBp03s5dEzKgccIJ1lcAz9BuW9po56qg4bz5
+         WxoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=sIW0jOj9f2zyE3XbbwArWS7yU2vU8DbR4RLobl61rlE=;
+        b=P5ADKMTuUF65n685fBxpFW68SOzGe9wxSn8P5Fk11+rgZWMHTYDRIP065EJOVHLzn4
+         sPTTuWSNgPV+wA0VDv/3FnqAcOmfx8gmV023sY4KX0F4yKQ+MfIenZXhNugKz/bftqSx
+         vo9jkAeZJ2AXmn7chyczoQp1ZjCF4sGobw3cCUwLTMjD5+20bhL1iqGbm4B0P4JLp7jA
+         naqY5jpoONoHWl5LoSzQUvS0afFylBokmmierDC6BiNX7G2Tt8alnPRxpWkhTtQjYbQx
+         RDRzZRu66eFCYW7Er0Dp6PMyqDm3+2YmOWEn5XValq5Xb4ZSo+16voMBqhFr+ADge49P
+         WRuw==
+X-Gm-Message-State: ACgBeo3rytz3nAcumjN5H0zl6UJc3XO9g7pic3Hz6axJp+xGxGuoXIGw
+        svNwo4DXsSXY+x3ioM+R11V7G66LFtLX431kNAXvPQ==
+X-Google-Smtp-Source: AA6agR6xLK8C4qJdigsd8yEHH+TKpLgN5MT9yfh5GJuDfSkVGSo1vafy06eImNkjtngmdW4n+PDEfxLUFOM32v1oeZA=
+X-Received: by 2002:ad4:5ce9:0:b0:49f:ee02:50c7 with SMTP id
+ iv9-20020ad45ce9000000b0049fee0250c7mr28733575qvb.105.1663102069229; Tue, 13
+ Sep 2022 13:47:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT007:EE_|DM4PR12MB6616:EE_
-X-MS-Office365-Filtering-Correlation-Id: 510614bf-55ad-4936-de89-08da95c77463
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j2K1OCUoHJEsvd7wMbjojWzTdE14QDcTHGwiUinLftkWrURObI4dNT7tkdstnyDSNx+hq3wPS/3zalHMMaSOcYn+ztCYdieL6DIySGeEnvS2pIaLSpzE/TdaYr9+GHNG/l64fgGoi9v19EFTgF5HSARrwdCLHj8B5E9v/EgPR2CPfxfZi6+HORaqumLTgVbLssdYyipShzkDfJFCCRo1d+nDGWwqacghZ2k6dcAxQtkSM5ggDUV1EzdOvAxYAYMiEPilQUSAl2/c4EXSI0ghrd21/he6jwf6SXUDBayY4j4+7PpE9E1pOiuWwBvV/unEr5adqfJdTL9NNL1MkmXbSpzEu8zy9OW4N/+7s0N4YKsQwISmC34qFvANvUvJgMwwmMmry83H8llXmFpTHB4QC8cVjeirNi7vsIetHNy2LNVuBbxOu6naDWWXbAKLqLSWj9zN09shDxzCrmxJrAJntBNp3IDyazJ7NQG1RYglz0V/Qj02qkYdWTgnNk+yo4SiYL81D+c8yOk3IM1ljred5THcXhJybTaOPIIqGa/rSWE4I75BHgYrinWJnKUZdS1ppOr0JTP/F6oZQjpr9Tsd9VNIMn3t7c1i9M/wcelyNqLg2tzVyfqiBr9/CNoyjA7wjbgxC4YoaOy8Un0848jJr3fQvGJCBS3yHbVYcuT1c3wxXvl5Lfd+P+QODgDsasjSS6+CBC7NFJPnJG9XIa8/YiKpqPzLKGzSNkJn/UZb9qLWH1B0O/42h7Fuag9ZlbfNp+OrBVbQDEWFedHf504KS2Z8+qLD6YJszp1yn9pmd8LzFfSWO0eXuSxHnNtrApFjOsFhXCqTb5uLFQKkrywQtkand/cR27O983pfYZf0Bec=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199015)(46966006)(40470700004)(36840700001)(70206006)(15650500001)(41300700001)(40460700003)(1076003)(4326008)(36756003)(26005)(336012)(2616005)(83380400001)(5660300002)(2906002)(110136005)(316002)(40480700001)(16526019)(54906003)(82310400005)(478600001)(8936002)(6666004)(36860700001)(356005)(86362001)(426003)(186003)(44832011)(82740400003)(8676002)(70586007)(81166007)(7696005)(47076005)(966005)(518174003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 20:35:10.8204
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 510614bf-55ad-4936-de89-08da95c77463
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6616
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220912214432.928989-1-nhuck@google.com> <20220913081548.gmngjwuagbt63j7h@wse-c0155>
+In-Reply-To: <20220913081548.gmngjwuagbt63j7h@wse-c0155>
+From:   Nathan Huckleberry <nhuck@google.com>
+Date:   Tue, 13 Sep 2022 13:46:00 -0700
+Message-ID: <CAJkfWY7dGXV=YPaCKqZ0YguRGTN2JA+n9jyVWk8LPj3dgtC=tA@mail.gmail.com>
+Subject: Re: [PATCH] net: sparx5: Fix return type of sparx5_port_xmit_impl
+To:     Casper Andersson <casper.casan@gmail.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,38 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was
-set") introduced a new warning message when the host controller error
-was set and re-initializing.
+Hey Casper,
 
-This is expected behavior on some designs which already set
-`xhci->broken_suspend` so the new warning is alarming to some users.
+On Tue, Sep 13, 2022 at 1:15 AM Casper Andersson <casper.casan@gmail.com> wrote:
+>
+> Hi,
+>
+> On 2022-09-12 14:44, Nathan Huckleberry wrote:
+> > The ndo_start_xmit field in net_device_ops is expected to be of type
+> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> >
+> > The mismatched return type breaks forward edge kCFI since the underlying
+> > function definition does not match the function hook definition.
+> >
+> > The return type of sparx5_port_xmit_impl should be changed from int to
+> > netdev_tx_t.
+>
+> I noticed that the functions that assign the return value inside
+> sparx5_port_xmit_impl also have return type int, which would ideally
+> also be changed. But a bigger issue might be that
+> sparx5_ptp_txtstamp_request and sparx5_inject (called inside
+> sparx5_port_xmit_impl) returns -EBUSY (-16), when they should return
+> NETDEV_TX_BUSY (16). If this is an issue then it also needs to be fixed.
 
-Modify the code to only show the warning if this was a surprising behavior
-to the XHCI driver.
+It's not clear to me what happens when returning an error vs
+NETDEV_TX_BUSY. The netdev_tx_t enum allows negative values, so
+returning an error might be valid. If anyone more familiar with this
+code has insight into why it's done like this, that'd be useful.
 
-Fixes: 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was set")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216470
-Reported-by: Artem S. Tashkinov <aros@gmx.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/usb/host/xhci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The important bit here for me is changing the return type on the
+hooked function since the current code will cause panics.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 38649284ff88..a7ef675f00fd 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1183,7 +1183,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 	/* re-initialize the HC on Restore Error, or Host Controller Error */
- 	if (temp & (STS_SRE | STS_HCE)) {
- 		reinit_xhc = true;
--		xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
-+		if (!xhci->broken_suspend)
-+			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
- 	}
- 
- 	if (reinit_xhc) {
--- 
-2.34.1
+>
+> sparx5_fdma_xmit also has int return type, but always returns
+> NETDEV_TX_OK right now.
+>
+> Best Regards,
+> Casper
+>
 
+Thanks,
+Huck
