@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF45F5B73B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943D95B731A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbiIMPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S234791AbiIMO6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiIMPFz (ORCPT
+        with ESMTP id S234751AbiIMO4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:05:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F25753A9;
-        Tue, 13 Sep 2022 07:30:35 -0700 (PDT)
+        Tue, 13 Sep 2022 10:56:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F1173318;
+        Tue, 13 Sep 2022 07:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAA09B80FA1;
-        Tue, 13 Sep 2022 14:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCFBC433D7;
-        Tue, 13 Sep 2022 14:30:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC08614AA;
+        Tue, 13 Sep 2022 14:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7997C433D6;
+        Tue, 13 Sep 2022 14:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079426;
-        bh=6QeIICB9afA+06gQQvIaQmzK9vuCVqdguqf5PTujeGk=;
+        s=korg; t=1663079270;
+        bh=J6bY75iJ1h9Z6yJ8vIVGtMGTgX8TS40R6GyThvgxfUU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mNDAyuMP1/TcLT2kSWwQTleQ42cN4XY84n4hI6vb83aEvNV5bNFDIboO9ynttSekq
-         3ssdfPftON6V9rEqD749E2Y7zEJ/yRkGtKju0l8GxHefTECkcLRTqazf0umdo7canQ
-         HwVQONHa6Bep1U+ParpXfh0IWaeHLCadwwEepgsQ=
+        b=knPfcQ0qF9aXocJoEEFzqIjUSjbZsAblO034c0+862fnPBvz8TX5wUIJOmNIvB7zY
+         SK57zSTHmGIRrI3y1W03vtr7UguVDjZu4vidasPxdo1cHKrVBTj/8lfWPE5f2Iu6X9
+         OLcUwpDQ/rs5YwNsrrzGgjlIVwjjQwmXwZikZOUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Zheng Wang <hackerzheng666@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 4.19 21/79] staging: rtl8712: fix use after free bugs
-Date:   Tue, 13 Sep 2022 16:06:39 +0200
-Message-Id: <20220913140349.912122205@linuxfoundation.org>
+        stable@vger.kernel.org, Candice Li <candice.li@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 069/108] drm/amdgpu: Check num_gfx_rings for gfx v9_0 rb setup.
+Date:   Tue, 13 Sep 2022 16:06:40 +0200
+Message-Id: <20220913140356.583163802@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Candice Li <candice.li@amd.com>
 
-commit e230a4455ac3e9b112f0367d1b8e255e141afae0 upstream.
+[ Upstream commit c351938350ab9b5e978dede2c321da43de7eb70c ]
 
-_Read/Write_MACREG callbacks are NULL so the read/write_macreg_hdl()
-functions don't do anything except free the "pcmd" pointer.  It
-results in a use after free.  Delete them.
+No need to set up rb when no gfx rings.
 
-Fixes: 2865d42c78a9 ("staging: r8712u: Add the new driver to the mainline kernel")
-Cc: stable <stable@kernel.org>
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/Yw4ASqkYcUhUfoY2@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Candice Li <candice.li@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8712/rtl8712_cmd.c |   36 ----------------------------------
- 1 file changed, 36 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/staging/rtl8712/rtl8712_cmd.c
-+++ b/drivers/staging/rtl8712/rtl8712_cmd.c
-@@ -129,34 +129,6 @@ static void r871x_internal_cmd_hdl(struc
- 	kfree(pdrvcmd->pbuf);
- }
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index 5906a8951a6c6..685a2df01d096 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -2472,7 +2472,8 @@ static void gfx_v9_0_constants_init(struct amdgpu_device *adev)
  
--static u8 read_macreg_hdl(struct _adapter *padapter, u8 *pbuf)
--{
--	void (*pcmd_callback)(struct _adapter *dev, struct cmd_obj	*pcmd);
--	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
--
--	/*  invoke cmd->callback function */
--	pcmd_callback = cmd_callback[pcmd->cmdcode].callback;
--	if (!pcmd_callback)
--		r8712_free_cmd_obj(pcmd);
--	else
--		pcmd_callback(padapter, pcmd);
--	return H2C_SUCCESS;
--}
--
--static u8 write_macreg_hdl(struct _adapter *padapter, u8 *pbuf)
--{
--	void (*pcmd_callback)(struct _adapter *dev, struct cmd_obj	*pcmd);
--	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
--
--	/*  invoke cmd->callback function */
--	pcmd_callback = cmd_callback[pcmd->cmdcode].callback;
--	if (!pcmd_callback)
--		r8712_free_cmd_obj(pcmd);
--	else
--		pcmd_callback(padapter, pcmd);
--	return H2C_SUCCESS;
--}
--
- static u8 read_bbreg_hdl(struct _adapter *padapter, u8 *pbuf)
- {
- 	struct cmd_obj *pcmd  = (struct cmd_obj *)pbuf;
-@@ -225,14 +197,6 @@ static struct cmd_obj *cmd_hdl_filter(st
- 	pcmd_r = NULL;
+ 	gfx_v9_0_tiling_mode_table_init(adev);
  
- 	switch (pcmd->cmdcode) {
--	case GEN_CMD_CODE(_Read_MACREG):
--		read_macreg_hdl(padapter, (u8 *)pcmd);
--		pcmd_r = pcmd;
--		break;
--	case GEN_CMD_CODE(_Write_MACREG):
--		write_macreg_hdl(padapter, (u8 *)pcmd);
--		pcmd_r = pcmd;
--		break;
- 	case GEN_CMD_CODE(_Read_BBREG):
- 		read_bbreg_hdl(padapter, (u8 *)pcmd);
- 		break;
+-	gfx_v9_0_setup_rb(adev);
++	if (adev->gfx.num_gfx_rings)
++		gfx_v9_0_setup_rb(adev);
+ 	gfx_v9_0_get_cu_info(adev, &adev->gfx.cu_info);
+ 	adev->gfx.config.db_debug2 = RREG32_SOC15(GC, 0, mmDB_DEBUG2);
+ 
+-- 
+2.35.1
+
 
 
