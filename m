@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AB85B7146
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200815B736B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiIMOkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S235176AbiIMPHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbiIMOhM (ORCPT
+        with ESMTP id S235478AbiIMPEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:37:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC866B8E2;
-        Tue, 13 Sep 2022 07:20:29 -0700 (PDT)
+        Tue, 13 Sep 2022 11:04:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB1B74DCE;
+        Tue, 13 Sep 2022 07:30:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CADA614A8;
-        Tue, 13 Sep 2022 14:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E429C433D6;
-        Tue, 13 Sep 2022 14:19:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAC3A614B6;
+        Tue, 13 Sep 2022 14:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17D1C433C1;
+        Tue, 13 Sep 2022 14:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078794;
-        bh=Q83UYvvGgPJ5Yy7LZn6xwgV627m5YsW0M8zEvrvHtNk=;
+        s=korg; t=1663079030;
+        bh=qw+AuVF2vbBLzKv6kIt8ab6sjz0MEMRHaxZ7VPhNNuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qxgj6+RCAkZGKyG56gB9DYnGiYRk1vO2rAUBRccOkYNhpiQWFl1uj4xYM8y3nqaII
-         O/wcxteXm696qUEUm8M8RKU/tMzDQy32CGrke06cZbxGWvNvr0gGAVH5Gps0keg80x
-         Uiqr++0PTmJLGtRAPYbA73plFYPblluDMHElbz8A=
+        b=DstIEtFGNLungn9m7u03YUUy9l7vbu/sM6NYMQ8KOwA9M9JCccssEWa9jh+f16r+l
+         yB5sJwaOGWhGL5ltyz9JssDQfnOmoa0dzn+WxQ14ixySDZxodfqWuiq76dST39qJeu
+         ygTHnW/zjyjxnu8Wn5LPfzbBjugNXG835M8hSrvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        =?UTF-8?q?Cs=C3=B3k=C3=A1s=20Bence?= <csokas.bence@prolan.hu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH 5.15 084/121] net: fec: Use a spinlock to guard `fep->ptp_clk_on`
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Aaron Ma <aaron.ma@canonical.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH 5.10 30/79] drm/i915: Implement WaEdpLinkRateDataReload
 Date:   Tue, 13 Sep 2022 16:04:35 +0200
-Message-Id: <20220913140400.979880696@linuxfoundation.org>
+Message-Id: <20220913140351.757713465@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,191 +58,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Csókás Bence <csokas.bence@prolan.hu>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-[ Upstream commit b353b241f1eb9b6265358ffbe2632fdcb563354f ]
+commit 672d6ca758651f0ec12cd0d59787067a5bde1c96 upstream.
 
-Mutexes cannot be taken in a non-preemptible context,
-causing a panic in `fec_ptp_save_state()`. Replacing
-`ptp_clk_mutex` by `tmreg_lock` fixes this.
+A lot of modern laptops use the Parade PS8461E MUX for eDP
+switching. The MUX can operate in jitter cleaning mode or
+redriver mode, the first one resulting in higher link
+quality. The jitter cleaning mode needs to know the link
+rate used and the MUX achieves this by snooping the
+LINK_BW_SET, LINK_RATE_SELECT and SUPPORTED_LINK_RATES
+DPCD accesses.
 
-Fixes: 6a4d7234ae9a ("net: fec: ptp: avoid register access when ipg clock is disabled")
-Fixes: f79959220fa5 ("fec: Restart PPS after link state change")
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/all/20220827160922.642zlcd5foopozru@pengutronix.de/
-Signed-off-by: Csókás Bence <csokas.bence@prolan.hu>
-Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com> # Toradex Apalis iMX6
-Link: https://lore.kernel.org/r/20220901140402.64804-1-csokas.bence@prolan.hu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+When the MUX is powered down (seems this can happen whenever
+the display is turned off) it loses track of the snooped
+link rates so when we do the LINK_RATE_SELECT write it no
+longer knowns which link rate we're selecting, and thus it
+falls back to the lower quality redriver mode. This results
+in unstable high link rates (eg. usually 8.1Gbps link rate
+no longer works correctly).
+
+In order to avoid all that let's re-snoop SUPPORTED_LINK_RATES
+from the sink at the start of every link training.
+
+Unfortunately we don't have a way to detect the presence of
+the MUX. It looks like the set of laptops equipped with this
+MUX is fairly large and contains devices from multiple
+manufacturers. It may also still be growing with new models.
+So a quirk doesn't seem like a very easily maintainable
+option, thus we shall attempt to do this unconditionally on
+all machines that use LINK_RATE_SELECT. Hopefully this extra
+DPCD read doesn't cause issues for any unaffected machine.
+If that turns out to be the case we'll need to convert this
+into a quirk in the future.
+
+Cc: stable@vger.kernel.org
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/6205
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220902070319.15395-1-ville.syrjala@linux.intel.com
+Tested-by: Aaron Ma <aaron.ma@canonical.com>
+Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+(cherry picked from commit 25899c590cb5ba9b9f284c6ca8e7e9086793d641)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fec.h      |  1 -
- drivers/net/ethernet/freescale/fec_main.c | 17 +++++++-------
- drivers/net/ethernet/freescale/fec_ptp.c  | 28 ++++++++---------------
- 3 files changed, 19 insertions(+), 27 deletions(-)
+ drivers/gpu/drm/i915/display/intel_dp_link_training.c |   22 ++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-index ed7301b691694..939720a75f87c 100644
---- a/drivers/net/ethernet/freescale/fec.h
-+++ b/drivers/net/ethernet/freescale/fec.h
-@@ -557,7 +557,6 @@ struct fec_enet_private {
- 	struct clk *clk_2x_txclk;
+--- a/drivers/gpu/drm/i915/display/intel_dp_link_training.c
++++ b/drivers/gpu/drm/i915/display/intel_dp_link_training.c
+@@ -163,6 +163,28 @@ intel_dp_link_training_clock_recovery(st
+ 	intel_dp_compute_rate(intel_dp, intel_dp->link_rate,
+ 			      &link_bw, &rate_select);
  
- 	bool ptp_clk_on;
--	struct mutex ptp_clk_mutex;
- 	unsigned int num_tx_queues;
- 	unsigned int num_rx_queues;
- 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 67eb9b671244b..7561524e7c361 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1984,6 +1984,7 @@ static void fec_enet_phy_reset_after_clk_enable(struct net_device *ndev)
- static int fec_enet_clk_enable(struct net_device *ndev, bool enable)
- {
- 	struct fec_enet_private *fep = netdev_priv(ndev);
-+	unsigned long flags;
- 	int ret;
- 
- 	if (enable) {
-@@ -1992,15 +1993,15 @@ static int fec_enet_clk_enable(struct net_device *ndev, bool enable)
- 			return ret;
- 
- 		if (fep->clk_ptp) {
--			mutex_lock(&fep->ptp_clk_mutex);
-+			spin_lock_irqsave(&fep->tmreg_lock, flags);
- 			ret = clk_prepare_enable(fep->clk_ptp);
- 			if (ret) {
--				mutex_unlock(&fep->ptp_clk_mutex);
-+				spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 				goto failed_clk_ptp;
- 			} else {
- 				fep->ptp_clk_on = true;
- 			}
--			mutex_unlock(&fep->ptp_clk_mutex);
-+			spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 		}
- 
- 		ret = clk_prepare_enable(fep->clk_ref);
-@@ -2015,10 +2016,10 @@ static int fec_enet_clk_enable(struct net_device *ndev, bool enable)
- 	} else {
- 		clk_disable_unprepare(fep->clk_enet_out);
- 		if (fep->clk_ptp) {
--			mutex_lock(&fep->ptp_clk_mutex);
-+			spin_lock_irqsave(&fep->tmreg_lock, flags);
- 			clk_disable_unprepare(fep->clk_ptp);
- 			fep->ptp_clk_on = false;
--			mutex_unlock(&fep->ptp_clk_mutex);
-+			spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 		}
- 		clk_disable_unprepare(fep->clk_ref);
- 		clk_disable_unprepare(fep->clk_2x_txclk);
-@@ -2031,10 +2032,10 @@ static int fec_enet_clk_enable(struct net_device *ndev, bool enable)
- 		clk_disable_unprepare(fep->clk_ref);
- failed_clk_ref:
- 	if (fep->clk_ptp) {
--		mutex_lock(&fep->ptp_clk_mutex);
-+		spin_lock_irqsave(&fep->tmreg_lock, flags);
- 		clk_disable_unprepare(fep->clk_ptp);
- 		fep->ptp_clk_on = false;
--		mutex_unlock(&fep->ptp_clk_mutex);
-+		spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 	}
- failed_clk_ptp:
- 	clk_disable_unprepare(fep->clk_enet_out);
-@@ -3866,7 +3867,7 @@ fec_probe(struct platform_device *pdev)
- 		fep->clk_enet_out = NULL;
- 
- 	fep->ptp_clk_on = false;
--	mutex_init(&fep->ptp_clk_mutex);
-+	spin_lock_init(&fep->tmreg_lock);
- 
- 	/* clk_ref is optional, depends on board */
- 	fep->clk_ref = devm_clk_get(&pdev->dev, "enet_clk_ref");
-diff --git a/drivers/net/ethernet/freescale/fec_ptp.c b/drivers/net/ethernet/freescale/fec_ptp.c
-index c5ae673005908..99bd67d3befd0 100644
---- a/drivers/net/ethernet/freescale/fec_ptp.c
-+++ b/drivers/net/ethernet/freescale/fec_ptp.c
-@@ -366,21 +366,19 @@ static int fec_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
-  */
- static int fec_ptp_gettime(struct ptp_clock_info *ptp, struct timespec64 *ts)
- {
--	struct fec_enet_private *adapter =
-+	struct fec_enet_private *fep =
- 	    container_of(ptp, struct fec_enet_private, ptp_caps);
- 	u64 ns;
- 	unsigned long flags;
- 
--	mutex_lock(&adapter->ptp_clk_mutex);
-+	spin_lock_irqsave(&fep->tmreg_lock, flags);
- 	/* Check the ptp clock */
--	if (!adapter->ptp_clk_on) {
--		mutex_unlock(&adapter->ptp_clk_mutex);
-+	if (!fep->ptp_clk_on) {
-+		spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 		return -EINVAL;
- 	}
--	spin_lock_irqsave(&adapter->tmreg_lock, flags);
--	ns = timecounter_read(&adapter->tc);
--	spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
--	mutex_unlock(&adapter->ptp_clk_mutex);
-+	ns = timecounter_read(&fep->tc);
-+	spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 
- 	*ts = ns_to_timespec64(ns);
- 
-@@ -405,10 +403,10 @@ static int fec_ptp_settime(struct ptp_clock_info *ptp,
- 	unsigned long flags;
- 	u32 counter;
- 
--	mutex_lock(&fep->ptp_clk_mutex);
-+	spin_lock_irqsave(&fep->tmreg_lock, flags);
- 	/* Check the ptp clock */
- 	if (!fep->ptp_clk_on) {
--		mutex_unlock(&fep->ptp_clk_mutex);
-+		spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 		return -EINVAL;
- 	}
- 
-@@ -418,11 +416,9 @@ static int fec_ptp_settime(struct ptp_clock_info *ptp,
- 	 */
- 	counter = ns & fep->cc.mask;
- 
--	spin_lock_irqsave(&fep->tmreg_lock, flags);
- 	writel(counter, fep->hwp + FEC_ATIME);
- 	timecounter_init(&fep->tc, &fep->cc, ns);
- 	spin_unlock_irqrestore(&fep->tmreg_lock, flags);
--	mutex_unlock(&fep->ptp_clk_mutex);
- 	return 0;
- }
- 
-@@ -523,13 +519,11 @@ static void fec_time_keep(struct work_struct *work)
- 	struct fec_enet_private *fep = container_of(dwork, struct fec_enet_private, time_keep);
- 	unsigned long flags;
- 
--	mutex_lock(&fep->ptp_clk_mutex);
-+	spin_lock_irqsave(&fep->tmreg_lock, flags);
- 	if (fep->ptp_clk_on) {
--		spin_lock_irqsave(&fep->tmreg_lock, flags);
- 		timecounter_read(&fep->tc);
--		spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 	}
--	mutex_unlock(&fep->ptp_clk_mutex);
-+	spin_unlock_irqrestore(&fep->tmreg_lock, flags);
- 
- 	schedule_delayed_work(&fep->time_keep, HZ);
- }
-@@ -604,8 +598,6 @@ void fec_ptp_init(struct platform_device *pdev, int irq_idx)
- 	}
- 	fep->ptp_inc = NSEC_PER_SEC / fep->cycle_speed;
- 
--	spin_lock_init(&fep->tmreg_lock);
--
- 	fec_ptp_start_cyclecounter(ndev);
- 
- 	INIT_DELAYED_WORK(&fep->time_keep, fec_time_keep);
--- 
-2.35.1
-
++	/*
++	 * WaEdpLinkRateDataReload
++	 *
++	 * Parade PS8461E MUX (used on varius TGL+ laptops) needs
++	 * to snoop the link rates reported by the sink when we
++	 * use LINK_RATE_SET in order to operate in jitter cleaning
++	 * mode (as opposed to redriver mode). Unfortunately it
++	 * loses track of the snooped link rates when powered down,
++	 * so we need to make it re-snoop often. Without this high
++	 * link rates are not stable.
++	 */
++	if (!link_bw) {
++		struct intel_connector *connector = intel_dp->attached_connector;
++		__le16 sink_rates[DP_MAX_SUPPORTED_RATES];
++
++		drm_dbg_kms(&i915->drm, "[CONNECTOR:%d:%s] Reloading eDP link rates\n",
++			    connector->base.base.id, connector->base.name);
++
++		drm_dp_dpcd_read(&intel_dp->aux, DP_SUPPORTED_LINK_RATES,
++				 sink_rates, sizeof(sink_rates));
++	}
++
+ 	if (link_bw)
+ 		drm_dbg_kms(&i915->drm,
+ 			    "Using LINK_BW_SET value %02x\n", link_bw);
 
 
