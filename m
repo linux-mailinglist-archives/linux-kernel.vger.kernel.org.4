@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4282C5B786B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A305C5B7853
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiIMRlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S233418AbiIMRlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbiIMRkJ (ORCPT
+        with ESMTP id S233129AbiIMRkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:40:09 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612F56C12D;
-        Tue, 13 Sep 2022 09:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663086828; x=1694622828;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qwr5ms5q+Z7ve8a7ukY4qstUnie8LtphKGzGWejbU+Y=;
-  b=T6A+Is1AMgpldxYhyUOOmpKSuQF3fy/bZm850aGYSnDaDQ5FO0zuwodW
-   bMhuX20eU2HyivOTnQE6HHii1MAYiTzLzOfjb6Pl1A3rHn2rxUC4mr7lS
-   cKdh1fG0NmV+xtBNm7Ez7pYRtNMl9vjP5/2AXus4p61lP6n/R3qIQUi1O
-   1IooFxzZ+fwOtq3SpRPUKp93KMys5fbyxwFD9ovrxH3S23h9hH2Qn0MDF
-   dXgOCn0VynDwNSw0v2ZIO+IWbukqe5WaAIl6+Ye+dAc/X3l4lOMLwp7zy
-   BFz5Yoj60IsPAssfyz5LjnzczAhfsM3WCrCiF7UJBmYstyEuEtVTdym+a
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="295777096"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="295777096"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 09:32:59 -0700
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="742222406"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 09:32:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oY8q1-001qD0-2E;
-        Tue, 13 Sep 2022 19:32:41 +0300
-Date:   Tue, 13 Sep 2022 19:32:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
-Message-ID: <YyCwqeQ35F2P9v82@smile.fi.intel.com>
-References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
- <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
- <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
- <Yx8MRPxPrNG1XRqV@smile.fi.intel.com>
+        Tue, 13 Sep 2022 13:40:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86FD6BD54
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:33:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6303334C94;
+        Tue, 13 Sep 2022 16:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663086824; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G+0/LysbokAzH3nfVJCfLD1HJyONhXA3k1asjd6ZpuU=;
+        b=GAL/vVTboiPfL6nqKly6L4ys0VP8Rjr4JSnNmOgdGBp/b3aCy7MSfdHt/R+eWwXSrMHBBz
+        gGJebnloswyiDy7rdpxnWxsQ0WQ9FIMS0tE5+8pjqIb8siv7q/quj0rnXCzUFEq7w/JMAs
+        TYmZ6SlcColGm2/UPbQU5S1+QHmNux0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663086824;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G+0/LysbokAzH3nfVJCfLD1HJyONhXA3k1asjd6ZpuU=;
+        b=wZiMmYWHW3tRWJEU+DOSnDTSvIiUt6MtbIBCW2JEX2xq9tqcJRFWMdCyJr5uWzlAmaM7X1
+        OxEh1ms6O2nbSwCg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3A9AB2C141;
+        Tue, 13 Sep 2022 16:33:44 +0000 (UTC)
+Date:   Tue, 13 Sep 2022 18:33:43 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Nathan Lynch <nathanl@linux.ibm.com>
+Cc:     Laurent Dufour <ldufour@linux.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, Lee@kitsune.suse.cz,
+        Chun-Yi <jlee@suse.com>
+Subject: Re: [PATCH] powerpc/pseries: add lparctl driver for
+ platform-specific functions
+Message-ID: <20220913163343.GA28810@kitsune.suse.cz>
+References: <20220730000458.130938-1-nathanl@linux.ibm.com>
+ <0ead0cd1-f6f6-ecf0-65d9-f3d9366e258c@linux.ibm.com>
+ <87k07dl1f6.fsf@linux.ibm.com>
+ <20220913091302.GY28810@kitsune.suse.cz>
+ <87v8prtgcj.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yx8MRPxPrNG1XRqV@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87v8prtgcj.fsf@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,27 +73,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 01:39:00PM +0300, Andy Shevchenko wrote:
-> On Sat, Sep 10, 2022 at 06:32:10PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-
-...
-
-> > Tentatively applied as 6.1 material.
+On Tue, Sep 13, 2022 at 10:59:56AM -0500, Nathan Lynch wrote:
+> Michal Suchánek <msuchanek@suse.de> writes:
 > 
-> Thanks!
+> > On Fri, Aug 12, 2022 at 02:14:21PM -0500, Nathan Lynch wrote:
+> >> Laurent Dufour <ldufour@linux.ibm.com> writes:
+> >> > Le 30/07/2022 à 02:04, Nathan Lynch a écrit :
+> >> >> +static long lparctl_get_sysparm(struct lparctl_get_system_parameter __user *argp)
+> >> >> +{
+> >> >> +	struct lparctl_get_system_parameter *gsp;
+> >> >> +	long ret;
+> >> >> +	int fwrc;
+> >> >> +
+> >> >> +	/*
+> >> >> +	 * Special case to allow user space to probe the command.
+> >> >> +	 */
+> >> >> +	if (argp == NULL)
+> >> >> +		return 0;
+> >> >> +
+> >> >> +	gsp = memdup_user(argp, sizeof(*gsp));
+> >> >> +	if (IS_ERR(gsp)) {
+> >> >> +		ret = PTR_ERR(gsp);
+> >> >> +		goto err_return;
+> >> >> +	}
+> >> >> +
+> >> >> +	ret = -EINVAL;
+> >> >> +	if (gsp->rtas_status != 0)
+> >> >> +		goto err_free;
+> >> >> +
+> >> >> +	do {
+> >> >> +		static_assert(sizeof(gsp->data) <= sizeof(rtas_data_buf));
+> >> >> +
+> >> >> +		spin_lock(&rtas_data_buf_lock);
+> >> >> +		memset(rtas_data_buf, 0, sizeof(rtas_data_buf));
+> >> >> +		memcpy(rtas_data_buf, gsp->data, sizeof(gsp->data));
+> >> >> +		fwrc = rtas_call(rtas_token("ibm,get-system-parameter"), 3, 1,
+> >> >> +				 NULL, gsp->token, __pa(rtas_data_buf),
+> >> >> +				 sizeof(gsp->data));
+> >> >> +		if (fwrc == 0)
+> >> >> +			memcpy(gsp->data, rtas_data_buf, sizeof(gsp->data));
+> >> >
+> >> > May be the amount of data copied out to the user space could be
+> >> > gsp->length. This would prevent copying 4K bytes all the time.
+> >> >
+> >> > In a more general way, the size of the RTAS buffer is quite big, and I'm
+> >> > wondering if all the data need to be copied back and forth to the kernel.
+> >> >
+> >> > Unless there are a high frequency of calls this doesn't make sense, and
+> >> > keeping the code simple might be the best way. Otherwise limiting the bytes
+> >> > copied could help a bit.
+> >> 
+> >> This is not intended to be a high-bandwidth interface and I don't think
+> >> there's much of a performance concern here, so I'd rather just keep the
+> >> copy sizes involved constant.
+> >
+> > But that's absolutely horrible!
 > 
-> > If there are updates, we'll make changes as they go.
+> ?
 > 
-> There is one at least to fix a warning in the perf patch. Should I resend
-> a fixed patch, just a fix, or entire series with a fixed patch?
+> > The user wants the VPD data, all of it. And you only give one page with
+> > this interface.
+> 
+> The code here is for system parameters, which have a known maximum size,
+> unlike VPD. There's no code for VPD retrieval in this patch.
 
-Since LKP found one small issue with SPI patch when CONFIG_ACPI=n, I decided
-to send a v3. Please, replace this by a new version in your tree, thanks!
+But we do need to support the calls that return multiple pages of data.
 
--- 
-With Best Regards,
-Andy Shevchenko
+If the new driver supports only the simple calls it's a failure.
 
+> 
+> But I'm happy to constructively discuss how a VPD ioctl interface should
+> work.
+> 
+> > Worse, the call is not reentrant so you need to lock against other users
+> > calling the call while the current caller is retrieving the inidividual
+> > pagaes.
+> >
+> > You could do that per process, but then processes with userspace
+> > threading would want the data as well so you would have to save the
+> > arguments of the last call, and compare to arguments of any subsequent
+> > call to determine if you can let it pass or block.
+> >
+> > And when you do all that there will be a process that retrieves a couple
+> > of pages and goes out for lunch or loses interest completely, blocking
+> > out everyone from accessing the interface at all.
+> 
+> Right, the ibm,get-vpd RTAS function is tricky to expose to user space.
+> 
+> It needs to be called repeatedly until all data has been returned, 4KB
+> at a time.
+> 
+> Only one ibm,get-vpd sequence can be in progress at any time. If an
+> ibm,get-vpd sequence is begun while another sequence is already
+> outstanding, the first one is invalidated -- I would guess -1 or some
+> other error is returned on its next call.
+> 
+> So a new system-call level interface for VPD retrieval probably should
+> not expose the repeating sequence-based nature of the RTAS function to
+> user space, to prevent concurrent clients from interfering with each
+> other. That implies that the kernel should buffer the VPD results
+> internally; at least that's the only idea I've had so far. Open to
+> other suggestions.
 
+It can save the data to an user-supplied buffer until all data is
+transferred or the buffer space runs out.
+
+Thanks
+
+Michal
