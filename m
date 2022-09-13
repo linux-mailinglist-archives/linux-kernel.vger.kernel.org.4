@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EDB5B6D25
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110685B6D2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbiIMMYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S232063AbiIMMZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiIMMYs (ORCPT
+        with ESMTP id S232020AbiIMMYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:24:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0343CE09D;
-        Tue, 13 Sep 2022 05:24:47 -0700 (PDT)
+        Tue, 13 Sep 2022 08:24:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262A311A34;
+        Tue, 13 Sep 2022 05:24:48 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9664660201B;
-        Tue, 13 Sep 2022 13:24:44 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7212660201D;
+        Tue, 13 Sep 2022 13:24:45 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663071885;
-        bh=Upr1CZnAlEt+3JwKmYKTBI9Ip2x7C+ZicowckZI35Q8=;
+        s=mail; t=1663071886;
+        bh=ffrRKhHcihnlzqwVMU99ZUXWa98jp4gFpa0V3vIwr2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZWwHhBThJmMRW4dl0ji3MMgDUZ79XURrkUYNaOFL4tKCpmZtJriyWMMuAp5PVDcqE
-         cVZuoAx48PqJFgi57C58hq+1J8lUGRndeZOlfhFkODqJdjkxRpUPeYHMzzrXtBulFO
-         s7HPh3J5wqwp7+7hjbCge7DaGi1M+yg3xRA39cppv/I0HMQhPJVFBMFWRXuXJsZrww
-         bVArS2Tp4C6Ss7iYKS1nC9l4GuHU3Ml0BKyae7JGYcvvaSZsE2dR5zGYgDEi+7zCYj
-         A6PwXchJoBLfcf+FuTkEuQbZRL8juoPd8P9N5Y6sTnNCrDNnU9mSCCrSGzcsjpz5Nb
-         xqbV8LZroFcEQ==
+        b=fdlQEuUccl/3XzNDAj8GjUhJkGFA5PQcsI97iXoCFlWaJcl8Mk/UeGyV5R6SbLdmA
+         P58UytLWY/9Xk2aX5/JfN6bzNC9H1c4SGOh/TaKNytkVWJUeN3YPWYq8scCBtZ0xKH
+         ze8dx3N9Zo8Dq1IynbRNpJZGKyF51aFZe0PP8n/BlJyOaITWWB59l9frxjfb3Rl5Wy
+         zAk7Rt/9kTnhoUZ3Yspc+pQS8/OFTySEjHPX54dDsOV5p3yzWrNghwH2Gn3LDG5H9E
+         +vTv/2NfNaSotJAIaaSGP62P0TLm7cCSb00Ba3AsGpAN707nAVvY/UAoxeda/4zGAQ
+         WkiFLFVb2PquA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     joro@8bytes.org
@@ -45,9 +45,9 @@ Cc:     yong.wu@mediatek.com, will@kernel.org, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v5 2/3] iommu/mediatek: Introduce new flag TF_PORT_TO_ADDR_MT8173
-Date:   Tue, 13 Sep 2022 14:24:27 +0200
-Message-Id: <20220913122428.374280-3-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v5 3/3] iommu/mediatek: Add support for MT6795 Helio X10 M4Us
+Date:   Tue, 13 Sep 2022 14:24:28 +0200
+Message-Id: <20220913122428.374280-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220913122428.374280-1-angelogioacchino.delregno@collabora.com>
 References: <20220913122428.374280-1-angelogioacchino.delregno@collabora.com>
@@ -62,61 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for adding support for MT6795, add a new flag named
-TF_PORT_TO_ADDR_MT8173 and use that instead of checking for m4u_plat
-type in mtk_iommu_hw_init() to avoid seeing a long list of m4u_plat
-checks there in the future.
+Add support for the M4Us found in the MT6795 Helio X10 SoC.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/iommu/mtk_iommu.c | 6 ++++--
- drivers/memory/mtk-smi.c  | 1 +
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/iommu/mtk_iommu.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 7e363b1f24df..b511359376f4 100644
+index b511359376f4..e3f03a1d32b8 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -138,6 +138,7 @@
- #define PM_CLK_AO			BIT(15)
- #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
- #define PGTABLE_PA_35_EN		BIT(17)
-+#define TF_PORT_TO_ADDR_MT8173		BIT(18)
+@@ -158,6 +158,7 @@
+ enum mtk_iommu_plat {
+ 	M4U_MT2712,
+ 	M4U_MT6779,
++	M4U_MT6795,
+ 	M4U_MT8167,
+ 	M4U_MT8173,
+ 	M4U_MT8183,
+@@ -1414,6 +1415,19 @@ static const struct mtk_iommu_plat_data mt6779_data = {
+ 	.larbid_remap  = {{0}, {1}, {2}, {3}, {5}, {7, 8}, {10}, {9}},
+ };
  
- #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
- 				((((pdata)->flags) & (mask)) == (_x))
-@@ -955,7 +956,7 @@ static int mtk_iommu_hw_init(const struct mtk_iommu_data *data, unsigned int ban
- 	 * Global control settings are in bank0. May re-init these global registers
- 	 * since no sure if there is bank0 consumers.
- 	 */
--	if (data->plat_data->m4u_plat == M4U_MT8173) {
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, TF_PORT_TO_ADDR_MT8173)) {
- 		regval = F_MMU_PREFETCH_RT_REPLACE_MOD |
- 			 F_MMU_TF_PROT_TO_PROGRAM_ADDR_MT8173;
- 	} else {
-@@ -1427,7 +1428,8 @@ static const struct mtk_iommu_plat_data mt8167_data = {
- static const struct mtk_iommu_plat_data mt8173_data = {
- 	.m4u_plat     = M4U_MT8173,
- 	.flags	      = HAS_4GB_MODE | HAS_BCLK | RESET_AXI |
--			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM,
++static const struct mtk_iommu_plat_data mt6795_data = {
++	.m4u_plat     = M4U_MT6795,
++	.flags	      = HAS_4GB_MODE | HAS_BCLK | RESET_AXI |
 +			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM |
 +			TF_PORT_TO_ADDR_MT8173,
- 	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
- 	.banks_num    = 1,
- 	.banks_enable = {true},
-diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-index 5a9754442bc7..cd415ed1f4ca 100644
---- a/drivers/memory/mtk-smi.c
-+++ b/drivers/memory/mtk-smi.c
-@@ -462,6 +462,7 @@ static int mtk_smi_larb_sleep_ctrl_enable(struct mtk_smi_larb *larb)
- 	if (ret) {
- 		/* TODO: Reset this larb if it fails here. */
- 		dev_err(larb->smi.dev, "sleep ctrl is not ready(0x%x).\n", tmp);
-+		ret = -EAGAIN;
- 	}
- 	return ret;
- }
++	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
++	.banks_num    = 1,
++	.banks_enable = {true},
++	.iova_region  = single_domain,
++	.iova_region_nr = ARRAY_SIZE(single_domain),
++	.larbid_remap = {{0}, {1}, {2}, {3}, {4}}, /* Linear mapping. */
++};
++
+ static const struct mtk_iommu_plat_data mt8167_data = {
+ 	.m4u_plat     = M4U_MT8167,
+ 	.flags        = RESET_AXI | HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM,
+@@ -1526,6 +1540,7 @@ static const struct mtk_iommu_plat_data mt8195_data_vpp = {
+ static const struct of_device_id mtk_iommu_of_ids[] = {
+ 	{ .compatible = "mediatek,mt2712-m4u", .data = &mt2712_data},
+ 	{ .compatible = "mediatek,mt6779-m4u", .data = &mt6779_data},
++	{ .compatible = "mediatek,mt6795-m4u", .data = &mt6795_data},
+ 	{ .compatible = "mediatek,mt8167-m4u", .data = &mt8167_data},
+ 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
+ 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
 -- 
 2.37.2
 
