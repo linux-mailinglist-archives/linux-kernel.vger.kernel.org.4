@@ -2,169 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D185B684B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D6C5B684E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiIMHAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S230508AbiIMHBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiIMHAv (ORCPT
+        with ESMTP id S229821AbiIMHBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:00:51 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3D21570E;
-        Tue, 13 Sep 2022 00:00:50 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id d17so6949509qko.13;
-        Tue, 13 Sep 2022 00:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=765RBTHIVr4lJSrq7MpOeNT5T0qDbvjzGqtnHA+6dLY=;
-        b=lHn+kun5vFNZw9lq6iAmd/tF3UYyk0BPvoJGd++0yRRXBQubtztslYNyBRyjUH+z9P
-         rdMhmtzGLrk8qtdy76Ibz47Ps08MbIGchkkGDRJq6h6AZVBCEBJU4+678i93fsotfq5E
-         f3uZ2KDFEb04aqLpbqyHBGProH8GcgH/F9SiLgQvcvSuXhcTnPhFHpDHTVjips8ph3+n
-         NPxHmjWn4pPlbwwVCh45iPmnu4NOybLDNxEAYiVee4dQkcfoflISKmOjX9MUlXKOUBMs
-         3l8RRdfbT8Wmffk4/H/+0fRSBbVx+lJnLZElQAmgDv00uJCqMSTo3llQc2xzv9o9ANQC
-         3MWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=765RBTHIVr4lJSrq7MpOeNT5T0qDbvjzGqtnHA+6dLY=;
-        b=7pvKW8UjW4AWRBTCGTgDLoPre9K9O8SKR3QTROENamPGPFoL3ZojuzZDe3IHvbOGUQ
-         3K4eYVQdmH0IQafabB4DBd1wtWIeJb1TzsMCKu/p5aGx+VFtC6v0CQ9hwQHBBtQKAOjn
-         /NEMwAS8Iuk1S7JKYHoHLoNW+DpP0aWNX0/NndjFvjW5m1CZwXwWCUro1t6zrlm+RoFr
-         rwdh0IE0Hh58MEftTRY3JGlG/1FYWT8IYJ6PxhM9W4kIz0h3FWB3/kdbFv3aQmA+pXnX
-         k3jQFiFfcEQAHIQZJF5J5WaaO5sSk2u0xu3BlOuuBiLusJmtxsZ1g0ZP06L04Dv1Sm9r
-         4nkQ==
-X-Gm-Message-State: ACgBeo2oP8zXq9Y7AG0IQPkZDl01NQJftc3/DNBaQxAajDKZMWYUYlGp
-        xFgfkala8A4l33yeF2smp8M=
-X-Google-Smtp-Source: AA6agR6fDy9UM3qotb//TTX9Rq1I9o//vFtLnFlcAXErWRbzqoB6rMtz152VgrlNA/URkng98Cui9Q==
-X-Received: by 2002:a37:758:0:b0:6cb:c6e0:f17a with SMTP id 85-20020a370758000000b006cbc6e0f17amr16968540qkh.679.1663052449306;
-        Tue, 13 Sep 2022 00:00:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:216d:1a77:16d6:2f68? ([2600:1700:2442:6db0:216d:1a77:16d6:2f68])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006ce622e6c96sm1045426qkp.30.2022.09.13.00.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 00:00:48 -0700 (PDT)
-Message-ID: <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
-Date:   Tue, 13 Sep 2022 02:00:47 -0500
+        Tue, 13 Sep 2022 03:01:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B7314D0B;
+        Tue, 13 Sep 2022 00:01:23 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D6KGPX013655;
+        Tue, 13 Sep 2022 07:01:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eOuIRQbfvzC+vc/Wz4LlLQjHPuOjG/kNI+Kv7NJoMQo=;
+ b=FuzgIGxx9+R2lIbpyJ/4kxsFdWOsW1PHZnpKcLyu3b3CBI/LdrcQuy+TNrmmOuBz++7n
+ hsCDbUteV+yTm4KloQKEDApPnZExUtoyZt0JFPFNbGDPO4EOL69AlUzHSko0tMjLIy5n
+ iubVL9dK3PBcLzSuXY0JlZF5FmWt3GTBDVhhnHY+oecBN2QRLNa5nn2XH01lGBUg2q4u
+ k531myx2V+yctPenx+gDaNtZtoTgpsBaMvXOLbjbm1OyRfkZYzXt6eew3uzV9IzcRM6h
+ g09UL6591IpV4MLtuaOgRrU+8lMRMBlZB93s7cILyCOxgYfK13ATJ7nhHz4YoIMvfCG4 /w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk6kec2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 07:01:04 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28D713wd001973
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 07:01:03 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
+ 2022 00:00:58 -0700
+Message-ID: <05c64748-6a3b-fb0b-e6b7-3715f77de14f@quicinc.com>
+Date:   Tue, 13 Sep 2022 15:00:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 1/9] dt-bindings: arm: Add support for DSB element
 Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org, helgaas@kernel.org
-Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>
+References: <1662626705-13097-1-git-send-email-quic_taozha@quicinc.com>
+ <1662626705-13097-2-git-send-email-quic_taozha@quicinc.com>
+ <e015754f-2f33-ab7d-4f18-e1bef39a8390@linaro.org>
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <e015754f-2f33-ab7d-4f18-e1bef39a8390@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: HTVfxTT71ja7NDdty1FdRkDielKuYFQo
+X-Proofpoint-ORIG-GUID: HTVfxTT71ja7NDdty1FdRkDielKuYFQo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_02,2022-09-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130030
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 16:43, Lizhi Hou wrote:
-> This patch series introduces OF overlay support for PCI devices which
-> primarily addresses two use cases. First, it provides a data driven method
-> to describe hardware peripherals that are present in a PCI endpoint and
-> hence can be accessed by the PCI host. An example device is Xilinx/AMD
-> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
-> driver -- often used in SoC platforms -- in a PCI host based system. An
-> example device is Microchip LAN9662 Ethernet Controller.
-> 
-> This patch series consolidates previous efforts to define such an
-> infrastructure:
-> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
-> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
-> 
-> Normally, the PCI core discovers PCI devices and their BARs using the
-> PCI enumeration process. However, the process does not provide a way to
-> discover the hardware peripherals that are present in a PCI device, and
-> which can be accessed through the PCI BARs. Also, the enumeration process
-> does not provide a way to associate MSI-X vectors of a PCI device with the
-> hardware peripherals that are present in the device. PCI device drivers
-> often use header files to describe the hardware peripherals and their
-> resources as there is no standard data driven way to do so. This patch
-> series proposes to use flattened device tree blob to describe the
-> peripherals in a data driven way. Based on previous discussion, using
-> device tree overlay is the best way to unflatten the blob and populate
-> platform devices. To use device tree overlay, there are three obvious
-> problems that need to be resolved.
-> 
-> First, we need to create a base tree for non-DT system such as x86_64. A
-> patch series has been submitted for this:
-> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
-> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
-> 
-> Second, a device tree node corresponding to the PCI endpoint is required
-> for overlaying the flattened device tree blob for that PCI endpoint.
-> Because PCI is a self-discoverable bus, a device tree node is usually not
-> created for PCI devices. This series adds support to generate a device
-> tree node for a PCI device which advertises itself using PCI quirks
-> infrastructure.
-> 
-> Third, we need to generate device tree nodes for PCI bridges since a child
-> PCI endpoint may choose to have a device tree node created.
-> 
-> This patch series is made up of two patches.
-> 
-> The first patch is adding OF interface to allocate an OF node. It is copied
-> from:
-> https://lore.kernel.org/lkml/20220620104123.341054-5-clement.leger@bootlin.com/
-> 
-> The second patch introduces a kernel option, CONFIG_PCI_OF. When the option
-> is turned on, the kernel will generate device tree nodes for all PCI
-> bridges unconditionally. The patch also shows how to use the PCI quirks
-> infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device tree node for
-> a device. Specifically, the patch generates a device tree node for Xilinx
-> Alveo U50 PCIe accelerator device. The generated device tree nodes do not
-> have any property. Future patches will add the necessary properties.
-> 
-> Clément Léger (1):
->   of: dynamic: add of_node_alloc()
-> 
-> Lizhi Hou (1):
->   pci: create device tree node for selected devices
-> 
->  drivers/of/dynamic.c        |  50 +++++++++++++----
->  drivers/pci/Kconfig         |  11 ++++
->  drivers/pci/bus.c           |   2 +
->  drivers/pci/msi/irqdomain.c |   6 +-
->  drivers/pci/of.c            | 106 ++++++++++++++++++++++++++++++++++++
->  drivers/pci/pci-driver.c    |   3 +-
->  drivers/pci/pci.h           |  16 ++++++
->  drivers/pci/quirks.c        |  11 ++++
->  drivers/pci/remove.c        |   1 +
->  include/linux/of.h          |   7 +++
->  10 files changed, 200 insertions(+), 13 deletions(-)
-> 
 
-The patch description leaves out the most important piece of information.
+在 9/8/2022 6:54 PM, Krzysztof Kozlowski 写道:
+> On 08/09/2022 10:44, Tao Zhang wrote:
+>> Add property "qcom,dsb-elem-size" to support DSB element for TPDA.
+>> Specifies the DSB element size supported by each monitor connected
+>> to the aggregator on each port. Should be specified in pairs (port,
+>> dsb element size).
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+>> index eb9bfc5..1bb3fdf 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+>> @@ -40,6 +40,13 @@ properties:
+>>       minItems: 1
+>>       maxItems: 2
+>>   
+>> +  qcom,dsb-elem-size:
+>> +    description: |
+>> +      Specifies the DSB element size supported by each monitor
+>> +      connected to the aggregator on each port. Should be specified
+>> +      in pairs (port, dsb element size).
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> So it is rather uint32-matrix (need to describe the items subschema).
+> What about maxItems?
+>
+> Best regards,
+> Krzysztof
 
-The device located at the PCI endpoint is implemented via FPGA
-   - which is programmed after Linux boots (or somewhere late in the boot process)
-      - (A) and thus can not be described by static data available pre-boot because
-            it is dynamic (and the FPGA program will often change while the Linux
-            kernel is already booted
-      - (B) can be described by static data available pre-boot because the FPGA
-            program will always be the same for this device on this system
+Yes, indeed it should be uint32-matrix here. I will update in the next 
+release.
 
-I am not positive what part of what I wrote above is correct and would appreciate
-some confirmation of what is correct or incorrect.
+The "maxItems" cannot be known explicitly because it depends on how many 
+DSB subunit TPDMs are connected to the TPDA input ports.
 
--Frank
+Usually the number of the items is 1 to several, but there is no limit 
+to its maximum value.
+
+
+Best regards,
+
+Tao
+
