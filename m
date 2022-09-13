@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA105B6E4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C855B6E4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbiIMNWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S231704AbiIMNZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiIMNW0 (ORCPT
+        with ESMTP id S232159AbiIMNZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:22:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7BF44552;
-        Tue, 13 Sep 2022 06:22:25 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DDIJaZ030461;
-        Tue, 13 Sep 2022 13:22:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2/A0NS3W9xVoZHj6mPomZBrOMRNq6H+Nz72F40i5agw=;
- b=miawhnoyxZewUQsHY4ae5Q3eBEHonr8VTzta8gDsGC+zYDucZLq1TUJTpUWRB1rkYr5w
- RApEeDmcXQ1Vg0q1+by0XH2CZHfQbM6Mk+AVCRpVYXexafBqyvwNEwJgsCVm3cBlJzw8
- pGFamHdrEnOzJ5dO1tcA7GqUK7+ub1GKIojKhjfA+EvxkoTtPmi/o6lEQNKhPQvfZjya
- HOzl6YnAW5QCOnwmHfgEijDHp4tRpNd25qU9UTxcy61hzXlgG4H04ERvkTtkGwccZ9ll
- FUgLEonLI0TqhOWtYTLSqUNwoNUSaAB+rHh+pUUsoR3Zh86184cu6b5oRf3vniwpm1GS WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjtmnr5y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 13:22:24 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DDK8KL008509;
-        Tue, 13 Sep 2022 13:22:24 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjtmnr5x4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 13:22:24 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28DDLqIe010027;
-        Tue, 13 Sep 2022 13:22:22 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04wdc.us.ibm.com with ESMTP id 3jgj79c69c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 13:22:22 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28DDMMaX9503238
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Sep 2022 13:22:22 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB410124054;
-        Tue, 13 Sep 2022 13:22:21 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B273124052;
-        Tue, 13 Sep 2022 13:22:21 +0000 (GMT)
-Received: from [9.160.74.225] (unknown [9.160.74.225])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Sep 2022 13:22:21 +0000 (GMT)
-Message-ID: <c2f4e68f-28cb-39c0-ce17-65ab55c55784@linux.ibm.com>
-Date:   Tue, 13 Sep 2022 09:22:21 -0400
+        Tue, 13 Sep 2022 09:25:09 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2424167DF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1663075502;
+        bh=tKBeLzzduMcJ2xyjvXECgZEYzh5G5fX2iEY9DXOhEvo=;
+        h=From:To:Cc:Subject:Date;
+        b=Z1tnJqefYecVBe2YrjoHXl7ap+zijkMd87FLE75nWw0Vs+SpLmHlGM3VTHWUnIUy7
+         2gQrX4hR6PcN/cDP6BmcFAUoJxEqCUDdxpT4AZVQIJ0njS5esf3Gi0LlZLpxmPvpH1
+         WJ5wSlqkM1L+1RV0QcdVBN6YiEk8buCoMce0SxVg=
+Received: from localhost.localdomain ([113.57.80.61])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id 63B064E3; Tue, 13 Sep 2022 21:24:59 +0800
+X-QQ-mid: xmsmtpt1663075499to3s5e6wz
+Message-ID: <tencent_DB57E4F270F4539485C32B05FDAF8394310A@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQwROWwfJomQifEGwo2y52og5ZUKGHHXcLbvEdXnjVaSekj5Q3DtY
+         f+ec5zYBR3jtZ+/542QwOi6WbVECojatOG74eO4VB6CGE6eiEWserR/d29n8+b1gq6in3Zpk8UIt
+         3haZeE0nDMfVzaKTigIEhPa/4GJEmbK0lEwtiQaMqJavdJS8EoAVwiLgj3injUVfVS/wq81b316L
+         W2D5Z3qZs28BJdGG1hhHjC7CNax3O9kCJfrpXmv93RZHScz0/1jK6y4oWuftJHKhZ0bWr2ewaWa7
+         aUZSEuADCQo8c5pQttGechZD1Y/2NWnrj3a5H+qmfgSBu02WnsvWh6zV3TvP0FMyMrfoGRSO5iET
+         HN5kf3AkT1j1jM9/fRjBdLXfDSEnDQUsAfQ72n+JtU5h3BIAY4QW9VKtU6wwLVIpefiZhW3fKhcU
+         D52dizTHjziUW0DTeHbantgxSxleC+u1GThpLch9A18Axxb31nPJHdmzQWWJq0ZlW9y8P8mwr8A5
+         dWs6xDbXsOTyNz+7/SY8mWCYW5DM9/stF2lsJjjlQ1FbexEoI9OiCZJaLB2kpjJenZNm+1omKct3
+         iEeaB+J3Jucm0/2RfD/bf/LhOWgFJb56VMK2JrJk1B7T8fDeSEZrz2AVesFgNVIJwlxjTJF/xU4n
+         16XxgEd+jnlGM/tpV9JSCwtwBQ6hEWU5BWamd3u4Kn9gzFgltXV915/kO+I8HxFmorMAhZKLxKNO
+         Woi4rxS9w6CVTg0WIezSWEjAS7xVs0XB4/KFO18v/11/iZh0TQtcr/zLg625bQCspzdzuetJ9l3u
+         aJZLM4KfllngosZfhloJdUnZ+Q+hMkr/rfBTWUGv4dd2r5sDuVL25vPcqgKTNq6HlqyYacVWaFDh
+         ssiSR4WhJnZyIVnmdZbXyE9XwGhovnaCc75cPrMXTpnHsNkjAfEhBZk7h5XgzSKDhFIuYVSkXK8R
+         cYK7FUGhw8UUd7vlPTwGwX0S0WDKY8rpSjziqVWgHNyelp0wqbTlY6Zk3gNx04e5A4WjCzGoz6m5
+         t/AzmhgQ==
+From:   xkernel.wang@foxmail.com
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v4] staging: r8188eu: fix potential memory leak in _rtw_init_xmit_priv()
+Date:   Tue, 13 Sep 2022 21:24:05 +0800
+X-OQ-MSGID: <20220913132405.4387-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/2] s390/vfio-ap: fix two problems discovered in the
- vfio_ap driver
-Content-Language: en-US
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com
-References: <20220823150643.427737-1-akrowiak@linux.ibm.com>
-In-Reply-To: <20220823150643.427737-1-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: P8-pYIhjr8cCmz92gCg2U5fU_Fok0XQo
-X-Proofpoint-ORIG-GUID: oPfSeu-G7846YaCCFWK-D-_CsXJamU-4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_06,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999
- clxscore=1015 bulkscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2209130059
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are pretty simple, straight forward patches that fix a couple of 
-issues recently introduced in the vfio_ap device driver. I would greatly 
-appreciate it if someone could review these so we can get the fixes into 
-the kernel. Thank you in advance for your attention to this.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-On 8/23/22 11:06 AM, Tony Krowiak wrote:
-> Two problems have been discovered with the vfio_ap device driver since the
-> hot plug support was recently introduced:
->
-> 1. Attempting to remove a matrix mdev after assigning a duplicate adapter
->     or duplicate domain results in a hang.
->
-> 2. The queues associated with an adapter or domain being unassigned from
->     the matrix mdev do not get unlinked from it.
->
-> Two patches are provided to resolve these problems.
->
-> Change log v2 => v3:
-> --------------------
-> * Replaced the wrong commit IDs in the 'Fixes' tags in both patches.
->    (Halil and Alexander)
->
-> * Changed the subject line and description of patch 01/02 to better reflect the
->    code changes in the patch. (Halil)
->
-> Tony Krowiak (2):
->    s390/vfio-ap: bypass unnecessary processing of AP resources
->    s390/vfio-ap: fix unlinking of queues from the mdev
->
->   drivers/s390/crypto/vfio_ap_ops.c | 36 +++++++++++++++++++++++++++----
->   1 file changed, 32 insertions(+), 4 deletions(-)
->
+In _rtw_init_xmit_priv(), there are several error paths for allocation
+failures just jump to the `exit` section. However, there is no action
+will be performed, so the allocated resources are not properly released,
+which leads to various memory leaks.
+
+To properly release them, this patch unifies the error handling code and
+several error handling paths are added.
+According to the allocation sequence, if the validation fails, it will
+jump to its corresponding error tag to release the resources.
+
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ChangeLog:
+v1->v2 update the description and adjust the sequence of patches.
+v2->v3 None to this patch, but some to another patch in this series.
+v3->v4 rebase the original series and merge them due to the missing check
+for kzalloc() in rtw_alloc_hwxmits() had been added.
+ drivers/staging/r8188eu/core/rtw_xmit.c | 30 ++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 9c39d08..9e70c79 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -134,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmitbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_frame_buf;
+ 	}
+ 
+ 	pxmitpriv->pxmitbuf = (u8 *)ALIGN((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
+@@ -156,7 +156,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 			msleep(10);
+ 			res = rtw_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
+ 			if (res == _FAIL)
+-				goto exit;
++				goto free_xmitbuf;
+ 		}
+ 
+ 		pxmitbuf->flags = XMIT_VO_QUEUE;
+@@ -174,7 +174,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmit_extbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_xmitbuf;
+ 	}
+ 
+ 	pxmitpriv->pxmit_extbuf = (u8 *)ALIGN((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
+@@ -191,7 +191,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 		res = rtw_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
+ 		if (res == _FAIL) {
+ 			res = _FAIL;
+-			goto exit;
++			goto free_xmit_extbuf;
+ 		}
+ 
+ 		list_add_tail(&pxmitbuf->list, &pxmitpriv->free_xmit_extbuf_queue.queue);
+@@ -202,7 +202,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (rtw_alloc_hwxmits(padapter)) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_xmit_extbuf;
+ 	}
+ 
+ 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+@@ -226,8 +226,26 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	rtl8188eu_init_xmit_priv(padapter);
+ 
+-exit:
++	return _SUCCESS;
+ 
++free_xmit_extbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
++	while (i--) {
++		rtw_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmit_extbuf);
++	i = NR_XMITBUFF;
++free_xmitbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
++	while (i--) {
++		rtw_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmitbuf);
++free_frame_buf:
++	vfree(pxmitpriv->pallocated_frame_buf);
++exit:
+ 	return res;
+ }
+ 
+-- 
