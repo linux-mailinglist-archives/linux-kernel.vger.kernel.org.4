@@ -2,327 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECA55B6E29
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA88A5B6E35
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiIMNPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S230001AbiIMNRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiIMNPQ (ORCPT
+        with ESMTP id S232294AbiIMNQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:15:16 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C21182A;
-        Tue, 13 Sep 2022 06:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=6o06f6lKEImR2OALb/GgSAF0FPbhPTKph1QDZj138Gs=; b=sXRPMgLBbkNt0C3LJq4SxOZxBA
-        LSJ9IVYtjeAVFej55mgdlka/cBZmDdcis60BPJ939Mka3rHW3GreBFC2/oPbXvCIQtbGNv5akR0Vm
-        Vq05qGXpQ/ZrVMEQBlX6PNnsUBIi55eVO2RPt0U9eggvOpK37uivYHdHpYBONfW+jPuqQl8B8v8Tc
-        EzCr9CTJNgDcIpmWoFA58j+eiqlhuplS4CscU8OY1JS79FUyDj7FdIpWuacMT85d39eyiiiobHbRa
-        rbHGxTF7SFgHuZ56wRVCxo1kRYSdY45y0B25sQ5qXt3hakA7Brk/ZBH4HkmzvNMzQx/2Wo6Zmd5HN
-        XYXIsF7g==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1oY5ki-00EVnM-MZ; Tue, 13 Sep 2022 16:15:00 +0300
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] drm/tegra: Add Tegra234 support to NVDEC driver
-Date:   Tue, 13 Sep 2022 16:14:46 +0300
-Message-Id: <20220913131447.2877280-9-cyndis@kapsi.fi>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220913131447.2877280-1-cyndis@kapsi.fi>
-References: <20220913131447.2877280-1-cyndis@kapsi.fi>
+        Tue, 13 Sep 2022 09:16:29 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1911D1276A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HxCe9N2ZPr/5kCwic9CoLe8DjVEylSYlBt3jF6Yv8Fg=; b=Zd//mRqGShzJlFQxc6viPN+bIw
+        kbZezimhUR3BjYgIkXV6eQcAOXQKJIeSbcBMLodKuMgyEHsA12CxrVYSUiKwy96TGXF87SetMBnQU
+        ad0kfKMW2qywRdTrsOP/x0TX99WEPu5XngPrP4oqFMDDXUajGueV6vNhr46lDHpzVaam6f9nnGCzJ
+        yxobQy5BhxW2Fz5ylxWcmgi3fmm+Kc9dWrTPUrR37Ub8rmscjivgoPCdcACXrxWqiABaaIaedUqpJ
+        rBJ0htLB0LG9V1WHhCip0bYTJIsthMuhu5jP0Bdn+SukC0dF72bKKQt2QKk8qM0jLuvbep3UiViGf
+        we/3HZBQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oY5l5-00C5UN-Tf; Tue, 13 Sep 2022 13:15:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6CA993002AE;
+        Tue, 13 Sep 2022 15:15:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3D49F2027D6A2; Tue, 13 Sep 2022 15:15:20 +0200 (CEST)
+Date:   Tue, 13 Sep 2022 15:15:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v3 02/16] powerpc: Override __ALIGN and __ALIGN_STR macros
+Message-ID: <YyCCaPzVi3Yv0tFB@hirez.programming.kicks-ass.net>
+References: <20220912082020.226755-1-sv@linux.ibm.com>
+ <20220912082020.226755-3-sv@linux.ibm.com>
+ <YyBxqjtC0DAhmQrT@hirez.programming.kicks-ass.net>
+ <8480c380-2eb9-4eff-ceb4-f8bbcb425149@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8480c380-2eb9-4eff-ceb4-f8bbcb425149@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+On Tue, Sep 13, 2022 at 12:21:51PM +0000, Christophe Leroy wrote:
 
-Add support for the Tegra234 version of NVDEC to the NVDEC driver.
-This version sports a RISC-V controller and requires a few additional
-clocks. After firmware has been loaded, the behavior is, however,
-backwards compatible.
+> > Like mentioned last time; I'm fixing this (but you're right to not wait
+> > on that), that said, would it make sense to write it like:
+> > 
+> > #define __ALIGN		.balign 4
+> > #define __ALIGN_STR	__stringify(__ALIGN)
+> 
+> By the way, I commented to Sathvika to not use __stringify() in order to 
+> avoid having to include stringify.h as we are trying to minimise 
+> dependencies between headers.
+> 
+> Several other architectures also do it that way.
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
- drivers/gpu/drm/tegra/drm.c   |   1 +
- drivers/gpu/drm/tegra/nvdec.c | 140 ++++++++++++++++++++++++++++++----
- 2 files changed, 126 insertions(+), 15 deletions(-)
+stringify.h is a trivial header and included by linux/linkage.h before
+it includes asm/linkage.
 
-diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
-index 6748ec1e0005..a014f11e9edb 100644
---- a/drivers/gpu/drm/tegra/drm.c
-+++ b/drivers/gpu/drm/tegra/drm.c
-@@ -1382,6 +1382,7 @@ static const struct of_device_id host1x_drm_subdevs[] = {
- 	{ .compatible = "nvidia,tegra194-vic", },
- 	{ .compatible = "nvidia,tegra194-nvdec", },
- 	{ .compatible = "nvidia,tegra234-vic", },
-+	{ .compatible = "nvidia,tegra234-nvdec", },
- 	{ /* sentinel */ }
- };
- 
-diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
-index 05af4d107421..10fd21517281 100644
---- a/drivers/gpu/drm/tegra/nvdec.c
-+++ b/drivers/gpu/drm/tegra/nvdec.c
-@@ -8,6 +8,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/host1x.h>
- #include <linux/iommu.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -16,18 +17,21 @@
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- 
--#include <soc/tegra/pmc.h>
-+#include <soc/tegra/mc.h>
- 
- #include "drm.h"
- #include "falcon.h"
-+#include "riscv.h"
- #include "vic.h"
- 
-+#define NVDEC_FALCON_DEBUGINFO			0x1094
- #define NVDEC_TFBIF_TRANSCFG			0x2c44
- 
- struct nvdec_config {
- 	const char *firmware;
- 	unsigned int version;
- 	bool supports_sid;
-+	bool has_riscv;
- 	bool has_extra_clocks;
- };
- 
-@@ -40,9 +44,14 @@ struct nvdec {
- 	struct device *dev;
- 	struct clk_bulk_data clks[3];
- 	unsigned int num_clks;
-+	struct reset_control *reset;
- 
- 	/* Platform configuration */
- 	const struct nvdec_config *config;
-+
-+	/* RISC-V specific data */
-+	struct tegra_drm_riscv riscv;
-+	phys_addr_t carveout_base;
- };
- 
- static inline struct nvdec *to_nvdec(struct tegra_drm_client *client)
-@@ -56,7 +65,7 @@ static inline void nvdec_writel(struct nvdec *nvdec, u32 value,
- 	writel(value, nvdec->regs + offset);
- }
- 
--static int nvdec_boot(struct nvdec *nvdec)
-+static int nvdec_boot_falcon(struct nvdec *nvdec)
- {
- #ifdef CONFIG_IOMMU_API
- 	struct iommu_fwspec *spec = dev_iommu_fwspec_get(nvdec->dev);
-@@ -92,6 +101,64 @@ static int nvdec_boot(struct nvdec *nvdec)
- 	return 0;
- }
- 
-+static int nvdec_wait_debuginfo(struct nvdec *nvdec, const char *phase)
-+{
-+	int err;
-+	u32 val;
-+
-+	err = readl_poll_timeout(nvdec->regs + NVDEC_FALCON_DEBUGINFO, val, val == 0x0, 10, 100000);
-+	if (err) {
-+		dev_err(nvdec->dev, "failed to boot %s, debuginfo=0x%x\n", phase, val);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int nvdec_boot_riscv(struct nvdec *nvdec)
-+{
-+	int err;
-+
-+	err = reset_control_acquire(nvdec->reset);
-+	if (err)
-+		return err;
-+
-+	nvdec_writel(nvdec, 0xabcd1234, NVDEC_FALCON_DEBUGINFO);
-+
-+	err = tegra_drm_riscv_boot_bootrom(&nvdec->riscv, nvdec->carveout_base, 1,
-+					   &nvdec->riscv.bl_desc);
-+	if (err) {
-+		dev_err(nvdec->dev, "failed to execute bootloader\n");
-+		goto release_reset;
-+	}
-+
-+	err = nvdec_wait_debuginfo(nvdec, "bootloader");
-+	if (err)
-+		goto release_reset;
-+
-+	err = reset_control_reset(nvdec->reset);
-+	if (err)
-+		goto release_reset;
-+
-+	nvdec_writel(nvdec, 0xabcd1234, NVDEC_FALCON_DEBUGINFO);
-+
-+	err = tegra_drm_riscv_boot_bootrom(&nvdec->riscv, nvdec->carveout_base, 1,
-+					   &nvdec->riscv.os_desc);
-+	if (err) {
-+		dev_err(nvdec->dev, "failed to execute firmware\n");
-+		goto release_reset;
-+	}
-+
-+	err = nvdec_wait_debuginfo(nvdec, "firmware");
-+	if (err)
-+		goto release_reset;
-+
-+release_reset:
-+	reset_control_release(nvdec->reset);
-+
-+	return err;
-+}
-+
- static int nvdec_init(struct host1x_client *client)
- {
- 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
-@@ -191,7 +258,7 @@ static const struct host1x_client_ops nvdec_client_ops = {
- 	.exit = nvdec_exit,
- };
- 
--static int nvdec_load_firmware(struct nvdec *nvdec)
-+static int nvdec_load_falcon_firmware(struct nvdec *nvdec)
- {
- 	struct host1x_client *client = &nvdec->client.base;
- 	struct tegra_drm *tegra = nvdec->client.drm;
-@@ -254,7 +321,6 @@ static int nvdec_load_firmware(struct nvdec *nvdec)
- 	return err;
- }
- 
--
- static __maybe_unused int nvdec_runtime_resume(struct device *dev)
- {
- 	struct nvdec *nvdec = dev_get_drvdata(dev);
-@@ -266,13 +332,19 @@ static __maybe_unused int nvdec_runtime_resume(struct device *dev)
- 
- 	usleep_range(10, 20);
- 
--	err = nvdec_load_firmware(nvdec);
--	if (err < 0)
--		goto disable;
-+	if (nvdec->config->has_riscv) {
-+		err = nvdec_boot_riscv(nvdec);
-+		if (err < 0)
-+			goto disable;
-+	} else {
-+		err = nvdec_load_falcon_firmware(nvdec);
-+		if (err < 0)
-+			goto disable;
- 
--	err = nvdec_boot(nvdec);
--	if (err < 0)
--		goto disable;
-+		err = nvdec_boot_falcon(nvdec);
-+		if (err < 0)
-+			goto disable;
-+	}
- 
- 	return 0;
- 
-@@ -348,10 +420,18 @@ static const struct nvdec_config nvdec_t194_config = {
- 	.supports_sid = true,
- };
- 
-+static const struct nvdec_config nvdec_t234_config = {
-+	.version = 0x23,
-+	.supports_sid = true,
-+	.has_riscv = true,
-+	.has_extra_clocks = true,
-+};
-+
- static const struct of_device_id tegra_nvdec_of_match[] = {
- 	{ .compatible = "nvidia,tegra210-nvdec", .data = &nvdec_t210_config },
- 	{ .compatible = "nvidia,tegra186-nvdec", .data = &nvdec_t186_config },
- 	{ .compatible = "nvidia,tegra194-nvdec", .data = &nvdec_t194_config },
-+	{ .compatible = "nvidia,tegra234-nvdec", .data = &nvdec_t234_config },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, tegra_nvdec_of_match);
-@@ -410,12 +490,42 @@ static int nvdec_probe(struct platform_device *pdev)
- 	if (err < 0)
- 		host_class = HOST1X_CLASS_NVDEC;
- 
--	nvdec->falcon.dev = dev;
--	nvdec->falcon.regs = nvdec->regs;
-+	if (nvdec->config->has_riscv) {
-+		struct tegra_mc *mc;
- 
--	err = falcon_init(&nvdec->falcon);
--	if (err < 0)
--		return err;
-+		mc = devm_tegra_memory_controller_get(dev);
-+		if (IS_ERR(mc)) {
-+			dev_err_probe(dev, PTR_ERR(mc),
-+				"failed to get memory controller handle\n");
-+			return PTR_ERR(mc);
-+		}
-+
-+		err = tegra_mc_get_carveout_info(mc, 1, &nvdec->carveout_base, NULL);
-+		if (err) {
-+			dev_err(dev, "failed to get carveout info: %d\n", err);
-+			return err;
-+		}
-+
-+		nvdec->reset = devm_reset_control_get_exclusive_released(dev, "nvdec");
-+		if (IS_ERR(nvdec->reset)) {
-+			dev_err_probe(dev, PTR_ERR(nvdec->reset), "failed to get reset\n");
-+			return PTR_ERR(nvdec->reset);
-+		}
-+
-+		nvdec->riscv.dev = dev;
-+		nvdec->riscv.regs = nvdec->regs;
-+
-+		err = tegra_drm_riscv_read_descriptors(&nvdec->riscv);
-+		if (err < 0)
-+			return err;
-+	} else {
-+		nvdec->falcon.dev = dev;
-+		nvdec->falcon.regs = nvdec->regs;
-+
-+		err = falcon_init(&nvdec->falcon);
-+		if (err < 0)
-+			return err;
-+	}
- 
- 	platform_set_drvdata(pdev, nvdec);
- 
--- 
-2.37.0
+Anyway, I was thinking of having:
 
+#ifndef __ALIGN_STR
+#define __ALIGN_STR __stringify(__ALIGN)
+#endif
+
+in linux/linkage.h, that avoids having to duplicate this all over the
+place.
