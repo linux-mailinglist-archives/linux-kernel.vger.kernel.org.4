@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8462D5B68EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2914E5B68ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiIMHsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S231245AbiIMHsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiIMHsY (ORCPT
+        with ESMTP id S231259AbiIMHsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Sep 2022 03:48:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306165A164;
-        Tue, 13 Sep 2022 00:48:19 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRb9N6szFznVFp;
-        Tue, 13 Sep 2022 15:45:28 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 15:48:08 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH next v4 1/2] i2c: hisi: Add initial device tree support
-To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
-References: <20220909074842.281232-1-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <cc27d1af-7f8a-7c51-a101-1b254a2d761b@huawei.com>
-Date:   Tue, 13 Sep 2022 15:48:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A75A3CA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:48:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5529B80E19
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:48:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FE0C433C1;
+        Tue, 13 Sep 2022 07:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663055297;
+        bh=Of/zRCi4LPBlW8V1x2NpTuzZS4rJePo9idcJOEnYoAI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k1awtXj5VWUA7HRjnaeNKOernHCW4kLVx01QqRuCW220YsLBxeBVmzEnV4DPx54Fv
+         uroA8Q1achGI2lJHwbSR4RgXa2DJ0RX+Gi0A5TvCXjIBmHC7ybBE5JGfU8HSgjFfWZ
+         Jmosnzg/L7YlkwtqLF8Hw/t8+UarGTHrg2NwN8aNkxheKx0J3g3MBtUjCsKGYMf1o1
+         NPt3TVLWoF8T1DkmN802WNmIREaU1r8xt+Fg8RurBbSYJ4FWUrvR9aOw9cg+t+W6+B
+         FFGJBdvHVrGqPRJgBkqfPseERRxVv12qWob9k53huWnW4BqIJOthsw5DVXL2FvJ1Hh
+         krdAL5vLXXd9A==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH v3] f2fs: fix to detect corrupted meta ino
+Date:   Tue, 13 Sep 2022 15:48:12 +0800
+Message-Id: <20220913074812.2300528-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220909074842.281232-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/9 15:48, Weilong Chen wrote:
-> The HiSilicon I2C controller can be used on embedded platform, which
-> boot from devicetree.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
->  drivers/i2c/busses/Kconfig    |  2 +-
->  drivers/i2c/busses/i2c-hisi.c | 19 ++++++++++++++++++-
->  2 files changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 7284206b278b..6d0fdf48e97d 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
->  
->  config I2C_HISI
->  	tristate "HiSilicon I2C controller"
-> -	depends on (ARM64 && ACPI) || COMPILE_TEST
-> +	depends on ARM64 || COMPILE_TEST
->  	help
->  	  Say Y here if you want to have Hisilicon I2C controller support
->  	  available on the Kunpeng Server.
-> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> index 76c3d8f6fc3c..7a77f306d05f 100644
-> --- a/drivers/i2c/busses/i2c-hisi.c
-> +++ b/drivers/i2c/busses/i2c-hisi.c
-> @@ -5,6 +5,9 @@
->   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
->   */
->  
-> +#ifdef CONFIG_ACPI
-> +#include <linux/acpi.h>
-> +#endif
->  #include <linux/bits.h>
->  #include <linux/bitfield.h>
->  #include <linux/completion.h>
-> @@ -13,6 +16,9 @@
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> +#ifdef CONFIG_OF
-> +#include <linux/of.h>
-> +#endif
+It is possible that ino of dirent or orphan inode is corrupted in a
+fuzzed image, occasionally, if corrupted ino is equal to meta ino:
+meta_ino, node_ino or compress_ino, caller of f2fs_iget() from below
+call paths will get meta inode directly, it's not allowed, let's
+add sanity check to detect such cases.
 
-I don't think the protection for the headers is necessary and common. The
-ACPI/OF specific functions should have already been handled well with{out}
-ACPI/OF config. Have you met some problems without these?
+case #1
+- recover_dentry
+ - __f2fs_find_entry
+ - f2fs_iget_retry
 
-BTW, it's better to have a changelog when updating the patches.
+case #2
+- recover_orphan_inode
+ - f2fs_iget_retry
 
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/units.h>
-> @@ -483,17 +489,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
->  	{ "HISI03D1", 0 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
-> +#endif
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id hisi_i2c_dts_ids[] = {
-> +	{ .compatible = "hisilicon,hisi-i2c", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
-> +#endif
->  
->  static struct platform_driver hisi_i2c_driver = {
->  	.probe		= hisi_i2c_probe,
->  	.driver		= {
->  		.name	= "hisi-i2c",
-> -		.acpi_match_table = hisi_i2c_acpi_ids,
-> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
-> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
->  	},
->  };
->  module_platform_driver(hisi_i2c_driver);
-> 
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v3:
+- update commit title/message
+- change logic inside f2fs_iget() rather than its caller
+ fs/f2fs/inode.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index cde0a3dc80c3..1baac6056733 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -487,6 +487,12 @@ static int do_read_inode(struct inode *inode)
+ 	return 0;
+ }
+ 
++static bool is_meta_ino(struct f2fs_sb_info *sbi, unsigned int ino)
++{
++	return ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
++		ino == F2FS_COMPRESS_INO(sbi);
++}
++
+ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+@@ -497,17 +503,22 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+ 	if (!inode)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	if (is_meta_ino(sbi, ino)) {
++		if (!(inode->i_state & I_NEW)) {
++			f2fs_err(sbi, "detect corrupted inode no:%lu, run fsck to repair", ino);
++			set_sbi_flag(sbi, SBI_NEED_FSCK);
++			ret = -EFSCORRUPTED;
++			trace_f2fs_iget_exit(inode, ret);
++			iput(inode);
++			return ERR_PTR(ret);
++		}
++		goto make_now;
++	}
++
+ 	if (!(inode->i_state & I_NEW)) {
+ 		trace_f2fs_iget(inode);
+ 		return inode;
+ 	}
+-	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
+-		goto make_now;
+-
+-#ifdef CONFIG_F2FS_FS_COMPRESSION
+-	if (ino == F2FS_COMPRESS_INO(sbi))
+-		goto make_now;
+-#endif
+ 
+ 	ret = do_read_inode(inode);
+ 	if (ret)
+-- 
+2.25.1
+
