@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8FE5B739E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E955B7395
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbiIMPGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S235527AbiIMPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiIMPEE (ORCPT
+        with ESMTP id S235603AbiIMPIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:04:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12FB31238;
-        Tue, 13 Sep 2022 07:29:59 -0700 (PDT)
+        Tue, 13 Sep 2022 11:08:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4792C663;
+        Tue, 13 Sep 2022 07:31:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E2DDB80F9B;
-        Tue, 13 Sep 2022 14:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D76AC433C1;
-        Tue, 13 Sep 2022 14:29:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8CDEB80EFA;
+        Tue, 13 Sep 2022 14:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CEDC433C1;
+        Tue, 13 Sep 2022 14:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079389;
-        bh=ZvBFeRpS6FJNk1e3hXE1x7y+C30QeFlKGNXI8yWVbCg=;
+        s=korg; t=1663079481;
+        bh=g4OSy4eiWzd4GXoIulDPPUyvFbwo6gtuf8PChh14Lrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aTgOXdY/urj6VjRlJqGiNJxPnkq7z/rRibKD8ZCIAGitBp0Lf9BUiq87W7IpRtvYI
-         hRKDBiYOXynGHOrkXrQuu8rQRMeKvrSZqFyeWqcXIHu92JrQyhuwZA3GVGl3vUBIkd
-         XEbYqSt64iVGVPY6ftE+feH+qdePPAvMM7cyUxYY=
+        b=CjfGvGPeOJdJSQQ8iefAka/A6wmTLjNItdP95Z/vd5dqeOGNhYMTVoplUEAJzGF+B
+         +OtAKBMBHfGsSKdtbWAV/Q/NntCY1TjamMwV6s8kMWAI7WEpinwIXbBKl3puDVgIX3
+         ul3PbdnYaHUKJw00u3dsPGA8iX0XBUd+EGYkus/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Guralnik <michaelgur@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 091/108] RDMA/cma: Fix arguments order in net device validation
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH 4.19 44/79] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
 Date:   Tue, 13 Sep 2022 16:07:02 +0200
-Message-Id: <20220913140357.529332072@linuxfoundation.org>
+Message-Id: <20220913140351.046519972@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Guralnik <michaelgur@nvidia.com>
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-[ Upstream commit 27cfde795a96aef1e859a5480489944b95421e46 ]
+commit 9d4dc16ec71bd6368548e9743223e449b4377fc7 upstream.
 
-Fix the order of source and destination addresses when resolving the
-route between server and client to validate use of correct net device.
+During cdrom emulation, the response to read_toc command must contain
+the cdrom address as the number of sectors (2048 byte sized blocks)
+represented either as an absolute value (when MSF bit is '0') or in
+terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
+cdrom, the fsg_lun_open call sets the sector size to 2048 bytes.
 
-The reverse order we had so far didn't actually validate the net device
-as the server would try to resolve the route to itself, thus always
-getting the server's net device.
+When MAC OS sends a read_toc request with MSF set to '1', the
+store_cdrom_address assumes that the address being provided is the
+LUN size represented in 512 byte sized blocks instead of 2048. It
+tries to modify the address further to convert it to 2048 byte sized
+blocks and store it in MSF format. This results in data transfer
+failures as the cdrom address being provided in the read_toc response
+is incorrect.
 
-The issue was discovered when running cm applications on a single host
-between 2 interfaces with same subnet and source based routing rules.
-When resolving the reverse route the source based route rules were
-ignored.
-
-Fixes: f887f2ac87c2 ("IB/cma: Validate routing of incoming requests")
-Link: https://lore.kernel.org/r/1c1ec2277a131d277ebcceec987fd338d35b775f.1661251872.git.leonro@nvidia.com
-Signed-off-by: Michael Guralnik <michaelgur@nvidia.com>
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
+Cc: stable@vger.kernel.org
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Link: https://lore.kernel.org/r/1661570110-19127-1-git-send-email-quic_kriskura@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/core/cma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/storage_common.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index de7df5ab06f3b..cf174aa7fe25b 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -1719,8 +1719,8 @@ cma_ib_id_from_event(struct ib_cm_id *cm_id,
- 		}
- 
- 		if (!validate_net_dev(*net_dev,
--				 (struct sockaddr *)&req->listen_addr_storage,
--				 (struct sockaddr *)&req->src_addr_storage)) {
-+				 (struct sockaddr *)&req->src_addr_storage,
-+				 (struct sockaddr *)&req->listen_addr_storage)) {
- 			id_priv = ERR_PTR(-EHOSTUNREACH);
- 			goto err;
- 		}
--- 
-2.35.1
-
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -294,8 +294,10 @@ EXPORT_SYMBOL_GPL(fsg_lun_fsync_sub);
+ void store_cdrom_address(u8 *dest, int msf, u32 addr)
+ {
+ 	if (msf) {
+-		/* Convert to Minutes-Seconds-Frames */
+-		addr >>= 2;		/* Convert to 2048-byte frames */
++		/*
++		 * Convert to Minutes-Seconds-Frames.
++		 * Sector size is already set to 2048 bytes.
++		 */
+ 		addr += 2*75;		/* Lead-in occupies 2 seconds */
+ 		dest[3] = addr % 75;	/* Frames */
+ 		addr /= 75;
 
 
