@@ -2,48 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2914E5B68ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EC95B68F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiIMHsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        id S231197AbiIMHsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiIMHsY (ORCPT
+        with ESMTP id S231312AbiIMHsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:48:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A75A3CA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:48:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 03:48:43 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718BF5A3C8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:48:39 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aef37.dynamic.kabel-deutschland.de [95.90.239.55])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5529B80E19
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FE0C433C1;
-        Tue, 13 Sep 2022 07:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663055297;
-        bh=Of/zRCi4LPBlW8V1x2NpTuzZS4rJePo9idcJOEnYoAI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k1awtXj5VWUA7HRjnaeNKOernHCW4kLVx01QqRuCW220YsLBxeBVmzEnV4DPx54Fv
-         uroA8Q1achGI2lJHwbSR4RgXa2DJ0RX+Gi0A5TvCXjIBmHC7ybBE5JGfU8HSgjFfWZ
-         Jmosnzg/L7YlkwtqLF8Hw/t8+UarGTHrg2NwN8aNkxheKx0J3g3MBtUjCsKGYMf1o1
-         NPt3TVLWoF8T1DkmN802WNmIREaU1r8xt+Fg8RurBbSYJ4FWUrvR9aOw9cg+t+W6+B
-         FFGJBdvHVrGqPRJgBkqfPseERRxVv12qWob9k53huWnW4BqIJOthsw5DVXL2FvJ1Hh
-         krdAL5vLXXd9A==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH v3] f2fs: fix to detect corrupted meta ino
-Date:   Tue, 13 Sep 2022 15:48:12 +0800
-Message-Id: <20220913074812.2300528-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 974D461EA1932;
+        Tue, 13 Sep 2022 09:48:35 +0200 (CEST)
+Message-ID: <fe5695d3-b645-08a4-848e-262e291aea76@molgen.mpg.de>
+Date:   Tue, 13 Sep 2022 09:48:35 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: `switch_ldt()` fills up trace file
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,76 +44,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that ino of dirent or orphan inode is corrupted in a
-fuzzed image, occasionally, if corrupted ino is equal to meta ino:
-meta_ino, node_ino or compress_ino, caller of f2fs_iget() from below
-call paths will get meta inode directly, it's not allowed, let's
-add sanity check to detect such cases.
+Dear Linux folks,
 
-case #1
-- recover_dentry
- - __f2fs_find_entry
- - f2fs_iget_retry
 
-case #2
-- recover_orphan_inode
- - f2fs_iget_retry
+Using `bootgraph.py -f -manual` [1] to generate the Linux CLI line for 
+tracing the boot, and changing `do_one_initcall` to `dell_init` to trace 
+`drivers/platform/x86/dell/dell-laptop.c`, `switch_ldt();` fills up the 
+trace file. Is that expected, and can I work around it?
 
-Signed-off-by: Chao Yu <chao@kernel.org>
----
-v3:
-- update commit title/message
-- change logic inside f2fs_iget() rather than its caller
- fs/f2fs/inode.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+```
+# boot-091222-181507 dellxps139360 boot 5.19.0-1-amd64
+# sysinfo | man:Dell Inc. | plat:XPS 13 9360 | cpu:Intel(R) Core(TM) 
+i7-7500U CPU @ 2.70GHz | bios:2.21.0 | biosdate:06/02/2022 | numcpu:4 | 
+memsz:15959616 | memfr:11084888 | os:Debian GNU/Linux bookworm/sid
+# command | analyze_boot.py -f
+# kparams | BOOT_IMAGE=/vmlinuz-5.19.0-1-amd64 
+root=UUID=fe58fd63-a3e1-4670-b648-45c6a324394a ro initcall_debug 
+log_buf_len=32M trace_buf_size=524288K trace_clock=global 
+trace_options=nooverwrite,funcgraph-abstime,funcgraph-cpu,funcgraph-duration,funcgraph-proc,funcgraph-tail,nofuncgraph-overhead,context-info,graph-time 
+ftrace=function_graph ftrace_graph_max_depth=5 
+ftrace_graph_filter=dell_init cryptomgr.notests
+# tracer: function_graph
+#
+#     TIME        CPU  TASK/PID         DURATION 
+FUNCTION CALLS
+#      |          |     |    |           |   |                     |   | 
+   |   |
+     0.516713 |   0)   systemd-1    |   1.671 us    |  switch_ldt();
+     0.516715 |   0)   systemd-1    |   0.207 us    |  switch_ldt();
+     0.516716 |   0)   systemd-1    |   0.170 us    |  switch_ldt();
+[…]
+```
 
-diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-index cde0a3dc80c3..1baac6056733 100644
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -487,6 +487,12 @@ static int do_read_inode(struct inode *inode)
- 	return 0;
- }
- 
-+static bool is_meta_ino(struct f2fs_sb_info *sbi, unsigned int ino)
-+{
-+	return ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
-+		ino == F2FS_COMPRESS_INO(sbi);
-+}
-+
- struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
- {
- 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
-@@ -497,17 +503,22 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
- 	if (!inode)
- 		return ERR_PTR(-ENOMEM);
- 
-+	if (is_meta_ino(sbi, ino)) {
-+		if (!(inode->i_state & I_NEW)) {
-+			f2fs_err(sbi, "detect corrupted inode no:%lu, run fsck to repair", ino);
-+			set_sbi_flag(sbi, SBI_NEED_FSCK);
-+			ret = -EFSCORRUPTED;
-+			trace_f2fs_iget_exit(inode, ret);
-+			iput(inode);
-+			return ERR_PTR(ret);
-+		}
-+		goto make_now;
-+	}
-+
- 	if (!(inode->i_state & I_NEW)) {
- 		trace_f2fs_iget(inode);
- 		return inode;
- 	}
--	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
--		goto make_now;
--
--#ifdef CONFIG_F2FS_FS_COMPRESSION
--	if (ino == F2FS_COMPRESS_INO(sbi))
--		goto make_now;
--#endif
- 
- 	ret = do_read_inode(inode);
- 	if (ret)
--- 
-2.25.1
 
+Kind regards,
+
+Paul
+
+
+[1]: https://github.com/intel/pm-graph
