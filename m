@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDF55B7708
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBD45B764A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiIMQ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S232854AbiIMQSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiIMQ7E (ORCPT
+        with ESMTP id S231338AbiIMQSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:59:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BDE89CFB;
-        Tue, 13 Sep 2022 08:50:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CAA1B80FA6;
-        Tue, 13 Sep 2022 14:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98F8C433B5;
-        Tue, 13 Sep 2022 14:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079859;
-        bh=ojvWfJ+hbalWUIRKhw1goJH5jDX4yV0o04EEXy313Js=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nHD9VkkE+lXIl9v+xR7UdSwi/pPD+14CfP0EtqiueVpb1P5J6kOBvZNk+NxI0zFzd
-         UeNcYFtyIFRm7NWll6YVs8OLhSSuTdTy2tU4glDxRnzQaYivtwvtH2w5JdcKuhr5yx
-         H3BoP0yupjTNqiT7D/tGf8ku3dHkywJdNPZY7B3k=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Ling <gnaygnil@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 41/42] MIPS: loongson32: ls1c: Fix hang during startup
-Date:   Tue, 13 Sep 2022 16:08:12 +0200
-Message-Id: <20220913140344.468916704@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 12:18:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B308A4064
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6sWTHMIaS7c4U7WbLbBKuS0md5EgWarg5ud4NGNcZbk=; b=lmggLUI88QD+f7YFYmE75O1P7N
+        G7Q9Yg27Ik3Cq4LkE0BpnsHzL0kAtPBczmImsWssmEDqLCliz0ttqlgQWTjNJhstHCKshN9Sq0gkn
+        QOKNi/H5+rWs+hADnDr8ORim2r/bK0Y9p62PvTUWXgx9yl/NbIdZhI6eD2qVVuqHD/NzvaVI99HzE
+        Nm5A8Z26keNaZzk3b6Oi0UnSG2AXWgr6Uiuxd42ztZ7S0n+c/p92YlE2Wi+FdeE2qiBeW9nsfKWoU
+        dWB3roGJi+g00N30Ryvd6sWkigsh+zSapcNYhCxU2OyVCGby+yI3eMAtPhgA6SaZSpJTogKoLH9lc
+        Ob3HHp6Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oY6fm-00GvrO-Oe; Tue, 13 Sep 2022 14:13:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E665930030F;
+        Tue, 13 Sep 2022 16:13:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C78E2202070C2; Tue, 13 Sep 2022 16:13:52 +0200 (CEST)
+Date:   Tue, 13 Sep 2022 16:13:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
+        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v3 00/16] objtool: Enable and implement --mcount option
+ on powerpc
+Message-ID: <YyCQIMHXP9DdvCzo@hirez.programming.kicks-ass.net>
+References: <20220912082020.226755-1-sv@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912082020.226755-1-sv@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Ling <gnaygnil@gmail.com>
+On Mon, Sep 12, 2022 at 01:50:04PM +0530, Sathvika Vasireddy wrote:
+> Christophe Leroy (4):
+>   objtool: Fix SEGFAULT
+>   objtool: Use target file endianness instead of a compiled constant
+>   objtool: Use target file class size instead of a compiled constant
 
-[ Upstream commit 35508d2424097f9b6a1a17aac94f702767035616 ]
+> Sathvika Vasireddy (12):
+>   objtool: Add --mnop as an option to --mcount
+>   objtool: Read special sections with alts only when specific options are selected
+>   objtool: Use macros to define arch specific reloc types
+>   objtool: Add arch specific function arch_ftrace_match()
+>   objtool/powerpc: Enable objtool to be built on ppc
+>   objtool/powerpc: Add --mcount specific implementation
 
-The RTCCTRL reg of LS1C is obselete.
-Writing this reg will cause system hang.
+>  tools/objtool/arch/powerpc/Build              |   2 +
+>  tools/objtool/arch/powerpc/decode.c           | 101 ++++++++++++++++++
+>  .../arch/powerpc/include/arch/cfi_regs.h      |  11 ++
+>  tools/objtool/arch/powerpc/include/arch/elf.h |  10 ++
+>  .../arch/powerpc/include/arch/special.h       |  21 ++++
+>  tools/objtool/arch/powerpc/special.c          |  19 ++++
+>  tools/objtool/arch/x86/decode.c               |   5 +
+>  tools/objtool/arch/x86/include/arch/elf.h     |   2 +
+>  .../arch/x86/include/arch/endianness.h        |   9 --
+>  tools/objtool/builtin-check.c                 |  14 +++
+>  tools/objtool/check.c                         |  53 ++++-----
+>  tools/objtool/elf.c                           |   8 +-
+>  tools/objtool/include/objtool/arch.h          |   2 +
+>  tools/objtool/include/objtool/builtin.h       |   1 +
+>  tools/objtool/include/objtool/elf.h           |   8 ++
+>  tools/objtool/include/objtool/endianness.h    |  32 +++---
+>  tools/objtool/orc_dump.c                      |  11 +-
+>  tools/objtool/orc_gen.c                       |   4 +-
+>  tools/objtool/special.c                       |   3 +-
 
-Fixes: 60219c563c9b6 ("MIPS: Add RTC support for Loongson1C board")
-Signed-off-by: Yang Ling <gnaygnil@gmail.com>
-Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
-Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/loongson32/ls1c/board.c | 1 -
- 1 file changed, 1 deletion(-)
+This seems to painlessly merge with the objtool changes I have in
+queue.git/call-depth-tracking. After that all I need is the below little
+patch to make it to build ppc44x_defconfig + CONFIG_DYNAMIC_FTRACE=y.
 
-diff --git a/arch/mips/loongson32/ls1c/board.c b/arch/mips/loongson32/ls1c/board.c
-index a96bed5e3ea60..ac1c5e6572d5f 100644
---- a/arch/mips/loongson32/ls1c/board.c
-+++ b/arch/mips/loongson32/ls1c/board.c
-@@ -18,7 +18,6 @@ static struct platform_device *ls1c_platform_devices[] __initdata = {
- static int __init ls1c_platform_init(void)
- {
- 	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
--	ls1x_rtc_set_extclk(&ls1x_rtc_pdev);
+So I think these patches can go through the powerpc tree if Michael
+wants. Josh you okay with that, or should we do something complicated?
+
+diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
+index ea2b1968f0ee..8343e2c4cea0 100644
+--- a/tools/objtool/arch/powerpc/decode.c
++++ b/tools/objtool/arch/powerpc/decode.c
+@@ -24,6 +24,11 @@ bool arch_callee_saved_reg(unsigned char reg)
+ 	return false;
+ }
  
- 	return platform_add_devices(ls1c_platform_devices,
- 				   ARRAY_SIZE(ls1c_platform_devices));
--- 
-2.35.1
-
-
-
++bool arch_pc_relative_reloc(struct reloc *reloc)
++{
++	exit(-1);
++}
++
+ int arch_decode_hint_reg(u8 sp_reg, int *base)
+ {
+ 	exit(-1);
