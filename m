@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFCF5B7D06
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB825B7D0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIMWYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 18:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S229569AbiIMW3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 18:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIMWYD (ORCPT
+        with ESMTP id S229492AbiIMW3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 18:24:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3252D74DEC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:24:00 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so12685891pjl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Mn9WBo5vNNbs0NZJBbiO/Yi28wMF/lgC71dq4ukkoxE=;
-        b=Dubdtf184nm84qSfvmgvXOaoKydU193nKrYzRylLXH5pTxCx/EiPSQhBryggNtpSPw
-         7dhYt/5APvLYyi7HiY1eUJh4GW+Y1P6SbKRN4mFj8umVUMA/XAnIIxvgofSNBuk4Lc9z
-         ejY8Jr+V8zRwa7zRzy5+ZzAMhRmrSW6mGEz0dMIY4SQhGrCvpPVmMHxv1HNChGiOb4b3
-         F4rHo62tImNd98RCVCSodsXZrLh9NJqrKy1BF6m86EFHBG/LCQsil0p8qZZMPdviHgNQ
-         rXCaImFIuECYoPeovbaFPCBiRi60XvRfm7I/HlUFGTSYcq4KIGNqr5+gq5OL92KZ0zYx
-         xxpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Mn9WBo5vNNbs0NZJBbiO/Yi28wMF/lgC71dq4ukkoxE=;
-        b=DD6La+gnqgots6ylELaGUbT52vGNCdDN+MaI2wOq05KGHFHAnP6DDTO7dvX0xdqwnc
-         O04oFAAVgkjip8rnL8p2W46yjYrNIuhyg4Nyg4gDUvhGUroovQy30Jn2MsPWLX9pP9l+
-         +XoY6aH+o4adHRLJ88DsUUVKVCPqf9/4yG6VipuNkkwsMI+K6zF46jP3wPW0lczsrxsv
-         uXEkZyfniLnbKdHr0TNASNkGJMOQmRuX6sYrJ6UU0kqcAI4CBJSvftCV1zM0jHhNIUND
-         OZ5a8uWuCjYHWbvZHmH5NSZwEZlDP2mLuWh5ZbHm9Zkb1Iwf1NRZr1kjBohrvpoVQwLY
-         Ts3Q==
-X-Gm-Message-State: ACgBeo23VBqIJjX6bal/mnKbktFROpqI6o58LruQMopmuZZEe3HagHUi
-        YlCn3PIJ4mk/sOzx0kqLMmHREQSNOhgJMIB0TjA=
-X-Google-Smtp-Source: AA6agR6axQZpOW/L0c5XHtQuHfj2iBCzW+WtzyTHa/pa3vc6ipX86M2QMYAVLusKm7rTN+WViK7NZUzyaIPmTyNN9Rc=
-X-Received: by 2002:a17:902:f782:b0:173:1206:cee0 with SMTP id
- q2-20020a170902f78200b001731206cee0mr33234283pln.130.1663107839649; Tue, 13
- Sep 2022 15:23:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220913205544.155106-1-nhuck@google.com>
-In-Reply-To: <20220913205544.155106-1-nhuck@google.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 13 Sep 2022 19:23:46 -0300
-Message-ID: <CAOMZO5CYaxdgn=Wh2CKsbJegb9hu40qEPOAEYy6x2qxpvPZseQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
+        Tue, 13 Sep 2022 18:29:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4185A172;
+        Tue, 13 Sep 2022 15:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9D9461607;
+        Tue, 13 Sep 2022 22:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E96EC433D6;
+        Tue, 13 Sep 2022 22:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663108158;
+        bh=YeIdUhpezu+PSJF2j8F0mUYzDwOXfM39RU0PHsl2DNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDisfPbZdMVcviSHu3pvOq/VmFQqmTM3flSTCcgGXVUILoSHAO5gHUK7sE2ExABV5
+         iJHkE9p/nJjTJjYQfgVJUlgHHUratE1HPf26eRMyzF3zZX88Q95bpZaoLBYJjPtqm5
+         MQuu1zzuEMU9hG0MUxpXVbJM1zdygMBiF8LCznnslNqwQJjy5PvZevA3WcYKYt66tJ
+         dbRfBtDKBSM6RbsMjixdiQm1oC97GHdeEGfshsktCWIlqUTDeHpJ4muTUZF/3WTZO/
+         YJvcLJ3dC3wuuki6SzvhMMoylD2D45GfL/UvgSvn/arEZ8Aj5kF01t64vFd44/Hk0x
+         NUyqzrGTiKP/A==
+Date:   Tue, 13 Sep 2022 15:29:15 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     Nathan Huckleberry <nhuck@google.com>
 Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: davicom: Fix return type of dm9000_start_xmit
+Message-ID: <YyEEO0ttQhMvLFIC@dev-arch.thelio-3990X>
+References: <20220912194722.809525-1-nhuck@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912194722.809525-1-nhuck@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
-
-On Tue, Sep 13, 2022 at 5:55 PM Nathan Huckleberry <nhuck@google.com> wrote:
->
-> The mode_valid field in drm_connector_helper_funcs is expected to be of
-> type:
-> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
->                                      struct drm_display_mode *mode);
->
+On Mon, Sep 12, 2022 at 12:47:19PM -0700, Nathan Huckleberry wrote:
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> 
 > The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
->
-> The return type of imx_tve_connector_mode_valid should be changed from
-> int to enum drm_mode_status.
->
+> 
+> The return type of dm9000_start_xmit should be changed from int to
+> netdev_tx_t.
+> 
 > Reported-by: Dan Carpenter <error27@gmail.com>
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  drivers/net/ethernet/davicom/dm9000.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/davicom/dm9000.c b/drivers/net/ethernet/davicom/dm9000.c
+> index 0985ab216566..186a5e0a7862 100644
+> --- a/drivers/net/ethernet/davicom/dm9000.c
+> +++ b/drivers/net/ethernet/davicom/dm9000.c
+> @@ -1012,7 +1012,7 @@ static void dm9000_send_packet(struct net_device *dev,
+>   *  Hardware start transmission.
+>   *  Send a packet to media from the upper layer.
+>   */
+> -static int
+> +static netdev_tx_t
+>  dm9000_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>  {
+>  	unsigned long flags;
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
