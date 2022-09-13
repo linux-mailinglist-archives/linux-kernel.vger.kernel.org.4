@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7E35B7174
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB815B7115
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiIMOlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S234355AbiIMOjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234739AbiIMOjc (ORCPT
+        with ESMTP id S234211AbiIMOhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:39:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56FE6D55B;
-        Tue, 13 Sep 2022 07:21:37 -0700 (PDT)
+        Tue, 13 Sep 2022 10:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A715C6B65D;
+        Tue, 13 Sep 2022 07:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D0C5B80EFD;
-        Tue, 13 Sep 2022 14:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D55A3C433D7;
-        Tue, 13 Sep 2022 14:20:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08010B80D87;
+        Tue, 13 Sep 2022 14:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704C2C433C1;
+        Tue, 13 Sep 2022 14:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078827;
-        bh=RzE8TxGjDi2S04MdtkRS+uoCo8hNUqW9GhKvr1kBV10=;
+        s=korg; t=1663078829;
+        bh=sJERrPUAwCBI0ASN54+KpYx7+Q3ky4neYCJzCXJ+fOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rf5fTv2SSC7uboIUvUEu3AK4+O587dvlO2nyeyk05xuuBYNxw070OnIgxK0evn+Zr
-         jXGm/qMVudBwjtHmzQqEK6zRPo/2ygVGvjmu0uML7GrUef34YsfHk7lDC5WPWyoKsy
-         DqYEQOpX2zttxiQ371dobFSLr4DTWtk6N8HVtRF4=
+        b=u1q6r0pNEyuWWVFay3/TtAsdS7lR/+FpUCPURjltvWYm2jvn7HjuBRKS71xvldu2W
+         ccyMGEtQFonDnczIHzXyLWFINYGF5gC8SC16var7Yv+dEWOV5EOFx0ZHZ7qPU2jvVH
+         FhkTDwtigG3p5ZtvqbyGyKTPuCmVkBDSZNX2CksE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 071/121] ALSA: usb-audio: Inform the delayed registration more properly
-Date:   Tue, 13 Sep 2022 16:04:22 +0200
-Message-Id: <20220913140400.417409378@linuxfoundation.org>
+Subject: [PATCH 5.15 072/121] ALSA: usb-audio: Register card again for iface over delayed_register option
+Date:   Tue, 13 Sep 2022 16:04:23 +0200
+Message-Id: <20220913140400.465277446@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -56,54 +56,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 7e1afce5866e02b45bf88c27dd7de1b9dfade1cc ]
+[ Upstream commit 2027f114686e0f3f1f39971964dfc618637c88c2 ]
 
-The info message that was added in the commit a4aad5636c72 ("ALSA:
-usb-audio: Inform devices that need delayed registration") is actually
-useful to know the need for the delayed registration.  However, it
-turned out that this doesn't catch the all cases; namely, this warned
-only when a PCM stream is attached onto the existing PCM instance, but
-it doesn't count for a newly created PCM instance.  This made
-confusion as if there were no further delayed registration.
+When the delayed registration is specified via either delayed_register
+option or the quirk, we delay the invocation of snd_card_register()
+until the given interface.  But if a wrong value has been set there
+and there are more interfaces over the given interface number,
+snd_card_register() call would be missing for those interfaces.
 
-This patch moves the check to the code path for either adding a stream
-or creating a PCM instance.  Also, make it simpler by checking the
-card->registered flag instead of querying each snd_device state.
+This patch catches up those missing calls by fixing the comparison of
+the interface number.  Now the call is skipped only if the processed
+interface is less than the given interface, instead of the exact
+match.
 
-Fixes: a4aad5636c72 ("ALSA: usb-audio: Inform devices that need delayed registration")
+Fixes: b70038ef4fea ("ALSA: usb-audio: Add delayed_register option")
 Link: https://bugzilla.kernel.org/show_bug.cgi?id=216082
-Link: https://lore.kernel.org/r/20220831125901.4660-1-tiwai@suse.de
+Link: https://lore.kernel.org/r/20220831125901.4660-2-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/stream.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ sound/usb/card.c   | 2 +-
+ sound/usb/quirks.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/usb/stream.c b/sound/usb/stream.c
-index 40ce8a1cb318a..f10f4e6d3fb85 100644
---- a/sound/usb/stream.c
-+++ b/sound/usb/stream.c
-@@ -495,6 +495,10 @@ static int __snd_usb_add_audio_stream(struct snd_usb_audio *chip,
- 			return 0;
- 		}
+diff --git a/sound/usb/card.c b/sound/usb/card.c
+index ff5f8de1bc540..713b84d8d42f1 100644
+--- a/sound/usb/card.c
++++ b/sound/usb/card.c
+@@ -698,7 +698,7 @@ static bool check_delayed_register_option(struct snd_usb_audio *chip, int iface)
+ 		if (delayed_register[i] &&
+ 		    sscanf(delayed_register[i], "%x:%x", &id, &inum) == 2 &&
+ 		    id == chip->usb_id)
+-			return inum != iface;
++			return iface < inum;
  	}
-+
-+	if (chip->card->registered)
-+		chip->need_delayed_register = true;
-+
- 	/* look for an empty stream */
- 	list_for_each_entry(as, &chip->pcm_list, list) {
- 		if (as->fmt_type != fp->fmt_type)
-@@ -502,9 +506,6 @@ static int __snd_usb_add_audio_stream(struct snd_usb_audio *chip,
- 		subs = &as->substream[stream];
- 		if (subs->ep_num)
- 			continue;
--		if (snd_device_get_state(chip->card, as->pcm) !=
--		    SNDRV_DEV_BUILD)
--			chip->need_delayed_register = true;
- 		err = snd_pcm_new_stream(as->pcm, stream, 1);
- 		if (err < 0)
- 			return err;
+ 
+ 	return false;
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index 9bfead5efc4c1..5b4d8f5eade20 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1764,7 +1764,7 @@ bool snd_usb_registration_quirk(struct snd_usb_audio *chip, int iface)
+ 
+ 	for (q = registration_quirks; q->usb_id; q++)
+ 		if (chip->usb_id == q->usb_id)
+-			return iface != q->interface;
++			return iface < q->interface;
+ 
+ 	/* Register as normal */
+ 	return false;
 -- 
 2.35.1
 
