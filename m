@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F835B72B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6645B73AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiIMPBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S235332AbiIMPGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiIMO7b (ORCPT
+        with ESMTP id S235371AbiIMPEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:59:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7264374B86;
-        Tue, 13 Sep 2022 07:29:08 -0700 (PDT)
+        Tue, 13 Sep 2022 11:04:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05196B8E6;
+        Tue, 13 Sep 2022 07:30:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12C4CB80FB5;
-        Tue, 13 Sep 2022 14:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70733C433D6;
-        Tue, 13 Sep 2022 14:28:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC565B80FAF;
+        Tue, 13 Sep 2022 14:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C6BC433C1;
+        Tue, 13 Sep 2022 14:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079305;
-        bh=4aUWc+8xSSeE7zL6x2uFeoDypKjs1iKE72Blkd7WAXE=;
+        s=korg; t=1663079396;
+        bh=fJYGu+vGBXDNVN3bkHSfbhFb/RFNCdKrSdC1GIKks3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vNl1moSaFgO2H9AfPiwjlOboAfZ6nJgoeE0XFtlplg53/UOlxxLWHk9ENCnWTPwk1
-         VQp2RAGOwHr2aS1eonyGphqYETia4ZNGzTkFzK6K8vpoRYlpMS7bTghhpcBQS5KhOr
-         dc8eCKUlqiY9oF+mZY6jqMdv9ruNRjiT3id2czCQ=
+        b=KuU3su4uyPuCY092W4/QjQIHxb24vh6rUVKkNT4z8N+1XZFPVUoQ0pWnJBrLcI9+A
+         doZxO03vOcxGKg/FkHgcXT2bHWUHoJbnuzZ5qBPgbW/GaI3mACAoQOpfqk0w80NhTR
+         W3EUWyJngTpY8PGjJ6913wYaJv7CjnryDku7IOkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com,
-        Siddh Raman Pant <code@siddh.me>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 056/108] wifi: mac80211: Dont finalize CSA in IBSS mode if state is disconnected
-Date:   Tue, 13 Sep 2022 16:06:27 +0200
-Message-Id: <20220913140356.035465396@linuxfoundation.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 10/79] platform/x86: pmc_atom: Fix SLP_TYPx bitfield mask
+Date:   Tue, 13 Sep 2022 16:06:28 +0200
+Message-Id: <20220913140349.348078286@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddh Raman Pant <code@siddh.me>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 15bc8966b6d3a5b9bfe4c9facfa02f2b69b1e5f0 upstream.
+[ Upstream commit 0a90ed8d0cfa29735a221eba14d9cb6c735d35b6 ]
 
-When we are not connected to a channel, sending channel "switch"
-announcement doesn't make any sense.
+On Intel hardware the SLP_TYPx bitfield occupies bits 10-12 as per ACPI
+specification (see Table 4.13 "PM1 Control Registers Fixed Hardware
+Feature Control Bits" for the details).
 
-The BSS list is empty in that case. This causes the for loop in
-cfg80211_get_bss() to be bypassed, so the function returns NULL
-(check line 1424 of net/wireless/scan.c), causing the WARN_ON()
-in ieee80211_ibss_csa_beacon() to get triggered (check line 500
-of net/mac80211/ibss.c), which was consequently reported on the
-syzkaller dashboard.
+Fix the mask and other related definitions accordingly.
 
-Thus, check if we have an existing connection before generating
-the CSA beacon in ieee80211_ibss_finish_csa().
-
-Cc: stable@vger.kernel.org
-Fixes: cd7760e62c2a ("mac80211: add support for CSA in IBSS mode")
-Link: https://syzkaller.appspot.com/bug?id=05603ef4ae8926761b678d2939a3b2ad28ab9ca6
-Reported-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Tested-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20220814151512.9985-1-code@siddh.me
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 93e5eadd1f6e ("x86/platform: New Intel Atom SOC power management controller driver")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220801113734.36131-1-andriy.shevchenko@linux.intel.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/ibss.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/platform/x86/pmc_atom.c            | 2 +-
+ include/linux/platform_data/x86/pmc_atom.h | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
---- a/net/mac80211/ibss.c
-+++ b/net/mac80211/ibss.c
-@@ -542,6 +542,10 @@ int ieee80211_ibss_finish_csa(struct iee
+diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
+index 682fc49d172cb..e8440850b73ac 100644
+--- a/drivers/platform/x86/pmc_atom.c
++++ b/drivers/platform/x86/pmc_atom.c
+@@ -253,7 +253,7 @@ static void pmc_power_off(void)
+ 	pm1_cnt_port = acpi_base_addr + PM1_CNT;
  
- 	sdata_assert_lock(sdata);
+ 	pm1_cnt_value = inl(pm1_cnt_port);
+-	pm1_cnt_value &= SLEEP_TYPE_MASK;
++	pm1_cnt_value &= ~SLEEP_TYPE_MASK;
+ 	pm1_cnt_value |= SLEEP_TYPE_S5;
+ 	pm1_cnt_value |= SLEEP_ENABLE;
  
-+	/* When not connected/joined, sending CSA doesn't make sense. */
-+	if (ifibss->state != IEEE80211_IBSS_MLME_JOINED)
-+		return -ENOLINK;
+diff --git a/include/linux/platform_data/x86/pmc_atom.h b/include/linux/platform_data/x86/pmc_atom.h
+index e4905fe69c381..e4cfcb6f16633 100644
+--- a/include/linux/platform_data/x86/pmc_atom.h
++++ b/include/linux/platform_data/x86/pmc_atom.h
+@@ -16,6 +16,8 @@
+ #ifndef PMC_ATOM_H
+ #define PMC_ATOM_H
+ 
++#include <linux/bits.h>
 +
- 	/* update cfg80211 bss information with the new channel */
- 	if (!is_zero_ether_addr(ifibss->bssid)) {
- 		cbss = cfg80211_get_bss(sdata->local->hw.wiphy,
+ /* ValleyView Power Control Unit PCI Device ID */
+ #define	PCI_DEVICE_ID_VLV_PMC	0x0F1C
+ /* CherryTrail Power Control Unit PCI Device ID */
+@@ -148,9 +150,9 @@
+ #define	ACPI_MMIO_REG_LEN	0x100
+ 
+ #define	PM1_CNT			0x4
+-#define	SLEEP_TYPE_MASK		0xFFFFECFF
++#define	SLEEP_TYPE_MASK		GENMASK(12, 10)
+ #define	SLEEP_TYPE_S5		0x1C00
+-#define	SLEEP_ENABLE		0x2000
++#define	SLEEP_ENABLE		BIT(13)
+ 
+ extern int pmc_atom_read(int offset, u32 *value);
+ extern int pmc_atom_write(int offset, u32 value);
+-- 
+2.35.1
+
 
 
