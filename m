@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9C25B71B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC7A5B71FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiIMOpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S230026AbiIMOol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiIMOmd (ORCPT
+        with ESMTP id S232186AbiIMOma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:42:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF076E2EC;
-        Tue, 13 Sep 2022 07:22:47 -0700 (PDT)
+        Tue, 13 Sep 2022 10:42:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2277C6E2F8;
+        Tue, 13 Sep 2022 07:22:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4010B80F3B;
-        Tue, 13 Sep 2022 14:22:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA74C433C1;
-        Tue, 13 Sep 2022 14:22:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 946D1614B4;
+        Tue, 13 Sep 2022 14:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F581C433D6;
+        Tue, 13 Sep 2022 14:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078965;
-        bh=31O2RnmTrqwLreTHa69wpotWavAZzHJ+YCcgLoU3qiM=;
+        s=korg; t=1663078968;
+        bh=wgRZma+e4X5kCGxfMKh1BxeU5ur5lm00SFY+zuuMEMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d3CCZxHcP4QSXbyz3tatWrNCg68rDRJutSVGf6MZyekKyKhY6/MwPfGQW2UmM1WIp
-         Vl60OtlPYl0/KAGUtlGuEY7gSD90DfCA9HHRp/cZ+Jfid5ctl30fLDWQ3LAb1OShIv
-         VvVSyB/rSzzldZNaHY8TNjQ1Bnopdqh+o8hAiObY=
+        b=S8rvj3AXknWMYQUZC6KaPcz4pTUlOSmBgJHq5GoZQLq6cj93Cxk1j2p6WOO+7aPa8
+         K6bzKMMJkZBOnv1xzoa4TzDN7oYmyV57+VdmzbJeN3pFWs+icpbxakIOehXVqqoli0
+         N+RzOXtB/P/co9EUVCeZPh5smLGDPU5a3o/3AyIU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stanislaw Gruszka <stf_xl@wp.pl>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 07/79] wifi: iwlegacy: 4965: corrected fix for potential off-by-one overflow in il4965_rs_fill_link_cmd()
-Date:   Tue, 13 Sep 2022 16:04:12 +0200
-Message-Id: <20220913140350.649369248@linuxfoundation.org>
+        stable@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.10 08/79] net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()
+Date:   Tue, 13 Sep 2022 16:04:13 +0200
+Message-Id: <20220913140350.695792494@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
 References: <20220913140350.291927556@linuxfoundation.org>
@@ -54,51 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislaw Gruszka <stf_xl@wp.pl>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 6d0ef7241553f3553a0a2764c69b07892705924c upstream.
+commit fe2c9c61f668cde28dac2b188028c5299cedcc1e upstream.
 
-This reverts commit a8eb8e6f7159c7c20c0ddac428bde3d110890aa7 as
-it can cause invalid link quality command sent to the firmware
-and address the off-by-one issue by fixing condition of while loop.
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  Fix this up to be much
+simpler logic and only create the root debugfs directory once when the
+driver is first accessed.  That resolves the memory leak and makes
+things more obvious as to what the intent is.
 
-Cc: stable@vger.kernel.org
-Fixes: a8eb8e6f7159 ("wifi: iwlegacy: 4965: fix potential off-by-one overflow in il4965_rs_fill_link_cmd()")
-Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220815073737.GA999388@wp.pl
+Cc: Marcin Wojtas <mw@semihalf.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: stable <stable@kernel.org>
+Fixes: 21da57a23125 ("net: mvpp2: add a debugfs interface for the Header Parser")
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlegacy/4965-rs.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-@@ -2403,7 +2403,7 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 		/* Repeat initial/next rate.
- 		 * For legacy IL_NUMBER_TRY == 1, this loop will not execute.
- 		 * For HT IL_HT_NUMBER_TRY == 3, this executes twice. */
--		while (repeat_rate > 0) {
-+		while (repeat_rate > 0 && idx < (LINK_QUAL_MAX_RETRY_NUM - 1)) {
- 			if (is_legacy(tbl_type.lq_type)) {
- 				if (ant_toggle_cnt < NUM_TRY_BEFORE_ANT_TOGGLE)
- 					ant_toggle_cnt++;
-@@ -2422,8 +2422,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 			    cpu_to_le32(new_rate);
- 			repeat_rate--;
- 			idx++;
--			if (idx >= LINK_QUAL_MAX_RETRY_NUM)
--				goto out;
- 		}
+--- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
++++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+@@ -700,10 +700,10 @@ void mvpp2_dbgfs_cleanup(struct mvpp2 *p
  
- 		il4965_rs_get_tbl_info_from_mcs(new_rate, lq_sta->band,
-@@ -2468,7 +2466,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 		repeat_rate--;
- 	}
+ void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name)
+ {
+-	struct dentry *mvpp2_dir, *mvpp2_root;
++	static struct dentry *mvpp2_root;
++	struct dentry *mvpp2_dir;
+ 	int ret, i;
  
--out:
- 	lq_cmd->agg_params.agg_frame_cnt_limit = LINK_QUAL_AGG_FRAME_LIMIT_DEF;
- 	lq_cmd->agg_params.agg_dis_start_th = LINK_QUAL_AGG_DISABLE_START_DEF;
+-	mvpp2_root = debugfs_lookup(MVPP2_DRIVER_NAME, NULL);
+ 	if (!mvpp2_root)
+ 		mvpp2_root = debugfs_create_dir(MVPP2_DRIVER_NAME, NULL);
  
 
 
