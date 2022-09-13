@@ -2,135 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6BB5B78FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A517C5B792F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiIMSBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S231976AbiIMSLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiIMSAW (ORCPT
+        with ESMTP id S231704AbiIMSLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:00:22 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C698D3CC;
-        Tue, 13 Sep 2022 10:02:13 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id t14so21836237wrx.8;
-        Tue, 13 Sep 2022 10:02:13 -0700 (PDT)
+        Tue, 13 Sep 2022 14:11:09 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B3D65561
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:00 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso11979132pjm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date;
-        bh=zme2lWuvoGrfFBsqa9yom9/QfDJ4HQGLRNit4i2UCVU=;
-        b=gb5gMEWhgM2EKjkHbhhv+6J3zPFJrpiiT64EymmpcoBssE2lsv05Vu8qX3wZqinZ0h
-         BMkQzntjCT38sdMIE8n+YMkhXeTShtcllFx8kXZil898lK2ZZo9hfr1irkoN+FOmmn/G
-         18s4LiPWt+uokg4vMEHkemUlSVJAK0I30L8IyXkutU9UTBD5kc7QZOlOTjXB0ioclMBh
-         TyxbaEtvajMFgJJUbaJ4pZldCBNrXUllfaraMq7OdHi8BQ3LlVWQpy+BNdM1JsbGL0md
-         kkbqRz/c5fyZpRYq2jqSzJB0hNci6mANsEMATWwGW0xG8Y0is54TVT/9cMMFST7Ujyt1
-         Fsrg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=D9/CMhAnwY+iSxXO7mkpQUkem+9syIuYCz6PSBi314E=;
+        b=PrUhFDsazpzObIPf13w3em4XMpw13EzTsTwDotwjA4G9uUwyRxSKT/DriUGSEAy+ZA
+         60dG9/NpE0OjmsZBagZeXSZsl+w8GP76KhR1i8FE255XDDO4E9YONMWSCmtNclLPPDPp
+         X1+vxIo7iD1opjC3IX4J9SrKg8tDPsZ7QfR7kCy14B/UdQBAiKvLv+WrE3HxWql1HBlU
+         YakjZr1ouhdVADCFF1/8gvKsYEBLXARPkFBMNIak6p4C6ulk+Q/6bI5CNiYF/eXH6SKv
+         iZZI6u0Js8RvZB6fFaph5AmcDuiy3MMNGADdUbh/5EbBpVqK6tTB3Y+7vJSCpquRKQv+
+         hG6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zme2lWuvoGrfFBsqa9yom9/QfDJ4HQGLRNit4i2UCVU=;
-        b=D5FYDvxiSfgp/T2q3zOHbRV2oY39PX4+qzDNsZukT+z574OM+1nPs9wLcaZ5TGcRTU
-         Ffl+DhWvlUs7tfi3GWaQ5lsrx0OiiOTHKIyDl4nxeV1jXtsbobI+Uf80BjksKP/uIze2
-         PiegU/82N7YIPBNOMONXrCCKwwCrrpM6YS6uG2iWl2kT4/cDGaTWPsOz9MV0IvB05HKR
-         /v8fJff+/mxL+7sGVzZmsYpJA66nA3UPYhGQXxImGY9HA93A6InKn3wVQTZnglbytqRr
-         AfNbmrKUsWHzEZLcX6InLjPsWRA2sGOaMNFowQTsRC7FqbvlyOBNBuByrvGrEi3TW50W
-         BAXQ==
-X-Gm-Message-State: ACgBeo1nzAKH2NmbUwdW0bs0nvM2/IO0SJwElhxNaAYsbrphFKE5qnU+
-        rc75Bb/eXzgKRxcZE2A30tw=
-X-Google-Smtp-Source: AA6agR7Vy7lRYafgDhqFC8YEpPO0p60Igi71WulBnX+t34itz9FoRQym/jbyQ5d8Jiv2gkoDFnAGRg==
-X-Received: by 2002:a05:6000:2c1:b0:226:e816:b6a4 with SMTP id o1-20020a05600002c100b00226e816b6a4mr19498275wry.330.1663088521736;
-        Tue, 13 Sep 2022 10:02:01 -0700 (PDT)
-Received: from [192.168.23.141] ([212.2.175.203])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05600c4e5300b003a62bc1735asm14668109wmq.9.2022.09.13.10.02.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 10:02:01 -0700 (PDT)
-Message-ID: <b7eada4f-9625-d2a0-d58b-73bb08d17cc9@gmail.com>
-Date:   Tue, 13 Sep 2022 20:01:59 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=D9/CMhAnwY+iSxXO7mkpQUkem+9syIuYCz6PSBi314E=;
+        b=a1cHbJkGVV62UShOmZaTAr2bAEmy81jtOlMa2eyce/2B9g49F3JR5Ba1MHC+Z6yv5q
+         kpetSpvAl7tk8Gv7tDAYxl4oo51g13XN9Vmnf+8S47FqitL5YDnYBs7GDb3zG749bXnT
+         myh89XtN4CjvzftNYNbgj9NIALaDl5Qsvj7bFnVz2xNifJDKNHF2YO5B6tjarNw2OLlR
+         xD/5v5Foo0Tq5E4h1WZg23/mPx+JUf9OuFIQ5vGib7ljBYFSSzSxeuOZDB4OWXqW2naK
+         Ku4kJkIxjVatsgtxvWTCnawkoAFL2pEQhKfRrExiSlRtEBtVzcKxmoOTTz/q6Sg3YmgB
+         oqIg==
+X-Gm-Message-State: ACgBeo2lJRXCiQXxdKvkpfNHKbpI1G3qNKbe3EArG9Dg4Ydm1gPVviry
+        qPhQ0qWiitychQ2MrZYec0o=
+X-Google-Smtp-Source: AA6agR7LvukJBTHiGSlmNN6EGBGKlOkHAMsEVCHXC4+cx7lsKj/rB6rzJJn561MQga7Gy2i/aJaKwQ==
+X-Received: by 2002:a17:902:e2d3:b0:176:e97a:d3eb with SMTP id l19-20020a170902e2d300b00176e97ad3ebmr31484970plc.172.1663089479694;
+        Tue, 13 Sep 2022 10:17:59 -0700 (PDT)
+Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
+        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053e5b905843sm796474pfq.203.2022.09.13.10.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 10:17:59 -0700 (PDT)
+From:   Nadav Amit <nadav.amit@gmail.com>
+X-Google-Original-From: Nadav Amit
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
+Subject: [PATCH 0/3] vmw_balloon: misc fixes and enhancements
+Date:   Tue, 13 Sep 2022 02:43:03 -0700
+Message-Id: <20220913094306.317734-1-namit@vmware.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        peng.fan@oss.nxp.com
-Cc:     festevam@gmail.com, linux-clk@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, marex@denx.de,
-        mturquette@baylibre.com, peng.fan@nxp.com, sboyd@kernel.org,
-        shawnguo@kernel.org, tharvey@gateworks.com
-References: <20220913152140.iikckob5h3ecagfi@mercury.elektranox.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
-In-Reply-To: <20220913152140.iikckob5h3ecagfi@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the input Sebastian!
+From: Nadav Amit <namit@vmware.com>
 
-On 9/13/22 18:21, Sebastian Reichel wrote:
-> Hi,
-> 
-> I had the same trouble before for QMX6 system on module, which feeds
-> the i.MX6 32k clock via I2C RTC's 32k output. Here is how it has
-> been solved upstream:
-> 
-> https://lore.kernel.org/all/20210428222953.235280-1-sebastian.reichel@collabora.com/
-> 
+Various relatively minor enhancements. Patches 1-2 address borderline
+bugs. There have been no actual bug reports, and the first bug is
+theoretical and the second one is a minor performance issue. We
+therefore do not ask to backport them, but keep them first since we (or
+distributions) might want to backport them later.
 
-So, if my poor brains (that have been conferencing the whole day) can 
-still read this correctly - upstream solution is that drivers 
-controllong clock gate need to have this "fixed-clock" propery check && 
-not register the gate if fixed-clock is present, right?
+Patch 3 is doing some cleanup due to recent changes, with no expected
+functional change.
 
-I think the fixed clock is better than the vendor specific property as 
-it still describes the real HW. I am not really thrilled by the fact 
-that each clk (provider) driver may potentially need to implement this 
-as no one knows when the clocks are used in such an environment. This is 
-why I feel the support would better fit the core. (Yep - I didn't yet 
-read the linked discussion - I know people who are smarter than me have 
-probably thought this through already).
+Nadav Amit (3):
+  vmw_balloon: access reset_required through READ/WRITE_ONCE
+  vmw_balloon: exit if initalization fails
+  vmw_balloon: open-code vmballoon_compaction_init()
 
-So, basically this would require adding fixed-clock node in PMIC node 
-when the 32K clock must not be touched. I hope this suits the people 
-looking after the board dts files. In the clk driver it requires the 
-check for "fixed-clock" node + return w/o registering the clk if node is 
-there.
-
-I guess we could at least have a registration API (something like 
-clk_register_if_not_fixed(), but "naming is hard" said Rob once to me) - 
-it would not only slightly simplify the drivers but it would also help 
-avoiding this same discussion with the next board where similar problem 
-is surfacing. This of course needs buy-in from Stephen (as does any 
-change to bd718x7-clk which goes through his tree).
-
-Finally this probably requires the binding docs changes to all PMICs 
-which use the bd718x7-clk driver - and I guess that is Rob's territory.
-
-I am happy if someone patches the bd718x7-clk + all the binding docs. 
-Especially the binding docs - I never get the right at first shot. I can 
-also try giving a hand with the clk-bd718x7 if no one else will, but 
-that will take some time (I'm currently travelling) :( Tim, others, 
-please let me know if you wish me to try looking at this.
-
-Yours
-	-- Matti
+ drivers/misc/vmw_balloon.c | 71 +++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 40 deletions(-)
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+2.25.1
 
-~~ When things go utterly wrong vim users can always type :help! ~~
