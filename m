@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBE55B72DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0135B73EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbiIMPCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S235671AbiIMPPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiIMO7k (ORCPT
+        with ESMTP id S235628AbiIMPMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:59:40 -0400
+        Tue, 13 Sep 2022 11:12:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E80C67C96;
-        Tue, 13 Sep 2022 07:29:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA554785A6;
+        Tue, 13 Sep 2022 07:32:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36139B80F88;
-        Tue, 13 Sep 2022 14:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842E3C433D6;
-        Tue, 13 Sep 2022 14:28:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21A0AB80F1A;
+        Tue, 13 Sep 2022 14:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7ADC43147;
+        Tue, 13 Sep 2022 14:30:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079323;
-        bh=8KeMCIg+Pi0ZSD9ArrUQGZ0FqfMzxYSZnbkOkTiYLNE=;
+        s=korg; t=1663079455;
+        bh=byZiY4GVwHFWvBA3Mo8AblOqT8dGZGcsnGwD6OC1F5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xzVOeHfgY4OumLxOlpvvQc1tRAZPNliOsQMqlW24/1DbgjZZ+7sBzfXWcWKkTZvvt
-         aarMqQOnZ9vjq9Tf3yUa0duibLuOFg0LtlnDycd8sef9VvwlGPNjoSW16z0bEIwQrN
-         1tPJv/cTJBbw4fEuWDZdyZf8fNXTiGSlBuG656XU=
+        b=Er3MWGcaQTrXIA5UU/M4zBwRdTuRMqh/x4AAvlzDMsu+6S8VTiUdsG5oMODeF/DVd
+         3pfmuRYWRo1KJKWeNVnhlpdvqnIxpvA3rrveok+AKSmNJpYgU972NFkY8XWsB9EpQZ
+         XVQyibfvdHoU6hup3dODAHC9W2OdlsgmkvLsindE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Rondreis <linhaoguo86@gmail.com>
-Subject: [PATCH 5.4 053/108] USB: core: Prevent nested device-reset calls
-Date:   Tue, 13 Sep 2022 16:06:24 +0200
-Message-Id: <20220913140355.910732567@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 07/79] net: dp83822: disable false carrier interrupt
+Date:   Tue, 13 Sep 2022 16:06:25 +0200
+Message-Id: <20220913140349.214011981@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,130 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
 
-commit 9c6d778800b921bde3bff3cff5003d1650f942d1 upstream.
+commit c96614eeab663646f57f67aa591e015abd8bd0ba upstream.
 
-Automatic kernel fuzzing revealed a recursive locking violation in
-usb-storage:
+When unplugging an Ethernet cable, false carrier events were produced by
+the PHY at a very high rate. Once the false carrier counter full, an
+interrupt was triggered every few clock cycles until the cable was
+replugged. This resulted in approximately 10k/s interrupts.
 
-============================================
-WARNING: possible recursive locking detected
-5.18.0 #3 Not tainted
---------------------------------------------
-kworker/1:3/1205 is trying to acquire lock:
-ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+Since the false carrier counter (FCSCR) is never used, we can safely
+disable this interrupt.
 
-but task is already holding lock:
-ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+In addition to improving performance, this also solved MDIO read
+timeouts I was randomly encountering with an i.MX8 fec MAC because of
+the interrupt flood. The interrupt count and MDIO timeout fix were
+tested on a v5.4.110 kernel.
 
-...
-
-stack backtrace:
-CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
-check_deadlock kernel/locking/lockdep.c:3031 [inline]
-validate_chain kernel/locking/lockdep.c:3816 [inline]
-__lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
-lock_acquire kernel/locking/lockdep.c:5665 [inline]
-lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
-__mutex_lock_common kernel/locking/mutex.c:603 [inline]
-__mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
-usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
-r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
-usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
-device_remove drivers/base/dd.c:545 [inline]
-device_remove+0x11f/0x170 drivers/base/dd.c:537
-__device_release_driver drivers/base/dd.c:1222 [inline]
-device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
-usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
-usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
-usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
-
-This turned out not to be an error in usb-storage but rather a nested
-device reset attempt.  That is, as the rtl8712 driver was being
-unbound from a composite device in preparation for an unrelated USB
-reset (that driver does not have pre_reset or post_reset callbacks),
-its ->remove routine called usb_reset_device() -- thus nesting one
-reset call within another.
-
-Performing a reset as part of disconnect processing is a questionable
-practice at best.  However, the bug report points out that the USB
-core does not have any protection against nested resets.  Adding a
-reset_in_progress flag and testing it will prevent such errors in the
-future.
-
-Link: https://lore.kernel.org/all/CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com/
-Cc: stable@vger.kernel.org
-Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YwkflDxvg0KWqyZK@rowland.harvard.edu
+Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
+Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |   10 ++++++++++
- include/linux/usb.h    |    2 ++
- 2 files changed, 12 insertions(+)
+ drivers/net/phy/dp83822.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -5923,6 +5923,11 @@ re_enumerate_no_bos:
-  * the reset is over (using their post_reset method).
-  *
-  * Return: The same as for usb_reset_and_verify_device().
-+ * However, if a reset is already in progress (for instance, if a
-+ * driver doesn't have pre_ or post_reset() callbacks, and while
-+ * being unbound or re-bound during the ongoing reset its disconnect()
-+ * or probe() routine tries to perform a second, nested reset), the
-+ * routine returns -EINPROGRESS.
-  *
-  * Note:
-  * The caller must own the device lock.  For example, it's safe to use
-@@ -5956,6 +5961,10 @@ int usb_reset_device(struct usb_device *
- 		return -EISDIR;
- 	}
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -204,7 +204,6 @@ static int dp83822_config_intr(struct ph
+ 			return misr_status;
  
-+	if (udev->reset_in_progress)
-+		return -EINPROGRESS;
-+	udev->reset_in_progress = 1;
-+
- 	port_dev = hub->ports[udev->portnum - 1];
- 
- 	/*
-@@ -6020,6 +6029,7 @@ int usb_reset_device(struct usb_device *
- 
- 	usb_autosuspend_device(udev);
- 	memalloc_noio_restore(noio_flag);
-+	udev->reset_in_progress = 0;
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(usb_reset_device);
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -580,6 +580,7 @@ struct usb3_lpm_parameters {
-  * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
-  * @can_submit: URBs may be submitted
-  * @persist_enabled:  USB_PERSIST enabled for this device
-+ * @reset_in_progress: the device is being reset
-  * @have_langid: whether string_langid is valid
-  * @authorized: policy has said we can use it;
-  *	(user space) policy determines if we authorize this device to be
-@@ -665,6 +666,7 @@ struct usb_device {
- 
- 	unsigned can_submit:1;
- 	unsigned persist_enabled:1;
-+	unsigned reset_in_progress:1;
- 	unsigned have_langid:1;
- 	unsigned authorized:1;
- 	unsigned authenticated:1;
+ 		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
+-				DP83822_FALSE_CARRIER_HF_INT_EN |
+ 				DP83822_ANEG_COMPLETE_INT_EN |
+ 				DP83822_DUP_MODE_CHANGE_INT_EN |
+ 				DP83822_SPEED_CHANGED_INT_EN |
 
 
