@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CC05B7D58
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6B35B7D59
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiIMXMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S229569AbiIMXOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIMXMp (ORCPT
+        with ESMTP id S229500AbiIMXOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:12:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6144E70E43
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:12:44 -0700 (PDT)
+        Tue, 13 Sep 2022 19:14:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3CEC29
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:14:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2173CB81107
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F147C433D6;
-        Tue, 13 Sep 2022 23:12:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBC796164B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:14:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B42C433D6;
+        Tue, 13 Sep 2022 23:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663110761;
-        bh=As3E/5cVHJLb20FXFderpxKGHqSXrRunlE+X5ctrt8w=;
+        s=k20201202; t=1663110869;
+        bh=eD7OnuNEg2BVPLGRpHp+6sLXUAMjcwcu/sAlw9lLAAc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=klS7TgFo8gwWLAQxxz2ru+T8tfcS/nLmWqn//q7EReQUj/9yBnt4XG9w6/sW0AAnF
-         k0gmaCvVa0PGaGSPASl3vvx9yhMHxhYGboCTQWVdzWpWakkrmtUOaBWVANvAYX7HwB
-         /a/RwX3C5PS7tDhogxj5Ihtble/uKDcYqfsgyCZhRLr/6bNo1Gnpj1CWLzSKX9zzs8
-         y2u/qVFQdV7fqThAgA9eBqos0ofHe3SddlINXLqv9Jc+Iki8Zz8Jks10eT6NFc5Fml
-         8ILlX9xWgsPNMQnB6wvA4izBd0hfs7RgjC82QG/qNFKRJdb0+bfJtILPw0vWWgDEW2
-         hSCv+C+TvD9Aw==
-Date:   Tue, 13 Sep 2022 16:12:39 -0700
+        b=gNxd+VvmGpzmAkO9OC8ubGFXxVjXjTTKD9JzCqSberTiHB+qi26dpbQYfvk/n7LUA
+         dcvttc/w0Pd+JTYzS0cczu4rFgBS+qZx3BCRofTwofTxxWECmvbnH81xEncWscQqja
+         vl6usMgzBnYFYuVrO2l+IqZZ6gzjh/xEXjCtEN5pfDx2u2N7diDnwyclWfvt9LBklf
+         g4SfdK4Vgj5SjEKhaPmCN5aTiVAnKzcV4kUPZVb2wM9E1z5eJ4AoGZ5JF58PMUj7kV
+         AuXvgZuwsu1rwHxSRZzYik84GvGZCQG9LclCUXpui8cSTvsTVmUjtxqOxN911szY/p
+         ttvkNxI/15xEw==
+Date:   Tue, 13 Sep 2022 16:14:27 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Nathan Huckleberry <nhuck@google.com>
 Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Sathish Kumar <skumark1902@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: Fix return type of r8712_xmit_entry
-Message-ID: <YyEOZ+u/T8rP6o9S@dev-arch.thelio-3990X>
-References: <20220912214607.929211-1-nhuck@google.com>
+        Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8723bs: Fix rtw_xmit_entry return type
+Message-ID: <YyEO01+suq0Wl/2F@dev-arch.thelio-3990X>
+References: <20220912214617.929240-1-nhuck@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912214607.929211-1-nhuck@google.com>
+In-Reply-To: <20220912214617.929240-1-nhuck@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,14 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:46:03PM -0700, Nathan Huckleberry wrote:
+On Mon, Sep 12, 2022 at 02:46:14PM -0700, Nathan Huckleberry wrote:
 > The ndo_start_xmit field in net_device_ops is expected to be of type
 > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 > 
 > The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
 > 
-> The return type of r8712_xmit_entry should be changed from int to
+> The return type of rtw_xmit_entry should be changed from int to
 > netdev_tx_t.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
@@ -76,40 +72,46 @@ On Mon, Sep 12, 2022 at 02:46:03PM -0700, Nathan Huckleberry wrote:
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-The prototype in drivers/staging/rtl8712/xmit_osdep.h should be updated
-as well. With that:
+The prototype in drivers/staging/rtl8723bs/include/xmit_osdep.h should
+be updated as well. With that:
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  drivers/staging/rtl8712/xmit_linux.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/staging/rtl8723bs/os_dep/xmit_linux.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
-> index 4a93839bf947..e84b9fa231cd 100644
-> --- a/drivers/staging/rtl8712/xmit_linux.c
-> +++ b/drivers/staging/rtl8712/xmit_linux.c
-> @@ -140,7 +140,7 @@ void r8712_xmit_complete(struct _adapter *padapter, struct xmit_frame *pxframe)
->  	pxframe->pkt = NULL;
+> diff --git a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
+> index 530e7a6c67c5..472d3ac0179b 100644
+> --- a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
+> +++ b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
+> @@ -181,7 +181,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
+>  	return true;
 >  }
 >  
-> -int r8712_xmit_entry(_pkt *pkt, struct  net_device *netdev)
-> +netdev_tx_t r8712_xmit_entry(_pkt *pkt, struct  net_device *netdev)
+> -int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
+> +netdev_tx_t _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
 >  {
->  	struct xmit_frame *xmitframe = NULL;
->  	struct _adapter *adapter = netdev_priv(netdev);
-> @@ -165,11 +165,11 @@ int r8712_xmit_entry(_pkt *pkt, struct  net_device *netdev)
->  	}
->  	xmitpriv->tx_pkts++;
->  	xmitpriv->tx_bytes += xmitframe->attrib.last_txcmdsz;
+>  	struct adapter *padapter = rtw_netdev_priv(pnetdev);
+>  	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+> @@ -217,15 +217,12 @@ int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
+>  	dev_kfree_skb_any(pkt);
+>  
+>  exit:
 > -	return 0;
 > +	return NETDEV_TX_OK;
->  _xmit_entry_drop:
->  	if (xmitframe)
->  		r8712_free_xmitframe(xmitpriv, xmitframe);
->  	xmitpriv->tx_drop++;
->  	dev_kfree_skb_any(pkt);
-> -	return 0;
+>  }
+>  
+> -int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
+> +netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
+>  {
+> -	int ret = 0;
+> -
+>  	if (pkt)
+> -		ret = _rtw_xmit_entry(pkt, pnetdev);
+> -
+> -	return ret;
+> +		return _rtw_xmit_entry(pkt, pnetdev);
 > +	return NETDEV_TX_OK;
 >  }
 > -- 
