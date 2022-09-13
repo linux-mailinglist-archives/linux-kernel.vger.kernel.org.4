@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFAE5B711F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB125B70B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiIMOez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S234010AbiIMObG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbiIMOdx (ORCPT
+        with ESMTP id S233960AbiIMO2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:33:53 -0400
+        Tue, 13 Sep 2022 10:28:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1AB21E31;
-        Tue, 13 Sep 2022 07:19:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDF969F52;
+        Tue, 13 Sep 2022 07:18:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE8D614C1;
-        Tue, 13 Sep 2022 14:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 250B7C433D6;
-        Tue, 13 Sep 2022 14:18:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F15E614B3;
+        Tue, 13 Sep 2022 14:18:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9EFC4314C;
+        Tue, 13 Sep 2022 14:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078682;
-        bh=D2HyxxSpSa5YTEjtXuzgAvSwiiYUGhrSmQTZJg4P7MA=;
+        s=korg; t=1663078684;
+        bh=t/IuHrlcFJzD4wEDVvMD5tRh3tZgRHNPMtfF5B5TnTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mRW4/L4+Vx3lxy2EvQpysxTPBc9+mN4t4soeEXVwIJp9Cs6Tym5w3gLMxa6a5yzcO
-         dn9oSc/ow7JLRQUyQAk/yHjStC+fmT8U/fQGC6OWOtbl1ZlI0i+IbuB090X6KL+vwX
-         yikbJNZxb3+PN6PfX3TAxBtk0Kfl64W31sTMtfgs=
+        b=TYa+6TBfzsFLJFs0FH+pPYbiuat3BSv6CrImQDmM86/m/oIHdnqxmlHEGaTZzcMK4
+         Gia8Cs6HSbSJ0nmpHb+gk+rIoxlOO1JgI0qgH+pnaKUZppTRUMLqGe4SHIvjaUyo4K
+         QumQv63X+myLjt29+bdPVlRlfwEmJigW560v5+Dg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 015/121] Revert "parisc: Show error if wrong 32/64-bit compiler is being used"
-Date:   Tue, 13 Sep 2022 16:03:26 +0200
-Message-Id: <20220913140357.998691943@linuxfoundation.org>
+        stable@vger.kernel.org, Li Qiong <liqiong@nfschina.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 016/121] parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()
+Date:   Tue, 13 Sep 2022 16:03:27 +0200
+Message-Id: <20220913140358.040961532@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -54,41 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Li Qiong <liqiong@nfschina.com>
 
-[ Upstream commit b4b18f47f4f9682fbf5827682645da7c8dde8f80 ]
+[ Upstream commit d46c742f827fa2326ab1f4faa1cccadb56912341 ]
 
-This reverts commit b160628e9ebcdc85d0db9d7f423c26b3c7c179d0.
+As the possible failure of the kmalloc(), it should be better
+to fix this error path, check and return '-ENOMEM' error code.
 
-There is no need any longer to have this sanity check, because the
-previous commit ("parisc: Make CONFIG_64BIT available for ARCH=parisc64
-only") prevents that CONFIG_64BIT is set if ARCH==parisc.
-
+Signed-off-by: Li Qiong <liqiong@nfschina.com>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/bitops.h | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/parisc/ccio-dma.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/parisc/include/asm/bitops.h b/arch/parisc/include/asm/bitops.h
-index 5779d463b341f..aa4e883431c1a 100644
---- a/arch/parisc/include/asm/bitops.h
-+++ b/arch/parisc/include/asm/bitops.h
-@@ -12,14 +12,6 @@
- #include <asm/barrier.h>
- #include <linux/atomic.h>
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index 9be007c9420f9..f69ab90b5e22d 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -1380,15 +1380,17 @@ ccio_init_resource(struct resource *res, char *name, void __iomem *ioaddr)
+ 	}
+ }
  
--/* compiler build environment sanity checks: */
--#if !defined(CONFIG_64BIT) && defined(__LP64__)
--#error "Please use 'ARCH=parisc' to build the 32-bit kernel."
--#endif
--#if defined(CONFIG_64BIT) && !defined(__LP64__)
--#error "Please use 'ARCH=parisc64' to build the 64-bit kernel."
--#endif
+-static void __init ccio_init_resources(struct ioc *ioc)
++static int __init ccio_init_resources(struct ioc *ioc)
+ {
+ 	struct resource *res = ioc->mmio_region;
+ 	char *name = kmalloc(14, GFP_KERNEL);
 -
- /* See http://marc.theaimsgroup.com/?t=108826637900003 for discussion
-  * on use of volatile and __*_bit() (set/clear/change):
-  *	*_bit() want use of volatile.
++	if (unlikely(!name))
++		return -ENOMEM;
+ 	snprintf(name, 14, "GSC Bus [%d/]", ioc->hw_path);
+ 
+ 	ccio_init_resource(res, name, &ioc->ioc_regs->io_io_low);
+ 	ccio_init_resource(res + 1, name, &ioc->ioc_regs->io_io_low_hv);
++	return 0;
+ }
+ 
+ static int new_ioc_area(struct resource *res, unsigned long size,
+@@ -1543,7 +1545,10 @@ static int __init ccio_probe(struct parisc_device *dev)
+ 		return -ENOMEM;
+ 	}
+ 	ccio_ioc_init(ioc);
+-	ccio_init_resources(ioc);
++	if (ccio_init_resources(ioc)) {
++		kfree(ioc);
++		return -ENOMEM;
++	}
+ 	hppa_dma_ops = &ccio_ops;
+ 
+ 	hba = kzalloc(sizeof(*hba), GFP_KERNEL);
 -- 
 2.35.1
 
