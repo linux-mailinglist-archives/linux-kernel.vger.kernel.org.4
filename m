@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFDD5B70C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E8E5B717D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiIMO3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S233964AbiIMOea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiIMO2B (ORCPT
+        with ESMTP id S234114AbiIMOc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:28:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52863F24;
-        Tue, 13 Sep 2022 07:17:38 -0700 (PDT)
+        Tue, 13 Sep 2022 10:32:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16A365C1;
+        Tue, 13 Sep 2022 07:19:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CD4E614D5;
-        Tue, 13 Sep 2022 14:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92602C433C1;
-        Tue, 13 Sep 2022 14:17:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA0E2B80EFA;
+        Tue, 13 Sep 2022 14:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54607C433C1;
+        Tue, 13 Sep 2022 14:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078650;
-        bh=t1P3kWJlr3FRz90YArACEMVnqBprOqufRoCxhUOe9P0=;
+        s=korg; t=1663078374;
+        bh=GzpsB0D1JGDYSDIApTtRFPJ6ix4triFWPwcufVL0XhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r/LbCkDyxRddW4cZQN0q3oakkfLhXZ8wiS8JUTWS79QH9bZ5TvQRBh7tc/FesG7w2
-         E5YyOMLt9A4CcAXDUot3Ibj9xVC3Bpt6cN7IhM1xfRIMb0oLIDJt72IgH2fl3h7tk1
-         NVwFXkoacNmFlfWrSBqVM9eZ/+X5l1wI3Wytlk+g=
+        b=iccV8TLqZUm/ZqtSqSkkpYZR6H4bFkVsu5q19ekW2+Kfm5J02+fzX79LRiaru7Aa1
+         Fao4xJLRGxyMCzX0C/cyyYTw4DqfVw+bMOPKqyX8uSKe82K304cncuVWz9lGgHXrlb
+         /nq7O0Pvjtak/i3cSX2Cu34u/szDMSlx1TJAYySc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Pattara Teerapong <pteerapong@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 029/121] ALSA: aloop: Fix random zeros in capture data when using jiffies timer
-Date:   Tue, 13 Sep 2022 16:03:40 +0200
-Message-Id: <20220913140358.602158670@linuxfoundation.org>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, zdi-disclosures@trendmicro.com
+Subject: [PATCH 5.19 115/192] sch_sfb: Dont assume the skb is still around after enqueueing to child
+Date:   Tue, 13 Sep 2022 16:03:41 +0200
+Message-Id: <20220913140415.705955889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pattara Teerapong <pteerapong@chromium.org>
+From: Toke Høiland-Jørgensen <toke@toke.dk>
 
-commit 3e48940abee88b8dbbeeaf8a07e7b2b6be1271b3 upstream.
+[ Upstream commit 9efd23297cca530bb35e1848665805d3fcdd7889 ]
 
-In loopback_jiffies_timer_pos_update(), we are getting jiffies twice.
-First time for playback, second time for capture. Jiffies can be updated
-between these two calls and if the capture jiffies is larger, extra zeros
-will be filled in the capture buffer.
+The sch_sfb enqueue() routine assumes the skb is still alive after it has
+been enqueued into a child qdisc, using the data in the skb cb field in the
+increment_qlen() routine after enqueue. However, the skb may in fact have
+been freed, causing a use-after-free in this case. In particular, this
+happens if sch_cake is used as a child of sfb, and the GSO splitting mode
+of CAKE is enabled (in which case the skb will be split into segments and
+the original skb freed).
 
-Change to get jiffies once and use it for both playback and capture.
+Fix this by copying the sfb cb data to the stack before enqueueing the skb,
+and using this stack copy in increment_qlen() instead of the skb pointer
+itself.
 
-Signed-off-by: Pattara Teerapong <pteerapong@chromium.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220901144036.4049060-1-pteerapong@chromium.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-18231
+Fixes: e13e02a3c68d ("net_sched: SFB flow scheduler")
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/drivers/aloop.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ net/sched/sch_sfb.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/sound/drivers/aloop.c
-+++ b/sound/drivers/aloop.c
-@@ -605,17 +605,18 @@ static unsigned int loopback_jiffies_tim
- 			cable->streams[SNDRV_PCM_STREAM_PLAYBACK];
- 	struct loopback_pcm *dpcm_capt =
- 			cable->streams[SNDRV_PCM_STREAM_CAPTURE];
--	unsigned long delta_play = 0, delta_capt = 0;
-+	unsigned long delta_play = 0, delta_capt = 0, cur_jiffies;
- 	unsigned int running, count1, count2;
+diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+index 3d061a13d7ed2..0d761f454ae8b 100644
+--- a/net/sched/sch_sfb.c
++++ b/net/sched/sch_sfb.c
+@@ -135,15 +135,15 @@ static void increment_one_qlen(u32 sfbhash, u32 slot, struct sfb_sched_data *q)
+ 	}
+ }
  
-+	cur_jiffies = jiffies;
- 	running = cable->running ^ cable->pause;
- 	if (running & (1 << SNDRV_PCM_STREAM_PLAYBACK)) {
--		delta_play = jiffies - dpcm_play->last_jiffies;
-+		delta_play = cur_jiffies - dpcm_play->last_jiffies;
- 		dpcm_play->last_jiffies += delta_play;
+-static void increment_qlen(const struct sk_buff *skb, struct sfb_sched_data *q)
++static void increment_qlen(const struct sfb_skb_cb *cb, struct sfb_sched_data *q)
+ {
+ 	u32 sfbhash;
+ 
+-	sfbhash = sfb_hash(skb, 0);
++	sfbhash = cb->hashes[0];
+ 	if (sfbhash)
+ 		increment_one_qlen(sfbhash, 0, q);
+ 
+-	sfbhash = sfb_hash(skb, 1);
++	sfbhash = cb->hashes[1];
+ 	if (sfbhash)
+ 		increment_one_qlen(sfbhash, 1, q);
+ }
+@@ -283,6 +283,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 	struct sfb_sched_data *q = qdisc_priv(sch);
+ 	struct Qdisc *child = q->qdisc;
+ 	struct tcf_proto *fl;
++	struct sfb_skb_cb cb;
+ 	int i;
+ 	u32 p_min = ~0;
+ 	u32 minqlen = ~0;
+@@ -399,11 +400,12 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
  	}
  
- 	if (running & (1 << SNDRV_PCM_STREAM_CAPTURE)) {
--		delta_capt = jiffies - dpcm_capt->last_jiffies;
-+		delta_capt = cur_jiffies - dpcm_capt->last_jiffies;
- 		dpcm_capt->last_jiffies += delta_capt;
- 	}
- 
+ enqueue:
++	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
+ 	ret = qdisc_enqueue(skb, child, to_free);
+ 	if (likely(ret == NET_XMIT_SUCCESS)) {
+ 		qdisc_qstats_backlog_inc(sch, skb);
+ 		sch->q.qlen++;
+-		increment_qlen(skb, q);
++		increment_qlen(&cb, q);
+ 	} else if (net_xmit_drop_count(ret)) {
+ 		q->stats.childdrop++;
+ 		qdisc_qstats_drop(sch);
+-- 
+2.35.1
+
 
 
