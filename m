@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169C95B741B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9243E5B7511
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbiIMPSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S234068AbiIMPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235703AbiIMPRk (ORCPT
+        with ESMTP id S233990AbiIMPcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:17:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204712BB22;
-        Tue, 13 Sep 2022 07:34:44 -0700 (PDT)
+        Tue, 13 Sep 2022 11:32:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B5F7F118;
+        Tue, 13 Sep 2022 07:40:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED7B614E6;
-        Tue, 13 Sep 2022 14:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77830C4314B;
-        Tue, 13 Sep 2022 14:34:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0142EB80F1A;
+        Tue, 13 Sep 2022 14:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 575FFC433D6;
+        Tue, 13 Sep 2022 14:33:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079675;
-        bh=+XPBrIOIZ3AEbHVdiyGfUYR8D1RWCPPH5kCaPunTPDE=;
+        s=korg; t=1663079587;
+        bh=reUpS03sK+iOiluB79gKV2t+j7afT4DYT/IaDQx99M4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=txesi3/XIjBjG9OsMLMICc5BtrzRoCFc2ZGFdGNx1nYCu3gKcIGYGh1UdLbkxYQ0l
-         Lk59KRnguXH4ojX7se6rxGbUdEEiK7IMMCi/zUHR2VsNMZmvzbLi1Ua+XeBg1upuca
-         vqveO4rJ3cyV8osBKeSah5Yss6ozJUTrRN4GRo/U=
+        b=qfzVSm8ObK5D7Y47ziVTNV9v7qgN0xr4MRZTThplWPF182mTfD7CYEvggqrTvKh9v
+         ZJUenPFB1qD/dYUcZA0sgwT85RRlMcws0hrNRk6tT9Kkil7jNLUBVhJmqSobT4kYMa
+         bGrLglAME3x4QbpfkdUr7cTKnTYGaMUUv+zFknXc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 32/61] ALSA: seq: oss: Fix data-race for max_midi_devs access
-Date:   Tue, 13 Sep 2022 16:07:34 +0200
-Message-Id: <20220913140348.091996873@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH 4.19 77/79] x86/nospec: Fix i386 RSB stuffing
+Date:   Tue, 13 Sep 2022 16:07:35 +0200
+Message-Id: <20220913140352.600717282@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 22dec134dbfa825b963f8a1807ad19b943e46a56 upstream.
+From: Peter Zijlstra <peterz@infradead.org>
 
-ALSA OSS sequencer refers to a global variable max_midi_devs at
-creating a new port, storing it to its own field.  Meanwhile this
-variable may be changed by other sequencer events at
-snd_seq_oss_midi_check_exit_port() in parallel, which may cause a data
-race.
+commit 332924973725e8cdcc783c175f68cf7e162cb9e5 upstream.
 
-OTOH, this data race itself is almost harmless, as the access to the
-MIDI device is done via get_mdev() and it's protected with a refcount,
-hence its presence is guaranteed.
+Turns out that i386 doesn't unconditionally have LFENCE, as such the
+loop in __FILL_RETURN_BUFFER isn't actually speculation safe on such
+chips.
 
-Though, it's sill better to address the data-race from the code sanity
-POV, and this patch adds the proper spinlock for the protection.
-
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/CAEHB2493pZRXs863w58QWnUTtv3HHfg85aYhLn5HJHCwxqtHQg@mail.gmail.com
-Link: https://lore.kernel.org/r/20220823072717.1706-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
+Reported-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net
+[bwh: Backported to 4.19/5.4:
+ - __FILL_RETURN_BUFFER takes an sp parameter
+ - Open-code __FILL_RETURN_SLOT]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/seq/oss/seq_oss_midi.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/include/asm/nospec-branch.h |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/sound/core/seq/oss/seq_oss_midi.c
-+++ b/sound/core/seq/oss/seq_oss_midi.c
-@@ -280,7 +280,9 @@ snd_seq_oss_midi_clear_all(void)
- void
- snd_seq_oss_midi_setup(struct seq_oss_devinfo *dp)
- {
-+	spin_lock_irq(&register_lock);
- 	dp->max_mididev = max_midi_devs;
-+	spin_unlock_irq(&register_lock);
- }
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -35,6 +35,7 @@
+  * the optimal version — two calls, each with their own speculation
+  * trap should their return address end up getting used, in a loop.
+  */
++#ifdef CONFIG_X86_64
+ #define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+ 	mov	$(nr/2), reg;			\
+ 771:						\
+@@ -55,6 +56,19 @@
+ 	add	$(BITS_PER_LONG/8) * nr, sp;	\
+ 	/* barrier for jnz misprediction */	\
+ 	lfence;
++#else
++/*
++ * i386 doesn't unconditionally have LFENCE, as such it can't
++ * do a loop.
++ */
++#define __FILL_RETURN_BUFFER(reg, nr, sp)	\
++	.rept nr;				\
++	call	772f;				\
++	int3;					\
++772:;						\
++	.endr;					\
++	add	$(BITS_PER_LONG/8) * nr, sp;
++#endif
  
- /*
+ /* Sequence to mitigate PBRSB on eIBRS CPUs */
+ #define __ISSUE_UNBALANCED_RET_GUARD(sp)	\
 
 
