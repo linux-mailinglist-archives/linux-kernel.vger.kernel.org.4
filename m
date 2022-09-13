@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1265B7235
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0000E5B71FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiIMOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S234506AbiIMOwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiIMOnf (ORCPT
+        with ESMTP id S234607AbiIMOtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72736E8AF;
-        Tue, 13 Sep 2022 07:23:02 -0700 (PDT)
+        Tue, 13 Sep 2022 10:49:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CD6165AD;
+        Tue, 13 Sep 2022 07:25:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D455614B0;
-        Tue, 13 Sep 2022 14:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ABD9C433D7;
-        Tue, 13 Sep 2022 14:21:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA5CB80FBD;
+        Tue, 13 Sep 2022 14:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717D7C43470;
+        Tue, 13 Sep 2022 14:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078860;
-        bh=/S2v/qI81B/+SK+yIQFjFhc3VMKsPvqNAN/wYyruoTU=;
+        s=korg; t=1663079098;
+        bh=I+QK/ESWmL/Wj+hKMs0Inox95iz6LZkRH+Tufc3qPmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oRr2BMbLUbButMYOSOwMBPIofQyG5Q5scOYQaAHZ8y29oVHTIXQsaTSaJl5QvYYIZ
-         AnyBfWsRtyGmA/JTV5zDH3vNBDRDNA+r9SX9lNUaBcffZQVhFXBPwUUPJ/2Z3I/GlL
-         ESsta0wbrDq9n4NAb42ym4X1PG93/Gvzp8zQJBQQ=
+        b=zoEHI7XyEElVtzVXJV9QJU0JDttVYBEaLfFXwjJhvRO5cJPwhzfIHwiKfdmO/gfeS
+         0RUxeC2HYxz47g/kTtnaUnU49F6YN8GIvCwsCNn7aPcQ8hQfnSKqV0jZASlCEoeScl
+         s9H9tloC6utv+kocRzoEQWyAqXzhagYD7edCLCJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eliav Farber <farbere@amazon.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
+        Helena Anna Dubel <helena.anna.dubel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 111/121] hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of used sensors
-Date:   Tue, 13 Sep 2022 16:05:02 +0200
-Message-Id: <20220913140402.117853724@linuxfoundation.org>
+Subject: [PATCH 5.10 58/79] i40e: Fix kernel crash during module removal
+Date:   Tue, 13 Sep 2022 16:05:03 +0200
+Message-Id: <20220913140353.018779173@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eliav Farber <farbere@amazon.com>
+From: Ivan Vecera <ivecera@redhat.com>
 
-[ Upstream commit bb9195bd6664d94d71647631593e09f705ff5edd ]
+[ Upstream commit fb8396aeda5872369a8ed6d2301e2c86e303c520 ]
 
-This issue is relevant when "intel,vm-map" is set in device-tree, and
-defines a lower number of VMs than actually supported.
+The driver incorrectly frees client instance and subsequent
+i40e module removal leads to kernel crash.
 
-This change is needed for all places that use pvt->v_num or vm_num
-later on in the code.
+Reproducer:
+1. Do ethtool offline test followed immediately by another one
+host# ethtool -t eth0 offline; ethtool -t eth0 offline
+2. Remove recursively irdma module that also removes i40e module
+host# modprobe -r irdma
 
-Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
-Signed-off-by: Eliav Farber <farbere@amazon.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220908152449.35457-4-farbere@amazon.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Result:
+[ 8675.035651] i40e 0000:3d:00.0 eno1: offline testing starting
+[ 8675.193774] i40e 0000:3d:00.0 eno1: testing finished
+[ 8675.201316] i40e 0000:3d:00.0 eno1: offline testing starting
+[ 8675.358921] i40e 0000:3d:00.0 eno1: testing finished
+[ 8675.496921] i40e 0000:3d:00.0: IRDMA hardware initialization FAILED init_state=2 status=-110
+[ 8686.188955] i40e 0000:3d:00.1: i40e_ptp_stop: removed PHC on eno2
+[ 8686.943890] i40e 0000:3d:00.1: Deleted LAN device PF1 bus=0x3d dev=0x00 func=0x01
+[ 8686.952669] i40e 0000:3d:00.0: i40e_ptp_stop: removed PHC on eno1
+[ 8687.761787] BUG: kernel NULL pointer dereference, address: 0000000000000030
+[ 8687.768755] #PF: supervisor read access in kernel mode
+[ 8687.773895] #PF: error_code(0x0000) - not-present page
+[ 8687.779034] PGD 0 P4D 0
+[ 8687.781575] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[ 8687.785935] CPU: 51 PID: 172891 Comm: rmmod Kdump: loaded Tainted: G        W I        5.19.0+ #2
+[ 8687.794800] Hardware name: Intel Corporation S2600WFD/S2600WFD, BIOS SE5C620.86B.0X.02.0001.051420190324 05/14/2019
+[ 8687.805222] RIP: 0010:i40e_lan_del_device+0x13/0xb0 [i40e]
+[ 8687.810719] Code: d4 84 c0 0f 84 b8 25 01 00 e9 9c 25 01 00 41 bc f4 ff ff ff eb 91 90 0f 1f 44 00 00 41 54 55 53 48 8b 87 58 08 00 00 48 89 fb <48> 8b 68 30 48 89 ef e8 21 8a 0f d5 48 89 ef e8 a9 78 0f d5 48 8b
+[ 8687.829462] RSP: 0018:ffffa604072efce0 EFLAGS: 00010202
+[ 8687.834689] RAX: 0000000000000000 RBX: ffff8f43833b2000 RCX: 0000000000000000
+[ 8687.841821] RDX: 0000000000000000 RSI: ffff8f4b0545b298 RDI: ffff8f43833b2000
+[ 8687.848955] RBP: ffff8f43833b2000 R08: 0000000000000001 R09: 0000000000000000
+[ 8687.856086] R10: 0000000000000000 R11: 000ffffffffff000 R12: ffff8f43833b2ef0
+[ 8687.863218] R13: ffff8f43833b2ef0 R14: ffff915103966000 R15: ffff8f43833b2008
+[ 8687.870342] FS:  00007f79501c3740(0000) GS:ffff8f4adffc0000(0000) knlGS:0000000000000000
+[ 8687.878427] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 8687.884174] CR2: 0000000000000030 CR3: 000000014276e004 CR4: 00000000007706e0
+[ 8687.891306] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 8687.898441] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 8687.905572] PKRU: 55555554
+[ 8687.908286] Call Trace:
+[ 8687.910737]  <TASK>
+[ 8687.912843]  i40e_remove+0x2c0/0x330 [i40e]
+[ 8687.917040]  pci_device_remove+0x33/0xa0
+[ 8687.920962]  device_release_driver_internal+0x1aa/0x230
+[ 8687.926188]  driver_detach+0x44/0x90
+[ 8687.929770]  bus_remove_driver+0x55/0xe0
+[ 8687.933693]  pci_unregister_driver+0x2a/0xb0
+[ 8687.937967]  i40e_exit_module+0xc/0xf48 [i40e]
+
+Two offline tests cause IRDMA driver failure (ETIMEDOUT) and this
+failure is indicated back to i40e_client_subtask() that calls
+i40e_client_del_instance() to free client instance referenced
+by pf->cinst and sets this pointer to NULL. During the module
+removal i40e_remove() calls i40e_lan_del_device() that dereferences
+pf->cinst that is NULL -> crash.
+Do not remove client instance when client open callbacks fails and
+just clear __I40E_CLIENT_INSTANCE_OPENED bit. The driver also needs
+to take care about this situation (when netdev is up and client
+is NOT opened) in i40e_notify_client_of_netdev_close() and
+calls client close callback only when __I40E_CLIENT_INSTANCE_OPENED
+is set.
+
+Fixes: 0ef2d5afb12d ("i40e: KISS the client interface")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Tested-by: Helena Anna Dubel <helena.anna.dubel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/mr75203.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/i40e/i40e_client.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 36cbc86033ce9..6e6aa61ea632b 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -605,6 +605,8 @@ static int mr75203_probe(struct platform_device *pdev)
- 				if (pvt->vm_idx[i] >= vm_num ||
- 				    pvt->vm_idx[i] == 0xff) {
- 					num = i;
-+					pvt->v_num = i;
-+					vm_num = i;
- 					break;
- 				}
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_client.c b/drivers/net/ethernet/intel/i40e/i40e_client.c
+index 32f3facbed1a5..b3cb5d1033260 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_client.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_client.c
+@@ -178,6 +178,10 @@ void i40e_notify_client_of_netdev_close(struct i40e_vsi *vsi, bool reset)
+ 			"Cannot locate client instance close routine\n");
+ 		return;
+ 	}
++	if (!test_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state)) {
++		dev_dbg(&pf->pdev->dev, "Client is not open, abort close\n");
++		return;
++	}
+ 	cdev->client->ops->close(&cdev->lan_info, cdev->client, reset);
+ 	clear_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state);
+ 	i40e_client_release_qvlist(&cdev->lan_info);
+@@ -374,7 +378,6 @@ void i40e_client_subtask(struct i40e_pf *pf)
+ 				/* Remove failed client instance */
+ 				clear_bit(__I40E_CLIENT_INSTANCE_OPENED,
+ 					  &cdev->state);
+-				i40e_client_del_instance(pf);
+ 				return;
+ 			}
  		}
 -- 
 2.35.1
