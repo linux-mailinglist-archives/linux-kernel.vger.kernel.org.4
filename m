@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392FD5B7468
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B935B750E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236050AbiIMPXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S236550AbiIMPdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235950AbiIMPWT (ORCPT
+        with ESMTP id S236479AbiIMPcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:22:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61267B78B;
-        Tue, 13 Sep 2022 07:36:30 -0700 (PDT)
+        Tue, 13 Sep 2022 11:32:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1243D6CF60;
+        Tue, 13 Sep 2022 07:40:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15426614E0;
-        Tue, 13 Sep 2022 14:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2185EC433C1;
-        Tue, 13 Sep 2022 14:34:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5509FB80FA1;
+        Tue, 13 Sep 2022 14:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1C3C43147;
+        Tue, 13 Sep 2022 14:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079683;
-        bh=rV+n4kd+7BD+xatHr5rme8y5xnzaeFBry0keN3r8Rlo=;
+        s=korg; t=1663079820;
+        bh=e28Tqsl9X5LrOAMbqEPA8WEGAyDGwUMRE/iZx5Q4Yck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z5jgMslu3EH8ymxaAZWvaZZYdElf/C/s5kAiNpwr+jS+2GIAnn1gZ9G/bb6q+tNDb
-         98wbn3xjyEaSzJwudjnUkapGrDNT7YylHIO/0AS4/slpe9Y8Eh1nrlnM8pHhULLmv/
-         Pkrxijs5r4Z7at03bAzyGGZkogdbkio40celAgI0=
+        b=aa+tKaQOl16/2ds1gSCEuJVgkR4fkK8buQ7+oGyZpxgaKha47FSQcM1sAK9U2yJa3
+         MBeRuXhv/URF2WyN1iU82bHRdLSaFPGfAx8ZgPuQBSpD4iHRBzLqe5kfma47siBAtM
+         Q+FtSFq2GwiDSBHXtCV4aEsQUSJaSfPEW+ihoeqA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stanislaw Gruszka <stf_xl@wp.pl>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 4.14 35/61] wifi: iwlegacy: 4965: corrected fix for potential off-by-one overflow in il4965_rs_fill_link_cmd()
+        stable@vger.kernel.org,
+        syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com,
+        stable <stable@kernel.org>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.9 06/42] vt: Clear selection before changing the font
 Date:   Tue, 13 Sep 2022 16:07:37 +0200
-Message-Id: <20220913140348.244519936@linuxfoundation.org>
+Message-Id: <20220913140342.566361976@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislaw Gruszka <stf_xl@wp.pl>
+From: Helge Deller <deller@gmx.de>
 
-commit 6d0ef7241553f3553a0a2764c69b07892705924c upstream.
+commit 566f9c9f89337792070b5a6062dff448b3e7977f upstream.
 
-This reverts commit a8eb8e6f7159c7c20c0ddac428bde3d110890aa7 as
-it can cause invalid link quality command sent to the firmware
-and address the off-by-one issue by fixing condition of while loop.
+When changing the console font with ioctl(KDFONTOP) the new font size
+can be bigger than the previous font. A previous selection may thus now
+be outside of the new screen size and thus trigger out-of-bounds
+accesses to graphics memory if the selection is removed in
+vc_do_resize().
 
-Cc: stable@vger.kernel.org
-Fixes: a8eb8e6f7159 ("wifi: iwlegacy: 4965: fix potential off-by-one overflow in il4965_rs_fill_link_cmd()")
-Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220815073737.GA999388@wp.pl
+Prevent such out-of-memory accesses by dropping the selection before the
+various con_font_set() console handlers are called.
+
+Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
+Cc: stable <stable@kernel.org>
+Tested-by: Khalid Masum <khalid.masum.92@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://lore.kernel.org/r/YuV9apZGNmGfjcor@p100
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlegacy/4965-rs.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/tty/vt/vt.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-@@ -2424,7 +2424,7 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 		/* Repeat initial/next rate.
- 		 * For legacy IL_NUMBER_TRY == 1, this loop will not execute.
- 		 * For HT IL_HT_NUMBER_TRY == 3, this executes twice. */
--		while (repeat_rate > 0) {
-+		while (repeat_rate > 0 && idx < (LINK_QUAL_MAX_RETRY_NUM - 1)) {
- 			if (is_legacy(tbl_type.lq_type)) {
- 				if (ant_toggle_cnt < NUM_TRY_BEFORE_ANT_TOGGLE)
- 					ant_toggle_cnt++;
-@@ -2443,8 +2443,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 			    cpu_to_le32(new_rate);
- 			repeat_rate--;
- 			idx++;
--			if (idx >= LINK_QUAL_MAX_RETRY_NUM)
--				goto out;
- 		}
- 
- 		il4965_rs_get_tbl_info_from_mcs(new_rate, lq_sta->band,
-@@ -2489,7 +2487,6 @@ il4965_rs_fill_link_cmd(struct il_priv *
- 		repeat_rate--;
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -4183,9 +4183,11 @@ static int con_font_set(struct vc_data *
+ 	console_lock();
+ 	if (vc->vc_mode != KD_TEXT)
+ 		rc = -EINVAL;
+-	else if (vc->vc_sw->con_font_set)
++	else if (vc->vc_sw->con_font_set) {
++		if (vc_is_sel(vc))
++			clear_selection();
+ 		rc = vc->vc_sw->con_font_set(vc, &font, op->flags);
+-	else
++	} else
+ 		rc = -ENOSYS;
+ 	console_unlock();
+ 	kfree(font.data);
+@@ -4212,9 +4214,11 @@ static int con_font_default(struct vc_da
+ 		console_unlock();
+ 		return -EINVAL;
  	}
- 
--out:
- 	lq_cmd->agg_params.agg_frame_cnt_limit = LINK_QUAL_AGG_FRAME_LIMIT_DEF;
- 	lq_cmd->agg_params.agg_dis_start_th = LINK_QUAL_AGG_DISABLE_START_DEF;
- 
+-	if (vc->vc_sw->con_font_default)
++	if (vc->vc_sw->con_font_default) {
++		if (vc_is_sel(vc))
++			clear_selection();
+ 		rc = vc->vc_sw->con_font_default(vc, &font, s);
+-	else
++	} else
+ 		rc = -ENOSYS;
+ 	console_unlock();
+ 	if (!rc) {
 
 
