@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01595B71BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4635B7129
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbiIMOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S231366AbiIMOlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiIMOsX (ORCPT
+        with ESMTP id S230150AbiIMOkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:48:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50454C625;
-        Tue, 13 Sep 2022 07:24:57 -0700 (PDT)
+        Tue, 13 Sep 2022 10:40:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C85E6D9E3;
+        Tue, 13 Sep 2022 07:21:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C35AB80F6F;
-        Tue, 13 Sep 2022 14:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6197C433D6;
-        Tue, 13 Sep 2022 14:23:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38EAA614AE;
+        Tue, 13 Sep 2022 14:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D2DC433C1;
+        Tue, 13 Sep 2022 14:20:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079018;
-        bh=1jS7lZ4MEjDQmopBnisfmndMJSQPPn+ToR1lJO8xBUA=;
+        s=korg; t=1663078842;
+        bh=tZ63s44RQjryfuCe0CUUP58SoCsvCG597kk38pNZ/W4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pWogglnp+2e4AfNNY0qBL2qhS1X2o1GJCCKEIrluOoWWP5wbAMjlVbyJivcLcgzng
-         aPmzd4bquG9mIr/Llr398+n+ZSzaB9z3sZzvfLuefLfnEYhTRLlq/4egtUHan0OW1m
-         gXMDVNxFyu5bwWOz9lhukjk/HN+Ffp5VTtDWUgHI=
+        b=wb48VH/FJ58+DR1JSNqNgtz8Gk4lApCCZCs1Kzcyf4p6CCBWMm73aDiSprY3a4zEc
+         wgTjqKo3p3c6CxpiYnOtxTUU5bOEC+4GMZB3v5q+Od7+1k9iuI8RCuvy44zBuxLYaW
+         +xjYJJ+ilke7PjPxmPPuY1tmTicBmnjxzq6S6Vhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 50/79] netfilter: nf_conntrack_irc: Fix forged IP logic
+Subject: [PATCH 5.15 104/121] kbuild: disable header exports for UML in a straightforward way
 Date:   Tue, 13 Sep 2022 16:04:55 +0200
-Message-Id: <20220913140352.668535270@linuxfoundation.org>
+Message-Id: <20220913140401.818922514@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Leadbeater <dgl@dgl.cx>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 0efe125cfb99e6773a7434f3463f7c2fa28f3a43 ]
+[ Upstream commit 1b620d539ccc18a1aca1613d9ff078115a7891a1 ]
 
-Ensure the match happens in the right direction, previously the
-destination used was the server, not the NAT host, as the comment
-shows the code intended.
+Previously 'make ARCH=um headers' stopped because of missing
+arch/um/include/uapi/asm/Kbuild.
 
-Additionally nf_nat_irc uses port 0 as a signal and there's no valid way
-it can appear in a DCC message, so consider port 0 also forged.
+The error is not shown since commit ed102bf2afed ("um: Fix W=1
+missing-include-dirs warnings") added arch/um/include/uapi/asm/Kbuild.
 
-Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
-Signed-off-by: David Leadbeater <dgl@dgl.cx>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Hard-code the unsupported architecture, so it works like before.
+
+Fixes: ed102bf2afed ("um: Fix W=1 missing-include-dirs warnings")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Acked-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_irc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
-index e40988a2f22fb..26245419ef4a9 100644
---- a/net/netfilter/nf_conntrack_irc.c
-+++ b/net/netfilter/nf_conntrack_irc.c
-@@ -185,8 +185,9 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+diff --git a/Makefile b/Makefile
+index eca45b7be9c1e..32253ea989217 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1332,8 +1332,7 @@ hdr-inst := -f $(srctree)/scripts/Makefile.headersinst obj
  
- 			/* dcc_ip can be the internal OR external (NAT'ed) IP */
- 			tuple = &ct->tuplehash[dir].tuple;
--			if (tuple->src.u3.ip != dcc_ip &&
--			    tuple->dst.u3.ip != dcc_ip) {
-+			if ((tuple->src.u3.ip != dcc_ip &&
-+			     ct->tuplehash[!dir].tuple.dst.u3.ip != dcc_ip) ||
-+			    dcc_port == 0) {
- 				net_warn_ratelimited("Forged DCC command from %pI4: %pI4:%u\n",
- 						     &tuple->src.u3.ip,
- 						     &dcc_ip, dcc_port);
+ PHONY += headers
+ headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
+-	$(if $(wildcard $(srctree)/arch/$(SRCARCH)/include/uapi/asm/Kbuild),, \
+-	  $(error Headers not exportable for the $(SRCARCH) architecture))
++	$(if $(filter um, $(SRCARCH)), $(error Headers not exportable for UML))
+ 	$(Q)$(MAKE) $(hdr-inst)=include/uapi
+ 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
+ 
 -- 
 2.35.1
 
