@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799435B762D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAD35B7804
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiIMQKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
+        id S231968AbiIMRcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiIMQKE (ORCPT
+        with ESMTP id S233119AbiIMRcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:10:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9D9C8F8;
-        Tue, 13 Sep 2022 08:06:04 -0700 (PDT)
+        Tue, 13 Sep 2022 13:32:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BB99F8F3;
+        Tue, 13 Sep 2022 09:20:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADF3AB80F9B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0E73B80F9C;
         Tue, 13 Sep 2022 15:04:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98CCAC43146;
-        Tue, 13 Sep 2022 15:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D9FC433D7;
+        Tue, 13 Sep 2022 15:04:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663081493;
-        bh=YKWqRD9wZIFrxL18F1BNYMX4z1L3xqPjo9erakavuBU=;
+        s=k20201202; t=1663081494;
+        bh=5LqduA3tskL2oNsFJWLd4UAprbXLVMGFZMgrSaQcZCM=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=b6BbhXpMfeGlD5twA1x00f6ASvphPE1IPmL4ENfrj0FWQ4AJnD3cJYbJa95H/cvT1
-         3N7cseAHaCiq8Fugs6VAJFjioBuJxOcQ4o1XD/SMYDYeSNB9aR1PDF45RlUz2t05JU
-         GGLAAotRgCFSJeht45NuYjtaeXc92cvxRbOLumvXOuvxJTyHy1wQ2b8GHDfHOvMLAk
-         BbBVKV6k3n/JIi28nqevBsz/5dy5jfbPegPVKAVeke8ZrSSb5NooNsUjqeb6Rgv4+C
-         24xZjIGEwKZ4FeAHaL+zG1JmwfN9LI1iMhnch90LQitfU1pORlWXTubxqgVare8LBS
-         P45Un9kYRslOQ==
+        b=daSpTpqAy9o64y6S6etRmYK7vqNcaxzvmSRG6wMkKX/8IXcaqHFDFIuxz0hq6CVws
+         ZsbJCkiV9e5zN+1dtD2v9qsfTmKb6rRTJ2mB7IsLb2g70wXPVFS9HO2mmfMRQHvlOO
+         WnEj3YjFLw71nyXnWCype1gl0TgAdmSS6T94/YpqWmB5yeO2TSAh/zES24KE8ADZzJ
+         BMP3iai3RjTM5M2wcI7O3CWQQdYP5JVuLyGawHGzDAvJGGg4ekq0W1/n4MB+VRCyZn
+         FWq8Jn8CHhlJ1vtwAKaZ9pipRRhMvK326MeteeSUzZ/rgFYOLFRcaKvkY+OB6r3CfA
+         WmJYCrzagc0Dg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_srivasam@quicinc.com, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     quic_srivasam@quicinc.com, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
         srinivas.kandagatla@linaro.org, swboyd@chromium.org,
         judyhsiao@chromium.org, robh+dt@kernel.org, dianders@chromium.org,
         Bjorn Andersson <andersson@kernel.org>,
         devicetree@vger.kernel.org, quic_rohkumar@quicinc.com
-Subject: Re: [PATCH v12 00/12] Add soundcard support for sc7280 based platforms.
-Date:   Tue, 13 Sep 2022 10:04:45 -0500
-Message-Id: <166308148199.625876.290176664932096979.b4-ty@kernel.org>
+Subject: Re: [PATCH v14 00/12] Add soundcard support for sc7280 based platforms.
+Date:   Tue, 13 Sep 2022 10:04:46 -0500
+Message-Id: <166308148204.625876.4441160183565553499.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1653049124-24713-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1653049124-24713-1-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <1657200184-29565-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1657200184-29565-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,15 +58,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 May 2022 17:48:32 +0530, Srinivasa Rao Mandadapu wrote:
+On Thu, 7 Jul 2022 18:52:52 +0530, Srinivasa Rao Mandadapu wrote:
 > This patch set is to add bolero digital macros, WCD and maxim codecs nodes
 > for audio on sc7280 based platforms.
 > 
 > This patch set depends on:
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638776
->     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=634597
->     -- https://patchwork.kernel.org/project/linux-clk/list/?series=637999
+>     [LPASS DTS: wcd related pinmux reorg]
+>     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657389
+>     [Clock DTS: reset control changes]
 >     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
+>     [Clock: External MCLK and reset control driver changes]
+>     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=650267
+>     [Clock DTS: lpasscc node disable and lpasscore node name changes]
+>     -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657325
 > 
 > [...]
 
