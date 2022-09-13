@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCD55B7135
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421E05B71DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiIMOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S231839AbiIMOrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiIMOf4 (ORCPT
+        with ESMTP id S234588AbiIMOoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:35:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797FB6B179
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:20:20 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oY6l5-0003zp-Ah; Tue, 13 Sep 2022 16:19:27 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:e27a:1417:2420:c072])
+        Tue, 13 Sep 2022 10:44:02 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D10F65267;
+        Tue, 13 Sep 2022 07:23:36 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 20A36E2236;
-        Tue, 13 Sep 2022 14:19:26 +0000 (UTC)
-Date:   Tue, 13 Sep 2022 16:19:17 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?utf-8?B?Q3PDs2vDoXM=?= Bence <csokas.bence@prolan.hu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH 5.19 123/192] net: fec: Use a spinlock to guard
- `fep->ptp_clk_on`
-Message-ID: <20220913141917.ukoid65sqao5f4lg@pengutronix.de>
-References: <20220913140410.043243217@linuxfoundation.org>
- <20220913140416.124325107@linuxfoundation.org>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 6F18422D1;
+        Tue, 13 Sep 2022 16:21:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1663078884;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g0cz2RuwebJaTXH0eI4H1to3O9WXEkI2yKThc7wO9xs=;
+        b=puA9H+i874EBUSaakIlALbTcIJMrhgUsmPKYhLqpOWbQ20JTJ5fVFwUB/0xL7PdtjoZNkn
+        /LWHDZkmGolvwMHG6otGJgppi6NYVWn1e5Ux4UEQyg2OKcHnC8BjRHgY4iRIDnUIA0VNxN
+        vg3s0PSonX5qKSLbx8UH7z7jRGR0Ho6oGhpbNamn+d0EvSIIe8CAUJz8rb1sIHY2YcBAQa
+        FHTIxbnc7cadTKVIabma6BXzUJvc6zdu3MqM6ROQLiPvX7ninN5VJayFW6Cm5xOIThjlkf
+        QjyP+ll1YRpedOOB89zlAk8nwDlU11gfigOL3zR2wAExzfa+yweYJabWn+5d6Q==
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="af6c52mww4vpchdw"
-Content-Disposition: inline
-In-Reply-To: <20220913140416.124325107@linuxfoundation.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 13 Sep 2022 16:21:24 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 15/20] dt-bindings: nvmem: add YAML schema for the sl28
+ vpd layout
+In-Reply-To: <20220912192038.GA1661550-robh@kernel.org>
+References: <20220901221857.2600340-1-michael@walle.cc>
+ <20220901221857.2600340-16-michael@walle.cc>
+ <20220912192038.GA1661550-robh@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <aa53a858e362ae747a2cbd28caa3fa78@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 2022-09-12 21:20, schrieb Rob Herring:
 
---af6c52mww4vpchdw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>> +  base-mac-address:
+>> +    type: object
+>> +    description:
+>> +      Base MAC address for all on-module network interfaces. The 
+>> first
+>> +      argument of the phandle will be treated as an offset.
+>> +
+>> +    properties:
+>> +      "#nvmem-cell-cells":
+> 
+> You can't just add a new #.*-cells buried in a device binding. I'm fine
+> with the concept though having more than 1 user would be nice.
 
-Hello Greg,
+I was under the impression the tooling will handle it, but as you
+pointed out below, this isn't the case for a missing default. The
+statement above should only be to validate that there is one
+additional argument if the base-mac-address node is used in a
+phandle.
 
-On 13.09.2022 16:03:49, Greg Kroah-Hartman wrote:
-> From: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
->=20
-> [ Upstream commit b353b241f1eb9b6265358ffbe2632fdcb563354f ]
->=20
-> Mutexes cannot be taken in a non-preemptible context,
-> causing a panic in `fec_ptp_save_state()`. Replacing
-> `ptp_clk_mutex` by `tmreg_lock` fixes this.
->=20
-> Fixes: 6a4d7234ae9a ("net: fec: ptp: avoid register access when ipg clock=
- is disabled")
-> Fixes: f79959220fa5 ("fec: Restart PPS after link state change")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Link: https://lore.kernel.org/all/20220827160922.642zlcd5foopozru@pengutr=
-onix.de/
-> Signed-off-by: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
-> Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com> # Toradex Ap=
-alis iMX6
-> Link: https://lore.kernel.org/r/20220901140402.64804-1-csokas.bence@prola=
-n.hu
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Any case that doesn't match foos->#foo-cells or has a default # of
+> cells if missing (as this does) has to be added to dtschema to decode 
+> it
+> properly. It won't really matter until there's a user with 2 or more
+> entries. I'm happy to do update the dtschema part, but I'd prefer to 
+> see
+> the schema in dtschema rather than the kernel.
 
-there's a revert pending for this patch:
+Ok, but I'm not sure I understand you correctly here. You will
+update the dtschema tooling (I guess it's about fixup_phandles() in
+dtb.py) and which schema should be in dtschema? nvmem.yaml
+and/or nvmem-consumer.yaml? The entire schema or only a
+subset of it?
 
-| https://lore.kernel.org/all/20220912070143.98153-1-francesco.dolcini@tora=
-dex.com
-
-=2E..as it causes troubles in 6.0-rc4:
-
-| https://lore.kernel.org/all/20220907143915.5w65kainpykfobte@pengutronix.d=
-e/
-| https://lore.kernel.org/all/CAHk-=3Dwj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eh=
-eb3A9WHw@mail.gmail.com/
-
-please drop this patch.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---af6c52mww4vpchdw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMgkWIACgkQrX5LkNig
-012O6Qf+IMmJPdO6Klc+65dYelBzSP71ECLl5oevZ3+kFxdgPaUdeuQUbjt/d7q1
-daOodkWOcmkL/NStL6xRJJ/0SZ0q0hfP0KqP4BbIjaGSiox/C4lD1Feo/hRTHs+z
-Qmvh5a7wdzXMqCKx8pF439QAaKetnwKwS8ZcIJ282clRy+KqQU7i57N/4S82qpKO
-g1Q6KS3JWZF3a/8GK4sSh07jAa2W1CaPkMhxjNXnSHhk8OomKCvVrt4c5eN+YJu5
-RoZ/0Hb9z2dWBAFyqeyB0zkiN76c7aqCxcy61eofobdhT1ypzOnTtDvxa95Xdz2V
-w5JiujUU7gnQLoIAT9SyXG+TmcUidQ==
-=v56d
------END PGP SIGNATURE-----
-
---af6c52mww4vpchdw--
+-michael
