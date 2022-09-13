@@ -2,149 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004435B691F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1A95B6923
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiIMH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S231328AbiIMIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiIMH7L (ORCPT
+        with ESMTP id S230349AbiIMIAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:59:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723A85A3FE;
-        Tue, 13 Sep 2022 00:59:08 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRbMq4sKKzNmFH;
-        Tue, 13 Sep 2022 15:54:31 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 15:59:06 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
- hisilicon,hisi-i2c
-To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
-References: <20220909074842.281232-1-chenweilong@huawei.com>
- <20220909074842.281232-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <58bd3483-3830-bb64-d7d6-5c0f1126de73@huawei.com>
-Date:   Tue, 13 Sep 2022 15:59:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 13 Sep 2022 04:00:12 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EBE240B7;
+        Tue, 13 Sep 2022 01:00:10 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 8F3B7135F;
+        Tue, 13 Sep 2022 10:00:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1663056008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yVtB/VJEfqHZoKPwgwxIul/sPitJMz3rz7VeLQrdCpk=;
+        b=O8jLzS5Gmcb8l6dbfs+w/rpJXtZ/yp2o/NXEZIkfR3M43rISCrVAp0+S0sGE20Npg1KUWp
+        9PW2Rv3L6Ux6Wzf4IC0DJILnCi3+NrKbmvia517IsaYsoqnBQzBMVXoF1ZOV5+TVd4S0pC
+        lBiLgqnlP8RPykM/rpIp2hWVmMzERr52IsC8r5SPPUPUHNqhiAXAX0P8o9KnTbig1cnXO9
+        iXfGstMhkzx+ANdS8AOO55NwER9t0f6S046TKu6rgyeIjEqlKwhFPMunTqkY0r97pCVtho
+        +o4MbS+lmedILV8wt9krA8FCWF08nr0ITFK8xYij3kySvXJMnxXUfxAkcKc+VQ==
 MIME-Version: 1.0
-In-Reply-To: <20220909074842.281232-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+Date:   Tue, 13 Sep 2022 10:00:08 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        claudiu.beznea@microchip.com, nicolas.ferre@microchip.com
+Subject: Re: [PATCH] ARM: dts: lan966x: Fix the interrupt number for internal
+ PHYs
+In-Reply-To: <20220913075719.y63uvvwzquk435ht@soft-dev3-1.localhost>
+References: <20220912192629.461452-1-horatiu.vultur@microchip.com>
+ <caf34bf663601404df4021bc14297eeb@walle.cc>
+ <20220913075719.y63uvvwzquk435ht@soft-dev3-1.localhost>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1f9ea2607ea1d8e0d4a2530a4c7dab41@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/9 15:48, Weilong Chen wrote:
-> Add the new compatible for HiSilicon common i2c.
+Am 2022-09-13 09:57, schrieb Horatiu Vultur:
+>> Accoring to Table 3-155: Shared Peripheral Interrupts
+>> There are ID47 and ID48 listed as "MIIM controller 0 interrupt".
+>> Whatever that is, because the internal PHYs are on MIIM
+>> controller 1.
+>> 
+>> But 80 and 81 would be ID48 and ID49. Did you test the
+>> interrupts?
 > 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
->  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> Looking the same table (3-155) in the documentation that I have these
+> interrupts correspond to ID112 and ID113 (Embedded CuPHY port 0/1 
+> interrupt).
+> And because these are shared peripheral interrupts, it is required to
+> substract 32. Therefore I got the numbers 80 and 81.
+
+Ahh, I need more coffee :) Yes you are right.
+
+> As the internal PHYs don't have yet interrupt support, I have sent a
+> patch here [1] and I have tested it with this.
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> new file mode 100644
-> index 000000000000..f1cb6a4c70d1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HiSilicon common IIC controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,hisi-i2c
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clk_rate:
-> +    default: 0xEE6B280
-> +
-> +  clock-frequency:
-> +    default: 400000
-> +
-> +  i2c-sda-falling-time-ns:
-> +    default: 343
-> +
-> +  i2c-scl-falling-time-ns:
-> +    default: 203
-> +
-> +  i2c-sda-hold-time-ns:
-> +    default: 0x33E
-> +
-> +  i2c-scl-rising-time-ns:
-> +    default: 365
-> +
-> +  i2c-digital-filter-width-ns:
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c1: i2c@5038B0000{
-> +      compatible = "hisilicon,hisi-i2c";
-> +      reg = <0x38B0000 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      i2c-sda-falling-time-ns = <56>;
-> +      i2c-scl-falling-time-ns = <56>;
-> +      i2c-sda-hold-time-ns = <56>;
-> +      i2c-scl-rising-time-ns = <56>;
+> [1] https://www.spinics.net/lists/kernel/msg4511731.html
 
-The values used here are different from above. Are they used on different
-products?
+Thanks for the pointer!
 
-> +      i2c-digital-filter;
-
-Should we discard the empty properties or is it necessary to have it?
-
-Others looks good to me, but the device tree experts may have some comments.
-
-This binding file should also be listed in the MAINTAINERS file.
-
-Thanks.
-
-> +      i2c-digital-filter-width-ns = <0x0>;
-> +      clk_rate = <0x0 0xEE6B280>;
-> +      clock-frequency = <400000>;
-> +    };
-> 
+-michael
