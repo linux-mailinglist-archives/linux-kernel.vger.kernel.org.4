@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D075B72A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DAB5B754E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbiIMO74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S236596AbiIMPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbiIMO5N (ORCPT
+        with ESMTP id S236697AbiIMPkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:57:13 -0400
+        Tue, 13 Sep 2022 11:40:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA9B62AB2;
-        Tue, 13 Sep 2022 07:28:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333828284E;
+        Tue, 13 Sep 2022 07:45:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 293AD614AA;
-        Tue, 13 Sep 2022 14:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40445C433C1;
-        Tue, 13 Sep 2022 14:28:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E84614ED;
+        Tue, 13 Sep 2022 14:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBDAC433D6;
+        Tue, 13 Sep 2022 14:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079292;
-        bh=lpazVn+TDsYK5GKA9iWWyLBDb2pAAjMWK2hSETqYsOs=;
+        s=korg; t=1663079494;
+        bh=fI2yfiNqV2oq5W4XyxDiisIz2YmEE/wdZyR8M0aqJwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ONgky8Gox61f3C0/96gA5vKfHqoi0m4A42ZfDz62Iv5whBMRh6awycS1gK6w+ReVa
-         5zK4FdZ+MLt2CvOTf8KXMYYmu/Bknm5Z56vtXSHXorIYAIXhRxUPHJs9dIswNUms5G
-         eLsFbjyhVCsyj6aAvxny0Nsf0vtu2sIYjnHZAUtE=
+        b=yynort38fYMPA+dACnaHN5HNwUsVEj8WO4hmYKQbUcAM5oU+h1Jtp6j7fI+UzyNNH
+         qb16XpxXCazG0AOJTTfw0DGDYhiLf3iREuyQncdw99F+i8xsXBzgMUvrswkyaByyDz
+         RAJXzZyvmO0qSZKBgP8Ct5eD/2Kq138Ydr30Z5iI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 077/108] ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
-Date:   Tue, 13 Sep 2022 16:06:48 +0200
-Message-Id: <20220913140356.943689456@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 4.19 31/79] thunderbolt: Use the actual buffer in tb_async_error()
+Date:   Tue, 13 Sep 2022 16:06:49 +0200
+Message-Id: <20220913140350.401482524@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-commit d29f59051d3a07b81281b2df2b8c9dfe4716067f upstream.
+commit eb100b8fa8e8b59eb3e5fc7a5fd4a1e3c5950f64 upstream.
 
-The voice allocator sometimes begins allocating from near the end of the
-array and then wraps around, however snd_emu10k1_pcm_channel_alloc()
-accesses the newly allocated voices as if it never wrapped around.
+The received notification packet is held in pkg->buffer and not in pkg
+itself. Fix this by using the correct buffer.
 
-This results in out of bounds access if the first voice has a high enough
-index so that first_voice + requested_voice_count > NUM_G (64).
-The more voices are requested, the more likely it is for this to occur.
-
-This was initially discovered using PipeWire, however it can be reproduced
-by calling aplay multiple times with 16 channels:
-aplay -r 48000 -D plughw:CARD=Live,DEV=3 -c 16 /dev/zero
-
-UBSAN: array-index-out-of-bounds in sound/pci/emu10k1/emupcm.c:127:40
-index 65 is out of range for type 'snd_emu10k1_voice [64]'
-CPU: 1 PID: 31977 Comm: aplay Tainted: G        W IOE      6.0.0-rc2-emu10k1+ #7
-Hardware name: ASUSTEK COMPUTER INC P5W DH Deluxe/P5W DH Deluxe, BIOS 3002    07/22/2010
-Call Trace:
-<TASK>
-dump_stack_lvl+0x49/0x63
-dump_stack+0x10/0x16
-ubsan_epilogue+0x9/0x3f
-__ubsan_handle_out_of_bounds.cold+0x44/0x49
-snd_emu10k1_playback_hw_params+0x3bc/0x420 [snd_emu10k1]
-snd_pcm_hw_params+0x29f/0x600 [snd_pcm]
-snd_pcm_common_ioctl+0x188/0x1410 [snd_pcm]
-? exit_to_user_mode_prepare+0x35/0x170
-? do_syscall_64+0x69/0x90
-? syscall_exit_to_user_mode+0x26/0x50
-? do_syscall_64+0x69/0x90
-? exit_to_user_mode_prepare+0x35/0x170
-snd_pcm_ioctl+0x27/0x40 [snd_pcm]
-__x64_sys_ioctl+0x95/0xd0
-do_syscall_64+0x5c/0x90
-? do_syscall_64+0x69/0x90
-? do_syscall_64+0x69/0x90
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/3707dcab-320a-62ff-63c0-73fc201ef756@tasossah.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 81a54b5e1986 ("thunderbolt: Let the connection manager handle all notifications")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/emu10k1/emupcm.c |    2 +-
+ drivers/thunderbolt/ctl.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/emu10k1/emupcm.c
-+++ b/sound/pci/emu10k1/emupcm.c
-@@ -123,7 +123,7 @@ static int snd_emu10k1_pcm_channel_alloc
- 	epcm->voices[0]->epcm = epcm;
- 	if (voices > 1) {
- 		for (i = 1; i < voices; i++) {
--			epcm->voices[i] = &epcm->emu->voices[epcm->voices[0]->number + i];
-+			epcm->voices[i] = &epcm->emu->voices[(epcm->voices[0]->number + i) % NUM_G];
- 			epcm->voices[i]->epcm = epcm;
- 		}
- 	}
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -387,7 +387,7 @@ static void tb_ctl_rx_submit(struct ctl_
+ 
+ static int tb_async_error(const struct ctl_pkg *pkg)
+ {
+-	const struct cfg_error_pkg *error = (const struct cfg_error_pkg *)pkg;
++	const struct cfg_error_pkg *error = pkg->buffer;
+ 
+ 	if (pkg->frame.eof != TB_CFG_PKG_ERROR)
+ 		return false;
 
 
