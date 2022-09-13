@@ -2,200 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D505B65E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04585B65D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiIMC6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S229778AbiIMCpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiIMC6F (ORCPT
+        with ESMTP id S230115AbiIMCnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:58:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D352FF6;
-        Mon, 12 Sep 2022 19:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663037883; x=1694573883;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sp5gG4+b6ZZJ27Y2zvVjoqOFmRPQHUPIEcDl++tfFLY=;
-  b=UfXYse/jCGmOGor0qaEKRlyZBlOgtWv/wPPO/vyFB/OEWw2a+f3qJTBS
-   Skxr4l9zo4FO37ROH6fyp2TGXDaIjgelm9qz/hr3f9SGz5k+GxdjfJNWp
-   L62bbIDB82ERbiLMheWu7shOOZoZ/Fur5s8dlOkH+j1XCAofplBq7YDER
-   eDGdalp59CiarAsqFTV63dXjWEqisMm4UivrUMaNEDRz8S0dkKhwPair3
-   pZBIWZqNUvFPG+m5uTxKd870D1r5ADYb+sX7MULayB4VHjPdiY2n6miM+
-   A7UTqzQAlxVxdBwSd/tCPlQcnefOLTi77mRQ1iTk/8LuF4kZo1RxEowC0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359747665"
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="359747665"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 19:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="646736842"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2022 19:57:54 -0700
-Date:   Tue, 13 Sep 2022 10:48:20 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Yx/vdIVnd+ZVOffL@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
- <Yx2tSicH1M73cISi@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2209120817490.960392@rhweight-WRK1>
+        Mon, 12 Sep 2022 22:43:33 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637B152FF5;
+        Mon, 12 Sep 2022 19:43:31 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRSQc3YDPzHnv8;
+        Tue, 13 Sep 2022 10:41:28 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 10:43:28 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v4 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+Date:   Tue, 13 Sep 2022 10:54:45 +0800
+Message-ID: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2209120817490.960392@rhweight-WRK1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-12 at 08:29:47 -0700, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Sun, 11 Sep 2022, Xu Yilun wrote:
-> 
-> > On 2022-09-06 at 12:04:26 -0700, matthew.gerlach@linux.intel.com wrote:
-> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > 
-> > > Add a Device Feature List (DFL) bus driver for the Altera
-> > > 16550 implementation of UART.
-> > > 
-> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > ---
-> > >  drivers/tty/serial/8250/8250_dfl.c | 188 +++++++++++++++++++++++++++++
-> > >  drivers/tty/serial/8250/Kconfig    |   9 ++
-> > >  drivers/tty/serial/8250/Makefile   |   1 +
-> > >  include/linux/dfl.h                |   7 ++
-> > >  4 files changed, 205 insertions(+)
-> > >  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> > > 
-> > > diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-> > > new file mode 100644
-> > > index 000000000000..dcf6638a298c
-> > > --- /dev/null
-> > > +++ b/drivers/tty/serial/8250/8250_dfl.c
-> > > @@ -0,0 +1,188 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Driver for FPGA UART
-> > > + *
-> > > + * Copyright (C) 2022 Intel Corporation, Inc.
-> > > + *
-> > > + * Authors:
-> > > + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> > > + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > + */
-> > > +
-> > > +#include <linux/dfl.h>
-> > > +#include <linux/version.h>
-> > > +#include <linux/serial.h>
-> > > +#include <linux/serial_8250.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/bitfield.h>
-> > > +#include <linux/io-64-nonatomic-lo-hi.h>
-> > > +
-> > > +struct dfl_uart {
-> > > +	void __iomem   *csr_base;
-> > > +	u64             csr_addr;
-> > > +	unsigned int    csr_size;
-> > > +	struct device  *dev;
-> > > +	u64             uart_clk;
-> > > +	u64             fifo_len;
-> > > +	unsigned int    fifo_size;
-> > > +	unsigned int    reg_shift;
-> > > +	unsigned int    line;
-> > > +};
-> > > +
-> > > +int feature_uart_walk(struct dfl_uart *dfluart, resource_size_t max)
-> > > +{
-> > > +	void __iomem *param_base;
-> > > +	int off;
-> > > +	u64 v;
-> > > +
-> > > +	v = readq(dfluart->csr_base + DFHv1_CSR_ADDR);
-> > > +	dfluart->csr_addr = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> > > +
-> > > +	v = readq(dfluart->csr_base + DFHv1_CSR_SIZE_GRP);
-> > > +	dfluart->csr_size = FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v);
-> > 
-> > These are generic for DFHv1, so maybe we parse them in DFL generic code.
-> 
-> I will look into moving this to the DFL generic code.
-> 
-> > 
-> > > +
-> > > +	if (dfluart->csr_addr == 0 || dfluart->csr_size == 0) {
-> > > +		dev_err(dfluart->dev, "FIXME bad dfh address and size\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> > > +		dev_err(dfluart->dev, "missing required parameters\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	param_base = dfluart->csr_base + DFHv1_PARAM_HDR;
-> > 
-> > The same concern.
-> > 
-> > > +
-> > > +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> > > +	if (off < 0) {
-> > > +		dev_err(dfluart->dev, "missing CLK_FRQ param\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	dfluart->uart_clk = readq(param_base + off + DFHv1_PARAM_DATA);
-> > > +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
-> > 
-> > I see the DFHv1_PARAM_ID_CLK_FRQ defined in generic dfl.h, is this
-> > param definition global to all features, or specific to uart?
-> 
-> Certainly uart drivers need to know the input clock frequency in order to
-> properly calculate baud rate dividers, but drivers for other features/IP
-> blocks may need to know the input clock frequency as well.  On the other
-> hand not all drivers need to know the input clock frequency to the
-> feature/IP block.
-> 
-> > 
-> > Do we have clear definition of generic parameters vs feature specific
-> > parameters?
-> 
-> I don't think there is a clear definition of generic versus feature
-> specific, but a clock frequency and interrupt information it fairly generic.
-> 
-> > 
-> > The concern here is to avoid duplicated parameter parsing for each driver.
-> 
-> I understand the concern about avoiding duplicated parameter parsing.
+Add auto_attach optional to support one-step load-attach-pin_link.
 
-Yeah. Another concern is, reviewers from other domains have to look into
-every detail of the DFH param layout to know what happened, which I
-think is not that friendly.
+For example,
+   $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
 
-Thanks,
-Yilun
+   $ bpftool link
+   26: tracing  name test1  tag f0da7d0058c00236  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+   	btf_id 55
+   28: kprobe  name test3  tag 002ef1bef0723833  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+   	btf_id 55
+   57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+   	loaded_at 2022-09-09T21:41:32+0800  uid 0
+   	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+   	btf_id 82
+
+   $ bpftool link
+   1: tracing  prog 26
+   	prog_type tracing  attach_type trace_fentry
+   3: perf_event  prog 28
+   10: perf_event  prog 57
+
+The auto_attach optional can support tracepoints, k(ret)probes,
+u(ret)probes.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+v3 -> v4: rename functions, update doc, bash and do_help()
+v2 -> v3: switch to extend prog load command instead of extend perf
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+ tools/bpf/bpftool/prog.c | 77 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index c81362a..aea0b57 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1453,6 +1453,68 @@ static int do_run(int argc, char **argv)
+ 	return ret;
+ }
+ 
++static int
++auto_attach_program(struct bpf_program *prog, const char *path)
++{
++	struct bpf_link *link;
++	int err;
++
++	link = bpf_program__attach(prog);
++	err = libbpf_get_error(link);
++	if (err)
++		return err;
++
++	err = bpf_link__pin(link, path);
++	if (err) {
++		bpf_link__destroy(link);
++		return err;
++	}
++	return 0;
++}
++
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
++static int
++auto_attach_programs(struct bpf_object *obj, const char *path)
++{
++	struct bpf_program *prog;
++	char buf[PATH_MAX];
++	int err;
++
++	bpf_object__for_each_program(prog, obj) {
++		err = pathname_concat(path, bpf_program__name(prog), buf);
++		if (err)
++			goto err_unpin_programs;
++
++		err = auto_attach_program(prog, buf);
++		if (err)
++			goto err_unpin_programs;
++	}
++
++	return 0;
++
++err_unpin_programs:
++	while ((prog = bpf_object__prev_program(obj, prog))) {
++		if (pathname_concat(path, bpf_program__name(prog), buf))
++			continue;
++
++		bpf_program__unpin(prog, buf);
++	}
++
++	return err;
++}
++
+ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ {
+ 	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+@@ -1464,6 +1526,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	struct bpf_program *prog = NULL, *pos;
+ 	unsigned int old_map_fds = 0;
+ 	const char *pinmaps = NULL;
++	bool auto_attach = false;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	const char *pinfile;
+@@ -1583,6 +1646,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 				goto err_free_reuse_maps;
+ 
+ 			pinmaps = GET_ARG();
++		} else if (is_prefix(*argv, "auto_attach")) {
++			auto_attach = true;
++			NEXT_ARG();
+ 		} else {
+ 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+ 			      *argv);
+@@ -1692,14 +1758,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 			goto err_close_obj;
+ 		}
+ 
+-		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
++		if (auto_attach)
++			err = auto_attach_program(prog, pinfile);
++		else
++			err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+ 			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
+-		err = bpf_object__pin_programs(obj, pinfile);
++		if (auto_attach)
++			err = auto_attach_programs(obj, pinfile);
++		else
++			err = bpf_object__pin_programs(obj, pinfile);
+ 		if (err) {
+ 			p_err("failed to pin all programs");
+ 			goto err_close_obj;
+@@ -2338,6 +2410,7 @@ static int do_help(int argc, char **argv)
+ 		"                         [type TYPE] [dev NAME] \\\n"
+ 		"                         [map { idx IDX | name NAME } MAP]\\\n"
+ 		"                         [pinmaps MAP_DIR]\n"
++		"                         [auto_attach]\n"
+ 		"       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s run PROG \\\n"
+-- 
+1.8.3.1
+
