@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAB15B7359
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62D05B73C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbiIMPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S235449AbiIMPIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235361AbiIMPGT (ORCPT
+        with ESMTP id S235275AbiIMPGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:06:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A974DC9;
-        Tue, 13 Sep 2022 07:30:36 -0700 (PDT)
+        Tue, 13 Sep 2022 11:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633E7538E;
+        Tue, 13 Sep 2022 07:30:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2333BB80F1A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF79261414;
+        Tue, 13 Sep 2022 14:30:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0414DC433D6;
         Tue, 13 Sep 2022 14:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8835AC433D6;
-        Tue, 13 Sep 2022 14:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079428;
-        bh=fVTPf3kZWUEOzXkJeJsw7Qw1cjNO7q4MAtA0lzT95Qs=;
+        s=korg; t=1663079431;
+        bh=7mreMoNMe2y+I+bp3VFWad5be6urVBI6OeKSwayGzSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PD7QvzD3rywL1xBJ6C/lWaOkPluZhga8Qb/eDJOHp7dpLj8BEujG229zZZ0zq/by5
-         di5pU4knr7CX5NZQ9ORSbk683iJ3Z21EDOWcphcrp7JQXM0insykqolmi3WdUSEFGO
-         Qp+JpxzY6kWe6pmuQyv4XMLOcdoFuERAoTyxSKQ0=
+        b=VQYaoe+SB1g8Mpqi8ej28t7eh8NXpeKfB+GvBxpKYURLJRrA41SabZ4ZLcnEsF5fr
+         CPfIbFdwsyELsFobEy4PELOFXsQkWep1v3PgnMYgzN5+CZ/jcPKbP33Jxc52dXodrz
+         xQLtiekB/pMy84B7+/Te/mdPIEDsoeJ+ltcxVSP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com,
-        stable <stable@kernel.org>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.19 22/79] vt: Clear selection before changing the font
-Date:   Tue, 13 Sep 2022 16:06:40 +0200
-Message-Id: <20220913140349.970511449@linuxfoundation.org>
+        stable@vger.kernel.org, Niek Nooijens <niek.nooijens@omron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 23/79] USB: serial: ftdi_sio: add Omron CS1W-CIF31 device id
+Date:   Tue, 13 Sep 2022 16:06:41 +0200
+Message-Id: <20220913140350.027454959@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
 References: <20220913140348.835121645@linuxfoundation.org>
@@ -57,58 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Niek Nooijens <niek.nooijens@omron.com>
 
-commit 566f9c9f89337792070b5a6062dff448b3e7977f upstream.
+commit 001047ea241a9646010b2744451dfbc7289542f3 upstream.
 
-When changing the console font with ioctl(KDFONTOP) the new font size
-can be bigger than the previous font. A previous selection may thus now
-be outside of the new screen size and thus trigger out-of-bounds
-accesses to graphics memory if the selection is removed in
-vc_do_resize().
+works perfectly with:
+modprobe ftdi_sio
+echo "0590 00b2" | tee
+/sys/module/ftdi_sio/drivers/usb-serial\:ftdi_sio/new_id > /dev/null
 
-Prevent such out-of-memory accesses by dropping the selection before the
-various con_font_set() console handlers are called.
+but doing this every reboot is a pain in the ass.
 
-Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
-Cc: stable <stable@kernel.org>
-Tested-by: Khalid Masum <khalid.masum.92@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Link: https://lore.kernel.org/r/YuV9apZGNmGfjcor@p100
+Signed-off-by: Niek Nooijens <niek.nooijens@omron.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/vt/vt.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/usb/serial/ftdi_sio.c     |    2 ++
+ drivers/usb/serial/ftdi_sio_ids.h |    6 ++++++
+ 2 files changed, 8 insertions(+)
 
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4518,9 +4518,11 @@ static int con_font_set(struct vc_data *
- 	console_lock();
- 	if (vc->vc_mode != KD_TEXT)
- 		rc = -EINVAL;
--	else if (vc->vc_sw->con_font_set)
-+	else if (vc->vc_sw->con_font_set) {
-+		if (vc_is_sel(vc))
-+			clear_selection();
- 		rc = vc->vc_sw->con_font_set(vc, &font, op->flags);
--	else
-+	} else
- 		rc = -ENOSYS;
- 	console_unlock();
- 	kfree(font.data);
-@@ -4547,9 +4549,11 @@ static int con_font_default(struct vc_da
- 		console_unlock();
- 		return -EINVAL;
- 	}
--	if (vc->vc_sw->con_font_default)
-+	if (vc->vc_sw->con_font_default) {
-+		if (vc_is_sel(vc))
-+			clear_selection();
- 		rc = vc->vc_sw->con_font_default(vc, &font, s);
--	else
-+	} else
- 		rc = -ENOSYS;
- 	console_unlock();
- 	if (!rc) {
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1035,6 +1035,8 @@ static const struct usb_device_id id_tab
+ 	/* IDS GmbH devices */
+ 	{ USB_DEVICE(IDS_VID, IDS_SI31A_PID) },
+ 	{ USB_DEVICE(IDS_VID, IDS_CM31A_PID) },
++	/* Omron devices */
++	{ USB_DEVICE(OMRON_VID, OMRON_CS1W_CIF31_PID) },
+ 	/* U-Blox devices */
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ZED_PID) },
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ODIN_PID) },
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -662,6 +662,12 @@
+ #define INFINEON_TRIBOARD_TC2X7_PID	0x0043 /* DAS JTAG TriBoard TC2X7 V1.0 */
+ 
+ /*
++ * Omron corporation (https://www.omron.com)
++ */
++ #define OMRON_VID			0x0590
++ #define OMRON_CS1W_CIF31_PID		0x00b2
++
++/*
+  * Acton Research Corp.
+  */
+ #define ACTON_VID		0x0647	/* Vendor ID */
 
 
