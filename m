@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E365B7788
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866D75B7763
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbiIMRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S232500AbiIMRJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiIMRO2 (ORCPT
+        with ESMTP id S231867AbiIMRI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:14:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91875E014
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:03:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oY8Hl-0003F9-NB; Tue, 13 Sep 2022 17:57:17 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:e27a:1417:2420:c072])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1A6D1E2363;
-        Tue, 13 Sep 2022 15:57:17 +0000 (UTC)
-Date:   Tue, 13 Sep 2022 17:57:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?utf-8?B?Q3PDs2vDoXM=?= Bence <csokas.bence@prolan.hu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH 5.10 59/79] net: fec: Use a spinlock to guard
- `fep->ptp_clk_on`
-Message-ID: <20220913155709.4xtmo3gephilcwk3@pengutronix.de>
-References: <20220913140350.291927556@linuxfoundation.org>
- <20220913140353.063220321@linuxfoundation.org>
+        Tue, 13 Sep 2022 13:08:57 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027FAC6CF3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:58:05 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id b15so764295vkp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=i5/2s/PtLL3F7sLuPHmoT47IPaMV4985HuOVmfSMhas=;
+        b=FbQwg+dOez++WMspFJqw3yEG1M9ose4sVfHvAK1ksk90VagdWtbqpulHuCRHaYxWtx
+         iWBUI7EruGr5Fnk1kzQbRwg2rXSrp1eTMYgGIhiEyyDqPWTrp28ydel1DboiYARudz05
+         3HuiX/r1ZYm7OKE3cPd8kxtBYA08o1jSXqVOt/p+p00VqyKyxnQFlqtEQZ33eQRTqD0Y
+         Vv4hGG7Dzo1Y1N+PY6/116ZIX+AOdx0Hsl8QBSO7ey8fPW54COsVdx0wAh+TbkQoBbVD
+         gktX3l08/T7cFDFA6Zz2W65Jy6gqZXkfBtBsY7hTcGUI1RhvpppGaZvZKcEYhHdET21G
+         zvuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=i5/2s/PtLL3F7sLuPHmoT47IPaMV4985HuOVmfSMhas=;
+        b=VEV59KT7CXtu8Q0qCylHpdIAJ/j4tmtaBgJmjm9vFxiVFkzwB64Kkl8QARpDIemvLI
+         F8AL9yHLUd7zRq47qdm81XkATzZsI1wHJOEdFx1EPSGI2fhmjWlKMpXEHL3uYJ0sBxcq
+         pNE4y2ulqp/2s9nDwSb7RSQmJvDPMbXWlwGcw16Vo36k098kZEyIrELQb1TC0BbXrP2j
+         4ympQNrGJIKD0Pcoy+86HJHkodecVSV0gLNTwY1jpSdtt1ukN4L6Pua7i7gtd9xYCPSH
+         BN+M65ghwsJHPxZRcHkXSAJChy93rEtPiII5M/BqO802aWuSol44HSsW8ZTWQvd0p2bo
+         voXA==
+X-Gm-Message-State: ACgBeo39OLpLUDix1W1Hz7afAN/GX9okLqU67OJe00vdq0MNSBAld/cQ
+        tZQlSmdWSBjAWdT63fYNllfdf+ILh4scwcQLCLg=
+X-Google-Smtp-Source: AA6agR44lSG8WNfFrRxZTUuCUtDbsrpCwCxLMS1Oq5vTfjYOKjqu8k4+i5IJZlBMtaqQKUsoKsN6BU9gFKDQhHfo5ss=
+X-Received: by 2002:a1f:2a58:0:b0:37d:2a8d:5fbd with SMTP id
+ q85-20020a1f2a58000000b0037d2a8d5fbdmr10871327vkq.31.1663084677136; Tue, 13
+ Sep 2022 08:57:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6lghwa3xlo5fb2a3"
-Content-Disposition: inline
-In-Reply-To: <20220913140353.063220321@linuxfoundation.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220912052852.1123868-1-jim.cromie@gmail.com>
+ <20220912052852.1123868-2-jim.cromie@gmail.com> <87sfkw6gn5.fsf@intel.com>
+In-Reply-To: <87sfkw6gn5.fsf@intel.com>
+From:   jim.cromie@gmail.com
+Date:   Tue, 13 Sep 2022 09:57:31 -0600
+Message-ID: <CAJfuBxyrpMsHdYozXPSf=Oms4XAHyQ=PUx18RU3w=R1wVJQTtg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/9] drm_print: condense enum drm_debug_category
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sean Paul <seanpaul@chromium.org>,
+        Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 12, 2022 at 4:17 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+>
+> On Sun, 11 Sep 2022, Jim Cromie <jim.cromie@gmail.com> wrote:
+> > enum drm_debug_category has 10 categories, but is initialized with
+> > bitmasks which require 10 bits of underlying storage.  By using
+> > natural enumeration, and moving the BIT(cat) into drm_debug_enabled(),
+> > the enum fits in 4 bits, allowing the category to be represented
+> > directly in pr_debug callsites, via the ddebug.class_id field.
+> >
+> > While this slightly pessimizes the bit-test in drm_debug_enabled(),
+> > using dyndbg with JUMP_LABEL will avoid the function entirely.
+> >
+> > NOTE: this change forecloses the possibility of doing:
+> >
+> >   drm_dbg(DRM_UT_CORE|DRM_UT_KMS, "weird 2-cat experiment")
+> >
+> > but thats already strongly implied by the use of the enum itself; its
+> > not a normal enum if it can be 2 values simultaneously.
+>
+> The drm.debug module parameter values are, arguably, ABI. There are tons
+> of people, scripts, test environments, documentation, bug reports, etc,
+> etc, referring to specific drm.debug module parameter values to enable
+> specific drm debug logging categories.
+>
+> AFAICT you're not changing any of the values here, but having an enum
+> without the hard coded values makes it more likely to accidentally
+> change the category to bit mapping. At the very least deserves a
+> comment.
+>
 
---6lghwa3xlo5fb2a3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+hi Jani,
 
-On 13.09.2022 16:05:04, Greg Kroah-Hartman wrote:
-> From: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
->=20
-> [ Upstream commit b353b241f1eb9b6265358ffbe2632fdcb563354f ]
->=20
-> Mutexes cannot be taken in a non-preemptible context,
-> causing a panic in `fec_ptp_save_state()`. Replacing
-> `ptp_clk_mutex` by `tmreg_lock` fixes this.
->=20
-> Fixes: 6a4d7234ae9a ("net: fec: ptp: avoid register access when ipg clock=
- is disabled")
-> Fixes: f79959220fa5 ("fec: Restart PPS after link state change")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Link: https://lore.kernel.org/all/20220827160922.642zlcd5foopozru@pengutr=
-onix.de/
-> Signed-off-by: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
-> Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com> # Toradex Ap=
-alis iMX6
-> Link: https://lore.kernel.org/r/20220901140402.64804-1-csokas.bence@prola=
-n.hu
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+You're correct, this is unchanged :
+   echo $script_debug_val > /sys/module/drm/parameters/debug
 
-If possible please drop this patch, a revert for this is pending. For
-details see:
+wrt the enum, the next patch adds a comment,
 
-https://lore.kernel.org/all/20220913141917.ukoid65sqao5f4lg@pengutronix.de/
+ enum drm_debug_category {
++       /* These names must match those in DYNAMIC_DEBUG_CLASSBITS */
+        /**
+         * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+But that comment mostly misses the point youre making.
+and the specific NAME is stale.
+and the s/int/ulong/ __drm_debug should go here, with the use of BIT()
+I will fix this and repost.
 
---6lghwa3xlo5fb2a3
-Content-Type: application/pgp-signature; name="signature.asc"
+Is it useful for CI / patchwork / lkp-robot purposes,
+to branch-and-rebase onto drm-next/drm-next  or  drm-tip/drm-tip
+(or dated tags on them ) ?
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMgqFIACgkQrX5LkNig
-012TTAf+P0rJtQK4dwHta/xlt6YZr7XEt4I0c6vwW0QOxPT0YP/tAckl0TPf9Y6r
-vkkokyECbOx0yjTow08sJDHvOpikQ0rcLCafpa4sY/emrxCBbMHJVAoXAsP2e3Mu
-hQBDq8jNfoFCgfg1Uvt9BU3ChI1JKkjbbf+Hmzw8MNfLW2QWOLglY/T13SNyEHQP
-4wWbewWvgDU5bzUBcXMjUuxZukMTUOGiArjY2ruHt8D2PQgo3Snx+S4sAUIe6VrR
-W94t1xTk9rGV29Z/gxAL7GfyFH5vqVShz2H/RfN0h/yiM2y7DsEehO32vaDoLME/
-iJs6D0Ie7sbkiIBiiB5N9R4LlmUATg==
-=Exn+
------END PGP SIGNATURE-----
 
---6lghwa3xlo5fb2a3--
+
+>
+> BR,
+> Jani.
+>
+>
+
+thank you
+
+> >
+> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> > ---
+> >  inclu
