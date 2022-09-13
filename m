@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D085B7D75
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896405B7D81
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiIMXWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S229806AbiIMXYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIMXW1 (ORCPT
+        with ESMTP id S229456AbiIMXYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:22:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B217171E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:22:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 19:24:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9778227DE6;
+        Tue, 13 Sep 2022 16:24:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F66A61683
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074F8C433D6;
-        Tue, 13 Sep 2022 23:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663111345;
-        bh=2TX1nccSTQ50w1MEvLtJw+7bvB4T+UvLhS92m1Avg5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S2KCtYwGkvv2UwSti7StkyHy5HzpS8R804muUFfMy4d/inhxLA6Yzov4pRkr/NPLZ
-         gpvx5ym3dNsEpDPvOc01yI/C6TkgpxZYMJ8lNPe+9YDFTwQcGyF0FF3fuQFRzDbSVb
-         52ZSiOZ2CGWrO13M2rZe1LPnO55M2xT1kam26OdrMl7FMn/UbBzvc006aEMFhslGWo
-         nlO0qzFB3DXDeguxB9QqDlxHgn/nSvKt9t5NZpnqda+2b5Y+NwwlGmmjfWTFS3MmIv
-         XM8x3fKfmoC1IOkm6Mlu0SZf8YHnQd1xG0HP+Q8e4zk9lh7IYwjt41Pu/Ot/SAvUW2
-         HUlq5swggpnow==
-Date:   Tue, 13 Sep 2022 16:22:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     error27@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        llvm@lists.linux.dev, ndesaulniers@google.com, trix@redhat.com
-Subject: Re: [PATCH v2] staging: octeon: Fix return type of cvm_oct_xmit and
- cvm_oct_xmit_pow
-Message-ID: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
-References: <YyEFu8uzoxK64p0Y@dev-arch.thelio-3990X>
- <20220913230412.225957-1-nhuck@google.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 111195C81A;
+        Tue, 13 Sep 2022 23:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663111455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lCZbTt8MqzDxXBhNECVaeYq92wrfjuXQyXb1QCL9L08=;
+        b=xlbgGCcX1vaqfVo0T7/7HHkGJClHbYwVmCkEjYU+yukwvWlmi/KV4I9oCfaEa4wMX0rAE+
+        SEsmeldoOIOeCxP5qYRC+CdkHQdKTtaC4+4AbfA5fyhqvZZp3SIKD2vcprwsRNYTCxFz9M
+        JLUB3aTflnqVKCKYq+IrL7uyVXYqhBc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663111455;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lCZbTt8MqzDxXBhNECVaeYq92wrfjuXQyXb1QCL9L08=;
+        b=f3V4jz9cjD4/+YabArl2nlr3TvCKBf+HRA2DIYhIcYM7hGDyhFP9+9JyddEfjRtGauQ9MS
+        eeY+o8dgRHryQzBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5AC313AB5;
+        Tue, 13 Sep 2022 23:24:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DEmgFxYRIWMlZgAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 13 Sep 2022 23:24:06 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913230412.225957-1-nhuck@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Dave Chinner" <david@fromorbit.com>,
+        "Trond Myklebust" <trondmy@hammerspace.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>
+References: <91e31d20d66d6f47fe12c80c34b1cffdfc202b6a.camel@hammerspace.com>,
+ <166268467103.30452.1687952324107257676@noble.neil.brown.name>,
+ <166268566751.30452.13562507405746100242@noble.neil.brown.name>,
+ <29a6c2e78284e7947ddedf71e5cb9436c9330910.camel@hammerspace.com>,
+ <8d638cb3c63b0d2da8679b5288d1622fdb387f83.camel@hammerspace.com>,
+ <166270570118.30452.16939807179630112340@noble.neil.brown.name>,
+ <33d058be862ccc0ccaf959f2841a7e506e51fd1f.camel@kernel.org>,
+ <166285038617.30452.11636397081493278357@noble.neil.brown.name>,
+ <2e34a7d4e1a3474d80ee0402ed3bc0f18792443a.camel@kernel.org>,
+ <166302538820.30452.7783524836504548113@noble.neil.brown.name>,
+ <20220913011518.GE3600936@dread.disaster.area>,
+ <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>
+Date:   Wed, 14 Sep 2022 09:24:02 +1000
+Message-id: <166311144203.20483.1888757883086697314@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:04:12PM -0700, Nathan Huckleberry wrote:
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
-> 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
-> 
-> The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
-> from int to netdev_tx_t.
-> 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+On Wed, 14 Sep 2022, Jeff Layton wrote:
+>
+> At that point, bumping i_version both before and after makes a bit more
+> sense, since it better ensures that a change will be noticed, whether
+> the related read op comes before or after the statx.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+How does bumping it before make any sense at all?  Maybe it wouldn't
+hurt much, but how does it help anyone at all?
 
-> 
-> Changes v1 -> v2:
->  - Update function signatures in ethernet-tx.h.
-> 
-> ---
->  drivers/staging/octeon/ethernet-tx.c | 4 ++--
->  drivers/staging/octeon/ethernet-tx.h | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/octeon/ethernet-tx.c b/drivers/staging/octeon/ethernet-tx.c
-> index 1ad94c5060b5..a36e36701c74 100644
-> --- a/drivers/staging/octeon/ethernet-tx.c
-> +++ b/drivers/staging/octeon/ethernet-tx.c
-> @@ -125,7 +125,7 @@ static void cvm_oct_free_tx_skbs(struct net_device *dev)
->   *
->   * Returns Always returns NETDEV_TX_OK
->   */
-> -int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
-> +netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
->  {
->  	union cvmx_pko_command_word0 pko_command;
->  	union cvmx_buf_ptr hw_buffer;
-> @@ -506,7 +506,7 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
->   * @dev:    Device info structure
->   * Returns Always returns zero
->   */
-> -int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
-> +netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
->  {
->  	struct octeon_ethernet *priv = netdev_priv(dev);
->  	void *packet_buffer;
-> diff --git a/drivers/staging/octeon/ethernet-tx.h b/drivers/staging/octeon/ethernet-tx.h
-> index 78936e9b33b0..6c524668f65a 100644
-> --- a/drivers/staging/octeon/ethernet-tx.h
-> +++ b/drivers/staging/octeon/ethernet-tx.h
-> @@ -5,8 +5,8 @@
->   * Copyright (c) 2003-2007 Cavium Networks
->   */
->  
-> -int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-> -int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
-> +netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-> +netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
->  int cvm_oct_transmit_qos(struct net_device *dev, void *work_queue_entry,
->  			 int do_free, int qos);
->  void cvm_oct_tx_initialize(void);
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+  i_version must appear to change no sooner than the change it reflects
+  becomes visible and no later than the request which initiated that
+  change is acknowledged as complete.
+
+Why would that definition ever not be satisfactory?
+
+NeilBrown
