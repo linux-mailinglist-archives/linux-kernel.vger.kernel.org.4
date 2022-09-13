@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABD15B72BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FFB5B738B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbiIMPAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S235198AbiIMPHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiIMO7N (ORCPT
+        with ESMTP id S234874AbiIMPEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:59:13 -0400
+        Tue, 13 Sep 2022 11:04:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3904E167F2;
-        Tue, 13 Sep 2022 07:28:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D4465802;
+        Tue, 13 Sep 2022 07:30:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D765B80F1A;
-        Tue, 13 Sep 2022 14:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A24CC433C1;
-        Tue, 13 Sep 2022 14:27:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07DEEB80F99;
+        Tue, 13 Sep 2022 14:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEBDC433C1;
+        Tue, 13 Sep 2022 14:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079253;
-        bh=UuyQn3qu/BZoLdKG9QeWcEFtx/A4cWpod+WFlNADWdI=;
+        s=korg; t=1663079256;
+        bh=Fl2Giew66XqwbEuil+L3lWo7xPrcCZo3t0Rz+/OmeNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNOK51GtCumZLIY4aHxvauyr5LMfW+spKFQ1+Cx/Eo0sOEyE4wM4iZcGJZUf9siLE
-         2C+myBMUkOXvM94GRNiNkD+qe1sN3ccPrxe3UyClQwZjYpLMSHl/cX+dGQ8SA5e2qQ
-         ChR73BRMg4RYwapwMPzdzdNMAXveIN4R8GBK2YzM=
+        b=JQg9iZAwtSqVpesbmp016ZnFda6g92gKWDrMyk3DfIm7FadT67CIL0jm5RIgGXH5u
+         Eue/URfyMdNqyal9TSEK6aSX/4PxrVvr88YM234mrIGxNsfh+BFVjVPMxtIvn4PAY0
+         8aEez6jXmVf6CortbDyQWbPl+hSW6aCnJP3jBcdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5.4 063/108] usb: dwc3: fix PHY disable sequence
-Date:   Tue, 13 Sep 2022 16:06:34 +0200
-Message-Id: <20220913140356.327666582@linuxfoundation.org>
+Subject: [PATCH 5.4 064/108] usb: dwc3: disable USB core PHY management
+Date:   Tue, 13 Sep 2022 16:06:35 +0200
+Message-Id: <20220913140356.370574658@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
 References: <20220913140353.549108748@linuxfoundation.org>
@@ -58,79 +57,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johan Hovold <johan+linaro@kernel.org>
 
-commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
+commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
 
-Generic PHYs must be powered-off before they can be tore down.
+The dwc3 driver manages its PHYs itself so the USB core PHY management
+needs to be disabled.
 
-Similarly, suspending legacy PHYs after having powered them off makes no
-sense.
+Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+host: xhci-plat: add platform data support") and f768e718911e ("usb:
+host: xhci-plat: add priv quirk for skip PHY initialization") to
+propagate the setting for now.
 
-Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-dwc3_probe() error-path sequences that got this wrong.
-
-Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-path with respect to powering off the PHYs.
-
-Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-Cc: stable@vger.kernel.org      # 4.8
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
+Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Cc: stable <stable@kernel.org>
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
+Link: https://lore.kernel.org/r/20220825131836.19769-1-johan+linaro@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 [ johan: adjust context to 5.15 ]
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c |   19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/usb/dwc3/host.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -694,15 +694,16 @@ static void dwc3_core_exit(struct dwc3 *
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -9,8 +9,13 @@
+ 
+ #include <linux/platform_device.h>
+ 
++#include "../host/xhci-plat.h"
+ #include "core.h"
+ 
++static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
++
+ static int dwc3_host_get_irq(struct dwc3 *dwc)
  {
- 	dwc3_event_buffers_cleanup(dwc);
+ 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+@@ -85,6 +90,11 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 		goto err;
+ 	}
  
-+	usb_phy_set_suspend(dwc->usb2_phy, 1);
-+	usb_phy_set_suspend(dwc->usb3_phy, 1);
-+	phy_power_off(dwc->usb2_generic_phy);
-+	phy_power_off(dwc->usb3_generic_phy);
++	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
++					sizeof(dwc3_xhci_plat_priv));
++	if (ret)
++		goto err;
 +
- 	usb_phy_shutdown(dwc->usb2_phy);
- 	usb_phy_shutdown(dwc->usb3_phy);
- 	phy_exit(dwc->usb2_generic_phy);
- 	phy_exit(dwc->usb3_generic_phy);
+ 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
  
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
--	phy_power_off(dwc->usb2_generic_phy);
--	phy_power_off(dwc->usb3_generic_phy);
- 	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
- 	reset_control_assert(dwc->reset);
- }
-@@ -1537,16 +1538,16 @@ err5:
- 	dwc3_debugfs_exit(dwc);
- 	dwc3_event_buffers_cleanup(dwc);
- 
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
- 	usb_phy_set_suspend(dwc->usb2_phy, 1);
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
- 
-+	usb_phy_shutdown(dwc->usb2_phy);
-+	usb_phy_shutdown(dwc->usb3_phy);
-+	phy_exit(dwc->usb2_generic_phy);
-+	phy_exit(dwc->usb3_generic_phy);
-+
- 	dwc3_ulpi_exit(dwc);
- 
- err4:
+ 	if (dwc->usb3_lpm_capable)
 
 
