@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0869F5B68C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205C25B68C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiIMHh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S230458AbiIMHh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiIMHhz (ORCPT
+        with ESMTP id S230092AbiIMHhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:37:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8D557E2E;
-        Tue, 13 Sep 2022 00:37:53 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRZxW3BRMznVFj;
-        Tue, 13 Sep 2022 15:35:11 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 15:37:51 +0800
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 13 Sep
- 2022 15:37:50 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yanan@huawei.com>, <wuchangye@huawei.com>,
-        <xiesongyang@huawei.com>, <zhudi2@huawei.com>,
-        <kongweibin2@huawei.com>, <liuxin350@huawei.com>
-Subject: [PATCH v3] libbpf: Clean up legacy bpf maps declaration in bpf_helpers
-Date:   Tue, 13 Sep 2022 15:36:43 +0800
-Message-ID: <20220913073643.19960-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 13 Sep 2022 03:37:25 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269A57E2E;
+        Tue, 13 Sep 2022 00:37:23 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id v16so25422620ejr.10;
+        Tue, 13 Sep 2022 00:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=lzCjj4e1n9t9IQqzlLuW7nZyRLt7gzrz/oqLfcOYBJo=;
+        b=QAyx8P59UPICELew93zou/RH2Ml+kd2I7MRmcDtbbz5eEhudPk6ezVT+I4rqcvHjzh
+         EOALXHwNQ9hS9s0FcwvkO5KKVQX89qNB6JvTFWH6sR1LvndNJdnAIpk3gI0JW5ULodRN
+         PSPMEytd8qxx7RNmAAjZFKClYbIMnMg2qEEyjzbofj9QZG1NVKF5rJAT4KqMKjUSqytu
+         0t4boLURlDeJeGGqhqx/gvDmt1hUvuIPqYzpimRO3WhY1p4P1RGWWdq+LT9svwh7sSm5
+         PlHEcx5TEHIZPx/Vpl9iSWWla9mpXgvV3hqn56VBIcwI7ptul60KYlG4cfLqj3toTz2Q
+         51Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=lzCjj4e1n9t9IQqzlLuW7nZyRLt7gzrz/oqLfcOYBJo=;
+        b=A0pZprJ5K2pe10L35eQppCw12rsXsfxrc/14eXsOK2cSgVuM+YAkQZEjCgIme0NnlL
+         qHrYvf9xs0S2SFCPQo2fyZ/mnT1NnPxiZaTBKdX60EP0txj0OMsTIzt98Z5I5ucdbyDF
+         UsbcFvA/8KVRnmsq+V0gPW9GRs3rBKWAZdCF09fQOauWm8zlviEkkZ9EBW4gCRPIf6RX
+         MW4Jilbdu5vG4QZzw3tB6qmOur2Y5rZHi4F4vGRWSncyUCK2Q2rDoor9p0ITdvHwoWEH
+         wWfLbMdayNjP+m5eUXcqYsTgcfuesiGWUVIZloUGWJOkm9VYzn7+e9iWV+lOK5PNnKTh
+         jSlg==
+X-Gm-Message-State: ACgBeo0qNU3e1uQzyK9a5bfPn0DOVuQ1QyiVs6x6efKjtYvoWQ0Ywbjl
+        9NLn1runTSrHOSnqRYqq4NQ=
+X-Google-Smtp-Source: AA6agR5F+AIP1OradTbq3GgwPQDWo1ENqpICuNDTzLf0vNAx5BDUiZAweHJLerxTyQ+7k7Lsc/IvXg==
+X-Received: by 2002:a17:907:6e0b:b0:73d:5850:ca15 with SMTP id sd11-20020a1709076e0b00b0073d5850ca15mr21398115ejc.344.1663054642389;
+        Tue, 13 Sep 2022 00:37:22 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id e17-20020a170906249100b00778e3e2830esm191067ejb.9.2022.09.13.00.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 00:37:21 -0700 (PDT)
+Message-ID: <43059215-aa56-e8c5-53a4-143643058797@gmail.com>
+Date:   Tue, 13 Sep 2022 09:37:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 1/1] mtd: mtdpart: Fix cosmetic print
+To:     Adrian Zaharia <Adrian.Zaharia@windriver.com>,
+        linux-mtd@lists.infradead.org
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jani.nurminen@windriver.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
+ <20220825060407.335475-2-Adrian.Zaharia@windriver.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220825060407.335475-2-Adrian.Zaharia@windriver.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Legacy bpf maps declaration were no longer supported in Libbpf 1.0.
-So it was time to remove the definition of bpf_map_def in bpf_helpers.h.
-Supported in Libbpf 1.0 ([0])
+On 25.08.2022 08:04, Adrian Zaharia wrote:
+> From: Jani Nurminen <jani.nurminen@windriver.com>
+> 
+> The print of the MTD partitions during boot are off-by-one for the size.
+> Fix this and show the real last offset.
 
-  [0]:https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0
+I see that PCI subsystem and printk() + %pR do that. Probably more. I
+guess it makes sense but I'm also wondering if/how confusing is that
+change going to be for users. We did printing like that for probably
+dozens of years.
 
-Acked-by: Song Liu <song@kernel.org>
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
----
-v2 -> v3: Modify the number of lines and links in commit information
-v2: https://lore.kernel.org/bpf/94275aa1e5af4efea53f322f91b27380@huawei.com/
-v1: https://lore.kernel.org/bpf/6d349d1047f44001b926f80ad5416245@huawei.com/
 
- tools/lib/bpf/bpf_helpers.h | 12 ------------
- 1 file changed, 12 deletions(-)
+> Fixes: 3d6f657ced2b ("mtd: mtdpart: Fix cosmetic print")
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 7349b16b8e2f..d37c4fe2849d 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -160,18 +160,6 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- }
- #endif
- 
--/*
-- * Helper structure used by eBPF C program
-- * to describe BPF map attributes to libbpf loader
-- */
--struct bpf_map_def {
--	unsigned int type;
--	unsigned int key_size;
--	unsigned int value_size;
--	unsigned int max_entries;
--	unsigned int map_flags;
--} __attribute__((deprecated("use BTF-defined maps in .maps section")));
--
- enum libbpf_pin_type {
- 	LIBBPF_PIN_NONE,
- 	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
--- 
-2.33.0
+I can't find that hash / commit anywhere. Are you sure it exists?
+
+
+> Signed-off-by: Jani Nurminen <jani.nurminen@windriver.com>
+> Signed-off-by: Adrian Zaharia <Adrian.Zaharia@windriver.com>
+> ---
+>   drivers/mtd/mtdpart.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/mtdpart.c b/drivers/mtd/mtdpart.c
+> index d442fa94c872..fab10e6d4171 100644
+> --- a/drivers/mtd/mtdpart.c
+> +++ b/drivers/mtd/mtdpart.c
+> @@ -118,7 +118,7 @@ static struct mtd_info *allocate_partition(struct mtd_info *parent,
+>   		child->part.size = parent_size - child->part.offset;
+>   
+>   	printk(KERN_NOTICE "0x%012llx-0x%012llx : \"%s\"\n",
+> -	       child->part.offset, child->part.offset + child->part.size,
+> +	       child->part.offset, child->part.offset + child->part.size - 1,
+>   	       child->name);
+>   
+>   	/* let's do some sanity checks */
 
