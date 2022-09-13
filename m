@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05EA5B73CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756625B7345
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiIMPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S235245AbiIMPFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiIMPLV (ORCPT
+        with ESMTP id S235254AbiIMPDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:11:21 -0400
+        Tue, 13 Sep 2022 11:03:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF078580;
-        Tue, 13 Sep 2022 07:32:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E52E12AE8;
+        Tue, 13 Sep 2022 07:30:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5983CB80ECE;
-        Tue, 13 Sep 2022 14:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D5FC433D6;
-        Tue, 13 Sep 2022 14:32:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8E76B80F1A;
+        Tue, 13 Sep 2022 14:29:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198D7C433C1;
+        Tue, 13 Sep 2022 14:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079549;
-        bh=qOPfv6rN3G08Au0xWngt92uuyIDREJjHLEVh3jzqV5I=;
+        s=korg; t=1663079391;
+        bh=qCVth4/8yW7umEyG9bOFYKwyaYG5yoB7+h3QeJB41SU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tUPt5L2k8dhCn8a2xUEJHhdeaNek9IZRmKNvtc8AILhxRBVqyFcjJGJkJTTqNfnuD
-         OK8lWRZJjNq42ue9zBM+I46rB+ifV7PadJ5s9PM76aaw0cGhnnyv6t1I9FZfBdE+Fl
-         wo9Y+ecFpleHxn9ccVFAhvLQdp7L7SaFj3nnxOyU=
+        b=vu8qtabrWj6dmokDx5BrQTpMwwVb2IMu7n7hJdEjKN6hdzSvGpd3WTaNonBhZuHAr
+         dRCxIj9wlnHmZTMFrX4+qvw5TohM2hxrrWk/R73+P5bHqYYrHfbKv9Bvkr4/YIYG7t
+         enreVNolcJnLa9K1g3iwT4gd5MgMKCXEs6162uL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yan Xinyu <sdlyyxy@bupt.edu.cn>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 34/79] USB: serial: option: add support for OPPO R11 diag port
-Date:   Tue, 13 Sep 2022 16:06:52 +0200
-Message-Id: <20220913140350.554841999@linuxfoundation.org>
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.4 082/108] nvmet: fix a use-after-free
+Date:   Tue, 13 Sep 2022 16:06:53 +0200
+Message-Id: <20220913140357.151512934@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+From: Bart Van Assche <bvanassche@acm.org>
 
-commit 8d5fc280392735e4441b35de14f2f4860fa8d83c upstream.
+commit 6a02a61e81c231cc5c680c5dbf8665275147ac52 upstream.
 
-Add support for OPPO R11 USB diag serial port to option driver. This
-phone uses Qualcomm Snapdragon 660 SoC.
+Fix the following use-after-free complaint triggered by blktests nvme/004:
 
-usb-devices output:
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=22d9 ProdID=276c Rev=04.04
-S:  Manufacturer=OPPO
-S:  Product=SDM660-MTP _SN:09C6BCA7
-S:  SerialNumber=beb2c403
-C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+BUG: KASAN: user-memory-access in blk_mq_complete_request_remote+0xac/0x350
+Read of size 4 at addr 0000607bd1835943 by task kworker/13:1/460
+Workqueue: nvmet-wq nvme_loop_execute_work [nvme_loop]
+Call Trace:
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x49/0x5e
+ print_report.cold+0x36/0x1e2
+ kasan_report+0xb9/0xf0
+ __asan_load4+0x6b/0x80
+ blk_mq_complete_request_remote+0xac/0x350
+ nvme_loop_queue_response+0x1df/0x275 [nvme_loop]
+ __nvmet_req_complete+0x132/0x4f0 [nvmet]
+ nvmet_req_complete+0x15/0x40 [nvmet]
+ nvmet_execute_io_connect+0x18a/0x1f0 [nvmet]
+ nvme_loop_execute_work+0x20/0x30 [nvme_loop]
+ process_one_work+0x56e/0xa70
+ worker_thread+0x2d1/0x640
+ kthread+0x183/0x1c0
+ ret_from_fork+0x1f/0x30
 
-Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-Link: https://lore.kernel.org/r/20220714102037.4113889-1-sdlyyxy@bupt.edu.cn
-Link: https://lore.kernel.org/r/Yt1WfSZk03Plpnan@hovoldconsulting.com
 Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: a07b4970f464 ("nvmet: add a generic NVMe target")
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/nvme/target/core.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -573,6 +573,10 @@ static void option_instat_callback(struc
- #define WETELECOM_PRODUCT_6802			0x6802
- #define WETELECOM_PRODUCT_WMD300		0x6803
+--- a/drivers/nvme/target/core.c
++++ b/drivers/nvme/target/core.c
+@@ -709,6 +709,8 @@ static void nvmet_set_error(struct nvmet
  
-+/* OPPO products */
-+#define OPPO_VENDOR_ID				0x22d9
-+#define OPPO_PRODUCT_R11			0x276c
+ static void __nvmet_req_complete(struct nvmet_req *req, u16 status)
+ {
++	struct nvmet_ns *ns = req->ns;
 +
+ 	if (!req->sq->sqhd_disabled)
+ 		nvmet_update_sq_head(req);
+ 	req->cqe->sq_id = cpu_to_le16(req->sq->qid);
+@@ -719,9 +721,9 @@ static void __nvmet_req_complete(struct
  
- /* Device flags */
+ 	trace_nvmet_req_complete(req);
  
-@@ -2155,6 +2159,7 @@ static const struct usb_device_id option
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
+-	if (req->ns)
+-		nvmet_put_namespace(req->ns);
+ 	req->ops->queue_response(req);
++	if (ns)
++		nvmet_put_namespace(ns);
+ }
+ 
+ void nvmet_req_complete(struct nvmet_req *req, u16 status)
 
 
