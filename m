@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D705B68F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3A55B6902
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiIMHtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
+        id S231244AbiIMHwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiIMHtX (ORCPT
+        with ESMTP id S231131AbiIMHwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:49:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1B34D4FD;
-        Tue, 13 Sep 2022 00:49:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Sep 2022 03:52:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BAB543D5;
+        Tue, 13 Sep 2022 00:52:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E2E61343;
-        Tue, 13 Sep 2022 07:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086DDC433D6;
-        Tue, 13 Sep 2022 07:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663055358;
-        bh=vbEK8a1FZJSD5mb8h3IpS0iL7BqomgfGkSEDht4TmC4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W934uYq12yOZ9dEj+er+bqOSj1YRQThqDyVjAjfDVD3Y2cgWhUTADn3/0+8q8/CgX
-         aazhOib/w1fOb3C9kgj1i9hB7uzENBI8fWqq0nr9jCHr6Nz8KCIsPrughCznpjkSUd
-         gTICcoleBzr7H3UTE5J0MOgJC0KOVn6i27PD+cBFETJ+vpqlJLboZztMSfoXLJq7jh
-         GLYdtJ56+q//HKYvSlgHsQyn3cHvBc7PdNHzfHhBTO3FaneG4nJuhyJgar/AeZhVLp
-         bWOkK4LtIB2U7S6gtjIqeGK+WjMUpF+SDh4Nph84GEm90agbMYZdkVZkcB4qg71Euo
-         yzfCUSvCB+Reg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oY0fT-0000yR-Rl; Tue, 13 Sep 2022 09:49:16 +0200
-Date:   Tue, 13 Sep 2022 09:49:15 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/7] drm/msm: fix memory corruption with too many bridges
-Message-ID: <YyA1+xbgF+Gnm37S@hovoldconsulting.com>
-References: <20220912154046.12900-1-johan+linaro@kernel.org>
- <20220912154046.12900-3-johan+linaro@kernel.org>
- <1f2dbfae-a29a-d654-0ad6-10125c6b6e0b@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f2dbfae-a29a-d654-0ad6-10125c6b6e0b@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7FC4434904;
+        Tue, 13 Sep 2022 07:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663055558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jfOBxCeILtVmBqnyi93nlnhLNhcCGDKz244rDQpPrnE=;
+        b=e4UJKSd1s63cDlV3etPMt+a+vqW1sLWtW2P1cVowq8brEMRhGn4TUDryARLYmSgv8Yjz9e
+        HTlXgfTe+VVAv1z6OnkXVCkrECW8I/aB9cnjdsuyYKCD35S3dXbgRi/w46//avFB/vhq+w
+        DMhQgD7ZPsO1aMgm4Bij+XKGiV8JiSQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663055558;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jfOBxCeILtVmBqnyi93nlnhLNhcCGDKz244rDQpPrnE=;
+        b=uAqtdCa/qXHxEsUHBH8+rdMskZBKSiEqw63FI1aq341uLhlsKsuDV928b6UPoaV+olILNc
+        qDttnMCZEVsdroCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5793313AB5;
+        Tue, 13 Sep 2022 07:52:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O+e3FMY2IGNQCgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 13 Sep 2022 07:52:38 +0000
+Date:   Tue, 13 Sep 2022 09:52:37 +0200
+Message-ID: <871qsfhfsq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mohan Kumar D <mkumard@nvidia.com>
+Cc:     tiwai@suse.com, perex@perex.cz, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2] ALSA: hda: Fix Nvidia dp infoframe
+In-Reply-To: <5f7d294a-5040-a7a7-cee2-d62cfef5b48e@nvidia.com>
+References: <20220913065818.13015-1-mkumard@nvidia.com>
+        <874jxbhhin.wl-tiwai@suse.de>
+        <5f7d294a-5040-a7a7-cee2-d62cfef5b48e@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 08:55:55PM +0300, Dmitry Baryshkov wrote:
-> On 12/09/2022 18:40, Johan Hovold wrote:
-> > Add the missing sanity checks on the bridge counter to avoid corrupting
-> > data beyond the fixed-sized bridge array in case there are ever more
-> > than eight bridges.
+On Tue, 13 Sep 2022 09:18:52 +0200,
+Mohan Kumar D wrote:
+> 
+> 
+> On 9/13/2022 12:45 PM, Takashi Iwai wrote:
+> > External email: Use caution opening links or attachments
 > > 
-> > a3376e3ec81c ("drm/msm: convert to drm_bridge")
-> > ab5b0107ccf3 ("drm/msm: Initial add eDP support in msm drm driver (v5)")
-> > a689554ba6ed ("drm/msm: Initial add DSI connector support")
-> 
-> Most probably you've missed the Fixes: here.
+> > 
+> > On Tue, 13 Sep 2022 08:58:18 +0200,
+> > Mohan Kumar wrote:
+> >> Nvidia HDA HW expects infoframe data bytes order same for both
+> >> HDMI and DP i.e infoframe data starts from 5th bytes offset. As
+> >> dp infoframe structure has 4th byte as valid infoframe data, use
+> >> hdmi infoframe structure for nvidia dp infoframe to match HW behvaior.
+> >> 
+> >> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> > Aha, so this affects on all Nvidia devices, not only on Tegra, but
+> > also on PC?  Then we should put cc-to-stable definitely.
+> Yes, The HDA HW design was common for dGPU and Tegra.
+> > 
+> > (No need to resend, I can put it locally.)
+> Thanks!.
 
-Indeed, thanks for catching that.
+OK, applied now.
 
-> > Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-> > Cc: stable@vger.kernel.org	# 3.12
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/gpu/drm/msm/dp/dp_display.c | 6 ++++++
-> >   drivers/gpu/drm/msm/dsi/dsi.c       | 6 ++++++
-> >   drivers/gpu/drm/msm/hdmi/hdmi.c     | 5 +++++
-> 
-> Could you please split this into respective dp/dsi/hdmi patches. This 
-> will assist both the review and the stable team.
 
-Yeah, you're right, that should help the stable team if nothing else.
+thanks,
 
-> Otherwise LGTM.
-
-Johan
+Takashi
