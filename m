@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450B25B725C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FF75B72CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiIMOy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S234849AbiIMO4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbiIMOu0 (ORCPT
+        with ESMTP id S234632AbiIMOxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:50:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA467269A;
-        Tue, 13 Sep 2022 07:26:07 -0700 (PDT)
+        Tue, 13 Sep 2022 10:53:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675CE72B67;
+        Tue, 13 Sep 2022 07:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4706B80F62;
-        Tue, 13 Sep 2022 14:24:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA4AC433C1;
-        Tue, 13 Sep 2022 14:24:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63DB1B80F9B;
+        Tue, 13 Sep 2022 14:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6708C433C1;
+        Tue, 13 Sep 2022 14:24:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079048;
-        bh=5/SJ4GartrR0F9VJhARBL3T5rj5VjqOPise/ix6nb2M=;
+        s=korg; t=1663079051;
+        bh=KaSwSIgk7nDDYsYLWWwE5uYh50byIm2BzbB5QmW7AQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXW7j2GTQFpGakFZyvSeP5844eSZoCGDPA9vF3PUvxrYivsOF0s4M7AE2ZYbHi1cQ
-         ZVvnTtWc1371MbBwMiSLoghaiTZpsHMg85Nrq9mkj7SUSOoMJ6Pe/QDSPxklvTzdgp
-         6v7JDE3xH7l4F9x90xiTXpkXZTnOIApHRLl+CmxY=
+        b=blC/FieGI/43U538PcmeScjC+K8P5Zl8CVpBPhFSkPUDox+fJCIHS0lg05QVFcgtj
+         HoFRUUAWnEUUjMzaDWRAEvorP7TTK30s3U/rxtjwdblOHiMQFUDb0SHbt1fLnthyWF
+         3QdCiGfKitI97Ezkfg07aq/Sgw/npQ1ezPGX61T8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Chris Mi <cmi@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 63/79] IB/core: Fix a nested dead lock as part of ODP flow
-Date:   Tue, 13 Sep 2022 16:05:08 +0200
-Message-Id: <20220913140353.246916334@linuxfoundation.org>
+Subject: [PATCH 5.10 64/79] RDMA/mlx5: Set local port to one when accessing counters
+Date:   Tue, 13 Sep 2022 16:05:09 +0200
+Message-Id: <20220913140353.293777543@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
 References: <20220913140350.291927556@linuxfoundation.org>
@@ -56,92 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yishai Hadas <yishaih@nvidia.com>
+From: Chris Mi <cmi@nvidia.com>
 
-[ Upstream commit 85eaeb5058f0f04dffb124c97c86b4f18db0b833 ]
+[ Upstream commit 74b30b3ad5cec95d2647e796d10137438a098bc1 ]
 
-Fix a nested dead lock as part of ODP flow by using mmput_async().
+When accessing Ports Performance Counters Register (PPCNT),
+local port must be one if it is Function-Per-Port HCA that
+HCA_CAP.num_ports is 1.
 
->From the below call trace [1] can see that calling mmput() once we have
-the umem_odp->umem_mutex locked as required by
-ib_umem_odp_map_dma_and_lock() might trigger in the same task the
-exit_mmap()->__mmu_notifier_release()->mlx5_ib_invalidate_range() which
-may dead lock when trying to lock the same mutex.
+The offending patch can change the local port to other values
+when accessing PPCNT after enabling switchdev mode. The following
+syndrome will be printed:
 
-Moving to use mmput_async() will solve the problem as the above
-exit_mmap() flow will be called in other task and will be executed once
-the lock will be available.
+ # cat /sys/class/infiniband/rdmap4s0f0/ports/2/counters/*
+ # dmesg
+ mlx5_core 0000:04:00.0: mlx5_cmd_check:756:(pid 12450): ACCESS_REG(0x805) op_mod(0x1) failed, status bad parameter(0x3), syndrome (0x1e5585)
 
-[1]
-[64843.077665] task:kworker/u133:2  state:D stack:    0 pid:80906 ppid:
-2 flags:0x00004000
-[64843.077672] Workqueue: mlx5_ib_page_fault mlx5_ib_eqe_pf_action [mlx5_ib]
-[64843.077719] Call Trace:
-[64843.077722]  <TASK>
-[64843.077724]  __schedule+0x23d/0x590
-[64843.077729]  schedule+0x4e/0xb0
-[64843.077735]  schedule_preempt_disabled+0xe/0x10
-[64843.077740]  __mutex_lock.constprop.0+0x263/0x490
-[64843.077747]  __mutex_lock_slowpath+0x13/0x20
-[64843.077752]  mutex_lock+0x34/0x40
-[64843.077758]  mlx5_ib_invalidate_range+0x48/0x270 [mlx5_ib]
-[64843.077808]  __mmu_notifier_release+0x1a4/0x200
-[64843.077816]  exit_mmap+0x1bc/0x200
-[64843.077822]  ? walk_page_range+0x9c/0x120
-[64843.077828]  ? __cond_resched+0x1a/0x50
-[64843.077833]  ? mutex_lock+0x13/0x40
-[64843.077839]  ? uprobe_clear_state+0xac/0x120
-[64843.077860]  mmput+0x5f/0x140
-[64843.077867]  ib_umem_odp_map_dma_and_lock+0x21b/0x580 [ib_core]
-[64843.077931]  pagefault_real_mr+0x9a/0x140 [mlx5_ib]
-[64843.077962]  pagefault_mr+0xb4/0x550 [mlx5_ib]
-[64843.077992]  pagefault_single_data_segment.constprop.0+0x2ac/0x560
-[mlx5_ib]
-[64843.078022]  mlx5_ib_eqe_pf_action+0x528/0x780 [mlx5_ib]
-[64843.078051]  process_one_work+0x22b/0x3d0
-[64843.078059]  worker_thread+0x53/0x410
-[64843.078065]  ? process_one_work+0x3d0/0x3d0
-[64843.078073]  kthread+0x12a/0x150
-[64843.078079]  ? set_kthread_struct+0x50/0x50
-[64843.078085]  ret_from_fork+0x22/0x30
-[64843.078093]  </TASK>
+Fix it by setting local port to one for Function-Per-Port HCA.
 
-Fixes: 36f30e486dce ("IB/core: Improve ODP to use hmm_range_fault()")
-Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Yishai Hadas <yishaih@nvidia.com>
-Link: https://lore.kernel.org/r/74d93541ea533ef7daec6f126deb1072500aeb16.1661251841.git.leonro@nvidia.com
+Fixes: 210b1f78076f ("IB/mlx5: When not in dual port RoCE mode, use provided port as native")
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Signed-off-by: Chris Mi <cmi@nvidia.com>
+Link: https://lore.kernel.org/r/6c5086c295c76211169e58dbd610fb0402360bab.1661763459.git.leonro@nvidia.com
 Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/core/umem_odp.c | 2 +-
- kernel/fork.c                      | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/mlx5/mad.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/infiniband/core/umem_odp.c b/drivers/infiniband/core/umem_odp.c
-index 323f6cf006824..af4af4789ef27 100644
---- a/drivers/infiniband/core/umem_odp.c
-+++ b/drivers/infiniband/core/umem_odp.c
-@@ -466,7 +466,7 @@ int ib_umem_odp_map_dma_and_lock(struct ib_umem_odp *umem_odp, u64 user_virt,
- 		mutex_unlock(&umem_odp->umem_mutex);
- 
- out_put_mm:
--	mmput(owning_mm);
-+	mmput_async(owning_mm);
- out_put_task:
- 	if (owning_process)
- 		put_task_struct(owning_process);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index a78c0b02edd55..b877480c901f0 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1127,6 +1127,7 @@ void mmput_async(struct mm_struct *mm)
- 		schedule_work(&mm->async_put_work);
+diff --git a/drivers/infiniband/hw/mlx5/mad.c b/drivers/infiniband/hw/mlx5/mad.c
+index 9bb9bb058932f..cca7a4a6bd82d 100644
+--- a/drivers/infiniband/hw/mlx5/mad.c
++++ b/drivers/infiniband/hw/mlx5/mad.c
+@@ -166,6 +166,12 @@ static int process_pma_cmd(struct mlx5_ib_dev *dev, u8 port_num,
+ 		mdev = dev->mdev;
+ 		mdev_port_num = 1;
  	}
- }
-+EXPORT_SYMBOL_GPL(mmput_async);
- #endif
- 
- /**
++	if (MLX5_CAP_GEN(dev->mdev, num_ports) == 1) {
++		/* set local port to one for Function-Per-Port HCA. */
++		mdev = dev->mdev;
++		mdev_port_num = 1;
++	}
++
+ 	/* Declaring support of extended counters */
+ 	if (in_mad->mad_hdr.attr_id == IB_PMA_CLASS_PORT_INFO) {
+ 		struct ib_class_port_info cpi = {};
 -- 
 2.35.1
 
