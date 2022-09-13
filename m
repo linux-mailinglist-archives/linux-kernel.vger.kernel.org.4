@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC335B7104
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3565B7251
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiIMOi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S234595AbiIMOxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234190AbiIMOgv (ORCPT
+        with ESMTP id S234663AbiIMOtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:36:51 -0400
+        Tue, 13 Sep 2022 10:49:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814AA6B66C;
-        Tue, 13 Sep 2022 07:20:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECE970E75;
+        Tue, 13 Sep 2022 07:25:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 499D2B80FA7;
-        Tue, 13 Sep 2022 14:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E740C433C1;
-        Tue, 13 Sep 2022 14:19:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF4C9B80F79;
+        Tue, 13 Sep 2022 14:15:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D08CC433C1;
+        Tue, 13 Sep 2022 14:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078782;
-        bh=UEI2QPagaJd1R3pAYPY9+IOswULFy5kiobbBumVlZSw=;
+        s=korg; t=1663078506;
+        bh=qoc8ER+X5UJoBTchz/XY1RzHdHBrZd4mG2/4VfLup4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09ujGv+2DO0biaPZTks5QzcgxJ7Ep7t+CSCD7OL8yI2XRiSfsHj0Nll6En3jjUEC7
-         jqYacxrarnHWtEJ0q7wWr+hVzIEtg+tez7slOXRqpnfA4XjWrJergLdv8nJ9OucyHO
-         ZUXy1Tpezhw8kaIMM30XLyuHebPWgNPNwSvXNhrc=
+        b=RXLwle8ZNpwcmbXttABWjwKK5z13M0G2hTpYz5eu2zc4MCx1urX/c7q7do1p/Wniy
+         M/a8pEOL7folIwjbZvmCE34YKHlUhE/6ABZTFCA5bJHSimiWAw60mBc9HbpkTn2PF1
+         uzAX+mtNrizNLchxRZBH73MId8SrNOppXcV1frvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.15 081/121] ice: use bitmap_free instead of devm_kfree
-Date:   Tue, 13 Sep 2022 16:04:32 +0200
-Message-Id: <20220913140400.853319346@linuxfoundation.org>
+        stable@vger.kernel.org, LiLiang <liali@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 167/192] bonding: accept unsolicited NA message
+Date:   Tue, 13 Sep 2022 16:04:33 +0200
+Message-Id: <20220913140418.351316425@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 59ac325557b6c14f1f793b90d3946bc145ffa085 ]
+[ Upstream commit 592335a4164c3c41f57967223a1e1efe3a0c6eb3 ]
 
-pf->avail_txqs was allocated using bitmap_zalloc, bitmap_free should be
-used to free this memory.
+The unsolicited NA message with all-nodes multicast dest address should
+be valid, as this also means the link could reach the target.
 
-Fixes: 78b5713ac1241 ("ice: Alloc queue management bitmaps and arrays dynamically")
-Signed-off-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Also rename bond_validate_ns() to bond_validate_na().
+
+Reported-by: LiLiang <liali@redhat.com>
+Fixes: 5e1eeef69c0f ("bonding: NS target should accept link local address")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/bonding/bond_main.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index b9d45c7dbef18..63ae4674d2000 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3549,7 +3549,7 @@ static int ice_init_pf(struct ice_pf *pf)
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 01b58b7e7f165..bff0bfd10e235 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -3174,12 +3174,19 @@ static bool bond_has_this_ip6(struct bonding *bond, struct in6_addr *addr)
+ 	return ret;
+ }
  
- 	pf->avail_rxqs = bitmap_zalloc(pf->max_pf_rxqs, GFP_KERNEL);
- 	if (!pf->avail_rxqs) {
--		devm_kfree(ice_pf_to_dev(pf), pf->avail_txqs);
-+		bitmap_free(pf->avail_txqs);
- 		pf->avail_txqs = NULL;
- 		return -ENOMEM;
- 	}
+-static void bond_validate_ns(struct bonding *bond, struct slave *slave,
++static void bond_validate_na(struct bonding *bond, struct slave *slave,
+ 			     struct in6_addr *saddr, struct in6_addr *daddr)
+ {
+ 	int i;
+ 
+-	if (ipv6_addr_any(saddr) || !bond_has_this_ip6(bond, daddr)) {
++	/* Ignore NAs that:
++	 * 1. Source address is unspecified address.
++	 * 2. Dest address is neither all-nodes multicast address nor
++	 *    exist on bond interface.
++	 */
++	if (ipv6_addr_any(saddr) ||
++	    (!ipv6_addr_equal(daddr, &in6addr_linklocal_allnodes) &&
++	     !bond_has_this_ip6(bond, daddr))) {
+ 		slave_dbg(bond->dev, slave->dev, "%s: sip %pI6c tip %pI6c not found\n",
+ 			  __func__, saddr, daddr);
+ 		return;
+@@ -3222,14 +3229,14 @@ static int bond_na_rcv(const struct sk_buff *skb, struct bonding *bond,
+ 	 * see bond_arp_rcv().
+ 	 */
+ 	if (bond_is_active_slave(slave))
+-		bond_validate_ns(bond, slave, saddr, daddr);
++		bond_validate_na(bond, slave, saddr, daddr);
+ 	else if (curr_active_slave &&
+ 		 time_after(slave_last_rx(bond, curr_active_slave),
+ 			    curr_active_slave->last_link_up))
+-		bond_validate_ns(bond, slave, saddr, daddr);
++		bond_validate_na(bond, slave, saddr, daddr);
+ 	else if (curr_arp_slave &&
+ 		 bond_time_in_interval(bond, slave_last_tx(curr_arp_slave), 1))
+-		bond_validate_ns(bond, slave, saddr, daddr);
++		bond_validate_na(bond, slave, saddr, daddr);
+ 
+ out:
+ 	return RX_HANDLER_ANOTHER;
 -- 
 2.35.1
 
