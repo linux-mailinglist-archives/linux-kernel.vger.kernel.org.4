@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B2A5B7501
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA275B74C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbiIMPbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S236364AbiIMP0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236571AbiIMP3I (ORCPT
+        with ESMTP id S236233AbiIMPX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:29:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D985B796;
-        Tue, 13 Sep 2022 07:39:43 -0700 (PDT)
+        Tue, 13 Sep 2022 11:23:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C857CABE;
+        Tue, 13 Sep 2022 07:37:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DE6EB81029;
-        Tue, 13 Sep 2022 14:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4541C433C1;
-        Tue, 13 Sep 2022 14:37:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D2DE614C1;
+        Tue, 13 Sep 2022 14:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FB6C433D6;
+        Tue, 13 Sep 2022 14:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079867;
-        bh=b06b0l8kwYRi7e3XNh/w/6ReSmTYreK4a3sgVSKi4b4=;
+        s=korg; t=1663079869;
+        bh=Y5wq0g3mZu2wF+NTvQYKTtZ113Sd6gEawyb/vEOcDYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uX2LYjWFbGoU/6tg7CaLR72UD9Srw4SmEUp2MFCln4fu3b3OTiOoO4wkND/3kk8pR
-         RsnpOmLPL+1ATNtTpneM59GaL2HEM8p1I7QJx8eQ8gz23fLcj9ZAkejCkWmOnB7vbp
-         l4NHAk/Ul0ft4K9hdu3inpi8ED2+5w5bGe7X0+NY=
+        b=mnbyvfa6BlsF0KBYA2oIX7ZL0D5DyF0LHP3pm2QsFOLqaeBm0gul5U9NEAWc70DLd
+         gnSXnKPIBrOhKYcQhztVmaD9SxCOarfqGhN3fUHhkXPM8TMn2XeNWKNdP9GNoed65m
+         kM5NEKy77euIcHADu2NPt3wq6cT6GfzRmmtafyco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Zhenneng Li <lizhenneng@kylinos.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 25/42] drm/radeon: add a force flush to delay work when radeon
-Date:   Tue, 13 Sep 2022 16:07:56 +0200
-Message-Id: <20220913140343.578497793@linuxfoundation.org>
+        stable@vger.kernel.org, Li Qiong <liqiong@nfschina.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 26/42] parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()
+Date:   Tue, 13 Sep 2022 16:07:57 +0200
+Message-Id: <20220913140343.634106854@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 References: <20220913140342.228397194@linuxfoundation.org>
@@ -57,72 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhenneng Li <lizhenneng@kylinos.cn>
+From: Li Qiong <liqiong@nfschina.com>
 
-[ Upstream commit f461950fdc374a3ada5a63c669d997de4600dffe ]
+[ Upstream commit d46c742f827fa2326ab1f4faa1cccadb56912341 ]
 
-Although radeon card fence and wait for gpu to finish processing current batch rings,
-there is still a corner case that radeon lockup work queue may not be fully flushed,
-and meanwhile the radeon_suspend_kms() function has called pci_set_power_state() to
-put device in D3hot state.
-Per PCI spec rev 4.0 on 5.3.1.4.1 D3hot State.
-> Configuration and Message requests are the only TLPs accepted by a Function in
-> the D3hot state. All other received Requests must be handled as Unsupported Requests,
-> and all received Completions may optionally be handled as Unexpected Completions.
-This issue will happen in following logs:
-Unable to handle kernel paging request at virtual address 00008800e0008010
-CPU 0 kworker/0:3(131): Oops 0
-pc = [<ffffffff811bea5c>]  ra = [<ffffffff81240844>]  ps = 0000 Tainted: G        W
-pc is at si_gpu_check_soft_reset+0x3c/0x240
-ra is at si_dma_is_lockup+0x34/0xd0
-v0 = 0000000000000000  t0 = fff08800e0008010  t1 = 0000000000010000
-t2 = 0000000000008010  t3 = fff00007e3c00000  t4 = fff00007e3c00258
-t5 = 000000000000ffff  t6 = 0000000000000001  t7 = fff00007ef078000
-s0 = fff00007e3c016e8  s1 = fff00007e3c00000  s2 = fff00007e3c00018
-s3 = fff00007e3c00000  s4 = fff00007fff59d80  s5 = 0000000000000000
-s6 = fff00007ef07bd98
-a0 = fff00007e3c00000  a1 = fff00007e3c016e8  a2 = 0000000000000008
-a3 = 0000000000000001  a4 = 8f5c28f5c28f5c29  a5 = ffffffff810f4338
-t8 = 0000000000000275  t9 = ffffffff809b66f8  t10 = ff6769c5d964b800
-t11= 000000000000b886  pv = ffffffff811bea20  at = 0000000000000000
-gp = ffffffff81d89690  sp = 00000000aa814126
-Disabling lock debugging due to kernel taint
-Trace:
-[<ffffffff81240844>] si_dma_is_lockup+0x34/0xd0
-[<ffffffff81119610>] radeon_fence_check_lockup+0xd0/0x290
-[<ffffffff80977010>] process_one_work+0x280/0x550
-[<ffffffff80977350>] worker_thread+0x70/0x7c0
-[<ffffffff80977410>] worker_thread+0x130/0x7c0
-[<ffffffff80982040>] kthread+0x200/0x210
-[<ffffffff809772e0>] worker_thread+0x0/0x7c0
-[<ffffffff80981f8c>] kthread+0x14c/0x210
-[<ffffffff80911658>] ret_from_kernel_thread+0x18/0x20
-[<ffffffff80981e40>] kthread+0x0/0x210
- Code: ad3e0008  43f0074a  ad7e0018  ad9e0020  8c3001e8  40230101
- <88210000> 4821ed21
-So force lockup work queue flush to fix this problem.
+As the possible failure of the kmalloc(), it should be better
+to fix this error path, check and return '-ENOMEM' error code.
 
-Acked-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Li Qiong <liqiong@nfschina.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/radeon_device.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/parisc/ccio-dma.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
-index 82b01123c3868..227c4733de2ea 100644
---- a/drivers/gpu/drm/radeon/radeon_device.c
-+++ b/drivers/gpu/drm/radeon/radeon_device.c
-@@ -1661,6 +1661,9 @@ int radeon_suspend_kms(struct drm_device *dev, bool suspend,
- 		if (r) {
- 			/* delay GPU reset to resume */
- 			radeon_fence_driver_force_completion(rdev, i);
-+		} else {
-+			/* finish executing delayed work */
-+			flush_delayed_work(&rdev->fence_drv[i].lockup_work);
- 		}
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index f6ef5952e94b3..633762f8d7755 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -1408,15 +1408,17 @@ ccio_init_resource(struct resource *res, char *name, void __iomem *ioaddr)
  	}
+ }
+ 
+-static void __init ccio_init_resources(struct ioc *ioc)
++static int __init ccio_init_resources(struct ioc *ioc)
+ {
+ 	struct resource *res = ioc->mmio_region;
+ 	char *name = kmalloc(14, GFP_KERNEL);
+-
++	if (unlikely(!name))
++		return -ENOMEM;
+ 	snprintf(name, 14, "GSC Bus [%d/]", ioc->hw_path);
+ 
+ 	ccio_init_resource(res, name, &ioc->ioc_regs->io_io_low);
+ 	ccio_init_resource(res + 1, name, &ioc->ioc_regs->io_io_low_hv);
++	return 0;
+ }
+ 
+ static int new_ioc_area(struct resource *res, unsigned long size,
+@@ -1566,7 +1568,10 @@ static int __init ccio_probe(struct parisc_device *dev)
+ 	ioc->hw_path = dev->hw_path;
+ 	ioc->ioc_regs = ioremap_nocache(dev->hpa.start, 4096);
+ 	ccio_ioc_init(ioc);
+-	ccio_init_resources(ioc);
++	if (ccio_init_resources(ioc)) {
++		kfree(ioc);
++		return -ENOMEM;
++	}
+ 	hppa_dma_ops = &ccio_ops;
+ 	dev->dev.platform_data = kzalloc(sizeof(struct pci_hba_data), GFP_KERNEL);
  
 -- 
 2.35.1
