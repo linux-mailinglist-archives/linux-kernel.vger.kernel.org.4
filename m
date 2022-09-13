@@ -2,189 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490325B7773
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C745B7782
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiIMRMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S232667AbiIMRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiIMRMR (ORCPT
+        with ESMTP id S232546AbiIMROS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:12:17 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA18CAC56
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:01:01 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DFgmZA015914;
-        Tue, 13 Sep 2022 16:00:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ze7Wo8vSz+6FKCjW0hwogxOYp7L41cMHnUC+rihIgFg=;
- b=JQVvPUPev3xmj98nDshQdgxsjrfUHYUJZK2tajxS7ngxuLOIC/2TCbBgy6s3/KFQS/9D
- vWvxhM6lUQEJsLGWChLdOBPG6TPAMV/uScaBlidDUa8i+m7xVTX7yDu7mCbjzJYFDFw6
- ktD4VU7BT6Oj65IboElGqjyZpAF2lfAI04H+qdjSZbqcGM8UsCm30uP8yBcMWF0Q067X
- 0MvgxzmZXEglp3jH61aryPObUdeyoc/3SCSHNFo4PPOBWeXFKYGa3sDc1SXCPSnt2OAY
- 8no87CFwrzfBiRKpSYci4cbfd5U1txvhL85AMupQXgrhsM1SR5aEY3YKxDhTpRUrfas1 OA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjvfmh8sw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 15:59:59 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28DFrorc009784;
-        Tue, 13 Sep 2022 15:59:58 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3jgj7aa7qu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 15:59:58 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28DFxvpW54329780
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Sep 2022 15:59:57 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6911EB2065;
-        Tue, 13 Sep 2022 15:59:57 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D4F9B2064;
-        Tue, 13 Sep 2022 15:59:57 +0000 (GMT)
-Received: from localhost (unknown [9.65.113.132])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Sep 2022 15:59:57 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Michal =?utf-8?Q?Such=C3=A1nek?= <msuchanek@suse.de>
-Cc:     Laurent Dufour <ldufour@linux.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>, Lee@kitsune.suse.cz,
-        Chun-Yi <jlee@suse.com>
-Subject: Re: [PATCH] powerpc/pseries: add lparctl driver for
- platform-specific functions
-In-Reply-To: <20220913091302.GY28810@kitsune.suse.cz>
-References: <20220730000458.130938-1-nathanl@linux.ibm.com>
- <0ead0cd1-f6f6-ecf0-65d9-f3d9366e258c@linux.ibm.com>
- <87k07dl1f6.fsf@linux.ibm.com> <20220913091302.GY28810@kitsune.suse.cz>
-Date:   Tue, 13 Sep 2022 10:59:56 -0500
-Message-ID: <87v8prtgcj.fsf@linux.ibm.com>
+        Tue, 13 Sep 2022 13:14:18 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4A101D4;
+        Tue, 13 Sep 2022 09:02:58 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CC1605802D8;
+        Tue, 13 Sep 2022 12:00:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 13 Sep 2022 12:00:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1663084851; x=1663092051; bh=nR
+        H4z7e+oXA2SkZv/m8JgJqSDk7nulXrp2QoWv1YEN4=; b=XM4CuKJtTWDLoARjMU
+        ZEoD6wB5FqnJdSnY3AUy+IO++7ZeMKuIGV7uzlq8uSGUd+dk9chibkWCsvDK8GNY
+        lUXAlf7MPuPfea2V80ipCokGbqWGe90/O4izA17lU44CEqmslzDymGWi8CmFigUv
+        /1pt2fDthxiWGh3J8mgjWfumcmOTyZXvfPJoP6Id6cvvaavU+5xrsA9EhZpt5Euf
+        aywjzWe1+3TbO7Nv8QkUYFPgV+AlIEB+1KFSYXFxjZDIPVazeJogLXHgNC4ex0Ea
+        /IlPGW+cYL0/VjUf6NiNk6Okczw8aRTkqyNAGpU2Ezuj6KQd9nYmPgjUi1it7PhV
+        upFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663084851; x=1663092051; bh=nRH4z7e+oXA2SkZv/m8JgJqSDk7n
+        ulXrp2QoWv1YEN4=; b=L9Yl22VBFNLeetc6fSQgTPfXDMKU/Un/Nk3+eIFVPVGM
+        jXoMC62j/pqiRCZhTsfDKXXjDf0pwGuFtuMs1+x5MjSaHS9RqdS4IdUUxa93GbGA
+        kpWwa4xQFzg0GgHggZDoI/hD1+DFTJ8Y554qKeRFdOTrWvQf98vrayUX4L3sBVbf
+        uF2qW1fujBLU6PEAPaHmqdw/urgqhR4LySbsxm1+RXzmoNNVO2rXx1nfscmcdinv
+        GAoZo5+589NE8/kQ5NTX+lIcLX4szCiqfW2jXy0gAXNFnk8Eide20Iu/gvidC+XI
+        00H5SJY8aaxn8RExcr8e6V6nkwTTQXr4g+Y4SDFVqQ==
+X-ME-Sender: <xms:MakgY8Bb_c1hF-G-V0xWPp6v2tFFK59WYo5RW7yO9_bo81elPeCgoA>
+    <xme:MakgY-isRLK2xNjFVddU3SuO8bJG_C6SNZa4RK15I9d4SP_yc0hvI3va7iWTOsVZo
+    3FaCARM6L7l1xyd5Zk>
+X-ME-Received: <xmr:MakgY_lm1icemmPyCRuc9L2e_WJ__1iRM-x3EYy78zCdcr1QKV3cVpWOP2lYACbn3DOrxg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugedgleekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:MakgYyz6PLeOqvzrzN5MSngKpLn4PepAjtzzW3M8h49ivJQx919_Qg>
+    <xmx:MakgYxTRjdKN_AfcWIfFLJ3MShKx3UaKy8i5hyCqMXeqjxeGHGl_eQ>
+    <xmx:MakgY9aZkKdjYf2ydxmqv_7Rz2mI3q82LHYS_E-o9H-iPrDI0ym8hA>
+    <xmx:M6kgY4M0E0kvqk7pyaWP0fDgJCM7yLnmmneraumr2YriAtgMkDNi7w>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Sep 2022 12:00:49 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CDFF310465E; Tue, 13 Sep 2022 19:00:46 +0300 (+03)
+Date:   Tue, 13 Sep 2022 19:00:46 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Elena Reshetova <elena.reshetova@intel.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220913160046.rkz7uh6cpwy6wyzg@box.shutemov.name>
+References: <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
+ <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+ <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
+ <YyBQ+wzPtGwwRB/U@google.com>
+ <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
+ <YyCZZSyCrwXLLCD9@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RhmzO3p18zxa09I7k7_M15KmfaprDV36
-X-Proofpoint-GUID: RhmzO3p18zxa09I7k7_M15KmfaprDV36
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_07,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- adultscore=0 phishscore=0 impostorscore=0 clxscore=1011 bulkscore=0
- mlxscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209130071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyCZZSyCrwXLLCD9@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Such=C3=A1nek <msuchanek@suse.de> writes:
+On Tue, Sep 13, 2022 at 02:53:25PM +0000, Sean Christopherson wrote:
+> > > Switching topics, what actually prevents mmapp() on the shim?  I tried to follow,
+> > > but I don't know these areas well enough.
+> > 
+> > It has no f_op->mmap, so mmap() will fail with -ENODEV. See do_mmap().
+> > (I did not read the switch statement correctly at first. Note there are
+> > two 'fallthrough' there.)
+> 
+> Ah, validate_mmap_request().  Thought not implementing ->mmap() was the key, but
+> couldn't find the actual check.
 
-> On Fri, Aug 12, 2022 at 02:14:21PM -0500, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->> > Le 30/07/2022 =C3=A0 02:04, Nathan Lynch a =C3=A9crit=C2=A0:
->> >> +static long lparctl_get_sysparm(struct lparctl_get_system_parameter =
-__user *argp)
->> >> +{
->> >> +	struct lparctl_get_system_parameter *gsp;
->> >> +	long ret;
->> >> +	int fwrc;
->> >> +
->> >> +	/*
->> >> +	 * Special case to allow user space to probe the command.
->> >> +	 */
->> >> +	if (argp =3D=3D NULL)
->> >> +		return 0;
->> >> +
->> >> +	gsp =3D memdup_user(argp, sizeof(*gsp));
->> >> +	if (IS_ERR(gsp)) {
->> >> +		ret =3D PTR_ERR(gsp);
->> >> +		goto err_return;
->> >> +	}
->> >> +
->> >> +	ret =3D -EINVAL;
->> >> +	if (gsp->rtas_status !=3D 0)
->> >> +		goto err_free;
->> >> +
->> >> +	do {
->> >> +		static_assert(sizeof(gsp->data) <=3D sizeof(rtas_data_buf));
->> >> +
->> >> +		spin_lock(&rtas_data_buf_lock);
->> >> +		memset(rtas_data_buf, 0, sizeof(rtas_data_buf));
->> >> +		memcpy(rtas_data_buf, gsp->data, sizeof(gsp->data));
->> >> +		fwrc =3D rtas_call(rtas_token("ibm,get-system-parameter"), 3, 1,
->> >> +				 NULL, gsp->token, __pa(rtas_data_buf),
->> >> +				 sizeof(gsp->data));
->> >> +		if (fwrc =3D=3D 0)
->> >> +			memcpy(gsp->data, rtas_data_buf, sizeof(gsp->data));
->> >
->> > May be the amount of data copied out to the user space could be
->> > gsp->length. This would prevent copying 4K bytes all the time.
->> >
->> > In a more general way, the size of the RTAS buffer is quite big, and I=
-'m
->> > wondering if all the data need to be copied back and forth to the kern=
-el.
->> >
->> > Unless there are a high frequency of calls this doesn't make sense, and
->> > keeping the code simple might be the best way. Otherwise limiting the =
-bytes
->> > copied could help a bit.
->>=20
->> This is not intended to be a high-bandwidth interface and I don't think
->> there's much of a performance concern here, so I'd rather just keep the
->> copy sizes involved constant.
->
-> But that's absolutely horrible!
+validate_mmap_request() is in mm/nommu.c which is not relevant for real
+computers.
 
-?
+I was talking about this check:
 
-> The user wants the VPD data, all of it. And you only give one page with
-> this interface.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/mmap.c#n1495
 
-The code here is for system parameters, which have a known maximum size,
-unlike VPD. There's no code for VPD retrieval in this patch.
-
-But I'm happy to constructively discuss how a VPD ioctl interface should
-work.
-
-> Worse, the call is not reentrant so you need to lock against other users
-> calling the call while the current caller is retrieving the inidividual
-> pagaes.
->
-> You could do that per process, but then processes with userspace
-> threading would want the data as well so you would have to save the
-> arguments of the last call, and compare to arguments of any subsequent
-> call to determine if you can let it pass or block.
->
-> And when you do all that there will be a process that retrieves a couple
-> of pages and goes out for lunch or loses interest completely, blocking
-> out everyone from accessing the interface at all.
-
-Right, the ibm,get-vpd RTAS function is tricky to expose to user space.
-
-It needs to be called repeatedly until all data has been returned, 4KB
-at a time.
-
-Only one ibm,get-vpd sequence can be in progress at any time. If an
-ibm,get-vpd sequence is begun while another sequence is already
-outstanding, the first one is invalidated -- I would guess -1 or some
-other error is returned on its next call.
-
-So a new system-call level interface for VPD retrieval probably should
-not expose the repeating sequence-based nature of the RTAS function to
-user space, to prevent concurrent clients from interfering with each
-other. That implies that the kernel should buffer the VPD results
-internally; at least that's the only idea I've had so far. Open to
-other suggestions.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
