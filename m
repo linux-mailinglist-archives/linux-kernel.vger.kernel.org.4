@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606E35B6905
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9276F5B691A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiIMHxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S231298AbiIMH6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiIMHw7 (ORCPT
+        with ESMTP id S229821AbiIMH6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:52:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93C9543C5;
-        Tue, 13 Sep 2022 00:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663055578; x=1694591578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=knZhzRD1rPrCT9tfB8+UU6FETZqBRyh4NXb907yKBSI=;
-  b=HwP+9ch2y/QSzMs4cO3ITxwdCHVKOfMzO/Gls890JXDbbpdgFdE/6LYz
-   uux3pMvEBelCvi2tX6r0AuECZdOtb8RQQrus2oxeGFuov1gsQAQAJ7dwx
-   TfbTao7ar4i0+pRqRLcnDtDGmzxxRNGFjYAqHM1/waM9xYQqgAB6Gouan
-   oa/U5HM4/i3V2nkz8l3gFw7V+Loryw4EPRYwG3iB1VIsVUFLyoD9/ZQL2
-   urqgrBrJkMY/oeGiTz0gWhXCE27AXc/7+Up8RjNMhbckpP8yL0+LSMQwZ
-   qTdYitQ3iu33dNFJMgpGPbW9KdylEjSQYLj8DHXAEeLsgakQ2DN+zYbBo
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="190584736"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 00:52:58 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 13 Sep 2022 00:52:57 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 13 Sep 2022 00:52:57 -0700
-Date:   Tue, 13 Sep 2022 09:57:19 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>
-Subject: Re: [PATCH] ARM: dts: lan966x: Fix the interrupt number for internal
- PHYs
-Message-ID: <20220913075719.y63uvvwzquk435ht@soft-dev3-1.localhost>
-References: <20220912192629.461452-1-horatiu.vultur@microchip.com>
- <caf34bf663601404df4021bc14297eeb@walle.cc>
+        Tue, 13 Sep 2022 03:58:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31E9BB48C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:58:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C1BD106F;
+        Tue, 13 Sep 2022 00:58:49 -0700 (PDT)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1BC23F73B;
+        Tue, 13 Sep 2022 00:58:40 -0700 (PDT)
+Message-ID: <a0e30ae4-7241-aca1-7824-e40d9a848a15@arm.com>
+Date:   Tue, 13 Sep 2022 13:28:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <caf34bf663601404df4021bc14297eeb@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 02/16] mm/page_alloc: make zone_pcp_update() static
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-3-linmiaohe@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220909092451.24883-3-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 09/13/2022 09:18, Michael Walle wrote:
+
+
+On 9/9/22 14:54, Miaohe Lin wrote:
+> Since commit b92ca18e8ca5 ("mm/page_alloc: disassociate the pcp->high
+> from pcp->batch"), zone_pcp_update() is only used in mm/page_alloc.c.
+> Move zone_pcp_update() up to avoid forward declaration and then make
+> it static. No functional change intended.
 > 
-> Hi Horatiu,
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Hi Walle,
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
+> ---
+>  mm/internal.h   |  1 -
+>  mm/page_alloc.c | 22 +++++++++++-----------
+>  2 files changed, 11 insertions(+), 12 deletions(-)
 > 
-> Am 2022-09-12 21:26, schrieb Horatiu Vultur:
-> > According to the datasheet the interrupts for internal PHYs are
-> > 80 and 81.
-> 
-> Can you point me to that documentation?
-
-I have not found yet one on the microchip.com
-
-> 
-> Accoring to Table 3-155: Shared Peripheral Interrupts
-> There are ID47 and ID48 listed as "MIIM controller 0 interrupt".
-> Whatever that is, because the internal PHYs are on MIIM
-> controller 1.
-> 
-> But 80 and 81 would be ID48 and ID49. Did you test the
-> interrupts?
-
-Looking the same table (3-155) in the documentation that I have these
-interrupts correspond to ID112 and ID113 (Embedded CuPHY port 0/1 interrupt).
-And because these are shared peripheral interrupts, it is required to
-substract 32. Therefore I got the numbers 80 and 81.
-
-As the internal PHYs don't have yet interrupt support, I have sent a
-patch here [1] and I have tested it with this.
-
-[1] https://www.spinics.net/lists/kernel/msg4511731.html
-
-> 
-> -michael
-> 
-> > Fixes: 6ad69e07def67c ("ARM: dts: lan966x: add MIIM nodes")
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  arch/arm/boot/dts/lan966x.dtsi | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/lan966x.dtsi
-> > b/arch/arm/boot/dts/lan966x.dtsi
-> > index bcb130a2471d..23665a042990 100644
-> > --- a/arch/arm/boot/dts/lan966x.dtsi
-> > +++ b/arch/arm/boot/dts/lan966x.dtsi
-> > @@ -547,13 +547,13 @@ mdio1: mdio@e200413c {
-> > 
-> >                       phy0: ethernet-phy@1 {
-> >                               reg = <1>;
-> > -                             interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> >                               status = "disabled";
-> >                       };
-> > 
-> >                       phy1: ethernet-phy@2 {
-> >                               reg = <2>;
-> > -                             interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> >                               status = "disabled";
-> >                       };
-> >               };
-
--- 
-/Horatiu
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 4e5f3d0d5538..2424fcde6538 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -367,7 +367,6 @@ extern int user_min_free_kbytes;
+>  extern void free_unref_page(struct page *page, unsigned int order);
+>  extern void free_unref_page_list(struct list_head *list);
+>  
+> -extern void zone_pcp_update(struct zone *zone, int cpu_online);
+>  extern void zone_pcp_reset(struct zone *zone);
+>  extern void zone_pcp_disable(struct zone *zone);
+>  extern void zone_pcp_enable(struct zone *zone);
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 4b97a03fa2dd..2deac2fe3372 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7238,6 +7238,17 @@ void __meminit setup_zone_pageset(struct zone *zone)
+>  	zone_set_pageset_high_and_batch(zone, 0);
+>  }
+>  
+> +/*
+> + * The zone indicated has a new number of managed_pages; batch sizes and percpu
+> + * page high values need to be recalculated.
+> + */
+> +static void zone_pcp_update(struct zone *zone, int cpu_online)
+> +{
+> +	mutex_lock(&pcp_batch_high_lock);
+> +	zone_set_pageset_high_and_batch(zone, cpu_online);
+> +	mutex_unlock(&pcp_batch_high_lock);
+> +}
+> +
+>  /*
+>   * Allocate per cpu pagesets and initialize them.
+>   * Before this call only boot pagesets were available.
+> @@ -9469,17 +9480,6 @@ void free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>  }
+>  EXPORT_SYMBOL(free_contig_range);
+>  
+> -/*
+> - * The zone indicated has a new number of managed_pages; batch sizes and percpu
+> - * page high values need to be recalculated.
+> - */
+> -void zone_pcp_update(struct zone *zone, int cpu_online)
+> -{
+> -	mutex_lock(&pcp_batch_high_lock);
+> -	zone_set_pageset_high_and_batch(zone, cpu_online);
+> -	mutex_unlock(&pcp_batch_high_lock);
+> -}
+> -
+>  /*
+>   * Effectively disable pcplists for the zone by setting the high limit to 0
+>   * and draining all cpus. A concurrent page freeing on another CPU that's about
