@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D40C5B6471
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 02:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5ECC5B6477
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 02:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiIMAEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 20:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S230000AbiIMAMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 20:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiIMAEs (ORCPT
+        with ESMTP id S229542AbiIMAMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 20:04:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA07101F0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 17:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663027487; x=1694563487;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e08DO+nESv5SUFPLV4pDZkpPx6WqURD0tlXib9o8nS0=;
-  b=AYN57LV2U+T6tFGCvPKl+UK3P93K+dPxNI9EZK7dkJVxt3Pk+sM/5Cky
-   9rlTzw6ufR8fjn6Vn0S6PI40BMUOUwZqoqGSGh3MzLIYiZ+fUSmJDBU7N
-   7mnyr2kt5vVroztDoX+KVaIdGt0tzelExXQks3DhR90BHv/Q+GBGW5LoQ
-   XPCW2db4+s12wrRFj/nm0LuezqeH44QvNwVnm90s8ZMt7exJrR9hYMJe9
-   MDd8VRKfJII35lfJTtCwZJWGK7Ri+KCAQKjKkS3Viz6O6uX1x2bVCXWhY
-   Kf/k6Azwyh5jZ5Sat5+2lStw8xwmsLq7px6G7RgWk7ifaV/VViDMz3KMR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="278392163"
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="278392163"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 17:04:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="646689982"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 17:04:46 -0700
-Date:   Mon, 12 Sep 2022 17:08:09 -0700
-From:   Jacob Pan <jacob.jun.pan@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Ashok Raj <ashok_raj@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>, <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, jacob.jun.pan@intel.com
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Message-ID: <20220912170809.101fa976@jacob-builder>
-In-Reply-To: <20220912224930.ukakmmwumchyacqc@box.shutemov.name>
-References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
-        <YxDvpLb77lwb8zaT@araj-dh-work>
-        <20220904003952.fheisiloilxh3mpo@box.shutemov.name>
-        <20220912224930.ukakmmwumchyacqc@box.shutemov.name>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 12 Sep 2022 20:12:05 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123BD4BD2C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 17:12:03 -0700 (PDT)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 943323F550
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1663027921;
+        bh=z6N6722jp6gXDXHtSfBIv6r9VA68RRCBbIlOgOGSNmU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ldZIipKvejNnH9/wqYsLtN2r4+koAwJ7IQJz0MyTVwCkccYUrVbeboBPs0pQ+QfbR
+         OtTz2YXbyYMzLhkelbenW2TsRLWZsfyGpHrhlpp4Df1U+PXQjE3hATv4tiPxgfhpye
+         pROMdYSEJgJIDfof0XhwznT92bXgX0H+YJGY7qneusl1tQ6NwLzM/ZMD9LJjYFMIPv
+         SYjZMVvxOHbB9Zrfbok/ybY4s+/REVet5LJHP8+sT8jn/RKhpfnmxd/fhaTxFZneJ0
+         pKjjM7SW7r+r5OAJH4I8uhpPRKiIHLwuBueqIGHhoAU/FB4M/CPS8w/bgKfS0XHRlP
+         tOfdWVSKqggpw==
+Received: by mail-wm1-f72.google.com with SMTP id c128-20020a1c3586000000b003b324bb08c5so8098735wma.9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 17:12:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=z6N6722jp6gXDXHtSfBIv6r9VA68RRCBbIlOgOGSNmU=;
+        b=Dcoj1VhJdlHrCxux65bvGRhYcngDh9aMZGBAMZQrBWXc3iyi7BgSdKBW4susdRqK+6
+         wDyNGt7iXwWtDtjf52T+wfBopsHiGjlXcgtBFIKsG33EzOyOz1oJ1i4t+0VSp9IHqtXA
+         7VdximfpKM3WpRf4nK7WJxTdcq47n+XSnPdgmI5Km4XvPfY/Ok3VlPR2tYU6MwXzhz5p
+         Yv+VnLC8w7wMyDa1m0cV05GEI0x1VnRKW/a+t3a1FIQ2LtBUUDBoX156Ts/fvlQSWsKv
+         damSrrDTQPP0aTj0Ezm/THJT0OtC4QqFtCoYEBHkJW2V/M9309avaHn0a8lyWLN2B/WB
+         0y6w==
+X-Gm-Message-State: ACgBeo0MuH0ETcf+GvdMrdGirhc/I8XBJLT5v/f0mRi50GO0/4FmZU2w
+        nMy6Aqk8Ba6uYFS+SoqSOcZZC8s40i/y+XnFuhJFo10sa3NmhijeLWNExZkElHsZvzE2M/Bbqte
+        XnW9cPmaM6Bpv7NZJs8odjA6K1QxpXCYHbUSvI7B6/KgGMFKMwWrt1h33CA==
+X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id t18-20020a05600c199200b003a623f68417mr483060wmq.14.1663027921092;
+        Mon, 12 Sep 2022 17:12:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7lLfh2J6xG+T5DjIdovJBNize9y0/aQzz5DQKRB13IBjOsO9e90KyGlFZuFun9ZP92HT7VnA1fdn3+sMqFdzQ=
+X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id
+ t18-20020a05600c199200b003a623f68417mr483042wmq.14.1663027920787; Mon, 12 Sep
+ 2022 17:12:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220906143108.1749183-1-kai.heng.feng@canonical.com> <526160bf-f0f8-a861-55d4-1ed5437c9009@gmail.com>
+In-Reply-To: <526160bf-f0f8-a861-55d4-1ed5437c9009@gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 13 Sep 2022 08:11:48 +0800
+Message-ID: <CAAd53p72POknU3tWyNBtsbZ_rEPVz+FBqi46QVvG3rhEO7ysWQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: ACPI: reboot: Reinstate S5 for reboot
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     rafael.j.wysocki@intel.com, Josef Bacik <josef@toxicpanda.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        tangmeng <tangmeng@uniontech.com>,
+        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +81,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kirill,
+On Wed, Sep 7, 2022 at 4:07 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 06.09.2022 17:31, Kai-Heng Feng =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
+> > PowerEdge r440 hangs at boot.
+> >
+> > The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
+> > system reboot to avoid triggering AER"), so reinstate the patch again.
+> >
+> > Cc: Josef Bacik <josef@toxicpanda.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v2:
+> >  - Use do_kernel_power_off_prepare() instead.
+> >
+> >  kernel/reboot.c | 55 +++++++++++++++++++++++++------------------------
+> >  1 file changed, 28 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/kernel/reboot.c b/kernel/reboot.c
+> > index 3c35445bf5ad3..39cbb45afc54a 100644
+> > --- a/kernel/reboot.c
+> > +++ b/kernel/reboot.c
+> > @@ -243,28 +243,6 @@ void migrate_to_reboot_cpu(void)
+> >       set_cpus_allowed_ptr(current, cpumask_of(cpu));
+> >  }
+> >
+> > -/**
+> > - *   kernel_restart - reboot the system
+> > - *   @cmd: pointer to buffer containing command to execute for restart
+> > - *           or %NULL
+> > - *
+> > - *   Shutdown everything and perform a clean reboot.
+> > - *   This is not safe to call in interrupt context.
+> > - */
+> > -void kernel_restart(char *cmd)
+> > -{
+> > -     kernel_restart_prepare(cmd);
+> > -     migrate_to_reboot_cpu();
+> > -     syscore_shutdown();
+> > -     if (!cmd)
+> > -             pr_emerg("Restarting system\n");
+> > -     else
+> > -             pr_emerg("Restarting system with command '%s'\n", cmd);
+> > -     kmsg_dump(KMSG_DUMP_SHUTDOWN);
+> > -     machine_restart(cmd);
+> > -}
+> > -EXPORT_SYMBOL_GPL(kernel_restart);
+> > -
+> >  static void kernel_shutdown_prepare(enum system_states state)
+> >  {
+> >       blocking_notifier_call_chain(&reboot_notifier_list,
+> > @@ -301,6 +279,34 @@ static BLOCKING_NOTIFIER_HEAD(power_off_prep_handl=
+er_list);
+> >   */
+> >  static ATOMIC_NOTIFIER_HEAD(power_off_handler_list);
+> >
+> > +static void do_kernel_power_off_prepare(void)
+> > +{
+> > +     blocking_notifier_call_chain(&power_off_prep_handler_list, 0, NUL=
+L);
+> > +}
+> > +
+> > +/**
+> > + *   kernel_restart - reboot the system
+> > + *   @cmd: pointer to buffer containing command to execute for restart
+> > + *           or %NULL
+> > + *
+> > + *   Shutdown everything and perform a clean reboot.
+> > + *   This is not safe to call in interrupt context.
+> > + */
+> > +void kernel_restart(char *cmd)
+> > +{
+> > +     kernel_restart_prepare(cmd);
+> > +     do_kernel_power_off_prepare();
+>
+> Looks like an abuse to me. Adding new SYS_OFF_MODE_RESTART_PREPARE and
+> updating acpi_sleep_init() to use it should be a better solution.
 
-On Tue, 13 Sep 2022 01:49:30 +0300, "Kirill A. Shutemov"
-<kirill.shutemov@linux.intel.com> wrote:
+Thanks, will send a new one based on your comment.
 
-> On Sun, Sep 04, 2022 at 03:39:52AM +0300, Kirill A. Shutemov wrote:
-> > On Thu, Sep 01, 2022 at 05:45:08PM +0000, Ashok Raj wrote:  
-> > > Hi Kirill,
-> > > 
-> > > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:  
-> > > > Linear Address Masking[1] (LAM) modifies the checking that is
-> > > > applied to 64-bit linear addresses, allowing software to use of the
-> > > > untranslated address bits for metadata.  
-> > > 
-> > > We discussed this internally, but didn't bubble up here.
-> > > 
-> > > Given that we are working on enabling Shared Virtual Addressing (SVA)
-> > > within the IOMMU. This permits user to share VA directly with the
-> > > device, and the device can participate even in fixing page-faults and
-> > > such.
-> > > 
-> > > IOMMU enforces canonical addressing, since we are hijacking the top
-> > > order bits for meta-data, it will fail sanity check and we would
-> > > return a failure back to device on any page-faults from device. 
-> > > 
-> > > It also complicates how device TLB and ATS work, and needs some major
-> > > improvements to detect device capability to accept tagged pointers,
-> > > adjust the devtlb to act accordingly. 
-> > > 
-> > > 
-> > > Both are orthogonal features, but there is an intersection of both
-> > > that are fundamentally incompatible.
-> > > 
-> > > Its even more important, since an application might be using SVA
-> > > under the cover provided by some library that's used without their
-> > > knowledge.
-> > > 
-> > > The path would be:
-> > > 
-> > > 1. Ensure both LAM and SVM are incompatible by design, without major
-> > >    changes.
-> > >    	- If LAM is enabled already and later SVM enabling is
-> > > requested by user, that should fail. and Vice versa.
-> > > 	- Provide an API to user to ask for opt-out. Now they know
-> > > they must sanitize the pointers before sending to device, or the
-> > > 	  working set is already isolated and needs no work.  
-> > 
-> > The patch below implements something like this. It is PoC, build-tested
-> > only.
-> > 
-> > To be honest, I hate it. It is clearly a layering violation. It feels
-> > dirty. But I don't see any better way as we tie orthogonal features
-> > together.
-> > 
-> > Also I have no idea how to make forced PASID allocation if LAM enabled.
-> > What the API has to look like?  
-> 
-> Jacob, Ashok, any comment on this part?
-> 
-> I expect in many cases LAM will be enabled very early (like before malloc
-> is functinal) in process start and it makes PASID allocation always fail.
-> 
-Is there a generic flag LAM can set on the mm?
-
-We can't check x86 feature in IOMMU SVA API. i.e. 
- 
-@@ -32,6 +33,15 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
- 		return -EINVAL;
- 
- 	mutex_lock(&iommu_sva_lock);
-+
-+	/* Serialize against LAM enabling */
-+	mutex_lock(&mm->context.lock);
-+
-+	if (mm_lam_cr3_mask(mm)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-
-> Any way out?
-> 
-
-
-Thanks,
-
-Jacob
+Kai-Heng
