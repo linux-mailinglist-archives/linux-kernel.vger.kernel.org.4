@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A445B779A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757F75B77A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiIMRQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S232832AbiIMRTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiIMRQh (ORCPT
+        with ESMTP id S232871AbiIMRSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:16:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8D213D5C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:04:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DFFEB80F92
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:04:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D1DC433C1;
-        Tue, 13 Sep 2022 16:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663085071;
-        bh=6Tb1sUxJd8dJSLR0kzh76bNzgOnCELvZEdTlXBGdo74=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PheyAgfTkCSP3WusJLXvYkxhsvdu5x7NwAb77YJp6uTLsFzMXhfPj5sL/UkcNBYlJ
-         igl+prwhPZ8shp+dhWpY5Unxz2BzCpBSiZsxZQSe6dwXpPGFxf6PKcR5pl9jIhZbDY
-         Kw1LFol0B4iu2dKWbOCou+G7BrbXvAUKD3Y6w8WCN+LuN2L3gxutkJDjpR2FNoLAYR
-         KIwb7oDhgeHYnXcjcvnUSlh9Vm7lc5jfmcLJgx5yYMrzmp0YH6Qb3VbP0OzI1fR2VD
-         WGhQa57ASkwWj8RlzeKHeRHiRazD2+A087uFkiGjqqiKAhhP7ILqfHXpWSuWdpnC9S
-         gfilQsh4igr4g==
-Date:   Tue, 13 Sep 2022 17:04:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ASoC: sunxi: sun4i-codec: set debugfs_prefix for CPU
- DAI component
-Message-ID: <YyCqC2EypxnoJFk7@sirena.org.uk>
-References: <20220911145713.55199-1-mike.rudenko@gmail.com>
- <20220911145713.55199-2-mike.rudenko@gmail.com>
+        Tue, 13 Sep 2022 13:18:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DFF98378;
+        Tue, 13 Sep 2022 09:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663085139; x=1694621139;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ID9kqtBpMi1grFQ2zHt3THgmOxztjFaV2cZKdBQla2Q=;
+  b=VI2R0pZks4R2BrztBK/lCpMSKCTg2U0gvfLKUbLz7piqXqlbi2piX1Ah
+   r6bb7KPbQrCGeQxFemXzO2bswUjFev6BIgZcxb+ppLtZtEnXhvEFFZQMA
+   jvkRz4OfYHkwmHZZOt9pn9ezSNngnpTvbtyK3aRUuFdilMVph95X6xB6y
+   zuqxdLexfTRvLdEpSwmdacSCFFbFAJv2mpya+dEaPNiyKeGK8BdCj2ii1
+   t97uAsNdumRncbVGBSWTP93jvKfNPp+G7Zg4O/WUXqNlLs8w3wAf46WCK
+   hzsTDDgAgTa5WxyBKryy76jln3gs/b7KvrlPz+0l5WCGZhzF4wry97Otc
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="173660068"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 09:05:37 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 09:05:35 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 09:05:29 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <arun.ramadoss@microchip.com>,
+        <prasanna.vengateshan@microchip.com>, <hkallweit1@gmail.com>
+Subject: [Patch net-next 5/5] net: phy: micrel: enable interrupt for ksz9477 phy
+Date:   Tue, 13 Sep 2022 21:34:27 +0530
+Message-ID: <20220913160427.12749-6-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220913160427.12749-1-arun.ramadoss@microchip.com>
+References: <20220913160427.12749-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tnCcChlqU0Imzw0K"
-Content-Disposition: inline
-In-Reply-To: <20220911145713.55199-2-mike.rudenko@gmail.com>
-X-Cookie: ... I have read the INSTRUCTIONS ...
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Config_intr and handle_interrupt are enabled for ksz9477 phy. It is
+similar to all other phys in the micrel phys.
 
---tnCcChlqU0Imzw0K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+ drivers/net/phy/micrel.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Sun, Sep 11, 2022 at 05:57:12PM +0300, Mikhail Rudenko wrote:
-> At present, succesfull probing of H3 Codec results in an error
->=20
->     debugfs: Directory '1c22c00.codec' with parent 'H3 Audio Codec' alrea=
-dy present!
->=20
-> This is caused by a directory name conflict between codec
-> components. Fix it by setting debugfs_prefix for the CPU DAI
-> component.
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 7b8c5c8d013e..09f2bef5d96c 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -3191,6 +3191,8 @@ static struct phy_driver ksphy_driver[] = {
+ 	.name		= "Microchip KSZ9477",
+ 	/* PHY_GBIT_FEATURES */
+ 	.config_init	= kszphy_config_init,
++	.config_intr	= kszphy_config_intr,
++	.handle_interrupt = kszphy_handle_interrupt,
+ 	.suspend	= genphy_suspend,
+ 	.resume		= genphy_resume,
+ } };
+-- 
+2.36.1
 
-This doesn't apply against current code, please check and resend.
-
---tnCcChlqU0Imzw0K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMgqgoACgkQJNaLcl1U
-h9BpWAf+JC1VIGpEuZdvAM6o78KE4CJpeeq0Ui9NrveL6c7kukJdKu+CocTWndfh
-i3O+dtlkWNqZgOk7sOs4LRx651un/NqsygQkWr25B4CjGXoxJCf6YpaMXE7TGVuf
-gJ6HYi2zSWoK7Yni6uScEU7D2HtnCQnwfI33jWM2GK6pwGZOTby86HtC/p1wnT+q
-QFUTx54l0bYUkVfq+FLuPyQRmbMGQ4A8XFsQ9TQOlXC69sWna9yc5APBNXOcPR/6
-lEUm8A0MZJJ8jZbUqOaG/PBZitXZ0r3vVNnLauiJaIOBHjwj6BW2Ut8oRZMoRDvG
-x+5GTQ058lJw4SZvzZl5908v44s69A==
-=2cfA
------END PGP SIGNATURE-----
-
---tnCcChlqU0Imzw0K--
