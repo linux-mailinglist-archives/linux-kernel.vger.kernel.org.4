@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8621F5B7BD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5065B7BDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiIMT7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S230190AbiIMUAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiIMT7E (ORCPT
+        with ESMTP id S230079AbiIMT7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:59:04 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBF6786C3;
-        Tue, 13 Sep 2022 12:58:47 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id c11so9603342qtw.8;
-        Tue, 13 Sep 2022 12:58:47 -0700 (PDT)
+        Tue, 13 Sep 2022 15:59:08 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A1786FF;
+        Tue, 13 Sep 2022 12:58:50 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id q11so6264314qkc.12;
+        Tue, 13 Sep 2022 12:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Q4ZU5cexm9Q08qLiEijmmMTjwuY3GlJ1Cn90C3bzJMU=;
-        b=DPtm4ok3PSf82mq7JMYxEELlSbe2Rh/g3fQ51ooEmzdbhvAmX7bq1p/PDmYadgyeC1
-         zi9y/jcGd3D1R6ZJkZ/FQsWIwfFLD+Pb0MJITbf3fgUqnK83ONtjfJ+HMIIxaq6Be8T0
-         7yW02a5Gpkn6GV6C9TtbKwXcBYYQfckEhhDlRw3kQGNLccCEAsysOi1687eQCVwa1Snz
-         UzUeXpguUoApWzimdM3XamY7zoYoXwniOBrFXnFh1C31eUhw4i9vT9n/3okZ8ZMJuUbE
-         x2Q9CpCURykZLJagLzDO5v/o6/9ctT6KeQ6BSDQrVAvGz6WE7hB0JQGNvnw+QEyD9e4R
-         S75w==
+        bh=ed+iX/nv/XMEFygJ1SlfRX9x+uzs7Q6SqUw+PcSFA+Y=;
+        b=kTC2V8I0KbKQgYVpiMXWXobqHukHN5wc9G7pyTq0OXIlmxgzs1DdLdIuMurl376JOh
+         TI+sLZOsyYvKvgQV1mtsgOKDhgkCHY9vgTN75V+209rBR7AYRtArLxFXLQfDpntS8+77
+         1VJuC85XaAr9lDOJi4JPuZBYlxos4LmgTFUlBZzjlAHRPleIyKNPrsw1Q/TybKJ6LhLy
+         P7jZiatOzHC+C4lsh8jLuUsBJv4lBg9GwtABHfhEamUAOb2Eu3rURCtfJTb4hzSEiYzf
+         Mf68rOnlVxAV76vW2E0E1N4Dtdqb6V3ShGLPb0HbK61ur+zHBF+wQNqRrMeYo3aOEqsI
+         sQUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Q4ZU5cexm9Q08qLiEijmmMTjwuY3GlJ1Cn90C3bzJMU=;
-        b=cVm3jcqIl8VrX5pxqWFz1PosmEr89rAV3mFawA6Wzvbu7hpKrsszOFHhK7seocYhpB
-         yuRt0vq9dmseifi5j1L9IAIynCuNTuc3fIthb3pCje4U5HSQZJAOrr8ttXTieu0xlykV
-         oL/jFMtvpfFyoxAVw5AypICxzHX3hw5Tbzwhn9mmedfQbM8KzcWd8dLKZN4X0hfZjxIT
-         KGoEXtFY+ZCHAEhHah43UJWd5IM+wy5SUm8Riz0YVRJMPdv+h2Hwbu+agGpbvZN/pnED
-         SbkLrHX0Zh6IU0Lcs+8a0NJHoDtc2hZ4CM7rR9Qs8W6oacxG05WDIaBIWT3qMJeL+h8Z
-         Seqw==
-X-Gm-Message-State: ACgBeo0K2zcoPOw+bF5Q6YRE5KxJEWI0D1wA8RTt+HORRGTKmtXAY1Xl
-        SEIqkpmzG+izjsc2KVypZYg=
-X-Google-Smtp-Source: AA6agR79LKnSKwsuEjaHOZbqMf9sDJeff1s7ltAoeOd0yWLYcv6FI23B3yp+SehZLzBtT5Q7988TlQ==
-X-Received: by 2002:a05:622a:174b:b0:343:1fc:14d8 with SMTP id l11-20020a05622a174b00b0034301fc14d8mr29317695qtk.579.1663099126048;
-        Tue, 13 Sep 2022 12:58:46 -0700 (PDT)
+        bh=ed+iX/nv/XMEFygJ1SlfRX9x+uzs7Q6SqUw+PcSFA+Y=;
+        b=T20Otj5Ly/TC8a+VsTAB82tQyD56hLYzJ8A4iZBRUOyYuwJeTDyvVkJfEHZchkr9o6
+         ovTG9933VUDtGHgYWjS02Q2PzvykKjGg+0Xcf5ibS8YFftj7Lvdo8mI8IyeqEdEQQqmD
+         eOHN3hJvGlb59TdFRhlOU2NPZKO8xO9Rgg7k3BHXEV9VLL1gspkQTrZ8u7QmR3JApcXq
+         XoGDa/otK7QtsgqNQ1tNSYzu61A3bg76kCI76EIg2UuKYl+NfACgAVj5jBaZ1gSY8yTj
+         hZ8telwUlJk6v3baBvwa27UpL1fVEfRFib1tJe7DaAJNOEsRtvf4NYmtjFLdZfckWgpy
+         YmBQ==
+X-Gm-Message-State: ACgBeo2WYpA/Dl/zJgmMXFGqBPH6+kwbgNEU7VqoDjxR5ATWpXEDnboa
+        HFc2tVUeLx1KXCIVCtXzQ6w=
+X-Google-Smtp-Source: AA6agR6oL/h20WlhqK4D/I9yr1owRo+hnv02mOT7OtmgSO2hWSXNGrz7MzYBNL87UH+0Ca4e8ZJtlg==
+X-Received: by 2002:a05:620a:2956:b0:6ce:60f5:d887 with SMTP id n22-20020a05620a295600b006ce60f5d887mr4614697qkp.303.1663099129650;
+        Tue, 13 Sep 2022 12:58:49 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.42
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:58:45 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:49 -0700 (PDT)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
         Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: [PATCH 14/21] mm/page_alloc: make alloc_contig_pages DMB aware
-Date:   Tue, 13 Sep 2022 12:55:01 -0700
-Message-Id: <20220913195508.3511038-15-opendmb@gmail.com>
+Subject: [PATCH 15/21] mm/page_alloc: allow base for movablecore
+Date:   Tue, 13 Sep 2022 12:55:02 -0700
+Message-Id: <20220913195508.3511038-16-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913195508.3511038-1-opendmb@gmail.com>
 References: <20220913195508.3511038-1-opendmb@gmail.com>
@@ -94,57 +94,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Designated Movable Blocks are skipped when attempting to allocate
-contiguous pages. Doing per page validation across all spanned
-pages within a zone can be extra inefficient when Designated
-Movable Blocks create large overlaps between zones. Use
-dmb_intersects() within pfn_range_valid_contig as an early check
-to signal the range is not valid.
-
-The zone_movable_pfn array which represents the start of non-
-overlapped ZONE_MOVABLE on the node is now preserved to be used
-at runtime to skip over any DMB-only portion of the zone.
+A Designated Movable Block can be created by including the base
+address of the block when specifying a movablecore range on the
+kernel command line.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- mm/page_alloc.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ .../admin-guide/kernel-parameters.txt         | 14 ++++++-
+ mm/page_alloc.c                               | 38 ++++++++++++++++---
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 426fa892d311..8141fac7c7cb 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3312,7 +3312,7 @@
+ 			reporting absolute coordinates, such as tablets
+ 
+ 	movablecore=	[KNL,X86,IA-64,PPC]
+-			Format: nn[KMGTPE] | nn%
++			Format: nn[KMGTPE] | nn[KMGTPE]@ss[KMGTPE] | nn%
+ 			This parameter is the complement to kernelcore=, it
+ 			specifies the amount of memory used for migratable
+ 			allocations.  If both kernelcore and movablecore is
+@@ -3322,6 +3322,18 @@
+ 			that the amount of memory usable for all allocations
+ 			is not too small.
+ 
++			If @ss[KMGTPE] is included, memory within the region
++			from ss to ss+nn will be designated as a movable block
++			and included in ZONE_MOVABLE. Designated Movable Blocks
++			must be aligned to pageblock_order. Designated Movable
++			Blocks take priority over values of kernelcore= and are
++			considered part of any memory specified by more general
++			movablecore= values.
++			Multiple Designated Movable Blocks may be specified,
++			comma delimited.
++			Example:
++				movablecore=100M@2G,100M@3G,1G@1024G
++
+ 	movable_node	[KNL] Boot-time switch to make hotplugable memory
+ 			NUMA nodes to be movable. This means that the memory
+ 			of such nodes will be usable only for movable
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e723094d1e1e..69753cc51e19 100644
+index 69753cc51e19..e38dd1b32771 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -435,7 +435,7 @@ static unsigned long required_kernelcore_percent __initdata;
- static unsigned long required_movablecore __initdata;
- static unsigned long required_movablecore_percent __initdata;
- static unsigned long min_dmb_pfn[MAX_NUMNODES] __initdata;
--static unsigned long zone_movable_pfn[MAX_NUMNODES] __initdata;
-+static unsigned long zone_movable_pfn[MAX_NUMNODES];
- bool mirrored_kernelcore __initdata_memblock;
+@@ -8370,9 +8370,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ }
  
- /* movable_zone is the "real" zone pages in ZONE_MOVABLE are taken from */
-@@ -9370,6 +9370,9 @@ static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
- 	unsigned long i, end_pfn = start_pfn + nr_pages;
- 	struct page *page;
+ static int __init cmdline_parse_core(char *p, unsigned long *core,
+-				     unsigned long *percent)
++				     unsigned long *percent, bool movable)
+ {
+-	unsigned long long coremem;
++	unsigned long long coremem, address;
+ 	char *endptr;
  
-+	if (dmb_intersects(start_pfn, end_pfn))
-+		return false;
+ 	if (!p)
+@@ -8387,6 +8387,17 @@ static int __init cmdline_parse_core(char *p, unsigned long *core,
+ 		*percent = coremem;
+ 	} else {
+ 		coremem = memparse(p, &p);
++		if (movable && *p == '@') {
++			address = memparse(++p, &p);
++			if (*p != '\0' ||
++			    !memblock_is_region_memory(address, coremem) ||
++			    memblock_is_region_reserved(address, coremem))
++				return -EINVAL;
++			memblock_reserve(address, coremem);
++			return dmb_reserve(address, coremem, NULL);
++		} else if (*p != '\0') {
++			return -EINVAL;
++		}
+ 		/* Paranoid check that UL is enough for the coremem value */
+ 		WARN_ON((coremem >> PAGE_SHIFT) > ULONG_MAX);
+ 
+@@ -8409,17 +8420,32 @@ static int __init cmdline_parse_kernelcore(char *p)
+ 	}
+ 
+ 	return cmdline_parse_core(p, &required_kernelcore,
+-				  &required_kernelcore_percent);
++				  &required_kernelcore_percent, false);
+ }
+ 
+ /*
+  * movablecore=size sets the amount of memory for use for allocations that
+- * can be reclaimed or migrated.
++ * can be reclaimed or migrated. movablecore=size@base defines a Designated
++ * Movable Block.
+  */
+ static int __init cmdline_parse_movablecore(char *p)
+ {
+-	return cmdline_parse_core(p, &required_movablecore,
+-				  &required_movablecore_percent);
++	int ret = -EINVAL;
 +
- 	for (i = start_pfn; i < end_pfn; i++) {
- 		page = pfn_to_online_page(i);
- 		if (!page)
-@@ -9426,7 +9429,10 @@ struct page *alloc_contig_pages(unsigned long nr_pages, gfp_t gfp_mask,
- 					gfp_zone(gfp_mask), nodemask) {
- 		spin_lock_irqsave(&zone->lock, flags);
++	while (p) {
++		char *k = strchr(p, ',');
++
++		if (k)
++			*k++ = 0;
++
++		ret = cmdline_parse_core(p, &required_movablecore,
++					 &required_movablecore_percent, true);
++		if (ret)
++			break;
++		p = k;
++	}
++
++	return ret;
+ }
  
--		pfn = ALIGN(zone->zone_start_pfn, nr_pages);
-+		if (zone_idx(zone) == ZONE_MOVABLE && zone_movable_pfn[nid])
-+			pfn = ALIGN(zone_movable_pfn[nid], nr_pages);
-+		else
-+			pfn = ALIGN(zone->zone_start_pfn, nr_pages);
- 		while (zone_spans_last_pfn(zone, pfn, nr_pages)) {
- 			if (pfn_range_valid_contig(zone, pfn, nr_pages)) {
- 				/*
+ early_param("kernelcore", cmdline_parse_kernelcore);
 -- 
 2.25.1
 
