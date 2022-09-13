@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E8C5B71F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406C5B7201
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiIMOrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S231424AbiIMOts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiIMOqR (ORCPT
+        with ESMTP id S233213AbiIMOrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:46:17 -0400
+        Tue, 13 Sep 2022 10:47:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDB66F252;
-        Tue, 13 Sep 2022 07:24:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E79315FF7;
+        Tue, 13 Sep 2022 07:24:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEBC5614D1;
-        Tue, 13 Sep 2022 14:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B6CC433C1;
-        Tue, 13 Sep 2022 14:24:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11EAD614D1;
+        Tue, 13 Sep 2022 14:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27DCCC433D6;
+        Tue, 13 Sep 2022 14:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079046;
-        bh=y2qWzrFfahicfsBuM+hsEfMX5QUzq/PC38YkE8OGKNs=;
+        s=korg; t=1663079074;
+        bh=Z1DqO47BFrDbZG++f2rX/wbcetEoP13iZAVe6wxbpqM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=thFs74gSQamn+fLx1+nmkD//rUIIGCAh4jwKOOCT8RTDte1KDBoLHJtV9Ycex6tlz
-         qGkHaqxijHbZwL3tRPid8a2B0cEONukPWXYiCNiMLfUBvNvvmjaUnkJmyRoemrvY78
-         uWTC6M+52K/aKp9gFkJZyz4bshrp968lI9r8u+N4=
+        b=cS0sffY+w29GMGkPpduXEgzYtAweGeFP6/bbIYf7zstSGmzt/WmLL18DotLWwcwRj
+         t8vfXXZn4H+55qfzPTNUUgL6vdC2Jrs5JrgfF0//EX0kLYupeAZ3j3Z6J1q88vELCb
+         JGpG1uW5/EDtAqHqSKDLnJ6sq2r0odqi1mDsnIBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeffrey E Altman <jaltman@auristor.com>,
-        David Howells <dhowells@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 54/79] afs: Use the operation issue time instead of the reply time for callbacks
-Date:   Tue, 13 Sep 2022 16:04:59 +0200
-Message-Id: <20220913140352.841720589@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, zdi-disclosures@trendmicro.com
+Subject: [PATCH 5.10 55/79] sch_sfb: Dont assume the skb is still around after enqueueing to child
+Date:   Tue, 13 Sep 2022 16:05:00 +0200
+Message-Id: <20220913140352.882604311@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
 References: <20220913140350.291927556@linuxfoundation.org>
@@ -55,122 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Toke Høiland-Jørgensen <toke@toke.dk>
 
-[ Upstream commit 7903192c4b4a82d792cb0dc5e2779a2efe60d45b ]
+[ Upstream commit 9efd23297cca530bb35e1848665805d3fcdd7889 ]
 
-rxrpc and kafs between them try to use the receive timestamp on the first
-data packet (ie. the one with sequence number 1) as a base from which to
-calculate the time at which callback promise and lock expiration occurs.
+The sch_sfb enqueue() routine assumes the skb is still alive after it has
+been enqueued into a child qdisc, using the data in the skb cb field in the
+increment_qlen() routine after enqueue. However, the skb may in fact have
+been freed, causing a use-after-free in this case. In particular, this
+happens if sch_cake is used as a child of sfb, and the GSO splitting mode
+of CAKE is enabled (in which case the skb will be split into segments and
+the original skb freed).
 
-However, we don't know how long it took for the server to send us the reply
-from it having completed the basic part of the operation - it might then,
-for instance, have to send a bunch of a callback breaks, depending on the
-particular operation.
+Fix this by copying the sfb cb data to the stack before enqueueing the skb,
+and using this stack copy in increment_qlen() instead of the skb pointer
+itself.
 
-Fix this by using the time at which the operation is issued on the client
-as a base instead.  That should never be longer than the server's idea of
-the expiry time.
-
-Fixes: 781070551c26 ("afs: Fix calculation of callback expiry time")
-Fixes: 2070a3e44962 ("rxrpc: Allow the reply time to be obtained on a client call")
-Suggested-by: Jeffrey E Altman <jaltman@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-18231
+Fixes: e13e02a3c68d ("net_sched: SFB flow scheduler")
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/flock.c     | 2 +-
- fs/afs/fsclient.c  | 2 +-
- fs/afs/internal.h  | 3 +--
- fs/afs/rxrpc.c     | 7 +------
- fs/afs/yfsclient.c | 3 +--
- 5 files changed, 5 insertions(+), 12 deletions(-)
+ net/sched/sch_sfb.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/fs/afs/flock.c b/fs/afs/flock.c
-index cb3054c7843ea..466ad609f2057 100644
---- a/fs/afs/flock.c
-+++ b/fs/afs/flock.c
-@@ -76,7 +76,7 @@ void afs_lock_op_done(struct afs_call *call)
- 	if (call->error == 0) {
- 		spin_lock(&vnode->lock);
- 		trace_afs_flock_ev(vnode, NULL, afs_flock_timestamp, 0);
--		vnode->locked_at = call->reply_time;
-+		vnode->locked_at = call->issue_time;
- 		afs_schedule_lock_extension(vnode);
- 		spin_unlock(&vnode->lock);
+diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+index da047a37a3bf3..f180cf95cfc97 100644
+--- a/net/sched/sch_sfb.c
++++ b/net/sched/sch_sfb.c
+@@ -135,15 +135,15 @@ static void increment_one_qlen(u32 sfbhash, u32 slot, struct sfb_sched_data *q)
  	}
-diff --git a/fs/afs/fsclient.c b/fs/afs/fsclient.c
-index 1d95ed9dd86e6..0048a32cb040e 100644
---- a/fs/afs/fsclient.c
-+++ b/fs/afs/fsclient.c
-@@ -130,7 +130,7 @@ static void xdr_decode_AFSFetchStatus(const __be32 **_bp,
- 
- static time64_t xdr_decode_expiry(struct afs_call *call, u32 expiry)
- {
--	return ktime_divns(call->reply_time, NSEC_PER_SEC) + expiry;
-+	return ktime_divns(call->issue_time, NSEC_PER_SEC) + expiry;
  }
  
- static void xdr_decode_AFSCallBack(const __be32 **_bp,
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index dc08a3d9b3a8b..637cbe549397c 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -135,7 +135,6 @@ struct afs_call {
- 	bool			need_attention;	/* T if RxRPC poked us */
- 	bool			async;		/* T if asynchronous */
- 	bool			upgrade;	/* T to request service upgrade */
--	bool			have_reply_time; /* T if have got reply_time */
- 	bool			intr;		/* T if interruptible */
- 	bool			unmarshalling_error; /* T if an unmarshalling error occurred */
- 	u16			service_id;	/* Actual service ID (after upgrade) */
-@@ -149,7 +148,7 @@ struct afs_call {
- 		} __attribute__((packed));
- 		__be64		tmp64;
- 	};
--	ktime_t			reply_time;	/* Time of first reply packet */
-+	ktime_t			issue_time;	/* Time of issue of operation */
- };
+-static void increment_qlen(const struct sk_buff *skb, struct sfb_sched_data *q)
++static void increment_qlen(const struct sfb_skb_cb *cb, struct sfb_sched_data *q)
+ {
+ 	u32 sfbhash;
  
- struct afs_call_type {
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index efe0fb3ad8bdc..535d28b44bca3 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -429,6 +429,7 @@ void afs_make_call(struct afs_addr_cursor *ac, struct afs_call *call, gfp_t gfp)
- 	if (call->max_lifespan)
- 		rxrpc_kernel_set_max_life(call->net->socket, rxcall,
- 					  call->max_lifespan);
-+	call->issue_time = ktime_get_real();
+-	sfbhash = sfb_hash(skb, 0);
++	sfbhash = cb->hashes[0];
+ 	if (sfbhash)
+ 		increment_one_qlen(sfbhash, 0, q);
  
- 	/* send the request */
- 	iov[0].iov_base	= call->request;
-@@ -533,12 +534,6 @@ static void afs_deliver_to_call(struct afs_call *call)
- 			return;
- 		}
+-	sfbhash = sfb_hash(skb, 1);
++	sfbhash = cb->hashes[1];
+ 	if (sfbhash)
+ 		increment_one_qlen(sfbhash, 1, q);
+ }
+@@ -283,6 +283,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 	struct sfb_sched_data *q = qdisc_priv(sch);
+ 	struct Qdisc *child = q->qdisc;
+ 	struct tcf_proto *fl;
++	struct sfb_skb_cb cb;
+ 	int i;
+ 	u32 p_min = ~0;
+ 	u32 minqlen = ~0;
+@@ -399,11 +400,12 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 	}
  
--		if (!call->have_reply_time &&
--		    rxrpc_kernel_get_reply_time(call->net->socket,
--						call->rxcall,
--						&call->reply_time))
--			call->have_reply_time = true;
--
- 		ret = call->type->deliver(call);
- 		state = READ_ONCE(call->state);
- 		if (ret == 0 && call->unmarshalling_error)
-diff --git a/fs/afs/yfsclient.c b/fs/afs/yfsclient.c
-index bd787e71a657f..5b2ef5ffd716f 100644
---- a/fs/afs/yfsclient.c
-+++ b/fs/afs/yfsclient.c
-@@ -239,8 +239,7 @@ static void xdr_decode_YFSCallBack(const __be32 **_bp,
- 	struct afs_callback *cb = &scb->callback;
- 	ktime_t cb_expiry;
- 
--	cb_expiry = call->reply_time;
--	cb_expiry = ktime_add(cb_expiry, xdr_to_u64(x->expiration_time) * 100);
-+	cb_expiry = ktime_add(call->issue_time, xdr_to_u64(x->expiration_time) * 100);
- 	cb->expires_at	= ktime_divns(cb_expiry, NSEC_PER_SEC);
- 	scb->have_cb	= true;
- 	*_bp += xdr_size(x);
+ enqueue:
++	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
+ 	ret = qdisc_enqueue(skb, child, to_free);
+ 	if (likely(ret == NET_XMIT_SUCCESS)) {
+ 		qdisc_qstats_backlog_inc(sch, skb);
+ 		sch->q.qlen++;
+-		increment_qlen(skb, q);
++		increment_qlen(&cb, q);
+ 	} else if (net_xmit_drop_count(ret)) {
+ 		q->stats.childdrop++;
+ 		qdisc_qstats_drop(sch);
 -- 
 2.35.1
 
