@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35465B70A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D931F5B70AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbiIMOaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S234064AbiIMOcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbiIMO20 (ORCPT
+        with ESMTP id S233776AbiIMO3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:28:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0D696CB;
-        Tue, 13 Sep 2022 07:17:52 -0700 (PDT)
+        Tue, 13 Sep 2022 10:29:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DD6A49B;
+        Tue, 13 Sep 2022 07:18:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B918C614B3;
-        Tue, 13 Sep 2022 14:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C445CC433D6;
-        Tue, 13 Sep 2022 14:17:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BED49B80FA6;
+        Tue, 13 Sep 2022 14:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34613C433C1;
+        Tue, 13 Sep 2022 14:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078672;
-        bh=eNmdi/BoP7WYZz4B7PTE9g7lLo2eJ9DD+Kgpxwy77wE=;
+        s=korg; t=1663078674;
+        bh=EAJCYjhkJNORUUDynnZRYb9oNFCXK83WLB1Yzw2xubg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MoCm+G4xuQIpXAoFrAYGqACtXdKikgdkAzgcqUJ9bBhEfJ6e9yZG/kNBFpaTb/kYn
-         yCmqwcd1FvT7uNss5EANO7f7T2j8o2ZTSpzgCihqeC705eR41NmLni+yFcAw9MEeDI
-         muoReho9OoSJD8IsL9i9TrqIKz/b4OZv7wy+w/dg=
+        b=txkdR64NRg0h8ncG7Ehf9J3DEVyW8tFhA7IwqgoRQLJiiGGZku0LQJbZUUECz6B/F
+         eHjTGYjTWlKI8RvCtg8ilYHot19cfxFJ/NXtcjGNZQO/LFdGf88iuxVGU2nmobw5Eo
+         YVt60bAd2yIDhetgLqiqkyVjGI32PxY0RForgSu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, YiPeng Chai <YiPeng.Chai@amd.com>,
+        stable@vger.kernel.org, Candice Li <candice.li@amd.com>,
         Hawking Zhang <Hawking.Zhang@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 011/121] drm/amdgpu: Move psp_xgmi_terminate call from amdgpu_xgmi_remove_device to psp_hw_fini
-Date:   Tue, 13 Sep 2022 16:03:22 +0200
-Message-Id: <20220913140357.817506266@linuxfoundation.org>
+Subject: [PATCH 5.15 012/121] drm/amdgpu: Check num_gfx_rings for gfx v9_0 rb setup.
+Date:   Tue, 13 Sep 2022 16:03:23 +0200
+Message-Id: <20220913140357.858242921@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -56,57 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YiPeng Chai <YiPeng.Chai@amd.com>
+From: Candice Li <candice.li@amd.com>
 
-[ Upstream commit 9d705d7741ae70764f3d6d87e67fad3b5c30ffd0 ]
+[ Upstream commit c351938350ab9b5e978dede2c321da43de7eb70c ]
 
-V1:
-The amdgpu_xgmi_remove_device function will send unload command
-to psp through psp ring to terminate xgmi, but psp ring has been
-destroyed in psp_hw_fini.
+No need to set up rb when no gfx rings.
 
-V2:
-1. Change the commit title.
-2. Restore amdgpu_xgmi_remove_device to its original calling location.
-   Move psp_xgmi_terminate call from amdgpu_xgmi_remove_device to
-   psp_hw_fini.
-
-Signed-off-by: YiPeng Chai <YiPeng.Chai@amd.com>
+Signed-off-by: Candice Li <candice.li@amd.com>
 Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c  | 3 +++
- drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index 57e9932d8a04e..5b41c29f3ed50 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@ -2729,6 +2729,9 @@ static int psp_hw_fini(void *handle)
- 		psp_rap_terminate(psp);
- 		psp_dtm_terminate(psp);
- 		psp_hdcp_terminate(psp);
-+
-+		if (adev->gmc.xgmi.num_physical_nodes > 1)
-+			psp_xgmi_terminate(psp);
- 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index db27fcf87cd04..16cbae04078ad 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -2624,7 +2624,8 @@ static void gfx_v9_0_constants_init(struct amdgpu_device *adev)
  
- 	psp_asd_unload(psp);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-index a799e0b1ff736..ce0b9cb61f582 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-@@ -723,7 +723,7 @@ int amdgpu_xgmi_remove_device(struct amdgpu_device *adev)
- 		amdgpu_put_xgmi_hive(hive);
- 	}
+ 	gfx_v9_0_tiling_mode_table_init(adev);
  
--	return psp_xgmi_terminate(&adev->psp);
-+	return 0;
- }
+-	gfx_v9_0_setup_rb(adev);
++	if (adev->gfx.num_gfx_rings)
++		gfx_v9_0_setup_rb(adev);
+ 	gfx_v9_0_get_cu_info(adev, &adev->gfx.cu_info);
+ 	adev->gfx.config.db_debug2 = RREG32_SOC15(GC, 0, mmDB_DEBUG2);
  
- static int amdgpu_xgmi_ras_late_init(struct amdgpu_device *adev)
 -- 
 2.35.1
 
