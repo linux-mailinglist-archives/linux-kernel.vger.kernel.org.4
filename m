@@ -2,93 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A875B7523
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B805B6F34
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiIMPbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S232694AbiIMOJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiIMP3K (ORCPT
+        with ESMTP id S232457AbiIMOIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:29:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB7012AE6;
-        Tue, 13 Sep 2022 07:39:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD3FDB80FB3;
-        Tue, 13 Sep 2022 14:37:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 273ECC433D6;
-        Tue, 13 Sep 2022 14:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079864;
-        bh=Zz20S2iYhS1C8p2637bUqpeyAzUowHY50lpZhR3aER8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/lcnBYcHAGp0tPR30/l75KCVrx1RDc1KqwndTcySYa9YCnNuzIT2+B6j/U49hQ+g
-         L8ClIcXqwpeFcwQZX11Gc+6DOw0+4jlqq2Xqb4JLZfDns1fc82tS5VfeenloqJibjj
-         ls81ILG3Gdnp9Z2e+Cy95z6/1EVOdBak6mRqD264=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Subject: [PATCH 4.9 42/42] SUNRPC: use _bh spinlocking on ->transport_lock
-Date:   Tue, 13 Sep 2022 16:08:13 +0200
-Message-Id: <20220913140344.525654708@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-References: <20220913140342.228397194@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:08:49 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632815788C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:08:28 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DDuRxA022424;
+        Tue, 13 Sep 2022 14:08:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Gee9i0tLAhXBmv2PdAiOdWGYIoFuMseV5LWWpVexfSA=;
+ b=fdKLH/boMg/+4tmDozRIuZWfB0NqUyzOQygi9uzvkTLrw3YYlfuMq60eChqiI7F5H2oS
+ Ci879mKvwhGek7naHR3Fno/TTGS1zaywOB+on0Ed5+6KKl1bn8p8E+5l1FgMEHmQqWcM
+ A9DdPYr8uBm92RJqTkUN0opXlP9RPaIJaPuRDIAag/mGzlM4YvIE8WaOEIsIlTUDATSg
+ qXrY64blIi/WUWALTmgik8huDAfwnzT8pYhIevR1XBGRu1xp+F6ZrE+BVrJAwEGyzrUK
+ /1XuB4TCsDp9vJUhgqhPQCpdUz1pWTcgYiGLWzksyb5SwMY3dlSV6yxGSf53DuUtfYnn Ug== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jgk6kfq8h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 14:08:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28DE8NFc028516
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 14:08:23 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 13 Sep 2022 07:08:21 -0700
+Date:   Tue, 13 Sep 2022 19:38:17 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_charante@quicinc.com>
+Subject: PSI idle-shutoff
+Message-ID: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: z6RgJQ70XD_q-fVZNu1fbm0tt2ieaTjH
+X-Proofpoint-ORIG-GUID: z6RgJQ70XD_q-fVZNu1fbm0tt2ieaTjH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_05,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=820 adultscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130064
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "NeilBrown" <neilb@suse.de>
+Hi
 
-Prior to Linux 5.3, ->transport_lock in sunrpc required the _bh style
-spinlocks (when not called from a bottom-half handler).
+The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
+run from a kworker thread, PSI_NONIDLE condition would be observed as
+there is a RUNNING task. So we would always end up re-arming the work.
 
-When upstream 3848e96edf4788f772d83990022fa7023a233d83 was backported to
-stable kernels, the spin_lock/unlock calls should have been changed to
-the _bh version, but this wasn't noted in the patch and didn't happen.
+If the work is re-armed from the psi_avgs_work() it self, the backing off
+logic in psi_task_change() (will be moved to psi_task_switch soon) can't
+help. The work is already scheduled. so we don't do anything there.
 
-So convert these lock/unlock calls to the _bh versions.
+Probably I am missing some thing here. Can you please clarify how we
+shut off re-arming the psi avg work?
 
-This patch is required for any stable kernel prior to 5.3 to which the
-above mentioned patch was backported.  Namely 4.9.y, 4.14.y, 4.19.y.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
-Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
----
- net/sunrpc/xprt.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1451,9 +1451,9 @@ static void xprt_destroy(struct rpc_xprt
- 	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
- 	 * can only run *before* del_time_sync(), never after.
- 	 */
--	spin_lock(&xprt->transport_lock);
-+	spin_lock_bh(&xprt->transport_lock);
- 	del_timer_sync(&xprt->timer);
--	spin_unlock(&xprt->transport_lock);
-+	spin_unlock_bh(&xprt->transport_lock);
- 
- 	rpc_xprt_debugfs_unregister(xprt);
- 	rpc_destroy_wait_queue(&xprt->binding);
-
+Thanks,
+Pavan
 
