@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421E05B71DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69795B759A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiIMOrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
+        id S232508AbiIMPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiIMOoC (ORCPT
+        with ESMTP id S234356AbiIMPvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:44:02 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D10F65267;
-        Tue, 13 Sep 2022 07:23:36 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 6F18422D1;
-        Tue, 13 Sep 2022 16:21:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663078884;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g0cz2RuwebJaTXH0eI4H1to3O9WXEkI2yKThc7wO9xs=;
-        b=puA9H+i874EBUSaakIlALbTcIJMrhgUsmPKYhLqpOWbQ20JTJ5fVFwUB/0xL7PdtjoZNkn
-        /LWHDZkmGolvwMHG6otGJgppi6NYVWn1e5Ux4UEQyg2OKcHnC8BjRHgY4iRIDnUIA0VNxN
-        vg3s0PSonX5qKSLbx8UH7z7jRGR0Ho6oGhpbNamn+d0EvSIIe8CAUJz8rb1sIHY2YcBAQa
-        FHTIxbnc7cadTKVIabma6BXzUJvc6zdu3MqM6ROQLiPvX7ninN5VJayFW6Cm5xOIThjlkf
-        QjyP+ll1YRpedOOB89zlAk8nwDlU11gfigOL3zR2wAExzfa+yweYJabWn+5d6Q==
+        Tue, 13 Sep 2022 11:51:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409D08E0E2;
+        Tue, 13 Sep 2022 07:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663080830; x=1694616830;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=pLJ8priI7RmY67VypJNLPFkfcfxWAxaQ7nFJHrNbVhI=;
+  b=neolalmZlbeg0Cd8OmeZQeOnG7uEwFZyCMvomSBD5w15HJAPJteumXOU
+   +P/h8/TjVldCi8NOYeEkYmZ8KlbaIdTd33EhmwDfrBYYCJ2aUf8xXKdDC
+   aMcXqXjBCuFx7ntVH94TqY0k3ryLCX6sursai79XeQYOXeWfATUVVLYo6
+   Km5auT4V1i9fB3gtyoFwrZOMc2gue0T0Qq1IUBXcxsp3ooV9oG927Rgog
+   cyzBjpgRRJ4Uc+vKYDZ2IxWx4AhSU4X4Qz6o7rcQekwTQf5h1jHdlaXxD
+   Nvspvsl03zKeLVsGm4rxzhv34QgbXbJuyg6LQio0SAt3Vbz0LMo4S46S4
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="190643859"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 07:24:55 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 07:24:55 -0700
+Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 07:24:50 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
+        <gregkh@linuxfoundation.org>, <broonie@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <jirislaby@kernel.org>, <sergiu.moga@microchip.com>,
+        <admin@hifiphile.com>, <kavyasree.kotagiri@microchip.com>,
+        <tudor.ambarus@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v3 02/14] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+Date:   Tue, 13 Sep 2022 17:21:54 +0300
+Message-ID: <20220913142205.162399-3-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220913142205.162399-1-sergiu.moga@microchip.com>
+References: <20220913142205.162399-1-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-Date:   Tue, 13 Sep 2022 16:21:24 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2 15/20] dt-bindings: nvmem: add YAML schema for the sl28
- vpd layout
-In-Reply-To: <20220912192038.GA1661550-robh@kernel.org>
-References: <20220901221857.2600340-1-michael@walle.cc>
- <20220901221857.2600340-16-michael@walle.cc>
- <20220912192038.GA1661550-robh@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <aa53a858e362ae747a2cbd28caa3fa78@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-12 21:20, schrieb Rob Herring:
+Maintain consistency among the compatibles of the serial nodes of
+sam9x60ek and highlight the incremental characteristic of its serial
+IP's by making sure that all serial nodes contain both the sam9x60
+and sam9260 usart/dbgu compatibles.
 
->> +  base-mac-address:
->> +    type: object
->> +    description:
->> +      Base MAC address for all on-module network interfaces. The 
->> first
->> +      argument of the phandle will be treated as an offset.
->> +
->> +    properties:
->> +      "#nvmem-cell-cells":
-> 
-> You can't just add a new #.*-cells buried in a device binding. I'm fine
-> with the concept though having more than 1 user would be nice.
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+---
 
-I was under the impression the tooling will handle it, but as you
-pointed out below, this isn't the case for a missing default. The
-statement above should only be to validate that there is one
-additional argument if the base-mac-address node is used in a
-phandle.
 
-> Any case that doesn't match foos->#foo-cells or has a default # of
-> cells if missing (as this does) has to be added to dtschema to decode 
-> it
-> properly. It won't really matter until there's a user with 2 or more
-> entries. I'm happy to do update the dtschema part, but I'd prefer to 
-> see
-> the schema in dtschema rather than the kernel.
+v1 -> v2:
+- Nothing, this patch was not here before
 
-Ok, but I'm not sure I understand you correctly here. You will
-update the dtschema tooling (I guess it's about fixup_phandles() in
-dtb.py) and which schema should be in dtschema? nvmem.yaml
-and/or nvmem-consumer.yaml? The entire schema or only a
-subset of it?
 
--michael
+v2 -> v3:
+- Nothing, previously this was [PATCH 4]
+
+
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7ade9979e1c6..67bce8d60908 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -258,7 +258,7 @@ &flx5 {
+ 	status = "okay";
+ 
+ 	uart1: serial@200 {
+-		compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
++		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+ 		reg = <0x200 0x200>;
+ 		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		dmas = <&dma0
+-- 
+2.34.1
+
