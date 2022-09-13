@@ -2,92 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F505B6D1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6E75B6D0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbiIMMWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S231821AbiIMMSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiIMMWs (ORCPT
+        with ESMTP id S230487AbiIMMSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:22:48 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35142E9E1;
-        Tue, 13 Sep 2022 05:22:47 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1278624b7c4so31613198fac.5;
-        Tue, 13 Sep 2022 05:22:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=a0ZVYyUwvTe813ooNV90an8PWT+uoOIk2MYh2XBCvjI=;
-        b=cF/eensKt5zrs41u19MKXa3GjIPdcAOjzuYEOyIa40cIAjBvV3qX1U5gmb6TNXxQG2
-         JMh8z70ywIMXV9H+gPrRJ2YNTDcFjSItfG51e5Hf+V2e8UNoPi7bveaC7BnLAiAzC3Og
-         vbeKc9g5Fm9AuVCANYvunTrauVlcwDQBQ4RN/tYPPMqJz+9eXNvLgjWV174Xk/VOB3+2
-         uSISIENdW9JsZJW3YU9JKRZ1ELjnpNfqDuAPZmkZkYQnFnC5jsJrp7OpAuDwD0rB5aoR
-         Jz3VW9VYXcrhlmD8nMRkhzzF3L30SFffOhWLeAzD6vhKLeIW2ob2HVOWmBw64b3tz9es
-         x8Gg==
-X-Gm-Message-State: ACgBeo0ms2qgUnWG0If1V4QbPMhkzj6+4vw7mvGYlxt487+HUsuV6wMa
-        jR+LHvQyPgwMjGIXJav5qOhnI0nFNg==
-X-Google-Smtp-Source: AA6agR7rteQhoOLOheqYGn7D2Ke/H99a0cHFsJHdvziHEj4xR8930T8vMLed/dz/mzlsuo+PmWxykQ==
-X-Received: by 2002:a05:6808:2029:b0:34f:f1c3:9493 with SMTP id q41-20020a056808202900b0034ff1c39493mr535621oiw.215.1663071767071;
-        Tue, 13 Sep 2022 05:22:47 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056870d1cb00b001276cea2320sm6922454oac.58.2022.09.13.05.22.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 05:22:46 -0700 (PDT)
-Received: (nullmailer pid 3429879 invoked by uid 1000);
-        Tue, 13 Sep 2022 12:22:45 -0000
-Date:   Tue, 13 Sep 2022 07:22:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v3] dt-bindings: mfd: qcom,tcsr: drop simple-mfd from
- IPQ6018
-Message-ID: <20220913122245.GA3429823-robh@kernel.org>
-References: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
+        Tue, 13 Sep 2022 08:18:44 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7EAE0EC;
+        Tue, 13 Sep 2022 05:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663071520; x=1694607520;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RbOTHa0oab0x7q8xNIhJEDOAprgx4UxPU54rnf2GoxU=;
+  b=2T1RUyOurtMbbXsCfo4H4JnCizwZSkz9QdbUqL6tg5wogU/RlDVrPlbs
+   32+/jE32/aQ6IowRM797m23fqnW60OU3nHnJMk35sbehNn66r3ptC6gMe
+   IRBVJep1CjDkzZtB77Uz0MoTkT9BQLCf78Dk4aiFHn8V/gLX1bM51Cuj1
+   loQxTIpAhasRm/YZ+pzlkKu36amzVefG5kH3xzY4d9IkAF/s5/BwYDB3k
+   N+SF2GXLVVHM2tBrMXMyK+PUbZv86ROpEZeZe73MRuDrHP82jqUm7Nd80
+   cKQx6rdA42XF+26VOJprhsqrt7JOm5kQStPTZFi5FzpaA2PASg+2ppd3k
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="176905062"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 05:18:39 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 05:18:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 13 Sep 2022 05:18:39 -0700
+Date:   Tue, 13 Sep 2022 14:23:01 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <UNGLinuxDriver@microchip.com>, <andrew@lunn.ch>,
+        <davem@davemloft.net>, <edumazet@google.com>,
+        <hkallweit1@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: Re: [PATCH net-next] net: phy: micrel: Add interrupts support for
+ LAN8804 PHY
+Message-ID: <20220913122301.362ap6zghpdpluci@soft-dev3-1.localhost>
+References: <20220912195650.466518-1-horatiu.vultur@microchip.com>
+ <20220913081814.212548-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220913081814.212548-1-michael@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022 11:10:56 +0200, Krzysztof Kozlowski wrote:
-> Commit 7677ed11e9fa ("dt-bindings: mfd: qcom,tcsr: Convert to dtschema")
-> converted bindings to DT schema literally - including the
-> qcom,tcsr-ipq6018 expecting syscon and simple-mfd.  Such configuration
-> is not used in DTS and there is no actual need of it.  The TCSR block is
-> purely configuration block and should not have children.  Any child
-> device should be simply moved outside of TCSR syscon block.
+The 09/13/2022 10:18, Michael Walle wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Add support for interrupts for LAN8804 PHY.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  drivers/net/phy/micrel.c | 55 ++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> >
+> > diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> > index 7b8c5c8d013e..98e9bc101d96 100644
+> > --- a/drivers/net/phy/micrel.c
+> > +++ b/drivers/net/phy/micrel.c
+> > @@ -2676,6 +2676,59 @@ static int lan8804_config_init(struct phy_device *phydev)
+> >       return 0;
+> >  }
+> >
+> > +static irqreturn_t lan8804_handle_interrupt(struct phy_device *phydev)
+> > +{
+> > +     int status;
+> > +
+> > +     status = phy_read(phydev, LAN8814_INTS);
+> > +     if (status < 0) {
+> > +             phy_error(phydev);
+> > +             return IRQ_NONE;
+> > +     }
+> > +
+> > +     if (status > 0)
+> > +             phy_trigger_machine(phydev);
+> > +
+> > +     return IRQ_HANDLED;
+> > +}
+> > +
+> > +#define LAN8804_OUTPUT_CONTROL                       25
+> > +#define LAN8804_OUTPUT_CONTROL_INTR_BUFFER   BIT(14)
+> > +#define LAN8804_CONTROL                              31
+> > +#define LAN8804_CONTROL_INTR_POLARITY                BIT(14)
+> > +
+> > +static int lan8804_config_intr(struct phy_device *phydev)
+> > +{
+> > +     int err;
+> > +
+> > +     /* Change interrupt polarity */
+> > +     phy_write(phydev, LAN8804_CONTROL, LAN8804_CONTROL_INTR_POLARITY);
 > 
-> ---
-> 
-> Changes since v2
-> ================
-> 1. Rebase on current MFD changes.
-> 2. Split from the series. Nothing depends on it, AFAIK.
-> v2: https://lore.kernel.org/all/20220817145901.865977-2-krzysztof.kozlowski@linaro.org/
-> ---
->  .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 46 +++++++++----------
->  1 file changed, 21 insertions(+), 25 deletions(-)
-> 
+> I assume you change the polarity to high active? Could you add a note?
+> The LAN966x nor the LAN8804 datasheet describe this bit. You might also add
+> a note, that this is an internal PHY and you cannot change the polarity on
+> the GIC. Which begs the question, is this really only an internal PHY or
+> can you actually buy it as a dedicated one. Then you'd change the polarity
+> in a really unusual way.
 
-Acked-by: Rob Herring <robh@kernel.org>
+That is correct, as you described it, I change the polarity to high.
+From what I know, you can't buy a dedicated PHY.
+I will add these notes in the next version.
+
+> 
+> 
+> > +
+> > +     /* Change interrupt buffer type */
+> 
+> To what? Push-pull?
+
+Yes, I have changed it to push-pull.
+I will add a node in the next version.
+
+> 
+> -michael
+> 
+> > +     phy_write(phydev, LAN8804_OUTPUT_CONTROL,
+> > +               LAN8804_OUTPUT_CONTROL_INTR_BUFFER);
+> > +
+
+-- 
+/Horatiu
