@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321935B7120
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787C75B722D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiIMOlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S231863AbiIMOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbiIMOkp (ORCPT
+        with ESMTP id S234366AbiIMOnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:40:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2B36D57E;
-        Tue, 13 Sep 2022 07:21:51 -0700 (PDT)
+        Tue, 13 Sep 2022 10:43:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB5D6E8A2;
+        Tue, 13 Sep 2022 07:23:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CF06149A;
-        Tue, 13 Sep 2022 14:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1EAC433D6;
-        Tue, 13 Sep 2022 14:20:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCCADB80F99;
+        Tue, 13 Sep 2022 14:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2387BC433C1;
+        Tue, 13 Sep 2022 14:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078837;
-        bh=dowIBB/GIP3oLAHFW8IvKxJycSBw8huMxMSJIGACm/g=;
+        s=korg; t=1663078992;
+        bh=/kK+PK1CTeymdSj7Q7fco8uU/odJSlu1OgbFvwydZNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NkdjCjFHNRy+7+sj+ci7Cv5Uem44EXHQ4yT8g7Vt8aSxAB6WF7e7JTnxlC6JJmzf1
-         sZQZvG4T8N1pGxpxmoJow3jIeo25t6H92zqcClMPI4LUnOf714QKca4ik+4ds9NFjc
-         asK7jtVnPEo40sk8rXhYd8Nsnnzfw056BiuSdcQo=
+        b=F7vMJgP6N1fAIYYMKUS4RtBZG5u7nb0viN+6gx8uq+6ToKMh909JujCrpnyH/Q42Z
+         chua2xMGt4riK5hg/1wC5eHgftDetlD3iodeeWO/IaELjShMrs3Cr6dy/gDh5q6SeK
+         pV9ktYhWVrYw70gPSe9sXcaTkVQtQrY/d8bf661c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Dennis Maisenbacher <dennis.maisenbacher@wdc.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 094/121] nvmet: fix mar and mor off-by-one errors
-Date:   Tue, 13 Sep 2022 16:04:45 +0200
-Message-Id: <20220913140401.398486262@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 41/79] soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
+Date:   Tue, 13 Sep 2022 16:04:46 +0200
+Message-Id: <20220913140352.277554990@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dennis Maisenbacher <dennis.maisenbacher@wdc.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit b7e97872a65e1d57b4451769610554c131f37a0a ]
+[ Upstream commit 1085f5080647f0c9f357c270a537869191f7f2a1 ]
 
-Maximum Active Resources (MAR) and Maximum Open Resources (MOR) are 0's
-based vales where a value of 0xffffffff indicates that there is no limit.
+In brcmstb_pm_probe(), there are two kinds of leak bugs:
 
-Decrement the values that are returned by bdev_max_open_zones and
-bdev_max_active_zones as the block layer helpers are not 0's based.
-A 0 returned by the block layer helpers indicates no limit, thus convert
-it to 0xffffffff (U32_MAX).
+(1) we need to add of_node_put() when for_each__matching_node() breaks
+(2) we need to add iounmap() for each iomap in fail path
 
-Fixes: aaf2e048af27 ("nvmet: add ZBD over ZNS backend support")
-Suggested-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Dennis Maisenbacher <dennis.maisenbacher@wdc.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220707015620.306468-1-windhl@126.com
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/target/zns.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c | 50 ++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/nvme/target/zns.c b/drivers/nvme/target/zns.c
-index 235553337fb2d..1466698751c55 100644
---- a/drivers/nvme/target/zns.c
-+++ b/drivers/nvme/target/zns.c
-@@ -100,6 +100,7 @@ void nvmet_execute_identify_cns_cs_ns(struct nvmet_req *req)
- 	struct nvme_id_ns_zns *id_zns;
- 	u64 zsze;
- 	u16 status;
-+	u32 mar, mor;
+diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+index c6ec7d95bcfcc..722fd54e537cf 100644
+--- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
++++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+@@ -681,13 +681,14 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	const struct of_device_id *of_id = NULL;
+ 	struct device_node *dn;
+ 	void __iomem *base;
+-	int ret, i;
++	int ret, i, s;
  
- 	if (le32_to_cpu(req->cmd->identify.nsid) == NVME_NSID_ALL) {
- 		req->error_loc = offsetof(struct nvme_identify, nsid);
-@@ -126,8 +127,20 @@ void nvmet_execute_identify_cns_cs_ns(struct nvmet_req *req)
- 	zsze = (bdev_zone_sectors(req->ns->bdev) << 9) >>
- 					req->ns->blksize_shift;
- 	id_zns->lbafe[0].zsze = cpu_to_le64(zsze);
--	id_zns->mor = cpu_to_le32(bdev_max_open_zones(req->ns->bdev));
--	id_zns->mar = cpu_to_le32(bdev_max_active_zones(req->ns->bdev));
-+
-+	mor = bdev_max_open_zones(req->ns->bdev);
-+	if (!mor)
-+		mor = U32_MAX;
-+	else
-+		mor--;
-+	id_zns->mor = cpu_to_le32(mor);
-+
-+	mar = bdev_max_active_zones(req->ns->bdev);
-+	if (!mar)
-+		mar = U32_MAX;
-+	else
-+		mar--;
-+	id_zns->mar = cpu_to_le32(mar);
+ 	/* AON ctrl registers */
+ 	base = brcmstb_ioremap_match(aon_ctrl_dt_ids, 0, NULL);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping AON_CTRL\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto aon_err;
+ 	}
+ 	ctrl.aon_ctrl_base = base;
  
- done:
- 	status = nvmet_copy_to_sgl(req, 0, id_zns, sizeof(*id_zns));
+@@ -697,8 +698,10 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 		/* Assume standard offset */
+ 		ctrl.aon_sram = ctrl.aon_ctrl_base +
+ 				     AON_CTRL_SYSTEM_DATA_RAM_OFS;
++		s = 0;
+ 	} else {
+ 		ctrl.aon_sram = base;
++		s = 1;
+ 	}
+ 
+ 	writel_relaxed(0, ctrl.aon_sram + AON_REG_PANIC);
+@@ -708,7 +711,8 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 				     (const void **)&ddr_phy_data);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping DDR PHY\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto ddr_phy_err;
+ 	}
+ 	ctrl.support_warm_boot = ddr_phy_data->supports_warm_boot;
+ 	ctrl.pll_status_offset = ddr_phy_data->pll_status_offset;
+@@ -728,17 +732,20 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, ddr_shimphy_dt_ids) {
+ 		i = ctrl.num_memc;
+ 		if (i >= MAX_NUM_MEMC) {
++			of_node_put(dn);
+ 			pr_warn("too many MEMCs (max %d)\n", MAX_NUM_MEMC);
+ 			break;
+ 		}
+ 
+ 		base = of_io_request_and_map(dn, 0, dn->full_name);
+ 		if (IS_ERR(base)) {
++			of_node_put(dn);
+ 			if (!ctrl.support_warm_boot)
+ 				break;
+ 
+ 			pr_err("error mapping DDR SHIMPHY %d\n", i);
+-			return PTR_ERR(base);
++			ret = PTR_ERR(base);
++			goto ddr_shimphy_err;
+ 		}
+ 		ctrl.memcs[i].ddr_shimphy_base = base;
+ 		ctrl.num_memc++;
+@@ -749,14 +756,18 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, brcmstb_memc_of_match) {
+ 		base = of_iomap(dn, 0);
+ 		if (!base) {
++			of_node_put(dn);
+ 			pr_err("error mapping DDR Sequencer %d\n", i);
+-			return -ENOMEM;
++			ret = -ENOMEM;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		of_id = of_match_node(brcmstb_memc_of_match, dn);
+ 		if (!of_id) {
+ 			iounmap(base);
+-			return -EINVAL;
++			of_node_put(dn);
++			ret = -EINVAL;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		ddr_seq_data = of_id->data;
+@@ -776,21 +787,24 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	dn = of_find_matching_node(NULL, sram_dt_ids);
+ 	if (!dn) {
+ 		pr_err("SRAM not found\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ret = brcmstb_init_sram(dn);
+ 	of_node_put(dn);
+ 	if (ret) {
+ 		pr_err("error setting up SRAM for PM\n");
+-		return ret;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ctrl.pdev = pdev;
+ 
+ 	ctrl.s3_params = kmalloc(sizeof(*ctrl.s3_params), GFP_KERNEL);
+-	if (!ctrl.s3_params)
+-		return -ENOMEM;
++	if (!ctrl.s3_params) {
++		ret = -ENOMEM;
++		goto s3_params_err;
++	}
+ 	ctrl.s3_params_pa = dma_map_single(&pdev->dev, ctrl.s3_params,
+ 					   sizeof(*ctrl.s3_params),
+ 					   DMA_TO_DEVICE);
+@@ -810,7 +824,21 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 
+ out:
+ 	kfree(ctrl.s3_params);
+-
++s3_params_err:
++	iounmap(ctrl.boot_sram);
++brcmstb_memc_err:
++	for (i--; i >= 0; i--)
++		iounmap(ctrl.memcs[i].ddr_ctrl);
++ddr_shimphy_err:
++	for (i = 0; i < ctrl.num_memc; i++)
++		iounmap(ctrl.memcs[i].ddr_shimphy_base);
++
++	iounmap(ctrl.memcs[0].ddr_phy_base);
++ddr_phy_err:
++	iounmap(ctrl.aon_ctrl_base);
++	if (s)
++		iounmap(ctrl.aon_sram);
++aon_err:
+ 	pr_warn("PM: initialization failed with code %d\n", ret);
+ 
+ 	return ret;
 -- 
 2.35.1
 
