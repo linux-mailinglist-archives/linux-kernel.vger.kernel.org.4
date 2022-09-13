@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804F85B7D24
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A085B7D2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 00:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiIMWga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 18:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S229586AbiIMWnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 18:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiIMWg2 (ORCPT
+        with ESMTP id S229490AbiIMWno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 18:36:28 -0400
+        Tue, 13 Sep 2022 18:43:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4AD2CDC0;
-        Tue, 13 Sep 2022 15:36:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1C317A8C;
+        Tue, 13 Sep 2022 15:43:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF21A6162D;
-        Tue, 13 Sep 2022 22:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66203C433D6;
-        Tue, 13 Sep 2022 22:36:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8EC6160B;
+        Tue, 13 Sep 2022 22:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DAEC433C1;
+        Tue, 13 Sep 2022 22:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663108586;
-        bh=sTxeYnX0H9Aq6JVrBf2pIXdeCFg8vJ4G3YDg/hrlXf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dJChLg70voKjeriCi4tl4sUVPZUlFF7Hx+u7O6xeryu9JcYY+ASMBKYV9bM6AsDEg
-         atZDWhxK581YFIY24vjKRLIJH8aFhn1R/WUCzslOYyA2TCcEgnLEJIhWdhJNgeG2dX
-         dIrPzCPYK0GWfSPb8gftEMBXMgK0BQvtTjVsgEtvXhZnUr3dQr2fUIBdG6kkOk4Hp5
-         SI/ckmXKvuPk+XvCW1KzQnIrO/KwNwoqGVlvWFlEVZnza+Uj73LjpbSDkYsJo2dPJq
-         03IcZe6kDrVemhbZzt5jUNe91MD5VwaCDU9N8m+xfnJ50uy4pQFpx+87r+Bs9+kvNC
-         JdEkR2dwgO1yA==
-Date:   Tue, 13 Sep 2022 17:36:23 -0500
+        s=k20201202; t=1663109023;
+        bh=HMs7SygX+dZ+FJdrUSMKbxGpb+XAtjm7bvaVNyusMpA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=m2HiEt1NnMSeXdLoqwo3rgiLAZ/IJiTj2exJZFvQaHBmJQ3C/FEWoD/CflbpLaFfD
+         o2CR3vQIZ1N1w7M3F9VCtVIJ2ur9fyOmgnao+aLf7iz8aaPuKHf5L6r94NSMgPknS1
+         Enj6Mmd4E9dvshkvjLYMLz84G925VVQakZIKuim+1Tds1V8764VyjgKuQ6hq6weOgs
+         2AxlzAIknAnbHJL5iCR3JLEu6yChM3Bg2xBaxiUNa3vzope0CbGZMjSHkXylmyfzR7
+         PagqnyJhRM0nN4AIf7bIWCMZS8M3si9WQxrxH6c6uemTWBSS/1dh5wYTrMBHE4lUDy
+         B50t50s6iiZIQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/15] arm64: dts: qcom: msm8953: add missing TCSR
- syscon compatible
-Message-ID: <20220913223623.zzencwgzuqygbtnr@builder.lan>
+To:     krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ohad@wizery.com, agross@kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, baolin.wang@linux.alibaba.com,
+        konrad.dybcio@somainline.org, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org
+Subject: Re: (subset) [PATCH v3 00/15] ARM/hwlock: qcom: switch TCSR mutex to MMIO
+Date:   Tue, 13 Sep 2022 17:43:41 -0500
+Message-Id: <166310901623.665247.12740915451161443545.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
 References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
- <20220909092035.223915-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909092035.223915-7-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,37 +58,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 11:20:26AM +0200, Krzysztof Kozlowski wrote:
-> TCSR syscon node should come with dedicated compatible.
+On Fri, 9 Sep 2022 11:20:20 +0200, Krzysztof Kozlowski wrote:
+> Switch older Qualcomm SoCs to use MMIO-based method instead of syscon.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/msm8953.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Not tested on hardware. Please kindly provide tests.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> index 8416a45ca4fd..ed05897d33f1 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> @@ -722,7 +722,7 @@ tcsr: syscon@1937000 {
->  		};
->  
->  		tcsr_phy_clk_scheme_sel: syscon@193f044 {
-> -			compatible = "syscon";
-> +			compatible = "qcom,tcsr-msm8953", "syscon";
->  			reg = <0x193f044 0x4>;
-
-I'm okay with the proposed change, but this node is not good.
-
-This exposes a single register from TCSR to the HSUSB driver. We have a
-couple of these cases (and have had more popping up in discussions) and
-I think that nvmem would be a better abstraction than syscon.
-
-Regards,
-Bjorn
-
->  		};
->  
-> -- 
-> 2.34.1
+> Changes since v2
+> ================
+> 1. Rebase on current MFD changes.
+> 2. Add Rb tag.
+> 3. Split MFD patch to separate patchset:
+> https://lore.kernel.org/linux-devicetree/20220909091056.128949-1-krzysztof.kozlowski@linaro.org/T/#u
 > 
+> [...]
+
+Applied, thanks!
+
+[01/15] dt-bindings: hwlock: qcom-hwspinlock: add support for MMIO on older SoCs
+        commit: 6ca53a75c425cb1cb0929ce07f58d9e41094500c
+[02/15] dt-bindings: hwlock: qcom-hwspinlock: correct example indentation
+        commit: 276a4f1a5fb118bfd6980d42732d530e43f2916a
+[03/15] hwspinlock: qcom: correct MMIO max register for newer SoCs
+        commit: 90cb380f9ceb811059340d06ff5fd0c0e93ecbe1
+[04/15] hwspinlock: qcom: add support for MMIO on older SoCs
+        commit: 5d4753f741d824e04e7ba46f46ec016be120f383
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
