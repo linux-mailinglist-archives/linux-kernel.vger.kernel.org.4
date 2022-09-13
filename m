@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3654C5B69EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D64D5B69EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 10:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiIMIyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 04:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
+        id S231342AbiIMIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 04:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiIMIyS (ORCPT
+        with ESMTP id S231439AbiIMIyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 04:54:18 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C4C578B4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:54:17 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id z25so18993669lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:54:17 -0700 (PDT)
+        Tue, 13 Sep 2022 04:54:40 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFBB65BD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:54:38 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z13so2539153edb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=7lRCXb3a6WmUpEh3zs0uWMm1tjdYcQA5tCTGxYDGUB0=;
-        b=sYzCvHCjIw8U+d5BnGTNcIPkYj7C5qsJ09OyPs0s62VKm0kYhLVSmGiE/UmSxJM8eM
-         y+E2wFiuvkcehqr3+UtB1ynjmwAm+XVKUZvElN4uhfBZ8K7iU+NYmaCtVVYH7gplDTKt
-         X63n3kUV9EkkzrawWuD00UbCU6anboJ02KcG8JDVR9Xe/rvMWQEMiAx/E9Q5jzSUXoxc
-         CkX0VeYGHkYypVlndJykBWdUxEopSwncyKI0XhYVYZDUJTHUuQhoLwsmEBraYr6rby2b
-         n4lp/FE9AmNByh4VhsklNRjOkDA6ULf3WjiMGlZ+/nXlsOt8zU9TgMxYrBVBEjkUqvHe
-         Svpw==
+        bh=JtKN6ivnTt8W41kiJ6PrZBXUONgEHmL/cRSauODg8t0=;
+        b=PjNzMWmAi3uDLHnuivA8de8hNVFpFjIxM49Cik3JWLYBD8vMIOBHz1OrFijZiTZ4YH
+         M25mkINOPpJEVN2a+EuS3WkOdbfIvFSm07pkq99soW6U8D/PbDY8xnDCaU3UWZaxbgxT
+         3nVJalDrfwnp4aUf3l4sdraoOPRPfw9eCg4+ZE0mPgFRfRktAlV+zWkjzWRyBeFaP1E5
+         hd8XplAdkJwiJ/V0X55Hi/J8h7V06iBgVzGvU8KnYXd4GOtiMjvNj3CPkQAmyzo8uiNG
+         Yka2odDfsoYxSJ3C1GO8j6bUiuEXlF4NUulApcCt01nAT3HTHIOCdMucc52Epsolu/9v
+         /zvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7lRCXb3a6WmUpEh3zs0uWMm1tjdYcQA5tCTGxYDGUB0=;
-        b=5h3Sm+/qeEjHP6Q3CumnjfKlaHK9dg6M+uDbUGSL4bJlElYLAUmrentMG+x2gv0MT5
-         gFjn1aGDOMGiKWg0sxpLryFHv3TA7cULWBC/FH9y3FP/BU+gxkfYc1aKvSQCDStzcU0P
-         YLqXvU2gfeyzudTcmFpDynVKwmChNzGbAfj2ZnUt3F8t9piAj9YGzd6YtayfL+vD2DLX
-         HI/7mEpY/KS4e3jVkic+8ZFLnd+c0Cf6CNQNh7qfv6V7Ddt+xeUBNh5gCZYfw9XV5wtK
-         Iv+PxLHCnVjJVj/widrV5TpC2aI93randbxcHbv/63qSlFdSZuQ7CJ586XVgvr8786zY
-         BXfw==
-X-Gm-Message-State: ACgBeo3yABalNQHdarpnDaLzsWHGVdIJHnVl9HAUdd/X3WJp+ldjNlVA
-        3RIydJMR/5zDtWw5bITKiojpuBJvBZuKNIKYewuMGw==
-X-Google-Smtp-Source: AA6agR6pDGNcz+UOEksS5d8E5NMp4tuRJCPPibMYOpiTkKcnLs3VdzzOhgMH303duakdX6SnMy8tO54eR8tDZy2aSYs=
-X-Received: by 2002:a05:6512:3f0f:b0:498:fad9:db0d with SMTP id
- y15-20020a0565123f0f00b00498fad9db0dmr6251966lfa.46.1663059256103; Tue, 13
- Sep 2022 01:54:16 -0700 (PDT)
+        bh=JtKN6ivnTt8W41kiJ6PrZBXUONgEHmL/cRSauODg8t0=;
+        b=DDgJKa2VC/JIKcQ7P0YPZyZUKC2z8+ulbo7zIuRQsEW/oyNBkAghQDFIti5X0RLM5n
+         Zao7xG3PTW+yk9VmLayDCjECe4nQkb5sTuuRgVIwKP+2EYiV2EQJN3w4jKWVVMIodIVM
+         2LjWnEIGIN8ClG3wS0j8evPMSWBqiST20QUjQQp1Gf+u1HyKd1vMY3ZjM5p0OfXRne+x
+         N+fc6U3g05y/sE4/YCXM+Y+UlAmsT0z0nNH33IVvjECFarcxclRmrtt4WhOzgfd06iaX
+         GFfQj0zO+udRRDmdFcD+svvhysY17V3zldxyPgPlQiBrU4F+X5hHvD1C4g2MUKVLKmUy
+         kZLw==
+X-Gm-Message-State: ACgBeo2qfVcZoEN9PUZD6fm73L+vBXNJSGvHGrwzhOpU54nh7h95O1sv
+        xWG6e7g6EJAeqo/em07TO1a9xqnIiuaPJCKdmg9d3g==
+X-Google-Smtp-Source: AA6agR4AF3yPp0P/SALlgk71eZu0DKygIWC/xmT4VMDlbJ/HyjpSsVqfLfwtl3GtFtZWNIL4A9L3PLCgtvtHFWjgHh0=
+X-Received: by 2002:a05:6402:34cc:b0:451:62bf:c816 with SMTP id
+ w12-20020a05640234cc00b0045162bfc816mr11520688edc.213.1663059277510; Tue, 13
+ Sep 2022 01:54:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825122726.20819-1-vincent.guittot@linaro.org>
- <20220825122726.20819-2-vincent.guittot@linaro.org> <b85e608f-7293-9588-5e85-36b62f1fdbeb@arm.com>
-In-Reply-To: <b85e608f-7293-9588-5e85-36b62f1fdbeb@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 13 Sep 2022 10:54:03 +0200
-Message-ID: <CAKfTPtCo-JPuDQ973FrQrjpK8wG-3TSJ9Z+=Loj6Zr-mjtuz1A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] sched/fair: make sure to try to detach at least one
- movable task
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
+References: <20220909121329.42004-1-brgl@bgdev.pl> <20220909121329.42004-3-brgl@bgdev.pl>
+ <YxykorLetCjAls/Z@sol> <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
+ <Yx8Bj0+4STpklMc2@sol> <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
+ <Yx/nG5YsyCa+VXoj@sol>
+In-Reply-To: <Yx/nG5YsyCa+VXoj@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Sep 2022 10:54:26 +0200
+Message-ID: <CAMRc=MfoZQV-aHKSkAw6d_jPPbjn==oR0LA=irjuWLGzQiRP-w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Sept 2022 at 10:44, Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
+On Tue, Sep 13, 2022 at 4:12 AM Kent Gibson <warthog618@gmail.com> wrote:
 >
-> On 25/08/2022 14:27, Vincent Guittot wrote:
->
-> s/sched/fair: make/sched/fair: Make
->
-> > During load balance, we try at most env->loop_max time to move a task.
-> > But it can happen that the loop_max LRU tasks (ie tail of
-> > the cfs_tasks list) can't be moved to dst_cpu because of affinity.
-> > In this case, loop in the list until we found at least one.
+> On Mon, Sep 12, 2022 at 11:56:17AM +0200, Bartosz Golaszewski wrote:
+> > On Mon, Sep 12, 2022 at 11:53 AM Kent Gibson <warthog618@gmail.com> wrote:
+> > >
 > >
-> > The maximum of detached tasks remained the same as before.
+> > [snip]
+> >
+> > > >
+> > > > Using -1 sounds good but I've just realized there's a different
+> > > > problem. A process holding a file descriptor may fork and both the
+> > > > parent and the child will keep the same file descriptors open. Now
+> > > > we'll have two processes (with different PIDs) holding the same GPIO
+> > > > lines (specifically holding a file descriptor to the same anonymous
+> > > > inode).
+> > > >
+> > > > This already poses a problem for this patch as we'd need to return an
+> > > > array of PIDs which we don't have the space for but also is a
+> > > > situation which we haven't discussed previously IIRC - two processes
+> > > > keeping the same GPIO lines requested.
+> > > >
+> > > > I don't have any good idea on how to address this yet. One thing off
+> > > > the top of my head is: close the parent's file descriptor from kernel
+> > > > space (is it even possible?) on fork() (kind of like the close() on
+> > > > exec flag).
+> > > >
+> > > > I need to think about it more.
+> > > >
+> > >
+> > > I thought the O_CLOEXEC was set on the request fds exactly to prevent this
+> > > case - only one process can hold the request fd.
+> > >
+> >
+> > O_CLOEXEC means "close on exec" not "close on fork". When you fork,
+> > you inherit all file descriptors from your parent. Only once you call
+> > execve() are the fds with this flag closed *in the child*.
+> >
 >
-> Not sure how this relates to the patch? Isn't this given by the
-> `env->imbalance <= 0` check at the end of detach_tasks()?
+> Ah, ok.
+> You want to pass request fd ownership from parent to child??
+> Why not lock ownership to the parent, so O_CLOFORK, were that
+> available?
+>
 
-The number of detached tasks can't be higher than  loop_max in
-detached_tasks() and it remains the same with this patch as we will
-continue to loop only if we didn't find task that can move to the cpu
+Because what if we want to request a line and then daemonize i.e. fork
+and exit in parent? It makes much more sense to keep the lines
+requested in the child IMO.
 
->
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  kernel/sched/fair.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index da388657d5ac..02b7b808e186 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -8052,8 +8052,12 @@ static int detach_tasks(struct lb_env *env)
-> >               p = list_last_entry(tasks, struct task_struct, se.group_node);
-> >
-> >               env->loop++;
-> > -             /* We've more or less seen every task there is, call it quits */
-> > -             if (env->loop > env->loop_max)
-> > +             /*
-> > +              * We've more or less seen every task there is, call it quits
->
-> I never understood this `more or less`. Either we have seen all tasks or
-> not?
->
-> > +              * unless we haven't found any movable task yet.
-> > +              */
-> > +             if (env->loop > env->loop_max &&
-> > +                 !(env->flags & LBF_ALL_PINNED))
-> >                       break;
-> >
-> >               /* take a breather every nr_migrate tasks */
-> > @@ -10182,7 +10186,9 @@ static int load_balance(int this_cpu, struct rq *this_rq,
-> >
-> >               if (env.flags & LBF_NEED_BREAK) {
-> >                       env.flags &= ~LBF_NEED_BREAK;
-> > -                     goto more_balance;
-> > +                     /* Stop if we tried all running tasks */
->
-> Would say s/running/runnable but I see that we do use running/runnable
-> interchangeably.
->
-> > +                     if (env.loop < busiest->nr_running)
-> > +                             goto more_balance;
-> >               }
-> >
-> >               /*
->
-> IMHO, there will be some interaction with the `All tasks on this
-> runqueue were pinned by CPU affinity` check at the end of load_balance()?
+During the BoF at Linux Plumbers it was suggested to use
+/proc/$PID/fdinfo to expose the information about which lines are
+requested but I can't figure out a way to do it elegantly.
+
+Bart
