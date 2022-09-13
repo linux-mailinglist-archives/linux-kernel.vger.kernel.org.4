@@ -2,92 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79B45B6DF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F855B6DF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiIMNHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S232103AbiIMNIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiIMNH3 (ORCPT
+        with ESMTP id S231462AbiIMNIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:07:29 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39BC1E3FA;
-        Tue, 13 Sep 2022 06:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663074443;
-  x=1694610443;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fjdWymekn3UIiOUWJEmNK3vReR/+Xpw8sXAn58G/p98=;
-  b=US/NqJ6CW1rVgd3VDD8Zc8ac3mADQ7coGG6CmUlRyB9rMRgnWbvvRjvj
-   YPCkA7NOCVLwldUnt7xkEzF0iN8idj4UXpM1vuqUaMpE0mshB895go1Gz
-   OB2N1NNcYiFn3HSGy0H+dkcopcleCmtWi3UO1I0kDtstkhvCeEZ7ItAMJ
-   hI1whieVTeYRCsWysCVOvW0CE8x384z4WrWN+Wjz6A5lxFX8qh2hIspum
-   TrIyn/NUUTIfKXBEVVUFuryHdBbAFHMM85+a0SEjGPmlPcQsHAEVzpvuZ
-   1gO6DtVbZsBjV5mQQ7Z84+UFCJ7cDIA1iEss2q5ydlqHI3mJY3h5TPc1G
-   A==;
-Date:   Tue, 13 Sep 2022 15:07:20 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     kernel <kernel@axis.com>,
-        "adobriyan@gmail.com" <adobriyan@gmail.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        <sergey.senozhatsky@gmail.com>
-Subject: Re: [PATCH] proc: Enable smaps_rollup without ptrace rights
-Message-ID: <YyCAiAMvaNihNUAH@axis.com>
-References: <20220908093919.843346-1-vincent.whitchurch@axis.com>
- <20220908145934.4565620db7cbc3b9ceb90e3b@linux-foundation.org>
+        Tue, 13 Sep 2022 09:08:18 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819D46DAA;
+        Tue, 13 Sep 2022 06:08:16 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11eab59db71so31876134fac.11;
+        Tue, 13 Sep 2022 06:08:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gYRvuQ2qdE1v5ZxvpALuLEYAx8HMvTd8N+InKp0h9SA=;
+        b=Um0i3BlM77/oo1BnUs6m2GnCiir6buKFBIzp+7GTWv9YUFd9DAEqQZ6OmIDrrfEzB/
+         1g8mt286LLSsUqKrBhyhRHrxLQLzhv74IQZJILCUZUGsESbkVJQjYeLLt+bIp9ULBXYt
+         1AbDYoScayTx9EhKxmKIT6DtD8nOslTA3QprGebJonyxgFkiGeSxPmM5XpOaw2WCpTO/
+         RcUB1WX/vlKQGqP4zxYswHul4AyZve8zUnc1DOKAIrMg6Bm4icZYO17Y4sRLBi83wI1O
+         2nvyYMEaKk40m3+FY7djBtavz+oe/LaPAK/PAdF8Few7KgdKAlJ8EbmRzXfhiTPwNdqu
+         jreQ==
+X-Gm-Message-State: ACgBeo1bSyr23DlaY1K0ZHAUl6MBtwj4MVQhiaDNoctBu1AASUqwuQvq
+        6aghf64mgDwgfmiaBoTonQ==
+X-Google-Smtp-Source: AA6agR543D8vV1CKE1eBM4ij6qnbQIN4icm49CwBYIRIDsP8JddOUmDai/27liOGBenmYu1KFZrc7w==
+X-Received: by 2002:a05:6870:ac0d:b0:127:bf92:581f with SMTP id kw13-20020a056870ac0d00b00127bf92581fmr1818362oab.270.1663074495871;
+        Tue, 13 Sep 2022 06:08:15 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h24-20020a056830165800b0063974238a5dsm6077956otr.63.2022.09.13.06.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 06:08:15 -0700 (PDT)
+Received: (nullmailer pid 3499949 invoked by uid 1000);
+        Tue, 13 Sep 2022 13:08:14 -0000
+Date:   Tue, 13 Sep 2022 08:08:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        asahi@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 01/10] dt-bindings: apple,aic: Fix required item
+ "apple,fiq-index" in affinity description
+Message-ID: <20220913130814.GA3495877-robh@kernel.org>
+References: <20220909135103.98179-1-j@jannau.net>
+ <20220909135103.98179-2-j@jannau.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908145934.4565620db7cbc3b9ceb90e3b@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220909135103.98179-2-j@jannau.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:59:34PM +0200, Andrew Morton wrote:
-> On Thu, 8 Sep 2022 11:39:19 +0200 Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
-> > smaps_rollup is currently only allowed on processes which the user has
-> > ptrace permissions for, since it uses a common proc open function used
-> > by other files like mem and smaps.
-> > 
-> > However, while smaps provides detailed, individual information about
-> > each memory map in the process (justifying its ptrace rights
-> > requirement), smaps_rollup only provides a summary of the memory usage,
-> > which is not unlike the information available from other places like the
-> > status and statm files, which do not need ptrace permissions.
-> > 
-> > The first line of smaps_rollup could however be sensitive, since it
-> > exposes the randomized start and end of the process' address space.
-> > This information however does not seem essential to smap_rollup's
-> > purpose and could be replaced with placeholder values to preserve the
-> > format without leaking information.  (I could not find any user space in
-> > Debian or Android which uses the information in the first line.)
-> > 
-> > Replace the start with 0 and end with ~0 and allow smaps_rollup to be
-> > opened and read regardless of ptrace permissions.
+On Fri, 09 Sep 2022 15:50:54 +0200, Janne Grunau wrote:
+> Fixes: dba07ad11384 ("dt-bindings: apple,aic: Add affinity description for per-cpu pseudo-interrupts")
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> ---
 > 
-> What is the motivation for this?  Use case?  End-user value and such?
+>  .../devicetree/bindings/interrupt-controller/apple,aic.yaml     | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-My use case is similar to Sergey's[0]: to be able to gather memory usage
-information from a daemon/script running without root permissions or
-ptrace rights.  Values like Pss are only available from smaps_rollup,
-and not from the other files like status and statm which already provide
-memory usage information without requiring elevated privileges.
-
-[0] https://lore.kernel.org/lkml/20200929024018.GA529@jagdpanzerIV.localdomain/
-
-smaps_rollup is however much more expensive than those other files, so I
-guess that could be an argument for treating it differently, even if the
-content itself does not need to be protected.
+Applied with added commit msg, thanks!
