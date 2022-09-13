@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B45B663B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0601F5B663E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiIMDk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S229744AbiIMDmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 23:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiIMDkx (ORCPT
+        with ESMTP id S229610AbiIMDmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:40:53 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F60A5282E;
-        Mon, 12 Sep 2022 20:40:51 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRThm5lBszHntv;
-        Tue, 13 Sep 2022 11:38:48 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 11:40:49 +0800
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 11:40:49 +0800
-Received: from dggpeml500010.china.huawei.com ([7.185.36.155]) by
- dggpeml500010.china.huawei.com ([7.185.36.155]) with mapi id 15.01.2375.031;
- Tue, 13 Sep 2022 11:40:49 +0800
-From:   "Liuxin(EulerOS)" <liuxin350@huawei.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     "andrii@kernel.org" <andrii@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "854182924@qq.com" <854182924@qq.com>,
-        "Yanan (Euler)" <yanan@huawei.com>,
-        "Wuchangye (EulerOS)" <wuchangye@huawei.com>,
-        Xiesongyang <xiesongyang@huawei.com>,
-        "zhudi (E)" <zhudi2@huawei.com>,
-        "kongweibin (A)" <kongweibin2@huawei.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjJdIGxpYmJwZjogQ2xlYW4gdXAgbGVnYWN5IGJw?=
- =?utf-8?Q?f_maps_declaration_in_bpf=5Fhelpers?=
-Thread-Topic: [PATCH v2] libbpf: Clean up legacy bpf maps declaration in
- bpf_helpers
-Thread-Index: AdjCY85HjE9yfqFYRLS5SLbbKPstawCB444AAK2612A=
-Date:   Tue, 13 Sep 2022 03:40:49 +0000
-Message-ID: <9bf6d58f55c44c28ab809c2a014a2570@huawei.com>
-References: <94275aa1e5af4efea53f322f91b27380@huawei.com>
- <CAEf4BzZw8R1UH4R_FmeAVAXAALmh0ETtMVkOKytvDTs_GxqbLg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZw8R1UH4R_FmeAVAXAALmh0ETtMVkOKytvDTs_GxqbLg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.136.113.250]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 12 Sep 2022 23:42:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A0513D31
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1ECA9B80CB1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2227C433C1;
+        Tue, 13 Sep 2022 03:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663040531;
+        bh=VUeq6MUzXB3MhRWXQ1REV1K4QwHMVaOsxFDEM74s2JM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EQ7adyotaOphDX46uv9SLP9FXSj7XTK0+OvL+hiaeepzepf6FMmqcAZJuORYxsoqL
+         QGKm+7lx121CEUPtZ6WN21dExX2Ju8x2yQ60Nx7xcP6obu3F6QerPdFMyXPyXQsXXQ
+         VwcSjxRwCkWCkj3SZdqV2MGXjUaXtdLW4cQ5q6ZabcLYDZx+NuswOALS4ALnihXCSQ
+         bAYATikAnNwroYqQ3LDlXlPAJm58OycpOnN5RWm0u4R9JjmIzdVYDcg/AncOVws4Ft
+         91/nAde33ArG3aT5zPxKXYRn4kXXG8b0/Rbx2ZiyYihQ6kqKxQYQ6AwhGiEMi44/XM
+         6yE/2b/TtQW4g==
+Message-ID: <e14a916c-a597-5328-2d79-39274fbdad35@kernel.org>
+Date:   Tue, 13 Sep 2022 11:42:04 +0800
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Chao Yu <chao.yu@oppo.com>, muchun.song@linux.dev
+References: <20220830141009.150075-1-chao@kernel.org>
+ <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIHRvIFNvbmcgYW5kIEFuZHJpaSBmb3IgdGhlaXIgYWR2aWNlLCBJIHdpbGwgZml4IGl0
-IGluIFYzLg0KDQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IEFuZHJpaSBOYWty
-eWlrbyBbbWFpbHRvOmFuZHJpaS5uYWtyeWlrb0BnbWFpbC5jb21dIA0K5Y+R6YCB5pe26Ze0OiAy
-MDIy5bm0OeaciDEw5pelIDg6NDQNCuaUtuS7tuS6ujogTGl1eGluKEV1bGVyT1MpIDxsaXV4aW4z
-NTBAaHVhd2VpLmNvbT4NCuaKhOmAgTogYW5kcmlpQGtlcm5lbC5vcmc7IGRhbmllbEBpb2dlYXJi
-b3gubmV0OyBhc3RAa2VybmVsLm9yZzsgbWFydGluLmxhdUBsaW51eC5kZXY7IHNvbmdAa2VybmVs
-Lm9yZzsgeWhzQGZiLmNvbTsgam9obi5mYXN0YWJlbmRAZ21haWwuY29tOyBrcHNpbmdoQGtlcm5l
-bC5vcmc7IHNkZkBnb29nbGUuY29tOyBoYW9sdW9AZ29vZ2xlLmNvbTsgam9sc2FAa2VybmVsLm9y
-ZzsgYnBmQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgODU0
-MTgyOTI0QHFxLmNvbTsgWWFuYW4gKEV1bGVyKSA8eWFuYW5AaHVhd2VpLmNvbT47IFd1Y2hhbmd5
-ZSAoRXVsZXJPUykgPHd1Y2hhbmd5ZUBodWF3ZWkuY29tPjsgWGllc29uZ3lhbmcgPHhpZXNvbmd5
-YW5nQGh1YXdlaS5jb20+OyB6aHVkaSAoRSkgPHpodWRpMkBodWF3ZWkuY29tPjsga29uZ3dlaWJp
-biAoQSkgPGtvbmd3ZWliaW4yQGh1YXdlaS5jb20+DQrkuLvpopg6IFJlOiBbUEFUQ0ggdjJdIGxp
-YmJwZjogQ2xlYW4gdXAgbGVnYWN5IGJwZiBtYXBzIGRlY2xhcmF0aW9uIGluIGJwZl9oZWxwZXJz
-DQoNCk9uIFR1ZSwgU2VwIDYsIDIwMjIgYXQgNzo1MSBQTSBMaXV4aW4oRXVsZXJPUykgPGxpdXhp
-bjM1MEBodWF3ZWkuY29tPiB3cm90ZToNCj4NCj4gTGVnYWN5IGJwZiBtYXBzIGRlY2xhcmF0aW9u
-IHdlcmUgbm8gbG9uZ2VyIHN1cHBvcnRlZCBpbiBMaWJicGYgMS4wLCBzbyBpdCB3YXMgdGltZSB0
-byByZW1vdmUgdGhlIGRlZmluaXRpb24gb2YgYnBmX21hcF9kZWYgaW4gYnBmX2hlbHBlcnMuaC4N
-Cg0KcGxlYXNlIG1ha2Ugc3VyZSB0aGF0IGNvbW1pdCBsb2cgbGluZXMgYXJlIHdyYXBwZWQgYXQg
-PDgwIGNoYXJhY3RlcnMNCj4NCj4gTElOSzpbMV0gDQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJi
-cGYvbGliYnBmL3dpa2kvTGliYnBmOi10aGUtcm9hZC10by12MS4wDQoNCmRvbid0IGFkZCAiTElO
-SyIsIGp1c3QgdHdvIHNwYWNlcyBhbmQgdGhlbiBbMF0gYW5kIHRoZW4gcmVmZXIgdG8gaXQgZnJv
-bSB0aGUgYWJvdmUgYXMgInN1cHBvcnRlZCBpbiBMaWJicGYgMS4wIChbMF0pIg0KDQoNCj4NCj4g
-QWNrZWQtYnk6IFNvbmcgTGl1IDxzb25nQGtlcm5lbC5vcmc+DQo+IFNpZ25lZC1vZmYtYnk6IFhp
-biBMaXU8bGl1eGluMzUwQGh1YXdlaS5jb20+DQoNCnNwYWNlIGFmdGVyIG5hbWUgYW5kIGJlZm9y
-ZSBvcGVuaW5nIDwgaXMgbWlzc2luZw0KDQo+IC0tLQ0KPiBDaGFuZ2VzIGluIHYyOg0KPiAgICAg
-LSBGaXggc3RyYW5nZSBzaWduYXR1cmVzDQo+DQoNCkl0IGxvb2tzIGdvb2Qgb3ZlcmFsbCwgYnV0
-IHlvdXIgcGF0Y2ggZG9lc24ndCBhcHBseS4gUGxlYXNlIG1ha2Ugc3VyZSB5b3UgYmFzZSBpdCBv
-biB0b3Agb2YgYnBmLW5leHQncyBtYXN0ZXIgYW5kIHlvdSB1c2UgZ2l0IHNlbmQtZW1haWwgd2hp
-Y2ggd29uJ3QgY2xvYmJlciB0aGUgcGF0Y2guIFRoYW5rcy4NCg0KPiBWMTogDQo+IGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2JwZi9DQVBoc3VXN0VtNnE1aHFpS1dFWnBKT2FVNURUclpFK0JQUEhx
-K0NoeXoNCj4gMC0rLXlRX1pBQG1haWwuZ21haWwuY29tL1QvI3QNCj4NCj4gdG9vbHMvbGliL2Jw
-Zi9icGZfaGVscGVycy5oIHwgMTIgLS0tLS0tLS0tLS0tDQo+IDEgZmlsZSBjaGFuZ2VkLCAxMiBk
-ZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMu
-aCBiL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMuaCANCj4gaW5kZXggODY3YjczNDgzLi45Y2Fk
-MTNlN2YgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMuaA0KPiArKysg
-Yi90b29scy9saWIvYnBmL2JwZl9oZWxwZXJzLmgNCj4gQEAgLTE2NywxOCArMTY3LDYgQEAgYnBm
-X3RhaWxfY2FsbF9zdGF0aWModm9pZCAqY3R4LCBjb25zdCB2b2lkICptYXAsIA0KPiBjb25zdCBf
-X3UzMiBzbG90KSB9ICNlbmRpZg0KPg0KPiAtLyoNCj4gLSAqIEhlbHBlciBzdHJ1Y3R1cmUgdXNl
-ZCBieSBlQlBGIEMgcHJvZ3JhbQ0KPiAtICogdG8gZGVzY3JpYmUgQlBGIG1hcCBhdHRyaWJ1dGVz
-IHRvIGxpYmJwZiBsb2FkZXINCj4gLSAqLw0KPiAtc3RydWN0IGJwZl9tYXBfZGVmIHsNCj4gLSAg
-ICAgICB1bnNpZ25lZCBpbnQgdHlwZTsNCj4gLSAgICAgICB1bnNpZ25lZCBpbnQga2V5X3NpemU7
-DQo+IC0gICAgICAgdW5zaWduZWQgaW50IHZhbHVlX3NpemU7DQo+IC0gICAgICAgdW5zaWduZWQg
-aW50IG1heF9lbnRyaWVzOw0KPiAtICAgICAgIHVuc2lnbmVkIGludCBtYXBfZmxhZ3M7DQo+IC19
-IF9fYXR0cmlidXRlX18oKGRlcHJlY2F0ZWQoInVzZSBCVEYtZGVmaW5lZCBtYXBzIGluIC5tYXBz
-IA0KPiBzZWN0aW9uIikpKTsNCj4gLQ0KPiBlbnVtIGxpYmJwZl9waW5fdHlwZSB7DQo+ICAgICAg
-ICAgTElCQlBGX1BJTl9OT05FLA0KPiAgICAgICAgIC8qIFBJTl9CWV9OQU1FOiBwaW4gbWFwcyBi
-eSBuYW1lIChpbiAvc3lzL2ZzL2JwZiBieSBkZWZhdWx0KSANCj4gKi8NCj4gLS0NCj4gMi4zMy4w
-DQo=
+On 2022/9/10 0:47, Christophe JAILLET wrote:
+> Le 30/08/2022 à 16:10, Chao Yu a écrit :
+>> From: Chao Yu <chao.yu@oppo.com>
+>>
+>> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
+>> out-of-memory, if it fails, return errno correctly rather than
+>> triggering panic via BUG_ON();
+>>
+>> kernel BUG at mm/slub.c:5893!
+>> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+>>
+>> Call trace:
+>>   sysfs_slab_add+0x258/0x260 mm/slub.c:5973
+>>   __kmem_cache_create+0x60/0x118 mm/slub.c:4899
+>>   create_cache mm/slab_common.c:229 [inline]
+>>   kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
+>>   kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
+>>   f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
+>>   f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
+>>   f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
+>>   mount_bdev+0x1b8/0x210 fs/super.c:1400
+>>   f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
+>>   legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+>>   vfs_get_tree+0x40/0x140 fs/super.c:1530
+>>   do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+>>   path_mount+0x358/0x914 fs/namespace.c:3370
+>>   do_mount fs/namespace.c:3383 [inline]
+>>   __do_sys_mount fs/namespace.c:3591 [inline]
+>>   __se_sys_mount fs/namespace.c:3568 [inline]
+>>   __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+>>
+>> Cc: <stable@kernel.org>
+>> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
+>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>> ---
+>>   mm/slub.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index 862dbd9af4f5..e6f3727b9ad2 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -5890,7 +5890,8 @@ static char *create_unique_id(struct kmem_cache *s)
+>>       char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
+> 
+> Hi,
+> 
+> looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+> 
+> The 2nd BUG_ON at the end of the function could certainly be just removed as well or remplaced by a:
+>         if (p > name + ID_STR_LENGTH - 1) {
+>          kfree(name);
+>          return -E<something>;
+>      }
+
+Hi Christophe, Vlastimil,
+
+Should I include this in v3? or may be in another patch?
+
+Thanks,
+
+> 
+> Just my 2c,
+> 
+> CJ
+> 
+>>       char *p = name;
+>> -    BUG_ON(!name);
+>> +    if (!name)
+>> +        return ERR_PTR(-ENOMEM);
+>>       *p++ = ':';
+>>       /*
+>> @@ -5948,6 +5949,8 @@ static int sysfs_slab_add(struct kmem_cache *s)
+>>            * for the symlinks.
+>>            */
+>>           name = create_unique_id(s);
+>> +        if (IS_ERR(name))
+>> +            return PTR_ERR(name);
+>>       }
+>>       s->kobj.kset = kset;
+> 
