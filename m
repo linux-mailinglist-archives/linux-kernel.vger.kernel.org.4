@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077245B73F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED8B5B746C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbiIMPQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S234250AbiIMPUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235820AbiIMPN4 (ORCPT
+        with ESMTP id S236000AbiIMPSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:13:56 -0400
+        Tue, 13 Sep 2022 11:18:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0008E17045;
-        Tue, 13 Sep 2022 07:33:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EF2796A3;
+        Tue, 13 Sep 2022 07:35:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75187614E0;
-        Tue, 13 Sep 2022 14:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91995C433D7;
-        Tue, 13 Sep 2022 14:32:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 586F9614C1;
+        Tue, 13 Sep 2022 14:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2B9C433C1;
+        Tue, 13 Sep 2022 14:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079563;
-        bh=71ccEzCZlCVf3U6aqIjBcQvMZRJuhWUPUhP+Js1jsgU=;
+        s=korg; t=1663079636;
+        bh=fwCZWdOyCDS6UONenHmEV250O9wKOBrXLdEiwoMjMAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t5ImDbfM8BWOEoDhcqCf/lgUB/dAznk2SAxnWXJKLuCeAbRy2gqbx56cD+kGuN39D
-         ODonWJIMtxApbsi/ihlTeQDjVW0ZGswgx+GWnA6fkcFNEMXAYx2PNnQmyb2YbLYLKi
-         b0F9Xbs7PfYbmaPpqlNu2GdSgZoMYtREAUUcbJAQ=
+        b=GDx5NEhNQaTLQci9A8fwxgzarCrWygfc/xPdc2p+nxWlLut6CrlJPvZ1MT/HzO4zS
+         S4CrHqKK/xMZjLzmsCBtohAX/VQ7Hv/HQ8gozPZZT9Ip1lfXrY4GaGaXNBo2HhLLAq
+         WrVoMrQ9WdBt3FmAD4VOahci3z+C94oGXaDMMfp8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Christian A. Ehrhardt" <lk@c--e.de>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 60/79] kprobes: Prohibit probes in gate area
+        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 16/61] hwmon: (gpio-fan) Fix array out of bounds access
 Date:   Tue, 13 Sep 2022 16:07:18 +0200
-Message-Id: <20220913140351.797598051@linuxfoundation.org>
+Message-Id: <20220913140347.332169099@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,117 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian A. Ehrhardt <lk@c--e.de>
+From: Armin Wolf <W_Armin@gmx.de>
 
-commit 1efda38d6f9ba26ac88b359c6277f1172db03f1e upstream.
+[ Upstream commit f233d2be38dbbb22299192292983037f01ab363c ]
 
-The system call gate area counts as kernel text but trying
-to install a kprobe in this area fails with an Oops later on.
-To fix this explicitly disallow the gate area for kprobes.
+The driver does not check if the cooling state passed to
+gpio_fan_set_cur_state() exceeds the maximum cooling state as
+stored in fan_data->num_speeds. Since the cooling state is later
+used as an array index in set_fan_speed(), an array out of bounds
+access can occur.
+This can be exploited by setting the state of the thermal cooling device
+to arbitrary values, causing for example a kernel oops when unavailable
+memory is accessed this way.
 
-Found by syzkaller with the following reproducer:
-perf_event_open$cgroup(&(0x7f00000001c0)={0x6, 0x80, 0x0, 0x0, 0x0, 0x0, 0x80ffff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, @perf_config_ext={0x0, 0xffffffffff600000}}, 0xffffffffffffffff, 0x0, 0xffffffffffffffff, 0x0)
+Example kernel oops:
+[  807.987276] Unable to handle kernel paging request at virtual address ffffff80d0588064
+[  807.987369] Mem abort info:
+[  807.987398]   ESR = 0x96000005
+[  807.987428]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  807.987477]   SET = 0, FnV = 0
+[  807.987507]   EA = 0, S1PTW = 0
+[  807.987536]   FSC = 0x05: level 1 translation fault
+[  807.987570] Data abort info:
+[  807.987763]   ISV = 0, ISS = 0x00000005
+[  807.987801]   CM = 0, WnR = 0
+[  807.987832] swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000001165000
+[  807.987872] [ffffff80d0588064] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+[  807.987961] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+[  807.987992] Modules linked in: cmac algif_hash aes_arm64 algif_skcipher af_alg bnep hci_uart btbcm bluetooth ecdh_generic ecc 8021q garp stp llc snd_soc_hdmi_codec brcmfmac vc4 brcmutil cec drm_kms_helper snd_soc_core cfg80211 snd_compress bcm2835_codec(C) snd_pcm_dmaengine syscopyarea bcm2835_isp(C) bcm2835_v4l2(C) sysfillrect v4l2_mem2mem bcm2835_mmal_vchiq(C) raspberrypi_hwmon sysimgblt videobuf2_dma_contig videobuf2_vmalloc fb_sys_fops videobuf2_memops rfkill videobuf2_v4l2 videobuf2_common i2c_bcm2835 snd_bcm2835(C) videodev snd_pcm snd_timer snd mc vc_sm_cma(C) gpio_fan uio_pdrv_genirq uio drm fuse drm_panel_orientation_quirks backlight ip_tables x_tables ipv6
+[  807.988508] CPU: 0 PID: 1321 Comm: bash Tainted: G         C        5.15.56-v8+ #1575
+[  807.988548] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
+[  807.988574] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  807.988608] pc : set_fan_speed.part.5+0x34/0x80 [gpio_fan]
+[  807.988654] lr : gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
+[  807.988691] sp : ffffffc008cf3bd0
+[  807.988710] x29: ffffffc008cf3bd0 x28: ffffff80019edac0 x27: 0000000000000000
+[  807.988762] x26: 0000000000000000 x25: 0000000000000000 x24: ffffff800747c920
+[  807.988787] x23: 000000000000000a x22: ffffff800369f000 x21: 000000001999997c
+[  807.988854] x20: ffffff800369f2e8 x19: ffffff8002ae8080 x18: 0000000000000000
+[  807.988877] x17: 0000000000000000 x16: 0000000000000000 x15: 000000559e271b70
+[  807.988938] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+[  807.988960] x11: 0000000000000000 x10: ffffffc008cf3c20 x9 : ffffffcfb60c741c
+[  807.989018] x8 : 000000000000000a x7 : 00000000ffffffc9 x6 : 0000000000000009
+[  807.989040] x5 : 000000000000002a x4 : 0000000000000000 x3 : ffffff800369f2e8
+[  807.989062] x2 : 000000000000e780 x1 : 0000000000000001 x0 : ffffff80d0588060
+[  807.989084] Call trace:
+[  807.989091]  set_fan_speed.part.5+0x34/0x80 [gpio_fan]
+[  807.989113]  gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
+[  807.989199]  cur_state_store+0x84/0xd0
+[  807.989221]  dev_attr_store+0x20/0x38
+[  807.989262]  sysfs_kf_write+0x4c/0x60
+[  807.989282]  kernfs_fop_write_iter+0x130/0x1c0
+[  807.989298]  new_sync_write+0x10c/0x190
+[  807.989315]  vfs_write+0x254/0x378
+[  807.989362]  ksys_write+0x70/0xf8
+[  807.989379]  __arm64_sys_write+0x24/0x30
+[  807.989424]  invoke_syscall+0x4c/0x110
+[  807.989442]  el0_svc_common.constprop.3+0xfc/0x120
+[  807.989458]  do_el0_svc+0x2c/0x90
+[  807.989473]  el0_svc+0x24/0x60
+[  807.989544]  el0t_64_sync_handler+0x90/0xb8
+[  807.989558]  el0t_64_sync+0x1a0/0x1a4
+[  807.989579] Code: b9403801 f9402800 7100003f 8b35cc00 (b9400416)
+[  807.989627] ---[ end trace 8ded4c918658445b ]---
 
-Sample report:
-BUG: unable to handle page fault for address: fffffbfff3ac6000
-PGD 6dfcb067 P4D 6dfcb067 PUD 6df8f067 PMD 6de4d067 PTE 0
-Oops: 0000 [#1] PREEMPT SMP KASAN NOPTI
-CPU: 0 PID: 21978 Comm: syz-executor.2 Not tainted 6.0.0-rc3-00363-g7726d4c3e60b-dirty #6
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-RIP: 0010:__insn_get_emulate_prefix arch/x86/lib/insn.c:91 [inline]
-RIP: 0010:insn_get_emulate_prefix arch/x86/lib/insn.c:106 [inline]
-RIP: 0010:insn_get_prefixes.part.0+0xa8/0x1110 arch/x86/lib/insn.c:134
-Code: 49 be 00 00 00 00 00 fc ff df 48 8b 40 60 48 89 44 24 08 e9 81 00 00 00 e8 e5 4b 39 ff 4c 89 fa 4c 89 f9 48 c1 ea 03 83 e1 07 <42> 0f b6 14 32 38 ca 7f 08 84 d2 0f 85 06 10 00 00 48 89 d8 48 89
-RSP: 0018:ffffc900088bf860 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffffffff9b9bebc0 RCX: 0000000000000000
-RDX: 1ffffffff3ac6000 RSI: ffffc90002d82000 RDI: ffffc900088bf9e8
-RBP: ffffffff9d630001 R08: 0000000000000000 R09: ffffc900088bf9e8
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
-R13: ffffffff9d630000 R14: dffffc0000000000 R15: ffffffff9d630000
-FS:  00007f63eef63640(0000) GS:ffff88806d000000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbfff3ac6000 CR3: 0000000029d90005 CR4: 0000000000770ef0
-PKRU: 55555554
-Call Trace:
- <TASK>
- insn_get_prefixes arch/x86/lib/insn.c:131 [inline]
- insn_get_opcode arch/x86/lib/insn.c:272 [inline]
- insn_get_modrm+0x64a/0x7b0 arch/x86/lib/insn.c:343
- insn_get_sib+0x29a/0x330 arch/x86/lib/insn.c:421
- insn_get_displacement+0x350/0x6b0 arch/x86/lib/insn.c:464
- insn_get_immediate arch/x86/lib/insn.c:632 [inline]
- insn_get_length arch/x86/lib/insn.c:707 [inline]
- insn_decode+0x43a/0x490 arch/x86/lib/insn.c:747
- can_probe+0xfc/0x1d0 arch/x86/kernel/kprobes/core.c:282
- arch_prepare_kprobe+0x79/0x1c0 arch/x86/kernel/kprobes/core.c:739
- prepare_kprobe kernel/kprobes.c:1160 [inline]
- register_kprobe kernel/kprobes.c:1641 [inline]
- register_kprobe+0xb6e/0x1690 kernel/kprobes.c:1603
- __register_trace_kprobe kernel/trace/trace_kprobe.c:509 [inline]
- __register_trace_kprobe+0x26a/0x2d0 kernel/trace/trace_kprobe.c:477
- create_local_trace_kprobe+0x1f7/0x350 kernel/trace/trace_kprobe.c:1833
- perf_kprobe_init+0x18c/0x280 kernel/trace/trace_event_perf.c:271
- perf_kprobe_event_init+0xf8/0x1c0 kernel/events/core.c:9888
- perf_try_init_event+0x12d/0x570 kernel/events/core.c:11261
- perf_init_event kernel/events/core.c:11325 [inline]
- perf_event_alloc.part.0+0xf7f/0x36a0 kernel/events/core.c:11619
- perf_event_alloc kernel/events/core.c:12059 [inline]
- __do_sys_perf_event_open+0x4a8/0x2a00 kernel/events/core.c:12157
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0x90 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f63ef7efaed
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f63eef63028 EFLAGS: 00000246 ORIG_RAX: 000000000000012a
-RAX: ffffffffffffffda RBX: 00007f63ef90ff80 RCX: 00007f63ef7efaed
-RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 00000000200001c0
-RBP: 00007f63ef86019c R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffffffffffff R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000002 R14: 00007f63ef90ff80 R15: 00007f63eef43000
- </TASK>
-Modules linked in:
-CR2: fffffbfff3ac6000
----[ end trace 0000000000000000 ]---
-RIP: 0010:__insn_get_emulate_prefix arch/x86/lib/insn.c:91 [inline]
-RIP: 0010:insn_get_emulate_prefix arch/x86/lib/insn.c:106 [inline]
-RIP: 0010:insn_get_prefixes.part.0+0xa8/0x1110 arch/x86/lib/insn.c:134
-Code: 49 be 00 00 00 00 00 fc ff df 48 8b 40 60 48 89 44 24 08 e9 81 00 00 00 e8 e5 4b 39 ff 4c 89 fa 4c 89 f9 48 c1 ea 03 83 e1 07 <42> 0f b6 14 32 38 ca 7f 08 84 d2 0f 85 06 10 00 00 48 89 d8 48 89
-RSP: 0018:ffffc900088bf860 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffffffff9b9bebc0 RCX: 0000000000000000
-RDX: 1ffffffff3ac6000 RSI: ffffc90002d82000 RDI: ffffc900088bf9e8
-RBP: ffffffff9d630001 R08: 0000000000000000 R09: ffffc900088bf9e8
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
-R13: ffffffff9d630000 R14: dffffc0000000000 R15: ffffffff9d630000
-FS:  00007f63eef63640(0000) GS:ffff88806d000000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbfff3ac6000 CR3: 0000000029d90005 CR4: 0000000000770ef0
-PKRU: 55555554
-==================================================================
+Fix this by checking the cooling state and return an error if it
+exceeds the maximum cooling state.
 
-Link: https://lkml.kernel.org/r/20220907200917.654103-1-lk@c--e.de
+Tested on a Raspberry Pi 3.
 
-cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-cc: "David S. Miller" <davem@davemloft.net>
-Cc: stable@vger.kernel.org
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b5cf88e46bad ("(gpio-fan): Add thermal control hooks")
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Link: https://lore.kernel.org/r/20220830011101.178843-1-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/kprobes.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/gpio-fan.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1568,6 +1568,7 @@ static int check_kprobe_address_safe(str
- 	/* Ensure it is not in reserved area nor out of text */
- 	if (!(core_kernel_text((unsigned long) p->addr) ||
- 	    is_module_text_address((unsigned long) p->addr)) ||
-+	    in_gate_area_no_mm((unsigned long) p->addr) ||
- 	    within_kprobe_blacklist((unsigned long) p->addr) ||
- 	    jump_label_text_reserved(p->addr, p->addr) ||
- 	    find_bug((unsigned long)p->addr)) {
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index 9c355b9d31c57..d1b47d20f2fab 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -422,6 +422,9 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 	if (!fan_data)
+ 		return -EINVAL;
+ 
++	if (state >= fan_data->num_speed)
++		return -EINVAL;
++
+ 	set_fan_speed(fan_data, state);
+ 	return 0;
+ }
+-- 
+2.35.1
+
 
 
