@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE3A5B67D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C78A5B67DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiIMGWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S230251AbiIMGYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiIMGVu (ORCPT
+        with ESMTP id S230245AbiIMGYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:21:50 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB982CE13;
-        Mon, 12 Sep 2022 23:21:18 -0700 (PDT)
-Received: from HP-EliteBook-840-G7.. (1-171-215-55.dynamic-ip.hinet.net [1.171.215.55])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 9539F3FDC4;
-        Tue, 13 Sep 2022 06:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663050076;
-        bh=LiDG8FrfTYaa0AmzxLH7DWNm3Yjyr6Vzh7RHEY6totM=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=F0FG0aked9Qzb2athEyWhdNhH6/lNuQjRhRg8bvMoFa3nITwHBYQndwiFAsndPNDJ
-         o7yDFMy7RYVI5BTpQRbbGhX/tVGfpeWGb2lSTro3P57KTQtjdvK00Or6KJYqDqB/3p
-         5Ef0fLjM6zccaQxk3Y5EKEUSb/6wS72PgUfSV1WDMFqnZzhq2eQWWgwJ0ZZMWZ5JYb
-         3vGy/gSUlZTHPPNP6g8ZqxRZ0phEDc5Yrb3pdxnCO/dBBkw2FA2V7aesLhzWAWIuFo
-         ITO8S9uz4Ubk1QDSl7R7w+4ihh5I/zK+0ToxyISnxKjGLo/r0Zx3lMBmaPJHtLUTIo
-         EOnwOx6qLpyZg==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
-Date:   Tue, 13 Sep 2022 14:20:40 +0800
-Message-Id: <20220913062042.1977790-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220913062042.1977790-1-kai.heng.feng@canonical.com>
-References: <20220913062042.1977790-1-kai.heng.feng@canonical.com>
+        Tue, 13 Sep 2022 02:24:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 226C010A3;
+        Mon, 12 Sep 2022 23:24:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16300106F;
+        Mon, 12 Sep 2022 23:24:22 -0700 (PDT)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7A853F73B;
+        Mon, 12 Sep 2022 23:24:39 -0700 (PDT)
+Message-ID: <95599654-a302-dd64-e1c8-4d9a723aed85@arm.com>
+Date:   Tue, 13 Sep 2022 11:54:09 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V2 1/7] arm64/perf: Add register definitions for BRBE
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20220908051046.465307-1-anshuman.khandual@arm.com>
+ <20220908051046.465307-2-anshuman.khandual@arm.com>
+ <Yx8Cgzr7lQdMLX+P@sirena.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Yx8Cgzr7lQdMLX+P@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
-PowerEdge r440 hangs at reboot.
 
-The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
-system reboot to avoid triggering AER"), so use the new sysoff API to
-reinstate S5 for reboot on ACPI-based systems.
+On 9/12/22 15:27, Mark Brown wrote:
+> On Thu, Sep 08, 2022 at 10:40:40AM +0530, Anshuman Khandual wrote:
+> 
+>> ---
+>>  arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 222 insertions(+)
+> 
+> Rather than manually encoding register definitions in sysreg.h
+> can we add them to arch/arm64/tools/sysreg so that all the
+> #defines and so on are generated instead?
 
-Cc: Josef Bacik <josef@toxicpanda.com>
-Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v3:
- - Use new API to invoke ACPI S5.
+SYS_[BRBINF<N>|BRBSRC<N>|BRBTGT<N>]_EL1 registers are encoded as per three
+distinct formulas where <CRm> and <op2> are derived from corresponding <N>
+Just wondering if those could be accommodated in arch/arm64/tools/sysreg ?
 
-v2:
- - Use do_kernel_power_off_prepare() instead.
+System register description via arch/arm64/tools/sysreg seems bit cryptic.
+BTW, do we expect all existing sysreg definitions to move there ? Because
+still there are many registers and their fields present in sysreg.h
 
- drivers/acpi/sleep.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index ad4b2987b3d6e..dce5460902eed 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -1088,6 +1088,10 @@ int __init acpi_sleep_init(void)
- 		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
- 					 SYS_OFF_PRIO_FIRMWARE,
- 					 acpi_power_off, NULL);
-+
-+		register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
-+					 SYS_OFF_PRIO_FIRMWARE,
-+					 acpi_power_off_prepare, NULL);
- 	} else {
- 		acpi_no_s5 = true;
- 	}
--- 
-2.36.1
-
+Besides, there is also some benefit in being able to grep system registers
+and their fields, across headers and implementations simultaneously.
