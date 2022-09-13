@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAE85B6FB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680845B73B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbiIMOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S235391AbiIMPGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiIMOO6 (ORCPT
+        with ESMTP id S235431AbiIMPE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:14:58 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF86961710
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:10:49 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so9580222wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Te8k9s87unrEgkHcqd5vPRmIiJKPic6o0P3DO6oru9I=;
-        b=QoJLC3BR8wDCo0dQ4CZeGh+M7CkQEibwhsg+xXmtc17UNjkMc3FijrZZ8W+wCgcV+w
-         ySkg74u3AxilkIEmjGc0Xx2e962mqazZ6/UQrt9W4by/BzG0qwzstX9ZKjqqCjfB2nG6
-         xKtWNmPImF3XS5vF751fxviMKRoxE35J5eE7uVUQlNpnYARhoVqIn47L1yCG7phXHSWN
-         orojVXRqGtTSJ0dbiWgPf25SzujNYA3IwAgLUlt6ZjrlDUGbYLeC6ofk8L02Q8oPymWU
-         8A9ZrAiZdpk1mpxk5OEz39GpXFHlf3DJQ1VhQPXhATxU/S3gCOC8fPyDC0BcYjGZUGhs
-         FOWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Te8k9s87unrEgkHcqd5vPRmIiJKPic6o0P3DO6oru9I=;
-        b=AZ1mFSQjagTmNlbtzHD5mhBNp1qydacQJQdmpnosnp4+OCy3Fvhjm/cHVY1MK6H6WI
-         isC4rDp1Kbs61nscxH/6zFu3hy6o+uqlJWoW21W1a78exIFLuPPFjJNp7qYP71pIGtZQ
-         MXmWFVdztwHE510GUrm3wEbist/1o6tC/rjPMGM5UqGgWdpbfd8YD31xWtAouLNsr46h
-         k0rWvULdSWvexBHcNAbOqOMZOuHuZGF7QTp6V3QhgmrEbXdrFWxIs5o4tfWui8/aMkOd
-         50k/+CgCSkzdUeUFgUNup4S6AVwgHC8pDPZfSEh7h+SKrmr9ome6kmquaRHOlXxIk2aE
-         7eaw==
-X-Gm-Message-State: ACgBeo0A1/rWe9eMOcI0cU0Cj2YzEwdsP93aOwWgkK+RhWmHK73hUaVT
-        MeCSwNk/cCfpfHAv4zglr59LhQ==
-X-Google-Smtp-Source: AA6agR7fg9Yc5sCrG6pv+2JK5BauOdoRWdSdVeWZ38mpN9v3VOy/zNf3eVr4hucIAuIPexefzL+VVQ==
-X-Received: by 2002:a05:600c:4a9a:b0:3b4:78ab:bae5 with SMTP id b26-20020a05600c4a9a00b003b478abbae5mr2681954wmp.114.1663078246057;
-        Tue, 13 Sep 2022 07:10:46 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.67])
-        by smtp.gmail.com with ESMTPSA id o12-20020a5d4a8c000000b002285f73f11dsm13050983wrq.81.2022.09.13.07.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 07:10:45 -0700 (PDT)
-Message-ID: <6ab84de3-acbd-066f-1e19-4be556d3f4d9@linaro.org>
-Date:   Tue, 13 Sep 2022 16:10:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] gpio: pca953x: Introduce support for nxp,pcal6408
-Content-Language: en-US
-To:     Nate Drude <nate.d@variscite.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     eran.m@variscite.com
-References: <20220912171347.4167372-1-nate.d@variscite.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220912171347.4167372-1-nate.d@variscite.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 13 Sep 2022 11:04:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AF3696F4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:30:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4930ECE10F7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 14:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E71EC433B5;
+        Tue, 13 Sep 2022 14:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663078359;
+        bh=r8wZQgEU+vYFVvB3qrIiAUKrIbQ4wzYX48wo3aj1TWQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u7f1l0ljeHlbk+AuvmhAWZYSR4O/PDNy/x9v5Dyk+RXo+jSShkYR1CKxKBVxPtrYn
+         Pxcmb9oNHyB9tGaoeqLmaox4wvqcSwVjvoiwYGp6Awg+4nPfOSJPJyq+yOM5J+teDD
+         xJtoDkkDHqzTLbcayVpC5LDiDvhlMyE+7zlp+9c7JF+gPlzWXojvrVnEAg7lOXdUEZ
+         /69I5hmeCAejVwBxeT6pEm8vJRxqhZCDH3FBFrfM8pYli494dJZI5pDGk0h1uuFrUh
+         GgyzYWxkiIND2SG5NhgnCqssy9w5RPc9vwjoNWtHUVBbeEabWQzFO24hzaWt2a0ENz
+         XOZOhuT/MViUQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oY6eT-009x4S-Cs;
+        Tue, 13 Sep 2022 15:12:37 +0100
+Date:   Tue, 13 Sep 2022 15:12:36 +0100
+Message-ID: <8735cvuzvv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kunkun Jiang <jiangkunkun@huawei.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oupton@google.com>, <wanghaibin.wang@huawei.com>,
+        <yuzenghui@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: arch_timer: Fix the lack of set_next_event* for workaround of Cortex-A73 erratum 858921
+In-Reply-To: <20220913104723.332-1-jiangkunkun@huawei.com>
+References: <20220913104723.332-1-jiangkunkun@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiangkunkun@huawei.com, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, oupton@google.com, wanghaibin.wang@huawei.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +70,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 19:13, Nate Drude wrote:
-> Signed-off-by: Nate Drude <nate.d@variscite.com>
-
-Missing commit msg.
-
+On Tue, 13 Sep 2022 11:47:23 +0100,
+Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> 
+> The patch a38b71b0833e moves the programming of the timers from
+> the countdown timer (TVAL) over to the comparator (CVAL). This
+> makes it necessary to read the counter when setting next event.
+> However, the workaround of Cortex-A73 erratum 858921 does not
+> set the corresponding set_next_event_phys and set_next_event_virt.
+> This patch fixes it.
+> 
+> Fixes: a38b71b0833e ("clocksource/drivers/arm_arch_timer: Move system register timer programming over to CVAL")
+> Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
 > ---
->  Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 1 +
+>  drivers/clocksource/arm_arch_timer.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> index 9ab8221ee3c6..ff935efb6a88 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -473,6 +473,8 @@ static const struct arch_timer_erratum_workaround ool_workarounds[] = {
+>  		.desc = "ARM erratum 858921",
+>  		.read_cntpct_el0 = arm64_858921_read_cntpct_el0,
+>  		.read_cntvct_el0 = arm64_858921_read_cntvct_el0,
+> +		.set_next_event_phys = erratum_set_next_event_phys,
+> +		.set_next_event_virt = erratum_set_next_event_virt,
+>  	},
+>  #endif
+>  #ifdef CONFIG_SUN50I_ERRATUM_UNKNOWN1
 
-Split bindings to separate patch.
+With the fixed commit message as suggested by Oliver, and a subject
+more conform to the style of previous commits (something like:
+"clocksource/drivers/arm_arch_timer: Fix handling of ARM erratum 85821"):
 
+Acked-by: Marc Zyngier <maz@kernel.org>
 
+Daniel, I assume you'll pick this?
 
-Best regards,
-Krzysztof
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
