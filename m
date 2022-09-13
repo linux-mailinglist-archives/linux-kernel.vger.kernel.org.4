@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169FC5B664F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9F45B6652
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 06:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiIMDzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S229995AbiIMEAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 00:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIMDzj (ORCPT
+        with ESMTP id S229960AbiIMEAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:55:39 -0400
+        Tue, 13 Sep 2022 00:00:02 -0400
 Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A31143E61;
-        Mon, 12 Sep 2022 20:55:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 574D7B1EE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 21:00:01 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 6CDFC1E80D89;
-        Tue, 13 Sep 2022 11:53:31 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id 598E11E80D80;
+        Tue, 13 Sep 2022 11:57:56 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id m0azm_8-P2zr; Tue, 13 Sep 2022 11:53:28 +0800 (CST)
+        with ESMTP id urrVywFzYQfb; Tue, 13 Sep 2022 11:57:53 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
         (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 905631E80D80;
-        Tue, 13 Sep 2022 11:53:28 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTPA id ABDCF1E80D74;
+        Tue, 13 Sep 2022 11:57:53 +0800 (CST)
 From:   Li zeming <zeming@nfschina.com>
-To:     aelior@marvell.com, manishc@marvell.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] qed: Remove unnecessary '0' values from prod
-Date:   Tue, 13 Sep 2022 11:55:30 +0800
-Message-Id: <20220913035530.258266-1-zeming@nfschina.com>
+To:     p.zabel@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: [PATCH] reset: Remove unnecessary '0' values from ret
+Date:   Tue, 13 Sep 2022 11:59:50 +0800
+Message-Id: <20220913035950.258430-1-zeming@nfschina.com>
 X-Mailer: git-send-email 2.18.2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -43,26 +42,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The prod variable is assigned first, it does not need to be initialized.
+The ret variable is assigned first, it does not need to be initialized.
 
 Signed-off-by: Li zeming <zeming@nfschina.com>
 ---
- include/linux/qed/qed_if.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/reset/bcm63xx_pmb.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/qed/qed_if.h b/include/linux/qed/qed_if.h
-index 6dc4943d8aec..f542d9946444 100644
---- a/include/linux/qed/qed_if.h
-+++ b/include/linux/qed/qed_if.h
-@@ -1423,7 +1423,7 @@ struct qed_sb_cnt_info {
- 
- static inline u16 qed_sb_update_sb_idx(struct qed_sb_info *sb_info)
+diff --git a/include/linux/reset/bcm63xx_pmb.h b/include/linux/reset/bcm63xx_pmb.h
+index c77b6999518a..a6cc6df952f6 100644
+--- a/include/linux/reset/bcm63xx_pmb.h
++++ b/include/linux/reset/bcm63xx_pmb.h
+@@ -58,7 +58,7 @@ static inline int __bpcm_do_op(void __iomem *master, unsigned int addr,
+ static inline int bpcm_rd(void __iomem *master, unsigned int addr,
+ 			  u32 off, u32 *val)
  {
--	u32 prod = 0;
-+	u32 prod;
- 	u16 rc = 0;
+-	int ret = 0;
++	int ret;
  
- 	prod = le32_to_cpu(sb_info->sb_virt->prod_index) &
+ 	ret = __bpcm_do_op(master, addr, off >> 2, PMC_PMBM_READ);
+ 	*val = readl(master + PMB_RD_DATA);
+@@ -69,7 +69,7 @@ static inline int bpcm_rd(void __iomem *master, unsigned int addr,
+ static inline int bpcm_wr(void __iomem *master, unsigned int addr,
+ 			  u32 off, u32 val)
+ {
+-	int ret = 0;
++	int ret;
+ 
+ 	writel(val, master + PMB_WR_DATA);
+ 	ret = __bpcm_do_op(master, addr, off >> 2, PMC_PMBM_WRITE);
 -- 
 2.18.2
 
