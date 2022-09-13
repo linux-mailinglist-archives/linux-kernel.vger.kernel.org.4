@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEF25B7C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB095B7C56
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiIMUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S229520AbiIMUz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIMUuJ (ORCPT
+        with ESMTP id S229459AbiIMUzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:50:09 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E36F551
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:50:07 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id y24-20020a17090aa41800b0020269fb74b0so10362802pjp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:50:07 -0700 (PDT)
+        Tue, 13 Sep 2022 16:55:18 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCF41E3C0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:16 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id p9-20020a9f3689000000b003b0197572fbso3848443uap.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date;
-        bh=gy3bDNBw7VQytEVRKZxZzrTdbmTEWTGJEIGOvnabvxo=;
-        b=MsIiTEcp0YKQ0q29PXoqrtM0XP78eU5bv/HJl7x4HzGd9dYG0kP/f4qqYx2Y6uYzoY
-         5AbqkdzAhgmKSpUJxqX0Q+2TINrtybI03WTeO7PPJEGii/QTaZPDWNWQbAkVG95RwPxB
-         pNN5fdf9XUlqBU+ojPKKznCDDWpTgI8Chdp4jSTdCqxUXMjg3thI+7oHCwp5cr2s42XR
-         4xvMKpMA+jtmz13XBoq2KVAa5idLwm0OukMDv5oHBwTOKinPYoaO5/4ByCwSs7+hzZ3T
-         9f2ehaWXoSF7eO5bHu8RzEEVC8UKYS0C6dcN5EyzxI7kEZEIN+IQvo43BkWd72iPNzjB
-         RZsQ==
+        bh=nJJJEPzYfSkXVdsCpO+dC++9rjlYO0nwzxMLu7tGL28=;
+        b=kBuaNyAa7BFLRUEAj+HWAu4RAwHGJ9M57W9cIKk5MyobRXZOJfVdASqgAzWehpzyUn
+         Y2IjOvlKDeODQuKbuNU3iikjsk79MNdjB7129WV6VfDSJNyYNNWrbljfwjvUPNHaboNr
+         uiD84mx7PdI1dLViLrk1nug6KFyvMaOYA5/g2iznrnDGS9JbMdD4SWf2Db7rcUZGQLcG
+         PMriKa3MzKAq1ZqqRh77D4TnN4zbttl85a6WpoJim5+T9nS0Gpmnk8hOc6Hgjloq/vak
+         YyqkjUk+2SaZYQyLFnw2OgHqRIPyCfeeMNJtGxqxurWYcYuRL5J4RQfQpyzJPmHPv9zm
+         QTyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=gy3bDNBw7VQytEVRKZxZzrTdbmTEWTGJEIGOvnabvxo=;
-        b=a5WcmTquo1jzqzvZSodpeE22qrZGulikkiWCJogUp/BrP6+DD7x/0zZDLtK6q+XhvH
-         vhrKHOde7+Co0IJBdpxwnC89I58Ho8sbY+b4/GWxGUQLGogQIef034hqarbPNzDY85Q1
-         9oCjYRMSlupiiGJ4P0yyCfVt9iT/OETcxilPNNFZW5Knql/uRswwVdF2+MvVDcuqZvjv
-         B4R9lo0g6nMw0H+o3VUANLe9kK+ySe17LWmEVDanNZipJzZwzcFcV1Z3vxxKPweUO7P8
-         XFwbwjwasDkHXaofOOQRWd5b2f+/9k23ll1L/MM4m4lL99OwKGm7fn7APyfgURfwa6cc
-         K+GA==
-X-Gm-Message-State: ACgBeo2CBu2R0rkMT0vfrUJ3Fbf6f/CfeMnEK0YoQcMeEvc2O++b/Zn3
-        2u74bsnSNbV2CLlVck7IF/u4KBUmBAI=
-X-Google-Smtp-Source: AA6agR7qXuSHYsLoYdDFCEwxGLsUWKVrpzzkU4qHYq5nHGq6bSMKbnk8HCDo45F5/DCYdGcKhlMvvmxiEd0=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
- (user=jthies job=sendgmr) by 2002:a05:6a00:1892:b0:540:acee:29e8 with SMTP id
- x18-20020a056a00189200b00540acee29e8mr27129067pfh.1.1663102206357; Tue, 13
- Sep 2022 13:50:06 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 20:49:54 +0000
+        bh=nJJJEPzYfSkXVdsCpO+dC++9rjlYO0nwzxMLu7tGL28=;
+        b=LlKFT3QZ2HxHGAMdnIkEaSgBZdSDXgUJobm2hXf30VLWAQM2lS4XpiYLvPAfV+cLKo
+         K9c65BMSv7ktp4SX5x6YTAcInWIWsev3+Ly50RARHn0cElWz5ivyQE/y4wOhXZog/oUg
+         7j6zo4QxSkj0nkeAoK6K9DkR+NKOD5XDCvoXuo25Y7C3QprWtMfOFKFUeyRJFVuJBGB1
+         xakn3vqcyO5nIIjC5R+MEh1I392aPaxrdizp0Nbcnjej7Iek+4hIo4swuSBgPJoKv6Pm
+         aPlZHNeFLDy9ow4sxEkPuxxRHvc5g0JWKKV33hRAfAwwHKgFVXHlTn4RS9lYf/bxnF4k
+         Cx0Q==
+X-Gm-Message-State: ACgBeo3XFCz5GtLNyDp4vExggX+K+38pxECrQoDz0BI/KWse1TwbAIw3
+        6XIW4TOrw1kls50L1U6sjR4GU1T0Ug==
+X-Google-Smtp-Source: AA6agR4lN1+7GX3YCJf/g+HqBAOkYjtAZV+sr5K0G3Nx6PLg9iKXtY/f1H3UDT4F3TWgC7ydjoSAksoqag==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a05:6122:106e:b0:39e:e580:440 with SMTP id
+ k14-20020a056122106e00b0039ee5800440mr10035328vko.37.1663102515183; Tue, 13
+ Sep 2022 13:55:15 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 13:54:49 -0700
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913204954.2931042-1-jthies@google.com>
-Subject: [PATCH v4] platform/chrome: cros_ec: Notify the PM of wake events
- during resume
-From:   Jameson Thies <jthies@google.com>
-To:     chrome-platform@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
-        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
-        Jameson Thies <jthies@google.com>
+Message-ID: <20220913205449.154966-1-nhuck@google.com>
+Subject: [PATCH] drm/exynos: Fix return type for mixer_mode_valid and hdmi_mode_valid
+From:   Nathan Huckleberry <nhuck@google.com>
+Cc:     Nathan Huckleberry <nhuck@google.com>,
+        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cros_ec_handle_event in the cros_ec driver can notify the PM of wake
-events. When a device is suspended, cros_ec_handle_event will not check
-MKBP events. Instead, received MKBP events are checked during resume by
-cros_ec_report_events_during_suspend. But
-cros_ec_report_events_during_suspend cannot notify the PM if received
-events are wake events, causing wake events to not be reported if
-received while the device is suspended.
+The field mode_valid in exynos_drm_crtc_ops is expected to be of type
+enum drm_mode_status (*mode_valid)(struct exynos_drm_crtc *crtc,
+                                   const struct drm_display_mode *mode);
 
-Update cros_ec_report_events_during_suspend to notify the PM of wake
-events during resume by calling pm_wakeup_event.
+Likewise for mode_valid in drm_connector_helper_funcs.
 
-Signed-off-by: Jameson Thies <jthies@google.com>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Benson Leung <bleung@chromium.org>
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
+
+The return type of mixer_mode_valid and hdmi_mode_valid should be
+changed from int to enum drm_mode_status.
+
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
+ drivers/gpu/drm/exynos/exynos_hdmi.c  | 4 ++--
+ drivers/gpu/drm/exynos/exynos_mixer.c | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Changes since v1:
-- Updated wording in commit message from "Log" to "Notify PM of".
-
-Changes since v2:
-- Removed Reviewed-by tag and provided more context for the update in
-  the commit message.
-
-Changes since v3:
-- Added reviewers back into commit message.
----
- drivers/platform/chrome/cros_ec.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index 8aace50d446d..110df0fd4b00 100644
---- a/drivers/platform/chrome/cros_ec.c
-+++ b/drivers/platform/chrome/cros_ec.c
-@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
- 
- static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
- {
-+	bool wake_event;
-+
- 	while (ec_dev->mkbp_event_supported &&
--	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
-+	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
- 		blocking_notifier_call_chain(&ec_dev->event_notifier,
- 					     1, ec_dev);
-+
-+		if (wake_event && device_may_wakeup(ec_dev->dev))
-+			pm_wakeup_event(ec_dev->dev, 0);
-+	}
+diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exynos/exynos_hdmi.c
+index 10b0036f8a2e..8453359c92e8 100644
+--- a/drivers/gpu/drm/exynos/exynos_hdmi.c
++++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
+@@ -922,8 +922,8 @@ static int hdmi_find_phy_conf(struct hdmi_context *hdata, u32 pixel_clock)
+ 	return -EINVAL;
  }
  
- /**
+-static int hdmi_mode_valid(struct drm_connector *connector,
+-			struct drm_display_mode *mode)
++static enum drm_mode_status hdmi_mode_valid(struct drm_connector *connector,
++					    struct drm_display_mode *mode)
+ {
+ 	struct hdmi_context *hdata = connector_to_hdmi(connector);
+ 	int ret;
+diff --git a/drivers/gpu/drm/exynos/exynos_mixer.c b/drivers/gpu/drm/exynos/exynos_mixer.c
+index 65260a658684..82f676e6d21b 100644
+--- a/drivers/gpu/drm/exynos/exynos_mixer.c
++++ b/drivers/gpu/drm/exynos/exynos_mixer.c
+@@ -1045,8 +1045,9 @@ static void mixer_atomic_disable(struct exynos_drm_crtc *crtc)
+ 	clear_bit(MXR_BIT_POWERED, &ctx->flags);
+ }
+ 
+-static int mixer_mode_valid(struct exynos_drm_crtc *crtc,
+-		const struct drm_display_mode *mode)
++static enum drm_mode_status
++mixer_mode_valid(struct exynos_drm_crtc *crtc,
++		 const struct drm_display_mode *mode)
+ {
+ 	struct mixer_context *ctx = crtc->ctx;
+ 	u32 w = mode->hdisplay, h = mode->vdisplay;
 -- 
 2.37.2.789.g6183377224-goog
 
