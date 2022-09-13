@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB81D5B6639
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45B45B663B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 05:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiIMDkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 23:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S230022AbiIMDk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 23:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiIMDkE (ORCPT
+        with ESMTP id S229665AbiIMDkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 23:40:04 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0EE101F7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:40:00 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id h22so1178881uab.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 20:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SyK81HZ9JPEJagWfXq4zWZFpLC9vh3BZpRR5zeN7SjY=;
-        b=Auv2rrGyZIMhkc+UHK8Bpnx+XLmnxCOnxjIfe5raDy4Geut4ckQ693/uSO+/0lZgRp
-         QFCPDDN1A3GL0FZO9q7V3IpFdxxdyFyE29lw+bRxp3Cj+3cXsENj7oWcTyix+0dpepUy
-         Hom7oWLxsdEW6vNuBrNRYzmFrmDZWUYCgUhs1O6PnnNjtmAMjQe0wvsdqM5RnmlTufHq
-         8a7jkNIy+qNf9/NZMcfNE21IP4CXyajYkm9clqM1Bf6goB8miT5GtgnDx9+0CEMuPB9w
-         GrF7Lwjqi5GfNWYkxmegnfGS5NEM92aiiTQSsGTuEWxIqGbciGA2PC6eDeAv7rZJP7CK
-         yv/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SyK81HZ9JPEJagWfXq4zWZFpLC9vh3BZpRR5zeN7SjY=;
-        b=kzJrXEqvDUyhiNZDgX0qlFu8JKkiJfBdGWovQhFbA4esY/UwjdW4VUf/YWG6GvtrJX
-         VQftoTNlDDTO/mIPapIEhD/n5QLuvR0/M3hmdeRhRm+6aWz4wGR/5K00KIMqapi3bOkt
-         Nz5T07LQAYT1bc4Ji8aQnvx0zBwIj2UhdwxSc0YML2MdmLW2qlBbH/Pv2cEia4wxkuBm
-         yst6QU9vJB7I9C4olIKMUqgsDMEqP/jKp6YEa9RW73mihuh1XhCFSH6S8YuYT9P9G7+3
-         evMwbC2NC5F4drr34GB3oWDv/Dlv8gc7aPRimEffH9j1b/OZoFxZRQC8LeIJ9BUA9DRm
-         zxBA==
-X-Gm-Message-State: ACgBeo1PKmk4DP7TnS0OHmlDrXWIpAJHMSKEYjXhd+SLkXZEFQCjzZTi
-        0nqduzUCS1ULXwChAYazmIu8H8nx43su1oUHilyeg9zSUsS1Qw==
-X-Google-Smtp-Source: AA6agR53jXOvAyemWZqLSZjuNXVXjtOif6PVKyAxWWZU2SMQcwU4QdxBZPHWdkrfEr3eeFC/Qx+fgZ4xTKgm25m+UNU=
-X-Received: by 2002:ab0:1322:0:b0:390:e7af:a87c with SMTP id
- g31-20020ab01322000000b00390e7afa87cmr9036455uae.113.1663040399913; Mon, 12
- Sep 2022 20:39:59 -0700 (PDT)
+        Mon, 12 Sep 2022 23:40:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F60A5282E;
+        Mon, 12 Sep 2022 20:40:51 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRThm5lBszHntv;
+        Tue, 13 Sep 2022 11:38:48 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 11:40:49 +0800
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 11:40:49 +0800
+Received: from dggpeml500010.china.huawei.com ([7.185.36.155]) by
+ dggpeml500010.china.huawei.com ([7.185.36.155]) with mapi id 15.01.2375.031;
+ Tue, 13 Sep 2022 11:40:49 +0800
+From:   "Liuxin(EulerOS)" <liuxin350@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     "andrii@kernel.org" <andrii@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "854182924@qq.com" <854182924@qq.com>,
+        "Yanan (Euler)" <yanan@huawei.com>,
+        "Wuchangye (EulerOS)" <wuchangye@huawei.com>,
+        Xiesongyang <xiesongyang@huawei.com>,
+        "zhudi (E)" <zhudi2@huawei.com>,
+        "kongweibin (A)" <kongweibin2@huawei.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjJdIGxpYmJwZjogQ2xlYW4gdXAgbGVnYWN5IGJw?=
+ =?utf-8?Q?f_maps_declaration_in_bpf=5Fhelpers?=
+Thread-Topic: [PATCH v2] libbpf: Clean up legacy bpf maps declaration in
+ bpf_helpers
+Thread-Index: AdjCY85HjE9yfqFYRLS5SLbbKPstawCB444AAK2612A=
+Date:   Tue, 13 Sep 2022 03:40:49 +0000
+Message-ID: <9bf6d58f55c44c28ab809c2a014a2570@huawei.com>
+References: <94275aa1e5af4efea53f322f91b27380@huawei.com>
+ <CAEf4BzZw8R1UH4R_FmeAVAXAALmh0ETtMVkOKytvDTs_GxqbLg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZw8R1UH4R_FmeAVAXAALmh0ETtMVkOKytvDTs_GxqbLg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.136.113.250]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220906194824.2110408-1-Liam.Howlett@oracle.com>
- <20220906194824.2110408-68-Liam.Howlett@oracle.com> <Yx7XzNBMbcdgTxa9@google.com>
- <20220912124559.f1f5c26b882325fe5e5c5cce@linux-foundation.org>
- <Yx+QGOgHg1Wk8tGK@google.com> <20220912140337.cccdea4cf67e4c4126ae158d@linux-foundation.org>
-In-Reply-To: <20220912140337.cccdea4cf67e4c4126ae158d@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 12 Sep 2022 21:39:24 -0600
-Message-ID: <CAOUHufYb4v1nahwixQ=a80j3Ej-Xd9ujxr=Cio5Zn2=A7GE=aw@mail.gmail.com>
-Subject: Re: [PATCH v14 67/70] mm/vmscan: Use vma iterator instead of vm_next
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 3:03 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 12 Sep 2022 14:01:28 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > The diff between the original patch and this one, in case you prefer to
-> > fix it atop rather than amend.
->
-> Always...
->
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index a7c5d15c1618..cadcc3290918 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -3776,7 +3776,10 @@ static bool get_next_vma(unsigned long mask, unsigned long size, struct mm_walk
-> >       VM_WARN_ON_ONCE(mask & size);
-> >       VM_WARN_ON_ONCE((start & mask) != (*vm_start & mask));
-> >
-> > -     for_each_vma_range(vmi, args->vma, end) {
-> > +     for_each_vma(vmi, args->vma) {
-> > +             if (end && end <= args->vma->vm_start)
-> > +                     return false;
-> > +
-> >               if (should_skip_vma(args->vma->vm_start, args->vma->vm_end, args))
-> >                       continue;
->
-> Thanks.
->
-> I added your signoff so I don't get a nastygram from Stephen in the
-> morning.  Please send along a suitable brief changelog?
-
-mm/vmscan: use the proper VMA iterator
-
-When get_next_vma() finishes iterating VMAs within a range [start,
-end), it expects args->vma to point the first VMA out of that range,
-if such a VMA exists. This allows its callers to continue the
-iteration with a new range above the previous one, if those callers
-choose to.
-
-for_each_vma_range() always sets args->vma to NULL after it's done.
-This may mislead those callers to conclude that there are no more
-VMAs, and in turn they terminate their iterations prematurely.
-
-This fix replaces for_each_vma_range() with for_each_vma() and
-explicitly checks whether the next VMA is still within range, and if
-not, returns false to indicate the current range has ended. The
-callers may continue with the next range if args->vma is not NULL.
+VGhhbmtzIHRvIFNvbmcgYW5kIEFuZHJpaSBmb3IgdGhlaXIgYWR2aWNlLCBJIHdpbGwgZml4IGl0
+IGluIFYzLg0KDQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IEFuZHJpaSBOYWty
+eWlrbyBbbWFpbHRvOmFuZHJpaS5uYWtyeWlrb0BnbWFpbC5jb21dIA0K5Y+R6YCB5pe26Ze0OiAy
+MDIy5bm0OeaciDEw5pelIDg6NDQNCuaUtuS7tuS6ujogTGl1eGluKEV1bGVyT1MpIDxsaXV4aW4z
+NTBAaHVhd2VpLmNvbT4NCuaKhOmAgTogYW5kcmlpQGtlcm5lbC5vcmc7IGRhbmllbEBpb2dlYXJi
+b3gubmV0OyBhc3RAa2VybmVsLm9yZzsgbWFydGluLmxhdUBsaW51eC5kZXY7IHNvbmdAa2VybmVs
+Lm9yZzsgeWhzQGZiLmNvbTsgam9obi5mYXN0YWJlbmRAZ21haWwuY29tOyBrcHNpbmdoQGtlcm5l
+bC5vcmc7IHNkZkBnb29nbGUuY29tOyBoYW9sdW9AZ29vZ2xlLmNvbTsgam9sc2FAa2VybmVsLm9y
+ZzsgYnBmQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgODU0
+MTgyOTI0QHFxLmNvbTsgWWFuYW4gKEV1bGVyKSA8eWFuYW5AaHVhd2VpLmNvbT47IFd1Y2hhbmd5
+ZSAoRXVsZXJPUykgPHd1Y2hhbmd5ZUBodWF3ZWkuY29tPjsgWGllc29uZ3lhbmcgPHhpZXNvbmd5
+YW5nQGh1YXdlaS5jb20+OyB6aHVkaSAoRSkgPHpodWRpMkBodWF3ZWkuY29tPjsga29uZ3dlaWJp
+biAoQSkgPGtvbmd3ZWliaW4yQGh1YXdlaS5jb20+DQrkuLvpopg6IFJlOiBbUEFUQ0ggdjJdIGxp
+YmJwZjogQ2xlYW4gdXAgbGVnYWN5IGJwZiBtYXBzIGRlY2xhcmF0aW9uIGluIGJwZl9oZWxwZXJz
+DQoNCk9uIFR1ZSwgU2VwIDYsIDIwMjIgYXQgNzo1MSBQTSBMaXV4aW4oRXVsZXJPUykgPGxpdXhp
+bjM1MEBodWF3ZWkuY29tPiB3cm90ZToNCj4NCj4gTGVnYWN5IGJwZiBtYXBzIGRlY2xhcmF0aW9u
+IHdlcmUgbm8gbG9uZ2VyIHN1cHBvcnRlZCBpbiBMaWJicGYgMS4wLCBzbyBpdCB3YXMgdGltZSB0
+byByZW1vdmUgdGhlIGRlZmluaXRpb24gb2YgYnBmX21hcF9kZWYgaW4gYnBmX2hlbHBlcnMuaC4N
+Cg0KcGxlYXNlIG1ha2Ugc3VyZSB0aGF0IGNvbW1pdCBsb2cgbGluZXMgYXJlIHdyYXBwZWQgYXQg
+PDgwIGNoYXJhY3RlcnMNCj4NCj4gTElOSzpbMV0gDQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJi
+cGYvbGliYnBmL3dpa2kvTGliYnBmOi10aGUtcm9hZC10by12MS4wDQoNCmRvbid0IGFkZCAiTElO
+SyIsIGp1c3QgdHdvIHNwYWNlcyBhbmQgdGhlbiBbMF0gYW5kIHRoZW4gcmVmZXIgdG8gaXQgZnJv
+bSB0aGUgYWJvdmUgYXMgInN1cHBvcnRlZCBpbiBMaWJicGYgMS4wIChbMF0pIg0KDQoNCj4NCj4g
+QWNrZWQtYnk6IFNvbmcgTGl1IDxzb25nQGtlcm5lbC5vcmc+DQo+IFNpZ25lZC1vZmYtYnk6IFhp
+biBMaXU8bGl1eGluMzUwQGh1YXdlaS5jb20+DQoNCnNwYWNlIGFmdGVyIG5hbWUgYW5kIGJlZm9y
+ZSBvcGVuaW5nIDwgaXMgbWlzc2luZw0KDQo+IC0tLQ0KPiBDaGFuZ2VzIGluIHYyOg0KPiAgICAg
+LSBGaXggc3RyYW5nZSBzaWduYXR1cmVzDQo+DQoNCkl0IGxvb2tzIGdvb2Qgb3ZlcmFsbCwgYnV0
+IHlvdXIgcGF0Y2ggZG9lc24ndCBhcHBseS4gUGxlYXNlIG1ha2Ugc3VyZSB5b3UgYmFzZSBpdCBv
+biB0b3Agb2YgYnBmLW5leHQncyBtYXN0ZXIgYW5kIHlvdSB1c2UgZ2l0IHNlbmQtZW1haWwgd2hp
+Y2ggd29uJ3QgY2xvYmJlciB0aGUgcGF0Y2guIFRoYW5rcy4NCg0KPiBWMTogDQo+IGh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2JwZi9DQVBoc3VXN0VtNnE1aHFpS1dFWnBKT2FVNURUclpFK0JQUEhx
+K0NoeXoNCj4gMC0rLXlRX1pBQG1haWwuZ21haWwuY29tL1QvI3QNCj4NCj4gdG9vbHMvbGliL2Jw
+Zi9icGZfaGVscGVycy5oIHwgMTIgLS0tLS0tLS0tLS0tDQo+IDEgZmlsZSBjaGFuZ2VkLCAxMiBk
+ZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMu
+aCBiL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMuaCANCj4gaW5kZXggODY3YjczNDgzLi45Y2Fk
+MTNlN2YgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL2xpYi9icGYvYnBmX2hlbHBlcnMuaA0KPiArKysg
+Yi90b29scy9saWIvYnBmL2JwZl9oZWxwZXJzLmgNCj4gQEAgLTE2NywxOCArMTY3LDYgQEAgYnBm
+X3RhaWxfY2FsbF9zdGF0aWModm9pZCAqY3R4LCBjb25zdCB2b2lkICptYXAsIA0KPiBjb25zdCBf
+X3UzMiBzbG90KSB9ICNlbmRpZg0KPg0KPiAtLyoNCj4gLSAqIEhlbHBlciBzdHJ1Y3R1cmUgdXNl
+ZCBieSBlQlBGIEMgcHJvZ3JhbQ0KPiAtICogdG8gZGVzY3JpYmUgQlBGIG1hcCBhdHRyaWJ1dGVz
+IHRvIGxpYmJwZiBsb2FkZXINCj4gLSAqLw0KPiAtc3RydWN0IGJwZl9tYXBfZGVmIHsNCj4gLSAg
+ICAgICB1bnNpZ25lZCBpbnQgdHlwZTsNCj4gLSAgICAgICB1bnNpZ25lZCBpbnQga2V5X3NpemU7
+DQo+IC0gICAgICAgdW5zaWduZWQgaW50IHZhbHVlX3NpemU7DQo+IC0gICAgICAgdW5zaWduZWQg
+aW50IG1heF9lbnRyaWVzOw0KPiAtICAgICAgIHVuc2lnbmVkIGludCBtYXBfZmxhZ3M7DQo+IC19
+IF9fYXR0cmlidXRlX18oKGRlcHJlY2F0ZWQoInVzZSBCVEYtZGVmaW5lZCBtYXBzIGluIC5tYXBz
+IA0KPiBzZWN0aW9uIikpKTsNCj4gLQ0KPiBlbnVtIGxpYmJwZl9waW5fdHlwZSB7DQo+ICAgICAg
+ICAgTElCQlBGX1BJTl9OT05FLA0KPiAgICAgICAgIC8qIFBJTl9CWV9OQU1FOiBwaW4gbWFwcyBi
+eSBuYW1lIChpbiAvc3lzL2ZzL2JwZiBieSBkZWZhdWx0KSANCj4gKi8NCj4gLS0NCj4gMi4zMy4w
+DQo=
