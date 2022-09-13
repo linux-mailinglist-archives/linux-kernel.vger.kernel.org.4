@@ -2,149 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EC35B7661
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF945B76F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiIMQXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S231586AbiIMQ5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiIMQXX (ORCPT
+        with ESMTP id S232146AbiIMQ5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:23:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C9519029
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:18:03 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oY7e1-0005K2-JO; Tue, 13 Sep 2022 17:16:13 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oY7e1-0001yU-1A; Tue, 13 Sep 2022 17:16:13 +0200
-Date:   Tue, 13 Sep 2022 17:16:12 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3] dmaengine: mxs: fix driver registering
-Message-ID: <20220913151612.GI12909@pengutronix.de>
-References: <20220614101751.3636028-1-dario.binacchi@amarulasolutions.com>
- <Yqs3E0ipEpsCT2T2@matsya>
+        Tue, 13 Sep 2022 12:57:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C51C13F8E;
+        Tue, 13 Sep 2022 08:49:39 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-122-187.nat.spd-mgts.ru [109.252.122.187])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A16B6601F9C;
+        Tue, 13 Sep 2022 16:17:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663082239;
+        bh=XkZJpiv5PF0uDye6OFManEG8kZH5pOgK7EHrRYw8g3w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KEKfydIL3dWx62K5QaMFEu8a8m88Q5fbP6ncw+3u4dBvpS7CIwhzG6hLPzyIXXzuy
+         UtyepaA6pRJKKFiJnt5mvNMAFpZTpZhMukim8zelsdW+EEXluCZSf2e4Xp95YD/EEY
+         KepVNnRonAwvEUmqfYE5LcFxbcsNFRyjnRiTQ6s/O9gfyf8ck7fW9B15HqzfihOlTk
+         E5WdJom+DJ9jU4JuTzuU4zsF91b4AyRugWmAoB9wnKiGQjN6H0+eRK+rmc0a1Nl6N9
+         mo4j9JY/i7k8Mu30RzLXa4CQjTUnX4b8yOV8F+oGSazSmtzSH60edgfVSIboGpdZdZ
+         OyDKHPCy1Q1tQ==
+Message-ID: <44e3e1be-363b-f19b-4907-6990d2f5b24c@collabora.com>
+Date:   Tue, 13 Sep 2022 18:17:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqs3E0ipEpsCT2T2@matsya>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v3 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220913062042.1977790-1-kai.heng.feng@canonical.com>
+ <20220913062042.1977790-2-kai.heng.feng@canonical.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220913062042.1977790-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
-
-On Thu, Jun 16, 2022 at 06:58:43AM -0700, Vinod Koul wrote:
-> On 14-06-22, 12:17, Dario Binacchi wrote:
-> > Driver registration fails on SOC imx8mn as its supplier, the clock
-> > control module, is not ready. Since platform_driver_probe(), as
-> > reported by its description, is incompatible with deferred probing,
-> > we have to use platform_driver_register().
-> > 
-> > Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
-> > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > Cc: stable@vger.kernel.org
-> > 
-> > ---
-> > 
-> > Changes in v3:
-> > - Restore __init in front of mxs_dma_init() definition.
-> > 
-> > Changes in v2:
-> > - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
-> > 
-> >  drivers/dma/mxs-dma.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-> > index 994fc4d2aca4..6e90540fedc4 100644
-> > --- a/drivers/dma/mxs-dma.c
-> > +++ b/drivers/dma/mxs-dma.c
-> > @@ -741,7 +741,7 @@ static struct dma_chan *mxs_dma_xlate(struct of_phandle_args *dma_spec,
-> >  				     ofdma->of_node);
-> >  }
-> >  
-> > -static int __init mxs_dma_probe(struct platform_device *pdev)
-> > +static int mxs_dma_probe(struct platform_device *pdev)
+On 9/13/22 09:20, Kai-Heng Feng wrote:
+> Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
+> PowerEdge r440 hangs at reboot.
 > 
-> why drop __init here, if there is a reason for that please split this
-> change and document such reason...
-
-The reason for dropping __init comes with this patch. With
-platform_driver_probe() the probe function is called only once, during
-init time. The problem with platform_driver_probe() is that the probe
-function will never be called again when it initially returns
--EPROBE_DEFER. That's a problem for Dario: The clock is not yet
-available, the driver defers probe and will never be probed again
-when the clock is finally available.
-
-With platform_driver_register() to which this patch switches to the
-probe function can be called at any time, thus __init has to be removed.
-
-For what it's worth:
-
-Acked-by: Sascha Hauer <s.hauer@pengutronix.de>
-
-for this patch.
-
-Sascha
-
+> The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
+> system reboot to avoid triggering AER"), so use the new sysoff API to
+> reinstate S5 for reboot on ACPI-based systems.
 > 
-> >  {
-> >  	struct device_node *np = pdev->dev.of_node;
-> >  	const struct mxs_dma_type *dma_type;
-> > @@ -839,10 +839,7 @@ static struct platform_driver mxs_dma_driver = {
-> >  		.name	= "mxs-dma",
-> >  		.of_match_table = mxs_dma_dt_ids,
-> >  	},
-> > +	.probe = mxs_dma_probe,
-> >  };
-> >  
-> > -static int __init mxs_dma_module_init(void)
-> > -{
-> > -	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
-> > -}
-> > -subsys_initcall(mxs_dma_module_init);
-> > +module_platform_driver(mxs_dma_driver);
-> > -- 
-> > 2.32.0
+> Cc: Josef Bacik <josef@toxicpanda.com>
+> Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v3:
+>  - Use new API to invoke ACPI S5.
 > 
-> -- 
-> ~Vinod
+> v2:
+>  - Use do_kernel_power_off_prepare() instead.
 > 
+>  drivers/acpi/sleep.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> index ad4b2987b3d6e..dce5460902eed 100644
+> --- a/drivers/acpi/sleep.c
+> +++ b/drivers/acpi/sleep.c
+> @@ -1088,6 +1088,10 @@ int __init acpi_sleep_init(void)
+>  		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
+>  					 SYS_OFF_PRIO_FIRMWARE,
+>  					 acpi_power_off, NULL);
+> +
+> +		register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
+> +					 SYS_OFF_PRIO_FIRMWARE,
+> +					 acpi_power_off_prepare, NULL);
+
+Maybe you could add a small comment to the code explaining why
+acpi_power_off_prepare is used for restarting?
+
+Is it safe to use S5 on restart for all devices in general?
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Best regards,
+Dmitry
+
