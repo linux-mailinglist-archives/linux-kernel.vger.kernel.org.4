@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053C85B70B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415BC5B7189
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiIMO0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S231753AbiIMOna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiIMOYU (ORCPT
+        with ESMTP id S230129AbiIMOmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:24:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62C35B05E;
-        Tue, 13 Sep 2022 07:16:15 -0700 (PDT)
+        Tue, 13 Sep 2022 10:42:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627BC52DDA;
+        Tue, 13 Sep 2022 07:22:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C546149A;
-        Tue, 13 Sep 2022 14:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFED3C433C1;
-        Tue, 13 Sep 2022 14:16:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EFDFB80E22;
+        Tue, 13 Sep 2022 14:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F39C433D7;
+        Tue, 13 Sep 2022 14:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078575;
-        bh=dqgcicMSD2kRAzU5ZVBwjKEmlRdW45onYHG3fvnKt08=;
+        s=korg; t=1663078938;
+        bh=fPid+q0GoEnpfhUVAoMELTMnsoxydhxBhddicCiYKQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=InkuhZ5aBuOrHNmbG716dsGUDZD2A8zClNyRs+46BUiMsod4DKMp936WDmoc7jYjf
-         +AgzSXZ22k3J2S7QY5AxcJUtVskC8C9xY6LaJHIXqQi3nY7f3uvDu+SJCy3QKtPRHr
-         xnbyc9sdYAcQ4/dNjAczRTssizuRzmZ6Q57If0/o=
+        b=wvNaLRHU0b8ut+e+E0/ECtaKYEPZL7BYhw3JKy9wjZ86bUh4Dk6fbVNc7/3fev4XV
+         aEmyylU53Vl7EEYdsiS7vY3Kc0JUNWCTULnpwWIkfS2KMYxkI6vAFt1fE7elLRpUMM
+         YCssvMt25PJfWTg1epasAqj8lrQbB7Z0tafxtUi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.19 157/192] ASoC: mchp-spdiftx: remove references to mchp_i2s_caps
-Date:   Tue, 13 Sep 2022 16:04:23 +0200
-Message-Id: <20220913140417.850653638@linuxfoundation.org>
+        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        Bruno Goncalves <bgoncalv@redhat.com>
+Subject: [PATCH 5.10 19/79] arm64: cacheinfo: Fix incorrect assignment of signed error value to unsigned fw_level
+Date:   Tue, 13 Sep 2022 16:04:24 +0200
+Message-Id: <20220913140351.230431132@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
 
-commit 403fcb5118a0f4091001a537e76923031fb45eaf upstream.
+[ Upstream commit e75d18cecbb3805895d8ed64da4f78575ec96043 ]
 
-Remove references to struct mchp_i2s_caps as they are not used.
+Though acpi_find_last_cache_level() always returned signed value and the
+document states it will return any errors caused by lack of a PPTT table,
+it never returned negative values before.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220727090814.2446111-3-claudiu.beznea@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Commit 0c80f9e165f8 ("ACPI: PPTT: Leave the table mapped for the runtime usage")
+however changed it by returning -ENOENT if no PPTT was found. The value
+returned from acpi_find_last_cache_level() is then assigned to unsigned
+fw_level.
+
+It will result in the number of cache leaves calculated incorrectly as
+a huge value which will then cause the following warning from __alloc_pages
+as the order would be great than MAX_ORDER because of incorrect and huge
+cache leaves value.
+
+  |  WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5407 __alloc_pages+0x74/0x314
+  |  Modules linked in:
+  |  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-10393-g7c2a8d3ac4c0 #73
+  |  pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  |  pc : __alloc_pages+0x74/0x314
+  |  lr : alloc_pages+0xe8/0x318
+  |  Call trace:
+  |   __alloc_pages+0x74/0x314
+  |   alloc_pages+0xe8/0x318
+  |   kmalloc_order_trace+0x68/0x1dc
+  |   __kmalloc+0x240/0x338
+  |   detect_cache_attributes+0xe0/0x56c
+  |   update_siblings_masks+0x38/0x284
+  |   store_cpu_topology+0x78/0x84
+  |   smp_prepare_cpus+0x48/0x134
+  |   kernel_init_freeable+0xc4/0x14c
+  |   kernel_init+0x2c/0x1b4
+  |   ret_from_fork+0x10/0x20
+
+Fix the same by changing fw_level to be signed integer and return the
+error from init_cache_level() early in case of error.
+
+Reported-and-Tested-by: Bruno Goncalves <bgoncalv@redhat.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Link: https://lore.kernel.org/r/20220808084640.3165368-1-sudeep.holla@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/mchp-spdiftx.c |    8 --------
- 1 file changed, 8 deletions(-)
+ arch/arm64/kernel/cacheinfo.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/sound/soc/atmel/mchp-spdiftx.c
-+++ b/sound/soc/atmel/mchp-spdiftx.c
-@@ -196,7 +196,6 @@ struct mchp_spdiftx_dev {
- 	struct clk				*pclk;
- 	struct clk				*gclk;
- 	unsigned int				fmt;
--	const struct mchp_i2s_caps		*caps;
- 	int					gclk_enabled:1;
- };
+diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
+index 587543c6c51cb..97c42be71338a 100644
+--- a/arch/arm64/kernel/cacheinfo.c
++++ b/arch/arm64/kernel/cacheinfo.c
+@@ -45,7 +45,8 @@ static void ci_leaf_init(struct cacheinfo *this_leaf,
  
-@@ -766,8 +765,6 @@ static const struct of_device_id mchp_sp
- MODULE_DEVICE_TABLE(of, mchp_spdiftx_dt_ids);
- static int mchp_spdiftx_probe(struct platform_device *pdev)
+ int init_cache_level(unsigned int cpu)
  {
--	struct device_node *np = pdev->dev.of_node;
--	const struct of_device_id *match;
- 	struct mchp_spdiftx_dev *dev;
- 	struct resource *mem;
- 	struct regmap *regmap;
-@@ -781,11 +778,6 @@ static int mchp_spdiftx_probe(struct pla
- 	if (!dev)
- 		return -ENOMEM;
+-	unsigned int ctype, level, leaves, fw_level;
++	unsigned int ctype, level, leaves;
++	int fw_level;
+ 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
  
--	/* Get hardware capabilities. */
--	match = of_match_node(mchp_spdiftx_dt_ids, np);
--	if (match)
--		dev->caps = match->data;
--
- 	/* Map I/O registers. */
- 	base = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
- 	if (IS_ERR(base))
+ 	for (level = 1, leaves = 0; level <= MAX_CACHE_LEVEL; level++) {
+@@ -63,6 +64,9 @@ int init_cache_level(unsigned int cpu)
+ 	else
+ 		fw_level = acpi_find_last_cache_level(cpu);
+ 
++	if (fw_level < 0)
++		return fw_level;
++
+ 	if (level < fw_level) {
+ 		/*
+ 		 * some external caches not specified in CLIDR_EL1
+-- 
+2.35.1
+
 
 
