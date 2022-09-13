@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811A35B6CB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4AE5B6CBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiIMMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S231990AbiIMMHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiIMMEh (ORCPT
+        with ESMTP id S231575AbiIMMH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:04:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D006C60DA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hEpCORyj+0B2c8CSokQtAfftL9v4UKhuX8e0O4W42lQ=; b=FWxcF1DrWGJmcDkJwK+fQLssK7
-        kzli3Bcih+3hYnzsYAbqx8RS29oYfkZ1GR+cwP63aQzyleFAg4VQ2QGuB+hOWD9erml6yV904Jwsq
-        vJDdpzlVckA9yRQJHKdQ7qzaGGJGGZFQ4lg8NWOH+H/uuEuGB/eITA5uSaJGTmG8KF8JyI1wN6Z3W
-        1ufnjneB9DVqHIDEWw0puNvo11F+Th85EKkfLsikg/6BnbO3ES5mYsCbo3b9Rrm7BUu8vyppOyS/l
-        +jR+7gUWly1XUmDriX/1l4xBE5G3BjkD7b5i86qSePdtWmjtmS9WUvK1C3BwC95LWcX+lkNwE3cXa
-        A6n9Mxkw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oY4dx-00C4OO-Co; Tue, 13 Sep 2022 12:03:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BFDAF30030F;
-        Tue, 13 Sep 2022 14:03:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 974E220282DC8; Tue, 13 Sep 2022 14:03:54 +0200 (CEST)
-Date:   Tue, 13 Sep 2022 14:03:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
-        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
-        naveen.n.rao@linux.vnet.ibm.com
-Subject: Re: [PATCH v3 02/16] powerpc: Override __ALIGN and __ALIGN_STR macros
-Message-ID: <YyBxqjtC0DAhmQrT@hirez.programming.kicks-ass.net>
-References: <20220912082020.226755-1-sv@linux.ibm.com>
- <20220912082020.226755-3-sv@linux.ibm.com>
+        Tue, 13 Sep 2022 08:07:29 -0400
+Received: from out0-137.mail.aliyun.com (out0-137.mail.aliyun.com [140.205.0.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6805F11C;
+        Tue, 13 Sep 2022 05:07:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047208;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.PEXKKLn_1663070841;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PEXKKLn_1663070841)
+          by smtp.aliyun-inc.com;
+          Tue, 13 Sep 2022 20:07:21 +0800
+Date:   Tue, 13 Sep 2022 20:07:21 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
+ in validate_direct_spte()
+Message-ID: <20220913120721.GA113257@k08j02272.eu95sqa>
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+ <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
+ <YxjYWtgLZMxFBrjl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912082020.226755-3-sv@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxjYWtgLZMxFBrjl@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 01:50:06PM +0530, Sathvika Vasireddy wrote:
-> In a subsequent patch, we would want to annotate powerpc assembly functions
-> with SYM_FUNC_START_LOCAL macro. This macro depends on __ALIGN macro.
+On Thu, Sep 08, 2022 at 01:43:54AM +0800, David Matlack wrote:
+> On Wed, Aug 24, 2022 at 05:29:18PM +0800, Hou Wenlong wrote:
+> > The spte pointing to the children SP is dropped, so the
+> > whole gfn range covered by the children SP should be flushed.
+> > Although, Hyper-V may treat a 1-page flush the same if the
+> > address points to a huge page, it still would be better
+> > to use the correct size of huge page. Also introduce
+> > a helper function to do range-based flushing when a direct
+> > SP is dropped, which would help prevent future buggy use
+> > of kvm_flush_remote_tlbs_with_address() in such case.
+> > 
+> > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
+> > Suggested-by: David Matlack <dmatlack@google.com>
+> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index e418ef3ecfcb..a3578abd8bbc 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -260,6 +260,14 @@ void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
+> >  	kvm_flush_remote_tlbs_with_range(kvm, &range);
+> >  }
+> >  
+> > +/* Flush all memory mapped by the given direct SP. */
+> > +static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+> > +{
+> > +	WARN_ON_ONCE(!sp->role.direct);
+> > +	kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
+> > +					   KVM_PAGES_PER_HPAGE(sp->role.level + 1));
 > 
-> The default expansion of __ALIGN macro is:
->         #define __ALIGN      .align 4,0x90
-> 
-> So, override __ALIGN and __ALIGN_STR macros to use the same alignment as
-> that of the existing _GLOBAL macro. Also, do not pad with 0x90, because
-> repeated 0x90s are not a nop or trap on powerpc.
-> 
-> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
-> ---
->  arch/powerpc/include/asm/linkage.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/powerpc/include/asm/linkage.h b/arch/powerpc/include/asm/linkage.h
-> index b71b9582e754..b88d1d2cf304 100644
-> --- a/arch/powerpc/include/asm/linkage.h
-> +++ b/arch/powerpc/include/asm/linkage.h
-> @@ -4,6 +4,9 @@
->  
->  #include <asm/types.h>
->  
-> +#define __ALIGN		.align 2
-> +#define __ALIGN_STR	".align 2"
-
-Like mentioned last time; I'm fixing this (but you're right to not wait
-on that), that said, would it make sense to write it like:
-
-#define __ALIGN		.balign 4
-#define __ALIGN_STR	__stringify(__ALIGN)
-
-That said; with power instructions being 4 bytes, the above alignment is
-basically no-alignment, right?
-
-
+> nit: I think it would make sense to introduce
+> kvm_flush_remote_tlbs_gfn() in this patch since you are going to
+> eventually use it here anyway.
+>
+OK, I'll do it in the next version. Thanks!
+ 
+> > +}
+> > +
+> >  static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+> >  			   unsigned int access)
+> >  {
+> > @@ -2341,7 +2349,7 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+> >  			return;
+> >  
+> >  		drop_parent_pte(child, sptep);
+> > -		kvm_flush_remote_tlbs_with_address(vcpu->kvm, child->gfn, 1);
+> > +		kvm_flush_remote_tlbs_direct_sp(vcpu->kvm, child);
+> >  	}
+> >  }
+> >  
+> > -- 
+> > 2.31.1
+> > 
