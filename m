@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF22F5B7B91
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C7F5B7B94
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIMTvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S229590AbiIMTvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIMTvp (ORCPT
+        with ESMTP id S229541AbiIMTvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:51:45 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C425A6BCCC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:51:42 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id k12-20020a92c24c000000b002f18edda397so9057710ilo.13
+        Tue, 13 Sep 2022 15:51:47 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188596BCE0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:51:43 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id f11-20020a5d858b000000b006a17b75af65so2689397ioj.13
         for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:51:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=7S0v9HXpkYT9zH8YjpmOOMJrTOndmWA1loFnUsoP6kk=;
-        b=szCnUgjbFULTwXqbDVx1A6499OnOz6pI5L3xq8jSgcTa5hNHpmCpMw+nrmZEOUe8N9
-         xnGcr7ynMY8wVBf6DVKsCVSMHbufyk4eLYUIO2cWMWnY/pi2CwbUf2ENR02EOi8aTejn
-         ty1NLpJ17RjmWJwBNXdtg5nDzmSM2ZEXjuVyf2XjrClRhn9WdlCxbVrUd6Qfx6h4KPXp
-         L7oEWi1s58O5KSNTwybkp7BjK72fVDasN8MvXmP8w3CIkvZwc3VL7ca0VRHvCMpnRMdk
-         GvOVB9/kjqBkcEo9nqwQfvoVquoUiZRXaicpn0xpj6cf4IDgFG7L/l9AgfodEhgCgTiJ
-         32bA==
-X-Gm-Message-State: ACgBeo0yfGlPNNB9vlTQg+wiEogv0Ly9j1rRZOvH095jfyl90h3Xdbf/
-        AmNzXuwuEFxBBjmVVNIygg06iwJRL7UG+l2p8sAM/KXNaUF7
-X-Google-Smtp-Source: AA6agR5WqIUuaej2dCGt4CnV3+/Q4ZLjM0p09HHZSy1HniIRoD+P7nEsG1M/+4E02x7RGXIULLXEZg6r2ZY4SqV6ZlcFaHYAFk8X
+        bh=4Ja416e6EJtl4Wt4k3rSUiNYJTMdEKf5Mdz7+oJMoaM=;
+        b=PrejcHCeHZUJiEk44936g6kkko6XaTvqv9KLXhOoZlBFqCmSm86k38Ew99+WlIfBoI
+         Z9MP0zehDaub/CuyQC5WgWfIV72wWqlOJinwXjgey+HsLfXcHl7RbmqwD3cSOKDe9aDQ
+         MR9V7v5g53VOs6QL4Ran+P8U8hG2YfL4/ahmowRLAdvJEj6zagttHmE3+Xhi7Qq6p+6E
+         y3CHKEDjLAv//1Y+q4+AGxrtEBPiVUhepINw6fLisf67loZSijwOidWZBt78rjshmmv6
+         9pVTMXzqS9MvIHaqKLgWMPSpvoF6NEL2ooJ7M0Kx58vlfKkkqAXsLtDs36NvWVjU9NlB
+         hFfQ==
+X-Gm-Message-State: ACgBeo2SrMKdCvFUbo0NWYQD60M8/1mhc86ytSJcDCbJY7tRZMcH1170
+        ejtzslG6bl3ZgftpZ7Sj7MItBlB2My4Y0b9sxIePVdATi9TS
+X-Google-Smtp-Source: AA6agR7PzI68sFAEeTK6kqc/EWQIZjiO+xUlEtke6HmJMklycsbSZgPtF3Lv8oRweEc5SEqc1AMHgWLOP1OApBKLU6KC8qd3kkhg
 MIME-Version: 1.0
-X-Received: by 2002:a92:d0ca:0:b0:2eb:33e4:7734 with SMTP id
- y10-20020a92d0ca000000b002eb33e47734mr12670354ila.42.1663098702012; Tue, 13
+X-Received: by 2002:a05:6e02:1688:b0:2f2:179b:a648 with SMTP id
+ f8-20020a056e02168800b002f2179ba648mr13182154ila.201.1663098702306; Tue, 13
  Sep 2022 12:51:42 -0700 (PDT)
 Date:   Tue, 13 Sep 2022 12:51:42 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c2d1f05e8945724@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __d_instantiate
-From:   syzbot <syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Message-ID: <00000000000060a74405e8945759@google.com>
+Subject: [syzbot] linux-next test error: WARNING in set_peer
+From:   syzbot <syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +61,71 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16271d4f080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e79d82586727c5df
-dashboard link: https://syzkaller.appspot.com/bug?extid=29dc75ed37be943c610e
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162474a7080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119b6b78880000
+HEAD commit:    0caac1da9949 Add linux-next specific files for 20220913
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=172d78d8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2fd6142ea1cf631c
+dashboard link: https://syzkaller.appspot.com/bug?extid=a448cda4dba2dac50de5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/1436897f0dc0/disk-a6b44374.raw.xz
-vmlinux: https://storage.googleapis.com/68c4de151fbb/vmlinux-a6b44374.xz
+disk image: https://storage.googleapis.com/syzbot-assets/4916ab25f774/disk-0caac1da.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/16dace3b273b/vmlinux-0caac1da.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com
+Reported-by: syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com
 
-ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
-ntfs3: loop0: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-ntfs3: loop0: Failed to load $Extend.
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109094000
-[0000000000000008] pgd=080000010aed9003, p4d=080000010aed9003, pud=080000010738d003, pmd=0000000000000000
-Internal error: Oops: 96000006 [#1] PREEMPT SMP
+netdevsim netdevsim0 netdevsim1: renamed from eth1
+netdevsim netdevsim0 netdevsim2: renamed from eth2
+netdevsim netdevsim0 netdevsim3: renamed from eth3
+------------[ cut here ]------------
+memcpy: detected field-spanning write (size 28) of single field "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+WARNING: CPU: 0 PID: 3616 at drivers/net/wireguard/netlink.c:446 set_peer+0x991/0x10c0 drivers/net/wireguard/netlink.c:446
 Modules linked in:
-CPU: 0 PID: 3027 Comm: syz-executor119 Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+CPU: 0 PID: 3616 Comm: syz-executor.0 Not tainted 6.0.0-rc5-next-20220913-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : d_flags_for_inode fs/dcache.c:1980 [inline]
-pc : __d_instantiate+0x2a0/0x2e4 fs/dcache.c:1998
-lr : d_flags_for_inode fs/dcache.c:1979 [inline]
-lr : __d_instantiate+0x80/0x2e4 fs/dcache.c:1998
-sp : ffff8000126f3ac0
-x29: ffff8000126f3ac0 x28: 0000000040000000 x27: ffff0000cd3a0000
-x26: ffff80000cf0e000 x25: fffffc0000000000 x24: 000000000001f000
-x23: ffff0000cd3a0000 x22: 0000000000000008 x21: 0000000000000000
-x20: ffff0000ca50ce48 x19: ffff0000c7732750 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c4f13500
-x14: 00000000000000b8 x13: 00000000ffffffff x12: ffff0000c4f13500
-x11: ff808000085e2a88 x10: 0000000000000000 x9 : ffff0000c4f13500
-x8 : 0000000000000000 x7 : ffff8000085e2e0c x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- d_flags_for_inode fs/dcache.c:1980 [inline]
- __d_instantiate+0x2a0/0x2e4 fs/dcache.c:1998
- d_instantiate fs/dcache.c:2036 [inline]
- d_make_root+0x64/0xa8 fs/dcache.c:2071
- ntfs_fill_super+0x1420/0x14a4 fs/ntfs/super.c:180
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Code: 79000688 52a00417 17ffff83 f9401288 (f9400508) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	79000688 	strh	w8, [x20, #2]
-   4:	52a00417 	mov	w23, #0x200000              	// #2097152
-   8:	17ffff83 	b	0xfffffffffffffe14
-   c:	f9401288 	ldr	x8, [x20, #32]
-* 10:	f9400508 	ldr	x8, [x8, #8] <-- trapping instruction
+RIP: 0010:set_peer+0x991/0x10c0 drivers/net/wireguard/netlink.c:446
+Code: 00 e8 63 30 b3 fc b9 10 00 00 00 48 c7 c2 00 4c 72 8a be 1c 00 00 00 48 c7 c7 60 4c 72 8a c6 05 d0 e7 02 09 01 e8 f1 d7 74 04 <0f> 0b e9 03 04 00 00 e8 33 30 b3 fc 89 ee 44 89 ef e8 79 2c b3 fc
+RSP: 0018:ffffc90003d4f540 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffffc90003d4f6d8 RCX: 0000000000000000
+RDX: ffff888072ed57c0 RSI: ffffffff81611eb8 RDI: fffff520007a9e9a
+RBP: ffffc90003d4f5e8 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 7720676e696e6e6d R12: 000000000000001c
+R13: 0000000000000000 R14: ffff888072f1d104 R15: ffff888024cb0960
+FS:  000055555616b400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa5644d32c0 CR3: 000000006e43c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ wg_set_device+0x8d7/0x11b0 drivers/net/wireguard/netlink.c:589
+ genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:731
+ genl_family_rcv_msg net/netlink/genetlink.c:778 [inline]
+ genl_rcv_msg+0x3b7/0x630 net/netlink/genetlink.c:795
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
+ genl_rcv+0x24/0x40 net/netlink/genetlink.c:806
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ __sys_sendto+0x236/0x340 net/socket.c:2117
+ __do_sys_sendto net/socket.c:2129 [inline]
+ __se_sys_sendto net/socket.c:2125 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2125
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa56343c18c
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffe4bc97580 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007fa5644d4320 RCX: 00007fa56343c18c
+RDX: 0000000000000170 RSI: 00007fa5644d4370 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 00007ffe4bc975d4 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007fa5644d4370 R14: 0000000000000005 R15: 0000000000000000
+ </TASK>
 
 
 ---
@@ -150,5 +135,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
