@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839115B7665
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E965B77ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiIMQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S233023AbiIMR13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiIMQXl (ORCPT
+        with ESMTP id S231384AbiIMR0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:23:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE82A98FD;
-        Tue, 13 Sep 2022 08:18:24 -0700 (PDT)
+        Tue, 13 Sep 2022 13:26:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D1A6457;
+        Tue, 13 Sep 2022 09:15:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 072C8614CE;
-        Tue, 13 Sep 2022 14:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F886C433D6;
-        Tue, 13 Sep 2022 14:36:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79602B8100E;
+        Tue, 13 Sep 2022 14:35:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E50FCC433C1;
+        Tue, 13 Sep 2022 14:35:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079767;
-        bh=/FD+XJlkiYnUlmeTNebsc0OZTkHSly0huwW07NOq6uY=;
+        s=korg; t=1663079750;
+        bh=ZyUgIjdNLSUYrx8Fp9Kntz2SmFYPsYZBQCZEtISl5IE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EhD5onltNePqUP5a0vuNlXC9Zhc1iIR2UjxCjzIKll3cP1ELxFAz7dGb8luV+Ss92
-         AALB+j/KgVzUqyCti7fUyq4nGyXyl5ii5yeBq//dUYPXfFvKVT2IxLM206Hn/O9KwL
-         91S5iArkBe1e6uCLV638pzFdS6qCIRGQTSJp7Xr8=
+        b=m8l56xHwZLceRyJMZDBoLw99MFtJXAGq5FlY1qHEleEOodrE3PNZAqFJA0z7DFHiE
+         3604kJyAM4hOG1e8OLV5LoQlb9mfYGe200q1zKPGbVBE4PNStLy8PNmwPU3ZveoEHA
+         /H36PxCgkm4JfBhwWEXG+K8FtHCTN/LCzy2wRmTU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Woithe <jwoithe@just42.net>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.14 58/61] USB: serial: ch341: fix lost character on LCR updates
-Date:   Tue, 13 Sep 2022 16:08:00 +0200
-Message-Id: <20220913140349.360305890@linuxfoundation.org>
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Subject: [PATCH 4.14 61/61] SUNRPC: use _bh spinlocking on ->transport_lock
+Date:   Tue, 13 Sep 2022 16:08:03 +0200
+Message-Id: <20220913140349.494726420@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
 References: <20220913140346.422813036@linuxfoundation.org>
@@ -54,62 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: "NeilBrown" <neilb@suse.de>
 
-commit 8e83622ae7ca481c76c8fd9579877f6abae64ca2 upstream.
+Prior to Linux 5.3, ->transport_lock in sunrpc required the _bh style
+spinlocks (when not called from a bottom-half handler).
 
-Disable LCR updates for pre-0x30 devices which use a different (unknown)
-protocol for line control and where the current register write causes
-the next received character to be lost.
+When upstream 3848e96edf4788f772d83990022fa7023a233d83 was backported to
+stable kernels, the spin_lock/unlock calls should have been changed to
+the _bh version, but this wasn't noted in the patch and didn't happen.
 
-Note that updating LCR using the INIT command has no effect on these
-devices either.
+So convert these lock/unlock calls to the _bh versions.
 
-Reported-by: Jonathan Woithe <jwoithe@just42.net>
-Tested-by: Jonathan Woithe <jwoithe@just42.net>
-Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
-Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
-Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
-Cc: stable@vger.kernel.org      # 4.10
-Signed-off-by: Johan Hovold <johan@kernel.org>
-[ johan: adjust context to 4.19 ]
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch is required for any stable kernel prior to 5.3 to which the
+above mentioned patch was backported.  Namely 4.9.y, 4.14.y, 4.19.y.
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 ---
- drivers/usb/serial/ch341.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ net/sunrpc/xprt.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -99,6 +99,8 @@ struct ch341_private {
- 	u8 mcr;
- 	u8 msr;
- 	u8 lcr;
-+
-+	u8 version;
- };
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1525,9 +1525,9 @@ static void xprt_destroy(struct rpc_xprt
+ 	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
+ 	 * can only run *before* del_time_sync(), never after.
+ 	 */
+-	spin_lock(&xprt->transport_lock);
++	spin_lock_bh(&xprt->transport_lock);
+ 	del_timer_sync(&xprt->timer);
+-	spin_unlock(&xprt->transport_lock);
++	spin_unlock_bh(&xprt->transport_lock);
  
- static void ch341_set_termios(struct tty_struct *tty,
-@@ -184,6 +186,9 @@ static int ch341_set_baudrate_lcr(struct
- 	if (r)
- 		return r;
- 
-+	if (priv->version < 0x30)
-+		return 0;
-+
- 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
- 	if (r)
- 		return r;
-@@ -235,7 +240,9 @@ static int ch341_configure(struct usb_de
- 	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
- 	if (r < 0)
- 		goto out;
--	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
-+
-+	priv->version = buffer[0];
-+	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
- 
- 	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
- 	if (r < 0)
+ 	/*
+ 	 * Destroy sockets etc from the system workqueue so they can
 
 
