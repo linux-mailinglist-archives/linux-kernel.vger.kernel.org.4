@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75DD5B737C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF5A5B70A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbiIMPGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S233870AbiIMOaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235449AbiIMPE2 (ORCPT
+        with ESMTP id S233834AbiIMO2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:04:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415831B7A8;
-        Tue, 13 Sep 2022 07:30:19 -0700 (PDT)
+        Tue, 13 Sep 2022 10:28:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70C567CAE;
+        Tue, 13 Sep 2022 07:17:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71997B80F93;
-        Tue, 13 Sep 2022 14:16:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA860C433D7;
-        Tue, 13 Sep 2022 14:16:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8931614D4;
+        Tue, 13 Sep 2022 14:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A32C433B5;
+        Tue, 13 Sep 2022 14:17:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078613;
-        bh=73lWbTdiqKnYoZ9jmUkpJuJBRTOaCYWnNn+0KzdRaHw=;
+        s=korg; t=1663078641;
+        bh=Flt/mF2z0wxXkni/7rusTf9mZAlqIp6ClD2ug9pddeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xicWPR3+uyMgakO/cAZv6s++b0y0uxrONzsBF4WnXy4gu/k3M9hRgLkInRfx61j/I
-         Gzzn6oC/SStgSxgJaZ2IRLLrC+GWndBo8hS0bFcTdyz42Bm44p1vAe/TBnfF0yNKi8
-         5q24s1YO1fs8WDqM/eZ895oEc8mOPs+zP/od+W5w=
+        b=fqEWCTKvMTIV+nAQISOo4Xy0B83IZLT26IBAnUNumzT9o4fAp7bpMGMypMzlRDg1+
+         TSW9ae7ZII3VDPYaY4K9EZuUjMLv0HDhZl1wfp7ROIzQbto7qFfWuGxKL7QP8gGWY8
+         9YvqWcwHCb6Dh3wRiFzBmIWw7LfLuxd7WBrfxHg8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
+        stable@vger.kernel.org, Sumit Saxena <sumit.saxena@broadcom.com>,
+        Guixin Liu <kanie@linux.alibaba.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 008/121] scsi: qla2xxx: Disable ATIO interrupt coalesce for quad port ISP27XX
-Date:   Tue, 13 Sep 2022 16:03:19 +0200
-Message-Id: <20220913140357.688926516@linuxfoundation.org>
+Subject: [PATCH 5.15 009/121] scsi: megaraid_sas: Fix double kfree()
+Date:   Tue, 13 Sep 2022 16:03:20 +0200
+Message-Id: <20220913140357.733101855@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -58,52 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Battersby <tonyb@cybernetics.com>
+From: Guixin Liu <kanie@linux.alibaba.com>
 
-[ Upstream commit 53661ded2460b414644532de6b99bd87f71987e9 ]
+[ Upstream commit 8c499e49240bd93628368c3588975cfb94169b8b ]
 
-This partially reverts commit d2b292c3f6fd ("scsi: qla2xxx: Enable ATIO
-interrupt handshake for ISP27XX")
+When allocating log_to_span fails, kfree(instance->ctrl_context) is called
+twice. Remove redundant call.
 
-For some workloads where the host sends a batch of commands and then
-pauses, ATIO interrupt coalesce can cause some incoming ATIO entries to be
-ignored for extended periods of time, resulting in slow performance,
-timeouts, and aborted commands.
-
-Disable interrupt coalesce and re-enable the dedicated ATIO MSI-X
-interrupt.
-
-Link: https://lore.kernel.org/r/97dcf365-89ff-014d-a3e5-1404c6af511c@cybernetics.com
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Reviewed-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+Link: https://lore.kernel.org/r/1659424729-46502-1-git-send-email-kanie@linux.alibaba.com
+Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 7ab3c9e4d4783..b86f6e1f21b5c 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -6961,14 +6961,8 @@ qlt_24xx_config_rings(struct scsi_qla_host *vha)
- 
- 	if (ha->flags.msix_enabled) {
- 		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--			if (IS_QLA2071(ha)) {
--				/* 4 ports Baker: Enable Interrupt Handshake */
--				icb->msix_atio = 0;
--				icb->firmware_options_2 |= cpu_to_le32(BIT_26);
--			} else {
--				icb->msix_atio = cpu_to_le16(msix->entry);
--				icb->firmware_options_2 &= cpu_to_le32(~BIT_26);
--			}
-+			icb->msix_atio = cpu_to_le16(msix->entry);
-+			icb->firmware_options_2 &= cpu_to_le32(~BIT_26);
- 			ql_dbg(ql_dbg_init, vha, 0xf072,
- 			    "Registering ICB vector 0x%x for atio que.\n",
- 			    msix->entry);
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index eb5ceb75a15ec..056837849ead5 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -5279,7 +5279,6 @@ megasas_alloc_fusion_context(struct megasas_instance *instance)
+ 		if (!fusion->log_to_span) {
+ 			dev_err(&instance->pdev->dev, "Failed from %s %d\n",
+ 				__func__, __LINE__);
+-			kfree(instance->ctrl_context);
+ 			return -ENOMEM;
+ 		}
+ 	}
 -- 
 2.35.1
 
