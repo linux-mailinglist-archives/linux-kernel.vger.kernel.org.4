@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7EC5B71D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06CE25B6EE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiIMOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S232453AbiIMOGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234521AbiIMOnu (ORCPT
+        with ESMTP id S232454AbiIMOFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D1865270;
-        Tue, 13 Sep 2022 07:23:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26A9C614D4;
-        Tue, 13 Sep 2022 14:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3F1C433C1;
-        Tue, 13 Sep 2022 14:21:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078893;
-        bh=1xKMPOAIjXAYy50nficxGkTThJt4JiSDavxh3hKYCTI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GDfpoOkVYOAU1ZolNgzNdaWIYXASo3dYCfrGnexHGPOltOcvWISQshDk8N8eOKyWn
-         tR4n9BoFr5KTDdX2EXo3VWVF1pbOgooHawVYE3gre4Ovm8vpKeZuTtuK5R3NHZ0b53
-         i7xCmhZSKH/1al4vrEALZEmrvDDKQ1ohAexVcNRo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 097/121] RDMA/irdma: Report RNR NAK generation in device caps
-Date:   Tue, 13 Sep 2022 16:04:48 +0200
-Message-Id: <20220913140401.523730787@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:05:52 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473B1520BD;
+        Tue, 13 Sep 2022 07:05:49 -0700 (PDT)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28DE5PTr015435;
+        Tue, 13 Sep 2022 23:05:26 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28DE5PTr015435
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1663077926;
+        bh=YeFfqsD1cMM/56dIANPgCUVk9QsCcNwlQvvcGl88Bmo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VurfrffIXsKJXT+A/JCESLYaC4y9WFiO+2KX08ME9nBrFNhS85XRR/29gfjw+Fa0E
+         T/e34Jcm+NRe+MM9Bi0jawXBJtqstBy84T4HEuz09mwAuA34v75xBKl4f2FmmJOJFV
+         NH/waIUG3T//0JR3+xjgo9BOoEQzLgbN99Rh7MRNBom/Tl+C9aZfy/v5Nh4S1po4b/
+         AH6cIWMCr2Pb1mbNn/ZC14PaXGP3fHVDWbrM38UnoeH9yqMRFUDDlGdDLKxBTmXdK/
+         KT6p9dX9AluJTH+WBEU7g72rCgxw7FZb87Z0piw7TJ8EPxp8X7Medgw8AR7CtZq4EH
+         5zp3NvS+6iwFw==
+X-Nifty-SrcIP: [209.85.160.44]
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1278624b7c4so32409941fac.5;
+        Tue, 13 Sep 2022 07:05:25 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1ued3phsRpXgC2QZ/vz9/bAr66gOaC5UyMvTrKqoJJV6qSQfRZ
+        y7SNjNLRq+3AA9J64+j4FpyYxRkkEfvJr6Unk70=
+X-Google-Smtp-Source: AA6agR7R++hgoWo7WThcQ9iOPJ7P8NZbGLYTq2wQTuFqtkVYuxGvVglcwUqDg2OyQ11iWrlgREEwz+LOorWIH3dklO8=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr1869267oab.287.1663077924765; Tue, 13
+ Sep 2022 07:05:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220913040753.2198-1-xingwu.yang@gmail.com> <YyBSgNbJGRBNIL5I@dev-arch.thelio-3990X>
+In-Reply-To: <YyBSgNbJGRBNIL5I@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 13 Sep 2022 23:04:48 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASNTxtNCjjUEr+oDPLhPgqQet_iWzG0i2-dFBLo8nO+8g@mail.gmail.com>
+Message-ID: <CAK7LNASNTxtNCjjUEr+oDPLhPgqQet_iWzG0i2-dFBLo8nO+8g@mail.gmail.com>
+Subject: Re: [PATCH] scripts/clang-tools: remove unused module
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     yangxingwu <xingwu.yang@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sindhu-Devale <sindhu.devale@intel.com>
+On Tue, Sep 13, 2022 at 6:50 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Tue, Sep 13, 2022 at 04:07:52AM +0000, yangxingwu wrote:
+> > remove unused imported 'os' module
+> >
+> > Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
+>
+> Sure.
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Masahiro, are you able to pick this up? The original was not cc'd to
+> linux-kbuild but it is on lore:
+>
+> https://lore.kernel.org/20220913040753.2198-1-xingwu.yang@gmail.com/
 
-[ Upstream commit a261786fdc0a5bed2e5f994dcc0ffeeeb0d662c7 ]
 
-Report RNR NAK generation when device capabilities are queried
+Sure, applied to linux-kbuild. Thanks.
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Link: https://lore.kernel.org/r/20220906223244.1119-6-shiraz.saleem@intel.com
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/infiniband/hw/irdma/verbs.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
-index adb0e0774256c..5275616398d83 100644
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -43,8 +43,11 @@ static int irdma_query_device(struct ib_device *ibdev,
- 	props->max_sge_rd = hw_attrs->uk_attrs.max_hw_read_sges;
- 	props->max_qp_rd_atom = hw_attrs->max_hw_ird;
- 	props->max_qp_init_rd_atom = hw_attrs->max_hw_ord;
--	if (rdma_protocol_roce(ibdev, 1))
-+	if (rdma_protocol_roce(ibdev, 1)) {
-+		props->device_cap_flags |= IB_DEVICE_RC_RNR_NAK_GEN;
- 		props->max_pkeys = IRDMA_PKEY_TBL_SZ;
-+	}
-+
- 	props->max_ah = rf->max_ah;
- 	props->max_mcast_grp = rf->max_mcg;
- 	props->max_mcast_qp_attach = IRDMA_MAX_MGS_PER_CTX;
+> > ---
+> >  scripts/clang-tools/run-clang-tools.py | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> > index 1337cedca..bb78c9bde 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -12,7 +12,6 @@ compile_commands.json.
+> >  import argparse
+> >  import json
+> >  import multiprocessing
+> > -import os
+> >  import subprocess
+> >  import sys
+> >
+> > --
+> > 2.37.2
+> >
+
+
+
 -- 
-2.35.1
-
-
-
+Best Regards
+Masahiro Yamada
