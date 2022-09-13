@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5865C5B6C14
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668705B6C08
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiIMK5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S231778AbiIMK4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbiIMK5F (ORCPT
+        with ESMTP id S231247AbiIMK4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:57:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF775F130
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663066623; x=1694602623;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BL9ydBtVwfEgQDpu1HgFXSFKo0fJNzYIDkD86bRaHYg=;
-  b=T0RsWJF+LiW3Q3/AdZgYqVZNPxaiulYkPxn4EiBuWapLDGZ2E3Wia396
-   HpvTBm6QHxn6D2QGZVFNu5nxJndd5g273CurFd4STlaewma3QqCOspxlh
-   oSws6R1S3rOR9TAWfXKSRPqJoUbxkvZcejt5+KvHna8+4pg9ymA3Mb0nM
-   UJUmbcP47zUMDqezmfDJYxoqhOXK38DMpMYRiHxYmtcOiUPre0P/sgAwW
-   mMH6mQfJ5DAYfflwkdF5+KHMvl9Iz/p52ko6IrD8IKhJBN6BBL6J8LTf3
-   b2VgVPmENLVvEBKcGMJ8zOXf4BCtZZ8vgtIozFfQMz1xJZc2I0Xy/VUk5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="277839542"
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="277839542"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 03:57:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="861511473"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Sep 2022 03:57:01 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oY3bB-0003WM-0Y;
-        Tue, 13 Sep 2022 10:57:01 +0000
-Date:   Tue, 13 Sep 2022 18:56:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [palmer:riscv-zicbom_fix 7/7] arch/riscv/mm/dma-noncoherent.c:15:14:
- error: redefinition of 'riscv_cbom_block_size' with a different type:
- 'unsigned int' vs 'int'
-Message-ID: <202209131858.0qmW0TEk-lkp@intel.com>
+        Tue, 13 Sep 2022 06:56:41 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B025EDEE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:56:40 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso9261540wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=S/DDh4Dc4NwKbIspCCOFeZLSTNJTP49Y+3Pko2NGQsI=;
+        b=RjZYdegDG1Eper+2N2K/QB6WEnHlsT/EOJ5/CYgMqvX/vAdQxoSpZ767A+c8cSjTZZ
+         7a1VkRmK2P2BsFL1E9iQ7LQGibfHI5jD0IJYOxBgb3Kci3dEWQCLnSSbMgsEvad1HsBF
+         y7nlpmJ2Lm+F58BUulFDhhLAUelmQnlmmNAnXmK3DhIqqwRrW8/rmNEC/qnXwW3n/KBu
+         oqdJyOv1szzTrcAn6n9lH5F1/fhMjowOXjGMc+YdaJ3aicmdTauFUaz5tbxbygPsFqMi
+         iW7tezfQxRuK3dpV6VIppQ+oG2jSUe+Yl2Ki31/zstQR7aWThCJi3e5rvRsAy+UWQ+/b
+         fsVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=S/DDh4Dc4NwKbIspCCOFeZLSTNJTP49Y+3Pko2NGQsI=;
+        b=lUqTPPDO87fzxMqcKyZDUS5xMZtFN0uFjWSlT9XYv1F48L86w9GD/P8uM5eZ4FmQRQ
+         agmHdmI3GBcyXOOFrGVIKDU9TPDCnoeW1ZYrnVK+1Atar5TjbDNIb1hzDQot00Qu+/7p
+         yFoR7NySSzf+SmEWGnucAeSpb+5XtEYSeeoL31ER7A+pDQS5zzX/xG/dWcblXkEGge7t
+         XEeEAAVU1CCSWqfxV9L1P3ZhPy448jti1BvcJ8vzPY4R/JE2XrSiQTjgGfpSVR5zMB+a
+         Gz9ydJ4ci41eywwa1dydkBwedkTJDtka9+KBSnrdzuuhPcrahiyk6Te66cEtkdA93DVN
+         G1jw==
+X-Gm-Message-State: ACgBeo2bSMrh0ROrvKIUhN0De1XpvyIeiM1/x3/T040anYurOC+dBuyu
+        geA4rmfBuFutBMW3v21IVJtsTA==
+X-Google-Smtp-Source: AA6agR4Aq9H8Q+MOOVu+M1poly4g+vo6TAxHNZjrt3t0xRJtJmP20cPpB/mMfqXgX7aHUWQc6IHRjA==
+X-Received: by 2002:a05:600c:3b1b:b0:3b4:92fd:559a with SMTP id m27-20020a05600c3b1b00b003b492fd559amr1930831wms.69.1663066599193;
+        Tue, 13 Sep 2022 03:56:39 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.70])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b002286670bafasm10238117wrq.48.2022.09.13.03.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 03:56:38 -0700 (PDT)
+Message-ID: <7146d3f6-1bea-bfe4-c5c6-88be45ffa10e@linaro.org>
+Date:   Tue, 13 Sep 2022 12:56:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/4] pinctrl: qcom: spmi-gpio: Fix the GPIO strength
+ mapping
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_jprakash@quicinc.com
+References: <20220912210624.4527-1-quic_amelende@quicinc.com>
+ <20220912210624.4527-3-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220912210624.4527-3-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,45 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-zicbom_fix
-head:   933c80bff1907722a069a0d8bdce283183e4b203
-commit: 933c80bff1907722a069a0d8bdce283183e4b203 [7/7] RISC-V: Clean up the Zicbom block size probing
-config: riscv-buildonly-randconfig-r005-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131858.0qmW0TEk-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=933c80bff1907722a069a0d8bdce283183e4b203
-        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
-        git fetch --no-tags palmer riscv-zicbom_fix
-        git checkout 933c80bff1907722a069a0d8bdce283183e4b203
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+On 12/09/2022 23:06, Anjelique Melendez wrote:
+> The SPMI based PMICs have the HIGH and LOW GPIO output strength mappings
+> interchanged, fix them.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This looks like a fix, so should have Fixes tag and Cc-stable.
 
-All errors (new ones prefixed by >>):
+Code looks good, thanks.
 
->> arch/riscv/mm/dma-noncoherent.c:15:14: error: redefinition of 'riscv_cbom_block_size' with a different type: 'unsigned int' vs 'int'
-   unsigned int riscv_cbom_block_size;
-                ^
-   arch/riscv/include/asm/cacheflush.h:46:12: note: previous declaration is here
-   extern int riscv_cbom_block_size;
-              ^
-   1 error generated.
-
-
-vim +15 arch/riscv/mm/dma-noncoherent.c
-
-    14	
-  > 15	unsigned int riscv_cbom_block_size;
-    16	static bool noncoherent_supported;
-    17	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+Best regards,
+Krzysztof
