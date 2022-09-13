@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B275B7431
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFA55B7067
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbiIMPPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S233909AbiIMOaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbiIMPNa (ORCPT
+        with ESMTP id S233888AbiIMO2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:13:30 -0400
+        Tue, 13 Sep 2022 10:28:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CB6A4AA;
-        Tue, 13 Sep 2022 07:32:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8466D67C99;
+        Tue, 13 Sep 2022 07:17:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33039614C5;
-        Tue, 13 Sep 2022 14:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E581C433D7;
-        Tue, 13 Sep 2022 14:23:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D8C614BD;
+        Tue, 13 Sep 2022 14:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF12C433C1;
+        Tue, 13 Sep 2022 14:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078997;
-        bh=F4/WLsRyy07YolkegJmcY9GWhvPc3z+yHZ+ideYcFvY=;
+        s=korg; t=1663078549;
+        bh=kWaJaqfSDIHyK2Hlx0qudHzqLUGwNU3CI8gNO7RTeao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NJbIIWFG4ojJ2w1clOMrEal8G+tHRvtFBkLHV5kJKdzKNQifD0ZTEh2hkFQKMBq8a
-         cJWFvgoqtzuFnhhRvl3ykf/6jzNQCDnrKssoM1JSh4Ndc9fDHb3n41EOLG0inDAfi9
-         /yuBnSy8ETaGxmdPL20TbRDbCQUSjeOQETRkHgFg=
+        b=JhgPZgXA2+9mToZjc8t/5mVQ5gAPK4N3/du/VjvP3BFuOTacXtEjJgdRb03lAmveW
+         +ILX1eAshNTHVTSyCjnKCl3ZNjaJe2njlAyIR0vFMCbQJRsfoKeq7OqhZnvSM9K3gF
+         oFNHAMflvheuBe2EC1YnUEaTuz7zSmOFW/wl7aNU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenpeng Liang <liangwenpeng@huawei.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        stable@vger.kernel.org, Michael Carns <mike@carns.com>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 43/79] RDMA/hns: Fix wrong fixed value of qp->rq.wqe_shift
-Date:   Tue, 13 Sep 2022 16:04:48 +0200
-Message-Id: <20220913140352.369810620@linuxfoundation.org>
+Subject: [PATCH 5.19 183/192] hwmon: (asus-ec-sensors) add support for Maximus XI Hero
+Date:   Tue, 13 Sep 2022 16:04:49 +0200
+Message-Id: <20220913140419.174531488@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenpeng Liang <liangwenpeng@huawei.com>
+From: Michael Carns <mike@carns.com>
 
-[ Upstream commit 0c8b5d6268d92d141bfd64d21c870d295a84dee1 ]
+[ Upstream commit 8f9eb10ff71d8e3beeee3f8d19050223600faf85 ]
 
-The value of qp->rq.wqe_shift of HIP08 is always determined by the number
-of sge. So delete the wrong branch.
+Add definitions for ROG MAXIMUS XI HERO and ROG MAXIMUS XI HERO (WI-FI)
+boards.
 
-Fixes: cfc85f3e4b7f ("RDMA/hns: Add profile support for hip08 driver")
-Fixes: 926a01dc000d ("RDMA/hns: Add QP operations support for hip08 SoC")
-Link: https://lore.kernel.org/r/20220829105021.1427804-3-liangwenpeng@huawei.com
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Michael Carns <mike@carns.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Link: https://lore.kernel.org/r/20220627225437.87462-1-eugene.shalygin@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Stable-dep-of: 88700d1396ba ("hwmon: (asus-ec-sensors) autoload module via DMI data")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_qp.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ Documentation/hwmon/asus_ec_sensors.rst |  2 ++
+ drivers/hwmon/asus-ec-sensors.c         | 36 +++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_qp.c b/drivers/infiniband/hw/hns/hns_roce_qp.c
-index 291e06d631505..6fe98af7741b5 100644
---- a/drivers/infiniband/hw/hns/hns_roce_qp.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_qp.c
-@@ -386,11 +386,8 @@ static int set_rq_size(struct hns_roce_dev *hr_dev, struct ib_qp_cap *cap,
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 00d8c46ef9e04..1e40c123db777 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -13,6 +13,8 @@ Supported boards:
+  * ROG CROSSHAIR VIII FORMULA
+  * ROG CROSSHAIR VIII HERO
+  * ROG CROSSHAIR VIII IMPACT
++ * ROG MAXIMUS XI HERO
++ * ROG MAXIMUS XI HERO (WI-FI)
+  * ROG STRIX B550-E GAMING
+  * ROG STRIX B550-I GAMING
+  * ROG STRIX X570-E GAMING
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 19d3ca71b3609..625c2baa35ec6 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -141,6 +141,7 @@ enum board_family {
+ 	family_unknown,
+ 	family_amd_400_series,
+ 	family_amd_500_series,
++	family_intel_300_series,
+ 	family_intel_600_series
+ };
  
- 	hr_qp->rq.max_gs = roundup_pow_of_two(max(1U, cap->max_recv_sge));
+@@ -200,6 +201,26 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
+ 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
+ };
  
--	if (hr_dev->caps.max_rq_sg <= HNS_ROCE_SGE_IN_WQE)
--		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz);
--	else
--		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
--					    hr_qp->rq.max_gs);
-+	hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
-+				    hr_qp->rq.max_gs);
- 
- 	hr_qp->rq.wqe_cnt = cnt;
- 	if (hr_dev->caps.flags & HNS_ROCE_CAP_FLAG_RQ_INLINE)
++static const struct ec_sensor_info sensors_family_intel_300[] = {
++	[ec_sensor_temp_chipset] =
++		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
++	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
++	[ec_sensor_temp_mb] =
++		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
++	[ec_sensor_temp_t_sensor] =
++		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
++	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
++	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
++	[ec_sensor_fan_water_flow] =
++		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc),
++	[ec_sensor_temp_water_in] =
++		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
++	[ec_sensor_temp_water_out] =
++		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
++};
++
+ static const struct ec_sensor_info sensors_family_intel_600[] = {
+ 	[ec_sensor_temp_t_sensor] =
+ 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
+@@ -281,6 +302,18 @@ static const struct ec_board_info board_info[] = {
+ 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+ 		.family = family_amd_500_series,
+ 	},
++	{
++		.board_names = {
++			"ROG MAXIMUS XI HERO",
++			"ROG MAXIMUS XI HERO (WI-FI)",
++		},
++		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++			SENSOR_TEMP_T_SENSOR |
++			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
++			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
++		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++		.family = family_intel_300_series,
++	},
+ 	{
+ 		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
+ 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+@@ -814,6 +847,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+ 	case family_amd_500_series:
+ 		ec_data->sensors_info = sensors_family_amd_500;
+ 		break;
++	case family_intel_300_series:
++		ec_data->sensors_info = sensors_family_intel_300;
++		break;
+ 	case family_intel_600_series:
+ 		ec_data->sensors_info = sensors_family_intel_600;
+ 		break;
 -- 
 2.35.1
 
