@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E405B76C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7195B76B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiIMQv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S231577AbiIMQsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiIMQvi (ORCPT
+        with ESMTP id S231496AbiIMQra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:51:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9971481695
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:45:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 280ED1A2D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:37:11 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8455E3F73B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:37:04 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 16:36:57 +0100
-From:   Liviu Dudau <Liviu.Dudau@arm.com>
-To:     Brian Starkey <brian.starkey@arm.com>
-Cc:     ville.syrjala@linux.intel.com, butterflyhuangxx@gmail.com,
-        tzimmermann@suse.de, jonas@kwiboo.se, airlied@linux.ie,
-        linux-kernel@vger.kernel.org,
-        George Kennedy <george.kennedy@oracle.com>,
-        dri-devel@lists.freedesktop.org, ben.davis@arm.com
-Subject: Re: [PATCH] drm/fourcc: Fix vsub/hsub for Q410 and Q401
-Message-ID: <YyCjmQUZGKP6e8H1@e110455-lin.cambridge.arm.com>
-References: <YyA9Y+Cs8ZCYHXAT@intel.com>
- <20220913144306.17279-1-brian.starkey@arm.com>
+        Tue, 13 Sep 2022 12:47:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA52BD1CB;
+        Tue, 13 Sep 2022 08:41:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD3236148A;
+        Tue, 13 Sep 2022 15:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F939C433C1;
+        Tue, 13 Sep 2022 15:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663083561;
+        bh=hdzbMLB+OJ8cSYqpFPdtuabfUwCyTVksg9R5H7w1rxY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u1B1fl67g266hqwu9fyDgpcc5qq+LxmYN+nz3ADp6ysgt/uXn8K+ZiIa7907dCy1p
+         gqdsag6VJtsW2qIPJCKxLRAFSnW0CephlAfhYQKbSyyrqsK3r3Yd8yre1yJ+yZiccZ
+         uZiejsrrYo1te3jO4kDp7HTFkmvd+s9ouvCSFW1mBHNM2ruXpp8rOKOj6wiEEe0h32
+         3AozQ/ZNMofA+h11rH9LLL4iir3sHjzojSNMM3nnSPTCMNqjep5OUiz6x3PVEzeVDx
+         R5vzu8XPqwI83WUCxronnovJvaAWY/iYzanVOXTmPVU5ENUUWioQWtHjy85tKrVZwS
+         v4lz3nvTIRJaA==
+Date:   Tue, 13 Sep 2022 10:39:18 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
+        robh@kernel.org, rafael@kernel.org, bhupesh.linux@gmail.com
+Subject: Re: [PATCH 1/4] thermal: qcom: qmi_cooling: Add skeletal qmi cooling
+ driver
+Message-ID: <20220913153918.e2bckss5htpjuuhw@builder.lan>
+References: <20220912085049.3517140-1-bhupesh.sharma@linaro.org>
+ <20220912085049.3517140-2-bhupesh.sharma@linaro.org>
+ <ec1858fe-753f-c63a-4580-35851241fbcf@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220913144306.17279-1-brian.starkey@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ec1858fe-753f-c63a-4580-35851241fbcf@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,65 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 03:43:06PM +0100, Brian Starkey wrote:
-> These formats are not subsampled, but that means hsub and vsub should be
-> 1, not 0.
+On Mon, Sep 12, 2022 at 02:23:21PM -0700, Jeff Johnson wrote:
+> On 9/12/2022 1:50 AM, Bhupesh Sharma wrote:
+[..]
+> > diff --git a/drivers/thermal/qcom/qmi_cooling/qcom_qmi_cooling.c b/drivers/thermal/qcom/qmi_cooling/qcom_qmi_cooling.c
+[..]
+> > +static struct qmi_elem_info tmd_mitigation_dev_id_type_v01_ei[] = {
 > 
-> Fixes: 94b292b27734 ("drm: drm_fourcc: add NV15, Q410, Q401 YUV formats")
-> Reported-by: George Kennedy <george.kennedy@oracle.com>
-> Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
-> Signed-off-by: Brian Starkey <brian.starkey@arm.com>
-
-Reviewed-by: Liviu Dudau <liviu.dudau@arm.com>
-
-Should this be backported into stable releases? How far back to we go?
-
-Best regards,
-Liviu
-
-
-> ---
->  drivers/gpu/drm/drm_fourcc.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> note that commit ff6d365898d ("soc: qcom: qmi: use const for struct
+> qmi_elem_info") allows QMI message encoding/decoding rules to be const
 > 
-> Sorry, I lost track of this - I thought it got fixed after the previous
-> thread[1].
+> <https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=ff6d365898d4d31bd557954c7fc53f38977b491c>
 > 
-> -Brian
-> 
-> [1] https://lore.kernel.org/all/26fdb955-10c8-a5d6-07b6-85a4374e7754@oracle.com/
-> 
-> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-> index 07741b678798..6768b7d18b6f 100644
-> --- a/drivers/gpu/drm/drm_fourcc.c
-> +++ b/drivers/gpu/drm/drm_fourcc.c
-> @@ -263,12 +263,12 @@ const struct drm_format_info *__drm_format_info(u32 format)
->  		  .vsub = 2, .is_yuv = true },
->  		{ .format = DRM_FORMAT_Q410,		.depth = 0,
->  		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-> -		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-> -		  .vsub = 0, .is_yuv = true },
-> +		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
-> +		  .vsub = 1, .is_yuv = true },
->  		{ .format = DRM_FORMAT_Q401,		.depth = 0,
->  		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
-> -		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
-> -		  .vsub = 0, .is_yuv = true },
-> +		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
-> +		  .vsub = 1, .is_yuv = true },
->  		{ .format = DRM_FORMAT_P030,            .depth = 0,  .num_planes = 2,
->  		  .char_per_block = { 4, 8, 0 }, .block_w = { 3, 3, 0 }, .block_h = { 1, 1, 0 },
->  		  .hsub = 2, .vsub = 2, .is_yuv = true},
-> -- 
-> 2.25.1
+> I'm waiting for that to land in the soc tree before I submit my changes to
+> all of the existing drivers, but you can do this now for the new driver
 > 
 
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+I did merge your patch recently, so you should be able to fetch
+linux-next and continue this work:
+
+https://patchwork.kernel.org/project/linux-arm-msm/patch/20220822153435.7856-1-quic_jjohnson@quicinc.com/
+
+Looking forward to the continuation,
+Bjorn
