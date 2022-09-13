@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F0C5B71C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D4A5B700A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiIMOpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
+        id S233153AbiIMOWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiIMOmh (ORCPT
+        with ESMTP id S233616AbiIMOT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:42:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CE42FFD7;
-        Tue, 13 Sep 2022 07:22:39 -0700 (PDT)
+        Tue, 13 Sep 2022 10:19:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF276556E;
+        Tue, 13 Sep 2022 07:14:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB3C5B80FBC;
-        Tue, 13 Sep 2022 14:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA0DC433D6;
-        Tue, 13 Sep 2022 14:22:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFC78B80EF8;
+        Tue, 13 Sep 2022 14:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34789C433D6;
+        Tue, 13 Sep 2022 14:14:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078940;
-        bh=tVAbAvCjhuEg7A6fhu9ETVqCIukL5QdM6oRk66+FGAE=;
+        s=korg; t=1663078443;
+        bh=ZEPGgOGoYFei7a8Dw68+BjH8Pus/gQZBsMUyRUPSWYw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BTtIVdpuvWCfWKlsr0dHfyL+CLL+x3T+OHhOxl1gW2Cc8/kkjZ7JJNVx4Eauf6ESA
-         MS9jj4F8Ay2RBM4veKEQPli3RrhgTd+T1gV7sYLm9xih0XrP0DUAG5Uf9CMKgsdio3
-         KV5RZw0KQGQ2WzxtWv402PixOF0Xtb7JHS/vShEw=
+        b=2no+xc0LYmY5Pmy+PfkExHUytYhm4bxW2nJxUMgrjYwRmQOU+Lsu6PqNPcKzDzI8V
+         tz2phG/LktFn9m/sMgDCEplWWqx3nzcJyK9GhIDR1OHUhimtLtS4/jvJ2Q80zLdoKe
+         T/NIF9yS+XmDiF1eF5ROeMMqHYwyyxB9ZFnXe0KI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, SeongJae Park <sj@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.10 02/79] xen-blkfront: Cache feature_persistent value before advertisement
-Date:   Tue, 13 Sep 2022 16:04:07 +0200
-Message-Id: <20220913140350.404321086@linuxfoundation.org>
+        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 142/192] RDMA/irdma: Return correct WC error for bind operation failure
+Date:   Tue, 13 Sep 2022 16:04:08 +0200
+Message-Id: <20220913140417.094887013@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+From: Sindhu-Devale <sindhu.devale@intel.com>
 
-commit fe8f65b018effbf473f53af3538d0c1878b8b329 upstream.
+[ Upstream commit dcb23bbb1de7e009875fdfac2b8a9808a9319cc6 ]
 
-Xen blkfront advertises its support of the persistent grants feature
-when it first setting up and when resuming in 'talk_to_blkback()'.
-Then, blkback reads the advertised value when it connects with blkfront
-and decides if it will use the persistent grants feature or not, and
-advertises its decision to blkfront.  Blkfront reads the blkback's
-decision and it also makes the decision for the use of the feature.
+When a QP and a MR on a local host are in different PDs, the HW generates
+an asynchronous event (AE). The same AE is generated when a QP and a MW
+are in different PDs during a bind operation. Return the more appropriate
+IBV_WC_MW_BIND_ERR for the latter case by checking the OP type from the
+CQE in error.
 
-Commit 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter
-when connect"), however, made the blkfront's read of the parameter for
-disabling the advertisement, namely 'feature_persistent', to be done
-when it negotiate, not when advertise.  Therefore blkfront advertises
-without reading the parameter.  As the field for caching the parameter
-value is zero-initialized, it always advertises as the feature is
-disabled, so that the persistent grants feature becomes always disabled.
-
-This commit fixes the issue by making the blkfront does parmeter caching
-just before the advertisement.
-
-Fixes: 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter when connect")
-Cc: <stable@vger.kernel.org> # 5.10.x
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220831165824.94815-4-sj@kernel.org
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 551c46edc769 ("RDMA/irdma: Add user/kernel shared libraries")
+Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Link: https://lore.kernel.org/r/20220906223244.1119-4-shiraz.saleem@intel.com
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/xen-blkfront.c |   14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/infiniband/hw/irdma/uk.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -1852,6 +1852,12 @@ static void free_info(struct blkfront_in
- 	kfree(info);
- }
+diff --git a/drivers/infiniband/hw/irdma/uk.c b/drivers/infiniband/hw/irdma/uk.c
+index daeab5daed5bc..d003ad864ee44 100644
+--- a/drivers/infiniband/hw/irdma/uk.c
++++ b/drivers/infiniband/hw/irdma/uk.c
+@@ -1005,6 +1005,7 @@ int irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq,
+ 	int ret_code;
+ 	bool move_cq_head = true;
+ 	u8 polarity;
++	u8 op_type;
+ 	bool ext_valid;
+ 	__le64 *ext_cqe;
  
-+/* Enable the persistent grants feature. */
-+static bool feature_persistent = true;
-+module_param(feature_persistent, bool, 0644);
-+MODULE_PARM_DESC(feature_persistent,
-+		"Enables the persistent grants feature");
-+
- /* Common code used when first setting up, and when resuming. */
- static int talk_to_blkback(struct xenbus_device *dev,
- 			   struct blkfront_info *info)
-@@ -1943,6 +1949,7 @@ again:
- 		message = "writing protocol";
- 		goto abort_transaction;
- 	}
-+	info->feature_persistent_parm = feature_persistent;
- 	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
- 			info->feature_persistent_parm);
- 	if (err)
-@@ -2019,12 +2026,6 @@ static int negotiate_mq(struct blkfront_
- 	return 0;
- }
+@@ -1187,7 +1188,6 @@ int irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq,
+ 			do {
+ 				__le64 *sw_wqe;
+ 				u64 wqe_qword;
+-				u8 op_type;
+ 				u32 tail;
  
--/* Enable the persistent grants feature. */
--static bool feature_persistent = true;
--module_param(feature_persistent, bool, 0644);
--MODULE_PARM_DESC(feature_persistent,
--		"Enables the persistent grants feature");
--
- /**
-  * Entry point to this code when a new device is created.  Allocate the basic
-  * structures and the ring buffer for communication with the backend, and
-@@ -2394,7 +2395,6 @@ static void blkfront_gather_backend_feat
- 	if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
- 		blkfront_setup_discard(info);
- 
--	info->feature_persistent_parm = feature_persistent;
- 	if (info->feature_persistent_parm)
- 		info->feature_persistent =
- 			!!xenbus_read_unsigned(info->xbdev->otherend,
+ 				tail = qp->sq_ring.tail;
+@@ -1204,6 +1204,8 @@ int irdma_uk_cq_poll_cmpl(struct irdma_cq_uk *cq,
+ 					break;
+ 				}
+ 			} while (1);
++			if (op_type == IRDMA_OP_TYPE_BIND_MW && info->minor_err == FLUSH_PROT_ERR)
++				info->minor_err = FLUSH_MW_BIND_ERR;
+ 			qp->sq_flush_seen = true;
+ 			if (!IRDMA_RING_MORE_WORK(qp->sq_ring))
+ 				qp->sq_flush_complete = true;
+-- 
+2.35.1
+
 
 
