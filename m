@@ -2,48 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5695B6EB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209AF5B6EBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbiIMN7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S232361AbiIMOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiIMN7d (ORCPT
+        with ESMTP id S232355AbiIMOAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:59:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB432A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:59:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 328B0B80EC1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:59:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0FFC433C1;
-        Tue, 13 Sep 2022 13:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663077566;
-        bh=vFobcfiHZDpwdf9zYUnaAawgPz1u8B6UNqZWjZa3X9s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DbkSclphuGT8hI5iPmkVbuWOM/ho1V8sk6LIowQ/sF3hHozEQRnUbgn6bqHPp3U+k
-         Tv/IQam/vqeW53JSVjG8Doqw5pauj7aOUm7b0S2umN+vLsX8SWvS1el1pg/Q+wdFtu
-         5JlDpRR9j7MWdDW/1E/Nvq+1nqAoMi+GpgzPzFlo1oOAMu/nGEvsBioCSSvGE9kwY3
-         0tJvaqsTuGDS1OKk3Ja8K/mbWRCQgqeLxq1Nn3JEc50YlHoKj0RJKmV0ob3H6U5GaZ
-         yjYTU0Cc/hKiXHcpCSn4qHfRfVduo+/pWBjyo8EUaEHjoaFr3Vm2kUAy6iJLvif+2b
-         MQ8Oc64MlI+eA==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [RFC PATCH v2] f2fs: record need_fsck in super_block
-Date:   Tue, 13 Sep 2022 21:59:19 +0800
-Message-Id: <20220913135919.2445544-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Sep 2022 10:00:22 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A3613DFC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:00:21 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so13461708wmk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ntIzlODa8VHfVz9gaAWJZ+6KEvSuSPe+fV/RrMaRxgI=;
+        b=JL6seYaEXYPiTaWHGPF7FCkGpC4o2c6grxWA9rfWEsEfxEj6dcYUFzGgj2cQBMIyYQ
+         6lGuaQpXpI5+TlUMLZzoHvXPWLjWza8tiB688QY+qwcuMAC//BLZFbM2D+P5J2uusJEA
+         PMz8l+Apv5et8f2+ePlK53Z4ix+DVpX3Cw+Kc3I7jTkhHc8NWZoKn6Wv7TQcoCIfra4D
+         KQQzJgs/oWY+ghKZqmV5nQ/VI8tcxhsdj4IJeZjEC9zh1zwyxeLAHE8GREBoTpsdjoB4
+         9xEZ+N6U7Jwk8Zl0tLeRepZQ1tlaRoCPT02pI59CpgUwq2JmhxFD9ZNbwQKBzx0LftEm
+         MuZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ntIzlODa8VHfVz9gaAWJZ+6KEvSuSPe+fV/RrMaRxgI=;
+        b=FXIhWKKaEJuHZK4lthOuhBwRn7+bEbHV01pXP32wjPSiyHapXTZfbes1aIj8OLUXvF
+         7T6KTk8iU3LObd78Q+0sGgXigMAHZz0VDYzVRz962vVMdxyyG9SQUoWAGKHh5Dsxc0LK
+         ScSrBgo5SAIykklL/YJYbGCgHIUx5p5R0zuAO46S1Z4z7Dd8o6GbqI+RAdAcSIzcR/In
+         v7ci7y4kQh0DhSBoT5NE3WZ0dZb4Tz/jsZQSYEgFv8KI5fKBqmFboO3jbUe9bx6UiK7J
+         v5NKEYOwSAeGPG4pvtUc52d2upFKKyEP+rP9yW0+NQk8G1gc6NGIo0SgCKsxCUHqpOFG
+         znIw==
+X-Gm-Message-State: ACgBeo1AyYHq+sjiEceu10Vq3nqTV2dHRfH2CouVGoHvPfS66+rc6c3k
+        c+34p6+ZLd5GGMdxIf6SzRCPFw==
+X-Google-Smtp-Source: AA6agR7g5FY7wHdTehwMx55DpEZT3Z+gPuKa/lg/4WJyQ+Frjx8fhx7poC6RWkYD+0FuHdmLvbzpwg==
+X-Received: by 2002:a05:600c:1c1b:b0:3b4:9504:98eb with SMTP id j27-20020a05600c1c1b00b003b4950498ebmr2584707wms.172.1663077619886;
+        Tue, 13 Sep 2022 07:00:19 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.67])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05600c038a00b003b2878b9e0dsm13174284wmd.20.2022.09.13.07.00.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 07:00:19 -0700 (PDT)
+Message-ID: <29758c95-e77a-5105-f03e-22ea94d9a569@linaro.org>
+Date:   Tue, 13 Sep 2022 16:00:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 2/3] iommu/mediatek: Introduce new flag
+ TF_PORT_TO_ADDR_MT8173
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, joro@8bytes.org
+Cc:     yong.wu@mediatek.com, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
+References: <20220913122428.374280-1-angelogioacchino.delregno@collabora.com>
+ <20220913122428.374280-3-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220913122428.374280-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,114 +84,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Once CP_ERROR_FLAG is set, checkpoint is disallowed to be triggered to
-persist CP_FSCK_FLAG, fsck won't repair the image due to lack of
-CP_FSCK_FLAG.
+On 13/09/2022 14:24, AngeloGioacchino Del Regno wrote:
+> In preparation for adding support for MT6795, add a new flag named
+> TF_PORT_TO_ADDR_MT8173 and use that instead of checking for m4u_plat
+> type in mtk_iommu_hw_init() to avoid seeing a long list of m4u_plat
+> checks there in the future.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>  drivers/iommu/mtk_iommu.c | 6 ++++--
+>  drivers/memory/mtk-smi.c  | 1 +
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 7e363b1f24df..b511359376f4 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -138,6 +138,7 @@
+>  #define PM_CLK_AO			BIT(15)
+>  #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
+>  #define PGTABLE_PA_35_EN		BIT(17)
+> +#define TF_PORT_TO_ADDR_MT8173		BIT(18)
+>  
+>  #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
+>  				((((pdata)->flags) & (mask)) == (_x))
+> @@ -955,7 +956,7 @@ static int mtk_iommu_hw_init(const struct mtk_iommu_data *data, unsigned int ban
+>  	 * Global control settings are in bank0. May re-init these global registers
+>  	 * since no sure if there is bank0 consumers.
+>  	 */
+> -	if (data->plat_data->m4u_plat == M4U_MT8173) {
+> +	if (MTK_IOMMU_HAS_FLAG(data->plat_data, TF_PORT_TO_ADDR_MT8173)) {
+>  		regval = F_MMU_PREFETCH_RT_REPLACE_MOD |
+>  			 F_MMU_TF_PROT_TO_PROGRAM_ADDR_MT8173;
+>  	} else {
+> @@ -1427,7 +1428,8 @@ static const struct mtk_iommu_plat_data mt8167_data = {
+>  static const struct mtk_iommu_plat_data mt8173_data = {
+>  	.m4u_plat     = M4U_MT8173,
+>  	.flags	      = HAS_4GB_MODE | HAS_BCLK | RESET_AXI |
+> -			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM,
+> +			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM |
+> +			TF_PORT_TO_ADDR_MT8173,
+>  	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
+>  	.banks_num    = 1,
+>  	.banks_enable = {true},
+> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> index 5a9754442bc7..cd415ed1f4ca 100644
+> --- a/drivers/memory/mtk-smi.c
+> +++ b/drivers/memory/mtk-smi.c
+> @@ -462,6 +462,7 @@ static int mtk_smi_larb_sleep_ctrl_enable(struct mtk_smi_larb *larb)
+>  	if (ret) {
+>  		/* TODO: Reset this larb if it fails here. */
+>  		dev_err(larb->smi.dev, "sleep ctrl is not ready(0x%x).\n", tmp);
+> +		ret = -EAGAIN;
 
-This patch proposes to persist newly introduced SB_NEED_FSCK flag into
-super block if CP_ERROR_FLAG and SBI_NEED_FSCK is set, later, once fsck
-detect this flag, it can check and repair corrupted image in time.
+Doesn't look related nor explained in commit msg.
 
-Signed-off-by: Chao Yu <chao@kernel.org>
----
-v2:
-- remove unneeded codes.
- fs/f2fs/checkpoint.c    |  6 +++++-
- fs/f2fs/f2fs.h          |  1 +
- fs/f2fs/super.c         | 26 ++++++++++++++++++++++++++
- include/linux/f2fs_fs.h |  5 ++++-
- 4 files changed, 36 insertions(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index c3119e4c890c..0836fce40394 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -30,8 +30,12 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
- {
- 	f2fs_build_fault_attr(sbi, 0, 0);
- 	set_ckpt_flags(sbi, CP_ERROR_FLAG);
--	if (!end_io)
-+	if (!end_io) {
- 		f2fs_flush_merged_writes(sbi);
-+
-+		if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
-+			f2fs_update_sb_flags(sbi, SB_NEED_FSCK);
-+	}
- }
- 
- /*
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index dee7b67a17a6..1960a98c7555 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -3556,6 +3556,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
- int f2fs_quota_sync(struct super_block *sb, int type);
- loff_t max_file_blocks(struct inode *inode);
- void f2fs_quota_off_umount(struct super_block *sb);
-+void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag);
- int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
- int f2fs_sync_fs(struct super_block *sb, int sync);
- int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index b8e5fe244596..c99ba840593d 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -3846,6 +3846,32 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
- 	return err;
- }
- 
-+void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag)
-+{
-+	unsigned short s_flags;
-+	int err;
-+
-+	if (le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags) & SB_NEED_FSCK)
-+		return;
-+
-+	f2fs_down_write(&sbi->sb_lock);
-+
-+	s_flags = le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags);
-+
-+	if (s_flags & SB_NEED_FSCK)
-+		goto out_unlock;
-+
-+	F2FS_RAW_SUPER(sbi)->s_flags = cpu_to_le16(s_flags | SB_NEED_FSCK);
-+
-+	err = f2fs_commit_super(sbi, false);
-+	if (err) {
-+		f2fs_warn(sbi, "f2fs_commit_super fails to persist flag: %u, err:%d", flag, err);
-+		F2FS_RAW_SUPER(sbi)->s_flags = s_flags;
-+	}
-+out_unlock:
-+	f2fs_up_write(&sbi->sb_lock);
-+}
-+
- static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
-diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
-index d445150c5350..124176e2a42c 100644
---- a/include/linux/f2fs_fs.h
-+++ b/include/linux/f2fs_fs.h
-@@ -73,6 +73,8 @@ struct f2fs_device {
- 	__le32 total_segments;
- } __packed;
- 
-+#define SB_NEED_FSCK			0x00000001	/* need fsck */
-+
- struct f2fs_super_block {
- 	__le32 magic;			/* Magic Number */
- 	__le16 major_ver;		/* Major Version */
-@@ -116,7 +118,8 @@ struct f2fs_super_block {
- 	__u8 hot_ext_count;		/* # of hot file extension */
- 	__le16  s_encoding;		/* Filename charset encoding */
- 	__le16  s_encoding_flags;	/* Filename charset encoding flags */
--	__u8 reserved[306];		/* valid reserved region */
-+	__le16 s_flags;			/* super block flags */
-+	__u8 reserved[304];		/* valid reserved region */
- 	__le32 crc;			/* checksum of superblock */
- } __packed;
- 
--- 
-2.25.1
-
+Best regards,
+Krzysztof
