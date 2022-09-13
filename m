@@ -2,84 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E38C5B6B8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216745B6B94
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiIMKXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S231651AbiIMK0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiIMKXH (ORCPT
+        with ESMTP id S231224AbiIMK0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:23:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A3557246
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:23:06 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 29so16859924edv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=+IOkPYBVudVE123a/Rn57DKbqImHDs6xTaqKWEnTeaU=;
-        b=YTAM1HJhcNX6lY53UXJdPGaOs7WE7S7pfxefPhiWz925EGDz1aW6CZ5SJnAR+vP6rE
-         83HIFLZvgzn1o5tpWPcp07eQMv7Ck54+5iLq9VFNOSeSRt8Bn1QAUJOdnqiKBy7D7kyS
-         j4n890NsmkpFIhPFJAT05DxNqOLyXg/K4M+hvsfnOjYJKhxvUZkSR9LbpjBsTZCSID1F
-         sMC+6lMEY2/EPWiBdXjVQSU+VYgYtiCbSYz6t70K+MJ4g/zaIpDFTr0JODN0hbjA1GAY
-         YjPSAJSZ2SnMU0WdLALulai3+C+dIoa17EJU95SJm0mdAxTW1hcEHSfni9/qonkVATgZ
-         QrpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+IOkPYBVudVE123a/Rn57DKbqImHDs6xTaqKWEnTeaU=;
-        b=hnb2KRcjT4DUBgatQiT8GGrBxsmXq5XzA0T8RzItHEojUxW2hryRgaEtj72eCROQSB
-         okWCkAU0edVvi5ku42WLLqMGULhAUbGYTRnMTXBUIvSmGRr2KNoU13dk9waTHovJYsC+
-         peaE/QqopismSXxpX035JLJ6tvjGoSF8mOI+dyxJFaozi/6ze7sYWid24Tk5UUDuFPBC
-         0BaeGXiLlsocYqw/VWwnf6dO80HTvjm6oEh/JXSg+G/73pfuAJ31+o9s0qDku2qJ5LiW
-         0M1oMfmLrPZ0x47SDb38Mbs+FZc3o0QUALfTIvZuWhshLpqihOeguOAcs3I9yWQrEqAw
-         Wvyw==
-X-Gm-Message-State: ACgBeo02E9OmBGEgxDGVf9Fza+iHUQr6PYbiTScINLsKgYUCx7KjpL3V
-        q9DaegtvO1z+RKNrj77mw5CPrxboAx2Q5s+UbBU=
-X-Google-Smtp-Source: AA6agR6G1X5GPuWD3D3iercwcEkUc0j1P3WmIu2mC4Q+rkErFYz0DZelUTbmLCWrDbTtVggiHMIWe1b0Cb8SfykBsM4=
-X-Received: by 2002:a05:6402:7c5:b0:44e:9319:4b26 with SMTP id
- u5-20020a05640207c500b0044e93194b26mr25583736edy.105.1663064585024; Tue, 13
- Sep 2022 03:23:05 -0700 (PDT)
+        Tue, 13 Sep 2022 06:26:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EEF5A2D9;
+        Tue, 13 Sep 2022 03:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663064762; x=1694600762;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ARgoLmEbhTA7goAGgTKJDoKZwOFyACEiJhXaXvPcn+4=;
+  b=KdXS8FaZ+vo6T/5hCWIksLuwBH8PDMqbETvyIhOM6CCP+H7Of99znozS
+   vlLiGDBKZlqAWH6jFYxZieVyHEjSc1P5Td/hID1sNN739bDGCZ87r7DBj
+   jutysx4uZAoolU1+XVAM1WIJRx2bmrD7XLgLKCpIntE0qyydkScX6cQTW
+   mgXJT1OJbYtkETtFs1JMxknEgSF7eFaECK5BILLaZWWs5rZCvOdDGnRH1
+   Pv9yA7wZyb0F73DnUNXjFM9BLvj/qHOKOSjzpN+xpeW4qAi+7ljndW/O6
+   GxN+L3yy/Us19t9mgFb2UYw5oHVJnKZiuOtjpJ2q2xeobuvdzXCe2RsPH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359827124"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="359827124"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 03:26:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="649609317"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 13 Sep 2022 03:26:00 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oY379-0003U3-1K;
+        Tue, 13 Sep 2022 10:25:59 +0000
+Date:   Tue, 13 Sep 2022 18:25:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, irusskikh@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
+ aq_ndev_close()
+Message-ID: <202209131828.hYRSPYF2-lkp@intel.com>
+References: <20220913063941.83611-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Sender: oyebuchikalu29@gmail.com
-Received: by 2002:a17:907:961c:0:0:0:0 with HTTP; Tue, 13 Sep 2022 03:23:04
- -0700 (PDT)
-From:   Hannah Wilson <hannahwilson11254@gmail.com>
-Date:   Tue, 13 Sep 2022 10:23:04 +0000
-X-Google-Sender-Auth: 2Lgv2CL8sLRHxSC2HYObEAJLCRI
-Message-ID: <CAOkQLHVUqmwP6=P8xcm8-6xU=prVwapzNpvRC=VLt8AP+kMyLQ@mail.gmail.com>
-Subject: Hello My Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913063941.83611-1-niejianglei2021@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dear,
+Hi Jianglei,
 
-It is my pleasure to communicate with you, I know that this message
-will be a surprise to you my name is Mrs.Hannah Wilson David, I am
-diagnosed with ovarian cancer which my doctor have confirmed that I
-have only some weeks to live so I have decided you handover the sum
-of($12,000.000 ) through I decided handover the money in my account to
-you for help of the orphanage homes and the needy once
+Thank you for the patch! Perhaps something to improve:
 
-Please   kindly reply me here as soon as possible to enable me give
-you more information but before handing over my bank to you please
-assure me that you will only take 40%  of the money and share the rest
-to the poor orphanage home and the needy once, thank you am waiting to
-hear from you
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master linus/master v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Mrs,Hannah Wilson David.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 169ccf0e40825d9e465863e4707d8e8546d3c3cb
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220913/202209131828.hYRSPYF2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/e1ce8c41446db3a7dd59206ff9c8a75baf7be067
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
+        git checkout e1ce8c41446db3a7dd59206ff9c8a75baf7be067
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/aquantia/atlantic/aq_main.c: In function 'aq_ndev_close':
+>> drivers/net/ethernet/aquantia/atlantic/aq_main.c:99:1: warning: label 'err_exit' defined but not used [-Wunused-label]
+      99 | err_exit:
+         | ^~~~~~~~
+
+
+vim +/err_exit +99 drivers/net/ethernet/aquantia/atlantic/aq_main.c
+
+97bde5c4f909a5 David VomLehn  2017-01-23   90  
+97bde5c4f909a5 David VomLehn  2017-01-23   91  static int aq_ndev_close(struct net_device *ndev)
+97bde5c4f909a5 David VomLehn  2017-01-23   92  {
+97bde5c4f909a5 David VomLehn  2017-01-23   93  	struct aq_nic_s *aq_nic = netdev_priv(ndev);
+7b0c342f1f6754 Nikita Danilov 2019-11-07   94  	int err = 0;
+97bde5c4f909a5 David VomLehn  2017-01-23   95  
+97bde5c4f909a5 David VomLehn  2017-01-23   96  	err = aq_nic_stop(aq_nic);
+837c637869bef2 Nikita Danilov 2019-11-07   97  	aq_nic_deinit(aq_nic, true);
+97bde5c4f909a5 David VomLehn  2017-01-23   98  
+97bde5c4f909a5 David VomLehn  2017-01-23  @99  err_exit:
+97bde5c4f909a5 David VomLehn  2017-01-23  100  	return err;
+97bde5c4f909a5 David VomLehn  2017-01-23  101  }
+97bde5c4f909a5 David VomLehn  2017-01-23  102  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
