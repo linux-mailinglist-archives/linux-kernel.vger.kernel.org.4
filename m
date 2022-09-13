@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED55B6FF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACB35B7218
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiIMOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S231202AbiIMOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbiIMOTu (ORCPT
+        with ESMTP id S234566AbiIMOn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:19:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AB642D3;
-        Tue, 13 Sep 2022 07:14:25 -0700 (PDT)
+        Tue, 13 Sep 2022 10:43:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653C965812;
+        Tue, 13 Sep 2022 07:23:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37179B80EFE;
-        Tue, 13 Sep 2022 14:14:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B46BC433D6;
-        Tue, 13 Sep 2022 14:14:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAA10614D1;
+        Tue, 13 Sep 2022 14:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C36E0C433D7;
+        Tue, 13 Sep 2022 14:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078464;
-        bh=6aA7CnVTcpXodXHxy4KVbkMf2SFC+nIXweQBADRBJnw=;
+        s=korg; t=1663078914;
+        bh=mGwilQNMz8rWwIIMssiaTJwKrROZCcdiCFXPZnexT9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uK6x42GTfP7aov+9Dqo8PBmJw7Oxx9he2c3koBUFCq9g83EeHAtZIBwbIrTLuPo5A
-         Tu8+DUAPT6uP/65Aa9aejaBclE1pDjYZkG6OAwHQHqhHbmP6/wnaJIuL/INB+wrf4O
-         kPtL0XdC9PkDHyg2VcTinDRtUpb8iHDVyY9aD/uo=
+        b=E+vCVeZzL7vUVPMGht32IM/zVcSYtn8wH1MiMYNRcHGOnqb0MEtXp4w9tkAS/CXFb
+         Smh1sihcFBs/uWtjFEnf4w6kOvzZT9gv82NG2aSvHW8rXxGER1SQ23488mHqDqUi0j
+         KcN8crYOGs+XVjt/IRP2qrhcNRWpp5W6TbeSw6QI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 149/192] io_uring: recycle kbuf recycle on tw requeue
+        stable@vger.kernel.org, Yee Lee <yee.lee@mediatek.com>
+Subject: [PATCH 5.10 10/79] Revert "mm: kmemleak: take a full lowmem check in kmemleak_*_phys()"
 Date:   Tue, 13 Sep 2022 16:04:15 +0200
-Message-Id: <20220913140417.446810476@linuxfoundation.org>
+Message-Id: <20220913140350.799743939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Yee Lee <yee.lee@mediatek.com>
 
-[ Upstream commit 336d28a8f38013a069f2d46e73aaa1880ef17a47 ]
+This reverts commit 23c2d497de21f25898fbea70aeb292ab8acc8c94.
 
-When we queue a request via tw for execution it's not going to be
-executed immediately, so when io_queue_async() hits IO_APOLL_READY
-and queues a tw but doesn't try to recycle/consume the buffer some other
-request may try to use the the buffer.
+Commit 23c2d497de21 ("mm: kmemleak: take a full lowmem check in
+kmemleak_*_phys()") brought false leak alarms on some archs like arm64
+that does not init pfn boundary in early booting. The final solution
+lands on linux-6.0: commit 0c24e061196c ("mm: kmemleak: add rbtree and
+store physical address for objects allocated with PA").
 
-Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/a19bc9e211e3184215a58e129b62f440180e9212.1662480490.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Revert this commit before linux-6.0. The original issue of invalid PA
+can be mitigated by additional check in devicetree.
+
+The false alarm report is as following: Kmemleak output: (Qemu/arm64)
+unreferenced object 0xffff0000c0170a00 (size 128):
+  comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
+  hex dump (first 32 bytes):
+ 62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
+    [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
+    [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
+    [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
+    [<(____ptrval____)>] kobject_add+0x84/0x100
+    [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
+    [<(____ptrval____)>] of_core_init+0x68/0x104
+    [<(____ptrval____)>] driver_init+0x28/0x48
+    [<(____ptrval____)>] do_basic_setup+0x14/0x28
+    [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
+    [<(____ptrval____)>] kernel_init+0x20/0x1a0
+    [<(____ptrval____)>] ret_from_fork+0x10/0x20
+
+This pacth is also applicable to linux-5.17.y/linux-5.18.y/linux-5.19.y
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- io_uring/io_uring.c | 1 +
- 1 file changed, 1 insertion(+)
+ mm/kmemleak.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index cd155b7e1346d..effe3570a051f 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -8260,6 +8260,7 @@ static void io_queue_async(struct io_kiocb *req, int ret)
- 
- 	switch (io_arm_poll_handler(req, 0)) {
- 	case IO_APOLL_READY:
-+		io_kbuf_recycle(req, 0);
- 		io_req_task_queue(req);
- 		break;
- 	case IO_APOLL_ABORTED:
--- 
-2.35.1
-
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1123,7 +1123,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+@@ -1137,7 +1137,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+@@ -1149,7 +1149,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+@@ -1161,7 +1161,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
 
 
