@@ -2,114 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77AD5B6564
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC3B5B6565
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiIMCIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S229888AbiIMCIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIMCIF (ORCPT
+        with ESMTP id S229731AbiIMCIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:08:05 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E7F520B9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:08:04 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3452214cec6so123070927b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=g0oDvjtBK2VMBJ47PBfid9tISF3aZdmjyN5GalTdGoc=;
-        b=H3ix/l4xybalXZ4LUIQ2BcjD1Ln9iwfZZDx2bCgXUfGOstyQXEwriY1lPwo+yLOKoH
-         sOGeKqbAenfyvPs2QuGnSYj+4e1ILYo7RMv0z20/2cwY44l754TakT+NGCgGyrBoRAAD
-         fMgLSUAIXwcl1zxDMRNnIqwQqR3kXAafFi02epl0BCzhF8m6n6IASf1yaePQcTf1mALQ
-         mLnyQ2sxpD231eejfwnghYHdkXSz0EtgpHOSU2zVcGrL8lN7FE2qdOAVjZh7pAvv9MeQ
-         Y6Bp/xiAb5T1dt421ivskyURuN0SjyK7UEgPOyJyPc7YOppPyp7ZnxXqQtuPLZwZbfhw
-         dwHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=g0oDvjtBK2VMBJ47PBfid9tISF3aZdmjyN5GalTdGoc=;
-        b=zWxNySwGov2Qzjk5ed48/7i1KrK+kxV0QGY6/9YmVa06UnW9aV/63QFN7THNe/s+4i
-         RxLohA3kiWt3s8cx4W9I/UBx7Xd8/RGkgNsO2/yu4wjT8lt52DRGlTpbYCQLmC2AE5V5
-         6Dp8pB9LfMnFdMgyPTm3HV5U1dSxgnTK9xaj1wqoxUoTn43MZdilN7L2b5TAcdY/VFVT
-         6PlYAnoHN+Mz0Uv5Gld2h08SEPUgoi2gyPjJm4Tc4L8NDL6yUuPSgTlGnJx4PBwqUrX9
-         GnSmLIF+Fdd/CXyZcd9NBX0OQYtxzeKIaZGECazc5oOpO8VClwOkjHadWqLoioVYQfTi
-         7m2g==
-X-Gm-Message-State: ACgBeo0LxsYR6sIrhkXLH+tYp/DlQczWyO1hHHGeRVrs4/SPYWeFIruZ
-        VoVeI/7mw9d1ll+6dSNX29GpEllqXjrC+XUN/3fgYduyixGl+A==
-X-Google-Smtp-Source: AA6agR6CmjtxBnbAId0YEdeOQdD6gV/7WuXuQJudc6F6AQAIXlEPG8AJiQz8BmcsA2KAm5BJNW/NEGaHUIv+wVu+Mrc=
-X-Received: by 2002:a81:47c4:0:b0:341:2cab:a63c with SMTP id
- u187-20020a8147c4000000b003412caba63cmr25194352ywa.58.1663034883870; Mon, 12
- Sep 2022 19:08:03 -0700 (PDT)
+        Mon, 12 Sep 2022 22:08:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF13351A2C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:08:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A924612ED
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:08:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A665C433D7;
+        Tue, 13 Sep 2022 02:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663034931;
+        bh=vjt6qr7Rif2FDbRud6yiPxuhZbxX0Q+EsxZ+L+zGtb8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oWPxDTyw/h1EIZe6A8MJ4e4XMJcFDwm8WwTHucCaeqYYzgyreTq0XMOHSDWiUVt9s
+         Pau1kaDvr7QLIGk1J0iblSVgdt7Te8DCZ1VLCocjkHMLTdGLsodDAlUxNUA6VFMRje
+         cYJ+YuvsfINYWb8aJspiELlNKQugO4HWC0/y99uYKXbpVoHZxguGcYdsJnUVPG2hyq
+         yeldrma9fE/TCDHn+Gho89oewSCMKcNriE8ZqgzUcS/osS1MYGhd2eFQ3aXnkDiPDF
+         ufmDA+2Rw2lJnTN3Oe3QHUwx4rfaUJvY3FNFYWNtm3lOT9BXI/yzBGzJH6wES6TiTH
+         j3EnAWn4DD+8A==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
+Subject: [PATCH v2] f2fs: fix to do sanity check on destination blkaddr during recovery
+Date:   Tue, 13 Sep 2022 10:08:41 +0800
+Message-Id: <20220913020841.2072608-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220912152744.527438-1-senozhatsky@chromium.org>
- <CADyq12z8ijE__cgxdMssoE6Ooz4zdazsZ-TeipLTNqqis2vSzA@mail.gmail.com> <Yx/i2nQ/XVG334ag@google.com>
-In-Reply-To: <Yx/i2nQ/XVG334ag@google.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Mon, 12 Sep 2022 22:07:08 -0400
-Message-ID: <CADyq12xxxTWQ3Wz_jfayJA7k6u+20KAqhOSpqBxa3T0Zkr2pQg@mail.gmail.com>
-Subject: Re: [PATCHv2] zram: do not waste zram_table_entry flags bits
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 9:54 PM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (22/09/12 11:39), Brian Geffon wrote:
-> > > zram_table_entry::flags stores object size in the lower bits and
-> > > zram pageflags in the upper bits. However, for some reason, we
-> > > use 24 lower bits, while maximum zram object size is PAGE_SIZE,
-> > > which requires PAGE_SHIFT bits (up to 16 on arm64). This wastes
-> > > 24 - PAGE_SHIFT bits that we can use for additional zram pageflags
-> > > instead.
-> > >
-> > > Also add a BUILD_BUG_ON() to alert us should we run out of bits
-> > > in zram_table_entry::flags.
-> > >
-> > > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > > ---
-> > >  drivers/block/zram/zram_drv.c |  2 ++
-> > >  drivers/block/zram/zram_drv.h | 15 +++++++--------
-> > >  2 files changed, 9 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> > > index f3948abce2f7..07913bcdb5c2 100644
-> > > --- a/drivers/block/zram/zram_drv.c
-> > > +++ b/drivers/block/zram/zram_drv.c
-> > > @@ -2449,6 +2449,8 @@ static int __init zram_init(void)
-> > >  {
-> > >         int ret;
-> > >
-> > > +       BUILD_BUG_ON(__NR_ZRAM_PAGEFLAGS > BITS_PER_LONG);
-> >
-> > Should this be >= BITS_PER_LONG?
->
-> __NR_ZRAM_PAGEFLAGS == BITS_PER_LONG == 64 (e.g. on 64 bit host)
-> means that the last valid zram pageflag (and __NR_ZRAM_PAGEFLAGS
-> is not a valid pageflag) is __NR_ZRAM_PAGEFLAGS - 1, which is 63
-> and which is a valid BIT() offset for u64.
->
-> So __NR_ZRAM_PAGEFLAGS == BITS_PER_LONG should be a valid case.
+As Wenqing Liu reported in bugzilla:
 
-I apologize, you are correct.
+https://bugzilla.kernel.org/show_bug.cgi?id=216456
 
-Reviewed-by: Brian Geffon <bgeffon@google.com>
+loop5: detected capacity change from 0 to 131072
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): Bitmap was wrongly set, blk:5634
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 1013 at fs/f2fs/segment.c:2198
+RIP: 0010:update_sit_entry+0xa55/0x10b0 [f2fs]
+Call Trace:
+ <TASK>
+ f2fs_do_replace_block+0xa98/0x1890 [f2fs]
+ f2fs_replace_block+0xeb/0x180 [f2fs]
+ recover_data+0x1a69/0x6ae0 [f2fs]
+ f2fs_recover_fsync_data+0x120d/0x1fc0 [f2fs]
+ f2fs_fill_super+0x4665/0x61e0 [f2fs]
+ mount_bdev+0x2cf/0x3b0
+ legacy_get_tree+0xed/0x1d0
+ vfs_get_tree+0x81/0x2b0
+ path_mount+0x47e/0x19d0
+ do_mount+0xce/0xf0
+ __x64_sys_mount+0x12c/0x1a0
+ do_syscall_64+0x38/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+If we enable CONFIG_F2FS_CHECK_FS config, it will trigger a kernel panic
+instead of warning.
+
+The root cause is: in fuzzed image, SIT table is inconsistent with inode
+mapping table, result in triggering such warning during SIT table update.
+
+This patch introduces a new flag DATA_GENERIC_ENHANCE_UPDATE, w/ this
+flag, data block recovery flow can check destination blkaddr's validation
+in SIT table, and skip f2fs_replace_block() to avoid inconsistent status.
+
+Cc: <stable@kernel.org>
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- Cc stable kernel mailing list
+- add reported-by tag
+- update commit title
+ fs/f2fs/checkpoint.c | 10 +++++++++-
+ fs/f2fs/f2fs.h       |  4 ++++
+ fs/f2fs/recovery.c   |  8 ++++++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index cf315e3d244c..c3119e4c890c 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -140,7 +140,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 	unsigned int segno, offset;
+ 	bool exist;
+ 
+-	if (type != DATA_GENERIC_ENHANCE && type != DATA_GENERIC_ENHANCE_READ)
++	if (type == DATA_GENERIC)
+ 		return true;
+ 
+ 	segno = GET_SEGNO(sbi, blkaddr);
+@@ -148,6 +148,13 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 	se = get_seg_entry(sbi, segno);
+ 
+ 	exist = f2fs_test_bit(offset, se->cur_valid_map);
++	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
++		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
++			 blkaddr, exist);
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
++		return exist;
++	}
++
+ 	if (!exist && type == DATA_GENERIC_ENHANCE) {
+ 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
+ 			 blkaddr, exist);
+@@ -185,6 +192,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
+ 	case DATA_GENERIC:
+ 	case DATA_GENERIC_ENHANCE:
+ 	case DATA_GENERIC_ENHANCE_READ:
++	case DATA_GENERIC_ENHANCE_UPDATE:
+ 		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
+ 				blkaddr < MAIN_BLKADDR(sbi))) {
+ 			f2fs_warn(sbi, "access invalid blkaddr:%u",
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 80c0ae6196db..dee7b67a17a6 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -266,6 +266,10 @@ enum {
+ 					 * condition of read on truncated area
+ 					 * by extent_cache
+ 					 */
++	DATA_GENERIC_ENHANCE_UPDATE,	/*
++					 * strong check on range and segment
++					 * bitmap for update case
++					 */
+ 	META_GENERIC,
+ };
+ 
+diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
+index dcd0a1e35095..8326003e6918 100644
+--- a/fs/f2fs/recovery.c
++++ b/fs/f2fs/recovery.c
+@@ -698,6 +698,14 @@ static int do_recover_data(struct f2fs_sb_info *sbi, struct inode *inode,
+ 				goto err;
+ 			}
+ 
++			if (f2fs_is_valid_blkaddr(sbi, dest,
++					DATA_GENERIC_ENHANCE_UPDATE)) {
++				f2fs_err(sbi, "Inconsistent dest blkaddr:%u, ino:%lu, ofs:%u",
++					dest, inode->i_ino, dn.ofs_in_node);
++				err = -EFSCORRUPTED;
++				goto err;
++			}
++
+ 			/* write dummy data page */
+ 			f2fs_replace_block(sbi, &dn, src, dest,
+ 						ni.version, false, false);
+-- 
+2.25.1
+
