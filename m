@@ -2,413 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA015B793C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C2F5B7941
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 20:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiIMSQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 14:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S230415AbiIMSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 14:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiIMSPq (ORCPT
+        with ESMTP id S231314AbiIMSRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:15:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27F110FD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:24:27 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o23so10733647pji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 10:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date;
-        bh=f3cAxQlpr9MhS7L+K6LHuUXyazd8km8sEFTCZsuiIvQ=;
-        b=fnJqn0M2B0RToDQUjjL1EmukHybpmMuK8fRRr2q+TZnOO9velXjw9L0tsaFiChol1x
-         HFmaPuPVRqD3bA5j1y45QlOKmv0E9zL29sDq5zlxQptQqAr95+yNmRNBkfgHTKN18Oq9
-         7VhYbBLoA+wgAA17xKfUP3OSQLW7Ww3VA7Bb+z207uDw8xCyLGgxovAXHA76HLCgKZIM
-         rnXirn6N7I9db4jbQ8RTN3dlz0EAKr6D8warBfQynfE43xeS5nzpHXoErneWK+1FoXFD
-         +YWEel/Rr+cNmBeEWbpeGdNUjWBSMj9xtonM3h4UHPJUgU/YAFHEEGoazJ4a5XRWP7Np
-         RVLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=f3cAxQlpr9MhS7L+K6LHuUXyazd8km8sEFTCZsuiIvQ=;
-        b=wRqN1MJMAGEDOGnvNdfcojs+66z28xlwRaOxDFIG7rqtVXNYG/8as/+jdILQwb/J50
-         vLvWrCeKcFtsyk15bguSgmPDPMQZ9cm/17ph6d1+1PQfe2w+PXuR0kEh4DlZIbwDmKwX
-         nHNijcMP69n00otrlRjET0U1YLVZZ2dRvVWucBGtBQDWLo1oKn5DpGwIB+9DCQSBoRJO
-         TVGwncxSMywX5c1S19CB6yRvQP/6XdcxBzhDbSvmbGp9NPzQrrW1qrX2H1QiIiLu0cnm
-         PaLDCr/5pAbPPTOi8hhVFc6NuqX8xpwWKXy8LGgZBCyidwzHN4yHQPB9ujP2hyQCZ78+
-         AO9A==
-X-Gm-Message-State: ACgBeo3Y8sINW0igmLcONg9eIiZ+3YNhAxXHuyXUyxVw+GcL0+fNgpcV
-        4jUs4pzVG7/dih1soOCkNbwM
-X-Google-Smtp-Source: AA6agR6ukeHUFbmmO6edAqgXbgWT6JjNXjHE/gxuAJ+TuicNIIQoj2Qr1icVvhmbbqft7T+tAYtj/A==
-X-Received: by 2002:a17:902:d58a:b0:177:f86c:4456 with SMTP id k10-20020a170902d58a00b00177f86c4456mr25523705plh.171.1663089860501;
-        Tue, 13 Sep 2022 10:24:20 -0700 (PDT)
-Received: from workstation ([117.202.184.122])
-        by smtp.gmail.com with ESMTPSA id 199-20020a6217d0000000b0053e3ed14419sm8169606pfx.48.2022.09.13.10.24.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Sep 2022 10:24:19 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 22:54:11 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     maz@kernel.org, tglx@linutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-        lznuaa@gmail.com, imx@lists.linux.dev
-Subject: Re: [PATCH v9 4/4] PCI: endpoint: Add vNTB MSI support
-Message-ID: <20220913172411.GI25849@workstation>
-References: <20220907034856.3101570-1-Frank.Li@nxp.com>
- <20220907034856.3101570-5-Frank.Li@nxp.com>
+        Tue, 13 Sep 2022 14:17:00 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A893C74E32;
+        Tue, 13 Sep 2022 10:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663089984; x=1694625984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8l8sVqCYPFAIMdJg6jBdWIjl1HdQJtMIy8edAcpgqMI=;
+  b=CigPpHe6zP6FuumooGWkQEl40ZSyrbsY6r+etxskCXtL0BYIFYDMNYzo
+   6FpV/pZAWuz7p8MNJpubOgkH1BepHzjG5EXc+P8MJaKv4zzKNeCN/kG6u
+   iyEgZUSi3ygogBnTfgaobgCa4PscLib0DlmtP2MQIY6JfPTTiF1nKAkIo
+   8L1W0E+K7BzjqHo3kvoCJH+kLI+8E0vZ3TgD4JP3LgCQD50TGx6cIGjYD
+   cyhQmwaeS9M/agEtq3XeBauDYW2x1RnVtuK1gvbFoJvD/JZmG3ASGG76N
+   m6thJIhHOMXboWAPuRxQV06I9b39EIUb3kUPKDz4v8wa2nvAZoqYs4K2Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="296935676"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="296935676"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 10:26:22 -0700
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="649745153"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 10:26:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oY9fr-001rBg-2X;
+        Tue, 13 Sep 2022 20:26:15 +0300
+Date:   Tue, 13 Sep 2022 20:26:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        jingle.wu@emc.com.tw, mario.limonciello@amd.com, timvp@google.com,
+        linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set
+ wake_irq
+Message-ID: <YyC9N62JaMGaeanf@smile.fi.intel.com>
+References: <20220912221317.2775651-1-rrangel@chromium.org>
+ <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220907034856.3101570-5-Frank.Li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 10:48:56PM -0500, Frank Li wrote:
->                       ┌───────┐                   ┌──────────┐
->                       │       │                   │          │
->     ┌─────────────┐   │ PCI   │                   │ PCI Host │
->     │ MSI         │◄┐ │ EP    │                   │          │
->     │ Controller  │ │ │       │ 3.MSI Write       │          │
->     └────────┬────┘ └─┼───────┼───────────────────┤          │
->       ▲      │        │       │                   ├─BAR_n    │
->       │      └────────┼───────┼──────────────────►│          │
->       │               │       │ 2.Call Back       │          │
->       │               │       │   write_msi_msg() │          │
->       │               │       │                   │          │
->       │               └───┬───┘                   └──────────┘
->       │                   │
->       └───────────────────┘
->       1.platform_msi_domain_alloc_irqs()
-> 
-> There is no defined way of raising IRQs by PCI host to the PCI endpoint.
-> Only define MSI/MSI-X to let EP notified RC status change.
-> 
-> The memory assigned for BAR region by the PCI host is mapped to the
-> message address of platform msi interrupt controller in PCI Endpoint.
-> Such that, whenever the PCI host writes to the BAR region, it will
-> trigger an IRQ in the Endpoint.
-> 
-> Basic working follow as
-> 1. EP function driver call platform_msi_domain_alloc_irqs() alloc a
-> MSI irq from MSI controller with call back function write_msi_msg();
-> 2. write_msg_msg will config BAR and map to address defined in msi_msg;
-> 3. Host side trigger an IRQ in Endpoint by write to BAR region.
-> 
-> Add MSI support for pci-epf-vntb. Query if system has an MSI controller.
-> Set up doorbell address according to struct msi_msg.
-> 
-> So PCI RC can write this doorbell address to trigger EP side's IRQ.
-> 
-> If no MSI controller exists, fall back to software polling.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 155 +++++++++++++++---
->  1 file changed, 128 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index 1466dd1904175..426205b980a09 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -44,6 +44,7 @@
->  #include <linux/pci-epc.h>
->  #include <linux/pci-epf.h>
->  #include <linux/ntb.h>
-> +#include <linux/msi.h>
->  
->  static struct workqueue_struct *kpcintb_workqueue;
->  
-> @@ -136,13 +137,15 @@ struct epf_ntb {
->  
->  	struct epf_ntb_ctrl *reg;
->  
-> -	phys_addr_t epf_db_phy;
-> +	phys_addr_t epf_db_phys;
+On Mon, Sep 12, 2022 at 04:13:11PM -0600, Raul E Rangel wrote:
+> Device tree already has a mechanism to pass the wake_irq. It does this
+> by looking for the wakeup-source property and setting the
+> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> ACPI interrupt wake flag to determine if the interrupt can be used to
+> wake the system. Previously the i2c drivers had to make assumptions and
+> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> If there is a device with an Active Low interrupt and the device gets
+> powered off while suspending, the interrupt line will go low since it's
+> no longer powered and wakes the system. For this reason we should
+> respect the board designers wishes and honor the wake bit defined on the
+> interrupt.
 
-This should be part of a separate patch.
+...
 
->  	void __iomem *epf_db;
->  
->  	phys_addr_t vpci_mw_phy[MAX_MW];
->  	void __iomem *vpci_mw_addr[MAX_MW];
->  
->  	struct delayed_work cmd_handler;
-> +
-> +	int msi_virqbase;
->  };
->  
->  #define to_epf_ntb(epf_group) container_of((epf_group), struct epf_ntb, group)
-> @@ -253,13 +256,15 @@ static void epf_ntb_cmd_handler(struct work_struct *work)
->  
->  	ntb = container_of(work, struct epf_ntb, cmd_handler.work);
->  
-> -	for (i = 1; i < ntb->db_count; i++) {
-> -		if (readl(ntb->epf_db + i * 4)) {
-> -			if (readl(ntb->epf_db + i * 4))
-> -				ntb->db |= 1 << (i - 1);
-> +	if (!ntb->epf_db_phys) {
-> +		for (i = 1; i < ntb->db_count; i++) {
-> +			if (readl(ntb->epf_db + i * 4)) {
-> +				if (readl(ntb->epf_db + i * 4))
+> +			if (irq > 0 && acpi_wake_capable)
+> +				client->flags |= I2C_CLIENT_WAKE;
 
-Why are you reading twice? And why cannot you use _relaxed() variant
-here and below?
+Why do we need a parameter and can't simply set this flag inside the callee?
 
-> +					ntb->db |= 1 << (i - 1);
->  
-> -			ntb_db_event(&ntb->ntb, i);
-> -			writel(0, ntb->epf_db + i * 4);
-> +				ntb_db_event(&ntb->ntb, i);
-> +				writel(0, ntb->epf_db + i * 4);
-> +			}
->  		}
->  	}
->  
-> @@ -454,11 +459,9 @@ static int epf_ntb_config_spad_bar_alloc(struct epf_ntb *ntb)
->  	ctrl->num_mws = ntb->num_mws;
->  	ntb->spad_size = spad_size;
->  
-> -	ctrl->db_entry_size = 4;
-> -
->  	for (i = 0; i < ntb->db_count; i++) {
->  		ntb->reg->db_data[i] = 1 + i;
-> -		ntb->reg->db_offset[i] = 0;
-> +		ntb->reg->db_offset[i] = 4 * i;
+-- 
+With Best Regards,
+Andy Shevchenko
 
-4 should be defined as a macro of what it represents.
 
->  	}
->  
->  	return 0;
-> @@ -509,6 +512,28 @@ static int epf_ntb_configure_interrupt(struct epf_ntb *ntb)
->  	return 0;
->  }
->  
-> +static int epf_ntb_db_size(struct epf_ntb *ntb)
-> +{
-> +	const struct pci_epc_features *epc_features;
-> +	size_t size = 4 * ntb->db_count;
-
-Here also.
-
-> +	u32 align;
-> +
-> +	epc_features = pci_epc_get_features(ntb->epf->epc,
-> +					    ntb->epf->func_no,
-> +					    ntb->epf->vfunc_no);
-> +	align = epc_features->align;
-> +
-> +	if (size < 128)
-> +		size = 128;
-> +
-> +	if (align)
-> +		size = ALIGN(size, align);
-> +	else
-> +		size = roundup_pow_of_two(size);
-> +
-> +	return size;
-> +}
-> +
->  /**
->   * epf_ntb_db_bar_init() - Configure Doorbell window BARs
->   * @ntb: NTB device that facilitates communication between HOST and vHOST
-> @@ -522,33 +547,32 @@ static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
->  	struct pci_epf_bar *epf_bar;
->  	void __iomem *mw_addr;
->  	enum pci_barno barno;
-> -	size_t size = 4 * ntb->db_count;
-> +	size_t size;
->  
->  	epc_features = pci_epc_get_features(ntb->epf->epc,
->  					    ntb->epf->func_no,
->  					    ntb->epf->vfunc_no);
->  	align = epc_features->align;
-> -
-> -	if (size < 128)
-> -		size = 128;
-> -
-> -	if (align)
-> -		size = ALIGN(size, align);
-> -	else
-> -		size = roundup_pow_of_two(size);
-> +	size = epf_ntb_db_size(ntb);
->  
->  	barno = ntb->epf_ntb_bar[BAR_DB];
-> +	epf_bar = &ntb->epf->bar[barno];
->  
-> -	mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
-> -	if (!mw_addr) {
-> -		dev_err(dev, "Failed to allocate OB address\n");
-> -		return -ENOMEM;
-> +	if (ntb->epf_db_phys) {
-> +		mw_addr = NULL;
-> +		epf_bar->phys_addr = ntb->epf_db_phys;
-> +		epf_bar->barno = barno;
-> +		epf_bar->size = size;
-> +	} else {
-> +		mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
-> +		if (!mw_addr) {
-> +			dev_err(dev, "Failed to allocate door bell address\n");
-
-doorbell
-
-> +			return -ENOMEM;
-> +		}
->  	}
->  
->  	ntb->epf_db = mw_addr;
->  
-> -	epf_bar = &ntb->epf->bar[barno];
-> -
->  	ret = pci_epc_set_bar(ntb->epf->epc, ntb->epf->func_no, ntb->epf->vfunc_no, epf_bar);
->  	if (ret) {
->  		dev_err(dev, "Doorbell BAR set failed\n");
-> @@ -704,6 +728,82 @@ static int epf_ntb_init_epc_bar(struct epf_ntb *ntb)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-> +static void epf_ntb_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
-> +{
-> +	struct epf_ntb *ntb = dev_get_drvdata(desc->dev);
-> +	struct epf_ntb_ctrl *reg = ntb->reg;
-> +	int size = epf_ntb_db_size(ntb);
-> +	u64 addr;
-> +
-> +	addr = msg->address_hi;
-> +	addr <<= 32;
-> +	addr |= msg->address_lo;
-> +
-> +	reg->db_data[desc->msi_index] = msg->data;
-> +
-> +	if (desc->msi_index == 0)
-
-if (!desc->msi_index)
-
-> +		ntb->epf_db_phys = round_down(addr, size);
-> +
-> +	reg->db_offset[desc->msi_index] = addr - ntb->epf_db_phys;
-> +}
-> +#endif
-> +
-> +static irqreturn_t epf_ntb_interrupt_handler(int irq, void *data)
-> +{
-> +	struct epf_ntb *ntb = data;
-> +	int index;
-> +
-> +	index = irq - ntb->msi_virqbase;
-> +	ntb->db |= 1 << (index - 1);
-> +	ntb_db_event(&ntb->ntb, index);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void epf_ntb_epc_msi_init(struct epf_ntb *ntb)
-
-Why cannot you guard this whole function with CONFIG_GENERIC_MSI_IRQ_DOMAIN?
-
-> +{
-> +	struct device *dev = &ntb->epf->dev;
-> +	struct irq_domain *domain;
-> +	int virq;
-> +	int ret;
-> +	int i;
-> +
-> +	domain = dev_get_msi_domain(ntb->epf->epc->dev.parent);
-> +	if (!domain)
-> +		return;
-> +
-> +	dev_set_msi_domain(dev, domain);
-> +
-> +#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-> +	if (platform_msi_domain_alloc_irqs(&ntb->epf->dev,
-> +		ntb->db_count,
-> +		epf_ntb_write_msi_msg)) {
-> +		dev_info(dev, "Can't allocate MSI, fall back to poll mode\n");
-
-falling back to polling mode
-
-Should this be dev_err?
-
-> +		return;
-> +	}
-> +#else
-> +	return;
-> +#endif
-> +	dev_info(dev, "vntb use MSI as doorbell\n");
-
-Using MSI as a doorbell
-
-> +
-> +	for (i = 0; i < ntb->db_count; i++) {
-> +		virq = msi_get_virq(dev, i);
-> +		ret = devm_request_irq(dev, virq,
-> +			       epf_ntb_interrupt_handler, 0,
-> +			       "vntb", ntb);
-
-s/vntb/pci_epf_vntb
-
-> +
-> +		if (ret) {
-> +			dev_err(dev, "devm_request_irq() failure, fall back to poll mode\n");
-
-Failed to request doorbell IRQ! Falling back to polling mode
-
-> +			ntb->epf_db_phys = 0;
-> +			break;
-> +		}
-> +
-> +		if (!i)
-> +			ntb->msi_virqbase = virq;
-
-A comment here would be helpful
-
-Thanks,
-Mani
-
-> +	}
-> +}
-> +
->  /**
->   * epf_ntb_epc_init() - Initialize NTB interface
->   * @ntb: NTB device that facilitates communication between HOST and vHOST2
-> @@ -1299,14 +1399,15 @@ static int epf_ntb_bind(struct pci_epf *epf)
->  		goto err_bar_alloc;
->  	}
->  
-> +	epf_set_drvdata(epf, ntb);
-> +	epf_ntb_epc_msi_init(ntb);
-> +
->  	ret = epf_ntb_epc_init(ntb);
->  	if (ret) {
->  		dev_err(dev, "Failed to initialize EPC\n");
->  		goto err_bar_alloc;
->  	}
->  
-> -	epf_set_drvdata(epf, ntb);
-> -
->  	pci_space[0] = (ntb->vntb_pid << 16) | ntb->vntb_vid;
->  	pci_vntb_table[0].vendor = ntb->vntb_vid;
->  	pci_vntb_table[0].device = ntb->vntb_pid;
-> -- 
-> 2.35.1
-> 
