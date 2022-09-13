@@ -2,178 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F56C5B6885
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C099A5B6888
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIMHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S230260AbiIMHTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiIMHSh (ORCPT
+        with ESMTP id S231211AbiIMHTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:18:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1CC58B7E;
-        Tue, 13 Sep 2022 00:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663053506; x=1694589506;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=UrUQHmc80yR2oaPX7r9jTlgkw//7qYpV1wtqJlTtVSE=;
-  b=fadWw+ZtyOXctGHD+Cxo3jw1c48sKljmgGADRl+RqViC8qPPXX9Oxv+4
-   X8rpQuxMXag0OOOEWKdqZZp5yIPbYgeXogBPboi+pPfcXypwUj1hOKrJH
-   Hbh+qR2Egyr4pqR3mk60/xl2xqgJtvIKltBk9hmsDEEN5QUdXtoruj4wG
-   A4LMs0DszllDtrr6BQl0o9F5QOZPyExEr+p2nMZjlfbxlU1LRBlhVSWcw
-   pzkPn15eMFxJ80jkcnm+GmI58VwcFl0JyFUfgTyp8ZInsEh9mUvARMhsV
-   LeKtYju6YTS5TIC2BKlGLn4X4bpF8OGZiFBHavb3BBlfhPrpbWQpkeBs1
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="180141376"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 00:18:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 13 Sep 2022 00:18:24 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 00:18:24 -0700
+        Tue, 13 Sep 2022 03:19:10 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979143E54;
+        Tue, 13 Sep 2022 00:19:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RUpkF6vN9o8IauBZ9Pt8GyNhhPZY2duyDcXbJhQUPDDN2fhIDDfakQb1ozmBWibl/5jnvITnud41rwEaRmPb9jyS14Pd5tuK7u06BVl9aI1g2qJcg5vMZa+GWPvuXS5Ycy5Ou2XLTHIp1rP8eBjRdECmOVEcn7ZgAa+LImml0uYeNLBaatDETmBSASvOQaawiOAjw+9E39SEmG3arzlx6mRPET7KnsuZPynZT1rqls1waKkw5E3pPt0CNwO2cL4B5QVVpYgqmb+kfPyfYh+YwhmAPxwNzmJttmXcESmFsSM0GQnHGuwsMJ5cFz67eXNU1Wi72MDVXsfxL0Rij/yQ1A==
+ b=LQXrPFsYLsiiKgbD9y6Dpf814ACpPpejX4ncU3foMHeG8aTk3gnPk5d4V3q6YbXsIi43tQmFe+fGQDgHRKrMRlJUSQiibtHnbEV6+DA4UTy6csR7qGpSCe/R8cXhNTL7DDtI2MjSu4sRQLHYnvrF4O+OXInosp5UzAJzNQnbzxSBlJTDHS5fROCx27EETsctdF/GBQ/Sk6yA8byoUyQS5iurSNI3x3kQIvTasUf550rx5mmNxrYm2EXvI31ULiH93vkUJL5HNSpsNibTGe0fFqYnLPKG7h4Kuyecaf+nyc6LxZxr4VXF+dXu+1jW9H4mqaww3oxo8YlCEHQmONgQlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UrUQHmc80yR2oaPX7r9jTlgkw//7qYpV1wtqJlTtVSE=;
- b=Tg0U+A53zohFjqZNGGC8aZed9c3jW+VRAfZG1Uzv7eX+mvoaGZHd9oNJkbQFh7382RfkCTMBA76KZek7zCbUMpTAmMZhjv6qJjaXIa0qhILh7aLiKfUukXdW3w8kdeFw/djgYnx8UeZat4cLdeypjrchUgXS89VZXyd1wuegCBB3m9VTD0MXMHqgcbms5atJK3bY11+hvwFuWE8ZKVlduYtCDg40Qj0wLIXUZJgdoUFKpUmz2cv+FYpehW/Ff2N9fdu1u4BXNiGlPK2gu39vLuZk/qTFCDOWWT8MnvmmdJ0kHYvnlIhxowPLRlVUjEAe4Lnkcf8HTIaa/oQGzMfBqw==
+ bh=i4m2eIDEtMA5Gv+isYu8GJg2eZT6Cy88G1hjtenl5tM=;
+ b=dSZrLzmCXZczClOhYONJ8eTIQ7O6xtwTRbmGvPiOu1TuFoePu8V+3evsVHIBmmC1dFtrNiD1WzE7jf86eRIciRIoCcRttBF1Jcdr07bXdM1oIlcZfyv3iB+f0KLf5NwFpft7bngNOD7C1O/m/XHcIXvVnKQb/xsb/m8eN8Eez9d7ZAB5z7V0aNzpqVbU7XZ09sMbuczP0khL+xInblZdhYBVTW+aDIeSjV4oBsMOUNK39iM/isXf6fF5grATTtpFpa+k7qvC8/OV4ygUQW1GLBmP3BrClKX5EbTqPWKW4HsVykam3LYzEKW8lSpJpf3SqHxQbVapnCFThwOG3DQN3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UrUQHmc80yR2oaPX7r9jTlgkw//7qYpV1wtqJlTtVSE=;
- b=NnDPDU+n4idvJTIG8KACmhjdee5jh5il0y4k8sqcCHXO620RVrBHwTQoXlryyUbvKx9OUQGDk/W67wORdLjiM8JODDQ1//rAM8NBYlxeMM4oa5g22xFNBcDgnDkG/tzT85WIOV5PDkXwHZVGn5llGsjBMERcs7TSktIEdWzkbqs=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by CO6PR11MB5649.namprd11.prod.outlook.com (2603:10b6:5:35b::18) with
+ bh=i4m2eIDEtMA5Gv+isYu8GJg2eZT6Cy88G1hjtenl5tM=;
+ b=Rp8zUpX6/x4IO8M8bZItHPHMevHlhvArKGI81p3FfyLQ3EyLcq8QO1f31sBS/9UUfJbL8k9kD0JtVYpchOtycQZ0E62wbbGBS/3qBtgeRW+0PE/Fb8VlSWJKff2qY4xqVSrWTA32/hN9h/zybcIic0/44vHAhlHoZ83mVBZpxx74eOX1MyIVp+PNv7raLOncA/VH1dolxjrKlxC8V1ygLtb9GHGwVwWQ7NPeNMNu17uxiueVwqoLci9F2g0a35YDfFZonUJfPN13jRXoj7TRaHqturANR0caqb1y9JXI2KK7mTsDecfxFNBTtSJFiMScN//uGh5IovmuVBufD8sekw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4435.namprd12.prod.outlook.com (2603:10b6:5:2a6::23)
+ by SJ0PR12MB6880.namprd12.prod.outlook.com (2603:10b6:a03:485::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Tue, 13 Sep
- 2022 07:18:22 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610%11]) with mapi id 15.20.5612.022; Tue, 13 Sep
- 2022 07:18:22 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Horatiu.Vultur@microchip.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Nicolas.Ferre@microchip.com>, <michael@walle.cc>
-Subject: Re: [PATCH] ARM: dts: lan966x: Fix the interrupt number for internal
- PHYs
-Thread-Topic: [PATCH] ARM: dts: lan966x: Fix the interrupt number for internal
- PHYs
-Thread-Index: AQHYx0EBJ0DJGsvQEkGW/nakyWOGHA==
-Date:   Tue, 13 Sep 2022 07:18:22 +0000
-Message-ID: <51e33996-3ff8-69cd-392d-9d5d6298fe31@microchip.com>
-References: <20220912192629.461452-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220912192629.461452-1-horatiu.vultur@microchip.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Tue, 13 Sep
+ 2022 07:19:04 +0000
+Received: from DM6PR12MB4435.namprd12.prod.outlook.com
+ ([fe80::3dd3:e494:c723:e0cc]) by DM6PR12MB4435.namprd12.prod.outlook.com
+ ([fe80::3dd3:e494:c723:e0cc%4]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 07:19:04 +0000
+Message-ID: <5f7d294a-5040-a7a7-cee2-d62cfef5b48e@nvidia.com>
+Date:   Tue, 13 Sep 2022 12:48:52 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [v2] ALSA: hda: Fix Nvidia dp infoframe
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|CO6PR11MB5649:EE_
-x-ms-office365-filtering-correlation-id: 2930986a-157b-4c6c-1446-08da95582433
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5ZjAMa517S6ipNjOZO2MSHg6QkCRHk7CVP43xKX78NHMVYoM4xUOvWzi8ER+JnMKlHfBmGaxv/hbdxA2nVlsLPE4kM5niCFj2y+aacezL0Q9H4cO/r11Dll89wnoYkpUEB1PwNLgIGad0U2XxL/vw9w0b6QiNSJ4Nuh8lAWGEFa8dZecOTtx0PHjFaLxoPcZsg83RrnlYaY8E88kYFgSnNLZm7goihqa/a//UzzGRo6ZNEnGAkQ4/zzFFws5i1EnFKPjieOwGWycZr1Drf7CqF5VZBSBKtVXr33eDoP9tiauE1r+FbBWkWZfU/z/JeUraWO0nPVVFR/3cplo+RfjeUoA6BKsCkEdTcHHZSqja6bMpq2nWNvcEvq8A6Kuoai4urBLCqoXNGbCxFyDjQNSw+tHNeSM/YSWoHl4ovIgeA85HjnHu0Sm1Aq71i0ZrHVCtQ0atjh2YWu7WvBHv2nU+gDckpqXiKS0vrLWrb517O0WtnF1tW1r8KB7X8h4T7I7MSUF8mK8dMkSULj1rdoB3c6dheUdccyyDWn15Efip2RupHj4vSNeu1GvVlW7nF7XnLULH1Fa084hAvnhqzT6ir4kheBhs/ubjFCqaJHCKsbkU9povMRtpaJo7N9Ue/AZBj6jYUPOHT1N5zaP1ULAOHF+U3z7QzpIS4i1Q6u9eyx2pNw+i4hygmsF79G3xISvQSzhIlYpaZVVY7ih2WilKOP7bW26E7+VPwRpI0S5HJ2aL49NsuhWSb9xG5XgaaNVvlLltSRqBbRqbTijgDaR7SWehtjgPLNLc327alaML5NyaTDcGcmGcRdZQ2VH7uxVz924SC38W9M7rV0EEqbfFg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199015)(122000001)(66556008)(8936002)(64756008)(31686004)(8676002)(2906002)(2616005)(66946007)(86362001)(76116006)(4326008)(478600001)(71200400001)(38100700002)(186003)(36756003)(41300700001)(66476007)(6512007)(83380400001)(53546011)(6506007)(4744005)(6486002)(91956017)(110136005)(38070700005)(54906003)(31696002)(316002)(66446008)(26005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L0xkdGJqcWNVMzVhRk9oZVh1SmhYSXR3Q3BLK0dOYU1VRHhmTEVTVEt5bmpO?=
- =?utf-8?B?cFVCZ0JjRDdtVlhIRk14a2Q1KzBTTVNSbFlid25YZXVuZDhEUkVCTkdickNB?=
- =?utf-8?B?cVJlMlUyUnpUTFdnRTVhK3g1Mk9uOElkb2dpTmQvdGhMYUhLd1NUOHBIc3dM?=
- =?utf-8?B?SGJXRUxQYmJZcTlSMm9aMXF4SlNZd3JGcXEwV0J0d0MwWkZuYUVMY0I2UzA1?=
- =?utf-8?B?cGM1SGNTR1c0Rjh6emxYRTkxc2hvd1Ntend2YzBialo0U3BTOEsxM1RRSUs4?=
- =?utf-8?B?LzY4V2Q5aDlsRlJaMTJqblRnK2Y3UUZneVEzY3ROWlNnT2NiQXlsZlQxdXhG?=
- =?utf-8?B?QmRnYisrNW9lckhQN1BtcWlYa2doUTBOcDM0eHhUTWhxQldXS2hNUVB1TG1C?=
- =?utf-8?B?bUwydnZkUTRKZFpScTJ0Sk5RNllBNVhZbWVPS0JRMmxlWjk0WkRsZnFqVlRi?=
- =?utf-8?B?TnlrVm1qZE9jaGtPK05hTDhKWC9iOFB2NDJmc3BoNUxWUXRqMlUrMUJuWXAz?=
- =?utf-8?B?MnVrT2ZRd3VRNDlmeW5VeFNDNm5DK05IS2dBOXFVd0FZZTMxbWUvOFpZeWxh?=
- =?utf-8?B?VjBFb3B2VjBSYTAxWmhHdGNwSEhHaURQZ0dlYWp0bHFKZmwvQnRSYS9yNjVL?=
- =?utf-8?B?UWY4bUhEbjF5MnBCNUdSQ1Q2SnZSeDRtYmFZYmlIYXhOM0ZVK095MW9VRjNn?=
- =?utf-8?B?MnYyMHpWclVWYXpkb1M5VHRnL2htRllKdWJzS3NQWGgxQUFXNkk0YmdKY0dm?=
- =?utf-8?B?cmk2UnZpMmx3cHFVY24zQ2VMRysxdzYzVkw5c0lWRFhCeklvV3dnUFFqTVhn?=
- =?utf-8?B?Z1hPeGtTdzE4UklUY0lJWlhWbFprUFlWelNRQXJSbktVNjV4Z1hZWlNIeUln?=
- =?utf-8?B?dDQxUEF3cHhveVVaa2tpQS9LZVUyVUVoYkZGUHpBUWFLTmQ5LytpYVpRekFw?=
- =?utf-8?B?eVFpL2xXRG5XeWJkMUkrdHF0MXIvNUFZWXFXYnIxcUkzNWM4aEhuSkF3Y0ho?=
- =?utf-8?B?U0hiWGlvamJrZnJWelJ2MjZFUXNoTTNzbklNYTF2RDhzdStZamdCRGE2REZB?=
- =?utf-8?B?RWp0dktnU0lxdURRbnJka0NlUElVOFJsaFZRdGkxRjlnVDgrclNxVmhTTlVO?=
- =?utf-8?B?aGRKc0NlYVpOd2UrK0Z3dXNNRVZpdGwxVlJTdCtGdlF4SmY4citWcmVDU3dE?=
- =?utf-8?B?Q1RKTVV5OGY3Vk1nWmlYY2tqb2pMaEExMHJQc2gxcEZ0U1hUOGRWQkw5OG1x?=
- =?utf-8?B?SjhheEJDT0hkK1lWZTV0SUppNXMzZWhXcEhHNis5UHdyVFJ3OENLTDBTOEcy?=
- =?utf-8?B?NU52Wm5rWGJhdkEvUDBwM0hsVnNOUFp6ZWJvVjc4YXVQM1ptNm1DRm4wR3BG?=
- =?utf-8?B?NVpuSWNEc2dRVE9yTktzQzhLS3NyOUhWODQ5MXJuT3hoN0VGQXdUS3gxdHNF?=
- =?utf-8?B?TDdKUVZFcUlYTE9iaDhPSXJHWUdua2NPU3J6Q3ZsNS9UbEpFb2tTWm5Nb2lv?=
- =?utf-8?B?am8vV1BLV0Z1WU91TWZYZ2xBOWJmMUw4VVcxR0V6ZXJPMEh0WlZDd08zbnVt?=
- =?utf-8?B?aE5oYlpDTFdnOUdwUWRJemttNitDOTZiL3VZTHNwcDlyVXFkR3haOXZFTFJy?=
- =?utf-8?B?TExhWUdDS3NvTTZuT3VGU0kwRmh2aVpJdWV5dlVqMWNFWGZjWU9waE51MXpB?=
- =?utf-8?B?SVlWMkc2SGY4U2xrUkhhdExZSVQ5d3JyTTVnYWlUZFVLQW9WemtIK1cvbWg4?=
- =?utf-8?B?ay9hUGZBUE9EdDc5MzBvVEJoc3RhUURXQUtsRmJQMXA0SE1NVVM2L1FLTURz?=
- =?utf-8?B?R2ltN0tVNllWRTh5azRkeFdUV3d3YS91Nmtna3hoWDBoTjJkVVAveXQ0VkhR?=
- =?utf-8?B?NjZEZ3drVGx1NG0zbUVpZUJiT1F4Zjh2ODM0b29wSnVIVERHMUFYbUNoU0pB?=
- =?utf-8?B?SWxndllyRzdnU0JEWDBua3Bqc1dLVDZzOHIvREd3WUQzQUNsUm55TnhZU1Js?=
- =?utf-8?B?L09xc044RStYL1ZYcUpTOFVpU0pEamhEc2o0YnlZRkVQWGtBWVFDeHZVVW9r?=
- =?utf-8?B?R1djNDVNcnFFV0lUeTh2Y2hodTNidGxvU01mMXgzaTZ6S2dyRkY2cGNHQzRK?=
- =?utf-8?B?cis5ZG5raUFodGoxUGdIZmRSVTNxRFFaL3pyV1Q0OEpoU3Z0UnRlTWp1aWVr?=
- =?utf-8?B?L3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <05DDB91F37E6544DB96A67FDA4CA6A94@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     tiwai@suse.com, perex@perex.cz, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220913065818.13015-1-mkumard@nvidia.com>
+ <874jxbhhin.wl-tiwai@suse.de>
+From:   Mohan Kumar D <mkumard@nvidia.com>
+In-Reply-To: <874jxbhhin.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXP287CA0005.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a00:49::16) To DM6PR12MB4435.namprd12.prod.outlook.com
+ (2603:10b6:5:2a6::23)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4435:EE_|SJ0PR12MB6880:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bb5aa7e-bf83-46ba-e0d5-08da95583d1c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0a2Rd0vHa7tjz0RwO97U0S3JZmAA3j7yqnykbBNX5RW7Z9m9KmkiJsCwPfe0m2I3FkTRNfE7ZW/Dgs9oYt5t1JC3KIyynqi69zRmXTF6DG2K7U82+8nwuYW1k2SRCbalLwExtCYCb7jX19XwdZw66/ZwdW/E001LAu5h2xN/2M9xMknhGrwq2xQGb5JAukYVnD3E7XHNNZ2MXfenKMs4L3JvwAuH1+YpQaW9cCFm3JHJ9LHZuaQAWJl1MGs1vq0LbX9zk40cGc10rmfkXOx6RTmwX2PyD9eGmaukZ/AX97c3C7P+Bagmj3ZF2AvA+WXY3TVL1Otpqdu3wvekDmTvUVEX+MQysl7Mq7WC/DgpD8tAqC+hOlB8aTPJ4VEQYRtMXYe/77x+LSnOyJC9EZA5NhucznnEj2SWAC+L+Zyyi1nHbN7+S7aLyIFqn7U3/ZGBIvpt6jqkoiKxhTCcIaHkgVgM5sKW2BOcv8uq0i7KRoMoxKEHe4pF4TavRFPHH8y1TZL0J1cYcyacZBxWGJyAnssAr10suvlrLOw/tQ/2OU/RVSQ/HzJ8vOxmPD1mx9CtQK0T4uAPcveYmW9YIRwWQRffXcKrUoVq4zufchlnnX7zPCvDFMig9Mf115KbeFnlV/aczqMKOyQFMpzQmsPPXP+/2IGdDj1d38+bHPe1ih5viAynZSfAFCGpnYYeTkcqNEDbChoN/B6hOWK6YBxZW8Ex079Y1sRUfMDhYmOcZ+YvKtCojcNzxPH5OMALOLy5gpJCNsiju2v3qA6y0grv5Tvpe0V568avceyZIGzFKgw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4435.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(136003)(39860400002)(376002)(451199015)(66946007)(6486002)(66556008)(86362001)(186003)(316002)(478600001)(6916009)(38100700002)(31696002)(6666004)(6506007)(66476007)(36756003)(31686004)(5660300002)(83380400001)(8676002)(6512007)(26005)(53546011)(2906002)(41300700001)(8936002)(4326008)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TTJNS0txVUV1S0J0VkxDcmFvQkJOTFRROHpFYjhoTkZKdllmeW5rdGhEVUhY?=
+ =?utf-8?B?WXpLSmM4RVpYNVVuT3g1cVlYUGdQeHNudTNXZnpWUnpLL3ZLZnRsS05aUzdh?=
+ =?utf-8?B?Y3FoOWN2Y25qNk5TeUZDNUhHbnVYbGxmcmRSOE80SHJZTlZhM2tlUzR4WXZx?=
+ =?utf-8?B?SzNhUS8zdWdLWEZoeS93dVYvRUZRTFRUZzd2VjdwV3Y1Y01MWnpSR2VPaDl1?=
+ =?utf-8?B?N3BYVjVqbkpncFo2dG05SGFQeVJxbHZaaDFIMmNRL0E5ZS81bnBkTlFDR3RB?=
+ =?utf-8?B?UEllTysyTnVTYTJrcU1ybFBOVWd5MitaM3FBVGRJOVYrYWc3S016c1JQMmt5?=
+ =?utf-8?B?cFhuWktsR0lJT09DZGQ1UlBuMG55cEg0eG5KYitiSXhMalpOcGpWbVBLZ0lO?=
+ =?utf-8?B?OGRhY2pQN0FJQk5LQVlmV2NGdkI3eVFGWmpBek1JT1NLVWxvN1RNdXl6M3NS?=
+ =?utf-8?B?Tnhpc1Iwd1dZNmN1NDd3VzU0MEJSRzFocjFucTFjZjR1cU5rQnVTYzFDUGtv?=
+ =?utf-8?B?OUtaR2FDQ1RMVWN6bHFLdGI5cFB1clpra1ZlYmVPVFV4VUlpS0p6R0x6SWls?=
+ =?utf-8?B?M29qcFE0SUd4WVl3Vi9UZGRaNWJGeEl5UXlUMkovMmY0cDFFT3NoUjc1Y2JB?=
+ =?utf-8?B?SHlDaHd0RWVJOFJlQ0U3KzlhV3pOcmJIL2h4eDAwUGF5M1R4Z2tDd2UveExZ?=
+ =?utf-8?B?QkdmbWJVRkhJU2tnOUYyRjhQN0lxNWNiMUdBWnZxbTc5R1RYVUdvS2E5TWZt?=
+ =?utf-8?B?SnBqelU4VUNublVFVzZsZmVvYTVJSEFlTHc3MkJiQkt2Zmh6ZDVSU1h3Nnhk?=
+ =?utf-8?B?V3pUanlvU3YrVFIxRzVXY1F3UE1IVEdJemJIVnBmQTdtMkJ4b3JiZjZDTmZl?=
+ =?utf-8?B?L0VmSko2dWdST28zYk5uQWJ2WmZlakJKdXBjOXRJU2xSZzlwM1lRbjZ2L3ZB?=
+ =?utf-8?B?dlpKWnpXdWpQYSs5R2M3Y0JrY1YxaWx6eHhMZUNjaXJEazZrRHNVR0RsUWVE?=
+ =?utf-8?B?bTZ3ZDBSckNiNFB4L0VneXhEaDV3WGdURUN2S3IxRVlPMm54RWFJSWNSbHZw?=
+ =?utf-8?B?MG45MTBHTTY2NWNweXZNc2xwcDcra2RLdXZ1YlVOQUJEeWdrMGJnaVh4Z04v?=
+ =?utf-8?B?RExrdzJHYU1kTlRrY2N6UXByQ29WR0NOeVlQTGIrRkt3QkowbU9EZEFoZ1FE?=
+ =?utf-8?B?cHg4T2x2OVlMZjNpMmxrdEM0cHhEbzBQSmRnYjlpdkthNTk3NTZyQkVVWDJI?=
+ =?utf-8?B?U0krUEIvS3JZSFVscXcwSk11V1U3LzdVZHp6clpZbkMyR0lIQlB2Q2xlZi9H?=
+ =?utf-8?B?VVdPMEp0ZElyUnUzelRxZFZ6bXAwNVp0R0ZiZHYwbHAzbWVMWGRWVFE0OWVq?=
+ =?utf-8?B?d21QNTg2VStkUVNvYU5jZzdTRE5kUmlkd1diYmFSSGNmcTlVeldIZlJxc3NQ?=
+ =?utf-8?B?emZFeUJ5VDJ4TllSTm80QWFzNHgvR1QwS1dIak1zRW5JRzVHdTdpMmFNR3Rv?=
+ =?utf-8?B?dGt6dHlLWkd6K21lZFZJR2hUK1dlZTRSWHVTa1pHZlpYMjlKRmFqVVh6VVlu?=
+ =?utf-8?B?NnJ0OWxZam9SRElTVER3cExjbXNLM2E5SG5VdVJreHZSLzl5SXVkRmJGRFU4?=
+ =?utf-8?B?TjJ0aTJJeisxRWFaVGxWc2NaRmFmU2xRYlgvMEpZVzhFdWFNZTBGcDRCR2xz?=
+ =?utf-8?B?aTNTU2ZCWGgxSGRya0hpdUhocDRUK3gzMzIzQksrdjVLL24yOGpRa2cvRk9k?=
+ =?utf-8?B?ZlVJYmx5QUljVXQ3Mjk3cVZKU2pkb25EbWFlQnVtcFZlYmtuamR5clN3Yzd2?=
+ =?utf-8?B?Zkt0dlhQL0xqZHJncSt3aXdFaDg5RGxBK0NwVWZQM2hGMUhBU0UwMGYvMStr?=
+ =?utf-8?B?RzY4QUVwNUpTY0lSckYzamVXaHBPY2tNYXUxSGlRcUtYRVFvbHZ1bjIrNmhm?=
+ =?utf-8?B?M1ZlYVBJcUtPUHM2NDN5QnlTSHlxeXlURUR2TWs0SFFCNXV6YXA4TktaeEJL?=
+ =?utf-8?B?WThPMG5hN1ZlMnRJam9UNndDMnJ6L2dGa1pKSCtncTB6QlBES3lhZlJjaTRN?=
+ =?utf-8?B?VytYK09kS0QzVzNjbk1DZDhRSVVXRExldWZjNGwxSTJvcEpNQWkwZlpMazhH?=
+ =?utf-8?Q?sf5QyVIoui1m21SnGN2m4/Y+v?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb5aa7e-bf83-46ba-e0d5-08da95583d1c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4435.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2930986a-157b-4c6c-1446-08da95582433
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 07:18:22.2865
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 07:19:04.4915
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VimBJ6m5ESIgapKHTaYnWJaOlxHn1gGfGa4Jhoqipc+INTlZlQWKBjAC07yQs9UY2yyMBptREgmMq5JTIgs2/b3V3Q11HEVJu1BFtF97FWk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5649
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FvZtrTdwOM7bmoCZKB5Z19XEZytpIgkwiRL9po8IubYe6iJPwq00TiH0GSXMfgZVfZwTqUfW43wcW2RjY8Xp5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6880
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIuMDkuMjAyMiAyMjoyNiwgSG9yYXRpdSBWdWx0dXIgd3JvdGU6DQo+IEFjY29yZGluZyB0
-byB0aGUgZGF0YXNoZWV0IHRoZSBpbnRlcnJ1cHRzIGZvciBpbnRlcm5hbCBQSFlzIGFyZQ0KPiA4
-MCBhbmQgODEuDQo+IA0KPiBGaXhlczogNmFkNjllMDdkZWY2N2MgKCJBUk06IGR0czogbGFuOTY2
-eDogYWRkIE1JSU0gbm9kZXMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBIb3JhdGl1IFZ1bHR1ciA8aG9y
-YXRpdS52dWx0dXJAbWljcm9jaGlwLmNvbT4NCg0KQXBwbGllZCB0byBhdDkxLWZpeGVzLCB0aGFu
-a3MhDQoNCj4gLS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LmR0c2kgfCA0ICsrLS0N
-Cj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2eC5kdHNpIGIvYXJjaC9hcm0v
-Ym9vdC9kdHMvbGFuOTY2eC5kdHNpDQo+IGluZGV4IGJjYjEzMGEyNDcxZC4uMjM2NjVhMDQyOTkw
-IDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LmR0c2kNCj4gKysrIGIv
-YXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2eC5kdHNpDQo+IEBAIC01NDcsMTMgKzU0NywxMyBAQCBt
-ZGlvMTogbWRpb0BlMjAwNDEzYyB7DQo+ICANCj4gIAkJCXBoeTA6IGV0aGVybmV0LXBoeUAxIHsN
-Cj4gIAkJCQlyZWcgPSA8MT47DQo+IC0JCQkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDgxIElSUV9U
-WVBFX0xFVkVMX0hJR0g+Ow0KPiArCQkJCWludGVycnVwdHMgPSA8R0lDX1NQSSA4MCBJUlFfVFlQ
-RV9MRVZFTF9ISUdIPjsNCj4gIAkJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAgCQkJfTsNCj4g
-IA0KPiAgCQkJcGh5MTogZXRoZXJuZXQtcGh5QDIgew0KPiAgCQkJCXJlZyA9IDwyPjsNCj4gLQkJ
-CQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgODIgSVJRX1RZUEVfTEVWRUxfSElHSD47DQo+ICsJCQkJ
-aW50ZXJydXB0cyA9IDxHSUNfU1BJIDgxIElSUV9UWVBFX0xFVkVMX0hJR0g+Ow0KPiAgCQkJCXN0
-YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICAJCQl9Ow0KPiAgCQl9Ow0KDQo=
+
+On 9/13/2022 12:45 PM, Takashi Iwai wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> On Tue, 13 Sep 2022 08:58:18 +0200,
+> Mohan Kumar wrote:
+>> Nvidia HDA HW expects infoframe data bytes order same for both
+>> HDMI and DP i.e infoframe data starts from 5th bytes offset. As
+>> dp infoframe structure has 4th byte as valid infoframe data, use
+>> hdmi infoframe structure for nvidia dp infoframe to match HW behvaior.
+>>
+>> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> Aha, so this affects on all Nvidia devices, not only on Tegra, but
+> also on PC?  Then we should put cc-to-stable definitely.
+Yes, The HDA HW design was common for dGPU and Tegra.
+>
+> (No need to resend, I can put it locally.)
+Thanks!.
+>
+>
+> Takashi
+>
+>> ---
+>>   sound/pci/hda/patch_hdmi.c | 23 +++++++++++++++++++----
+>>   1 file changed, 19 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+>> index 6c209cd26c0c..9127dd1b1a9c 100644
+>> --- a/sound/pci/hda/patch_hdmi.c
+>> +++ b/sound/pci/hda/patch_hdmi.c
+>> @@ -170,6 +170,8 @@ struct hdmi_spec {
+>>        bool dyn_pcm_no_legacy;
+>>        /* hdmi interrupt trigger control flag for Nvidia codec */
+>>        bool hdmi_intr_trig_ctrl;
+>> +     bool nv_dp_workaround; /* workaround DP audio infoframe for Nvidia */
+>> +
+>>        bool intel_hsw_fixup;   /* apply Intel platform-specific fixups */
+>>        /*
+>>         * Non-generic VIA/NVIDIA specific
+>> @@ -679,15 +681,24 @@ static void hdmi_pin_setup_infoframe(struct hda_codec *codec,
+>>                                     int ca, int active_channels,
+>>                                     int conn_type)
+>>   {
+>> +     struct hdmi_spec *spec = codec->spec;
+>>        union audio_infoframe ai;
+>>
+>>        memset(&ai, 0, sizeof(ai));
+>> -     if (conn_type == 0) { /* HDMI */
+>> +     if ((conn_type == 0) || /* HDMI */
+>> +             /* Nvidia DisplayPort: Nvidia HW expects same layout as HDMI */
+>> +             (conn_type == 1 && spec->nv_dp_workaround)) {
+>>                struct hdmi_audio_infoframe *hdmi_ai = &ai.hdmi;
+>>
+>> -             hdmi_ai->type           = 0x84;
+>> -             hdmi_ai->ver            = 0x01;
+>> -             hdmi_ai->len            = 0x0a;
+>> +             if (conn_type == 0) { /* HDMI */
+>> +                     hdmi_ai->type           = 0x84;
+>> +                     hdmi_ai->ver            = 0x01;
+>> +                     hdmi_ai->len            = 0x0a;
+>> +             } else {/* Nvidia DP */
+>> +                     hdmi_ai->type           = 0x84;
+>> +                     hdmi_ai->ver            = 0x1b;
+>> +                     hdmi_ai->len            = 0x11 << 2;
+>> +             }
+>>                hdmi_ai->CC02_CT47      = active_channels - 1;
+>>                hdmi_ai->CA             = ca;
+>>                hdmi_checksum_audio_infoframe(hdmi_ai);
+>> @@ -3617,6 +3628,7 @@ static int patch_nvhdmi_2ch(struct hda_codec *codec)
+>>        spec->pcm_playback.rates = SUPPORTED_RATES;
+>>        spec->pcm_playback.maxbps = SUPPORTED_MAXBPS;
+>>        spec->pcm_playback.formats = SUPPORTED_FORMATS;
+>> +     spec->nv_dp_workaround = true;
+>>        return 0;
+>>   }
+>>
+>> @@ -3756,6 +3768,7 @@ static int patch_nvhdmi(struct hda_codec *codec)
+>>        spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+>>                nvhdmi_chmap_cea_alloc_validate_get_type;
+>>        spec->chmap.ops.chmap_validate = nvhdmi_chmap_validate;
+>> +     spec->nv_dp_workaround = true;
+>>
+>>        codec->link_down_at_suspend = 1;
+>>
+>> @@ -3779,6 +3792,7 @@ static int patch_nvhdmi_legacy(struct hda_codec *codec)
+>>        spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+>>                nvhdmi_chmap_cea_alloc_validate_get_type;
+>>        spec->chmap.ops.chmap_validate = nvhdmi_chmap_validate;
+>> +     spec->nv_dp_workaround = true;
+>>
+>>        codec->link_down_at_suspend = 1;
+>>
+>> @@ -3992,6 +4006,7 @@ static int tegra_hdmi_init(struct hda_codec *codec)
+>>        spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+>>                nvhdmi_chmap_cea_alloc_validate_get_type;
+>>        spec->chmap.ops.chmap_validate = nvhdmi_chmap_validate;
+>> +     spec->nv_dp_workaround = true;
+>>
+>>        return 0;
+>>   }
+>> --
+>> 2.17.1
+>>
