@@ -2,223 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647925B653A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 03:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08255B653E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 03:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiIMBtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 21:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S229760AbiIMBvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 21:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiIMBtQ (ORCPT
+        with ESMTP id S229630AbiIMBvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 21:49:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94704F67F;
-        Mon, 12 Sep 2022 18:49:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7DF9134486;
-        Tue, 13 Sep 2022 01:49:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663033754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XymQaOtV2yV+xCDaTdfh048Uz6sbE2/X7+E4QQCcVdo=;
-        b=RJxgi3J1bX3N95U7SNYQj6XFLkLiRRJMmXP5Dcw1rxxL7Pk3SWRoQK1arYpZSZDmyWuLX9
-        IkrHNjN7zOhBdypFQOeR0/YlkKLseT6jpWor8TftOvGZ4mOo+dwvQwgeWTi2DbT6PwN0aB
-        mepCSbH00VBbO54aU5FzE/mp5XUb7tc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663033754;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XymQaOtV2yV+xCDaTdfh048Uz6sbE2/X7+E4QQCcVdo=;
-        b=nrTqRPioiBIrZ75RcYjeFJfhOVcHGnLXCxYbUvR+CI0TEqBuMDUU2+UZdE0vOmTpYNXUkL
-        ChjPBearKW3Oy0Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E8A02139B3;
-        Tue, 13 Sep 2022 01:49:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dHZ5J5LhH2OyGQAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 13 Sep 2022 01:49:06 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 12 Sep 2022 21:51:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060FE4F6B8;
+        Mon, 12 Sep 2022 18:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663033904; x=1694569904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2NGc7hvIE92RCbTENDH1MmBHPouANN1/L78mTjXfFAs=;
+  b=Ipln9n8efswqVqwMMrHaQesMo1oQGb4OS82Xl17QJWW6U4fHmdH3TN18
+   cb5KWaI3MQdy6kWwvnRyS43+R3IWBu/n2Z3JuIvQKsM/vxwF4TOI39eko
+   LIJGTRValOAr0zsGnFGzQHOKx4y0pK2GFsGtPm60gpqRuzeIrNYbRTf8v
+   OEGIydVJmaKXj3+MzuNHLhuf7ISqVKHLmnwjm200PDrE6GKIp9h9wOkjB
+   P1OX07xzKGOyLX3UvchDcHVueJsgOb+thFI3TwxitjXBBaY8twE9/1CFc
+   5iCdFjwpzLuHU3AW8O9fvzDfkVEzYPpE74Qmnuh0sA/YVyhdkC9AyEnyd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298811072"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="298811072"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:51:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="741990614"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Sep 2022 18:51:39 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXv5O-00034d-1T;
+        Tue, 13 Sep 2022 01:51:38 +0000
+Date:   Tue, 13 Sep 2022 09:51:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     kbuild-all@lists.01.org, dri-devel@lists.freedesktop.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Sean Paul <sean@poorly.run>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH 4/7] drm/msm/dp: fix aux-bus EP lifetime
+Message-ID: <202209130930.yrI8pQGL-lkp@intel.com>
+References: <20220912154046.12900-5-johan+linaro@kernel.org>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Dave Chinner" <david@fromorbit.com>
-Cc:     "Jeff Layton" <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, "Jan Kara" <jack@suse.cz>,
-        adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <20220913004146.GD3600936@dread.disaster.area>
-References: <YxoIjV50xXKiLdL9@mit.edu>,
- <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>,
- <20220908155605.GD8951@fieldses.org>,
- <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>,
- <20220908182252.GA18939@fieldses.org>,
- <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>,
- <20220909154506.GB5674@fieldses.org>,
- <125df688dbebaf06478b0911e76e228e910b04b3.camel@kernel.org>,
- <20220910145600.GA347@fieldses.org>,
- <9eaed9a47d1aef11fee95f0079e302bc776bc7ff.camel@kernel.org>,
- <20220913004146.GD3600936@dread.disaster.area>
-Date:   Tue, 13 Sep 2022 11:49:03 +1000
-Message-id: <166303374350.30452.17386582960615006566@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912154046.12900-5-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sep 2022, Dave Chinner wrote:
-> On Mon, Sep 12, 2022 at 07:42:16AM -0400, Jeff Layton wrote:
-> > On Sat, 2022-09-10 at 10:56 -0400, J. Bruce Fields wrote:
-> > > On Fri, Sep 09, 2022 at 12:36:29PM -0400, Jeff Layton wrote:
-> > > Our goal is to ensure that after a crash, any *new* i_versions that we
-> > > give out or write to disk are larger than any that have previously been
-> > > given out.  We can do that by ensuring that they're equal to at least
-> > > that old maximum.
-> > > 
-> > > So think of the 64-bit value we're storing in the superblock as a
-> > > ceiling on i_version values across all the filesystem's inodes.  Call it
-> > > s_version_max or something.  We also need to know what the maximum was
-> > > before the most recent crash.  Call that s_version_max_old.
-> > > 
-> > > Then we could get correct behavior if we generated i_versions with
-> > > something like:
-> > > 
-> > > 	i_version++;
-> > > 	if (i_version < s_version_max_old)
-> > > 		i_version = s_version_max_old;
-> > > 	if (i_version > s_version_max)
-> > > 		s_version_max = i_version + 1;
-> > > 
-> > > But that last step makes this ludicrously expensive, because for this to
-> > > be safe across crashes we need to update that value on disk as well, and
-> > > we need to do that frequently.
-> > > 
-> > > Fortunately, s_version_max doesn't have to be a tight bound at all.  We
-> > > can easily just initialize it to, say, 2^40, and only bump it by 2^40 at
-> > > a time.  And recognize when we're running up against it way ahead of
-> > > time, so we only need to say "here's an updated value, could you please
-> > > make sure it gets to disk sometime in the next twenty minutes"?
-> > > (Numbers made up.)
-> > > 
-> > > Sorry, that was way too many words.  But I think something like that
-> > > could work, and make it very difficult to hit any hard limits, and
-> > > actually not be too complicated??  Unless I missed something.
-> > > 
-> > 
-> > That's not too many words -- I appreciate a good "for dummies"
-> > explanation!
-> > 
-> > A scheme like that could work. It might be hard to do it without a
-> > spinlock or something, but maybe that's ok. Thinking more about how we'd
-> > implement this in the underlying filesystems:
-> > 
-> > To do this we'd need 2 64-bit fields in the on-disk and in-memory 
-> > superblocks for ext4, xfs and btrfs. On the first mount after a crash,
-> > the filesystem would need to bump s_version_max by the significant
-> > increment (2^40 bits or whatever). On a "clean" mount, it wouldn't need
-> > to do that.
-> 
-> Why only increment on crash? If the filesystem has been unmounted,
-> then any cached data is -stale- and must be discarded. e.g. unmount,
-> run fsck which cleans up corrupt files but does not modify
-> i_version, then mount. Remote caches are now invalid, but i_version
-> may not have changed, so we still need the clean unmount-mount cycle
-> to invalidate caches.
+Hi Johan,
 
-I disagree.  We do need fsck to cause caches to be invalidated IF IT
-FOUND SOMETHING TO REPAIR, but not if the filesystem was truely clean.
+I love your patch! Yet something to improve:
 
-> 
-> IOWs, what we want is a salted i_version value, with the filesystem
-> providing the unique per-mount salt that gets added to the
-> externally visible i_version values.
+[auto build test ERROR on next-20220912]
+[also build test ERROR on v6.0-rc5]
+[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.0-rc5 v6.0-rc4 v6.0-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I agree this is a simple approach.  Possible the best.
+url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/drm-msm-probe-deferral-fixes/20220912-234351
+base:    044b771be9c5de9d817dfafb829d2f049c71c3b4
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220913/202209130930.yrI8pQGL-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/458c96e19570036b3dd6e48d91f0bf6f67b996fa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Johan-Hovold/drm-msm-probe-deferral-fixes/20220912-234351
+        git checkout 458c96e19570036b3dd6e48d91f0bf6f67b996fa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-> 
-> If that's the case, the salt doesn't need to be restricted to just
-> modifying the upper bits - as long as the salt increments
-> substantially and independently to the on-disk inode i_version then
-> we just don't care what bits of the superblock salt change from
-> mount to mount.
-> 
-> For XFS we already have a unique 64 bit salt we could use for every
-> mount - clean or unclean - and guarantee it is larger for every
-> mount. It also gets substantially bumped by fsck, too. It's called a
-> Log Sequence Number and we use them to track and strictly order
-> every modification we write into the log. This is exactly what is
-> needed for a i_version salt, and it's already guaranteed to be
-> persistent.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Invalidating the client cache on EVERY unmount/mount could impose
-unnecessary cost.  Imagine a client that caches a lot of data (several
-large files) from a server which is expected to fail-over from one
-cluster node to another from time to time.  Adding extra delays to a
-fail-over is not likely to be well received.
+All errors (new ones prefixed by >>):
 
-I don't *know* this cost would be unacceptable, and I *would* like to
-leave it to the filesystem to decide how to manage its own i_version
-values.  So maybe XFS can use the LSN for a salt.  If people notice the
-extra cost, they can complain.
-
-Thanks,
-NeilBrown
+   drivers/gpu/drm/bridge/ti-sn65dsi86.c: In function 'ti_sn_aux_probe':
+>> drivers/gpu/drm/bridge/ti-sn65dsi86.c:632:50: error: passing argument 1 of 'devm_of_dp_aux_populate_ep_devices' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     632 |         ret = devm_of_dp_aux_populate_ep_devices(&pdata->aux);
+         |                                                  ^~~~~~~~~~~
+         |                                                  |
+         |                                                  struct drm_dp_aux *
+   In file included from drivers/gpu/drm/bridge/ti-sn65dsi86.c:26:
+   include/drm/display/drm_dp_aux_bus.h:64:69: note: expected 'struct device *' but argument is of type 'struct drm_dp_aux *'
+      64 | static inline int devm_of_dp_aux_populate_ep_devices(struct device *dev, struct drm_dp_aux *aux)
+         |                                                      ~~~~~~~~~~~~~~~^~~
+>> drivers/gpu/drm/bridge/ti-sn65dsi86.c:632:15: error: too few arguments to function 'devm_of_dp_aux_populate_ep_devices'
+     632 |         ret = devm_of_dp_aux_populate_ep_devices(&pdata->aux);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/display/drm_dp_aux_bus.h:64:19: note: declared here
+      64 | static inline int devm_of_dp_aux_populate_ep_devices(struct device *dev, struct drm_dp_aux *aux)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_i2c_probe':
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2654:44: error: passing argument 1 of 'devm_of_dp_aux_populate_ep_devices' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    2654 |         devm_of_dp_aux_populate_ep_devices(&platform->aux);
+         |                                            ^~~~~~~~~~~~~~
+         |                                            |
+         |                                            struct drm_dp_aux *
+   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:24:
+   include/drm/display/drm_dp_aux_bus.h:64:69: note: expected 'struct device *' but argument is of type 'struct drm_dp_aux *'
+      64 | static inline int devm_of_dp_aux_populate_ep_devices(struct device *dev, struct drm_dp_aux *aux)
+         |                                                      ~~~~~~~~~~~~~~~^~~
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2654:9: error: too few arguments to function 'devm_of_dp_aux_populate_ep_devices'
+    2654 |         devm_of_dp_aux_populate_ep_devices(&platform->aux);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/display/drm_dp_aux_bus.h:64:19: note: declared here
+      64 | static inline int devm_of_dp_aux_populate_ep_devices(struct device *dev, struct drm_dp_aux *aux)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-> 
-> > Would there be a way to ensure that the new s_version_max value has made
-> > it to disk?
-> 
-> Yes, but that's not really relevant to the definition of the salt:
-> we don't need to design the filesystem implementation of a
-> persistent per-mount salt value. All we need is to define the
-> behaviour of the salt (e.g. must always increase across a
-> umount/mount cycle) and then you can let the filesystem developers
-> worry about how to provide the required salt behaviour and it's
-> persistence.
-> 
-> In the mean time, you can implement the salting and testing it by
-> using the system time to seed the superblock salt - that's good
-> enough for proof of concept, and as a fallback for filesystems that
-> cannot provide the required per-mount salt persistence....
-> 
-> > Bumping it by a large value and hoping for the best might be
-> > ok for most cases, but there are always outliers, so it might be
-> > worthwhile to make an i_version increment wait on that if necessary. 
-> 
-> Nothing should be able to query i_version until the filesystem is
-> fully recovered, mounted and the salt has been set. Hence no
-> application (kernel or userspace) should ever see an unsalted
-> i_version value....
-> 
-> -Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
-> 
+vim +/devm_of_dp_aux_populate_ep_devices +632 drivers/gpu/drm/bridge/ti-sn65dsi86.c
+
+77674e722f4b27 Laurent Pinchart 2021-06-24  620  
+77674e722f4b27 Laurent Pinchart 2021-06-24  621  static int ti_sn_aux_probe(struct auxiliary_device *adev,
+77674e722f4b27 Laurent Pinchart 2021-06-24  622  			   const struct auxiliary_device_id *id)
+77674e722f4b27 Laurent Pinchart 2021-06-24  623  {
+77674e722f4b27 Laurent Pinchart 2021-06-24  624  	struct ti_sn65dsi86 *pdata = dev_get_drvdata(adev->dev.parent);
+77674e722f4b27 Laurent Pinchart 2021-06-24  625  	int ret;
+77674e722f4b27 Laurent Pinchart 2021-06-24  626  
+77674e722f4b27 Laurent Pinchart 2021-06-24  627  	pdata->aux.name = "ti-sn65dsi86-aux";
+77674e722f4b27 Laurent Pinchart 2021-06-24  628  	pdata->aux.dev = &adev->dev;
+77674e722f4b27 Laurent Pinchart 2021-06-24  629  	pdata->aux.transfer = ti_sn_aux_transfer;
+77674e722f4b27 Laurent Pinchart 2021-06-24  630  	drm_dp_aux_init(&pdata->aux);
+77674e722f4b27 Laurent Pinchart 2021-06-24  631  
+77674e722f4b27 Laurent Pinchart 2021-06-24 @632  	ret = devm_of_dp_aux_populate_ep_devices(&pdata->aux);
+77674e722f4b27 Laurent Pinchart 2021-06-24  633  	if (ret)
+77674e722f4b27 Laurent Pinchart 2021-06-24  634  		return ret;
+77674e722f4b27 Laurent Pinchart 2021-06-24  635  
+77674e722f4b27 Laurent Pinchart 2021-06-24  636  	/*
+77674e722f4b27 Laurent Pinchart 2021-06-24  637  	 * The eDP to MIPI bridge parts don't work until the AUX channel is
+77674e722f4b27 Laurent Pinchart 2021-06-24  638  	 * setup so we don't add it in the main driver probe, we add it now.
+77674e722f4b27 Laurent Pinchart 2021-06-24  639  	 */
+77674e722f4b27 Laurent Pinchart 2021-06-24  640  	return ti_sn65dsi86_add_aux_device(pdata, &pdata->bridge_aux, "bridge");
+77674e722f4b27 Laurent Pinchart 2021-06-24  641  }
+77674e722f4b27 Laurent Pinchart 2021-06-24  642  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
