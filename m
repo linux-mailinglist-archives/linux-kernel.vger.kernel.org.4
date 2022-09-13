@@ -2,278 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCED25B6DD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4018B5B6DDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiIMNAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S231587AbiIMNBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbiIMM7z (ORCPT
+        with ESMTP id S231247AbiIMNBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:59:55 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674D4F590
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:59:53 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id jm11so11702861plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:59:53 -0700 (PDT)
+        Tue, 13 Sep 2022 09:01:37 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB42228C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:01:36 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-12b542cb1d3so22091599fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=xG9hg062b2ZIS+JDzyuJF9PDLmjCBLQtx5EPxF5Afdo=;
-        b=FrvzOOFuTsDxW1FIWU2/cr+lbtpLEpLNQu1O2Fyq5PwLA6HtIbHcqBfIHFLkmr1nZD
-         +qXuzx5UW0q8G/FpJK+ycBdP1GopWgWOcbciCYmEs64d/0MGpiTVuGIPvh5/0pVlcGUk
-         SeV/tErBE3Hbe085vAvSzHaVvUKUrKOWXyeeqIyp1GrqzoopDGAeom8hwAPZ+J8Xi26I
-         SNAmBSojnSFF5EUtn/qOIVXxKV4/IFLDfr1nNkh7AH4HktInbBTbRFe5J/8FOiFBTEzK
-         VuVOkCwZjfcNqIET+2GOxutqogTqmjm9xJomlQp46C69+C5FW93IjB10faMrRZ0OR/eF
-         UHlQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=Egq3TEXftTCJHVvcDfROaTHHjIMkOHhmY4MYJgUqpWQ=;
+        b=IkYoOc4wWT22pJ9fC+4oRYo0mk+0Jkg6ujt7YjIOFF1VBj7HNkFGvXg2n19hopxdH1
+         ioQg9GrPo1NMvYUVtbvmYyF9uDwDFCkxzZHiaXDuGszuvGbwCpPu/blKETycs3jTEjY3
+         NZu1aPRoNYlrkJ0E48Kglav5q3KbstekWQtfjLv5JL4F1a1Y93yMsy7fXYoH0umdQv+R
+         +CP2Biq3F6XRW3mog4/A1qA1bcd96tQuwWJM0laeT+s9BjSeGLVozIAQZbm/ifctH7H0
+         fJ31YaMEpT+XuFsJQM4TkVYZy0dzT+5+RKn1Ia/Oa+cIoecUP3MsurqMRNbLAgwKQl+7
+         0q/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=xG9hg062b2ZIS+JDzyuJF9PDLmjCBLQtx5EPxF5Afdo=;
-        b=ViScAezun5hBJW6CZBNA5sxPG98p/J0/GmGfeKliPFF8avE5pbfwVKe8inVba5phKG
-         Y6BfmrDiOJPU16gBYvlxEDJYGDhJdAT/Hnxwjl7G52CMz5yM9yWp9HUTfk+t9oHzT0Yf
-         uXA5CfG9UxlKK0TZlqEVB5fJe+Sh/U6Vv6Ogg6Fb/lrCS+VKRKE8ZK3fzw1eMOoo3RVn
-         /F43EAy1+KrL6MJBKVK5GL8+7bsPz7a0vLAlsLfV4t4fX7arh4sfbGqF8rPdgFeJFSKj
-         SNIg/ATjKhQft6Gsnqg6Ef3QvuhnnyLC2s2ZRIXa7L4f+tVe164Wd6suREpruTHnG28P
-         MAMw==
-X-Gm-Message-State: ACgBeo1XqIl2m2+K/bNMlF6kRfIUpfXHNtEym84Q0Ba0I4zMJxN4mgTS
-        UI0K5QAonQgv2t4sud2c+VjImA==
-X-Google-Smtp-Source: AA6agR5bhxWeNfqv9JPYlGg1fagPXBZrurfTVzo+IVWkH3d+2spTZ8UiMMiwfdk/y+jxRkZi4aAmnQ==
-X-Received: by 2002:a17:90a:1b6e:b0:1f5:1902:af92 with SMTP id q101-20020a17090a1b6e00b001f51902af92mr3984254pjq.238.1663073992788;
-        Tue, 13 Sep 2022 05:59:52 -0700 (PDT)
-Received: from [10.76.37.214] ([61.213.176.11])
-        by smtp.gmail.com with ESMTPSA id z8-20020aa79e48000000b0053b850b17c8sm7803611pfq.152.2022.09.13.05.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 05:59:52 -0700 (PDT)
-Message-ID: <23018405-bd62-45b6-d3d0-6f0acb5630f5@bytedance.com>
-Date:   Tue, 13 Sep 2022 20:59:47 +0800
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Egq3TEXftTCJHVvcDfROaTHHjIMkOHhmY4MYJgUqpWQ=;
+        b=ZjEO981rWZCG1st5kFRiQCJ/uW0PvH/9cpe/dT/8N5JdruijqakxUqR4VDed20UjRX
+         kgfHVxYt2I867q7XE9s5kzeH2eLBb3Ggj8m3U+DrBYKbteKrLh89lBmSf+nLpzvYbRHO
+         OAplbL/5FdznXvTNtY07b3y3/vwRUI+c7mKfGBKSCzPWYAkswX8bv79ZLwMdhFyYdhvi
+         n7AftFHITFd8YPFfB40m73PDdcBqBRRum/P6vqJY/JdLr8Fiw4nFB5jeaf8XG6R0Bfgp
+         rIYWIiclFZDrys67WPg6Zp0szic0Tn/4D/Avur3eY8V2BiWLyN3B3vYbgC41/wg5OlVT
+         Clgg==
+X-Gm-Message-State: ACgBeo2K3n6Dv9eA2YE4azfu92n/igwu2ljQ1LYOGLjVESg3Il/Zad96
+        wYsbjL/NZXfBryK5WHDCEQ9RCaTa4MSIxSZkUks=
+X-Google-Smtp-Source: AA6agR4FjusHCwayFdOlxCIojR/3f7ct8RZVroGn3bNBezA+eIWEwxbO0vSF7MMqn8xxiXfkohKS+WVlyhevJEMQg3g=
+X-Received: by 2002:a05:6870:738d:b0:125:1b5:420f with SMTP id
+ z13-20020a056870738d00b0012501b5420fmr1711917oam.96.1663074094492; Tue, 13
+ Sep 2022 06:01:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [External] Re: [PATCH V2 5/5] erofs: support fscache based shared
- domain
-To:     JeffleXu <jefflexu@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220902105305.79687-1-zhujia.zj@bytedance.com>
- <20220902105305.79687-6-zhujia.zj@bytedance.com>
- <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <097a8ffb-c8b0-ed10-6c82-8a6de9bed09b@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220913083805.22549-1-jiapeng.chong@linux.alibaba.com> <20220913083805.22549-5-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220913083805.22549-5-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 13 Sep 2022 09:01:23 -0400
+Message-ID: <CADnq5_OGB6jVp34oWRxRHJneK-+UZo-oRm=ydO2Rtv3=ekHgdA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] drm/amd/display: Remove the unused function copy_stream_update_to_stream()
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied the series.  Thanks!
 
+Alex
 
-在 2022/9/13 14:27, JeffleXu 写道:
-> 
-> 
-> On 9/2/22 6:53 PM, Jia Zhu wrote:
->> Several erofs filesystems can belong to one domain, and data blobs can
->> be shared among these erofs filesystems of same domain.
->>
->> Users could specify domain_id mount option to create or join into a domain.
->>
->> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
->> ---
->>   fs/erofs/fscache.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++
->>   fs/erofs/internal.h | 12 ++++++++
->>   fs/erofs/super.c    | 10 +++++--
->>   3 files changed, 93 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
->> index 439dd3cc096a..c01845808ede 100644
->> --- a/fs/erofs/fscache.c
->> +++ b/fs/erofs/fscache.c
->> @@ -559,12 +559,27 @@ int erofs_fscache_register_cookie(struct super_block *sb,
->>   void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
->>   {
->>   	struct erofs_fscache *ctx = *fscache;
->> +	struct erofs_domain *domain;
->>   
->>   	if (!ctx)
->>   		return;
->> +	domain = ctx->domain;
->> +	if (domain) {
->> +		mutex_lock(&domain->mutex);
->> +		/* Cookie is still in use */
->> +		if (atomic_read(&ctx->anon_inode->i_count) > 1) {
->> +			iput(ctx->anon_inode);
->> +			mutex_unlock(&domain->mutex);
->> +			return;
->> +		}
->> +		iput(ctx->anon_inode);
->> +		kfree(ctx->name);
->> +		mutex_unlock(&domain->mutex);
->> +	}
->>   
->>   	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
->>   	fscache_relinquish_cookie(ctx->cookie, false);
->> +	erofs_fscache_domain_put(domain);
->>   	ctx->cookie = NULL;
->>   
->>   	iput(ctx->inode);
->> @@ -609,3 +624,61 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
->>   	sbi->volume = NULL;
->>   	sbi->domain = NULL;
->>   }
->> +
->> +static int erofs_fscache_domain_init_cookie(struct super_block *sb,
->> +		struct erofs_fscache **fscache, char *name, bool need_inode)
->> +{
->> +	int ret;
->> +	struct inode *inode;
->> +	struct erofs_fscache *ctx;
->> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +	struct erofs_domain *domain = sbi->domain;
->> +
->> +	ret = erofs_fscache_register_cookie(sb, &ctx, name, need_inode);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ctx->name = kstrdup(name, GFP_KERNEL);
->> +	if (!ctx->name)
->> +		return -ENOMEM;
-> 
-> Shall we clean up the above registered cookie in the error path?
-> 
-If this step fails, error will be transmitted to vfs_get_tree() and
-erofs_kill_sb() will relinquish the cookie.
->> +
->> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
->> +	if (!inode) {
->> +		kfree(ctx->name);
->> +		return -ENOMEM;
->> +	}
-> 
-> Ditto.
-> 
->> +
->> +	ctx->domain = domain;
->> +	ctx->anon_inode = inode;
->> +	inode->i_private = ctx;
->> +	erofs_fscache_domain_get(domain);
->> +	*fscache = ctx;
->> +	return 0;
->> +}
->> +
->> +int erofs_domain_register_cookie(struct super_block *sb,
->> +	struct erofs_fscache **fscache, char *name, bool need_inode)
->> +{
->> +	int err;
->> +	struct inode *inode;
->> +	struct erofs_fscache *ctx;
->> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +	struct erofs_domain *domain = sbi->domain;
->> +	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
->> +
->> +	mutex_lock(&domain->mutex);
-> 
-> What is domain->mutex used for?
-> 
-This lock is used to avoid race conditions between cookie's
-traverse/del/insert in the inode list.
-It seems to be possible to increase the granularity of the lock
-after v2's change "Only initialize one pseudo fs to manage anonymous 
-inodes(cookies).".
-> 
->> +	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
->> +		ctx = inode->i_private;
->> +		if (!ctx)
->> +			continue;
->> +		if (!strcmp(ctx->name, name)) {
->> +			*fscache = ctx;
->> +			igrab(inode);
->> +			mutex_unlock(&domain->mutex);
->> +			return 0;
->> +		}
->> +	}
->> +	err = erofs_fscache_domain_init_cookie(sb, fscache, name, need_inode);
->> +	mutex_unlock(&domain->mutex);
->> +	return err;
->> +}
->> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
->> index 2790c93ffb83..efa4f4ad77cc 100644
->> --- a/fs/erofs/internal.h
->> +++ b/fs/erofs/internal.h
->> @@ -110,6 +110,9 @@ struct erofs_domain {
->>   struct erofs_fscache {
->>   	struct fscache_cookie *cookie;
->>   	struct inode *inode;
->> +	struct inode *anon_inode;
-> 
-> Why can't we reuse @inode for anon_inode?
-> 
-We use pseudo sb's anonymous inodes list to manage the cookie.
-Wouldn't it be a bit of messy if reuses erofs meta inode?
-> 
->> +	struct erofs_domain *domain;
->> +	char *name;
->>   };
->>   
->>   struct erofs_sb_info {
->> @@ -625,6 +628,9 @@ int erofs_fscache_register_domain(struct super_block *sb);
->>   int erofs_fscache_register_cookie(struct super_block *sb,
->>   				  struct erofs_fscache **fscache,
->>   				  char *name, bool need_inode);
->> +int erofs_domain_register_cookie(struct super_block *sb,
->> +				  struct erofs_fscache **fscache,
->> +				  char *name, bool need_inode);
->>   void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
->>   
->>   extern const struct address_space_operations erofs_fscache_access_aops;
->> @@ -646,6 +652,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
->>   {
->>   	return -EOPNOTSUPP;
->>   }
->> +static inline int erofs_domain_register_cookie(struct super_block *sb,
->> +						struct erofs_fscache **fscache,
->> +						char *name, bool need_inode)
->> +{
->> +	return -EOPNOTSUPP;
->> +}
->>   
->>   static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
->>   {
->> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
->> index 667a78f0ee70..11c5ba84567c 100644
->> --- a/fs/erofs/super.c
->> +++ b/fs/erofs/super.c
->> @@ -245,8 +245,12 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
->>   	}
->>   
->>   	if (erofs_is_fscache_mode(sb)) {
->> -		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
->> -				dif->path, false);
->> +		if (sbi->opt.domain_id)
->> +			ret = erofs_domain_register_cookie(sb, &dif->fscache, dif->path,
->> +					false);
->> +		else
->> +			ret = erofs_fscache_register_cookie(sb, &dif->fscache, dif->path,
->> +					false);
->>   		if (ret)
->>   			return ret;
->>   	} else {
->> @@ -726,6 +730,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->>   			err = erofs_fscache_register_domain(sb);
->>   			if (err)
->>   				return err;
->> +			err = erofs_domain_register_cookie(sb, &sbi->s_fscache,
->> +					sbi->opt.fsid, true);
->>   		} else {
->>   			err = erofs_fscache_register_fs(sb);
->>   			if (err)
-> 
+On Tue, Sep 13, 2022 at 4:39 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> The function copy_stream_update_to_stream() is defined in the notif.c
+> file, but not called elsewhere, so delete this unused function.
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2852:6: warning: no pr=
+evious prototype for =E2=80=98dc_reset_state=E2=80=99.
+>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2113
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/core/dc.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/a=
+md/display/dc/core/dc.c
+> index 9860bf38c547..2ee0b5a2ce62 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+> @@ -2849,16 +2849,6 @@ static void copy_stream_update_to_stream(struct dc=
+ *dc,
+>         }
+>  }
+>
+> -void dc_reset_state(struct dc *dc, struct dc_state *context)
+> -{
+> -       dc_resource_state_destruct(context);
+> -
+> -       /* clear the structure, but don't reset the reference count */
+> -       memset(context, 0, offsetof(struct dc_state, refcount));
+> -
+> -       init_state(dc, context);
+> -}
+> -
+>  static bool update_planes_and_stream_state(struct dc *dc,
+>                 struct dc_surface_update *srf_updates, int surface_count,
+>                 struct dc_stream_state *stream,
+> --
+> 2.20.1.7.g153144c
+>
