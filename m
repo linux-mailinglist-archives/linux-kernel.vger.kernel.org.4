@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00A05B7578
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261485B751A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235719AbiIMPof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S236542AbiIMPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234280AbiIMPn6 (ORCPT
+        with ESMTP id S234707AbiIMPbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:43:58 -0400
+        Tue, 13 Sep 2022 11:31:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EA485ABD;
-        Tue, 13 Sep 2022 07:48:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0765C78599;
+        Tue, 13 Sep 2022 07:40:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F9F1B80D87;
-        Tue, 13 Sep 2022 14:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A533C433D6;
-        Tue, 13 Sep 2022 14:32:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C1BAB8100C;
+        Tue, 13 Sep 2022 14:35:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D458C433D7;
+        Tue, 13 Sep 2022 14:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079571;
-        bh=ilTAr5nPNvI1E5aLl32zYpZw9kchp8GWq3gidlQZdjk=;
+        s=korg; t=1663079734;
+        bh=gIiL6T4LvaFLNHSvjDxv/6KecjXwYvhUtfdxuCANdKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fgru0b1sDAfpfoR72OxUM5oyNNbRVabnRAQM2IFubRybSrWknQtJ/n+L38W2oHQTF
-         rX7IsKqpGdXuwsFQ4W10UmSk0tvMuwepfV9q5PRJ1CelNdfnZlrhloOYFD/b3puJJm
-         ZD0MdvxLtnq6SBnXeEOH4alvALX20OjtvFihifhI=
+        b=rZogGtYbcdmWCvcOs/nqZMafDSFIwnMEaJjDgxv6oXF4etOVQZO/zyzkcjMTx6VqM
+         4cziIigCKcG/GNmiIMBKPMDWqZodgyRN/4r8qiZ8wvCLHFIL9C43+5H0J9Tx3BnSCS
+         L3An3bFKPmBz2irS5WFiElJmx5lNPhIShCC9DmB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nagaraj Arankal <nagaraj.p.arankal@hpe.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 71/79] tcp: fix early ETIMEDOUT after spurious non-SACK RTO
-Date:   Tue, 13 Sep 2022 16:07:29 +0200
-Message-Id: <20220913140352.333113786@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Rondreis <linhaoguo86@gmail.com>
+Subject: [PATCH 4.14 28/61] USB: core: Prevent nested device-reset calls
+Date:   Tue, 13 Sep 2022 16:07:30 +0200
+Message-Id: <20220913140347.905656775@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+References: <20220913140346.422813036@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,129 +54,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neal Cardwell <ncardwell@google.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ Upstream commit 686dc2db2a0fdc1d34b424ec2c0a735becd8d62b ]
+commit 9c6d778800b921bde3bff3cff5003d1650f942d1 upstream.
 
-Fix a bug reported and analyzed by Nagaraj Arankal, where the handling
-of a spurious non-SACK RTO could cause a connection to fail to clear
-retrans_stamp, causing a later RTO to very prematurely time out the
-connection with ETIMEDOUT.
+Automatic kernel fuzzing revealed a recursive locking violation in
+usb-storage:
 
-Here is the buggy scenario, expanding upon Nagaraj Arankal's excellent
-report:
+============================================
+WARNING: possible recursive locking detected
+5.18.0 #3 Not tainted
+--------------------------------------------
+kworker/1:3/1205 is trying to acquire lock:
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
 
-(*1) Send one data packet on a non-SACK connection
+but task is already holding lock:
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
 
-(*2) Because no ACK packet is received, the packet is retransmitted
-     and we enter CA_Loss; but this retransmission is spurious.
+...
 
-(*3) The ACK for the original data is received. The transmitted packet
-     is acknowledged.  The TCP timestamp is before the retrans_stamp,
-     so tcp_may_undo() returns true, and tcp_try_undo_loss() returns
-     true without changing state to Open (because tcp_is_sack() is
-     false), and tcp_process_loss() returns without calling
-     tcp_try_undo_recovery().  Normally after undoing a CA_Loss
-     episode, tcp_fastretrans_alert() would see that the connection
-     has returned to CA_Open and fall through and call
-     tcp_try_to_open(), which would set retrans_stamp to 0.  However,
-     for non-SACK connections we hold the connection in CA_Loss, so do
-     not fall through to call tcp_try_to_open() and do not set
-     retrans_stamp to 0. So retrans_stamp is (erroneously) still
-     non-zero.
+stack backtrace:
+CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+check_deadlock kernel/locking/lockdep.c:3031 [inline]
+validate_chain kernel/locking/lockdep.c:3816 [inline]
+__lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
+lock_acquire kernel/locking/lockdep.c:5665 [inline]
+lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
+__mutex_lock_common kernel/locking/mutex.c:603 [inline]
+__mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
+r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
+usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+device_remove drivers/base/dd.c:545 [inline]
+device_remove+0x11f/0x170 drivers/base/dd.c:537
+__device_release_driver drivers/base/dd.c:1222 [inline]
+device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
+usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
+usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
 
-     At this point the first "retransmission event" has passed and
-     been recovered from. Any future retransmission is a completely
-     new "event". However, retrans_stamp is erroneously still
-     set. (And we are still in CA_Loss, which is correct.)
+This turned out not to be an error in usb-storage but rather a nested
+device reset attempt.  That is, as the rtl8712 driver was being
+unbound from a composite device in preparation for an unrelated USB
+reset (that driver does not have pre_reset or post_reset callbacks),
+its ->remove routine called usb_reset_device() -- thus nesting one
+reset call within another.
 
-(*4) After 16 minutes (to correspond with tcp_retries2=15), a new data
-     packet is sent. Note: No data is transmitted between (*3) and
-     (*4) and we disabled keep alives.
+Performing a reset as part of disconnect processing is a questionable
+practice at best.  However, the bug report points out that the USB
+core does not have any protection against nested resets.  Adding a
+reset_in_progress flag and testing it will prevent such errors in the
+future.
 
-     The socket's timeout SHOULD be calculated from this point in
-     time, but instead it's calculated from the prior "event" 16
-     minutes ago (step (*2)).
-
-(*5) Because no ACK packet is received, the packet is retransmitted.
-
-(*6) At the time of the 2nd retransmission, the socket returns
-     ETIMEDOUT, prematurely, because retrans_stamp is (erroneously)
-     too far in the past (set at the time of (*2)).
-
-This commit fixes this bug by ensuring that we reuse in
-tcp_try_undo_loss() the same careful logic for non-SACK connections
-that we have in tcp_try_undo_recovery(). To avoid duplicating logic,
-we factor out that logic into a new
-tcp_is_non_sack_preventing_reopen() helper and call that helper from
-both undo functions.
-
-Fixes: da34ac7626b5 ("tcp: only undo on partial ACKs in CA_Loss")
-Reported-by: Nagaraj Arankal <nagaraj.p.arankal@hpe.com>
-Link: https://lore.kernel.org/all/SJ0PR84MB1847BE6C24D274C46A1B9B0EB27A9@SJ0PR84MB1847.NAMPRD84.PROD.OUTLOOK.COM/
-Signed-off-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Yuchung Cheng <ycheng@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220903121023.866900-1-ncardwell.kernel@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/all/CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com/
+Cc: stable@vger.kernel.org
+Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YwkflDxvg0KWqyZK@rowland.harvard.edu
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ drivers/usb/core/hub.c |   10 ++++++++++
+ include/linux/usb.h    |    2 ++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 0be9d5d3c032f..aac5d5b739268 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -2372,6 +2372,21 @@ static inline bool tcp_may_undo(const struct tcp_sock *tp)
- 	return tp->undo_marker && (!tp->undo_retrans || tcp_packet_delayed(tp));
- }
- 
-+static bool tcp_is_non_sack_preventing_reopen(struct sock *sk)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+
-+	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
-+		/* Hold old state until something *above* high_seq
-+		 * is ACKed. For Reno it is MUST to prevent false
-+		 * fast retransmits (RFC2582). SACK TCP is safe. */
-+		if (!tcp_any_retrans_done(sk))
-+			tp->retrans_stamp = 0;
-+		return true;
-+	}
-+	return false;
-+}
-+
- /* People celebrate: "We love our President!" */
- static bool tcp_try_undo_recovery(struct sock *sk)
- {
-@@ -2394,14 +2409,8 @@ static bool tcp_try_undo_recovery(struct sock *sk)
- 	} else if (tp->rack.reo_wnd_persist) {
- 		tp->rack.reo_wnd_persist--;
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5737,6 +5737,11 @@ re_enumerate_no_bos:
+  * the reset is over (using their post_reset method).
+  *
+  * Return: The same as for usb_reset_and_verify_device().
++ * However, if a reset is already in progress (for instance, if a
++ * driver doesn't have pre_ or post_reset() callbacks, and while
++ * being unbound or re-bound during the ongoing reset its disconnect()
++ * or probe() routine tries to perform a second, nested reset), the
++ * routine returns -EINPROGRESS.
+  *
+  * Note:
+  * The caller must own the device lock.  For example, it's safe to use
+@@ -5770,6 +5775,10 @@ int usb_reset_device(struct usb_device *
+ 		return -EISDIR;
  	}
--	if (tp->snd_una == tp->high_seq && tcp_is_reno(tp)) {
--		/* Hold old state until something *above* high_seq
--		 * is ACKed. For Reno it is MUST to prevent false
--		 * fast retransmits (RFC2582). SACK TCP is safe. */
--		if (!tcp_any_retrans_done(sk))
--			tp->retrans_stamp = 0;
-+	if (tcp_is_non_sack_preventing_reopen(sk))
- 		return true;
--	}
- 	tcp_set_ca_state(sk, TCP_CA_Open);
- 	tp->is_sack_reneg = 0;
- 	return false;
-@@ -2437,6 +2446,8 @@ static bool tcp_try_undo_loss(struct sock *sk, bool frto_undo)
- 			NET_INC_STATS(sock_net(sk),
- 					LINUX_MIB_TCPSPURIOUSRTOS);
- 		inet_csk(sk)->icsk_retransmits = 0;
-+		if (tcp_is_non_sack_preventing_reopen(sk))
-+			return true;
- 		if (frto_undo || tcp_is_sack(tp)) {
- 			tcp_set_ca_state(sk, TCP_CA_Open);
- 			tp->is_sack_reneg = 0;
--- 
-2.35.1
-
+ 
++	if (udev->reset_in_progress)
++		return -EINPROGRESS;
++	udev->reset_in_progress = 1;
++
+ 	port_dev = hub->ports[udev->portnum - 1];
+ 
+ 	/*
+@@ -5834,6 +5843,7 @@ int usb_reset_device(struct usb_device *
+ 
+ 	usb_autosuspend_device(udev);
+ 	memalloc_noio_restore(noio_flag);
++	udev->reset_in_progress = 0;
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(usb_reset_device);
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -568,6 +568,7 @@ struct usb3_lpm_parameters {
+  * @level: number of USB hub ancestors
+  * @can_submit: URBs may be submitted
+  * @persist_enabled:  USB_PERSIST enabled for this device
++ * @reset_in_progress: the device is being reset
+  * @have_langid: whether string_langid is valid
+  * @authorized: policy has said we can use it;
+  *	(user space) policy determines if we authorize this device to be
+@@ -646,6 +647,7 @@ struct usb_device {
+ 
+ 	unsigned can_submit:1;
+ 	unsigned persist_enabled:1;
++	unsigned reset_in_progress:1;
+ 	unsigned have_langid:1;
+ 	unsigned authorized:1;
+ 	unsigned authenticated:1;
 
 
