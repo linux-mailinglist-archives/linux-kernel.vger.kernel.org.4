@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E623C5B7534
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82385B7343
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiIMPgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S233332AbiIMPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiIMPfj (ORCPT
+        with ESMTP id S235216AbiIMPDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:35:39 -0400
+        Tue, 13 Sep 2022 11:03:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24158037F;
-        Tue, 13 Sep 2022 07:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C792E18B23;
+        Tue, 13 Sep 2022 07:29:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56278B80F10;
-        Tue, 13 Sep 2022 14:32:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03A6C433D6;
-        Tue, 13 Sep 2022 14:32:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04636B80EFA;
+        Tue, 13 Sep 2022 14:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB39C433D7;
+        Tue, 13 Sep 2022 14:29:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079533;
-        bh=DnYQUcsVH32s4uZbj997262p3sc1ImMPNTeT3izOTnk=;
+        s=korg; t=1663079359;
+        bh=7N89YF3yRCbyHevIRTxZTJbDEO4CLJ4IHngDKQTtGIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bAZCl8CTZkujAa5vd4zoXHmqh6Et865TazwJp5iiUmBnBe4ms5fAWH/TR/TwNpUO+
-         QmkPFYr+pVKyM6GASceY4/1XFbEPxBUc7FUNDQGKeCe6F0iqT3yU6kgcdJN2cY7MA5
-         fY0FZJb/Sm4Bc7apGecXLxXAx07cT5Z3JId0SN3o=
+        b=Mk/s//13nRBBZucrUq2RDxDSVEzhh9Qgir9J9YAU+EEPtqJP8NxupRi6uheduB7pM
+         6YlBS8fnFD5PqtFgz8uj816sZW8iIaULTYRyL4eOQYvTxXEp6YTo9gCDicpbowQ0dv
+         6U0FZOmZD1pn1ODrNDXP7NSDmXPUeE51OYU1/T5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 55/79] fbdev: chipsfb: Add missing pci_disable_device() in chipsfb_pci_init()
-Date:   Tue, 13 Sep 2022 16:07:13 +0200
-Message-Id: <20220913140351.564387648@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Chris Mi <cmi@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 103/108] RDMA/mlx5: Set local port to one when accessing counters
+Date:   Tue, 13 Sep 2022 16:07:14 +0200
+Message-Id: <20220913140358.045441051@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Chris Mi <cmi@nvidia.com>
 
-[ Upstream commit 07c55c9803dea748d17a054000cbf1913ce06399 ]
+[ Upstream commit 74b30b3ad5cec95d2647e796d10137438a098bc1 ]
 
-Add missing pci_disable_device() in error path in chipsfb_pci_init().
+When accessing Ports Performance Counters Register (PPCNT),
+local port must be one if it is Function-Per-Port HCA that
+HCA_CAP.num_ports is 1.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+The offending patch can change the local port to other values
+when accessing PPCNT after enabling switchdev mode. The following
+syndrome will be printed:
+
+ # cat /sys/class/infiniband/rdmap4s0f0/ports/2/counters/*
+ # dmesg
+ mlx5_core 0000:04:00.0: mlx5_cmd_check:756:(pid 12450): ACCESS_REG(0x805) op_mod(0x1) failed, status bad parameter(0x3), syndrome (0x1e5585)
+
+Fix it by setting local port to one for Function-Per-Port HCA.
+
+Fixes: 210b1f78076f ("IB/mlx5: When not in dual port RoCE mode, use provided port as native")
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Signed-off-by: Chris Mi <cmi@nvidia.com>
+Link: https://lore.kernel.org/r/6c5086c295c76211169e58dbd610fb0402360bab.1661763459.git.leonro@nvidia.com
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/chipsfb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/infiniband/hw/mlx5/mad.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/video/fbdev/chipsfb.c b/drivers/video/fbdev/chipsfb.c
-index 413b465e69d8e..7ca149ab86d20 100644
---- a/drivers/video/fbdev/chipsfb.c
-+++ b/drivers/video/fbdev/chipsfb.c
-@@ -432,6 +432,7 @@ static int chipsfb_pci_init(struct pci_dev *dp, const struct pci_device_id *ent)
-  err_release_fb:
- 	framebuffer_release(p);
-  err_disable:
-+	pci_disable_device(dp);
-  err_out:
- 	return rc;
- }
+diff --git a/drivers/infiniband/hw/mlx5/mad.c b/drivers/infiniband/hw/mlx5/mad.c
+index 348c1df69cdc6..3897a3ce02ad0 100644
+--- a/drivers/infiniband/hw/mlx5/mad.c
++++ b/drivers/infiniband/hw/mlx5/mad.c
+@@ -219,6 +219,12 @@ static int process_pma_cmd(struct mlx5_ib_dev *dev, u8 port_num,
+ 		mdev = dev->mdev;
+ 		mdev_port_num = 1;
+ 	}
++	if (MLX5_CAP_GEN(dev->mdev, num_ports) == 1) {
++		/* set local port to one for Function-Per-Port HCA. */
++		mdev = dev->mdev;
++		mdev_port_num = 1;
++	}
++
+ 	/* Declaring support of extended counters */
+ 	if (in_mad->mad_hdr.attr_id == IB_PMA_CLASS_PORT_INFO) {
+ 		struct ib_class_port_info cpi = {};
 -- 
 2.35.1
 
