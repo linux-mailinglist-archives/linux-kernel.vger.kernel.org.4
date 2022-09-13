@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9555B7563
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352565B7381
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbiIMPkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S233405AbiIMPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236852AbiIMPjM (ORCPT
+        with ESMTP id S235397AbiIMPEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:39:12 -0400
+        Tue, 13 Sep 2022 11:04:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6093651A12;
-        Tue, 13 Sep 2022 07:45:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4046374CF6;
+        Tue, 13 Sep 2022 07:30:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A491E61414;
-        Tue, 13 Sep 2022 14:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC139C433D6;
-        Tue, 13 Sep 2022 14:31:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CDF4614DA;
+        Tue, 13 Sep 2022 14:28:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B05C433D6;
+        Tue, 13 Sep 2022 14:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079484;
-        bh=exZdNZWzP0dOHve55ZJWQ3kh4qj940fegArBrUQhtkE=;
+        s=korg; t=1663079328;
+        bh=/kK+PK1CTeymdSj7Q7fco8uU/odJSlu1OgbFvwydZNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yewirD50/S39mrY2EGyJ8Yu1IQM3TjS1Hm8sXKelEN4kvu+v9sreiYDOqb3+a1CjB
-         7sy99+7I8TPa05tEVgcvzalYmVUg6u6ust7A/G6lCO1BGXXHGGwITt9EdCkDgTkqef
-         MCLYLS5cLc7hwViyyJ61KhIZN1Mta20aCMvxkI2c=
+        b=wbhxWWKZo2gIXPy/PeNJ8pFPUVtXe/6eU2py7ZeFwVw3oLj/oH0ERKYplrC9+zO8r
+         TpuQzhgLtbHrs5/9NbGEnGllsxahk9SInu2CfNseJVf9vezoVz+lMYaM1kBpvft4Fz
+         FwZOUHNqrjdgy+PD5aERS6b6fLEl+f8kr4MF2s8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com,
-        Siddh Raman Pant <code@siddh.me>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.19 45/79] wifi: mac80211: Dont finalize CSA in IBSS mode if state is disconnected
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 092/108] soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
 Date:   Tue, 13 Sep 2022 16:07:03 +0200
-Message-Id: <20220913140351.090213867@linuxfoundation.org>
+Message-Id: <20220913140357.571046622@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +55,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddh Raman Pant <code@siddh.me>
+From: Liang He <windhl@126.com>
 
-commit 15bc8966b6d3a5b9bfe4c9facfa02f2b69b1e5f0 upstream.
+[ Upstream commit 1085f5080647f0c9f357c270a537869191f7f2a1 ]
 
-When we are not connected to a channel, sending channel "switch"
-announcement doesn't make any sense.
+In brcmstb_pm_probe(), there are two kinds of leak bugs:
 
-The BSS list is empty in that case. This causes the for loop in
-cfg80211_get_bss() to be bypassed, so the function returns NULL
-(check line 1424 of net/wireless/scan.c), causing the WARN_ON()
-in ieee80211_ibss_csa_beacon() to get triggered (check line 500
-of net/mac80211/ibss.c), which was consequently reported on the
-syzkaller dashboard.
+(1) we need to add of_node_put() when for_each__matching_node() breaks
+(2) we need to add iounmap() for each iomap in fail path
 
-Thus, check if we have an existing connection before generating
-the CSA beacon in ieee80211_ibss_finish_csa().
-
-Cc: stable@vger.kernel.org
-Fixes: cd7760e62c2a ("mac80211: add support for CSA in IBSS mode")
-Link: https://syzkaller.appspot.com/bug?id=05603ef4ae8926761b678d2939a3b2ad28ab9ca6
-Reported-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Tested-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20220814151512.9985-1-code@siddh.me
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220707015620.306468-1-windhl@126.com
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/ibss.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c | 50 ++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 11 deletions(-)
 
---- a/net/mac80211/ibss.c
-+++ b/net/mac80211/ibss.c
-@@ -544,6 +544,10 @@ int ieee80211_ibss_finish_csa(struct iee
+diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+index c6ec7d95bcfcc..722fd54e537cf 100644
+--- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
++++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+@@ -681,13 +681,14 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	const struct of_device_id *of_id = NULL;
+ 	struct device_node *dn;
+ 	void __iomem *base;
+-	int ret, i;
++	int ret, i, s;
  
- 	sdata_assert_lock(sdata);
+ 	/* AON ctrl registers */
+ 	base = brcmstb_ioremap_match(aon_ctrl_dt_ids, 0, NULL);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping AON_CTRL\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto aon_err;
+ 	}
+ 	ctrl.aon_ctrl_base = base;
  
-+	/* When not connected/joined, sending CSA doesn't make sense. */
-+	if (ifibss->state != IEEE80211_IBSS_MLME_JOINED)
-+		return -ENOLINK;
+@@ -697,8 +698,10 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 		/* Assume standard offset */
+ 		ctrl.aon_sram = ctrl.aon_ctrl_base +
+ 				     AON_CTRL_SYSTEM_DATA_RAM_OFS;
++		s = 0;
+ 	} else {
+ 		ctrl.aon_sram = base;
++		s = 1;
+ 	}
+ 
+ 	writel_relaxed(0, ctrl.aon_sram + AON_REG_PANIC);
+@@ -708,7 +711,8 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 				     (const void **)&ddr_phy_data);
+ 	if (IS_ERR(base)) {
+ 		pr_err("error mapping DDR PHY\n");
+-		return PTR_ERR(base);
++		ret = PTR_ERR(base);
++		goto ddr_phy_err;
+ 	}
+ 	ctrl.support_warm_boot = ddr_phy_data->supports_warm_boot;
+ 	ctrl.pll_status_offset = ddr_phy_data->pll_status_offset;
+@@ -728,17 +732,20 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, ddr_shimphy_dt_ids) {
+ 		i = ctrl.num_memc;
+ 		if (i >= MAX_NUM_MEMC) {
++			of_node_put(dn);
+ 			pr_warn("too many MEMCs (max %d)\n", MAX_NUM_MEMC);
+ 			break;
+ 		}
+ 
+ 		base = of_io_request_and_map(dn, 0, dn->full_name);
+ 		if (IS_ERR(base)) {
++			of_node_put(dn);
+ 			if (!ctrl.support_warm_boot)
+ 				break;
+ 
+ 			pr_err("error mapping DDR SHIMPHY %d\n", i);
+-			return PTR_ERR(base);
++			ret = PTR_ERR(base);
++			goto ddr_shimphy_err;
+ 		}
+ 		ctrl.memcs[i].ddr_shimphy_base = base;
+ 		ctrl.num_memc++;
+@@ -749,14 +756,18 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	for_each_matching_node(dn, brcmstb_memc_of_match) {
+ 		base = of_iomap(dn, 0);
+ 		if (!base) {
++			of_node_put(dn);
+ 			pr_err("error mapping DDR Sequencer %d\n", i);
+-			return -ENOMEM;
++			ret = -ENOMEM;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		of_id = of_match_node(brcmstb_memc_of_match, dn);
+ 		if (!of_id) {
+ 			iounmap(base);
+-			return -EINVAL;
++			of_node_put(dn);
++			ret = -EINVAL;
++			goto brcmstb_memc_err;
+ 		}
+ 
+ 		ddr_seq_data = of_id->data;
+@@ -776,21 +787,24 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 	dn = of_find_matching_node(NULL, sram_dt_ids);
+ 	if (!dn) {
+ 		pr_err("SRAM not found\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ret = brcmstb_init_sram(dn);
+ 	of_node_put(dn);
+ 	if (ret) {
+ 		pr_err("error setting up SRAM for PM\n");
+-		return ret;
++		goto brcmstb_memc_err;
+ 	}
+ 
+ 	ctrl.pdev = pdev;
+ 
+ 	ctrl.s3_params = kmalloc(sizeof(*ctrl.s3_params), GFP_KERNEL);
+-	if (!ctrl.s3_params)
+-		return -ENOMEM;
++	if (!ctrl.s3_params) {
++		ret = -ENOMEM;
++		goto s3_params_err;
++	}
+ 	ctrl.s3_params_pa = dma_map_single(&pdev->dev, ctrl.s3_params,
+ 					   sizeof(*ctrl.s3_params),
+ 					   DMA_TO_DEVICE);
+@@ -810,7 +824,21 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+ 
+ out:
+ 	kfree(ctrl.s3_params);
+-
++s3_params_err:
++	iounmap(ctrl.boot_sram);
++brcmstb_memc_err:
++	for (i--; i >= 0; i--)
++		iounmap(ctrl.memcs[i].ddr_ctrl);
++ddr_shimphy_err:
++	for (i = 0; i < ctrl.num_memc; i++)
++		iounmap(ctrl.memcs[i].ddr_shimphy_base);
 +
- 	/* update cfg80211 bss information with the new channel */
- 	if (!is_zero_ether_addr(ifibss->bssid)) {
- 		cbss = cfg80211_get_bss(sdata->local->hw.wiphy,
++	iounmap(ctrl.memcs[0].ddr_phy_base);
++ddr_phy_err:
++	iounmap(ctrl.aon_ctrl_base);
++	if (s)
++		iounmap(ctrl.aon_sram);
++aon_err:
+ 	pr_warn("PM: initialization failed with code %d\n", ret);
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 
