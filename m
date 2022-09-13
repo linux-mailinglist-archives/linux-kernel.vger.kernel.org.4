@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FD65B7200
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816B25B7138
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbiIMOwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S231552AbiIMOmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiIMOtH (ORCPT
+        with ESMTP id S234347AbiIMOlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:49:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01ABA70E55;
-        Tue, 13 Sep 2022 07:25:31 -0700 (PDT)
+        Tue, 13 Sep 2022 10:41:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5E76DF96;
+        Tue, 13 Sep 2022 07:22:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E7FCB80F9C;
-        Tue, 13 Sep 2022 14:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D48C433D7;
-        Tue, 13 Sep 2022 14:17:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93872614CA;
+        Tue, 13 Sep 2022 14:12:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E6AC433D6;
+        Tue, 13 Sep 2022 14:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078646;
-        bh=W7RwtjbRO7cSQgAvXH9sdYPxfIDfe7vMn9FkQLu6MFM=;
+        s=korg; t=1663078372;
+        bh=QZkttdey2IZbuHhI/iymCpT7oKPDrJqvupu9s4uBL/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H2L6jtI75byopSbnVAVJloCrTTo25xxkNFZAi/D86DYbRjPMrurQbjeHRjw3QOx5G
-         jZ+kwm5n9CWFg/84aDNEO+73v76j1LynsRU8DLthY4hdPtYUKxF9RGn707YD3iphL3
-         6q0t4tw2ybE2GtPwFtj0stMnkb/ovjYDpLSdS3XY=
+        b=O5VtojKVdv4/PBcrAcyoK1h3Jdzdv9wV80r3rryetexVpPbx6KrxkwMSYjbboml/x
+         bDNSeEv8UUE7pUpXC+UdtDK2k/KeJDD4sbPhTL1zZQHv+fOm36vxN92WlbTpcMhZn1
+         MqpKm3pmuTYQiYvOYkrU/Qn/BTNVbUhkaPqmoIBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 028/121] ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
-Date:   Tue, 13 Sep 2022 16:03:39 +0200
-Message-Id: <20220913140358.556630518@linuxfoundation.org>
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 114/192] Revert "net: phy: meson-gxl: improve link-up behavior"
+Date:   Tue, 13 Sep 2022 16:03:40 +0200
+Message-Id: <20220913140415.654612788@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit d29f59051d3a07b81281b2df2b8c9dfe4716067f upstream.
+[ Upstream commit 7fdc77665f3d45c9da7c6edd4beadee9790f43aa ]
 
-The voice allocator sometimes begins allocating from near the end of the
-array and then wraps around, however snd_emu10k1_pcm_channel_alloc()
-accesses the newly allocated voices as if it never wrapped around.
+This reverts commit 2c87c6f9fbddc5b84d67b2fa3f432fcac6d99d93.
+Meanwhile it turned out that the following commit is the proper
+workaround for the issue that 2c87c6f9fbdd tries to address.
+a3a57bf07de2 ("net: stmmac: work around sporadic tx issue on link-up")
+It's nor clear why the to be reverted commit helped for one user,
+for others it didn't make a difference.
 
-This results in out of bounds access if the first voice has a high enough
-index so that first_voice + requested_voice_count > NUM_G (64).
-The more voices are requested, the more likely it is for this to occur.
-
-This was initially discovered using PipeWire, however it can be reproduced
-by calling aplay multiple times with 16 channels:
-aplay -r 48000 -D plughw:CARD=Live,DEV=3 -c 16 /dev/zero
-
-UBSAN: array-index-out-of-bounds in sound/pci/emu10k1/emupcm.c:127:40
-index 65 is out of range for type 'snd_emu10k1_voice [64]'
-CPU: 1 PID: 31977 Comm: aplay Tainted: G        W IOE      6.0.0-rc2-emu10k1+ #7
-Hardware name: ASUSTEK COMPUTER INC P5W DH Deluxe/P5W DH Deluxe, BIOS 3002    07/22/2010
-Call Trace:
-<TASK>
-dump_stack_lvl+0x49/0x63
-dump_stack+0x10/0x16
-ubsan_epilogue+0x9/0x3f
-__ubsan_handle_out_of_bounds.cold+0x44/0x49
-snd_emu10k1_playback_hw_params+0x3bc/0x420 [snd_emu10k1]
-snd_pcm_hw_params+0x29f/0x600 [snd_pcm]
-snd_pcm_common_ioctl+0x188/0x1410 [snd_pcm]
-? exit_to_user_mode_prepare+0x35/0x170
-? do_syscall_64+0x69/0x90
-? syscall_exit_to_user_mode+0x26/0x50
-? do_syscall_64+0x69/0x90
-? exit_to_user_mode_prepare+0x35/0x170
-snd_pcm_ioctl+0x27/0x40 [snd_pcm]
-__x64_sys_ioctl+0x95/0xd0
-do_syscall_64+0x5c/0x90
-? do_syscall_64+0x69/0x90
-? do_syscall_64+0x69/0x90
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/3707dcab-320a-62ff-63c0-73fc201ef756@tasossah.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2c87c6f9fbdd ("net: phy: meson-gxl: improve link-up behavior")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Link: https://lore.kernel.org/r/8deeeddc-6b71-129b-1918-495a12dc11e3@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/emu10k1/emupcm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/meson-gxl.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
---- a/sound/pci/emu10k1/emupcm.c
-+++ b/sound/pci/emu10k1/emupcm.c
-@@ -124,7 +124,7 @@ static int snd_emu10k1_pcm_channel_alloc
- 	epcm->voices[0]->epcm = epcm;
- 	if (voices > 1) {
- 		for (i = 1; i < voices; i++) {
--			epcm->voices[i] = &epcm->emu->voices[epcm->voices[0]->number + i];
-+			epcm->voices[i] = &epcm->emu->voices[(epcm->voices[0]->number + i) % NUM_G];
- 			epcm->voices[i]->epcm = epcm;
- 		}
- 	}
+diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+index 73f7962a37d33..c49062ad72c6c 100644
+--- a/drivers/net/phy/meson-gxl.c
++++ b/drivers/net/phy/meson-gxl.c
+@@ -243,13 +243,7 @@ static irqreturn_t meson_gxl_handle_interrupt(struct phy_device *phydev)
+ 	    irq_status == INTSRC_ENERGY_DETECT)
+ 		return IRQ_HANDLED;
+ 
+-	/* Give PHY some time before MAC starts sending data. This works
+-	 * around an issue where network doesn't come up properly.
+-	 */
+-	if (!(irq_status & INTSRC_LINK_DOWN))
+-		phy_queue_state_machine(phydev, msecs_to_jiffies(100));
+-	else
+-		phy_trigger_machine(phydev);
++	phy_trigger_machine(phydev);
+ 
+ 	return IRQ_HANDLED;
+ }
+-- 
+2.35.1
+
 
 
