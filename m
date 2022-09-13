@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150805B789C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4095B78AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbiIMRp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S232351AbiIMRqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiIMRpU (ORCPT
+        with ESMTP id S233315AbiIMRqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:45:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A046B6C124;
-        Tue, 13 Sep 2022 09:41:20 -0700 (PDT)
+        Tue, 13 Sep 2022 13:46:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A99463E4;
+        Tue, 13 Sep 2022 09:42:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7ECEB80E42;
-        Tue, 13 Sep 2022 16:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51134C433C1;
-        Tue, 13 Sep 2022 16:41:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 998F1614B2;
+        Tue, 13 Sep 2022 16:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC96C433C1;
+        Tue, 13 Sep 2022 16:42:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663087277;
-        bh=zbv4EwTaP7rUkUEvFc0RdqraUvYNfEaRoM8zAcgBhuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pRweID/xbMDKa46YcOEacdA2JxVlxKekXd0bNpQGONzRzVTSM/ooW4cMQNrdO0AlV
-         G4FPiNAc9Uab/ewSkNMRbzO0kMfN4ly/+AzHlzSEZ3extX8VHzzsSBNtiCo78yWin/
-         32VcE3QYY22/a2s7VwqmgkK3Sun8cg8wg/tpZUYQqu/NYW8meeeu6ylxIi8zur3vjN
-         Z8d5mu/VaZputxRt9QOnh8024aU7m2o0eevjYtdIKouhmHzOFwregHfmliUq15UtIE
-         5AXH6at/lGGxfSVLt3POxlUuWM5mdD4X9SFK1Hh8yXPMFKHCauimcnNvi4fjwlICQy
-         VyyCFAfSamlCA==
-Date:   Tue, 13 Sep 2022 11:41:15 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power
- up
-Message-ID: <20220913164115.GA603018@bhelgaas>
+        s=k20201202; t=1663087347;
+        bh=3Q42QFQ/ngGZQQeyp7QhP6eTWM1+zQJpWZ4yQpNfCck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CxcOkubrZXQn2EQ474gG4UJo8mQX4nMBEhGTo20JqjXQk8APbj4ESssFffXLIIrHe
+         EkQekGPKV6oi28uzSCB2vMMBMNbL4MG/Y5Jqo/Ck6PRg6Gf6/9R/4ETjb53/y1bDmI
+         ER8i6KF9wD8A2E87VuxXZrTmY3TJJvX2uADpxHUwm4/hxI6WH3ha1O7+/zCtIQmadL
+         tSaG76vGXeo3tTYJOqbp4CDh6cL8oz16K6lPvZscMq0aHIQ5cAbdBIkL0kaQ1BFzBj
+         ZnFYabEV5yARdpuFbCj0JK78O4TM5SxigD6MRnGzfigOv/gp8fXAhW6xuuCQGo/mmn
+         t/XgkL+PxS2DQ==
+Date:   Tue, 13 Sep 2022 22:12:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v1 09/11] dt-bindings: phy: phy-rockchip-inno-usb2: add
+ rockchip,rk3128-usb2phy
+Message-ID: <YyCy7838UGnV2qcR@matsya>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyCahxV+315zoSQG@matsya>
+In-Reply-To: <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,27 +69,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 08:28:15PM +0530, Vinod Koul wrote:
-> On 09-09-22, 14:14, Krishna chaitanya chundru wrote:
-> > Introducing phy power down/up callbacks for allowing to park the
-> > link-state in L1ss without holding any PCIe resources during
-> > system suspend.
-> 
-> where is the rest of the series, pls cc relevant folks on cover at
-> least!
+On 10-09-22, 00:01, Johan Jonker wrote:
+> Add rockchip,rk3128-usb2phy compatible string.
 
-Would be best to cc relevant folks, but in the meantime, it's easy to
-find via lore, e.g., 3/5 has:
+Applied, thanks
 
-  Message-Id: <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
-
-so the lore URL is:
-
-  https://lore.kernel.org/r/1662713084-8106-4-git-send-email-quic_krichai@quicinc.com
-
-and the thread overview is at the bottom.
-
-I use this incredibly handy mutt hook that adds lore URLs to emails
-directly when viewing them: https://github.com/danrue/lorifier
-
-Bjorn
+-- 
+~Vinod
