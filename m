@@ -2,156 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8145D5B73A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F311E5B72C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbiIMPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S235059AbiIMPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbiIMPIv (ORCPT
+        with ESMTP id S235092AbiIMO7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:08:51 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A87675B;
-        Tue, 13 Sep 2022 07:31:24 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d82so11920735pfd.10;
-        Tue, 13 Sep 2022 07:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=uE2k8DemtXQoFgIyx0axivRuuEaQewLGGBhI5xQfpoo=;
-        b=ABby8htyK4p5z9pS9ijVFXTHBZtbRC+kbrxb6x6zZ4tgRINFOL9NZ16LZk0wtyIShs
-         37xkjsS5y0QFnGgF0m8gpKKWoM4F4fsVczYuBF0eHOOkHirw/+7HC9RzfGKuZ97unX2N
-         9QH2pzP8o6ZJaN+qG6FRKDZN4M14P1B4wAJq28gMBSCt7cmXOeIpPsV3K067tcTlE9+L
-         b4FAoDoHODOfCmviN4bfQ+wYEhK0O9QxO75TMXNEIMPecKhuBalU9XfKw3NG4ZFZCOcm
-         s2kJLrqmw/Hhjszh43JsGlHgqtQ5ZNe1g+WHBWcYyj8UhrrEFliYeYFDoLja4CqGMcUs
-         w46g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=uE2k8DemtXQoFgIyx0axivRuuEaQewLGGBhI5xQfpoo=;
-        b=FN8Ol64z8eg70BydvM2hLU5oVT2GHuBe1ivp0nJL66SM5VEppw37aKw7vnzy2NNPsF
-         l0hl2n65TWVtP+nVsqRxMcNgkcDge+hrs0fP/xDTSuKbjmHt9puuPPozcAFv2uS/mroe
-         KOYM0mTkLwe/8yWTtRlaSjHV7BO7hrsSIWuiQEV5AktnBRu5ClKZkCek7wxRXSmsjd9O
-         spz1hdjA3C24FMf8aJTA8hqq/ZxmzO/p3xyJhmQ/AWKlbdg3+QP+r85FSt1xPWeyZ5Ug
-         bVfviNuZC4QJLqtZ0wETbRJOFyBS9MEPuDtCN9OxdRKNjmx5OrdYT5k9ibAaayt58S4c
-         8IBQ==
-X-Gm-Message-State: ACgBeo19pcwBXW8AEqChsMIwE/Ik6kMBM9kCjorGe7hlhHjmCBe1GPVW
-        LwuWRT+QALJdJppBuvFLUdg=
-X-Google-Smtp-Source: AA6agR5AsU2rLelzEvOegvduVc5Ahp8yRB4ULphBkQexoW8BtQKEFO3AYtdT5xjYzHZYqGfKGNqPxw==
-X-Received: by 2002:a05:6a00:ac4:b0:535:c08:2da7 with SMTP id c4-20020a056a000ac400b005350c082da7mr33345721pfl.69.1663079327532;
-        Tue, 13 Sep 2022 07:28:47 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id w6-20020a170902e88600b0017824e7065fsm6640367plg.180.2022.09.13.07.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:28:46 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 22:28:41 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
-Message-ID: <YyCTmZocN/CY4Pg6@sol>
-References: <20220909121329.42004-1-brgl@bgdev.pl>
- <20220909121329.42004-3-brgl@bgdev.pl>
- <YxykorLetCjAls/Z@sol>
- <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
- <Yx8Bj0+4STpklMc2@sol>
- <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
- <Yx/nG5YsyCa+VXoj@sol>
- <CAMRc=MfoZQV-aHKSkAw6d_jPPbjn==oR0LA=irjuWLGzQiRP-w@mail.gmail.com>
+        Tue, 13 Sep 2022 10:59:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBFC63F13;
+        Tue, 13 Sep 2022 07:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663079323; x=1694615323;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r++yIB0Zi49RlX5j8upgavcrEl7RW8kP06fMbAaKCzc=;
+  b=T+RhTZ4CQ+tv6TyfQqYRHHv2AHu9iygKCxN5Dzi/YXkyxTC08ZGdg4cH
+   08BYxhsjs7S5f63sJkcS5zhHjYuTeok9q02DgfDgZdZ43GBqKyV9r8q1P
+   GU+tWJKcDRTdQ2Bf/lxUCp5WMjEcKL/VUxLi2n0ens+3E3brwNA548cJv
+   goZB2soJqGHEtPIKcfHIuP0/5E3G51M6h/tX3+bPCIoVPY24eGwJxPc8j
+   KDKpsP9vDgOw83k4/UEs2DaIMaUILbbe46/3iJr3x6gwjImv0+VJY+kU9
+   vQa6kIMUctzsn7/hkLqwOwa4XKYAxEyIqCc2iabtClYGRzQnUh2F8v9zU
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="173638038"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 07:25:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 07:25:15 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 07:25:12 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <michael@walle.cc>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v2] net: phy: micrel: Add interrupts support for LAN8804 PHY
+Date:   Tue, 13 Sep 2022 16:29:26 +0200
+Message-ID: <20220913142926.816746-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MfoZQV-aHKSkAw6d_jPPbjn==oR0LA=irjuWLGzQiRP-w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 10:54:26AM +0200, Bartosz Golaszewski wrote:
-> On Tue, Sep 13, 2022 at 4:12 AM Kent Gibson <warthog618@gmail.com> wrote:
-> >
-> > On Mon, Sep 12, 2022 at 11:56:17AM +0200, Bartosz Golaszewski wrote:
-> > > On Mon, Sep 12, 2022 at 11:53 AM Kent Gibson <warthog618@gmail.com> wrote:
-> > > >
-> > >
-> > > [snip]
-> > >
-> > > > >
-> > > > > Using -1 sounds good but I've just realized there's a different
-> > > > > problem. A process holding a file descriptor may fork and both the
-> > > > > parent and the child will keep the same file descriptors open. Now
-> > > > > we'll have two processes (with different PIDs) holding the same GPIO
-> > > > > lines (specifically holding a file descriptor to the same anonymous
-> > > > > inode).
-> > > > >
-> > > > > This already poses a problem for this patch as we'd need to return an
-> > > > > array of PIDs which we don't have the space for but also is a
-> > > > > situation which we haven't discussed previously IIRC - two processes
-> > > > > keeping the same GPIO lines requested.
-> > > > >
-> > > > > I don't have any good idea on how to address this yet. One thing off
-> > > > > the top of my head is: close the parent's file descriptor from kernel
-> > > > > space (is it even possible?) on fork() (kind of like the close() on
-> > > > > exec flag).
-> > > > >
-> > > > > I need to think about it more.
-> > > > >
-> > > >
-> > > > I thought the O_CLOEXEC was set on the request fds exactly to prevent this
-> > > > case - only one process can hold the request fd.
-> > > >
-> > >
-> > > O_CLOEXEC means "close on exec" not "close on fork". When you fork,
-> > > you inherit all file descriptors from your parent. Only once you call
-> > > execve() are the fds with this flag closed *in the child*.
-> > >
-> >
-> > Ah, ok.
-> > You want to pass request fd ownership from parent to child??
-> > Why not lock ownership to the parent, so O_CLOFORK, were that
-> > available?
-> >
-> 
-> Because what if we want to request a line and then daemonize i.e. fork
-> and exit in parent? It makes much more sense to keep the lines
-> requested in the child IMO.
-> 
+Add support for interrupts for LAN8804 PHY.
 
-Then you are doing it backwards - daemonize first ;-).
+Tested-by: Michael Walle <michael@walle.cc> # on kontron-kswitch-d10
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+v1->v2:
+- add Tested-by and Reviewed-by tags
+- add better comments
+---
+ drivers/net/phy/micrel.c | 62 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-Generally speaking, doesn't transfer of resource ownership to the forked
-child create havoc in multi-threaded apps? i.e. one thread requests a
-resource, another forks.  The parent thread unknowingly loses ownership,
-and the forked child process only starts with a replica of the forking
-thread.
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 7b8c5c8d013e..6ec2d8fec78a 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -2676,6 +2676,66 @@ static int lan8804_config_init(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++static irqreturn_t lan8804_handle_interrupt(struct phy_device *phydev)
++{
++	int status;
++
++	status = phy_read(phydev, LAN8814_INTS);
++	if (status < 0) {
++		phy_error(phydev);
++		return IRQ_NONE;
++	}
++
++	if (status > 0)
++		phy_trigger_machine(phydev);
++
++	return IRQ_HANDLED;
++}
++
++#define LAN8804_OUTPUT_CONTROL			25
++#define LAN8804_OUTPUT_CONTROL_INTR_BUFFER	BIT(14)
++#define LAN8804_CONTROL				31
++#define LAN8804_CONTROL_INTR_POLARITY		BIT(14)
++
++static int lan8804_config_intr(struct phy_device *phydev)
++{
++	int err;
++
++	/* This is an internal PHY of lan966x and is not possible to change the
++	 * polarity on the GIC found in lan966x, therefore change the polarity
++	 * of the interrupt in the PHY from being active low instead of active
++	 * high.
++	 */
++	phy_write(phydev, LAN8804_CONTROL, LAN8804_CONTROL_INTR_POLARITY);
++
++	/* By default interrupt buffer is open-drain in which case the interrupt
++	 * can be active only low. Therefore change the interrupt buffer to be
++	 * push-pull to be able to change interrupt polarity
++	 */
++	phy_write(phydev, LAN8804_OUTPUT_CONTROL,
++		  LAN8804_OUTPUT_CONTROL_INTR_BUFFER);
++
++	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
++		err = phy_read(phydev, LAN8814_INTS);
++		if (err < 0)
++			return err;
++
++		err =  phy_write(phydev, LAN8814_INTC, LAN8814_INT_LINK);
++		if (err)
++			return err;
++	} else {
++		err =  phy_write(phydev, LAN8814_INTC, 0);
++		if (err)
++			return err;
++
++		err = phy_read(phydev, LAN8814_INTS);
++		if (err < 0)
++			return err;
++	}
++
++	return 0;
++}
++
+ static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
+ {
+ 	int irq_status, tsu_irq_status;
+@@ -3137,6 +3197,8 @@ static struct phy_driver ksphy_driver[] = {
+ 	.get_stats	= kszphy_get_stats,
+ 	.suspend	= genphy_suspend,
+ 	.resume		= kszphy_resume,
++	.config_intr	= lan8804_config_intr,
++	.handle_interrupt = lan8804_handle_interrupt,
+ }, {
+ 	.phy_id		= PHY_ID_KSZ9131,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
+-- 
+2.33.0
 
-> During the BoF at Linux Plumbers it was suggested to use
-> /proc/$PID/fdinfo to expose the information about which lines are
-> requested but I can't figure out a way to do it elegantly.
-> 
-
-Yeah, missed that :-(.
-
-Makes sense.
-
-As each request fd can contain multiple lines on a particular chip,
-you would need to identify the gpiochip and the offsets for that request.
-So two fields - the gpiochip path, and the list of offsets.
-
-Is that already too clunky or am I missing something?
-
-Cheers,
-Kent.
