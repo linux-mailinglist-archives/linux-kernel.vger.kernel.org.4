@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E095B7089
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B275B7431
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiIMOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S235740AbiIMPPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbiIMOYA (ORCPT
+        with ESMTP id S235678AbiIMPNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:24:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392965C367;
-        Tue, 13 Sep 2022 07:15:53 -0700 (PDT)
+        Tue, 13 Sep 2022 11:13:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CB6A4AA;
+        Tue, 13 Sep 2022 07:32:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95646B80F9C;
-        Tue, 13 Sep 2022 14:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2DEC433C1;
-        Tue, 13 Sep 2022 14:15:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33039614C5;
+        Tue, 13 Sep 2022 14:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E581C433D7;
+        Tue, 13 Sep 2022 14:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078547;
-        bh=VY/Ay3kKE70oNyFPjlsuRy0rDmW1jBUkn3PCjS2vUyQ=;
+        s=korg; t=1663078997;
+        bh=F4/WLsRyy07YolkegJmcY9GWhvPc3z+yHZ+ideYcFvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UU5cycGm59M2ccH6F+zTk1p1yTsFKPKckVIqnCmSHXxqEjy3FxrnxgXh5GQxvHr9k
-         h+f9mts2DknGvIBH0+A7Ft9F0Q73NDYLnwRsP6Rpfpp6k8Gv0oC0RpLVC6QyaAY901
-         fCjNXiwF3IKXZHSGob9xteySqFiRoSAzSGp0NOAQ=
+        b=NJbIIWFG4ojJ2w1clOMrEal8G+tHRvtFBkLHV5kJKdzKNQifD0ZTEh2hkFQKMBq8a
+         cJWFvgoqtzuFnhhRvl3ykf/6jzNQCDnrKssoM1JSh4Ndc9fDHb3n41EOLG0inDAfi9
+         /yuBnSy8ETaGxmdPL20TbRDbCQUSjeOQETRkHgFg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shady Nawara <shady.nawara@outlook.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Wenpeng Liang <liangwenpeng@huawei.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 182/192] hwmon: (asus-ec-sensors) add support for Strix Z690-a D4
+Subject: [PATCH 5.10 43/79] RDMA/hns: Fix wrong fixed value of qp->rq.wqe_shift
 Date:   Tue, 13 Sep 2022 16:04:48 +0200
-Message-Id: <20220913140419.123746705@linuxfoundation.org>
+Message-Id: <20220913140352.369810620@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,92 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shady Nawara <shady.nawara@outlook.com>
+From: Wenpeng Liang <liangwenpeng@huawei.com>
 
-[ Upstream commit bae26b801f98bc902ab4a43c96947f3a0ce4f3a0 ]
+[ Upstream commit 0c8b5d6268d92d141bfd64d21c870d295a84dee1 ]
 
-adds T_Sensor and VRM Temp sensors for the Asus Strix z690-a D4 motherboard
+The value of qp->rq.wqe_shift of HIP08 is always determined by the number
+of sge. So delete the wrong branch.
 
-Signed-off-by: Shady Nawara <shady.nawara@outlook.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-Link: https://lore.kernel.org/r/20220603122758.1561064-1-eugene.shalygin@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Stable-dep-of: 88700d1396ba ("hwmon: (asus-ec-sensors) autoload module via DMI data")
+Fixes: cfc85f3e4b7f ("RDMA/hns: Add profile support for hip08 driver")
+Fixes: 926a01dc000d ("RDMA/hns: Add QP operations support for hip08 SoC")
+Link: https://lore.kernel.org/r/20220829105021.1427804-3-liangwenpeng@huawei.com
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
+ drivers/infiniband/hw/hns/hns_roce_qp.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 78ca69eda8778..00d8c46ef9e04 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -19,6 +19,7 @@ Supported boards:
-  * ROG STRIX X570-E GAMING WIFI II
-  * ROG STRIX X570-F GAMING
-  * ROG STRIX X570-I GAMING
-+ * ROG STRIX Z690-A GAMING WIFI D4
+diff --git a/drivers/infiniband/hw/hns/hns_roce_qp.c b/drivers/infiniband/hw/hns/hns_roce_qp.c
+index 291e06d631505..6fe98af7741b5 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_qp.c
++++ b/drivers/infiniband/hw/hns/hns_roce_qp.c
+@@ -386,11 +386,8 @@ static int set_rq_size(struct hns_roce_dev *hr_dev, struct ib_qp_cap *cap,
  
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 3633ab691662b..19d3ca71b3609 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -54,6 +54,8 @@ static char *mutex_path_override;
- /* ACPI mutex for locking access to the EC for the firmware */
- #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
+ 	hr_qp->rq.max_gs = roundup_pow_of_two(max(1U, cap->max_recv_sge));
  
-+#define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
-+
- #define MAX_IDENTICAL_BOARD_VARIATIONS	3
+-	if (hr_dev->caps.max_rq_sg <= HNS_ROCE_SGE_IN_WQE)
+-		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz);
+-	else
+-		hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
+-					    hr_qp->rq.max_gs);
++	hr_qp->rq.wqe_shift = ilog2(hr_dev->caps.max_rq_desc_sz *
++				    hr_qp->rq.max_gs);
  
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-@@ -139,6 +141,7 @@ enum board_family {
- 	family_unknown,
- 	family_amd_400_series,
- 	family_amd_500_series,
-+	family_intel_600_series
- };
- 
- /* All the known sensors for ASUS EC controllers */
-@@ -197,6 +200,12 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
- 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_600[] = {
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+};
-+
- /* Shortcuts for common combinations */
- #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
- 	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
-@@ -330,6 +339,12 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
-+	{
-+		.board_names = {"ROG STRIX Z690-A GAMING WIFI D4"},
-+		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
-+		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-+		.family = family_intel_600_series,
-+	},
- 	{}
- };
- 
-@@ -799,6 +814,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
-+	case family_intel_600_series:
-+		ec_data->sensors_info = sensors_family_intel_600;
-+		break;
- 	default:
- 		dev_err(dev, "Unknown board family: %d",
- 			ec_data->board_info->family);
+ 	hr_qp->rq.wqe_cnt = cnt;
+ 	if (hr_dev->caps.flags & HNS_ROCE_CAP_FLAG_RQ_INLINE)
 -- 
 2.35.1
 
