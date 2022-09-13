@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FA25B73AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0AC5B6F16
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiIMPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S232624AbiIMOHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiIMPGT (ORCPT
+        with ESMTP id S232461AbiIMOHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:06:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEACD753BF;
-        Tue, 13 Sep 2022 07:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0D78614CE;
-        Tue, 13 Sep 2022 14:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F73C433D6;
-        Tue, 13 Sep 2022 14:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079436;
-        bh=eZJOThYP4wm6xfAkQVHsDsG7KU0Di8nivbUXO/0Bf+E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWJHd2RJxGuW7nBTHpRAdzWDUPBpETufbXu8ZqnQSwySTaoLTEVd6Mux4o3Q0MyWg
-         TZS+PbNc2XfwDOXK8RO4p7hea0e4JTc1SXwX9HvnSU21o8EJGDGKHzKGIXAO4VSlrx
-         FrSZJ2B/QJyyMz92W/+atTRyGFWOhKITvcxx4q5s=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 25/79] drm/i915/reg: Fix spelling mistake "Unsupport" -> "Unsupported"
-Date:   Tue, 13 Sep 2022 16:06:43 +0200
-Message-Id: <20220913140350.119463132@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:07:09 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91B5AC71;
+        Tue, 13 Sep 2022 07:06:47 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id x23-20020a056830409700b00655c6dace73so5870522ott.11;
+        Tue, 13 Sep 2022 07:06:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zoPmw8JW/Le55KAdfImgxUs7YtJIEgve1VGjOMzTQeo=;
+        b=PO4ITECyZRtsc8S4zWSZGrKrvTDsp2S55zEsRTjzvyPiTgEcEF+bs+bYQQsb55Z2i4
+         1Gys7KAFEHg81J9V8M4s6ZqhkcpF7EMl4MnMaJFsOqmf6zQtPbo6IZaAqjUeKnMAXEle
+         am6lX+77xvgnn4yoGC6ZUfynwAXqr9hGUIwPPBliM2qzjVaB38AkhqMS0DQS3+cW+fPY
+         X4/SOEjJHccepaoEx/nWeKL4YSI/Keyzb3ropDNqr+gyZf9CSaY1WvNpWcFWVm6qdQIY
+         25gDYq2tBLvUHu4OrDyx77lEPVRIHf0nfxRyDS7I45enlzuIRcWAR2ZvAPKuSSetQyqt
+         J4bA==
+X-Gm-Message-State: ACgBeo2JTdKkrl77C0xORgFAFLZtGdNWyDaeDIh8XhF9TbA3iC7Zx0Qm
+        qQOE5PYK11MELmv3vJ2OMA==
+X-Google-Smtp-Source: AA6agR5LFvgkAS1RLpwP+MalfrYVSYShfCYdO8clZgU1WUU4EmFpEH8pJbpxErYAZmbdlxR6vK8NLA==
+X-Received: by 2002:a05:6830:91b:b0:655:f7a3:61ba with SMTP id v27-20020a056830091b00b00655f7a361bamr2961087ott.226.1663078006506;
+        Tue, 13 Sep 2022 07:06:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o8-20020a9d4048000000b006370c0e5be0sm6155675oti.48.2022.09.13.07.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:06:46 -0700 (PDT)
+Received: (nullmailer pid 3593540 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:06:44 -0000
+Date:   Tue, 13 Sep 2022 09:06:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, jamie@jamieiles.com,
+        sjg@chromium.org, wim@linux-watchdog.org, vkoul@kernel.org,
+        ulf.hansson@linaro.org, heiko@sntech.de, linux@roeck-us.net,
+        thierry.reding@gmail.com, miquel.raynal@bootlin.com,
+        philipp.tomsich@vrull.eu, kever.yang@rock-chips.com,
+        vigneshr@ti.com, broonie@kernel.org, zhangqing@rock-chips.com,
+        devicetree@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        linux-mmc@vger.kernel.org, kishon@ti.com,
+        linux-phy@lists.infradead.org, linux-spi@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, richard@nod.at,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v1 06/11] dt-bindings: usb: dwc2: rockchip: add
+ rockchip,rk3128-usb
+Message-ID: <20220913140644.GA3593492-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <dfb657ab-85e5-ac47-810d-133c7e8dd823@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfb657ab-85e5-ac47-810d-133c7e8dd823@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+On Sat, 10 Sep 2022 00:02:01 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-usb compatible string.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-[ Upstream commit 233f56745be446b289edac2ba8184c09365c005e ]
-
-There is a spelling mistake in a gvt_vgpu_err error message. Fix it.
-
-Fixes: 695fbc08d80f ("drm/i915/gvt: replace the gvt_err with gvt_vgpu_err")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20220315202449.2952845-1-colin.i.king@gmail.com
-Reviewed-by: Zhi Wang <zhi.a.wang@intel.com>
-Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/i915/gvt/handlers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
-index 94c1089ecf59e..1bde4b618d151 100644
---- a/drivers/gpu/drm/i915/gvt/handlers.c
-+++ b/drivers/gpu/drm/i915/gvt/handlers.c
-@@ -651,7 +651,7 @@ static int update_fdi_rx_iir_status(struct intel_vgpu *vgpu,
- 	else if (FDI_RX_IMR_TO_PIPE(offset) != INVALID_INDEX)
- 		index = FDI_RX_IMR_TO_PIPE(offset);
- 	else {
--		gvt_vgpu_err("Unsupport registers %x\n", offset);
-+		gvt_vgpu_err("Unsupported registers %x\n", offset);
- 		return -EINVAL;
- 	}
- 
--- 
-2.35.1
-
-
-
+Acked-by: Rob Herring <robh@kernel.org>
