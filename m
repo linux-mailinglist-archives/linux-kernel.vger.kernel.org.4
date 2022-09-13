@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50B15B74F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C8D5B74F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbiIMP20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S236274AbiIMP3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236179AbiIMP1B (ORCPT
+        with ESMTP id S235966AbiIMP2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:27:01 -0400
+        Tue, 13 Sep 2022 11:28:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360007D7BA;
-        Tue, 13 Sep 2022 07:38:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA76B176;
+        Tue, 13 Sep 2022 07:38:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CABEBB80F9D;
-        Tue, 13 Sep 2022 14:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFF4C433D7;
-        Tue, 13 Sep 2022 14:36:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63FA4B8101B;
+        Tue, 13 Sep 2022 14:36:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCEEBC433D7;
+        Tue, 13 Sep 2022 14:36:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079799;
-        bh=0PyzWKGgacvE+hrA7uAAPic9Xb5y/v5fYZvJrGxE2Bo=;
+        s=korg; t=1663079802;
+        bh=exZdNZWzP0dOHve55ZJWQ3kh4qj940fegArBrUQhtkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yBUJAR/tCzJHT7YOOtlsAE7fKI38Y5gmkcI3cFBnX4ZgYkVAN6X3DBuuYm9XAT/+U
-         avNoucH3afzMDTSRiFhJq5m9CeYLr3OqpfJlaoFbKNoielWcb5pIr7BzCK05F2B7gM
-         QylisbVxc1DhLoMX7y8WjKViIP8u/MuIYrWVUwoM=
+        b=hIupgOi5VX3Zuf0iP7FB4KWP1FJWJfZihxnAhaxqL/ujgn6j7XF/6xFewVsHNOv8i
+         xaGEdzNhDf3lEJAW26ufcyeOyg20gK/FElrLBRFgRRCruJ0KteyhQTkjRaLKcyKZii
+         wrYEptOd5ssKKp++45wrUYZyh7hg7id2+iPlt988=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH 4.9 18/42] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
-Date:   Tue, 13 Sep 2022 16:07:49 +0200
-Message-Id: <20220913140343.184916758@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com,
+        Siddh Raman Pant <code@siddh.me>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.9 19/42] wifi: mac80211: Dont finalize CSA in IBSS mode if state is disconnected
+Date:   Tue, 13 Sep 2022 16:07:50 +0200
+Message-Id: <20220913140343.240378340@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 References: <20220913140342.228397194@linuxfoundation.org>
@@ -54,48 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
+From: Siddh Raman Pant <code@siddh.me>
 
-commit 9d4dc16ec71bd6368548e9743223e449b4377fc7 upstream.
+commit 15bc8966b6d3a5b9bfe4c9facfa02f2b69b1e5f0 upstream.
 
-During cdrom emulation, the response to read_toc command must contain
-the cdrom address as the number of sectors (2048 byte sized blocks)
-represented either as an absolute value (when MSF bit is '0') or in
-terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
-cdrom, the fsg_lun_open call sets the sector size to 2048 bytes.
+When we are not connected to a channel, sending channel "switch"
+announcement doesn't make any sense.
 
-When MAC OS sends a read_toc request with MSF set to '1', the
-store_cdrom_address assumes that the address being provided is the
-LUN size represented in 512 byte sized blocks instead of 2048. It
-tries to modify the address further to convert it to 2048 byte sized
-blocks and store it in MSF format. This results in data transfer
-failures as the cdrom address being provided in the read_toc response
-is incorrect.
+The BSS list is empty in that case. This causes the for loop in
+cfg80211_get_bss() to be bypassed, so the function returns NULL
+(check line 1424 of net/wireless/scan.c), causing the WARN_ON()
+in ieee80211_ibss_csa_beacon() to get triggered (check line 500
+of net/mac80211/ibss.c), which was consequently reported on the
+syzkaller dashboard.
 
-Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
+Thus, check if we have an existing connection before generating
+the CSA beacon in ieee80211_ibss_finish_csa().
+
 Cc: stable@vger.kernel.org
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Link: https://lore.kernel.org/r/1661570110-19127-1-git-send-email-quic_kriskura@quicinc.com
+Fixes: cd7760e62c2a ("mac80211: add support for CSA in IBSS mode")
+Link: https://syzkaller.appspot.com/bug?id=05603ef4ae8926761b678d2939a3b2ad28ab9ca6
+Reported-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Tested-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20220814151512.9985-1-code@siddh.me
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/storage_common.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/mac80211/ibss.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/usb/gadget/function/storage_common.c
-+++ b/drivers/usb/gadget/function/storage_common.c
-@@ -298,8 +298,10 @@ EXPORT_SYMBOL_GPL(fsg_lun_fsync_sub);
- void store_cdrom_address(u8 *dest, int msf, u32 addr)
- {
- 	if (msf) {
--		/* Convert to Minutes-Seconds-Frames */
--		addr >>= 2;		/* Convert to 2048-byte frames */
-+		/*
-+		 * Convert to Minutes-Seconds-Frames.
-+		 * Sector size is already set to 2048 bytes.
-+		 */
- 		addr += 2*75;		/* Lead-in occupies 2 seconds */
- 		dest[3] = addr % 75;	/* Frames */
- 		addr /= 75;
+--- a/net/mac80211/ibss.c
++++ b/net/mac80211/ibss.c
+@@ -544,6 +544,10 @@ int ieee80211_ibss_finish_csa(struct iee
+ 
+ 	sdata_assert_lock(sdata);
+ 
++	/* When not connected/joined, sending CSA doesn't make sense. */
++	if (ifibss->state != IEEE80211_IBSS_MLME_JOINED)
++		return -ENOLINK;
++
+ 	/* update cfg80211 bss information with the new channel */
+ 	if (!is_zero_ether_addr(ifibss->bssid)) {
+ 		cbss = cfg80211_get_bss(sdata->local->hw.wiphy,
 
 
