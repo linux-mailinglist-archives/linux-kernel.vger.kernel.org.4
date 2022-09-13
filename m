@@ -2,256 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00BC5B6571
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB715B6575
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiIMCPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S229906AbiIMCRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiIMCPB (ORCPT
+        with ESMTP id S229744AbiIMCRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:15:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B851CFED
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:14:58 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MRRlS6L3Bz14QZQ;
-        Tue, 13 Sep 2022 10:11:00 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 10:14:55 +0800
-Subject: Re: [PATCH 8/8] hugetlb: use new vma_lock for pmd sharing
- synchronization
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220824175757.20590-1-mike.kravetz@oracle.com>
- <20220824175757.20590-9-mike.kravetz@oracle.com>
- <08edc08e-08ab-0706-3c8d-804080f37bd7@huawei.com> <YxKMy3sDsWPEOMMJ@monkey>
- <1baff74d-d38f-6139-2548-19c0c8f87649@huawei.com> <Yx+6fbHUcInz4R+j@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a879ee95-918e-00f7-b04f-e9dba156902c@huawei.com>
-Date:   Tue, 13 Sep 2022 10:14:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 12 Sep 2022 22:17:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1CE52DCB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:17:14 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id c198so10357350pfc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=mNIi18X3rLwN7bNjOQgmycw3pgOrOB3gKZL4IhqTm0Y=;
+        b=pkf7liHixkCnKG6153BxNwx5r85qeEvrfDd8Xv+ijxHa4yEP2+nSqEAm+zJ//bD2OL
+         yndpzP6KpxqtWMYB1az234Slh8fmKt3zQBakDMewxqyeujWb0FJlyWaQRjtvFoQFun7B
+         CZ6dNKTWcOa0eC+kjcUj+u6ZjVbd0TJ7y1DQIOfsdtCaeFdlmjyspsQZ92eRhyKd6xOv
+         maOy0LG7ed0vfwMUZ/+pD/5STBRw/Dr7Ew+MIqrimco/pZKKJXAN5lI2V9fObnAI8upu
+         dZHJETVz/Z+rTDcuW9zo06M3xNx2DA5fxpHLkqTpuEYSNBmxG4Whb3X7ESqviPmTqjMP
+         q1lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=mNIi18X3rLwN7bNjOQgmycw3pgOrOB3gKZL4IhqTm0Y=;
+        b=6JDDwLDHjil22E5iqQbT4jmrzd9ZQMrd2XxWrwa215WVnUSH4SMTpBo/sjaYxt7otR
+         aXlaUxAlvkHm7/QkscnP+tgEkJnV/ZU1+vp3Nayucnx+19/8YwkdEwV2ursbq9fMWDP/
+         st38SMaYSTHB951+so/Yvih925bfeVG7PiYqH0qwshDVcnWEX8I9XAAbl2la5qddELlb
+         NyZRc5TbnRITVIOZ6t++YLH8Hz4ONQczM3bC4Ht5LvVjrYhQw9I17qwc6DTczo7BBB7b
+         z0awlO1ybX6qGBp1w97q6XEv3W+rcXWExzNxjlHX4PrkF4Xkxj9bwR0E7L3eKeWa17Qe
+         Kchg==
+X-Gm-Message-State: ACgBeo1srseHPXYbX7kBmnDf0G+/uZgT8M3mSNrptpjA6SR7vPoH6oL5
+        b/jE5W+RBbFGvTsR+ucqmRSn0A==
+X-Google-Smtp-Source: AA6agR6RX1U2gyW4RI0OqD6Leu4mPHYm5EFqoUfispvjgEYXh5UtA+Lxmd57WzWFCVFmNmtyreHuFw==
+X-Received: by 2002:a63:4816:0:b0:438:aece:3738 with SMTP id v22-20020a634816000000b00438aece3738mr13381201pga.279.1663035433786;
+        Mon, 12 Sep 2022 19:17:13 -0700 (PDT)
+Received: from leoy-yangtze.lan (173.242.123.178.16clouds.com. [173.242.123.178])
+        by smtp.gmail.com with ESMTPSA id u16-20020a62d450000000b0053e66f57334sm6341291pfl.112.2022.09.12.19.17.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 19:17:13 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 10:17:08 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] perf: Skip and warn on unknown format 'configN' attrs
+Message-ID: <Yx/oJDvan6ctGYtX@leoy-yangtze.lan>
+References: <20220909204509.2169512-1-robh@kernel.org>
+ <Yx8LgqUtDh5TwWmV@leoy-huanghe.lan>
+ <CAL_JsqJGrUrahj-T+k7T9GAF+T8=y03YUTG2V+v52styFFDW_Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yx+6fbHUcInz4R+j@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJGrUrahj-T+k7T9GAF+T8=y03YUTG2V+v52styFFDW_Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/13 7:02, Mike Kravetz wrote:
-> On 09/05/22 11:08, Miaohe Lin wrote:
->> On 2022/9/3 7:07, Mike Kravetz wrote:
->>> On 08/30/22 10:02, Miaohe Lin wrote:
->>>> On 2022/8/25 1:57, Mike Kravetz wrote:
->>>>> The new hugetlb vma lock (rw semaphore) is used to address this race:
->>>>>
->>>>> Faulting thread                                 Unsharing thread
->>>>> ...                                                  ...
->>>>> ptep = huge_pte_offset()
->>>>>       or
->>>>> ptep = huge_pte_alloc()
->>>>> ...
->>>>>                                                 i_mmap_lock_write
->>>>>                                                 lock page table
->>>>> ptep invalid   <------------------------        huge_pmd_unshare()
->>>>> Could be in a previously                        unlock_page_table
->>>>> sharing process or worse                        i_mmap_unlock_write
->>>>> ...
->>>>>
->>>>> The vma_lock is used as follows:
->>>>> - During fault processing. the lock is acquired in read mode before
->>>>>   doing a page table lock and allocation (huge_pte_alloc).  The lock is
->>>>>   held until code is finished with the page table entry (ptep).
->>>>> - The lock must be held in write mode whenever huge_pmd_unshare is
->>>>>   called.
->>>>>
->>>>> Lock ordering issues come into play when unmapping a page from all
->>>>> vmas mapping the page.  The i_mmap_rwsem must be held to search for the
->>>>> vmas, and the vma lock must be held before calling unmap which will
->>>>> call huge_pmd_unshare.  This is done today in:
->>>>> - try_to_migrate_one and try_to_unmap_ for page migration and memory
->>>>>   error handling.  In these routines we 'try' to obtain the vma lock and
->>>>>   fail to unmap if unsuccessful.  Calling routines already deal with the
->>>>>   failure of unmapping.
->>>>> - hugetlb_vmdelete_list for truncation and hole punch.  This routine
->>>>>   also tries to acquire the vma lock.  If it fails, it skips the
->>>>>   unmapping.  However, we can not have file truncation or hole punch
->>>>>   fail because of contention.  After hugetlb_vmdelete_list, truncation
->>>>>   and hole punch call remove_inode_hugepages.  remove_inode_hugepages
->>>>>   check for mapped pages and call hugetlb_unmap_file_page to unmap them.
->>>>>   hugetlb_unmap_file_page is designed to drop locks and reacquire in the
->>>>>   correct order to guarantee unmap success.
->>>>>
->>>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
->>>>> ---
->>>>>  fs/hugetlbfs/inode.c |  46 +++++++++++++++++++
->>>>>  mm/hugetlb.c         | 102 +++++++++++++++++++++++++++++++++++++++----
->>>>>  mm/memory.c          |   2 +
->>>>>  mm/rmap.c            | 100 +++++++++++++++++++++++++++---------------
->>>>>  mm/userfaultfd.c     |   9 +++-
->>>>>  5 files changed, 214 insertions(+), 45 deletions(-)
->>>>>
->>>>> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
->>>>> index b93d131b0cb5..52d9b390389b 100644
->>>>> --- a/fs/hugetlbfs/inode.c
->>>>> +++ b/fs/hugetlbfs/inode.c
->>>>> @@ -434,6 +434,8 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
->>>>>  					struct folio *folio, pgoff_t index)
->>>>>  {
->>>>>  	struct rb_root_cached *root = &mapping->i_mmap;
->>>>> +	unsigned long skipped_vm_start;
->>>>> +	struct mm_struct *skipped_mm;
->>>>>  	struct page *page = &folio->page;
->>>>>  	struct vm_area_struct *vma;
->>>>>  	unsigned long v_start;
->>>>> @@ -444,6 +446,8 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
->>>>>  	end = ((index + 1) * pages_per_huge_page(h));
->>>>>  
->>>>>  	i_mmap_lock_write(mapping);
->>>>> +retry:
->>>>> +	skipped_mm = NULL;
->>>>>  
->>>>>  	vma_interval_tree_foreach(vma, root, start, end - 1) {
->>>>>  		v_start = vma_offset_start(vma, start);
->>>>> @@ -452,11 +456,49 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
->>>>>  		if (!hugetlb_vma_maps_page(vma, vma->vm_start + v_start, page))
->>>>>  			continue;
->>>>>  
->>>>> +		if (!hugetlb_vma_trylock_write(vma)) {
->>>>> +			/*
->>>>> +			 * If we can not get vma lock, we need to drop
->>>>> +			 * immap_sema and take locks in order.
->>>>> +			 */
->>>>> +			skipped_vm_start = vma->vm_start;
->>>>> +			skipped_mm = vma->vm_mm;
->>>>> +			/* grab mm-struct as we will be dropping i_mmap_sema */
->>>>> +			mmgrab(skipped_mm);
->>>>> +			break;
->>>>> +		}
->>>>> +
->>>>>  		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
->>>>>  				NULL, ZAP_FLAG_DROP_MARKER);
->>>>> +		hugetlb_vma_unlock_write(vma);
->>>>>  	}
->>>>>  
->>>>>  	i_mmap_unlock_write(mapping);
->>>>> +
->>>>> +	if (skipped_mm) {
->>>>> +		mmap_read_lock(skipped_mm);
->>>>> +		vma = find_vma(skipped_mm, skipped_vm_start);
->>>>> +		if (!vma || !is_vm_hugetlb_page(vma) ||
->>>>> +					vma->vm_file->f_mapping != mapping ||
->>>>> +					vma->vm_start != skipped_vm_start) {
->>>>
->>>> i_mmap_lock_write(mapping) is missing here? Retry logic will do i_mmap_unlock_write(mapping) anyway.
->>>>
->>>
->>> Yes, that is missing.  I will add here.
->>>
->>>>> +			mmap_read_unlock(skipped_mm);
->>>>> +			mmdrop(skipped_mm);
->>>>> +			goto retry;
->>>>> +		}
->>>>> +
->>>>
->>>> IMHO, above check is not enough. Think about the below scene:
->>>>
->>>> CPU 1					CPU 2
->>>> hugetlb_unmap_file_folio		exit_mmap
->>>>   mmap_read_lock(skipped_mm);		  mmap_read_lock(mm);
->>>>   check vma is wanted.
->>>>   					  unmap_vmas
->>>>   mmap_read_unlock(skipped_mm);		  mmap_read_unlock
->>>>   					  mmap_write_lock(mm);
->>>>   					  free_pgtables
->>>>   					  remove_vma
->>>> 					    hugetlb_vma_lock_free
->>>>   vma, hugetlb_vma_lock is still *used after free*
->>>>   					  mmap_write_unlock(mm);
->>>> So we should check mm->mm_users == 0 to fix the above issue. Or am I miss something?
->>>
->>> In the retry case, we are OK because go back and look up the vma again.  Right?
->>>
->>> After taking mmap_read_lock, vma can not go away until we mmap_read_unlock.
->>> Before that, we do the following:
->>>
->>>>> +		hugetlb_vma_lock_write(vma);
->>>>> +		i_mmap_lock_write(mapping);
->>>
->>> IIUC, vma can not go away while we hold i_mmap_lock_write.  So, after this we
->>
->> I think you're right. free_pgtables() can't complete its work as unlink_file_vma() will be
->> blocked on i_mmap_rwsem of mapping. Sorry for reporting such nonexistent race.
->>
->>> can.
->>>
->>>>> +		mmap_read_unlock(skipped_mm);
->>>>> +		mmdrop(skipped_mm);
->>>
->>> We continue to hold i_mmap_lock_write as we goto retry.
->>>
->>> I could be missing something as well.  This was how I intended to keep
->>> vma valid while dropping and acquiring locks.
->>
->> Thanks for your clarifying.
->>
+On Mon, Sep 12, 2022 at 08:55:32AM -0500, Rob Herring wrote:
+
+[...]
+
+> > If this is the case,
+> > it's good to add a fixes tag like below?
+> >
+> > Fixes: cd82a32e9924 ("perf tools: Add perf pmu object to access pmu format definition")
 > 
-> Well, that was all correct 'in theory' but not in practice.  I did not take
-> into account the inode lock that is taken at the beginning of truncate (or
-> hole punch).  In other code paths, we take inode lock after mmap_lock.  So,
-> taking mmap_lock here is not allowed.
+> Probably not too important given this is from 2012.
 
-Considering the Lock ordering in mm/filemap.c:
+Which means since 2012 there have no requirement for config3 :)
 
- *  ->i_rwsem
- *    ->invalidate_lock		(acquired by fs in truncate path)
- *      ->i_mmap_rwsem		(truncate->unmap_mapping_range)
+AFAICT, perf tool should be forward compatible, so I think it's good
+for this patch to be landed on (old) LTS kernels.
 
- *  ->i_rwsem			(generic_perform_write)
- *    ->mmap_lock		(fault_in_readable->do_page_fault)
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > > v2:
+> > >  - Rework YACC code to handle configN formats in C code
+> > >  - Add a warning when an unknown configN attr is found
+> > >
+> > > v1: https://lore.kernel.org/all/20220901184709.2179309-1-robh@kernel.org/
+> > > ---
+> > >  tools/perf/util/pmu.c |  6 ++++++
+> > >  tools/perf/util/pmu.l |  2 --
+> > >  tools/perf/util/pmu.y | 15 ++++-----------
+> > >  3 files changed, 10 insertions(+), 13 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> > > index 89655d53117a..6757db7d559c 100644
+> > > --- a/tools/perf/util/pmu.c
+> > > +++ b/tools/perf/util/pmu.c
+> > > @@ -1475,6 +1475,12 @@ int perf_pmu__new_format(struct list_head *list, char *name,
+> > >  {
+> > >       struct perf_pmu_format *format;
+> > >
+> > > +     if (config > PERF_PMU_FORMAT_VALUE_CONFIG2) {
+> >
+> > It's good to add a new macro PERF_PMU_FORMAT_VALUE_CONFIG_END in
+> > util/pmu.h. Then at here we can check the condition:
+> 
+> Sure.
+> 
+> >
+> >        if (config >= PERF_PMU_FORMAT_VALUE_CONFIG_END) {
+> >
+> > > +             pr_warning("WARNING: format '%s' requires 'config%d' which is not supported by this version of perf!\n",
+> > > +                        name, config);
+> >
+> > ... so at here we can print log like:
+> >
+> >        pr_warning("WARNING: format '%s' requires 'config%d' which is not "
+> >                   "supported by this version of perf (maximum config%d)!\n",
+> >                   name, config, PERF_PMU_FORMAT_VALUE_CONFIG_END - 1);
+> 
+> I was trying to keep it to one line and given configN isn't expanded
+> frequently it should be simple enough to figure out what version you
+> need.
 
-It seems inode_lock is taken before the mmap_lock?
+It's fine for me.
+
+> > The rest of this patch is fine for me.
+> >
+> > As a side topic, I know you want to support the SPEv1.2 feature with
+> > config3, seems to me a complete patch set series should include the
+> > changes for supporting config3 as well.  This can give more clear view
+> > for how to fix incompatibility issue between old and new kernels, and
+> > how to support config3 in the latest kernel, but it's fine for me if
+> > you want to split into two patch sets.
+> 
+> I've sent out the SPE kernel support separately. I was told by Arnaldo
+> to split perf tool and kernel side changes.
+
+To be clear, it's right to split kernel and userspace parts into two
+patch set, but for userspace change I cannot find you sent patch
+to support config3 in perf tool, something in the [1] is missed,
+otherwise I don't think you provide complete support for config3 (and
+thus we have no chance to use new event format).
 
 Thanks,
-Miaohe Lin
+Leo
 
-> 
-> I came up with another way to make this work.  As discussed above, we need to
-> drop the i_mmap lock before acquiring the vma_lock.  However, once we drop
-> i_mmap, the vma could go away.  My solution is to make the 'vma_lock' be a
-> ref counted structure that can live on after the vma is freed.  Therefore,
-> this code can take a reference while under i_mmap then drop i_mmap and wait
-> on the vma_lock.  Of course, once it acquires the vma_lock it needs to check
-> and make sure the vma still exists.  It may sound complicated, but I think
-> it is a bit simpler than the code here.  A new series will be out soon.
-> 
+[1] https://termbin.com/vdph
