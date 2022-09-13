@@ -2,88 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836665B7317
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCD55B7135
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiIMPAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S234182AbiIMOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbiIMO6z (ORCPT
+        with ESMTP id S234123AbiIMOf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:58:55 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A2B67C97;
-        Tue, 13 Sep 2022 07:28:36 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11e9a7135easo32544794fac.6;
-        Tue, 13 Sep 2022 07:28:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zYRS5/+Q00Jt+sqvHB1fjEMsS/sAzxnNY3oApp6VsX4=;
-        b=BDR0mhRW0cZNaNfmjAann9vKWXeLTkg8G8vI1awTj8pz/GDwkR3cK29FJghbA8RlAk
-         Vv6Rmd6Uwmcc6Uuc6sY0MxTpHn2MunKE4aXels7LbXsAGaOdo7dmmpV1kz5pjAkgnmFQ
-         6gyBnn39DThc73eIFjhxhH0kMV8Wb6tiDJdun2E8rRSc0V/AnUIV5CM3JK+WhtT9Rcmm
-         bhtHdsdd4jI161DBuSFcodN9OdBI0/r96rpu7RJhE8i/eXM/56BG6qsNJPDkSqNExxHz
-         vrA+b08LI/8IlVxJOGYMmg87BrTNdTrMnk/fZoo2zXiOWjl/6BkYhI06lhsfL6QCpuUu
-         J1Dg==
-X-Gm-Message-State: ACgBeo3pZ04ZQ0KZa0OFBe4YcYHxfLx51hXFtV9ZUB+NLbMVpHBgj4Av
-        4vHRYP6vQhW5UcLQmnoA/czu+59jjw==
-X-Google-Smtp-Source: AA6agR6hOpZPvoPt2Eb14Hvai4q1Lk4rE7+yyu9TNmztp+7DqLeOhYDLvEKfa24JcgVwwqI0QlyFNw==
-X-Received: by 2002:a05:6808:15aa:b0:34f:b7e3:26f5 with SMTP id t42-20020a05680815aa00b0034fb7e326f5mr1747211oiw.22.1663078560574;
-        Tue, 13 Sep 2022 07:16:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i34-20020a056870892200b0012644cc4feasm6980943oao.55.2022.09.13.07.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:15:59 -0700 (PDT)
-Received: (nullmailer pid 3606168 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:15:58 -0000
-Date:   Tue, 13 Sep 2022 09:15:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kishon@ti.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        sjg@chromium.org, heiko@sntech.de, linux-watchdog@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, broonie@kernel.org,
-        miquel.raynal@bootlin.com, linux-rockchip@lists.infradead.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, richard@nod.at, ulf.hansson@linaro.org,
-        linux-arm-kernel@lists.infradead.org, zhangqing@rock-chips.com,
-        jamie@jamieiles.com, thierry.reding@gmail.com,
-        linux-mmc@vger.kernel.org, robh+dt@kernel.org,
-        kever.yang@rock-chips.com, linux-spi@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        vkoul@kernel.org, philipp.tomsich@vrull.eu,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        u.kleine-koenig@pengutronix.de, vigneshr@ti.com
-Subject: Re: [PATCH v1 04/11] dt-bindings: mmc: rockchip: add
- rockchip,rk3128-dw-mshc
-Message-ID: <20220913141558.GA3606130-robh@kernel.org>
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
+        Tue, 13 Sep 2022 10:35:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797FB6B179
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:20:20 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oY6l5-0003zp-Ah; Tue, 13 Sep 2022 16:19:27 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:e27a:1417:2420:c072])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 20A36E2236;
+        Tue, 13 Sep 2022 14:19:26 +0000 (UTC)
+Date:   Tue, 13 Sep 2022 16:19:17 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        =?utf-8?B?Q3PDs2vDoXM=?= Bence <csokas.bence@prolan.hu>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH 5.19 123/192] net: fec: Use a spinlock to guard
+ `fep->ptp_clk_on`
+Message-ID: <20220913141917.ukoid65sqao5f4lg@pengutronix.de>
+References: <20220913140410.043243217@linuxfoundation.org>
+ <20220913140416.124325107@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="af6c52mww4vpchdw"
 Content-Disposition: inline
-In-Reply-To: <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220913140416.124325107@linuxfoundation.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 00:02:14 +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-dw-mshc compatible string.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+--af6c52mww4vpchdw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Greg,
+
+On 13.09.2022 16:03:49, Greg Kroah-Hartman wrote:
+> From: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
+>=20
+> [ Upstream commit b353b241f1eb9b6265358ffbe2632fdcb563354f ]
+>=20
+> Mutexes cannot be taken in a non-preemptible context,
+> causing a panic in `fec_ptp_save_state()`. Replacing
+> `ptp_clk_mutex` by `tmreg_lock` fixes this.
+>=20
+> Fixes: 6a4d7234ae9a ("net: fec: ptp: avoid register access when ipg clock=
+ is disabled")
+> Fixes: f79959220fa5 ("fec: Restart PPS after link state change")
+> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Link: https://lore.kernel.org/all/20220827160922.642zlcd5foopozru@pengutr=
+onix.de/
+> Signed-off-by: Cs=C3=B3k=C3=A1s Bence <csokas.bence@prolan.hu>
+> Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com> # Toradex Ap=
+alis iMX6
+> Link: https://lore.kernel.org/r/20220901140402.64804-1-csokas.bence@prola=
+n.hu
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+there's a revert pending for this patch:
+
+| https://lore.kernel.org/all/20220912070143.98153-1-francesco.dolcini@tora=
+dex.com
+
+=2E..as it causes troubles in 6.0-rc4:
+
+| https://lore.kernel.org/all/20220907143915.5w65kainpykfobte@pengutronix.d=
+e/
+| https://lore.kernel.org/all/CAHk-=3Dwj1obPoTu1AHj9Bd_BGYjdjDyPP+vT5WMj8eh=
+eb3A9WHw@mail.gmail.com/
+
+please drop this patch.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--af6c52mww4vpchdw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMgkWIACgkQrX5LkNig
+012O6Qf+IMmJPdO6Klc+65dYelBzSP71ECLl5oevZ3+kFxdgPaUdeuQUbjt/d7q1
+daOodkWOcmkL/NStL6xRJJ/0SZ0q0hfP0KqP4BbIjaGSiox/C4lD1Feo/hRTHs+z
+Qmvh5a7wdzXMqCKx8pF439QAaKetnwKwS8ZcIJ282clRy+KqQU7i57N/4S82qpKO
+g1Q6KS3JWZF3a/8GK4sSh07jAa2W1CaPkMhxjNXnSHhk8OomKCvVrt4c5eN+YJu5
+RoZ/0Hb9z2dWBAFyqeyB0zkiN76c7aqCxcy61eofobdhT1ypzOnTtDvxa95Xdz2V
+w5JiujUU7gnQLoIAT9SyXG+TmcUidQ==
+=v56d
+-----END PGP SIGNATURE-----
+
+--af6c52mww4vpchdw--
