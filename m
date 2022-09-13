@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7AA5B725D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87EE5B7161
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234949AbiIMOyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S234422AbiIMOiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiIMOu2 (ORCPT
+        with ESMTP id S234281AbiIMOgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB38726AD;
-        Tue, 13 Sep 2022 07:26:11 -0700 (PDT)
+        Tue, 13 Sep 2022 10:36:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E4A1928F;
+        Tue, 13 Sep 2022 07:20:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C32C0614D0;
-        Tue, 13 Sep 2022 14:24:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37A7C433D6;
-        Tue, 13 Sep 2022 14:24:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5447CB80F62;
+        Tue, 13 Sep 2022 14:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95AC6C433D6;
+        Tue, 13 Sep 2022 14:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079043;
-        bh=8PuaP/incUVIAeBANDpRL8XFoyJ5zftOBkXkgOQ5REs=;
+        s=korg; t=1663078778;
+        bh=l2nfi8JHyMeItk0u8t8lhcMaWYblO2aNY0uh6RaqThk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dHN2k/4GcygoLHvEATDN/GwOELRwxg0MkccwfEf3FEohNVJ1znnvnEJ7wq3IPU3jp
-         nnFVUa2nosM9UinEsxUjL6TwaWC1NT3AdQGhHQih1mi9e237nY7rZdF2l6mIfwieLH
-         ljU9aGzAbiXfCBzitoXLEtPkJrghNf2osxkb0i9M=
+        b=kiO4I0x3Z3PzryJLCMD3+hBes/vAvQSYOq1/aTDlsaQH8nkEZTPErPKvnRTD+w20A
+         V0aEkIKgc5t+AhW/u9otoGV0kKVrSOpPipy8JUD6tGxysl/Ye0RSNbk2r3aMbsuC8M
+         wWM9w71pJYUIG67VvgaiYulLOduA/myTq+4uwfW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pattara Teerapong <pteerapong@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 25/79] ALSA: aloop: Fix random zeros in capture data when using jiffies timer
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 079/121] net: introduce __skb_fill_page_desc_noacc
 Date:   Tue, 13 Sep 2022 16:04:30 +0200
-Message-Id: <20220913140351.513272951@linuxfoundation.org>
+Message-Id: <20220913140400.770286188@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pattara Teerapong <pteerapong@chromium.org>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-commit 3e48940abee88b8dbbeeaf8a07e7b2b6be1271b3 upstream.
+[ Upstream commit 84ce071e38a6e25ea3ea91188e5482ac1f17b3af ]
 
-In loopback_jiffies_timer_pos_update(), we are getting jiffies twice.
-First time for playback, second time for capture. Jiffies can be updated
-between these two calls and if the capture jiffies is larger, extra zeros
-will be filled in the capture buffer.
+Managed pages contain pinned userspace pages and controlled by upper
+layers, there is no need in tracking skb->pfmemalloc for them. Introduce
+a helper for filling frags but ignoring page tracking, it'll be needed
+later.
 
-Change to get jiffies once and use it for both playback and capture.
-
-Signed-off-by: Pattara Teerapong <pteerapong@chromium.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220901144036.4049060-1-pteerapong@chromium.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/drivers/aloop.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ include/linux/skbuff.h | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
---- a/sound/drivers/aloop.c
-+++ b/sound/drivers/aloop.c
-@@ -606,17 +606,18 @@ static unsigned int loopback_jiffies_tim
- 			cable->streams[SNDRV_PCM_STREAM_PLAYBACK];
- 	struct loopback_pcm *dpcm_capt =
- 			cable->streams[SNDRV_PCM_STREAM_CAPTURE];
--	unsigned long delta_play = 0, delta_capt = 0;
-+	unsigned long delta_play = 0, delta_capt = 0, cur_jiffies;
- 	unsigned int running, count1, count2;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index ae598ed86b50b..be7cc31d58961 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2232,6 +2232,22 @@ static inline unsigned int skb_pagelen(const struct sk_buff *skb)
+ 	return skb_headlen(skb) + __skb_pagelen(skb);
+ }
  
-+	cur_jiffies = jiffies;
- 	running = cable->running ^ cable->pause;
- 	if (running & (1 << SNDRV_PCM_STREAM_PLAYBACK)) {
--		delta_play = jiffies - dpcm_play->last_jiffies;
-+		delta_play = cur_jiffies - dpcm_play->last_jiffies;
- 		dpcm_play->last_jiffies += delta_play;
- 	}
- 
- 	if (running & (1 << SNDRV_PCM_STREAM_CAPTURE)) {
--		delta_capt = jiffies - dpcm_capt->last_jiffies;
-+		delta_capt = cur_jiffies - dpcm_capt->last_jiffies;
- 		dpcm_capt->last_jiffies += delta_capt;
- 	}
- 
++static inline void __skb_fill_page_desc_noacc(struct skb_shared_info *shinfo,
++					      int i, struct page *page,
++					      int off, int size)
++{
++	skb_frag_t *frag = &shinfo->frags[i];
++
++	/*
++	 * Propagate page pfmemalloc to the skb if we can. The problem is
++	 * that not all callers have unique ownership of the page but rely
++	 * on page_is_pfmemalloc doing the right thing(tm).
++	 */
++	frag->bv_page		  = page;
++	frag->bv_offset		  = off;
++	skb_frag_size_set(frag, size);
++}
++
+ /**
+  * __skb_fill_page_desc - initialise a paged fragment in an skb
+  * @skb: buffer containing fragment to be initialised
+@@ -2248,17 +2264,7 @@ static inline unsigned int skb_pagelen(const struct sk_buff *skb)
+ static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
+ 					struct page *page, int off, int size)
+ {
+-	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+-
+-	/*
+-	 * Propagate page pfmemalloc to the skb if we can. The problem is
+-	 * that not all callers have unique ownership of the page but rely
+-	 * on page_is_pfmemalloc doing the right thing(tm).
+-	 */
+-	frag->bv_page		  = page;
+-	frag->bv_offset		  = off;
+-	skb_frag_size_set(frag, size);
+-
++	__skb_fill_page_desc_noacc(skb_shinfo(skb), i, page, off, size);
+ 	page = compound_head(page);
+ 	if (page_is_pfmemalloc(page))
+ 		skb->pfmemalloc	= true;
+-- 
+2.35.1
+
 
 
