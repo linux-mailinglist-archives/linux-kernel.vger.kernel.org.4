@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EA15B7403
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BBA5B7479
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiIMPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S236025AbiIMPUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbiIMPNd (ORCPT
+        with ESMTP id S235681AbiIMPSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:13:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E042B78238;
-        Tue, 13 Sep 2022 07:33:08 -0700 (PDT)
+        Tue, 13 Sep 2022 11:18:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC1357224;
+        Tue, 13 Sep 2022 07:35:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ED5D614D9;
-        Tue, 13 Sep 2022 14:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CB85C433C1;
-        Tue, 13 Sep 2022 14:32:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3759614AA;
+        Tue, 13 Sep 2022 14:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156B7C433D6;
+        Tue, 13 Sep 2022 14:28:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079546;
-        bh=eCwaN/21W5acu4yeA53pjjrhreev07+tX5OCyrtfXOM=;
+        s=korg; t=1663079303;
+        bh=KunAitdqsNAr8OHLeGsc+rfXUt+DkWrQu4cvq4FpV7U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XvrnHWgsqD+YJJGN+CE1nsaz2VA+j+CXkr1nCDVHssjeGm6imlpXRpiju4zBCjHD3
-         fF6FbYALD8jQNXA2Dg1bd9U5PYRfA80gKGhtb9M7jYdQcHsecLf+tWr8GsZvCP2lzR
-         D6/AGnCvzDT8n+XdaAHPMy0drpb6D49u3+susOZU=
+        b=QeRW3xgsmkvXAYd24nHJL8EjDeqDGyI5y+sAgCxz5YlPa3/ekQfn4td5A3e8IYkFw
+         WulLqZGLVf2Ys7ALoxRyA33L6N3j1ydRSRhFbU9cTqrFR7OYiI4PUymafh0nULM/e7
+         wf/B1tt5nV0OQxCVlY+gt0fT8HILshBlSih///iw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 33/79] USB: serial: cp210x: add Decagon UCA device id
-Date:   Tue, 13 Sep 2022 16:06:51 +0200
-Message-Id: <20220913140350.508008181@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Kuyo Chang <kuyo.chang@mediatek.com>
+Subject: [PATCH 5.4 081/108] debugfs: add debugfs_lookup_and_remove()
+Date:   Tue, 13 Sep 2022 16:06:52 +0200
+Message-Id: <20220913140357.110806115@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,29 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit ceb4038472a4803e7046ed488b03d11551991514 upstream.
+commit dec9b2f1e0455a151a7293c367da22ab973f713e upstream.
 
-Add the device id for Decagon Devices USB Cable Adapter.
+There is a very common pattern of using
+debugfs_remove(debufs_lookup(..)) which results in a dentry leak of the
+dentry that was looked up.  Instead of having to open-code the correct
+pattern of calling dput() on the dentry, create
+debugfs_lookup_and_remove() to handle this pattern automatically and
+properly without any memory leaks.
 
-Link: https://lore.kernel.org/r/trinity-819f9db2-d3e1-40e9-a669-9c245817c046-1661523546680@msvc-mesg-web108
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Cc: stable <stable@kernel.org>
+Reported-by: Kuyo Chang <kuyo.chang@mediatek.com>
+Tested-by: Kuyo Chang <kuyo.chang@mediatek.com>
+Link: https://lore.kernel.org/r/YxIaQ8cSinDR881k@kroah.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/cp210x.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/debugfs/inode.c      |   22 ++++++++++++++++++++++
+ include/linux/debugfs.h |    6 ++++++
+ 2 files changed, 28 insertions(+)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -131,6 +131,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x10C4, 0x83AA) }, /* Mark-10 Digital Force Gauge */
- 	{ USB_DEVICE(0x10C4, 0x83D8) }, /* DekTec DTA Plus VHF/UHF Booster/Attenuator */
- 	{ USB_DEVICE(0x10C4, 0x8411) }, /* Kyocera GPS Module */
-+	{ USB_DEVICE(0x10C4, 0x8414) }, /* Decagon USB Cable Adapter */
- 	{ USB_DEVICE(0x10C4, 0x8418) }, /* IRZ Automation Teleport SG-10 GSM/GPRS Modem */
- 	{ USB_DEVICE(0x10C4, 0x846E) }, /* BEI USB Sensor Interface (VCP) */
- 	{ USB_DEVICE(0x10C4, 0x8470) }, /* Juniper Networks BX Series System Console */
+--- a/fs/debugfs/inode.c
++++ b/fs/debugfs/inode.c
+@@ -743,6 +743,28 @@ void debugfs_remove(struct dentry *dentr
+ EXPORT_SYMBOL_GPL(debugfs_remove);
+ 
+ /**
++ * debugfs_lookup_and_remove - lookup a directory or file and recursively remove it
++ * @name: a pointer to a string containing the name of the item to look up.
++ * @parent: a pointer to the parent dentry of the item.
++ *
++ * This is the equlivant of doing something like
++ * debugfs_remove(debugfs_lookup(..)) but with the proper reference counting
++ * handled for the directory being looked up.
++ */
++void debugfs_lookup_and_remove(const char *name, struct dentry *parent)
++{
++	struct dentry *dentry;
++
++	dentry = debugfs_lookup(name, parent);
++	if (!dentry)
++		return;
++
++	debugfs_remove(dentry);
++	dput(dentry);
++}
++EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
++
++/**
+  * debugfs_remove_recursive - recursively removes a directory
+  * @dentry: a pointer to a the dentry of the directory to be removed.  If this
+  *          parameter is NULL or an error value, nothing will be done.
+--- a/include/linux/debugfs.h
++++ b/include/linux/debugfs.h
+@@ -85,6 +85,8 @@ struct dentry *debugfs_create_automount(
+ void debugfs_remove(struct dentry *dentry);
+ void debugfs_remove_recursive(struct dentry *dentry);
+ 
++void debugfs_lookup_and_remove(const char *name, struct dentry *parent);
++
+ const struct file_operations *debugfs_real_fops(const struct file *filp);
+ 
+ int debugfs_file_get(struct dentry *dentry);
+@@ -216,6 +218,10 @@ static inline void debugfs_remove(struct
+ static inline void debugfs_remove_recursive(struct dentry *dentry)
+ { }
+ 
++static inline void debugfs_lookup_and_remove(const char *name,
++					     struct dentry *parent)
++{ }
++
+ const struct file_operations *debugfs_real_fops(const struct file *filp);
+ 
+ static inline int debugfs_file_get(struct dentry *dentry)
 
 
