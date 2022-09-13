@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1264A5B7B5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790905B7B81
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiIMTgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S229691AbiIMTgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiIMTfv (ORCPT
+        with ESMTP id S229575AbiIMTgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:35:51 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8606E2F65C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:34:13 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-348608c1cd3so111823187b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:34:13 -0700 (PDT)
+        Tue, 13 Sep 2022 15:36:20 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862061582F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:35:52 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id lc7so29966552ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 12:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=ZrnfMcG0b0qdMa/HG9lWVFWiMRD2rFKVvj8aOqoB5NA=;
-        b=jl+otp4drEgbzDYTQOVQCe/lGQ641MtaMVO7qinvKC5Z/Z0dR7bW2ruruvElf91Mza
-         rWIG6jxnLFpbzjxYmb5hdLxpqCph4WGtedV0jYKug9pvcFi9GKMNHWYQ3MhV7Z1j88yk
-         C6zM9+8uEYYRmMjCgT2yhu2soVB4o4GEEhV6Odeyn040LBTrLoxj9PC9Bi0MW8tbwkYI
-         korKEqKCSvt1O5ysUgMORQ32kUTSRx8d6O3P6JSNr0CgxHOGMjDy+FKt3dd0tgXbyMJQ
-         fFYaGkhOwh3jf1mzUPxBWJrYHZfFC32tZr/0bRlCZwAl2Snl3C6f92W1eOGwTq3xkwJJ
-         cGAA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DikkaX1eMP9ZVtNQsOxKO485i0cWxHC9sJM9iBVieQg=;
+        b=iebLfzpnAgVgDTeo4FkMpYs7e95HeKgoigV5IQSjBEYajBXi8rdPfOAOzj/MCubfqX
+         kA+mCudL+GqF06Qy6vqzDITflKDDQiadaEfHHLKrmP+y8jF8Z3Mh0EfiQltpL3q6IpF2
+         x/a1bGH6rLutemLQ7E/9JgAYSJFRKYNri0Dn+R+DT2qIW57Xi20s4AhSMs2CFlgExAuN
+         KFpUa88Wstu7S2RSvfCEoR0PJC5PBwZ5sWiJ1K8PBvPqEUOZIu30Xv6o8APiYg0NKoMx
+         DNDFZQRbXQvgDYLMrcoOZa8+cD0we4WBXtAH9MS3Ulo6vnBPC3aIrnNDig7XnbyJI8pe
+         Imyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZrnfMcG0b0qdMa/HG9lWVFWiMRD2rFKVvj8aOqoB5NA=;
-        b=H9/cSWjqnGmeG3SnRbLcS3nj8yTbKXrovbYd90LHnYtShA+Gwp9zLddl1HPpcvddHi
-         DGP/8Y0AhpxUoNJtyZZwKBjhyhduokpcjHrq451Ym+6r8TK47eR8NSDphq42TX+DysjV
-         Zc4T5tdaM4tBJATDyHtDAlVRfLAfMAwZruNHYusOf1/tZDVIjPkqOSVj1dL9T9Kbwnhp
-         IWdmEJ8J2D0ajHofEy7bKJ0UJUdpeAHYYioMKBB+PsbtWT7K6x4MnSHzxPa7oFIpXZAR
-         D8Rifl/tDR4iIH7g3oDy23EGmzRBNNQ3oewuqo13xbYbZ+z9yAkvs+udl7CXYgLZhRzi
-         A4lQ==
-X-Gm-Message-State: ACgBeo2yllz4I4fHoSA9mp8nXHHgTCHqYiozqhHnqJarnZU6AH0NQWi5
-        vazcrMguPkqOhDbJgSGqaCSngXAKHw==
-X-Google-Smtp-Source: AA6agR4LglXqDawoel4yrWBMkm6qEgbPHBpN7FxtOlMNyNGMQNx6OftnLwFFbJ4OUngWXoBIeukihYgGyg==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a05:6902:124d:b0:66d:5ce6:5924 with SMTP id
- t13-20020a056902124d00b0066d5ce65924mr28556708ybu.320.1663097652806; Tue, 13
- Sep 2022 12:34:12 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 12:33:22 -0700
-In-Reply-To: <CA+sZ8B8RStBhofQ0=vvzH5FeQ66fj90DdCj9EQSaVErbVPLi7g@mail.gmail.com>
-Mime-Version: 1.0
-References: <CA+sZ8B8RStBhofQ0=vvzH5FeQ66fj90DdCj9EQSaVErbVPLi7g@mail.gmail.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913193322.18776-1-nhuck@google.com>
-Subject: [PATCH v2] staging: r8188eu: Fix return type of rtw_xmit_entry
-From:   Nathan Huckleberry <nhuck@google.com>
-To:     namcaov@gmail.com
-Cc:     Larry.Finger@lwfinger.net, error27@gmail.com,
-        gregkh@linuxfoundation.org, insafonov@gmail.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        llvm@lists.linux.dev, makvihas@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, nhuck@google.com, paskripkin@gmail.com,
-        phil@philpotter.co.uk, saurav.girepunje@gmail.com, trix@redhat.com
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DikkaX1eMP9ZVtNQsOxKO485i0cWxHC9sJM9iBVieQg=;
+        b=6QJg2g+sbFY6uBkE+NwEVGlNhiPptuxjXk/uA6fQIrP0LSI4fmx3BnF+eaHujYmQVd
+         0H/gi8uLs1YwjnHz59jwr6mW7r/Fjm163eWOM3Qd2Rre0jdqFzHmMki8+akrzvPe2n1E
+         vaRZObdB0b8xFI1/c7Nt4LymADc26i+XKnqH6W+W5tmHyG1v0zLJ+Wle9dCmB9cQmK7B
+         PZfplCfNaeerjG/Y06MrzMqHoHHVDzUmmng0o4lsBRMrFVfvBCE/wFQ/AZQID1uZX35h
+         sXqU9vm7b2H+DtEV0Mp3w7vMzTo+zFhoAAEBhbw3M/WZTxt7+uXqVEnNrubr9NYvOfiv
+         /MbA==
+X-Gm-Message-State: ACgBeo064gnkWwV8cuAMDDvCkL0CR9PRyd1qn94zsAfiJhPBrkyGTroT
+        Pxir1o2r5EcdbuqYOeo0XEYmdiQKzFN/NMuBUY6OkQ==
+X-Google-Smtp-Source: AA6agR5Dx66JzXZShCx+13MMFBYDINkWlVg0Gc9OyUfkHEFDlSjd9IQpuCLgUR25O4gxCSx46xqJzlfhQkIUfhw/li4=
+X-Received: by 2002:a17:907:a079:b0:77b:8d9:9d9 with SMTP id
+ ia25-20020a170907a07900b0077b08d909d9mr11600925ejc.697.1663097751070; Tue, 13
+ Sep 2022 12:35:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAMRc=Me46b+Fjz_AAbZZVbaELjY6NGVfNE6mwueiKRTpYe98rA@mail.gmail.com>
+ <Yx8Bj0+4STpklMc2@sol> <CAMRc=Me=QxXRgZKyirj23r4hEN9bzcPSM6N4z=0yGgAZheh=Qg@mail.gmail.com>
+ <Yx/nG5YsyCa+VXoj@sol> <CAMRc=MfoZQV-aHKSkAw6d_jPPbjn==oR0LA=irjuWLGzQiRP-w@mail.gmail.com>
+ <YyCTmZocN/CY4Pg6@sol> <CAMRc=MdBRGW0skXOgPbZy=w4EiWcyKmKwKSZuAj+k4EtbPmvdg@mail.gmail.com>
+ <YyCZ7TN8fyVyuWXY@sol> <CAMRc=MfyD5iyfB5f5hx_Kq4p7NZv+0o8HVOysiy6DaKANpGNKQ@mail.gmail.com>
+ <YyCtI/WPngP9InsD@sol> <YyC4zq2YEmzQMkBL@smile.fi.intel.com>
+In-Reply-To: <YyC4zq2YEmzQMkBL@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Sep 2022 21:35:40 +0200
+Message-ID: <CAMRc=MfAF8cypMjp_G0L6VmBqED1Dc+Q3C-Ma4vCukL2pDZKpw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib: cdev: export the consumer's PID
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ndo_start_xmit field in net_device_ops is expected to be of type
-netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+On Tue, Sep 13, 2022 at 7:09 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Sep 14, 2022 at 12:17:39AM +0800, Kent Gibson wrote:
+> > On Tue, Sep 13, 2022 at 05:58:32PM +0200, Bartosz Golaszewski wrote:
+> > > On Tue, Sep 13, 2022 at 4:55 PM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> ...
+>
+> > > We'd need of course first expose that info like:
+> > >
+> > > gpio chip:gpiochip2 lines:0,3,4,7
+> > >
+> > > Does that make sense?
+> >
+> > Makes sense to me, though I don't claim to know anything about fdinfo
+> > field formatting.
+> >
+> > e.g. I also see fdinfo fields like this:
+> >
+> > eventfd-count:                0
+> > eventfd-id: 1
+> >
+> > so
+> >
+> > gpio-chip:  gpiochip2
+> > gpio-lines: 0,3,4,7
+> >
+> > might be ok too.
+>
+> Always think about two or more GPIO chips in the same process with 1 or more
+> lines requested from each of them.
+>
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
+That is fine because every file descriptor has its own fdinfo entry
+and so one entry can only contain information about a single request.
 
-The return type of rtw_xmit_entry should be changed from int to
-netdev_tx_t.
-
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-
-Changes v1 -> v2:
- - Rebased onto linux-next/master
-
----
- drivers/staging/r8188eu/core/rtw_xmit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 98864fc55b25..ea13f11b231b 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -2289,7 +2289,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
- 	return true;
- }
- 
--int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-+netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- {
- 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-@@ -2323,5 +2323,5 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- 	dev_kfree_skb_any(pkt);
- 
- exit:
--	return 0;
-+	return NETDEV_TX_OK;
- }
--- 
-2.37.2.789.g6183377224-goog
-
+Bart
