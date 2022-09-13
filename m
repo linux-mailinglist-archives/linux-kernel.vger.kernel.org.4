@@ -2,90 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ADC5B6BE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804C55B6BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 12:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiIMKqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 06:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S231753AbiIMKsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 06:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiIMKpy (ORCPT
+        with ESMTP id S231741AbiIMKsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:45:54 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473A24330B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:45:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t14so20102802wrx.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=y+BBxnKoWouAVhBZw8lJ2J6Kb99WrytidhJJguewIJ0=;
-        b=vcbcnOeM77RS/TlFUyx9du/9bqkZlxdb9lj9LYxyye8qvkT0L/zkVtzQodzWVvJK/N
-         B1POyYN5lM/1tH7IGhzNWLv9vGcqi6noaZ83MwKSoGnLB+hMG+JGvdP9JscWI1VbzHwL
-         nkk5ASmMwdLbnp6FPs2YPER7btwQ2qc5XGnlqTKKKsgsg/JbfHusIFDp48fIWX5crX6V
-         3vV8f/52JtUmqYyajAgn22zMUQBsDfN9iRHX7uNbipi3jnPb3out+BE5rwQjPvMEZlH7
-         ie+Tlzp+MNCkVUo3P3UwA+BdZlMbpgr27ciRA+0ElbZtUa7GrUJDbAA6yuzR94p19GIL
-         SdNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=y+BBxnKoWouAVhBZw8lJ2J6Kb99WrytidhJJguewIJ0=;
-        b=xIb0S5IQtC/7R/bTiDvL/solWbjA/QntiW9MGsDXL2oo4NXytXjSSCyO+ZUnp2WM50
-         NryNDWqNev1tiZcW9WoLLnqKiSzm6Gc5afV1K5j65IqE2kgnMbY1zwlgcINDxhHzO3KO
-         pfUTiHQBDhdKU3XionZJEvVMdnou3LWySaox276sl3Fs9gibNPx9tttamqL7ZsiFpMcL
-         4r3C223hJCi1TzrkQfsWQCIhO5pO1jnVNoVWox7GUWoZj4qfU3/1sMm47wLSERG8F5UB
-         42s87MYeYZV7ovQDHdTDAKGVlm9tlAQdqaTTR7IHZ2fPtvdozcfdVUVJn1dDDWxcPp/h
-         H2lw==
-X-Gm-Message-State: ACgBeo2i3kK54i8QxoFjgYVgOQevcvjALTYpVuyEdKsO+jt2eKzuhD7P
-        eOY46rzgU4vhA0lGyXPuRLQNPA==
-X-Google-Smtp-Source: AA6agR6GBqm41tfpUFo8c7vfgFrizDHLp2shQbi8UtlYJqZOFyBauxdYzQ+IiT+4oteAjUdlRpVEtQ==
-X-Received: by 2002:a05:6000:552:b0:228:6296:3b33 with SMTP id b18-20020a056000055200b0022862963b33mr19100885wrf.615.1663065950698;
-        Tue, 13 Sep 2022 03:45:50 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.70])
-        by smtp.gmail.com with ESMTPSA id i1-20020a05600c354100b003b497138093sm2149014wmq.47.2022.09.13.03.45.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 03:45:50 -0700 (PDT)
-Message-ID: <f35e2803-03d8-86ae-8049-074b3896f6d4@linaro.org>
-Date:   Tue, 13 Sep 2022 12:45:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V3 1/2] dt-bindings: clock: imx8m/imx93: introduce
- fsl,always-on-clocks property
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "abelvesa@kernel.org" <abelvesa@kernel.org>,
-        "abel.vesa@linaro.org" <abel.vesa@linaro.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Tue, 13 Sep 2022 06:48:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EEC5F220
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 03:47:58 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MRg7M61gsz14QTT;
+        Tue, 13 Sep 2022 18:43:59 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 13 Sep 2022 18:47:56 +0800
+Received: from DESKTOP-6NKE0BC.china.huawei.com (10.174.185.210) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 18:47:55 +0800
+From:   Kunkun Jiang <jiangkunkun@huawei.com>
+To:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oupton@google.com>
+CC:     <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220913092136.1706263-1-peng.fan@oss.nxp.com>
- <20220913092136.1706263-2-peng.fan@oss.nxp.com>
- <DU0PR04MB94170E9F1324C345A66C750688479@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU0PR04MB94170E9F1324C345A66C750688479@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: arch_timer: Fix the lack of set_next_event* for workaround of Cortex-A73 erratum 858921
+Date:   Tue, 13 Sep 2022 18:47:23 +0800
+Message-ID: <20220913104723.332-1-jiangkunkun@huawei.com>
+X-Mailer: git-send-email 2.26.2.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.210]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,12 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/09/2022 11:29, Peng Fan wrote:
-> Missed to cc: devicetree@vger.kernel.org
+The patch a38b71b0833e moves the programming of the timers from
+the countdown timer (TVAL) over to the comparator (CVAL). This
+makes it necessary to read the counter when setting next event.
+However, the workaround of Cortex-A73 erratum 858921 does not
+set the corresponding set_next_event_phys and set_next_event_virt.
+This patch fixes it.
 
-This does not work.
+Fixes: a38b71b0833e ("clocksource/drivers/arm_arch_timer: Move system register timer programming over to CVAL")
+Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+---
+ drivers/clocksource/arm_arch_timer.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Please resend.
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index 9ab8221ee3c6..ff935efb6a88 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -473,6 +473,8 @@ static const struct arch_timer_erratum_workaround ool_workarounds[] = {
+ 		.desc = "ARM erratum 858921",
+ 		.read_cntpct_el0 = arm64_858921_read_cntpct_el0,
+ 		.read_cntvct_el0 = arm64_858921_read_cntvct_el0,
++		.set_next_event_phys = erratum_set_next_event_phys,
++		.set_next_event_virt = erratum_set_next_event_virt,
+ 	},
+ #endif
+ #ifdef CONFIG_SUN50I_ERRATUM_UNKNOWN1
+-- 
+2.27.0
 
-Best regards,
-Krzysztof
