@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0185B72A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFDB5B707C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiIMO4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S233739AbiIMO0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiIMOyH (ORCPT
+        with ESMTP id S233690AbiIMOX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:54:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497AC72EC1;
-        Tue, 13 Sep 2022 07:27:01 -0700 (PDT)
+        Tue, 13 Sep 2022 10:23:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE066118;
+        Tue, 13 Sep 2022 07:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A922F61414;
-        Tue, 13 Sep 2022 14:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5BDDC4347C;
-        Tue, 13 Sep 2022 14:18:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 247D8CE1277;
+        Tue, 13 Sep 2022 14:14:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D38C433C1;
+        Tue, 13 Sep 2022 14:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078713;
-        bh=OYGIZzUf3tsRIRrsrVbwFTBCi+ghl60JeGakohJsvs8=;
+        s=korg; t=1663078438;
+        bh=YwyCy934OPQqHZ4UCWk+IgjuY/Cytd2eRVYocFrcypg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NboPBjg/oxeA9uv32J9a9SbB8IqIYVOV3YFTjY+5ADNLrZaHVmFo5fRvrytFuOey0
-         NUAWTqIC5JOORP64Ok7I4IRs/LVAuwRx0mQ9vaooVYYK+T1xUnd+qd0W0rky2idgFB
-         eQVQpSQsGPMkbccZzPrvIsroz7Mt+qlFxhZXHan0=
+        b=pfurDzdZCOB7kuTb+pylAVAYfVxM0jWAnjIljC8l3N+YbEw+MYYTnXyFci8h0zlwp
+         PFeyzdbgW4zS6YUl8aZ/3Ffa6vPB0ES3U5VBwnV0yNc03dDICqjHm99HO46pIsSM2Q
+         53D3oUsBNNU759pvysLTkLZ60SaRZtUYdHprZX6I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Brian Masney <bmasney@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 054/121] regulator: core: Clean up on enable failure
-Date:   Tue, 13 Sep 2022 16:04:05 +0200
-Message-Id: <20220913140359.678790053@linuxfoundation.org>
+Subject: [PATCH 5.19 140/192] RDMA/irdma: Report the correct max cqes from query device
+Date:   Tue, 13 Sep 2022 16:04:06 +0200
+Message-Id: <20220913140416.993301600@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Halaney <ahalaney@redhat.com>
+From: Sindhu-Devale <sindhu.devale@intel.com>
 
-[ Upstream commit c32f1ebfd26bece77141257864ed7b4720da1557 ]
+[ Upstream commit 12faad5e5cf2372af2d51f348b697b5edf838daf ]
 
-If regulator_enable() fails, enable_count is incremented still.
-A consumer, assuming no matching regulator_disable() is necessary on
-failure, will then get this error message upon regulator_put()
-since enable_count is non-zero:
+Report the correct max cqes available to an application taking
+into account a reserved entry to detect overflow.
 
-    [    1.277418] WARNING: CPU: 3 PID: 1 at drivers/regulator/core.c:2304 _regulator_put.part.0+0x168/0x170
-
-The consumer could try to fix this in their driver by cleaning up on
-error from regulator_enable() (i.e. call regulator_disable()), but that
-results in the following since regulator_enable() failed and didn't
-increment user_count:
-
-    [    1.258112] unbalanced disables for vreg_l17c
-    [    1.262606] WARNING: CPU: 4 PID: 1 at drivers/regulator/core.c:2899 _regulator_disable+0xd4/0x190
-
-Fix this by decrementing enable_count upon failure to enable.
-
-With this in place, just the reason for failure to enable is printed
-as expected and developers can focus on the root cause of their issue
-instead of thinking their usage of the regulator consumer api is
-incorrect. For example, in my case:
-
-    [    1.240426] vreg_l17c: invalid input voltage found
-
-Fixes: 5451781dadf8 ("regulator: core: Only count load for enabled consumers")
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-Link: https://lore.kernel.org/r/20220819194336.382740-1-ahalaney@redhat.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
+Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Link: https://lore.kernel.org/r/20220906223244.1119-2-shiraz.saleem@intel.com
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/irdma/verbs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index f4f28e5888b1c..43613db7af754 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -2688,13 +2688,18 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
-  */
- static int _regulator_handle_consumer_enable(struct regulator *regulator)
- {
-+	int ret;
- 	struct regulator_dev *rdev = regulator->rdev;
- 
- 	lockdep_assert_held_once(&rdev->mutex.base);
- 
- 	regulator->enable_count++;
--	if (regulator->uA_load && regulator->enable_count == 1)
--		return drms_uA_update(rdev);
-+	if (regulator->uA_load && regulator->enable_count == 1) {
-+		ret = drms_uA_update(rdev);
-+		if (ret)
-+			regulator->enable_count--;
-+		return ret;
-+	}
- 
- 	return 0;
- }
+diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
+index 227a799385d1d..4835702871677 100644
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -39,7 +39,7 @@ static int irdma_query_device(struct ib_device *ibdev,
+ 	props->max_send_sge = hw_attrs->uk_attrs.max_hw_wq_frags;
+ 	props->max_recv_sge = hw_attrs->uk_attrs.max_hw_wq_frags;
+ 	props->max_cq = rf->max_cq - rf->used_cqs;
+-	props->max_cqe = rf->max_cqe;
++	props->max_cqe = rf->max_cqe - 1;
+ 	props->max_mr = rf->max_mr - rf->used_mrs;
+ 	props->max_mw = props->max_mr;
+ 	props->max_pd = rf->max_pd - rf->used_pds;
 -- 
 2.35.1
 
