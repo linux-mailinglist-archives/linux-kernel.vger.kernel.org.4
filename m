@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCE15B740A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25DB5B740D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbiIMPRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S235731AbiIMPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235499AbiIMPOY (ORCPT
+        with ESMTP id S235875AbiIMPOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:14:24 -0400
+        Tue, 13 Sep 2022 11:14:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1601678BCA;
-        Tue, 13 Sep 2022 07:33:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B0BF64;
+        Tue, 13 Sep 2022 07:33:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A2F8614CE;
-        Tue, 13 Sep 2022 14:33:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41740C433D6;
-        Tue, 13 Sep 2022 14:33:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26578614D3;
+        Tue, 13 Sep 2022 14:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343B1C433D6;
+        Tue, 13 Sep 2022 14:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079631;
-        bh=vFvwAh1oiOsmNqlxm7mbIjC5CoxMOKLwzRwiX9I8R4Y=;
+        s=korg; t=1663079616;
+        bh=hpwTWqXXcPvP50paH3J/qzE6vS5vOWzr2EqlAbwu1Fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hXVdYWVl1YV86FABIcnRV0kMHWrEJfnOsCrP1H3cy7hJw6ugIdtD56MFn8tVCQllv
-         KFE/Pr1jrgetb+h6pBcvRWSB6iu5idwaBQAxF5zIWL57Th7pm6Rl0/vXyuxG4HbT3a
-         xRjdin+fZeA6lTKgKUlnZ3BCxLAzlcLaXO+hRT5g=
+        b=crKdKU+CXzlF6FsbOVyWMEshTlt7L5OCMD/p89vPqxljpTCMCa6dpt0kvKPqz3tcE
+         CXRMGmyu/nH8sQB6gCqbMsZSmsU0v7n1F/8xFF42vTifLDNhTdKXCLq+SywYSp//v6
+         kwjPRwp07afWYr1c+UaY9JG/krfvQ97pVvaR35Us=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 14/61] drm/i915/reg: Fix spelling mistake "Unsupport" -> "Unsupported"
-Date:   Tue, 13 Sep 2022 16:07:16 +0200
-Message-Id: <20220913140347.227530651@linuxfoundation.org>
+        stable@vger.kernel.org, Dongxiang Ke <kdx.glider@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 59/79] ALSA: usb-audio: Fix an out-of-bounds bug in __snd_usb_parse_audio_interface()
+Date:   Tue, 13 Sep 2022 16:07:17 +0200
+Message-Id: <20220913140351.747330421@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
-References: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Dongxiang Ke <kdx.glider@gmail.com>
 
-[ Upstream commit 233f56745be446b289edac2ba8184c09365c005e ]
+commit e53f47f6c1a56d2af728909f1cb894da6b43d9bf upstream.
 
-There is a spelling mistake in a gvt_vgpu_err error message. Fix it.
+There may be a bad USB audio device with a USB ID of (0x04fa, 0x4201) and
+the number of it's interfaces less than 4, an out-of-bounds read bug occurs
+when parsing the interface descriptor for this device.
 
-Fixes: 695fbc08d80f ("drm/i915/gvt: replace the gvt_err with gvt_vgpu_err")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20220315202449.2952845-1-colin.i.king@gmail.com
-Reviewed-by: Zhi Wang <zhi.a.wang@intel.com>
-Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix this by checking the number of interfaces.
+
+Signed-off-by: Dongxiang Ke <kdx.glider@gmail.com>
+Link: https://lore.kernel.org/r/20220906024928.10951-1-kdx.glider@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gvt/handlers.c | 2 +-
+ sound/usb/stream.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
-index a5bed2e71b926..2a6c3004ff6d9 100644
---- a/drivers/gpu/drm/i915/gvt/handlers.c
-+++ b/drivers/gpu/drm/i915/gvt/handlers.c
-@@ -601,7 +601,7 @@ static int update_fdi_rx_iir_status(struct intel_vgpu *vgpu,
- 	else if (FDI_RX_IMR_TO_PIPE(offset) != INVALID_INDEX)
- 		index = FDI_RX_IMR_TO_PIPE(offset);
- 	else {
--		gvt_vgpu_err("Unsupport registers %x\n", offset);
-+		gvt_vgpu_err("Unsupported registers %x\n", offset);
- 		return -EINVAL;
- 	}
+--- a/sound/usb/stream.c
++++ b/sound/usb/stream.c
+@@ -1111,7 +1111,7 @@ int snd_usb_parse_audio_interface(struct
+ 	 * Dallas DS4201 workaround: It presents 5 altsettings, but the last
+ 	 * one misses syncpipe, and does not produce any sound.
+ 	 */
+-	if (chip->usb_id == USB_ID(0x04fa, 0x4201))
++	if (chip->usb_id == USB_ID(0x04fa, 0x4201) && num >= 4)
+ 		num = 4;
  
--- 
-2.35.1
-
+ 	for (i = 0; i < num; i++) {
 
 
