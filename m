@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205C25B68C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445685B68C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiIMHh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S230026AbiIMHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiIMHhZ (ORCPT
+        with ESMTP id S229743AbiIMHja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:37:25 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269A57E2E;
-        Tue, 13 Sep 2022 00:37:23 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id v16so25422620ejr.10;
-        Tue, 13 Sep 2022 00:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=lzCjj4e1n9t9IQqzlLuW7nZyRLt7gzrz/oqLfcOYBJo=;
-        b=QAyx8P59UPICELew93zou/RH2Ml+kd2I7MRmcDtbbz5eEhudPk6ezVT+I4rqcvHjzh
-         EOALXHwNQ9hS9s0FcwvkO5KKVQX89qNB6JvTFWH6sR1LvndNJdnAIpk3gI0JW5ULodRN
-         PSPMEytd8qxx7RNmAAjZFKClYbIMnMg2qEEyjzbofj9QZG1NVKF5rJAT4KqMKjUSqytu
-         0t4boLURlDeJeGGqhqx/gvDmt1hUvuIPqYzpimRO3WhY1p4P1RGWWdq+LT9svwh7sSm5
-         PlHEcx5TEHIZPx/Vpl9iSWWla9mpXgvV3hqn56VBIcwI7ptul60KYlG4cfLqj3toTz2Q
-         51Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=lzCjj4e1n9t9IQqzlLuW7nZyRLt7gzrz/oqLfcOYBJo=;
-        b=A0pZprJ5K2pe10L35eQppCw12rsXsfxrc/14eXsOK2cSgVuM+YAkQZEjCgIme0NnlL
-         qHrYvf9xs0S2SFCPQo2fyZ/mnT1NnPxiZaTBKdX60EP0txj0OMsTIzt98Z5I5ucdbyDF
-         UsbcFvA/8KVRnmsq+V0gPW9GRs3rBKWAZdCF09fQOauWm8zlviEkkZ9EBW4gCRPIf6RX
-         MW4Jilbdu5vG4QZzw3tB6qmOur2Y5rZHi4F4vGRWSncyUCK2Q2rDoor9p0ITdvHwoWEH
-         wWfLbMdayNjP+m5eUXcqYsTgcfuesiGWUVIZloUGWJOkm9VYzn7+e9iWV+lOK5PNnKTh
-         jSlg==
-X-Gm-Message-State: ACgBeo0qNU3e1uQzyK9a5bfPn0DOVuQ1QyiVs6x6efKjtYvoWQ0Ywbjl
-        9NLn1runTSrHOSnqRYqq4NQ=
-X-Google-Smtp-Source: AA6agR5F+AIP1OradTbq3GgwPQDWo1ENqpICuNDTzLf0vNAx5BDUiZAweHJLerxTyQ+7k7Lsc/IvXg==
-X-Received: by 2002:a17:907:6e0b:b0:73d:5850:ca15 with SMTP id sd11-20020a1709076e0b00b0073d5850ca15mr21398115ejc.344.1663054642389;
-        Tue, 13 Sep 2022 00:37:22 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id e17-20020a170906249100b00778e3e2830esm191067ejb.9.2022.09.13.00.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 00:37:21 -0700 (PDT)
-Message-ID: <43059215-aa56-e8c5-53a4-143643058797@gmail.com>
-Date:   Tue, 13 Sep 2022 09:37:21 +0200
+        Tue, 13 Sep 2022 03:39:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DBA246
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:39:28 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oY0Vc-00046v-Sy; Tue, 13 Sep 2022 09:39:04 +0200
+Message-ID: <0660fff6d29c5f8251ac4f28d4badcfea91e6833.camel@pengutronix.de>
+Subject: Re: [PATCH] PCI: imx6: Fix wrong check in imx6_pcie_attach_pd()
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>, hongxing.zhu@nxp.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        shawnguo@kernel.org, bhelgaas@google.com, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 13 Sep 2022 09:39:03 +0200
+In-Reply-To: <20220913065910.15348-1-tangbin@cmss.chinamobile.com>
+References: <20220913065910.15348-1-tangbin@cmss.chinamobile.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 1/1] mtd: mtdpart: Fix cosmetic print
-To:     Adrian Zaharia <Adrian.Zaharia@windriver.com>,
-        linux-mtd@lists.infradead.org
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        jani.nurminen@windriver.com, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220825060407.335475-1-Adrian.Zaharia@windriver.com>
- <20220825060407.335475-2-Adrian.Zaharia@windriver.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20220825060407.335475-2-Adrian.Zaharia@windriver.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.08.2022 08:04, Adrian Zaharia wrote:
-> From: Jani Nurminen <jani.nurminen@windriver.com>
+Am Dienstag, dem 13.09.2022 um 14:59 +0800 schrieb Tang Bin:
+> In the function imx6_pcie_attach_pd(),
+> dev_pm_domain_attach_by_name() may return NULL in some cases,
+> so IS_ERR() doesn't meet the requirements. Thus fix it.
 > 
-> The print of the MTD partitions during boot are off-by-one for the size.
-> Fix this and show the real last offset.
+I don't like this added complexity in the driver. IHMO if there is a
+real issue, dev_pm_domain_attach_by_name() should just return a error
+code, instead of NULL. The fact that you need to pull a error code out
+of thin air in the driver is a big hint that this should be fixed in
+the called function, not in the return handling in the driver.
 
-I see that PCI subsystem and printk() + %pR do that. Probably more. I
-guess it makes sense but I'm also wondering if/how confusing is that
-change going to be for users. We did printing like that for probably
-dozens of years.
+A bit down the callstack genpd_dev_pm_attach_by_id() is called, which
+is documented like this "Returns the created virtual device if
+successfully attached PM domain, NULL when the device don't need a PM
+domain [...]". NULL is a valid return code, where the driver should
+_not_ stop probing, as the device should work without the power domain
+attached.
 
+Regards,
+Lucas
 
-> Fixes: 3d6f657ced2b ("mtd: mtdpart: Fix cosmetic print")
-
-I can't find that hash / commit anywhere. Are you sure it exists?
-
-
-> Signed-off-by: Jani Nurminen <jani.nurminen@windriver.com>
-> Signed-off-by: Adrian Zaharia <Adrian.Zaharia@windriver.com>
+> Fixes: 3f7cceeab895 ("PCI: imx: Add multi-pd support")
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
 > ---
->   drivers/mtd/mtdpart.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/pci/controller/dwc/pci-imx6.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/mtd/mtdpart.c b/drivers/mtd/mtdpart.c
-> index d442fa94c872..fab10e6d4171 100644
-> --- a/drivers/mtd/mtdpart.c
-> +++ b/drivers/mtd/mtdpart.c
-> @@ -118,7 +118,7 @@ static struct mtd_info *allocate_partition(struct mtd_info *parent,
->   		child->part.size = parent_size - child->part.offset;
->   
->   	printk(KERN_NOTICE "0x%012llx-0x%012llx : \"%s\"\n",
-> -	       child->part.offset, child->part.offset + child->part.size,
-> +	       child->part.offset, child->part.offset + child->part.size - 1,
->   	       child->name);
->   
->   	/* let's do some sanity checks */
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 6619e3caf..65d6ebbba 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -337,8 +337,8 @@ static int imx6_pcie_attach_pd(struct device *dev)
+>  		return 0;
+>  
+>  	imx6_pcie->pd_pcie = dev_pm_domain_attach_by_name(dev, "pcie");
+> -	if (IS_ERR(imx6_pcie->pd_pcie))
+> -		return PTR_ERR(imx6_pcie->pd_pcie);
+> +	if (IS_ERR_OR_NULL(imx6_pcie->pd_pcie))
+> +		return PTR_ERR(imx6_pcie->pd_pcie) ? : -ENODATA;
+>  	/* Do nothing when power domain missing */
+>  	if (!imx6_pcie->pd_pcie)
+>  		return 0;
+> @@ -352,8 +352,8 @@ static int imx6_pcie_attach_pd(struct device *dev)
+>  	}
+>  
+>  	imx6_pcie->pd_pcie_phy = dev_pm_domain_attach_by_name(dev, "pcie_phy");
+> -	if (IS_ERR(imx6_pcie->pd_pcie_phy))
+> -		return PTR_ERR(imx6_pcie->pd_pcie_phy);
+> +	if (IS_ERR_OR_NULL(imx6_pcie->pd_pcie_phy))
+> +		return PTR_ERR(imx6_pcie->pd_pcie_phy) ? : -ENODATA;
+>  
+>  	link = device_link_add(dev, imx6_pcie->pd_pcie_phy,
+>  			DL_FLAG_STATELESS |
+
 
