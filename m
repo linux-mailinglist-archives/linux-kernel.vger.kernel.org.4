@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33105B7102
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B20A5B71DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiIMOlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S232285AbiIMOqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiIMOio (ORCPT
+        with ESMTP id S234448AbiIMOng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:38:44 -0400
+        Tue, 13 Sep 2022 10:43:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7926B6C101;
-        Tue, 13 Sep 2022 07:20:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B3E6E88D;
+        Tue, 13 Sep 2022 07:23:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A028AB80FC6;
-        Tue, 13 Sep 2022 14:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00140C433C1;
-        Tue, 13 Sep 2022 14:20:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BD55B80F98;
+        Tue, 13 Sep 2022 14:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1997FC4347C;
+        Tue, 13 Sep 2022 14:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078814;
-        bh=rX8DFCe520ckxYWalAQaL8MPnRhwc0M3hmZOmRKOfCQ=;
+        s=korg; t=1663078987;
+        bh=7tnHMHAvB6M6JQRu1ixEhd0G1OkiuztOMfKoitV/3kQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ukib0dxeXuGlts21ZRwCyS24Nc4bBiKQTdmlHMILuRwaLii2DCgst1nLpNR6u1nxR
-         pK2YJCVsqYi2mp0gymU9LQCnZgRl/ljHw9BnZB0Ekw6/x5uTBeCknjJ2wmAaJNAPDW
-         eTOyde5reOfers0HBIu/ibOK3JhJ4YpGWZVwmaMg=
+        b=JZsB5IjqkuXzAZD5YgAxg1vPlhwMs9npealYFMtZmrk1niDnVUykYU6L+qPDxx8jQ
+         VyfQwFFEZBMHep/ReuGTlk2jmowtlSlTUCNF319i/ssaz3EEeXgP5MBLWHtTCeGMBV
+         hCHWQOGMeppm5GBA73C1SgETlPowstG0DkYrd3Xo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Nicklin <jnicklin@blockbridge.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/121] nvme-tcp: fix regression that causes sporadic requests to time out
-Date:   Tue, 13 Sep 2022 16:04:43 +0200
-Message-Id: <20220913140401.315082269@linuxfoundation.org>
+        stable@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 39/79] tee: fix compiler warning in tee_shm_register()
+Date:   Tue, 13 Sep 2022 16:04:44 +0200
+Message-Id: <20220913140352.179556183@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+From: Jens Wiklander <jens.wiklander@linaro.org>
 
-[ Upstream commit 3770a42bb8ceb856877699257a43c0585a5d2996 ]
+[ Upstream commit eccd7439709810127563e7e3e49b8b44c7b2791d ]
 
-When we queue requests, we strive to batch as much as possible and also
-signal the network stack that more data is about to be sent over a socket
-with MSG_SENDPAGE_NOTLAST. This flag looks at the pending requests queued
-as well as queue->more_requests that is derived from the block layer
-last-in-batch indication.
+Include <linux/uaccess.h> to avoid the warning:
+   drivers/tee/tee_shm.c: In function 'tee_shm_register':
+>> drivers/tee/tee_shm.c:242:14: error: implicit declaration of function 'access_ok' [-Werror=implicit-function-declaration]
+     242 |         if (!access_ok((void __user *)addr, length))
+         |              ^~~~~~~~~
+   cc1: some warnings being treated as errors
 
-We set more_request=true when we flush the request directly from
-.queue_rq submission context (in nvme_tcp_send_all), however this is
-wrongly assuming that no other requests may be queued during the
-execution of nvme_tcp_send_all.
-
-Due to this, a race condition may happen where:
-
- 1. request X is queued as !last-in-batch
- 2. request X submission context calls nvme_tcp_send_all directly
- 3. nvme_tcp_send_all is preempted and schedules to a different cpu
- 4. request Y is queued as last-in-batch
- 5. nvme_tcp_send_all context sends request X+Y, however signals for
-    both MSG_SENDPAGE_NOTLAST because queue->more_requests=true.
-
-==> none of the requests is pushed down to the wire as the network
-stack is waiting for more data, both requests timeout.
-
-To fix this, we eliminate queue->more_requests and only rely on
-the queue req_list and send_list to be not-empty.
-
-Fixes: 122e5b9f3d37 ("nvme-tcp: optimize network stack with setting msg flags according to batch size")
-Reported-by: Jonathan Nicklin <jnicklin@blockbridge.com>
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Tested-by: Jonathan Nicklin <jnicklin@blockbridge.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 573ae4f13f63 ("tee: add overflow check in register_shm_helper()")
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/tcp.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/tee/tee_shm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index 2c6e031135716..96d8d7844e846 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -119,7 +119,6 @@ struct nvme_tcp_queue {
- 	struct mutex		send_mutex;
- 	struct llist_head	req_list;
- 	struct list_head	send_list;
--	bool			more_requests;
- 
- 	/* recv state */
- 	void			*pdu;
-@@ -315,7 +314,7 @@ static inline void nvme_tcp_send_all(struct nvme_tcp_queue *queue)
- static inline bool nvme_tcp_queue_more(struct nvme_tcp_queue *queue)
- {
- 	return !list_empty(&queue->send_list) ||
--		!llist_empty(&queue->req_list) || queue->more_requests;
-+		!llist_empty(&queue->req_list);
- }
- 
- static inline void nvme_tcp_queue_request(struct nvme_tcp_request *req,
-@@ -334,9 +333,7 @@ static inline void nvme_tcp_queue_request(struct nvme_tcp_request *req,
- 	 */
- 	if (queue->io_cpu == raw_smp_processor_id() &&
- 	    sync && empty && mutex_trylock(&queue->send_mutex)) {
--		queue->more_requests = !last;
- 		nvme_tcp_send_all(queue);
--		queue->more_requests = false;
- 		mutex_unlock(&queue->send_mutex);
- 	}
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index 499fccba3d74b..6fb4400333fb4 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -9,6 +9,7 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/tee_drv.h>
++#include <linux/uaccess.h>
+ #include <linux/uio.h>
+ #include "tee_private.h"
  
 -- 
 2.35.1
