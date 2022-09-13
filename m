@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978F75B70CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3265B71FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiIMOaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S234734AbiIMOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiIMO2Y (ORCPT
+        with ESMTP id S234585AbiIMOtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:28:24 -0400
+        Tue, 13 Sep 2022 10:49:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7929A67C9B;
-        Tue, 13 Sep 2022 07:17:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D708070E5E;
+        Tue, 13 Sep 2022 07:25:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C667614D1;
-        Tue, 13 Sep 2022 14:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527C7C433D6;
-        Tue, 13 Sep 2022 14:16:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C5B5614B0;
+        Tue, 13 Sep 2022 14:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A341AC433C1;
+        Tue, 13 Sep 2022 14:23:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078577;
-        bh=8guZ+4hxP3YrjpzLGSrEfwndyXcBmqFTw3z1B112zxo=;
+        s=korg; t=1663079013;
+        bh=XfoVHhO2KwoVqCnflZpVxrBPhafIjjfzPTnfE+4PjpE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m9fCryFM9Or/RzGwYBX9Su/Xhfz77Ai5J77VykDB6WcUCxNN/aaF6JfKJVE2Edv0R
-         tWi+VOuf360nG/9begveCaenbrJNyKz5c+JRsuGcuoS8Vo/7aiNnwwy+XM/WDPLP5+
-         Nhuvw1zVudPw0hnvbNg+pr7HNgZTVj7fXpGqMn38=
+        b=D9z/j6/MN8qA+dcTH65z+k7ekzeQse0fi+B6kVCCnEKhOEdD8R+fq/9esOs4gEn5I
+         UIBsBN/HLp7sTmgYlBty5YJfA3pQ0fyVsy46/asUwWHnRP/fgT9NRGRYjcSWW7uNAx
+         qnappy6CDeuKHB8QwtbT/d99LFwj85R36tS101so=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
-Subject: [PATCH 5.19 187/192] arm64/bti: Disable in kernel BTI when cross section thunks are broken
+        stable@vger.kernel.org, Harsh Modi <harshmodi@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 48/79] netfilter: br_netfilter: Drop dst references before setting.
 Date:   Tue, 13 Sep 2022 16:04:53 +0200
-Message-Id: <20220913140419.378789636@linuxfoundation.org>
+Message-Id: <20220913140352.580765780@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+References: <20220913140350.291927556@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Harsh Modi <harshmodi@google.com>
 
-commit c0a454b9044fdc99486853aa424e5b3be2107078 upstream.
+[ Upstream commit d047283a7034140ea5da759a494fd2274affdd46 ]
 
-GCC does not insert a `bti c` instruction at the beginning of a function
-when it believes that all callers reach the function through a direct
-branch[1]. Unfortunately the logic it uses to determine this is not
-sufficiently robust, for example not taking account of functions being
-placed in different sections which may be loaded separately, so we may
-still see thunks being generated to these functions. If that happens,
-the first instruction in the callee function will result in a Branch
-Target Exception due to the missing landing pad.
+The IPv6 path already drops dst in the daddr changed case, but the IPv4
+path does not. This change makes the two code paths consistent.
 
-While this has currently only been observed in the case of modules
-having their main code loaded sufficiently far from their init section
-to require thunks it could potentially happen for other cases so the
-safest thing is to disable BTI for the kernel when building with an
-affected toolchain.
+Further, it is possible that there is already a metadata_dst allocated from
+ingress that might already be attached to skbuff->dst while following
+the bridge path. If it is not released before setting a new
+metadata_dst, it will be leaked. This is similar to what is done in
+bpf_set_tunnel_key() or ip6_route_input().
 
-[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
+It is important to note that the memory being leaked is not the dst
+being set in the bridge code, but rather memory allocated from some
+other code path that is not being freed correctly before the skb dst is
+overwritten.
 
-Reported-by: D Scott Phillips <scott@os.amperecomputing.com>
-[Bits of the commit message are lifted from his report & workaround]
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220905142255.591990-1-broonie@kernel.org
-Cc: <stable@vger.kernel.org> # v5.10+
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+An example of the leakage fixed by this commit found using kmemleak:
+
+unreferenced object 0xffff888010112b00 (size 256):
+  comm "softirq", pid 0, jiffies 4294762496 (age 32.012s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 80 16 f1 83 ff ff ff ff  ................
+    e1 4e f6 82 ff ff ff ff 00 00 00 00 00 00 00 00  .N..............
+  backtrace:
+    [<00000000d79567ea>] metadata_dst_alloc+0x1b/0xe0
+    [<00000000be113e13>] udp_tun_rx_dst+0x174/0x1f0
+    [<00000000a36848f4>] geneve_udp_encap_recv+0x350/0x7b0
+    [<00000000d4afb476>] udp_queue_rcv_one_skb+0x380/0x560
+    [<00000000ac064aea>] udp_unicast_rcv_skb+0x75/0x90
+    [<000000009a8ee8c5>] ip_protocol_deliver_rcu+0xd8/0x230
+    [<00000000ef4980bb>] ip_local_deliver_finish+0x7a/0xa0
+    [<00000000d7533c8c>] __netif_receive_skb_one_core+0x89/0xa0
+    [<00000000a879497d>] process_backlog+0x93/0x190
+    [<00000000e41ade9f>] __napi_poll+0x28/0x170
+    [<00000000b4c0906b>] net_rx_action+0x14f/0x2a0
+    [<00000000b20dd5d4>] __do_softirq+0xf4/0x305
+    [<000000003a7d7e15>] __irq_exit_rcu+0xc3/0x140
+    [<00000000968d39a2>] sysvec_apic_timer_interrupt+0x9e/0xc0
+    [<000000009e920794>] asm_sysvec_apic_timer_interrupt+0x16/0x20
+    [<000000008942add0>] native_safe_halt+0x13/0x20
+
+Florian Westphal says: "Original code was likely fine because nothing
+ever did set a skb->dst entry earlier than bridge in those days."
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Harsh Modi <harshmodi@google.com>
+Acked-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
+ net/bridge/br_netfilter_hooks.c | 2 ++
+ net/bridge/br_netfilter_ipv6.c  | 1 +
+ 2 files changed, 3 insertions(+)
 
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1884,6 +1884,8 @@ config ARM64_BTI_KERNEL
- 	depends on CC_HAS_BRANCH_PROT_PAC_RET_BTI
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94697
- 	depends on !CC_IS_GCC || GCC_VERSION >= 100100
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
-+	depends on !CC_IS_GCC
- 	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
- 	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
- 	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
+diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
+index 10a2c7bca7199..a718204c4bfdd 100644
+--- a/net/bridge/br_netfilter_hooks.c
++++ b/net/bridge/br_netfilter_hooks.c
+@@ -384,6 +384,7 @@ static int br_nf_pre_routing_finish(struct net *net, struct sock *sk, struct sk_
+ 				/* - Bridged-and-DNAT'ed traffic doesn't
+ 				 *   require ip_forwarding. */
+ 				if (rt->dst.dev == dev) {
++					skb_dst_drop(skb);
+ 					skb_dst_set(skb, &rt->dst);
+ 					goto bridged_dnat;
+ 				}
+@@ -413,6 +414,7 @@ static int br_nf_pre_routing_finish(struct net *net, struct sock *sk, struct sk_
+ 			kfree_skb(skb);
+ 			return 0;
+ 		}
++		skb_dst_drop(skb);
+ 		skb_dst_set_noref(skb, &rt->dst);
+ 	}
+ 
+diff --git a/net/bridge/br_netfilter_ipv6.c b/net/bridge/br_netfilter_ipv6.c
+index e4e0c836c3f51..6b07f30675bb0 100644
+--- a/net/bridge/br_netfilter_ipv6.c
++++ b/net/bridge/br_netfilter_ipv6.c
+@@ -197,6 +197,7 @@ static int br_nf_pre_routing_finish_ipv6(struct net *net, struct sock *sk, struc
+ 			kfree_skb(skb);
+ 			return 0;
+ 		}
++		skb_dst_drop(skb);
+ 		skb_dst_set_noref(skb, &rt->dst);
+ 	}
+ 
+-- 
+2.35.1
+
 
 
