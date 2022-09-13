@@ -2,84 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88445B7643
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A165B761D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiIMQSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S231383AbiIMQIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiIMQSO (ORCPT
+        with ESMTP id S231667AbiIMQIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:18:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9EEA4B07;
-        Tue, 13 Sep 2022 08:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C77614BD;
-        Tue, 13 Sep 2022 14:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88443C43140;
-        Tue, 13 Sep 2022 14:53:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663080803;
-        bh=/8WqCLI/wMTjSbA7iL9pUmar0F3oKI5oUzIn+3qnt+c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Li7BgVSfXOWDvCNi0CtS04TwNdrK+uzVPegNGktqG3WwwGe00CfDGUvLfGKqFkteV
-         pKg+LHSJ1UrHbQiuP0QPKIRYm5imQXjn65Ma2qlK1ZpDQLRy+JYyXNIilxebPwGlHq
-         T1cN+XJ9ZyrjHPHIM9Zj7OcO8GoQIEXx7UoxFLBzqG3G4zQbFNOMuGajsEsSWVrosm
-         fBR9kADARFhn2ZK20yvCPObWSF1cYrhVla8dbaDVGSVrh65gfmtYRKniLGZxCEjYbh
-         KSmHVnejSGXipu14cv/4Ue55Yx25PD9DfHpMN/QiwNnCsHiX9thcIV155ziN2O0Qwt
-         rjADueaqIgaRQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oY7Hv-0005PR-0J; Tue, 13 Sep 2022 16:53:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH] USB: serial: ftdi_sio: fix 300 bps rate for SIO
-Date:   Tue, 13 Sep 2022 16:53:12 +0200
-Message-Id: <20220913145312.20782-1-johan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 13 Sep 2022 12:08:15 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EFBF41
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:04:28 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so6497448pjk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=OJAIEjey9dL/oOlyHKJUty+rvUtRfrNcjV74l588HbE=;
+        b=nipjUGyopyRbnweevoI2Oq+FbDhrGlaD7wKP+k5xapkMVsoGweAQ6K2hQ8AZ+n3N71
+         J85U0qDe2D5AD8d1gpjf++nTpiIkyTFzNlFk+YTPVFtJCYSH/SE9jP8KJtPu7wQ0hfi5
+         wYDpgxyUrRwd1sYa/NGSuu4VudYk3GqiPthKN+bOi/ckST3RiIggvPeGp3bhm5p8ypVT
+         3f+MwrbGT4h/7a0VEnXrxvfZQW0KEOYcQaivu+1/UqQdLAEGFiH+0RbJHMUiEdIZPPCt
+         MhVMuPS1IGUUE+HBMjXHJM9fAUIO8mG1oaSP0/UpGjTZuC/UI7ZeIyP4hCCX4seU5+Tv
+         A0Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=OJAIEjey9dL/oOlyHKJUty+rvUtRfrNcjV74l588HbE=;
+        b=XZka5ZZRREgucJwxqOnBA9TDJhIZm3TkBQcYT70pfJpiARJ7RLIcTOkwosajj6HqMH
+         eQod6kDGMIWOzjFJbSKYxbmJsxoMU3wBj9Mg21oC/hbWmQ3dzWz/UmVImHvC6lB1qxPc
+         ln4hgkAwntI7MdMN4OfkQ0Fflq2SzMoJSu9o4XqHf8m48FMWZk9MmKEwYaiwyRCSekkg
+         xcTRcN7sBUM2o85+qY2w2Cwof0amSjHi9CVAGn3itFbcaxUu6H6uIlftc0wABdjov71r
+         NdXuV3zbDQaBCOQ6ST8/FutqgaUh9XZ3qf9aEX3PjOIlGbfg7e9H6hwtfbzU1phdXi7a
+         oBPg==
+X-Gm-Message-State: ACgBeo0C0pM66x7kzqWBUbgZn+qwYYqmIsn7AS4iot7AsjcDSbg7G9av
+        lOijqsNPLIj/LDuxRoara2qaFR3JMGMJTA==
+X-Google-Smtp-Source: AA6agR4hCeLSjZthMuJfgYlKUGutRaZadKKJTFOH4uT+lOP/oa9jwO7wbAgJCVwL7oqP3EbrVwcGew==
+X-Received: by 2002:a17:902:c7cc:b0:176:9fdd:ddb7 with SMTP id r12-20020a170902c7cc00b001769fddddb7mr32324812pla.150.1663080810301;
+        Tue, 13 Sep 2022 07:53:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k5-20020aa79985000000b00535d3caa66fsm7855085pfh.197.2022.09.13.07.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:53:29 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 14:53:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Elena Reshetova <elena.reshetova@intel.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YyCZZSyCrwXLLCD9@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
+ <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+ <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
+ <YyBQ+wzPtGwwRB/U@google.com>
+ <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 300 bps rate of SIO devices has been mapped to 9600 bps since
-2003... Let's fix the regression.
+On Tue, Sep 13, 2022, Kirill A. Shutemov wrote:
+> On Tue, Sep 13, 2022 at 09:44:27AM +0000, Sean Christopherson wrote:
+> > On Thu, Sep 08, 2022, Kirill A. Shutemov wrote:
+> > > On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
+> > > > On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
+> > > > > > I will try next week to rework it as shim to top of shmem. Does it work
+> > > > > > for you?
+> > > > > 
+> > > > > Yes, please do, thanks.  It's a compromise between us: the initial TDX
+> > > > > case has no justification to use shmem at all, but doing it that way
+> > > > > will help you with some of the infrastructure, and will probably be
+> > > > > easiest for KVM to extend to other more relaxed fd cases later.
+> > > > 
+> > > > Okay, below is my take on the shim approach.
+> > > > 
+> > > > I don't hate how it turned out. It is easier to understand without
+> > > > callback exchange thing.
+> > > > 
+> > > > The only caveat is I had to introduce external lock to protect against
+> > > > race between lookup and truncate.
+> > 
+> > As before, I think this lock is unnecessary.  Or at least it's unnessary to hold
+> > the lock across get/put.  The ->invalidate() call will ensure that the pfn is
+> > never actually used if get() races with truncation.
+> 
+> The updated version you replying to does not use the lock to protect
+> against truncation anymore. The lock protect notifier list.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ftdi_sio.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Gah, grabbed the patch when applying.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 52d59be92034..787e63fd7f99 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1319,8 +1319,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
- 		case 38400: div_value = ftdi_sio_b38400; break;
- 		case 57600: div_value = ftdi_sio_b57600;  break;
- 		case 115200: div_value = ftdi_sio_b115200; break;
--		} /* baud */
--		if (div_value == 0) {
-+		default:
- 			dev_dbg(dev, "%s - Baudrate (%d) requested is not supported\n",
- 				__func__,  baud);
- 			div_value = ftdi_sio_b9600;
--- 
-2.35.1
+> > Switching topics, what actually prevents mmapp() on the shim?  I tried to follow,
+> > but I don't know these areas well enough.
+> 
+> It has no f_op->mmap, so mmap() will fail with -ENODEV. See do_mmap().
+> (I did not read the switch statement correctly at first. Note there are
+> two 'fallthrough' there.)
 
+Ah, validate_mmap_request().  Thought not implementing ->mmap() was the key, but
+couldn't find the actual check.
+
+Thanks much!
