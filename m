@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E4E5B71B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A6C5B7490
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiIMOqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S236034AbiIMPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiIMOn4 (ORCPT
+        with ESMTP id S236013AbiIMPW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEEC6EF08;
-        Tue, 13 Sep 2022 07:23:20 -0700 (PDT)
+        Tue, 13 Sep 2022 11:22:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CC57C304;
+        Tue, 13 Sep 2022 07:37:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B626A614AE;
-        Tue, 13 Sep 2022 14:23:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C878FC433B5;
-        Tue, 13 Sep 2022 14:23:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8B7614B2;
+        Tue, 13 Sep 2022 14:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6773C4314B;
+        Tue, 13 Sep 2022 14:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079000;
-        bh=GXHCHdpxzsXoM8VvLKFzn6OMvfLVUZPJ9IDWiBJLpbU=;
+        s=korg; t=1663078896;
+        bh=ZCj8EpiWE4HdoEoR65ksFhQ1zBYwbSb8ZDqJZlmL7c8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xaxIiWGr1kvvshAMX94Sx+c/mrSUqchHe6h6w0LNIpDDxubCrGyLieb8jt79/qAdJ
-         DAYtoLmzVMVt9uMFktlr2SxoK4PduPgEYOS3gTvI8+AiefvAZk+AmrMZHNsMQ3sd+V
-         xC9I/mhhsdFTnQNkqmZr+3g0xIyCdyYgqpnwUYII=
+        b=vNnsLwNfwUuY1W1kuj/S42iF7r9r6uw9+FEQnpw/pZWfIevF0wxebaoYP8KUSKKX0
+         8URkf0/06RmMYcXT4AaM9ugYtjEGGNk5uAhLWNVLCbUyPAegNt7MZPWao3b8BqUyDT
+         eOfX75qXyDyd+T3tsSqQ0/fvXoQwy5r2Js87Bd5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 44/79] ARM: dts: at91: sama5d27_wlsom1: specify proper regulator output ranges
+Subject: [PATCH 5.15 098/121] sch_sfb: Also store skb len before calling child enqueue
 Date:   Tue, 13 Sep 2022 16:04:49 +0200
-Message-Id: <20220913140352.411086410@linuxfoundation.org>
+Message-Id: <20220913140401.565417803@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+References: <20220913140357.323297659@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Toke Høiland-Jørgensen <toke@toke.dk>
 
-[ Upstream commit addf7efec23af2b67547800aa232d551945e7de2 ]
+[ Upstream commit 2f09707d0c972120bf794cfe0f0c67e2c2ddb252 ]
 
-Min and max output ranges of regulators need to satisfy board
-requirements not PMIC requirements. Thus adjust device tree to
-cope with this.
+Cong Wang noticed that the previous fix for sch_sfb accessing the queued
+skb after enqueueing it to a child qdisc was incomplete: the SFB enqueue
+function was also calling qdisc_qstats_backlog_inc() after enqueue, which
+reads the pkt len from the skb cb field. Fix this by also storing the skb
+len, and using the stored value to increment the backlog after enqueueing.
 
-Fixes: 5d4c3cfb63fe ("ARM: dts: at91: sama5d27_wlsom1: add SAMA5D27 wlsom1 and wlsom1-ek")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220826083927.3107272-5-claudiu.beznea@microchip.com
+Fixes: 9efd23297cca ("sch_sfb: Don't assume the skb is still around after enqueueing to child")
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Acked-by: Cong Wang <cong.wang@bytedance.com>
+Link: https://lore.kernel.org/r/20220905192137.965549-1-toke@toke.dk
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ net/sched/sch_sfb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-index a06700e53e4c3..7f16d62bb1a1a 100644
---- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-+++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
-@@ -62,8 +62,8 @@
- 		regulators {
- 			vdd_3v3: VDD_IO {
- 				regulator-name = "VDD_IO";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -81,8 +81,8 @@
+diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+index 0d761f454ae8b..2829455211f8c 100644
+--- a/net/sched/sch_sfb.c
++++ b/net/sched/sch_sfb.c
+@@ -281,6 +281,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ {
  
- 			vddio_ddr: VDD_DDR {
- 				regulator-name = "VDD_DDR";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <1850000>;
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -104,8 +104,8 @@
- 
- 			vdd_core: VDD_CORE {
- 				regulator-name = "VDD_CORE";
--				regulator-min-microvolt = <600000>;
--				regulator-max-microvolt = <1850000>;
-+				regulator-min-microvolt = <1250000>;
-+				regulator-max-microvolt = <1250000>;
- 				regulator-initial-mode = <2>;
- 				regulator-allowed-modes = <2>, <4>;
- 				regulator-always-on;
-@@ -146,8 +146,8 @@
- 
- 			LDO1 {
- 				regulator-name = "LDO1";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-always-on;
- 
- 				regulator-state-standby {
-@@ -161,8 +161,8 @@
- 
- 			LDO2 {
- 				regulator-name = "LDO2";
--				regulator-min-microvolt = <1200000>;
--				regulator-max-microvolt = <3700000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
- 				regulator-always-on;
- 
- 				regulator-state-standby {
+ 	struct sfb_sched_data *q = qdisc_priv(sch);
++	unsigned int len = qdisc_pkt_len(skb);
+ 	struct Qdisc *child = q->qdisc;
+ 	struct tcf_proto *fl;
+ 	struct sfb_skb_cb cb;
+@@ -403,7 +404,7 @@ static int sfb_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 	memcpy(&cb, sfb_skb_cb(skb), sizeof(cb));
+ 	ret = qdisc_enqueue(skb, child, to_free);
+ 	if (likely(ret == NET_XMIT_SUCCESS)) {
+-		qdisc_qstats_backlog_inc(sch, skb);
++		sch->qstats.backlog += len;
+ 		sch->q.qlen++;
+ 		increment_qlen(&cb, q);
+ 	} else if (net_xmit_drop_count(ret)) {
 -- 
 2.35.1
 
