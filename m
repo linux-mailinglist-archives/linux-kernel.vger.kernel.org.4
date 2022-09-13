@@ -2,121 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651585B7CB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F285B7CBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiIMV2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 17:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S229639AbiIMVaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 17:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIMV2C (ORCPT
+        with ESMTP id S229630AbiIMVaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 17:28:02 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED7165578;
-        Tue, 13 Sep 2022 14:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Wscn5dkggvZiZ0wJ3zxOaRBw0qG01+CWesayzXtuhxc=; b=uiiEEkRan/uKyzQz8RRjZ6qsTd
-        Skdm5pIGzk82MJ7HYjaNnsLEnY6Clx6DqMnArzsqYvBMHjkucg5HPDfhf/aQchMAAZ0RX1w1Yl36H
-        k/peloic/wBt6QsuQa6xB39x2rGetD4azkJJEfGtX+QCd7DI4gPbvX02a3jliBrYDKpmvipcIy/47
-        jAIkserencOEgqU8Srlsiqy/SO8hjfvOUh5T5E19tXhjpgNUnGQjw0yD63B4+xTH/XqMm8/VIAN7v
-        kO7ugREAhPhUfFs74cx2fwDz7V9C/kVSTRtcsJzHcANGI1EAOQFGncXhB0CVqywMneSXAZzXp4cqq
-        xP+B7rRw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oYDRm-00Fy5C-2O;
-        Tue, 13 Sep 2022 21:27:58 +0000
-Date:   Tue, 13 Sep 2022 22:27:58 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     syzbot <syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in __d_instantiate
-Message-ID: <YyD13iRuhPDJypz8@ZenIV>
-References: <0000000000005c2d1f05e8945724@google.com>
+        Tue, 13 Sep 2022 17:30:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9850078;
+        Tue, 13 Sep 2022 14:30:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 563E9615CD;
+        Tue, 13 Sep 2022 21:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC8DC433B5;
+        Tue, 13 Sep 2022 21:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663104610;
+        bh=Zl+H9wn8tNQcuqY+u/39q2o9zAh6YN3JsvPLJz2NN/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=No4oZ6UQUVrpCT/GNJRpOnh4G6oMPwYbbO9pCW8w09def5UqD+XAoUTEc6rtH54ej
+         0ef2CO+iQ3TP/MHuz/KmD828xb1JnV/ulbs7onBmQCY4zLeLSU0iuN2uSGERWbZTDZ
+         QBGXCVRzSUD5gsiUQ/NwmVjVuMDl625HqEyXxMZzSUwLR2bcU/SnR8RRsS3YPK7mJd
+         MohBmknVTaayr51hYgbb1Tb/Y3ACCWsoXMQ9hfFyd4AcxhpkGCjcuU1TfYxZ1+BEqq
+         000sNl0NgVJKKVIpBS7zdCoJFbdVNffnFGw2CWingwsggKMPDR1PoeQk63AqwVoqTR
+         sxxCcURMV/rWw==
+Date:   Tue, 13 Sep 2022 16:30:07 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Iskren Chernev <iskren.chernev@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] arm64: dts: qcom: sm4250: Add support for
+ oneplus-billie2
+Message-ID: <20220913213007.gdk27nxjzmagbdzn@builder.lan>
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-10-iskren.chernev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000005c2d1f05e8945724@google.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220910143213.477261-10-iskren.chernev@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:51:42PM -0700, syzbot wrote:
-> Hello,
+On Sat, Sep 10, 2022 at 05:32:13PM +0300, Iskren Chernev wrote:
+> Add initial support for OnePlus Nord N100, based on SM4250. Currently
+> working:
+> - boots
+> - usb
+> - buildin flash storage (UFS)
+> - SD card reader
 > 
-> syzbot found the following issue on:
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 241 ++++++++++++++++++
+>  2 files changed, 242 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
 > 
-> HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16271d4f080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e79d82586727c5df
-> dashboard link: https://syzkaller.appspot.com/bug?extid=29dc75ed37be943c610e
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162474a7080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119b6b78880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/1436897f0dc0/disk-a6b44374.raw.xz
-> vmlinux: https://storage.googleapis.com/68c4de151fbb/vmlinux-a6b44374.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com
-> 
-> ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
-> ntfs3: loop0: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-> ntfs3: loop0: Failed to load $Extend.
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index f4126f7e7640..5d2570b600e0 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -137,6 +137,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> new file mode 100644
+> index 000000000000..b9094f1efca0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> @@ -0,0 +1,241 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 
-> Call trace:
->  d_flags_for_inode fs/dcache.c:1980 [inline]
->  __d_instantiate+0x2a0/0x2e4 fs/dcache.c:1998
->  d_instantiate fs/dcache.c:2036 [inline]
->  d_make_root+0x64/0xa8 fs/dcache.c:2071
->  ntfs_fill_super+0x1420/0x14a4 fs/ntfs/super.c:180
->  get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
->  ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
->  vfs_get_tree+0x40/0x140 fs/super.c:1530
->  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->  path_mount+0x358/0x914 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
->  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
->  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
->  el0t_64_sync+0x18c/0x190
-> Code: 79000688 52a00417 17ffff83 f9401288 (f9400508) 
-> ---[ end trace 0000000000000000 ]---
-> ----------------
-> Code disassembly (best guess):
->    0:	79000688 	strh	w8, [x20, #2]
->    4:	52a00417 	mov	w23, #0x200000              	// #2097152
->    8:	17ffff83 	b	0xfffffffffffffe14
->    c:	f9401288 	ldr	x8, [x20, #32]
-> * 10:	f9400508 	ldr	x8, [x8, #8] <-- trapping instruction
+Would it be possible for you to dual license this?
 
-at a guess - bollocksed inode; NULL ->i_op (should never happen; it takes actively
-assigning NULL to it, but apparently ntfs_read_mft() is that dumb), combined with
-candidate root inode somehow having S_IFLNK in ->i_mode.
+> +/*
+> + * Copyright (c) 2021, Iskren Chernev <iskren.chernev@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sm4250.dtsi"
+> +
+> +/ {
+> +	model = "OnePlus Nord N100";
+> +	compatible = "oneplus,billie2", "qcom,sm4250";
+> +
+> +	/* required for bootloader to select correct board */
+> +	qcom,msm-id = <0x1a1 0x10000 0x1bc 0x10000>;
+> +	qcom,board-id = <0x1000b 0x00>;
+> +
+> +	aliases {
+> +	};
+> +
+> +	chosen {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		stdout-path = "framebuffer0";
+> +
+> +		framebuffer0: framebuffer@9d400000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0 0x5c000000 0 (1600 * 720 * 4)>;
+> +			width = <720>;
+> +			height = <1600>;
+> +			stride = <(720 * 4)>;
+> +			format = "a8r8g8b8";
+> +		};
+> +	};
+> +};
+> +
+> +&xo_board {
+> +	clock-frequency = <19200000>;
+> +};
+> +
+> +&sleep_clk {
+> +	clock-frequency = <32764>;
+> +};
+> +
+> +&reserved_memory {
 
-At the very least,
-        inode->i_op = NULL;
-should *NEVER* be done; there is no legitimate reason to do that, no matter
-what.  ->i_op initially points to empty method table; it should never
-point to anything that is not an object of type struct inode_operations.
-In particular, it should never become NULL.
+As the number of nodes grow it would be nice if these were sorted
+alphabetically.
+
+> +	bootloader_log_mem: memory@5fff7000 {
+> +		reg = <0x00 0x5fff7000 0x00 0x8000>;
+> +		no-map;
+> +	};
+> +
+> +	ramoops@cbe00000 {
+> +		compatible = "ramoops";
+> +		reg = <0x0 0xcbe00000 0x0 0x400000>;
+> +		record-size = <0x40000>;
+> +		pmsg-size = <0x200000>;
+> +		console-size = <0x40000>;
+> +		ftrace-size = <0x40000>;
+> +	};
+> +
+> +	param_mem: memory@cc200000 {
+> +		reg = <0x00 0xcc200000 0x00 0x100000>;
+> +		no-map;
+> +	};
+> +
+> +	mtp_mem: memory@cc300000 {
+> +		reg = <0x00 0xcc300000 0x00 0xb00000>;
+> +		no-map;
+> +	};
+> +};
+> +
+> +&usb3 {
+> +	status = "okay";
+> +};
+[..]
+> +&rpm_requests {
+> +	regulators-0 {
+
+Is there a reason why you don't call this node pm6125-regulators ?
+
+> +		compatible = "qcom,rpm-pm6125-regulators";
+> +
+> +		vreg_s6a: s6 {
+> +			regulator-min-microvolt = <320000>;
+> +			regulator-max-microvolt = <1456000>;
+> +		};
+[..]
+> +		vreg_l24a: l24 {
+> +			regulator-min-microvolt = <2704000>;
+> +			regulator-max-microvolt = <3544000>;
+> +		};
+
+Just as a heads up, by not ensuring that your regulators are in
+high-power-mode you risk seeing brown-outs - something we keep running
+into for e.g. SD-cards.
+
+Regards,
+Bjorn
+
+> +	};
+> +};
+> -- 
+> 2.37.2
+> 
