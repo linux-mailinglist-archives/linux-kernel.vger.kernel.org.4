@@ -2,300 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC355B7C47
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEF25B7C4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiIMUqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S229605AbiIMUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIMUqL (ORCPT
+        with ESMTP id S229457AbiIMUuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 16:46:11 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14DF74CE6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:46:08 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id b23so10521478iof.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:46:08 -0700 (PDT)
+        Tue, 13 Sep 2022 16:50:09 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E36F551
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:50:07 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id y24-20020a17090aa41800b0020269fb74b0so10362802pjp.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 13:50:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=rq4Dj5U2n/e4bQ6bVsh9p/NIDkKotE6vqkg3NdNmgQc=;
-        b=yUNlr9V2VMlazKr2AFUIdojFJQe/1zwQBWRwnll4SMA6keT5/+NEOAnBaAezR3tZVS
-         uQsM7hUfAJLkLQtIlSn+L9G8p2V6fTeVRoq40rymniINmKHRNOaxpoyFQ0bUfPLc/mRa
-         /cLePv18SohOmhcpXlSMEDwSLQ57HB2DE9Vr+wZfQxjrBcd9pwKJ6Erv7AcyFK8NFXsH
-         hCUbPfL9M5KotHGvWK3C9g/IykV4t9KR5OVayPQmgARoOqlsUV8NJn9FW3YObjLEygyv
-         j0VDx3+XfCD7Uvi3RipL6BrtvhactxgVRp56SwnxzuaxdJlU3/dFCKZL1OlaIecwYjpE
-         NKJQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=gy3bDNBw7VQytEVRKZxZzrTdbmTEWTGJEIGOvnabvxo=;
+        b=MsIiTEcp0YKQ0q29PXoqrtM0XP78eU5bv/HJl7x4HzGd9dYG0kP/f4qqYx2Y6uYzoY
+         5AbqkdzAhgmKSpUJxqX0Q+2TINrtybI03WTeO7PPJEGii/QTaZPDWNWQbAkVG95RwPxB
+         pNN5fdf9XUlqBU+ojPKKznCDDWpTgI8Chdp4jSTdCqxUXMjg3thI+7oHCwp5cr2s42XR
+         4xvMKpMA+jtmz13XBoq2KVAa5idLwm0OukMDv5oHBwTOKinPYoaO5/4ByCwSs7+hzZ3T
+         9f2ehaWXoSF7eO5bHu8RzEEVC8UKYS0C6dcN5EyzxI7kEZEIN+IQvo43BkWd72iPNzjB
+         RZsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=rq4Dj5U2n/e4bQ6bVsh9p/NIDkKotE6vqkg3NdNmgQc=;
-        b=anz4RLB+wfrh4swGH23Zyzt+Mm55MlqqjDpBYyvoMy5E17SpZjkz7kmcZqZJHvB54s
-         0oHod4mURFt1bE7VoPaaWKmo3eR8/7MVay8nu3sOApAtt2SuJYjIK+pSttXo/h3/gvir
-         hngGLyaQCq25MeoHN7UZoe6uwfofcPpRPlqqFGv7xVOL1LamJThAG836S47DC8tiAxFI
-         1QXxNdnLUu/Zc/4R1iPiIdYk8lWoSDcD8lNb10ZaT5pW+J0fn+3r4O9ZMEyO24GYjXxg
-         nC8v9Ci5oI1ke1zNDGzsWxSV7I2qEUWs9j+yXyTz7vH9KdvCH5odAqzikt2Plob96HPu
-         CHOQ==
-X-Gm-Message-State: ACgBeo11TwzURMtBvXPpag3HXaDyDSEYa+e9ZdIrLpgrtqle/XHMfKAC
-        OpD6XG6w10ZIWFIpcBCFz0WZkg==
-X-Google-Smtp-Source: AA6agR77Zj3Vu6lJq4Cvl0xtEib+fKXSPapmzcGGo8o7qp5DuWg5m02BD9x6+7Jcv4Vx4D9hlLDjMg==
-X-Received: by 2002:a05:6602:c9:b0:6a1:4e25:8b0b with SMTP id z9-20020a05660200c900b006a14e258b0bmr4534623ioe.188.1663101967998;
-        Tue, 13 Sep 2022 13:46:07 -0700 (PDT)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id o35-20020a027423000000b0034286300316sm6009301jac.166.2022.09.13.13.46.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 13:46:06 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] net: ipa: properly limit modem routing table use
-Date:   Tue, 13 Sep 2022 15:46:02 -0500
-Message-Id: <20220913204602.1803004-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=gy3bDNBw7VQytEVRKZxZzrTdbmTEWTGJEIGOvnabvxo=;
+        b=a5WcmTquo1jzqzvZSodpeE22qrZGulikkiWCJogUp/BrP6+DD7x/0zZDLtK6q+XhvH
+         vhrKHOde7+Co0IJBdpxwnC89I58Ho8sbY+b4/GWxGUQLGogQIef034hqarbPNzDY85Q1
+         9oCjYRMSlupiiGJ4P0yyCfVt9iT/OETcxilPNNFZW5Knql/uRswwVdF2+MvVDcuqZvjv
+         B4R9lo0g6nMw0H+o3VUANLe9kK+ySe17LWmEVDanNZipJzZwzcFcV1Z3vxxKPweUO7P8
+         XFwbwjwasDkHXaofOOQRWd5b2f+/9k23ll1L/MM4m4lL99OwKGm7fn7APyfgURfwa6cc
+         K+GA==
+X-Gm-Message-State: ACgBeo2CBu2R0rkMT0vfrUJ3Fbf6f/CfeMnEK0YoQcMeEvc2O++b/Zn3
+        2u74bsnSNbV2CLlVck7IF/u4KBUmBAI=
+X-Google-Smtp-Source: AA6agR7qXuSHYsLoYdDFCEwxGLsUWKVrpzzkU4qHYq5nHGq6bSMKbnk8HCDo45F5/DCYdGcKhlMvvmxiEd0=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3f85])
+ (user=jthies job=sendgmr) by 2002:a05:6a00:1892:b0:540:acee:29e8 with SMTP id
+ x18-20020a056a00189200b00540acee29e8mr27129067pfh.1.1663102206357; Tue, 13
+ Sep 2022 13:50:06 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 20:49:54 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220913204954.2931042-1-jthies@google.com>
+Subject: [PATCH v4] platform/chrome: cros_ec: Notify the PM of wake events
+ during resume
+From:   Jameson Thies <jthies@google.com>
+To:     chrome-platform@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        Jameson Thies <jthies@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPA can route packets between IPA-connected entities.  The AP and
-modem are currently the only such entities supported, and no routing
-is required to transfer packets between them.
+cros_ec_handle_event in the cros_ec driver can notify the PM of wake
+events. When a device is suspended, cros_ec_handle_event will not check
+MKBP events. Instead, received MKBP events are checked during resume by
+cros_ec_report_events_during_suspend. But
+cros_ec_report_events_during_suspend cannot notify the PM if received
+events are wake events, causing wake events to not be reported if
+received while the device is suspended.
 
-The number of entries in each routing table is fixed, and defined at
-initialization time.  Some of these entries are designated for use
-by the modem, and the rest are available for the AP to use.  The AP
-sends a QMI message to the modem which describes (among other
-things) information about routing table memory available for the
-modem to use.
+Update cros_ec_report_events_during_suspend to notify the PM of wake
+events during resume by calling pm_wakeup_event.
 
-Currently the QMI initialization packet gives wrong information in
-its description of routing tables.  What *should* be supplied is the
-maximum index that the modem can use for the routing table memory
-located at a given location.  The current code instead supplies the
-total *number* of routing table entries.  Furthermore, the modem is
-granted the entire table, not just the subset it's supposed to use.
-
-This patch fixes this.  First, the ipa_mem_bounds structure is
-generalized so its "end" field can be interpreted either as a final
-byte offset, or a final array index.  Second, the IPv4 and IPv6
-(non-hashed and hashed) table information fields in the QMI
-ipa_init_modem_driver_req structure are changed to be ipa_mem_bounds
-rather than ipa_mem_array structures.  Third, we set the "end" value
-for each routing table to be the last index, rather than setting the
-"count" to be the number of indices.  Finally, instead of allowing
-the modem to use all of a routing table's memory, it is limited to
-just the portion meant to be used by the modem.  In all versions of
-IPA currently supported, that is IPA_ROUTE_MODEM_COUNT (8) entries.
-
-Update a few comments for clarity.
-
-Fixes: 530f9216a9537 ("soc: qcom: ipa: AP/modem communications")
-Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Jameson Thies <jthies@google.com>
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Reviewed-by: Benson Leung <bleung@chromium.org>
 ---
-v2: Update the element info arrays defining the modified QMI message
-    so it uses the ipa_mem_bounds_ei structure rather than the
-    ipa_mem_array_ei structure.  The message format is identical,
-    but the code was incorrect without that change.
 
- drivers/net/ipa/ipa_qmi.c     |  8 ++++----
- drivers/net/ipa/ipa_qmi_msg.c |  8 ++++----
- drivers/net/ipa/ipa_qmi_msg.h | 37 ++++++++++++++++++++---------------
- drivers/net/ipa/ipa_table.c   |  2 --
- drivers/net/ipa/ipa_table.h   |  3 +++
- 5 files changed, 32 insertions(+), 26 deletions(-)
+Changes since v1:
+- Updated wording in commit message from "Log" to "Notify PM of".
 
-diff --git a/drivers/net/ipa/ipa_qmi.c b/drivers/net/ipa/ipa_qmi.c
-index ec010cf2e816a..6f874f99b910c 100644
---- a/drivers/net/ipa/ipa_qmi.c
-+++ b/drivers/net/ipa/ipa_qmi.c
-@@ -308,12 +308,12 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
- 	mem = ipa_mem_find(ipa, IPA_MEM_V4_ROUTE);
- 	req.v4_route_tbl_info_valid = 1;
- 	req.v4_route_tbl_info.start = ipa->mem_offset + mem->offset;
--	req.v4_route_tbl_info.count = mem->size / sizeof(__le64);
-+	req.v4_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
+Changes since v2:
+- Removed Reviewed-by tag and provided more context for the update in
+  the commit message.
+
+Changes since v3:
+- Added reviewers back into commit message.
+---
+ drivers/platform/chrome/cros_ec.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d..110df0fd4b00 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -349,10 +349,16 @@ EXPORT_SYMBOL(cros_ec_suspend);
  
- 	mem = ipa_mem_find(ipa, IPA_MEM_V6_ROUTE);
- 	req.v6_route_tbl_info_valid = 1;
- 	req.v6_route_tbl_info.start = ipa->mem_offset + mem->offset;
--	req.v6_route_tbl_info.count = mem->size / sizeof(__le64);
-+	req.v6_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
- 
- 	mem = ipa_mem_find(ipa, IPA_MEM_V4_FILTER);
- 	req.v4_filter_tbl_start_valid = 1;
-@@ -352,7 +352,7 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
- 		req.v4_hash_route_tbl_info_valid = 1;
- 		req.v4_hash_route_tbl_info.start =
- 				ipa->mem_offset + mem->offset;
--		req.v4_hash_route_tbl_info.count = mem->size / sizeof(__le64);
-+		req.v4_hash_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
- 	}
- 
- 	mem = ipa_mem_find(ipa, IPA_MEM_V6_ROUTE_HASHED);
-@@ -360,7 +360,7 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
- 		req.v6_hash_route_tbl_info_valid = 1;
- 		req.v6_hash_route_tbl_info.start =
- 			ipa->mem_offset + mem->offset;
--		req.v6_hash_route_tbl_info.count = mem->size / sizeof(__le64);
-+		req.v6_hash_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
- 	}
- 
- 	mem = ipa_mem_find(ipa, IPA_MEM_V4_FILTER_HASHED);
-diff --git a/drivers/net/ipa/ipa_qmi_msg.c b/drivers/net/ipa/ipa_qmi_msg.c
-index 6838e8065072b..75d3fc0092e92 100644
---- a/drivers/net/ipa/ipa_qmi_msg.c
-+++ b/drivers/net/ipa/ipa_qmi_msg.c
-@@ -311,7 +311,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
- 		.tlv_type	= 0x12,
- 		.offset		= offsetof(struct ipa_init_modem_driver_req,
- 					   v4_route_tbl_info),
--		.ei_array	= ipa_mem_array_ei,
-+		.ei_array	= ipa_mem_bounds_ei,
- 	},
- 	{
- 		.data_type	= QMI_OPT_FLAG,
-@@ -332,7 +332,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
- 		.tlv_type	= 0x13,
- 		.offset		= offsetof(struct ipa_init_modem_driver_req,
- 					   v6_route_tbl_info),
--		.ei_array	= ipa_mem_array_ei,
-+		.ei_array	= ipa_mem_bounds_ei,
- 	},
- 	{
- 		.data_type	= QMI_OPT_FLAG,
-@@ -496,7 +496,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
- 		.tlv_type	= 0x1b,
- 		.offset		= offsetof(struct ipa_init_modem_driver_req,
- 					   v4_hash_route_tbl_info),
--		.ei_array	= ipa_mem_array_ei,
-+		.ei_array	= ipa_mem_bounds_ei,
- 	},
- 	{
- 		.data_type	= QMI_OPT_FLAG,
-@@ -517,7 +517,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
- 		.tlv_type	= 0x1c,
- 		.offset		= offsetof(struct ipa_init_modem_driver_req,
- 					   v6_hash_route_tbl_info),
--		.ei_array	= ipa_mem_array_ei,
-+		.ei_array	= ipa_mem_bounds_ei,
- 	},
- 	{
- 		.data_type	= QMI_OPT_FLAG,
-diff --git a/drivers/net/ipa/ipa_qmi_msg.h b/drivers/net/ipa/ipa_qmi_msg.h
-index 495e85abe50bd..9651aa59b5968 100644
---- a/drivers/net/ipa/ipa_qmi_msg.h
-+++ b/drivers/net/ipa/ipa_qmi_msg.h
-@@ -86,9 +86,11 @@ enum ipa_platform_type {
- 	IPA_QMI_PLATFORM_TYPE_MSM_QNX_V01	= 0x5,	/* QNX MSM */
- };
- 
--/* This defines the start and end offset of a range of memory.  Both
-- * fields are offsets relative to the start of IPA shared memory.
-- * The end value is the last addressable byte *within* the range.
-+/* This defines the start and end offset of a range of memory.  The start
-+ * value is a byte offset relative to the start of IPA shared memory.  The
-+ * end value is the last addressable unit *within* the range.  Typically
-+ * the end value is in units of bytes, however it can also be a maximum
-+ * array index value.
-  */
- struct ipa_mem_bounds {
- 	u32 start;
-@@ -129,18 +131,19 @@ struct ipa_init_modem_driver_req {
- 	u8			hdr_tbl_info_valid;
- 	struct ipa_mem_bounds	hdr_tbl_info;
- 
--	/* Routing table information.  These define the location and size of
--	 * non-hashable IPv4 and IPv6 filter tables.  The start values are
--	 * offsets relative to the start of IPA shared memory.
-+	/* Routing table information.  These define the location and maximum
-+	 * *index* (not byte) for the modem portion of non-hashable IPv4 and
-+	 * IPv6 routing tables.  The start values are byte offsets relative
-+	 * to the start of IPA shared memory.
- 	 */
- 	u8			v4_route_tbl_info_valid;
--	struct ipa_mem_array	v4_route_tbl_info;
-+	struct ipa_mem_bounds	v4_route_tbl_info;
- 	u8			v6_route_tbl_info_valid;
--	struct ipa_mem_array	v6_route_tbl_info;
-+	struct ipa_mem_bounds	v6_route_tbl_info;
- 
- 	/* Filter table information.  These define the location of the
- 	 * non-hashable IPv4 and IPv6 filter tables.  The start values are
--	 * offsets relative to the start of IPA shared memory.
-+	 * byte offsets relative to the start of IPA shared memory.
- 	 */
- 	u8			v4_filter_tbl_start_valid;
- 	u32			v4_filter_tbl_start;
-@@ -181,18 +184,20 @@ struct ipa_init_modem_driver_req {
- 	u8			zip_tbl_info_valid;
- 	struct ipa_mem_bounds	zip_tbl_info;
- 
--	/* Routing table information.  These define the location and size
--	 * of hashable IPv4 and IPv6 filter tables.  The start values are
--	 * offsets relative to the start of IPA shared memory.
-+	/* Routing table information.  These define the location and maximum
-+	 * *index* (not byte) for the modem portion of hashable IPv4 and IPv6
-+	 * routing tables (if supported by hardware).  The start values are
-+	 * byte offsets relative to the start of IPA shared memory.
- 	 */
- 	u8			v4_hash_route_tbl_info_valid;
--	struct ipa_mem_array	v4_hash_route_tbl_info;
-+	struct ipa_mem_bounds	v4_hash_route_tbl_info;
- 	u8			v6_hash_route_tbl_info_valid;
--	struct ipa_mem_array	v6_hash_route_tbl_info;
-+	struct ipa_mem_bounds	v6_hash_route_tbl_info;
- 
- 	/* Filter table information.  These define the location and size
--	 * of hashable IPv4 and IPv6 filter tables.  The start values are
--	 * offsets relative to the start of IPA shared memory.
-+	 * of hashable IPv4 and IPv6 filter tables (if supported by hardware).
-+	 * The start values are byte offsets relative to the start of IPA
-+	 * shared memory.
- 	 */
- 	u8			v4_hash_filter_tbl_start_valid;
- 	u32			v4_hash_filter_tbl_start;
-diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
-index 2f5a58bfc529a..69efe672ca528 100644
---- a/drivers/net/ipa/ipa_table.c
-+++ b/drivers/net/ipa/ipa_table.c
-@@ -108,8 +108,6 @@
- 
- /* Assignment of route table entries to the modem and AP */
- #define IPA_ROUTE_MODEM_MIN		0
--#define IPA_ROUTE_MODEM_COUNT		8
--
- #define IPA_ROUTE_AP_MIN		IPA_ROUTE_MODEM_COUNT
- #define IPA_ROUTE_AP_COUNT \
- 		(IPA_ROUTE_COUNT_MAX - IPA_ROUTE_MODEM_COUNT)
-diff --git a/drivers/net/ipa/ipa_table.h b/drivers/net/ipa/ipa_table.h
-index b6a9a0d79d68e..1538e2e1732fe 100644
---- a/drivers/net/ipa/ipa_table.h
-+++ b/drivers/net/ipa/ipa_table.h
-@@ -13,6 +13,9 @@ struct ipa;
- /* The maximum number of filter table entries (IPv4, IPv6; hashed or not) */
- #define IPA_FILTER_COUNT_MAX	14
- 
-+/* The number of route table entries allotted to the modem */
-+#define IPA_ROUTE_MODEM_COUNT	8
+ static void cros_ec_report_events_during_suspend(struct cros_ec_device *ec_dev)
+ {
++	bool wake_event;
 +
- /* The maximum number of route table entries (IPv4, IPv6; hashed or not) */
- #define IPA_ROUTE_COUNT_MAX	15
+ 	while (ec_dev->mkbp_event_supported &&
+-	       cros_ec_get_next_event(ec_dev, NULL, NULL) > 0)
++	       cros_ec_get_next_event(ec_dev, &wake_event, NULL) > 0) {
+ 		blocking_notifier_call_chain(&ec_dev->event_notifier,
+ 					     1, ec_dev);
++
++		if (wake_event && device_may_wakeup(ec_dev->dev))
++			pm_wakeup_event(ec_dev->dev, 0);
++	}
+ }
  
+ /**
 -- 
-2.34.1
+2.37.2.789.g6183377224-goog
 
