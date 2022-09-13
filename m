@@ -2,268 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F455B7663
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F8E5B776C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiIMQXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S232441AbiIMRMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbiIMQWc (ORCPT
+        with ESMTP id S232431AbiIMRLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:22:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90345A887
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 08:17:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 13 Sep 2022 13:11:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3CE719AD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:00:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C480134BE9;
-        Tue, 13 Sep 2022 15:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663082143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7J2Jd4H3GPutH4+ShyMvIVzVgAVZE6tCpqlVAu+xqFI=;
-        b=AhRs+oZa41+s7ruJI6lhJAsQvmlxd4I5sgmxjoFGp0ZfeGp6RHldFnjd2v/1B9YTL+s3KL
-        v3I7PmnaizoYtCYUcK1RvgeGXzCQpjz5kXLun+TF+wupfBc6eeOZvUZw+QfwDXDr1g26Ub
-        lc461RZjgi62k0A+x52vK6olvdyhcE8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663082143;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7J2Jd4H3GPutH4+ShyMvIVzVgAVZE6tCpqlVAu+xqFI=;
-        b=5OCofS457baWjev5XN8SEb7zCIFCfe7gb0cIPlKIezFPyb3Pxzq7M3Q1ZItah0ROxnjnzG
-        5Qlmd6K5QIqySqDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A51C1139B3;
-        Tue, 13 Sep 2022 15:15:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HPNhJ5+eIGN7UAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 13 Sep 2022 15:15:43 +0000
-Message-ID: <f644c43e-0c84-d7e3-90af-af269e9eb6e2@suse.de>
-Date:   Tue, 13 Sep 2022 17:15:42 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43CE6B80F6F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 15:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C16C433D6;
+        Tue, 13 Sep 2022 15:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663082129;
+        bh=9574kaSGiUpQ1RKeeeAf7bmjgJV7cpo3A99ptlG2Ccw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GVQSXgc1SwLvIiJiCD5KSewwiyO4s7/WwES4cFEGdhdMky9qaTLL60W9Vc26N/h9v
+         GHbMU5y75SAmzHJCbiS6FfBkGlbLICQIbmzIBpQnkFzfEhthi68ASmLBPuHJZPbvIu
+         d1usMpJZcffYdQgkkQJrJlMVzwiEhdTNP+i3JP0s=
+Date:   Tue, 13 Sep 2022 17:15:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
+Message-ID: <YyCequVJnV3p0Cpw@kroah.com>
+References: <YuqDMLF2AQyj4+N1@kroah.com>
+ <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
+ <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] drm/plane-helper: Add a
- drm_plane_helper_atomic_check() helper
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-References: <20220913093339.106625-1-javierm@redhat.com>
- <b81591c4-934c-4b70-fbf0-b0f4663a6d1c@amd.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <b81591c4-934c-4b70-fbf0-b0f4663a6d1c@amd.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------DiouCn0RWPGokSIcWyoFJqyE"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------DiouCn0RWPGokSIcWyoFJqyE
-Content-Type: multipart/mixed; boundary="------------nI0vA6GHU8Q0GeFg50qARSlq";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Harry Wentland <harry.wentland@amd.com>,
- Javier Martinez Canillas <javierm@redhat.com>, linux-kernel@vger.kernel.org
-Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-Message-ID: <f644c43e-0c84-d7e3-90af-af269e9eb6e2@suse.de>
-Subject: Re: [PATCH v2] drm/plane-helper: Add a
- drm_plane_helper_atomic_check() helper
-References: <20220913093339.106625-1-javierm@redhat.com>
- <b81591c4-934c-4b70-fbf0-b0f4663a6d1c@amd.com>
-In-Reply-To: <b81591c4-934c-4b70-fbf0-b0f4663a6d1c@amd.com>
+On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
+> On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > > Saravana Kannan (11):
+> > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
+> > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
+> > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
+> > >       driver core: Add wait_for_init_devices_probe helper function
+> > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+> > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
+> > >       driver core: Set fw_devlink.strict=1 by default
+> > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
+> > >       driver core: Delete driver_deferred_probe_check_state()
+> > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
+> > >       of: base: Avoid console probe delay when fw_devlink.strict=1
+> >
+> > The last patch in this list regresses my HoneyComb LX2K (ironically
+> > the machine I do maintainer work on). It stops PCIe from probing, but
+> > without a single message indicating why.
+> >
+> > The reason seems to be that the iommu-maps property doesn't get
+> > patched up by my (older) u-boot, and thus isn't a valid reference.
+> > System works fine without IOMMU, which is how I've ran it for a couple
+> > of years.
+> >
+> > It's also extremely hard to diagnose out of the box because there are
+> > *no error messages*. And there were no warnings leading up to this
+> > strict enforcement.
+> >
+> > This "feature" seems to have been done backwards. The checks should
+> > have been running (and not skipped due to the "optional" flag), but
+> > also not causing errors, just warnings. That would have given users a
+> > chance to know that this is something that needs to be fixed.
+> >
+> > And when you flip the switch, at least report what failed so that
+> > people don't need to spend a whole night bisecting kernels, please.
+> >
+> > Greg, mind reverting just the last one? If I hit this, I presume
+> > others would too.
+> 
+> Apologies, wrong patch pointed out. The culprit is "driver core: Set
+> fw_devlink.strict=1 by default", 71066545b48e42.
 
---------------nI0vA6GHU8Q0GeFg50qARSlq
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Is this still an issue in -rc5?  A number of patches in the above series
+was just reverted and hopefully should have resolved the issue you are
+seeing.
 
-SGkNCg0KQW0gMTMuMDkuMjIgdW0gMTU6NDkgc2NocmllYiBIYXJyeSBXZW50bGFuZDoNCj4g
-DQo+IA0KPiBPbiAyMDIyLTA5LTEzIDA1OjMzLCBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMg
-d3JvdGU6DQo+PiBQcm92aWRlcyBhIGRlZmF1bHQgcGxhbmUgc3RhdGUgY2hlY2sgaGFuZGxl
-ciBmb3IgcHJpbWFyeSBwbGFuZXMgdGhhdCBhcmUgYQ0KPj4gZnVsbHNjcmVlbiBzY2Fub3V0
-IGJ1ZmZlciBhbmQgd2hvc2Ugc3RhdGUgc2NhbGUgYW5kIHBvc2l0aW9uIGNhbid0IGNoYW5n
-ZS4NCj4+DQo+IA0KPiBFdmVuIHRob3VnaCB0aGlzIG1pZ2h0IGJlIGhvdyBzb21lIGRyaXZl
-cnMgYXJlIGhhbmRsaW5nIHRoZSBwcmltYXJ5DQo+IHBsYW5lIHRoaXMgYXNzdW1wdGlvbiBp
-cyBub3QgdW5pdmVyc2FsLiBGb3IgZXhhbXBsZSwgb24gQ2hyb21lT1Mgd2hlbg0KPiB0aGUg
-KGRlZmF1bHQpIHVuZGVybGF5IHN0cmF0ZWd5IGlzIHNlbGVjdGVkIHRoZSBjb21wb3NpdG9y
-IHdpbGwNCj4gcG9zaXRpb24gdGhlIHZpZGVvIHBsYW5lIGFzIHRoZSBib3R0b20tbW9zdCBw
-bGFuZSBhbmQgbWFyayBpdA0KPiBhcyBwcmltYXJ5LCB3aGlsZSB0aGUgZGVza3RvcCBwbGFu
-ZSBpcyBtYXJrZWQgYXMgb3ZlcmxheSBhbmQNCj4gd2lsbCBjb250YWluIGFuIGFscGhhIGN1
-dG91dCB0byBzaG93IHRoZSB1bmRlcmx5aW5nIHZpZGVvLg0KPiANCj4gSW4gdGhpcyBjYXNl
-IHRoZSB2aWRlbyBwbGFuZSAocHJpbWFyeSkgd29uJ3Qgc3BhbiB0aGUgc2NyZWVuDQo+IGFu
-ZCBpcyByZWd1bGFybHkgcGFubmVkIGFuZCByZXNpemVkLg0KPiANCj4gTm8gb2JqZWN0aW9u
-cyB0byB0aGlzIGNoYW5nZSBhcyBpdCBoZWxwcyBzaGFyZSBjb2RlIGJldHdlZW4gZHJpdmVy
-cywNCj4gYnV0IG1heWJlIHNwZWNpZnkgdGhhdCB0aGlzIGJlaGF2aW9yIGlzIGEgdW5pcXVl
-IHJlcXVpcmVtZW50IG9mDQo+IHRoZXNlIGRyaXZlcnMuDQo+IA0KPiBIYXJyeQ0KPiANCj4+
-IFRoZXJlIGFyZSBzb21lIGRyaXZlcnMgdGhhdCBkdXBsaWNhdGUgdGhpcyBsb2dpYyBpbiB0
-aGVpciBoZWxwZXJzLCBzdWNoIGFzDQo+PiBzaW1wbGVkcm0gYW5kIHNzZDEzMHguIEZhY3Rv
-ciBvdXQgdGhpcyBjb21tb24gY29kZSBpbnRvIGEgcGxhbmUgaGVscGVyIGFuZA0KPj4gbWFr
-ZSBkcml2ZXJzIHVzZSBpdC4NCj4+DQo+PiBTdWdnZXN0ZWQtYnk6IFRob21hcyBaaW1tZXJt
-YW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1h
-cnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQo+PiAtLS0NCj4+DQo+PiBD
-aGFuZ2VzIGluIHYyOg0KPj4gLSBGaXggYG5ld19zdGF0ZWAgZmllbGQgY29tbWVudCAoVmls
-bGUgU3lyasOkbMOkKS4NCj4+IC0gUmVuYW1lIGBuZXdfc3RhdGVgIHRvIGp1c3QgYHN0YXRl
-YCAoVmlsbGUgU3lyasOkbMOkKS4NCj4+DQo+PiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fcGxh
-bmVfaGVscGVyLmMgfCAyOCArKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+PiAgIGRy
-aXZlcnMvZ3B1L2RybS9zb2xvbW9uL3NzZDEzMHguYyAgfCAxOCArLS0tLS0tLS0tLS0tLS0t
-LS0NCj4+ICAgZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMgICB8IDI1ICstLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+ICAgaW5jbHVkZS9kcm0vZHJtX3BsYW5lX2hlbHBl
-ci5oICAgICB8ICAxICsNCj4+ICAgNCBmaWxlcyBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCsp
-LCA0MSBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L2RybV9wbGFuZV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fcGxhbmVfaGVscGVy
-LmMNCj4+IGluZGV4IGM3Nzg1OTY3ZjViZi4uMjE2NTM5MDg2M2Y0IDEwMDY0NA0KPj4gLS0t
-IGEvZHJpdmVycy9ncHUvZHJtL2RybV9wbGFuZV9oZWxwZXIuYw0KPj4gKysrIGIvZHJpdmVy
-cy9ncHUvZHJtL2RybV9wbGFuZV9oZWxwZXIuYw0KPj4gQEAgLTI3OCwzICsyNzgsMzEgQEAg
-dm9pZCBkcm1fcGxhbmVfaGVscGVyX2Rlc3Ryb3koc3RydWN0IGRybV9wbGFuZSAqcGxhbmUp
-DQo+PiAgIAlrZnJlZShwbGFuZSk7DQo+PiAgIH0NCj4+ICAgRVhQT1JUX1NZTUJPTChkcm1f
-cGxhbmVfaGVscGVyX2Rlc3Ryb3kpOw0KPj4gKw0KPj4gKy8qKg0KPj4gKyAqIGRybV9wbGFu
-ZV9oZWxwZXJfYXRvbWljX2NoZWNrKCkgLSBIZWxwZXIgdG8gY2hlY2sgcHJpbWFyeSBwbGFu
-ZXMgc3RhdGVzDQo+PiArICogQHBsYW5lOiBwbGFuZSB0byBjaGVjaw0KPj4gKyAqIEBzdGF0
-ZTogYXRvbWljIHN0YXRlIG9iamVjdA0KPj4gKyAqDQo+PiArICogUHJvdmlkZXMgYSBkZWZh
-dWx0IHBsYW5lIHN0YXRlIGNoZWNrIGhhbmRsZXIgZm9yIHByaW1hcnkgcGxhbmVzIHdob3Nl
-IGF0b21pYw0KDQoncGxhbmUtc3RhdGUnDQoNCidhdG9taWMtc3RhdGUgc2NhbGUgYW5kIHBv
-c2l0aW9uaW5nIHByb3BlcnRpZXMgYXJlIG5vdCBleHBlY3RlZCB0byBjaGFuZ2UnDQoNCj4+
-ICsgKiBzdGF0ZSBzY2FsZSBhbmQgcG9zaXRpb24gaXMgbm90IGV4cGVjdGVkIHRvIGNoYW5n
-ZSBiZWNhdXNlIHRoZSBwcmltYXJ5IHBsYW5lDQo+PiArICogaXMgYWx3YXlzIGEgZnVsbHNj
-cmVlbiBzY2Fub3V0IGJ1ZmZlci4NCg0KQUZBSUNUIHRoZSBkb2NzIGNsZWFybHkgc3RhdGUg
-dGhlIHB1cnBvc2Ugb2YgdGhlIGhlbHBlci4gTWF5YmUgc2F5IA0KJ3BsYW5lJyBpbnN0ZWFk
-IG9mICdwcmltYXJ5IHBsYW5lJyBpbiB0aGUgZG9jcyBhbmQgYWRkIGEgc2VudGVuY2UgbGlr
-ZSANCidUaGlzIGlzIG9mdGVuIHRoZSBjYXNlIGZvciB0aGUgcHJpbWFyeSBwbGFuZSBvZiBz
-aW1wbGUgZnJhbWVidWZmZXJzLicNCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5u
-IDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+PiAr
-ICoNCj4+ICsgKiBSRVRVUk5TOg0KPj4gKyAqIFplcm8gb24gc3VjY2Vzcywgb3IgYW4gZXJy
-bm8gY29kZSBvdGhlcndpc2UuDQo+PiArICovDQo+PiAraW50IGRybV9wbGFuZV9oZWxwZXJf
-YXRvbWljX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLCBzdHJ1Y3QgZHJtX2F0b21p
-Y19zdGF0ZSAqc3RhdGUpDQo+PiArew0KPj4gKwlzdHJ1Y3QgZHJtX3BsYW5lX3N0YXRlICpu
-ZXdfcGxhbmVfc3RhdGUgPSBkcm1fYXRvbWljX2dldF9uZXdfcGxhbmVfc3RhdGUoc3RhdGUs
-IHBsYW5lKTsNCj4+ICsJc3RydWN0IGRybV9jcnRjICpuZXdfY3J0YyA9IG5ld19wbGFuZV9z
-dGF0ZS0+Y3J0YzsNCj4+ICsJc3RydWN0IGRybV9jcnRjX3N0YXRlICpuZXdfY3J0Y19zdGF0
-ZSA9IE5VTEw7DQo+PiArDQo+PiArCWlmIChuZXdfY3J0YykNCj4+ICsJCW5ld19jcnRjX3N0
-YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X2NydGNfc3RhdGUoc3RhdGUsIG5ld19jcnRjKTsN
-Cj4+ICsNCj4+ICsJcmV0dXJuIGRybV9hdG9taWNfaGVscGVyX2NoZWNrX3BsYW5lX3N0YXRl
-KG5ld19wbGFuZV9zdGF0ZSwgbmV3X2NydGNfc3RhdGUsDQo+PiArCQkJCQkJICAgRFJNX1BM
-QU5FX05PX1NDQUxJTkcsDQo+PiArCQkJCQkJICAgRFJNX1BMQU5FX05PX1NDQUxJTkcsDQo+
-PiArCQkJCQkJICAgZmFsc2UsIGZhbHNlKTsNCj4+ICt9DQo+PiArRVhQT1JUX1NZTUJPTChk
-cm1fcGxhbmVfaGVscGVyX2F0b21pY19jaGVjayk7DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24v
-c3NkMTMweC5jDQo+PiBpbmRleCA3OWU4ZTIwMTdjNjguLjI4Y2Y5Yzg3Zjg2ZCAxMDA2NDQN
-Cj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9zb2xvbW9uL3NzZDEzMHguYw0KPj4gKysrIGIv
-ZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+PiBAQCAtNTY1LDIyICs1NjUs
-NiBAQCBzdGF0aWMgaW50IHNzZDEzMHhfZmJfYmxpdF9yZWN0KHN0cnVjdCBkcm1fZnJhbWVi
-dWZmZXIgKmZiLCBjb25zdCBzdHJ1Y3QgaW9zeXNfbQ0KPj4gICAJcmV0dXJuIHJldDsNCj4+
-ICAgfQ0KPj4gICANCj4+IC1zdGF0aWMgaW50IHNzZDEzMHhfcHJpbWFyeV9wbGFuZV9oZWxw
-ZXJfYXRvbWljX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0KPj4gLQkJCQkJCSAg
-ICAgc3RydWN0IGRybV9hdG9taWNfc3RhdGUgKm5ld19zdGF0ZSkNCj4+IC17DQo+PiAtCXN0
-cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0
-X25ld19wbGFuZV9zdGF0ZShuZXdfc3RhdGUsIHBsYW5lKTsNCj4+IC0Jc3RydWN0IGRybV9j
-cnRjICpuZXdfY3J0YyA9IG5ld19wbGFuZV9zdGF0ZS0+Y3J0YzsNCj4+IC0Jc3RydWN0IGRy
-bV9jcnRjX3N0YXRlICpuZXdfY3J0Y19zdGF0ZSA9IE5VTEw7DQo+PiAtDQo+PiAtCWlmIChu
-ZXdfY3J0YykNCj4+IC0JCW5ld19jcnRjX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X2Ny
-dGNfc3RhdGUobmV3X3N0YXRlLCBuZXdfY3J0Yyk7DQo+PiAtDQo+PiAtCXJldHVybiBkcm1f
-YXRvbWljX2hlbHBlcl9jaGVja19wbGFuZV9zdGF0ZShuZXdfcGxhbmVfc3RhdGUsIG5ld19j
-cnRjX3N0YXRlLA0KPj4gLQkJCQkJCSAgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPj4gLQkJ
-CQkJCSAgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPj4gLQkJCQkJCSAgIGZhbHNlLCBmYWxz
-ZSk7DQo+PiAtfQ0KPj4gLQ0KPj4gICBzdGF0aWMgdm9pZCBzc2QxMzB4X3ByaW1hcnlfcGxh
-bmVfaGVscGVyX2F0b21pY191cGRhdGUoc3RydWN0IGRybV9wbGFuZSAqcGxhbmUsDQo+PiAg
-IAkJCQkJCSAgICAgICBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqb2xkX3N0YXRlKQ0KPj4g
-ICB7DQo+PiBAQCAtNjIzLDcgKzYwNyw3IEBAIHN0YXRpYyB2b2lkIHNzZDEzMHhfcHJpbWFy
-eV9wbGFuZV9oZWxwZXJfYXRvbWljX2Rpc2FibGUoc3RydWN0IGRybV9wbGFuZSAqcGxhbmUs
-DQo+PiAgIA0KPj4gICBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9wbGFuZV9oZWxwZXJfZnVu
-Y3Mgc3NkMTMweF9wcmltYXJ5X3BsYW5lX2hlbHBlcl9mdW5jcyA9IHsNCj4+ICAgCURSTV9H
-RU1fU0hBRE9XX1BMQU5FX0hFTFBFUl9GVU5DUywNCj4+IC0JLmF0b21pY19jaGVjayA9IHNz
-ZDEzMHhfcHJpbWFyeV9wbGFuZV9oZWxwZXJfYXRvbWljX2NoZWNrLA0KPj4gKwkuYXRvbWlj
-X2NoZWNrID0gZHJtX3BsYW5lX2hlbHBlcl9hdG9taWNfY2hlY2ssDQo+PiAgIAkuYXRvbWlj
-X3VwZGF0ZSA9IHNzZDEzMHhfcHJpbWFyeV9wbGFuZV9oZWxwZXJfYXRvbWljX3VwZGF0ZSwN
-Cj4+ICAgCS5hdG9taWNfZGlzYWJsZSA9IHNzZDEzMHhfcHJpbWFyeV9wbGFuZV9oZWxwZXJf
-YXRvbWljX2Rpc2FibGUsDQo+PiAgIH07DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUv
-ZHJtL3Rpbnkvc2ltcGxlZHJtLmMgYi9kcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0u
-Yw0KPj4gaW5kZXggNzc3Y2NkMjUwODcxLi5lYTViMzIzOWE2NTkgMTAwNjQ0DQo+PiAtLS0g
-YS9kcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYw0KPj4gKysrIGIvZHJpdmVycy9n
-cHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4+IEBAIC00NjksMjkgKzQ2OSw2IEBAIHN0YXRp
-YyBjb25zdCB1aW50NjRfdCBzaW1wbGVkcm1fcHJpbWFyeV9wbGFuZV9mb3JtYXRfbW9kaWZp
-ZXJzW10gPSB7DQo+PiAgIAlEUk1fRk9STUFUX01PRF9JTlZBTElEDQo+PiAgIH07DQo+PiAg
-IA0KPj4gLXN0YXRpYyBpbnQgc2ltcGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21p
-Y19jaGVjayhzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4+IC0JCQkJCQkgICAgICAgc3Ry
-dWN0IGRybV9hdG9taWNfc3RhdGUgKm5ld19zdGF0ZSkNCj4+IC17DQo+PiAtCXN0cnVjdCBk
-cm1fcGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19w
-bGFuZV9zdGF0ZShuZXdfc3RhdGUsIHBsYW5lKTsNCj4+IC0Jc3RydWN0IGRybV9jcnRjICpu
-ZXdfY3J0YyA9IG5ld19wbGFuZV9zdGF0ZS0+Y3J0YzsNCj4+IC0Jc3RydWN0IGRybV9jcnRj
-X3N0YXRlICpuZXdfY3J0Y19zdGF0ZSA9IE5VTEw7DQo+PiAtCWludCByZXQ7DQo+PiAtDQo+
-PiAtCWlmIChuZXdfY3J0YykNCj4+IC0JCW5ld19jcnRjX3N0YXRlID0gZHJtX2F0b21pY19n
-ZXRfbmV3X2NydGNfc3RhdGUobmV3X3N0YXRlLCBuZXdfY3J0Yyk7DQo+PiAtDQo+PiAtCXJl
-dCA9IGRybV9hdG9taWNfaGVscGVyX2NoZWNrX3BsYW5lX3N0YXRlKG5ld19wbGFuZV9zdGF0
-ZSwgbmV3X2NydGNfc3RhdGUsDQo+PiAtCQkJCQkJICBEUk1fUExBTkVfTk9fU0NBTElORywN
-Cj4+IC0JCQkJCQkgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPj4gLQkJCQkJCSAgZmFsc2Us
-IGZhbHNlKTsNCj4+IC0JaWYgKHJldCkNCj4+IC0JCXJldHVybiByZXQ7DQo+PiAtCWVsc2Ug
-aWYgKCFuZXdfcGxhbmVfc3RhdGUtPnZpc2libGUpDQo+PiAtCQlyZXR1cm4gMDsNCj4+IC0N
-Cj4+IC0JcmV0dXJuIDA7DQo+PiAtfQ0KPj4gLQ0KPj4gICBzdGF0aWMgdm9pZCBzaW1wbGVk
-cm1fcHJpbWFyeV9wbGFuZV9oZWxwZXJfYXRvbWljX3VwZGF0ZShzdHJ1Y3QgZHJtX3BsYW5l
-ICpwbGFuZSwNCj4+ICAgCQkJCQkJCSBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqb2xkX3N0
-YXRlKQ0KPj4gICB7DQo+PiBAQCAtNTQzLDcgKzUyMCw3IEBAIHN0YXRpYyB2b2lkIHNpbXBs
-ZWRybV9wcmltYXJ5X3BsYW5lX2hlbHBlcl9hdG9taWNfZGlzYWJsZShzdHJ1Y3QgZHJtX3Bs
-YW5lICpwbGFuDQo+PiAgIA0KPj4gICBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9wbGFuZV9o
-ZWxwZXJfZnVuY3Mgc2ltcGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2Z1bmNzID0gew0K
-Pj4gICAJRFJNX0dFTV9TSEFET1dfUExBTkVfSEVMUEVSX0ZVTkNTLA0KPj4gLQkuYXRvbWlj
-X2NoZWNrID0gc2ltcGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21pY19jaGVjaywN
-Cj4+ICsJLmF0b21pY19jaGVjayA9IGRybV9wbGFuZV9oZWxwZXJfYXRvbWljX2NoZWNrLA0K
-Pj4gICAJLmF0b21pY191cGRhdGUgPSBzaW1wbGVkcm1fcHJpbWFyeV9wbGFuZV9oZWxwZXJf
-YXRvbWljX3VwZGF0ZSwNCj4+ICAgCS5hdG9taWNfZGlzYWJsZSA9IHNpbXBsZWRybV9wcmlt
-YXJ5X3BsYW5lX2hlbHBlcl9hdG9taWNfZGlzYWJsZSwNCj4+ICAgfTsNCj4+IGRpZmYgLS1n
-aXQgYS9pbmNsdWRlL2RybS9kcm1fcGxhbmVfaGVscGVyLmggYi9pbmNsdWRlL2RybS9kcm1f
-cGxhbmVfaGVscGVyLmgNCj4+IGluZGV4IDE3ODFmYWIyNGRkNi4uNzc2MGIyN2IwMzIzIDEw
-MDY0NA0KPj4gLS0tIGEvaW5jbHVkZS9kcm0vZHJtX3BsYW5lX2hlbHBlci5oDQo+PiArKysg
-Yi9pbmNsdWRlL2RybS9kcm1fcGxhbmVfaGVscGVyLmgNCj4+IEBAIC00MSw1ICs0MSw2IEBA
-IGludCBkcm1fcGxhbmVfaGVscGVyX3VwZGF0ZV9wcmltYXJ5KHN0cnVjdCBkcm1fcGxhbmUg
-KnBsYW5lLCBzdHJ1Y3QgZHJtX2NydGMgKmNyDQo+PiAgIGludCBkcm1fcGxhbmVfaGVscGVy
-X2Rpc2FibGVfcHJpbWFyeShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4+ICAgCQkJCSAg
-ICAgc3RydWN0IGRybV9tb2Rlc2V0X2FjcXVpcmVfY3R4ICpjdHgpOw0KPj4gICB2b2lkIGRy
-bV9wbGFuZV9oZWxwZXJfZGVzdHJveShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSk7DQo+PiAr
-aW50IGRybV9wbGFuZV9oZWxwZXJfYXRvbWljX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBs
-YW5lLCBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqc3RhdGUpOw0KPj4gICANCj4+ICAgI2Vu
-ZGlmDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
-ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
-dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
-ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+thanks,
 
---------------nI0vA6GHU8Q0GeFg50qARSlq--
-
---------------DiouCn0RWPGokSIcWyoFJqyE
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMgnp4FAwAAAAAACgkQlh/E3EQov+Bb
-kA//USRYRQ/96/Cyg8rpZSWXvqw161ZjBzoVe83XxeQ1C0mcMiTh95X+9hJVv4vcLtDtbrNuMSk4
-Kbjq2Txf5Z48pIhg40yvtdn05T6/Bob14J2V642n811g5GmxosYsEdvSQXronx3N0YfqCVAiaCM/
-dkCRBNOpb+AZn5aGDUxMdcoLunsp30JbCJbrkq7RDAiA8bIEUL9BhQl2qgRTctqlVzRu655lhpmN
-1RX6XKwf99CIRgdkveFYOBzHBnr20MFW/D3c9sA4o0iM/vHb/6Dcjlj3X5uLcsAk6GDUtx2zKBCo
-V8/EX5jFmLdZqzcWKO0LrkehUxjvdUBLUGdZ/Y+vrn0u7lNA8TceW38cuRfX/UWUX7wcBsWJ8Inv
-yjgKHLs6MFmwmuQKHfHZ4kpL1q+OG+0cRWR6N3pU37Eb7CLR6fHz5ahqz8XXsUIGlzczzeqJDsea
-sutXVx3lAOva4w8Kr+wY5ZM24AZ+qX4VeWfIyeRkMCWTqwjmNrzpMmug4Uca+xqH76fI2HtPLHcD
-Yb+d64nN6Mh9GgqcacXVkAUODM5+siWHcAflHhe8LdkAemP9HZlGIr19vQvpIrwM89UH1GXz9KEJ
-FT8cU99Y8uLj9720l9dwxG1iJAZJ87bTBb1rjo8y8m7vv8cqrvARFOFxgDgGriBSUFYUL/BWmJzJ
-jXU=
-=BTq8
------END PGP SIGNATURE-----
-
---------------DiouCn0RWPGokSIcWyoFJqyE--
+greg k-h
