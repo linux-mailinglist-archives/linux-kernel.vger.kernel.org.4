@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784015B6DFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E55B6E01
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbiIMNJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S232186AbiIMNKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbiIMNJQ (ORCPT
+        with ESMTP id S232141AbiIMNJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:09:16 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1DE558D1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:09:02 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q17so412073lji.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:09:01 -0700 (PDT)
+        Tue, 13 Sep 2022 09:09:58 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07228E08E;
+        Tue, 13 Sep 2022 06:09:58 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id v1so11765504plo.9;
+        Tue, 13 Sep 2022 06:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UFtD5M/leAKWSJsauM4L+rY2d6l+0yYTOQ146z3FD+g=;
-        b=WKiFtYj7nnRHY3jatJLR4PJ0pVYQ9Y1vh0mJ968wJQxIi9jFl69bj0fievdGirkNB5
-         rx4lt0aVQsB7fG2iJRBl1wN/Zdx2CC1y5yDhgSMxez+/abHL2DMjAsxcltQmKsUVlcu6
-         ++1fIPHIMsOfSMZKfHQnWBwP8HOJng46ZtDjI=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date;
+        bh=HplfPOglv3ZamZq4B3bbFC0qSbQJgjuU0QJdpQQ61Ig=;
+        b=R9iwYN5WUzw7sILYdsdBaVcLccgzLCTjfzBKIMn6cxZXcFXnAKlDkC8uB4ppzLU96l
+         WqwD8C+QSB14b5dkRUlxMZoAzTFATQoL7zNoGOs4wKe9TGJkQ6BgSl3pBxqp6FUXrZRB
+         9bl+ZtolJnQ6Sl753vN3Dwq99d3dOYT4WqzXek4fevoQ2vemNkiyCo/3IrIPpaKvNjJl
+         5qp5DspuY1SDd/7hw9ObriWxOb3j85Pj6TZ2r50ChQ87q2APNtBhKscKvMpHjenlWBuC
+         rVC9JEa48He8D3SCx0P9N6SUVGc3HLb15cBLEazSRfXXVBME7ZUaJkeHNzQCn+60Ltkn
+         EHZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UFtD5M/leAKWSJsauM4L+rY2d6l+0yYTOQ146z3FD+g=;
-        b=7Vd70FR2Wk+xgLr4DU3PCend9VLBLb6hfAItR2ZH5S2XJ1jlnP9un5WIKH7txNRFh/
-         rhKUJRU9AbrpuNDDBZRBzthndAR7b9g+6/GkuBmoPhAo1SB39/Fs5ha46XwHizoOIffr
-         9RoQa7eCIHRm9nLu18a3MFN5djmPwX4wvYGCzmPtYrptt7+nwzwig5mRxQ1IelqSq6Ml
-         SP0rG9UdasVcDHIEAtR1iayq9On/vlK7zkH2cYrMcjCsvm6mQdgq4JBHtlsTAho0C/jm
-         /NB5ddJaW9uy0xI2Sl9GKTLbT/NRu3+hgnC/AHiwsoFlEUhqRWYiM36XrA/b1Tp5aNV7
-         hrug==
-X-Gm-Message-State: ACgBeo0+UoSA1Lo3KUNCh9zI8z48U5zhyiAs26peAJafVZ9mNOArRELW
-        2pKZ+gPxbMdT+2rAmOvfVSAotJS/20jkivFqsQQ=
-X-Google-Smtp-Source: AA6agR77CObfIUyfyIWhO86v2jN2IlzrlydL05ZIgKgdtr5AE0SunahPnG1py5/IncWI7LJy7BjWmQ==
-X-Received: by 2002:a05:651c:1791:b0:261:c72d:70b0 with SMTP id bn17-20020a05651c179100b00261c72d70b0mr9693704ljb.164.1663074540010;
-        Tue, 13 Sep 2022 06:09:00 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id u7-20020ac258c7000000b004946748ad4dsm1704401lfo.159.2022.09.13.06.08.57
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:cc:to:subject:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date;
+        bh=HplfPOglv3ZamZq4B3bbFC0qSbQJgjuU0QJdpQQ61Ig=;
+        b=ou/xsRqnZcREDbg683NLWBeYnS5UTctJr+Bi6Jtf9+R0VRM0mzMhzTjxZNxzsCJAOp
+         ktSHr24uEohXIZwQeVoIEYgpMgT4ofOvisZr9hGA3L/jFKeVNfZ0vmm2RjS9UpCEoM8r
+         RhD6LQE4sO1zIBd+wLcRF1tsAZnAwJ40HOMsMJQB/Ry2rFVlEEv8H7ChkEvv2Ro2VuL6
+         lrxV1DXWI1IuCxaz19UKdvJYAxM67kJ103IRVBbb/rR8zPpG/yklek4JJm3Tqulua5Z1
+         nFZOnQa45BzjEMtne/yib9T4z7MDhjXaYGnuOYyTaglKexGB/LS3BNeQaRdmpwHf1uT0
+         Zxzw==
+X-Gm-Message-State: ACgBeo1szBQX5ysvS58qe6PSD4AtnxSZDjk5DaVh8II1+P/GcCMIxPU/
+        XPMUo6GhXqCBdJTOaGKscgM=
+X-Google-Smtp-Source: AA6agR6D7Wnl+DM0A2GZmVmtXOWp3abUpqmXctmd8U5OR0yPq+gwYpMRAyykHkS9VtfNtgQd8DcVzw==
+X-Received: by 2002:a17:90a:6783:b0:1fd:ab56:5af7 with SMTP id o3-20020a17090a678300b001fdab565af7mr4055560pjj.39.1663074597393;
+        Tue, 13 Sep 2022 06:09:57 -0700 (PDT)
+Received: from [192.168.10.107] ([117.176.186.9])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00174f61a7d09sm8212717plm.247.2022.09.13.06.09.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 06:08:58 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id u18so19998212lfo.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:08:57 -0700 (PDT)
-X-Received: by 2002:a05:6512:41c:b0:497:a5fe:f39f with SMTP id
- u28-20020a056512041c00b00497a5fef39fmr11349100lfk.291.1663074537263; Tue, 13
- Sep 2022 06:08:57 -0700 (PDT)
+        Tue, 13 Sep 2022 06:09:56 -0700 (PDT)
+Message-ID: <ab879545-d4b2-0cd8-3ae2-65f9f2baf2fe@gmail.com>
+Date:   Tue, 13 Sep 2022 21:09:47 +0800
 MIME-Version: 1.0
-References: <20220902130625.217071627@infradead.org> <20220902130947.190618587@infradead.org>
- <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
- <YxI+K8Y+f/FHSQCU@hirez.programming.kicks-ass.net> <CAHk-=wjRLehUO=u8HDJGRFv+wz7hakSc=z6eTg547pAmb0UKHg@mail.gmail.com>
- <YxXJswK9QjhCGmPN@hirez.programming.kicks-ass.net> <CAHk-=whRetwx+5Bjiee+T+Nyyi8EiZ17SM3AL8jJnXuA+WjQyQ@mail.gmail.com>
- <Yx+MBXvGLhbd7dHH@worktop.programming.kicks-ass.net> <YyA6gwtAKRwmJR53@hirez.programming.kicks-ass.net>
-In-Reply-To: <YyA6gwtAKRwmJR53@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 13 Sep 2022 09:08:48 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wh7f0focp2Wg-ePknkvU6Q0YkRBtDPJgn-804a7ZMu9wg@mail.gmail.com>
-Message-ID: <CAHk-=wh7f0focp2Wg-ePknkvU6Q0YkRBtDPJgn-804a7ZMu9wg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/59] x86/build: Ensure proper function alignment
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+From:   yong <yongw.pur@gmail.com>
+Subject: Re: [PATCH v4] page_alloc: consider highatomic reserve in watermark
+ fast
+To:     jaewon31.kim@samsung.com, gregkh@linuxfoundation.org,
+        mhocko@kernel.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        wang.yong12@zte.com.cn
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 4:09 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Found it: https://sourceware.org/binutils/docs-2.39/as/Balign.html
->
-> 7.8 .balign[wl] [abs-expr[, abs-expr[, abs-expr]]]
->
-> Pad the location counter [...]
+Hello,
+This patch is required to be patched in linux-5.4.y and linux-4.19.y.
 
-Very good. All looks sane to me then.
+In addition to that, the following two patches are somewhat related:
 
-              Linus
+	3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_idx
+	9282012 page_alloc: fix invalid watermark check on a negative value
+
+thanks.
+	
+	
+
