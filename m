@@ -2,100 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCD35B6C50
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5E35B6C51
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiIMLWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 07:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S231891AbiIMLXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 07:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiIMLWS (ORCPT
+        with ESMTP id S231459AbiIMLXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:22:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E5C5B07B;
-        Tue, 13 Sep 2022 04:22:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9404361423;
-        Tue, 13 Sep 2022 11:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702E2C433D6;
-        Tue, 13 Sep 2022 11:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663068137;
-        bh=x7WF+7CA3nXQtMjuos5fNmT7nAaca1B5/qu1yeepwtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/s9MYK59kxZOxQDTYWZtYoHg/0eXRQULs+dywiK1jiqhzTrvjGdtTDTpLZpNq6VC
-         bBooUkbGncBMZitCCxnbeF2KIrf4rIvbsgRro0D+VrdwKajpudlN2avGfRXVuVAvin
-         W+Ina20aYM3jmxw7EIUCYvWXalBb1WQrRjPtWFb8=
-Date:   Tue, 13 Sep 2022 13:22:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stefan Agner <stefan@agner.ch>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 247/779] drm/meson: encoder_hdmi: switch to bridge
- DRM_BRIDGE_ATTACH_NO_CONNECTOR
-Message-ID: <YyBoACiWvW1UnfQA@kroah.com>
-References: <20220815180337.130757997@linuxfoundation.org>
- <20220815180347.894058731@linuxfoundation.org>
- <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
- <685b64f60375b69c5c790286f1386be3@agner.ch>
+        Tue, 13 Sep 2022 07:23:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46A515B07B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:23:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CB961063;
+        Tue, 13 Sep 2022 04:23:36 -0700 (PDT)
+Received: from [10.163.58.193] (unknown [10.163.58.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A89F93F71A;
+        Tue, 13 Sep 2022 04:23:27 -0700 (PDT)
+Message-ID: <7dccfd5d-7fa1-440e-91a2-8aa35b9d968b@arm.com>
+Date:   Tue, 13 Sep 2022 16:53:24 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <685b64f60375b69c5c790286f1386be3@agner.ch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 01/16] mm/page_alloc: ensure kswapd doesn't accidentally
+ go to sleep
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-2-linmiaohe@huawei.com>
+ <ea96d35e-46ae-c168-3186-ddf58ad6806c@arm.com>
+ <YyA4Pz8hnnTsomUh@casper.infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <YyA4Pz8hnnTsomUh@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 08:48:24PM +0200, Stefan Agner wrote:
-> On 2022-09-12 18:08, Stefan Agner wrote:
-> > On 2022-08-15 19:58, Greg Kroah-Hartman wrote:
-> >> From: Neil Armstrong <narmstrong@baylibre.com>
-> >>
-> >> [ Upstream commit 0af5e0b41110e2da872030395231ab19c45be931 ]
-> >>
-> >> This implements the necessary change to no more use the embedded
-> >> connector in dw-hdmi and use the dedicated bridge connector driver
-> >> by passing DRM_BRIDGE_ATTACH_NO_CONNECTOR to the bridge attach call.
-> >>
-> >> The necessary connector properties are added to handle the same
-> >> functionalities as the embedded dw-hdmi connector, i.e. the HDR
-> >> metadata, the CEC notifier & other flags.
-> >>
-> >> The dw-hdmi output_port is set to 1 in order to look for a connector
-> >> next bridge in order to get DRM_BRIDGE_ATTACH_NO_CONNECTOR working.
-> > 
-> > HDMI on ODROID-N2+ was working with v5.15.60, and stopped working with
-> > v5.15.61. Reverting this commit (and two dependent refcount leak) to be
-> > the culprit. Reverting just the refcount leaks is not enough to get HDMI
-> > working, so I assume it is this commit.
-> > 
-> > I haven't investigated much beyond that, maybe its simple a case of a
-> > missing kernel configuration? DRM_DISPLAY_CONNECTOR is compiled, and the
-> > module display_connector is loaded, so that part seemed to have worked.
-> > 
-> > Any ideas welcome.
-> > 
-> > FWIW, I track the issue in the HAOS tracker at
-> > https://github.com/home-assistant/operating-system/issues/2120.
-> 
-> It seems that backporting commit 7cd70656d128 ("drm/bridge:
-> display-connector: implement bus fmts callbacks") fixes the problem
-> without reverting this commit.
-> 
-> @Greg, can we backport this commit as well?
 
-sure, now queued up, thanks.
 
-greg k-h
+On 9/13/22 13:28, Matthew Wilcox wrote:
+> On Tue, Sep 13, 2022 at 12:32:50PM +0530, Anshuman Khandual wrote:
+>>
+>> On 9/9/22 14:54, Miaohe Lin wrote:
+>>> If ALLOC_KSWAPD is set, wake_all_kswapds() will be called to ensure
+>>> kswapd doesn't accidentally go to sleep. But when reserve_flags is
+>>> set, alloc_flags will be overwritten and ALLOC_KSWAPD is thus lost.
+>>> Preserve the ALLOC_KSWAPD flag in alloc_flags to ensure kswapd won't
+>>> go to sleep accidentally.
+>> Currently wake_all_kswapds() gets skipped subsequently if ALLOC_KSWAPD
+>> is lost, but this only happens when the 'retry:' loops is taken ?
+> Right, but see the comment:
+> 
+>         /* Ensure kswapd doesn't accidentally go to sleep as long as we loop */
+> 
+> and that is not currently true.  I think that was an inadvertent change.
+> Particularly since the changelog for 0a79cdad5eb2 says "No functional
+> change".
+
+Got it, thanks for the explanation.
