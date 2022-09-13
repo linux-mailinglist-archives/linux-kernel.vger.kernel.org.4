@@ -2,90 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52745B6A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4445B6A3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiIMJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S230373AbiIMJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiIMJD1 (ORCPT
+        with ESMTP id S230350AbiIMJDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:03:27 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A4121815
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:03:26 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id e18so2813224wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=u0+/4DOaKm+4ffSLNzqiW9x1Gxog4OJEqiqEoF/yw7Y=;
-        b=qryssQyWeKIu75ubPUW0iHm/yVERj0n+y/zNXGQpiKNxdOmJ6aLs0sfq5V+r5W5cG0
-         YnaD4AIP7RH4D0c/emc4G3RHaEOlxsBi25NxT2/cQAW5xdIZpv9SzHIyb13EPBFcGYpb
-         N8mUAjMOLFE76eY99ClSpFtga+lyDQCtIf/kDAVB7AvaEGboJfYWrzEqzWS4w+keXTsO
-         X0kckQAqwsbSA1GQcLjrsMrSy34tokQ9mo77t4cF95/4v3CG5ZYLws6WmqnrliZ/UnZH
-         lYGZKE/8HSYKQ4AtouJnerf31WsPtjfscnS2fDGLGoMzReS4ib4G2IBY+7b/z1ExfSWX
-         8T2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=u0+/4DOaKm+4ffSLNzqiW9x1Gxog4OJEqiqEoF/yw7Y=;
-        b=NkY8wdKGS9SQeAsfQ3EbQIxyzs4LNZQMjkoULuQwJsk8JuKzkS8Bl3nNxtFkrFDiN2
-         rW3LSmzcq6kPwr3dHP8eMq7MbBQgelQ/S4YLjcE0u19G2NlcRHFl8qiA4DqzxnOrYKj6
-         fpC/Y2jxepS1OisZkfsdI+e6RPVVBKHUBnjf4WOswQ3+mOiRfVCczB9ds6Kzpz5dowm0
-         YfZudpM2k9PAcU9DeXid8QRGkAkqSNnwby9DYz2+n7u5P5tdzwCsgo97rbh6Qw2QzGZg
-         LAzVXE5ZD9NcwfdWwvIVAqZvaD2F03N+PB5sr5xyziKif2f3S987nVkSCLGeaVbhjWxH
-         jPZg==
-X-Gm-Message-State: ACgBeo1hRM+sc2PdLTw78tl+CJg/2zpui9TwPQmjBtzgiimnKwJb1Dsj
-        3P1r1yRWF+IbAVrrNPf2Dd7MkA==
-X-Google-Smtp-Source: AA6agR6tgHbM7dxYDRZ789TFmI5oqqZizaFVPdsBuEzXTii3bjLRA2QLQp236Cr6ae5gSL9m/8Oupg==
-X-Received: by 2002:a05:600c:1e08:b0:3b4:8fef:d63c with SMTP id ay8-20020a05600c1e0800b003b48fefd63cmr1569107wmb.158.1663059804794;
-        Tue, 13 Sep 2022 02:03:24 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.70])
-        by smtp.gmail.com with ESMTPSA id n42-20020a05600c502a00b003b31c560a0csm12943776wmr.12.2022.09.13.02.03.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 02:03:24 -0700 (PDT)
-Message-ID: <c931b0f7-9ce6-b270-d11e-9bcf3f304218@linaro.org>
-Date:   Tue, 13 Sep 2022 11:03:22 +0200
+        Tue, 13 Sep 2022 05:03:50 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 116C521815
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:03:48 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAAXH_NuRyBj3hcyAg--.29934S2;
+        Tue, 13 Sep 2022 17:03:46 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     pmalani@chromium.org, bleung@chromium.org
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] platform/chrome: cros_usbpd_notify: Add check for platform_driver_register
+Date:   Tue, 13 Sep 2022 17:03:40 +0800
+Message-Id: <20220913090340.1738370-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220913084835.78490-1-allen.chen@ite.com.tw>
- <20220913084835.78490-2-allen.chen@ite.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220913084835.78490-2-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAXH_NuRyBj3hcyAg--.29934S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4DKF4DAr4DKr1xKF1DGFg_yoWDuFgE9r
+        4xWF47Ars3KrnrKF1ay34fu342kr98Xr4fKFnagr13t343JryxXryYva47C3W8JF13tw13
+        t3yUurySkFySvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU0VyxDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,23 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/09/2022 10:48, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> Add properties to restrict dp output data-lanes and clock.
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> ---
->  .../devicetree/bindings/display/bridge/ite,it6505.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+As platform_driver_register() can return error numbers,
+it should be better to check platform_driver_register()
+and deal with the exception.
 
-Thank you for your patch. There is something to discuss/improve.
+Fixes: ec2daf6e33f9 ("platform: chrome: Add cros-usbpd-notify driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/platform/chrome/cros_usbpd_notify.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-You already sent it. Please version your patches (git help format-patch)
-or mark them as RESEND (it's nice sometimes to explain why it is being
-resent).
+diff --git a/drivers/platform/chrome/cros_usbpd_notify.c b/drivers/platform/chrome/cros_usbpd_notify.c
+index 4b5a81c9dc6d..baa72ad73c68 100644
+--- a/drivers/platform/chrome/cros_usbpd_notify.c
++++ b/drivers/platform/chrome/cros_usbpd_notify.c
+@@ -239,7 +239,11 @@ static int __init cros_usbpd_notify_init(void)
+ 		return ret;
+ 
+ #ifdef CONFIG_ACPI
+-	platform_driver_register(&cros_usbpd_notify_acpi_driver);
++	ret = platform_driver_register(&cros_usbpd_notify_acpi_driver);
++	if (ret < 0) {
++		platform_driver_unregister(&cros_usbpd_notify_plat_driver);
++		return ret;
++	}
+ #endif
+ 	return 0;
+ }
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof
