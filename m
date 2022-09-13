@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE1B5B6AD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2397B5B6ADC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiIMJh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S231361AbiIMJi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiIMJhO (ORCPT
+        with ESMTP id S229669AbiIMJix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:37:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A57A5E658;
-        Tue, 13 Sep 2022 02:37:06 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRdb41TxVznVHk;
-        Tue, 13 Sep 2022 17:34:24 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        Tue, 13 Sep 2022 05:38:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D42C5E55A;
+        Tue, 13 Sep 2022 02:38:52 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRdZv3xDhzNmB2;
+        Tue, 13 Sep 2022 17:34:15 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 17:37:04 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH next v4 1/2] i2c: hisi: Add initial device tree support
-To:     chenweilong <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
-References: <20220909074842.281232-1-chenweilong@huawei.com>
- <cc27d1af-7f8a-7c51-a101-1b254a2d761b@huawei.com>
- <64721a3f-8fa4-45b4-1045-544cdd021bd8@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <9d2eb596-f16b-a87b-22f7-a6fcd9cb49fc@huawei.com>
-Date:   Tue, 13 Sep 2022 17:37:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+ 15.1.2375.31; Tue, 13 Sep 2022 17:38:50 +0800
+Received: from [10.67.111.232] (10.67.111.232) by
+ dggpeml500010.china.huawei.com (7.185.36.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 17:38:49 +0800
+Message-ID: <7e615e37-ba5f-4e50-17c6-8f742a366808@huawei.com>
+Date:   Tue, 13 Sep 2022 17:38:49 +0800
 MIME-Version: 1.0
-In-Reply-To: <64721a3f-8fa4-45b4-1045-544cdd021bd8@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next] Documentation/hw-vuln: Update spectre doc
+To:     <corbet@lwn.net>, <bp@suse.de>, <keescook@chromium.org>,
+        <aarcange@redhat.com>, <daniel.sneddon@linux.intel.com>,
+        <longman@redhat.com>, <lukas.bulwahn@gmail.com>,
+        <peterz@infradead.org>, <kim.phillips@amd.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220830123614.23007-1-linyujun809@huawei.com>
+From:   "linyujun (C)" <linyujun809@huawei.com>
+In-Reply-To: <20220830123614.23007-1-linyujun809@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
+X-Originating-IP: [10.67.111.232]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,105 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/13 17:01, chenweilong wrote:
-> On 2022/9/13 15:48, Yicong Yang wrote:
->> On 2022/9/9 15:48, Weilong Chen wrote:
->>> The HiSilicon I2C controller can be used on embedded platform, which
->>> boot from devicetree.
->>>
->>> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
->>> ---
->>>  drivers/i2c/busses/Kconfig    |  2 +-
->>>  drivers/i2c/busses/i2c-hisi.c | 19 ++++++++++++++++++-
->>>  2 files changed, 19 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
->>> index 7284206b278b..6d0fdf48e97d 100644
->>> --- a/drivers/i2c/busses/Kconfig
->>> +++ b/drivers/i2c/busses/Kconfig
->>> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
->>>  
->>>  config I2C_HISI
->>>  	tristate "HiSilicon I2C controller"
->>> -	depends on (ARM64 && ACPI) || COMPILE_TEST
->>> +	depends on ARM64 || COMPILE_TEST
->>>  	help
->>>  	  Say Y here if you want to have Hisilicon I2C controller support
->>>  	  available on the Kunpeng Server.
->>> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
->>> index 76c3d8f6fc3c..7a77f306d05f 100644
->>> --- a/drivers/i2c/busses/i2c-hisi.c
->>> +++ b/drivers/i2c/busses/i2c-hisi.c
->>> @@ -5,6 +5,9 @@
->>>   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
->>>   */
->>>  
->>> +#ifdef CONFIG_ACPI
->>> +#include <linux/acpi.h>
->>> +#endif
->>>  #include <linux/bits.h>
->>>  #include <linux/bitfield.h>
->>>  #include <linux/completion.h>
->>> @@ -13,6 +16,9 @@
->>>  #include <linux/io.h>
->>>  #include <linux/module.h>
->>>  #include <linux/mod_devicetable.h>
->>> +#ifdef CONFIG_OF
->>> +#include <linux/of.h>
->>> +#endif
->> I don't think the protection for the headers is necessary and common. The
->> ACPI/OF specific functions should have already been handled well with{out}
->> ACPI/OF config. Have you met some problems without these?
->>
->> BTW, it's better to have a changelog when updating the patches.
-> 
-> This kind usage does exist in the kernel, for example: drivers/rtc/rtc-mc146818-lib.c.
-> 
+kindly ping
 
-The protection for acpi.h used in that driver may also be unnecessary I think, but may need
-test.
-
-> It can be consistent with the protection below MODULE_DEVICE_TABLE.
-> 
-
-MODULE_DEVICE_TABLE is defined in module.h, so not depend on these two headers.
-
->>>  #include <linux/platform_device.h>
->>>  #include <linux/property.h>
->>>  #include <linux/units.h>
->>> @@ -483,17 +489,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->>>  	return 0;
->>>  }
->>>  
->>> +#ifdef CONFIG_ACPI
->>>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
->>>  	{ "HISI03D1", 0 },
->>>  	{ }
->>>  };
->>>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
->>> +#endif
->>> +
->>> +#ifdef CONFIG_OF
->>> +static const struct of_device_id hisi_i2c_dts_ids[] = {
->>> +	{ .compatible = "hisilicon,hisi-i2c", },
->>> +	{ }
->>> +};
->>> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
->>> +#endif
->>>  
->>>  static struct platform_driver hisi_i2c_driver = {
->>>  	.probe		= hisi_i2c_probe,
->>>  	.driver		= {
->>>  		.name	= "hisi-i2c",
->>> -		.acpi_match_table = hisi_i2c_acpi_ids,
->>> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
->>> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
->>>  	},
->>>  };
->>>  module_platform_driver(hisi_i2c_driver);
->>>
->> .
-> 
-> 
-> .
-> 
+On 2022/8/30 20:36, Lin Yujun writed:
+> commit 7c693f54c873691 ("x86/speculation: Add spectre_v2=ibrs
+> option to support Kernel IBRS") adds the "ibrs " option  in
+> Documentation/admin-guide/kernel-parameters.txt but omits it to
+> Documentation/admin-guide/hw-vuln/spectre.rst, add it.
+>
+> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+> ---
+>   Documentation/admin-guide/hw-vuln/spectre.rst | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
+> index 2ce2a38cdd55..c4dcdb3d0d45 100644
+> --- a/Documentation/admin-guide/hw-vuln/spectre.rst
+> +++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+> @@ -613,6 +613,7 @@ kernel command line.
+>                   eibrs                   enhanced IBRS
+>                   eibrs,retpoline         enhanced IBRS + Retpolines
+>                   eibrs,lfence            enhanced IBRS + LFENCE
+> +                ibrs                    use IBRS to protect kernel
+>   
+>   		Not specifying this option is equivalent to
+>   		spectre_v2=auto.
