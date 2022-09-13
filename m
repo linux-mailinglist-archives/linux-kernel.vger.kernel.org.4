@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FDB5B73B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45F35B6EFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbiIMPHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S232554AbiIMOHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbiIMPEm (ORCPT
+        with ESMTP id S232363AbiIMOG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:04:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E3C74E35;
-        Tue, 13 Sep 2022 07:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CD34B80EFA;
-        Tue, 13 Sep 2022 14:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15CAC433D6;
-        Tue, 13 Sep 2022 14:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079419;
-        bh=Ts001EFLg14UM0gR5+RoL0k7mn87CWbDBOrEQf6oIpY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=snbkce+uwY5mBG/pPr1w6hFjDfRlS0sDDn6cIvJKh6AJEBofnwFUSOKR9n+Dt86bO
-         FSendZynmSVkF+jQ8jEmeZQ0TGVP5LNpZbGMgVgjvFXIeIroXLj1d3WCMf/JrVdGo1
-         7gU06SKIMw4JS5AiVmlG+QD6zJ+1EnddVDJtcYoI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yacan Liu <liuyacan@corp.netease.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 19/79] net/smc: Remove redundant refcount increase
-Date:   Tue, 13 Sep 2022 16:06:37 +0200
-Message-Id: <20220913140349.806693128@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 13 Sep 2022 10:06:57 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6B5AA1F;
+        Tue, 13 Sep 2022 07:06:40 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-127dca21a7dso32332317fac.12;
+        Tue, 13 Sep 2022 07:06:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=s6AlJol1WXkTtPhwmopMK+Eef1rB1gY5f+tJ12KpnB0=;
+        b=lSqi0Sz2yBe+ReXDcfe6B2n0K7afcd4mUK8bAIvs1k80BXcmB31u+LnuKrRvlXXmCg
+         6mAWuuu+VYGFRaDsRlUkRB5fysuyMuWFW5nMNdOkFu+ZjDBuUyGV+jieM4NpI+bW7OH7
+         8fLshbl4fp43QpX/UJHx1wfBZLL4pSIOGQGDEfPVQfTEXVnkx4RH1KQfNL4BbgRJUGcU
+         9qIv/f9Gv9ZFAiHOCTso14J3oFAsDmrbiPG79qzmmBuod46JqRlGWSsZXZeRMpJXV1/a
+         uFY7IOwRwpF9CSsm0ZAWExlCuqDh4r+kETH9pHwQ2hMIBn5wCot8hzDx1A9D4CP8hayz
+         CYHQ==
+X-Gm-Message-State: ACgBeo3/JCf+QcIvE/3/lD2tC9A6d7D7R52/RB4nnlj4cehTF35UhA3P
+        LODviSrPnrYCsLO4uE2CEQ==
+X-Google-Smtp-Source: AA6agR7DEpROfK34CcJc9ua54a54y7oXUr80MDoa0RjLp7zD/zwbGg+f95PbuxN+K1kvWR0jclK1jw==
+X-Received: by 2002:a05:6808:d4e:b0:344:cc0a:2a48 with SMTP id w14-20020a0568080d4e00b00344cc0a2a48mr1537325oik.241.1663077998885;
+        Tue, 13 Sep 2022 07:06:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bl32-20020a05680830a000b0034d9042758fsm5232514oib.24.2022.09.13.07.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:06:38 -0700 (PDT)
+Received: (nullmailer pid 3593227 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:06:37 -0000
+Date:   Tue, 13 Sep 2022 09:06:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     vkoul@kernel.org, thierry.reding@gmail.com, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        kever.yang@rock-chips.com, broonie@kernel.org,
+        ulf.hansson@linaro.org, wim@linux-watchdog.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux@roeck-us.net, miquel.raynal@bootlin.com,
+        linux-serial@vger.kernel.org, linux-phy@lists.infradead.org,
+        sjg@chromium.org, vigneshr@ti.com, kishon@ti.com,
+        linux-spi@vger.kernel.org, philipp.tomsich@vrull.eu,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        linux-mmc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        jamie@jamieiles.com, zhangqing@rock-chips.com, richard@nod.at,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v1 07/11] dt-bindings: watchdog: rockchip: add
+ rockchip,rk3128-wdt
+Message-ID: <20220913140637.GA3593173-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <a4da79fe-3449-6538-742f-790835ffe43a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4da79fe-3449-6538-742f-790835ffe43a@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yacan Liu <liuyacan@corp.netease.com>
+On Sat, 10 Sep 2022 00:01:56 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-wdt compatible string.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-[ Upstream commit a8424a9b4522a3ab9f32175ad6d848739079071f ]
-
-For passive connections, the refcount increment has been done in
-smc_clcsock_accept()-->smc_sock_alloc().
-
-Fixes: 3b2dec2603d5 ("net/smc: restructure client and server code in af_smc")
-Signed-off-by: Yacan Liu <liuyacan@corp.netease.com>
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220830152314.838736-1-liuyacan@corp.netease.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/smc/af_smc.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 4c904ab29e0e6..dcd00b514c3f9 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -1031,7 +1031,6 @@ static void smc_listen_out_connected(struct smc_sock *new_smc)
- {
- 	struct sock *newsmcsk = &new_smc->sk;
- 
--	sk_refcnt_debug_inc(newsmcsk);
- 	if (newsmcsk->sk_state == SMC_INIT)
- 		newsmcsk->sk_state = SMC_ACTIVE;
- 
--- 
-2.35.1
-
-
-
+Acked-by: Rob Herring <robh@kernel.org>
