@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF3B5B6553
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549FB5B6556
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIMCDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S229861AbiIMCEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiIMCDb (ORCPT
+        with ESMTP id S229831AbiIMCEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:03:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BF225298;
-        Mon, 12 Sep 2022 19:03:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FD47612E1;
-        Tue, 13 Sep 2022 02:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B31BC433C1;
-        Tue, 13 Sep 2022 02:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663034609;
-        bh=dAg3FZ9zu3IH+ISvygDYxRdgqtmYTOxxK0xZvwzsjFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KewjEPEOJz4TyYv1p3rKYGZmT8zfkngZMS5S/fbreu/5YOvUiHrh9jxOwE55r7wWD
-         iE2Kc3N+YtHp1ux0Y2+aaLKvkjhaeBAVaSkRMxgRECdXM1ImDOKgwnmxQxiV3khSAn
-         xZ6/p64aPCNTXX2niNrE3HtuYtn3I7P+mCJs5ErXtvRk45FCF5DA7vgpljANnaD4TO
-         CxXMFPqqEDbOT9GVs0xTI0Ojy/w6Zw5T5RQCmzU9U34jQn+7YdtLzHErJQI0hrVhdx
-         TwYbYHOulETuC8kCuVbSvzJs8W9Zux2t1QVo0C+JoDQZFfgfmSj0edLAARizaM2vVf
-         2agfYJoP1wsag==
-Date:   Tue, 13 Sep 2022 10:03:23 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Leo Li <leoyang.li@nxp.com>
-Cc:     Olof Johansson <olof@lixom.net>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Z.Q. Hou" <zhiqiang.hou@nxp.com>
-Subject: Re: [PATCH v4 1/2] arm64: dts: lx2160a: update PCIe nodes to match
- rev2 silicon
-Message-ID: <20220913020323.GD1728671@dragon>
-References: <20220817202538.21493-1-leoyang.li@nxp.com>
- <20220817202538.21493-2-leoyang.li@nxp.com>
- <CAOesGMhz8PYNG_bgMX-6gka77k1hJOZUv6xqJRqATaJ6mFbk6A@mail.gmail.com>
- <AM0PR04MB6289B28243FCBA64CAD110B98F449@AM0PR04MB6289.eurprd04.prod.outlook.com>
+        Mon, 12 Sep 2022 22:04:42 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537BB9FEA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663034681; x=1694570681;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Aq5CkD5R3lhPprQbjFiFBDcrgms+a4ueawvlYQspySI=;
+  b=ThjwZJrmWRHBU3pnxOyTzfC9OptgMNlmfZ/oHTMHHM7X78FF+lxGNOOQ
+   yEBpX9VPDgQKg07u9xrnk6Rmzq0MxX6pLLBuH4gEA7jJkfIr7eI7RHOex
+   dafSuqu4XMrjgXPcA9AEUOSAAASw5S1WS2Uzn1/tJLEF2vS0TmIaCRhes
+   Mx+u0Y1C9wDb8XSHFiRf2GbNWm3bjoUsQeiT4dvcIJTWz4qsYhfUqpApk
+   mEKB1MK5Evb31FCvaT+TjEYQ9Wg2KRFFETbOgfOSgit6S3N1PfW/OvBID
+   Kj93Zo5RYwLbr/Trb/3qMP61nRQSdagfo/4851BJWEaholfNYJeqGo8NM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298017343"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="298017343"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 19:04:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="649473690"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 12 Sep 2022 19:04:39 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXvHy-00035X-2d;
+        Tue, 13 Sep 2022 02:04:38 +0000
+Date:   Tue, 13 Sep 2022 10:04:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 11/39]
+ arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function
+ 'tdx_write_msr'
+Message-ID: <202209131039.Nv0agYnN-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB6289B28243FCBA64CAD110B98F449@AM0PR04MB6289.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,36 +66,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 08:25:39PM +0000, Leo Li wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Olof Johansson <olof@lixom.net>
-> > Sent: Monday, September 12, 2022 2:05 AM
-> > To: Leo Li <leoyang.li@nxp.com>
-> > Cc: shawnguo@kernel.org; devicetree@vger.kernel.org;
-> > robh+dt@kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; Z.Q. Hou <zhiqiang.hou@nxp.com>
-> > Subject: Re: [PATCH v4 1/2] arm64: dts: lx2160a: update PCIe nodes to match
-> > rev2 silicon
-> > 
-> > Hi,
-> > 
-> > On Wed, Aug 17, 2022 at 1:26 PM Li Yang <leoyang.li@nxp.com> wrote:
-> > >
-> > > The original dts was created based on the non-production rev1 silicon
-> > > which was only used for evaluation.  Update the PCIe nodes to align
-> > > with the different controller used in production rev2 silicon.
-> > 
-> > How can I confirm what version of silicon I have on a system?
-> > 
-> > My non-evaluation commercially purchased system (HoneyComb LX2K) has:
-> > 
-> > # cat /sys/bus/soc/devices/soc0/revision
-> > 1.0
-> 
-> This is different from the information I got.  If there is still active Rev1.0 system in use, I would agree that we probably need to create a new device tree for the rev2 silicon.  Thanks for the information.
+Hi Andi,
 
-Dropped both patches.
+FYI, the error/warning still remains.
 
-Shawn
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   1f71e25a309e1f46dadb7c65e4383c3690dcd3be
+commit: a9189da9f0413f85d9072894ccb973cf785d2c0d [11/39] x86/tdx: Use direct paravirt call for wrmsrl
+config: x86_64-randconfig-r025-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131039.Nv0agYnN-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/a9189da9f0413f85d9072894ccb973cf785d2c0d
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout a9189da9f0413f85d9072894ccb973cf785d2c0d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function 'tdx_write_msr' [-Wmissing-prototypes]
+   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+                ^
+   arch/x86/coco/tdx/tdx.c:298:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/tdx_write_msr +298 arch/x86/coco/tdx/tdx.c
+
+   297	
+ > 298	void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+   299	{
+   300		struct tdx_hypercall_args args = {
+   301			.r10 = TDX_HYPERCALL_STANDARD,
+   302			.r11 = hcall_func(EXIT_REASON_MSR_WRITE),
+   303			.r12 = msr,
+   304			.r13 = (u64)high << 32 | low,
+   305		};
+   306	
+   307		if (tdx_fast_tdcall_path_msr(msr))
+   308			__tdx_hypercall(&args, 0);
+   309		else
+   310			native_write_msr(msr, low, high);
+   311	}
+   312	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
