@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0135B73EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EDC5B72AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbiIMPPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S234900AbiIMPBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235628AbiIMPMu (ORCPT
+        with ESMTP id S235184AbiIMO7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:12:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA554785A6;
-        Tue, 13 Sep 2022 07:32:55 -0700 (PDT)
+        Tue, 13 Sep 2022 10:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245162AA1;
+        Tue, 13 Sep 2022 07:28:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21A0AB80F1A;
-        Tue, 13 Sep 2022 14:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7ADC43147;
-        Tue, 13 Sep 2022 14:30:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59C8EB80F9B;
+        Tue, 13 Sep 2022 14:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E06C433D6;
+        Tue, 13 Sep 2022 14:27:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079455;
-        bh=byZiY4GVwHFWvBA3Mo8AblOqT8dGZGcsnGwD6OC1F5g=;
+        s=korg; t=1663079280;
+        bh=wTT+y7OxndejrNZVsBuIMLnHzd38Ef9JL6Sq4tH05kc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Er3MWGcaQTrXIA5UU/M4zBwRdTuRMqh/x4AAvlzDMsu+6S8VTiUdsG5oMODeF/DVd
-         3pfmuRYWRo1KJKWeNVnhlpdvqnIxpvA3rrveok+AKSmNJpYgU972NFkY8XWsB9EpQZ
-         XVQyibfvdHoU6hup3dODAHC9W2OdlsgmkvLsindE=
+        b=IFiLjXcYLS+OmNLqHyMhrcuXSIC9OPTCbmrhl8XILEdLKHpDUBEcltjxrYUvBCdbt
+         4853RsTG3zpjO8629gpR/MDmUKS0ukktDKfjqFn0JIvL5AHNvszFvexybf1q38ZJ95
+         hFYu3MhH3gTbUdYAaCxs9UvZryeXHSfiQYO1NPK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 07/79] net: dp83822: disable false carrier interrupt
-Date:   Tue, 13 Sep 2022 16:06:25 +0200
-Message-Id: <20220913140349.214011981@linuxfoundation.org>
+        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Subject: [PATCH 5.4 055/108] driver core: Dont probe devices after bus_type.match() probe deferral
+Date:   Tue, 13 Sep 2022 16:06:26 +0200
+Message-Id: <20220913140355.994585527@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+References: <20220913140353.549108748@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
+From: Isaac J. Manjarres <isaacmanjarres@google.com>
 
-commit c96614eeab663646f57f67aa591e015abd8bd0ba upstream.
+commit 25e9fbf0fd38868a429feabc38abebfc6dbf6542 upstream.
 
-When unplugging an Ethernet cable, false carrier events were produced by
-the PHY at a very high rate. Once the false carrier counter full, an
-interrupt was triggered every few clock cycles until the cable was
-replugged. This resulted in approximately 10k/s interrupts.
+Both __device_attach_driver() and __driver_attach() check the return
+code of the bus_type.match() function to see if the device needs to be
+added to the deferred probe list. After adding the device to the list,
+the logic attempts to bind the device to the driver anyway, as if the
+device had matched with the driver, which is not correct.
 
-Since the false carrier counter (FCSCR) is never used, we can safely
-disable this interrupt.
+If __device_attach_driver() detects that the device in question is not
+ready to match with a driver on the bus, then it doesn't make sense for
+the device to attempt to bind with the current driver or continue
+attempting to match with any of the other drivers on the bus. So, update
+the logic in __device_attach_driver() to reflect this.
 
-In addition to improving performance, this also solved MDIO read
-timeouts I was randomly encountering with an i.MX8 fec MAC because of
-the interrupt flood. The interrupt count and MDIO timeout fix were
-tested on a v5.4.110 kernel.
+If __driver_attach() detects that a driver tried to match with a device
+that is not ready to match yet, then the driver should not attempt to bind
+with the device. However, the driver can still attempt to match and bind
+with other devices on the bus, as drivers can be bound to multiple
+devices. So, update the logic in __driver_attach() to reflect this.
 
-Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
-Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirfairelinux.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+Cc: stable@vger.kernel.org
+Cc: Saravana Kannan <saravanak@google.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+Link: https://lore.kernel.org/r/20220817184026.3468620-1-isaacmanjarres@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/dp83822.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/base/dd.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -204,7 +204,6 @@ static int dp83822_config_intr(struct ph
- 			return misr_status;
- 
- 		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_FALSE_CARRIER_HF_INT_EN |
- 				DP83822_ANEG_COMPLETE_INT_EN |
- 				DP83822_DUP_MODE_CHANGE_INT_EN |
- 				DP83822_SPEED_CHANGED_INT_EN |
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -818,6 +818,11 @@ static int __device_attach_driver(struct
+ 	} else if (ret == -EPROBE_DEFER) {
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Device can't match with a driver right now, so don't attempt
++		 * to match or bind with other drivers on the bus.
++		 */
++		return ret;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d", ret);
+ 		return ret;
+@@ -1057,6 +1062,11 @@ static int __driver_attach(struct device
+ 	} else if (ret == -EPROBE_DEFER) {
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Driver could not match with device, but may match with
++		 * another device on the bus.
++		 */
++		return 0;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d", ret);
+ 		return ret;
 
 
