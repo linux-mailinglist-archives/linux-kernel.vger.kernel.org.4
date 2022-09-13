@@ -2,52 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184505B753A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C085B7589
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiIMPg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S236683AbiIMPsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiIMPgP (ORCPT
+        with ESMTP id S236675AbiIMPrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:36:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B534A80E91
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:42:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB07361497
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 14:41:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C540AC43150;
-        Tue, 13 Sep 2022 14:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663080074;
-        bh=0Iu5DsvC2OjaeqYGhwmLixwDgdWUl/BFj6dhTq4RAts=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p9Zm7asacy4VFjm24SgyTL0RRdpJv68cAyH0gdlTLHAHQg+8sQHqWn/+3anIjp6IG
-         wwLvL+MdXvOS9NT8hhDH6UklUcGMa3rcncpD51I6+EXMec52o59k2Qi0Ey76Wfp1Tf
-         Yq1CNCaySzlU6sxB8GeIRvWTCf2lF4xvLrRyP7KAIS4uESjxQt5XukzZcPkWNaYi4a
-         Sdvk2W7L8RRvrlFQt6ljuAqr68jVK+vALzs1DfS+v13/OB5wGsG3T0xVF66TYIKj/H
-         6PO+4ZjiGM98bH32tLQGDytl4cq83o+5vK/dsctgjUpw82j9zCJVDqcb4S1R7oxALp
-         lh4CI7QYQY7cQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     xiakaixu1987@gmail.com
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon/sysfs: use the wrapper directly to check if the kdamond is running
-Date:   Tue, 13 Sep 2022 14:41:12 +0000
-Message-Id: <20220913144112.95690-1-sj@kernel.org>
+        Tue, 13 Sep 2022 11:47:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09AFE70E40
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 07:50:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14C5C106F;
+        Tue, 13 Sep 2022 07:43:25 -0700 (PDT)
+Received: from 000377403353.arm.com (000377403353.arm.com [10.2.13.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE8A43F73B;
+        Tue, 13 Sep 2022 07:43:16 -0700 (PDT)
+From:   Brian Starkey <brian.starkey@arm.com>
+To:     ville.syrjala@linux.intel.com, butterflyhuangxx@gmail.com
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ben.davis@arm.com, Liviu.Dudau@arm.com, jonas@kwiboo.se,
+        George Kennedy <george.kennedy@oracle.com>
+Subject: [PATCH] drm/fourcc: Fix vsub/hsub for Q410 and Q401
+Date:   Tue, 13 Sep 2022 15:43:06 +0100
+Message-Id: <20220913144306.17279-1-brian.starkey@arm.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1662995513-24489-1-git-send-email-kaixuxia@tencent.com>
-References: 
+In-Reply-To: <YyA9Y+Cs8ZCYHXAT@intel.com>
+References: <YyA9Y+Cs8ZCYHXAT@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,41 +45,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kaixu,
+These formats are not subsampled, but that means hsub and vsub should be
+1, not 0.
 
-On Mon, 12 Sep 2022 23:11:53 +0800 xiakaixu1987@gmail.com wrote:
+Fixes: 94b292b27734 ("drm: drm_fourcc: add NV15, Q410, Q401 YUV formats")
+Reported-by: George Kennedy <george.kennedy@oracle.com>
+Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Signed-off-by: Brian Starkey <brian.starkey@arm.com>
+---
+ drivers/gpu/drm/drm_fourcc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> From: Kaixu Xia <kaixuxia@tencent.com>
-> 
-> We can use the 'damon_sysfs_kdamond_running()' wrapper directly to
-> check if the kdamond is running in 'damon_sysfs_turn_damon_on()'.
-> 
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+Sorry, I lost track of this - I thought it got fixed after the previous
+thread[1].
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+-Brian
 
+[1] https://lore.kernel.org/all/26fdb955-10c8-a5d6-07b6-85a4374e7754@oracle.com/
 
-Thanks,
-SJ
+diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+index 07741b678798..6768b7d18b6f 100644
+--- a/drivers/gpu/drm/drm_fourcc.c
++++ b/drivers/gpu/drm/drm_fourcc.c
+@@ -263,12 +263,12 @@ const struct drm_format_info *__drm_format_info(u32 format)
+ 		  .vsub = 2, .is_yuv = true },
+ 		{ .format = DRM_FORMAT_Q410,		.depth = 0,
+ 		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
+-		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
+-		  .vsub = 0, .is_yuv = true },
++		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
++		  .vsub = 1, .is_yuv = true },
+ 		{ .format = DRM_FORMAT_Q401,		.depth = 0,
+ 		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
+-		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
+-		  .vsub = 0, .is_yuv = true },
++		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
++		  .vsub = 1, .is_yuv = true },
+ 		{ .format = DRM_FORMAT_P030,            .depth = 0,  .num_planes = 2,
+ 		  .char_per_block = { 4, 8, 0 }, .block_w = { 3, 3, 0 }, .block_h = { 1, 1, 0 },
+ 		  .hsub = 2, .vsub = 2, .is_yuv = true},
+-- 
+2.25.1
 
-> ---
->  mm/damon/sysfs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index 7488e27c87c3..84861c4085a5 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -2455,8 +2455,7 @@ static int damon_sysfs_turn_damon_on(struct damon_sysfs_kdamond *kdamond)
->  	struct damon_ctx *ctx;
->  	int err;
->  
-> -	if (kdamond->damon_ctx &&
-> -			damon_sysfs_ctx_running(kdamond->damon_ctx))
-> +	if (damon_sysfs_kdamond_running(kdamond))
->  		return -EBUSY;
->  	if (damon_sysfs_cmd_request.kdamond == kdamond)
->  		return -EBUSY;
-> -- 
-> 2.27.0
-> 
