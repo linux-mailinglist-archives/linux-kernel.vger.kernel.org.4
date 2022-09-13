@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513375B7160
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A2D5B70E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiIMOiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S233829AbiIMOdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiIMOgX (ORCPT
+        with ESMTP id S234007AbiIMOck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:36:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D00F6B643;
-        Tue, 13 Sep 2022 07:20:22 -0700 (PDT)
+        Tue, 13 Sep 2022 10:32:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB4B3A486;
+        Tue, 13 Sep 2022 07:19:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCC3614AC;
-        Tue, 13 Sep 2022 14:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36682C433D6;
-        Tue, 13 Sep 2022 14:19:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45D9DB80F3B;
+        Tue, 13 Sep 2022 14:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADD6C433D7;
+        Tue, 13 Sep 2022 14:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078745;
-        bh=AD+dgFqZkrdywkWlK+ggxBMoUeeiLnpnjPuftBO4RsU=;
+        s=korg; t=1663078748;
+        bh=BrsrdON7KovxOojInyEqPaghbcoHurwYXeZgZyEoYmI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GVpBhmfXF/sA7KBmRcEY7HZUSv7ICf/92QtAnWRkap+sSwIiJWvN9ytNazCs7d06p
-         jG/WKVwAuPTQtFMhfTnlj02L+RZUMrAjFVZ5/evoFA9DxUMkh7pDZzunjeCeiHh3NX
-         b+7NSrE+3QODKdXQE+thcKObMl5QOBInitNh7dj0=
+        b=hq+HBe07zzGqDy1D655Jln049uNtjttRvdJrisX6Ww0GNCxfjhgBa3vnImvt50Zvn
+         oDeVGeUfYA/aCL8sQbe8OClYPkiHKT05UmHm4FftbTJTSjjqTsCwPWj6TrATjHr6Db
+         OGZ6JpL1CTafndGQ9wQ5VUdMvO3qQfXVqKzGGZmA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        stable@vger.kernel.org, James Smart <jsmart2021@gmail.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 041/121] scsi: mpt3sas: Fix use-after-free warning
-Date:   Tue, 13 Sep 2022 16:03:52 +0200
-Message-Id: <20220913140359.126966217@linuxfoundation.org>
+Subject: [PATCH 5.15 042/121] scsi: lpfc: Add missing destroy_workqueue() in error path
+Date:   Tue, 13 Sep 2022 16:03:53 +0200
+Message-Id: <20220913140359.174786600@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -55,41 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 991df3dd5144f2e6b1c38b8d20ed3d4d21e20b34 upstream.
+commit da6d507f5ff328f346b3c50e19e19993027b8ffd upstream.
 
-Fix the following use-after-free warning which is observed during
-controller reset:
+Add the missing destroy_workqueue() before return from
+lpfc_sli4_driver_resource_setup() in the error path.
 
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 23 PID: 5399 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
-
-Link: https://lore.kernel.org/r/20220906134908.1039-2-sreekanth.reddy@broadcom.com
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Link: https://lore.kernel.org/r/20220823044237.285643-1-yangyingliang@huawei.com
+Fixes: 3cee98db2610 ("scsi: lpfc: Fix crash on driver unload in wq free")
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_init.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -3670,6 +3670,7 @@ static struct fw_event_work *dequeue_nex
- 		fw_event = list_first_entry(&ioc->fw_event_list,
- 				struct fw_event_work, list);
- 		list_del_init(&fw_event->list);
-+		fw_event_work_put(fw_event);
- 	}
- 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -7893,7 +7893,7 @@ lpfc_sli4_driver_resource_setup(struct l
+ 	/* Allocate device driver memory */
+ 	rc = lpfc_mem_alloc(phba, SGL_ALIGN_SZ);
+ 	if (rc)
+-		return -ENOMEM;
++		goto out_destroy_workqueue;
  
-@@ -3751,7 +3752,6 @@ _scsih_fw_event_cleanup_queue(struct MPT
- 		if (cancel_work_sync(&fw_event->work))
- 			fw_event_work_put(fw_event);
- 
--		fw_event_work_put(fw_event);
- 	}
- 	ioc->fw_events_cleanup = 0;
+ 	/* IF Type 2 ports get initialized now. */
+ 	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
+@@ -8309,6 +8309,9 @@ out_free_bsmbx:
+ 	lpfc_destroy_bootstrap_mbox(phba);
+ out_free_mem:
+ 	lpfc_mem_free(phba);
++out_destroy_workqueue:
++	destroy_workqueue(phba->wq);
++	phba->wq = NULL;
+ 	return rc;
  }
+ 
 
 
