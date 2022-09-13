@@ -2,131 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817B95B780C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6B15B780E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiIMReW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:34:22 -0400
+        id S233191AbiIMRfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:35:03 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbiIMRdh (ORCPT
+        with ESMTP id S233162AbiIMReh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:33:37 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2090.outbound.protection.outlook.com [40.92.98.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E785A3447
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:22:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DWoRncdEYvMDzl7UISQRCDYD6I+41bqMxL+n91Nn3uZr7JDMlNKHH7wKQzy9+9pxNJRUBdntkmMRtuhSWT0W+Db4IqluD/3o4KbUMFA5bX89OqK9YnnZ90Ks1ygeOtCZ9sOn5EGM8VAomXTIc5LCOyn1C8kS3BomUeIKQLoTlsb84eVZNVPeOThf2tfoevzQG6Dj/3D5Gnvui3+/IsPFuRA0sHy8m1Tv7wLJR4NsG3IyO5DQSbOFhzwh0IschG4fqo3sbQ2xfD4zbtDh88+HKtaqDfFdZ8Rbynip8V1IrRRE/EyJ0VJ4mjcIMrsqPqpcHSmtmXekZZdrBvl4LeHB5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hFFzN6HyxVDp6++o9aXYTIouEDXFRsFE2Wv04kjX07I=;
- b=kjEjGxbkvFIK4NQKqRbTT+NAKTxcoJ2/QamBg7Lp/7WpIBrpxWfrzDWqdrztank7T5WYPyjzrNPrj/ZD+uC+8WCKB8Uw3sOCqgzP57kEZ4qv1ttbJRBynG2QC7cT98cA9ETqH+kW+ULrdlDCw57vrf0UcLKMBaMPErwdZUA/eMLtticsO0K7E+rCv9AmLG5oeDmy/rUQi/riOZuRNjOYINTQOXHRFTOsplVPgWlopLqPWOwJQW40twYLxqVGOI1EFlNe6P9LmxlKYhueilgC0DTWxR6JiWWWm4J1Lq7uLku63eCeBzLdSga1mJNPrktmraSwZPOUSMqTR+dal4FrTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hFFzN6HyxVDp6++o9aXYTIouEDXFRsFE2Wv04kjX07I=;
- b=rZmOsh1F6+oivLZKWdLzvqSoDsfKlY7dRvCsGFArE4AHgyfsnPesg/Pz6aeaPkBVslzsX6VObbYilKt/py916voIYy7+vpZsMQNSYbUHD61qPmwPjg9ATE4qVtDK+hei8sgIcm6luGyj1/OfMOL/75iwxEB/lHTlfR/AH5Nr6wSehWZbpal9ulqf7GhBUkWSR9Mf6+59KpqVEO2a4vIjppF56Q19BsrJtHS2YZrX7I/m/tUxFnd0nUIDmlOAlQwkeuhfGd7c9MdIIrdPXeD3fRI/fcEM90YtbFK3zjwp79dk2U1u2xWND9nbAlBb4i7z56OmXM5nh5NIoGEjUfHBoQ==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:158::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Tue, 13 Sep
- 2022 16:22:11 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::8d69:1a6d:5def:16db]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::8d69:1a6d:5def:16db%4]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 16:22:11 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH] mm/damon: Creating kmem cache for damon regions by KMEM_CACHE()
-Date:   Wed, 14 Sep 2022 00:21:58 +0800
-Message-ID: <TYCP286MB23233778395A18052E578387CA479@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [8alXQgIZM0+q4CsoLmoSY65t7Jir3Cwr]
-X-ClientProxiedBy: SI2PR01CA0044.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::8) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20220913162158.157767-1-set_pte_at@outlook.com>
+        Tue, 13 Sep 2022 13:34:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADDAFE5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663086214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/ucusGnYdezKlzEU00G3OKGUQ3PtOtcS9x0L25TIYSE=;
+        b=iKgpQaQsVB6EalkJT503ROLqMhAu2+FNtMWD3BcrNIuk6mzjx1KVJIpH3i0Tw71Z1VTLnW
+        069+on2j1bj8K/A+qyJWUSu1WnyG1j0LlpgT4rhnRMB/Q+mcjlRc8rQzfXwmerDGWpYUDY
+        xvFXFY63EgPBabkc0JIH7bB8q0R7JGw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-673-_BiuCZDAPvi9tyldxyELmA-1; Tue, 13 Sep 2022 12:23:33 -0400
+X-MC-Unique: _BiuCZDAPvi9tyldxyELmA-1
+Received: by mail-wm1-f70.google.com with SMTP id 84-20020a1c0257000000b003b499f99aceso58247wmc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:23:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/ucusGnYdezKlzEU00G3OKGUQ3PtOtcS9x0L25TIYSE=;
+        b=WVLjIiYXipjASYM6dw6BSYdc4ZjIsseyHXZoogiHiuwZRNUaBbwzATGxvdzxSbH6//
+         L0+zl/VMgOfEq0aAsPyR3wkYQxgNiAS2oVY/SmEeLurvlVE+Pptt90ayfyObRxLdyCi7
+         FuViIO6F9m741r+9zS9iRrvyAkl20k37PAMQihlKDBb6F2kgDa5a+qmehsCfS41FNWwn
+         7MRpQHBjQxp3iEKSmmh3hDAcHpMGhGEnaps+SV0PTpncTQxzxFJHpfvlcViibwFx7nMV
+         yqz0jkSPuEVyFpIsP+X6NgAsCxGi3AkgM0F5tbZwzPrIFRKBYxMWf0nV5t5K1EqBJX9v
+         lUiw==
+X-Gm-Message-State: ACgBeo346ET/CeJ+Jjk7QoxWPZvafEEnfpBgasuma5YQcUpYepXVY65A
+        LGLbO5lvPUa7nH3Wr7rJDus04K5BlYsnOSSFvTAV/n0nzmkIZxlvXbeDQiD3LdggpwmDig7/nBi
+        MZG9mJfqOUh+eLQJDvoa9wzHEDMTWol3619dzX9J9VNWb7tsdf2Xhg/FQlBY1y0+bWyKBX1MMya
+        A=
+X-Received: by 2002:adf:d1ce:0:b0:22a:36d6:da05 with SMTP id b14-20020adfd1ce000000b0022a36d6da05mr15347226wrd.719.1663086212336;
+        Tue, 13 Sep 2022 09:23:32 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4O1BQyUm2ehPm712XtDMX5Wsz2i51HwUqgqqPqtTaRYU9jbn9uJHp4bBswlTFqsxc2H905hg==
+X-Received: by 2002:adf:d1ce:0:b0:22a:36d6:da05 with SMTP id b14-20020adfd1ce000000b0022a36d6da05mr15347206wrd.719.1663086212047;
+        Tue, 13 Sep 2022 09:23:32 -0700 (PDT)
+Received: from minerva.access.network ([185.122.133.20])
+        by smtp.gmail.com with ESMTPSA id m13-20020a05600c3b0d00b003a2e92edeccsm1902634wms.46.2022.09.13.09.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 09:23:31 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v3] drm/plane-helper: Add a drm_plane_helper_atomic_check() helper
+Date:   Tue, 13 Sep 2022 18:23:07 +0200
+Message-Id: <20220913162307.121503-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYCP286MB2146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26472d5b-8b58-4578-ea90-08da95a41c89
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmpEumVcsW5TnWy4PLAuKi5diZWuL0anliBMc/m3HusdrAa33+zeBwRxYGrjmEZz3PJMC812i/X4KsPkAcJ8ulz5L/4BOD2dVNi52jl3QUel/CfzY4syIQ03/W0XaPevFwQvB8jy0XD7PEa0mxCd8hpKqcRZBBjtFdMqWvGb5DKx6JsARN42xO2kjZ4dyxdw2uto/xvtOUcZCf1fVzzy9nxkaurFaqSKNOAOyrtpPhAiwJ2YG2sUuqlhd/MyLpATl45ip+DFkOqCMmPP2+RRDxFudkDVaeCbGtb9V/aqm3kBatuyJluNVtRNRI92wfSJ2LLvwvfASU1aELP9mRxbspGDhmzA/oJkaKYKAIpgCYcx6LsNGWEQlkKbZUIXvNDcErmlvjT5r/sfLI2bF3HAFhVWbVK3h4+7Mo77KtcGjLsdCEUyt5UcQkpzZXFyMsNbXz/FRg87vvTkrEnrBM+N684gujrl0u2+QGHE0TpTF3IrYBsWYyW0KGMaH0e92o8wFxG0APF9JI65z68/tNQIGvSZsxdCH/0764Nj2UUTQzAm4yRGXv5ue+++FUQDrdLhyFi7qrbeGuAV57LCxu3q0zx/yzyscj1g3yhUL8grs1p21YSYtEYHBSp9McDzlloAz/T5XDqRXzRd5i71CU7KgSF7IyiAfNnZkKAb3FK5aGv59TbsAC7psgCv7BFHzW1MUxmuaPZKcrIYqELCt287Eu/GpA94cr5jERi/w87gHAESFeyBtEUQUV5ow6Go7o88dHY=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4f4KM19CMvtPAoRc9ib4U1qG25Caly1A+sIPbKaKg1ULRGRdhGV2g216VHN0p9ToLxgEUR9NFmHBXJLrg/Y/XFLW7FXQ6xA5I61D/6VP3YEU7m9Kv9+cShFomsdPY6oREot5+7KeSsNZDnY4ditia6PxDUb/ykK1pE5y4qQUMJJk1yZi+B4bMXCsn8aa/SbCI9A8ZL9mb2sfUxNO5gLUPKurN1STkA87pNpaY5KBIFoo8oOASaJSOu/gz/s+mr3ussdoY7FiVm7iVQhbEYu1/97PIkJDvswgjXrqCYjq5MvX4yTP0hffb0gsQw3sg07cYjNyB7cQrcGoOwHLkv0X+Nc26q0lwhL2R9r/mCdLgio4j5y1D9QG/qtCRBW08yG5zjr4c15ZxcBjkvk8TKsJfySUQoJuYGMFf07CwpdvEn/1f71KN0I98NZ58+AQ9gmgNHsE2xCA8VspGRpRWGITz0IICrDNVayY29FJ4/idKVPmjMjVvrh0GlbHhu3D6IQudOe0ozhXILOarMhFO6mw4JUzK+0qPl4nKt91PSUQp7HaK/UkgZwihsQ6Sh29vME7MJ+wvkzwtNJ7wOoY3oBEpC+MZ4qcIVN+7Y2DzbyQz6+5/AqQmFuedJdmv9STmCoPVh0X0ExCTO7UXMu3iChLng==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KOIOh+Oe8zO7WEM3gN7azAFYTx42hGIdct88SZcrMPAm/r6FVxoyyUYSVm7E?=
- =?us-ascii?Q?ipLFpR4FrDyrtjn87N/aHk4WT3zctaSHV4F5on34aqMS+/69SVRq8u8yWk19?=
- =?us-ascii?Q?Pw4X4VhuT4kTJ5HWi3hnK80f88BBAdNVSdFyK88SBmfM+pWblv20f3lkLiqM?=
- =?us-ascii?Q?9VthD4hynox1PY5SshHyWU+pIUSlSgWb8e7kbefaxRf46oMo+FzbagAx3GkB?=
- =?us-ascii?Q?6AyzGBqeN3Lk4U9g1y5Bq8UUVyBqAWcF4Jl3aVj6uQP4KSv8f7YNpFriooAk?=
- =?us-ascii?Q?eRwEKR9HJCgDO1KmBZxHqx593+WKvXxYZkO9J8I7ATDlGqaDw+NufMIM4Edg?=
- =?us-ascii?Q?0+IEpDGpAeapHCnOsaXKINXuv2E0L1ne5TvxlHae3qZKMCyi8Glc6WE72zUe?=
- =?us-ascii?Q?n7Hd+grBanhaCi+ye66LsHuXah+YaejcLVxUFbv5SKiLzACvu3WWvdySRyiO?=
- =?us-ascii?Q?NYndLNbWNCMq+NMNOZOireHxUyGpkkKSkclUnH87W4+EF+VJHAl2Dx5oIwfe?=
- =?us-ascii?Q?CfpAjkzwS6WjAN6dlNHkRy6Rd2DnPIa5pEewLA7t/l8EBZ+tliCTNAbwTlLN?=
- =?us-ascii?Q?XbEJGjBrxaqN4RStq2XT4tyWvfQy9kmVvqmTZ+jlsHJ5UJdvV0nK0dVgcpMX?=
- =?us-ascii?Q?UEqTjdui5Kw8wvlgkh/fdIT+NFmC+SATZtvwdAYtH/457Uq5MP1nEBNzOh/r?=
- =?us-ascii?Q?9EKP127H1cjNE6MNt0JZ3wDXY8OODizJiD2t3dtyUz0BUfG5H3r/d4xUuBw6?=
- =?us-ascii?Q?QQZ0w4EpIXJoVqq91avtm5BicvPaaY+hMriHFrfGGr4wu6o8qF0gWjjphcee?=
- =?us-ascii?Q?itUjV3Mo3PuFUxeG27X+fdGiVwOejNbxAbbiS8oOPZ/lYnks8uaNt+jFUpUG?=
- =?us-ascii?Q?IcSUHUfkvt3qNPOx90xTGgqznhv4+mogVCCkN67rM+YuZjehYlgiGKbw1TEQ?=
- =?us-ascii?Q?uHppF0UV1Q7XZcDNTaSwO7JKzZx95Rho9IWZc6yJW757xMP123dTwpDzSu9F?=
- =?us-ascii?Q?17HcmkKyTv3xYAgMQ7AhRmoLNXarYlHo91e7yAEIe0+uUGh46o0LdVzIw3U6?=
- =?us-ascii?Q?xC7F9Tn3JULC2mKpY9R1J85UnvE7zrIVTdc/75SszplCXodMUMO+Cwc9mhLI?=
- =?us-ascii?Q?XheADkoEQ3fQkooyvadLlzkCmU9Gqxcj3JkQF+Pg/u9A0IofpaUEzAZK8Xzf?=
- =?us-ascii?Q?3lEp0QLBn73R3AzwIznGM3CDBD0liyz+ncp6fOccGAmUBRlQqUyTSSIy6rlJ?=
- =?us-ascii?Q?038zZOSfPzwPGyxSoRuXU9AQCRLxOfu/4rQvjXommQ=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26472d5b-8b58-4578-ea90-08da95a41c89
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 16:22:11.6240
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB2146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Damon regions are dynamic objects which can be created and destroyed
-frequently, a dedicated slab cache is created by KMEM_CACHE(), as
-suggested by akpm.
+Provides a default plane state check handler for primary planes that are a
+fullscreen scanout buffer and whose state scale and position can't change.
 
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+There are some drivers that duplicate this logic in their helpers, such as
+simpledrm and ssd130x. Factor out this common code into a plane helper and
+make drivers use it.
+
+Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 ---
- mm/damon/core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 0b1eb945c68a..20163c3c9aa7 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -1283,8 +1283,7 @@ bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
+Changes in v3:
+- Use plane-state and atomic-state (Thomas Zimmermann).
+- Drop primary and just refer to plane (Thomas Zimmermann).
+- Make kernel-doc comment more clear (Harry Wentland, Thomas Zimmermann).
+- Add Thomas Zimmermann Reviewed-by tag.
+
+Changes in v2:
+- Fix `new_state` field comment (Ville Syrjälä).
+- Rename `new_state` to just `state` (Ville Syrjälä).
+
+ drivers/gpu/drm/drm_plane_helper.c | 30 ++++++++++++++++++++++++++++++
+ drivers/gpu/drm/solomon/ssd130x.c  | 18 +-----------------
+ drivers/gpu/drm/tiny/simpledrm.c   | 25 +------------------------
+ include/drm/drm_plane_helper.h     |  1 +
+ 4 files changed, 33 insertions(+), 41 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
+index c7785967f5bf..db04d9a32ce8 100644
+--- a/drivers/gpu/drm/drm_plane_helper.c
++++ b/drivers/gpu/drm/drm_plane_helper.c
+@@ -278,3 +278,33 @@ void drm_plane_helper_destroy(struct drm_plane *plane)
+ 	kfree(plane);
+ }
+ EXPORT_SYMBOL(drm_plane_helper_destroy);
++
++/**
++ * drm_plane_helper_atomic_check() - Helper to check plane atomic-state
++ * @plane: plane to check
++ * @state: atomic state object
++ *
++ * Provides a default plane-state check handler for planes whose atomic-state
++ * scale and positioning are not expected to change since the plane is always
++ * a fullscreen scanout buffer.
++ *
++ * This is often the case for the primary plane of simple framebuffers.
++ *
++ * RETURNS:
++ * Zero on success, or an errno code otherwise.
++ */
++int drm_plane_helper_atomic_check(struct drm_plane *plane, struct drm_atomic_state *state)
++{
++	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
++	struct drm_crtc *new_crtc = new_plane_state->crtc;
++	struct drm_crtc_state *new_crtc_state = NULL;
++
++	if (new_crtc)
++		new_crtc_state = drm_atomic_get_new_crtc_state(state, new_crtc);
++
++	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
++						   DRM_PLANE_NO_SCALING,
++						   DRM_PLANE_NO_SCALING,
++						   false, false);
++}
++EXPORT_SYMBOL(drm_plane_helper_atomic_check);
+diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+index 79e8e2017c68..28cf9c87f86d 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.c
++++ b/drivers/gpu/drm/solomon/ssd130x.c
+@@ -565,22 +565,6 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
+ 	return ret;
+ }
  
- static int __init damon_init(void)
+-static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
+-						     struct drm_atomic_state *new_state)
+-{
+-	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+-	struct drm_crtc *new_crtc = new_plane_state->crtc;
+-	struct drm_crtc_state *new_crtc_state = NULL;
+-
+-	if (new_crtc)
+-		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+-
+-	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+-						   DRM_PLANE_NO_SCALING,
+-						   DRM_PLANE_NO_SCALING,
+-						   false, false);
+-}
+-
+ static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
+ 						       struct drm_atomic_state *old_state)
  {
--	damon_region_cache = kmem_cache_create("damon_region_cache", sizeof(struct damon_region),
--		0, 0, NULL);
-+	damon_region_cache = KMEM_CACHE(damon_region, 0);
- 	if (unlikely(!damon_region_cache)) {
- 		pr_err("creating damon_region_cache fails\n");
- 		return -ENOMEM;
+@@ -623,7 +607,7 @@ static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
+ 
+ static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
+ 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+-	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
++	.atomic_check = drm_plane_helper_atomic_check,
+ 	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
+ 	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
+ };
+diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
+index 777ccd250871..ea5b3239a659 100644
+--- a/drivers/gpu/drm/tiny/simpledrm.c
++++ b/drivers/gpu/drm/tiny/simpledrm.c
+@@ -469,29 +469,6 @@ static const uint64_t simpledrm_primary_plane_format_modifiers[] = {
+ 	DRM_FORMAT_MOD_INVALID
+ };
+ 
+-static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
+-						       struct drm_atomic_state *new_state)
+-{
+-	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+-	struct drm_crtc *new_crtc = new_plane_state->crtc;
+-	struct drm_crtc_state *new_crtc_state = NULL;
+-	int ret;
+-
+-	if (new_crtc)
+-		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+-
+-	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+-						  DRM_PLANE_NO_SCALING,
+-						  DRM_PLANE_NO_SCALING,
+-						  false, false);
+-	if (ret)
+-		return ret;
+-	else if (!new_plane_state->visible)
+-		return 0;
+-
+-	return 0;
+-}
+-
+ static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
+ 							 struct drm_atomic_state *old_state)
+ {
+@@ -543,7 +520,7 @@ static void simpledrm_primary_plane_helper_atomic_disable(struct drm_plane *plan
+ 
+ static const struct drm_plane_helper_funcs simpledrm_primary_plane_helper_funcs = {
+ 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
+-	.atomic_check = simpledrm_primary_plane_helper_atomic_check,
++	.atomic_check = drm_plane_helper_atomic_check,
+ 	.atomic_update = simpledrm_primary_plane_helper_atomic_update,
+ 	.atomic_disable = simpledrm_primary_plane_helper_atomic_disable,
+ };
+diff --git a/include/drm/drm_plane_helper.h b/include/drm/drm_plane_helper.h
+index 1781fab24dd6..7760b27b0323 100644
+--- a/include/drm/drm_plane_helper.h
++++ b/include/drm/drm_plane_helper.h
+@@ -41,5 +41,6 @@ int drm_plane_helper_update_primary(struct drm_plane *plane, struct drm_crtc *cr
+ int drm_plane_helper_disable_primary(struct drm_plane *plane,
+ 				     struct drm_modeset_acquire_ctx *ctx);
+ void drm_plane_helper_destroy(struct drm_plane *plane);
++int drm_plane_helper_atomic_check(struct drm_plane *plane, struct drm_atomic_state *state);
+ 
+ #endif
 -- 
-2.25.1
+2.37.1
 
