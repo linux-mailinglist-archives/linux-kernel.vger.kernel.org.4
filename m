@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66035B7125
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6435B70C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiIMOfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S233772AbiIMO1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiIMOeU (ORCPT
+        with ESMTP id S233771AbiIMO0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:34:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A21647F6;
-        Tue, 13 Sep 2022 07:20:06 -0700 (PDT)
+        Tue, 13 Sep 2022 10:26:34 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEF36565F;
+        Tue, 13 Sep 2022 07:16:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74FC8B80FA3;
-        Tue, 13 Sep 2022 14:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00EAC433C1;
-        Tue, 13 Sep 2022 14:18:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5B56DCE1278;
+        Tue, 13 Sep 2022 14:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7345BC433D7;
+        Tue, 13 Sep 2022 14:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078700;
-        bh=FVP8keIi9Db7tPv+cq2sKFHXwu/hX6pIePkdAC8k2ME=;
+        s=korg; t=1663078491;
+        bh=UbCpuCPbcinXMCZOspcJy2W/PDBVglLjkQGxbqYYNsM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gvwtnq/0TVihWX1MVFo0ioKwO1lFElKpQR+NAySOmaIFxTFFwgZbQxfh6CbwR5a3f
-         uE+012rGTRVU3lCwZO1DPXBJkpKsLehhumIZGRuz8UYQot0yTbla33OleAzou5dZvP
-         +z/u31NgOAx6iBWMHPCFq4V6ty/WX8+q/ooKOt80=
+        b=hnp50GIMahQAtX13Ipbw9G/q4F9+ju7cri3tyL16R8ZhXQ8TZYN7UpPflt3tqglUZ
+         S5aMVe45ovcDJphmmPyCPZnIC9Z4gu0guYZC/drN3UxfuM5Nmq1hQJUMU49UUEqgK2
+         9B9iIXQ60n++OXyA7zSn8e6v2cWuAsfOi0uGL6ek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 049/121] ASoC: qcom: sm8250: add missing module owner
-Date:   Tue, 13 Sep 2022 16:04:00 +0200
-Message-Id: <20220913140359.465739429@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Wagner <dwagner@suse.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 135/192] nvme-tcp: fix UAF when detecting digest errors
+Date:   Tue, 13 Sep 2022 16:04:01 +0200
+Message-Id: <20220913140416.739412712@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-References: <20220913140357.323297659@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Sagi Grimberg <sagi@grimberg.me>
 
-[ Upstream commit c6e14bb9f50df7126ca64405ae807d8bc7b39f9a ]
+[ Upstream commit 160f3549a907a50e51a8518678ba2dcf2541abea ]
 
-Add missing module owner to able to build and load this driver as module.
+We should also bail from the io_work loop when we set rd_enabled to true,
+so we don't attempt to read data from the socket when the TCP stream is
+already out-of-sync or corrupted.
 
-Fixes: aa2e2785545a ("ASoC: qcom: sm8250: add sound card qrb5165-rb5 support")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220816165229.7971-1-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 3f2304f8c6d6 ("nvme-tcp: add NVMe over TCP host driver")
+Reported-by: Daniel Wagner <dwagner@suse.de>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Daniel Wagner <dwagner@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/qcom/sm8250.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nvme/host/tcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/sm8250.c b/sound/soc/qcom/sm8250.c
-index fe8fd7367e21b..e5190aa588c63 100644
---- a/sound/soc/qcom/sm8250.c
-+++ b/sound/soc/qcom/sm8250.c
-@@ -191,6 +191,7 @@ static int sm8250_platform_probe(struct platform_device *pdev)
- 	if (!card)
- 		return -ENOMEM;
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index 7a9e6ffa23429..40bd68ba1040a 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -1227,7 +1227,7 @@ static void nvme_tcp_io_work(struct work_struct *w)
+ 		else if (unlikely(result < 0))
+ 			return;
  
-+	card->owner = THIS_MODULE;
- 	/* Allocate the private data */
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
+-		if (!pending)
++		if (!pending || !queue->rd_enabled)
+ 			return;
+ 
+ 	} while (!time_after(jiffies, deadline)); /* quota is exhausted */
 -- 
 2.35.1
 
