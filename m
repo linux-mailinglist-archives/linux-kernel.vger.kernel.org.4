@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3388B5B6CC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E175B6CCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiIMMJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S232010AbiIMMJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiIMMJA (ORCPT
+        with ESMTP id S232001AbiIMMJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:09:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A830A5F9B4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 05:08:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4649A6602002;
-        Tue, 13 Sep 2022 13:08:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663070937;
-        bh=ytNEmiOcTsgWo0PMOFDU/i6E5lJKDu8uqwY6x00ydfU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bFHlB0J2yobOwBvsWUUS07kgVmtwvhQ8i0BmdU0Mc14MRQ8k2mS60QKiOyPOT4BIm
-         aZrp8CbbkzYxHPK2wQopWJ68KZ0ISvf8ddrLGwPNK4t7Ts336PtSjjQBmSDyZONOF8
-         Wc+MYU+dWW0Wct9deGcnCiuAa1O3kXKQsBY4fh38B2f88+8SoVJHlQmI3Z1VmN0kYq
-         9xSorSGxfXLbz3SXAjKJiZ55Hc6yT/JhjPAYyWLK+9LlwHhEmOssamkXBlXswm07dg
-         PRNhCH/5FHNEIb3pY7pY5YNx7zwndByB4z+BDES0tryYxvo7WERu5BVyJY0+1C+WDX
-         ydQ55sH6DQwdA==
-Message-ID: <ca89b96f-cb17-e6b0-5dcd-fede79737770@collabora.com>
-Date:   Tue, 13 Sep 2022 14:08:54 +0200
+        Tue, 13 Sep 2022 08:09:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBE113A;
+        Tue, 13 Sep 2022 05:09:27 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DBpEki029303;
+        Tue, 13 Sep 2022 12:09:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=JCxc1Ojv95W6xf87b7UX1sIpoTQQTskpUVwH+4Fl1pA=;
+ b=TJ6YsmGQkkQkLh8jT5eswx6/jFROP80jin8ty0k8KDha6YPt51OlSi00OJ/O1ZDfr8bF
+ PAuilnCFiW6lXlnlCNE4+1Mn7bGfUqeI2lIacmeimW8sN/AjcONZjhJXTdtn3i/hmkXH
+ B+XUHxtyH/gORWReTBYR7qO0u5oOcFLkRsCQXj2dP+DSRIIaB3xlaSxmAwJAt4/bpt5h
+ qJ7V9oV1LIeC7XxtO3xm4zzXvnn37QcBHQG27XH8jQRvP0T8bBZBQHBxzzNENG6p4ern
+ Po/TR/2ewfwl5gdxcmqxkDMTOVE++/3ZBkBeuhlIVcUqIzaL87+EFWOX4uDwzYUrl3Y1 HQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjrk0g6rt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 12:09:16 +0000
+Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28DC9GJk000536
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 12:09:16 GMT
+Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 13 Sep 2022 05:09:14 -0700
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Vikash Garodia" <quic_vgarodia@quicinc.com>
+Subject: [PATCH] MAINTAINERS: Add Vikash as VENUS video driver co-maintainer
+Date:   Tue, 13 Sep 2022 17:39:00 +0530
+Message-ID: <1663070940-8165-1-git-send-email-quic_vgarodia@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3] soc: mediatek: Introduce mediatek-regulator-coupler
- driver
-Content-Language: en-US
-To:     matthias.bgg@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org,
-        alyssa.rosenzweig@collabora.com, nfraprado@collabora.com,
-        dmitry.osipenko@collabora.com
-References: <20220628120224.81180-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220628120224.81180-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zM61q-G5cUAxWV7X9EHm-7cfD0m85nxO
+X-Proofpoint-GUID: zM61q-G5cUAxWV7X9EHm-7cfD0m85nxO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_05,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=835 spamscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1011
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130055
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,47 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/06/22 14:02, AngeloGioacchino Del Regno ha scritto:
-> This driver currently deals with GPU-SRAM regulator coupling, ensuring
-> that the SRAM voltage is always between a specific range of distance to
-> the GPU voltage, depending on the SoC, necessary in order to achieve
-> system stability across the full range of supported GPU frequencies.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+For the past several amendments in video driver, I have been working
+with Stanimir in multiple design discussions or handling a given
+issue. With this, adding myself as a co-maintainer.
 
-Hello Matthias,
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-gentle ping for this one, as it has been tested for quite a while here,
-on multiple MediaTek SoCs, and it's working as expected.
-
-Can we get it upstream? Is there any blocker?
-
-Cheers,
-Angelo
-
-> ---
-> 
-> Changes in v3:
->   - Added braces to else-if branch
-> 
-> Changes in v2:
->   - Added check for n_coupled
->   - Added check for vgpu to enforce attaching to vgpu<->sram coupling only
-> 
-> Context:
-> This driver is one of the pieces of a bigger puzzle, aiming to finally
-> enable Dynamic Voltage/Frequency Scaling for Mali GPUs found on MediaTek
-> SoCs on the fully open source graphics stack (Panfrost driver).
-> 
-> No devicetree bindings are provided because this does not require any
-> driver-specific binding at all.
-> 
-> Last but not least: it was chosen to have this driver enabled for
-> ( ARCH_MEDIATEK && REGULATOR ) without really giving a free configuration
-> choice because, once the DVFS mechanism will be fully working, using one
-> of the listed MediaTek SoCs *without* this coupling mechanism *will* lead
-> to unstabilities and system crashes.
-> For COMPILE_TEST, choice is given for obvious reasons.
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 936490d..d3ef64f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16969,6 +16969,7 @@ F:	drivers/thermal/qcom/
+ 
+ QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+ M:	Stanimir Varbanov <stanimir.varbanov@linaro.org>
++M:	Vikash Garodia <quic_vgarodia@quicinc.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
