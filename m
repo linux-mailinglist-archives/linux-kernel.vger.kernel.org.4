@@ -2,215 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CAE5B73C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29B85B746A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbiIMPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S236110AbiIMPVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiIMPJE (ORCPT
+        with ESMTP id S235876AbiIMPTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:09:04 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766B177553;
-        Tue, 13 Sep 2022 07:31:47 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278624b7c4so32620802fac.5;
-        Tue, 13 Sep 2022 07:31:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=tj9IaKd3V1LuUQ7OzzJ/L+w5soQvCCrAzGZ3d7sXgeU=;
-        b=JuHcfCrZ/4xDb9hE81GSjQydbrnsQ00tf8f6Tn0G2Q6jc73wLHH7O0+xxhmnuS60p6
-         4tGDivpPjk0ixgeAGAvQeB7Hn9pJ0ecP9hsQ5uRwSGU2HImMC7GF7+UoRMmLL52eg+9x
-         lyM9vqjV89Ds3h3FSnHW/kPXbgmendktFAzdOL3bqPzPep/foZtsrM3kNpjBFN3GoiS4
-         uHudOzIASfpagZg2aEaX58TRaqCpLlzX8hdJVP6MVKoxqrrztfLGF1Q5FGVznFYsdQIo
-         IBeZHxo7LUbEGjrphbTVHmv5d9PmVNWskRlA237jV85kUZDdlGjvvZW1HwCNon4atzu/
-         nL2w==
-X-Gm-Message-State: ACgBeo1tlXDzoEN3MRQo/98+ezq0zHWMj13gFQy/Hach4a4gGRL80FO5
-        2O+8/B81ccEp9tsGtm8bNPEYcIMJIg==
-X-Google-Smtp-Source: AA6agR7PIbzqcKoTBfvtNXth+cXiNYZjzdTsrAu8f4IZ+GA9u0Y0kkQ9kXUc385HG9xo7xD4RV9YvQ==
-X-Received: by 2002:a05:6870:51ca:b0:11b:98fa:432b with SMTP id b10-20020a05687051ca00b0011b98fa432bmr1959987oaj.109.1663079425048;
-        Tue, 13 Sep 2022 07:30:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r35-20020a05687017a300b0011e37fb5493sm7278331oae.30.2022.09.13.07.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 07:30:24 -0700 (PDT)
-Received: (nullmailer pid 3625970 invoked by uid 1000);
-        Tue, 13 Sep 2022 14:30:24 -0000
-Date:   Tue, 13 Sep 2022 09:30:24 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4 v3] dt-bindings: memory: Add jedec,lpddr4 and
- jedec,lpddr5 bindings
-Message-ID: <20220913143024.GA3620595-robh@kernel.org>
-References: <20220909232139.645945-1-jwerner@chromium.org>
+        Tue, 13 Sep 2022 11:19:44 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-he1eur02on0607.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe05::607])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A5A79EED;
+        Tue, 13 Sep 2022 07:36:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iPyFo/yG5YFw/LpSWg4fTxefiL20m37yyVpq4u85jeNHsXF4Bh504Hz6DApDhnte/8ZykpZA/tH61t4uPXQwbBNeWby7hjWLWWXQ0v2gqA2cOJ4CtXpgt2MJl+D3Zzel/u2J422lYr/Fl7ChHbR2/aDR5Uq/4xkP4nG54nQZAv2c6Y9nKzu0qS+GeyOaMyEXlIf5FqofJIxTRm/WWgeAS/gr02LrXZ+1eOcfk+7M2lAhLn1SKSQU40+wHFLlaykyf5XDRjGXGPJisBDctbIF9h3M6Lyh+o6u5HAom7AoUdva6v4KgiF+vmWeozR0/s6hcL0VO5O+bVqNmfXQMYh4nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Hcqwtd2+mYcf7CmY79H9YC9GT8cTaKmtLpKkPrGfjzw=;
+ b=E5MAKM0419oAtWrbiitGPMSId93MWS+csC9BFKGl9lRlCn6Foto8bq8yPVYUze8SoEUJYxisOHx+rcDXxr1UP5FOipHH3AeRkmxCG66Z+eqWeFfGvDXw4ahYKZlXIdnHXoXsCSh0mvfrXIhjKrrDpt3gB3YznbV8gmuUcZwNqEixJ1D3xyRt2ItAeM0obroMMKS/HDLN93PBHm9Dm4UaCOIKjr/L5rIignWgPhq+3hYviOBte5OLW4zQORzpukYqjBzPEDIV6CiIHn8OLXPYd7y25DfcABcKYCPziIRv3VM3uiKPt09e8aM6fN1euKnXwxYxUVo17o7i4SUCIdKg8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hcqwtd2+mYcf7CmY79H9YC9GT8cTaKmtLpKkPrGfjzw=;
+ b=Ttb3pDpZm3IsKbIhyW/emstYkxPBEnYW59jq88FAuPDeqXFrmBxtyUkqDxPxmKf/ABP4LxaQGkPn13yWxRmb4K6OY8ri6TDkoKvRPbdwQ3GmiDkrrRkR+yu69u2rmxf2FcGVyQujXjl/LC8RJwtGHiMzbMIonYG1UKNh+bU68d8=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DB8PR04MB7017.eurprd04.prod.outlook.com (2603:10a6:10:123::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
+ 2022 14:32:53 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 14:32:53 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        George McCollister <george.mccollister@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Marek Vasut <marex@denx.de>, John Crispin <john@phrozen.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/3] dt-bindings: net: dsa: remove label = "cpu"
+ from examples
+Thread-Topic: [PATCH net-next 3/3] dt-bindings: net: dsa: remove label = "cpu"
+ from examples
+Thread-Index: AQHYxtBCZhrlfLn9yUSG8exS6G8zpK3dBZ8AgABW+gCAAAwAgIAABS8A
+Date:   Tue, 13 Sep 2022 14:32:53 +0000
+Message-ID: <20220913143252.xfajlh6v7aqznakw@skbuf>
+References: <20220912175058.280386-1-vladimir.oltean@nxp.com>
+ <20220912175058.280386-4-vladimir.oltean@nxp.com>
+ <b11e86c6-ff35-2103-cebe-ebe5f737d9de@arinc9.com>
+ <20220913133122.gzs2uhuk626eazee@skbuf>
+ <8a323fc4-bf98-a808-899a-957438b0d792@arinc9.com>
+In-Reply-To: <8a323fc4-bf98-a808-899a-957438b0d792@arinc9.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|DB8PR04MB7017:EE_
+x-ms-office365-filtering-correlation-id: 665aaf4b-1847-41f1-c366-08da9594d797
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XK3x6N989qu58UakxWOlPMPKHzMK2yV/4ip8Tz613YhXQbdBtpjjpdaBuZ+SgMJk+mF9h2rPmYOOjWGDtKqVfsdmgqI6h9BhsTFRbP5QzO+h1q4FgHkQQX+wWWI3NNEuMvTE/9H4vBK/F9oLqf9ExCn0kzdTLp/3s7FAPN8UD7zCh2qfGmMCQq/nw1px+u/Rc842LihI9nVN8MAzkLfhQwH1k1W3lRbvzBRaoFO0NBwTwCXJBkVfvAc3gviN7mP4uNJuQ6xqCxwg+06ZC9ReAxg+p345U3Meplw6ILf+/SS7VxMqvVCG/rZY0xAIa5hPUuwS1+k5oio3fT4YoJCIEepHEdJAa5BVeYgBuInmiXvZSVGJ4mrTYbdjMWzwDXbrLydHsv06kB+B4H2828QddNsBZREk3wCc/zoFOFAk9qN+4TFExnbuTsrJg1pQ0BkvEW3birrrKDlzkGpuiGMcqh4hTndudpAgI3uRQbZtC10Ec2e++x6FFOsUXsKvymvLv1V8zJWjTC+5IpMu0rv4KSa2Ab/utZaj8fwv4IkgOFz+35GuIyLwWuNvciJzNhrpSRmzkaD8+8ze67RpP0JfQ4l8Gcj+JzVjDkZwWbus0kzRf9TFrfajDCII/rwZ/NWtqPRtt0Jkh7szq0D73X+n8AziD7WJxJHHfeM7vbU8Hgq/Vw9obIwwVL26gOUKfyA2UK6fgblQt5ag+WyC8DUeJZ6Gi4tjzvTTfHsLN2KskOD4+BINDvjEglexrjxuOYZA99kuMBNggPnDtr+BvlbTWg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199015)(83380400001)(9686003)(186003)(6486002)(1076003)(8676002)(6916009)(54906003)(44832011)(5660300002)(53546011)(4326008)(71200400001)(33716001)(66556008)(86362001)(66946007)(6506007)(91956017)(66476007)(7416002)(76116006)(8936002)(6512007)(7406005)(38100700002)(478600001)(2906002)(122000001)(64756008)(316002)(41300700001)(26005)(4744005)(66446008)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TlFJTjNNQ0tzODZnZWxVVk00K3pPKzZMVmdiSFlRNGFId3dJOHhrWHpRbHhl?=
+ =?utf-8?B?Q2daM2N5N2xjbDg1Mm1kaXBzdXVhdkxLZ09Sa3lScWZHSzlxK2xMYnhZUU12?=
+ =?utf-8?B?QmRZWlgzL0hmbVY4RzNpLzNvSzlWQVFWalJmTjB0ZlEzQzJjQi82bHk5QklY?=
+ =?utf-8?B?K1B2L2J5d3Q1S2hWeTRBR01YdmpqSS9uRWhSOU9EZGM3S3lobG8vRkxsOUxz?=
+ =?utf-8?B?ZFZVYUJka3VsYVJib1N3U29scmI3NytJcDEyUVNoM05hRjlUZlVPZm1FUEx2?=
+ =?utf-8?B?NlRlRnh3eG1pTDR1TVhZK0V1TzNkUkUwV1Y5Y0dlcjMzOVpIQm5raWJQRmRE?=
+ =?utf-8?B?Y254cDhCZVRIYTJrMFB1ekRRSUZhd2hYTmFySGNJVVhPajF1NnRkKzB4WmI4?=
+ =?utf-8?B?S3MybmpHUUxEUWtsM1dJcVRtVlN0bmw1WFh5R2JuaXZUdGhmVVVia3l0TEZL?=
+ =?utf-8?B?Qm5vSGlxclNQUGFCdE1IZ29iMnl1SmdmUjFDaE5KMERUak1kc1dUUVNEK1Zr?=
+ =?utf-8?B?U0xuSzVvM2lTWUt1aVVwR216M0I1MklGWmp1d1BMcFRvK0NjM1V2M3o4c1Vk?=
+ =?utf-8?B?YzRTSkhqZHdWSTBSVGtjd1ppKzRlZi9sam1mazc0Ym1pRGc2cG1wM28rTXZI?=
+ =?utf-8?B?MEN5RWkrWDVoazRCOUUyUVhvQlJZb2Y0YTI5YWJqMUJycXFuS0tGanJ3VjRO?=
+ =?utf-8?B?aGh3cG1jM2gzWEVielZqbWZaNnBJYk9KOGdWNkJQK3FuZTZDVk1neDNaNWsv?=
+ =?utf-8?B?dGJXemJqRjc0cmFnMHEzOWhyUCt6T0ZkbkVOVEhvek1UeitWOGtYNkJqUkZq?=
+ =?utf-8?B?YkNyRThIT0dRWUxiOTAzRWxta1RiYmt0RUhHMGthMXJMaEw2ek1XZElkcVZX?=
+ =?utf-8?B?NHBNeFp5TzlvVmtMNlZWZ2FuM0c0aWY4RTNESE1PeXoxVlJiQ20zNVg2U2li?=
+ =?utf-8?B?aUxJQkpnVlJ3eGdwRGh0Nm5yU2dXTW4xL1FPWURIbGUyVXRLYWRJSjV0TVR4?=
+ =?utf-8?B?dHpOZUlTUVUveHZYcG9PLzM5ajc3UWh4aDVrUk54eTJiV1MrOGVyVlRCYWFn?=
+ =?utf-8?B?QTJaK2lPMTE3R0xHdDN6NmpydEN4dm9PVjF2NVFNejBYM1JLVnYwWVRDelNq?=
+ =?utf-8?B?SjhmTnRwU3RhSFA0RjZDV25mQnI3eW9Sa1F3RXBYYVB1ejh0Z1hrWjlDM25u?=
+ =?utf-8?B?VG9MelF5UWsvVWVZR01kcVQ4aUR0cFBaK09GUnI3Rkd2UFhOa0RaNldzWnBl?=
+ =?utf-8?B?c0VKMjVlZm1ybHpzWEpxeXBHc2gzQkttN2FGZjZEOVJ3S2VmS0hDSnFFOUhk?=
+ =?utf-8?B?WWo0Q0tDS1FxR2o1K0Fxd2p5dE84RGZid3c2YklJeUc1TkhPNStPUzlsNWpV?=
+ =?utf-8?B?NktwdGNWdlRRaUZGM2wyS3haU0tGQTFBNzQ3TDBJZVp5WlNGSlpMb1FoK0Vz?=
+ =?utf-8?B?SzFZKzI1aWZFQUVxSXJKWU53eks5eDlidFF6QytJR2Z1bTRTYW15RERkQWpC?=
+ =?utf-8?B?Q25oaE1BZTlCNGJUbHprcnZJZUFkbzNFbTR5NVJVTUZCS1lzRDJJWXRyNG1P?=
+ =?utf-8?B?VkYrQ3lKVVl5R284Z0FsN1N0ajBqZjlKem1SSXVTaktpdG1zMEZMNTJ3UUpa?=
+ =?utf-8?B?dDBGS092cG43ajY1UC9La0g1VjVrVGRRYW1LWDhwMUx5c2FzTDg3TlBtWFEw?=
+ =?utf-8?B?T1B3d0tRb3BYaXZ6ZmVZKzEzeFlvR2dVYVhHdEN6QkJxSHZsNTQzeEV2VjhP?=
+ =?utf-8?B?eGdqUVR5T3hIOVN1cjYyYmNERmhib0tYTkRzRUl0QkJTWVlPZFYwZ01NRldW?=
+ =?utf-8?B?VE81djdDQTNuOVlncXk2M1lCUmRPcnV5UVU2SDVRYU85dWdMakk3bG5oZkpD?=
+ =?utf-8?B?Q2h4bWVmSlpsY2Q2b3ZyMUhwSUVySGd0QlFVMHhJazZWTFdsVzdRVm9NaEkz?=
+ =?utf-8?B?QkkzelBQNTJabUxWVjNXUTBUc25mYnA1eEVRQ3NTNUNvMFpWWWRwWEZGenlR?=
+ =?utf-8?B?ZVR2Tlc3d3RDVTh2RUdjUExTZjZhSVMwdXdqelAwNEMyeFh3UktGN2ljZUVz?=
+ =?utf-8?B?Y21UNEovY1Q3SzJ5TitPcWMxRi9zeGFzTmt0VUNTeHdUd2M3OVcyYVJDeUdM?=
+ =?utf-8?B?M1prRUpnb2l6dmFOUFAvUXJwemZGQW1YbjR6TWRSaGtoQ2d4TEhsOWxLTHVa?=
+ =?utf-8?B?dWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F1C4BE2AC48FC2428505F0DC45FF84EE@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909232139.645945-1-jwerner@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 665aaf4b-1847-41f1-c366-08da9594d797
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 14:32:53.0467
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: no++1b4STivhV20hzVimH45SrxA19lNLOiMIBBg5C8uDORxCWg8eskHDlzpfB3vQP3nj+V9ufDi2zljm6aUbuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7017
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:21:39PM -0700, Julius Werner wrote:
-> This patch adds bindings for LPDDR4 and LPDDR5 memory analogous to the
-> existing bindings for LPDDR2 and LPDDR3. For now, the new types are only
-> needed for topology description, so other properties like timing
-> parameters are omitted. They can be added later if needed.
-
-I only see patch 3. Please only send complete series.
-
-> 
-> Signed-off-by: Julius Werner <jwerner@chromium.org>
-> ---
->  .../ddr/jedec,lpddr-props.yaml                |  4 ++
->  .../memory-controllers/ddr/jedec,lpddr4.yaml  | 35 ++++++++++++++
->  .../memory-controllers/ddr/jedec,lpddr5.yaml  | 46 +++++++++++++++++++
->  3 files changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
-> 
-> Changelog:
-> 
-> - v2
->   - removed minItems
->   - moved `$ref` below `maintainers`
->   - renamed example node from `lpddr4` to `lpddr`
-> - v3
->   - removed manufacturer-id property from examples
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> index 4114cfa8de67f1..92ef660888f318 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> @@ -45,9 +45,13 @@ properties:
->        - 512
->        - 1024
->        - 2048
-> +      - 3072
->        - 4096
-> +      - 6144
->        - 8192
-> +      - 12288
->        - 16384
-> +      - 24576
->        - 32768
->  
->    io-width:
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
-> new file mode 100644
-> index 00000000000000..fa9b30ee89cb81
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr4.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LPDDR4 SDRAM compliant to JEDEC JESD209-4
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzk@kernel.org>
-> +
-> +allOf:
-> +  - $ref: "jedec,lpddr-props.yaml#"
-
-Drop quotes.
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - pattern: "^lpddr4-[0-9a-f]{2},[0-9a-f]{4}$"
-> +      - const: jedec,lpddr4
-> +
-> +required:
-> +  - compatible
-> +  - density
-> +  - io-width
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    lpddr {
-> +        compatible = "lpddr4-ff,0100", "jedec,lpddr4";
-> +        density = <8192>;
-> +        io-width = <16>;
-> +        revision-id = <1 0>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
-> new file mode 100644
-> index 00000000000000..01e11aabc5a3f9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr5.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LPDDR5 SDRAM compliant to JEDEC JESD209-5
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzk@kernel.org>
-> +
-> +allOf:
-> +  - $ref: "jedec,lpddr-props.yaml#"
-
-And here.
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - pattern: "^lpddr5-[0-9a-f]{2},[0-9a-f]{4}$"
-> +      - const: jedec,lpddr5
-> +
-> +  serial-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +      Serial IDs read from Mode Registers 47 through 54. One byte per uint32
-> +      cell (i.e. <MR47 MR48 MR49 MR50 MR51 MR52 MR53 MR54>).
-> +    maxItems: 8
-> +    items:
-> +      minimum: 0
-> +      maximum: 255
-> +
-> +required:
-> +  - compatible
-> +  - density
-> +  - io-width
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    lpddr {
-> +        compatible = "lpddr5-01,0200", "jedec,lpddr5";
-> +        density = <8192>;
-> +        io-width = <8>;
-> +        revision-id = <2 0>;
-> +        serial-id = <3 1 0 0 0 0 0 0>;
-> +    };
-> -- 
-> 2.31.0
-> 
-> 
+T24gVHVlLCBTZXAgMTMsIDIwMjIgYXQgMDU6MTQ6MTlQTSArMDMwMCwgQXLEsW7DpyDDnE5BTCB3
+cm90ZToNCj4gT24gMTMuMDkuMjAyMiAxNjozMSwgVmxhZGltaXIgT2x0ZWFuIHdyb3RlOg0KPiA+
+IE9uIFR1ZSwgU2VwIDEzLCAyMDIyIGF0IDExOjIwOjA0QU0gKzAzMDAsIEFyxLFuw6cgw5xOQUwg
+d3JvdGU6DQo+ID4gPiBJcyB0aGVyZSBhbHNvIGEgcGxhbiB0byByZW1vdmUgdGhpcyBmcm9tIGV2
+ZXJ5IGRldmljZXRyZWUgb24gbWFpbmxpbmUgdGhhdA0KPiA+ID4gaGFzIGdvdCB0aGlzIHByb3Bl
+cnR5IG9uIHRoZSBDUFUgcG9ydD8NCj4gPiA+IA0KPiA+ID4gSSdkIGxpa2UgdG8gZG8gdGhlIHNh
+bWUgb24gdGhlIERUcyBvbiBPcGVuV3J0Lg0KPiA+IA0KPiA+IEkgZG9uJ3QgcmVhbGx5IGhhdmUg
+dGhlIHRpbWUgdG8gc3BsaXQgcGF0Y2hlcyB0b3dhcmRzIGV2ZXJ5IGluZGl2aWR1YWwNCj4gPiBw
+bGF0Zm9ybSBtYWludGFpbmVyIGFuZCBmb2xsb3cgdXAgd2l0aCB0aGVtIHVudGlsIHN1Y2ggcGF0
+Y2hlcyB3b3VsZCBnZXQNCj4gPiBhY2NlcHRlZC4gSSB3b3VsZCBlbmNvdXJhZ2Ugc3VjaCBhbiBp
+bml0aWF0aXZlIGNvbWluZyBmcm9tIHNvbWVib2R5IGVsc2UsDQo+ID4gdGhvdWdoLg0KPiANCj4g
+VW5kZXJzdG9vZCwgSSB0aGluayBJIGNhbiBkZWFsIHdpdGggdGhpcy4NCj4gDQo+IEFyxLFuw6cN
+Cg0KVGhhdCB3b3VsZCBiZSBncmVhdCwgdGhhbmtzIQ==
