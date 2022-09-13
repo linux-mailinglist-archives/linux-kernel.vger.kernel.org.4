@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6635B7D5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D5E5B7D5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiIMXRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S229513AbiIMXTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiIMXRC (ORCPT
+        with ESMTP id S229456AbiIMXS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:17:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F35966110
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:17:01 -0700 (PDT)
+        Tue, 13 Sep 2022 19:18:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A829266110;
+        Tue, 13 Sep 2022 16:18:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11565B81107
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C7AC433D6;
-        Tue, 13 Sep 2022 23:16:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BDFB9CE1347;
+        Tue, 13 Sep 2022 23:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4BDC433C1;
+        Tue, 13 Sep 2022 23:18:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663111018;
-        bh=3akCnlPgGO2b94vai2rGkaY0WUN32BXWSzV+OlLrLqI=;
+        s=k20201202; t=1663111133;
+        bh=/LcuPi8V7Ej7uvoNaew7dsD1eUxauxC0rf5elEG4pcY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oCck64zae9cjer4LrijeWD2DGLe3zG6FLrq+Tm2YyOvzNZ+BklYTVD2BuOWVKoOqy
-         AIc4Z/uJJFlI85RtIZ5J1Yd888ZONiS8VOC8edKRoML9A5Tc8ZA+r622f0uPjVjiVi
-         va0IVi7pRJn/PkAyStD0ryb9aAxDMFbGP2YmXp1biBqCLzO7maxxdP50Yyb1/2IpA4
-         cnwbJu1x2p3ey30bxivvFjUahcggLq22Gd69mreKueyzod0vH4JeKv81C7YaO1TxyS
-         O+zQzLegDkJiExDHKBCusvLd8fEVEP+2UOopc9B5CU9vLONxW6M7yHCebeqw/6gRRZ
-         ZYkp5mcSLHbqQ==
-Date:   Tue, 13 Sep 2022 16:16:56 -0700
+        b=isGmkR8X+bqZCIZQIZToszbRwjKwXAksaJyyViRDQ/ma3/H6VFLPPnBz4H+I+C6Z1
+         6k969mCZrmzJ/PvuMY9bfIh5gMSpa4U5DU+e9lUOE5415GUoFjRUDZLy9B6o1Sfnhm
+         3EtgPvgMiLXEI9iAzPZ6EBkKHoMNjadHoRDyPZOk3tWbqMPuFIqDyGl9hIa45hm89L
+         F/BlojPf6ZnPMR+WiolQWurOnGA0nbqbWlbZrE0JZ1mokMU4oSYFD6+IMLVQOPtkRJ
+         CxhG7NRoOAS+mXX9yUN/d+qGKH5PXJyjUYxkpe2rJdJWPuBGrPaadHsfomM2bY93nQ
+         TCPHDb5axgLdA==
+Date:   Tue, 13 Sep 2022 16:18:51 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     namcaov@gmail.com, Larry.Finger@lwfinger.net, error27@gmail.com,
-        gregkh@linuxfoundation.org, insafonov@gmail.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        llvm@lists.linux.dev, makvihas@gmail.com, ndesaulniers@google.com,
-        paskripkin@gmail.com, phil@philpotter.co.uk,
-        saurav.girepunje@gmail.com, trix@redhat.com
-Subject: Re: [PATCH v2] staging: r8188eu: Fix return type of rtw_xmit_entry
-Message-ID: <YyEPaMVRmdGQdoql@dev-arch.thelio-3990X>
-References: <CA+sZ8B8RStBhofQ0=vvzH5FeQ66fj90DdCj9EQSaVErbVPLi7g@mail.gmail.com>
- <20220913193322.18776-1-nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/exynos: Fix return type for mixer_mode_valid and
+ hdmi_mode_valid
+Message-ID: <YyEP28J5O2Wlh4lS@dev-arch.thelio-3990X>
+References: <20220913205449.154966-1-nhuck@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913193322.18776-1-nhuck@google.com>
+In-Reply-To: <20220913205449.154966-1-nhuck@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,53 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:33:22PM -0700, Nathan Huckleberry wrote:
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+On Tue, Sep 13, 2022 at 01:54:49PM -0700, Nathan Huckleberry wrote:
+> The field mode_valid in exynos_drm_crtc_ops is expected to be of type
+> enum drm_mode_status (*mode_valid)(struct exynos_drm_crtc *crtc,
+>                                    const struct drm_display_mode *mode);
+> 
+> Likewise for mode_valid in drm_connector_helper_funcs.
 > 
 > The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
 > 
-> The return type of rtw_xmit_entry should be changed from int to
-> netdev_tx_t.
+> The return type of mixer_mode_valid and hdmi_mode_valid should be
+> changed from int to enum drm_mode_status.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-The prototype in drivers/staging/r8188eu/include/xmit_osdep.h should be
-updated as well. With that:
-
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> Changes v1 -> v2:
->  - Rebased onto linux-next/master
-> 
 > ---
->  drivers/staging/r8188eu/core/rtw_xmit.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/exynos/exynos_hdmi.c  | 4 ++--
+>  drivers/gpu/drm/exynos/exynos_mixer.c | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 98864fc55b25..ea13f11b231b 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -2289,7 +2289,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
->  	return true;
+> diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exynos/exynos_hdmi.c
+> index 10b0036f8a2e..8453359c92e8 100644
+> --- a/drivers/gpu/drm/exynos/exynos_hdmi.c
+> +++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
+> @@ -922,8 +922,8 @@ static int hdmi_find_phy_conf(struct hdmi_context *hdata, u32 pixel_clock)
+>  	return -EINVAL;
 >  }
 >  
-> -int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> +netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
+> -static int hdmi_mode_valid(struct drm_connector *connector,
+> -			struct drm_display_mode *mode)
+> +static enum drm_mode_status hdmi_mode_valid(struct drm_connector *connector,
+> +					    struct drm_display_mode *mode)
 >  {
->  	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
->  	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-> @@ -2323,5 +2323,5 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
->  	dev_kfree_skb_any(pkt);
->  
->  exit:
-> -	return 0;
-> +	return NETDEV_TX_OK;
+>  	struct hdmi_context *hdata = connector_to_hdmi(connector);
+>  	int ret;
+> diff --git a/drivers/gpu/drm/exynos/exynos_mixer.c b/drivers/gpu/drm/exynos/exynos_mixer.c
+> index 65260a658684..82f676e6d21b 100644
+> --- a/drivers/gpu/drm/exynos/exynos_mixer.c
+> +++ b/drivers/gpu/drm/exynos/exynos_mixer.c
+> @@ -1045,8 +1045,9 @@ static void mixer_atomic_disable(struct exynos_drm_crtc *crtc)
+>  	clear_bit(MXR_BIT_POWERED, &ctx->flags);
 >  }
+>  
+> -static int mixer_mode_valid(struct exynos_drm_crtc *crtc,
+> -		const struct drm_display_mode *mode)
+> +static enum drm_mode_status
+> +mixer_mode_valid(struct exynos_drm_crtc *crtc,
+> +		 const struct drm_display_mode *mode)
+>  {
+>  	struct mixer_context *ctx = crtc->ctx;
+>  	u32 w = mode->hdisplay, h = mode->vdisplay;
 > -- 
 > 2.37.2.789.g6183377224-goog
 > 
