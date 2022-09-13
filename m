@@ -2,104 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2A65B6DDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796065B6DE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 15:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiIMNBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 09:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S231726AbiIMNCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 09:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiIMNBi (ORCPT
+        with ESMTP id S231794AbiIMNCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:01:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7C2228C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:01:37 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MRk8c22yWz67K73;
-        Tue, 13 Sep 2022 21:00:16 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 15:01:35 +0200
-Received: from [10.48.155.86] (10.48.155.86) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 13 Sep
- 2022 14:01:34 +0100
-Message-ID: <4740744e-2e12-520d-8598-188b8d2ebd6b@huawei.com>
-Date:   Tue, 13 Sep 2022 14:01:36 +0100
+        Tue, 13 Sep 2022 09:02:11 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9880E4A80D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 06:02:09 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663074127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E1Xbu20q2uc9KYuQMroPlHJBq4c9RUxC8suEQ4+I9qk=;
+        b=mXLTY4MtUbFsJuGzIuArIarMlZtfFO87o5bV5f8cgbq4NrikkSVIcJQaKMNk3wJK5dfKAG
+        cq3VY8jFqYdaGoAC1vCuleAZ8Gaum0IisfooQtMMJO37c5iDzRqKbDGwnFHyVpMNGx/ZPt
+        ktY3YQVEPEqccbTNU7NYkaqcjSVfBw8=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] iommu/iova: Fix module config properly
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>
-CC:     <will@kernel.org>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <548c2f683ca379aface59639a8f0cccc3a1ac050.1663069227.git.robin.murphy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <548c2f683ca379aface59639a8f0cccc3a1ac050.1663069227.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH-next] mm/mempolicy: use PAGE_ALIGN instead of open-coding
+ it
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20220913015505.1998958-1-zuoze1@huawei.com>
+Date:   Tue, 13 Sep 2022 21:02:03 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.155.86]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <138AF259-374E-4FD2-9E81-E442593FE556@linux.dev>
+References: <20220913015505.1998958-1-zuoze1@huawei.com>
+To:     Ze Zuo <zuoze1@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/09/2022 12:47, Robin Murphy wrote:
-> IOMMU_IOVA is intended to be an optional library for users to select as
-> and when they desire. Since it can be a module now, this means that
-> built-in code which has chosen not to select it should not fail to link
-> if it happens to have selected as a module by someone else. Replace
-> IS_ENABLED() with IS_REACHABLE() to do the right thing.
 
-Hi Robin,
 
-Recently you mentioned "I wonder if we couldn't replace the IS_ENABLED() 
-with IS_REACHABLE() and restore some of the previously-conditional 
-selects", and pointed me to 84db889e6d82 as an example of when a 
-conditional select was made unconditional.
-
-So will you also restore some previously-conditional selects next?
-
-To me, it seems that any user of IOVA API selects IOMMU_IOVA always.
-
-thanks,
-John
-
+> On Sep 13, 2022, at 09:55, Ze Zuo <zuoze1@huawei.com> wrote:
 > 
-> CC: Thierry Reding <thierry.reding@gmail.com>
-> Reported-by: John Garry <john.garry@huawei.com>
-> Fixes: 15bbdec3931e ("iommu: Make the iova library a module")
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
+> From: ze zuo <zuoze1@huawei.com>
 > 
-> Phrased as a fix for the sake of complete honesty, but it seems
-> everyone's been making do for years already so by now it's really
-> just more of an enhancement.
+> Replace the simple calculation with PAGE_ALIGN.
 > 
->   include/linux/iova.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index 8f97a43be834..fe18c3e6a725 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -75,7 +75,7 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
->   	return iova >> iova_shift(iovad);
->   }
->   
-> -#if IS_ENABLED(CONFIG_IOMMU_IOVA)
-> +#if IS_REACHABLE(CONFIG_IOMMU_IOVA)
->   int iova_cache_get(void);
->   void iova_cache_put(void);
->   
+> Signed-off-by: ze zuo <zuoze1@huawei.com>
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
 
