@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B7D5B7228
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F135B704D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbiIMOvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S233509AbiIMOYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiIMOsr (ORCPT
+        with ESMTP id S233514AbiIMOXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:48:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1882B66A7A;
-        Tue, 13 Sep 2022 07:25:17 -0700 (PDT)
+        Tue, 13 Sep 2022 10:23:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165EF61B1F;
+        Tue, 13 Sep 2022 07:15:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83AE7614C6;
-        Tue, 13 Sep 2022 14:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FFB9C433D7;
-        Tue, 13 Sep 2022 14:23:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F632B80F9C;
+        Tue, 13 Sep 2022 14:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0823DC433D6;
+        Tue, 13 Sep 2022 14:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079035;
-        bh=JtseD01ATePGId3VLyjVyOqQP9WnZXcf8aOBoKLHlgE=;
+        s=korg; t=1663078519;
+        bh=yljb55CwYjB2SsSXdpHl1sJ2giu6mj+JKJbpLxtk6Ws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CHdk35BXm8Qgnov6e1/p42MJMG5NzAtN1KFbX9U8mw1TgbFcuqGkTUmEJoSlmZ9Dh
-         E2nTtbR6Mg5IffURJkUarnZ6wWQzhWMHJ5/Gs6viyMg8NBxYL7VNchiOfIhebhVJFc
-         7y10HWri2/ALvN73PQ4LFb2aZduDDmPOxSOpDF/0=
+        b=QDEAoJRuBCMSLtZ+lnAEV79tWqQqT4oCL7ItV0b5EUl4NVnxye6w4rvPgCAn4drFu
+         lHNlFB3w0vLBRC3lo5km3ioU4BthtoPNytF0MNOkxs1grE9PVJT0xZLkKQ1UqB+AhZ
+         EqQfK/NT78v/gpEwsbHRoFPOtC45E9dhHQrXuOQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Smart <jsmart2021@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 32/79] scsi: lpfc: Add missing destroy_workqueue() in error path
-Date:   Tue, 13 Sep 2022 16:04:37 +0200
-Message-Id: <20220913140351.855398260@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 172/192] net: dsa: felix: tc-taprio intervals smaller than MTU should send at least one packet
+Date:   Tue, 13 Sep 2022 16:04:38 +0200
+Message-Id: <20220913140418.603893905@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-References: <20220913140350.291927556@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+References: <20220913140410.043243217@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +56,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit da6d507f5ff328f346b3c50e19e19993027b8ffd upstream.
+[ Upstream commit 11afdc6526de0e0368c05da632a8c0d29fc60bb8 ]
 
-Add the missing destroy_workqueue() before return from
-lpfc_sli4_driver_resource_setup() in the error path.
+The blamed commit broke tc-taprio schedules such as this one:
 
-Link: https://lore.kernel.org/r/20220823044237.285643-1-yangyingliang@huawei.com
-Fixes: 3cee98db2610 ("scsi: lpfc: Fix crash on driver unload in wq free")
-Reviewed-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+tc qdisc replace dev $swp1 root taprio \
+        num_tc 8 \
+        map 0 1 2 3 4 5 6 7 \
+        queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+        base-time 0 \
+        sched-entry S 0x7f 990000 \
+        sched-entry S 0x80  10000 \
+        flags 0x2
+
+because the gate entry for TC 7 (S 0x80 10000 ns) now has a static guard
+band added earlier than its 'gate close' event, such that packet
+overruns won't occur in the worst case of the largest packet possible.
+
+Since guard bands are statically determined based on the per-tc
+QSYS_QMAXSDU_CFG_* with a fallback on the port-based QSYS_PORT_MAX_SDU,
+we need to discuss what happens with TC 7 depending on kernel version,
+since the driver, prior to commit 55a515b1f5a9 ("net: dsa: felix: drop
+oversized frames with tc-taprio instead of hanging the port"), did not
+touch QSYS_QMAXSDU_CFG_*, and therefore relied on QSYS_PORT_MAX_SDU.
+
+1 (before vsc9959_tas_guard_bands_update): QSYS_PORT_MAX_SDU defaults to
+  1518, and at gigabit this introduces a static guard band (independent
+  of packet sizes) of 12144 ns, plus QSYS::HSCH_MISC_CFG.FRM_ADJ (bit
+  time of 20 octets => 160 ns). But this is larger than the time window
+  itself, of 10000 ns. So, the queue system never considers a frame with
+  TC 7 as eligible for transmission, since the gate practically never
+  opens, and these frames are forever stuck in the TX queues and hang
+  the port.
+
+2 (after vsc9959_tas_guard_bands_update): Under the sole goal of
+  enabling oversized frame dropping, we make an effort to set
+  QSYS_QMAXSDU_CFG_7 to 1230 bytes. But QSYS_QMAXSDU_CFG_7 plays
+  one more role, which we did not take into account: per-tc static guard
+  band, expressed in L2 byte time (auto-adjusted for FCS and L1 overhead).
+  There is a discrepancy between what the driver thinks (that there is
+  no guard band, and 100% of min_gate_len[tc] is available for egress
+  scheduling) and what the hardware actually does (crops the equivalent
+  of QSYS_QMAXSDU_CFG_7 ns out of min_gate_len[tc]). In practice, this
+  means that the hardware thinks it has exactly 0 ns for scheduling tc 7.
+
+In both cases, even minimum sized Ethernet frames are stuck on egress
+rather than being considered for scheduling on TC 7, even if they would
+fit given a proper configuration. Considering the current situation,
+with vsc9959_tas_guard_bands_update(), frames between 60 octets and 1230
+octets in size are not eligible for oversized dropping (because they are
+smaller than QSYS_QMAXSDU_CFG_7), but won't be considered as eligible
+for scheduling either, because the min_gate_len[7] (10000 ns) minus the
+guard band determined by QSYS_QMAXSDU_CFG_7 (1230 octets * 8 ns per
+octet == 9840 ns) minus the guard band auto-added for L1 overhead by
+QSYS::HSCH_MISC_CFG.FRM_ADJ (20 octets * 8 ns per octet == 160 octets)
+leaves 0 ns for scheduling in the queue system proper.
+
+Investigating the hardware behavior, it becomes apparent that the queue
+system needs precisely 33 ns of 'gate open' time in order to consider a
+frame as eligible for scheduling to a tc. So the solution to this
+problem is to amend vsc9959_tas_guard_bands_update(), by giving the
+per-tc guard bands less space by exactly 33 ns, just enough for one
+frame to be scheduled in that interval. This allows the queue system to
+make forward progress for that port-tc, and prevents it from hanging.
+
+Fixes: 297c4de6f780 ("net: dsa: felix: re-enable TAS guard band mode")
+Reported-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_init.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/dsa/ocelot/felix_vsc9959.c | 35 +++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 4 deletions(-)
 
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -6670,7 +6670,7 @@ lpfc_sli4_driver_resource_setup(struct l
- 	/* Allocate device driver memory */
- 	rc = lpfc_mem_alloc(phba, SGL_ALIGN_SZ);
- 	if (rc)
--		return -ENOMEM;
-+		goto out_destroy_workqueue;
+diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
+index 4cce71243080e..517bc3922ee24 100644
+--- a/drivers/net/dsa/ocelot/felix_vsc9959.c
++++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+@@ -22,6 +22,7 @@
+ #define VSC9959_NUM_PORTS		6
  
- 	/* IF Type 2 ports get initialized now. */
- 	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
-@@ -7076,6 +7076,9 @@ out_free_bsmbx:
- 	lpfc_destroy_bootstrap_mbox(phba);
- out_free_mem:
- 	lpfc_mem_free(phba);
-+out_destroy_workqueue:
-+	destroy_workqueue(phba->wq);
-+	phba->wq = NULL;
- 	return rc;
+ #define VSC9959_TAS_GCL_ENTRY_MAX	63
++#define VSC9959_TAS_MIN_GATE_LEN_NS	33
+ #define VSC9959_VCAP_POLICER_BASE	63
+ #define VSC9959_VCAP_POLICER_MAX	383
+ #define VSC9959_SWITCH_PCI_BAR		4
+@@ -1411,6 +1412,23 @@ static void vsc9959_mdio_bus_free(struct ocelot *ocelot)
+ 	mdiobus_free(felix->imdio);
  }
  
++/* The switch considers any frame (regardless of size) as eligible for
++ * transmission if the traffic class gate is open for at least 33 ns.
++ * Overruns are prevented by cropping an interval at the end of the gate time
++ * slot for which egress scheduling is blocked, but we need to still keep 33 ns
++ * available for one packet to be transmitted, otherwise the port tc will hang.
++ * This function returns the size of a gate interval that remains available for
++ * setting the guard band, after reserving the space for one egress frame.
++ */
++static u64 vsc9959_tas_remaining_gate_len_ps(u64 gate_len_ns)
++{
++	/* Gate always open */
++	if (gate_len_ns == U64_MAX)
++		return U64_MAX;
++
++	return (gate_len_ns - VSC9959_TAS_MIN_GATE_LEN_NS) * PSEC_PER_NSEC;
++}
++
+ /* Extract shortest continuous gate open intervals in ns for each traffic class
+  * of a cyclic tc-taprio schedule. If a gate is always open, the duration is
+  * considered U64_MAX. If the gate is always closed, it is considered 0.
+@@ -1590,10 +1608,13 @@ static void vsc9959_tas_guard_bands_update(struct ocelot *ocelot, int port)
+ 	mutex_lock(&ocelot->fwd_domain_lock);
+ 
+ 	for (tc = 0; tc < OCELOT_NUM_TC; tc++) {
++		u64 remaining_gate_len_ps;
+ 		u32 max_sdu;
+ 
+-		if (min_gate_len[tc] == U64_MAX /* Gate always open */ ||
+-		    min_gate_len[tc] * PSEC_PER_NSEC > needed_bit_time_ps) {
++		remaining_gate_len_ps =
++			vsc9959_tas_remaining_gate_len_ps(min_gate_len[tc]);
++
++		if (remaining_gate_len_ps > needed_bit_time_ps) {
+ 			/* Setting QMAXSDU_CFG to 0 disables oversized frame
+ 			 * dropping.
+ 			 */
+@@ -1606,9 +1627,15 @@ static void vsc9959_tas_guard_bands_update(struct ocelot *ocelot, int port)
+ 			/* If traffic class doesn't support a full MTU sized
+ 			 * frame, make sure to enable oversize frame dropping
+ 			 * for frames larger than the smallest that would fit.
++			 *
++			 * However, the exact same register, QSYS_QMAXSDU_CFG_*,
++			 * controls not only oversized frame dropping, but also
++			 * per-tc static guard band lengths, so it reduces the
++			 * useful gate interval length. Therefore, be careful
++			 * to calculate a guard band (and therefore max_sdu)
++			 * that still leaves 33 ns available in the time slot.
+ 			 */
+-			max_sdu = div_u64(min_gate_len[tc] * PSEC_PER_NSEC,
+-					  picos_per_byte);
++			max_sdu = div_u64(remaining_gate_len_ps, picos_per_byte);
+ 			/* A TC gate may be completely closed, which is a
+ 			 * special case where all packets are oversized.
+ 			 * Any limit smaller than 64 octets accomplishes this
+-- 
+2.35.1
+
 
 
