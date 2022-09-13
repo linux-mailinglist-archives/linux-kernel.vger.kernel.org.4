@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32215B7BAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11EB5B7BAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 21:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiIMT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 15:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
+        id S229937AbiIMT6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 15:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiIMT6D (ORCPT
+        with ESMTP id S229723AbiIMT6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:58:03 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7472697;
-        Tue, 13 Sep 2022 12:58:02 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id cb8so9637682qtb.0;
-        Tue, 13 Sep 2022 12:58:02 -0700 (PDT)
+        Tue, 13 Sep 2022 15:58:24 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A507392C;
+        Tue, 13 Sep 2022 12:58:06 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id q8so10090370qvr.9;
+        Tue, 13 Sep 2022 12:58:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Ae0x/cYtHCzUmIbnlOleUipnU3BBydliG8CbSfbHHfI=;
-        b=lQy156yj9m33v2+lsCppN/1SSiL1+HSKUeGu4OKDvKzsWQP9uaxSZeRF6KYff4/ZX1
-         T8ar9K8mrC7poQnpcOlicqZBPrnyrX4lQmy/efXceAo8c/r+O7+kebNQPiRqxM6b8RHk
-         nqDdqIjYqMl2UkmBaLyC3jNoxqdBf+LTtzsYTc4L2U/V/TdvsthKIhCb1FgggCffFcVL
-         4UCRPgfEkwehGvOaibbczRrkl3etaXkViPMT1ZepP3U6LDqZx2jP70X41REaFOYLplOf
-         cOzr55DR2HMCT6kc/P98YRx0lPP2AD9Ny8hyMOuXORVZJrRjvmaKZrJZ1BXySGhbtpI9
-         HDig==
+        bh=dgAC9wdSWdNnQd7c6lUo6ch6gbgfZ8Ik+m13B5omrFE=;
+        b=pgU7qB1cfn3bbb6aqaPKVsP0QULztBXM6ZTdmlLajCShk8VBE78cxzG8Cv0iNse9pr
+         raJ8GgLPcDyEkXzvMHViIvbgw2EPxCCCxmBWVydWXsbvHPXhV9LnTIQcxrhx+uvf4Xru
+         5WYEg1qQVSMXl/Ik2LXwDiiTB+uN5XnQ7jp32HYymQ2HZJZADmguB3tnteKHk9qIukRc
+         jpn8LdBlaPcxTkVAmOKzkV+NLvIVifwROYLBZ5KLKak/eoCCJdA+KloOJgYdmZJeYMVG
+         xPc5vPtISXEXXxdKiktdhoBVSWbwV6cguyuU1u/JwyBG7hVEPpa11URawNPjZH6cK9Db
+         YImw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Ae0x/cYtHCzUmIbnlOleUipnU3BBydliG8CbSfbHHfI=;
-        b=DhK79UjZYFX6oR2ZfYRzZaRib+JuOiQw8zC14/4oqBwzjoVvBskxTnNUCUo+YU570S
-         B5CZYKkrdBf5SwmIMYGyhv/n0nQVNWtcdtummZTCM0UGL0qkAs/xpdg/H4boH+pE0V9V
-         yNnJE8yAHHm5NHtpw73ESZKl9QW0K8FTlUT77nRa8MmIZjyn7k80pomSnX/iXKsxf/jt
-         eMcbYT9SF2INEc+LzvA4qoehtyBZ95C/UEdreXGb1AJ+P7CpAgZ8SaYBy7XlXjzhAbD1
-         b4/+ggHwwyaafLccNik9c5gSOMZXg42FzxbmAC0/kJXemAWbVjbqBVRP2pIP+UUYFtSk
-         QSng==
-X-Gm-Message-State: ACgBeo2JCDymnw+Bopy8tAou9papj5jEbvfJOtWdQd8u6UDfWCnRq0uE
-        HXtocqxXjAP+AHFJ9lJ0vIw=
-X-Google-Smtp-Source: AA6agR5RQ3Vz73r+e9pp4sPmIM/iMa/zHS6QVY1LvvDFqMY99XQUTUB/nmtdr1ce7F9gfpRjTDrD5Q==
-X-Received: by 2002:ac8:5790:0:b0:35b:fd92:6fb8 with SMTP id v16-20020ac85790000000b0035bfd926fb8mr4051143qta.53.1663099081690;
-        Tue, 13 Sep 2022 12:58:01 -0700 (PDT)
+        bh=dgAC9wdSWdNnQd7c6lUo6ch6gbgfZ8Ik+m13B5omrFE=;
+        b=B6u2/MEiC4pV8psVGPVSD88rjHk/IaFxLFt9DSmwztJxmOBOQ29whM6/9WL5oPgNju
+         Ytwri3PoF0ssUebbuJc8S0sZLZzFZRI/aZtyV9JK6V3VFUPFfg8YLHEvMd6du48OYrSk
+         Ea+C66o6ypmPRi/fSi6gvKMo8moBkr9/qBgTXhD35luusRvDsjnWWGc29uVC4X8YKslK
+         uC6wHIidWuQmowN79vPl4MAWCtJWG33aRyClCK8tVyisEKmqxBlcHfHcvL01Jo/rSxWc
+         gL/N6P2yaDJ4VM8v9oDUdYg9IPVkzqZ0f04Gfic3TpRHdodT6gifAxAssYMzGsCPxqKN
+         g9lg==
+X-Gm-Message-State: ACgBeo3yXKV81tjYZmKY4cxWDuvTmGVW/jcVwiycnZPmHVv4Yp85sQza
+        iYVtOy1JxBKkbFeGu5TfnAE=
+X-Google-Smtp-Source: AA6agR5N0IDxlcIGSy6m2BrDrpoJ44hk3cGJOE0+/g5noyEETZjDxRdlg2yegkHVtpvIIdmASzximw==
+X-Received: by 2002:a0c:a901:0:b0:4aa:a283:ef4a with SMTP id y1-20020a0ca901000000b004aaa283ef4amr28465376qva.53.1663099085481;
+        Tue, 13 Sep 2022 12:58:05 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.57.58
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:58:01 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:04 -0700 (PDT)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
         Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: [PATCH 02/21] mm/hugetlb: correct max_huge_pages accounting on demote
-Date:   Tue, 13 Sep 2022 12:54:49 -0700
-Message-Id: <20220913195508.3511038-3-opendmb@gmail.com>
+Subject: [PATCH 03/21] mm/hugetlb: correct demote page offset logic
+Date:   Tue, 13 Sep 2022 12:54:50 -0700
+Message-Id: <20220913195508.3511038-4-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913195508.3511038-1-opendmb@gmail.com>
 References: <20220913195508.3511038-1-opendmb@gmail.com>
@@ -94,30 +94,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When demoting a hugepage to a smaller order, the number of pages
-added to the target hstate will be the size of the large page
-divided by the size of the smaller page.
+With gigantic pages it may not be true that struct page structures
+are contiguous across the entire gigantic page. The mem_map_offset
+function is used here in place of direct pointer arithmetic to
+correct for this.
 
 Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- mm/hugetlb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/hugetlb.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e070b8593b37..79949893ac12 100644
+index 79949893ac12..a1d51a1f0404 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -3472,7 +3472,8 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
- 	 * based on pool changes for the demoted page.
- 	 */
- 	h->max_huge_pages--;
--	target_hstate->max_huge_pages += pages_per_huge_page(h);
-+	target_hstate->max_huge_pages += pages_per_huge_page(h) /
-+					 pages_per_huge_page(target_hstate);
+@@ -3420,6 +3420,7 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+ {
+ 	int i, nid = page_to_nid(page);
+ 	struct hstate *target_hstate;
++	struct page *subpage;
+ 	int rc = 0;
  
- 	return rc;
- }
+ 	target_hstate = size_to_hstate(PAGE_SIZE << h->demote_order);
+@@ -3453,15 +3454,16 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+ 	mutex_lock(&target_hstate->resize_lock);
+ 	for (i = 0; i < pages_per_huge_page(h);
+ 				i += pages_per_huge_page(target_hstate)) {
++		subpage = mem_map_offset(page, i);
+ 		if (hstate_is_gigantic(target_hstate))
+-			prep_compound_gigantic_page_for_demote(page + i,
++			prep_compound_gigantic_page_for_demote(subpage,
+ 							target_hstate->order);
+ 		else
+-			prep_compound_page(page + i, target_hstate->order);
+-		set_page_private(page + i, 0);
+-		set_page_refcounted(page + i);
+-		prep_new_huge_page(target_hstate, page + i, nid);
+-		put_page(page + i);
++			prep_compound_page(subpage, target_hstate->order);
++		set_page_private(subpage, 0);
++		set_page_refcounted(subpage);
++		prep_new_huge_page(target_hstate, subpage, nid);
++		put_page(subpage);
+ 	}
+ 	mutex_unlock(&target_hstate->resize_lock);
+ 
 -- 
 2.25.1
 
