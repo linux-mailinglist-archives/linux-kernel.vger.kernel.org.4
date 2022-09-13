@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34685B6514
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 03:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60025B6519
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 03:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiIMB0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 21:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S229816AbiIMBbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 21:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiIMB0P (ORCPT
+        with ESMTP id S229737AbiIMBbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 21:26:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77814BD1A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 18:26:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4AE612CE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 01:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3428C433D6;
-        Tue, 13 Sep 2022 01:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663032373;
-        bh=ahK3Hn9gj376IQfXm5Ze9rTSg34hVz4QwVp7njYLSnA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NR8E5EHYMVDxlO6TR0DAqqJSO2oHvfFZQHYaX9ci/icVlWM6i3keHzAIB7tgArR4/
-         qfmYpiYHdVOqpP/V5ETk0OsxudzvHQ0cdhlS3HedyJE6Zb54JUdSuPiKpd6jbGIMoI
-         6cRhMJ4SxIjYJJrFCTRLwffKj9vs9n8+cu6Q/xgw662N7fhGRrW5gODuNx2JM0jfJP
-         4LdGvdtBPLsinVGnjFDeNDcmDOrhLUFfNRL4VcMZ21UBQtiC0nYcNpNDN09pjLnUvL
-         rqRvjfyLMaisSqR2gF7MbVkq7jlINiAyDqXohRZBUDSl1nToyLuZR9OlZN2NMdVQO9
-         ETjju1DffZ0cw==
-Message-ID: <6c54e0b1-9c75-af90-565b-61174ddb5cbc@kernel.org>
-Date:   Tue, 13 Sep 2022 09:26:01 +0800
+        Mon, 12 Sep 2022 21:31:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6B2E34
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 18:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663032700; x=1694568700;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7GcriuGJN8QkCZ6dALbv+nUQS22ajzVge8n1O9gPcMA=;
+  b=KPmvngxV+pLJQ0MmPyJRmG4Gi7KpIKZN4e05xwqShj0o7Myl4l3+hQsJ
+   MK8aMLgdI8n2p2aL+ar8rfUv1ucBiFpwuQVnuPZuBHcohxGUT/7n4vojX
+   miYc7mYZHRHsfPjTxk3kOZr/bp7BV6DYtOnjFlIYgGMLRcVEfs0obcRDY
+   pBjvAq6UfBa4lJ01USHFob6sV9NTCkLqH7Bql53Qg9OyfpacI4ehiIVcA
+   HPXnYHQ25PsDdaPsWfgKLXe5xwpX9MEznsIjqZwKdiGgMNKTen3tO5Zab
+   /8yPNc7daxEgmZ1jFhnSSCGW3bv+X72G9XEZiST2pBT+VZp4o4CQ4XS6Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="277743923"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="277743923"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:31:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="944856083"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Sep 2022 18:31:38 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXum2-00033x-0f;
+        Tue, 13 Sep 2022 01:31:38 +0000
+Date:   Tue, 13 Sep 2022 09:30:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Saleem Abdulrasool <abdulras@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or
+ directory
+Message-ID: <202209130916.1lUqRlBJ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] f2fs: fix to disallow getting inner inode via
- f2fs_iget()
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-References: <20220830225358.300027-1-chao@kernel.org>
- <YxlNGeh6Sr4isEFf@google.com>
- <0af788ed-8797-22a2-ae0c-433fdd6a2188@kernel.org>
- <YxlRMRA7AVIusfav@google.com>
- <e5abac5f-433b-62d4-b2fa-974b5f978d61@kernel.org>
- <Yx9SulcDlMfO/hiW@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yx9SulcDlMfO/hiW@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/12 23:39, Jaegeuk Kim wrote:
-> On 09/08, Chao Yu wrote:
->> On 2022/9/8 10:19, Jaegeuk Kim wrote:
->>> On 09/08, Chao Yu wrote:
->>>> On 2022/9/8 10:02, Jaegeuk Kim wrote:
->>>>> On 08/31, Chao Yu wrote:
->>>>>> From: Chao Yu <chao.yu@oppo.com>
->>>>>>
->>>>>> Introduce f2fs_iget_inner() for f2fs_fill_super() to get inner inode:
->>>>>> meta inode, node inode or compressed inode, and add f2fs_check_nid_range()
->>>>>> in f2fs_iget() to avoid getting inner inode from external interfaces.
->>>>>
->>>>> So, we don't want to check the range of inner inode numbers? What'd be the
->>>>> way to check it's okay?
->>>>
->>>> For node_ino, meta_ino, root_ino, we have checked them in sanity_check_raw_super()
->>>> as below:
->>>>
->>>> 	/* check reserved ino info */
->>>> 	if (le32_to_cpu(raw_super->node_ino) != 1 ||
->>>> 		le32_to_cpu(raw_super->meta_ino) != 2 ||
->>>> 		le32_to_cpu(raw_super->root_ino) != 3) {
->>>> 		f2fs_info(sbi, "Invalid Fs Meta Ino: node(%u) meta(%u) root(%u)",
->>>> 			  le32_to_cpu(raw_super->node_ino),
->>>> 			  le32_to_cpu(raw_super->meta_ino),
->>>> 			  le32_to_cpu(raw_super->root_ino));
->>>> 		return -EFSCORRUPTED;
->>>> 	}
->>>>
->>>> compressed_ino should always be NM_I(sbi)->max_nid, it can be checked in
->>>> f2fs_init_compress_inode()?
->>>
->>> Hmm, I'm not sure whether we really need this patch, since it'd look better
->>> to handle all the iget with single f2fs_iget?
->>
->> Well, the main concern is previously f2fs_iget() won't check validation for inner
->> inode due to it will skip do_read_inode() - f2fs_check_nid_range(), so that in a
->> fuzzed image, caller may pass inner ino into f2fs_iget(), result in incorrect use
->> of inner inode. So I add f2fs_check_nid_range() in prior to f2fs_iget_inner() in
->> f2fs_iget() as below to detect and avoid this case.
-> 
-> FWIW, sanity_check_raw_super() checked the inode numbers.
+Hi Saleem,
 
-However, previously, f2fs_iget() will return inner inode to caller directly, if caller
-passes meta_ino, node_ino or compress_ino to f2fs_iget()?
+FYI, the error/warning still remains.
 
-Thanks,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e839a756012b6cad7a4eeb67b0598ac3f349f863
+commit: fde9c59aebafb91caeed816cc510b56f14aa63ae riscv: explicitly use symbol offsets for VDSO
+date:   1 year, 1 month ago
+config: riscv-randconfig-r031-20220911 (https://download.01.org/0day-ci/archive/20220913/202209130916.1lUqRlBJ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde9c59aebafb91caeed816cc510b56f14aa63ae
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fde9c59aebafb91caeed816cc510b56f14aa63ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
-> 
->>
->>>>>> +struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->>>>>> +{
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = f2fs_check_nid_range(F2FS_SB(sb), ino);
->>>>>> +	if (ret)
->>>>>> +		return ERR_PTR(ret);
->>>>>> +
->>>>>> +	return f2fs_iget_inner(sb, ino);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
+   >>> .text range is [0x800, 0x112B]
+   >>> _ftrace_annotated_branch range is [0x840, 0xAAF]
+>> llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
