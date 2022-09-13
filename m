@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1DF5B7BDE
+	by mail.lfdr.de (Postfix) with ESMTP id 6662C5B7BDF
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 22:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiIMUAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 16:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S229572AbiIMUAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 16:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiIMT7R (ORCPT
+        with ESMTP id S230029AbiIMT7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 15:59:17 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55678BF6;
-        Tue, 13 Sep 2022 12:58:54 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id d17so8539481qko.13;
-        Tue, 13 Sep 2022 12:58:54 -0700 (PDT)
+        Tue, 13 Sep 2022 15:59:19 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E71792D0;
+        Tue, 13 Sep 2022 12:58:57 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id i3so4616430qkl.3;
+        Tue, 13 Sep 2022 12:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=0ytqVsMPjuVvTMmUHQDgw++YWpDMZOL8Z97lPlE2FVY=;
-        b=io9Nt4/RcZ2YZMphnT4cANVUYCQB6U7tpDHWWA0ymeRAMaiACQe59CDdxV3fKa+Hsn
-         xNls20lsFyfw6rNS33zM5vtcFodTEOrCxgBbNhbWX8T1mEeMX+VwfC33CIm+xfP758LM
-         zM7bYSmAZtJOGaBc2/pCs2H6YwEWsP5kO079m4wM+f6s/zfDbHxnmlkNGrxVR7sLq2J2
-         vi+KzltoxbcgQVb6NYjPdS8rs20FudQRcZ6AiEV/jd58a8RhxFomEIPJSEoUVrySG9CU
-         fGCpRyRxdV4msiy4sXSvtH2LCG/1JOnoJrLiDkFSx8Zr9e7tZ4S5+YfhjAOUxZaXHtxy
-         O3kw==
+        bh=U4jOrSu6bqJBytWJghR6t0ljWrrZGLSB9ph/v+e9V8I=;
+        b=D/mTJk6kZw64eyUhHPaSFfxR9Msa5UBxyOTlcsmCwhUVjiAhTk7oqnxftuemkUJs0o
+         e/3ecILYiDZtf1ZduEhchjc87lM/UzBWANhyHjDCeSCCZZ+OsXTubHr/HBHsItOzKdH7
+         p/GQO/8nQMFRqeejgZsBOVzCwSXLRfYO2jhkP7CDsujDhgqd9989s5l2qAcx+CNYHM2D
+         3FzlZrQmr76F2aSmz5wNYnpRQxzHx962ONlutGAvPr/+dXcOvxUiHsk1k1ee7yaWbHVI
+         2LCJzHzqV9IGkV4gb1i+myYCzvATpnUG8sQPbUiE3I3lJUeSHhrVFH3mITfi1tyJU0b1
+         X7Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=0ytqVsMPjuVvTMmUHQDgw++YWpDMZOL8Z97lPlE2FVY=;
-        b=ZQs7vf9Islv6Wbory1SqXuxXCb2rDP4tYv2q0p7RXJaDcwPblba2PqaDF/QkC5Q5aU
-         ldZ5JsmPRWL6PEprxVb/gLa6nE498IBUU6Qy58fFSQLaNbINQ7ljgyOUQCUbTKg5QPaL
-         felKmzP9PAglUrKUOryFmpnkAkmy+YzGZuoV4P5KIEBngbVlRnQIiz6QAERn6b3u6Gnb
-         TLZdWOHhXga0Zr8DC3MQU1sU9x5wpscl6nRKM619Hq5SdPZ33kK0xEy0+ykBSFtlRZHJ
-         6SZdkDzwx3ve0qHpmSyuQ1Bp1xd5zvSaXf0tpz4N2n26ReYN7Cje8U1Zq8kdcua/EXis
-         rCIA==
-X-Gm-Message-State: ACgBeo2kxXrTsxSI/YzgtnPtx8AJIce6cBZkX9Ct4xJvGQslSpRVRQl0
-        b7gB1WqYbHMBxwXgvXn3o9k=
-X-Google-Smtp-Source: AA6agR6d/FiwNOHoDQ8OKNxH916Sryp0qXJllILzqqegobMzkZRMGgPUcF2Qjw5zlXSo5I0Sdx+6eA==
-X-Received: by 2002:a05:620a:4407:b0:6cb:e111:32c2 with SMTP id v7-20020a05620a440700b006cbe11132c2mr18923399qkp.415.1663099133214;
-        Tue, 13 Sep 2022 12:58:53 -0700 (PDT)
+        bh=U4jOrSu6bqJBytWJghR6t0ljWrrZGLSB9ph/v+e9V8I=;
+        b=6tGerPA+8CLTaSTurXxfHH11caWZcpKkMd0d7u6ZQznwAYm2Lqstgix8JAC9XY2Ias
+         PjBfiEnd2F57RC8cTQvztOyRLGzn+KN25OIc5glV8l8sZ8aCuSXM1z+3FOLa/rVNr8Z2
+         ZQ4MUlcCZoEf8JbHCUi+QirGDEZppS3zHNO/x7BcodkzQ+Of+5hOZONZxILgYLq14eOU
+         Nhle7ekgTmWIP57OvyhCMkVxLVhoouA+fbxnT68XH9yll0MK7Lr+BRC9os5aDaCGrNpe
+         QnkIi9LK8nZPqffy6uKUYMa7+l6fn8Q4roBC3aqYDbb4+ZDet5EPhm6DibH1EgAJoQCL
+         bsGw==
+X-Gm-Message-State: ACgBeo0u1sLYwclovlWZGsAQhjYhUGpEZ5wc506+TDJwKe4CSJ8D2sva
+        2jos7PqMzIl8gLZjY6e3pRo=
+X-Google-Smtp-Source: AA6agR42tNhbqU65weBklFefGDPSfeY7AMPrK26FTuyeT6UMnlp5fPm7LJh/3FGN4dhzcFbZNJ8Esw==
+X-Received: by 2002:a05:620a:2452:b0:6bb:d8ba:ca65 with SMTP id h18-20020a05620a245200b006bbd8baca65mr24199159qkn.263.1663099136924;
+        Tue, 13 Sep 2022 12:58:56 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.49
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006b8e049cf08sm276305qkp.2.2022.09.13.12.58.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:58:52 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:56 -0700 (PDT)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
         Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: [PATCH 16/21] dt-bindings: reserved-memory: introduce designated-movable-block
-Date:   Tue, 13 Sep 2022 12:55:03 -0700
-Message-Id: <20220913195508.3511038-17-opendmb@gmail.com>
+Subject: [PATCH 17/21] mm/dmb: introduce rmem designated-movable-block
+Date:   Tue, 13 Sep 2022 12:55:04 -0700
+Message-Id: <20220913195508.3511038-18-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220913195508.3511038-1-opendmb@gmail.com>
 References: <20220913195508.3511038-1-opendmb@gmail.com>
@@ -94,73 +94,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce designated-movable-block.yaml to document the
-devicetree binding for Designated Movable Block children of the
-reserved-memory node.
+This commit allows Designated Movable Blocks to be created by
+including reserved-memory child nodes in the device tree with
+the "designated-movable-block" compatible string.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- .../designated-movable-block.yaml             | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
+ drivers/of/of_reserved_mem.c | 15 ++++++---
+ mm/dmb.c                     | 64 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 74 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml b/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
-new file mode 100644
-index 000000000000..42f846069a2e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reserved-memory/designated-movable-block.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reserved-memory/designated-movable-block.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index 65f3b02a0e4e..0eb9e8898d7b 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -23,6 +23,7 @@
+ #include <linux/memblock.h>
+ #include <linux/kmemleak.h>
+ #include <linux/cma.h>
++#include <linux/dmb.h>
+ 
+ #include "of_private.h"
+ 
+@@ -113,12 +114,16 @@ static int __init __reserved_mem_alloc_size(unsigned long node,
+ 
+ 	nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
+ 
+-	/* Need adjust the alignment to satisfy the CMA requirement */
+-	if (IS_ENABLED(CONFIG_CMA)
+-	    && of_flat_dt_is_compatible(node, "shared-dma-pool")
+-	    && of_get_flat_dt_prop(node, "reusable", NULL)
+-	    && !nomap)
++	if (of_flat_dt_is_compatible(node, "designated-movable-block")) {
++		/* Need adjust the alignment to satisfy the DMB requirement */
++		align = max_t(phys_addr_t, align, DMB_MIN_ALIGNMENT_BYTES);
++	} else if (IS_ENABLED(CONFIG_CMA)
++		   && of_flat_dt_is_compatible(node, "shared-dma-pool")
++		   && of_get_flat_dt_prop(node, "reusable", NULL)
++		   && !nomap) {
++		/* Need adjust the alignment to satisfy the CMA requirement */
+ 		align = max_t(phys_addr_t, align, CMA_MIN_ALIGNMENT_BYTES);
++	}
+ 
+ 	prop = of_get_flat_dt_prop(node, "alloc-ranges", &len);
+ 	if (prop) {
+diff --git a/mm/dmb.c b/mm/dmb.c
+index 9d9fd31089d2..8132d18542a0 100644
+--- a/mm/dmb.c
++++ b/mm/dmb.c
+@@ -90,3 +90,67 @@ void __init dmb_init_region(struct memblock_region *region)
+ 		init_reserved_pageblock(page);
+ 	}
+ }
 +
-+title: /reserved-memory Designated Movable Block node binding
++/*
++ * Support for reserved memory regions defined in device tree
++ */
++#ifdef CONFIG_OF_RESERVED_MEM
++#include <linux/of.h>
++#include <linux/of_fdt.h>
++#include <linux/of_reserved_mem.h>
 +
-+maintainers:
-+  - devicetree-spec@vger.kernel.org
++#undef pr_fmt
++#define pr_fmt(fmt) fmt
 +
-+allOf:
-+  - $ref: "reserved-memory.yaml"
++static int rmem_dmb_device_init(struct reserved_mem *rmem, struct device *dev)
++{
++	struct dmb *dmb;
 +
-+properties:
-+  compatible:
-+    const: designated-movable-block
-+    description:
-+      This indicates a region of memory meant to be placed into
-+      ZONE_MOVABLE.
++	dmb = (struct dmb *)rmem->priv;
++	if (dmb->owner)
++		return -EBUSY;
 +
-+unevaluatedProperties: false
++	dmb->owner = dev;
++	return 0;
++}
 +
-+required:
-+  - compatible
-+  - reusable
++static void rmem_dmb_device_release(struct reserved_mem *rmem,
++				    struct device *dev)
++{
++	struct dmb *dmb;
 +
-+examples:
-+  - |
-+      reserved-memory {
-+          #address-cells = <0x2>;
-+          #size-cells = <0x2>;
++	dmb = (struct dmb *)rmem->priv;
++	if (dmb->owner == (void *)dev)
++		dmb->owner = NULL;
++}
 +
-+          DMB0@10800000 {
-+               compatible = "designated-movable-block";
-+               reusable;
-+               reg = <0x0 0x10800000 0x0 0x2d800000>;
-+          };
++static const struct reserved_mem_ops rmem_dmb_ops = {
++	.device_init	= rmem_dmb_device_init,
++	.device_release = rmem_dmb_device_release,
++};
 +
-+          DMB1@40000000 {
-+               compatible = "designated-movable-block";
-+               reusable;
-+               reg = <0x0 0x40000000 0x0 0x30000000>;
-+          };
++static int __init rmem_dmb_setup(struct reserved_mem *rmem)
++{
++	unsigned long node = rmem->fdt_node;
++	struct dmb *dmb;
++	int err;
 +
-+          DMB2@80000000 {
-+               compatible = "designated-movable-block";
-+               reusable;
-+               reg = <0x0 0x80000000 0x0 0x2fc00000>;
-+          };
-+      };
++	if (!of_get_flat_dt_prop(node, "reusable", NULL) ||
++	    of_get_flat_dt_prop(node, "no-map", NULL))
++		return -EINVAL;
++
++	err = dmb_reserve(rmem->base, rmem->size, &dmb);
++	if (err) {
++		pr_err("Reserved memory: unable to setup DMB region\n");
++		return err;
++	}
++
++	rmem->priv = dmb;
++	rmem->ops = &rmem_dmb_ops;
++	pr_info("Reserved memory: created DMB at %pa, size %ld MiB\n",
++		&rmem->base, (unsigned long)rmem->size / SZ_1M);
++
++	return 0;
++}
++RESERVEDMEM_OF_DECLARE(dmb, "designated-movable-block", rmem_dmb_setup);
++#endif
 -- 
 2.25.1
 
