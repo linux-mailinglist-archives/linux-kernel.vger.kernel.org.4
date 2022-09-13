@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040655B6D28
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D825B6D34
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 14:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiIMMZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 08:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S232088AbiIMM0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 08:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiIMMZK (ORCPT
+        with ESMTP id S232022AbiIMM02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 08:25:10 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062.outbound.protection.outlook.com [40.107.20.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E501EC67;
-        Tue, 13 Sep 2022 05:25:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JWSm+f84S2DeH7F7qM8EnKOuuIQwOlvXjYY0dGb3aLgoOaBOiCdN+fjN1/56ZGaV9tFOsSOHrvr0ziQDOvSo7gJvP3Yj3o1eyFDRPQISsAd7Tf7z7BhgOzdIZ1YbLzVFpiM3QpTkswE1HGgcFrVpY4A2KIFfWMdjVRt102g125tM/injjHyBuKVgnn7Nff/zN24tCLp7QCV/aAzT5cEj5Ajq5HvlfDm6Izdm5YjN6PNo/PgkcRYa3YPmeu9qycWUsT6amZ6N/upFkjOTwJN3MTDinI8hjf4yvKqPOh8WYHbz728cEhOP2Jtd3Bx7paQkYSC46km3V0rvPEmzs7EA3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BzZ00t8eGLpNYph+5BoxP0wJT5skfftspq9bYxpUECM=;
- b=fnYUSjmM8OfmL0HMKM5hylvdJ6R/ap1z7y0prfVJFztx+zCOLgYvaSRURq+4yIKvfisrS5mwR8MYp1044nfvvGyAfoPACYw52EMIicmUCuDZUY6dPKGehDEEgyPvXOBsPRa7MPo+nwmqDaZ2WbIQE8ac3i70ZxfYpdDFW1tTHobr69THKcuZDoes36Xd0hc9pz4H0dIFVlulsRyOPqMkdZODPiz/8Y+kS794X3nv1KTwQOgbvEz5nmXKV/o4rDvc/+F2+5WMCCrMadfxfSu3pbf5kg6j8+8F7sqbPNblXJxwN/qsDrebiWj+n/o3eSF4uEDDY40xwS6j81g1NKwE8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BzZ00t8eGLpNYph+5BoxP0wJT5skfftspq9bYxpUECM=;
- b=NQybRmMVp7Wt/qGvAZVm70B1W3f3neBZwHngVv6YEDpt0wvRbl7Eqrnd1987nqxvR0AVmCFkRTtwfP4hnGTLDB37qi3aLTt0hcxvmEHug9B52WNXZa2GLVsk7N9Jfdplw/beyt01HYK9tMOJONoJSl+yB9nfousotw4dBC+uvWI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB8530.eurprd04.prod.outlook.com (2603:10a6:20b:421::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
- 2022 12:24:59 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::75b7:64ed:bc9e:5354]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::75b7:64ed:bc9e:5354%5]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 12:24:59 +0000
-Message-ID: <30a8c599-583a-3eea-c7bf-04062c43b736@oss.nxp.com>
-Date:   Tue, 13 Sep 2022 20:24:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [RFC PATCH 0/2] Propose critical clocks
+        Tue, 13 Sep 2022 08:26:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB259140DC;
+        Tue, 13 Sep 2022 05:26:27 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DBptiN015687;
+        Tue, 13 Sep 2022 12:26:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=KWhf+9y4Twe3kN6SJ/H/i8sS8Uc+GlmjIG+kRv57r1I=;
+ b=GrO/dKEHEVbf6eO0tT/Q/k0GkxHeytvkDhTgSBQn8VcNowfkdXloY3YDdu2XO8wnykUQ
+ b57qbRlxAnM/B0qmuDMUFjNHMt8HAZ9QHd9Z+9yu5slno3Cm6nQAFQWIg/fow8cympes
+ W4Hg8KcL59Km6HS6+GDWiLIkCS1Tgti+c3Ae59AgbuBh5hcJcxWNHceed+SgYBx47Y5a
+ /axFtvsO2zvk0h34ZnvGlZF6jjxdtd80RGW4Ye2S2xIxT9entckCNqxW5mo2u/uPqLyZ
+ oPWCBLyLAALBtSbfGTGVNxuCxNFC5hn7v5CJjrF708qm0dYr4ebxDk6D6V2uhqnP643m 6w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjsc698fy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 12:26:15 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DBtCoM026084;
+        Tue, 13 Sep 2022 12:26:14 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjsc698fc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 12:26:14 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28DCLt2Y028932;
+        Tue, 13 Sep 2022 12:26:13 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 3jgj79buu3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Sep 2022 12:26:13 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28DCQD5822151670
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Sep 2022 12:26:13 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72C577805F;
+        Tue, 13 Sep 2022 12:40:34 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E807C7805E;
+        Tue, 13 Sep 2022 12:40:32 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Sep 2022 12:40:32 +0000 (GMT)
+Message-ID: <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
+Date:   Tue, 13 Sep 2022 08:26:09 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
 Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <20220913102141.971148-1-m.felsch@pengutronix.de>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <20220913102141.971148-1-m.felsch@pengutronix.de>
+To:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
+        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        corbet@lwn.net, jejb@linux.ibm.com,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
 Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bgbPq4D_WT8GHfx8tSoSOqyBdOCVg8-u
+X-Proofpoint-ORIG-GUID: AsknTBA13Kzga_E9gQcxwUrj9mePNgp0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR06CA0002.apcprd06.prod.outlook.com
- (2603:1096:4:186::10) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS8PR04MB8530:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ac13ace-aa43-433d-0d17-08da9582f95a
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zbbh2X0Iq9c2J/AIBTjEzNy9LrxpeeoFcL3YM38PhZ8waJv6UEJlYjfcgrE/To0wHF/VfxfC0JqlPTQGax7s+vtB/q7ah8Ns7NWyWhLF68RQwau0KszeIsaG0gulD1uyhZZd4ThuN2oOozFv6NqJG23uVnG7xTrq0R4fh+StAFpXsUUbJPxsoLB5PfrXWKBXAUeiIjtIWelh9td9LGwSg3u0EQzNJ7Lw6zyCAagE+iUnlKwfafTUx3Fe5RMfXJzNR/ObHKspXRnXgmh1+bdtwS6cDEp1caMrJY9wmWXSaCTtgkYgCUTnS/ee8ctPI/UefnhISMjSF2iLibffsJAhAA8yISdsRQnALCzA1UgwWlgjL02TEXaRYv+iK0Jjwy8xaLJOZ1pXTqV5GVEeplZDpSap/bzOaXvmhSb9tj/sCrd/+TBf1/7kK/QOND/c3mX0DXbn7qKBr8s4zSZwccikzRKzf6+cAObUGUFAm3hpP9fvwwVKwUgnscrdWL9eBjcJuFCCTd8i92f8yEJWQv9HWcsQFvlxxATdqdbuWIUCKw+M2tA8lhJed33s+zIPMo+h4FrWOWzNCfzziEN7X0mh3j5Pdyq9ro3vrH1wRZYDjAG7BbIskL4Rlym0KNMof0haQrOnIQKuDXF//KBksCL70tJ07rRjhvyTNzpQzgXd+FiboEoS8xPg+zYceB0RcpUlPWGai6i394D46/KsVgCk9ivS4cMJgHK8l/mJ3poCMeuNAyW1XuxxwpLtoJ2PixYZ5c0LFNJosVW6NuASQygTvhXmopyS8LHsjONlxyCxxjz9tarLhar/8w3D7ry2BJziW9bTQ2d9ZxUPNVA0w/GbXnkXQA8ISHYWgVVexUpc+sBE2MweEckvZpHVSbKrf88Zgu6T/3VZecPjYqdqiGUP6Pmi9VytxXESfCGap8XGRGI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(451199015)(7416002)(2906002)(44832011)(6512007)(478600001)(31686004)(66946007)(921005)(83380400001)(86362001)(41300700001)(66556008)(316002)(52116002)(8676002)(5660300002)(31696002)(26005)(8936002)(6506007)(2616005)(186003)(66476007)(38100700002)(6486002)(38350700002)(4326008)(966005)(53546011)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?elo1QmNBd200YVBMbExuN2JBejhrVUxod0ZnaHFLaXp1QlMzY3ZUaHB6TFB4?=
- =?utf-8?B?M0NJWVN6amJoZnBXaHZSWTUxU01KM1BrOUs5K0NSMUlaeFgyUTkxVHZFUFFt?=
- =?utf-8?B?RzhIZ2xlQ0RWc1JEeXBOOUJMdVNYbjNIMnZGWmlzZGQ3VHBFeVk3RjNKRVJK?=
- =?utf-8?B?cjJjOW9Lckl4SXJzSTRYeU1wZUFFdmx5S3pBVHZIcEpHVGNEdy8wN2ZhQ2dq?=
- =?utf-8?B?ejJSNFZudmZaK1c5QXhYYTREVjBKQmVVM21URmxub2RKc1AyRkkwQmJuTit2?=
- =?utf-8?B?LzZSb1U2ajRlZEM3NkZIRDVoSG5sbUJwaXVCL1dFaExuSlhtT0RQZlJpRGJi?=
- =?utf-8?B?Zld4Z1lCQXdWakpDZXdXSC9WMnFvY3BJQ2gxQmVxaWltSVFYZEFCSnhvSHho?=
- =?utf-8?B?WHZVQzR2NVpadjkrNVJidldTTHNHdGRvSEp3L3BNaisyWko4bXlLZGltNHEr?=
- =?utf-8?B?ZzNEWVdGbGdMVHFRMHpPeDNCSHd2NkU1clNrT1BuRGEwVGd4REp0cUtaeDV0?=
- =?utf-8?B?cExSN2dURzBwbmkxMi9ZQnJLZ0VYbnZXZFphVjdjRWoxbUtQVkswZnFyRHJs?=
- =?utf-8?B?SXVmNUlHY0xJcGdXRm9YcUlRWThOcmdvRzUwTFJZMnFrb0hmWHI2bG5jaEVP?=
- =?utf-8?B?U0FndzkxTjlFVkNMQXMzVXdwa0hHam9YeGhiT3NMTDhYcXpEUlJxcGRqV2Q3?=
- =?utf-8?B?N0N1Z1JWV0ZRcFFtSEhFejRHVGlUNGJBMVJuLzF0SGRnUDhkRjlTR0U4YVN6?=
- =?utf-8?B?c3JZV1F1eVZPM1VtR2RtVkg4Nk5SNzc4RTFhS3hLRW0wa2UvVlY5dzhiUmRO?=
- =?utf-8?B?TjJnOXBUQ1pBUkpxcVN2N0N1NnZwM0NXMkluVHNqdzFaREJUM08wcXprTkFj?=
- =?utf-8?B?T1FzUDUxMDMwZmtkTzltck5hUmtWZmhxazhSdlZDY0dnNXZ3b08zNG0wNG9G?=
- =?utf-8?B?NW9Wa0RneEZERW1PZzdqV2xtTnoyTzR5ajR5N1NBTUs0M1ZWUlIwQ2ZOcEtD?=
- =?utf-8?B?WWJJcEp3dDAxTnZYekMrQ0NkelM2Rjd0bjlya2EzVHhMdlZWOGdnZ2tmNlJO?=
- =?utf-8?B?cHhWVDFJYW93NUJSQW45dWdjQkJKRTg3ZUxoZ0FHY1M4OUorNXM4STZBdjky?=
- =?utf-8?B?eWdqUTV2cHUwbXczWHgwOE1qT3dycXNwaVI1eThpZzgxVk1sUDc0d3lObUZZ?=
- =?utf-8?B?NEVwUkVFblFiWS9BZERRQzFFVS9RMG5rNGlneUpua0ROWFpFSS8vbG9MM0Zx?=
- =?utf-8?B?UEplTjF5b2t1dkFJVndwd0drTzJtd0tXZ01EdFBJeHpQY2k0c01yN2hldTRM?=
- =?utf-8?B?TmV1OHhzTm8wRFFZT3U2Y1NVSVBnaVNMWVltQXdGV0dGOC95WVRJMVQ4T0tC?=
- =?utf-8?B?RlZDVTVIemM3VkdBSjBxaW8zOXd2TUVOc3BEOG44WUJWOHljcTdWYUdUeGEv?=
- =?utf-8?B?QWxLR29nMjBtZnFXRnk0N1JiYWJYVjV3TVRYZHdvSU4xWFZERWdkZ3RNcWVF?=
- =?utf-8?B?eFlJSUZzR0l0elppdHNLRG1OWFRXV0cwTExvVm41Wk83Y1Y4djViTVBtekZJ?=
- =?utf-8?B?b1lpM1FYZExZM3A4ZjFsM3F3dG9CZURkYXBYS3dpVUVwVlNWem1MZGxJK0RX?=
- =?utf-8?B?bTM4T1RCSmxoa05tc21xeEFxbU44TDdmOStCOGVMdmNZUHIwZWEyWnNtTjIy?=
- =?utf-8?B?dnBWZDdRRjdmb1hrcUpWYlNZVkhhWW4xTWs2T3Q1aXdLcEVXUWFLTmNwMWs3?=
- =?utf-8?B?ZEZyZ1NOSkNHNnN6WWhCbEppZDZDSTJ2TnJjYTU1TjZyZkVGQzhtYkZLSTM4?=
- =?utf-8?B?b1FDakZUVU1hZ0gvcG1KWThYaTBSQ3JOQWJIUGhmZnlJOWJYN2NVR2tjK3N5?=
- =?utf-8?B?TU1ubG1RUllHTVJsdGRRK0VwVHN0dWlvN0V5V05pdVdJZUJPQlJ1aUFCZXVK?=
- =?utf-8?B?d0xJZXRVN1NvRTkwWWt1Mk41eFVKK2o3RmJVU2VyNkdRZzRpTFY5TFlQSUMz?=
- =?utf-8?B?YU5FWHNtZTRNZTUwam5jandrbDhESkJseHE0NGJCbCtjeUdHZVh6YWxNd0Jy?=
- =?utf-8?B?VTNLdWNUeVlDK0ozd2IyeVZmOHc3elhTVWZWRnRwRjNYOVNROU1aQWo5V0gr?=
- =?utf-8?Q?2LrdmGppHetRRo7BpC51IINkz?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ac13ace-aa43-433d-0d17-08da9582f95a
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 12:24:59.0839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jq+5VSLeM47k5ikO+toYQEm01b3MIUYI6AIXuiLaJmon1SsaDJVTtQTzYdlWXMwGWJ1FwS3ohSZz44eJ98fJ/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8530
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_05,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 impostorscore=0 clxscore=1011 adultscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209130054
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -134,38 +106,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 9/13/2022 6:21 PM, Marco Felsch wrote:
-> Hi,
+On 8/23/22 18:25, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
 > 
-> this proposal is to mark clocks as critical. It is somehow inspired by
-> the regulator-always-on property. Since sometimes we can end in circular
-> dependcies if we wanna solve the dependcies for a specific clock
-> provider.
+> Under certain circumstances it might be desirable to enable the creation
+> of TPM-backed secrets that are only accessible to the kernel. In an
+> ideal world this could be achieved by using TPM localities, but these
+> don't appear to be available on consumer systems. An alternative is to
+> simply block userland from modifying one of the resettable PCRs, leaving
+> it available to the kernel. If the kernel ensures that no userland can
+> access the TPM while it is carrying out work, it can reset PCR 23,
+> extend it to an arbitrary value, create or load a secret, and then reset
+> the PCR again. Even if userland somehow obtains the sealed material, it
+> will be unable to unseal it since PCR 23 will never be in the
+> appropriate state.
 > 
-> The property is generic so it can be used by every hw clock provider. So
-> it can be seen as generic implementation to [1].
-
-Thanks for working on a generic solution, I think your proposal could 
-also help [1] and try to resolve same issue as [2].
-
-
-[1] 
-https://lore.kernel.org/all/CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com/
-[2] 
-https://lore.kernel.org/all/20220517235919.200375-1-marex@denx.de/T/#m52d6d0831bf43d5f293e35cb27f3021f278d0564
-
-Thanks,
-Peng.
-
-
+> From: Matthew Garrett <mjg59@google.com>
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
 > 
-> [1] https://lore.kernel.org/linux-clk/20220913092136.1706263-1-peng.fan@oss.nxp.com/
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+> Matthew's original version of this patch is at:
+> https://patchwork.kernel.org/patch/12096491/
 > 
-> Marco Felsch (2):
->    clk: add support for critical always-on clocks
->    arm64: dts: imx8mm-evk: mark 32k pmic clock as always-on
+> Changes in v2:
+>   - Fixed sparse warnings
 > 
->   arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi |  1 +
->   drivers/clk/clk.c                             | 18 ++++++++++++++++++
->   2 files changed, 19 insertions(+)
+>   drivers/char/tpm/Kconfig          | 10 +++++++++
+>   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+>   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+>   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+>   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+>   drivers/char/tpm/tpm2-space.c     |  2 +-
+>   6 files changed, 97 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index 927088b2c3d3f2..4483b61a428b11 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+>   	  This driver proxies for firmware TPM running in TEE.
+>   
+>   source "drivers/char/tpm/st33zp24/Kconfig"
+> +
+> +config TCG_TPM_RESTRICT_PCR
+> +	bool "Restrict userland access to PCR 23"
+> +	depends on TCG_TPM
+> +	help
+> +	  If set, block userland from extending or resetting PCR 23. This
+> +	  allows it to be restricted to in-kernel use, preventing userland
+> +	  from being able to make use of data sealed to the TPM by the kernel.
+> +	  This is required for secure hibernation support, but should be left
+> +	  disabled if any userland may require access to PCR23.
+>   endif # TCG_TPM
+> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> index dc4c0a0a512903..7a4e618c7d1942 100644
+> --- a/drivers/char/tpm/tpm-dev-common.c
+> +++ b/drivers/char/tpm/tpm-dev-common.c
+> @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+>   	priv->response_read = false;
+>   	*off = 0;
+>   
+> +	if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> +		ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> +	else
+> +		ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> +
+> +	if (ret)
+> +		goto out;
+> +
+>   	/*
+>   	 * If in nonblocking mode schedule an async job to send
+>   	 * the command return the size.
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index a80b341d38eb8c..077c3ca0a127ba 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+>   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+>   int tpm2_probe(struct tpm_chip *chip);
+>   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> +			     const void *buf, size_t bufsiz);
+>   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+>   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+>   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+>   void tpm_bios_log_teardown(struct tpm_chip *chip);
+>   int tpm_dev_common_init(void);
+>   void tpm_dev_common_exit(void);
+> +
+> +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> +#define TPM_RESTRICTED_PCR 23
+> +
+> +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> +#else
+> +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> +				      size_t size)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> +				      size_t size)
+> +{
+> +	return 0;
+> +}
+> +#endif
+>   #endif
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index 8ec743dec26544..318e75ae42fb85 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+>   
+>   	return 0;
+>   }
+> +
+> +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> +{
+> +	struct tpm_header *header = (struct tpm_header *)buffer;
+> +	char len, offset;
+> +	__be32 *pcr;
+> +	int pos;
+> +
+> +	switch (be32_to_cpu(header->ordinal)) {
+> +	case TPM_ORD_PCR_EXTEND:
+> +		if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> +			return -EINVAL;
+> +		pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> +		if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> +			return -EPERM;
+
+FYI: TPM 1.2 has transport sessions where the command is tunneled in an 
+encrypted channel and this check could be circumvented...
+
