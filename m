@@ -2,113 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D19D5B787F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2435B7882
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiIMRoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 13:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S233263AbiIMRom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbiIMRn7 (ORCPT
+        with ESMTP id S233129AbiIMRoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:43:59 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B8D7E03D;
-        Tue, 13 Sep 2022 09:38:11 -0700 (PDT)
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 28DGbe52014661;
-        Wed, 14 Sep 2022 01:37:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 28DGbe52014661
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1663087061;
-        bh=nud6kkeErbj6gxCVhXXnTfwdmo0n39YPcG7dhFcvh1g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wjX8kQsZucG0nawp4iyuS3KdSdKib6JGS+CoO3GcK0rdtfymKQlBFdt/AGmub8uTO
-         j1Pkz0E7g4H6nDfcR2MUZ3vd5+XT5CVlE0ktlEAXUfKzzKkt0n35+RiIPfJDQHZG7G
-         qIuGWb66EkLjnTHbMatqtHqHdsNubrxLsnNpafMcCL8jSRJ03KuZKPlN6XJZopc+Hp
-         8O0QWIAK+mOokFEEV7db0/DJfN2Pw1gKj+KN93Z1171jgPf/IPiUsho+BpsuLtmwhz
-         L4p4j/waNMsfQTjIfP9g72gxRWP0zVfoYEsqzRo4JbS4iP29eilBVdGf3IdWIN7Yfy
-         csjp4cO8X+V9w==
-X-Nifty-SrcIP: [209.85.160.43]
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1280590722dso33684803fac.1;
-        Tue, 13 Sep 2022 09:37:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo00i+mFupA9P/CyyxxwLvIiwWx0gZLqQodlFBPkSTv8PTFL3pMk
-        eP57zFlLpkgIEbYTkC2j/1phM0WHJH43xYpOsIk=
-X-Google-Smtp-Source: AA6agR78qVQuH9wKYoWkuMUWPBYpVpifhhBNrbSGkbiYxAOFG2gxyJmesUEHCW2oS3y/qY8FIy/cjblygWe+q4GCd4A=
-X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
- ek38-20020a056870f62600b0010da798f3aamr100015oab.194.1663087059946; Tue, 13
- Sep 2022 09:37:39 -0700 (PDT)
+        Tue, 13 Sep 2022 13:44:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80FBC61
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:39:29 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id v1so12391966plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 09:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=QsjjO29pV+lXnXx8W3jvjySTYx0DjCwzWNd1Q2TmSXA=;
+        b=Uqnmjv2xQNeNKUq7BA4jcJlTZavzWJWhXukjJKyzC6pVFxMd0AzNd7CIJMP+lYYZMf
+         rG+4JX2uYdFGphoSIMXiymcu0A66WUnE5bVc/thHgnWrLHp013vc7TxCNyd3fwHkJx0a
+         fKZe9OKqlVWzr5GCkcFRXwIkjzUpm0+4WZalg3kT3SbCvFFt8bYTJQYJQcXO4u8Xp/KI
+         V1fk91M+6twTeJvNjlHc/fk+vkhF6MNjMCoWviMZnCJAaAwPfuhRyPPPfglH74ezfl24
+         xKo1NvFzl3xADNqgD0ofJ4ZBbTVkbWg6yS4Tb1wKpmso5K7ESaWBhRR2grqhAEJTdkxO
+         hHyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=QsjjO29pV+lXnXx8W3jvjySTYx0DjCwzWNd1Q2TmSXA=;
+        b=0aytCrauO7n3HtPvAgYjeQFYTKX3IxR87kJHr503NKEDqL7JkWuJa5mFqHt3vdGhUk
+         S2ATcO3OT5H2OBTUjJtI1N7v9VkXZyU1ZaiSiwS5X2pNfEsiz2h3zHYsipwrw4EodaBf
+         vwsMpx79fEPy1wb8fieCIo08sHR+jrLZzd5VzU8BJYcA7b1yr28bNYBlbJLw+5XLEDId
+         ZK9WO05p94OtPexDZgoJ1OL8ekwbWHv5G1RG8Qj+lJiiysuQtBWDilk/ipe7YNEslaBf
+         5ILpbvIbVleRTNzsF6CsGW7dpnAtNyS6TTec43KUM03tpo+zcjiEJaYxVa13mA/cdnOX
+         jCFQ==
+X-Gm-Message-State: ACgBeo1bYT/DRg2coMMW2gOEMCeOramJNM5afXg9OD6PgL1MPjuXLBtv
+        M4YsasYel/hPInk/a+q1wa/+
+X-Google-Smtp-Source: AA6agR5TkRvWKKpdCy2xfTloIRSf/Zw2zjtIJkVjQVewOdcYMyHw0J1LpGaeyV7kqixlIKowsTJScg==
+X-Received: by 2002:a17:903:110e:b0:171:3afa:e68c with SMTP id n14-20020a170903110e00b001713afae68cmr32267098plh.12.1663087169076;
+        Tue, 13 Sep 2022 09:39:29 -0700 (PDT)
+Received: from workstation ([117.202.184.122])
+        by smtp.gmail.com with ESMTPSA id e14-20020a17090a7c4e00b002008a85bac1sm7344495pjl.49.2022.09.13.09.39.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Sep 2022 09:39:28 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 22:09:21 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v6 2/5] PCI: qcom: Add retry logic for link to be stable
+ in L1ss
+Message-ID: <20220913163921.GE25849@workstation>
+References: <20220909195000.GA310621@bhelgaas>
+ <7310fc0c-5f87-87a6-4484-d60970ce3285@quicinc.com>
+ <20220912173346.GB25849@workstation>
+ <e9c5d29a-f1a7-46c8-a456-6c75c129876f@quicinc.com>
 MIME-Version: 1.0
-References: <20220912094838.2398580-1-zengheng4@huawei.com> <20220912094838.2398580-3-zengheng4@huawei.com>
-In-Reply-To: <20220912094838.2398580-3-zengheng4@huawei.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 14 Sep 2022 01:37:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS75yHbaumt0POFASTM2GXuNK=AyuFOeh7QM72w5QUs5A@mail.gmail.com>
-Message-ID: <CAK7LNAS75yHbaumt0POFASTM2GXuNK=AyuFOeh7QM72w5QUs5A@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] Kconfig: remove unused function 'menu_get_root_menu'
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9c5d29a-f1a7-46c8-a456-6c75c129876f@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 6:41 PM Zeng Heng <zengheng4@huawei.com> wrote:
->
-> There is nowhere calling `menu_get_root_menu` function,
-> so remove it.
->
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+On Tue, Sep 13, 2022 at 07:54:22PM +0530, Krishna Chaitanya Chundru wrote:
+> 
+> On 9/12/2022 11:03 PM, Manivannan Sadhasivam wrote:
+> > On Mon, Sep 12, 2022 at 09:39:36PM +0530, Krishna Chaitanya Chundru wrote:
+> > > On 9/10/2022 1:20 AM, Bjorn Helgaas wrote:
+> > > > On Fri, Sep 09, 2022 at 02:14:41PM +0530, Krishna chaitanya chundru wrote:
+> > > > > Some specific devices are taking time to settle the link in L1ss.
+> > > > > So added a retry logic before returning from the suspend op.
+> > > > "L1ss" is not a state.  If you mean "L1.1" or "L1.2", say that.  Also
+> > > > in code comments below.
+> > > Yes L1ss means L1.2 and L1.2 We will update it next patch
+> > > > s/So added a/Add/
+> > > > 
+> > > > What are these specific devices?  Is this a qcom controller defect?
+> > > > An endpoint defect that should be addressed via some kind of generic
+> > > > quirk?
+> > > This is depending up on the endpoint devices and it varies to device to
+> > > device.
+> > > 
+> > Can we identify the source of the traffic? Is the NVMe driver not
+> > flushing it's queues correctly?
+> 
+> We found that it is not from nvme data, we are seeing some physical layer
+> activity on the
+> 
+> protocol analyzer.
+> 
 
+Okay
 
-Applied to linux-kbuild. Thanks.
+> > 
+> > > We are thinking this is not a defect if there is some traffic in the link
+> > > the link will
+> > > 
+> > > not go to L1ss .
+> > > 
+> > Is this hack still required even after switching to syscore ops?
+> > 
+> > Thanks,
+> > Mani
+> 
+> Yes, mani it is still required. And just before this sycore ops there will
+> be a pci transaction to
+> 
+> mask msix interrupts.
+> 
 
+Hmm. I'm getting slightly confused here. What really happens when you do
+the resource teardown during suspend and the link has not entered L1SS?
 
-> ---
->  scripts/kconfig/lkc.h  | 1 -
->  scripts/kconfig/menu.c | 5 -----
->  2 files changed, 6 deletions(-)
->
-> diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
-> index 279d56a44136..a61907686d22 100644
-> --- a/scripts/kconfig/lkc.h
-> +++ b/scripts/kconfig/lkc.h
-> @@ -98,7 +98,6 @@ bool menu_is_empty(struct menu *menu);
->  bool menu_is_visible(struct menu *menu);
->  bool menu_has_prompt(struct menu *menu);
->  const char *menu_get_prompt(struct menu *menu);
-> -struct menu *menu_get_root_menu(struct menu *menu);
->  struct menu *menu_get_parent_menu(struct menu *menu);
->  bool menu_has_help(struct menu *menu);
->  const char *menu_get_help(struct menu *menu);
-> diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
-> index 3d6f7cba8846..62b6313f51c8 100644
-> --- a/scripts/kconfig/menu.c
-> +++ b/scripts/kconfig/menu.c
-> @@ -661,11 +661,6 @@ const char *menu_get_prompt(struct menu *menu)
->         return NULL;
->  }
->
-> -struct menu *menu_get_root_menu(struct menu *menu)
-> -{
-> -       return &rootmenu;
-> -}
-> -
->  struct menu *menu_get_parent_menu(struct menu *menu)
->  {
->         enum prop_type type;
-> --
-> 2.25.1
->
+Since PHY is powered by MX domain, I'm wondering why we should wait for
+the link to be in L1SS?
 
+Thanks,
+Mani
 
--- 
-Best Regards
-Masahiro Yamada
+> > > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > > > > ---
+> > > > >    drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++-----------
+> > > > >    1 file changed, 25 insertions(+), 11 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > > index 6e04d0d..15c2067 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > > @@ -1809,26 +1809,40 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> > > > >    static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
+> > > > >    {
+> > > > >    	u32 val;
+> > > > > +	ktime_t timeout, start;
+> > > > >    	struct dw_pcie *pci = pcie->pci;
+> > > > >    	struct device *dev = pci->dev;
+> > > > >    	if (!pcie->cfg->supports_system_suspend)
+> > > > >    		return 0;
+> > > > > -	/* if the link is not active turn off clocks */
+> > > > > -	if (!dw_pcie_link_up(pci)) {
+> > > > > -		dev_info(dev, "Link is not active\n");
+> > > > > -		goto suspend;
+> > > > > -	}
+> > > > > +	start = ktime_get();
+> > > > > +	/* Wait max 200 ms */
+> > > > > +	timeout = ktime_add_ms(start, 200);
+> > > > > -	/* if the link is not in l1ss don't turn off clocks */
+> > > > > -	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> > > > > -	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> > > > > -		dev_warn(dev, "Link is not in L1ss\n");
+> > > > > -		return 0;
+> > > > > +	while (1) {
+> > > > > +
+> > > > > +		if (!dw_pcie_link_up(pci)) {
+> > > > > +			dev_warn(dev, "Link is not active\n");
+> > > > > +			break;
+> > > > > +		}
+> > > > > +
+> > > > > +		/* if the link is not in l1ss don't turn off clocks */
+> > > > > +		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> > > > > +		if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> > > > > +			dev_dbg(dev, "Link enters L1ss after %d  ms\n",
+> > > > > +					ktime_to_ms(ktime_get() - start));
+> > > > > +			break;
+> > > > > +		}
+> > > > > +
+> > > > > +		if (ktime_after(ktime_get(), timeout)) {
+> > > > > +			dev_warn(dev, "Link is not in L1ss\n");
+> > > > > +			return 0;
+> > > > > +		}
+> > > > > +
+> > > > > +		udelay(1000);
+> > > > >    	}
+> > > > > -suspend:
+> > > > >    	if (pcie->cfg->ops->suspend)
+> > > > >    		pcie->cfg->ops->suspend(pcie);
+> > > > > -- 
+> > > > > 2.7.4
+> > > > > 
