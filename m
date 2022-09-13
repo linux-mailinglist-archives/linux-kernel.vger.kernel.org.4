@@ -2,137 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355275B68E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8462D5B68EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiIMHr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S231269AbiIMHsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiIMHrz (ORCPT
+        with ESMTP id S231244AbiIMHsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:47:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30954620C;
-        Tue, 13 Sep 2022 00:47:54 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE1686601FFD;
-        Tue, 13 Sep 2022 08:47:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663055272;
-        bh=6u/thX32yOGH/bqlywjPbOzwMFBcKnBB26iBhycTJnw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U0wMsgxqZlK0q6dQRcwBUeYGM9WIrQL0rx0gQlqCA1lATN9B/W4LJpGMJg+5lF+1U
-         CT9A70UVYOYtkCy3IIopcLcefpLgMyR3SLkma4RBPna+dS+cRSXrRAxNdclXkkM159
-         KBEQHH3mLWa3GdD3Dyp2WaHVywwHM28cB/Jsl6hDwNsOYaE6MvsHIQ7PfKw5DHn/r9
-         4nzB157drCv3WqGH2atfYsdfKzXJpRuONAvtWo2ln81mmxOybQ/O6kivpYRh8R9bem
-         HOyMByi6ME2ZJX5YomQYqXkVspY3Aye/aoP9HBHTY3JJD/GXTHl3xuiFcJlDOCXM15
-         LR8foC4g1lWiw==
-Message-ID: <8c734b83-aa2a-83a6-cb12-28e36ace2bbb@collabora.com>
-Date:   Tue, 13 Sep 2022 09:47:47 +0200
+        Tue, 13 Sep 2022 03:48:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306165A164;
+        Tue, 13 Sep 2022 00:48:19 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRb9N6szFznVFp;
+        Tue, 13 Sep 2022 15:45:28 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 15:48:08 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH next v4 1/2] i2c: hisi: Add initial device tree support
+To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
+References: <20220909074842.281232-1-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <cc27d1af-7f8a-7c51-a101-1b254a2d761b@huawei.com>
+Date:   Tue, 13 Sep 2022 15:48:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/4] Bluetooth: btusb: mediatek: use readx_poll_timeout
- instead of open coding
-To:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <43b68b1f48c20b1dfcd7e6663c3dcb38e4e0648c.1663020936.git.objelf@gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <43b68b1f48c20b1dfcd7e6663c3dcb38e4e0648c.1663020936.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220909074842.281232-1-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/09/22 00:18, sean.wang@mediatek.com ha scritto:
-> From: Sean Wang <sean.wang@mediatek.com>
+On 2022/9/9 15:48, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
 > 
-> Use readx_poll_timeout instead of open coding to poll the hardware reset
-> status until it is done.
-> 
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-
-Hello Sean, thanks for the patch!
-However, there's something to improve...
-
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
 > ---
->   drivers/bluetooth/btusb.c | 32 ++++++++++++++++++--------------
->   1 file changed, 18 insertions(+), 14 deletions(-)
+>  drivers/i2c/busses/Kconfig    |  2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 19 ++++++++++++++++++-
+>  2 files changed, 19 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index c3daba17de7f..4dc9cae3e937 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 7284206b278b..6d0fdf48e97d 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..7a77f306d05f 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -5,6 +5,9 @@
+>   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+>   */
+>  
+> +#ifdef CONFIG_ACPI
+> +#include <linux/acpi.h>
+> +#endif
+>  #include <linux/bits.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/completion.h>
+> @@ -13,6 +16,9 @@
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#ifdef CONFIG_OF
+> +#include <linux/of.h>
+> +#endif
 
-..snip..
+I don't think the protection for the headers is necessary and common. The
+ACPI/OF specific functions should have already been handled well with{out}
+ACPI/OF config. Have you met some problems without these?
 
-> @@ -2910,18 +2918,14 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
->   	btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
->   	btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
->   
-> -	/* Poll the register until reset is completed */
-> -	do {
-> -		btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
-> -		if (val & MTK_BT_RST_DONE) {
-> -			bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
-> -			break;
-> -		}
-> +	err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
-> +				 val & MTK_BT_RST_DONE,
-> +				 100000, 1000000);
+BTW, it's better to have a changelog when updating the patches.
 
-I agree with using readx_poll_timeout() instead of open coding the same, but
-there's a catch: this macro uses usleep_range(), which is meant to be used
-for sleeping less than ~20ms.
-
-Even the kerneldoc at include/linux/iopoll.h advertises that:
-
-  * @sleep_us: Maximum time to sleep between reads in us (0
-  *            tight-loops).  Should be less than ~20ms since usleep_range
-  *            is used (see Documentation/timers/timers-howto.rst).
-
-So, if there's any reason for which you can't sleep for less than 100ms
-per iteration, I'm afraid that you can't use readx_poll_timeout()...
-...otherwise, please change sleep_us to 20000 and keep the timeout at 1 sec.
-
-Regards,
-Angelo
-
-> +	if (err < 0)
-> +		bt_dev_err(hdev, "Reset timeout");
->   
-> -		bt_dev_dbg(hdev, "Polling Bluetooth Reset CR");
-> -		retry++;
-> -		msleep(MTK_BT_RESET_WAIT_MS);
-> -	} while (retry < MTK_BT_RESET_NUM_TRIES);
-> +	if (val & MTK_BT_RST_DONE)
-> +		bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
->   
->   	btusb_mtk_id_get(data, 0x70010200, &val);
->   	if (!val)
-
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/units.h>
+> @@ -483,17 +489,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI
+>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  	{ "HISI03D1", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+> +#endif
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,hisi-i2c", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+> +#endif
+>  
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> 
