@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FE95B7D95
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D015B7D97
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 01:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiIMXh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 19:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S229852AbiIMXhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 19:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiIMXhW (ORCPT
+        with ESMTP id S229866AbiIMXhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 19:37:22 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4521B71BDB
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:37:19 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j15-20020a056902020f00b006aea95548b0so9122031ybs.19
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:37:19 -0700 (PDT)
+        Tue, 13 Sep 2022 19:37:23 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5222D71BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:37:22 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id b11-20020a170902d50b00b0017828988079so6216371plg.21
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 16:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=NwGQODpxaIQjq2Q9i7xww6BX9L+zJmLaZqsIG4X4HwQ=;
-        b=o4kOxYovTq8PJdbtLFHNsCuRZnYOxfFbUklDCum1if7Egy/oOVrLZccjBiHzq5BXuR
-         HQFB4ufGVJe1EForw5n8XYdu13KQ21Jwpy0r8gcfLeBszXy1Phx3faimJZyxO37aXLOp
-         YUYAH3/1WvyO3nP8fCCVDCpiVONvC+o2oLf+5sLG/VvnPA8UotxYhrM4nCJ4+/Z1GEz7
-         XkEDwRlsiGrs8TsCQbv0cdQm8Oz6ibzUN3tKMehKP02NX/iFzuc8K6BUYYwhuF/pOyKD
-         xwc/6jQHuSnUGzzuBLKblrDN9Xv0hArYEZKA2TvN7tKApcijJ5Fd2qwZO6MBZy6cuSMN
-         nggQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=3R3kd3ajupj3cdm7/eN6SOKkue4SpZWOLdvBLhR9NOg=;
+        b=PD40MUF8Fbm96f+EH4eN6upE2dgzH6/V5FZ6SzuMdGoEo4HvZK+fJbXAWO9ldkK2lx
+         kzQSobzZo1PkoYHzVvsc4e9FM5Oe0qds/6+zWntw22zR4S8nBVNl0xisR46tkpiuNeF6
+         Qwjo6rOvh+Hm3kJRwyJmG9pkUFK9aQpTB0G+Wk2x+pNyqN3M8l1Rt0e3yxRZOYGpsM+b
+         zO+qdXeOuJ3TSuFJjZJlMoBRd21LP2UZQ8LZHym5g/lybtCFr/ReZhe7Fyg5JnOf8E2H
+         flQYwuHYKHqFGoR/HQKD4DtAsfVNxH29HqEtp4ooAqIc4K59hP2YIhJfnoLW6OUbii1P
+         tQpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=NwGQODpxaIQjq2Q9i7xww6BX9L+zJmLaZqsIG4X4HwQ=;
-        b=Z5CncuMY+xVT+BKwMsxyx5JR2YRJCKkY2iKdNZS9tzw3TX/KrlDWrmkDdnmMYvoY0r
-         dfX9JXki0MLa46Ov3xyJXiiwli5vtZG0GQbyM/8nCJaiQxE/n53aaHt2JzBMC2+PGJ4s
-         Ub/OYMxxNaS/J7SYFBA6UIka5hgYIQI+4fIacCR0fK8VNVv/Brf01CeeqSO3xvSy1bBb
-         iV+UsGAbFDjQkisdsKu1IpaDJK6EdN59kJH6YVIMGFX+fsOsC2B47KeXKyjGSbtPjt1s
-         5eeb8YDq4RE6qK2VrZ5Izz2YH50Bhmnw0zQQFAoVcOhdBE5yZvX8mos0IVBt1PmRasq1
-         bVCg==
-X-Gm-Message-State: ACgBeo1dJiow1kUKSrSg0MwzOBNm1iGRdv+P6qgMnjCO8UUwZFO5C/oI
-        r6jZdIA/6OhheuFgkMj4N8c+d2v/ZJC8
-X-Google-Smtp-Source: AA6agR4nHY/ALASaB6ML9Y/8f2p0m5sk2i47fc6sZmQCuiYN/l2jdLI3fj8Icd8/Bz5NvCRsPfMkWvqD2Yoj
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=3R3kd3ajupj3cdm7/eN6SOKkue4SpZWOLdvBLhR9NOg=;
+        b=bERweyy3LvdoABU6yMImebKB7bpxA050icm9gp6rV6t0gaSEctylKNmKgeZ+ZB7RlR
+         vHEdlkrXrNF451jOV51FeCtoekgNFSYmjdUZnS43R04iFySPr6jvSb60fmNxfo32deS7
+         9AwWcYSVBUYR26gZOOwVytLp4hqPAIr/ZLo//KlI5cacvT4mZd4bYRSyVXL7DnEfXjy/
+         Xgg1sZDSgG/fPyQOaWQm9bTS1Gsw3FGQnmr7SU1dkmk6i+mLYffhCem438pXeaI/zoG+
+         dC1PokALewJcJYp8xZdZoRKpjnXfBCd0fSIEaKiog8zTuH47xn99lTpWeF2IyzRI048D
+         4UCg==
+X-Gm-Message-State: ACgBeo15CM4tDM7r4js2feGw7DIwXHSUE7xPjqQ1ACISDymipJ7jz9eD
+        +Ld5D39rEvf875kIrWwfXypAz4ofHs5Q
+X-Google-Smtp-Source: AA6agR6Rx7aJ5ESWaikv/TsLescyNMcGIubGq9nFlHDf+hu7K3rAOvznwWK4PlXHlMg1lAROBMAWgzwevRQe
 X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a81:1353:0:b0:345:34b5:ad29 with SMTP id
- 80-20020a811353000000b0034534b5ad29mr27724101ywt.17.1663112238498; Tue, 13
- Sep 2022 16:37:18 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 16:37:14 -0700
+ (user=jiangzp job=sendgmr) by 2002:a17:902:6943:b0:178:4751:a76b with SMTP id
+ k3-20020a170902694300b001784751a76bmr5349334plt.37.1663112241844; Tue, 13 Sep
+ 2022 16:37:21 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 16:37:15 -0700
+In-Reply-To: <20220913233715.3323089-1-jiangzp@google.com>
 Mime-Version: 1.0
+References: <20220913233715.3323089-1-jiangzp@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913233715.3323089-1-jiangzp@google.com>
-Subject: [kernel PATCH v2 0/1] Bluetooth: hci_sync: allow advertise when scan
+Message-ID: <20220913163710.kernel.v2.1.I54824fdfb8de716a1d7d9eccecbbfb6e45b116a8@changeid>
+Subject: [kernel PATCH v2 1/1] Bluetooth: hci_sync: allow advertise when scan
  without RPA
 From:   Zhengping Jiang <jiangzp@google.com>
 To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org
@@ -73,9 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Address resolution will be paused during active scan to allow any
+advertising reports reach the host. If LL privacy is enabled,
+advertising will rely on the controller to generate new RPA.
 
-This patch allows the device to keep advertising during active scan when
-ll privacy is enabled, if the device is not using privacy mode.
+If host is not using RPA, there is no need to stop advertising during
+active scan because there is no need to generate RPA in the controller.
+
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+---
 
 Changes in v2:
 - Modify title to reduce length within limit
@@ -83,12 +91,22 @@ Changes in v2:
 Changes in v1:
 - Check privacy flag when disable advertising
 
-Zhengping Jiang (1):
-  Bluetooth: hci_sync: allow advertise when scan without RPA
-
  net/bluetooth/hci_sync.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 41b6d19c70b06..422f7c6911d9f 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -5351,7 +5351,7 @@ static int hci_active_scan_sync(struct hci_dev *hdev, uint16_t interval)
+ 	/* Pause advertising since active scanning disables address resolution
+ 	 * which advertising depend on in order to generate its RPAs.
+ 	 */
+-	if (use_ll_privacy(hdev)) {
++	if (use_ll_privacy(hdev) && hci_dev_test_flag(hdev, HCI_PRIVACY)) {
+ 		err = hci_pause_advertising_sync(hdev);
+ 		if (err) {
+ 			bt_dev_err(hdev, "pause advertising failed: %d", err);
 -- 
 2.37.2.789.g6183377224-goog
 
