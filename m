@@ -2,107 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57295B6C8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3785B6C91
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 13:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbiIMLtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 07:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S231797AbiIMLuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 07:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiIMLtn (ORCPT
+        with ESMTP id S231207AbiIMLub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:49:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1580EA45F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 04:49:41 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oY4Pw-0006hk-LP; Tue, 13 Sep 2022 13:49:28 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oY4Pv-00060G-Pj; Tue, 13 Sep 2022 13:49:27 +0200
-Date:   Tue, 13 Sep 2022 13:49:27 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH V3 0/2] clk: imx: introduce fsl,always-on-clocks
-Message-ID: <20220913114927.an5n5cv5tzd3lypc@pengutronix.de>
-References: <20220913092136.1706263-1-peng.fan@oss.nxp.com>
- <20220913102957.sir37bsdr5sayxal@pengutronix.de>
- <c6d4fb3e-9907-cda2-90d8-cfa21e8ebd41@linaro.org>
+        Tue, 13 Sep 2022 07:50:31 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845B8AE71;
+        Tue, 13 Sep 2022 04:50:30 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1274ec87ad5so31435291fac.0;
+        Tue, 13 Sep 2022 04:50:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RcNQKqDpWZMHBl7FH++fUVwcpF5gBAwTAU2VtaJ7zk8=;
+        b=QJFBliYmUkwCH5zXl81puN4P05lgDQq8s3NM5DFZVfjiAa4MeiobqSeT6RIZ21mYex
+         2dMV4DWDML/6V05XdvaMbJ8hvS/bZSo05iIrQ8GXGFgCftPk/3AW9uEdA7sJRR9sJkGm
+         d9F/cloq6c/drzpQmHruqJq2tG0yZ+jXbXwqyn2KXxEP2J54vsoTZhMoJwTQYBTOZH9h
+         aaJWYAy0qYK0XYlxiScOKN8GD6wArivkejzouz179zVJWZezX38iF90j9Noax1hbMMBj
+         zmsRchsiIfEnZbOGtnWRafDKcP+XdQUDm+tQcAahpdYIm+6Rll7IatEhhOxiEZnXH3xD
+         F9wg==
+X-Gm-Message-State: ACgBeo3dZzaFf885U7hi17jbcs461QyYyGSPS2UpxZKO1dKLFaSxowrR
+        oUrbz1RgqIGyhpK21UPvyg==
+X-Google-Smtp-Source: AA6agR5zbDzHhyyW8Ff1pQzgfFa2xGYLn9YbuydKW6sTC1re97ECIjGyY2S+XSe0oTgnBt0uMcVajA==
+X-Received: by 2002:a05:6808:130e:b0:345:5de2:1095 with SMTP id y14-20020a056808130e00b003455de21095mr1258365oiv.130.1663069829764;
+        Tue, 13 Sep 2022 04:50:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j83-20020acab956000000b00334c2e81dfbsm5126821oif.0.2022.09.13.04.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 04:50:29 -0700 (PDT)
+Received: (nullmailer pid 3377303 invoked by uid 1000);
+        Tue, 13 Sep 2022 11:50:28 -0000
+Date:   Tue, 13 Sep 2022 06:50:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     linux-hwmon@vger.kernel.org, rtanwar@maxlinear.com,
+        jonnyc@amazon.com, robh+dt@kernel.org, jdelvare@suse.com,
+        devicetree@vger.kernel.org, linux@roeck-us.net,
+        p.zabel@pengutronix.de, hhhawa@amazon.com,
+        andriy.shevchenko@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 13/21] dt-bindings: hwmon: (mr75203) add
+ "moortec,vm-pre-scaler-x2" property
+Message-ID: <20220913115028.GA3377242-robh@kernel.org>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-14-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c6d4fb3e-9907-cda2-90d8-cfa21e8ebd41@linaro.org>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220908152449.35457-14-farbere@amazon.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-13, Krzysztof Kozlowski wrote:
-> On 13/09/2022 12:29, Marco Felsch wrote:
-> > Hi Peng,
-> > 
-> > On 22-09-13, Peng Fan (OSS) wrote:
-> >> From: Peng Fan <peng.fan@nxp.com>
-> >>
-> >> V3:
-> >>  Rename to fsl,always-on-clocks 
-> >>
-> >> V2:
-> >>  Use protected-clocks
-> >>  https://lore.kernel.org/all/20220816130327.2987710-1-peng.fan@oss.nxp.com/
-> >>
-> >> V1:
-> >>  Use fsl,protected-clocks
-> >>  https://lore.kernel.org/all/20220815033632.1687854-1-peng.fan@oss.nxp.com/
-> >>
-> >> There are two cases that I wanna this property could serve:
-> >> Virtualization: root cell linux run in parallel with inmate cell
-> >> AMP: M7/4 runs in parallel with A53
-> >>
-> >> The major case is:
-> >> Jailhouse hypervisor only support partition, so devices are partitioned.
-> >> But there is only CCM module that provides clock, the CCM is handled by
-> >> root cell linux, need make sure the root cell linux not shutdown the
-> >> clocks using by inmate cell.
-> >>
-> >> I was thinking whether need to provide a rate entry to ask root cell
-> >> configure the clk rate for inmate cell. But NXP downstream not have it,
-> >> see https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/clk/imx/clk-imx8mp.c?h=lf-5.15.y#n690
-> >> So just leave the property as uint32-array.
-> > 
-> > Can you please check my recent proposal? I recently stumbled over such
-> > an issue on the mx8mm-evk as well but with the 32k clock provided by the
-> > pmic. Unfortunately I forgot to add you to the to list, I will change
-> > that. If that proposal will fix your problem, I would like to go the
-> > generic way.
-> > 
-> > https://patchwork.kernel.org/project/linux-clk/list/?series=676522
+On Thu, 08 Sep 2022 15:24:41 +0000, Eliav Farber wrote:
+> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
+> the input voltage, so that it can be  presented to the VM for measurement
+> within its range (the VM input range is limited to -0.1V to 1V).
 > 
-> Your proposal does not change bindings. You cannot introduce new
-> properties without documenting them in the bindings.
+> The new "moortec,vm-pre-scaler-x2" property lists the channels that use
+> the mr76006 pre-scaler.
+> 
+> The driver will use this list to multiply the voltage result by 2, to
+> present to the user with the actual voltage input source.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+> V4 -> V3:
+> - Rename "moortec,vm-pre-scaler" to "moortec,vm-pre-scaler-x2".
+> - Added mximum number if items in description.
+> 
+> V3 -> V2:
+> - Add "moortec" prefix to property name.
+> - Change property format to be a single u8 array.
+> - Fix typo: scalar --> scaler.
+> 
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml  | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
 
-As said, it is a proposal. Bindings will be added if it would be
-accepted.
-
-Regards,
-  Marco
+Reviewed-by: Rob Herring <robh@kernel.org>
