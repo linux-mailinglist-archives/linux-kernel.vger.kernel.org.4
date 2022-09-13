@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374EF5B7CB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651585B7CB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 23:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiIMVY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 17:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S229603AbiIMV2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 17:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIMVY0 (ORCPT
+        with ESMTP id S229478AbiIMV2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 17:24:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A36B169;
-        Tue, 13 Sep 2022 14:24:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E070615C6;
-        Tue, 13 Sep 2022 21:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3D5C433D6;
-        Tue, 13 Sep 2022 21:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663104264;
-        bh=YmC8EMwSctk7x2dKGjz75evV77+1YkS7yGjJnCMZl9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fod98ampF4E963Ap0LjtJx0J69/n70HdCGZSFWcXEToV2EMIKX7NkB2ncf74wMUks
-         xa+IitXRJSKucqqrS11QwE5S/X0a6I6moIsuNnWQD3m6kMlBqkDuY8Pz2C6L7IncsZ
-         PfgKvZe7OgX5ZS6Kt7U1DcXUdwkJsnbOOmBXg9kBxV1R21ey0ysxSq441tGwsimfo0
-         vAQKNrT7VKTu3tksYDfmT1DiZ4/vHKA2dsqSBXbqXwNfjQ/AvqEn1NPxCYFSvx/BHF
-         VY/tiVDIsQ69af3m5eHEbhfjToCFr0se4Bwa0yL0llQF42E5eQ9DApLzNfB/OojHzK
-         S2iZ62WdGSO6A==
-Received: by pali.im (Postfix)
-        id 64BD5BE3; Tue, 13 Sep 2022 23:24:21 +0200 (CEST)
-Date:   Tue, 13 Sep 2022 23:24:21 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] PCI: Add standard PCI Config Address macros
-Message-ID: <20220913212421.yblwhgbd7zpdg5eo@pali>
-References: <20220911112024.14304-2-pali@kernel.org>
- <20220913211143.GA624473@bhelgaas>
+        Tue, 13 Sep 2022 17:28:02 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED7165578;
+        Tue, 13 Sep 2022 14:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Wscn5dkggvZiZ0wJ3zxOaRBw0qG01+CWesayzXtuhxc=; b=uiiEEkRan/uKyzQz8RRjZ6qsTd
+        Skdm5pIGzk82MJ7HYjaNnsLEnY6Clx6DqMnArzsqYvBMHjkucg5HPDfhf/aQchMAAZ0RX1w1Yl36H
+        k/peloic/wBt6QsuQa6xB39x2rGetD4azkJJEfGtX+QCd7DI4gPbvX02a3jliBrYDKpmvipcIy/47
+        jAIkserencOEgqU8Srlsiqy/SO8hjfvOUh5T5E19tXhjpgNUnGQjw0yD63B4+xTH/XqMm8/VIAN7v
+        kO7ugREAhPhUfFs74cx2fwDz7V9C/kVSTRtcsJzHcANGI1EAOQFGncXhB0CVqywMneSXAZzXp4cqq
+        xP+B7rRw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oYDRm-00Fy5C-2O;
+        Tue, 13 Sep 2022 21:27:58 +0000
+Date:   Tue, 13 Sep 2022 22:27:58 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     syzbot <syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
+ in __d_instantiate
+Message-ID: <YyD13iRuhPDJypz8@ZenIV>
+References: <0000000000005c2d1f05e8945724@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220913211143.GA624473@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000005c2d1f05e8945724@google.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 13 September 2022 16:11:43 Bjorn Helgaas wrote:
-> On Sun, Sep 11, 2022 at 01:20:22PM +0200, Pali Rohár wrote:
-> > Lot of PCI and PCIe controllers are using standard Config Address for PCI
-> > Configuration Mechanism #1 (as defined inPCI Local Bus Specification) or
-> > its extended version.
-> > 
-> > So introduce new macros PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() in
-> > new include file linux/pci-conf1.h which can be suitable for PCI and PCIe
-> > controllers which uses this type of access to PCI config space.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  include/linux/pci-conf1.h | 51 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 51 insertions(+)
-> >  create mode 100644 include/linux/pci-conf1.h
+On Tue, Sep 13, 2022 at 12:51:42PM -0700, syzbot wrote:
+> Hello,
 > 
-> This seems like a nice addition, but it would be nice if we could
-> encapsulate it in drivers/pci.
+> syzbot found the following issue on:
 > 
-> I know it's parallel to the existing include/linux/pci-ecam.h.  I wish
-> we could encapsulate *that* in drivers/pci, too.  For pci-ecam.h, I
-> think the only things that prevent that are drivers/acpi/pci_mcfg.c,
-> loongarch, and a few arm64 things.
-
-As these macros describe original Intel x86 API, it can be used also in
-arch/x86 PCI code.
-
-> pci_mcfg.c arguably would make more sense in drivers/pci; it uses
-> acpi_table_parse(), but no other ACPI services.
+> HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16271d4f080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e79d82586727c5df
+> dashboard link: https://syzkaller.appspot.com/bug?extid=29dc75ed37be943c610e
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162474a7080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119b6b78880000
 > 
-> The arm64 code that uses pci-ecam.h is really generic code that would
-> not be in arch/arm64 except for the fact that x86 has really ugly
-> legacy x86-specific mmconfig code.
-
-IIRC that legacy x86-specific code is used also on modern AMD processors
-which have broken ECAM. AMD supports that extended version of CF8/CFC
-with access to PCIe extended config space registers.
-
-> I guess that's a long-winded way of saying that I think maybe we could
-> put this in drivers/pci/pci.h even though the parallel ECAM stuff is
-> in include/linux/pci-ecam.h.
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/1436897f0dc0/disk-a6b44374.raw.xz
+> vmlinux: https://storage.googleapis.com/68c4de151fbb/vmlinux-a6b44374.xz
 > 
-> Bjorn
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+29dc75ed37be943c610e@syzkaller.appspotmail.com
+> 
+> ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+> ntfs3: loop0: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
+> ntfs3: loop0: Failed to load $Extend.
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
 
-Well, if you like this change, let me know where to put those new
-macros, into which file and in which subdirectory, and I can prepare a
-new patch version.
+> Call trace:
+>  d_flags_for_inode fs/dcache.c:1980 [inline]
+>  __d_instantiate+0x2a0/0x2e4 fs/dcache.c:1998
+>  d_instantiate fs/dcache.c:2036 [inline]
+>  d_make_root+0x64/0xa8 fs/dcache.c:2071
+>  ntfs_fill_super+0x1420/0x14a4 fs/ntfs/super.c:180
+>  get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+>  ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+>  vfs_get_tree+0x40/0x140 fs/super.c:1530
+>  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+>  path_mount+0x358/0x914 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+>  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+>  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+>  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+>  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+>  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+>  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+>  el0t_64_sync+0x18c/0x190
+> Code: 79000688 52a00417 17ffff83 f9401288 (f9400508) 
+> ---[ end trace 0000000000000000 ]---
+> ----------------
+> Code disassembly (best guess):
+>    0:	79000688 	strh	w8, [x20, #2]
+>    4:	52a00417 	mov	w23, #0x200000              	// #2097152
+>    8:	17ffff83 	b	0xfffffffffffffe14
+>    c:	f9401288 	ldr	x8, [x20, #32]
+> * 10:	f9400508 	ldr	x8, [x8, #8] <-- trapping instruction
 
-But doing all those arm64, x86, ACPI cleanup is a huge cross-tree work
-which I'm really not going to do...
+at a guess - bollocksed inode; NULL ->i_op (should never happen; it takes actively
+assigning NULL to it, but apparently ntfs_read_mft() is that dumb), combined with
+candidate root inode somehow having S_IFLNK in ->i_mode.
+
+At the very least,
+        inode->i_op = NULL;
+should *NEVER* be done; there is no legitimate reason to do that, no matter
+what.  ->i_op initially points to empty method table; it should never
+point to anything that is not an object of type struct inode_operations.
+In particular, it should never become NULL.
