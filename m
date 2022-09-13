@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9785B71BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A675B722F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 16:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiIMOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S232938AbiIMOrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 10:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiIMOnb (ORCPT
+        with ESMTP id S234594AbiIMOoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:43:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999DA6EF02;
-        Tue, 13 Sep 2022 07:23:05 -0700 (PDT)
+        Tue, 13 Sep 2022 10:44:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056986E887;
+        Tue, 13 Sep 2022 07:23:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6178BB80F91;
-        Tue, 13 Sep 2022 14:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04ABC433D6;
-        Tue, 13 Sep 2022 14:21:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49F70614DA;
+        Tue, 13 Sep 2022 14:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E9FC433D6;
+        Tue, 13 Sep 2022 14:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663078901;
-        bh=tK8jLGZFxiUqU/KoBQfv11nDAqZn1XjBbRjfZ2PNCcY=;
+        s=korg; t=1663078903;
+        bh=dqgcicMSD2kRAzU5ZVBwjKEmlRdW45onYHG3fvnKt08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1FkeZyUlFFHEDVqY9a3P1W289lOLh0dCW48vtSvDSnGaWUbdafS6Qa/J4xbQoblZn
-         cZVweBI/Xy8qAMHMhRocHIAaNVu9uAI+1OlvgZBnpt5WKJ8kKwmqxWd0DnrP5mcS0I
-         iZ52XZCsFSLykmOVwRc9V36qEm0YPkrxa6qt5Xu4=
+        b=kbMUY+apg81flMDBAjL0BHKGkF0MFZ/FgDRA0Wa72A5iE2w676gAS7Jjc0VzFVeLv
+         LLzUTE48SGL+5bkxaX16fV0+y1Q/QVfRJi3MXKc6pLVrKEpmdvySUeStQRErivAut3
+         NcftRZ6IND8yjZJoDAqeB9XU10O5WYisX0boz2QE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.15 100/121] hwmon: (tps23861) fix byte order in resistance register
-Date:   Tue, 13 Sep 2022 16:04:51 +0200
-Message-Id: <20220913140401.652217945@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.15 101/121] ASoC: mchp-spdiftx: remove references to mchp_i2s_caps
+Date:   Tue, 13 Sep 2022 16:04:52 +0200
+Message-Id: <20220913140401.693673576@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
 References: <20220913140357.323297659@linuxfoundation.org>
@@ -54,53 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-commit 1f05f65bddd6958d25b133f886da49c1d4bff3fa upstream.
+commit 403fcb5118a0f4091001a537e76923031fb45eaf upstream.
 
-The tps23861 registers are little-endian, and regmap_read_bulk() does
-not do byte order conversion. On BE machines, the bytes were swapped,
-and the interpretation of the resistance value was incorrect.
+Remove references to struct mchp_i2s_caps as they are not used.
 
-To make it work on both big and little-endian machines, use
-le16_to_cpu() to convert the resitance register to host byte order.
-
-Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Fixes: fff7b8ab22554 ("hwmon: add Texas Instruments TPS23861 driver")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220905142806.110598-1-mr.nuke.me@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220727090814.2446111-3-claudiu.beznea@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/tps23861.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ sound/soc/atmel/mchp-spdiftx.c |    8 --------
+ 1 file changed, 8 deletions(-)
 
---- a/drivers/hwmon/tps23861.c
-+++ b/drivers/hwmon/tps23861.c
-@@ -489,18 +489,20 @@ static char *tps23861_port_poe_plus_stat
+--- a/sound/soc/atmel/mchp-spdiftx.c
++++ b/sound/soc/atmel/mchp-spdiftx.c
+@@ -196,7 +196,6 @@ struct mchp_spdiftx_dev {
+ 	struct clk				*pclk;
+ 	struct clk				*gclk;
+ 	unsigned int				fmt;
+-	const struct mchp_i2s_caps		*caps;
+ 	int					gclk_enabled:1;
+ };
  
- static int tps23861_port_resistance(struct tps23861_data *data, int port)
+@@ -766,8 +765,6 @@ static const struct of_device_id mchp_sp
+ MODULE_DEVICE_TABLE(of, mchp_spdiftx_dt_ids);
+ static int mchp_spdiftx_probe(struct platform_device *pdev)
  {
--	u16 regval;
-+	unsigned int raw_val;
-+	__le16 regval;
+-	struct device_node *np = pdev->dev.of_node;
+-	const struct of_device_id *match;
+ 	struct mchp_spdiftx_dev *dev;
+ 	struct resource *mem;
+ 	struct regmap *regmap;
+@@ -781,11 +778,6 @@ static int mchp_spdiftx_probe(struct pla
+ 	if (!dev)
+ 		return -ENOMEM;
  
- 	regmap_bulk_read(data->regmap,
- 			 PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * (port - 1),
- 			 &regval,
- 			 2);
- 
--	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, regval)) {
-+	raw_val = le16_to_cpu(regval);
-+	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, raw_val)) {
- 	case PORT_RESISTANCE_RSN_OTHER:
--		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB) / 10000;
-+		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB) / 10000;
- 	case PORT_RESISTANCE_RSN_LOW:
--		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB_LOW) / 10000;
-+		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB_LOW) / 10000;
- 	case PORT_RESISTANCE_RSN_SHORT:
- 	case PORT_RESISTANCE_RSN_OPEN:
- 	default:
+-	/* Get hardware capabilities. */
+-	match = of_match_node(mchp_spdiftx_dt_ids, np);
+-	if (match)
+-		dev->caps = match->data;
+-
+ 	/* Map I/O registers. */
+ 	base = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
+ 	if (IS_ERR(base))
 
 
