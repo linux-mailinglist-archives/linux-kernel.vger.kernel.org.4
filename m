@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380C05B6B2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FA25B6AD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 11:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiIMJur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 05:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S231683AbiIMJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 05:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiIMJup (ORCPT
+        with ESMTP id S231264AbiIMJgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 05:50:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760D657E08
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 02:50:44 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRdvX39PgzHnk2;
-        Tue, 13 Sep 2022 17:48:40 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+        Tue, 13 Sep 2022 05:36:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6787664;
+        Tue, 13 Sep 2022 02:36:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRdZS5Vs9znVHQ;
+        Tue, 13 Sep 2022 17:33:52 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 13 Sep 2022 17:50:40 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <cezary.rojewski@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <liam.r.girdwood@linux.intel.com>,
-        <peter.ujfalusi@linux.intel.com>,
-        <yung-chuan.liao@linux.intel.com>,
-        <ranjani.sridharan@linux.intel.com>,
-        <kai.vehmanen@linux.intel.com>, <broonie@kernel.org>,
-        <perex@perex.cz>, <tiwai@suse.com>, <alsa-devel@alsa-project.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [-next] =?UTF-8?q?ASoC:=20Intel:=20fix=20compiler=20warning=20of?= =?UTF-8?q?=20function=20=E2=80=98probe=5Fcodec=E2=80=99?=
-Date:   Tue, 13 Sep 2022 18:02:00 +0800
-Message-ID: <1663063320-29158-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+ 15.1.2375.24; Tue, 13 Sep 2022 17:36:33 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 13 Sep
+ 2022 17:36:32 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH 0/3] mips: use DEFINE_SHOW_ATTRIBUTE to simplify code
+Date:   Tue, 13 Sep 2022 18:10:35 +0800
+Message-ID: <20220913101038.1902389-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,33 +52,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the variable ‘skl’ define to
-CONFIG_SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC enabled, to fix the compiler
-warning:
-  sound/soc/intel/skylake/skl.c: In function ‘probe_codec’:
-  sound/soc/intel/skylake/skl.c:729:18: warning: unused variable ‘skl’ [-Wunused-variable]
-    729 |  struct skl_dev *skl = bus_to_skl(bus);
-        |                  ^~~
+Use DEFINE_SHOW_ATTRIBUTE to simplify code.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- sound/soc/intel/skylake/skl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Liu Shixin (3):
+  mips: cavium: convert to DEFINE_SHOW_ATTRIBUTE
+  mips: kernel: convert to DEFINE_SHOW_ATTRIBUTE
+  mips: ralink: convert to DEFINE_SHOW_ATTRIBUTE
 
-diff --git a/sound/soc/intel/skylake/skl.c b/sound/soc/intel/skylake/skl.c
-index c7c1cad..52a041d 100644
---- a/sound/soc/intel/skylake/skl.c
-+++ b/sound/soc/intel/skylake/skl.c
-@@ -726,8 +726,8 @@ static int probe_codec(struct hdac_bus *bus, int addr)
- 	unsigned int cmd = (addr << 28) | (AC_NODE_ROOT << 20) |
- 		(AC_VERB_PARAMETERS << 8) | AC_PAR_VENDOR_ID;
- 	unsigned int res = -1;
--	struct skl_dev *skl = bus_to_skl(bus);
- #if IS_ENABLED(CONFIG_SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC)
-+	struct skl_dev *skl = bus_to_skl(bus);
- 	struct hdac_hda_priv *hda_codec;
- #endif
- 	struct hda_codec *codec;
+ arch/mips/cavium-octeon/oct_ilm.c | 17 +++--------------
+ arch/mips/kernel/segment.c        | 15 ++-------------
+ arch/mips/ralink/bootrom.c        | 15 ++-------------
+ 3 files changed, 7 insertions(+), 40 deletions(-)
+
 -- 
-1.8.3.1
+2.25.1
 
