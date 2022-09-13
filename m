@@ -2,67 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537D45B65A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB815B65A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 04:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiIMCeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Sep 2022 22:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S230014AbiIMCgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Sep 2022 22:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiIMCeQ (ORCPT
+        with ESMTP id S229888AbiIMCgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Sep 2022 22:34:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA4D52E60
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:34:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id go34so24372391ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Sep 2022 19:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=5K5C19ucjIxirrTVwdTH8e1rDFFb25mycghKPQV6gu0=;
-        b=vdpA6/PCDhdOn4FHZdxwU6muy2HDRh6oIz4AgmwFHsQZn4+Voak+h+r/3WyHUZSDy2
-         MT1zLdA1+Va/7dTKENil5CMjiiM5w3L/1bYVJmXlMmeJ2WTtcC09uf4rA2E9YhncIrnE
-         x3eniFG3ljQmdA8u1Z715pWgOVFldMnB0uCJV6iBid35EBecyOnqU6C1vi2PNe7J911J
-         b6Ga8Al/azf84L27DOL0pVQUZwuJhAicRv9wmua1tDiX8Et9brdlVI8nI7oEKCTyVloU
-         xuYjwAnYMhQV3lFt19A/9eMqZ3LC/267oiEotbje/X0XktdF42H1NfJoncxojN7JAP74
-         OsZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5K5C19ucjIxirrTVwdTH8e1rDFFb25mycghKPQV6gu0=;
-        b=nEylac9j16AxTZRbRhYVKJ6oWWz4dBHfP1oYBZCQbYgWnrz4n8Bk0aqW5k+dpR9p/H
-         4LB7VFMwijkC/Mnc3tPKbkDpkYvVhvK2XV7SGkSGdZy80vuFVCsRwWjjWYHwQJkEN0Jc
-         /hP4X3EzCLcvzjwl7j2TRH82vxoKZtCCQlaXLceF3BK8Gwa/2fvWwXt/36Ikl/f6o1d9
-         9tnmIj9JM/OeMNuhgD8gzNb6Dq9wGQ1TeHbwvOZXiprSf8HCzziC/AtEGWaOLBI0wK7U
-         vBWNVAbFrtJbIBn7R+Vasg1K/ogQdQqqCU8qks1CZX6govFOIl+J3MTEfZXYE5xzrLd7
-         J1Yg==
-X-Gm-Message-State: ACgBeo164HhCi2ULHpYmrMVexXUHJ3E5iNYc7qjFsEAou6RJ/mWXTB8x
-        bMOcYAR9wLiIPtDG863okb4KfRxeH526VfZF3eizyA==
-X-Google-Smtp-Source: AA6agR53syAuFCxMC5jPl66C8lWNug01/UM+Q3l+8Iaatq6b22RcIEBqU7NnV0Jd0WyjriPxcN5ew/70t+IrqLbxtnk=
-X-Received: by 2002:a17:907:1c0b:b0:77e:7da8:f6ed with SMTP id
- nc11-20020a1709071c0b00b0077e7da8f6edmr4079086ejc.309.1663036453344; Mon, 12
- Sep 2022 19:34:13 -0700 (PDT)
+        Mon, 12 Sep 2022 22:36:13 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACBFE014;
+        Mon, 12 Sep 2022 19:36:12 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id AEB225C00EA;
+        Mon, 12 Sep 2022 22:36:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 12 Sep 2022 22:36:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dustymabe.com;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663036569; x=
+        1663122969; bh=2Y0K8tT92lqyheJEd8IWcFQWbT2X7STc+YgZ6ML8spM=; b=3
+        YUd3jSFrLK17JWXtqIra2VXM3qDEjtNamQv1ZYnq+G6OAqANCDBasFwKTm0XU+x+
+        XNiQhLsFKT7tnWy8ROlqKru470SSPWd57P9U3b8PLP/yxEOZpY9J7XkAbaqZ6b0G
+        3i5jqGQA3HpwzKuYG0WwTqko0gOXks/fF0rOMkoTjYOoxSRG3iK1Ic+d1Te+KD8G
+        AC+N2I6QLT3pKwB/GcGayIzQFS0gG0bNHqh3TNNWYQJBDy9j3RaH9C03RyYtow/g
+        dTSp2lnru0Zim5in2Zk7PhnoysLPFA04Lds3bCOPScrRpZjBm4iTPjmtZIAh0cUx
+        fOBNnDxXwvxNq0ixzwTkg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663036569; x=
+        1663122969; bh=2Y0K8tT92lqyheJEd8IWcFQWbT2X7STc+YgZ6ML8spM=; b=n
+        yhoiDHaknz2Qj7XFj6LsI8geC7LOVWzev4p78cjf8lW2ZbJr9QMfMSK/T+WwY8VT
+        kOPWOfYRORIe6cmz8P1ECQJrkZjzN3pUPTWKdeuy6QVZARULZkCzpDKXp0X4q6EU
+        1Es6T7rehmtl0UMPUWus02nP3zOIFyy8SjHj6YPGDNaS9ZPF+ujEtlvmRR9bszdV
+        e3yPZ0K6HSDfpDILJ8J+YKyukM/FhVtIgd8eGUdKVcpHxADB8WuFTm42yW71MFlh
+        +Jgz7jH7Ol7WxlG5xdvTNXkYmfX+AJrFDkKr8TVcTQ1eGdJ/YAEov4CaxAB/B0x0
+        +Qr7DJho1RGabxlPYRdSA==
+X-ME-Sender: <xms:mewfY4KeMWyjcHoFNp7Db885_4aSSQOpml98pwRPXE3Fz-HFCyQ3Ng>
+    <xme:mewfY4JlV8nAFK1_A8Ac5kQg2HyYxs3ZVF1ud8DR2urVnJjU0fJ_739MTZ-7hAwsy
+    pseBLsoEiqquAjAwHk>
+X-ME-Received: <xmr:mewfY4tcoYaCIF_k-NB0fM1YkqGxTYuVmqOx7_NkNJ7ZcxHV-_J-z5y5T6ptnQNS5JAf>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedufedgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeffuhhs
+    thihucforggsvgcuoeguuhhsthihseguuhhsthihmhgrsggvrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeeiffffuefgtdfhgfekfedtkedtteefgfevueelueefueegvdehteeulefg
+    ueekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    guuhhsthihseguuhhsthihmhgrsggvrdgtohhm
+X-ME-Proxy: <xmx:mewfY1a14GqtKEQVx1pXjerM_1H7CkWj3Vo5ktAuDTSGGBKF5x5rAQ>
+    <xmx:mewfY_Y9JGDst9iEnZEGqosj4zZQG6cxOFhG8Cf2k1e__LldSIohrA>
+    <xmx:mewfYxACyHIYIgEgCkLso0Pxn87mNRBB7ddhfFXFYs63TGhQTD1JWA>
+    <xmx:mewfY-UVfl77ECw7ihqmcz-4EpY5e6yRTGwHilqaEG7QiHH_KxvkPA>
+Feedback-ID: i13394474:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 12 Sep 2022 22:36:08 -0400 (EDT)
+Message-ID: <95cbd47d-46ed-850e-7d4f-851b35d03069@dustymabe.com>
+Date:   Mon, 12 Sep 2022 22:36:08 -0400
 MIME-Version: 1.0
-References: <20220817202538.21493-1-leoyang.li@nxp.com> <20220817202538.21493-2-leoyang.li@nxp.com>
- <CAOesGMhz8PYNG_bgMX-6gka77k1hJOZUv6xqJRqATaJ6mFbk6A@mail.gmail.com>
- <CAOesGMjsegmLUVxbjZJ3kgxnDkVTyxy5BB=is2CM_7Se7TQrWQ@mail.gmail.com> <Yx+XonDqmpE4KGhD@shell.armlinux.org.uk>
-In-Reply-To: <Yx+XonDqmpE4KGhD@shell.armlinux.org.uk>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Mon, 12 Sep 2022 19:34:01 -0700
-Message-ID: <CAOesGMh58nTcKGbNi0VzNTg3GwWM6-HZRBJPn706-6pzrpJ4Wg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] arm64: dts: lx2160a: update PCIe nodes to match
- rev2 silicon
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Li Yang <leoyang.li@nxp.com>, shawnguo@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: regression caused by block: freeze the queue earlier in
+ del_gendisk
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org
+References: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
+ <YxBZ4BBjxvAkvI2A@T590> <20220907073324.GB23826@lst.de>
+ <Yxr4SD4d0rZ9TZik@T590> <20220912071618.GA4971@lst.de>
+ <Yx/jLTknQm9VeHi4@T590>
+From:   Dusty Mabe <dusty@dustymabe.com>
+In-Reply-To: <Yx/jLTknQm9VeHi4@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +92,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 1:33 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Sep 12, 2022 at 11:54:06AM -0700, Olof Johansson wrote:
-> > On Mon, Sep 12, 2022 at 12:05 AM Olof Johansson <olof@lixom.net> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Wed, Aug 17, 2022 at 1:26 PM Li Yang <leoyang.li@nxp.com> wrote:
-> > > >
-> > > > The original dts was created based on the non-production rev1 silicon
-> > > > which was only used for evaluation.  Update the PCIe nodes to align with
-> > > > the different controller used in production rev2 silicon.
-> > >
-> > > How can I confirm what version of silicon I have on a system?
-> > >
-> > > My non-evaluation commercially purchased system (HoneyComb LX2K) has:
-> > >
-> > > # cat /sys/bus/soc/devices/soc0/revision
-> > > 1.0
-> > >
-> > > And I will be really grumpy if this system stops working. It's what I
-> > > use to do all my maintainer work, even if that's been fairly dormant
-> > > this year.
-> > >
-> > > It's overall setting off red flags to update an in-place devicetree to
-> > > a "new revision" of silicon instead of adding a new DT for said
-> > > revision. 2160A has been on the market for several years, so it just
-> > > seems odd to all of the sudden retroactively make things
-> > > non-backwards-compatible.
-> >
-> > Confirmed that this patch renders my HoneyComb unbootable -- PCIe doesn't probe.
-> >
-> > Shawn, please revert, and be on the lookout for similar problematic
-> > approaches in the future. Thanks!
->
-> I think you may also need to beware of the MC firmware revision - I
-> seem to remember reading in the changelog notes for it that NXP
-> dropped support in the MC firmware for the older silicon, though I
-> may be misremembering. It's been a while since I really looked at
-> the LX2160A from the point of view of maintaining or developing
-> anything for it.
-
-Yeah, and if anything this speaks against trying to update u-boot/EFI
-on it to something newer, bugs in firmware or not.
 
 
--Olof
+On 9/12/22 21:55, Ming Lei wrote:
+> On Mon, Sep 12, 2022 at 09:16:18AM +0200, Christoph Hellwig wrote:
+>> On Fri, Sep 09, 2022 at 04:24:40PM +0800, Ming Lei wrote:
+>>> On Wed, Sep 07, 2022 at 09:33:24AM +0200, Christoph Hellwig wrote:
+>>>> On Thu, Sep 01, 2022 at 03:06:08PM +0800, Ming Lei wrote:
+>>>>> It is a bit hard to associate the above commit with reported issue.
+>>>>
+>>>> So the messages clearly are about something trying to open a device
+>>>> that went away at the block layer, but somehow does not get removed
+>>>> in time by udev (which seems to be a userspace bug in CoreOS).  But
+>>>> even with that we really should not hang.
+>>>
+>>> Xiao Ni provides one script[1] which can reproduce the issue more or less.
+>>
+>> I've run the reproduced 10000 times on current mainline, and while
+>> it prints one of the autoloading messages per run, I've not actually
+>> seen any kind of hang.
+> 
+> I can't reproduce the hang too.
+
+I obviously can reproduce the issue with the test in our Fedora CoreOS
+test suite. It's part of a framework (i.e. it's not simple some script
+you can run) but it is very reproducible so one can add some instrumentation
+to the kernel and feed it through a build/test cycle to see different
+results or logs.
+
+I'm willing to share this with other people (maybe a screen share or
+some written down instructions) if anyone would be interested.
+
+
+> 
+> What I meant is that new raid disk can be added by mdadm after stopping
+> the imsm container and raid disk with the autoloading messages printed,
+> I understand this behavior isn't correct, but I am not familiar with
+> raid enough.
+> 
+> It might be related with the delay deleting gendisk from wq & md kobj
+> release handler.
+> 
+> During reboot, if mdadm does this stupid thing without stopping, the hang
+> could be caused.
+> 
+> I think the root cause is that why mdadm tries to open/add new raid bdev
+> crazily during reboot.
+> 
+  
+Dusty
