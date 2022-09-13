@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78A45B76DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFADE5B76F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiIMQxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S229769AbiIMQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 12:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiIMQxD (ORCPT
+        with ESMTP id S232371AbiIMQ6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:53:03 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFA7C00CD;
-        Tue, 13 Sep 2022 08:46:19 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1225219ee46so33222271fac.2;
-        Tue, 13 Sep 2022 08:46:19 -0700 (PDT)
+        Tue, 13 Sep 2022 12:58:47 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACB38A1C1;
+        Tue, 13 Sep 2022 08:50:39 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-127f5411b9cso33244650fac.4;
+        Tue, 13 Sep 2022 08:50:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=jvR+5cYBN/jmH4LHizAk50e3xiA5DYoi3s75z6jiRMY=;
-        b=XhmX0fzckttRJfJqO6YPAeblaJtyNw1d23vfcNCoG2DgZDF+wE9qW4GZJ0c2viEoKj
-         s8OBXRxR1AqqHyBcPxDxcGJb+uf+PtDjcstZeDaHskl6H3Hmoh2p83G7cINHBWp3XpqV
-         8Q2o7m2T3BbTdJtjC9USlCO0zDOic0z0CSOcC5PfHfpyLUxpqwoXpy3PlocuTlMQJR5s
-         Flwf09pQDCdKrYbwHwSYR9XHWcN4KxjxdyZ9kBIcXo9G5LS65y4Mk6R9cJ5el6Js69Ch
-         YqfIw6s0VDcBglbKExww5tcSthHSiER7jlOqALYxXRVNuN3kHBTFkfv2EJBesghyA4Jh
-         oT/g==
-X-Gm-Message-State: ACgBeo2MzH06Xb8c8345bYka1KtMa0S2OkF6gXZUpfl5K2rzG3MszL0l
-        K/Vc0NzmAZtvuu/yOi9ZeQ==
-X-Google-Smtp-Source: AA6agR4JV7aKGKcSsm/3hcxmvaWfyHewMBq/2OdrrF0X9TNee1VdFTzf2OpU9JWPH89OowjsDjeoJA==
-X-Received: by 2002:a05:6808:1441:b0:333:3929:d079 with SMTP id x1-20020a056808144100b003333929d079mr1859152oiv.21.1663083908038;
-        Tue, 13 Sep 2022 08:45:08 -0700 (PDT)
+        bh=foJlUv46n5lMMNs0Q7Ku0d9gdElPGgCZVFMlT7KuK+0=;
+        b=2B3TYjVJCxIT5W0NLaDGvH+2bQpFac7xiZBtbke2N01LvjpVRszgCEE20rvCSFF4B8
+         UoIGZOy+rjMh+DZRu6Ko5o+tsI144qtJ/BYmDBQOjDNB0PzOjQJPrf4rcKFbk3Q2anhY
+         vdgARETnPFvWu91aBcFFjkVvljEXUe8Gxit38eN7zbmseSXmYRbUrvGG8VKXMKUlXXBr
+         t9WoRRWodvzUXojc+jbHbgEU58bwtklbII8gKmaONF03EmSipbDMByzlexxCY3/pwesZ
+         6vXh0T6XwF1WPVzFCZrJydS8dgiVm4c3wk235MTgWNm6BZsUx2JhsrHBWtRoRB7tLT/M
+         +vRA==
+X-Gm-Message-State: ACgBeo3f22PFgQcT5u+B0ahcE8YteZRopTovUCcWvl9vS8GOsyeWUIJx
+        fTzwhuuHmZgJUOH4thhz8Q==
+X-Google-Smtp-Source: AA6agR5LcWq3PN8/sz4CVvMmxOD9DMkwOlFV5vk5dDsbNSIRxxJomOiY9hpH3d6NqB/OpbsyDe6VBw==
+X-Received: by 2002:a05:6870:1601:b0:101:5e61:d8ee with SMTP id b1-20020a056870160100b001015e61d8eemr2121147oae.244.1663084190070;
+        Tue, 13 Sep 2022 08:49:50 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r196-20020acaa8cd000000b0034fd36e95bfsm1733767oie.31.2022.09.13.08.45.07
+        by smtp.gmail.com with ESMTPSA id w8-20020a9d5388000000b00616e2d2204csm6069481otg.21.2022.09.13.08.49.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 08:45:07 -0700 (PDT)
-Received: (nullmailer pid 3793676 invoked by uid 1000);
-        Tue, 13 Sep 2022 15:45:06 -0000
-Date:   Tue, 13 Sep 2022 10:45:06 -0500
+        Tue, 13 Sep 2022 08:49:49 -0700 (PDT)
+Received: (nullmailer pid 3799539 invoked by uid 1000);
+        Tue, 13 Sep 2022 15:49:48 -0000
+Date:   Tue, 13 Sep 2022 10:49:48 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Peter Chiu <chui-hao.chiu@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ryder Lee <ryder.Lee@mediatek.com>, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sean Wang <sean.wang@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] dt-bindings: pinctrl: update bindings for MT7986 SoC
-Message-ID: <20220913154506.GA3793619-robh@kernel.org>
-References: <20220912092440.21011-1-chui-hao.chiu@mediatek.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, dianders@chromium.org,
+        lkundrak@v3.sk, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>, tzimmermann@suse.de,
+        javierm@redhat.com, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org
+Subject: Re: [PATCH v1 1/2] Revert "dt-bindings: Add byteswap order to
+ chrontel ch7033"
+Message-ID: <20220913154948.GA3793808-robh@kernel.org>
+References: <20220912113856.817188-1-robert.foss@linaro.org>
+ <20220912113856.817188-2-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912092440.21011-1-chui-hao.chiu@mediatek.com>
+In-Reply-To: <20220912113856.817188-2-robert.foss@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Sep 2022 17:24:40 +0800, Peter Chiu wrote:
-> Add wifi pins in the description and set 'maxItems' for groups and pins.
+On Mon, Sep 12, 2022 at 01:38:57PM +0200, Robert Foss wrote:
+> As reported by Laurent in response to this commit[1], this functionality should
+> not be implemented using the devicetree, because of this let's revert this series
+> for now.
 > 
-> Reviewed-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
-> ---
-> v2:
-> - Set 'maxItems' for groups and pins.
-> - Update commit message.
-> - Remove '$ref: /schemas/types.yaml#/definitions/string-array'.
-> ---
->  .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 48 +++++++++++--------
->  1 file changed, 28 insertions(+), 20 deletions(-)
+> This reverts commit a4be71430c76eca43679e8485085c230afa84460.
 > 
+> [1] https://lore.kernel.org/all/20220902153906.31000-2-macroalpha82@gmail.com/
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  .../bindings/display/bridge/chrontel,ch7033.yaml    | 13 -------------
+>  1 file changed, 13 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+In the future, can you wait for a DT maintainer review.
+
+For the revert:
+
+Acked-by: Rob Herring <robh@kernel.org>
+
+Rob
