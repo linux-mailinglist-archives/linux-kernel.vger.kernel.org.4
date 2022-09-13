@@ -2,224 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15135B6797
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E795B6799
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 08:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiIMGEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 02:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S230184AbiIMGEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 02:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiIMGD6 (ORCPT
+        with ESMTP id S230174AbiIMGEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:03:58 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2082.outbound.protection.outlook.com [40.107.100.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E27D21801;
-        Mon, 12 Sep 2022 23:03:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kFBJ010rne4Jb32izulRSMQVpdwJSUOTqPNckvgxGTBPNov1yEMpkFoHmbo9IVml7HdWHxxYjHfElBib67QZRxlQdeAVSd2gA2+yqRBkgm7l9p7eS62GfVFriBobG1DUNbyaslSZjx8KMrg87i/Yx/GfOWe6dqdfO34BTDLsq89mWWR/lTLJ0AEAdf/Daqxj0N70od6RsWaRmj2v8fIeL491ZhaZLtgqWBXk2qbQvHVHFxFOAFvY45C1vv82J4vKYy6bNq0S8ppKiLk5XDPPNHpdbacZQ+UEsHCLpXwwAnsuJSJBM11oY8GnGb4ypyxmBrvmCY7HEqHRlVkApGoQFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b48vAQ+Pnc99cNmZ/f5D6UHZ/E5IRzNC/YpJQWFnh2I=;
- b=IjNScZ4kGaX9b0S9iVEyOy0Ijz9Y69oMRGE/tE6P92R7OAaYQxHeud5m+mJVtjqrNgKJpz7FSQjjfoRK7IS2PKVmzJNs2jhDCb1Q1CYMyAZYYWCYkYTs6CppZBHJoN7Kro2Gz9OsoOqrvexeQmGQIauSHbVIXL8WFrO3Wum2qV3Q48vhrlg8DfnNPplG6FlfKrlPv1ZkPhDOnSf9k0sZoj2dJRQ6TzIWZ+wl3Wsb9nNss79dDYrBoBfJbLTsX/1mn4cGCWl1PicKsPFRk5SXGtxpkAqlBPgzJQSbIvG1k+SSLH17qUW15eC54fsnpqpIn301lwAjXa0DZI860keqxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b48vAQ+Pnc99cNmZ/f5D6UHZ/E5IRzNC/YpJQWFnh2I=;
- b=AqrKyQe4Syowv9sXvBlZv9+PUaCCtA5k7YjloFIPx+Lw55LLqFBr7EyLwC/3mgsLyzxKgwc2TVQ1JrRpxbQhbhVxj9Mg7cZiFHJHzqcdrPs70yu5XmKPPNBo6ZofDLZS9Fow4W2tnVPH3A5O++bUpQO5z/3fjrxqwwm6m72kCQG4T67iDYH83S3LiPccmZV3jbnDzdefdroUINh6npSo4AAwUW2SoCvb73U2TwGPSLDEE/+UheuNiJxCwj1quDO9olQSlhGmuAMhjsoqco6iQjX32IFHBFL2PV9xd3FuBPzWFnFUu1ErhGMGoCrvUOJSDbq8Sdgb3L12OVuRgPEm0A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4435.namprd12.prod.outlook.com (2603:10b6:5:2a6::23)
- by PH8PR12MB6769.namprd12.prod.outlook.com (2603:10b6:510:1c4::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
- 2022 06:03:55 +0000
-Received: from DM6PR12MB4435.namprd12.prod.outlook.com
- ([fe80::3dd3:e494:c723:e0cc]) by DM6PR12MB4435.namprd12.prod.outlook.com
- ([fe80::3dd3:e494:c723:e0cc%4]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 06:03:55 +0000
-Message-ID: <c237d356-4792-8ed2-61ce-539fe40df8a6@nvidia.com>
-Date:   Tue, 13 Sep 2022 11:33:43 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] ALSA: hda: Fix tegra hda dp infoframe struct
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     tiwai@suse.com, perex@perex.cz, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20220913034410.17502-1-mkumard@nvidia.com>
- <87fsgvhlwr.wl-tiwai@suse.de>
-From:   Mohan Kumar D <mkumard@nvidia.com>
-In-Reply-To: <87fsgvhlwr.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MAXPR01CA0095.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:5d::13) To DM6PR12MB4435.namprd12.prod.outlook.com
- (2603:10b6:5:2a6::23)
+        Tue, 13 Sep 2022 02:04:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9EBD87;
+        Mon, 12 Sep 2022 23:04:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2118C612D0;
+        Tue, 13 Sep 2022 06:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BD7C4347C;
+        Tue, 13 Sep 2022 06:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663049068;
+        bh=knxMS0KQcgrZ9mebUrSxnCQF3NlIX6ym4qlT2kMEHDs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mPhwqmHSzRjuhdmk+bNEhrZo+RtjkIWfRTPwW+WJzdnZAVvAocQEV2zMcjTQTezlH
+         PWjxRmdLJXSIsarUPzup4R2w5bLym/zZlMyuKj48LGPFcAJys28wDEKq8BNfJ+OU0m
+         goUIT4wzKg1oT4Z5l/1LPP7SoQN5JgNxaF0Fdj9OQCJtzQRnKGrFQL5t9TCXu3jH1Y
+         OHOPLzu+5NR/ZYIPfzBrQSu/51B6w2ZHxIGyQIf/xarOpEL2sMYpAo6zp0DelU7qoj
+         k0UngkpE84+nVuwqyJMyMoZ48wSjR4e/Gb/ab81cl5BWgSDwwD4DlRZZoXOX+9bBjP
+         emSzR2MpiVRbA==
+Date:   Mon, 12 Sep 2022 23:04:26 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+Subject: Re: [PATCH] f2fs: fix to detect obsolete inner inode during
+ fill_super()
+Message-ID: <YyAdapWpgTIXa2R5@google.com>
+References: <20220908105334.98572-1-chao@kernel.org>
+ <Yx9SVsxVzNErMDpv@google.com>
+ <a03417f6-e4fa-2b1a-34f8-bd5d52c1e853@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4435:EE_|PH8PR12MB6769:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe9593b5-df27-4a5b-0d93-08da954dbd5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TK8RVvwzaNF+cO0kwNIkfzSEHSjnyqW03uPZ3MfX3YlfgGZil5GD7y4YVOU8AHL3f5jnEqNQEH39yxxwYyH/sg8dTUOtE199Lm4UqcJpfjAao/rPn3Xx92aQ6hAwBu/CohxLXp4qRqnP6npsHgWQVbQsGQRwuvWmwUWJfrPs/80Rp2RqWpHS2IZhuLq5+LIcWaj6ABS8WfPJdWt5QL2jV5ZKFPh5aap456QAH/+O8d3G4v5dv5DsLLz7Hl62kggpK4Lb+mOp4TV11Poo2krvXzd3PtJ8T1jusr5Oa22uLdZz3Db6FYGndtOeapvlHTO2tuhEOukDM+MjGc9DhXjVSpL11XP/vmvCmKx4LbwR8b1ScC+oyxnIemC2hQ+2PqUx29WGDRBqsY4jtIRHaCkUIx7H/tD9gu019xMNMe8TZyGro6Ao7C8M6hrhdlWY9Wm0feevhn1qENj3++qkL+OGFlRigHelGdYJdYJ8wNMKrRiKv6Eh1GmpIatZhmqzYwQE7a4pBevkrF7sTK6TsWYs7ZOOkXWLcY0Qe7+ApYu2vqFjGjCeDSQlt7A0BXJeOI3HcWSMhnassVI3gKxTkiAxQ+iiCEzEX/p1NqoukfvIPaD8ZZ6HbTObB0s2YCMkdAkkmZDo3aaWeda3abxyh5WsD0T3wDW8+msuxI1chlIQoU+wMWpAWE2y+Ol2qgrFGiNurWQ7ZjHAuFQCWLlgHu5y3u5BNrCkCOW/kboFBicQ6dgQG2OQ7MI36wQGD4gzUf4ugaSSRXvHpQcvsNzQq2+pH71LkUiwFPfSZOJUMq3dlAI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4435.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199015)(6916009)(53546011)(26005)(66476007)(5660300002)(6666004)(86362001)(186003)(478600001)(66556008)(31686004)(66946007)(36756003)(316002)(6506007)(38100700002)(6486002)(41300700001)(31696002)(2906002)(83380400001)(6512007)(4326008)(8676002)(8936002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVZ4dkY2bzZvMzJxaUsrS0IzYjNHaE1RVFNOazAvZkVjamlRcC9xSFhxc2lV?=
- =?utf-8?B?bS9CSG1KeklGMHVvSjVkTkpobElDaC9heGlFL1VlZFJjQVZHNEEwQmhYdXZE?=
- =?utf-8?B?a3VZOTFzMU9mWVhJaGFRV2lER0xQRjFta2F3elpBSWQ4WjFrN2YrRnh5eHg2?=
- =?utf-8?B?Z09nMGlFNFpBa21PQVNCYVY4RGNTMCs2V1g1ZjNUakVBOVdwZTB5ZlZCdTkw?=
- =?utf-8?B?OEFTZDBhS1VVbG4vajVzQUVJK1JVTUJ4NEFzUTBTZlhnK1RCUUV3WnF5aDIx?=
- =?utf-8?B?MmUzM1V1c0ptSTZxRnQ4Qm1tTHZJUkNsU0tWY0hwaWxUZ0ltZFRPem5rbWwr?=
- =?utf-8?B?V3FicGt5NE8vVjFtUXluTFREeVdRMTV3TUtPTVU4SjNCMzlHMFpIamhPTXBH?=
- =?utf-8?B?ZHFYV1RJSFpaN2FyR1Z2KzZZN3RScjBXYWxMYjRqMVFib1FTTGZtNVVHR08z?=
- =?utf-8?B?RDNyOGlqYndyUnpqZEdLTkQraG0vbnl5M0ovOWFyR2xLbVI0NHd6VWFVaSs0?=
- =?utf-8?B?OGVzMnh0TnBOTU0wVndMNWlKdXdCaUlnV2R6RUxwU0kzZkVJLzZGdzVnNEhD?=
- =?utf-8?B?QVlZV2YzWDVGQmZyYms5bDdub29ZOWtEVXQ1QU8vOFIvUUxKV3lKdzRwcHh1?=
- =?utf-8?B?U3FYbWJqMmRHeDByVU0xY1Z6NjROZmRUcWVGWmNTK2tMSm0zTStIRWRLRnJB?=
- =?utf-8?B?RVRCY25ONVZHbThUR3VwL3pOamRIWFFvUTV0MWZoMjdxUkE5aEJaS1A0ck96?=
- =?utf-8?B?aWRnWm9WRUFNSUxVc1VVcFM0UU43dm83R0JxSFUrZHUvb2ZQNElIdFl5eCtk?=
- =?utf-8?B?WFhleDlVb0NDN0luc3lyanh4OE9QL3ZGYk9MYjZORkNjNk1CTWYwV29mS1dZ?=
- =?utf-8?B?QVRPVnpscjNCZXpJcDVFbm02dEdtQjYybndrbm1laGxkNUsxSmNJZkIwak1P?=
- =?utf-8?B?a2dlcUF3TGpLZGsreTU5VVVsdFZacU80TXJ0YUtPSmFMUnkwb2NEUU5vYURr?=
- =?utf-8?B?WGU5LzQrS1lDZ2toKzU1WjdHaDZrbnVOc2hzeEZWRnVrUnJEWStvcFNoeFo2?=
- =?utf-8?B?TUJCUUNSUkZwSXJSdjlBcG9CMW1XQ1RlaDlOVXRKWVRvaEpKejR1THl0bFF4?=
- =?utf-8?B?cEpxNXR2UUhnWWgzYlBHc0Z6QzZRc2VxT3BqZGZiQkdEZTRzTDhwQmlLRlhD?=
- =?utf-8?B?c2NRa1hjUEw3RS9VUGlveHgzSWFna2pIK2p0S3Vmc3RuUDF6MmFYbkdDZWkv?=
- =?utf-8?B?K0dPdVF1TlcrSjNTeDBadDQ2aklGWHVoWGZOSXFmOENyV2d2dGNwQ3l2WEZq?=
- =?utf-8?B?MTdKbFlLVVFOSzJTZkJRMG16czhWWlBLQU9UcFc5UGpTbk5qUlExeFhiUkRI?=
- =?utf-8?B?bUZQdFUxZXRReXFheFRacVhRRWd5aEtlblY4VHdpZHc5VXI4QUpNODNqT2FS?=
- =?utf-8?B?bGl4R1QwRHd3SFp4cEVjZEhxQSs0czNQMmhDUzVCSVNhYjZiM0JUSFhPdDJ4?=
- =?utf-8?B?aEJNc1gwLzZuK052NHZTYkVkWUxKYU1yUGFiQ0w3eXp1OGR0d0dCYkxFcEs5?=
- =?utf-8?B?eEtQZHcrQUZRSmVwcnlLTUdQREo2akFvMXRLRUpQRTRZdmlOV1R6cXRwMUNR?=
- =?utf-8?B?UzhyUm1aR1AxN25vMnNXSldZR0VTbFFvM2duQytlbHlUcnVGUkpIKzFSa2wv?=
- =?utf-8?B?bGNIaFZ1R3FJaUx1YlBBVlBtRVgrZDMwcDFKakxLUVF0ejY4dDEvNG5TRGJ5?=
- =?utf-8?B?b2NQWEtLQkk4ZHV6SUNZS3U3Z1BNOEgrYTlUbS9JWE9lUDBCVDJoS2RhYVBP?=
- =?utf-8?B?S2Y2K3NJK2x6bi9ZYUJPNmM3OXVSQW9vQ1dvOWlJaE5NYXJDZytJK0NrZ3dM?=
- =?utf-8?B?QkU3MWNvamJGOUFmM2Q5UGdvOHBHYnYwS0JBVy9qUlZmTS9JMG5wSlZwWUVD?=
- =?utf-8?B?cU9yTXJuWjJaM0V4b2lwMHlGTG40UzNLdXlKVUFtRDNiNmJ6U0JoT094eHg4?=
- =?utf-8?B?SEMxeHNLYm1tTk5ueHFTNGFTU1VETE9xYlR1ZHkzb1hNK2xLS3ZIZkc3eUtS?=
- =?utf-8?B?RzBuTDZNRVF4Qno0c0xaU2d2SVc0M3FVVjlUM1B2N1hUV0pPRXBVTEN6QjBR?=
- =?utf-8?Q?DaS6B958JxBL5V8eJtyQP9UkK?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe9593b5-df27-4a5b-0d93-08da954dbd5b
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4435.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 06:03:55.1664
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 86Rz15QXph6z3aZ1K8cktdFMKNryf9MNTr4SCF28EuZdMOikc5rFofOoHZqRHUHdYvYbkP8OBmvbPi1JQRtmPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6769
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a03417f6-e4fa-2b1a-34f8-bd5d52c1e853@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/13, Chao Yu wrote:
+> On 2022/9/12 23:37, Jaegeuk Kim wrote:
+> > On 09/08, Chao Yu wrote:
+> > > Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
+> > > all the time to fix the below panic.
+> > > 
+> > > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> > > Mem abort info:
+> > >    ESR = 0x0000000086000004
+> > >    EC = 0x21: IABT (current EL), IL = 32 bits
+> > >    SET = 0, FnV = 0
+> > >    EA = 0, S1PTW = 0
+> > >    FSC = 0x04: level 0 translation fault
+> > > user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
+> > > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> > > Internal error: Oops: 86000004 [#1] PREEMPT SMP
+> > > Modules linked in:
+> > > CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > pc : 0x0
+> > > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+> > > sp : ffff800012783970
+> > > x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
+> > > x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
+> > > x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
+> > > x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
+> > > x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
+> > > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
+> > > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+> > > x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
+> > > x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
+> > > Call trace:
+> > >   0x0
+> > >   set_page_dirty+0x38/0xbc mm/folio-compat.c:62
+> > >   f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
+> > >   do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
+> > >   f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
+> > > 
+> > > The root cause is, quoted from Jaegeuk:
+> > > 
+> > > It turned out there is a bug in reiserfs which doesn't free the root
+> > > inode (ino=2). That leads f2fs to find an ino=2 with the previous
+> > > superblock point used by reiserfs. That stale inode has no valid
+> > > mapping that f2fs can use, result in kernel panic.
+> > > 
+> > > This patch adds sanity check in f2fs_iget() to avoid finding stale
+> > > inode during inner inode initialization.
+> > > 
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+> > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > ---
+> > >   fs/f2fs/inode.c | 11 +++++++++++
+> > >   1 file changed, 11 insertions(+)
+> > > 
+> > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > index ccb29034af59..df1a82fbfaf2 100644
+> > > --- a/fs/f2fs/inode.c
+> > > +++ b/fs/f2fs/inode.c
+> > > @@ -493,6 +493,17 @@ struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino)
+> > >   	struct inode *inode;
+> > >   	int ret = 0;
+> > > +	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
+> > > +					ino == F2FS_COMPRESS_INO(sbi)) {
+> > > +		inode = ilookup(sb, ino);
+> > > +		if (inode) {
+> > > +			iput(inode);
+> > > +			f2fs_err(sbi, "there is obsoleted inner inode %lu cached in hash table",
+> > > +					ino);
+> > > +			return ERR_PTR(-EFSCORRUPTED);
+> > 
+> > Well, this does not indicate f2fs is corrupted. I'd rather expect to fix
+> > reiserfs instead of f2fs workaround which hides the bug.
+> 
+> Well, is there a fixing patch for reiserfs? If not, how about applying this
+> patch first, later, we can revert it after reiserfs has been fixed.
 
-On 9/13/2022 11:10 AM, Takashi Iwai wrote:
-> External email: Use caution opening links or attachments
->
->
-> On Tue, 13 Sep 2022 05:44:10 +0200,
-> Mohan Kumar wrote:
->> Tegra HDA HW expects infoframe data bytes order same for both
->> HDMI and DP i.e infoframe data starts from 5th bytes offset.
->> This hw behavior mandates to have dummy bytes for dp infoframe
->> structure for Tegra.
->>
->> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
->> ---
->>   sound/pci/hda/patch_hdmi.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
->> index 6c209cd26c0c..a52e764db2e0 100644
->> --- a/sound/pci/hda/patch_hdmi.c
->> +++ b/sound/pci/hda/patch_hdmi.c
->> @@ -218,6 +218,9 @@ struct dp_audio_infoframe {
->>        u8 type; /* 0x84 */
->>        u8 len;  /* 0x1b */
->>        u8 ver;  /* 0x11 << 2 */
->> +#if IS_ENABLED(CONFIG_SND_HDA_TEGRA)
->> +     u8 checksum; /* Tegra HW expects infoframe bytes from 5th offset */
->> +#endif
-> I'm afraid that we can't use ifdef here, as this is another module
-> that is used not only by snd-hda-tegra.  In theory, snd-hda-intel can
-> run on Arm using the same codec driver.
->
-> That is, the check has to be dynamically.  Maybe we need to set a flag
-> at tegra_hdmi_init().
->
-> If I understand correctly, Tegra uses the same byte layout for both DP
-> and HDMI?  If so, the patch like below should work instead.
->
-> Of course, if that's really specific to Tegra, not generically for
-> Nvidia graphics, the flag has to be set in a different way...
->
->
-> thanks,
->
-> Takashi
->
-> -- 8< --
-> --- a/sound/pci/hda/patch_hdmi.c
-> +++ b/sound/pci/hda/patch_hdmi.c
-> @@ -171,6 +171,7 @@ struct hdmi_spec {
->          /* hdmi interrupt trigger control flag for Nvidia codec */
->          bool hdmi_intr_trig_ctrl;
->          bool intel_hsw_fixup;   /* apply Intel platform-specific fixups */
-> +       bool tegra_dp_workaround; /* workaround DP audio infoframe for Tegra */
->          /*
->           * Non-generic VIA/NVIDIA specific
->           */
-> @@ -679,15 +680,24 @@ static void hdmi_pin_setup_infoframe(struct hda_codec *codec,
->                                       int ca, int active_channels,
->                                       int conn_type)
->   {
-> +       struct hdmi_spec *spec = codec->spec;
->          union audio_infoframe ai;
->
->          memset(&ai, 0, sizeof(ai));
-> -       if (conn_type == 0) { /* HDMI */
-> +       if (conn_type == 0 || /* HDMI */
-> +           /* DisplayPort for Tegra: Tegra HW expects same layout as HDMI */
-> +           (conn_type == 1 && spec->tegra_dp_workaround)) {
->                  struct hdmi_audio_infoframe *hdmi_ai = &ai.hdmi;
->
-> -               hdmi_ai->type           = 0x84;
-> -               hdmi_ai->ver            = 0x01;
-> -               hdmi_ai->len            = 0x0a;
-> +               if (conn_type == 0) { /* HDMI */
-> +                       hdmi_ai->type           = 0x84;
-> +                       hdmi_ai->ver            = 0x01;
-> +                       hdmi_ai->len            = 0x0a;
-> +               } else { /* Tegra DP */
-> +                       hdmi_ai->type           = 0x84;
-> +                       hdmi_ai->len            = 0x1b;
-> +                       hdmi_ai->ver            = 0x11 << 2;
-> +               }
->                  hdmi_ai->CC02_CT47      = active_channels - 1;
->                  hdmi_ai->CA             = ca;
->                  hdmi_checksum_audio_infoframe(hdmi_ai);
-> @@ -3992,6 +4002,7 @@ static int tegra_hdmi_init(struct hda_codec *codec)
->          spec->chmap.ops.chmap_cea_alloc_validate_get_type =
->                  nvhdmi_chmap_cea_alloc_validate_get_type;
->          spec->chmap.ops.chmap_validate = nvhdmi_chmap_validate;
-> +       spec->tegra_dp_workaround = true;
->
->          return 0;
->   }
-Agreed, will do as per suggestion and upload patch v2.
+I don't feel this is a right way to deal with that. If we think it'd be worth
+checking any stale inode object during f2fs_fill_super, we'd better check any
+cached inode given superblock pointer rather than our inner inodes only.
+
+> 
+> Thanks,
+> 
+> > 
+> > > +		}
+> > > +	}
+> > > +
+> > >   	inode = iget_locked(sb, ino);
+> > >   	if (!inode)
+> > >   		return ERR_PTR(-ENOMEM);
+> > > -- 
+> > > 2.25.1
