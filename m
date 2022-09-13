@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F7B5B7670
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 18:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417EA5B789A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 19:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiIMQ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 12:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S233427AbiIMRqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 13:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiIMQZh (ORCPT
+        with ESMTP id S233365AbiIMRqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 12:25:37 -0400
+        Tue, 13 Sep 2022 13:46:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4EAA3FD;
-        Tue, 13 Sep 2022 08:20:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6969F6DFA2;
+        Tue, 13 Sep 2022 09:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6524614EC;
-        Tue, 13 Sep 2022 14:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCB2C433D7;
-        Tue, 13 Sep 2022 14:36:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE8EC614B2;
+        Tue, 13 Sep 2022 14:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C635BC433C1;
+        Tue, 13 Sep 2022 14:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079807;
-        bh=JYuxi9O3FdJnifusqhvtJkC+4XphOyrht8mntGp0LCI=;
+        s=korg; t=1663079877;
+        bh=9BgiPP6OCpWvSkGqFHD61EJ8AiegDO/o1o7/clXSep4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lNHxiGUxe2YxoN7gLRFklohgWuvT6FRkelY+fYchztdB+vpOnRkLWuI466/Spl/vr
-         mppfY22RZZWkZgO2xmQzRXQvBYtYDTrurheLnmJOj2PNwSM02fts6YX2ca9fYMf5EI
-         uSQeEGgJH5gN40KHGzY0R5EUTCe0UN1CtZntu/6U=
+        b=umO5zN1zmYJMY1PU/oCfjH1xV5sYAYSjY/ENk+j1lb1w6zAKWxqqUqklQqBSExBUr
+         fyNxWyXzA99+V+3zGBXFHIoFFrZOlzML2k+1Mpi82ZrvofmuqNTk8RfGmilHkLd+DU
+         gAi34GBwfWhhBG/ApE53eTDNRUwd5tfLna+tX+Yk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 4.9 20/42] net: mac802154: Fix a condition in the receive path
-Date:   Tue, 13 Sep 2022 16:07:51 +0200
-Message-Id: <20220913140343.292944929@linuxfoundation.org>
+        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.9 29/42] ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
+Date:   Tue, 13 Sep 2022 16:08:00 +0200
+Message-Id: <20220913140343.802205913@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 References: <20220913140342.228397194@linuxfoundation.org>
@@ -54,45 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Tasos Sahanidis <tasos@tasossah.com>
 
-commit f0da47118c7e93cdbbc6fb403dd729a5f2c90ee3 upstream.
+commit d29f59051d3a07b81281b2df2b8c9dfe4716067f upstream.
 
-Upon reception, a packet must be categorized, either it's destination is
-the host, or it is another host. A packet with no destination addressing
-fields may be valid in two situations:
-- the packet has no source field: only ACKs are built like that, we
-  consider the host as the destination.
-- the packet has a valid source field: it is directed to the PAN
-  coordinator, as for know we don't have this information we consider we
-  are not the PAN coordinator.
+The voice allocator sometimes begins allocating from near the end of the
+array and then wraps around, however snd_emu10k1_pcm_channel_alloc()
+accesses the newly allocated voices as if it never wrapped around.
 
-There was likely a copy/paste error made during a previous cleanup
-because the if clause is now containing exactly the same condition as in
-the switch case, which can never be true. In the past the destination
-address was used in the switch and the source address was used in the
-if, which matches what the spec says.
+This results in out of bounds access if the first voice has a high enough
+index so that first_voice + requested_voice_count > NUM_G (64).
+The more voices are requested, the more likely it is for this to occur.
 
-Cc: stable@vger.kernel.org
-Fixes: ae531b9475f6 ("ieee802154: use ieee802154_addr instead of *_sa variants")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20220826142954.254853-1-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+This was initially discovered using PipeWire, however it can be reproduced
+by calling aplay multiple times with 16 channels:
+aplay -r 48000 -D plughw:CARD=Live,DEV=3 -c 16 /dev/zero
+
+UBSAN: array-index-out-of-bounds in sound/pci/emu10k1/emupcm.c:127:40
+index 65 is out of range for type 'snd_emu10k1_voice [64]'
+CPU: 1 PID: 31977 Comm: aplay Tainted: G        W IOE      6.0.0-rc2-emu10k1+ #7
+Hardware name: ASUSTEK COMPUTER INC P5W DH Deluxe/P5W DH Deluxe, BIOS 3002    07/22/2010
+Call Trace:
+<TASK>
+dump_stack_lvl+0x49/0x63
+dump_stack+0x10/0x16
+ubsan_epilogue+0x9/0x3f
+__ubsan_handle_out_of_bounds.cold+0x44/0x49
+snd_emu10k1_playback_hw_params+0x3bc/0x420 [snd_emu10k1]
+snd_pcm_hw_params+0x29f/0x600 [snd_pcm]
+snd_pcm_common_ioctl+0x188/0x1410 [snd_pcm]
+? exit_to_user_mode_prepare+0x35/0x170
+? do_syscall_64+0x69/0x90
+? syscall_exit_to_user_mode+0x26/0x50
+? do_syscall_64+0x69/0x90
+? exit_to_user_mode_prepare+0x35/0x170
+snd_pcm_ioctl+0x27/0x40 [snd_pcm]
+__x64_sys_ioctl+0x95/0xd0
+do_syscall_64+0x5c/0x90
+? do_syscall_64+0x69/0x90
+? do_syscall_64+0x69/0x90
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/3707dcab-320a-62ff-63c0-73fc201ef756@tasossah.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac802154/rx.c |    2 +-
+ sound/pci/emu10k1/emupcm.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/mac802154/rx.c
-+++ b/net/mac802154/rx.c
-@@ -52,7 +52,7 @@ ieee802154_subif_frame(struct ieee802154
- 
- 	switch (mac_cb(skb)->dest.mode) {
- 	case IEEE802154_ADDR_NONE:
--		if (mac_cb(skb)->dest.mode != IEEE802154_ADDR_NONE)
-+		if (hdr->source.mode != IEEE802154_ADDR_NONE)
- 			/* FIXME: check if we are PAN coordinator */
- 			skb->pkt_type = PACKET_OTHERHOST;
- 		else
+--- a/sound/pci/emu10k1/emupcm.c
++++ b/sound/pci/emu10k1/emupcm.c
+@@ -137,7 +137,7 @@ static int snd_emu10k1_pcm_channel_alloc
+ 	epcm->voices[0]->epcm = epcm;
+ 	if (voices > 1) {
+ 		for (i = 1; i < voices; i++) {
+-			epcm->voices[i] = &epcm->emu->voices[epcm->voices[0]->number + i];
++			epcm->voices[i] = &epcm->emu->voices[(epcm->voices[0]->number + i) % NUM_G];
+ 			epcm->voices[i]->epcm = epcm;
+ 		}
+ 	}
 
 
