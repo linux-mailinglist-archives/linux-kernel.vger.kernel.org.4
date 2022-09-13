@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409FD5B691C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004435B691F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 09:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiIMH7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 03:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S231320AbiIMH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 03:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiIMH7H (ORCPT
+        with ESMTP id S231295AbiIMH7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 03:59:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85345A3C0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 00:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZSuHqErBdLq/WjJ+4mcD880q8RV5cT2VvtIHCgGu7tA=; b=XKsiu+BkB0bgK7rldV7WiuPw5j
-        e66tuTB0BowARIzVPTyQblNFQnpVVLLnFOW70jgMgJRCelISL57ZGUGsuG9B/hSGvZwCrNDqJYi3V
-        wQntdW3RfHV800/1iU4ZBPCSYkRzPDa2goPomk3ijOTcBrahxNxz3sUiiv1PSaijRi6Sdr51LbQBt
-        40k6K/mBev1+LP+HHeHoArRbGWNmSEMP/sPHZ3OHKO0CqL3kRKjYDhCoE449sFZOco5xjQ6oWTdeL
-        8gKb6s7WQH3pCqcKYDrNLCnOIZOz9aI+cpiqbrTmBnGP3eZx++sp4ZifobZk32K4gaONjb3jJqfvQ
-        XsX7HcXQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oY0op-00GhZw-Km; Tue, 13 Sep 2022 07:58:55 +0000
-Date:   Tue, 13 Sep 2022 08:58:55 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        david@redhat.com, osalvador@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/16] mm/page_alloc: ensure kswapd doesn't accidentally
- go to sleep
-Message-ID: <YyA4Pz8hnnTsomUh@casper.infradead.org>
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-2-linmiaohe@huawei.com>
- <ea96d35e-46ae-c168-3186-ddf58ad6806c@arm.com>
+        Tue, 13 Sep 2022 03:59:11 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723A85A3FE;
+        Tue, 13 Sep 2022 00:59:08 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRbMq4sKKzNmFH;
+        Tue, 13 Sep 2022 15:54:31 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 15:59:06 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
+ hisilicon,hisi-i2c
+To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>
+References: <20220909074842.281232-1-chenweilong@huawei.com>
+ <20220909074842.281232-2-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <58bd3483-3830-bb64-d7d6-5c0f1126de73@huawei.com>
+Date:   Tue, 13 Sep 2022 15:59:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea96d35e-46ae-c168-3186-ddf58ad6806c@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220909074842.281232-2-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:32:50PM +0530, Anshuman Khandual wrote:
+On 2022/9/9 15:48, Weilong Chen wrote:
+> Add the new compatible for HiSilicon common i2c.
 > 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+>  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
 > 
-> On 9/9/22 14:54, Miaohe Lin wrote:
-> > If ALLOC_KSWAPD is set, wake_all_kswapds() will be called to ensure
-> > kswapd doesn't accidentally go to sleep. But when reserve_flags is
-> > set, alloc_flags will be overwritten and ALLOC_KSWAPD is thus lost.
-> > Preserve the ALLOC_KSWAPD flag in alloc_flags to ensure kswapd won't
-> > go to sleep accidentally.
-> 
-> Currently wake_all_kswapds() gets skipped subsequently if ALLOC_KSWAPD
-> is lost, but this only happens when the 'retry:' loops is taken ?
+> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> new file mode 100644
+> index 000000000000..f1cb6a4c70d1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: HiSilicon common IIC controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - yangyicong@huawei.com
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,hisi-i2c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clk_rate:
+> +    default: 0xEE6B280
+> +
+> +  clock-frequency:
+> +    default: 400000
+> +
+> +  i2c-sda-falling-time-ns:
+> +    default: 343
+> +
+> +  i2c-scl-falling-time-ns:
+> +    default: 203
+> +
+> +  i2c-sda-hold-time-ns:
+> +    default: 0x33E
+> +
+> +  i2c-scl-rising-time-ns:
+> +    default: 365
+> +
+> +  i2c-digital-filter-width-ns:
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c1: i2c@5038B0000{
+> +      compatible = "hisilicon,hisi-i2c";
+> +      reg = <0x38B0000 0x10000>;
+> +      interrupts = <0x0 120 0x4>;
+> +      i2c-sda-falling-time-ns = <56>;
+> +      i2c-scl-falling-time-ns = <56>;
+> +      i2c-sda-hold-time-ns = <56>;
+> +      i2c-scl-rising-time-ns = <56>;
 
-Right, but see the comment:
+The values used here are different from above. Are they used on different
+products?
 
-        /* Ensure kswapd doesn't accidentally go to sleep as long as we loop */
+> +      i2c-digital-filter;
 
-and that is not currently true.  I think that was an inadvertent change.
-Particularly since the changelog for 0a79cdad5eb2 says "No functional
-change".
+Should we discard the empty properties or is it necessary to have it?
 
-> > 
-> > Fixes: 0a79cdad5eb2 ("mm: use alloc_flags to record if kswapd can wake")
-> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> > ---
-> >  mm/page_alloc.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index ba5c9402a5cb..4b97a03fa2dd 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -5147,7 +5147,8 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
-> >  
-> >  	reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
-> >  	if (reserve_flags)
-> > -		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags);
-> > +		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags) |
-> > +					  (alloc_flags & ALLOC_KSWAPD);
-> >  
-> >  	/*
-> >  	 * Reset the nodemask and zonelist iterators if memory policies can be
+Others looks good to me, but the device tree experts may have some comments.
+
+This binding file should also be listed in the MAINTAINERS file.
+
+Thanks.
+
+> +      i2c-digital-filter-width-ns = <0x0>;
+> +      clk_rate = <0x0 0xEE6B280>;
+> +      clock-frequency = <400000>;
+> +    };
 > 
