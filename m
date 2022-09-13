@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6365B72AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54EB5B7383
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiIMO5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 10:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S235212AbiIMPHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbiIMOyO (ORCPT
+        with ESMTP id S234975AbiIMPEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:54:14 -0400
+        Tue, 13 Sep 2022 11:04:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7537170D;
-        Tue, 13 Sep 2022 07:27:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860B274DCC;
+        Tue, 13 Sep 2022 07:30:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFDD3614A3;
-        Tue, 13 Sep 2022 14:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058CFC433D6;
-        Tue, 13 Sep 2022 14:26:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3907A614DA;
+        Tue, 13 Sep 2022 14:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDC8C433D6;
+        Tue, 13 Sep 2022 14:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663079217;
-        bh=5K8DzZTsQj7cIxa+vXjg400bLfv/wfBb5vcW/s+sH4A=;
+        s=korg; t=1663079421;
+        bh=d8/BjMjVzY/n7XeMlWP1JgbELelWC0FaNED4myX5wmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oTVVcWKj+ceJNKBjOxr25MAg5hSjF0jvN6VcQlCfOlON+FVE7AuGTlQy2okBSpK2E
-         M21WQzHCNaMA7N/j/iYvhPFaDeOtZcM9LtJqD/HWAPunPCwuTaLanqxU6QGgd/CI/q
-         3zWEVrfELLE9XcxzJtkj5gfwX7FIAq5M+ZPouknQ=
+        b=mXn7Y6D+9rkxH8csv3hoX2Z+CwRkIyLKxsLLvfuH4khgryIXTSqEXTOgCFz139zPt
+         eoa2Q7sbcxA72S2X4hpM7MEsMf24Khhd0/SjWyd1ttG/XP3SUX2142YbsHwcEZZJ7P
+         ZJckrO8ArdEF7JQKzi/h+iAcLG4HlAhDhVu+SNYE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 5.4 048/108] usb: dwc2: fix wrong order of phy_power_on and phy_init
-Date:   Tue, 13 Sep 2022 16:06:19 +0200
-Message-Id: <20220913140355.703170036@linuxfoundation.org>
+        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 4.19 02/79] efi: capsule-loader: Fix use-after-free in efi_capsule_write
+Date:   Tue, 13 Sep 2022 16:06:20 +0200
+Message-Id: <20220913140348.959636664@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-commit f9b995b49a07bd0d43b0e490f59be84415c745ae upstream.
+commit 9cb636b5f6a8cc6d1b50809ec8f8d33ae0c84c95 upstream.
 
-Since 1599069a62c6 ("phy: core: Warn when phy_power_on is called before
-phy_init") the driver complains. In my case (Amlogic SoC) the warning
-is: phy phy-fe03e000.phy.2: phy_power_on was called before phy_init
-So change the order of the two calls. The same change has to be done
-to the order of phy_exit() and phy_power_off().
+A race condition may occur if the user calls close() on another thread
+during a write() operation on the device node of the efi capsule.
 
-Fixes: 09a75e857790 ("usb: dwc2: refactor common low-level hw code to platform.c")
-Cc: stable@vger.kernel.org
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/r/dfcc6b40-2274-4e86-e73c-5c5e6aa3e046@gmail.com
+This is a race condition that occurs between the efi_capsule_write() and
+efi_capsule_flush() functions of efi_capsule_fops, which ultimately
+results in UAF.
+
+So, the page freeing process is modified to be done in
+efi_capsule_release() instead of efi_capsule_flush().
+
+Cc: <stable@vger.kernel.org> # v4.9+
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Link: https://lore.kernel.org/all/20220907102920.GA88602@ubuntu/
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/platform.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/firmware/efi/capsule-loader.c |   31 +++++++------------------------
+ 1 file changed, 7 insertions(+), 24 deletions(-)
 
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -142,9 +142,9 @@ static int __dwc2_lowlevel_hw_enable(str
- 	} else if (hsotg->plat && hsotg->plat->phy_init) {
- 		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
- 	} else {
--		ret = phy_power_on(hsotg->phy);
-+		ret = phy_init(hsotg->phy);
- 		if (ret == 0)
--			ret = phy_init(hsotg->phy);
-+			ret = phy_power_on(hsotg->phy);
- 	}
+--- a/drivers/firmware/efi/capsule-loader.c
++++ b/drivers/firmware/efi/capsule-loader.c
+@@ -244,29 +244,6 @@ failed:
+ }
  
- 	return ret;
-@@ -176,9 +176,9 @@ static int __dwc2_lowlevel_hw_disable(st
- 	} else if (hsotg->plat && hsotg->plat->phy_exit) {
- 		ret = hsotg->plat->phy_exit(pdev, hsotg->plat->phy_type);
- 	} else {
--		ret = phy_exit(hsotg->phy);
-+		ret = phy_power_off(hsotg->phy);
- 		if (ret == 0)
--			ret = phy_power_off(hsotg->phy);
-+			ret = phy_exit(hsotg->phy);
- 	}
- 	if (ret)
- 		return ret;
+ /**
+- * efi_capsule_flush - called by file close or file flush
+- * @file: file pointer
+- * @id: not used
+- *
+- *	If a capsule is being partially uploaded then calling this function
+- *	will be treated as upload termination and will free those completed
+- *	buffer pages and -ECANCELED will be returned.
+- **/
+-static int efi_capsule_flush(struct file *file, fl_owner_t id)
+-{
+-	int ret = 0;
+-	struct capsule_info *cap_info = file->private_data;
+-
+-	if (cap_info->index > 0) {
+-		pr_err("capsule upload not complete\n");
+-		efi_free_all_buff_pages(cap_info);
+-		ret = -ECANCELED;
+-	}
+-
+-	return ret;
+-}
+-
+-/**
+  * efi_capsule_release - called by file close
+  * @inode: not used
+  * @file: file pointer
+@@ -278,6 +255,13 @@ static int efi_capsule_release(struct in
+ {
+ 	struct capsule_info *cap_info = file->private_data;
+ 
++	if (cap_info->index > 0 &&
++	    (cap_info->header.headersize == 0 ||
++	     cap_info->count < cap_info->total_size)) {
++		pr_err("capsule upload not complete\n");
++		efi_free_all_buff_pages(cap_info);
++	}
++
+ 	kfree(cap_info->pages);
+ 	kfree(cap_info->phys);
+ 	kfree(file->private_data);
+@@ -325,7 +309,6 @@ static const struct file_operations efi_
+ 	.owner = THIS_MODULE,
+ 	.open = efi_capsule_open,
+ 	.write = efi_capsule_write,
+-	.flush = efi_capsule_flush,
+ 	.release = efi_capsule_release,
+ 	.llseek = no_llseek,
+ };
 
 
