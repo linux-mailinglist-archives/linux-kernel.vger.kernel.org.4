@@ -2,201 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D224B5B7388
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CAE5B73C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Sep 2022 17:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIMPL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 11:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S235603AbiIMPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 11:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiIMPJ3 (ORCPT
+        with ESMTP id S235694AbiIMPJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 11:09:29 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DFE77EB9;
-        Tue, 13 Sep 2022 07:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663079533; x=1694615533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ox9GGUs+Z82R1C7QDSPr4g0v7Fd9egBuMqzhOmk9J00=;
-  b=Yb1aNyQSragq+Vv2a/e3vHfw6p25+NHXWcQsr3D/QRwiaGjEn0ZprXrf
-   C9xKPRvvzAyjwOi1J0bap4qv8J/DU1wZ1G/2Tq54dq0ohBj9PXMkMQWhi
-   yd2V3xYeBSEzRqsMkGVkD7R2jCJprfP/a1O8o6vaZ8f9BAs+rBK9FC//x
-   R8Bwwlof+/6asUK3zeJn0ZU1L3UlO5Dr6+9DXh9Se9FBmzdOrSOYhvu4U
-   AhCq1solwGEWA+yQD62alBdbMeuOKU35gnlNLgNS5KUToRI93QjuM4nkY
-   wTm1HsOJEIxwlONvPs+kcfcKh6GudSHJpLl4Cm+25lHdIvE+g9ikCqH6f
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="281167254"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="281167254"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 07:30:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="684885449"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2022 07:30:30 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oY6vl-0003eF-2v;
-        Tue, 13 Sep 2022 14:30:29 +0000
-Date:   Tue, 13 Sep 2022 22:29:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, irusskikh@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: Re: [PATCH] net: atlantic: fix potential memory leak in
- aq_ndev_close()
-Message-ID: <202209132232.nSnoIBSi-lkp@intel.com>
-References: <20220913063941.83611-1-niejianglei2021@163.com>
+        Tue, 13 Sep 2022 11:09:04 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766B177553;
+        Tue, 13 Sep 2022 07:31:47 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278624b7c4so32620802fac.5;
+        Tue, 13 Sep 2022 07:31:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=tj9IaKd3V1LuUQ7OzzJ/L+w5soQvCCrAzGZ3d7sXgeU=;
+        b=JuHcfCrZ/4xDb9hE81GSjQydbrnsQ00tf8f6Tn0G2Q6jc73wLHH7O0+xxhmnuS60p6
+         4tGDivpPjk0ixgeAGAvQeB7Hn9pJ0ecP9hsQ5uRwSGU2HImMC7GF7+UoRMmLL52eg+9x
+         lyM9vqjV89Ds3h3FSnHW/kPXbgmendktFAzdOL3bqPzPep/foZtsrM3kNpjBFN3GoiS4
+         uHudOzIASfpagZg2aEaX58TRaqCpLlzX8hdJVP6MVKoxqrrztfLGF1Q5FGVznFYsdQIo
+         IBeZHxo7LUbEGjrphbTVHmv5d9PmVNWskRlA237jV85kUZDdlGjvvZW1HwCNon4atzu/
+         nL2w==
+X-Gm-Message-State: ACgBeo1tlXDzoEN3MRQo/98+ezq0zHWMj13gFQy/Hach4a4gGRL80FO5
+        2O+8/B81ccEp9tsGtm8bNPEYcIMJIg==
+X-Google-Smtp-Source: AA6agR7PIbzqcKoTBfvtNXth+cXiNYZjzdTsrAu8f4IZ+GA9u0Y0kkQ9kXUc385HG9xo7xD4RV9YvQ==
+X-Received: by 2002:a05:6870:51ca:b0:11b:98fa:432b with SMTP id b10-20020a05687051ca00b0011b98fa432bmr1959987oaj.109.1663079425048;
+        Tue, 13 Sep 2022 07:30:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r35-20020a05687017a300b0011e37fb5493sm7278331oae.30.2022.09.13.07.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:30:24 -0700 (PDT)
+Received: (nullmailer pid 3625970 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:30:24 -0000
+Date:   Tue, 13 Sep 2022 09:30:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4 v3] dt-bindings: memory: Add jedec,lpddr4 and
+ jedec,lpddr5 bindings
+Message-ID: <20220913143024.GA3620595-robh@kernel.org>
+References: <20220909232139.645945-1-jwerner@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913063941.83611-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220909232139.645945-1-jwerner@chromium.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianglei,
+On Fri, Sep 09, 2022 at 04:21:39PM -0700, Julius Werner wrote:
+> This patch adds bindings for LPDDR4 and LPDDR5 memory analogous to the
+> existing bindings for LPDDR2 and LPDDR3. For now, the new types are only
+> needed for topology description, so other properties like timing
+> parameters are omitted. They can be added later if needed.
 
-Thank you for the patch! Perhaps something to improve:
+I only see patch 3. Please only send complete series.
 
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master linus/master v6.0-rc5 next-20220913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> Signed-off-by: Julius Werner <jwerner@chromium.org>
+> ---
+>  .../ddr/jedec,lpddr-props.yaml                |  4 ++
+>  .../memory-controllers/ddr/jedec,lpddr4.yaml  | 35 ++++++++++++++
+>  .../memory-controllers/ddr/jedec,lpddr5.yaml  | 46 +++++++++++++++++++
+>  3 files changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
+> 
+> Changelog:
+> 
+> - v2
+>   - removed minItems
+>   - moved `$ref` below `maintainers`
+>   - renamed example node from `lpddr4` to `lpddr`
+> - v3
+>   - removed manufacturer-id property from examples
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> index 4114cfa8de67f1..92ef660888f318 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> @@ -45,9 +45,13 @@ properties:
+>        - 512
+>        - 1024
+>        - 2048
+> +      - 3072
+>        - 4096
+> +      - 6144
+>        - 8192
+> +      - 12288
+>        - 16384
+> +      - 24576
+>        - 32768
+>  
+>    io-width:
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+> new file mode 100644
+> index 00000000000000..fa9b30ee89cb81
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
+> @@ -0,0 +1,35 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr4.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LPDDR4 SDRAM compliant to JEDEC JESD209-4
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +allOf:
+> +  - $ref: "jedec,lpddr-props.yaml#"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 169ccf0e40825d9e465863e4707d8e8546d3c3cb
-config: s390-randconfig-r026-20220912 (https://download.01.org/0day-ci/archive/20220913/202209132232.nSnoIBSi-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e1ce8c41446db3a7dd59206ff9c8a75baf7be067
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianglei-Nie/net-atlantic-fix-potential-memory-leak-in-aq_ndev_close/20220913-144300
-        git checkout e1ce8c41446db3a7dd59206ff9c8a75baf7be067
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/aquantia/atlantic/ fs/f2fs/
+Drop quotes.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - pattern: "^lpddr4-[0-9a-f]{2},[0-9a-f]{4}$"
+> +      - const: jedec,lpddr4
+> +
+> +required:
+> +  - compatible
+> +  - density
+> +  - io-width
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    lpddr {
+> +        compatible = "lpddr4-ff,0100", "jedec,lpddr4";
+> +        density = <8192>;
+> +        io-width = <16>;
+> +        revision-id = <1 0>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
+> new file mode 100644
+> index 00000000000000..01e11aabc5a3f9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr5.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LPDDR5 SDRAM compliant to JEDEC JESD209-5
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +allOf:
+> +  - $ref: "jedec,lpddr-props.yaml#"
 
-All warnings (new ones prefixed by >>):
+And here.
 
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.c:10:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.h:12:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_common.h:13:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.c:10:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.h:12:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_common.h:13:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.c:10:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_main.h:12:
-   In file included from drivers/net/ethernet/aquantia/atlantic/aq_common.h:13:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/ethernet/aquantia/atlantic/aq_main.c:99:1: warning: unused label 'err_exit' [-Wunused-label]
-   err_exit:
-   ^~~~~~~~~
-   13 warnings generated.
-
-
-vim +/err_exit +99 drivers/net/ethernet/aquantia/atlantic/aq_main.c
-
-97bde5c4f909a5 David VomLehn  2017-01-23   90  
-97bde5c4f909a5 David VomLehn  2017-01-23   91  static int aq_ndev_close(struct net_device *ndev)
-97bde5c4f909a5 David VomLehn  2017-01-23   92  {
-97bde5c4f909a5 David VomLehn  2017-01-23   93  	struct aq_nic_s *aq_nic = netdev_priv(ndev);
-7b0c342f1f6754 Nikita Danilov 2019-11-07   94  	int err = 0;
-97bde5c4f909a5 David VomLehn  2017-01-23   95  
-97bde5c4f909a5 David VomLehn  2017-01-23   96  	err = aq_nic_stop(aq_nic);
-837c637869bef2 Nikita Danilov 2019-11-07   97  	aq_nic_deinit(aq_nic, true);
-97bde5c4f909a5 David VomLehn  2017-01-23   98  
-97bde5c4f909a5 David VomLehn  2017-01-23  @99  err_exit:
-97bde5c4f909a5 David VomLehn  2017-01-23  100  	return err;
-97bde5c4f909a5 David VomLehn  2017-01-23  101  }
-97bde5c4f909a5 David VomLehn  2017-01-23  102  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - pattern: "^lpddr5-[0-9a-f]{2},[0-9a-f]{4}$"
+> +      - const: jedec,lpddr5
+> +
+> +  serial-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      Serial IDs read from Mode Registers 47 through 54. One byte per uint32
+> +      cell (i.e. <MR47 MR48 MR49 MR50 MR51 MR52 MR53 MR54>).
+> +    maxItems: 8
+> +    items:
+> +      minimum: 0
+> +      maximum: 255
+> +
+> +required:
+> +  - compatible
+> +  - density
+> +  - io-width
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    lpddr {
+> +        compatible = "lpddr5-01,0200", "jedec,lpddr5";
+> +        density = <8192>;
+> +        io-width = <8>;
+> +        revision-id = <2 0>;
+> +        serial-id = <3 1 0 0 0 0 0 0>;
+> +    };
+> -- 
+> 2.31.0
+> 
+> 
