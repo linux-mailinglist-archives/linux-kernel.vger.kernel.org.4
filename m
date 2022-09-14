@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752FE5B8C9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA99A5B8C9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiINQMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S229710AbiINQOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiINQMa (ORCPT
+        with ESMTP id S229676AbiINQON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:12:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362FD82D36;
-        Wed, 14 Sep 2022 09:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663171945; x=1694707945;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Xqwq9WCXxeRuve+N6cmR8jhfeorkJSLMTvaV9AUCJEg=;
-  b=eM4lWd45eDP32l9zhsqKITec4B1dpvMuuD3u7M5yxOnPkfsGMGk1RiBa
-   REjk+WUdBRB3SA6Lp1EKtDlThU5aHbauSaouCevCvPAo9+6Po2PnlDEt0
-   MSDQ3o5DvVZErRhd2N1O1MYg+WYnWtZbn8hpKD7/dfJamX8qKhu8QHLIE
-   N6yxF9W0HQYZpPqNllxhYyr15SWiBPpf6+ral2IipbcZ3UhywVMiWU1V8
-   ZtA+D1xEIK6bvBIWcW7d5LOfGovX18N4JoI4WGCo7F99VkdL12UnekLjE
-   oZZgLp0pP4aCSdraiKzP4uODSKtcDM3LJoPsuxKaFooo8l6a/JVXvzV/a
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362432263"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="362432263"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 09:12:22 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="647445252"
-Received: from swallace-mobl1.ger.corp.intel.com (HELO [10.213.224.160]) ([10.213.224.160])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 09:12:13 -0700
-Message-ID: <d238f235-5623-d152-c0d3-2ef851f88473@intel.com>
-Date:   Wed, 14 Sep 2022 09:12:11 -0700
+        Wed, 14 Sep 2022 12:14:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1B780F7D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:14:12 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYV1c-0003s7-SQ; Wed, 14 Sep 2022 18:14:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYV1d-000jGk-8s; Wed, 14 Sep 2022 18:14:07 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYV1b-000uDX-16; Wed, 14 Sep 2022 18:14:07 +0200
+Date:   Wed, 14 Sep 2022 18:14:06 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [RFC v4 05/10] pwm: dwc: use devm_pwmchip_add
+Message-ID: <20220914161406.c2mnqo74lp4zpevj@pengutronix.de>
+References: <20220816211454.237751-1-ben.dooks@sifive.com>
+ <20220816211454.237751-6-ben.dooks@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <7c3cc265-869b-b2fc-43f2-d2cbd0bc142c@intel.com>
- <1182ef92-cae3-b7c1-8339-8e8bfa48f2e3@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1182ef92-cae3-b7c1-8339-8e8bfa48f2e3@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n2uzmvosh4a3p342"
+Content-Disposition: inline
+In-Reply-To: <20220816211454.237751-6-ben.dooks@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/14/22 08:36, Sathyanarayanan Kuppuswamy wrote:
-> When we initially submitted the attestation patches, virt/coco folder
-> was not created. I initially kept this driver in platform/x86/, but
-> later moved to arch/x86/coco based on the review comments in v4. There
-> was a discussion about the need for a new config and the location of
-> the driver. The outcome of that discussion is, since this is not a
-> traditional driver, but a basic TDX feature, we don't need a special
-> config and the code can be maintained in the arch/x86/coco folder.
 
-Could you please include the following in this set somewhere:
+--n2uzmvosh4a3p342
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-"The code to do the SEV analog of this TDX functionality is in
-___insert_path_here____.   This code is different from that because
-______reason______ so it is instead placed in ____other_path____."
+On Tue, Aug 16, 2022 at 10:14:49PM +0100, Ben Dooks wrote:
+> Use devm_pwmchip_add() to add the pwm chip to avoid having to manually
+> remove it (useful for the next patch which adds the platform-device
+> support).
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
 
-?
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--n2uzmvosh4a3p342
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMh/csACgkQwfwUeK3K
+7AmlLggAjp1LRuuYBLWYjnqBCdWwgMMU1TjdsJ79mu3ZYMfk4x0vGlxSDRSkr/iV
+cma1irW5yzXnXyDd5i3pt0RgQLlHgriE/8QoWMKduzjKCoBW87tJTPwOUkyy2OrU
+0DVqNpHckoGshTVRCQdPm0hsDabKz4j4KqTuZN51d2K2RnqShVkVvr1tvHVCguVX
+IE0Oyv/y+sJ+WHRR6IyHR3XIa3lV86xSYk5qYu3YgYr+kABMWMTZodJtR3xEBHQw
+p8+8m/QTv1Ld3tOuCd9uCb9VV3y6qwSGcrM8d99SOX+BOjfOXo9fQHDv3HxISaPF
+Gy01TlvaAsKvlxqgCLeJ3xVqxViPjA==
+=XgLz
+-----END PGP SIGNATURE-----
+
+--n2uzmvosh4a3p342--
