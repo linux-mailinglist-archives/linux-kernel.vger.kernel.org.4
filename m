@@ -2,207 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF175B8813
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DAE5B881A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiINMTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S229772AbiINMU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiINMTR (ORCPT
+        with ESMTP id S229520AbiINMUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:19:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FB680377;
-        Wed, 14 Sep 2022 05:19:15 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CA1F56602024;
-        Wed, 14 Sep 2022 13:19:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663157953;
-        bh=DCleAYfEI4FJICAKJmFAzxyRVAsE5kyhf9NIXG8/TQg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iLNpgK4Z8geWBsieZdhoFb89uWkA+E0sHPCj139QVypsVXlxeCsTgUOj/UNUgt7Ih
-         Prb1DDFgDgnfvWFu15+3ZWQJ681MbW/Wz44S5Z63Jr9NQePTvxKaphp2dUWUxiooTC
-         5ayh0D2LyUEKhfCULmEsUC/5wP80dzkhDG8RZlmoygwlWjTOy3uapatuQ75hSV8sd0
-         49Sopl5KuwI2m7dxKaXbYgpyG/s6Y8LZliDZJj3a1NqFcXsN19/ttr32ZRrZov5Y7r
-         JVjGbP0eCFFNi1bzZTlQOqD+jwbUvI8K/jDtAW9GIaHLSoVK/wApxUBxRjcrN9mc3C
-         htufRQwrpSmXA==
-Message-ID: <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com>
-Date:   Wed, 14 Sep 2022 14:19:10 +0200
+        Wed, 14 Sep 2022 08:20:53 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81397804AC;
+        Wed, 14 Sep 2022 05:20:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bj12so34199281ejb.13;
+        Wed, 14 Sep 2022 05:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=oPmXBjkVR3jE2EKfb211i3vsy5sbXpB5DgfIDb0tj7U=;
+        b=fR/cqUuBqqOc8TphBSFtc3hHnZNuhg58rhdXRrfTwtnvBgMtMCj5mEuh/8j2MHGzqz
+         6Sd4JYOI3gtUVdBYhUBbbsgW5X1IuFqA6PeO8pBZxo/cSgVtyZjOHh87BiiiQp4Aa3mh
+         qJm57TRP02IfwG5SAsS/UDRuFQn4KmLj04D83DhzICyuMiMkqVn5o17bYeXoDtN3BQbO
+         qfYt2rlC2VboJnQPJGbraaP6gcUzILd0Kv0/6hpQu6fXrnIa5g10T1Qme3XKFgdG3bwO
+         E1uAkwvrlifAOqcEMwyLkfbjHaNvgTdRB8UpoVIF0g7S79bUDbKuU7YSxAkSyHTNcbAy
+         lPxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=oPmXBjkVR3jE2EKfb211i3vsy5sbXpB5DgfIDb0tj7U=;
+        b=4RWqT1GG+EoeewEkbaGQObIfHe+fyZgzLAYxlE0hZFNtmLltxx/AEcoNh4TZtbTaVi
+         Ffg6CadIcRs1Z64SPEV6fNPuHcu65C4DOL1TIui+VCaKe9dDF8b/loHUqjugM4X0g5Go
+         pPNpNLXYIsNP0Ha8XDMrbE5BRprZw6kdQ2gScc1GRs9cZ10QfO85PUhEgrujj/Edjjaf
+         lCFsYe9+gQwcw8b4kfzJc1SxEYEJ3GNH8RzopIwfhp2bsqkLnf5BRn6ndAQ1+izrf4Fc
+         XdKi7vdmjnXQisQ3pk2ZCq2JuI48Ty6gAftDg4647spU6Dxm1Hts437bpxUJDSMVTfFT
+         pYMA==
+X-Gm-Message-State: ACgBeo2ORzGkQ2MHJOqI7JHXEfbyOtR6+twnHSOnBKZrimMttE6XOK1v
+        UR7kEhdCSF8VBF8FMpgiw8273/okupQ=
+X-Google-Smtp-Source: AA6agR6z3Uir2hCPnfxXK3HGcvKxjRYUkQv1BVTr+MYipNcOlS7Fw44xh6LkHTzoSoyulqrS0vJtvA==
+X-Received: by 2002:a17:907:2bf4:b0:76f:1053:6e4 with SMTP id gv52-20020a1709072bf400b0076f105306e4mr25328320ejc.443.1663158050780;
+        Wed, 14 Sep 2022 05:20:50 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id kx25-20020a170907775900b0073d70df6e56sm7491803ejc.138.2022.09.14.05.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 05:20:49 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 14:20:48 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Prathamesh Shete <pshete@nvidia.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     ulf.hansson@linaro.org, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
+Subject: Re: [PATCH v2 3/4] mmc: sdhci-tegra: Issue CMD and DAT resets
+ together
+Message-ID: <YyHHIPbXnLiPe/vn@orome>
+References: <20220914095628.26093-1-pshete@nvidia.com>
+ <20220914095628.26093-3-pshete@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
- LVTS thermal controllers
-Content-Language: en-US
-To:     bchihi@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220817080757.352021-1-bchihi@baylibre.com>
- <20220817080757.352021-3-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220817080757.352021-3-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mT7gJ1KoGt/nhYUh"
+Content-Disposition: inline
+In-Reply-To: <20220914095628.26093-3-pshete@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/08/22 10:07, bchihi@baylibre.com ha scritto:
-> From: Alexandre Bailon <abailon@baylibre.com>
-> 
-> Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+
+--mT7gJ1KoGt/nhYUh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Sep 14, 2022 at 03:26:27PM +0530, Prathamesh Shete wrote:
+> In case of error condition to avoid system crash
+> Tegra SDMMC controller requires CMD and DAT resets
+> issued together.
+
+It might be worth specifying exactly what "system crash" means. Does
+this always happen (i.e. do we have a problem right now?) or are there
+specific circumstances that cause the crash.
+
+> This is applicable to Tegra186 and later chips.
+>=20
+> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 > ---
->   .../thermal/mediatek,lvts-thermal.yaml        | 152 ++++++++++++++++++
->   1 file changed, 152 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> new file mode 100644
-> index 000000000000..31d9e220513a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> @@ -0,0 +1,152 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek SoC LVTS thermal controller
+>  drivers/mmc/host/sdhci-tegra.c |  3 ++-
+>  drivers/mmc/host/sdhci.c       | 11 ++++++++---
+>  drivers/mmc/host/sdhci.h       |  2 ++
+>  3 files changed, 12 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegr=
+a.c
+> index b66b0cc51497..7d16dc41fe91 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1530,7 +1530,8 @@ static const struct sdhci_pltfm_data sdhci_tegra186=
+_pdata =3D {
+>  		  SDHCI_QUIRK_NO_HISPD_BIT |
+>  		  SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC |
+>  		  SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
+> -	.quirks2 =3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> +	.quirks2 =3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> +		   SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER,
+>  	.ops  =3D &tegra186_sdhci_ops,
+>  };
+> =20
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index 7689ffec5ad1..289fa8ae4866 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -3063,9 +3063,14 @@ static bool sdhci_request_done(struct sdhci_host *=
+host)
+>  		 * Spec says we should do both at the same time, but Ricoh
+>  		 * controllers do not like that.
+>  		 */
 
-title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
+The comment above seems to indicate that the current behavior (i.e.
+splitting the CMD and DATA resets) is actually the quirk, so I wonder if
+this perhaps should be reversed? I suppose it could be difficult to
+track down the exact controllers that need the separate resets, but this
+might be worth doing. It's possible that other controllers might run
+into the same issue that we are if they work strictly to the spec.
 
-> +
-> +maintainers:
-> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> +  - Ben Tseng <ben.tseng@mediatek.com>
-> +
-> +description: |
+Adrian, any ideas on how much of this is just cargo-culted? Do we play
+it safe and do the "double workaround" or do we want to attempt to
+rectify this by adding a Ricoh-specific quirk?
 
-description:
-   LVTS is a thermal management architecture composed of three subsystems,
-   a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
-   a Convertor - Low Voltage Thermal Sensor convertor (LVTS), and
-   a Digital controller (LVTS_CTRL).
+Thierry
 
-> +  LVTS (Low Voltage Thermal Sensor).
-> +  The architecture will be first used on mt8192 and mt8195.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8192-lvts-ap
-> +      - mediatek,mt8192-lvts-mcu
-> +      - mediatek,mt8195-lvts-ap
-> +      - mediatek,mt8195-lvts-mcu
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: LVTS instance registers.
+> -		sdhci_do_reset(host, SDHCI_RESET_CMD);
+> -		sdhci_do_reset(host, SDHCI_RESET_DATA);
+> -
+> +		if (host->quirks2 &
+> +			SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER) {
+> +			sdhci_do_reset(host, SDHCI_RESET_CMD |
+> +					SDHCI_RESET_DATA);
+> +		} else {
+> +			sdhci_do_reset(host, SDHCI_RESET_CMD);
+> +			sdhci_do_reset(host, SDHCI_RESET_DATA);
+> +		}
+>  		host->pending_reset =3D false;
+>  	}
+> =20
+> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+> index 95a08f09df30..8045308f7859 100644
+> --- a/drivers/mmc/host/sdhci.h
+> +++ b/drivers/mmc/host/sdhci.h
+> @@ -480,6 +480,8 @@ struct sdhci_host {
+>   * block count.
+>   */
+>  #define SDHCI_QUIRK2_USE_32BIT_BLK_CNT			(1<<18)
+> +/* Issue CMD and DATA reset together */
+> +#define SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER      (1<<19)
+> =20
+>  	int irq;		/* Device IRQ */
+>  	void __iomem *ioaddr;	/* Mapped address */
+> --=20
+> 2.17.1
+>=20
 
-This description looks obvious, as it doesn't really say anything "new"...
-I would rather drop it.
+--mT7gJ1KoGt/nhYUh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: LVTS instance interrupts.
+-----BEGIN PGP SIGNATURE-----
 
-Same here
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMhxyAACgkQ3SOs138+
+s6ELcA//U86GSK/3O35fsKz+/8+HpCYKUHVhHdDMGPFUb1alnivbByn7wdER8kcK
+mL8e1VCMsg966yXExj5zRPZmFwLlYAnjFOiYdiYN2hJDYovqF7QBoSv7FQWfB6FN
+cD9XiSUnYuiwesdPLDME1ny5zdpmp5Zh+OrVl5WOU39Yby7J//cRDq0Pu44Z0o5g
+CxMXZL4XQ+l0fsw+Dokq66tyGMRZspG5O3rSxdP5Yv2cpxJ6X5SUl7f4jnbEPS+Z
+KTRGiLuPLMTejecRC9icZLSY6cArIOBzFTatju7aQ8dSabN2KjgKR+kyumV9WAJU
+JyF8AusM9x8+c+ObRqtFajvQJzEmXDv2qMlyJK0/Zl4y7rsiFVGbGSSfzGg2sLGU
+H0xKye2HNZ5RIa4pMj/IZsySgIWugixS0mUJZe9ztN46qxIM6xvm/Y25nHmT2Xm0
+G2c9POaDDz23bK48kq8APuaEYGsBtL9dDs1zzlASpT5fpI9nlFhpqv/qEA43j/ZP
+5zHxJQGkEgbBQg3lMgfKGWJMcJrWvRlIfUyo7vKLHmBe94hz2wH9IA+x+9jf6KKi
+AtD8GR4Ukqydm6pYBOmGYGRpwJLIwzSD56rlzT2Sqxv8M2bA8SEXrewPdUnBjI+S
+IeveP/e+831I+WCrN+NXMglGFilUdPMwm1dmYXqn8NNwQ40qHyU=
+=GGJ2
+-----END PGP SIGNATURE-----
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: LVTS instance clock.
-
-and here.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: |
-> +      LVTS instance SW reset for HW AP/MCU domain to clean temporary data
-> +      on HW initialization/resume.
-
-What about something like...
-
-   resets:
-     items:
-       - description: LVTS reset for clearing temporary data on AP/MCU
-
-> +
-> +  nvmem-cells:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: Calibration efuse data for LVTS
-
-   nvmem-cells:
-     minItems: 1
-     items:
-       - description: Calibration eFuse data for LVTS
-       - description: Additional eFuse data (?)
-
-
-> +
-> +  nvmem-cell-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: Calibration efuse cell names for LVTS
-
-Actually, maxItems is not really two, but it depends on how many
-eFuse arrays / nvmem cells we have for each SoC, so I was thinking...
-
-...what about doing something like
-
-   nvmem-cell-names:
-     minItems: 1
-     items:
-       pattern: 'lvts-calib-data[0-9]+$'
-
-and then,
-   if:
-     properties:
-       compatible:
-         contains:
-           enum:
-             - mediatek,blahblah-something
-   then:
-     properties:
-       nvmem-cell-names:
-         maxItems: 2 (or 3, 4, 5...)
-
-P.S.: I haven't tried any binding check on the proposed lines.
-
-Krzysztof, any opinions on that?
-
-Regards,
-Angelo
-
-
-
+--mT7gJ1KoGt/nhYUh--
