@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276935B9083
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89945B9084
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiINWe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S229728AbiINWfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 18:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiINWeZ (ORCPT
+        with ESMTP id S229629AbiINWfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:34:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648AE785A8;
-        Wed, 14 Sep 2022 15:34:24 -0700 (PDT)
+        Wed, 14 Sep 2022 18:35:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE137EFE6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:35:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F372361F58;
-        Wed, 14 Sep 2022 22:34:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B612C43470;
-        Wed, 14 Sep 2022 22:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663194863;
-        bh=5JNKrPYbxMNe6Hm6rld4fqMiyupR+bHOxvW1ZOcAvpc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZpMMMiJhnoxLtZk9rLxTeIYajMlKz7VBGEy3QpDuF7nVa6PlEKsuJxKPQuiVFSNIe
-         2TL608GGg6RlAB+RVg9htWN6DLNLY0C8kYNgVWficw8w9va44x9+nixDlNGGE6VEUj
-         CgTeUOeyHZEvCBdK4fWbqW5wShEJm8m6V3IceuUiBhl/DRm3NdZS4HtftobWb7Cdq6
-         pDs/LY04D4o9OTkU1CbqBpP0GF9IEXDTSBnKUrKvliZeHx29e0aKM7eFA4m6FHE4jG
-         LfwYzLZWN2Czly7GEs1V2+PbLXtaOGjku1O812e0H1xoneOV2emKaKIX5b5zMSMyub
-         C4i3WX0QThW4w==
-Received: by mail-wm1-f50.google.com with SMTP id r66-20020a1c4445000000b003b494ffc00bso3980105wma.0;
-        Wed, 14 Sep 2022 15:34:23 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1NIiQjCz2NweMa/N1MqYuhZG+GEOuJNtnVcYm8Urpsy3QS0BlO
-        aMtBpcLfV5U0hSCLwdzpGTNZlhkd/t+L0AsAVas=
-X-Google-Smtp-Source: AA6agR7ru2g7GnIe25Ah1O05C3vLxOEHyNPJD5VFnOAgGP94sW4ihHDOIPwLKc/bBXA4Vqh3EO+xnXJtdy7eYprJF0Y=
-X-Received: by 2002:a7b:c84c:0:b0:3b3:3faa:10c3 with SMTP id
- c12-20020a7bc84c000000b003b33faa10c3mr4601516wml.94.1663194861556; Wed, 14
- Sep 2022 15:34:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <43b68b1f48c20b1dfcd7e6663c3dcb38e4e0648c.1663020936.git.objelf@gmail.com>
- <a432abf4cf95e93783864b27bafa53d45bdd5212.1663020936.git.objelf@gmail.com> <07016e51-a5b5-a350-cad2-b9fcebfe3706@collabora.com>
-In-Reply-To: <07016e51-a5b5-a350-cad2-b9fcebfe3706@collabora.com>
-From:   Sean Wang <sean.wang@kernel.org>
-Date:   Wed, 14 Sep 2022 15:34:09 -0700
-X-Gmail-Original-Message-ID: <CAGp9Lzr7hruZ3LXD_bAVb_xy8v5YXptVpye9tEpO=aF18r_4Cw@mail.gmail.com>
-Message-ID: <CAGp9Lzr7hruZ3LXD_bAVb_xy8v5YXptVpye9tEpO=aF18r_4Cw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] Bluetooth: btusb: mediatek: reset the device as WMT failed
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67B1BB81CE0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 22:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F73C433C1;
+        Wed, 14 Sep 2022 22:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663194943;
+        bh=V3UnjH8r8/HZCf/bUXEv6LLNwHtF7DQP1lCGuLGnSdc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BuIdCB2Dng/VZh/rE6kuH/hBzh9AoNuhbKvfiKDY76Tsl76mj9UVm+7dE7qLi0fqT
+         X8WEcEkV5ma5YeYJP+ZkT+5+gAg7jodnZakuRY66tb/J2kAdVOSnvZafZJ1TKgy1qU
+         0wU9+nOA78D4kzV6UZL6EgRZszStVxVumn2JCTnQ=
+Date:   Wed, 14 Sep 2022 15:35:42 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     naoya.horiguchi@nec.com, linmiaohe@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        Huang Ying <ying.huang@intel.com>
+Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
+Message-Id: <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
+In-Reply-To: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,53 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Angelo
+On Wed, 14 Sep 2022 14:49:35 +0800 Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-On Tue, Sep 13, 2022 at 1:23 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 13/09/22 00:18, sean.wang@mediatek.com ha scritto:
-> > From: Sean Wang <sean.wang@mediatek.com>
-> >
-> > Reset the BT device whenever the driver detected any WMT failure happened
-> > to recover such kind of system-level error as soon as possible.
-> >
-> > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->
-> This looks like a fix, so you probably want a Fixes tag for backport.
+> The GHES code calls memory_failure_queue() from IRQ context to queue work
+> into workqueue and schedule it on the current CPU. Then the work is
+> processed in memory_failure_work_func() by kworker and calls
+> memory_failure().
+> 
+> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
+> SIGBUS with error virutal address") make memory_failure() call
+> kill_accessing_process() that:
+> 
+>     - holds mmap locking of current->mm
+>     - does pagetable walk to find the error virtual address
+>     - and sends SIGBUS to the current process with error info.
+> 
+> However, the mm of kworker is not valid. Therefore, check mm when killing
+> accessing process.
 
-I didn't add the fix tag because there is not a previous patch that
-had issues the patch needs to fix.
+Thanks.
 
-It would be looking more like an enhancement patch for me to fix up
-the potential issue happening in the firmware where the existing
-driver cannot detect and recover in time with .cmd_timeout callback
-but actually, the kind of potential issue in firmware I was worried
-about in the firmware didn't happen or being reported so far.
+When fixing a bug, please always describe the user-visible effects of
+tha bug.  I'm thinking "null pointer deref crashes the kernel".
 
-   Sean
+> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
->
-> Regards,
-> Angelo
->
-> > ---
-> >   drivers/bluetooth/btusb.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> > index 653f57a98233..dc86726c8271 100644
-> > --- a/drivers/bluetooth/btusb.c
-> > +++ b/drivers/bluetooth/btusb.c
-> > @@ -2576,6 +2576,10 @@ static int btusb_mtk_hci_wmt_sync(struct hci_dev *hdev,
-> >       data->evt_skb = NULL;
-> >   err_free_wc:
-> >       kfree(wc);
-> > +
-> > +     if (err < 0)
-> > +             btmtk_reset_sync(hdev);
-> > +
-> >       return err;
-> >   }
-> >
->
+I'll add cc:stable.
+
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>  	};
+>  	priv.tk.tsk = p;
+>  
+> +	if (!p->mm)
+> +		return -EFAULT;
+> +
+>  	mmap_read_lock(p->mm);
+>  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
+>  			      (void *)&priv);
+> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>  	else
+>  		ret = 0;
+>  	mmap_read_unlock(p->mm);
+> +
+>  	return ret > 0 ? -EHWPOISON : -EFAULT;
+>  }
+
+This is an unrelated change which doesn't appear to match the style in
+memory-failure.c, so I'll drop this hunk.
+
