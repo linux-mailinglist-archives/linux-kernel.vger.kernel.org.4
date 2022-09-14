@@ -2,117 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAF65B865E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A15B865B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiINK2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S229727AbiINK2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiINK2c (ORCPT
+        with ESMTP id S229539AbiINK2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:28:32 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D117CB7D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:28:30 -0700 (PDT)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 2EA3A10042D3E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:28:18 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id YPcvoxOI0vlAaYPcvo1hxu; Wed, 14 Sep 2022 10:28:18 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=ItrbzJzg c=1 sm=1 tr=0 ts=6321acc2
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=m3B_eOHTikhj6PlMeNoA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yohQTvVt4d8TamjjKGi7+f+oe/vxkrQkrKRW6c74gVE=; b=fC6z26HrbZE34b99f/S7Qpq6r+
-        Cj3wmEmMG4X2LRmTg/sWePuxagh0j5NMrrrjwakLwokq6/TT9SshScGBlFmImMBoXxZHXvqGKUXTy
-        E4WJZuzb9Qco6sZF9Gku8DBc25c2av2eGbUM4dUSTgZ6VLy/g7Q/jA0pAcSRZDBuuPC/QKWxa8MTR
-        C+Lh2sPX+UoENE+3uL4/h6HEMQHaccK+HcDnyC1OcAcERZIVQ8fopyxrsJwFduan4Wht0UjFOMb9w
-        SeC21nMG7mqzEq831t2lDLjyTBkH6bfzsOnTsudKEAj+c6OfwYF0qXK3XnUVmsTq3m9qHsPzE7TV0
-        PBdYxPVA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:44404 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oYPcu-001pAn-7R;
-        Wed, 14 Sep 2022 04:28:16 -0600
-Subject: Re: [PATCH 5.15 000/121] 5.15.68-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220913140357.323297659@linuxfoundation.org>
-In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f83cda64-b9de-2987-bc1c-d8f59887d0d0@w6rz.net>
-Date:   Wed, 14 Sep 2022 03:28:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 14 Sep 2022 06:28:21 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681DE7C762;
+        Wed, 14 Sep 2022 03:28:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MSGhc64P3zKNZJ;
+        Wed, 14 Sep 2022 18:26:24 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgA3inPBrCFjuFVUAw--.57050S3;
+        Wed, 14 Sep 2022 18:28:17 +0800 (CST)
+Subject: Re: [PATCH v2 1/4] md/raid10: cleanup wait_barrier()
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
+ <20220914014914.398712-2-yukuai1@huaweicloud.com>
+ <0b67df9e-7f64-e710-5928-2098ed8d0f2d@molgen.mpg.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <302127e5-67fa-1ff0-0551-4719005640b8@huaweicloud.com>
+Date:   Wed, 14 Sep 2022 18:28:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <0b67df9e-7f64-e710-5928-2098ed8d0f2d@molgen.mpg.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oYPcu-001pAn-7R
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:44404
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 16
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgA3inPBrCFjuFVUAw--.57050S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3WFWDWFyxJryUKFWrZw4Utwb_yoW7Xr4xpr
+        n5JrWUJryUJrn5Jr1UJr1UAFyUJr18J3WDJr18XF1DJr4UAr1jgr1UXryvgr1UJr48Jr1U
+        Jr1UJrnrZr1UJr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbE_M3
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 7:03 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.68 release.
-> There are 121 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.68-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi, Paul
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+在 2022/09/14 14:36, Paul Menzel 写道:
+> Dear Yu,
+> 
+> 
+> Thank you for the improved patch. Three minor nits.
+> 
+> Am 14.09.22 um 03:49 schrieb Yu Kuai:
+>> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> In the summary/title, I’d spell *Clean up* with a space. Maybe even use:
+> 
+> md/raid10: Factor out code from wait_barrier() to stop_waiting_barrier()
 
-Tested-by: Ron Economos <re@w6rz.net>
+Ok, sounds good, I'll change that in next version.
+> 
+>> Currently the nasty condition is wait_barrier() is hard to read. This
+>> patch factor out the condition into a function.
+> 
+> The first *is* above can be removed, and factor*s* needs an s.
+
+Yes, you're right.
+>> There are no functional changes.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   drivers/md/raid10.c | 56 ++++++++++++++++++++++++++-------------------
+>>   1 file changed, 32 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>> index 64d6e4cd8a3a..56458a53043d 100644
+>> --- a/drivers/md/raid10.c
+>> +++ b/drivers/md/raid10.c
+>> @@ -957,44 +957,52 @@ static void lower_barrier(struct r10conf *conf)
+>>       wake_up(&conf->wait_barrier);
+>>   }
+>> +static bool stop_waiting_barrier(struct r10conf *conf)
+>> +{
+>> +    /* barrier is dropped */
+>> +    if (!conf->barrier)
+>> +        return true;
+>> +
+>> +    /*
+>> +     * If there are already pending requests (preventing the barrier 
+>> from
+>> +     * rising completely), and the pre-process bio queue isn't empty, 
+>> then
+>> +     * don't wait, as we need to empty that queue to get the nr_pending
+>> +     * count down.
+>> +     */
+>> +    if (atomic_read(&conf->nr_pending)) {
+>> +        struct bio_list *bio_list = current->bio_list;
+>> +
+>> +        if (bio_list && (!bio_list_empty(&bio_list[0]) ||
+>> +                 !bio_list_empty(&bio_list[1])))
+>> +            return true;
+>> +    }
+>> +
+>> +    /* move on if recovery thread is blocked by us */
+>> +    if (conf->mddev->thread->tsk == current &&
+>> +        test_bit(MD_RECOVERY_RUNNING, &conf->mddev->recovery) &&
+>> +        conf->nr_queued > 0)
+>> +        return true;
+>> +
+>> +    return false;
+>> +}
+>> +
+>>   static bool wait_barrier(struct r10conf *conf, bool nowait)
+>>   {
+>>       bool ret = true;
+>>       spin_lock_irq(&conf->resync_lock);
+>>       if (conf->barrier) {
+>> -        struct bio_list *bio_list = current->bio_list;
+>> -        conf->nr_waiting++;
+>> -        /* Wait for the barrier to drop.
+>> -         * However if there are already pending
+>> -         * requests (preventing the barrier from
+>> -         * rising completely), and the
+>> -         * pre-process bio queue isn't empty,
+>> -         * then don't wait, as we need to empty
+>> -         * that queue to get the nr_pending
+>> -         * count down.
+>> -         */
+>>           /* Return false when nowait flag is set */
+>>           if (nowait) {
+>>               ret = false;
+>>           } else {
+>> +            conf->nr_waiting++;
+>>               raid10_log(conf->mddev, "wait barrier");
+>>               wait_event_lock_irq(conf->wait_barrier,
+>> -                        !conf->barrier ||
+>> -                        (atomic_read(&conf->nr_pending) &&
+>> -                         bio_list &&
+>> -                         (!bio_list_empty(&bio_list[0]) ||
+>> -                          !bio_list_empty(&bio_list[1]))) ||
+>> -                         /* move on if recovery thread is
+>> -                          * blocked by us
+>> -                          */
+>> -                         (conf->mddev->thread->tsk == current &&
+>> -                          test_bit(MD_RECOVERY_RUNNING,
+>> -                               &conf->mddev->recovery) &&
+>> -                          conf->nr_queued > 0),
+>> +                        stop_waiting_barrier(conf),
+>>                           conf->resync_lock);
+>> +            conf->nr_waiting--;
+>>           }
+>> -        conf->nr_waiting--;
+>>           if (!conf->nr_waiting)
+>>               wake_up(&conf->wait_barrier);
+>>       }
+> 
+> Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+
+Thanks,
+Kuai
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> .
+> 
 
