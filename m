@@ -2,210 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A8B5B823C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990E15B8244
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiINHuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 03:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S230175AbiINHvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 03:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiINHur (ORCPT
+        with ESMTP id S230036AbiINHvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 03:50:47 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18972A434
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:50:44 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id t14so24330990wrx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unimore.it; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=1biDXl6cgm2n8SGycMHAv9SCU/JP3uWb+Ul5VmFRIVw=;
-        b=I5Zadj9OJnTGYrv4u5A/xNiT8/POEYkxUf2yovO5ju1wBpFFBfFmBayvrXwPIFBkDZ
-         //gq6LKqJBWglHZv9SoeF7AouP+JsdscjhfUhTxSqCmcPrOwJ8pT8WymbZp2JWhg2Y5n
-         2meptMdqXBOxCaJ799mUlD4aQKXmyh4e/+9N4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1biDXl6cgm2n8SGycMHAv9SCU/JP3uWb+Ul5VmFRIVw=;
-        b=W2ZcBIV1X0Z8csZKMXlNoCel3PyKXhFz+85SrmXyeRpLUXnGA5knB6IT2pa01ZUJhg
-         MHKWu0MnhFgoV+YtmVT3dlZHcMGt2mjjd3QZHh/Dar9Ex+vMUw7bQXtxTeAZLfR6jmt2
-         X4dm+mjFjSLFmnhJCmRL4cWkPZzuzYLmHs3hY/pCgHfg7ewCF5kVrthLwZb8Y9jLSCjK
-         GtzputttAZRQvqrGax7FzsvHYEUMUpGM169+5sBWqKny4HHAP5CDQdrN8Fp8nXBEGMuO
-         1rzGd4I8aFZqycrDPEa335lhmOfNCnKIOIfeI5p9CNXzBF/Dw+86Cn8tvQo18nXQ/Joh
-         QU5Q==
-X-Gm-Message-State: ACgBeo0YbkF1fM8upNQc3Mq9+/6CXDT6Big7IsPSb5axzGiaUzFTz+Am
-        Lr2YWY28QPMZHcRUZn+Fl6sY
-X-Google-Smtp-Source: AA6agR6AfpLz24owT0MsoLvCgM5WlQtOrckpUWwp/g4kBGzNOA9UJ3aX5HD2fxo6FN95+GpWPXq0Vw==
-X-Received: by 2002:a5d:62cb:0:b0:228:6a13:24d9 with SMTP id o11-20020a5d62cb000000b002286a1324d9mr21349678wrv.497.1663141843044;
-        Wed, 14 Sep 2022 00:50:43 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-2-37-207-44.cust.vodafonedsl.it. [2.37.207.44])
-        by smtp.gmail.com with ESMTPSA id bk12-20020a0560001d8c00b0022762b0e2a2sm13119612wrb.6.2022.09.14.00.50.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Sep 2022 00:50:42 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-From:   Paolo VALENTE <paolo.valente@unimore.it>
-In-Reply-To: <f89eb61b-7912-5916-1a12-039e32bebe70@huaweicloud.com>
-Date:   Wed, 14 Sep 2022 09:50:41 +0200
-Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <BF3909EA-4659-48CB-917A-639DC3318916@unimore.it>
-References: <20220610021701.2347602-1-yukuai3@huawei.com>
- <20220610021701.2347602-4-yukuai3@huawei.com>
- <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
- <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
- <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
- <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
- <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
- <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
- <5cb0e5bc-feec-86d6-6f60-3c28ee625efd@huaweicloud.com>
- <D89DCF20-27D8-4F8F-B8B0-FD193FC4F18D@unimore.it>
- <e6b53794-f93f-92b2-1f45-35ae81a28a5c@huaweicloud.com>
- <F758A356-EE6B-4B7B-95E2-6414616C77E4@unimore.it>
- <5e0b44b4-46cc-b3c6-1d93-00a0a683eda8@huaweicloud.com>
- <f89eb61b-7912-5916-1a12-039e32bebe70@huaweicloud.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 03:51:08 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF04A2A266;
+        Wed, 14 Sep 2022 00:50:59 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E55ft8013611;
+        Wed, 14 Sep 2022 09:50:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=pYGgu5rOLOhul9DJXw1aqoaq6vf4xJjwRWFbMfPDlA0=;
+ b=5OYcofgipre4PQWTMHddfC2faViTEibm/LEh/ls+7gvgxCWS8t/P6K6M5jzOSunKImJb
+ TZZJ1aVKW7PepdVZsaaGq9mqCXGAl2ViGpQ3T6+v6z04+maihAsf3kON+f7WOerDepLk
+ cvpsXznQmRXWUAP1jqstXeduWHAc3/Bjn9jwKS50UlfI/1mrMdnhiY4EsrL6QGoJHRc8
+ 3OKI/ZI8a1h5PtDXzGFO8/XBNWT03BmioH6RNc94RSVZ0Xyq19Eize61Rshl2o0U7HxW
+ N1oryXHBORrvvatx44eH/LcUyTazJ2VuCQIdbaAlqf2CZgke1JPJOiakNugHJqt+bElr Mw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jjxxckgyh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 09:50:53 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DE1C010002A;
+        Wed, 14 Sep 2022 09:50:49 +0200 (CEST)
+Received: from Webmail-eu.st.com (eqndag1node5.st.com [10.75.129.134])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D946F2138FF;
+        Wed, 14 Sep 2022 09:50:49 +0200 (CEST)
+Received: from [10.201.22.245] (10.75.127.121) by EQNDAG1NODE5.st.com
+ (10.75.129.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 09:50:49 +0200
+Message-ID: <74224354-8543-559b-240b-0eda4d68fc52@foss.st.com>
+Date:   Wed, 14 Sep 2022 09:50:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 0/3] rpmsg signaling/flowcontrol patches
+Content-Language: en-US
+To:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>
+References: <1663133102-10671-1-git-send-email-quic_deesin@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <1663133102-10671-1-git-send-email-quic_deesin@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.121]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To EQNDAG1NODE5.st.com
+ (10.75.129.134)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_02,2022-09-13_01,2022-06-22_01
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Deepak,
+
+On 9/14/22 07:24, Deepak Kumar Singh wrote:
+> [Changes from V2]:
+> Trivial review comment fixes.
+> Avoid TIOCM_DTR etc signals in glink layer, use native signal macros only.
+> Glink layer to provide only flowcontrol on/off interface, no specific signal passing/receiving to client.
 
 
-> Il giorno 14 set 2022, alle ore 03:55, Yu Kuai =
-<yukuai1@huaweicloud.com> ha scritto:
->=20
->=20
->=20
-> =E5=9C=A8 2022/09/07 9:16, Yu Kuai =E5=86=99=E9=81=93:
->> Hi, Paolo!
->> =E5=9C=A8 2022/09/06 17:37, Paolo Valente =E5=86=99=E9=81=93:
->>>=20
->>>=20
->>>> Il giorno 26 ago 2022, alle ore 04:34, Yu Kuai =
-<yukuai1@huaweicloud.com> ha scritto:
->>>>=20
->>>> Hi, Paolo!
->>>>=20
->>>> =E5=9C=A8 2022/08/25 22:59, Paolo Valente =E5=86=99=E9=81=93:
->>>>>> Il giorno 11 ago 2022, alle ore 03:19, Yu Kuai =
-<yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
->>>>>>=20
->>>>>> Hi, Paolo
->>>>>>=20
->>>>>> =E5=9C=A8 2022/08/10 18:49, Paolo Valente =E5=86=99=E9=81=93:
->>>>>>>> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai =
-<yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
->>>>>>>>=20
->>>>>>>> Hi, Paolo
->>>>>>>>=20
->>>>>>> hi
->>>>>>>> Are you still interested in this patchset?
->>>>>>>>=20
->>>>>>> Yes. Sorry for replying very late again.
->>>>>>> Probably the last fix that you suggest is enough, but I'm a =
-little bit
->>>>>>> concerned that it may be a little hasty.  In fact, before this =
-fix, we
->>>>>>> exchanged several messages, and I didn't seem to be very good at
->>>>>>> convincing you about the need to keep into account also =
-in-service
->>>>>>> I/O.  So, my question is: are you sure that now you have a
->>>>>>=20
->>>>>> I'm confused here, I'm pretty aware that in-service I/O(as said =
-pending
->>>>>> requests is the patchset) should be counted, as you suggested in =
-v7, are
->>>>>> you still thinking that the way in this patchset is problematic?
->>>>>>=20
->>>>>> I'll try to explain again that how to track is bfqq has pending =
-pending
->>>>>> requests, please let me know if you still think there are some =
-problems:
->>>>>>=20
->>>>>> patch 1 support to track if bfqq has pending requests, it's
->>>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' =
-when the
->>>>>> first request is inserted to bfqq, and it's cleared when the last
->>>>>> request is completed. specifically the flag is set in
->>>>>> bfq_add_bfqq_busy() when 'bfqq->dispatched' if false, and it's =
-cleared
->>>>>> both in bfq_completed_request() and bfq_del_bfqq_busy() when
->>>>>> 'bfqq->diapatched' is false.
->>>>>>=20
->>>>> This general description seems correct to me. Have you already =
-sent a new version of your patchset?
->>>>=20
->>>> It's glad that we finially on the same page here.
->>>>=20
->>>=20
->>> Yep. Sorry for my chronicle delay.
->> Better late than never =F0=9F=98=81
->>>=20
->>>> Please take a look at patch 1, which already impelement the above
->>>> descriptions, it seems to me there is no need to send a new version
->>>> for now. If you think there are still some other problems, please =
-let
->>>> me know.
->>>>=20
->>>=20
->>> Patch 1 seems ok to me. I seem to have only one pending comment on =
-this patch (3/4) instead. Let me paste previous stuff here for your =
-convenience:
->> That sounds good.
->>>=20
->>>>>=20
->>>>> -    /*
->>>>> -     * Next function is invoked last, because it causes bfqq to =
-be
->>>>> -     * freed if the following holds: bfqq is not in service and
->>>>> -     * has no dispatched request. DO NOT use bfqq after the next
->>>>> -     * function invocation.
->>>>> -     */
->>>> I would really love it if you leave this comment.  I added it after
->>>> suffering a lot for a nasty UAF.  Of course the first sentence may
->>>> need to be adjusted if the code that precedes it is to be removed.
->>>> Same as above, if this patch is applied, this function will be =
-gone.
->=20
-> Hi, I'm curious while I'm trying to add the comment, before this
-> patchset, can bfqq be freed when bfq_weights_tree_remove is called?
->=20
-> bfq_completed_request
-> bfqq->dispatched--
-> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq))
->  bfq_weights_tree_remove(bfqd, bfqq);
->=20
-> // continue to use bfqq
->=20
-> It seems to me this is problematic if so, because bfqq is used after
-> bfq_weights_tree_remove() is called.
->=20
-
-It is.  Yet, IIRC, I verified that bfqq was not used after that free,
-and I added that comment as a heads-up.  What is a scenario (before
-your pending modifications) where this use-after-free happens?
+Please, could you have a look to my series that implements
+your proposed interface for the virtio rpmsg [1]?
+It would be nice that your API takes into account update to
+support of the rpmsg virtio implementation proposed in [08/10] rpmsg: Add the
+destination address in rpmsg_set_flow_control[2]
 
 Thanks,
-Paolo
+Arnaud
 
-> Thanks,
-> Kuai
+[1] https://lore.kernel.org/lkml/e54bcfcb-8e37-9caa-b330-a7411820b7ce@foss.st.com/T/
+[2]https://lore.kernel.org/lkml/e54bcfcb-8e37-9caa-b330-a7411820b7ce@foss.st.com/T/#m7340a8e70fb0d8935869c4cef96863abda555c96
 
+> 
+> Deepak Kumar Singh (3):
+>   rpmsg: core: Add signal API support
+>   rpmsg: glink: Add support to handle signals command
+>   rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+> 
+>  drivers/rpmsg/qcom_glink_native.c | 63 +++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 60 ++++++++++++++++++++++++++++++++-----
+>  drivers/rpmsg/rpmsg_core.c        | 20 +++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+>  include/linux/rpmsg.h             | 15 ++++++++++
+>  5 files changed, 152 insertions(+), 8 deletions(-)
+> 
