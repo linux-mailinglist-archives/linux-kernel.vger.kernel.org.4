@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA945B7EC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD435B7ECC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiINB7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S230144AbiINCAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 22:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiINB7n (ORCPT
+        with ESMTP id S230124AbiINCAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:59:43 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0596330;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b23so13435284pfp.9;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
+        Tue, 13 Sep 2022 22:00:19 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC2B3123D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:00:13 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3496e668a5dso49910607b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:00:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
-        b=VBXE1s30H4C5zDJ+8Zsaf/BEkL8GJBxe78wCKCHLzsPHPPPlGefbeRo+L99ns+KMDG
-         PPFe151cmLEGo4ugIpQBSB+nF6/g3Tf8wxWtt1vRn52QAyaWyMHFMiA8rt3GTwd1Ti1b
-         2ElO2EvzQvMZqlYjngu6sBH5RrbB6SA2ZuTrm/xnNNDyV+UeuktuKx+Do8SKyKbpyoAj
-         2Vee6FgDrT2LKtvaTei4jUqs6iHlr4IwLNWqRITlYyZAmIuCDBEu1bEQ4/48KCChlf/y
-         dQcEeXsiBkxL2QbeBztIg+3G9riiIVckypWkON2394bshz1bNX0fQDvWzSORRPrRpKJQ
-         w06Q==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date;
+        bh=p6qCghWQbcRewzTnBFceTKv/Y60AI2F5NEC8++qJ2MI=;
+        b=FZxg7ZQVvBz9WmQks3L0S9UYycRMX6FNxeIoQWOixAv/JrYVUeom0YA+u4RqWdG96c
+         UwdDLEZHnTU9I9fz0Z4OhTcqYz8IgZPUx6E7lVUPz12DOMT5Zcg2kV0JLqQRW/Cp6/qK
+         X48Ieg6gkbDHfOqruPwUwzv/U/9v40R+iLCA+WAA6lhXI7bkNeyefyLGfffTwIcxRSCL
+         wQ6N8BDNCkqqQGI3bgOhAVcQHeGXF0u6Q97uk9y2UnlTFRG+43WFmAJpo2znrD/CzVAQ
+         hMun9nt9+jT4b7CdL/NtNJjSBK+19f/WqTZqzIlXWaWjGWXvHNqCFIFKmH/pwWgkPEbn
+         A7OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
-        b=zyb3uF3ZuzbUcxFVkj/Qma2EAcomPW6zeOklwsFCuwJwwsU7pqPX8WTPzJtb2+wVjs
-         O5ctX53ngMiJBJ0k/VeOKzDYgLKCL0U5aOO4bni1VNiGhKoJpQcGBZDXHsTrTgY9tuu+
-         fzqCU5RN9/9YJ5oyWUPorh5QQUzFYkuho0q9w6H1K7RvGCNIuuNnQi3uKYATQloD7IAg
-         SNHTQqWMp5/1iwtJFAao1a8phuxni7gYZjx2xh+2ozd6KUWYf2ULTaqPtjLkmMmsX1OA
-         p+7jfjgkCxzyXN7D/t84Zg/b2ibnUwFduf8iNKjV5zBFOQW4Yfo77WC97q373U9ebR4a
-         V9OQ==
-X-Gm-Message-State: ACgBeo36mPmS0dvLxyyV9HrkmJiSBsQkluiIUiYo+vrbTZJeu6KrKt+m
-        y9DXNch9edJGXugbpGM7j9o=
-X-Google-Smtp-Source: AA6agR4u3WENglYh7kF/L2nouFheMKGNZeIS1UoTSAW+q8V0bFwC4eQTSs2u2oyGbrcMOdxBoV7fmw==
-X-Received: by 2002:a63:8a4a:0:b0:434:c99c:6fd4 with SMTP id y71-20020a638a4a000000b00434c99c6fd4mr29301515pgd.24.1663120778134;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-75.three.co.id. [180.214.232.75])
-        by smtp.gmail.com with ESMTPSA id w2-20020a1709026f0200b0017808db132bsm9210355plk.137.2022.09.13.18.59.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 18:59:37 -0700 (PDT)
-Message-ID: <db2fdc22-44b8-1e81-ace2-c83c143ac20e@gmail.com>
-Date:   Wed, 14 Sep 2022 08:59:33 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH char-misc-next] misc: microchip: pci1xxxx: use
- DEFINE_SIMPLE_DEV_PM_OPS() in place of the SIMPLE_DEV_PM_OPS() in pci1xxxx's
- gpio driver
-Content-Language: en-US
-To:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
-        sudipm.mukherjee@gmail.com, arnd@arndb.de,
-        linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
-        gregkh@linuxfoundation.org
-References: <20220912113634.167820-1-kumaravel.thiagarajan@microchip.com>
- <d34d9264-1f0b-d465-bc1d-75f8c736a35b@gmail.com>
- <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=p6qCghWQbcRewzTnBFceTKv/Y60AI2F5NEC8++qJ2MI=;
+        b=iCHTBKRPtXPy3vjDOjdxuTqLTVKPORQfQy9Kvmy6xG5Y1gmMYOCxwWifXIqIGPs5iY
+         NINYIUuWDpqm3JVey96B71cULBSK70PSRVGcQxE6dMC7Zj+CeoIL12HpIFLH/1mUsrRo
+         DFjUl3LEoLE0fyklPBRv4P9KdhmagD5hN5KGljyNQ5xxsuD2LxzTzmKWup7qEbWz78vn
+         ZzokVGpZuaiG27J9CVN6qeTfscannoPcXp6vb0t2cw0tFJZBs8k0o6mlRPDLblgl8kT5
+         bcftung/0L4djKaWxRv5e0ErIBp0sDeRqvAjzhqMraAgBul0NuJIpFdh2q0acvLBBPeE
+         P0xA==
+X-Gm-Message-State: ACgBeo3yL6hzcc4F2fygKlylDYPWf7clxSIT1MrftTComrQbOtqIFmbh
+        UZLMeA/jyt2i646ALWYsyoAS4Lg=
+X-Google-Smtp-Source: AA6agR4W0NwqBv0embkoehNEbFKrl95x/EFmpO/GESuyJ3JThH+BHAW+2aaI7Tl4bgr20j3mzjFMNac=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:370d:f9c3:6198:7768])
+ (user=pcc job=sendgmr) by 2002:a25:2687:0:b0:6a8:e551:b9d8 with SMTP id
+ m129-20020a252687000000b006a8e551b9d8mr29117452ybm.472.1663120812652; Tue, 13
+ Sep 2022 19:00:12 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 19:00:01 -0700
+Message-Id: <20220914020001.2846018-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Subject: [PATCH] kasan: call kasan_malloc() from __kmalloc_*track_caller()
+From:   Peter Collingbourne <pcc@google.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/14/22 01:27, Kumaravel.Thiagarajan@microchip.com wrote:
->> On 9/12/22 18:36, Kumaravel Thiagarajan wrote:
->>> build errors listed below and reported for the builds of riscv, s390,
->>> csky, alpha and loongarch allmodconfig are fixed in this patch.
->>>
->>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error:
->> 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
->>>   311 | static int pci1xxxx_gpio_resume(struct device *dev)
->>>       |            ^~~~~~~~~~~~~~~~~~~~
->>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error:
->> 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
->>>   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
->>>       |            ^~~~~~~~~~~~~~~~~~~~~
->>>
->>
->> What about this description?:
->>
->> "Sudip reported unused function errors on riscv, s390, cksy, alpha, and
->> loongarch (allmodconfig):
->> <pci1xxxx_gpio_* errors>...
->>
->> Fix these errors by using DEFINE_SIMPLE_DEV_PM_OPS."
-> It looks good even though it does not include all the details.
-> But is not how much of detail good enough subjective?
-> I thought some might be looking for more information and chose this way.
-> Do you think I need to change this? Please let me know.
+We were failing to call kasan_malloc() from __kmalloc_*track_caller()
+which was causing us to sometimes fail to produce KASAN error reports
+for allocations made using e.g. devm_kcalloc(), as the KASAN poison was
+not being initialized. Fix it.
 
-Yes, with full error text as Sudip had reported.
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Cc: <stable@vger.kernel.org> # 5.15
+---
+The same problem is being fixed upstream in:
+https://lore.kernel.org/all/20220817101826.236819-6-42.hyeyoo@gmail.com/
+as part of a larger patch series, but this more targeted fix seems
+more suitable for the stable kernel. Hyeonggon, maybe you can add
+this patch to the start of your series and it can be picked up
+by the stable maintainers.
 
+ mm/slub.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 862dbd9af4f5..875c569c5cbe 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4926,6 +4926,8 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
+ 	/* Honor the call site pointer we received. */
+ 	trace_kmalloc(caller, ret, s, size, s->size, gfpflags);
+ 
++	ret = kasan_kmalloc(s, ret, size, gfpflags);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL(__kmalloc_track_caller);
+@@ -4957,6 +4959,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+ 	/* Honor the call site pointer we received. */
+ 	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
+ 
++	ret = kasan_kmalloc(s, ret, size, gfpflags);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL(__kmalloc_node_track_caller);
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.2.789.g6183377224-goog
+
