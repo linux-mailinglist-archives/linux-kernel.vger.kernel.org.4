@@ -2,118 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAF95B89FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8D95B8A03
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiINOJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S229935AbiINOJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiINOIl (ORCPT
+        with ESMTP id S229794AbiINOJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:08:41 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C461318345
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:08:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id bz13so25915682wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=wxovnf5KPHC5iL/G2DCCvsq9cB2n/hhE49OVBFVzwkI=;
-        b=UqiPJZo0zb7b3pl7nCEzK05u/NTFiHU3ZI7CkUrRxxWSsqLwKkS4Jq07/Ub5UZ7fLq
-         tz4z9x77jnKvG7Ydxd0x+fM1yn+fi81vrpHi7o3jlKcksFShCfUuUDCT9hcvlLgce5lD
-         Wy/l8Qfi8cZwMGPEjXhInoSDezWIdJmX42JWqCCa3HCKYsho0JT7vloD7VLdz2tyU7pR
-         I5KpmwU/4j7AQTLw6JAi+eys/NuXEIQNxQ17zZXtkp7Y4B88N5lC9aW91A/tpvbm9tlM
-         3wfJvp+uhmFug+Twd+LgmXN4BtdNv7LPZ4g7ULxd59H16VD6ebruFKV0sQ5cS6QKnHdy
-         3HuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wxovnf5KPHC5iL/G2DCCvsq9cB2n/hhE49OVBFVzwkI=;
-        b=m7+5REfASmWSOo/1U2RcD4fbKUr5AfJEbKGd1abP33RpqzWNC4Pbo7VRkowHLPctOd
-         VUTN2HE8uR2KR62PaLoaGBmYfmj8tNXo6XGVqkLnTplrUoKftYf060uvgEjpzlDhFPfK
-         tPruZujvBr2RXYGWP8PyXBWapAKEwfYhjFKKJ9hpF1uf4x9+8JhOnx2yILrQoEHQo1Y4
-         FtSgUEMwavtnlvET1yxwOs1w3lvGo1okE8IrgyvubaDnB3MpQKvZPuPbBEa777JoTtLw
-         VN2dsi2/kwT0SUZLams2ADaq30Uu3D9S20F9XAJk2Rhxv6sM85/SE+k4tz3LGYD8waBt
-         yNLQ==
-X-Gm-Message-State: ACgBeo21QAqI7mTWdwRqEdnS55PfCJohj0JejjLZ9rFrhlzU0E5qh+Q/
-        ZKzMiHQF3Y0KnexIouaOhKZfDQ==
-X-Google-Smtp-Source: AA6agR6Absj8GXw3jd9aGn1MlDbl9A+FWp3Yi/6SrE3er+NdSEeNTSLIMKQDRP5aWpYxFLzcv1WO9g==
-X-Received: by 2002:a5d:60ca:0:b0:228:d77e:4b25 with SMTP id x10-20020a5d60ca000000b00228d77e4b25mr22059161wrt.139.1663164498366;
-        Wed, 14 Sep 2022 07:08:18 -0700 (PDT)
-Received: from jerome-BL.theccd.local ([89.101.193.66])
-        by smtp.gmail.com with ESMTPSA id z12-20020a5d654c000000b00228e1e90822sm13303767wrv.112.2022.09.14.07.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:08:17 -0700 (PDT)
-From:   Jerome Neanne <jneanne@baylibre.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
-        will@kernel.org, lee.jones@linaro.org, tony@atomide.com,
-        vigneshr@ti.com, bjorn.andersson@linaro.org, shawnguo@kernel.org,
-        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com
-Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
-        msp@baylibre.com, j-keerthy@ti.com, jneanne@baylibre.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v5 6/6] arm64: defconfig: Add tps65219 as modules
-Date:   Wed, 14 Sep 2022 16:07:58 +0200
-Message-Id: <20220914140758.7582-7-jneanne@baylibre.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220914140758.7582-1-jneanne@baylibre.com>
-References: <20220914140758.7582-1-jneanne@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 10:09:17 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC82DC;
+        Wed, 14 Sep 2022 07:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663164556; x=1694700556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=OwYNO3a8InLSODjAfcrLz6U5+3IJkzjM9iu7hhTzQXY=;
+  b=fpT9RZjupaJsjY7HhGmyV5bXeCHeEfm5MVK0i2woOPfdAtv9nEMcQKL4
+   0XwG6bnblOxa7qs2Ykl4HKodeNScaU/garUPb2q8nCqNiQD+C5EfhyUeP
+   IBumLSs7bMfY3hx1WudauIEAoN5FSUV4XyGgK5nlbPv2bBVpA6KvnUmx5
+   qC+e7nVYOMPoepxMOk2Z669SePcBJXcKouEb1L6KP8Of88oRTCsH1JO+K
+   MvPVYPOoampqTnzrO6OoL/ICNFY3reSXe+TDpY2TKsbpnVwOjxTAjnWHE
+   WX7fb8e87NNVanShGSDoUZbQovXYf4612ZXj0j3tUSkC0VePVThg7bzt8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="297168169"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="297168169"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:08:56 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="616875619"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:08:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oYT4L-002F3E-1e;
+        Wed, 14 Sep 2022 17:08:49 +0300
+Date:   Wed, 14 Sep 2022 17:08:49 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <YyHgce96oZYJsHZn@smile.fi.intel.com>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-21-farbere@amazon.com>
+ <YxowTBIODMLjf1Ek@smile.fi.intel.com>
+ <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
+ <3b121ab4-dd64-68b3-ee89-8571b5d3651e@amazon.com>
+ <YyC3hsNhbQGIlReU@smile.fi.intel.com>
+ <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
+ <YyGfvzlCu9qgtgA0@smile.fi.intel.com>
+ <YyHfHSIz9F+1SGnX@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YyHfHSIz9F+1SGnX@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds defconfig option to support TPS65219 PMIC, MFD, Regulators
-and power-button.
+On Wed, Sep 14, 2022 at 05:03:09PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 14, 2022 at 12:32:47PM +0300, Andy Shevchenko wrote:
+> > On Wed, Sep 14, 2022 at 07:26:36AM +0300, Farber, Eliav wrote:
+> > > On 9/13/2022 8:01 PM, Andy Shevchenko wrote:
+> > > > On Tue, Sep 13, 2022 at 05:40:16PM +0300, Farber, Eliav wrote:
+> > > > > On 9/13/2022 4:06 PM, Farber, Eliav wrote:
 
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+...
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d5b2d2dd4904..d64e00355fcd 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -406,6 +406,7 @@ CONFIG_TOUCHSCREEN_GOODIX=m
- CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_PM8941_PWRKEY=y
-+CONFIG_INPUT_TPS65219_PWRBUTTON=m
- CONFIG_INPUT_PM8XXX_VIBRATOR=m
- CONFIG_INPUT_PWM_BEEPER=m
- CONFIG_INPUT_PWM_VIBRA=m
-@@ -639,6 +640,7 @@ CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
- CONFIG_MFD_SEC_CORE=y
- CONFIG_MFD_SL28CPLD=y
-+CONFIG_MFD_TPS65219=m
- CONFIG_MFD_ROHM_BD718XX=y
- CONFIG_MFD_WCD934X=m
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -666,6 +668,7 @@ CONFIG_REGULATOR_QCOM_SPMI=y
- CONFIG_REGULATOR_RK808=y
- CONFIG_REGULATOR_S2MPS11=y
- CONFIG_REGULATOR_TPS65132=m
-+CONFIG_REGULATOR_TPS65219=m
- CONFIG_REGULATOR_VCTRL=m
- CONFIG_RC_CORE=m
- CONFIG_RC_DECODERS=y
+> > > > > It seems like debugfs_attr_write() calls simple_attr_write() and it uses
+> > > > > kstrtoull(), which is why it fails when setting a negative value.
+> > > > > This is the same also in v6.0-rc5.
+> > > > > 
+> > > > > debugfs_attr_read() on the other hand does show the correct value also
+> > > > > when j is negative.
+> > > > 
+> > > > Which puzzles me since there is a few drivers that use %lld.
+> > > > Yeah, changing it to
+> > > > 
+> > > >        ret = sscanf(attr->set_buf, attr->fmt, &val);
+> > > >        if (ret != 1)
+> > > >                ret = -EINVAL;
+> > > > 
+> > > > probably can fix that. Dunno if debugfs maintainer is okay with this.
+> > > > 
+> > > > P.S. This needs revisiting all format strings to see if there are no
+> > > > additional
+> > > > characters, otherwise that needs to be addressed first, if feasible.
+> > > 
+> > > I was thinking of making such a correction:
+> > > 
+> > > -       ret = kstrtoull(attr->set_buf, 0, &val);
+> > > +       if (attr->set_buf[0] == '-')
+> > > +               ret = kstrtoll(attr->set_buf, 0, &val);
+> > > +       else
+> > > +               ret = kstrtoull(attr->set_buf, 0, &val);
+> > > 
+> > > and when I tested the change it worked, but then I noticed this commit:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/libfs.c?h=v6.0-rc5&id=488dac0c9237647e9b8f788b6a342595bfa40bda
+> > > 
+> > > According to this, it previously used simple_strtoll() which supports
+> > > negative values, but was changed to use kstrtoull() to deliberately
+> > > return '-EINVAL' if it gets a negative value.
+> > > 
+> > > So I’m not sure debugfs maintainers will be okay with a fix that
+> > > basically reverts the commit I mentioned.
+> > > Hence, what do you suggest to do with my commit?
+> > > Is it ok to leave it as it is today?
+> > 
+> > Meanwhile asking is not a problem, at least we will know for sure.
+> > And yes, leave it as is, but point to the thread where you asking
+> > the clarification.
+> 
+> For the record:
+> 
+> $ git grep -n -A1 -w DEFINE_DEBUGFS_ATTRIBUTE | grep ');' | sed 's,.*\(".*%.*"\).*,\1,' | sort | uniq -c
+>   1 "%08llx\n"
+>   5 "0x%016llx\n"
+>   5 "0x%02llx\n"
+>   5 "0x%04llx\n"
+>  13 "0x%08llx\n"
+>   1 "0x%4.4llx\n"
+>   3 "0x%.4llx\n"
+>   4 "0x%llx\n"
+>   1 "%1lld\n"
+>  40 "%lld\n"
+>   2 "%lli\n"
+> 129 "%llu\n"
+>   1 "%#llx\n"
+>   2 "%llx\n"
+> 
+> means that sscanf() should work and fix the issue. You may even propose a patch
+> as a starter for a discussion.
+
+Reading the commit 488dac0c9237 ("libfs: fix error cast of negative value in
+simple_attr_write()") I think it should be either reverted or fixed, because
+u64 is not an issue for negative numbers. The %lld and %llu in any case are
+for 64-bit value, representing it as unsigned simplifies the generic code,
+but it doesn't mean we can't keep there signed value if we know that (by
+supplying proper format string). We have 43 current users of signed integer
+and I'm in doubt this patch doesn't break none of them.
+
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
