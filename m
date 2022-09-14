@@ -2,122 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DEB5B8A36
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D775B8A3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiINOUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S229759AbiINOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiINOUn (ORCPT
+        with ESMTP id S229590AbiINOWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:20:43 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0CF4507F;
-        Wed, 14 Sep 2022 07:20:42 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sb3so5445070ejb.9;
-        Wed, 14 Sep 2022 07:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=rQJchlp98LSRkNYT0Y3HEFD0d/jl10aOIqzKMpMh29o=;
-        b=AE+QONsRRVmf1CQraIvgeDAs4Orl2PYlDMwTN/2xAYYVjDXITuqaoLdIFCBywjwQVi
-         0WsYGglrXXYDKgVg0EDsBMQLPgg3PHyryWQrJE5JCLTVo0CLsf4/VwnLvC2Yq50AXMUJ
-         4esTbONxzIc+6Qju/qHpWIPB3PJLU1Wf0F04rvtoliKkutgiEEy+5hyL5BgQ2h0YxLFj
-         mEtBfyvi0pD6eSlfFtbYdkxGMkxEuAjuIHYYkfunn5VipcDgn8uDi0VVQfVdmV0xZlXC
-         l5xlQsHnwQGv455LOGefHEqEJQsiSNbwqjM1FmWkljymlb1urHLe8msqQWkFyY8rT8Yj
-         lP5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rQJchlp98LSRkNYT0Y3HEFD0d/jl10aOIqzKMpMh29o=;
-        b=CCPXPt7BhMN6RWyHKHbenM/a8rLNSk/SuQMIPXzL5nMchlCgb7xO2UDY/QtatoAn2j
-         tV3noHFcDvYXW70qToJpy9nkEqUE+0+nKHVxVf3FCXOBhAq2bKrYIo7izJwbu1Kj0Q0u
-         TS9i0HwABS7vVLuSUhrt8+yDCsgD8eNb2wfeEETUMBADVaADomjGomUxyO31V6f7rH9b
-         YMpczZiQGvYnlbQVucjpeMhXxmLvARNovwg9xZjSXRYDbNdvn88yozEDjWvCn88Pe6/H
-         lBdaZpNoTTbxZukjXHQaku5DU1uO4Z9Esa6OFgEHS20UuG5R4KKZgfD0Mzdf/vHzpUR1
-         RuMA==
-X-Gm-Message-State: ACgBeo04dxt5VeTHrHPV5mG2G5OSHW8wqwVzeNO/2dmSbJAgGbblNcz4
-        MXwKDG9TransADp3RmxKcLI=
-X-Google-Smtp-Source: AA6agR7OvPSTBl/G5oWm8qZW5U3e90EFCy/rAGm8UfgS/vXXw+IRsocVCoe4/VnWFJZOtHYvEnJQ1g==
-X-Received: by 2002:a17:907:a0c7:b0:77c:b9cb:be17 with SMTP id hw7-20020a170907a0c700b0077cb9cbbe17mr11861287ejc.335.1663165240929;
-        Wed, 14 Sep 2022 07:20:40 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bo24-20020a0564020b3800b0044e8ecb9d25sm9814186edb.52.2022.09.14.07.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:20:39 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 16:20:37 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: dmaengine: Add dma-channel-mask to
- Tegra GPCDMA
-Message-ID: <YyHjNfk8ZMx+O96e@orome>
-References: <20220913155251.59375-1-akhilrajeev@nvidia.com>
- <20220913155251.59375-2-akhilrajeev@nvidia.com>
+        Wed, 14 Sep 2022 10:22:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82464662E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:22:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 742E061DD4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:22:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58531C433D6;
+        Wed, 14 Sep 2022 14:22:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663165372;
+        bh=Y6zycBhsCZgK5WNKVxWPiDaovSEbTGuLy5Mn5r3GsUM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZSQ3uaCOQMXH5jgxiHuNWDm6VdOWemg6XW+G1Vy3ZYbVuw2sIw8YCmbISVy9JAqmT
+         CpeIudTMBBSxMJmpIrVYJIf8BtfAIy3hWNwK2eDf9czR7E3uW2YV9uNWFy05ie01Rw
+         z2joeyvRn2/CqeQTtkQcyVgdMhhuN08mFc+RLO+zCTHdP9kjnc3nygzFekLx3pnZ8r
+         s8OAYMDrh2Ai3nZY82CdapbTIBNK0JeP0V3PMbcELbfs+mmo7fTrVsEBXzHVJi5jFR
+         RZDowiWJX4V8McliiljPdIFDwhdUphEbtw9lGj5ECobJXwp6JnGJApdU14+tMzmGWl
+         OrBWUZpvbG3AA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Xin Hao <xhao@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] mm/damon: simplify scheme create in lru_sort.c
+Date:   Wed, 14 Sep 2022 14:22:50 +0000
+Message-Id: <20220914142250.1269-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220914113859.37637-1-xhao@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="u68pok3Ii3D4oT+4"
-Content-Disposition: inline
-In-Reply-To: <20220913155251.59375-2-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Xin,
 
---u68pok3Ii3D4oT+4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 14 Sep 2022 19:38:59 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
 
-On Tue, Sep 13, 2022 at 09:22:49PM +0530, Akhil R wrote:
-> Add dma-channel-mask property in Tegra GPCDMA document.
->=20
-> The property would help to specify the channels to be used in
-> kernel and reserve few for the firmware. This was previously
-> achieved by limiting the channel number to 31 in the driver.
-> Now since we can list all 32 channels, update the interrupts
-> property as well to list all 32 interrupts.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
+> they have so much in common, so we can combine them into a single
+> function, and we just need to distinguish their differences.
+
+Thank you again for patiently waiting for my changes and reworking on this!
+
+> 
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
 > ---
->  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml   | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  mm/damon/lru_sort.c | 57 ++++++++++++++++++++++-----------------------
+>  1 file changed, 28 insertions(+), 29 deletions(-)
+> 
+> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+> index 07a0908963fd..2eac907e866d 100644
+> --- a/mm/damon/lru_sort.c
+> +++ b/mm/damon/lru_sort.c
+> @@ -135,17 +135,40 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
+>  static struct damon_ctx *ctx;
+>  static struct damon_target *target;
+>  
+> -static struct damos *damon_lru_sort_new_scheme(
+> -		struct damos_access_pattern *pattern, enum damos_action action)
+> +static struct damos *damon_lru_sort_new_scheme(unsigned int thres,
+> +					       enum damos_action action)
+>  {
+> +	struct damos_access_pattern pattern = {
+> +		/* Find regions having PAGE_SIZE or larger size */
+> +		.min_sz_region = PAGE_SIZE,
+> +		.max_sz_region = ULONG_MAX,
+> +		/* and accessed for more than the threshold */
 
-Seems fine:
+This comment would be better to be written again?
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+> +		.min_nr_accesses = 0,
+> +		.max_nr_accesses = 0,
 
---u68pok3Ii3D4oT+4
-Content-Type: application/pgp-signature; name="signature.asc"
+If we're gonna set above two fields anyway later, we could simply remove above
+three lines.
 
------BEGIN PGP SIGNATURE-----
+> +		/* no matter its age */
+> +		.min_age_region = 0,
+> +		.max_age_region = UINT_MAX,
+> +	};
+>  	struct damos_quota quota = damon_lru_sort_quota;
+>  
+>  	/* Use half of total quota for hot/cold pages sorting */
+>  	quota.ms = quota.ms / 2;
+>  
+> +	switch (action) {
+> +	case DAMOS_LRU_PRIO:
+> +		pattern.min_nr_accesses = thres;
+> +		pattern.max_nr_accesses = UINT_MAX;
+> +		break;
+> +	case DAMOS_LRU_DEPRIO:
+> +		pattern.min_age_region = thres;
+> +		break;
+> +	default:
+> +		return NULL;
+> +	}
+> +
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMh4zMACgkQ3SOs138+
-s6HIwxAAnV8HckodonLxHxHC2GVwz4llfzXyru2YUhFSnnIgW9gdtEVLw0NVW9Mn
-h4b41JPZoGofX/8BCSkcrP53CZl5HOzRp3lBBjcvoMZfjwtCRYNJXxCsETgyoFpt
-+X1RJphVPk2928w/S4jgPzw3HVeDdvJPhupxMu1dxT/maKFmGe1jyXrPH1BSoTPi
-OBpvLDEMegZDhbHraE/KTJbIhuW/DJPTm5w/Y20xdVf3RhNujtSEa3kIkdoQgWvC
-O19xCBbsfw3o+7L4WsZTlUGAseGwu4Q3wqc9gLldlJb9mBGsQ0BFM73prf2ciYqC
-NLYw37RtimQUW+qPvoFrG2SznClJRSTvDWsbUQXQ0PyU5nOtk1NzpNHdW+hh2Lh/
-gfZdPqfBOp4vqke3Zh+KU9RQ5e1Wtac9DUzSsYv6d35bd0hYT32LjqJ1nmLKXzul
-16t4pH/qQVoFygdk+BjGhTd0LwuoGKbGi501H68TuTGx1FRFyrr4g8XTfhh1Q+rC
-uryV9tuOgBdbG94SmUIIn1QauBjGbje+9ljrxXrBJD4cNxJzAPeH+9Oc+PeyMZM/
-3G6AIkvRJsdRK4PVfZDfwOBiYIyqeByNiLG0ibWLacuicJ5rkNqHuV6g4jq49jEg
-YQHkK4DxCfmGUfddIPyVvs0HNSCH5KFfzZGDmstFDuRsE7fVEPs=
-=jbaz
------END PGP SIGNATURE-----
+This switch-case makes me wondering if the 'default' case really possible case.
+I think it would be clearer to set these from caller.
 
---u68pok3Ii3D4oT+4--
+IMHO, it might be clearer and shorter to define a static global 'struct
+damos_access_pattern' stub variable, and make the
+damon_lru_sort_new_{hot,cold}_scheme() copies it to their local variable,
+update the relevant fields, and pass that to 'damon_new_scheme()'.  What do you
+think?
+
+>  	return damon_new_scheme(
+>  			/* find the pattern, and */
+> -			pattern,
+> +			&pattern,
+>  			/* (de)prioritize on LRU-lists */
+>  			action,
+>  			/* under the quota. */
+> @@ -157,37 +180,13 @@ static struct damos *damon_lru_sort_new_scheme(
+>  /* Create a DAMON-based operation scheme for hot memory regions */
+>  static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+>  {
+> -	struct damos_access_pattern pattern = {
+> -		/* Find regions having PAGE_SIZE or larger size */
+> -		.min_sz_region = PAGE_SIZE,
+> -		.max_sz_region = ULONG_MAX,
+> -		/* and accessed for more than the threshold */
+> -		.min_nr_accesses = hot_thres,
+> -		.max_nr_accesses = UINT_MAX,
+> -		/* no matter its age */
+> -		.min_age_region = 0,
+> -		.max_age_region = UINT_MAX,
+> -	};
+> -
+> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
+> +	return damon_lru_sort_new_scheme(hot_thres, DAMOS_LRU_PRIO);
+
+If we follow what I suggested above, we could make this like below:
+
+	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
+
+	pattern.min_nr_accesses = hot_thres;
+	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
+
+
+>  }
+>  
+>  /* Create a DAMON-based operation scheme for cold memory regions */
+>  static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
+>  {
+> -	struct damos_access_pattern pattern = {
+> -		/* Find regions having PAGE_SIZE or larger size */
+> -		.min_sz_region = PAGE_SIZE,
+> -		.max_sz_region = ULONG_MAX,
+> -		/* and not accessed at all */
+> -		.min_nr_accesses = 0,
+> -		.max_nr_accesses = 0,
+> -		/* for min_age or more micro-seconds */
+> -		.min_age_region = cold_thres,
+> -		.max_age_region = UINT_MAX,
+> -	};
+> -
+> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
+> +	return damon_lru_sort_new_scheme(cold_thres, DAMOS_LRU_DEPRIO);
+
+And similarly here.
+
+>  }
+>  
+>  static int damon_lru_sort_apply_parameters(void)
+> -- 
+> 2.31.0
+> 
+> 
+
+
+Thanks,
+SJ
