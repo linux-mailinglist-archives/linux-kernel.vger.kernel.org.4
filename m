@@ -2,101 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D555B8770
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24C95B876C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiINLpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S229950AbiINLoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiINLp3 (ORCPT
+        with ESMTP id S229740AbiINLny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:45:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4007A534;
-        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id go34so34078610ejc.2;
-        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
+        Wed, 14 Sep 2022 07:43:54 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCFE7CB60
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:43:51 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 29so21819345edv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
-        b=e4xd2M66zszVNq8YmhKpHY8ZIdggWgLbfc5+RKNcLpBcqRne9wONjDgqGeAXIV4tvi
-         UcYIdX+gXb9er5DNXEOJ4cNwHjclfky5UUeY6t0b4JTaCZe30RN5/kDpi+57vi+IaxJF
-         wF+4V8rA0UTeIiAKWDAz9/y2ZijXZMj2JmHgI6MB2Hn7aEFJPS3Jf6lsFtY5CnR7rGAy
-         iKQ6FmtO6uluYaf1GyjRHwl+iS848EdYUkd341FMJZ6npE8esUsZ2hrQcvjfkL1zP6kr
-         +icr5zLRrJkTl/RPKod+s60uj0LyXuYKP+K5YOa1u3EKnN8tGBZ9bkJdfgKeWB5YiLdQ
-         ajJw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dBoAabtEYZbE61p8ixZqhbfi6v1fC0mMtx/SBVgEc2M=;
+        b=sHvAp2aTweHTIcaeOmkfU8XAulg5LrFD112mhlRHaBg0SmNyw2CwQgln4vDxB5/Z7r
+         cpCx6Tlxx8ZSeF3x887UAfevWZD0SGyQMVbN5KHOkgmbFruBWgCT31GfJueAA3yAzdkG
+         5TJHgNo7KNy+gV6G4Spr0pta7QLSnORDKb5XW5MbFVwz+3RNPpNiByZ/XEHO4w/QHPkC
+         cvz+sllfvxbW8hXn3L9YAKT4FZ/kyuz+6+Z52Q5SC2nFQonP/ihccYr6j5KXGWIqBwA/
+         T72ravaUMoIL2Ie/tLRkkelsyjz2yGVXI8ukfRi3H2tl/HXlJE2Or8U9qh1NUfJg7rum
+         wYVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
-        b=m81ZsXwANB8ebdA1UEZB1nqyE182biKH68WqvQhs1CR0Y4jXTeU3eZDix6YaMJzp+9
-         +D6N+QJgDf5THV6wTCvN618G3We9QcfxjoLKyUZnfmMyPthJYpw1RlkeQCIpIAKZ9STt
-         YHSO4TXwMFG23XoAnRZkXpGtjczjXw3BonD8uZHHfPM7WXR/EcOZAJyEyt2DeqfYhAgG
-         TQdhwyhVCACE9a1RffE/oP6x2OsKJ+8VAFZD5pntO6Comr+OAZmuqonD0+ms7zJ4YZce
-         YgLAXYX+yBsduYxnnYUMz6/2vAm8wiMW59TwTIYW340szuNihc8A9dVm/X67S1ojZ/Va
-         XY+Q==
-X-Gm-Message-State: ACgBeo00JZd7GqYNoVrEfadGn6QPzRvgJC7EW79kNzre2BXDGDL3K8KG
-        gRa9CehTVQqnH2jXlzX/hLEde4o7Ntk=
-X-Google-Smtp-Source: AA6agR5bobO1qpWSI/lhhlat3aOU3UPrDzSqMRRKib3ZWhPiGHcXh0AhJnqqCmKgV0G+xc/xY7GlmA==
-X-Received: by 2002:a17:906:fe09:b0:77a:52b3:da5d with SMTP id wy9-20020a170906fe0900b0077a52b3da5dmr16260621ejb.57.1663155926452;
-        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
-Received: from fedora.localdomain ([87.116.166.59])
-        by smtp.gmail.com with ESMTPSA id d12-20020aa7d5cc000000b0044e937ddcabsm9593026eds.77.2022.09.14.04.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix Quadro fan speed offsets
-Date:   Wed, 14 Sep 2022 13:43:27 +0200
-Message-Id: <20220914114327.6941-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dBoAabtEYZbE61p8ixZqhbfi6v1fC0mMtx/SBVgEc2M=;
+        b=ANaBmSY1L6dCyPypzWb3jNJOc4kn0sBPQc40LpTeUFDfqwZMurK7k7u2D4QfaAvALm
+         6aLwXSdt5lR2XyJBzcolZDyeXLdgGHKBTjnwi+relGP/KKygNcHK4KosQa58snb2PWt6
+         yMuA8LL/vfOBqiCxQ62zNTyMTJNawqH/Q4CzNmYUzM2AkwlLNKtxkm1Skw0XVFRYyR3n
+         Q/+WwacO5Fvgam0+rZyy9jJWm3M1Ek71J8Ex0dzvgw8181IY/7vE5GYJCrW8mePGRZbd
+         4tclWozpmHcoB2wFBaJMOj9dnWkgNuF2ghaVG9xVQr8H477XWjdsHGXwBJAvPLhYRlAP
+         RvgQ==
+X-Gm-Message-State: ACgBeo3lXbWsFVKckQgaJvknsJU9gvxwneocQwQ6l2+0ih3TeUCVJ4KJ
+        exeSt+Z+fxucyfAcJh/YV8Mv/Ae3ajiNHZBaQR5oYQ==
+X-Google-Smtp-Source: AA6agR6zzvnSkoFjBcd6qfZAossbSm+ZrKtgclV/8+IusICYRTxXIDGMtN+Um8dpbgsHzuvGbvUuYhtyuPCGD0qPvoI=
+X-Received: by 2002:aa7:cb87:0:b0:43b:e650:6036 with SMTP id
+ r7-20020aa7cb87000000b0043be6506036mr30743027edt.350.1663155829987; Wed, 14
+ Sep 2022 04:43:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220913140353.549108748@linuxfoundation.org>
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Sep 2022 17:13:38 +0530
+Message-ID: <CA+G9fYtwEF-YMrccLbd+kwB7EF=7irZK1o3eeUmUOg5hRvxFug@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/108] 5.4.212-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The offsets for setting speeds of fans connected to Quadro are off by one.
-Set them to their correct values.
+On Tue, 13 Sept 2022 at 19:56, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.212 release.
+> There are 108 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The offsets as shown point to registers for setting the fan control mode,
-which will be explored in future patches, but slipped in here. When
-setting fan speeds, the resulting values were overlapping, which made the
-fans still run in my initial testing.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Fixes: cdbe34da01e3 ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller")
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- drivers/hwmon/aquacomputer_d5next.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 3ea25edfc7a5..c51a2678f0eb 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -120,7 +120,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
- static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
- /* Fan speed registers in Quadro control report (from 0-100%) */
--static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
-+static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 };
- 
- /* Register offsets for the High Flow Next */
- #define HIGHFLOWNEXT_NUM_SENSORS	2
--- 
-2.30.2
+## Build
+* kernel: 5.4.212-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: d95c3e78edcd4138c5c7410aef523eb18bc05e1b
+* git describe: v5.4.211-109-gd95c3e78edcd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.211-109-gd95c3e78edcd
 
+## No test Regressions (compared to v5.4.211)
+
+## No metric Regressions (compared to v5.4.211)
+
+## No test Fixes (compared to v5.4.211)
+
+## No metric Fixes (compared to v5.4.211)
+
+## Test result summary
+total: 85999, pass: 75685, fail: 649, skip: 9286, xfail: 379
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 334 total, 334 passed, 0 failed
+* arm64: 64 total, 59 passed, 5 failed
+* i386: 31 total, 29 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 57 total, 55 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
