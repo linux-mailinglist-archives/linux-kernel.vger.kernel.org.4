@@ -2,208 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9465B82C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25065B85E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiINIQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S230262AbiINKEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiINIQN (ORCPT
+        with ESMTP id S229479AbiINKD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:16:13 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510D356BAA;
-        Wed, 14 Sep 2022 01:15:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MSClw5MlVz6S6Nc;
-        Wed, 14 Sep 2022 16:14:04 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP2 (Coremail) with SMTP id Syh0CgB3yXK6jSFjj9FPAw--.59270S4;
-        Wed, 14 Sep 2022 16:15:56 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 2/2] bpftool: Fix wrong cgroup attach flags being assigned to effective progs
-Date:   Wed, 14 Sep 2022 16:17:42 +0000
-Message-Id: <20220914161742.3180731-3-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914161742.3180731-1-pulehui@huaweicloud.com>
-References: <20220914161742.3180731-1-pulehui@huaweicloud.com>
-MIME-Version: 1.0
+        Wed, 14 Sep 2022 06:03:57 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2112.outbound.protection.outlook.com [40.107.95.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FA6696C9;
+        Wed, 14 Sep 2022 03:03:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kHrlcKxrcrCJ4YTzq1oWaSH5atSEU1fVabTqKO5+7KXbHXkKGoEkyipbXh4GQhpUhQrPnujW8Trj/00k+W3ywsm1nP08aL0fzDDORq5kaCGqJt7bDoXeWlzyIrgsjrQbyHPfNR37YXvsfim+dIIszS/F/3k2KupozmWSyHInG8zn4DmEpXXS7xhJXehkbEJhCeMzms6Zq5xX5XrI0zSlPGSFwwd6/oTs9j8+fginvMearokt7e7pTDnOLcr9/pxdqijh5051XBlQRXFY8/X1T1nnNM6ncOMxOmzVBkIpO3VHnqE/jk0H3u3/Tikgd46cTuJQJcZw7VDYFhls9e/WdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4B/YI2dWEo5gi+8HFWWJuyb8fgKGOktOEcbpKD5s2Fo=;
+ b=JfZpyCWthIbj8zoroxCTLT5W1qRC2CTP80L7NvXpxd8j/CbXVy/YP04Y1IbD5uKgXnkwB8qO62Bed91NDZEUpQ3rD1GHIKtzUve/xR4kmC3k9tqsHczepAa4TH8qLVEoPV27jzSu2B5t9qiR2aMgbxnxLE+ZckMetHn8GKUxM8V7NGOgfsotAcfNLmHyHM07+J/AnEe44FyPKb2AGcS+cFSBW/qggyoso7o9AIatGOk+hRmJXzB3Az9nxv4DWb89kd2gEssuthwyLq0cOgNJH7vAJxouf6TewhhdeZHtAQ/xslF08vNrViUW6IEZNtIHAv3Qzq+YiUVjSw1QBmgy9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4B/YI2dWEo5gi+8HFWWJuyb8fgKGOktOEcbpKD5s2Fo=;
+ b=qOolaJW3HcW1pRqNCAFpPoODQ8zURoG4ywfsAg3nnf4V2MLohdcxW68k78i1AKXYrWgE+7cLxL1qAXLGacZWHA8ZsD7mXX1bAL4f6voNrY4C+Re+6ot9xDXmaDGRpSqkct3hAhnzEN5wgJmopC11YY3/nqCsToY7PrguUhjT4OY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from DM6PR13MB4431.namprd13.prod.outlook.com (2603:10b6:5:1bb::21)
+ by BLAPR13MB4690.namprd13.prod.outlook.com (2603:10b6:208:331::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.12; Wed, 14 Sep
+ 2022 10:03:52 +0000
+Received: from DM6PR13MB4431.namprd13.prod.outlook.com
+ ([fe80::2944:20ba:ee80:b9c7]) by DM6PR13MB4431.namprd13.prod.outlook.com
+ ([fe80::2944:20ba:ee80:b9c7%3]) with mapi id 15.20.5632.012; Wed, 14 Sep 2022
+ 10:03:52 +0000
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>
+To:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     oss-drivers@corigine.com,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Louis Peens <louis.peens@corigine.com>
+Subject: [PATCH v7] checkpatch: warn for non-standard fixes tag style
+Date:   Wed, 14 Sep 2022 12:02:55 +0200
+Message-Id: <20220914100255.1048460-1-niklas.soderlund@corigine.com>
+X-Mailer: git-send-email 2.37.3
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgB3yXK6jSFjj9FPAw--.59270S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFW7KrWktFy3AF4xCryDKFg_yoWrur4rpr
-        s5Xa4UA3W5u3sxWF4rG3y5urWrGr4xXr1UC39xJw15uFyxG34vyr1IkFyF9r13GFWayw4I
-        vF15ZryDW3WjvFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK
-        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-        x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-        84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
-        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxV
-        A2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r
-        43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
-        WUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-        ImhFDUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        KHOP_HELO_FCRDNS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO6P123CA0012.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:338::18) To DM6PR13MB4431.namprd13.prod.outlook.com
+ (2603:10b6:5:1bb::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR13MB4431:EE_|BLAPR13MB4690:EE_
+X-MS-Office365-Filtering-Correlation-Id: 562f7b9e-a818-41cd-8623-08da96386d00
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gphSvz5qqGfJIsTm+gjxJrt2IOflwDDz7Phpk4llqsHaRAYU5ifDQ0kxdTD0q+nkGNxXCGfShjf+gGI/ICyInmlwS+SAKUIh1a6ZYFClxl20zuZiSOLo9ihakUsAKWVG++17/Zf4xhGNPpps4gEniaayymyLj+io5yJ7fbQMckM2QeKsVrO1bDF5myxERmgqvvNTBRy+BC1rN2udWo2GX2qVJ0s6GT2G8AhyOn+4aKIbWFg0m3qSQsiefCIbd7Ry4U2HLTdcjsBJmdwm0b+iFTNLqXyVs/xqmkpNcIGqFTKw0jpki6nxkK1m7cGxzz2H1QubRWLpxQ0z2UyWLlxw7ceCwxvU4e4Jm7Fe7R2tvItGYdmb7mmFVrnNrgi6c7EllVxAeXmAAPROA3064UaL1nBUlxVZPPbSDebn+LvMtOKsMabjdWm6b6K6dkVSbGYxSmZkR1dwzazXc16Z4PcTfpb6RGY0vcrgKY8r850V66Ve3Fb4eXeQOWJLGSG5MmwxW6p/s/HQ6W8BGXmLSgCrZyA2JA81OS8t5mMQyzoiPSxT8LUXD/aApptTFQ9QX8md27tvMjVd0v0wf8hu/knWdg4ZS4Jwws91IX5KUaI8Xk/BYztNZ02iqiixamX1ou5c+ty5TYWevhxuk31Rkh5q77NsPNEwrxX4e4vRWk/Qem+TbTOfMa+CQEOoURsVpQN6MurZUbdWanXS0zss5oLu8HKzGnstAAFOWoR+Y6rkcYX5KcPCRsrdWIyXIYmvRo9Oh5Cs4fppOVski54UiuSXjWcYPN92LN0UOlRDo4nDD4KNWp2v/fbt5ha/1DdZGcA1IhPJuW3NI4mOO7w3uyReSw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB4431.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39830400003)(376002)(396003)(451199015)(26005)(66574015)(6512007)(38350700002)(110136005)(478600001)(52116002)(86362001)(6506007)(107886003)(83380400001)(8676002)(8936002)(2906002)(66556008)(38100700002)(66946007)(1076003)(2616005)(186003)(316002)(41300700001)(66476007)(4326008)(5660300002)(54906003)(36756003)(6486002)(966005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUxzRTJIczZzWk8vZkE5M1pjUjBIdmRMVXZQYzJEMC81ZUFja1dTMGdzSE5F?=
+ =?utf-8?B?ZllNQk41dW9QZmhLa1JvUFB6ZzRNR1RZUGdnQnVKTWdLVU02c1RVYm4vUmo1?=
+ =?utf-8?B?dGsrYkQ1MVFpVUFVaHV3V28rUmJtNHNuV3JibjltbHd2NWtYQ2hJcUpONndZ?=
+ =?utf-8?B?RW9hSUFjNzAzM2EvY1l4bTQ3dGtxS01RVVpUNis0aUl1WEVhRFg3YWF1VGFX?=
+ =?utf-8?B?d1MyNGZHc21YQzVpWnRISE9FZG5kVVF6d0RsdVF5M242OHB6L0NSV2RnU2tr?=
+ =?utf-8?B?QzNUa1dTUUpBc1RuRjlqN2hCc3JtK3FMV2ZkNEpMMWdPZWdHcDVZbFVRbm5D?=
+ =?utf-8?B?b1BkQUoyajArTDNqSDQrVmJobjZvQUJtNWN0Nlg0dFpWTU9PQkpReWIra1Jz?=
+ =?utf-8?B?RndoUkVhWWJBaXRNdkFsV3Vobmk1SEVFdlNlcXJJdFhmTzZGLzZvQ2w1ekc1?=
+ =?utf-8?B?Skw0YmNreVNET1VSTnhYQzhqRitSaFEvdVE2UiswTzRPMnV1aWtYYzVZRFps?=
+ =?utf-8?B?bXBsK2JUdVMzU1NjbDhjRytkcFpoVnAxRHhtaVRqRElSYVhVbzhZek5QTWJx?=
+ =?utf-8?B?QzhsUmJrbityTEtuZmlRTEc3V0RwT0JKVVBaUWxyRGd4OU1GU1c3MGVIU1hm?=
+ =?utf-8?B?OFhaYXgycDV2bWs5VzJVRTRxUm1MS3k3SkxDZ3RQa1pCbTRRaStEZG55b040?=
+ =?utf-8?B?RTRQdnh4bWZZbVpGQ1dzZG9pMkFMbFhIUWdmTkVyQzhZUkNhYUgwSWNwRjla?=
+ =?utf-8?B?Yk9hQ0lPWHJZTFBxQ1crU1dlV2V6ZE1kSWtuUmQ0eldoZmErb0MvZ25IQVF1?=
+ =?utf-8?B?MUlvVUF3ci9pNlpNREEybFFzNlVSNk0zKzQ3ejJiV1BaVTA4QlIzb2R2RGFk?=
+ =?utf-8?B?TnJqb21JUkxMWldZaHJZRU5JMnF5Yjdta3dhZS9DTkMwVzA0NUlhYU5TaTBR?=
+ =?utf-8?B?Sjcreml1ZmRTaGJPSEI2ZFpFTkxXWm9PaDZZS3dPOFoxWXRGeUFjNDQvMk1z?=
+ =?utf-8?B?V3k5bkNHT2lxd2xwVEQrcDErR3BSd0NuZWt0WG81a2t4QjlmYWlCWlU5bjhW?=
+ =?utf-8?B?VDM3NW5MUmFjNXF6M0l6ZWc3Q0pRWWtIZWNkUnBnTm1OKys1U09lRmlVT0dm?=
+ =?utf-8?B?a1pLNU1BSlJEWG82QVBleWxhTTZJejRCT2NvNjUvY3lZWHM1SWw1N2ZqKzlX?=
+ =?utf-8?B?TjYrRk9WSU0rWERYUklRbzBLQzh3Y0Ztc0dQVUk2TFk4b3pBeE5DSVFvS29p?=
+ =?utf-8?B?WUI3WXZLNjFFUklHU1FERVNwZnh5N2g2bkZBUGM5RGp0V3c3WUVBVGxVbEJk?=
+ =?utf-8?B?bmJXN3dRTUJtL2hJNVByUHYwSnkzMW8xNE9kK2NNdWh1VmhDWjJNcXN5a1Nt?=
+ =?utf-8?B?aDN2UUhXWmdpYlBkdk1ueXZ3UnJLeTBNRnd1cDJ5UFFLY1d6V2tvSnBWRGN4?=
+ =?utf-8?B?NVViZ1lMaXEyR3ZJUUw3MjlFazRFZjBHMGdINmhvRVg1aWIvZ0YzN0Z2aTE3?=
+ =?utf-8?B?bHJRcHBnS29TYW16UlkrN3FVcmkzWURBMUFZSzRGVlp3R0xLT3BDOE1tUXdG?=
+ =?utf-8?B?Q1dyWnVxQTY2Yk9RcWw1d2toZ3did2lWVzF3RG01NzlDYnR2Wmw1WEl2Q3px?=
+ =?utf-8?B?VFVLdDdnZGIzL2FqUnJSNDhnemorR2NUL2dVRkhqMDFjaXJDa3RXbkFjSW9Y?=
+ =?utf-8?B?cVFMTjcyZVhkUGpMcTRzYlBhZEZxOEFERXNuRFBnTlJZMVF0UVg0L1hnWWRt?=
+ =?utf-8?B?dS9qWkpaelVGeVRBSkhzdWJUVVg3VjBzUDhvaU9Dd1FnYlptdXc4QXlYZERl?=
+ =?utf-8?B?Yk1VOUc1NTFzMmpSeHNQaUVjdzdpV2RtMEwwZzRidE5wRTQ3ZENMSUd6OVZm?=
+ =?utf-8?B?RmtxWDdpbjl1VUNPNEhWSU5SWlZpUXphTjdybDBTNlZxcjlDeEFHZE1XM3VW?=
+ =?utf-8?B?Zlg3Ym83OUJ5RDhjNjRxSGRza0NnSk1jbzlRaWViR01VQUhxcW44bmprNzQy?=
+ =?utf-8?B?NFk1bFh6ZVpsQUd4dFBUdUY2UjRkTVVZZFBHZzlQQjcwMGU4dmw5MktmY3hN?=
+ =?utf-8?B?aTBuYnhGRnZLSHZFYkdDWmw0dTB3T2Ezb2VZcXRxTVFqOGFaMjlneUNsSTlD?=
+ =?utf-8?B?cHJtQ2lDdFc5blVDakJ3U3BJcmdnNmh1Q3VvRitiVXRQeTUyYVMyaDQyY0pL?=
+ =?utf-8?B?QUE9PQ==?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4690
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+Add a warning for fixes tags that does not follow community conventions.
 
-When root-cgroup attach multi progs and sub-cgroup attach a override prog,
-bpftool will display incorrectly for the attach flags of the sub-cgroup’s
-effective progs:
-
-$ bpftool cgroup tree /sys/fs/cgroup effective
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-6        cgroup_sysctl   multi           sysctl_tcp_mem
-13       cgroup_sysctl   multi           sysctl_tcp_mem
-/sys/fs/cgroup/cg1
-20       cgroup_sysctl   override        sysctl_tcp_mem
-6        cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-13       cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-/sys/fs/cgroup/cg1/cg2
-20       cgroup_sysctl                   sysctl_tcp_mem
-6        cgroup_sysctl                   sysctl_tcp_mem
-13       cgroup_sysctl                   sysctl_tcp_mem
-
-Attach flags is only valid for attached progs of this layer cgroup,
-but not for effective progs. For querying with EFFECTIVE flags,
-exporting attach flags does not make sense. Since prog_attach_flags
-array not being populated when effective query, so we can just remove
-the corresponding attach flags logic.
-
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund@corigine.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Reviewed-by: Louis Peens <louis.peens@corigine.com>
+Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
+Acked-by: Dwaipayan Ray <dwaipayanray1@gmail.com>
+Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Acked-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- tools/bpf/bpftool/cgroup.c | 54 +++++++++++++++++++++++---------------
- 1 file changed, 33 insertions(+), 21 deletions(-)
+* Changes since v6
+- Update first check to make sure that there is a likely SHA1 of some
+  minimum length after the fixes line.
+- s/fall in line with community standard/follow community conventions/.
+- Improve grammar, thanks Lukas.
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index cced668fb2a3..24cdb0b41f89 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -136,8 +136,8 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			jsonw_string_field(json_wtr, "attach_type", attach_type_str);
- 		else
- 			jsonw_uint_field(json_wtr, "attach_type", attach_type);
--		jsonw_string_field(json_wtr, "attach_flags",
--				   attach_flags_str);
-+		if (!(query_flags & BPF_F_QUERY_EFFECTIVE))
-+			jsonw_string_field(json_wtr, "attach_flags", attach_flags_str);
- 		jsonw_string_field(json_wtr, "name", prog_name);
- 		if (attach_btf_name)
- 			jsonw_string_field(json_wtr, "attach_btf_name", attach_btf_name);
-@@ -150,7 +150,10 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			printf("%-15s", attach_type_str);
- 		else
- 			printf("type %-10u", attach_type);
--		printf(" %-15s %-15s", attach_flags_str, prog_name);
-+		if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+			printf(" %-15s", prog_name);
-+		else
-+			printf(" %-15s %-15s", attach_flags_str, prog_name);
- 		if (attach_btf_name)
- 			printf(" %-15s", attach_btf_name);
- 		else if (info.attach_btf_id)
-@@ -200,7 +203,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- {
- 	LIBBPF_OPTS(bpf_prog_query_opts, p);
- 	__u32 prog_attach_flags[1024] = {0};
--	const char *attach_flags_str;
-+	const char *attach_flags_str = NULL;
- 	__u32 prog_ids[1024] = {0};
- 	char buf[32];
- 	__u32 iter;
-@@ -219,23 +222,25 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 		return 0;
+* Changes since v5
+- Add support for --fix option for checkpatch.pl.
+
+* Changes since v4
+- Extend test to cover lines with whitespace before the fixes: tag, e.g.
+  match check on /^\s*fixes:?/i.
+
+* Changes since v3
+- Add test that title in tag match title of commit referenced by sha1.
+
+* Changes since v2
+- Change the pattern to match on 'fixes:?' to catch more malformed
+  tags.
+
+* Changes since v1
+- Update the documentation wording and add mention one cause of the
+  message can be that email program splits the tag over multiple lines.
+---
+ Documentation/dev-tools/checkpatch.rst |  7 ++++
+ scripts/checkpatch.pl                  | 44 ++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+
+diff --git a/Documentation/dev-tools/checkpatch.rst b/Documentation/dev-tools/checkpatch.rst
+index b52452bc2963..c3389c6f3838 100644
+--- a/Documentation/dev-tools/checkpatch.rst
++++ b/Documentation/dev-tools/checkpatch.rst
+@@ -612,6 +612,13 @@ Commit message
  
- 	for (iter = 0; iter < p.prog_cnt; iter++) {
--		__u32 attach_flags;
--
--		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
--
--		switch (attach_flags) {
--		case BPF_F_ALLOW_MULTI:
--			attach_flags_str = "multi";
--			break;
--		case BPF_F_ALLOW_OVERRIDE:
--			attach_flags_str = "override";
--			break;
--		case 0:
--			attach_flags_str = "";
--			break;
--		default:
--			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
--			attach_flags_str = buf;
-+		if (!(query_flags & BPF_F_QUERY_EFFECTIVE)) {
-+			__u32 attach_flags;
+     See: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
+ 
++  **BAD_FIXES_TAG**
++    The Fixes: tag is malformed or does not follow the community conventions.
++    This can occur if the tag have been split into multiple lines (e.g., when
++    pasted in an email program with word wrapping enabled).
 +
-+			attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
++    See: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
 +
-+			switch (attach_flags) {
-+			case BPF_F_ALLOW_MULTI:
-+				attach_flags_str = "multi";
-+				break;
-+			case BPF_F_ALLOW_OVERRIDE:
-+				attach_flags_str = "override";
-+				break;
-+			case 0:
-+				attach_flags_str = "";
-+				break;
-+			default:
-+				snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-+				attach_flags_str = buf;
-+			}
+ 
+ Comparison style
+ ----------------
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 79e759aac543..ddc5c9d730c3 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3140,6 +3140,50 @@ sub process {
+ 			}
  		}
  
- 		show_bpf_prog(prog_ids[iter], type,
-@@ -292,6 +297,8 @@ static int do_show(int argc, char **argv)
- 
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
-+	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+		printf("%-8s %-15s %-15s\n", "ID", "AttachType", "Name");
- 	else
- 		printf("%-8s %-15s %-15s %-15s\n", "ID", "AttachType",
- 		       "AttachFlags", "Name");
-@@ -436,6 +443,11 @@ static int do_show_tree(int argc, char **argv)
- 
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
-+	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+		printf("%s\n"
-+		       "%-8s %-15s %-15s\n",
-+		       "CgroupPath",
-+		       "ID", "AttachType", "Name");
- 	else
- 		printf("%s\n"
- 		       "%-8s %-15s %-15s %-15s\n",
++# Check Fixes: styles is correct
++		if (!$in_header_lines &&
++		    $line =~ /^\s*fixes:?\s*(?:commit\s*)?[0-9a-f]{5,}\b/i) {
++			my $orig_commit = "";
++			my $id = "0123456789ab";
++			my $title = "commit title";
++			my $tag_case = 1;
++			my $tag_space = 1;
++			my $id_length = 1;
++			my $id_case = 1;
++			my $title_has_quotes = 0;
++
++			if ($line =~ /(\s*fixes:?)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
++				my $tag = $1;
++				$orig_commit = $2;
++				$title = $3;
++
++				$tag_case = 0 if $tag eq "Fixes:";
++				$tag_space = 0 if ($line =~ /^fixes:? [0-9a-f]{5,} ($balanced_parens)/i);
++
++				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{12}$/i);
++				$id_case = 0 if ($orig_commit !~ /[A-F]/);
++
++				# Always strip leading/trailing parens then double quotes if existing
++				$title = substr($title, 1, -1);
++				if ($title =~ /^".*"$/) {
++					$title = substr($title, 1, -1);
++					$title_has_quotes = 1;
++				}
++			}
++
++			my ($cid, $ctitle) = git_commit_info($orig_commit, $id,
++							     $title);
++
++			if ($ctitle ne $title || $tag_case || $tag_space ||
++			    $id_length || $id_case || !$title_has_quotes) {
++				if (WARN("BAD_FIXES_TAG",
++				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
++				    $fix) {
++					$fixed[$fixlinenr] = "Fixes: $cid (\"$ctitle\")";
++				}
++			}
++		}
++
+ # Check email subject for common tools that don't need to be mentioned
+ 		if ($in_header_lines &&
+ 		    $line =~ /^Subject:.*\b(?:checkpatch|sparse|smatch)\b[^:]/i) {
 -- 
-2.25.1
+2.37.3
 
