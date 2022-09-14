@@ -2,79 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB32D5B7F46
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 05:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A835B7F45
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 05:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiINDUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 23:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S229552AbiINDTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 23:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiINDUF (ORCPT
+        with ESMTP id S229550AbiINDTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 23:20:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B84A27DF1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 20:20:01 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MS5816k91zlVjq;
-        Wed, 14 Sep 2022 11:16:01 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 11:19:59 +0800
-Received: from huawei.com (10.67.175.33) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
- 2022 11:19:59 +0800
-From:   Lin Yujun <linyujun809@huawei.com>
-To:     <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
-        <robert.jarzmik@free.fr>, <linux@armlinux.org.uk>,
-        <marc.zyngier@altran.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] viper_tpm_init(): fix memleak on registration failure
-Date:   Wed, 14 Sep 2022 11:16:24 +0800
-Message-ID: <20220914031624.93031-1-linyujun809@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 13 Sep 2022 23:19:44 -0400
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760910543;
+        Tue, 13 Sep 2022 20:19:43 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id x1so13804297plv.5;
+        Tue, 13 Sep 2022 20:19:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=MAYzqsNXhJ7NrfvzNWwW1ykVxjuume8Guse5S9ioDxs=;
+        b=SmrNpCrkFnDYAQSAU29LQeKM97im0bfBWPdDffuj3xUT/gJhjDqV4kIUKTBsuSSZSn
+         Pba8aOPnNxZbV1cUuyLRcnfzkqfZ2yqBsSmpCAdLgzfd43YqUYJp9K7YF7ozTWe0Egkq
+         tL0Rh4rzpm04SwZHtBqYNsNwcHKie+BK1oo8x8tNiBb8x/cb71XwV9onbuD14ckrc7QO
+         HW8qUzkEn2FKTsux+f+IuKG49J9I9sfMoEkh4usjrArWVHl405Pr3DJeOVHEO+ao5n2F
+         aTHJY4tu1d7UWuKItNH3MMSh2A9UdjjyoqW/nULe8t0ErfwBIa9XLyz4xtkfcwCoUI+U
+         /Qlw==
+X-Gm-Message-State: ACgBeo21G2XXE9IqrFhHDt8wffsIwAJI+rXkS7xyiws2JXZu2lKN1bjy
+        ZuZRulxt394adJ8V9rAEM2eXCJxc6hmhj9Ws
+X-Google-Smtp-Source: AMsMyM4AQyWD1PUPunaqDoOQs7WPannJRUkYqkaJpgVRKSprbfqRMsrhj2n3o8JswxRA2sxpDCfmUg==
+X-Received: by 2002:a17:90b:1810:b0:202:c6d7:98a4 with SMTP id lw16-20020a17090b181000b00202c6d798a4mr2451109pjb.16.1663125583288;
+        Tue, 13 Sep 2022 20:19:43 -0700 (PDT)
+Received: from sk-Yoga-14sARH-2021.lan (144.34.241.68.16clouds.com. [144.34.241.68])
+        by smtp.gmail.com with ESMTPSA id t67-20020a625f46000000b0053b8ea1c4f3sm8732747pfb.135.2022.09.13.20.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 20:19:42 -0700 (PDT)
+From:   Ke Sun <sunke@kylinos.cn>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Ke Sun <sunke@kylinos.cn>, linux-kernel@vger.kernel.org,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] rtc: rv3028: Fix codestyle errors
+Date:   Wed, 14 Sep 2022 11:19:36 +0800
+Message-Id: <20220914031936.3493647-1-sunke@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.33]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case device registration fails, the platform device
-structure needs to be free. Use platform_device_put()
-to free all resources instead of using kfree to release
-the platform device.
+Compiler warnings：
 
-Fixes: 352699a3d7cc ("Basic support for the Arcom/Eurotech Viper SBC.")
-Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+drivers/rtc/rtc-rv3028.c: In function 'rv3028_param_set':
+drivers/rtc/rtc-rv3028.c:559:20: warning: statement will never be executed [-Wswitch-unreachable]
+  559 |                 u8 mode;
+      |                    ^~~~
+drivers/rtc/rtc-rv3028.c: In function 'rv3028_param_get':
+drivers/rtc/rtc-rv3028.c:526:21: warning: statement will never be executed [-Wswitch-unreachable]
+  526 |                 u32 value;
+      |                     ^~~~~
+
+Fix it by moving the variable declaration to the beginning of the function.
+
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Ke Sun <sunke@kylinos.cn>
 ---
- arch/arm/mach-pxa/viper.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-rv3028.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/mach-pxa/viper.c b/arch/arm/mach-pxa/viper.c
-index 5b43351ee840..44b2c54fb2c7 100644
---- a/arch/arm/mach-pxa/viper.c
-+++ b/arch/arm/mach-pxa/viper.c
-@@ -829,7 +829,7 @@ static void __init viper_tpm_init(void)
- 	return;
- 
- error_free_tpm:
--	kfree(tpm_device);
-+	platform_device_put(tpm_device);
- error_tpm:
- 	pr_err("viper: Couldn't %s, giving up\n", errstr);
- }
--- 
-2.17.1
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index cdc623b3e365..dd170e3efd83 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -521,10 +521,9 @@ static int rv3028_param_get(struct device *dev, struct rtc_param *param)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
+ 	int ret;
++	u32 value;
+
+ 	switch(param->param) {
+-		u32 value;
+-
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &value);
+ 		if (ret < 0)
+@@ -554,9 +553,9 @@ static int rv3028_param_get(struct device *dev, struct rtc_param *param)
+ static int rv3028_param_set(struct device *dev, struct rtc_param *param)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++	u8 mode;
+
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		switch (param->uvalue) {
+ 		case RTC_BSM_DISABLED:
+--
+2.25.1
 
