@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875C65B817C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C76E5B8180
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiINGWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 02:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S230019AbiINGYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 02:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiINGV4 (ORCPT
+        with ESMTP id S229909AbiINGYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 02:21:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EA971BC5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:21:54 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MS9994bzQzNmCD;
-        Wed, 14 Sep 2022 14:17:17 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 14 Sep 2022 14:21:50 +0800
-Received: from [10.174.185.210] (10.174.185.210) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 14:21:49 +0800
-Subject: Re: [PATCH v2] clocksource/drivers/arm_arch_timer: Fix handling of
- ARM erratum 85821
-To:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oliver Upton <oupton@google.com>
-CC:     <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220914022122.1175-1-jiangkunkun@huawei.com>
-From:   Kunkun Jiang <jiangkunkun@huawei.com>
-Message-ID: <76f3e7ca-15c9-9b78-2520-f299b3e14cf8@huawei.com>
-Date:   Wed, 14 Sep 2022 14:21:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 14 Sep 2022 02:24:21 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2485B7269E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:24:18 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q9so4302657pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=fRKf+imVw7MttIFJnauud7q8IBR969IuIIWD8g4fCPA=;
+        b=PUXE6B3aPHP+SZGAuLS15FDgWLtMLluRF4EnRnapMrcQ/7eXfJhaqd6vSwaDNGravW
+         /Npbi5K0MPHIHcbnYARE1ZMDeGP2qJH6/1hfVOPuHui/wtwcCAbhbpVplIejXXxe1k67
+         EWO4k2b5toBpqgzKTMSwfHH0mnfQnCVygq3Yb/IOOfdfW8TzxuMZbn9z/FAJ48z2DTww
+         HwQZVPpv+XI8+8NqFX1QBcRZMRvVCGZUqvhne9x7Pqc/Lj1qRo1e9P8LzUFG8JLyvpJ1
+         3wOvrvNBboWiYlfZ1teVZXOucF2L/ff/0OeZiEhiHSuzp0xK1x1ml+1813aszt2UGqxX
+         iF9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=fRKf+imVw7MttIFJnauud7q8IBR969IuIIWD8g4fCPA=;
+        b=6Md9RacMXvexBuKmt4w1Y0aCM6A7vPxMSEB6YALXh9SpJIAEdls1p2iIEXxaPPgBzP
+         MN21aoAEuMXdYNF5D+ZEtJkaimImf8y9t1XUH2+ctaBnLDKqaxe8Bq23a9qzRwlBdOVt
+         5yM3kvleIOVEqY4IXFlqbnLMPSmI5Qibx4vw6vSoa8nytwVcJFkyo9zF/Zs/DBocCkcn
+         qAoLa44sWtj8AemBiAGMJBWOw2Q06nQen7/KLpUOdJYNe922FqyS6DeB5v9JFV8suT9z
+         oZ0P3cQ64x2SKA53wqQZ/XSzMnUoUnEpufsfx9dCwMVwHjJvZMIUzwR1jzvUs9rEHV9g
+         d55w==
+X-Gm-Message-State: ACgBeo3Agw7t1ZzKw13POSRiA8Zgoc0fOstaRGv5fU3r27O5ifsUobE7
+        ScxIETF6VoInMdKhaGrnTVODdMZa3WbebT4=
+X-Google-Smtp-Source: AA6agR4ZCZsGFPvSQBEvMKNXH7CVSjTn9MVPIP4sBKbe14FuFMLRYO5giCmz/5OT/5JZb4nHlql7iQ==
+X-Received: by 2002:a63:451a:0:b0:439:246e:807e with SMTP id s26-20020a63451a000000b00439246e807emr8559930pga.347.1663136657408;
+        Tue, 13 Sep 2022 23:24:17 -0700 (PDT)
+Received: from workstation ([117.202.184.122])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090322cc00b00177fb862a87sm9888045plg.20.2022.09.13.23.24.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Sep 2022 23:24:16 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 11:54:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Vidya Sagar <vidyas@nvidia.com>,
+        jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <20220914062411.GD16459@workstation>
+References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+ <20220913200746.GA619956@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20220914022122.1175-1-jiangkunkun@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.185.210]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913200746.GA619956@bhelgaas>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The subject is wrong. s/85821/858921
-Please review v3.
+On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
+> On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
+> > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
+> > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
+> > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> > > > not having an endpoint connected to the slot is not an error.
+> > > > So, changing the macro from dev_err to dev_info to log the event.
+> > > 
+> > > But the link up not happening is an actual error and -ETIMEDOUT is being
+> > > returned. So I don't think the log severity should be changed.
+> > 
+> > Yes it is an error in the sense it is a timeout, but reporting an error
+> > because nothing is attached to a PCI slot seems a bit noisy. Please note
+> > that a similar change was made by the following commit and it also seems
+> > appropriate here ...
+> > 
+> > commit 4b16a8227907118e011fb396022da671a52b2272
+> > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > Date:   Tue Jun 18 23:32:06 2019 +0530
+> > 
+> >     PCI: tegra: Change link retry log level to debug
+> > 
+> > 
+> > BTW, we check for error messages in the dmesg output and this is a new error
+> > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
+> > error, but in this case it seem more appropriate to make this a info or
+> > debug level print.
+> 
+> Can you tell whether there's a device present, e.g., via Slot Status
+> Presence Detect?  If there's nothing in the slot, I don't know why we
+> would print anything at all.  If a card is present but there's no
+> link, that's probably worthy of dev_info() or even dev_err().
+> 
+
+I don't think all form factors allow for the PRSNT pin to be wired up,
+so we cannot know if the device is actually present in the slot or not all
+the time. Maybe we should do if the form factor supports it?
+
+> I guess if you can tell the slot is empty, there's no point in even
+> trying to start the link, so you could avoid both the message and the
+> timeout by not even calling dw_pcie_wait_for_link().
+
+Right. There is an overhead of waiting for ~1ms during boot.
+
+We workaround this issue by disabling the PCIe instances in devicetree
+for which there would be no devices connected.
 
 Thanks,
-Kunkun Jiang
+Mani
 
-On 2022/9/14 10:21, Kunkun Jiang wrote:
-> The commit a38b71b0833e ("clocksource/drivers/arm_arch_timer:
-> Move system register timer programming over to CVAL") moves the
-> programming of the timers from the countdown timer (TVAL) over
-> to the comparator (CVAL). This makes it necessary to read the
-> counter when programming next event. However, the workaround of
-> Cortex-A73 erratum 858921 does not set the corresponding
-> set_next_event_phys and set_next_event_virt.
->
-> Add the appropriate hooks to apply the erratum mitigation when
-> programming the next timer event.
->
-> Fixes: a38b71b0833e ("clocksource/drivers/arm_arch_timer: Move system register timer programming over to CVAL")
-> Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> ---
->   drivers/clocksource/arm_arch_timer.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-> index 9ab8221ee3c6..ff935efb6a88 100644
-> --- a/drivers/clocksource/arm_arch_timer.c
-> +++ b/drivers/clocksource/arm_arch_timer.c
-> @@ -473,6 +473,8 @@ static const struct arch_timer_erratum_workaround ool_workarounds[] = {
->   		.desc = "ARM erratum 858921",
->   		.read_cntpct_el0 = arm64_858921_read_cntpct_el0,
->   		.read_cntvct_el0 = arm64_858921_read_cntvct_el0,
-> +		.set_next_event_phys = erratum_set_next_event_phys,
-> +		.set_next_event_virt = erratum_set_next_event_virt,
->   	},
->   #endif
->   #ifdef CONFIG_SUN50I_ERRATUM_UNKNOWN1
+> 
+> Bjorn
