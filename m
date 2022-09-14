@@ -2,52 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7B85B82B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BC65B82BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiINIOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S230251AbiINIPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiINIOh (ORCPT
+        with ESMTP id S230267AbiINIPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:14:37 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF58462EC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:14:32 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id p8-20020a5d9848000000b0068e97cc84b1so8707031ios.23
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:14:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=rTdEYGQWknM4bCrr879j6oI5QwDTYjwntwXKpOJK9EE=;
-        b=OvNeX5FACZJAZkZVZdYnzJXsyt2RLP3plXMEo4vgCJE6VWtdXvL1YztvXQebookpUG
-         Wxe5WfwYgr66ryBik1Us2k6YqiKhyL/Py0Ja1m/tyudZfcM9egU6jf9lctqMqtkOl5gp
-         9LVquAX25A7YCqBUZs1pZU/0IQWa0XzeDbeLjGH59bZD2bNkP4d21HXLDEr6KeOYbkRT
-         QIBKZtmk2UMOeL4C+JlzJg4/LsvwSo3s9tPrtG3Vdu3u7XDYzSPs59+T/nMqLXgGxo/X
-         SHZn5FAA+c6lFYDfFFSWH4zIVasmI6R02RCA/W7P3/if05zxJXaFFfoy8FbXrdo9jfW7
-         BhtQ==
-X-Gm-Message-State: ACgBeo1wA9jwrwu4LP6/AMsHmxtfXspHpLeBfQcqwfmqhHkHMrXnWN4H
-        Bl06WUC2e6Gd6EmBr4LRz1ajcP0juwmMqp5MivV4Mf3GLsOj
-X-Google-Smtp-Source: AA6agR6vazj+c4p+xYys19sbCkPRbW2VP922ajnnL9whyKDepvguYuRi9jpBCnkxAJH52eXiynkH0oFOpiDyhrKNOCPyENd0bGX4
+        Wed, 14 Sep 2022 04:15:33 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA465809E;
+        Wed, 14 Sep 2022 01:15:29 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MSClM0BtpzKPpB;
+        Wed, 14 Sep 2022 16:13:35 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgDXKXOejSFjV81PAw--.58702S3;
+        Wed, 14 Sep 2022 16:15:27 +0800 (CST)
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Paolo VALENTE <paolo.valente@unimore.it>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220610021701.2347602-1-yukuai3@huawei.com>
+ <20220610021701.2347602-4-yukuai3@huawei.com>
+ <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+ <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
+ <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
+ <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
+ <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
+ <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
+ <5cb0e5bc-feec-86d6-6f60-3c28ee625efd@huaweicloud.com>
+ <D89DCF20-27D8-4F8F-B8B0-FD193FC4F18D@unimore.it>
+ <e6b53794-f93f-92b2-1f45-35ae81a28a5c@huaweicloud.com>
+ <F758A356-EE6B-4B7B-95E2-6414616C77E4@unimore.it>
+ <5e0b44b4-46cc-b3c6-1d93-00a0a683eda8@huaweicloud.com>
+ <f89eb61b-7912-5916-1a12-039e32bebe70@huaweicloud.com>
+ <BF3909EA-4659-48CB-917A-639DC3318916@unimore.it>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <97534773-484f-5c2c-a371-446cc0680b73@huaweicloud.com>
+Date:   Wed, 14 Sep 2022 16:15:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20ee:b0:2f1:2959:8ec8 with SMTP id
- q14-20020a056e0220ee00b002f129598ec8mr14150974ilv.236.1663143271865; Wed, 14
- Sep 2022 01:14:31 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 01:14:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ee264405e89eb7e8@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in hiddev_disconnect (4)
-From:   syzbot <syzbot+08bc30b3c98573f139b8@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <BF3909EA-4659-48CB-917A-639DC3318916@unimore.it>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDXKXOejSFjV81PAw--.58702S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWUXw43ur47ZF4DtryrZwb_yoWruw17pw
+        4UGa1Ykr4DXr17twn7tr1UXry5t3yfJry5Wr1DJryUCw1qyrn7tF47tr4Y9rykXrW8Ww12
+        qr4Ut3s7Xw1jy37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,234 +82,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi, Paolo
 
-syzbot found the following issue on:
+在 2022/09/14 15:50, Paolo VALENTE 写道:
+> 
+> 
+>> Il giorno 14 set 2022, alle ore 03:55, Yu Kuai <yukuai1@huaweicloud.com> ha scritto:
+>>
+>>
+>>
+>> 在 2022/09/07 9:16, Yu Kuai 写道:
+>>> Hi, Paolo!
+>>> 在 2022/09/06 17:37, Paolo Valente 写道:
+>>>>
+>>>>
+>>>>> Il giorno 26 ago 2022, alle ore 04:34, Yu Kuai <yukuai1@huaweicloud.com> ha scritto:
+>>>>>
+>>>>> Hi, Paolo!
+>>>>>
+>>>>> 在 2022/08/25 22:59, Paolo Valente 写道:
+>>>>>>> Il giorno 11 ago 2022, alle ore 03:19, Yu Kuai <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>>>>
+>>>>>>> Hi, Paolo
+>>>>>>>
+>>>>>>> 在 2022/08/10 18:49, Paolo Valente 写道:
+>>>>>>>>> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>>>>>>
+>>>>>>>>> Hi, Paolo
+>>>>>>>>>
+>>>>>>>> hi
+>>>>>>>>> Are you still interested in this patchset?
+>>>>>>>>>
+>>>>>>>> Yes. Sorry for replying very late again.
+>>>>>>>> Probably the last fix that you suggest is enough, but I'm a little bit
+>>>>>>>> concerned that it may be a little hasty.  In fact, before this fix, we
+>>>>>>>> exchanged several messages, and I didn't seem to be very good at
+>>>>>>>> convincing you about the need to keep into account also in-service
+>>>>>>>> I/O.  So, my question is: are you sure that now you have a
+>>>>>>>
+>>>>>>> I'm confused here, I'm pretty aware that in-service I/O(as said pending
+>>>>>>> requests is the patchset) should be counted, as you suggested in v7, are
+>>>>>>> you still thinking that the way in this patchset is problematic?
+>>>>>>>
+>>>>>>> I'll try to explain again that how to track is bfqq has pending pending
+>>>>>>> requests, please let me know if you still think there are some problems:
+>>>>>>>
+>>>>>>> patch 1 support to track if bfqq has pending requests, it's
+>>>>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
+>>>>>>> first request is inserted to bfqq, and it's cleared when the last
+>>>>>>> request is completed. specifically the flag is set in
+>>>>>>> bfq_add_bfqq_busy() when 'bfqq->dispatched' if false, and it's cleared
+>>>>>>> both in bfq_completed_request() and bfq_del_bfqq_busy() when
+>>>>>>> 'bfqq->diapatched' is false.
+>>>>>>>
+>>>>>> This general description seems correct to me. Have you already sent a new version of your patchset?
+>>>>>
+>>>>> It's glad that we finially on the same page here.
+>>>>>
+>>>>
+>>>> Yep. Sorry for my chronicle delay.
+>>> Better late than never 😁
+>>>>
+>>>>> Please take a look at patch 1, which already impelement the above
+>>>>> descriptions, it seems to me there is no need to send a new version
+>>>>> for now. If you think there are still some other problems, please let
+>>>>> me know.
+>>>>>
+>>>>
+>>>> Patch 1 seems ok to me. I seem to have only one pending comment on this patch (3/4) instead. Let me paste previous stuff here for your convenience:
+>>> That sounds good.
+>>>>
+>>>>>>
+>>>>>> -    /*
+>>>>>> -     * Next function is invoked last, because it causes bfqq to be
+>>>>>> -     * freed if the following holds: bfqq is not in service and
+>>>>>> -     * has no dispatched request. DO NOT use bfqq after the next
+>>>>>> -     * function invocation.
+>>>>>> -     */
+>>>>> I would really love it if you leave this comment.  I added it after
+>>>>> suffering a lot for a nasty UAF.  Of course the first sentence may
+>>>>> need to be adjusted if the code that precedes it is to be removed.
+>>>>> Same as above, if this patch is applied, this function will be gone.
+>>
+>> Hi, I'm curious while I'm trying to add the comment, before this
+>> patchset, can bfqq be freed when bfq_weights_tree_remove is called?
+>>
+>> bfq_completed_request
+>> bfqq->dispatched--
+>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq))
+>>   bfq_weights_tree_remove(bfqd, bfqq);
+>>
+>> // continue to use bfqq
+>>
+>> It seems to me this is problematic if so, because bfqq is used after
+>> bfq_weights_tree_remove() is called.
+>>
+> 
+> It is.  Yet, IIRC, I verified that bfqq was not used after that free,
+> and I added that comment as a heads-up.  What is a scenario (before
+> your pending modifications) where this use-after-free happens?
+> 
 
-HEAD commit:    7eb2bf871454 usb: misc: usb3503: call clk_disable_unprepar..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1536bcaf080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c3701a9706c1806e
-dashboard link: https://syzkaller.appspot.com/bug?extid=08bc30b3c98573f139b8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+No, it never happens, I just notice it because it'll be weird if I
+place the comment where bfq_weights_tree_remove() is called, since bfqq
+will still be accessed.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If the suituation that the comment says is possible, perhaps we should
+move bfq_weights_tree_remove() to the last of bfq_completed_request().
+However, it seems that we haven't meet the problem for quite a long
+time...
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+08bc30b3c98573f139b8@syzkaller.appspotmail.com
+Thanks,
+Kuai
 
-==================================================================
-BUG: KASAN: use-after-free in debug_spin_lock_before kernel/locking/spinlock_debug.c:85 [inline]
-BUG: KASAN: use-after-free in do_raw_spin_lock+0x261/0x2a0 kernel/locking/spinlock_debug.c:114
-Read of size 4 at addr ffff888115d24c1c by task kworker/1:2/70
+> Thanks,
+> Paolo
+> 
+>> Thanks,
+>> Kuai
+> 
+> .
+> 
 
-CPU: 1 PID: 70 Comm: kworker/1:2 Not tainted 6.0.0-rc4-syzkaller-00066-g7eb2bf871454 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: events __usb_queue_reset_device
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- debug_spin_lock_before kernel/locking/spinlock_debug.c:85 [inline]
- do_raw_spin_lock+0x261/0x2a0 kernel/locking/spinlock_debug.c:114
- __mutex_unlock_slowpath+0x18e/0x5e0 kernel/locking/mutex.c:932
- hiddev_disconnect+0x154/0x1c0 drivers/hid/usbhid/hiddev.c:940
- hid_disconnect+0xb4/0x1a0 drivers/hid/hid-core.c:2252
- hid_hw_stop+0x12/0x70 drivers/hid/hid-core.c:2297
- cmhid_remove+0x38/0x50 drivers/hid/hid-cmedia.c:182
- hid_device_remove+0xbf/0x200 drivers/hid/hid-core.c:2627
- device_remove+0xc8/0x170 drivers/base/dd.c:548
- __device_release_driver drivers/base/dd.c:1249 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- hid_remove_device drivers/hid/hid-core.c:2796 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2815
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1451
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:550 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:542
- __device_release_driver drivers/base/dd.c:1249 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
- usb_driver_release_interface drivers/usb/core/driver.c:627 [inline]
- usb_forced_unbind_intf+0x136/0x210 drivers/usb/core/driver.c:1118
- unbind_marked_interfaces.isra.0+0x170/0x1e0 drivers/usb/core/driver.c:1141
- usb_unbind_and_rebind_marked_interfaces+0x34/0x70 drivers/usb/core/driver.c:1202
- usb_reset_device+0x846/0xac0 drivers/usb/core/hub.c:6142
- __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1904
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-Allocated by task 4334:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- __kasan_kmalloc+0x81/0xa0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- hiddev_connect+0x246/0x5c0 drivers/hid/usbhid/hiddev.c:893
- hid_connect+0x26d/0x17c0 drivers/hid/hid-core.c:2169
- hid_hw_start drivers/hid/hid-core.c:2277 [inline]
- hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2268
- cmhid_probe+0x104/0x160 drivers/hid/hid-cmedia.c:165
- hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2598
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3517
- hid_add_device+0x344/0x9d0 drivers/hid/hid-core.c:2748
- usbhid_probe+0xb49/0x1040 drivers/hid/usbhid/hid-core.c:1424
- usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3517
- usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3517
- usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
- hub_port_connect drivers/usb/core/hub.c:5353 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x26c7/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Freed by task 14583:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x14a/0x1b0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook mm/slub.c:1780 [inline]
- slab_free mm/slub.c:3534 [inline]
- kfree+0xca/0x5c0 mm/slub.c:4562
- hiddev_release+0x402/0x520 drivers/hid/usbhid/hiddev.c:232
- __fput+0x277/0x9d0 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xad5/0x2930 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- get_signal+0x238c/0x2610 kernel/signal.c:2857
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x156/0x200 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888115d24c00
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 28 bytes inside of
- 512-byte region [ffff888115d24c00, ffff888115d24e00)
-
-The buggy address belongs to the physical page:
-page:ffffea0004574900 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x115d24
-head:ffffea0004574900 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head|node=0|zone=2)
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff888100041c80
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 11894, tgid 11894 (udevd), ts 853331188558, free_ts 844278582420
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x7b4/0xda0 mm/slub.c:3031
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- kmem_cache_alloc_trace+0x2fb/0x3b0 mm/slub.c:3282
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kernfs_fop_open+0x2fa/0xfd0 fs/kernfs/file.c:680
- do_dentry_open+0x49c/0x1240 fs/open.c:878
- do_open fs/namei.c:3557 [inline]
- path_openat+0x1c92/0x28f0 fs/namei.c:3691
- do_filp_open+0x1b6/0x400 fs/namei.c:3718
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1338
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5d2/0xb80 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x420 mm/page_alloc.c:3476
- usbhid_disconnect+0xa7/0xe0 drivers/hid/usbhid/hid-core.c:1452
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:550 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:542
- __device_release_driver drivers/base/dd.c:1249 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Memory state around the buggy address:
- ffff888115d24b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888115d24b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888115d24c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff888115d24c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888115d24d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
