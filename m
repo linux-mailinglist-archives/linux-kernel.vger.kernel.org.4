@@ -2,164 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293555B8A23
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0045B8A26
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiINOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S229964AbiINOQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiINOP0 (ORCPT
+        with ESMTP id S230053AbiINOPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:15:26 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D37431EE6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:15:13 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d12so15256387plr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:15:13 -0700 (PDT)
+        Wed, 14 Sep 2022 10:15:53 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8383F3A496;
+        Wed, 14 Sep 2022 07:15:51 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id t14so25938416wrx.8;
+        Wed, 14 Sep 2022 07:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Fo6+GEpLuzEa2C/BIMz3Nj9vBo1YPW/XzxuoQnVqp/A=;
-        b=H6N/ovIZoLE0y5wnmEzlCIr1OyzJJa6sooNhhXVOxrWKu/9S+oay6RlSJ6vHRqDcjD
-         XJ12wl1OCHkDdGtAUyWTubazxIa+BpZOlSVIXhy1AmKuWNNs/sejGnUAynbLiRQwixRJ
-         MrXCt+FGheaBFqRqwWajpbTITyimyTxC2RCdE=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=zOs1QKwbZyIiYcD44wohoU5bGlws2KHw+g3vnQSorCQ=;
+        b=Ks2ZZ2IN9vBeYDzJ0s9jZhTQYhtlLUrRLYKvlMVyyF+fOG6cQTXOWPlmH7SnCj0oBN
+         0xmRSYhQ7hlpYwFPu3mfH8C7Ausi9Cy8vkEBvWrSbbraws/ubtp/3x12f2bTL7Agaox5
+         KVldTUUHDt2FtdfDZ5Zle50v9SNWt6CPMcCnkiQnT49u3x7ZVxVBp59xJkBzlLrnQE4z
+         RcfgjOk6uUsHIuOpY+mlpl7LLgkTFyfYG9343COAOqBPxDodKIih9CbroSaqWXSllqWF
+         G06iBnCr1pHfkDxMkzBfV5FGHAAtPRKLDyZ6j1V63/XjY/2MOv2HujUttLL0FRVpTOzk
+         T+5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Fo6+GEpLuzEa2C/BIMz3Nj9vBo1YPW/XzxuoQnVqp/A=;
-        b=yzqz6X0wMHhlQMPuZXe0G2eJoXMSdqZ6ahlWId3oQmQ84ks6pHOQL6Z8yRUqnm+cUZ
-         277O0y+Q2GeHw7IbAkecg+yMoiFL4eZ35zbZFAgBQU4BegjR/aN2OyJI/Et1vGN6TqVa
-         aQqT4V1ZZlYWzH47WVdPeRdOLZhDDSbkNNGl2AEV4YUNMBK8P+joMmrachRTFOBQ9Eao
-         Xx+dktcqv0TyUU99CAOG0WPEeV9v3bT5K9wDQM8tJylzcoFHkh/YdpwdRW0+7wlBBrUE
-         /iKIYpEwxhkfExD4PeSyoPEkUXrGJmELs8WAnRE7OrTB1BiW6Bak/Q1LyCSHMe0pIY2D
-         wdUA==
-X-Gm-Message-State: ACrzQf1T987sfwIaRdpanDz7DtmmSWnBDBxoxWFUyfgUUMp+EV46/Sp9
-        qyapRhT5tDv+wuOIeBOl+AUYauTkZUMYBA==
-X-Google-Smtp-Source: AMsMyM5mWwjLf2UkfbJqu70601uDNKEj6jsNzEl/wEpzPaasp6U0g3jAcjuOcytWRw4tOx9dR1a1oA==
-X-Received: by 2002:a17:90a:c782:b0:202:c73e:5488 with SMTP id gn2-20020a17090ac78200b00202c73e5488mr5023101pjb.202.1663164912285;
-        Wed, 14 Sep 2022 07:15:12 -0700 (PDT)
-Received: from fastly.com (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
-        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b00176b63535adsm10958949plc.260.2022.09.14.07.15.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Sep 2022 07:15:11 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 07:15:08 -0700
-From:   Joe Damato <jdamato@fastly.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     x86@kernel.org, linux-mm@kvack.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC 1/1] mm: Add per-task struct tlb counters
-Message-ID: <20220914141507.GA4422@fastly.com>
-References: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
- <1663120270-2673-2-git-send-email-jdamato@fastly.com>
- <e0067441-19e2-2ae6-df47-2018672426be@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=zOs1QKwbZyIiYcD44wohoU5bGlws2KHw+g3vnQSorCQ=;
+        b=U+UjIkKIyV2wWVfbPYyOI9szUPQgbGeITQGhItl4U2WsaUqKpAxB2NpTz/Tt6MrZUP
+         Cn5PunTLGlKzudCmqdBt5feqiRpv6+PUiR0m0Du6hrVbzVX/bYq5Y7eQhmH1UqaEqlDz
+         K63bMpOXh6ksKS+r46fX6Uo40kpBwJa9UDRyK779zH81eJokWuEcVIhHrRNx1z0N/Ttt
+         gkJb97/f5tWGZ3v1PodTAjZZ6B4lV/MKV7HSXt+r6DYDHS1+hmgN2J8uoelonRehtr18
+         OIVi+Tg0I1VE0Ra9xQndPuoJS+IH0MD57IWRCKOYBbpAh6ZnKqKJ936m0i8t5srNa2LM
+         qX8Q==
+X-Gm-Message-State: ACgBeo273NgEzsBUbvbFb5d5zAn6qblGglU61vg2Xnq4MeLXqrGf6F4d
+        IoFuqLMZC35MCIGmaVaIOWE=
+X-Google-Smtp-Source: AA6agR7Bu+ObYtkfeAMtim+ngA8n2IPmkQsqMg5NlIrP9uzCd4DPRq+COGJZeAVGftuRUF2LCdFdKQ==
+X-Received: by 2002:a5d:6f03:0:b0:22a:2de6:9229 with SMTP id ay3-20020a5d6f03000000b0022a2de69229mr18997910wrb.91.1663164949659;
+        Wed, 14 Sep 2022 07:15:49 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id o16-20020a056000011000b0021e4829d359sm13315939wrx.39.2022.09.14.07.15.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 07:15:48 -0700 (PDT)
+Message-ID: <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
+Date:   Wed, 14 Sep 2022 16:15:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0067441-19e2-2ae6-df47-2018672426be@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones
+ without trips.
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220914131339.18348-1-aouledameur@baylibre.com>
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220914131339.18348-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 12:40:55AM -0700, Dave Hansen wrote:
-> On 9/13/22 18:51, Joe Damato wrote:
-> > TLB shootdowns are tracked globally, but on a busy system it can be
-> > difficult to disambiguate the source of TLB shootdowns.
-> > 
-> > Add two counter fields:
-> > 	- nrtlbflush: number of tlb flush events received
-> > 	- ngtlbflush: number of tlb flush events generated
-> > 
-> > Expose those fields in /proc/[pid]/stat so that they can be analyzed
-> > alongside similar metrics (e.g. min_flt and maj_flt).
+
+
+On 14/09/2022 15:13, Amjad Ouled-Ameur wrote:
+> Thermal zones without trip point are not registered by thermal core.
 > 
-> On x86 at least, we already have two other ways to count flushes.  You
-> even quoted them with your patch:
+> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+> only but are not supposed to remain on DT.
 > 
-> >  	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
-> > +	current->ngtlbflush++;
-> >  	if (info->end == TLB_FLUSH_ALL)
-> >  		trace_tlb_flush(TLB_REMOTE_SEND_IPI, TLB_FLUSH_ALL);
+> Remove the zones above and keep only cpu_thermal.
 > 
-> Granted, the count_vm_tlb...() one is debugging only.  But, did you try
-> to use those other mechanisms?  For instance, could you patch
-> count_vm_tlb_event()? 
 
-I tried to address this in my cover letter[1], but the count_vm_tlb_event
-are system-wide, AFAICT. This is useful, certainly, but it's difficult to
-know how many TLB shootdowns are being generated by which tasks without
-finer granularity. The goal was to try to account these events on a
-per-task basis.
+My understanding is that this thermal zones exist but are not used. DTS should 
+describe the HW as it is, so I propose to add
+status = "disabled";
+to the zones.
 
-I could patch count_vm_tlb... to account on a per-task basis. That seems
-reasonable to me... assuming you and others are convinced that it's a
-better approach than tracepoints ;)
+Regards,
+Matthias
 
-> Why didn't the tracepoints work for you?
-
-Tracepoints do work; but IMHO the trouble with tracepoints in this case is:
-
-- You need to actually be running perf to gather the data at the right
-  time; if you stop running perf too soon, or if the TLB shootdown storm is
-  caused by some anomalous event when you weren't running perf... you are
-  out of luck.
-- On heavily loaded systems with O(10,000) or O(100,000) tasks, perf
-  tracepoint data is hard to analyze, events can be dropped, and
-  significant resources can be consumed.
-
-In addition to this, there is existing tooling on Linux for scraping
-/proc/[pid]/stat for graphing/analysis/etc.
-
-IMO, possibly an easier way to debug large TLB shootdowns on a system might
-be (using a form of this patch):
-
-1. Examine /proc/[pid]/stat to see which process or processes are
-responsible for the majority of the shootdowns. Perhaps you have a script
-scraping this data at various intervals and recording deltas.
-
-2. Now that you know the timeline of the events, which processes are
-responsible, and the magnitude of the deltas... perf tracepoints can help
-you determine when and where exactly they occur.
-
-What do you think?
-
-> Can this be done in a more arch-generic way?  It's a shame to
-> unconditionally add counters to the task struct and only use them on
-> x86.  If someone wanted to generalize the x86 tracepoints, or make them
-> available to other architectures, I think that would be fine even if
-> they have to change a bit (queue the inevitable argument about
-> tracepoint ABI).
-
-I'm not sure; maybe if I tweaked count_vm_tlb then I suppose if archs
-other than x86 support count_vm_tlb in the future, they would
-automatically get support for this.
-
-> P.S. I'm not a fan of the structure member naming.
-
-Fair enough; I was inspired by nvcsw and nivcsw :) but if you think that
-this worth pursuing, I'll use more clear names in the future.
-
-Thanks for taking a look!
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 57 ------------------------
+>   1 file changed, 57 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 9d32871973a2..f65fae8939de 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1182,63 +1182,6 @@ THERMAL_NO_LIMIT
+>   					};
+>   				};
+>   			};
+> -
+> -			/* The tzts1 ~ tzts6 don't need to polling */
+> -			/* The tzts1 ~ tzts6 don't need to thermal throttle */
+> -
+> -			tzts1: tzts1 {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 1>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+> -
+> -			tzts2: tzts2 {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 2>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+> -
+> -			tzts3: tzts3 {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 3>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+> -
+> -			tzts4: tzts4 {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 4>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+> -
+> -			tzts5: tzts5 {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 5>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+> -
+> -			tztsABB: tztsABB {
+> -				polling-delay-passive = <0>;
+> -				polling-delay = <0>;
+> -				thermal-sensors = <&thermal 6>;
+> -				sustainable-power = <5000>;
+> -				trips {};
+> -				cooling-maps {};
+> -			};
+>   		};
+>   
+>   		pwm0: pwm@1100e000 {
