@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9465D5B8DA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35ED35B8DA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiINQ5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S229956AbiINQ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiINQ5g (ORCPT
+        with ESMTP id S229813AbiINQ5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:57:36 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD6B237D1;
-        Wed, 14 Sep 2022 09:57:35 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id r18so36165010eja.11;
-        Wed, 14 Sep 2022 09:57:35 -0700 (PDT)
+        Wed, 14 Sep 2022 12:57:46 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5601382857;
+        Wed, 14 Sep 2022 09:57:41 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 3so10955304qka.5;
+        Wed, 14 Sep 2022 09:57:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date;
-        bh=Dm2hwF6WCe7czySRX8uWW+CCWzNHmf/+RMx8+8WjsmY=;
-        b=fYTCj0gVdjz0ZVF+nuyDBf3LMczRilxAn5L9w9g5Xa1qRrtB997hi29wSSYhCCN0kZ
-         BPrlpQK5H2/3aewy0KP7bGrtCsk9C3kU2KI80iOOHgKv9YZ7+iAvsyMJ1MbdExJss9WX
-         5naAG0dfgHYTnPQZvTn9BBiKKTXKYPXJF07eEwy0yGOj4ZPs5qviF0s2lXll43qpL0oU
-         V7hsGzvb8NWof2IUCOgpHhoeC5mAc5k3kYQWGr6sS6ErhRgKErQNzP0EEOlbkxbqZRMd
-         KOr0wDXT8A1kx/F7kbMTXRzvY/K9+kAJbrTkPTWPkAr4Z0hAoJedYgF4NgwHGuEUuMS9
-         mdVQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=UWYZ+LvZVhpAV6ZQBWEOlqo/TbgQPhE93gUN5h4Opa4=;
+        b=lBXUbs9pZpO+yTmR2jdfhmRm/kBSeGhEo/6IKheeNxrOaZ+SSStX4UyGbG7noCTZnL
+         lp4GNVPC+yuVX066hyg9SZyWVQUc+v0zWdguOY/nmscUyeDVvKy5jSWZaO+xzphOdvAQ
+         aTsC9QANMQ3cKIIiE6++nnjm/oB7778JyBSse4UwGosbGCTpuV7jvDE16vVWkNMCWqqr
+         paslr3euDOvfLPglAFtll6BbrIEH7G9dDqqDsbt8U2peyjwbTzpRL2hP2NTerae1SkXT
+         SVn4fudGRJTBSCtwGh1X5bX9nACK+SBbNtTAxaGYxsK9dZyA1/5h4e4DVMpUTdy67eBY
+         DA4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=Dm2hwF6WCe7czySRX8uWW+CCWzNHmf/+RMx8+8WjsmY=;
-        b=hjyVpH8qTxp6DKZnbJx8JMJq2vlCcaFyYQoVSh0ADsojWGpU+mg06eF/frXcAGjJOD
-         N21wHKROtbhL1WWp6xL9w6J/GFFpkxTL9DGczDSknorDoQO/NfhseWxt1LKQmoJDsSY7
-         FUowr/R2M+JrHZuoV4P0GllohOPgg2W5TDcGlDDLsVq0usNSCk3GZ+KkTqUPFMXsxBTN
-         U8t/cFAWErfLqHgyLfbD/6HnwZs8BZbWZZeJ+6qMQ7+mR/j8Fh4bk5FYd+kpXokM+TMq
-         0CKV/gEzS6ChM8rnUiBQ/jmgKqprUhyIq1O0jYR09SP3YOK5EnQKxPqwBQpRlkRcmXWk
-         v6CA==
-X-Gm-Message-State: ACgBeo1CSOblTLSQla9UFCyI9o2m0s2kO31DB1gPuLZkTem/yPbXx13M
-        bER0SIHvDLvyoVXt1AMSBos=
-X-Google-Smtp-Source: AA6agR6OwSTX9fAupj4WotNw0xeC0OpM5SL6CwjZ+b1Akb89ptdU5t7mq25zb77YKR6DV+QQ2tEuuQ==
-X-Received: by 2002:a17:907:845:b0:731:2f6c:6dbd with SMTP id ww5-20020a170907084500b007312f6c6dbdmr26248298ejb.551.1663174653979;
-        Wed, 14 Sep 2022 09:57:33 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id q9-20020a17090676c900b00741a0c3f4cdsm7830173ejn.189.2022.09.14.09.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:57:33 -0700 (PDT)
-Message-ID: <632207fd.170a0220.8b7b4.3e14@mx.google.com>
-X-Google-Original-Message-ID: <YyIH+39HUdAuO3+Y@Ansuel-xps.>
-Date:   Wed, 14 Sep 2022 18:57:31 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     dmaengine@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: dma: rework qcom,adm Documentation
- to yaml schema
-References: <20220914140426.7609-1-ansuelsmth@gmail.com>
- <1663174030.707683.2567031.nullmailer@robh.at.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UWYZ+LvZVhpAV6ZQBWEOlqo/TbgQPhE93gUN5h4Opa4=;
+        b=ED0KJ70yDH2uE4v88gHzjwp93i683HF1PaeLHL0K9wCAG4N0cztBXdZ/ZBphWtabVs
+         iYa8u7TRkjLW9L3Ym1NRfCbnQ1e77P8Q2A2WmnIxv2qGz+sriKBAYVCwbFUe74q4tP2e
+         mktxEaidJ0fe9TZYizmwMxMbTT54TljmuV45JRw2g52OvnOsiZjoRxBBrmlhEqs7/ly6
+         6AG8Rs8IHuf++LDyY0RM1azCH+4201e3637swql72jP5oPbL1uEhjGc8+1ixFGx097kf
+         udR972sG1MTnYohgfgbq6IhH/HLQNjRuK3sqVomudmcMYf+BMD6St33bfBzFos0xxqD6
+         u83g==
+X-Gm-Message-State: ACgBeo1C+IY6rlZoqF9Mq6IHlQ3ZlnEaR/Wd5/RhX+62fAR6qt8ZYtGu
+        xHOIlYFUuVs0jYp4Pd91f2w=
+X-Google-Smtp-Source: AA6agR6Wu36k8hHB+/9VV1slDHLKSuMtkQx48tsI3xnwZirYVolN/T5Srax7wN9UvBnxLS0DXw6nUw==
+X-Received: by 2002:a05:620a:13ae:b0:6ce:5926:1511 with SMTP id m14-20020a05620a13ae00b006ce59261511mr9345627qki.431.1663174660232;
+        Wed, 14 Sep 2022 09:57:40 -0700 (PDT)
+Received: from [10.69.40.226] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b3-20020a05620a118300b006b8f4ade2c9sm2051740qkk.19.2022.09.14.09.57.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 09:57:38 -0700 (PDT)
+Message-ID: <1825234b-f17a-dea4-38f6-ba5881ab9a3d@gmail.com>
+Date:   Wed, 14 Sep 2022 09:57:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663174030.707683.2567031.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 00/21] mm: introduce Designated Movable Blocks
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        - <devicetree-spec@vger.kernel.org>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        iommu@lists.linux.dev
+References: <20220913195508.3511038-1-opendmb@gmail.com>
+ <CAL_JsqLmJcLHViPaBPvkBhR4xi+ZQuAJQpXoiJLVRW9EH4EX0Q@mail.gmail.com>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <CAL_JsqLmJcLHViPaBPvkBhR4xi+ZQuAJQpXoiJLVRW9EH4EX0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,57 +101,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 11:47:10AM -0500, Rob Herring wrote:
-> On Wed, 14 Sep 2022 16:04:25 +0200, Christian Marangi wrote:
-> > Rework the qcom,adm Documentation to yaml schema.
-> > This is not a pure conversion since originally the driver has changed
-> > implementation for the #dma-cells and was wrong from the start.
-> > Also the driver now handles the common DMA clients implementation with
-> > the first cell that denotes the channel number and nothing else since
-> > the client will have to provide the crci information via other means.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/dma/qcom,adm.yaml     | 96 +++++++++++++++++++
-> >  .../devicetree/bindings/dma/qcom_adm.txt      | 61 ------------
-> >  2 files changed, 96 insertions(+), 61 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
-> > 
+On 9/14/2022 6:21 AM, Rob Herring wrote:
+> On Tue, Sep 13, 2022 at 2:57 PM Doug Berger <opendmb@gmail.com> wrote:
+>>
+>> MOTIVATION:
+>> Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
+>> controllers with each mapped in a different address range within
+>> a Uniform Memory Architecture. Some users of these systems have
+>> expressed the desire to locate ZONE_MOVABLE memory on each
+>> memory controller to allow user space intensive processing to
+>> make better use of the additional memory bandwidth.
+>> Unfortunately, the historical monotonic layout of zones would
+>> mean that if the lowest addressed memory controller contains
+>> ZONE_MOVABLE memory then all of the memory available from
+>> memory controllers at higher addresses must also be in the
+>> ZONE_MOVABLE zone. This would force all kernel memory accesses
+>> onto the lowest addressed memory controller and significantly
+>> reduce the amount of memory available for non-movable
+>> allocations.
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> Why are you sending kernel patches to the Devicetree specification list?
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> dma-controller@18300000: reset-names:1: 'c0' was expected
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 
-> dma-controller@18300000: reset-names:2: 'c1' was expected
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 
-> dma-controller@18300000: reset-names:3: 'c2' was expected
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 
-> dma-controller@18300000: reset-names: ['clk', 'pbus', 'c0', 'c1', 'c2'] is too long
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 
-> dma-controller@18300000: resets: [[12, 13], [12, 12], [12, 11], [12, 10], [12, 9]] is too long
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 
+> Rob
+My apologies if this is a problem. No offense was intended.
 
-Hi,
-I fixed these warning on the second commit of this series.
+My process has been to run my patches through get_maintainers.pl to get 
+the list of addresses to copy on submissions and my 
+0016-dt-bindings-reserved-memory-introduce-designated-mov.patch 
+solicited the
+'- <devicetree-spec@vger.kernel.org>' address.
 
--- 
-	Ansuel
+My preference when reviewing is to receive an entire patch set to 
+understand the context of an individual commit, but I can certainly 
+understand that others may have different preferences.
+
+It was my understanding that the Devicetree specification list was part 
+of the kernel (e.g. @vger.kernel.org) and would be willing to receive 
+patches that might be of relevance to it.
+
+I am inexperienced with yaml and devicetree processes in general so I 
+have tried to lean on the examples of other reserved-memory node 
+bindings for help.
+
+There is much to learn and I am happy to modify my process to better 
+accommodate your needs.
+
+Regards,
+     Doug
