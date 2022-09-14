@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3955B8D09
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A3C5B8D14
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiINQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S230073AbiINQbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiINQ2n (ORCPT
+        with ESMTP id S230036AbiINQbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:28:43 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A767B832EB;
-        Wed, 14 Sep 2022 09:27:49 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1280590722dso42472048fac.1;
-        Wed, 14 Sep 2022 09:27:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0Y050b+bqDXjMFJ0FQAtLb9qk0gbyprIyKNchoQmXT8=;
-        b=El924nw0bwKHOBPgPNhF59PcrfgNTmbLFUwXnXPgWQih6/K5ZnKZjkR96Z1NGGfgPj
-         F7+HEEIVJ64Mal6gPVvn9+BXO8PJ7Gy9ExT834f7auZj8fyX6SpyzXHHST8vswZoPsTb
-         4heZacP/raQR5awluHgjR3zCdc+ka0ifyTVJ0KjOr9siGu2Mvnt/yeZ8d2eOCbXWvd+k
-         kjQoJxY7fhELJEKyIWbYaM0JPJFBWxH4iVEV4ac7nOaXIrWVkeghjZsjBIAHeYfe7lf0
-         QOX4YJMXRdKa3D4ezngKCc+/oRhR/EZLN2NhU8BzmrwsXOAoavtpS0OeqPIAhS5KYDwN
-         Jylw==
-X-Gm-Message-State: ACgBeo1SljhE25FMXjv+arM/i+8r3Jjumhqwln7xmXL+rt0IDhvGhjQ4
-        80NHaHmUz1N+mAjlzD+x5Q==
-X-Google-Smtp-Source: AA6agR5JPh3F/7WxyKo5hFzduVLue4pftUF2pPAoQkbx7N1C4y8oQD4shtXx254V59inZFs9XEpmlg==
-X-Received: by 2002:a05:6808:140e:b0:344:d2fb:43fe with SMTP id w14-20020a056808140e00b00344d2fb43femr2244433oiv.112.1663172864306;
-        Wed, 14 Sep 2022 09:27:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w35-20020a056830412300b00657a221eb71sm848607ott.65.2022.09.14.09.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:27:44 -0700 (PDT)
-Received: (nullmailer pid 2502825 invoked by uid 1000);
-        Wed, 14 Sep 2022 16:27:43 -0000
-Date:   Wed, 14 Sep 2022 11:27:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     dmitry.torokhov@gmail.com, linux-mediatek@lists.infradead.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chen.zhong@mediatek.com
-Subject: Re: [PATCH v2 2/2] dt-bindings: input: mediatek,pmic-keys: Add
- compatible for MT6331 keys
-Message-ID: <20220914162743.GA2502746-robh@kernel.org>
-References: <20220914103021.43593-1-angelogioacchino.delregno@collabora.com>
- <20220914103021.43593-3-angelogioacchino.delregno@collabora.com>
+        Wed, 14 Sep 2022 12:31:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46A691ADA2;
+        Wed, 14 Sep 2022 09:29:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 445D81576;
+        Wed, 14 Sep 2022 09:29:54 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [10.57.78.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B97853F73D;
+        Wed, 14 Sep 2022 09:29:45 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Abhyuday Godhasara <abhyuday.godhasara@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/2] Save cpuhp dynamic state
+Date:   Wed, 14 Sep 2022 18:28:13 +0200
+Message-Id: <20220914162815.1954866-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914103021.43593-3-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 12:30:21 +0200, AngeloGioacchino Del Regno wrote:
-> Add a compatible for the keys found on MT6331 PMIC.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Requesting a CPUHP_AP_ONLINE_DYN cpuhp state reserves a state
+among the range [CPUHP_AP_ONLINE_DYN:CPUHP_AP_ONLINE_DYN_END].
+The reserved state must be saved in order to remove it later.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Cf. __cpuhp_setup_state_cpuslocked() documentation:
+Return:
+  On success:
+    Positive state number if @state is CPUHP_AP_ONLINE_DYN;
+    0 for all other states
+
+Indeed, the following:
+  cpuhp_remove_state(CPUHP_AP_ONLINE_DYN);
+removes the first dynamic states added to the cpuhp state machine.
+
+Patches were tested as:
+- powercap/drivers/dtpm: on a Juno-r2, using a late_initcall()
+  to init and exit the dtpm framework.
+- driver: soc: xilinx: the patch was only compile tested
+  due to missing hardware.
+
+Pierre Gondois (2):
+  driver: soc: xilinx: Save cpuhp dynamic state
+  powercap/drivers/dtpm: Save cpuhp dynamic state
+
+ drivers/powercap/dtpm_cpu.c             |  7 ++++++-
+ drivers/soc/xilinx/xlnx_event_manager.c | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+
