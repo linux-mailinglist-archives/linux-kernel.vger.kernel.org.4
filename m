@@ -2,203 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9475B86AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CEF5B869D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiINKvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S229794AbiINKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiINKvS (ORCPT
+        with ESMTP id S229511AbiINKur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:51:18 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2897B7A6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:51:02 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id t3so14742264ply.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=q3TsfZkeKJw5XNsDWUMmFDs6Gnk1XCvOAhXnXaSVyI4=;
-        b=05u3YH9R0psRe49MO2FNU8/5dfjtU6+uA3PESMKlS7YdPzozmMNv6CugV4OxDP/9qa
-         7XoEXoB3qcWpKYfZnhvS7qMIKQ6O29eYjYHE2HTXR6BhgbzG6FQpmmwIJzcKbE1d7pvx
-         3DGyqwP+3s5UBMrH0K5OXRRcb0SBYu+G1eMuJXb9/ybkkUH41iO6yqo26f7Zz5GC42Pi
-         8dzPXef/azuIbsGrG6WIxcrSlwv/r2YMGF2ViVMNyn1ehUXLHrXo0HS9mZSX/2HFioBJ
-         fnHgiAMK/irWYa+C5+YiEhjlvG6iI9yoVNpw6dqtXSdpfps0lWx/L/3ePy1N+gMmPQep
-         c6pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=q3TsfZkeKJw5XNsDWUMmFDs6Gnk1XCvOAhXnXaSVyI4=;
-        b=0FFcpIeAzO55GIZ3HTaEb5WzsGbd39xaFJ5WOh/RKGGOpzR8qM+U/emOrAAV+lUKn0
-         d3j7CnWxr+mMF7MIKyLrsw+KNYVVE2UMvvhQOtARgmaRO9bUVqIVmq5emXJwn+0UjIRx
-         XMiLRX9EundiqlutlhRrU6uyZfy06jLPzQmdOoJWnoylAwEaIHIM1R2vcEvDG+NkB44X
-         q9bEdhoq81SIOUwpB+07BQVzDzXQdJTTLihFcng13NbOl/SwgCYLv/2Z8qsa2OacGWa8
-         caOXgrPnjthHdnHfmb27iEx5RcbRUj3EpSHEjDkYZ+vH1X/zfwjWRfOISDP0jOT5A6wG
-         ImZQ==
-X-Gm-Message-State: ACrzQf2j8NPnWN0LH0qoVi6NIfhqajSl2UdcCCbYygZ8e7y+Plqb+v7i
-        uBdnxFuXGA1VIUrrA7cON2JC5g==
-X-Google-Smtp-Source: AA6agR7NDk5OHRM9Rd6OftgJi3/gHYY1TyxgEHCKEeThw53Wb1mA8mROSozj5Sh4+p9vi/4BBbPuig==
-X-Received: by 2002:a17:90b:3808:b0:202:c5ba:d71b with SMTP id mq8-20020a17090b380800b00202c5bad71bmr4102692pjb.18.1663152661702;
-        Wed, 14 Sep 2022 03:51:01 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([2400:8800:1f02:83:4000:0:1:2])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902ec8d00b0016dc2366722sm10537042plg.77.2022.09.14.03.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 03:51:01 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
-        huyue2@coolpad.com, Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V3 3/6] erofs: introduce 'domain_id' mount option
-Date:   Wed, 14 Sep 2022 18:50:38 +0800
-Message-Id: <20220914105041.42970-4-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20220914105041.42970-1-zhujia.zj@bytedance.com>
-References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
+        Wed, 14 Sep 2022 06:50:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB61A4661B;
+        Wed, 14 Sep 2022 03:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663152646; x=1694688646;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FJYMs62ascLSw9OHOfFlHvVTgyDpbA2c8qbkQOb1Nks=;
+  b=Ivb6PcF/NUgvu7ZigV/+XyLR54nCeiGMWXmpwgBBwY3AF2SiAL1lf9To
+   1AYNOynCya0x2Ah4ApyxuFxerysMDylHcyLUHlBf0uqp0z47PxLJci62L
+   LdKQ69iQKeLbZXvxqhUQa2NTatLqeqRGUsk/sptJe3lzy72218FgFhn3Y
+   CWU8sUtcdrcebLOv+zWcv9Jr24nM8CupSG4uAuOBKbOlhmE7pJ2GfQHAn
+   QCX/5mwoGfxL48p0cOg9MDJhW9VssQTeaRFSezuaGGFzQutzMRychMlaG
+   5Wg6k1M8/jaKfdcbrh99815bs7V3eIOPFvnvfdzr3pASjTWzVpPJon0zV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="297127793"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="297127793"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:50:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="705918476"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:50:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oYPyY-002A7j-1g;
+        Wed, 14 Sep 2022 13:50:38 +0300
+Date:   Wed, 14 Sep 2022 13:50:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Gene Chen <gene_chen@richtek.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v3 00/11] leds: deduplicate led_init_default_state_get()
+Message-ID: <YyGx/t8rLY59HXju@smile.fi.intel.com>
+References: <20220906135004.14885-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906135004.14885-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'domain_id' mount option to enable shared domain sementics.
-In which case, the related cookie is shared if two mountpoints in the
-same domain have the same data blob. Users could specify the name of
-domain by this mount option.
+On Tue, Sep 06, 2022 at 04:49:53PM +0300, Andy Shevchenko wrote:
+> There are several users of LED framework that reimplement the
+> functionality of led_init_default_state_get(). In order to
+> deduplicate them move the declaration to the global header
+> (patch 2) and convert users (patche 3-11).
 
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
----
- fs/erofs/internal.h |  1 +
- fs/erofs/super.c    | 17 +++++++++++++++++
- fs/erofs/sysfs.c    | 19 +++++++++++++++++--
- 3 files changed, 35 insertions(+), 2 deletions(-)
+Can this be applied now?
 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index aa71eb65e965..2d129c6b3027 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -76,6 +76,7 @@ struct erofs_mount_opts {
- #endif
- 	unsigned int mount_opt;
- 	char *fsid;
-+	char *domain_id;
- };
- 
- struct erofs_dev_context {
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 7aa57dcebf31..856758ee4869 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -440,6 +440,7 @@ enum {
- 	Opt_dax_enum,
- 	Opt_device,
- 	Opt_fsid,
-+	Opt_domain_id,
- 	Opt_err
- };
- 
-@@ -465,6 +466,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
- 	fsparam_string("fsid",		Opt_fsid),
-+	fsparam_string("domain_id",	Opt_domain_id),
- 	{}
- };
- 
-@@ -568,6 +570,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 			return -ENOMEM;
- #else
- 		errorfc(fc, "fsid option not supported");
-+#endif
-+		break;
-+	case Opt_domain_id:
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		kfree(ctx->opt.domain_id);
-+		ctx->opt.domain_id = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.domain_id)
-+			return -ENOMEM;
-+#else
-+		errorfc(fc, "domain_id option not supported");
- #endif
- 		break;
- 	default:
-@@ -695,6 +707,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
- 	ctx->opt.fsid = NULL;
-+	ctx->opt.domain_id = NULL;
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
-@@ -834,6 +847,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 
- 	erofs_free_dev_context(ctx->devs);
- 	kfree(ctx->opt.fsid);
-+	kfree(ctx->opt.domain_id);
- 	kfree(ctx);
- }
- 
-@@ -887,6 +901,7 @@ static void erofs_kill_sb(struct super_block *sb)
- 	fs_put_dax(sbi->dax_dev, NULL);
- 	erofs_fscache_unregister_fs(sb);
- 	kfree(sbi->opt.fsid);
-+	kfree(sbi->opt.domain_id);
- 	kfree(sbi);
- 	sb->s_fs_info = NULL;
- }
-@@ -1040,6 +1055,8 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
- #ifdef CONFIG_EROFS_FS_ONDEMAND
- 	if (opt->fsid)
- 		seq_printf(seq, ",fsid=%s", opt->fsid);
-+	if (opt->domain_id)
-+		seq_printf(seq, ",domain_id=%s", opt->domain_id);
- #endif
- 	return 0;
- }
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index c1383e508bbe..341fb43ad587 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -201,12 +201,27 @@ static struct kobject erofs_feat = {
- int erofs_register_sysfs(struct super_block *sb)
- {
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
-+	char *name;
-+	char *str = NULL;
- 	int err;
- 
-+	if (erofs_is_fscache_mode(sb)) {
-+		if (sbi->opt.domain_id) {
-+			str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id,
-+					sbi->opt.fsid);
-+			if (!str)
-+				return -ENOMEM;
-+			name = str;
-+		} else {
-+			name = sbi->opt.fsid;
-+		}
-+	} else {
-+		name = sb->s_id;
-+	}
- 	sbi->s_kobj.kset = &erofs_root;
- 	init_completion(&sbi->s_kobj_unregister);
--	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
--			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
-+	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s", name);
-+	kfree(str);
- 	if (err)
- 		goto put_sb_kobj;
- 	return 0;
+Lee, Pavel, what do you think?
+
+> Changelog v3:
+> - added tag to patch 11 (Kurt)
+> - Cc'ed to Lee, who might help with LED subsystem maintenance
+> 
+> Changelog v2:
+> - added missed patch 2 and hence make it the series
+> - appended tag to patch 7
+> - new patch 1
+
 -- 
-2.20.1
+With Best Regards,
+Andy Shevchenko
+
 
