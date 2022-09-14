@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AF65B7ED8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190345B7EE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiINCRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 22:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S229835AbiINCWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 22:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINCRt (ORCPT
+        with ESMTP id S229637AbiINCWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 22:17:49 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A465B558E1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:17:48 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id v4so13002352pgi.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:17:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=s5628q2IWcL7lPRgxwbc0TKBX+FlmvbMxHcTpQHaeS8=;
-        b=asSszdhcFXxMwCjE97nzDbnC6nlt9PooRfmNtSzBz36OKExwwuS7O2iuFFcFJEOc9H
-         IZ389Yw+teFVAm7zQNOHsOmzFRSfJNgpBveuwuxlpETLQf1SP3zAjpefMUgmNOhoMlhP
-         35c/KCsrW9uegXzGvrYsd7Nj+jcVmHkG5JOmppxXjH+b8af5a1Ose770fLotDFcArFjd
-         HOaD2MVmxo3HaDG3jyDVO63NoKSRP95sW7JAaNGG41x9IYeX5NAlGfaDlTt++mW6I4k1
-         TgAsGbcpGvPVLlpZqVb6eM2gCMUKjUho7yF9QxdHgR4SXzShSqtGC1ZMaZwJXtP4TyCJ
-         VcgA==
-X-Gm-Message-State: ACgBeo05HZJrYLS3rrvrcppb7WCWnteUxnW9Pj0zeunlFuY0EwxcrRox
-        FAXk9XWgkOeu2+DWdNTob/o=
-X-Google-Smtp-Source: AA6agR5vZpY7gIR2rF5G72kS3asgm4sRqIpdVVBPfPXFvxfmLmI3uRvHAF6p/u6pGj/DfFNZVfP7oQ==
-X-Received: by 2002:a63:5a01:0:b0:434:8bd7:284d with SMTP id o1-20020a635a01000000b004348bd7284dmr30637936pgb.538.1663121868135;
-        Tue, 13 Sep 2022 19:17:48 -0700 (PDT)
-Received: from sk-Yoga-14sARH-2021.lan (144.34.241.68.16clouds.com. [144.34.241.68])
-        by smtp.gmail.com with ESMTPSA id jg19-20020a17090326d300b0016f1ef2cd44sm9154461plb.154.2022.09.13.19.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 19:17:47 -0700 (PDT)
-From:   Ke Sun <sunke@kylinos.cn>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ke Sun <sunke@kylinos.cn>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] mm/filemap: Make folio_put_wait_locked static
-Date:   Wed, 14 Sep 2022 10:17:38 +0800
-Message-Id: <20220914021738.3228011-1-sunke@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Sep 2022 22:22:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23DA5D12E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:21:56 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MS3sF6sfqzmVGc;
+        Wed, 14 Sep 2022 10:18:09 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 14 Sep 2022 10:21:54 +0800
+Received: from DESKTOP-6NKE0BC.china.huawei.com (10.174.185.210) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 14 Sep 2022 10:21:53 +0800
+From:   Kunkun Jiang <jiangkunkun@huawei.com>
+To:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oupton@google.com>
+CC:     <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] clocksource/drivers/arm_arch_timer: Fix handling of ARM erratum 85821
+Date:   Wed, 14 Sep 2022 10:21:22 +0800
+Message-ID: <20220914022122.1175-1-jiangkunkun@huawei.com>
+X-Mailer: git-send-email 2.26.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.210]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's only used in mm/filemap.c, since commit <ffa65753c431>
-("mm/migrate.c: rework migration_entry_wait() to not take a pageref").
+The commit a38b71b0833e ("clocksource/drivers/arm_arch_timer:
+Move system register timer programming over to CVAL") moves the
+programming of the timers from the countdown timer (TVAL) over
+to the comparator (CVAL). This makes it necessary to read the
+counter when programming next event. However, the workaround of
+Cortex-A73 erratum 858921 does not set the corresponding
+set_next_event_phys and set_next_event_virt.
 
-Make it static.
+Add the appropriate hooks to apply the erratum mitigation when
+programming the next timer event.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Ke Sun <sunke@kylinos.cn>
+Fixes: a38b71b0833e ("clocksource/drivers/arm_arch_timer: Move system register timer programming over to CVAL")
+Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
 ---
- include/linux/pagemap.h | 1 -
- mm/filemap.c            | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ drivers/clocksource/arm_arch_timer.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 0178b2040ea3..82880993dd1a 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -1042,7 +1042,6 @@ static inline int wait_on_page_locked_killable(struct page *page)
- 	return folio_wait_locked_killable(page_folio(page));
- }
- 
--int folio_put_wait_locked(struct folio *folio, int state);
- void wait_on_page_writeback(struct page *page);
- void folio_wait_writeback(struct folio *folio);
- int folio_wait_writeback_killable(struct folio *folio);
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 15800334147b..ade9b7bfe7fc 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1467,7 +1467,7 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
-  *
-  * Return: 0 if the folio was unlocked or -EINTR if interrupted by a signal.
-  */
--int folio_put_wait_locked(struct folio *folio, int state)
-+static int folio_put_wait_locked(struct folio *folio, int state)
- {
- 	return folio_wait_bit_common(folio, PG_locked, state, DROP);
- }
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index 9ab8221ee3c6..ff935efb6a88 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -473,6 +473,8 @@ static const struct arch_timer_erratum_workaround ool_workarounds[] = {
+ 		.desc = "ARM erratum 858921",
+ 		.read_cntpct_el0 = arm64_858921_read_cntpct_el0,
+ 		.read_cntvct_el0 = arm64_858921_read_cntvct_el0,
++		.set_next_event_phys = erratum_set_next_event_phys,
++		.set_next_event_virt = erratum_set_next_event_virt,
+ 	},
+ #endif
+ #ifdef CONFIG_SUN50I_ERRATUM_UNKNOWN1
 -- 
-2.25.1
+2.27.0
 
