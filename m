@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEB35B8682
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA955B8688
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiINKkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S229951AbiINKnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiINKkL (ORCPT
+        with ESMTP id S229561AbiINKnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:40:11 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894CE58097;
-        Wed, 14 Sep 2022 03:40:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id sb3so4052481ejb.9;
-        Wed, 14 Sep 2022 03:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2q8cWxTdOT7NEjEAm48iQBXKuIhQLyWS2hOWoDR0iTY=;
-        b=DylVZ1TI5IYuSNnbh4HQypPHh3hxW8yETwHZ7tK0BXws5BOr1VdvOaNfaqTqAZzeSy
-         iVZLHCZ4IDW5C99L/FnrJjiKqfLCxjLpBeQ2XX/4MiU2z5adY+JbdVnrjcSrrGmjyQxC
-         1GX5lUGb/rcLVVkxep8ENB2iUhltpSeabSGZfHSelMzRhNFw0Eqxd3QgJ4meRdDu80BY
-         UvvqwtY6zFX79xh2/VKWStJjJV8PdxE3T/E23TtdBmw1oumC8GyThADXG6uRMU3nmh6U
-         FBowGk/gAa2xiyOQTjWmnQw71ItLgiUnzdIyEiGYwryC2WrB+jCu8OLyVqyKUnx/kgDg
-         MXoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=2q8cWxTdOT7NEjEAm48iQBXKuIhQLyWS2hOWoDR0iTY=;
-        b=XLLZ3Bl6QTy26NtT5rDNm9zH8C28hfCXaYorQlUuhbtxMvx2iT7VzeE1hCb1sP3+mo
-         Nubh5yJPfgl9sORQkIozSw+OdEwZrSjJaA/0jTeM76Ft9l8/PHYAe2+J5msk8DkKCUZf
-         +Le+aEMsRJH4YHe8CE5g+NM3uB/pWFSsf3NoMLp198AN6kXZ7+3nrleQ/wtkNw0fXkpH
-         D1mBUThJ6gr2xS7tTUE35t0MRJm2db0oa7UGd/pCeqgdcCj+xm3Ho5gmFcLWljgdOfPo
-         x/XtwZ63v4RljcntZsF+NucD7YJ3+TRTAwUYuXNTNPwjYTzJCEAwBi6g/ppce7cIqok+
-         2tsw==
-X-Gm-Message-State: ACgBeo008waOuOqMR0qK34PIQhOtj0UWCC2jMe0veiMky/On+guORIf0
-        kq99px3DbmdR1cMsa/jTA4w=
-X-Google-Smtp-Source: AA6agR548FPwc28DxYS445PZ5foFlZ/dWDKKUyLcm97KljK1vuY6/Kce2cqT8VdhjBo499zB+vRNZg==
-X-Received: by 2002:a17:907:2cf6:b0:77b:2dd9:7cd7 with SMTP id hz22-20020a1709072cf600b0077b2dd97cd7mr13428182ejc.334.1663152009082;
-        Wed, 14 Sep 2022 03:40:09 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s16-20020a1709064d9000b00772eb5e9f51sm7262675eju.118.2022.09.14.03.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 03:40:07 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 12:40:05 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, anrao@nvidia.com,
-        smangipudi@nvidia.com, kyarlagadda@nvidia.com
-Subject: Re: [PATCH v2 1/4] mmc: sdhci-tegra: Separate T19x and T23x SoC data
-Message-ID: <YyGvhT4bvNb55kZK@orome>
-References: <20220914095628.26093-1-pshete@nvidia.com>
+        Wed, 14 Sep 2022 06:43:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F5378581
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663152179; x=1694688179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Vp0eGXwV90GWfbMI665R9Cdn+zG5V4Ss1cf3iuS0xSQ=;
+  b=nYC4dhRmmc5ugUeDOwZMbAciHaeFZ4GVpYtrk0+KNmyUCkai4/m2Mt5T
+   dVEvQtSrcZ68hJ/GNcqsVVcCCYzDCJ/0B8sX6GmIrNfdl++QcdmV3T/5G
+   hDhojtSnWevPa9+EWUzWhC+V+gx0IPgjIEdZ3+sqmoyt9YXUqA+/gJuNu
+   GnIJpA42qMfO8KBuPXp3lhAgt+CgJ2cwngr7fmed6mkgz0l3D+0d4UwhM
+   rLsmfJALuGhFKdNov6QbiTFFscGG4OIfqHpRo+9yCWNXPIR8+3MFk+odM
+   ZZDc1jjNkJ2Nylm8F3s68SFf4jG5Xdy44SXh88idsT07KcK8Iyl476YSc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299754517"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="299754517"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:42:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="647343438"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 14 Sep 2022 03:42:57 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYPr7-00006u-0D;
+        Wed, 14 Sep 2022 10:42:57 +0000
+Date:   Wed, 14 Sep 2022 18:42:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mcgrof:20220913-test-sysfs 9/11]
+ fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect
+Message-ID: <202209141853.6zXXC9T7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bPE/XjzJQ2fi1dxO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914095628.26093-1-pshete@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20220913-test-sysfs
+head:   fd13723170f4a2381aab0b6449920c121f01a10a
+commit: 010fe7c173f104fbec6c1d56c3a92e2b88281ec8 [9/11] kernfs: add initial failure injection support
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220914/202209141853.6zXXC9T7-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=010fe7c173f104fbec6c1d56c3a92e2b88281ec8
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof 20220913-test-sysfs
+        git checkout 010fe7c173f104fbec6c1d56c3a92e2b88281ec8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
---bPE/XjzJQ2fi1dxO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, Sep 14, 2022 at 03:26:25PM +0530, Prathamesh Shete wrote:
-> Create new SoC data structure for T23x platforms.
+All warnings (new ones prefixed by >>):
 
-Can you please use consistent spelling of Tegra194 and Tegra234 here and
-in the subject? That makes it a bit easier to search for things.
+   In file included from fs/kernfs/file.c:19:
+   fs/kernfs/file.c: In function 'kernfs_fop_write_iter':
+>> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
+     239 | #define may_wait_kernfs_debug(func, when) (false)
+         |                                           ^
+   fs/kernfs/file.c:320:9: note: in expansion of macro 'may_wait_kernfs_debug'
+     320 |         may_wait_kernfs_debug(kernfs_fop_write_iter, at_start);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+>> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
+     239 | #define may_wait_kernfs_debug(func, when) (false)
+         |                                           ^
+   fs/kernfs/file.c:343:9: note: in expansion of macro 'may_wait_kernfs_debug'
+     343 |         may_wait_kernfs_debug(kernfs_fop_write_iter, before_mutex);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+>> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
+     239 | #define may_wait_kernfs_debug(func, when) (false)
+         |                                           ^
+   fs/kernfs/file.c:351:9: note: in expansion of macro 'may_wait_kernfs_debug'
+     351 |         may_wait_kernfs_debug(kernfs_fop_write_iter, after_mutex);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+>> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
+     239 | #define may_wait_kernfs_debug(func, when) (false)
+         |                                           ^
+   fs/kernfs/file.c:359:9: note: in expansion of macro 'may_wait_kernfs_debug'
+     359 |         may_wait_kernfs_debug(kernfs_fop_write_iter, after_active);
+         |         ^~~~~~~~~~~~~~~~~~~~~
 
-> StreamID programming is one of the additional feature
-> added in Tegra234 and later chips
 
-That's a bit confusing because this patch doesn't do anything with
-stream ID programming. Perhaps defer that comment to when it becomes
-relevant?
+vim +239 fs/kernfs/kernfs-internal.h
 
-Thierry
+   233	
+   234	#define may_wait_kernfs_debug(func, when) \
+   235		__kernfs_debug_should_wait_func_name(func)(__kernfs_config_wait_var(func, when))
+   236	void __kernfs_debug_should_wait_kernfs_fop_write_iter(bool evaluate);
+   237	#else
+   238	static inline void kernfs_init_failure_injection(void) {}
+ > 239	#define may_wait_kernfs_debug(func, when) (false)
+   240	#endif
+   241	
 
->=20
-> Signed-off-by: Aniruddha Tvs Rao <anrao@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegr=
-a.c
-> index 2d2d8260c681..a6c5bbae77b4 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -1556,7 +1556,21 @@ static const struct sdhci_tegra_soc_data soc_data_=
-tegra194 =3D {
->  	.max_tap_delay =3D 139,
->  };
-> =20
-> +static const struct sdhci_tegra_soc_data soc_data_tegra234 =3D {
-> +	.pdata =3D &sdhci_tegra186_pdata,
-> +	.dma_mask =3D DMA_BIT_MASK(39),
-> +	.nvquirks =3D NVQUIRK_NEEDS_PAD_CONTROL |
-> +		    NVQUIRK_HAS_PADCALIB |
-> +		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
-> +		    NVQUIRK_ENABLE_SDR50 |
-> +		    NVQUIRK_ENABLE_SDR104 |
-> +		    NVQUIRK_HAS_TMCLK,
-> +	.min_tap_delay =3D 95,
-> +	.max_tap_delay =3D 111,
-> +};
-> +
->  static const struct of_device_id sdhci_tegra_dt_match[] =3D {
-> +	{ .compatible =3D "nvidia,tegra234-sdhci", .data =3D &soc_data_tegra234=
- },
->  	{ .compatible =3D "nvidia,tegra194-sdhci", .data =3D &soc_data_tegra194=
- },
->  	{ .compatible =3D "nvidia,tegra186-sdhci", .data =3D &soc_data_tegra186=
- },
->  	{ .compatible =3D "nvidia,tegra210-sdhci", .data =3D &soc_data_tegra210=
- },
-> --=20
-> 2.17.1
->=20
-
---bPE/XjzJQ2fi1dxO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMhr4MACgkQ3SOs138+
-s6GIBQ//RafadWYDI+Sx2L96z9hC8zerwG/M9qu5ohqQc2Mt3pb1XzUE/lPdT/d9
-rXcsOe/1YBz7KJsKnVOSCHt+paplUHTnLsZvyZPAaNsjxWD38s5bARMoVfOPJMRq
-355bNDdYfZwmIdGGsMSu8Kf4CXXM2ASkhgztJwu/2mLOROJmV9jujYho6n8T+9tE
-emNKSQeGQPnsjrTJkVY53cfGO9OAV8s9l1k5AbDwhE2Atw8bV8PWNsCyR+0shY3S
-w26o5sCUoVKXs5mGCg4uQzY90bG0e1/R3PH8yxBj1+1aTGudeadsdn/6i+KqUFoV
-LQUfV7eILj8Fv7wk+yFfIk8Qn66MyE9omR7s4ArV/IUOQAe4VoJWYiOCji5c1WyN
-ozMAMZfnU6iKr5tb+FhBpwrsez3lCQ7LKM7CyYDkMGm0pIxBU+zQQDsP6SCkohAK
-y5iEOXID+ww180/aB3sVNjKSNookWaR9Nffp/h96ySFzELK6PhSxOtEMKrCqDoji
-wU8flrhVJYzwtzNcUh81OqYKnoOU8RU755eIpxGHZHehX8No5dZV3fNN9gCTHLeA
-aPudvlmrX3uXzBrp5S0iGzxTLeA470ruC8wHczh0xu31mvsGjGMj8SSI+vEffkUa
-+1hymqH51i/B3UlblSaSIeOng5CRBpXrd3uOt/nLZ+vdjaPC68I=
-=dWyL
------END PGP SIGNATURE-----
-
---bPE/XjzJQ2fi1dxO--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
