@@ -2,268 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC10A5B810F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A647F5B8118
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiINFnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S229884AbiINFvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiINFnG (ORCPT
+        with ESMTP id S229536AbiINFvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:43:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E219A6C120;
-        Tue, 13 Sep 2022 22:43:03 -0700 (PDT)
-X-UUID: fc5106fa49fb4d63a2d5902ecb05f796-20220914
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HiauB9ANq4Y2Q0NtJvs5OWH/ggmKqoFe3c2E0fWAmmw=;
-        b=kmABBap7pgxwMUt7iFQj+xpj679zZxB3fCStH7ixjLbVI1NK+apPVL1Tsx8PNmMlZ+Hn0T9d4D6F1T6t5u1jjubNtNTBeTw2K9ZBkP4XRYuiahq4i5vYHV6DjCxERbrQVHpUW77z8cg293DsLfJ2dDlRtVBvQbwr8oQ92m+luzs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:7b7e2adc-34c4-4bd8-bc16-9c5e8d520b06,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:69b75dec-2856-4fce-b125-09d4c7ebe045,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fc5106fa49fb4d63a2d5902ecb05f796-20220914
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 383026811; Wed, 14 Sep 2022 13:42:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 14 Sep 2022 13:42:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 14 Sep 2022 13:42:55 +0800
-Message-ID: <207b8c4ef0999a7b859c5e2eaf270293d2f18f75.camel@mediatek.com>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: mediatek,tphy: add property to
- set pre-emphasis
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Wed, 14 Sep 2022 13:42:55 +0800
-In-Reply-To: <8090e2e1-afce-9341-2ae7-3f4e094409b6@linaro.org>
-References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
-         <20220819091344.2274-2-chunfeng.yun@mediatek.com>
-         <438da392-f419-ad76-7e91-aa4aab36e12c@linaro.org>
-         <816ecf6287533137b750c8bde9de5830e4229c56.camel@mediatek.com>
-         <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
-         <1a16cce9fe164bafc06ae193310be71c6f645d75.camel@mediatek.com>
-         <000babd8-5980-3d77-f156-324b3442cbe7@linaro.org>
-         <114c357f8d7f049d21ede789a292a8e2d45f4c61.camel@mediatek.com>
-         <0a82842d-283c-e266-84f4-6306f29b61da@linaro.org>
-         <8dcb4de53a52ab44d40f490099b6ed13e5ef7fe0.camel@mediatek.com>
-         <3c180570-ecf9-3db4-c698-39c1b4679c6e@linaro.org>
-         <3b18a9c687af38f7299261c9a589ef3dfc5a1aa7.camel@mediatek.com>
-         <8090e2e1-afce-9341-2ae7-3f4e094409b6@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 14 Sep 2022 01:51:10 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A16564FE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:51:07 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 29so20599731edv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=Rzn+ELvPX5W7AGhjZtpZvYJ+aqaH/60YsBtITR2DMmc=;
+        b=eSeTu+yHRHSCgq9r9iu8y9yBgx8yMxHOsD3jdLNJWTzwKZbEpJGG8qZ3u/QD1R5/uN
+         zSw6mZijyn9Sj2u9vn6oyYi6BTYDeNYAz7YE36Tbpf9H/o5DU+MFTspT7obfndFiHcHY
+         N4UCr/LYR1TiUzCdPundsLmAaBe/5W5s+zFwkag8A1fV4ER7NJ75GimmijznDS9xZVF9
+         x8PPAFhSLr/7LOXYKX7sN8rSB9Iu/N4aN3is/8bPz6FK9V9p9iPQTNCrZeDaMs9JU4xF
+         DaHGg01l/B966rbSmfGlj2GztGntnrvNNNRsvs9RzhWW+qVtgtYeg4lW8dEQvBv9P2oN
+         BKsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Rzn+ELvPX5W7AGhjZtpZvYJ+aqaH/60YsBtITR2DMmc=;
+        b=2tr0maRj4oNpUW/D5TDR+tpeHyNeXqfzx/utOFfFyou1lOs8RNduK8Q5qeSanW4nqJ
+         Tva7IYSyD99E2fBv6e9CMRL4LjhbpgNKJxQ/hA2dgCjGynokwEoD5yHwh8Z5NVC82sf9
+         GV4oqho0CFkPH+SYEyDwHWoO0fjfHanjOkh5FoBMm9NKJbgZeR0YHVrhGZtkTjse/MYv
+         ZNLefEVextv2N6kkdsnZqD58kK/t6UqDTbITPiq3Cd6oqqefjDEVeETlQKuXDCubN9so
+         3qshkUJe4RCtyeY/JriD95IPFeq4ktuOomkbCTA0wtyFJ2gZS818gVG1aiGHfnEkBPGb
+         OUvw==
+X-Gm-Message-State: ACgBeo1QWoch0XLqCNnjctPq6d2KXsH9wzMBdVR/tvP9gY8/K2to3JVB
+        TY+uboYBtsNgo0/zaeMZ9LWM2WYmFSiSEJZk4Zo=
+X-Google-Smtp-Source: AA6agR7CJ65ZG9PZrLmbdZYh4TYrP5+kq5fgLIk0QwZOzxMqNIudRXmG9+XsI+ZHibepeArxUrsH+cbP2wJBJruUZ0M=
+X-Received: by 2002:aa7:d8d7:0:b0:44f:241d:7d81 with SMTP id
+ k23-20020aa7d8d7000000b0044f241d7d81mr27007419eds.201.1663134665678; Tue, 13
+ Sep 2022 22:51:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a50:7b10:0:b0:1d8:92d2:f7f3 with HTTP; Tue, 13 Sep 2022
+ 22:51:04 -0700 (PDT)
+From:   ms sherry johnson <mssherryj549@gmail.com>
+Date:   Wed, 14 Sep 2022 06:51:04 +0100
+Message-ID: <CALyxJoMja_peq197urnOVTkTeQLU-Un5P2rOXEYrtDydo=bzHw@mail.gmail.com>
+Subject: Auditor Payment File: -hl/id1033/11.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,LOTTO_DEPT,MILLION_HUNDRED,MILLION_USD,
+        MONEY_FORM,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-09 at 10:27 +0200, Krzysztof Kozlowski wrote:
-> On 09/09/2022 05:03, Chunfeng Yun wrote:
-> > On Wed, 2022-08-31 at 09:03 +0300, Krzysztof Kozlowski wrote:
-> > > On 31/08/2022 06:00, Chunfeng Yun wrote:
-> > > > On Tue, 2022-08-30 at 13:08 +0300, Krzysztof Kozlowski wrote:
-> > > > > On 29/08/2022 05:37, Chunfeng Yun wrote:
-> > > > > > On Fri, 2022-08-26 at 09:36 +0300, Krzysztof Kozlowski
-> > > > > > wrote:
-> > > > > > > On 26/08/2022 08:36, Chunfeng Yun wrote:
-> > > > > > > > On Tue, 2022-08-23 at 13:24 +0300, Krzysztof Kozlowski
-> > > > > > > > wrote:
-> > > > > > > > > On 22/08/2022 10:07, Chunfeng Yun wrote:
-> > > > > > > > > > On Fri, 2022-08-19 at 15:15 +0300, Krzysztof
-> > > > > > > > > > Kozlowski
-> > > > > > > > > > wrote:
-> > > > > > > > > > > On 19/08/2022 12:13, Chunfeng Yun wrote:
-> > > > > > > > > > > > Add a property to set usb2 phy's pre-emphasis.
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Signed-off-by: Chunfeng Yun <
-> > > > > > > > > > > > chunfeng.yun@mediatek.com>
-> > > > > > > > > > > > ---
-> > > > > > > > > > > >  Documentation/devicetree/bindings/phy/mediatek
-> > > > > > > > > > > > ,tph
-> > > > > > > > > > > > y.ya
-> > > > > > > > > > > > ml |
-> > > > > > > > > > > > 7
-> > > > > > > > > > > > +++++++
-> > > > > > > > > > > >  1 file changed, 7 insertions(+)
-> > > > > > > > > > > > 
-> > > > > > > > > > > > diff --git
-> > > > > > > > > > > > a/Documentation/devicetree/bindings/phy/mediate
-> > > > > > > > > > > > k,tp
-> > > > > > > > > > > > hy.y
-> > > > > > > > > > > > aml
-> > > > > > > > > > > > b/Documentation/devicetree/bindings/phy/mediate
-> > > > > > > > > > > > k,tp
-> > > > > > > > > > > > hy.y
-> > > > > > > > > > > > aml
-> > > > > > > > > > > > index 848edfb1f677..aee2f3027371 100644
-> > > > > > > > > > > > ---
-> > > > > > > > > > > > a/Documentation/devicetree/bindings/phy/mediate
-> > > > > > > > > > > > k,tp
-> > > > > > > > > > > > hy.y
-> > > > > > > > > > > > aml
-> > > > > > > > > > > > +++
-> > > > > > > > > > > > b/Documentation/devicetree/bindings/phy/mediate
-> > > > > > > > > > > > k,tp
-> > > > > > > > > > > > hy.y
-> > > > > > > > > > > > aml
-> > > > > > > > > > > > @@ -219,6 +219,13 @@ patternProperties:
-> > > > > > > > > > > >          minimum: 1
-> > > > > > > > > > > >          maximum: 15
-> > > > > > > > > > > >  
-> > > > > > > > > > > > +      mediatek,pre-emphasis:
-> > > > > > > > > > > > +        description:
-> > > > > > > > > > > > +          The selection of pre-emphasis (U2
-> > > > > > > > > > > > phy)
-> > > > > > > > > > > > +        $ref:
-> > > > > > > > > > > > /schemas/types.yaml#/definitions/uint32
-> > > > > > > > > > > > +        minimum: 1
-> > > > > > > > > > > > +        maximum: 3
-> > > > > > > > > > > 
-> > > > > > > > > > > Instead of hard-coding register values in
-> > > > > > > > > > > bindings,
-> > > > > > > > > > > you
-> > > > > > > > > > > should
-> > > > > > > > > > > rather
-> > > > > > > > > > > describe here feature/effect. If it is in units,
-> > > > > > > > > > > use
-> > > > > > > > > > > unit
-> > > > > > > > > > > suffixes.
-> > > > > > > > > > > If
-> > > > > > > > > > > it is some choice, usually string enum is
-> > > > > > > > > > > appropriate.
-> > > > > > > > > > 
-> > > > > > > > > > How about changing description as bellow:
-> > > > > > > > > > 
-> > > > > > > > > > "The level of pre-emphasis, increases one level,
-> > > > > > > > > > boosts
-> > > > > > > > > > the
-> > > > > > > > > > relative
-> > > > > > > > > > amplitudes of signal's higher frequencies
-> > > > > > > > > > components
-> > > > > > > > > > about
-> > > > > > > > > > 4.16%
-> > > > > > > > > > (U2
-> > > > > > > > > > phy)"
-> > > > > > > > > > 
-> > > > > > > > > 
-> > > > > > > > > Still the question is what is the unit. 4.16%?
-> > > > > > > > 
-> > > > > > > > No unit, it's a level value, like an index of array.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > So a value from register/device programming? 
-> > > > > > 
-> > > > > > Yes
-> > > > > > > Rather a regular units
-> > > > > > > should be used if that's possible. If not, this should be
-> > > > > > > clearly
-> > > > > > > described here, not some magical number which you encode
-> > > > > > > into
-> > > > > > > DTS...
-> > > > > > 
-> > > > > > Ok, I'll add more descriptions.
-> > > > > 
-> > > > > Better use logical value, e.g.
-> > > > > 
-> > > > 
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml*L38__;Iw!!CTRNKA9wMg0ARbw!1e-h0R_uwcaHKfKC9qYfaRWYeuWRq1sLCGy3yupNmkFyuW5s1nmRotL7Y0vFG9ETLLTA$
-> > > > >  
-> > > > 
-> > > > Optional unit may be -percent or -bp, but the value 4.16% * X
-> > > > (X=1,2,3...)is not an exact value, they are variable in a range
-> > > > and
-> > > > dependent more factors.
-> > > > So I think use level value is simple enough.
-> > > 
-> > > Then again explain exactly what are the levels. How you wrote it
-> > > last
-> > > time, -bp would do the trick.
-> > 
-> > There are many different methods of measuring pre-emphasis.
-> > The way used in MediaTek USB2 PHY as below:
-> > 
-> > pre-emphasis level equation = Vpp/Vs -1;
-> > Vpp: peak-peak voltage of differential signal;
-> > Vs : static voltage of differential signal, normal voltage, e.g.
-> > 400mV
-> > for u2 phy;
-> > 
-> > The pre-emphasis circuitry within t-phy can be dynamically
-> > programmed
-> > to three different levels of pre-emphasis. The exact value of
-> > pre-emphasis cannot be predetermined, because each device requires
-> > a percentage of pre-emphasis that is dependent on the output signal
-> > strength and transmission path characteristics.
-> > 
-> > Below shows three programmable pre-emphasis levels for a
-> > differential
-> > drive signal of 400 mV. The amount of pre-emphasis changes
-> > according
-> > to the transmission path parameters.
-> > 
-> > programmable level   typical pre-emphasis level
-> > 1                    4.16%
-> > 2                    8.30%
-> > 3                    12.40%
-> > 
-> > The reasons that why prefer to use programmable level in dt-binding 
-> > as
-> > following:
-> > 1. as you said, -bp may do the trick, but the main problem is that
-> >    pre-emphasis level is variable on different SoC, and is also
-> >    variable even on different pcb for the same SoC. e.g. for the
-> >    programmable level 1, pre-emphasis level may be 6% on a
-> > platform,
-> >    but for the programmable level 2, pre-emphasis level may be also
-> >    6% on another platform;
-> >    I think use pre-emphasis level in property, e.g. 4.16%, the
-> >    deviation may be bigger than 40%, may cause confusion for users,
-> >    due to we can't promise that the actual measurement is about
-> > 4.16%,
-> >    it may be 2%, or 5% when measured;
-> > 2. the programmable / logical level is flexible when we support
-> > more
-> >    and pre-emphasis level, ans it is easy for us to tune the level
-> >    due to it's continuous value.
-> > 3. all other vendor properties that can't provide exact measurable
-> >    value in this dt-binding make use of logic level, I want to
-> >    keep them align;
-> 
-> Hm, that's clarifies a lot. Thanks for explanation.
-I couldn't know more about pre-emphasis without your questions, thank
-you very much.
+ATTENTION PLEASE
+================================================================================================================================================
+In the just concluded meeting with the board of Trustees of United
+Nations Organization and Representative of all the financial sectors,
+The HOUSE OF LORD'S HUMANITARIAN FORUM (H.L.H.F) has taking the
+responsibility to pay part of debt own to citizen's across globe but
+only those that their file is submitted, We are looking into the case
+of Scammed Victims and those people that their lottery winning
+prize/Inheritance or Contract and award payment has been denied due to
+corrupt official services,
 
->  It's ok for me.
-> 
-> 
-> Best regards,
-> Krzysztof
+After our mutual investigation in the recent schedule for payment of
+outstanding debts incurred since 1999 to 2021, your file record was
+found and your email address attached, Your payment is categorized
+under SOUTH AFRICA ZONE of HOUSE OF LORD'S HUMANITARIAN FORUM
+(H.L.H.F) The total sum of $5.5usd has been approved under your file
+according to elect, Contact the processing/paying manager for your
+direct payment of US$5.5M (five Million Five Hundred Thousand United
+States Dollars),
 
+                                                  CONTACT THE
+INTERNATIONAL REMITTANCE DEPARTMENT VIA-EMAIL:
+Whatssapp line +44 7418348469
+E-mail: foreign_finance_affairs@hotmail.com
+E-mail: orgarnizationlordshumanitarian@yandex.com
+E-mail: foreign_finance@mail2expert.com
+CONTACT PERSON: MRS JENNET KINGSTON BROWN INTERNATIONAL FUND REMITTING
+DIRECTOR Also provide the following detail to her for immediate
+release of your fund,
+================================================================================================================================================
+Also it is very necessary and important that you send us an e-mail
+containing your vital information?? As requested below so that you
+will be given an immediate response and directives on what to do next:
+
+Full Names:
+Address:
+City:
+Zip/Postal Code:
+State:
+Country:
+Present Occupation:
+Company Owner:
+Company Name:
+Gender:
+Age:
+Reachable Tel#/Mob:..............*No Voice Mail Service*
+Fax:
+
+THIS REQUIREMENT MUST BE PROVIDED TO HER COMPLETELY,
+================================================================================================================================================
+As soon as the International Remittance Department receives your
+information, your US$5.5M will be Transfer to your nominated Bank
+account. this payment method is set up to keep a clean slate of all
+debts owned by the government and company to individuals either by
+contract or award fund, we hereby plead for any inconvenient that you
+might have received by any of this corrupt officials, The United
+Nations Organization will not be interested in your story of not
+receiving your payment if you fail to abide to this Instruction.
+================================================================================================================================================
+Yours Faithful,
+Mr. Anderson Paul
+Public Relation Officer
+Strand Bridge House 138-142 Strand,
+City of London,
+Whatssapp line +44 7418348469
+OUR REF: UNN/APXB/TF/08
+http://www.una.org.uk/
+IMMEDIATE PAYMENT
+#:WB/PC/FMF/MIN/UN/APXB/08.
+UNITED NATIONS LIAISON HEADQUARTERS UK LONDON OFFICE.
+
+SORRY IF YOU RECEIVED THIS MESSAGE IN JUNK BOX IS DUE TO OUR SLOW NETWORK.
+=============================================================
