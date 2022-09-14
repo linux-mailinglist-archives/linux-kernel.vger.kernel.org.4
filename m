@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728625B7FE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 05:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C465B8074
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiINDzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 23:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S229489AbiINFC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiINDzE (ORCPT
+        with ESMTP id S229437AbiINFC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 23:55:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F8812D11;
-        Tue, 13 Sep 2022 20:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663127695; x=1694663695;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ID9kqtBpMi1grFQ2zHt3THgmOxztjFaV2cZKdBQla2Q=;
-  b=BmbBIs/K1jS0csVtcYv3OB5xACLTZdRcWoK4FKkSjpAbxd4WN7XtuDdT
-   rQektF9kamousC4PrqnNSFGAPkYvaWCScf8qEq4HX5IKDLKgzUyDkvUoz
-   8u/mgjMfSO78SZLy68UhrZ/r+Kb+wHh/sNzNRXpa4z9cyWqRQJQ21jtyM
-   kIy4iNFsRK3BWh2V2hnbIL1MbxUjvj/i3zYJLiRoT9Q2GDz5kvGr1MEoS
-   F5ENkENkewMIGazBMbFQ9m+l9Q1U5oN5DGIzHK2Lu99lMBRnalkTOEWHm
-   LN+nDNtrJvWs88XButOCGb7CD/LgCjsNmAdbl2udTZi1TDGlKI8Lb5tm3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="113561533"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 20:54:53 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 13 Sep 2022 20:54:51 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 20:54:45 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <arun.ramadoss@microchip.com>,
-        <prasanna.vengateshan@microchip.com>, <hkallweit1@gmail.com>
-Subject: [Patch net-next v2 5/5] net: phy: micrel: enable interrupt for ksz9477 phy
-Date:   Wed, 14 Sep 2022 09:22:23 +0530
-Message-ID: <20220914035223.31702-6-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220914035223.31702-1-arun.ramadoss@microchip.com>
-References: <20220914035223.31702-1-arun.ramadoss@microchip.com>
+        Wed, 14 Sep 2022 01:02:56 -0400
+X-Greylist: delayed 3078 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Sep 2022 22:02:52 PDT
+Received: from virtnet-202-22.sysprovider.com (virtnet-202-22.sysprovider.com [185.250.202.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7D967CA0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=obsequioydetalles.es; s=x; h=Message-ID:Reply-To:Date:From:To:Subject:
+        Content-Description:Content-Transfer-Encoding:MIME-Version:Content-Type:
+        Sender:Cc:Content-ID:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cMV6g1dG62Wa1QS5IUASXqy0B+w37tgW03NQOYRA/Y4=; b=EzpwHUDXFE+WL431uSCTVRwc4X
+        UHPF9+wJLF4GnPcSV7AG6lT4o2XkFuqJWgQTbJJ7ZuBQOqSFlszL80lqXNToHnjORHyAJIcJ5Ou/C
+        2WGYdlJdpIkzjH8SBublF2L1oR3C9Jveq3shoJbFVukBl+KG7e9ZVMsK2TgqXxgVk5WI/J+7PRtuA
+        eQ7PdyWBRl54FQ5eLI1E5NR04JBCT163r1dpnLdAbAMRmA3SplGQ+MnyzCeN42jIeFISzYxm+4iwf
+        ytSe2gvcJhmC+/CeERdoSHM/jL8xFDKeE+yy+r5j8Uq5yfg1D7vFoUoLyqUMeU5YLbe1g0i9Lq+xZ
+        d6rPh5OQ==;
+Received: from [216.73.160.136] (helo=[10.153.0.6])
+        by virtnet-202-22.sysprovider.com with esmtpa (Exim 4.95)
+        (envelope-from <design@obsequioydetalles.es>)
+        id 1oYIDZ-0000v7-38;
+        Wed, 14 Sep 2022 04:33:37 +0200
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: 10 BTC (BITCOIN)
+To:     Recipients <design@obsequioydetalles.es>
+From:   "Team Elon Musk" <design@obsequioydetalles.es>
+Date:   Wed, 14 Sep 2022 04:33:18 +0200
+Reply-To: teamelonmusk94@gmail.com
+Message-ID: <GENERATED-WASMISSING-1oYIDZ-0000v7-38@virtnet-202-22.sysprovider.com>
+X-ACL-Warn: Adding Message-ID header because it is missing!
+X-Authenticated-Id: design@obsequioydetalles.es 
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Config_intr and handle_interrupt are enabled for ksz9477 phy. It is
-similar to all other phys in the micrel phys.
+Your email was luckly selected to received a donation of 10 BTC (BITCOIN) e=
+qual to 4,124,270.00 from Elon Musk.
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/micrel.c | 2 ++
- 1 file changed, 2 insertions(+)
+The donation is coming from Elon Musk, CEO and chief engineer of early-stag=
+e investor with an estimated net worth of around $245 billion.
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 7b8c5c8d013e..09f2bef5d96c 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -3191,6 +3191,8 @@ static struct phy_driver ksphy_driver[] = {
- 	.name		= "Microchip KSZ9477",
- 	/* PHY_GBIT_FEATURES */
- 	.config_init	= kszphy_config_init,
-+	.config_intr	= kszphy_config_intr,
-+	.handle_interrupt = kszphy_handle_interrupt,
- 	.suspend	= genphy_suspend,
- 	.resume		= genphy_resume,
- } };
--- 
-2.36.1
-
+Urgently email us: (teamelonmusk94@gmail.com).
