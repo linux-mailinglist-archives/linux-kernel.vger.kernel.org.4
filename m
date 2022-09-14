@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100745B842B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB58C5B8455
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiINJIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S231414AbiINJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiINJGo (ORCPT
+        with ESMTP id S230499AbiINJJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:06:44 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC14E77540;
-        Wed, 14 Sep 2022 02:03:45 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-12b542cb1d3so29443603fac.13;
-        Wed, 14 Sep 2022 02:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=D+SZ90LOGKr6PSOG3NHenig+A+JoVupnzjOX8oY/5mM=;
-        b=nExX2H2C6WrTnNGSpxdkS/T1FL5M+Sr7vDYZT64HVjqQ5M/Pa7eAR4by6hMu0qfyxJ
-         3qbx21WcZf9gvJ23WYaYT5830WSHS9I0fxKg5PWV043q44CqnXwRpghkSNe3CAkC/uqg
-         JPNtPeZPgYSXBQ7jaLQMuYgYFWkLBrzEBMKeRSjk84LrI9NFp8PEgHV3rrvI5gEoAegf
-         f0oQrUcSA3nLHzjEbTP2bLpRjk3SI89VDDLBFyZfxUCyDyebpuKlXPAIT+G/kgKm4CcM
-         Wx3w7v7TzkDjxerXa+Q1jnVQXJueeoxUDhwHa49rCdpFkjQAs1c6QaIyJ738DjN9kXJM
-         8TQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=D+SZ90LOGKr6PSOG3NHenig+A+JoVupnzjOX8oY/5mM=;
-        b=mS2ni3e0ADsFiF1qCeBITsk7T8O8LmLeE91HIMJy19qDftYRJFvwM2dy/t6oT+B6yi
-         f7Htf5q7tcGNsxRJUGOz/K8zQmjphWgNJnQ3jOXpGz/tP69LfQX8EgUl4KSRCJtAplc0
-         HoseSD7WQOoylt+wR7eXB79RUEDz+tNXAFCPVVcHYfyLkhHqSZJ569gbIRa2/AYRRpds
-         bCij+EtBiybsKXXqm+DVZdRpCdMEHozWFnv75d+Hpj8fNTuJz1oLWg00IKRA0sDvJKrf
-         zMInELL+E2TEvGfcEypT+flN4wzIk6pkfcqrrUvSINfXQayZdy5HP3RUhiEWNacDn/fu
-         LpXg==
-X-Gm-Message-State: ACgBeo0EjWnu/dm5J0Fju19ojj3p57mh3j0FuhXGog2xSFp3D+QJMDvR
-        HA2ReI4Fn4LirnlHPvlmsaBEoESWmY+9efg7Twg=
-X-Google-Smtp-Source: AA6agR6ka3E1cNjL/pn5j8TiAFXOCTm4ghY2UhrM1mmRzKbdO8p0jFiJ1HzoekaKmYo3JI4vfIcTz0ZDPjt6wYynFCE=
-X-Received: by 2002:a05:6808:bcb:b0:345:aa85:6f33 with SMTP id
- o11-20020a0568080bcb00b00345aa856f33mr1451152oik.83.1663146214114; Wed, 14
- Sep 2022 02:03:34 -0700 (PDT)
+        Wed, 14 Sep 2022 05:09:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871A92AE9;
+        Wed, 14 Sep 2022 02:04:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CBC2ECE1395;
+        Wed, 14 Sep 2022 09:04:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC832C43141;
+        Wed, 14 Sep 2022 09:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663146252;
+        bh=qE8upik8CSkwQbkwbPUN5ph1sqSRqQNZlu203IwJKBY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YwbL79vQ3JZ0mtQ0KblIlYXgMB0+KjJ2Q31yt5Z2sdgCvnuwcfN1KpzORJbeTgUkT
+         KTxL+Ks56xJdl0n12EcMIWoi/80seAmBeM4ioM4nhhNCIj2Stb4F3kMrXpeKN8nh+8
+         rR2yl+z4H7nqEOknPscJByW+1WlMWs2HEt6d81I9Kv0989IjydJYWy9xpQCmtcmkMd
+         6g1Wy4+A4GVU1SA6RlRr6vOAY7d0k7PT/omUfAq3wGIYYVGGNk5EKPu0Vx6N/IboKr
+         3lsjMZNwiYC+Qn1uxAMDhwoYvzwQx4MiXRj/l/DbBmmgSYRep6y5bQ4pd6izmbQMEN
+         sHjfUNY/aOWnA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, hdegoede@redhat.com, steve@sk2.org,
+        ckeepax@opensource.cirrus.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.4 01/12] ASoC: nau8824: Fix semaphore unbalance at error paths
+Date:   Wed, 14 Sep 2022 05:03:54 -0400
+Message-Id: <20220914090407.471328-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-5-arinc.unal@arinc9.com>
-In-Reply-To: <20220914085451.11723-5-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 14 Sep 2022 11:03:23 +0200
-Message-ID: <CAMhs-H8MohXO6xNf+vNodv9hDyCog5_Hjcb6_=_ujmYmmeEdSg@mail.gmail.com>
-Subject: Re: [PATCH 04/10] dt-bindings: memory: mt7621: add syscon as
- compatible string
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 10:55 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> Add syscon as a constant string on the compatible property as it's requir=
-ed
-> for the SoC to work. Update the example accordingly.
->
-> Fixes: 5278e4a181ff ("dt-bindings: memory: add binding for Mediatek's MT7=
-621 SDRAM memory controller")
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/memory-controllers/mediatek,mt7621-memc.yaml   | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+From: Takashi Iwai <tiwai@suse.de>
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+[ Upstream commit 5628560e90395d3812800a8e44a01c32ffa429ec ]
 
-Thanks,
-    Sergio Paracuellos
+The semaphore of nau8824 wasn't properly unlocked at some error
+handling code paths, hence this may result in the unbalance (and
+potential lock-up).  Fix them to handle the semaphore up properly.
+
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220823081000.2965-3-tiwai@suse.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/codecs/nau8824.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/sound/soc/codecs/nau8824.c b/sound/soc/codecs/nau8824.c
+index c8ccfa2fff848..a95fe3fff1db8 100644
+--- a/sound/soc/codecs/nau8824.c
++++ b/sound/soc/codecs/nau8824.c
+@@ -1072,6 +1072,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 	struct snd_soc_component *component = dai->component;
+ 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
+ 	unsigned int val_len = 0, osr, ctrl_val, bclk_fs, bclk_div;
++	int err = -EINVAL;
+ 
+ 	nau8824_sema_acquire(nau8824, HZ);
+ 
+@@ -1088,7 +1089,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		osr &= NAU8824_DAC_OVERSAMPLE_MASK;
+ 		if (nau8824_clock_check(nau8824, substream->stream,
+ 			nau8824->fs, osr))
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
+ 			NAU8824_CLK_DAC_SRC_MASK,
+ 			osr_dac_sel[osr].clk_src << NAU8824_CLK_DAC_SRC_SFT);
+@@ -1098,7 +1099,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		osr &= NAU8824_ADC_SYNC_DOWN_MASK;
+ 		if (nau8824_clock_check(nau8824, substream->stream,
+ 			nau8824->fs, osr))
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
+ 			NAU8824_CLK_ADC_SRC_MASK,
+ 			osr_adc_sel[osr].clk_src << NAU8824_CLK_ADC_SRC_SFT);
+@@ -1119,7 +1120,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		else if (bclk_fs <= 256)
+ 			bclk_div = 0;
+ 		else
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap,
+ 			NAU8824_REG_PORT0_I2S_PCM_CTRL_2,
+ 			NAU8824_I2S_LRC_DIV_MASK | NAU8824_I2S_BLK_DIV_MASK,
+@@ -1140,15 +1141,17 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		val_len |= NAU8824_I2S_DL_32;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		goto error;
+ 	}
+ 
+ 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
+ 		NAU8824_I2S_DL_MASK, val_len);
++	err = 0;
+ 
++ error:
+ 	nau8824_sema_release(nau8824);
+ 
+-	return 0;
++	return err;
+ }
+ 
+ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+@@ -1157,8 +1160,6 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
+ 	unsigned int ctrl1_val = 0, ctrl2_val = 0;
+ 
+-	nau8824_sema_acquire(nau8824, HZ);
+-
+ 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+ 	case SND_SOC_DAIFMT_CBM_CFM:
+ 		ctrl2_val |= NAU8824_I2S_MS_MASTER;
+@@ -1200,6 +1201,8 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ 		return -EINVAL;
+ 	}
+ 
++	nau8824_sema_acquire(nau8824, HZ);
++
+ 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
+ 		NAU8824_I2S_DF_MASK | NAU8824_I2S_BP_MASK |
+ 		NAU8824_I2S_PCMB_EN, ctrl1_val);
+-- 
+2.35.1
+
