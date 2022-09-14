@@ -2,63 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6380D5B8F5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EAA5B8F63
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiINTwT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Sep 2022 15:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S229713AbiINTxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 15:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiINTwS (ORCPT
+        with ESMTP id S229625AbiINTxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 15:52:18 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531105E32C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:52:17 -0700 (PDT)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 608F8C09E1;
-        Wed, 14 Sep 2022 19:52:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 5E0632002D;
-        Wed, 14 Sep 2022 19:52:14 +0000 (UTC)
-Message-ID: <70435cc384259c78afc52dc90a7b7f4953083824.camel@perches.com>
-Subject: Re: [PATCH v1 1/1] kernel.h: Split the hexadecimal related helpers
- to hex.h
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>
-Date:   Wed, 14 Sep 2022 12:52:13 -0700
-In-Reply-To: <20220914170809.34651-1-andriy.shevchenko@linux.intel.com>
-References: <20220914170809.34651-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 14 Sep 2022 15:53:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF5A77287B;
+        Wed, 14 Sep 2022 12:53:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 956841576;
+        Wed, 14 Sep 2022 12:53:23 -0700 (PDT)
+Received: from [10.57.18.118] (unknown [10.57.18.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CB443F73B;
+        Wed, 14 Sep 2022 12:53:12 -0700 (PDT)
+Message-ID: <5f049bb8-76e6-901a-9f8e-b48d270bc4a0@arm.com>
+Date:   Wed, 14 Sep 2022 20:53:07 +0100
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 5E0632002D
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: inm37xcu8ux5uxsw9z17m3a9d11uxmbz
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19yQQBRQqcuuJP3HlrxrBsXr8NfUTxDWV4=
-X-HE-Tag: 1663185134-507885
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 4/5] iommu: Regulate errno in ->attach_dev callback
+ functions
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     joro@8bytes.org, suravee.suthikulpanit@amd.com, will@kernel.org,
+        robdclark@gmail.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, matthias.bgg@gmail.com,
+        heiko@sntech.de, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, sricharan@codeaurora.org,
+        yong.wu@mediatek.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20220913082448.31120-1-nicolinc@nvidia.com>
+ <20220913082448.31120-5-nicolinc@nvidia.com> <YyB3F/o3RfymqiFW@myrica>
+ <YyGaqsXSDMn8R12R@nvidia.com> <YyGjtsB2Yq4fQICS@myrica>
+ <YyIWQ6rX6AR9KX5E@Asurada-Nvidia>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YyIWQ6rX6AR9KX5E@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-14 at 20:08 +0300, Andy Shevchenko wrote:
-> For the sake of cleaning up the kernel.h split the hexadecimal
-> relted helpers to own header called 'hex.h'.
+On 2022-09-14 18:58, Nicolin Chen wrote:
+> On Wed, Sep 14, 2022 at 10:49:42AM +0100, Jean-Philippe Brucker wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On Wed, Sep 14, 2022 at 06:11:06AM -0300, Jason Gunthorpe wrote:
+>>> On Tue, Sep 13, 2022 at 01:27:03PM +0100, Jean-Philippe Brucker wrote:
+>>>> I think in the future it will be too easy to forget about the constrained
+>>>> return value of attach() while modifying some other part of the driver,
+>>>> and let an external helper return EINVAL. So I'd rather not propagate ret
+>>>> from outside of viommu_domain_attach() and finalise().
+>>>
+>>> Fortunately, if -EINVAL is wrongly returned it only creates an
+>>> inefficiency, not a functional problem. So we do not need to be
+>>> precise here.
+>>
+>> Ah fair. In that case the attach_dev() documentation should indicate that
+>> EINVAL is a hint, so that callers don't rely on it (currently words "must"
+>> and "exclusively" indicate that returning EINVAL for anything other than
+>> device-domain incompatibility is unacceptable). The virtio-iommu
+>> implementation may well return EINVAL from the virtio stack or from the
+>> host response.
+> 
+> How about this?
+> 
+> + * * EINVAL    - mainly, device and domain are incompatible, or something went
+> + *               wrong with the domain. It's suggested to avoid kernel prints
+> + *               along with this errno. And it's better to convert any EINVAL
+> + *               returned from kAPIs to ENODEV if it is device-specific, or to
+> + *               some other reasonable errno being listed below
 
-related
+FWIW, I'd say something like:
 
-> diff --git a/include/linux/hex.h b/include/linux/hex.h
-[]
-> +bool mac_pton(const char *s, u8 *mac);
+"The device and domain are incompatible. If this is due to some previous 
+configuration of the domain, drivers should not log an error, since it 
+is legitimate for callers to test reuse of an existing domain. 
+Otherwise, it may still represent some fundamental problem."
 
-This one should likely stay in kernel.h unless and until
-a more suitable place is found for it.
+And then at the public interfaces state it from other angle:
 
+"The device and domain are incompatible. If the domain has already been 
+used or configured in some way, attaching the same device to a different 
+domain may be expected to succeed. Otherwise, it may still represent 
+some fundamental problem."
+
+[ and to save another mail, I'm not sure copying the default comment for 
+ENOSPC is all that helpful either - what is "space" for something that 
+isn't a storage device? I'd guess limited hardware resources in some 
+form, but in the IOMMU context, potential confusion with address space 
+is maybe a little too close for comfort? ]
+
+>>>> Since we can't guarantee that APIs like virtio or ida won't ever return
+>>>> EINVAL, we should set all return values:
+>>>
+>>> I dislike this alot, it squashes all return codes to try to optimize
+>>> an obscure failure path :(
+> 
+> Hmm...should I revert all the driver changes back to this version?
+
+Yeah, I don't think we need to go too mad here. Drivers shouldn't emit 
+their *own* -EINVAL unless appropriate, but if it comes back from some 
+external API then that implies something's gone unexpectedly wrong 
+anyway - maybe it's a transient condition and a subsequent different 
+attach might actually work out OK? We can't really say in general. 
+Besides, if the driver sees an error which implies it's done something 
+wrong itself, it probably shouldn't be trusted to try to reason about it 
+further. The caller can handle any error as long as we set their 
+expectations correctly.
+
+Thanks,
+Robin.
