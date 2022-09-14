@@ -2,195 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EBC5B833F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988D85B8346
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiINIsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S229671AbiINIwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiINIsX (ORCPT
+        with ESMTP id S229646AbiINIwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:48:23 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0905F7E2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:48:16 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220914084811epoutp015af993cc6d3c09ec394e779b64899fe6~UrdTLoXh90456804568epoutp01Z
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:48:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220914084811epoutp015af993cc6d3c09ec394e779b64899fe6~UrdTLoXh90456804568epoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663145291;
-        bh=GpenGdLc+Yz+N+RZI5HNax11+twVvZ4EXsMns6jJp9E=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=msDh+/Qzu4+R32kq8GYoX4HvCxxHqiSaCcd57o2NNW5y2mHr4KqFxuaUjG/4HtdBt
-         2A7sKldOoyCzxgLuTJ7sZdbOquvqULXjC/VjsOUMjSBbe/gYsmLIWsQS3f2bQ8nQ+h
-         UJY+CF0Z2qAatmGp91ir9tibXtO4vd1j0Z3zB6Fw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220914084811epcas1p1b7860b3621183738f83f28b52ccf5b8a~UrdS8DNfm3035930359epcas1p1S;
-        Wed, 14 Sep 2022 08:48:11 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.242]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MSDWH1Hxfz4x9Pt; Wed, 14 Sep
-        2022 08:48:11 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        40.1F.18616.B4591236; Wed, 14 Sep 2022 17:48:11 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220914084810epcas1p4547a0dd24f463570451ed9994013b7ca~UrdR-m4gM0070000700epcas1p4E;
-        Wed, 14 Sep 2022 08:48:10 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220914084810epsmtrp15e6e4ba273dc07563bcba8bfc469ed3e~UrdR_-Sp21418914189epsmtrp1C;
-        Wed, 14 Sep 2022 08:48:10 +0000 (GMT)
-X-AuditID: b6c32a38-6b9ff700000048b8-a6-6321954b0213
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1E.F2.18644.A4591236; Wed, 14 Sep 2022 17:48:10 +0900 (KST)
-Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220914084810epsmtip23e4bdd554d33ccc44561b73b140870a0~UrdRyN1-w1960519605epsmtip2K;
-        Wed, 14 Sep 2022 08:48:10 +0000 (GMT)
-From:   "Sungjong Seo" <sj1557.seo@samsung.com>
-To:     "'Rover'" <739817562@qq.com>,
-        "'linkinjeon'" <linkinjeon@kernel.org>
-Cc:     "'linux-kernel'" <linux-kernel@vger.kernel.org>,
-        "'linux-fsdevel'" <linux-fsdevel@vger.kernel.org>,
-        <sj1557.seo@samsung.com>
-In-Reply-To: <tencent_C77E59E94CE232025C1A0EA7642E22A9F708@qq.com>
-Subject: RE: [PATCH v1] exfat: remove the code that sets FileAttributes when
- renaming
-Date:   Wed, 14 Sep 2022 17:48:10 +0900
-Message-ID: <000001d8c816$b7ad4010$2707c030$@samsung.com>
+        Wed, 14 Sep 2022 04:52:07 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A435F9A7;
+        Wed, 14 Sep 2022 01:52:06 -0700 (PDT)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E87YFK005790;
+        Wed, 14 Sep 2022 08:51:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=OO19sj1nrjuLI9FfnQwrBekSePzYL8wn1rlle6iX61Q=;
+ b=kzb02ax1B4TNqqAiJtHQL+4IK0Itiv25SOdthaWsCFs+c9/IrlCa2DxGM2tkVHY0cpbr
+ s1eTy46ZjMDmxr1ECh03SXP2mHIsZ2lf5G9k5hNiIx413zjOec9zy23Q4CWXQ1IqloHR
+ tCVBUVhX0nyJ25A71BV8fPvMSCqmBslejk4PkJbEKUdiBz7NHko+fRV2YIqLA2YuE8TL
+ 73h7/Sj2Bsf0kbycAKsxsJqoZyH6UaQQDiU9qf6cC6jS8wFuimpHB1nqekmPi6GJMqTP
+ 7Rb9KYnTXaVL8nQHzEwafyTic4rkbi5FNmtDue8DkGlGv0wqsjwbtgElFnOvT6x6U/qS 7A== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3jk55vuqnr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 08:51:57 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6CBDAD24E;
+        Wed, 14 Sep 2022 08:51:56 +0000 (UTC)
+Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id A83D180171D;
+        Wed, 14 Sep 2022 08:51:55 +0000 (UTC)
+From:   Robert Elliott <elliott@hpe.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        lukas.bulwahn@gmail.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Elliott <elliott@hpe.com>
+Subject: [PATCH 1/2] crypto/arm64: Kconfig - fix SHA1 symbol name
+Date:   Wed, 14 Sep 2022 03:51:20 -0500
+Message-Id: <20220914085121.1808274-1-elliott@hpe.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJBluP1qAGmVhCZXr5YY9LBrskEeQIVjrm6rPxOW4A=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmga73VMVkgxNLWS1aXu5gtZg4bSmz
-        xZ69J1ksLu+aw2ax5d8RVgdWj02rOtk8bj1by+rRt2UVo8fnTXIBLFENjDaJRckZmWWpCql5
-        yfkpmXnptkqhIW66FkoKGfnFJbZK0YaGRnqGBuZ6RkZGesaWsVZGpkoKeYm5qbZKFbpQvUoK
-        RckFQLW5lcVAA3JS9aDiesWpeSkOWfmlIMfqFSfmFpfmpesl5+cqKZQl5pQCjVDST/jGmLH4
-        1RLmgguCFT0bShsY+/m6GDk4JARMJCZ3xXQxcnEICexglNiy+j8LhPOJUeLyrKVQzmdGiUMN
-        05i7GDnBOpbdfQGV2MUocfz8bWYI5yWjxLPd21hBqtgEdCWe3PgJ1iEi4CHx/m0LWAezQBOj
-        xNXfJ5hAEpwCThJ/f7wHKxIWCJf4/2cFWDOLgKrEhM/X2UBsXgFLiYmrnrFC2IISJ2c+YQGx
-        mQXkJba/nQN1koLE7k9HWSGWWUlc/vKfFaJGRGJ2ZxvYdRICnRwSLas+MEJ87SKxZIo6RK+w
-        xKvjW9ghbCmJl/1tUHY3o8Sfc7wQvRMYJVrunGWFSBhLfPr8GWwOs4CmxPpd+hBhRYmdv+cy
-        QtiCEqevdTND3MAn8e5rDyvEWl6JjjYhiBIVie8fdrJMYFSeheSzWUg+m4Xkg1kIyxYwsqxi
-        FEstKM5NTy02LDBBju9NjOCUqmWxg3Hu2w96hxiZOBgPMUpwMCuJ8PaFKCQL8aYkVlalFuXH
-        F5XmpBYfYkwGhvVEZinR5HxgUs8riTc0MTYwMAImQ3NLc2MihC0NTMyMTCyMLY3NlMR59bQZ
-        k4UE0hNLUrNTUwtSi2C2MHFwSjUwzXAVTWrQWfIyeP7SGbZlnN8zFf/2MDKz/z69I0r0YWyS
-        c3SN4iLmt1E6IiJcO2coXzHe//XSoarNvH4sPLsW9j254/Jy16FNM8s4ux32/G9/WX22z63A
-        7P3phCTBXP7A3pjWKMZ96Z4KoYt9WSuXa/+IPCbb8HvX4da9Dg6/7nPEc4nam86V0Hm2okhz
-        wcP//5wEVJfeWGPZ8C58XeS3GRJzHMzvmP07vc/x0NGApaY/bl/4zFhup7Jt6fKef24sV57P
-        X7nfQqfWTl5PNH+/pfOjC0sSPC7EiMhn66elV5zU8rwhbhSYEvvQZJ5I38qmZwsXvtj33c/k
-        rOf1lUv7Nvpt6Px9uDFNkuG7voOSEktxRqKhFnNRcSIAqMdr0WAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrALMWRmVeSWpSXmKPExsWy7bCSvK7XVMVkg/VHZC1aXu5gtZg4bSmz
-        xZ69J1ksLu+aw2ax5d8RVgdWj02rOtk8bj1by+rRt2UVo8fnTXIBLFFcNimpOZllqUX6dglc
-        GYtfLWEuuCBY0bOhtIGxn6+LkZNDQsBEYtndFyxdjFwcQgI7GCWevtjB1MXIAZSQkji4TxPC
-        FJY4fLgYouQ5o8ShW9vZQXrZBHQlntz4yQxSIyLgJbHifwlIDbNAC6PErMZnbBANkxklfu5q
-        YgFp4BRwkvj74z0ziC0sECqxfXcbK4jNIqAqMeHzdTYQm1fAUmLiqmesELagxMmZT1hAFjAL
-        6Em0bWQECTMLyEtsfzuHGeJ+BYndn46ClYsIWElc/vKfFaJGRGJ2ZxvzBEbhWUgmzUKYNAvJ
-        pFlIOhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOFC2tHYx7Vn3QO8TIxMF4
-        iFGCg1lJhLcvRCFZiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkm
-        Dk6pBqYz//+9NTi40GD94VQWydDCsBJm/dNWXTIhu3dXf+D1W8a0sLZq+9P9k3RCGracWSf9
-        sr3GsJr1/eZ/p3RlPzuv73l0Z86OHOkLYspvF/Nt/pbx5hBfMsfPBlvel7xTZ03edjWfv+qs
-        sorQja7QVnvvyHOutRee7XaZuurLTOGkSZqxFQpbWtw7cqQNyvZpZTNpSerUJKqc3x/LdKFB
-        4MlZq6ZPE/gWZS79te3XoxfMi4+LbK9dYt24Yv2U/oAplxjywiYbTVt2sfDslG/miidNBOYu
-        fTkhdMvGUxN0tl87H6nqPi2ylX9tiUWbC5dcSzjTcdW7K7fNbRUsXryX7/k6ri0tbVpf3i0v
-        YPu5R0VEiaU4I9FQi7moOBEAz1fHRQMDAAA=
-X-CMS-MailID: 20220914084810epcas1p4547a0dd24f463570451ed9994013b7ca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220909033708epcas1p23af4e173c0594a578b52cc59bcbeaacc
-References: <CGME20220909033708epcas1p23af4e173c0594a578b52cc59bcbeaacc@epcas1p2.samsung.com>
-        <tencent_C77E59E94CE232025C1A0EA7642E22A9F708@qq.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: FooX2_pGw5FWt_ovaxVDh3SSCELlTBLQ
+X-Proofpoint-ORIG-GUID: FooX2_pGw5FWt_ovaxVDh3SSCELlTBLQ
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_03,2022-09-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=873 malwarescore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140043
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rover,
+In the arm64 Kconfig file, revert an incorrect change of
+the symbol name CRYPTO_SHA1_ARM64_CE to CRYPTO_SHA1_ARM64.
 
-This patch seems to violate the exFAT specification below.
-Please refer to the description for ATTR_ARCHIVE in FAT32 Spec.
+Fixes: 3f342a23257d ("crypto: Kconfig - simplify hash entries")
+Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Robert Elliott <elliott@hpe.com>
+---
+ arch/arm64/crypto/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-* Archive
-This field is mandatory and conforms to the MS-DOS definition.
-
-* ATTR_ARCHIVE
-This attribute supports backup utilities. This bit is set by the FAT file
-system driver when a file is created, renamed, or written to. Backup
-utilities may use this attribute to indicate which files on the volume
-have been modified since the last time that a backup was performed.
-
-Thanks.
-B.R.
-
-Sungjong Seo
-
-> When renaming, FileAttributes remain unchanged, do not need to be
-> set, so the code that sets FileAttributes is unneeded, remove it.
-> 
-> Signed-off-by: rover &lt;739817562@qq.com&gt;
-> ---
->  fs/exfat/namei.c | 12 ------------
->  1 file changed, 12 deletions(-)
-> 
-> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-> index b617bebc3d0f..5ffaf553155e 100644
-> --- a/fs/exfat/namei.c
-> +++ b/fs/exfat/namei.c
-> @@ -1031,10 +1031,6 @@ static int exfat_rename_file(struct inode *inode,
-> struct exfat_chain *p_dir,
->  			return -EIO;
-> 
->  		*epnew = *epold;
-> -		if (exfat_get_entry_type(epnew) == TYPE_FILE) {
-> -			epnew-&gt;dentry.file.attr |=
-> cpu_to_le16(ATTR_ARCHIVE);
-> -			ei-&gt;attr |= ATTR_ARCHIVE;
-> -		}
->  		exfat_update_bh(new_bh, sync);
->  		brelse(old_bh);
->  		brelse(new_bh);
-> @@ -1063,10 +1059,6 @@ static int exfat_rename_file(struct inode *inode,
-> struct exfat_chain *p_dir,
->  		ei-&gt;dir = *p_dir;
->  		ei-&gt;entry = newentry;
->  	} else {
-> -		if (exfat_get_entry_type(epold) == TYPE_FILE) {
-> -			epold-&gt;dentry.file.attr |=
-> cpu_to_le16(ATTR_ARCHIVE);
-> -			ei-&gt;attr |= ATTR_ARCHIVE;
-> -		}
->  		exfat_update_bh(old_bh, sync);
->  		brelse(old_bh);
->  		ret = exfat_init_ext_entry(inode, p_dir, oldentry,
-> @@ -1112,10 +1104,6 @@ static int exfat_move_file(struct inode *inode,
-> struct exfat_chain *p_olddir,
->  		return -EIO;
-> 
->  	*epnew = *epmov;
-> -	if (exfat_get_entry_type(epnew) == TYPE_FILE) {
-> -		epnew-&gt;dentry.file.attr |= cpu_to_le16(ATTR_ARCHIVE);
-> -		ei-&gt;attr |= ATTR_ARCHIVE;
-> -	}
->  	exfat_update_bh(new_bh, IS_DIRSYNC(inode));
->  	brelse(mov_bh);
->  	brelse(new_bh);
-> --
-> 2.25.1
+diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+index 7ba9bcb6d409..8bd80508a710 100644
+--- a/arch/arm64/crypto/Kconfig
++++ b/arch/arm64/crypto/Kconfig
+@@ -36,7 +36,7 @@ config CRYPTO_POLY1305_NEON
+ 	  Architecture: arm64 using:
+ 	  - NEON (Advanced SIMD) extensions
+ 
+-config CRYPTO_SHA1_ARM64
++config CRYPTO_SHA1_ARM64_CE
+ 	tristate "Hash functions: SHA-1 (ARMv8 Crypto Extensions)"
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_HASH
+-- 
+2.37.2
 
