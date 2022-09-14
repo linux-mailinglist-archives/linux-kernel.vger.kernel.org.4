@@ -2,162 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F135B8DD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CBB5B8DE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiINRH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S229744AbiINRKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiINRH5 (ORCPT
+        with ESMTP id S229518AbiINRKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:07:57 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DB858DE4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663175276; x=1694711276;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=j/yBmzurcWwXZutQtxptjkeOqWAuVzR7sTadNSSvhqM=;
-  b=Q1RBiV8/mkCK9sPgOvZR4gcwqqPZ8un9mujKv+Oa2D2/eRQ1VanwhI4c
-   lOGGPMz/mT/kW00i62JCxen+LnjfixR0jJGgTFmCVYVIIpJ+fjsvOF6nE
-   vfZCWubQJaOibwoGN7qvoMVfxATl/6d4VsQymJmyqHr42wEI4KMlOl1EA
-   Whg0O9ucePrsvCF8bXMU40+Lf8d0BEtyb4lhfX2AUei2Qle4hjPL6oMMs
-   180Bmy5KNWl1Py/RtKLWhKlBzpMfmnue3xwc1wevKrqLc5FOtl5+s7dU0
-   cu26r8U238V75SZtuvbv/wTXpaejVXwHX0H4Fd/vxh7eOEfxpMmhcccJa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="278873867"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="278873867"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 10:07:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="650146943"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 14 Sep 2022 10:07:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9DADEF7; Wed, 14 Sep 2022 20:08:11 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v1 1/1] kernel.h: Split the hexadecimal related helpers to hex.h
-Date:   Wed, 14 Sep 2022 20:08:09 +0300
-Message-Id: <20220914170809.34651-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 14 Sep 2022 13:10:06 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD4321E1D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:10:03 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-12b542cb1d3so32992660fac.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=L6YhEh0UYxe2tPeB9Bs5zIhc3gbVkQ/Hoe4Ilc/R8DI=;
+        b=zapowfMLZG6nfuKhIaOEKqurE8nHf+m0lG9E4Hi9bjj0S0ZyKLFdodnrgeUZtOI0rb
+         vTmX8K6g2kmX7rUtUMjnImvjBJMi22CluiHOAjhxG7L4H8xlKr+xbg1kZRoGZvSGJw8K
+         HPRNo7jozmxDWJP68L5vaf5tLCfvQGqxodV4UV0D/3BVEn3M+YxepKAm7UlhCgfRpZNo
+         UvTqcd1UP5IMAQo6z2XRKT1Yh9/gUuUq2ZgJCRRDOecB4oX+7Ai3EtR1zJ2xeqimnTK4
+         yB5oIda938tiCaV6kurWJy0tuIHeeiwb41hkYaiYwkux2cCCQ9DBESndrpUaruy9AxQq
+         MY9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=L6YhEh0UYxe2tPeB9Bs5zIhc3gbVkQ/Hoe4Ilc/R8DI=;
+        b=T1TW6nn9CcbD97y9pMFNafdTUnWBYxDrCjhc81xHEUEmUWPctAUiKhyks1i6I7W/t9
+         wj3OhonK/fZafatkNug73wCW9+wzo0szsf+jPxi8jyVjMf5HjpEWpCC2OMoG0/0NzcYP
+         +ngtMnwms8yqNyNwPu51yC9N/uRi8HSgG8K4T/9wWtmWH3EQFCYe8cw+Jw/dsTzPqVMw
+         aRpY14auzgVLFaw3BGm+wEiHHlzj66F0ZEFWMmCO8jhp3mWsI1l31VFV2PHeXdR2OU2k
+         qhtBBajFFUwIOVB+cJJDgZY5KapgBwnznY48BV5NjH/KSQp9fk7CplxKqWUxY4+A24te
+         9hTg==
+X-Gm-Message-State: ACgBeo2YlnHWq3ED3ftAaCJ99vYiKMLXNjGebQOhwXzt4GOs9BeS72Dg
+        PZ8TbpbT1Oxpj+BDJrz20qTOrQeH0VC+MAIjjwvHcg==
+X-Google-Smtp-Source: AA6agR7ixBrehjh+uaYWhVhkcOhLhwy9Hd2Lp8tza6xcOsSAGXpYrRtPGVvl/Tu+9j1KD/zQEfu+HWFjxJM3KHklmeI=
+X-Received: by 2002:a05:6808:1444:b0:344:f010:27d8 with SMTP id
+ x4-20020a056808144400b00344f01027d8mr2273353oiv.33.1663175403154; Wed, 14 Sep
+ 2022 10:10:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220908154903.4100386-1-tharvey@gateworks.com>
+ <2530681.Lt9SDvczpP@steina-w> <CAJ+vNU2sKkjv1q=oPD++1DE7uUiXJYi75-fpRRNboabUbUwCqA@mail.gmail.com>
+In-Reply-To: <CAJ+vNU2sKkjv1q=oPD++1DE7uUiXJYi75-fpRRNboabUbUwCqA@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Wed, 14 Sep 2022 10:09:51 -0700
+Message-ID: <CAJ+vNU2fmsy2eT1tBOWx9D=cS1emgkCKxaOX+GCZF=v_JDc_1Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp-venice-gw74xx: add PCIe support
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the sake of cleaning up the kernel.h split the hexadecimal
-relted helpers to own header called 'hex.h'.
+On Fri, Sep 9, 2022 at 10:42 AM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> On Thu, Sep 8, 2022 at 10:59 PM Alexander Stein
+> <alexander.stein@ew.tq-group.com> wrote:
+> >
+> > Hi Tim,
+> >
+> > Am Donnerstag, 8. September 2022, 17:49:03 CEST schrieb Tim Harvey:
+> > > Add PCIe support on the Gateworks GW74xx board. While at it,
+> > > fix the related gpio line names from the previous incorrect values.
+> > >
+> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > > ---
+> > >  .../dts/freescale/imx8mp-venice-gw74xx.dts    | 40 +++++++++++++++++--
+> > >  1 file changed, 37 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts index
+> > > e0fe356b662d..7644db61d631 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > > @@ -8,6 +8,7 @@
+> > >  #include <dt-bindings/gpio/gpio.h>
+> > >  #include <dt-bindings/input/linux-event-codes.h>
+> > >  #include <dt-bindings/leds/common.h>
+> > > +#include <dt-bindings/phy/phy-imx8-pcie.h>
+> > >
+> > >  #include "imx8mp.dtsi"
+> > >
+> > > @@ -100,6 +101,12 @@ led-1 {
+> > >               };
+> > >       };
+> > >
+> > > +     pcie0_refclk: pcie0-refclk {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <100000000>;
+> > > +     };
+> > > +
+> > >       pps {
+> > >               compatible = "pps-gpio";
+> > >               pinctrl-names = "default";
+> > > @@ -215,8 +222,8 @@ &gpio1 {
+> > >  &gpio2 {
+> > >       gpio-line-names =
+> > >               "", "", "", "", "", "", "", "",
+> > > -             "", "", "", "", "", "", "", "",
+> > > -             "pcie3_wdis#", "", "", "pcie1_wdis@", "pcie2_wdis#", "",
+> > "", "",
+> > > +             "", "", "", "", "", "", "pcie3_wdis#", "",
+> > > +             "", "", "pcie2_wdis#", "", "", "", "", "",
+> > >               "", "", "", "", "", "", "", "";
+> > >  };
+> > >
+> > > @@ -562,6 +569,28 @@ &i2c4 {
+> > >       status = "okay";
+> > >  };
+> > >
+> > > +&pcie_phy {
+> > > +     fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
+> > > +     fsl,clkreq-unsupported;
+> > > +     clocks = <&pcie0_refclk>;
+> > > +     clock-names = "ref";
+> > > +     status = "okay";
+> > > +};
+> > > +
+> > > +&pcie {
+> > > +     pinctrl-names = "default";
+> > > +     pinctrl-0 = <&pinctrl_pcie0>;
+> > > +     reset-gpio = <&gpio2 17 GPIO_ACTIVE_LOW>;
+> > > +     clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+> > > +              <&clk IMX8MP_CLK_PCIE_ROOT>,
+> > > +              <&clk IMX8MP_CLK_HSIO_AXI>;
+> > > +     clock-names = "pcie", "pcie_aux", "pcie_bus";
+> >
+> > With the still pending dt-binding patch at [1] the clock order shall be
+> > "pcie", "pcie_bus", "pcie_phy".
+> >
+> > Best regards,
+> > Alexander
+> >
+> > [1] https://lore.kernel.org/lkml/20220822184701.25246-2-Sergey.Semin@baikalelectronics.ru/
+> >
+>
+> Alexander,
+>
+> Interesting... the imx8pm-evk PCIe patch was accepted with the
+> bindings I used which are current. So I suppose if/when the patch you
+> pointed to gets accepted some existing bindings will need to change to
+> be compliant.
+>
+> Best Regards,
+>
+> Tim
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/hex.h    | 35 +++++++++++++++++++++++++++++++++++
- include/linux/kernel.h | 29 +----------------------------
- 2 files changed, 36 insertions(+), 28 deletions(-)
- create mode 100644 include/linux/hex.h
+Shawn,
 
-diff --git a/include/linux/hex.h b/include/linux/hex.h
-new file mode 100644
-index 000000000000..2618382e5b0c
---- /dev/null
-+++ b/include/linux/hex.h
-@@ -0,0 +1,35 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_HEX_H
-+#define _LINUX_HEX_H
-+
-+#include <linux/types.h>
-+
-+extern const char hex_asc[];
-+#define hex_asc_lo(x)	hex_asc[((x) & 0x0f)]
-+#define hex_asc_hi(x)	hex_asc[((x) & 0xf0) >> 4]
-+
-+static inline char *hex_byte_pack(char *buf, u8 byte)
-+{
-+	*buf++ = hex_asc_hi(byte);
-+	*buf++ = hex_asc_lo(byte);
-+	return buf;
-+}
-+
-+extern const char hex_asc_upper[];
-+#define hex_asc_upper_lo(x)	hex_asc_upper[((x) & 0x0f)]
-+#define hex_asc_upper_hi(x)	hex_asc_upper[((x) & 0xf0) >> 4]
-+
-+static inline char *hex_byte_pack_upper(char *buf, u8 byte)
-+{
-+	*buf++ = hex_asc_upper_hi(byte);
-+	*buf++ = hex_asc_upper_lo(byte);
-+	return buf;
-+}
-+
-+extern int hex_to_bin(unsigned char ch);
-+extern int __must_check hex2bin(u8 *dst, const char *src, size_t count);
-+extern char *bin2hex(char *dst, const void *src, size_t count);
-+
-+bool mac_pton(const char *s, u8 *mac);
-+
-+#endif
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index bc3e0364970a..7a495e94b087 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/container_of.h>
- #include <linux/bitops.h>
-+#include <linux/hex.h>
- #include <linux/kstrtox.h>
- #include <linux/log2.h>
- #include <linux/math.h>
-@@ -259,34 +260,6 @@ extern enum system_states {
- 	SYSTEM_SUSPEND,
- } system_state;
- 
--extern const char hex_asc[];
--#define hex_asc_lo(x)	hex_asc[((x) & 0x0f)]
--#define hex_asc_hi(x)	hex_asc[((x) & 0xf0) >> 4]
--
--static inline char *hex_byte_pack(char *buf, u8 byte)
--{
--	*buf++ = hex_asc_hi(byte);
--	*buf++ = hex_asc_lo(byte);
--	return buf;
--}
--
--extern const char hex_asc_upper[];
--#define hex_asc_upper_lo(x)	hex_asc_upper[((x) & 0x0f)]
--#define hex_asc_upper_hi(x)	hex_asc_upper[((x) & 0xf0) >> 4]
--
--static inline char *hex_byte_pack_upper(char *buf, u8 byte)
--{
--	*buf++ = hex_asc_upper_hi(byte);
--	*buf++ = hex_asc_upper_lo(byte);
--	return buf;
--}
--
--extern int hex_to_bin(unsigned char ch);
--extern int __must_check hex2bin(u8 *dst, const char *src, size_t count);
--extern char *bin2hex(char *dst, const void *src, size_t count);
--
--bool mac_pton(const char *s, u8 *mac);
--
- /*
-  * General tracing related utility functions - trace_printk(),
-  * tracing_on/tracing_off and tracing_start()/tracing_stop
--- 
-2.35.1
+I'm unclear if this patch needs to change. I believe the patch adheres
+to the current bindings and if the bindings change it would require
+all the imx8m boards to have their bindings updated to agree with it.
+I'm also unclear if the order of the clocks really makes any
+difference here.
 
+Best Regards,
+
+Tim
