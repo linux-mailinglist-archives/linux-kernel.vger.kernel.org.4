@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B4A5B87CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B1E5B87CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiINMHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S229896AbiINMHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiINMHC (ORCPT
+        with ESMTP id S229876AbiINMHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:07:02 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF057F257;
-        Wed, 14 Sep 2022 05:07:00 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id s13so11500450qvq.10;
-        Wed, 14 Sep 2022 05:07:00 -0700 (PDT)
+        Wed, 14 Sep 2022 08:07:14 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64607FE54
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:07:12 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-127d10b4f19so40253453fac.9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:07:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2seAi8p9cHTQ5grUkwewK+XdzcnHWiXhnN5EOp8ed1M=;
-        b=dwVpg4cqBY0+c9XrNnlYb7uyYW8DoeEJtl5JT2pRFd16SN6bHT7Cl20p6HTwD8cR4P
-         +3DmJ/tjHNIGlq4usUb/aMaDOZtRKeAhnuZMJLSB84JCtPLk9K+ExSEhWd6pV/K9j9hF
-         QX/nqvHMFBz0rT8Wfbc3hwvmjwEziEvweO1XoqmVAD2tLonoTF+3w5kIQ0x7OKVJrihv
-         lwS27Tjndm+nR7G3gp4DZJpFqKVI2fpWuvk9N1JVrHDjB9pwD+0HSQwu1IP4RFtLCohW
-         jer/4LYVGMXOHKdtpsDCCOHTgo4LZVl3dAYiZNgR+c7GA/Ek2rYIReSwvmTObibAySzv
-         VFfA==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=Q+27K4r5oS0nyZYzQbGrXc1Sp0k9jMzZDh/vJFY9Rqo=;
+        b=WD9rBiy/FGY7Zx4rOdqynQR/5rHmYT/WtAG0NqDeCtm4UZ6cokOsd+zFbSjKNdZ/vW
+         hKqOCJBGdDPuHlhDiAT/2fU51WPHj3RA4/xP10lFolwkEacAcBg68cSkpA96DXgryCWC
+         oPDCVkv8i4STlPCQ2y8kS1dt3yED/GJ8+74KFmutT18rZCADnBumzY8ZlPWsDaqgECsQ
+         uc/U/0hCTPUmhWHFlOxJUzE6IPfrS5NRNGUDYvpJKN16/OGnTYZCqngX1at3JCwLle37
+         SQnrVcFKUTGoeu+b1og6UR8Ji9G4RpyBuuf8AS1Ins7cveUfUpgQ1qBv7DkZGuHxz7jf
+         WQqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2seAi8p9cHTQ5grUkwewK+XdzcnHWiXhnN5EOp8ed1M=;
-        b=lxE1mF6muEG7B3X2PsylvCQMyruwPkJL7Eq+PSriDiPXi2TXpkl9DFXnX1bJRLExMN
-         vEuJFnlY6HcU8q48djGG+Oz8u1G95beS9GRvyQSlAo9gRzmI4tWuV4k2+3IyWZr+bAyB
-         pZ18H2V87drbF4BUKj4R0fcy0Xk1myvOlKaQBiXSuku7/hl4xaTNKnWG4PLw/dVNMIyX
-         hy/1NNpkS/01dpNGjGaG36RFbr79HWTw71K1Mk2r4G7yROK06oC60eoQjO3kBsxi3nyP
-         rj4rl+FALY27CIhZVsFN6Q4O/kzpn/+OHaNVZhY+UMsFbAxtpWMKpudGVmQUg5j7qjqG
-         xcVg==
-X-Gm-Message-State: ACgBeo0dPrzvuHH9dwoP0cjvfatt7tAPdkyZyTpH+ps9FnuU84ej8j1/
-        lQnqbJhoIiiQDZmJaIEV8tsun1CFPAbv5Q==
-X-Google-Smtp-Source: AA6agR4qM8+4xZ8JfYFrFjrKKP+AQwRkgUoluvJ40CPzqYuFfl1kgsgy8xlZMg6+Rjj/AkbVhMNsOA==
-X-Received: by 2002:a0c:e152:0:b0:4ac:8080:215c with SMTP id c18-20020a0ce152000000b004ac8080215cmr24791308qvl.2.1663157219360;
-        Wed, 14 Sep 2022 05:06:59 -0700 (PDT)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id i10-20020ac84f4a000000b0031eb5648b86sm1452330qtw.41.2022.09.14.05.06.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 05:06:58 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 08:06:56 -0400
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nathan Huckleberry <nhuck@google.com>,
-        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ethernet: litex: Fix return type of
- liteeth_start_xmit
-Message-ID: <YyHD4MX0Pvckb6XW@errol.ini.cmu.edu>
-References: <20220912195307.812229-1-nhuck@google.com>
- <YyEErzoi9+8NMRCP@dev-arch.thelio-3990X>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q+27K4r5oS0nyZYzQbGrXc1Sp0k9jMzZDh/vJFY9Rqo=;
+        b=sdfT3YDF9UE8Oec+JqZQS6bwmdzst5G1pFJPjMBI6H457llWDypKbJCYk5kDExgAgy
+         L0o10zoa0c4RQZK2ruJdD8XSsez49hqoitF+K6cD0JL2BBxgpdOAnMS1f2Gb3vUcUouH
+         eziZYN09oFuxfy9YTKnrWldYPAldIsiaIdE7yRBZ5MilnetouF15RMZl7B8FzOiplnsj
+         g18Uba4axKLbaN2mAIXwUERUk4Aw1SvmBCyyOpZNX/RIKw9SjMjaq/9XIwuDVKC8Yl2h
+         DZOKTkCMlHCqC2W6Wf7yRxNW5Kqsoofo/WZcvTiysp0UFAL/FYzvE+LLx1dG6ReTDfY3
+         jwig==
+X-Gm-Message-State: ACgBeo1RbEo2iJ9yANsWfNRZluHlnkYjmZ5pY9sAUrskEhpmWCDhVi/t
+        /EYmkcU6gptdwS4L7FD96CAFu0Eh9oFJQKIje7I=
+X-Google-Smtp-Source: AA6agR71gd2wOjNZ+6ffiBJO6tK7kFNhKXxMAcj8atkt7k1k8Lid16IdghZfaSGjfPlYs3dDvFt28gYbAPxBpxySuyI=
+X-Received: by 2002:a05:6870:8912:b0:12b:3e64:e863 with SMTP id
+ i18-20020a056870891200b0012b3e64e863mr2165214oao.26.1663157231696; Wed, 14
+ Sep 2022 05:07:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyEErzoi9+8NMRCP@dev-arch.thelio-3990X>
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac9:5ecb:0:0:0:0:0 with HTTP; Wed, 14 Sep 2022 05:07:10
+ -0700 (PDT)
+Reply-To: philipsjohnsongoodone@gmail.com
+From:   philips <robertandersonhappy1@gmail.com>
+Date:   Wed, 14 Sep 2022 13:07:10 +0100
+Message-ID: <CAGRoA82mnnv1aNR4SuedNS8U2gFhsRMn0uyp5z9tEQxmZRdKdA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 03:31:11PM -0700, Nathan Chancellor wrote:
-> On Mon, Sep 12, 2022 at 12:53:07PM -0700, Nathan Huckleberry wrote:
-> > The ndo_start_xmit field in net_device_ops is expected to be of type
-> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
-> > 
-> > The mismatched return type breaks forward edge kCFI since the underlying
-> > function definition does not match the function hook definition.
-> > 
-> > The return type of liteeth_start_xmit should be changed from int to
-> > netdev_tx_t.
-> > 
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Acked-by: Gabriel Somlo <gsomlo@gmail.com>
-
-Thanks,
---G
-
- 
-> > ---
-> >  drivers/net/ethernet/litex/litex_liteeth.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/ethernet/litex/litex_liteeth.c b/drivers/net/ethernet/litex/litex_liteeth.c
-> > index fdd99f0de424..35f24e0f0934 100644
-> > --- a/drivers/net/ethernet/litex/litex_liteeth.c
-> > +++ b/drivers/net/ethernet/litex/litex_liteeth.c
-> > @@ -152,7 +152,8 @@ static int liteeth_stop(struct net_device *netdev)
-> >  	return 0;
-> >  }
-> >  
-> > -static int liteeth_start_xmit(struct sk_buff *skb, struct net_device *netdev)
-> > +static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
-> > +				      struct net_device *netdev)
-> >  {
-> >  	struct liteeth *priv = netdev_priv(netdev);
-> >  	void __iomem *txbuffer;
-> > -- 
-> > 2.37.2.789.g6183377224-goog
-> > 
+0J/QntCS0JXQoNCV0J3QndCr0Jkg0Jgg0J3QntCi0JDQoNCY0KPQoQ0KINCb0J7QndCU0J7QnS3Q
+ktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGPDQoNCtCS0LDRiNC10LzRgyDQstC90LjQvNCw0L3Q
+uNGOOiDQtNC+0YDQvtCz0L7QuSDQtNGA0YPQsw0KDQrQn9C+0LbQsNC70YPQudGB0YLQsCwg0L3Q
+tSDQvtCx0LjQttCw0LnRgtC10YHRjCwg0LXRgdC70Lgg0Y3RgtC+INGB0L7QvtCx0YnQtdC90LjQ
+tSDQv9GA0LjQtNC10YIg0Log0LLQsNC8LCDQv9C+0YHQutC+0LvRjNC60YMNCtGPINC00L7Qu9C2
+0LXQvSDQsdGL0Lsg0L/QvtC70YPRh9C40YLRjCDQstCw0YjQtSDRgdC+0LPQu9Cw0YHQuNC1INC4
+INC+0LTQvtCx0YDQtdC90LjQtSwg0L/RgNC10LbQtNC1INGH0LXQvCDQvtGC0L/RgNCw0LLQuNGC
+0YwNCtGN0YLQviDQv9GA0LXQtNC70L7QttC10L3QuNC1INC/0L4g0Y3Qu9C10LrRgtGA0L7QvdC9
+0L7QuSDQv9C+0YfRgtC1LiDQryDQtNC10LnRgdGC0LLQvtCy0LDQuyDRgtCw0LosINC60LDQuiDR
+jyDRgdC00LXQu9Cw0LssDQrQuNC3LdC30LAg0LLQsNC20L3QvtGB0YLQuCDQuCDRgdGA0L7Rh9C9
+0L7RgdGC0Lgg0Y3RgtC+0LPQviDQtNC10LvQsC4g0KEg0LrQsNC60L7QuSDQsdGLINGB0YLQvtGA
+0L7QvdGLINCy0Ysg0L3QuA0K0YHQvNC+0YLRgNC10LvQuCDQvdCwINGN0YLQviwg0L/Rg9GB0YLR
+jCDQstCw0Lwg0LHRg9C00LXRgiDQv9GA0LjRj9GC0L3QviDQsdGL0YHRgtGA0L4g0L7RgtCy0LXR
+gtC40YLRjCDQu9C40LHQvg0K0L7RgtGA0LjRhtCw0YLQtdC70YzQvdC+LCDQu9C40LHQviDQv9C+
+0LvQvtC20LjRgtC10LvRjNC90L4uDQoNCtCc0LXQvdGPINC30L7QstGD0YIg0KTQuNC70LjQv9GB
+INCU0LbQvtC90YHQvtC9LiDQryDQvtGC0L/RgNCw0LLQuNC7INCy0LDQvCDRjdC70LXQutGC0YDQ
+vtC90L3QvtC1INC/0LjRgdGM0LzQviDRgNCw0L3QtdC1INCx0LXQtw0K0L7RgtCy0LXRgtCwLCDQ
+siDQvNC+0LXQvCDQv9C10YDQstC+0Lwg0Y3Qu9C10LrRgtGA0L7QvdC90L7QvCDQv9C40YHRjNC8
+0LUg0Y8g0YPQv9C+0LzRj9C90YPQuyDQviDQvNC+0LXQvCDQutC70LjQtdC90YLQtSwNCtC60L7R
+gtC+0YDRi9C5INGD0LzQtdGAIDE1INGB0LXQvdGC0Y/QsdGA0Y8gMjAxNSDQs9C+0LTQsC4g0K8g
+0YHQtNC10LvQsNC7INC90LXRgdC60L7Qu9GM0LrQviDQt9Cw0L/RgNC+0YHQvtCyLCDRh9GC0L7Q
+sdGLDQrQvdCw0LnRgtC4INC60L7Qs9C+LdC70LjQsdC+INC40Lcg0LTQsNC70YzQvdC40YUg0YDQ
+vtC00YHRgtCy0LXQvdC90LjQutC+0LIg0LzQvtC10LPQviDQutC70LjQtdC90YLQsCwg0L3QviDR
+jdGC0L4NCtC+0LrQsNC30LDQu9C+0YHRjCDQsdC10LfRg9GB0L/QtdGI0L3Ri9C8LCDRjyDRgtGA
+0LXQsdGD0Y4g0LLQsNGI0LXQs9C+INGB0L7Qs9C70LDRgdC40Y8g0L/RgNC10LTRgdGC0LDQstC4
+0YLRjCDQstCw0YEg0LrQsNC6DQrQsdC70LjQt9C60L7Qs9C+INGA0L7QtNGB0YLQstC10L3QvdC4
+0LrQsCDQkdCb0JjQltCd0JXQk9CeINCg0J7QlNCh0KLQktCV0J3QndCY0JrQkCDQnNCe0JXQk9Ce
+INCf0J7QkdCV0JTQndCV0JPQniDQmtCb0JjQldCd0KLQkCwNCtCf0J7QotCe0JzQoyDQp9Ci0J4g
+0KMg0JLQkNChINCe0JTQmNCd0JDQmtCe0JLQq9CVINCY0JzQldCd0JAg0YEg0L/QvtC60L7QudC9
+0YvQvCwg0YfRgtC+0LHRiyDRg9C90LDRgdC70LXQtNC+0LLQsNGC0YwNCtC00LXQv9C+0LfQuNGC
+0L3Ri9C5INGE0L7QvdC0INC90LAg0YHRg9C80LzRgyAyIDcwMCAwMDAsMDAg0YTRg9C90YLQvtCy
+INGB0YLQtdGA0LvQuNC90LPQvtCyICjRgtC+0LvRjNC60L4g0LTQstCwDQrQvNC40LvQu9C40L7Q
+vdCwINGB0LXQvNGM0YHQvtGCINGC0YvRgdGP0Ycg0LHRgNC40YLQsNC90YHQutC40YUg0YTRg9C9
+0YLQvtCyINGB0YLQtdGA0LvQuNC90LPQvtCyLCDQsiBGU1QtQkFOSw0KTG9uZG9uLCDQvtGB0YLQ
+sNCy0LvQtdC90L3Ri9C5INC60LvQuNC10L3RgtC+0Lwg0LTQviDRgtC+0LPQviwg0LrQsNC6INC+
+0L0g0LHRg9C00LXRgiDQutC+0L3RhNC40YHQutC+0LLQsNC9LA0KDQrQkdCw0L3QuiDQstGL0LTQ
+sNC7INC80L3QtSDRg9Cy0LXQtNC+0LzQu9C10L3QuNC1LCDRh9GC0L7QsdGLINGPINC/0YDQtdC0
+0L7RgdGC0LDQstC40Lsg0LXQs9C+INGA0L7QtNGB0YLQstC10L3QvdC40LrQvtCyINCyDQrQutCw
+0YfQtdGB0YLQstC1INGB0LLQvtC10LPQviDQsNC00LLQvtC60LDRgtCwLCDQuNC90LDRh9C1INC+
+0L3QuCDQv9GA0L7RgtC+0LvQutC90YPRgiDRhNC+0L3QtCDQsiDQs9C+0YHRg9C00LDRgNGB0YLQ
+stC10L3QvdGD0Y4NCtC60LDQt9C90YMg0LrQsNC6INC90LXQstC+0YHRgtGA0LXQsdC+0LLQsNC9
+0L3Ri9C5INCy0LXQutGB0LXQu9GMLiDQryDQvdCw0LTQtdGP0LvRgdGPLCDRh9GC0L4g0LLRiyDQ
+vdC1INGA0LDQt9C+0LHQu9Cw0YfQuNGC0LUNCtC4INC90LUg0L/RgNC10LTQsNC00LjRgtC1INGN
+0YLQviDQtNC+0LLQtdGA0LjQtSDQuCDRg9Cy0LXRgNC10L3QvdC+0YHRgtGMLCDQutC+0YLQvtGA
+0YvQtSDRjyDQv9GL0YLQsNGO0YHRjCDRg9GB0YLQsNC90L7QstC40YLRjA0K0YEg0LLQsNC80Lgg
+0LTQu9GPINC90LDRiNC10Lkg0LLQt9Cw0LjQvNC90L7QuSDQstGL0LPQvtC00YssINGPINC90LUg
+0YXQvtGH0YMsINGH0YLQvtCx0Ysg0YEg0L3QsNC80Lgg0LHRi9C70LAg0YLRgNC10YLRjNGPDQrR
+gdGC0L7RgNC+0L3QsCwg0Y3RgtC+INC00L7Qu9C20L3QviDQsdGL0YLRjCDRgdC10LrRgNC10YLQ
+vtC8INC80LXQttC00YMg0LzQvdC+0Lkg0Lgg0LLQsNC80LguINCvINC30LDQstC10YDRj9GOINC4
+DQrQs9Cw0YDQsNC90YLQuNGA0YPRjiwg0YfRgtC+INGN0YLQviDQsdGD0LTQtdGCINCy0YvQv9C+
+0LvQvdC10L3QviDQsiDRgdC+0L7RgtCy0LXRgtGB0YLQstC40Lgg0YEg0LfQsNC60L7QvdC90L7Q
+uQ0K0LTQvtCz0L7QstC+0YDQtdC90L3QvtGB0YLRjNGOLCDQutC+0YLQvtGA0LDRjyDQt9Cw0YnQ
+uNGC0LjRgiDQstCw0YEg0L7RgiDQu9GO0LHQvtCz0L4g0L3QsNGA0YPRiNC10L3QuNGPINC30LDQ
+utC+0L3QsC4g0JLRgdC1LA0K0YfRgtC+INGPINGC0YDQtdCx0YPRjiDQvtGCINCy0LDRgSwgLSDR
+jdGC0L4g0LLQsNGI0LUg0YfQtdGB0YLQvdC+0LUg0YHQvtGC0YDRg9C00L3QuNGH0LXRgdGC0LLQ
+viwg0YfRgtC+0LHRiyDQvNGLINC80L7Qs9C70LgNCtC/0YDQvtCy0LXRgdGC0Lgg0Y3RgtGDINGC
+0YDQsNC90LfQsNC60YbQuNGOLg0KDQrQlNC70Y8g0L/QvtC70YPRh9C10L3QuNGPINCx0L7Qu9C1
+0LUg0L/QvtC00YDQvtCx0L3QvtC5INC40L3RhNC+0YDQvNCw0YbQuNC4LCDQv9C+0LbQsNC70YPQ
+udGB0YLQsCwg0YHQstGP0LbQuNGC0LXRgdGMINGB0L4NCtC80L3QvtC5LCDQvtC20LjQtNCw0Y8g
+0LLQsNGI0LXQs9C+INGB0YDQvtGH0L3QvtCz0L4g0L7RgtCy0LXRgtCwLg0KDQrQl9Cw0YDQsNC9
+0LXQtSDRgdC/0LDRgdC40LHQviDQuCDRhdGA0LDQvdC4INCy0LDRgSDQkdC+0LMsDQoNCtCc0LjR
+gdGC0LXRgCDQpNC40LvQuNC/0YEg0JTQttC+0L3RgdC+0L0sINGN0YHQutCy0LDQudGALg0K0KPR
+gdCw0LTRjNCx0LAgMiwg0J3RjNGOLdCu0L3QuNC+0L0t0YHRgtGA0LjRgiwgTEQxIDJQRg0K0JvQ
+ntCd0JTQntCdLdCS0LXQu9C40LrQvtCx0YDQuNGC0LDQvdC40Y8NClBPVkVSRU5OWVkgSSBOT1RB
+UklVUw0KIExPTkRPTi1WZWxpa29icml0YW5peWENCg==
