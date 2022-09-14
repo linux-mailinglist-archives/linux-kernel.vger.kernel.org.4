@@ -2,265 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B525B7E6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16145B7EB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiINBio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S229791AbiINBxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiINBiW (ORCPT
+        with ESMTP id S229800AbiINBx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:38:22 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D816D549;
-        Tue, 13 Sep 2022 18:38:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MS2xP6qfPzlKhb;
-        Wed, 14 Sep 2022 09:36:41 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgDHGXOGMCFj24dCAw--.23886S8;
-        Wed, 14 Sep 2022 09:38:17 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
-        pmenzel@molgen.mpg.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2 4/4] md/raid10: convert resync_lock to use seqlock
-Date:   Wed, 14 Sep 2022 09:49:14 +0800
-Message-Id: <20220914014914.398712-5-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220914014914.398712-1-yukuai1@huaweicloud.com>
-References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHGXOGMCFj24dCAw--.23886S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw45Gr43CFWfCFy3Ar15CFg_yoWxWryUpw
-        4aqr15tFWUXrn0qr4DJa1q9r1Fgw4kKa47Ka9rW3WkZFs5tryfXF1UGr9Ygryqvr9xJFyv
-        qFWrCFWfGw17tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQSdkUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Sep 2022 21:53:27 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DF76CD38
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:53:26 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id s18so7693665plr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=TRgWwX2Tmd+EvHBnlkB6xTDwLdmxHLqUQDbVImjS7Xg=;
+        b=gfs2RGp7aHKyljchnkF0/lk2biBR8aasmcxzX5nmzLNSu52Mrw+mzANHa4H1HRC41h
+         Sxim/pIFi71+87PrjDIpILJf2NUu0G8qG6oKvdoX5cc0vrsntYzogY6kvzCmHpWd77jA
+         wcvMAyRr9hOjYBk0wM/0TXtMiq1YXm86hFzDo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=TRgWwX2Tmd+EvHBnlkB6xTDwLdmxHLqUQDbVImjS7Xg=;
+        b=24em04A9Eb0Yha2DD162HwT09upS/VD9r5rzmTfXrxu9x00oMjebkypPRnT6yG9G47
+         /LZvKSuj5cckOiP3MeB3LLNfFxejlZx5JDJ9brJ364PRfn0fs60qI2GjsaRgdcV7w2nf
+         O6ki5r1sXrMdbBDdfcJg0g+N+WUpjZzWKVlVqW0YSecvTEQWNaLO9IC3kzI1Dgk+1daB
+         QY0W6Gtt20sbeuqRjydvjiSXN6BZqfCsccioH1gJed+KJmjtkhOuHcyra/2FVLrS5pwx
+         2DqdUcJOU1kUFJ7o+m8QzVlOuE/vktGHoSd2CrUanROn1PeECbOWAe8I9TumVYPo3e84
+         KCiA==
+X-Gm-Message-State: ACgBeo3POHgHyUxSCXg7AFaS5hEh+owdsaiKdn2PRGQyvhrvtYslA2pf
+        3lKVuwQWDe7tu/WwKY2MEhwIpw==
+X-Google-Smtp-Source: AA6agR4YzfRQlzRi2ZGv7skLDcUk5/gN75q+7y3fCJx2B4yiHMtuwCtQ2hdGuAQQt58B04tkZWTxoA==
+X-Received: by 2002:a17:903:230e:b0:178:3356:b82a with SMTP id d14-20020a170903230e00b001783356b82amr12249592plh.138.1663120406208;
+        Tue, 13 Sep 2022 18:53:26 -0700 (PDT)
+Received: from localhost.localdomain (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
+        by smtp.gmail.com with ESMTPSA id w189-20020a627bc6000000b0053e61633057sm8524481pfc.132.2022.09.13.18.53.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Sep 2022 18:53:25 -0700 (PDT)
+From:   Joe Damato <jdamato@fastly.com>
+To:     x86@kernel.org, linux-mm@kvack.org,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Joe Damato <jdamato@fastly.com>
+Subject: [RFC 0/1] mm: Track per-task tlb events
+Date:   Tue, 13 Sep 2022 18:51:08 -0700
+Message-Id: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Greetings:
 
-Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
-and io can't be dispatched until 'barrier' is dropped.
+TLB shootdown events can be measured on a per-CPU basis by examining
+/proc/interrupts. Further information about TLB events can be harvested
+from /proc/vmstat if CONFIG_DEBUG_TLBFLUSH is enabled, but this information
+is system-wide.
 
-Since holding the 'barrier' is not common, convert 'resync_lock' to use
-seqlock so that holding lock can be avoided in fast path.
+This information is useful, but on a busy system with many tasks it can be
+difficult to disambiguate the source of the TLB shootdown events.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/md/raid10.c | 85 +++++++++++++++++++++++++++++----------------
- drivers/md/raid10.h |  2 +-
- 2 files changed, 57 insertions(+), 30 deletions(-)
+Having this information tracked per-task can enable developers to fix or
+tweak userland allocators to reduce the number of IPIs and improve
+application performance.
 
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 377d4641bb54..6c2396fe75a0 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -79,6 +79,21 @@ static void end_reshape(struct r10conf *conf);
- 
- #include "raid1-10.c"
- 
-+#define NULL_CMD
-+#define cmd_before(conf, cmd) \
-+	do { \
-+		write_sequnlock_irq(&(conf)->resync_lock); \
-+		cmd; \
-+	} while (0)
-+#define cmd_after(conf) write_seqlock_irq(&(conf)->resync_lock)
-+
-+#define wait_event_barrier_cmd(conf, cond, cmd) \
-+	wait_event_cmd((conf)->wait_barrier, cond, cmd_before(conf, cmd), \
-+		       cmd_after(conf))
-+
-+#define wait_event_barrier(conf, cond) \
-+	wait_event_barrier_cmd(conf, cond, NULL_CMD)
-+
- /*
-  * for resync bio, r10bio pointer can be retrieved from the per-bio
-  * 'struct resync_pages'.
-@@ -936,30 +951,29 @@ static void flush_pending_writes(struct r10conf *conf)
- 
- static void raise_barrier(struct r10conf *conf, int force)
- {
--	spin_lock_irq(&conf->resync_lock);
-+	write_seqlock_irq(&conf->resync_lock);
- 	BUG_ON(force && !conf->barrier);
- 
- 	/* Wait until no block IO is waiting (unless 'force') */
--	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
--			    conf->resync_lock);
-+	wait_event_barrier(conf, force || !conf->nr_waiting);
- 
- 	/* block any new IO from starting */
--	conf->barrier++;
-+	WRITE_ONCE(conf->barrier, conf->barrier + 1);
- 
- 	/* Now wait for all pending IO to complete */
--	wait_event_lock_irq(conf->wait_barrier,
--			    !atomic_read(&conf->nr_pending) && conf->barrier < RESYNC_DEPTH,
--			    conf->resync_lock);
-+	wait_event_barrier(conf, !atomic_read(&conf->nr_pending) &&
-+				 conf->barrier < RESYNC_DEPTH);
- 
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static void lower_barrier(struct r10conf *conf)
- {
- 	unsigned long flags;
--	spin_lock_irqsave(&conf->resync_lock, flags);
--	conf->barrier--;
--	spin_unlock_irqrestore(&conf->resync_lock, flags);
-+
-+	write_seqlock_irqsave(&conf->resync_lock, flags);
-+	WRITE_ONCE(conf->barrier, conf->barrier - 1);
-+	write_sequnlock_irqrestore(&conf->resync_lock, flags);
- 	wake_up_barrier(conf);
- }
- 
-@@ -992,11 +1006,29 @@ static bool stop_waiting_barrier(struct r10conf *conf)
- 	return false;
- }
- 
-+static bool wait_barrier_nolock(struct r10conf *conf)
-+{
-+	unsigned int seq = read_seqbegin(&conf->resync_lock);
-+
-+	if (READ_ONCE(conf->barrier))
-+		return false;
-+
-+	atomic_inc(&conf->nr_pending);
-+	if (!read_seqretry(&conf->resync_lock, seq))
-+		return true;
-+
-+	atomic_dec(&conf->nr_pending);
-+	return false;
-+}
-+
- static bool wait_barrier(struct r10conf *conf, bool nowait)
- {
- 	bool ret = true;
- 
--	spin_lock_irq(&conf->resync_lock);
-+	if (wait_barrier_nolock(conf))
-+		return true;
-+
-+	write_seqlock_irq(&conf->resync_lock);
- 	if (conf->barrier) {
- 		/* Return false when nowait flag is set */
- 		if (nowait) {
-@@ -1004,9 +1036,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
- 		} else {
- 			conf->nr_waiting++;
- 			raid10_log(conf->mddev, "wait barrier");
--			wait_event_lock_irq(conf->wait_barrier,
--					    stop_waiting_barrier(conf),
--					    conf->resync_lock);
-+			wait_event_barrier(conf, stop_waiting_barrier(conf));
- 			conf->nr_waiting--;
- 		}
- 		if (!conf->nr_waiting)
-@@ -1015,7 +1045,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
- 	/* Only increment nr_pending when we wait */
- 	if (ret)
- 		atomic_inc(&conf->nr_pending);
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- 	return ret;
- }
- 
-@@ -1040,27 +1070,24 @@ static void freeze_array(struct r10conf *conf, int extra)
- 	 * must match the number of pending IOs (nr_pending) before
- 	 * we continue.
- 	 */
--	spin_lock_irq(&conf->resync_lock);
-+	write_seqlock_irq(&conf->resync_lock);
- 	conf->array_freeze_pending++;
--	conf->barrier++;
-+	WRITE_ONCE(conf->barrier, conf->barrier + 1);
- 	conf->nr_waiting++;
--	wait_event_lock_irq_cmd(conf->wait_barrier,
--				atomic_read(&conf->nr_pending) == conf->nr_queued+extra,
--				conf->resync_lock,
--				flush_pending_writes(conf));
--
-+	wait_event_barrier_cmd(conf, atomic_read(&conf->nr_pending) ==
-+			conf->nr_queued + extra, flush_pending_writes(conf));
- 	conf->array_freeze_pending--;
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static void unfreeze_array(struct r10conf *conf)
- {
- 	/* reverse the effect of the freeze */
--	spin_lock_irq(&conf->resync_lock);
--	conf->barrier--;
-+	write_seqlock_irq(&conf->resync_lock);
-+	WRITE_ONCE(conf->barrier, conf->barrier - 1);
- 	conf->nr_waiting--;
- 	wake_up_barrier(conf);
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static sector_t choose_data_offset(struct r10bio *r10_bio,
-@@ -4046,7 +4073,7 @@ static struct r10conf *setup_conf(struct mddev *mddev)
- 	INIT_LIST_HEAD(&conf->retry_list);
- 	INIT_LIST_HEAD(&conf->bio_end_io_list);
- 
--	spin_lock_init(&conf->resync_lock);
-+	seqlock_init(&conf->resync_lock);
- 	init_waitqueue_head(&conf->wait_barrier);
- 	atomic_set(&conf->nr_pending, 0);
- 
-@@ -4365,7 +4392,7 @@ static void *raid10_takeover_raid0(struct mddev *mddev, sector_t size, int devs)
- 				rdev->new_raid_disk = rdev->raid_disk * 2;
- 				rdev->sectors = size;
- 			}
--		conf->barrier = 1;
-+		WRITE_ONCE(conf->barrier, 1);
- 	}
- 
- 	return conf;
-diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
-index 5c0804d8bb1f..8c072ce0bc54 100644
---- a/drivers/md/raid10.h
-+++ b/drivers/md/raid10.h
-@@ -76,7 +76,7 @@ struct r10conf {
- 	/* queue pending writes and submit them on unplug */
- 	struct bio_list		pending_bio_list;
- 
--	spinlock_t		resync_lock;
-+	seqlock_t		resync_lock;
- 	atomic_t		nr_pending;
- 	int			nr_waiting;
- 	int			nr_queued;
+This change adds two new fields to task_struct and signal_struct to help
+track TLB events:
+
+	- ngtlbflush: number of tlb flushes generated
+	- nrtlbflush: number of tlb flushes received
+
+These stats are exported in /proc/[pid]/stat alongside similar metrics
+(e.g. min_flt and maj_flt) for analysis.
+
+I've gotten code into kernel networking / drivers before, but I've never
+hacked on mm and mm-adjacent code before. Please let me know if there's a
+glaring issue and I'll be happy to tweak this code as necessary.
+
+If this seems OK, I'll send an official v1.
+
+Thanks!
+
+Joe Damato (1):
+  mm: Add per-task struct tlb counters
+
+ arch/x86/mm/tlb.c            | 2 ++
+ fs/proc/array.c              | 9 +++++++++
+ include/linux/sched.h        | 6 ++++++
+ include/linux/sched/signal.h | 1 +
+ kernel/exit.c                | 6 ++++++
+ kernel/fork.c                | 1 +
+ 6 files changed, 25 insertions(+)
+
 -- 
-2.31.1
+2.7.4
 
