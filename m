@@ -2,142 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A647F5B8118
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFC35B811C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiINFvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S229897AbiINFyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiINFvK (ORCPT
+        with ESMTP id S229880AbiINFyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:51:10 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A16564FE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:51:07 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id 29so20599731edv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=Rzn+ELvPX5W7AGhjZtpZvYJ+aqaH/60YsBtITR2DMmc=;
-        b=eSeTu+yHRHSCgq9r9iu8y9yBgx8yMxHOsD3jdLNJWTzwKZbEpJGG8qZ3u/QD1R5/uN
-         zSw6mZijyn9Sj2u9vn6oyYi6BTYDeNYAz7YE36Tbpf9H/o5DU+MFTspT7obfndFiHcHY
-         N4UCr/LYR1TiUzCdPundsLmAaBe/5W5s+zFwkag8A1fV4ER7NJ75GimmijznDS9xZVF9
-         x8PPAFhSLr/7LOXYKX7sN8rSB9Iu/N4aN3is/8bPz6FK9V9p9iPQTNCrZeDaMs9JU4xF
-         DaHGg01l/B966rbSmfGlj2GztGntnrvNNNRsvs9RzhWW+qVtgtYeg4lW8dEQvBv9P2oN
-         BKsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=Rzn+ELvPX5W7AGhjZtpZvYJ+aqaH/60YsBtITR2DMmc=;
-        b=2tr0maRj4oNpUW/D5TDR+tpeHyNeXqfzx/utOFfFyou1lOs8RNduK8Q5qeSanW4nqJ
-         Tva7IYSyD99E2fBv6e9CMRL4LjhbpgNKJxQ/hA2dgCjGynokwEoD5yHwh8Z5NVC82sf9
-         GV4oqho0CFkPH+SYEyDwHWoO0fjfHanjOkh5FoBMm9NKJbgZeR0YHVrhGZtkTjse/MYv
-         ZNLefEVextv2N6kkdsnZqD58kK/t6UqDTbITPiq3Cd6oqqefjDEVeETlQKuXDCubN9so
-         3qshkUJe4RCtyeY/JriD95IPFeq4ktuOomkbCTA0wtyFJ2gZS818gVG1aiGHfnEkBPGb
-         OUvw==
-X-Gm-Message-State: ACgBeo1QWoch0XLqCNnjctPq6d2KXsH9wzMBdVR/tvP9gY8/K2to3JVB
-        TY+uboYBtsNgo0/zaeMZ9LWM2WYmFSiSEJZk4Zo=
-X-Google-Smtp-Source: AA6agR7CJ65ZG9PZrLmbdZYh4TYrP5+kq5fgLIk0QwZOzxMqNIudRXmG9+XsI+ZHibepeArxUrsH+cbP2wJBJruUZ0M=
-X-Received: by 2002:aa7:d8d7:0:b0:44f:241d:7d81 with SMTP id
- k23-20020aa7d8d7000000b0044f241d7d81mr27007419eds.201.1663134665678; Tue, 13
- Sep 2022 22:51:05 -0700 (PDT)
+        Wed, 14 Sep 2022 01:54:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3753D01;
+        Tue, 13 Sep 2022 22:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663134858; x=1694670858;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g0ZDy774WTGsi9qoMGjCuWt0nAi4gxFyXs0tiK+AsLk=;
+  b=J1r0PWI0BKcp4kEbMeJ2WxI8lnwCAXFx+HHahW6IKd1EU6+RUzlJzxye
+   Lfasq7mFTLsFpbRvSIzxPRBH/04X430eOIitmUu7y3o6Q0nfWeAuJdPbB
+   N0SoYLbCnw18yhi5ftmp5Yh0HgNsNG7lqt+0eg9O9A6LWnitKsLHns0ND
+   4sRkmv7IFrFl4CJZ8Docjf/I6NmvMn7mzKjqHpcXpBDUSP8ojO5Ri5lHn
+   50r2jb1TwVXWX5hJk753HNfTY/Z1ZHALCfTQN98WoOMfwWRJqiHWEjqO2
+   b9f8hZ7HheC5AnXMtsHf1OseHOHOtjcX/wz7m/fwf8JTnYSy4s6DNQNhe
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="298342848"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="298342848"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 22:54:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="649947388"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 13 Sep 2022 22:54:15 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 28560F7; Wed, 14 Sep 2022 08:54:31 +0300 (EEST)
+Date:   Wed, 14 Sep 2022 08:54:31 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
+        mario.limonciello@amd.com, timvp@google.com,
+        linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set
+ wake_irq
+Message-ID: <YyFslxMchzntebVb@black.fi.intel.com>
+References: <20220912221317.2775651-1-rrangel@chromium.org>
+ <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
 MIME-Version: 1.0
-Received: by 2002:a50:7b10:0:b0:1d8:92d2:f7f3 with HTTP; Tue, 13 Sep 2022
- 22:51:04 -0700 (PDT)
-From:   ms sherry johnson <mssherryj549@gmail.com>
-Date:   Wed, 14 Sep 2022 06:51:04 +0100
-Message-ID: <CALyxJoMja_peq197urnOVTkTeQLU-Un5P2rOXEYrtDydo=bzHw@mail.gmail.com>
-Subject: Auditor Payment File: -hl/id1033/11.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,LOTTO_DEPT,MILLION_HUNDRED,MILLION_USD,
-        MONEY_FORM,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATTENTION PLEASE
-================================================================================================================================================
-In the just concluded meeting with the board of Trustees of United
-Nations Organization and Representative of all the financial sectors,
-The HOUSE OF LORD'S HUMANITARIAN FORUM (H.L.H.F) has taking the
-responsibility to pay part of debt own to citizen's across globe but
-only those that their file is submitted, We are looking into the case
-of Scammed Victims and those people that their lottery winning
-prize/Inheritance or Contract and award payment has been denied due to
-corrupt official services,
+Hi,
 
-After our mutual investigation in the recent schedule for payment of
-outstanding debts incurred since 1999 to 2021, your file record was
-found and your email address attached, Your payment is categorized
-under SOUTH AFRICA ZONE of HOUSE OF LORD'S HUMANITARIAN FORUM
-(H.L.H.F) The total sum of $5.5usd has been approved under your file
-according to elect, Contact the processing/paying manager for your
-direct payment of US$5.5M (five Million Five Hundred Thousand United
-States Dollars),
+On Mon, Sep 12, 2022 at 04:13:11PM -0600, Raul E Rangel wrote:
+> Device tree already has a mechanism to pass the wake_irq. It does this
+> by looking for the wakeup-source property and setting the
+> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> ACPI interrupt wake flag to determine if the interrupt can be used to
+> wake the system. Previously the i2c drivers had to make assumptions and
+> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> If there is a device with an Active Low interrupt and the device gets
+> powered off while suspending, the interrupt line will go low since it's
+> no longer powered and wakes the system. For this reason we should
+> respect the board designers wishes and honor the wake bit defined on the
+> interrupt.
+> 
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> ---
+> 
+> Changes in v2:
+> - Look at wake_cabple bit for IRQ/Interrupt resources
+> 
+>  drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
+>  drivers/i2c/i2c-core-base.c |  6 +++++-
+>  drivers/i2c/i2c-core.h      |  4 ++--
+>  3 files changed, 35 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index c762a879c4cc6b..c3d69b287df824 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
+>  	{}
+>  };
+>  
+> +struct i2c_acpi_irq_context {
+> +	int irq;
+> +	int wake_capable;
 
-                                                  CONTACT THE
-INTERNATIONAL REMITTANCE DEPARTMENT VIA-EMAIL:
-Whatssapp line +44 7418348469
-E-mail: foreign_finance_affairs@hotmail.com
-E-mail: orgarnizationlordshumanitarian@yandex.com
-E-mail: foreign_finance@mail2expert.com
-CONTACT PERSON: MRS JENNET KINGSTON BROWN INTERNATIONAL FUND REMITTING
-DIRECTOR Also provide the following detail to her for immediate
-release of your fund,
-================================================================================================================================================
-Also it is very necessary and important that you send us an e-mail
-containing your vital information?? As requested below so that you
-will be given an immediate response and directives on what to do next:
+Why not bool?
 
-Full Names:
-Address:
-City:
-Zip/Postal Code:
-State:
-Country:
-Present Occupation:
-Company Owner:
-Company Name:
-Gender:
-Age:
-Reachable Tel#/Mob:..............*No Voice Mail Service*
-Fax:
+Also perhaps 'wakeable'?
 
-THIS REQUIREMENT MUST BE PROVIDED TO HER COMPLETELY,
-================================================================================================================================================
-As soon as the International Remittance Department receives your
-information, your US$5.5M will be Transfer to your nominated Bank
-account. this payment method is set up to keep a clean slate of all
-debts owned by the government and company to individuals either by
-contract or award fund, we hereby plead for any inconvenient that you
-might have received by any of this corrupt officials, The United
-Nations Organization will not be interested in your story of not
-receiving your payment if you fail to abide to this Instruction.
-================================================================================================================================================
-Yours Faithful,
-Mr. Anderson Paul
-Public Relation Officer
-Strand Bridge House 138-142 Strand,
-City of London,
-Whatssapp line +44 7418348469
-OUR REF: UNN/APXB/TF/08
-http://www.una.org.uk/
-IMMEDIATE PAYMENT
-#:WB/PC/FMF/MIN/UN/APXB/08.
-UNITED NATIONS LIAISON HEADQUARTERS UK LONDON OFFICE.
+> +};
+> +
+>  static int i2c_acpi_do_lookup(struct acpi_device *adev,
+>  			      struct i2c_acpi_lookup *lookup)
+>  {
+> @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
+>  
+>  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+>  {
+> -	int *irq = data;
+> +	struct i2c_acpi_irq_context *irq_ctx = data;
+>  	struct resource r;
+>  
+> -	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
+> -		*irq = i2c_dev_irq_from_resources(&r, 1);
+> +	if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
+> +		irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
+> +		irq_ctx->wake_capable =
+> +			r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
 
-SORRY IF YOU RECEIVED THIS MESSAGE IN JUNK BOX IS DUE TO OUR SLOW NETWORK.
-=============================================================
+Then you can just do this:
+
+		irq_ctx->wakeable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+
+> +	}
+>  
+>  	return 1; /* No need to add resource to the list */
+>  }
+> @@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+>  /**
+>   * i2c_acpi_get_irq - get device IRQ number from ACPI
+>   * @client: Pointer to the I2C client device
+> + * @wake_capable: Set to 1 if the IRQ is wake capable
+>   *
+>   * Find the IRQ number used by a specific client device.
+>   *
+>   * Return: The IRQ number or an error code.
+>   */
+> -int i2c_acpi_get_irq(struct i2c_client *client)
+> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+
+bool here too
+
+>  {
+>  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+>  	struct list_head resource_list;
+> -	int irq = -ENOENT;
+> +	struct i2c_acpi_irq_context irq_ctx = {
+> +		.irq = -ENOENT,
+> +		.wake_capable = 0,
+> +	};
+>  	int ret;
+>  
+>  	INIT_LIST_HEAD(&resource_list);
+>  
+> +	if (wake_capable)
+> +		*wake_capable = 0;
+
+I think it is better to touch this only after the function succeeds so..
+
+> +
+>  	ret = acpi_dev_get_resources(adev, &resource_list,
+> -				     i2c_acpi_add_resource, &irq);
+> +				     i2c_acpi_add_resource, &irq_ctx);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	acpi_dev_free_resource_list(&resource_list);
+>  
+> -	if (irq == -ENOENT)
+> -		irq = acpi_dev_gpio_irq_get(adev, 0);
+> +	if (irq_ctx.irq == -ENOENT)
+> +		irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
+> +			adev, 0, &irq_ctx.wake_capable);
+> +
+> +	if (wake_capable)
+> +		*wake_capable = irq_ctx.wake_capable;
+
+... here only.
+
+>  
+> -	return irq;
+> +	return irq_ctx.irq;
+>  }
+>  
+>  static int i2c_acpi_get_info(struct acpi_device *adev,
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 91007558bcb260..97315b41550213 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
+>  	struct i2c_client	*client = i2c_verify_client(dev);
+>  	struct i2c_driver	*driver;
+>  	int status;
+> +	int acpi_wake_capable = 0;
+
+You can declare this in the below block instead.
+
+>  
+>  	if (!client)
+>  		return 0;
+> @@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
+>  			if (irq == -EINVAL || irq == -ENODATA)
+>  				irq = of_irq_get(dev->of_node, 0);
+>  		} else if (ACPI_COMPANION(dev)) {
+
+			bool wakeable;
+
+> -			irq = i2c_acpi_get_irq(client);
+> +			irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
+> +
+			if (irq > 0 && wakeable)
+				client->flags |= I2C_CLIENT_WAKE;
+>  		}
+>  		if (irq == -EPROBE_DEFER) {
+>  			status = irq;
+> diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+> index 87e2c914f1c57b..8e336638a0cd2e 100644
+> --- a/drivers/i2c/i2c-core.h
+> +++ b/drivers/i2c/i2c-core.h
+> @@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
+>  #ifdef CONFIG_ACPI
+>  void i2c_acpi_register_devices(struct i2c_adapter *adap);
+>  
+> -int i2c_acpi_get_irq(struct i2c_client *client);
+> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
+>  #else /* CONFIG_ACPI */
+>  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
+>  
+> -static inline int i2c_acpi_get_irq(struct i2c_client *client)
+> +static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+>  {
+>  	return 0;
+>  }
+> -- 
+> 2.37.2.789.g6183377224-goog
