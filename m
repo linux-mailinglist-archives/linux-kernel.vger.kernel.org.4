@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C675B7F21
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3920C5B7F23
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiINC6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 22:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S229648AbiINC6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 22:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiINC6L (ORCPT
+        with ESMTP id S229503AbiINC6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 22:58:11 -0400
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E61B6583E;
-        Tue, 13 Sep 2022 19:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1663124287;
-        bh=mntmAyFdC2kyLkanzymJFmnOFp0qNaHrcUQTPCMpG28=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=OswdrgyIdnbh1CY5/rPQHIWVZJyFR6+WCLh3oTByrLNciwak7JrwsOWeUxXiw/7Ke
-         /fgSux6kli4Gl+9PKv+7Nkdkh7KvFWq3g0BJ9u+fkkJJ00e2IfmI3DakBa8IIjGULM
-         +qhRoJTu6853c3YR5e0rSm0jT7qkkH7KlMfpp3jw=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
-        id E8301052; Wed, 14 Sep 2022 10:58:03 +0800
-X-QQ-mid: xmsmtpt1663124283txe2q73ln
-Message-ID: <tencent_312AB3C62E6755325FB3477910430DB08509@qq.com>
-X-QQ-XMAILINFO: OEgU9iHXvJ5F5hxvh6cfJsq8O9UquHOB49EoJqG5k8wDySZxy+IO78SyBqREc6
-         cyobI7u6JYRq5gtZu2Pnj7IggKgN2e67Hv1vlMAXKb/zQqy8frYr5MVHdF9NZqmAOEXD4XZ44+tO
-         oq9TsLjGGRpJFkV2k11DhTKjbLz7bqe/Iev2kVwsCbyqDRpbCHp1dz4/xJpFZnFXn6lP9wJj2sb/
-         CwcHS9WGRei98V7QWyhs9NQNGa0rGEAPvXbdXv7ncXwZe9IHyeLZ17pCk1lwptMfbmizr4ucapRB
-         zgO4fhRoCN0l+5maM8P8la2Q8wfj61t1054qTION0PRvIcc+2DjRIY4lOBEIlyhWBmLZpZvF/hFo
-         rC85pL++Sh0nXE19IrEqNxdlsHcNscCYBD6jlZuawWMhMlNx8MCz9Crm4wBJh7xuxsZhT6X/iMCV
-         JvhRpnB2jd21aNpi1FrfHgBFK14QfRQ0iaTLBbh8ht4Ln6nqt5L94ijSklbDHohBmPGttHBecnLm
-         Y+9UzAOaIbqyoE8s0/M9yCZqUQtSsSEs/qWz38aGVNuk00MSTLxiCm0AuWm1rNhcqS2OWmYf+4rK
-         VllRQESIv6qt9rfGfyGWtnNzC7ucd7lsl0dJ2E/wUJ5jWaHe+z9KV1H1C8RSqYfK5OJWrSdQPC7d
-         v2SGjL1zOr3w14KwudzZ46cLtM5VgveRFf20zPnedlY1f/7a3cUPnJ3abx2TL2O2LHvXqYc76SNa
-         81MQVc9hV78Awrj2SkyvojDgHH7GvI7LYYlBUfzUPBwKNgNciyUqrt+LEbisVc/DJCXBb9Vyw30a
-         edOFS+1yF4XRqL3gmiYllJKaRVKH7MmMJOnYI2fJ++vOb5luCUrq9SqcC5iXF2gMkcmn8/SMlqY4
-         t4rL5jcMyJfCjA1Fm54cdAhniD+tqoCitaielG6qzt8DqVbbAu8GEzrdYfEZ/GLG0MHNLa0SW4yj
-         D66kONGEMK6omcAmelJSMOwUFZSoGU4Hw/pLsNLwMSBT4tPmipisIyyKM3ApxV
-From:   Rong Tao <rtoax@foxmail.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     corbet@lwn.net, erik@kryo.se, jkosina@suse.cz,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@leemhuis.info, lkp@intel.com,
-        ojeda@kernel.org, rdunlap@infradead.org, rongtao@cestc.cn,
-        rtoax@foxmail.com, tglx@linutronix.de,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v2] Documentation: process/submitting-patches: misspelling "mesages"
-Date:   Wed, 14 Sep 2022 10:58:01 +0800
-X-OQ-MSGID: <20220914025801.13727-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <2e4c52b5-85e8-6951-8248-961c2cdb13e7@linaro.org>
-References: <2e4c52b5-85e8-6951-8248-961c2cdb13e7@linaro.org>
+        Tue, 13 Sep 2022 22:58:50 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93756B14A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:58:49 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id q9so3966324pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=OZ96IVQvmxvaCQr+9C8RwHBw+QnxjHjakdXfpZmb5Ig=;
+        b=NzFFmcEPVQ9p/1YWi53Ksat5xISAZQysGkJCDBG7jeSZK9lfhy4AtZPLC415rrlE+K
+         qI/QwkOh5zpIYgrzI9BZjsmW/qtoaI/oWSnpR1FE1CAs/bSIZj2G2UKWVKzDTAipdEFV
+         oekWy1+R3xHFVvXrNUufzt7T6n1Y0htigl07dmEDWYNHsjDyoRzp14PInUVEhr3IiP1O
+         djvMvaD2pNQoILaRJN3fx06RtfiaJklbh5OjpjCPoiyKrs+hZ47rsbys0HCveArNNqSl
+         70Y4DcP4G/6213Cfp3AZEAc0orzGIUOrGYPPj0RAd+OE7HJiVI5w8dJv9vrIHq7g4C65
+         ttPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OZ96IVQvmxvaCQr+9C8RwHBw+QnxjHjakdXfpZmb5Ig=;
+        b=AbXbBG8g8s0XX2LffYWH84kEqSp2ONRCQE7W1WQjkJlz3DyM/BmZi9KtIfeOh0qLLy
+         OsGjU65wOTauNjuySFefnQRwq0ZKXCGH90BZY16Vk2lmWB/s245yojdS0UkVycZlpzNu
+         umHcRVVtPAHQSynI/Stlu2/UmB6Kutf8BUKzkdw7UlHkEJniQS/kOsCp/eUeVIQUR8Dr
+         9Mo1NR9hvZt6QB9CYQu2l8iD0BeWNIvF86g7y0Ta0jxJ1jPx1wnM71IvgYWuXcIOt+l7
+         v2/N94UtLwKpp8t6DGUPibNHBYPydTHlzCN1oWKB9Skt0kCy5s8r9bZUbNazkMzecaW4
+         ztgg==
+X-Gm-Message-State: ACgBeo297RszjVLji4IPSIbCnhcvq9j8ScKxSl8rA+ETMgX2fzjfyxZd
+        tJZYZwWGEm1Y0Oj0Aoa4s9L++TMFBZAG4j/MSAM=
+X-Google-Smtp-Source: AA6agR5GCVhQu55daJ3BhNEW5iLBxlaiPqAYTUdmJZMEgVRTNhBZnzUKpit/RLWrAt/0Dz2o44OYi+HP4umZ/IFrihs=
+X-Received: by 2002:a05:6a02:4c:b0:435:176d:2a18 with SMTP id
+ az12-20020a056a02004c00b00435176d2a18mr26951452pgb.577.1663124329003; Tue, 13
+ Sep 2022 19:58:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6a10:c590:b0:2d4:f7ab:fe75 with HTTP; Tue, 13 Sep 2022
+ 19:58:48 -0700 (PDT)
+Reply-To: officeforprojectfinance@gmail.com
+From:   Loan Office <rayb20949@gmail.com>
+Date:   Tue, 13 Sep 2022 19:58:48 -0700
+Message-ID: <CAKBHHx2PXXvOe7er5XYbxX=d_=LF14U=GLosBao7ihzZ0tWzdg@mail.gmail.com>
+Subject: RE :LOAN APPLICATION ARE YOU STILL INTERESTED !!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:52b listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9518]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [rayb20949[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [rayb20949[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix spelling mistakes, "mesages" should be spelled "messages".
+Attention Sir,
 
-Signed-off-by: Rong Tao <rtoax@foxmail.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/process/submitting-patches.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+We are registered and certified Loan lenders. We offer Loans to individuals
+and project owners that need Loan at affordable rate. We offer a referral
+fee to
+ brokers who bring us lucrative project owners for financing or other
+business opportunities.
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index be49d8f2601b..7dc94555417d 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -715,8 +715,8 @@ references.
- 
- .. _backtraces:
- 
--Backtraces in commit mesages
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+Backtraces in commit messages
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- Backtraces help document the call chain leading to a problem. However,
- not all backtraces are helpful. For example, early boot call chains are
--- 
-2.31.1
-
+Regards
+Mrs Habiba Otis
+International business coordinator
+Kingdom of Saudi Arabia
