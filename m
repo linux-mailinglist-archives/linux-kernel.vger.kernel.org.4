@@ -2,145 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C472F5B80EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B345B80F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiINF3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S229892AbiINFb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiINF3u (ORCPT
+        with ESMTP id S229889AbiINFbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:29:50 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2081.outbound.protection.outlook.com [40.107.223.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3AAEE26;
-        Tue, 13 Sep 2022 22:29:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oMavRbvDZm6DKa4m5yMktZOlBIl+/4+ZkUtOv4Pi3g3Y+eFx9PNQdSLyCUXk4NclUxCu/BaVD7KPHOmdE9vtgrBZROg1fQ+jxsDxxozivYvABYC9pwnV2SRP9cYJJB5VF5njBPOYrYsoDztA6eZZqmex+z254IFkIa1xzFRRjA0FbTyOK/v7ZEabuKg/FdueBhTBeFed1yC73pDLNPOLE8U0RqOPwJL9bebJRFWNgVImxJRidZh5aPgufJmFHeajVvI4RSVCq1GCYKoeF/oxTgQNh2HXvd2ONyeoktQM6UJGokjnCt8RVloMuhoZ7mNTook6fwumj5e3fbWXLKg4ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oxdYIc5682RaOd/T/JvqgmVBXGL1hcUE9RjWjHDq51M=;
- b=IzppbUvgOITKJXJwMBCR8YEFEFQHKfziQEWZ3RCsTSsv6hBqBGKvf9Bt/UlPoWgBrILmlPaUo3xB8b351R9HpPGhfqMioO3R+vqVAgbgBjaiFWana2ihhGO0BghEzal206QoWMgF+AYhqSohRtAurhemaNmq30rQlkrLpk2NGJeqdfknfUW5lyrS50fx3h/xE4y8Yvqqj/zXMyMXSTcdO5K7rMzatGgXlR8SJc2Wlgtu23loFWx2Rr2PSrXHwt6CfL0x6fVOQ0S0JN7h1t65nluAAfeigQpNnOUYS7Vfu8Rc1KDoNCc2A/ig6QFPK/F6eGsCyPDodwato7jov1U5ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=8bytes.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oxdYIc5682RaOd/T/JvqgmVBXGL1hcUE9RjWjHDq51M=;
- b=pCJayS44DA10rHX27/BeaUZ1vcV63T1FKKc3jdZUdO94RBvPTDMjzyuYaprv138iWvD7kNkb4yPLzZl9YcvoWTmCl7YfXWSL6zH2C8ytVpRzOumb8i3gLKge9WJTYZd67Mc620e/UkzG8ihvDefKGNwiA87mwkepxP0CPqbvi72Rt0AN896yne78CZXNenCzqbuEaJLZzEtBh0Ur5ijRCa1g0+FGRpH83F+WhjsAD0Y3a6aiB8HTAS6VG4GRZNNTBXMhUn9wfk1SRUTFTJEp4Yb34ihkK+UKx0rzj51TztzL/KNrBrj/nrZKiv321ohQV8vpaaicD14Cl2q6wnfvPQ==
-Received: from BN9PR03CA0468.namprd03.prod.outlook.com (2603:10b6:408:139::23)
- by DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 05:29:47 +0000
-Received: from BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:139:cafe::38) by BN9PR03CA0468.outlook.office365.com
- (2603:10b6:408:139::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
- Transport; Wed, 14 Sep 2022 05:29:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT104.mail.protection.outlook.com (10.13.177.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5632.12 via Frontend Transport; Wed, 14 Sep 2022 05:29:46 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 13 Sep
- 2022 22:29:28 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- rnnvmail205.nvidia.com (10.129.68.10) with Microsoft SMTP Server
+        Wed, 14 Sep 2022 01:31:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A127F6E88B;
+        Tue, 13 Sep 2022 22:31:03 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E4enP5000529;
+        Wed, 14 Sep 2022 05:30:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=n5rJAvQhwCq2T6m4EtpG3+YaK2yUFaiiXGtnycNXHnI=;
+ b=B47aktkwtgcbR2tJHPgD0dcBXJkplB4VijJdrEI4fcbHF0r7NV/M7WUe2lnSQrcpjeB7
+ l/wjXykSbc0835yPjHUqxmF6Fh+oVGLm9HaHt0acRmVG2KHg+Pubo0gI/kfOqO8wn29N
+ K+7/QF6KX56c0FagRpyRsaoUv28tJyE6sa6oMNZLqpHRGNNxcUdUAqm3MEg1mJTpIVRr
+ VSUMzVqJfut2Bodx082IiHBMWOUwAX6jzQ7CgKz3nWKD2Z97ndysgo2ujl9Gr6T8GMKj
+ 0C1E5YkqG3snKEPx9hFy+9Eoz0GtHIxYtSUfmzvT7C/2k7NCspndlJccFaYNo79OSdjL dg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxyv9c37-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 05:30:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E5UtK3025975
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 05:30:55 GMT
+Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 22:29:28 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 22:29:27 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29 via Frontend
- Transport; Tue, 13 Sep 2022 22:29:25 -0700
-Date:   Tue, 13 Sep 2022 22:29:24 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-        <will@kernel.org>, <robin.murphy@arm.com>, <robdclark@gmail.com>,
-        <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>, <matthias.bgg@gmail.com>,
-        <heiko@sntech.de>, <orsonzhai@gmail.com>,
-        <baolin.wang@linux.alibaba.com>, <zhang.lyra@gmail.com>,
-        <thierry.reding@gmail.com>, <jean-philippe@linaro.org>,
-        <jgg@nvidia.com>, <sricharan@codeaurora.org>
-CC:     <yong.wu@mediatek.com>, <vdumpa@nvidia.com>,
-        <jonathanh@nvidia.com>, <tglx@linutronix.de>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        <thunder.leizhen@huawei.com>, <christophe.jaillet@wanadoo.fr>,
-        <yangyingliang@huawei.com>, <jon@solid-run.com>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <kevin.tian@intel.com>, <quic_jjohnson@quicinc.com>
-Subject: Re: [PATCH v2 00/13] iommu: Define EINVAL as device/domain
- incompatibility
-Message-ID: <YyFmtOsvS9WHJEd2@Asurada-Nvidia>
-References: <20220914051234.10006-1-nicolinc@nvidia.com>
+ 15.2.986.29; Tue, 13 Sep 2022 22:30:51 -0700
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sboyd@kernel.org>,
+        <mka@chromium.org>, <johan+linaro@kernel.org>,
+        <quic_kriskura@quicinc.com>, <dianders@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: [PATCH] arm64: dts: qcom: sc7280: Add required-opps for USB
+Date:   Wed, 14 Sep 2022 11:00:17 +0530
+Message-ID: <20220914053017.23617-1-quic_rjendra@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220914051234.10006-1-nicolinc@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT104:EE_|DS7PR12MB6214:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b0fd3db-91fb-4d09-8f5f-08da96122345
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: afGYiCsnMHEEvbBzqNcSfmPAS3eAes5vMGs1IjgaBSFIQfwNfnP+2xxUdQpGYmOru+/XAmmyqOeVyZyz/dsLaiBEgJow4eUuMJ1sfVQwgiLYnnnHuNc5cLAX5uVCTkgoUWjW3LhyDewsvsw8bTp/TA2uyBQKRXjcUE+mqyjzvzUsoov//ht3JXfDk8ZCIbDkNukviGgqghV0YH45bdBUZHQ3or0cP3gw25BT17riva5osD+tsQaF94Kp0hZ6W96buDCO3yFP/tkNCNVBXwE8ng0riaozEFQEdeLkARjIa3WHcVmeN2NXJMSELoyH/ldNA3gFw43sudNs05cgXIsIz+HzV09JoKJkjhauFm77rLZhOwPIhukYl3p06gDNKpJBakalH3RSp8Mml4cgpbDY8QqS+40wVtSJIo/ZHKuMW1qFIWRoTWXlhlqNwBeUi60BPk9b0foIN9nDfWRwlk7m3Bi7BRtbA1vSJCD1TomF2QXMe6LpONMtzVeOFcApXPNJ5fU309G491C7ZF2coLLznf4k7D/GaOLTkrFTgaeYOZKw8uPQa5lqt61RoJ/LWlJsvKm7RcA6wo1VwNVKCG4XBb5u6fPHot+xJiSpD9+e04IEiiSY4KLPd7zsFOObo1fn9Fxct28iwcuJMicwSuj1ObBBdUnzyoMLTP3SNBIM8VA/RJE0WD2RXgjkudHbZRddvUokeHLOTj8pdKz37YjCBqkCqgDQcYiqOq3fcBYynTFWggENEt3u86kQdR2untWTXRgrbs1box6ZnJSrzjxHdGynVssPCjvZ4El2GzdwOGKshZWin2IyJ7I+fLDp2PaiRy6YQI1xdhOOMVeF5zX02B5HBTaASUbCz/DKXg4sVCjMTz4uFh1JO11ue31emCJKlms4YSwsDyMjpAEeisFokcbDZ5Bt5/cshOISdgVg3NI=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(451199015)(36840700001)(40470700004)(46966006)(9686003)(8936002)(82740400003)(110136005)(7406005)(36860700001)(55016003)(426003)(966005)(40460700003)(26005)(921005)(8676002)(70206006)(478600001)(70586007)(7416002)(186003)(4326008)(86362001)(7636003)(40480700001)(4744005)(5660300002)(33716001)(82310400005)(54906003)(47076005)(2906002)(336012)(316002)(41300700001)(356005)(83996005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 05:29:46.9654
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b0fd3db-91fb-4d09-8f5f-08da96122345
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6214
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gb9cfLVGYkngCQiQw-ipGUC39ZD52gXD
+X-Proofpoint-ORIG-GUID: gb9cfLVGYkngCQiQw-ipGUC39ZD52gXD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_02,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140026
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+USB has a requirement to put a performance state vote on 'cx'
+while active. Use 'required-opps' to pass this information from
+device tree, and since all the GDSCs in GCC (including USB) are
+sub-domains of cx, we also add cx as a power-domain for GCC.
+Now when any of the consumers of the GDSCs (in this case USB)
+votes on a perforamance state, genpd framework can identify that
+the GDSC itself does not support a performance state and it
+then propogates the vote to the parent, which in this case is cx.
 
-On Tue, Sep 13, 2022 at 10:12:33PM -0700, Nicolin Chen wrote:
+This change would also mean that any GDSC in GCC thats left enabled
+during low power state (perhaps because its marked with a
+ALWAYS_ON flag) can prevent the system from entering low power
+since that would prevent cx from transitioning to low power.
+Ideally any consumers that would need to have their devices
+(partially) powered to support wakeups should look at making the
+resp. GDSCs transtion to a Retention (PWRSTS_RET) state instead
+of leaving them ALWAYS_ON.
+
+Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+---
+* This patch is a follow up based on the discussion on the previously
+  posted version to support USB performance state voting [1]
+
+* Another patch that this approach depends on is the one to fix the
+  handling of PWRSTS_RET in the GDSC driver [2] so we can have USB
+  GDSC transtion to a RET state instead of marking it ALWAYS_ON
+
+[1] https://lore.kernel.org/linux-usb/YTduDqCO9aUyAsw1@ripper/
+[2] https://lore.kernel.org/all/20220901101756.28164-1-quic_rjendra@quicinc.com/#t
+
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index ad04025a8a1a..8a21446738bf 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -828,6 +828,7 @@
+ 			#clock-cells = <1>;
+ 			#reset-cells = <1>;
+ 			#power-domain-cells = <1>;
++			power-domains = <&rpmhpd SC7280_CX>;
+ 		};
  
-> This series is also available on Github:
-> https://github.com/nicolinc/iommufd/commits/iommu_attach_dev-v2
-> 
-> Changelog
-> v2:
+ 		ipcc: mailbox@408000 {
+@@ -3456,6 +3457,7 @@
+ 					  "ss_phy_irq";
+ 
+ 			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
++			required-opps = <&rpmhpd_opp_svs>;
+ 
+ 			resets = <&gcc GCC_USB30_PRIM_BCR>;
+ 
+-- 
+2.17.1
 
-I just realized that the chain of this version is broken. Yet, I
-think that people can still review the changes, though they may
-not be grouped together. I will fix this in the next respin.
-
-Thanks
-Nicolin
