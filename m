@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC21A5B89A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62DC5B89AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiINOA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S229948AbiINOAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiINOAJ (ORCPT
+        with ESMTP id S229937AbiINOAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:00:09 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00074.outbound.protection.outlook.com [40.107.0.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAB81A83C;
-        Wed, 14 Sep 2022 06:59:48 -0700 (PDT)
+        Wed, 14 Sep 2022 10:00:19 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00047.outbound.protection.outlook.com [40.107.0.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCBE33428;
+        Wed, 14 Sep 2022 06:59:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kr6NSevDvto/KXSvE1fyUa0YD8aDUklwQPGn5sPDCJ3flSwL22N/1WB/K9EB6lNtzFj0hlN9OmNwSXw+A3PodtnwpGGQJzD55xrsoiPmpE+/ogVjZkGuq3ONNs7M/nUcy/n5cYEoyZ2i/yINDsB5lyMNBNocJJARsrYKj6+24x5YkehyZiFuE0kTZdfXtvhXZYTj77F8H2AYsDKkHJqMv5pDBwa7d4SQdb5sgZOd9oMYoCOO8XFxNz7LaL0p+W4ccSMETOfKK1PXgbxidfcZCTKvuRCikwRxrSN8mmR67lpoMlRJ9gVSBXw+nSEpmdNAoVdP8RN9QOF7Nodm1jlBAA==
+ b=iLcpYoIzJqxkV4yZOfQBZhyp6W+V2KMUq4txCZeaVbm79ydbdNCgCSSx+By8AwAxUYS8Cekg8z1pJzMn+zqCr4al9Zw02opkaR+3q6A5PorTInEmJz7+aMFVuVBCXaNrmwQBw6Q8vw7TztbxSTNd9lpasXuao14ypGUtC346jqxq113BePCJCd7Q8T9/kpmqpRl9JVi0oxnqQ5NAmPxxXsKE1aRXN6pit5uHaVHZtE5/GItjgn0IpCmb4/tFbyyW+pCS7vDC5U2eJrQnL3njRCU5a7YVC/8iROfqt3P493VF6kuPdmpbDW5O4YJ5p7EiketV0n89qX6MnanfAqL9ug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6PZ7i2t2MIKTwxEybY05L44KbQTChqNFvulgZvvzr5k=;
- b=BnJOXzaOKZF9jDpbKXDzV2pbVxIR0iycy/Q6JeHfgXTcf1+8tNjP2hbiB5d+3pS4n/S6B02T7ar9i1NzULXL6MejjGci3mtVu6pUMq+selANwIy049v6A+GT+sXxpID75WC+QIfsLgEEeV49p71g2ECHK68FzISHor5GXsINeMataIKOcXakzlf0ICy/sac/uiq+04Ux5aPkgQ575dKi4SdaQfu+aXVuFj9VJv9Brz0Hpoczo3gPtJjwI5Oj1z3PzHG4ex45ca0qQkBQbvNDjD3Admos9Pwm6XIFwwrotXDMcYp3YvgK5wuQP2N180nPqKEfEXRsZGZQ8hXGboC4XQ==
+ bh=/n+n7zJPnpG8IGDf0oet+gswMFVi9N2XfM/ZsowdNJg=;
+ b=CNj6kOlqwU6i0m9BKEKwP40eyPrweMHUV7O7yCHgxSDCcMoNUL5C76QbDrrYdoXHcHvta8bs3iSKDbzplWVxon+SypuU7Pr2DxjHS+8uW7JMhBUrpfAXJfISPbJ9KFS7NWQ9x3fSeM0m3daG6Ut2M9wOPEUToxlQeQJzAu5LB4hi4lLIMaC5YJZcTw6fXJVITxOQx+swvGeZ8tLb4xrl2R9Q4JeYBOsV5u9iMr3Z46rzO5Gp+t1soKn9anjBCgAt3hIJ8mNX//2BQsNuO0xIeybMtPbyJ2zXZneDlBaAeBR1g8VMGLBuQHUk2IMbjhexKqjrBfKVxFZ36Yd2qDuGgA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6PZ7i2t2MIKTwxEybY05L44KbQTChqNFvulgZvvzr5k=;
- b=dZDxqL4tei0eTkBl9TeZ6DlyJYB45gzQKxP3GwyJQOX8+HS5wuB0bh9bGilg9ApbXfYDOmMgQpKiB1OnuFjXlIHsHf7fo7EgSH3RZ/wA2dCphHn0SwQTDgl7Q5ixEhBJ11wSDoMsI5bS7Osw8xBgK7eiUJc6kaJZvNIAlI4dzSw=
+ bh=/n+n7zJPnpG8IGDf0oet+gswMFVi9N2XfM/ZsowdNJg=;
+ b=NuknSd5Djz8kCo3oMBds2qI6nzEl13XGg7Fd7hLhl+beoJKJNTq4usGs0rutGKuUon0vtgAonbM6bJgNpJmgdw3jadcncqNkzRnjeFtsed3CSos2TH1l4Mt0i+u4RMhd2gMfI/4SdwkaM/c099Yc2AQxyDU55H4fTPiBT1m4p3A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB9176.eurprd04.prod.outlook.com (2603:10a6:20b:44b::7)
  by DB8PR04MB7129.eurprd04.prod.outlook.com (2603:10a6:10:127::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 13:59:47 +0000
+ 2022 13:59:53 +0000
 Received: from AS8PR04MB9176.eurprd04.prod.outlook.com
  ([fe80::a552:97fd:60f4:edd6]) by AS8PR04MB9176.eurprd04.prod.outlook.com
  ([fe80::a552:97fd:60f4:edd6%7]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 13:59:47 +0000
+ 13:59:53 +0000
 From:   Shenwei Wang <shenwei.wang@nxp.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -65,9 +65,9 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Peng Fan <peng.fan@nxp.com>, Li Yang <leoyang.li@nxp.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         imx@lists.linux.dev
-Subject: [PATCH v8 3/5] arm64: dts: imx8: add a node label to ddr-pmu
-Date:   Wed, 14 Sep 2022 08:58:46 -0500
-Message-Id: <20220914135848.118616-4-shenwei.wang@nxp.com>
+Subject: [PATCH v8 4/5] arm64: dts: freescale: add i.MX8DXL SoC support
+Date:   Wed, 14 Sep 2022 08:58:47 -0500
+Message-Id: <20220914135848.118616-5-shenwei.wang@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220914135848.118616-1-shenwei.wang@nxp.com>
 References: <20220914135848.118616-1-shenwei.wang@nxp.com>
@@ -78,51 +78,51 @@ X-ClientProxiedBy: BYAPR01CA0067.prod.exchangelabs.com (2603:10b6:a03:94::44)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8PR04MB9176:EE_|DB8PR04MB7129:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7f8d30d-e7bc-43d2-3a20-08da9659623e
+X-MS-Office365-Filtering-Correlation-Id: d59a6a83-8ea0-4cf2-5455-08da96596586
 X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DN9YntHmhY6TTIswEP25lwZ/OQLYmjx5IqSOl3OfMijjtAeLDH9d0h0vr+Eln7XIpVBlpU781HC5Hhrp49MmqJH8A+G1JgYXQaFXhL92QMiJpVaSXtM3j5MtOHAC+5tzbkKtv95cGl+g3S+5sUOyBXxez5JK1vqgF+aiR2vQaTWXEMVUJ7jvx60XF5CT7OBquHIQpzFqibakvyFG4WGCfk38n15L49uleErejBdP6efp2iuuDa/YaOonqcK92qGJAAkHV82hfKr6bf2i3+gdSAXrGFdGxFNb1kTzU8nlViuFFhKQfqvYHFrYdOups0/Nl/jJsCR+8RcD9Haqn7hhF2bCzTNitlvVWRt4WNNhMHUiI70Zv51cuqLCJnB9cEfWbY7OXJt8cWOP9nbiM0SGwpjxeSXf1kMzcm4/Q4+tW4JNtTAOC89y+4PRR7eI95DegcqmPUwJTZ6ERSboSPBsivZ8WFj3IRGZkrGIOWVdRN8AUXLr6bzUc7ClYTRvKTbLq4o6jtTRvVDjh2m6lGjB2HtlgLZlQi3yHm6sHFuuZdcO87rpzxMd9PVX3ZaR+V6rcs81lY5zEM+nvAw65TvPghhtF4N5P/FEumvB2vzLCgd/xKNhP6SP79gbZULKGrMoUGkjca3lZ8HNI3jSxnxVYWWWH/YDYP15KV2ekGi5aSgVcfawc+s/Zof6sg0ioduD+wanNZz9hmRD7tWw/BaMgrq3OR3HpNinW2Pj/DjamyQFy5LaiLyjt4wNCfkPZSnHe+T7QwGYI/ced8VDj6pB3w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9176.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(38350700002)(4326008)(5660300002)(7416002)(66946007)(55236004)(1076003)(66556008)(38100700002)(8936002)(8676002)(6486002)(186003)(4744005)(44832011)(41300700001)(66476007)(86362001)(26005)(316002)(110136005)(2906002)(478600001)(54906003)(2616005)(36756003)(52116002)(6506007)(83380400001)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +fb13Y4vhiAYqmBnZIyljpMDESx3LzTuLFyw+kLBrd3tM0wC8o2Og/zK1un19TVWjLLNQKDhhzjsDG1PP+0QnKOngjcbcWwo/EJWfNSLm0GJVso7TTYxyMs9HU7ydKjZn/xOvQ6NDuHg3vFCMAmX8EB7biOMjyntL4RedGMnhqWzeNostIHEHkHirloELUAemiOFvNRVtBr9GDRWztWdpwmJ03hr7L9b+gfkXqU2luPP7FJuneI09ynTNuj/Vo8FrMQHgjoCwS0P2/zlM0jQdZmZmLjbpyVGHqOEAkIpVaNoRYalOEQ98icySpzolZUtvzt4zrSs9bcJ1Eoc0AcnqA50C+OgmaoQlNO4CQ3ADtmc1fjBdzG/tuIYvdTW30y0Te0fhssKfUxwoXR7jXtapwkdOc4K5dEoxpKkUh9+R47btsG7EA0JJWLVXMz2IOqRL44F9ohwtAudNd9yfOZeZdAyNQFFXRvIptZ7PHRQar2gyg5OW86ExNRH8ouBWdMumWYpj7R1Q9sSLuNEpWdQkQE4DcqaJENXNEsjVfQJIYyYpDcxizjy3P/DSlPdC6RiMIQRv3kVuaHBML3LRISJJsqRlV9wdEqnZpEMOKOVn6WFv6g0o9GbnVlTfChqjR/NBHXEwP2FlzTc9GuQSJRGVqMgloyblUWp+g2pLybP43bPdJHDQIMCY9gctn8mMyPaYf0007Vwi27NQHPI8RwBMWetyJocGDtlxMhEguIS00mmFfBm04DTGsXk8aS9ltZM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9176.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(38350700002)(4326008)(5660300002)(7416002)(66946007)(6666004)(55236004)(1076003)(66556008)(38100700002)(8936002)(8676002)(6486002)(186003)(44832011)(41300700001)(66476007)(30864003)(86362001)(26005)(316002)(110136005)(2906002)(478600001)(54906003)(2616005)(36756003)(52116002)(6506007)(83380400001)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ECFHUGbQDEicwy7X9TQGDev+ozl8JBmHIWVaNN09qfyU3Ui+G6l/qckBqzCt?=
- =?us-ascii?Q?bl6fGDCbXMzzUbu/c7lciB2DCo2y0Ue+ey1mlqII/VHoDUwBRRvreI/CxMKG?=
- =?us-ascii?Q?5dgze9T1eQBgkqEKgBIwUoKim42f13RV5nxTV9LzklH1Yrw7NEM/gU6o3mjm?=
- =?us-ascii?Q?Nf3ysqgpZPTK8mjM4yAZ2qfBJ3EkU2X9DVbEaImu3MxTxYSf6ekNoJSX1Eob?=
- =?us-ascii?Q?4rk9pnn7E5piX2nM/1Sxn8qwQih4FBrWM2nUB4fMi9OdcEqXlfj+IqnTWc2w?=
- =?us-ascii?Q?lwchr2ZqVXLXTzUZeZoyxReZIwHgqizfPp+vhkipm24Np+HEWEKuvEM44vnX?=
- =?us-ascii?Q?lLmt7qfcsw/hYq13WMmgADDFzpI4jDJsuJeNTUdjaD3OXMHKwLYZXlFNAXvw?=
- =?us-ascii?Q?bvxrRPCNJasBJeWTTWf613TcbaRIBzG9u1rhf9llK6KYz2wEsDfHKs/PNnaY?=
- =?us-ascii?Q?t1EySMcCYVBmkaWUOgY5WjCqdHSlYMDUYP+MpU5LT+/l9XEYUKrVKH1iz7/q?=
- =?us-ascii?Q?XF0cv8HEQbz6eG3F1LYkIujOnEk2Fd3C1fT+HIo4fh2XPzPdu8WHJ+iW/1cl?=
- =?us-ascii?Q?QndqW68HGzUwLnfJlCPm8zGC00mZoXw9XwnlwgTchMVESg94XndSZ7oz5x06?=
- =?us-ascii?Q?quwh4NEbgtRJk5X2QzezJcS8jUZSbgSJm+qCyJZOKie+6OWUcrbgbVly9dP/?=
- =?us-ascii?Q?yhrT5z9F+CgeBN+Sv9vZSW6HeE6rTrSULPB/vYrG03H2nzSzO3Lnn5MNzBMW?=
- =?us-ascii?Q?XMLnkBYCIEp8KdW1hgUvs7YoKmFmOPlcoVniVGCqcmFM8pm41AyWmmmMYbqZ?=
- =?us-ascii?Q?mujvnnkTdksTwz9uc2w58pZNiBN5Ue3ClecZevQwgAATFMYsjvq3qUiY3HQ/?=
- =?us-ascii?Q?cCN2WUOnpjav313xFEOVmyQsDF8YLJ6kUsjU0lCEa0sPRuWV30K04Zk53Rn8?=
- =?us-ascii?Q?WGJXgAcBdbyPqvLYB1cONaDUxUHD0FSllvIIfzg38fdWeYJ1dv1SvwL0z7eD?=
- =?us-ascii?Q?2BcPHgXfBUZT4jkofFuP4NQeR5xGE7WHMAeiPvkD7TDcBiqB6HsiyLRUmd+X?=
- =?us-ascii?Q?82gROuoeOTcUByyfgTj+8MH+rirFpZD1jODK36/Qdq1NGmpBku0lUY0wXw6I?=
- =?us-ascii?Q?3HaqbsEfI9/HeO+0PK8o+i6sDpMPxNJru9oA5xMpLQ633vdCBcZwjm6fw/Fl?=
- =?us-ascii?Q?Knq0UViBIpH8vLkoF6/AwdukwODBo4SlOW9Kixe1LT3an7AKVaR4gKVolDl6?=
- =?us-ascii?Q?MhyyquEip71kYqaWmm4i17zTUnShCkJH4mqrmLGmhofx8p96a+tAOWwIOCB8?=
- =?us-ascii?Q?rhTw8nwe9gUaFSNYmwZzQ19PmXnlS09/Vmuq2PMcRbmqPpSuTlkGR4M1KQm9?=
- =?us-ascii?Q?WfB+4HqDksfAZ5NjsTHcRn3n+QR2ycGHRIGCq7hCdfKCLyFzA+xF73ZTtNdp?=
- =?us-ascii?Q?w4yxTcTDEgUAuFz4rbH1TSAXdxsh7Fk1Agp9zq9X5ENKS7zsuUBkth5dhORG?=
- =?us-ascii?Q?fWJOgEUxqmgl+o9a63xss1gZpl49tP8kOSxzHVfFI6S1TRMlzhLAZMaxuB6d?=
- =?us-ascii?Q?0y76SK7DZdAPKp2obs8iKk8ravWy94J2ON012pkn?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d6OaOQ5fp1MmSso9Djh5HXAxMlOyqGrnoEC6KkYXAxg/b777vFKTBqfOhrKz?=
+ =?us-ascii?Q?UnrVxEg/k3BXvcx3fzinmgaSx2TDulkzCLxYowkpqpVVSVVnwdQsXqDDQb9P?=
+ =?us-ascii?Q?bNmpyQ/YkiJDCIsB7jPwbWAZuW/WCMYhtkOh686Ue338RUbDS1qMC2p6yNBN?=
+ =?us-ascii?Q?k2xNOLK/awa8Eumx7KuKGmvLIWKQGfYRR5vRNGH28K2ZR2TbE4cht+dtVmpv?=
+ =?us-ascii?Q?IQvfc9t34is0b3+u33u45dXOvuhLCDy3N6Cu6IPCb88LmBocVbxToKXziRMV?=
+ =?us-ascii?Q?0COcDR6+0zWNEt/bJ9tUGT/1QzE7ZCq0VrT4r2lSsYOYf+BhMG2v9itLt3Ea?=
+ =?us-ascii?Q?K4kZ96jiNMOgCi1OFcMqa57JFypIa0JDVW+ufe5jQ2j+awUEhjbCoKzLAhF9?=
+ =?us-ascii?Q?mBN19omargABefkjZM50/S9wK9jaQP5La0ekHvXmDnhO3dxFjRf1JCDciVXl?=
+ =?us-ascii?Q?IA46EK80CWY1AVrUn59H4gwurlhoxWJJi5eKjTRARu1JtjkNashfxhpoiD/g?=
+ =?us-ascii?Q?SM8/h2YicrfS6zpU4UYDy5Hl/YxhD8I8DRzsEJoncBr4vUOapK4yN0nkJCN3?=
+ =?us-ascii?Q?Uo+N88xo1o6OFCoCY/M0wRyOS3wGfCyJdkUB9dOgUAXEtq/Axa7qB5W2abA4?=
+ =?us-ascii?Q?3MzDBrSz5Xtjwb+LTotkyXvCha0sJc8vHG1SD+khCV6NGpSrqFK6WwFWxpsh?=
+ =?us-ascii?Q?AR6gQNa0YXSr+Dt42B/2pAlAWa4v56bGtsFB81GEIcharmqcUouAME1FLpDJ?=
+ =?us-ascii?Q?hKV9OPg8nnhaYPsK+S3JyVj93r+HtJNTiF4e+8noo+1aMtSLCfJUA9SOolER?=
+ =?us-ascii?Q?iVcgoxgbcYBz7nYHDmK85Et8fQbG7yoyTda2B/O4KcgXELGg7K1xBStZLB+J?=
+ =?us-ascii?Q?vXAiHR7j5zNXDGfgjDb6zpZdZ9zuWPJozmmi8cmMtDYRE9uuy0wuJTlnqr30?=
+ =?us-ascii?Q?6N6VVrDx8wmFllYKQ17YeFbKB7dl/2e7vaepZ6+tNDAibhbavcq4zv0wrjcs?=
+ =?us-ascii?Q?gTF990LuqgosOdFJR+2EPD+0WeLoWO551JzYT8vR2KqOvgD0dDww40mIDC3h?=
+ =?us-ascii?Q?BtfQma8QyyrzQY6HblnJ/MjTHkmrvRd1u6PugWmPBNxbhg2jltdNRMzWWzd1?=
+ =?us-ascii?Q?m6UY/XC/dyEWdASgRNngYXwBZ4P8UWUZ4/RCqPnP1dd/KGP0gItAbaShsWbg?=
+ =?us-ascii?Q?PSgD1vQnGOVVQJdhYTUDF1JZ6JrwA2U1aOBpzVICZ+VV//FWL1Tfogkqr/0/?=
+ =?us-ascii?Q?rRIpYwtHb+SZgBk+AMO6tUToBziUDkr64nGEKNhKVKODz/jXiFaxDI+ms0m+?=
+ =?us-ascii?Q?VOBi4MBEv9ox9G1MinCnVEMACQ2PxDYqtUHk8xFSqi+JVGXTfSTxizXRaBq/?=
+ =?us-ascii?Q?nyS6b/Ei8DfaTnGuoyxKaQK1fEZys0MCdc5ZF3uFjjSSEx+M8Sg7ZalrEkZ5?=
+ =?us-ascii?Q?olhQJe8fNO3PkPu7tKh0py5EtPZioz7LM+npCjvkDlFMizTY6MhTMxo8rv9x?=
+ =?us-ascii?Q?JxqsjLkfRF6nnJFHcYiJwYP/kJSmo1bSyWKXjcMqpYw0he4qXanoizggX2F7?=
+ =?us-ascii?Q?/pzobvStDfJamB1wK7HHtj4aPf5oJsMtuUeAt8yq?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7f8d30d-e7bc-43d2-3a20-08da9659623e
+X-MS-Exchange-CrossTenant-Network-Message-Id: d59a6a83-8ea0-4cf2-5455-08da96596586
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB9176.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 13:59:47.3659
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 13:59:52.8591
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wz3Q3Wh26nVOihx+R5zC5KNxAoBxJpjo87ha5SGuzcbrzzkiMxkjdKjp+gYFPE7F8bElPG/vJKZ6NLTUDU7SQg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: LlVPuVrh0TucTOtgGzp3iFOOpr0SQGBqLwQcZq0p5dHr/Eaa54LyMVowxxAW+eR0H3uoSD8Y0UsiJ83X1xdZYA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7129
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -134,28 +134,571 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ddr-pmu on i.mx8dxl has a different interrupt number.
-Add a node label to ddr-pmu so that it could be referred
-and changed in i.mx8dxl dts.
+i.MX8DXL is a device targeting the automotive and industrial market
+segments. The chip is designed to achieve both high performance and
+low power consumption. It has a dual (2x) Cortex-A35 processor.
+
+This patch adds the basic support for i.MX8DXL SoC.
 
 Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
 ---
- arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../boot/dts/freescale/imx8dxl-ss-adma.dtsi   |  52 ++++
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   | 142 +++++++++++
+ .../boot/dts/freescale/imx8dxl-ss-ddr.dtsi    |   9 +
+ .../boot/dts/freescale/imx8dxl-ss-lsio.dtsi   |  74 ++++++
+ arch/arm64/boot/dts/freescale/imx8dxl.dtsi    | 238 ++++++++++++++++++
+ 5 files changed, 515 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl.dtsi
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi
-index 8b5cad4e2700..7d5183c6c5be 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-ddr.dtsi
-@@ -10,7 +10,7 @@ ddr_subsys: bus@5c000000 {
- 	#size-cells = <1>;
- 	ranges = <0x5c000000 0x0 0x5c000000 0x1000000>;
- 
--	ddr-pmu@5c020000 {
-+	ddr_pmu0: ddr-pmu@5c020000 {
- 		compatible = "fsl,imx8-ddr-pmu";
- 		reg = <0x5c020000 0x10000>;
- 		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+new file mode 100644
+index 000000000000..795d1d472fae
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019~2020, 2022 NXP
++ */
++
++&audio_ipg_clk {
++	clock-frequency = <160000000>;
++};
++
++&dma_ipg_clk {
++	clock-frequency = <160000000>;
++};
++
++&i2c0 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx8qxp-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c1 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx8qxp-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c2 {
++	compatible = "fsl,imx8qxp-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c3 {
++	compatible = "fsl,imx8qxp-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart0 {
++	compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 228 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart1 {
++	compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart2 {
++	compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 230 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart3 {
++	compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+new file mode 100644
+index 000000000000..69c4849f2132
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019~2020, 2022 NXP
++ */
++
++/delete-node/ &enet1_lpcg;
++/delete-node/ &fec2;
++
++&conn_subsys {
++	conn_enet0_root_clk: clock-conn-enet0-root {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <250000000>;
++		clock-output-names = "conn_enet0_root_clk";
++	};
++
++	eqos: ethernet@5b050000 {
++		compatible = "nxp,imx8dxl-dwmac-eqos", "snps,dwmac-5.10a";
++		reg = <0x5b050000 0x10000>;
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "eth_wake_irq", "macirq";
++		clocks = <&eqos_lpcg IMX_LPCG_CLK_4>,
++			 <&eqos_lpcg IMX_LPCG_CLK_6>,
++			 <&eqos_lpcg IMX_LPCG_CLK_0>,
++			 <&eqos_lpcg IMX_LPCG_CLK_5>,
++			 <&eqos_lpcg IMX_LPCG_CLK_2>;
++		clock-names = "stmmaceth", "pclk", "ptp_ref", "tx", "mem";
++		assigned-clocks = <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>;
++		assigned-clock-rates = <125000000>;
++		power-domains = <&pd IMX_SC_R_ENET_1>;
++		status = "disabled";
++	};
++
++	usbotg2: usb@5b0e0000 {
++		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb";
++		reg = <0x5b0e0000 0x200>;
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
++		fsl,usbphy = <&usbphy2>;
++		fsl,usbmisc = <&usbmisc2 0>;
++		/*
++		 * usbotg1 and usbotg2 share one clcok.
++		 * scu firmware disables the access to the clock and keeps
++		 * it always on in case other core (M4) uses one of these.
++		 */
++		clocks = <&clk_dummy>;
++		ahb-burst-config = <0x0>;
++		tx-burst-size-dword = <0x10>;
++		rx-burst-size-dword = <0x10>;
++		#stream-id-cells = <1>;
++		power-domains = <&pd IMX_SC_R_USB_1>;
++		status = "disabled";
++
++		clk_dummy: clock-dummy {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <0>;
++			clock-output-names = "clk_dummy";
++		};
++	};
++
++	usbmisc2: usbmisc@5b0e0200 {
++		#index-cells = <1>;
++		compatible = "fsl,imx7ulp-usbmisc";
++		reg = <0x5b0e0200 0x200>;
++	};
++
++	usbphy2: usbphy@0x5b110000 {
++		compatible = "fsl,imx8dxl-usbphy", "fsl,imx7ulp-usbphy";
++		reg = <0x5b110000 0x1000>;
++		clocks = <&usb2_2_lpcg IMX_LPCG_CLK_7>;
++		power-domains = <&pd IMX_SC_R_USB_1_PHY>;
++		status = "disabled";
++	};
++
++	eqos_lpcg: clock-controller@5b240000 {
++		compatible = "fsl,imx8qxp-lpcg";
++		reg = <0x5b240000 0x10000>;
++		#clock-cells = <1>;
++		clocks = <&conn_enet0_root_clk>,
++			 <&conn_axi_clk>,
++			 <&conn_axi_clk>,
++			 <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>,
++			 <&conn_ipg_clk>;
++		clock-indices = <IMX_LPCG_CLK_0>, <IMX_LPCG_CLK_2>,
++				<IMX_LPCG_CLK_4>, <IMX_LPCG_CLK_5>,
++				<IMX_LPCG_CLK_6>;
++		clock-output-names = "eqos_ptp",
++				     "eqos_mem_clk",
++				     "eqos_aclk",
++				     "eqos_clk",
++				     "eqos_csr_clk";
++		power-domains = <&pd IMX_SC_R_ENET_1>;
++	};
++
++	usb2_2_lpcg: clock-controller@5b280000 {
++		compatible = "fsl,imx8qxp-lpcg";
++		reg = <0x5b280000 0x10000>;
++		#clock-cells = <1>;
++		clock-indices = <IMX_LPCG_CLK_7>;
++		clocks = <&conn_ipg_clk>;
++		clock-output-names = "usboh3_2_phy_ipg_clk";
++		power-domains = <&pd IMX_SC_R_USB_1_PHY>;
++	};
++
++};
++
++&enet0_lpcg {
++	clocks = <&conn_enet0_root_clk>,
++		 <&conn_enet0_root_clk>,
++		 <&conn_axi_clk>,
++		 <&clk IMX_SC_R_ENET_0 IMX_SC_C_TXCLK>,
++		 <&conn_ipg_clk>,
++		 <&conn_ipg_clk>;
++};
++
++&fec1 {
++	compatible = "fsl,imx8qm-fec";
++	interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
++		     <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>,
++		     <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>,
++		     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
++	assigned-clocks = <&clk IMX_SC_R_ENET_0 IMX_SC_C_CLKDIV>;
++	assigned-clock-rates = <125000000>;
++};
++
++&usdhc1 {
++	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
++	interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&usdhc2 {
++	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
++	interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&usdhc3 {
++	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
++	interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+new file mode 100644
+index 000000000000..550f513708d8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2020 NXP
++ */
++
++&ddr_pmu0 {
++	compatible = "fsl,imx8-ddr-pmu";
++	interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
+new file mode 100644
+index 000000000000..815bd987b09b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019~2020, 2022 NXP
++ */
++
++&lsio_gpio0 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio1 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio2 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio3 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio4 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio5 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio6 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio7 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu0 {
++	compatible = "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu1 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu2 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu3 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu4 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu5 {
++	compatible = "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+new file mode 100644
+index 000000000000..5ddbda0b4def
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+@@ -0,0 +1,238 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019~2020, 2022 NXP
++ */
++
++#include <dt-bindings/clock/imx8-clock.h>
++#include <dt-bindings/firmware/imx/rsrc.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/pinctrl/pads-imx8dxl.h>
++#include <dt-bindings/thermal/thermal.h>
++
++/ {
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	aliases {
++		ethernet0 = &fec1;
++		ethernet1 = &eqos;
++		gpio0 = &lsio_gpio0;
++		gpio1 = &lsio_gpio1;
++		gpio2 = &lsio_gpio2;
++		gpio3 = &lsio_gpio3;
++		gpio4 = &lsio_gpio4;
++		gpio5 = &lsio_gpio5;
++		gpio6 = &lsio_gpio6;
++		gpio7 = &lsio_gpio7;
++		mu1 = &lsio_mu1;
++	};
++
++	cpus: cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		/* We have 1 clusters with 2 Cortex-A35 cores */
++		A35_0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x0>;
++			enable-method = "psci";
++			next-level-cache = <&A35_L2>;
++			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
++			#cooling-cells = <2>;
++			operating-points-v2 = <&a35_opp_table>;
++		};
++
++		A35_1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x1>;
++			enable-method = "psci";
++			next-level-cache = <&A35_L2>;
++			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
++			#cooling-cells = <2>;
++			operating-points-v2 = <&a35_opp_table>;
++		};
++
++		A35_L2: l2-cache0 {
++			compatible = "cache";
++		};
++	};
++
++	a35_opp_table: opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-900000000 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <150000>;
++		};
++
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <1100000>;
++			clock-latency-ns = <150000>;
++			opp-suspend;
++		};
++	};
++
++	gic: interrupt-controller@51a00000 {
++		compatible = "arm,gic-v3";
++		reg = <0x0 0x51a00000 0 0x10000>, /* GIC Dist */
++		      <0x0 0x51b00000 0 0xc0000>; /* GICR (RD_base + SGI_base) */
++		#interrupt-cells = <3>;
++		interrupt-controller;
++		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		dsp_reserved: dsp@92400000 {
++			reg = <0 0x92400000 0 0x2000000>;
++			no-map;
++		};
++	};
++
++	pmu {
++		compatible = "arm,armv8-pmuv3";
++		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	system-controller {
++		compatible = "fsl,imx-scu";
++		mbox-names = "tx0",
++			     "rx0",
++			     "gip3";
++		mboxes = <&lsio_mu1 0 0
++			  &lsio_mu1 1 0
++			  &lsio_mu1 3 3>;
++
++		pd: power-controller {
++			compatible = "fsl,scu-pd";
++			#power-domain-cells = <1>;
++			wakeup-irq = <160 163 235 236 237 228 229 230 231 238
++				     239 240 166 169>;
++		};
++
++		clk: clock-controller {
++			compatible = "fsl,imx8dxl-clk", "fsl,scu-clk";
++			#clock-cells = <2>;
++			clocks = <&xtal32k &xtal24m>;
++			clock-names = "xtal_32KHz", "xtal_24Mhz";
++		};
++
++		iomuxc: pinctrl {
++			compatible = "fsl,imx8dxl-iomuxc";
++		};
++
++		ocotp: ocotp {
++			compatible = "fsl,imx8qxp-scu-ocotp";
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			fec_mac0: mac@2c4 {
++				reg = <0x2c4 6>;
++			};
++
++			fec_mac1: mac@2c6 {
++				reg = <0x2c6 6>;
++			};
++		};
++
++		rtc: rtc {
++			compatible = "fsl,imx8qxp-sc-rtc";
++		};
++
++		sc_pwrkey: keys {
++			compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
++			linux,keycode = <KEY_POWER>;
++			wakeup-source;
++		};
++
++		watchdog {
++			compatible = "fsl,imx-sc-wdt";
++			timeout-sec = <60>;
++		};
++
++		tsens: thermal-sensor {
++			compatible = "fsl,imx-sc-thermal";
++			#thermal-sensor-cells = <1>;
++		};
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>, /* Physical Secure */
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>, /* Physical Non-Secure */
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>, /* Virtual */
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>; /* Hypervisor */
++	};
++
++	thermal_zones: thermal-zones {
++		cpu-thermal0 {
++			polling-delay-passive = <250>;
++			polling-delay = <2000>;
++			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
++
++			trips {
++				cpu_alert0: trip0 {
++					temperature = <107000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++				cpu_crit0: trip1 {
++					temperature = <127000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++
++			cooling-maps {
++				map0 {
++					trip = <&cpu_alert0>;
++					cooling-device =
++					<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++				};
++			};
++		};
++	};
++
++	/* The two values below cannot be changed by the board */
++	xtal32k: clock-xtal32k {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <32768>;
++		clock-output-names = "xtal_32KHz";
++	};
++
++	xtal24m: clock-xtal24m {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		clock-output-names = "xtal_24MHz";
++	};
++
++	/* sorted in register address */
++	#include "imx8-ss-adma.dtsi"
++	#include "imx8-ss-conn.dtsi"
++	#include "imx8-ss-ddr.dtsi"
++	#include "imx8-ss-lsio.dtsi"
++};
++
++#include "imx8dxl-ss-adma.dtsi"
++#include "imx8dxl-ss-conn.dtsi"
++#include "imx8dxl-ss-lsio.dtsi"
++#include "imx8dxl-ss-ddr.dtsi"
 -- 
 2.25.1
 
