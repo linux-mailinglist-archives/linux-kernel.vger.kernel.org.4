@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14575B8546
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF115B8543
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiINJkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S230488AbiINJkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiINJkE (ORCPT
+        with ESMTP id S230370AbiINJj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:40:04 -0400
+        Wed, 14 Sep 2022 05:39:59 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3501928C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002CBEB3;
         Wed, 14 Sep 2022 02:39:45 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28E9dLRW098641;
-        Wed, 14 Sep 2022 04:39:21 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28E9dQXg098677;
+        Wed, 14 Sep 2022 04:39:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663148361;
-        bh=voil66pq2xcvIlp0IN3QHMjFzxBwFruYToUKnjtNp2g=;
+        s=ti-com-17Q1; t=1663148366;
+        bh=IAIDS6zZRvqjsEEOsbFFjeDVR1Bx8cSXOYtHR8E1teA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nG2m2MGGk0a8994Z679y16TG90Kcb88iVEhB+0nsaWqtKxa9qcEgJifNXjHaw+SvS
-         c1b33/LmZULPMVMjK/gEnDPSS7FQ4KooyZmghuaSXir1HRtmAzMyvlMabQhHwh0m5z
-         28Hgj24HYrufibFaqZrQJAUJmttcjdXFFkdvn2dc=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28E9dLg2119194
+        b=v22Fqjr6EPJwcx/34DmT+6Op9c/GhhDYLei1cSytdUijx5RodGrlKkgybdBaN6Scy
+         34HMibKvz8mLWPR4k4nc2C4my4ezTYzbZV9bkLCeM0dOQH5W1wA8CvY0iQQ15//9PP
+         C4QNSecucGut/aa/KOVG41u4+O0+avMe2zTg/RZI=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28E9dQom063795
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Sep 2022 04:39:21 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 14 Sep 2022 04:39:26 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 14
- Sep 2022 04:39:21 -0500
+ Sep 2022 04:39:26 -0500
 Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
  (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 14 Sep 2022 04:39:21 -0500
+ Frontend Transport; Wed, 14 Sep 2022 04:39:26 -0500
 Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28E9dBHE111966;
-        Wed, 14 Sep 2022 04:39:17 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28E9dBHF111966;
+        Wed, 14 Sep 2022 04:39:21 -0500
 From:   Siddharth Vadapalli <s-vadapalli@ti.com>
 To:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
         <krzysztof.kozlowski@linaro.org>,
@@ -50,9 +50,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-phy@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>, <sjakhade@cadence.com>,
         <s-vadapalli@ti.com>
-Subject: [PATCH 1/6] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J721e
-Date:   Wed, 14 Sep 2022 15:09:06 +0530
-Message-ID: <20220914093911.187764-2-s-vadapalli@ti.com>
+Subject: [PATCH 2/6] phy: ti: gmii-sel: Add support for configuring CPSW5G ports in SGMII mode
+Date:   Wed, 14 Sep 2022 15:09:07 +0530
+Message-ID: <20220914093911.187764-3-s-vadapalli@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220914093911.187764-1-s-vadapalli@ti.com>
 References: <20220914093911.187764-1-s-vadapalli@ti.com>
@@ -70,107 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's J721e SoC supports additional PHY modes like QSGMII and SGMII
-that are not supported on earlier SoCs. Add a compatible for it.
-
-Extend ti,qsgmii-main-ports property to support selection of upto
-two main ports at once across the two QSGMII interfaces.
+CPSW5G ports on J7200 support SGMII mode. Add support to the phy-gmii-sel
+driver to configure the CPSW5G ports in SGMII mode.
 
 Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- .../bindings/phy/ti,phy-gmii-sel.yaml         | 52 ++++++++++++++++---
- 1 file changed, 46 insertions(+), 6 deletions(-)
+ drivers/phy/ti/phy-gmii-sel.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
-index da7cac537e15..1e19efab018b 100644
---- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
-+++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
-@@ -54,6 +54,7 @@ properties:
-       - ti,dm814-phy-gmii-sel
-       - ti,am654-phy-gmii-sel
-       - ti,j7200-cpsw5g-phy-gmii-sel
-+      - ti,j721e-cpsw9g-phy-gmii-sel
+diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+index 0bcfd6d96b4d..f0b2ba7a9c96 100644
+--- a/drivers/phy/ti/phy-gmii-sel.c
++++ b/drivers/phy/ti/phy-gmii-sel.c
+@@ -23,6 +23,7 @@
+ #define AM33XX_GMII_SEL_MODE_RGMII	2
  
-   reg:
-     maxItems: 1
-@@ -65,12 +66,19 @@ properties:
-     description: |
-       Required only for QSGMII mode. Array to select the port for
-       QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
--      ports automatically. Any one of the 4 CPSW5G ports can act as the
--      main port with the rest of them being the QSGMII_SUB ports.
--    maxItems: 1
--    items:
--      minimum: 1
--      maximum: 4
-+      ports automatically. For J7200 CPSW5G with the compatible:
-+      ti,j7200-cpsw5g-phy-gmii-sel, ti,qsgmii-main-ports is an
-+      array of only one element, which is the port number ranging from
-+      1 to 4. For J721e CPSW9G with the compatible:
-+      ti,j721e-cpsw9g-phy-gmii-sel, ti,qsgmii-main-ports is an array
-+      of two elements, which corresponds to two potential QSGMII main
-+      ports. The first element and second element of the array can both
-+      range from 1 to 8 each, corresponding to two QSGMII main ports.
-+      For J721e CPSW9G, to configure port 2 as the first QSGMII main
-+      port and port 7 as the second QSGMII main port, we specify:
-+      ti,qsgmii-main-ports = <2>, <7>;
-+      If only one QSGMII main port is desired, mention the same main
-+      port twice.
+ /* J72xx SoC specific definitions for the CONTROL port */
++#define J72XX_GMII_SEL_MODE_SGMII	3
+ #define J72XX_GMII_SEL_MODE_QSGMII	4
+ #define J72XX_GMII_SEL_MODE_QSGMII_SUB	6
  
- allOf:
-   - if:
-@@ -81,12 +89,43 @@ allOf:
-               - ti,dra7xx-phy-gmii-sel
-               - ti,dm814-phy-gmii-sel
-               - ti,am654-phy-gmii-sel
-+              - ti,j7200-cpsw5g-phy-gmii-sel
-+              - ti,j721e-cpsw9g-phy-gmii-sel
-     then:
-       properties:
-         '#phy-cells':
-           const: 1
-           description: CPSW port number (starting from 1)
+@@ -105,6 +106,13 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
+ 			gmii_sel_mode = J72XX_GMII_SEL_MODE_QSGMII_SUB;
+ 		break;
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ti,j7200-cpsw5g-phy-gmii-sel
-+    then:
-+      properties:
-+        ti,qsgmii-main-ports:
-+          maxItems: 1
-+          items:
-+            minimum: 1
-+            maximum: 4
++	case PHY_INTERFACE_MODE_SGMII:
++		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_SGMII)))
++			goto unsupported;
++		else
++			gmii_sel_mode = J72XX_GMII_SEL_MODE_SGMII;
++		break;
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ti,j721e-cpsw9g-phy-gmii-sel
-+    then:
-+      properties:
-+        ti,qsgmii-main-ports:
-+          minItems: 2
-+          maxItems: 2
-+          items:
-+            minimum: 1
-+            maximum: 8
-+
-   - if:
-       not:
-         properties:
-@@ -94,6 +133,7 @@ allOf:
-             contains:
-               enum:
-                 - ti,j7200-cpsw5g-phy-gmii-sel
-+                - ti,j721e-cpsw9g-phy-gmii-sel
-     then:
-       properties:
-         ti,qsgmii-main-ports: false
+ 	default:
+ 		goto unsupported;
+ 	}
+@@ -212,7 +220,7 @@ static const
+ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw5g_soc_j7200 = {
+ 	.use_of_data = true,
+ 	.regfields = phy_gmii_sel_fields_am654,
+-	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
++	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_SGMII),
+ };
+ 
+ static const struct of_device_id phy_gmii_sel_id_table[] = {
 -- 
 2.25.1
 
