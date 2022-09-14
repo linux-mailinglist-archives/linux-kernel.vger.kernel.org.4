@@ -2,59 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA105B8A42
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD575B8A59
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiINOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S230084AbiINOYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiINOXN (ORCPT
+        with ESMTP id S230031AbiINOXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:23:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033B54F39B
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663165390; x=1694701390;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0NUMeSnZcrH2RLjXRHKd+H5cCfslIuvsLHQV1aQYYbs=;
-  b=MrgFL2gP62sy4j3hGt2rFovMCCuI5IU8TQdgNhfW2n5AY7q5cy7WYzED
-   6d7N9B0hTeJlx1eYBfA0iKKcE2OocrD26OpVX0VKIRJfw8DP20OY2nwLo
-   pGZz36aqqF1HklsvTxyl7CeMOEZPb9aCAT4CeMyCN/5aq4k6IfwiZEfgJ
-   Dt6pr6HmDBS2V2APvpLGtjWwOFSxmnYkUXppY+na+IJaYbR2zk5TxBus+
-   eKzGExVbTRKXev+TzjEj4tcF9bK088xV/jb77GKpMavu5NtE6kpiuY8ot
-   fP4zSRhuo6p9TGK70luDjCrPwnbRc2D3wb2PuFCBOfXX0SbwkP+t3u7uc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="360181027"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="360181027"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:23:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594401920"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2022 07:23:08 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYTIB-0000Hg-2k;
-        Wed, 14 Sep 2022 14:23:07 +0000
-Date:   Wed, 14 Sep 2022 22:23:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org
-Subject: [cilium:pr/bpf-tc-links 1/10] ld.lld: error: undefined symbol:
- dev_sch_uninstall
-Message-ID: <202209142212.Rm27TU3m-lkp@intel.com>
+        Wed, 14 Sep 2022 10:23:20 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5E74F389
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:23:18 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y136so15096450pfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=7X3jI/FDmkrBs7DhtU4sYpQT4M91OAzd4bF9ysc8YQA=;
+        b=kuTFYHmJmpQFxv2JP6mXl4t7RMOKICwKvTcwLslqUJQ/xIlbxwQYeNKTsYUk2K2fIw
+         16zOvbCrZ98E0IA/KYx5UktK/z6ClyAYPoHMSE7uJ30cU5o9IDFy857orY0dbk+oVpLL
+         f/C15UDXNwotak1w8D3iBgvVTrcdx0jaXtqGY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=7X3jI/FDmkrBs7DhtU4sYpQT4M91OAzd4bF9ysc8YQA=;
+        b=hH7dV8UqaXMFQDpO4y6wGjQgkvOVhPUBxHtclKd45w3u29ZBrhnYm0c2+HgKyIOXgX
+         ccg7O5KVE2hRcEXPsZoITweYVAQKGAJndEu1/IaeqKowZZzubjrkkZMubYO7gO+A7ru0
+         wRN2N1hZ3tfZrTda1iTQj5HaPF3hbNHXfwXeuCBKjTDTQ3bVju0jf3oq1h8eL+ahbQTO
+         nuEJ0pKddwFgoF0/oMGZG+s2y8x4HlnAOkTxkLKFvX0HQ3KgMKTMCUlGBJJIHbgWkWEW
+         Bj868SOWxQb50nCVjwC4f4xxWultgJGcLGxBZWj5bs+X8Ou4u5DMTk+s0Ry+Tq2JYoKa
+         2pGQ==
+X-Gm-Message-State: ACgBeo1DrkGq1pdvPgtfwgLjcmk4WnWn/c5zgmVSlCrRSM02RnjGA9Vv
+        VsXEP4tnhPr51qmuXQ0cIYt+Lg==
+X-Google-Smtp-Source: AA6agR5e0Wb81DIfJkmSV8Voh4NfgntHAxCLTOZXQzJ2lzogbO8SlJVIATVlUY6WISHAYjiZnqvEAw==
+X-Received: by 2002:a63:ed18:0:b0:439:4176:3ea6 with SMTP id d24-20020a63ed18000000b0043941763ea6mr7224872pgi.363.1663165397855;
+        Wed, 14 Sep 2022 07:23:17 -0700 (PDT)
+Received: from fastly.com (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
+        by smtp.gmail.com with ESMTPSA id q6-20020aa78426000000b0053b9e5d365bsm5350864pfn.216.2022.09.14.07.23.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Sep 2022 07:23:17 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 07:23:14 -0700
+From:   Joe Damato <jdamato@fastly.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC 1/1] mm: Add per-task struct tlb counters
+Message-ID: <20220914142313.GB4422@fastly.com>
+References: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
+ <1663120270-2673-2-git-send-email-jdamato@fastly.com>
+ <e0067441-19e2-2ae6-df47-2018672426be@intel.com>
+ <YyHB48HSs/1S6S08@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <YyHB48HSs/1S6S08@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,31 +84,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/cilium/linux.git pr/bpf-tc-links
-head:   f9ab02443a6bd720c616b575437a851435c80c49
-commit: f182834c964343d39688f653f16bfee1f3ff39c2 [1/10] bpf: Add initial fd-based API to attach tc BPF programs
-config: x86_64-randconfig-a015-20220912 (https://download.01.org/0day-ci/archive/20220914/202209142212.Rm27TU3m-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/cilium/linux/commit/f182834c964343d39688f653f16bfee1f3ff39c2
-        git remote add cilium https://github.com/cilium/linux.git
-        git fetch --no-tags cilium pr/bpf-tc-links
-        git checkout f182834c964343d39688f653f16bfee1f3ff39c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Sep 14, 2022 at 01:58:27PM +0200, Peter Zijlstra wrote:
+> On Wed, Sep 14, 2022 at 12:40:55AM -0700, Dave Hansen wrote:
+> >  Why didn't the tracepoints work for you?
+> 
+> This; perf should be able to get you per-task slices of those events.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for taking a look; I replied to Dave with a longer form response,
+but IMHO, tracepoints are helpful in specific circumstances.
 
-All errors (new ones prefixed by >>):
+On a heavily loaded system with O(10,000) or O(100,000) tasks, tracepoints
+can be difficult to use... especially if the TLB shootdown events are
+anomalous events that happen in large bursts at unknown intervals and are
+difficult to reproduce.
 
->> ld.lld: error: undefined symbol: dev_sch_uninstall
-   >>> referenced by dev.c
-   >>>               core/dev.o:(unregister_netdevice_many) in archive net/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+IMHO, I think that being able to periodically scrape /proc to see that a
+particular process has a large TLB shootdown storm can then instruct you as
+to when to apply perf (and to which specific tasks) in order to debug the
+issue.
