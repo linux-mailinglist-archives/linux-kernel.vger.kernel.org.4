@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37FB5B7E6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F5B5B7E6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiINBia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S230006AbiINBif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiINBiV (ORCPT
+        with ESMTP id S229710AbiINBiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Sep 2022 21:38:21 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759C6A481;
-        Tue, 13 Sep 2022 18:38:18 -0700 (PDT)
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D726CF44;
+        Tue, 13 Sep 2022 18:38:19 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MS2x50rKPz6S3MZ;
-        Wed, 14 Sep 2022 09:36:25 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MS2xP3dMSzlFkJ;
+        Wed, 14 Sep 2022 09:36:41 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgDHGXOGMCFj24dCAw--.23886S6;
+        by APP2 (Coremail) with SMTP id Syh0CgDHGXOGMCFj24dCAw--.23886S7;
         Wed, 14 Sep 2022 09:38:17 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
         pmenzel@molgen.mpg.de
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2 2/4] md/raid10: prevent unnecessary calls to wake_up() in fast path
-Date:   Wed, 14 Sep 2022 09:49:12 +0800
-Message-Id: <20220914014914.398712-3-yukuai1@huaweicloud.com>
+Subject: [PATCH v2 3/4] md/raid10: fix improper BUG_ON() in raise_barrier()
+Date:   Wed, 14 Sep 2022 09:49:13 +0800
+Message-Id: <20220914014914.398712-4-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220914014914.398712-1-yukuai1@huaweicloud.com>
 References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHGXOGMCFj24dCAw--.23886S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr4fXF13JrWruF1UJr18Xwb_yoWrAr48p3
-        yaqF45tFW5ZFZ0qw4DJFWUu3Wjgw1ktFWIkFWvk3s7ZFn5tryftF1UGFyqkryqvrZ3uryU
-        ZFWayrWfGw48tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU=
+X-CM-TRANSID: Syh0CgDHGXOGMCFj24dCAw--.23886S7
+X-Coremail-Antispam: 1UD129KBjvdXoW7XF4xtF18uFykAFy5tw48Crg_yoWfJFbE93
+        ZY9F129r1fK347Kw1YgFsavryIgw4kWrnF9F4rt343ua98ZFWrC3W8X3y8XwnxWay7Zr43
+        ZryxuFyUA3WDCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb-kFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
+        0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73DUUUUU==
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -64,129 +64,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-Currently, wake_up() is called unconditionally in fast path such as
-raid10_make_request(), which will cause lock contention under high
-concurrency:
-
-raid10_make_request
- wake_up
-  __wake_up_common_lock
-   spin_lock_irqsave
-
-Improve performance by only call wake_up() if waitqueue is not empty.
+'conf->barrier' is protected by 'conf->resync_lock', reading
+'conf->barrier' without holding the lock is wrong.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ drivers/md/raid10.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 56458a53043d..0edcd98461fe 100644
+index 0edcd98461fe..377d4641bb54 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -274,6 +274,12 @@ static void put_buf(struct r10bio *r10_bio)
- 	lower_barrier(conf);
- }
+@@ -936,8 +936,8 @@ static void flush_pending_writes(struct r10conf *conf)
  
-+static void wake_up_barrier(struct r10conf *conf)
-+{
-+	if (wq_has_sleeper(&conf->wait_barrier))
-+		wake_up(&conf->wait_barrier);
-+}
-+
- static void reschedule_retry(struct r10bio *r10_bio)
+ static void raise_barrier(struct r10conf *conf, int force)
  {
- 	unsigned long flags;
-@@ -286,7 +292,7 @@ static void reschedule_retry(struct r10bio *r10_bio)
- 	spin_unlock_irqrestore(&conf->device_lock, flags);
- 
- 	/* wake up frozen array... */
--	wake_up(&conf->wait_barrier);
-+	wake_up_barrier(conf);
- 
- 	md_wakeup_thread(mddev->thread);
- }
-@@ -884,7 +890,7 @@ static void flush_pending_writes(struct r10conf *conf)
- 		/* flush any pending bitmap writes to disk
- 		 * before proceeding w/ I/O */
- 		md_bitmap_unplug(conf->mddev->bitmap);
--		wake_up(&conf->wait_barrier);
-+		wake_up_barrier(conf);
- 
- 		while (bio) { /* submit pending writes */
- 			struct bio *next = bio->bi_next;
-@@ -954,7 +960,7 @@ static void lower_barrier(struct r10conf *conf)
- 	spin_lock_irqsave(&conf->resync_lock, flags);
- 	conf->barrier--;
- 	spin_unlock_irqrestore(&conf->resync_lock, flags);
--	wake_up(&conf->wait_barrier);
-+	wake_up_barrier(conf);
- }
- 
- static bool stop_waiting_barrier(struct r10conf *conf)
-@@ -1004,7 +1010,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
- 			conf->nr_waiting--;
- 		}
- 		if (!conf->nr_waiting)
--			wake_up(&conf->wait_barrier);
-+			wake_up_barrier(conf);
- 	}
- 	/* Only increment nr_pending when we wait */
- 	if (ret)
-@@ -1017,7 +1023,7 @@ static void allow_barrier(struct r10conf *conf)
- {
- 	if ((atomic_dec_and_test(&conf->nr_pending)) ||
- 			(conf->array_freeze_pending))
--		wake_up(&conf->wait_barrier);
-+		wake_up_barrier(conf);
- }
- 
- static void freeze_array(struct r10conf *conf, int extra)
-@@ -1053,7 +1059,7 @@ static void unfreeze_array(struct r10conf *conf)
+-	BUG_ON(force && !conf->barrier);
  	spin_lock_irq(&conf->resync_lock);
- 	conf->barrier--;
- 	conf->nr_waiting--;
--	wake_up(&conf->wait_barrier);
-+	wake_up_barrier(conf);
- 	spin_unlock_irq(&conf->resync_lock);
- }
++	BUG_ON(force && !conf->barrier);
  
-@@ -1078,7 +1084,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
- 		spin_lock_irq(&conf->device_lock);
- 		bio_list_merge(&conf->pending_bio_list, &plug->pending);
- 		spin_unlock_irq(&conf->device_lock);
--		wake_up(&conf->wait_barrier);
-+		wake_up_barrier(conf);
- 		md_wakeup_thread(mddev->thread);
- 		kfree(plug);
- 		return;
-@@ -1087,7 +1093,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
- 	/* we aren't scheduling, so we can do the write-out directly. */
- 	bio = bio_list_get(&plug->pending);
- 	md_bitmap_unplug(mddev->bitmap);
--	wake_up(&conf->wait_barrier);
-+	wake_up_barrier(conf);
- 
- 	while (bio) { /* submit pending writes */
- 		struct bio *next = bio->bi_next;
-@@ -1893,7 +1899,7 @@ static bool raid10_make_request(struct mddev *mddev, struct bio *bio)
- 	__make_request(mddev, bio, sectors);
- 
- 	/* In case raid10d snuck in to freeze_array */
--	wake_up(&conf->wait_barrier);
-+	wake_up_barrier(conf);
- 	return true;
- }
- 
-@@ -3040,7 +3046,7 @@ static void handle_write_completed(struct r10conf *conf, struct r10bio *r10_bio)
- 			 * In case freeze_array() is waiting for condition
- 			 * nr_pending == nr_queued + extra to be true.
- 			 */
--			wake_up(&conf->wait_barrier);
-+			wake_up_barrier(conf);
- 			md_wakeup_thread(conf->mddev->thread);
- 		} else {
- 			if (test_bit(R10BIO_WriteError,
+ 	/* Wait until no block IO is waiting (unless 'force') */
+ 	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
 -- 
 2.31.1
 
