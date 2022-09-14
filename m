@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A645B8D4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1EC5B8D48
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiINQnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S229900AbiINQmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiINQnD (ORCPT
+        with ESMTP id S229875AbiINQmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:43:03 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF956E8B5;
-        Wed, 14 Sep 2022 09:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=drGd84Y88D87DtABnnd7yh6bhIO3nFxVGZfiNKSay/w=; b=NJ6SAfFns58rMbVH+azyEAlIBe
-        P6n1bn9OXiF4fmUEUpqXGV/bE106qYmZbX/MwFVbHxtW6ssgk2PCE8UfNTQg1aWm+yynxcJ9j7g08
-        8/tgQ5onCzhF8MKSQaEQ6zA3aarCv+3D7yqjX8P1okh4bYNOq1WFHE1a4IQDf5KHdx5u5zA+Wymlc
-        S+7i9ko/VpxQnZRAsQ62an08GtRr8DVSaNW3j49A/qLEWP1M+neWYX1OVsjvTIT7LfH477m66cmRa
-        Nyt7CbCvmVkXs5Lmdv1xX0vhwGMMyYK/hJL+vP9XhDhzkKBGXkATkAHo1w7IXkb8b+clGQVzjQxRV
-        f5T3UCDA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oYVTE-00GF4L-1R;
-        Wed, 14 Sep 2022 16:42:40 +0000
-Date:   Wed, 14 Sep 2022 17:42:40 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <YyIEgD8ksSZTsUdJ@ZenIV>
-References: <20220831041843.973026-1-jhubbard@nvidia.com>
- <20220831041843.973026-5-jhubbard@nvidia.com>
- <YxbtF1O8+kXhTNaj@infradead.org>
- <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
- <Yxb7YQWgjHkZet4u@infradead.org>
- <20220906102106.q23ovgyjyrsnbhkp@quack3>
- <YxhaJktqtHw3QTSG@infradead.org>
- <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
+        Wed, 14 Sep 2022 12:42:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102965FF55;
+        Wed, 14 Sep 2022 09:42:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD282B8172B;
+        Wed, 14 Sep 2022 16:42:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C01C433C1;
+        Wed, 14 Sep 2022 16:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663173769;
+        bh=5rjnZD4aW6Ta7RnXoGxlFAwk+JqLOxszQ44sIzN65/k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HIfbNPuyzSs45A+qFUmsLkLy+OLSCzaFrqkfB5h7CKohyL43gm71wS4YsFZuOuvDY
+         C3geizrBnXtwIwazo3rZmp8T3qWRfS5nHIlv59cNZsLnkyFdcwi+bq6zy6xfSFCb5v
+         ZRcDu94pvz0ChOaHQlYMcWxfJxRIA1eJBy9ZNoE2o3ilQBm0OEEOgnxQhi6NozyFxB
+         2exBGmh+ilVmwmrSM9cFTjN/DywFrVHTXEOJNYl4gh6RS39+Us/APOAZpiyWWSak96
+         Bo9l94NrOIvx0/P9JiqgjlhYK4sV28O2ahVQZJ3Z7Bk7fsvSjxqamttWdxqHiQx2Nq
+         YNBoxXe+ewODg==
+Date:   Wed, 14 Sep 2022 09:42:48 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Stephen Zhang <starzhangzsd@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>, dchinner@redhat.com,
+        chandan.babu@oracle.com, zhangshida@kylinos.cn,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] xfs: remove the redundant check in xfs_bmap_first_unused
+Message-ID: <YyIEiEXJuExymird@magnolia>
+References: <20220909030756.3916297-1-zhangshida@kylinos.cn>
+ <20220911231251.GA3600936@dread.disaster.area>
+ <CANubcdWe9thzi0WXHBg+vccP7UaGv1c8FiGQkORV6PGw_4cOwQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220914145233.cyeljaku4egeu4x2@quack3>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANubcdWe9thzi0WXHBg+vccP7UaGv1c8FiGQkORV6PGw_4cOwQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 04:52:33PM +0200, Jan Kara wrote:
-> > =================================================================================
-> > CASE 5: Pinning in order to write to the data within the page
-> > -------------------------------------------------------------
-> > Even though neither DMA nor Direct IO is involved, just a simple case of "pin,
-> > write to a page's data, unpin" can cause a problem. Case 5 may be considered a
-> > superset of Case 1, plus Case 2, plus anything that invokes that pattern. In
-> > other words, if the code is neither Case 1 nor Case 2, it may still require
-> > FOLL_PIN, for patterns like this:
-> > 
-> > Correct (uses FOLL_PIN calls):
-> >     pin_user_pages()
-> >     write to the data within the pages
-> >     unpin_user_pages()
-> > 
-> > INCORRECT (uses FOLL_GET calls):
-> >     get_user_pages()
-> >     write to the data within the pages
-> >     put_page()
-> > =================================================================================
+On Mon, Sep 12, 2022 at 02:39:23PM +0800, Stephen Zhang wrote:
+> Dave Chinner <david@fromorbit.com> 于2022年9月12日周一 07:12写道：
+> > Given that all the types and comparisons involved are 64 bit
+> > unsigned:
+> >
+> > typedef uint64_t        xfs_fileoff_t;  /* block number in a file */
+> >
+> > #define XFS_FILEOFF_MAX(a,b) max_t(xfs_fileoff_t, (a), (b))
+> >
+> >         xfs_fileoff_t br_startoff;
+> >
+> >         xfs_fileoff_t           lastaddr = 0;
+> >         xfs_fileoff_t           lowest, max;
+> >
+> > We end up with the following calculations (in FSBs, not bytes):
+> >
+> >         lowest + len    = 0x800000ULL + 1
+> >                         = 0x800001ULL
+> >
+> >         got.br_startoff - max   = 0ULL - 0x800000
+> >                                 = 0xffffffffff800000ULL
+> >
+> > and so the existing check is:
+> >
+> >         if (0 >= 0x800001ULL && 0xffffffffff800000 >= 1)
+> >
+> > which evaluates as false because the extent that was found is not
+> > beyond the initial offset (first_unused) that we need to start
+> > searching at.
+> >
+> > With your modification, this would now evaluate as:
+> >
+> >         if (0xffffffffff800000 >= 1)
+> >
+> > Because of the underflow, this would then evaluate as true  and we'd
+> > return 0 as the first unused offset. This is incorrect as we do not
+> > have a hole at offset 0, nor is it within the correct directory
+> > offset segment, nor is it within the search bounds we have
+> > specified.
+> >
+> > If these were all signed types, then your proposed code might be
+> > correct. But they are unsigned and hence we have to ensure that we
+> > handle overflow/underflow appropriately.
+> >
+> > Which leads me to ask: did you test this change before you send
+> > it to the list?
+> >
 > 
-> Yes, that was my point.
+> I am so sorry about the mistake, and thanks for your elaboration about
+> this problem. it indeed teaches me a lesson about the necessity of test
+> even for the simplest change.
+> 
+> By the way, theoretically, in order to solve this, I wonder if we could
+> change the code in the following way:
+> ====
+> xfs_bmap_first_unused(
+>                 /*
+>                  * See if the hole before this extent will work.
+>                  */
+> -               if (got.br_startoff >= lowest + len &&
+> -                   got.br_startoff - max >= len)
+> +               if (got.br_startoff >= max + len)
 
-The thing is, at which point do we pin those pages?  pin_user_pages() works by
-userland address; by the time we get to any of those we have struct page
-references and no idea whether they are still mapped anywhere.
+Er... what problem does this solve?  Is there a defect in this range
+checking code?  Why not leave it alone, since that's less retesting for
+all of us.
 
-How would that work?  What protects the area where you want to avoid running
-into pinned pages from previously acceptable page getting pinned?  If "they
-must have been successfully unmapped" is a part of what you are planning, we
-really do have a problem...
+--D
+
+>                         break;
+> ====
+> 
+> Thanks,
+> 
+> Stephen.
