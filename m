@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B75B5B8577
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2015B857B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiINJtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S230373AbiINJtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiINJsg (ORCPT
+        with ESMTP id S230132AbiINJtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:48:36 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D6E62AB8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:48:36 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y3so33467348ejc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:48:35 -0700 (PDT)
+        Wed, 14 Sep 2022 05:49:50 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D82DFE3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:49:48 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z12so6489281wrp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=O6/51sRCVz/G+JMMiz4jUXKcq/lDDLeL+799B6cifJY=;
-        b=m4iKwRmseKb2qBCAV8yrFJqvxQf9BfcXcWFgtWrzYjSwjnWyH/dEJ3chIsXAf/pDDy
-         edjaGQMhABfXi6TX+VEJZwUiww5ghb/5M0NrTobZdWSs+H0aXvdJyIA1NA7KndJpGFu+
-         2YMtlrsx+ZN2IKMkdRRUOKkbmh4HYxL8nB5FzP/SW6BM7MS+MqGueTTevuCFpiTem6SG
-         ICVVBiEyME9oPdnayfbWjIMtzh4vAQf/qmXFltD03sCaQv+oFhHAMZhCPw+YXTAoOn6c
-         GmKsf1fH3i31hmj09Bw8tuun8c5QGWwTtza4DC0yxw/sshSjQlJ1jKSX8ygKBl/kN0+a
-         7OUA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=bbq4/4T4JjPGUfth20drkaf18DSxlzxy1kFL2s5Skkk=;
+        b=ExcJVlbc0ZagiH+Rt7hA0bIVbTU/NxhHDjFnmOG97vfk7AfET8oP8YY+6s84+Q+Kob
+         AJ5rZVaCR4FSyyotJ+Um7fBWBWoMhnq6QmyyFF+rO62RqwDs2N4Cn46ksL+KGnpwh78j
+         S9EN8XhjlqB4zz8tP/9vhz/LY6UjBPfju8CSPIQ4BAqdnZkjw88ejZd09ya3aFzcPlFx
+         1+nPK7TEXW2EAEnjLYIuPT+P98eFpC+AhVnQvUCuPinG4F1UA1iUwSzMXBNZ6rOAIuA5
+         rt96dfG3b4g5SHEDUERGZ840y1RY/kPx0dSau+lT3vebZafJpjfn+RBOIRHaCUGx6/1o
+         JI8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=O6/51sRCVz/G+JMMiz4jUXKcq/lDDLeL+799B6cifJY=;
-        b=lkMBbxU1pwyMh/BhT8NIqb+vc0YvQ4Vm8c62pR9V3llbv9BycJHrl7lsz1yq+CL3lU
-         oEgcUWB4TID3lteizPdxug8qlpZWNlUDCsdyngPjHeOd+JD2FgAADb58RwiWENGTUWrR
-         Ytpz2FF8sTIr5KDGZDLAV5hOcdLMDrsqSNUIyfweWfuDpCyw35XP88MPwMmSFCOhZITB
-         hxitizoRtDoKBPi1Bcff2vAMp5nS3MvQujyRmNVtAEV3mNauCzW3NhdlVnCVzBxvToUf
-         fNMtGILAr33yQ2yOeUaacFeMcEFkY4Lt3MkMI7nYS4GyRH8g+Nd7mWVefVG8sEDBS+Wx
-         uQ3Q==
-X-Gm-Message-State: ACgBeo2Xj4z/vVZDCcd2/3gT2dR1BFvBrMZaKvpgEl+fKwdGPu6A/j2i
-        DCjGnLU5va8EbXhkuav+pqY=
-X-Google-Smtp-Source: AA6agR4cbNn3vgqQ1w8yp96TSvi3BC3ugARcldB/Hs0CwQ3HenzBgDLbK4GS6PixYFm7I3L1DMmggw==
-X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id fj2-20020a1709069c8200b006dfbaa29f75mr25671187ejc.762.1663148914326;
-        Wed, 14 Sep 2022 02:48:34 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056402514800b00451319a43dasm9352986edd.2.2022.09.14.02.48.32
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=bbq4/4T4JjPGUfth20drkaf18DSxlzxy1kFL2s5Skkk=;
+        b=0tJbrU8kdJBGOI7x+ZJtaFyUrI/QnQv1npSddawhGceV8zNExDKKIHk28dajwLK7/l
+         +odth6r/Ej0lx8qp5fmxZqHD0ssUBxNBDMVcIcO0Br+8a3n/DB0zi9djjel1Ytzpy2n8
+         HbWXoJZ5rkodfFN9cxM2aZ3qr1aDVPvIdKVyQ3uNbEZ0gRmqT27gF3CSurB59+m45+Hh
+         6OjHN1UqxQHO2FVa96y/DrGLJL2YWK4r/BMqegE5vc+m2H81MlUacbKab+F9P2/2rjqw
+         sn/VppS5Lo5z9ATgRAKchurWIzCHrndcP/ULSZFQhyPQ30PMyUBxx9AyJd5JP8ux74HE
+         BI0g==
+X-Gm-Message-State: ACgBeo3Frbpp3ZuspL1pHr+5iWyITfZmwrATIwIuTIUxac4KYzyAACoT
+        vnYNU7GUFxEhzeqj9DSurgLrPw==
+X-Google-Smtp-Source: AA6agR44NE7mkRWSZbkSxz7tUVdtOhV3Q3E9t0A41MbdOWdyWfvzOmpa8UdB3Zu6U/6tZw10e5zx/A==
+X-Received: by 2002:adf:e199:0:b0:228:60f6:f775 with SMTP id az25-20020adfe199000000b0022860f6f775mr20581130wrb.478.1663148987482;
+        Wed, 14 Sep 2022 02:49:47 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id v12-20020adfe4cc000000b00228c8ed21c8sm13192128wrm.17.2022.09.14.02.49.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 02:48:33 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 11:48:31 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH] iommu/iova: Fix module config properly
-Message-ID: <YyGjbz19ub2D9qZe@orome>
-References: <548c2f683ca379aface59639a8f0cccc3a1ac050.1663069227.git.robin.murphy@arm.com>
+        Wed, 14 Sep 2022 02:49:47 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 10:49:42 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, will@kernel.org,
+        robin.murphy@arm.com, robdclark@gmail.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        matthias.bgg@gmail.com, heiko@sntech.de, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, sricharan@codeaurora.org,
+        yong.wu@mediatek.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 4/5] iommu: Regulate errno in ->attach_dev callback
+ functions
+Message-ID: <YyGjtsB2Yq4fQICS@myrica>
+References: <20220913082448.31120-1-nicolinc@nvidia.com>
+ <20220913082448.31120-5-nicolinc@nvidia.com>
+ <YyB3F/o3RfymqiFW@myrica>
+ <YyGaqsXSDMn8R12R@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LhEFjvIk9c/nknZd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <548c2f683ca379aface59639a8f0cccc3a1ac050.1663069227.git.robin.murphy@arm.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+In-Reply-To: <YyGaqsXSDMn8R12R@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 14, 2022 at 06:11:06AM -0300, Jason Gunthorpe wrote:
+> On Tue, Sep 13, 2022 at 01:27:03PM +0100, Jean-Philippe Brucker wrote:
+> > I think in the future it will be too easy to forget about the constrained
+> > return value of attach() while modifying some other part of the driver,
+> > and let an external helper return EINVAL. So I'd rather not propagate ret
+> > from outside of viommu_domain_attach() and finalise().
+> 
+> Fortunately, if -EINVAL is wrongly returned it only creates an
+> inefficiency, not a functional problem. So we do not need to be
+> precise here.
 
---LhEFjvIk9c/nknZd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah fair. In that case the attach_dev() documentation should indicate that
+EINVAL is a hint, so that callers don't rely on it (currently words "must"
+and "exclusively" indicate that returning EINVAL for anything other than
+device-domain incompatibility is unacceptable). The virtio-iommu
+implementation may well return EINVAL from the virtio stack or from the
+host response.
 
-On Tue, Sep 13, 2022 at 12:47:20PM +0100, Robin Murphy wrote:
-> IOMMU_IOVA is intended to be an optional library for users to select as
-> and when they desire. Since it can be a module now, this means that
-> built-in code which has chosen not to select it should not fail to link
-> if it happens to have selected as a module by someone else. Replace
-> IS_ENABLED() with IS_REACHABLE() to do the right thing.
->=20
-> CC: Thierry Reding <thierry.reding@gmail.com>
-> Reported-by: John Garry <john.garry@huawei.com>
-> Fixes: 15bbdec3931e ("iommu: Make the iova library a module")
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->=20
-> Phrased as a fix for the sake of complete honesty, but it seems
-> everyone's been making do for years already so by now it's really
-> just more of an enhancement.
->=20
->  include/linux/iova.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Jean
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
-
---LhEFjvIk9c/nknZd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMho28ACgkQ3SOs138+
-s6EHwA/8C45u4Kc3+4y3O4DYuTVJSS+dM596uWeku6R8KW5q4zZ/OYZWkagYzw6d
-jIJQks0KHx/OAvEFLcfjbVURPbOeaXU+Q1Wa/og4mqDfiW0ALAlor8UrXXvYBmUo
-sI+w0L8MQWrTSV4g5lbP0clgmiQ8bItFdJzPVMraO2B5Bm7i1wmYamaZRUdSWSJb
-qOEAsWW2yBh3LLSZFVoUnLEGb2OKFYvWmomGAiKWPhWLrLfTWeWQM3eYzq38yCDn
-JIunl/S+VKLsWmSrfhaCsvXu8+Hm3LbuTuFWjuFcrQ5R91i3tMr5Vb8WgXOSo4KE
-I24xBaPYQuPSh7LUsSGxVoepf3maD5iG1zCFqvBPPB1pGkds+2iXaQwtTM3gjRhU
-bv4crFyiHxsZHPVV+KLSf3pA9j5a30BVEeEKc+KMvNWOCxuggzGxFzb00wx74PHS
-+Lqbl/1VwiyeT8Wp9xMdBZcNbXswbHwL3NpAbScXr24/CHsHZLBrjBKCifKFw/5P
-WWlBW7XUCi0T+57QtLoRoiG95xTd0A7Tcx91h+9qluBIv9QDGGAC1+LdQ7L8wJev
-UDH8tap7SMMudR83vic7c14tDQwzxMJpRI8EQOiWSs9t8WrdHzgjfgrkZUmfo+e1
-y/KAmb+UmVCnpjG00cD8SsCsHm1Esl9cbQqhBSrNcmHGor2jSp4=
-=LSgo
------END PGP SIGNATURE-----
-
---LhEFjvIk9c/nknZd--
+> 
+> > Since we can't guarantee that APIs like virtio or ida won't ever return
+> > EINVAL, we should set all return values:
+> 
+> I dislike this alot, it squashes all return codes to try to optimize
+> an obscure failure path :(
+> 
+> Jason
