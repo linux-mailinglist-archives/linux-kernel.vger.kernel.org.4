@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667AE5B9067
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3282A5B9069
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiINWFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S229612AbiINWHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 18:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiINWFc (ORCPT
+        with ESMTP id S229528AbiINWHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:05:32 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9274E855
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:05:30 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e18so24311426edj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Holejv5x4Ja/Ig/81V4R1f7COb2CYNqjVPz0cAvGiCM=;
-        b=ayCgX547FpPpZErSYJpswnBRNBxPeCchdn1sDtuf7WpoN6yxA6wfPKh/7XzmSdtryk
-         SDd3hv6hg6FZEgVnjWHg+z3GMhGjUQLVYMe0mx7GEn3K7Sk0nOfK1sL0m92yr1L8p+iv
-         YxSvHYNlDlZJe/MVbYHBpiWPMSS4ISSG1m/mAyaHJczvfFmqgSaehrwbqIJ3GPLlFExf
-         I9yeHzlEnPkd0RvqCa1vMIJFE4yy64YhBP314+l7jaSPoUbeoc2LtN0UFSaNtWAi0Y1n
-         gKoHu+iUukFsQsFDwNB+wJzFqdcQWgdjlmM7YsK7kOQtRxQVzGYf6lVMpQyWLliIKiWg
-         zQnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Holejv5x4Ja/Ig/81V4R1f7COb2CYNqjVPz0cAvGiCM=;
-        b=xyDNDhVaixtQuuSFTZmG2Tnf3rj6Upqq0c9UX/qnA94rEawcRAAKwGif0CCW2r5hrw
-         v0Fi9/CAsn9Fr7I9NyfRc9uAzuSvBKL1IJLQI/nVDv8vZAVE9ic1+p1Rg2LgOB8mturC
-         ZCSnxDopLa+W26GQwPe+nOwt31oBDsHon7tU1X1rpXAjyNm4IrnJ/K5QZKB0C0mDdqiq
-         AYiCaD7OMgnDkpB7cvStWgjZMhURuXPXLP0kdTjGxcaCMBRCRdmWm7x8Sdlq2m7niS3r
-         tOb/ZDI9t1xDfB+/50f+pHbwmchnESzwFqU0Ku/XUI3pl1ndFS5H/pQE7NtMun6DBkZv
-         +2yw==
-X-Gm-Message-State: ACgBeo1usDeaR+DOlMG91LjZWwl1cl9OWcv84soseUdvANfLkJ8c7l74
-        zeRBwyyS3QOYQzNgHVlmNUzT9w==
-X-Google-Smtp-Source: AA6agR6Um7EfAcKc/t5rmUVVmOpNYFWZ91NjX/7J8A4VMMJRacru6lx+Hj7znbWDiHemUG5SbN4LcA==
-X-Received: by 2002:a05:6402:90a:b0:443:8b10:bcad with SMTP id g10-20020a056402090a00b004438b10bcadmr32096151edz.416.1663193129021;
-        Wed, 14 Sep 2022 15:05:29 -0700 (PDT)
-Received: from [192.168.1.9] (hst-221-107.medicom.bg. [84.238.221.107])
-        by smtp.googlemail.com with ESMTPSA id gu2-20020a170906f28200b00718e4e64b7bsm8021631ejb.79.2022.09.14.15.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 15:05:28 -0700 (PDT)
-Message-ID: <5beecec3-b2f0-861e-d8bc-4f81ed355b6a@linaro.org>
-Date:   Thu, 15 Sep 2022 01:05:27 +0300
+        Wed, 14 Sep 2022 18:07:52 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA7261B21;
+        Wed, 14 Sep 2022 15:07:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663193240; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ntOIGx6DEiNzbOLb4pSvnlDrwadQx/sqQvkTn0B01mZTh5t+v9tkVAbcGOx10bKe0KDBgDHTbBAU2aKzAYQQyQhwu+D6mMiTF6UnDbW5wG4epmz5WGFWz/GZ8ZI1c/qP2pCY/TKmE2p5spoPghm4DGO/ewU/Q5lJngj1BCN1Pdo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663193240; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=wT2zYWTahB2Hz1fERK10MZ0PBJ20Nx8YM0Tg8v/iXO4=; 
+        b=ghcw1E29GCXXpZMrL0P4FNH40Iy3EmC841VXMfXPQPzyX8HAGkjobnmIq7WH7V61/I5AC7ju/ZSQVFApJKaH7Aep1vLRtylc8/SCXsFEK16h9S6AapgyVWKFe98KTpriS1Zni11tM8cdv5TBUXREff87CqJPR2+yGDFV0+r0MN0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663193240;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:To:To:From:From:Subject:Subject:Cc:Cc:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=wT2zYWTahB2Hz1fERK10MZ0PBJ20Nx8YM0Tg8v/iXO4=;
+        b=GcPHFdRoV+srWMetz2fvUwz4hW4rIha7SCrpohTy+nBygwDsseG4/Lc/HKZgabvJ
+        YA7ppvK0hhNea41lGeKlTBqr6FMd/Woo87LyH/1S0rGfUge3MJdpUPZ83B/saXUlH7t
+        5T7x/gLYKnvRkd8U1cTVIE7BeKQhbAImM6E99pRI=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1663193239443950.6869432993643; Wed, 14 Sep 2022 15:07:19 -0700 (PDT)
+Message-ID: <0e3ca573-2190-57b0-0e98-7f5b890d328e@arinc9.com>
+Date:   Thu, 15 Sep 2022 01:07:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] MAINTAINERS: Add Vikash as VENUS video driver
- co-maintainer
 Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <1663070940-8165-1-git-send-email-quic_vgarodia@quicinc.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <1663070940-8165-1-git-send-email-quic_vgarodia@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     netdev <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Subject: Move MT7530 phy muxing from DSA to PHY driver
+Cc:     Thibaut <hacks@slashdirt.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vikash,
+Hello folks.
 
-On 9/13/22 15:09, Vikash Garodia wrote:
-> For the past several amendments in video driver, I have been working
-> with Stanimir in multiple design discussions or handling a given
-> issue. With this, adding myself as a co-maintainer.
+MediaTek MT7530 switch has got 5 phys and 7 gmacs. gmac5 and gmac6 are 
+treated as CPU ports.
 
-I'd like to thank you for all your work on the Venus driver.
+This switch has got a feature which phy0 or phy4 can be muxed to gmac5 
+of the switch. This allows an ethernet mac connected to gmac5 to 
+directly connect to the phy.
 
-> 
-> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
+PHY muxing works by looking for the compatible string "mediatek,eth-mac" 
+then the mac address to find the gmac1 node. Then, it checks the mdio 
+address on the node which "phy-handle" on the gmac1 node points to. If 
+the mdio address is 0, phy0 is muxed to gmac5 of the switch. If it's 4, 
+phy4 is muxed.
 
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/drivers/net/dsa/mt7530.c?id=1f9a6abecf538cc73635f6082677a2f4dc9c89a4#n2238
 
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 936490d..d3ef64f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16969,6 +16969,7 @@ F:	drivers/thermal/qcom/
->  
->  QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
->  M:	Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> +M:	Vikash Garodia <quic_vgarodia@quicinc.com>
->  L:	linux-media@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
+Because that DSA probes the switch before muxing the phy, this won't 
+work on devices which only use a single switch phy because probing will 
+fail.
 
--- 
-regards,
-Stan
+I'd like this operation to be done from the MediaTek Gigabit PHY driver 
+instead. The motives for this change are that we solve the behaviour 
+above, liberate the need to use DSA for this operation and get rid of 
+the DSA overhead.
+
+Would a change like this make sense and be accepted into netdev?
+
+Arınç
