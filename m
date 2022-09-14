@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E35B8C8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEB35B8C8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiINQJo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Sep 2022 12:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S229681AbiINQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiINQJd (ORCPT
+        with ESMTP id S229658AbiINQJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:09:33 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DF7BED;
-        Wed, 14 Sep 2022 09:09:29 -0700 (PDT)
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id 952D880C18;
-        Wed, 14 Sep 2022 16:09:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 09AAD20025;
-        Wed, 14 Sep 2022 16:09:25 +0000 (UTC)
-Message-ID: <aa858ac592679fdf512debe17e0612c575450860.camel@perches.com>
-Subject: Re: [PATCH v7] checkpatch: warn for non-standard fixes tag style
-From:   Joe Perches <joe@perches.com>
-To:     Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@corigine.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     oss-drivers@corigine.com, Simon Horman <simon.horman@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>
-Date:   Wed, 14 Sep 2022 09:09:25 -0700
-In-Reply-To: <20220914100255.1048460-1-niklas.soderlund@corigine.com>
-References: <20220914100255.1048460-1-niklas.soderlund@corigine.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 14 Sep 2022 12:09:41 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62439B1EE;
+        Wed, 14 Sep 2022 09:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QVO1O0z/BVH8CRjnCLTwDu7rIPy+uXeBW2E/ilPBWno=; b=B2/82eOjpp5kGPJ3gicZLvcslo
+        QBukfSq7IeJwyf5AQjq/KaReUSxCdVPyl/RSVR7iMZyvhR7Tx5uiB5ylx3fiNB/l7zuHdSklwMXPN
+        otNS4cXf1oDLYjcUWh/KTjWmdjBSqv+nkJ1Qw+zuOyByIU6RXsh/CyOggBTGFD64ybklslqYt0CBZ
+        EsJmnaHsbi0YtwnmOf4Ak7ypuBaL0M0rH3dzUaebwIXtSB36UIb78RnQV+5kuzXACBChmp4Mv5Ndj
+        qofeUadkOAfR8SR5navbrKqDJFymrRWB72YfRhY1Sgm7vhdzf5V+fTG5Kam9kr1TYVI3b3wjccpxJ
+        xr7CAeLw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34332)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oYUxA-0004b6-4h; Wed, 14 Sep 2022 17:09:32 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oYUx8-0001nP-JK; Wed, 14 Sep 2022 17:09:30 +0100
+Date:   Wed, 14 Sep 2022 17:09:30 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
+        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kishon@ti.com
+Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
+ fixed-link configuration
+Message-ID: <YyH8us424n3dyLYT@shell.armlinux.org.uk>
+References: <20220914095053.189851-1-s-vadapalli@ti.com>
+ <20220914095053.189851-6-s-vadapalli@ti.com>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 09AAD20025
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 9md5hxrn71chdp7f1f7hcsjjgts5nfpt
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX183LY6G42xmDTBsfnC5aVm3gnaz6IMy0ks=
-X-HE-Tag: 1663171765-135009
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914095053.189851-6-s-vadapalli@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-14 at 12:02 +0200, Niklas Söderlund wrote:
-> Add a warning for fixes tags that does not follow community conventions.
-[]
-> * Changes since v6
-> - Update first check to make sure that there is a likely SHA1 of some
->   minimum length after the fixes line.
+On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
+> Check for fixed-link in am65_cpsw_nuss_mac_config() using struct
+> am65_cpsw_slave_data's phy_node property to obtain fwnode. Since
+> am65_cpsw_nuss_mac_link_up() is not invoked in fixed-link mode, perform
+> the relevant operations in am65_cpsw_nuss_mac_config() itself.
 
-https://lore.kernel.org/lkml/2febb7893346b6234983453de7c037536e479bfc.camel@perches.com/
+Further to my other comments, you also fail to explain that, when in
+fixed-link SGMII mode, you _emulate_ being a PHY - which I deduce
+since you are sending the duplex setting and speed settings via the
+SGMII control word. Also, as SGMII was invented for a PHY to be able
+to communicate the media negotiation resolution to the MAC, SGMII
+defines that the PHY fills in the speed and duplex information in
+the control word to pass it to the MAC, and the MAC acknowledges this
+information. There is no need (and SGMII doesn't permit) the MAC to
+advertise what it's doing.
 
-The goal here should be to identify a line that looks like a commit
-reference.
+Maybe this needs to be explained in the commit message?
 
-So find lines that starts with 'fixes' and have a SHA1 commit id as
-broadly as reasonable.
+This doesn't have any bearing on the other comments I've made.
 
-Did you run the grep pattern and look at the results?
-
-One grep pattern to verify the non canonical fixes format that
-are mistakenly used is:
-
-$ git log --since=5-years-ago --no-merges --grep='^\s*fixes' -i --format=email -P | \
-  grep -P -i '^\s*fixes' | \
-  grep -P -v '^Fixes: [0-9a-f]{12,12}\s*\(".*")'
-
-[]
-
-There are many different styles.
-Parenthesea are sometimes not used.
-
-> +			if ($line =~ /(\s*fixes:?)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
-
-How about some pattern like
-
-	/fixes\s*:?\s*(?:commit:?\s*)?[0-9a-f]{5,}/i
-
-or maybe even more broadly:
-
-	/fixes\b.*\b[0-9a-f]{5,}\b/i
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
