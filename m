@@ -2,159 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D8D5B80A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EA75B80C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiINFQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S229609AbiINFTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiINFQM (ORCPT
+        with ESMTP id S229436AbiINFTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:16:12 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080884F679;
-        Tue, 13 Sep 2022 22:16:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=US4diebhRP0SAQo8b1ud3UJ8RegS4Ly1VahSLNXaFnF+Tv2cx/y47LXn1wV/g0LJUJ4KgvaW2R3kzTVZIxbgeCH1hyjEBij0B53CreyXd0wAxTtH32tZFCvplah3g6xXqQLb1YGYk78lJt6mJotffuU9aqQ7+xUPRuKWGL7yrkN7ynsKmCLAHKdtE7eyD8GPWvtITISzlElDjBKr/IWyPOkHpfg8asnBRNSroWujmr09+GR3vjTnjbFfVl3aszuoZ+zQtwZobFoSuTnUQXIDRzQKyYoADV3O/zZL5PHQ3mzmJTpmSy3MakKP7OniX4n/92KJEjWxHate8eaxDIW94w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E7L/ZEz0mnJDAirQ7IaiZj0uUz+07k0HLsCJki+zbxg=;
- b=GEo7Z/aqubuZxSGHWQVlZTYIMYxtEmDeNLe3gkq0VQzcO71zbQsYEIgVnxlZUfSHbJX5uG7MIN3z28Jhv7Y1qYi+UnRmXe5aU8lbMkyD2SNWqvbN4lkWeOtTg58qn90SJ+/VphV2ZoE0uIYQxKXbozrG4euLpMBFaFfPCsrD5f6ml/nDQ832/+1d5cg4xbGpFRnghC789L/OeFo5wkpscngVQqQNEvBIdo6wcEUvuhpNLB7qoT2l511fdbtUa0tFDLZdKRdqVx15nakkngKUK/bqXgIrORCvZIdQcc7jGIdcQS/DMlxPqsle95Yo8vOh6/6tHDPbTc1cjVNmOfvu6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E7L/ZEz0mnJDAirQ7IaiZj0uUz+07k0HLsCJki+zbxg=;
- b=saJITpVZL1Yoc+hE9xqsSj0aAtwjsCxMX0qoEjTYYi2eqERGCaFw7ULCaZiNJAUcWedMBpCciH3t3ZtLPnRV857xlII8IYebl/ZLG8m5zhIpS+u/0SbuCLHdNgE5SDKoRPyEKCHrejulQy7fkGZi533omQuHTsouKmaor4jMPf/0YPNaW/Hv2Vwd4aCJ7Ge0fQYh+d1aKhD3EpdwVqmmoJPgA0gySpWxm4TnHzDaN/aLlsGysLSC25YRpzVjIZsyv+y4lxhKvJzzevrgFLLP87k7DXn6FU2A0hwYp6v50xVGbMpRDllphZde552mWvVBqN8xCRn9l1TTw/jGCwNXqA==
-Received: from BN0PR02CA0032.namprd02.prod.outlook.com (2603:10b6:408:e5::7)
- by SJ0PR12MB7005.namprd12.prod.outlook.com (2603:10b6:a03:486::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Wed, 14 Sep
- 2022 05:16:08 +0000
-Received: from BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e5:cafe::d8) by BN0PR02CA0032.outlook.office365.com
- (2603:10b6:408:e5::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
- Transport; Wed, 14 Sep 2022 05:16:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT042.mail.protection.outlook.com (10.13.177.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5632.12 via Frontend Transport; Wed, 14 Sep 2022 05:16:08 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 13 Sep
- 2022 22:15:50 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 22:15:49 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 22:15:49 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Tue, 13 Sep 2022 22:15:48 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <thierry.reding@gmail.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>
-CC:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <vdumpa@nvidia.com>,
-        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 12/13] iommu/tegra: Constrain return value of ->attach_dev()
-Date:   Tue, 13 Sep 2022 22:15:48 -0700
-Message-ID: <20220914051548.10644-1-nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 14 Sep 2022 01:19:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AEC4F679
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 22:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663132751; x=1694668751;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zs/nU3jdhfF/Tuo2sh/sQZjk2vbK/z1YJgI0Nzv2KRQ=;
+  b=UhaO9Wlsl803BwSYaUqljI1BOdIEDs1Mavl7ycY/1Ih+h4mcbxc2gbHV
+   Birm8zxfzC5PSYvRXbtv0xgtKlQLhi0nioDifTTv9vg/9PHp2vhnpPHY3
+   C3LRGG/lwPLudYq/sm48Y+hAi7cWy0gferVR6WBEThkuwk7oZicSVo2Zz
+   oniFkkVTMG+IhSkrrr7lDqmdne0E6Gd8vRf6YgH8/nnypD67iYvKAFMyZ
+   Po6O1yD3N5cbGRP+Rdzdgk3DvrCRqak9SYer5jgIdZRxMaweEs9eRWbFR
+   Oy6MBEXZHK6VGqvEt9MhVwj+rWe2wPsKQ19KOVoBrZftUmNnTuf+OPv9J
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="281370168"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="281370168"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 22:19:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="594241604"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Sep 2022 22:19:09 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYKnk-0004Ov-2n;
+        Wed, 14 Sep 2022 05:19:08 +0000
+Date:   Wed, 14 Sep 2022 13:18:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     YunQiang Su <yunqiang.su@cipunited.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for function 'putc'
+Message-ID: <202209141345.SIXtlp0W-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT042:EE_|SJ0PR12MB7005:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e14d466-5088-4010-1dc3-08da96103b30
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HyXS+pla+pEWMNHYxmjIA9feIxgGrRXHZqb0VI4ZvC7VqPUZDMFxiS9pLomHi7t9Rq6ZlEjN9R7bLwITBRzLkSWHSXsdtc6Kqew4UrarfRpoUssSdUep6HxJEV+046oQrFeoSzozndGI+ahK5kF9grGMmAs0SVsnx8Q2ivplZGiBYIX8vuHm5+VRa7X0e1w4KeoT/a2H6UX0jHJn3Su18kydWtaNydQ6WQuum07saSauLAuKthjTNvlfXjqMDH1MDnAwsVukfDedXgJUdcM72Xb2UOPsOv2s6KZr0j4DyqNHZSPLlNg3iLtMnqjauSAZeq9CPhgDicx+QwwpqX0ryKXMnIhHabb4mVXUf7PHJ/5gVXBYCkCHw0zZRe7S3HCcABOEM2CRDD72Hn+ozCFpTJ1Pb0BMpuzcES2SZ91cQR9Wd5za3VnOydfFa82r25jDyggZbNyx3a9l5cMK6vMMnT3l/WKoj0su5Wle1IYIeqL7w+4BC6fH92RljXZo6pnolDK5AqEl1G8h40CQsO/fLXaOHvQz4zpISrjGjz/t8f8+eMldHTkO5nEG+J5Rqnc3U1Kh3Eas5oNsQadY38DI1VHMO/ED0sHoLP2KNVLlosKzaFsyQQ9FdvKtB8R8jQaoEwZKKsuTquELaJruX0ZzI8ty+0ZS3vizsLJViSMed/wkTGva1625i1vwyyXxZ7hnpqFGV+ahINzJGFwnWFVsopE+BZuTtSUzR9VtHDO82jAv/TsgHXoh8Aurw2KTdOboO6jphyke8TEb/zRbgGJhcQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(4326008)(2616005)(1076003)(426003)(336012)(186003)(54906003)(82740400003)(36756003)(86362001)(40460700003)(110136005)(478600001)(8936002)(8676002)(7636003)(70206006)(2906002)(47076005)(36860700001)(26005)(5660300002)(70586007)(316002)(40480700001)(7696005)(82310400005)(41300700001)(83380400001)(356005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 05:16:08.1123
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e14d466-5088-4010-1dc3-08da96103b30
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7005
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure attach_dev() callback functions only return errno values expected
-from the attach_dev() op. In particular, only return -EINVAL when we are
-sure that the device is incompatible with the domain.
+Hi YunQiang,
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/tegra-gart.c | 2 +-
- drivers/iommu/tegra-smmu.c | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
-index e5ca3cf1a949..ed53279d1106 100644
---- a/drivers/iommu/tegra-gart.c
-+++ b/drivers/iommu/tegra-gart.c
-@@ -112,7 +112,7 @@ static int gart_iommu_attach_dev(struct iommu_domain *domain,
- 	spin_lock(&gart->dom_lock);
- 
- 	if (gart->active_domain && gart->active_domain != domain) {
--		ret = -EBUSY;
-+		ret = -EINVAL;
- 	} else if (dev_iommu_priv_get(dev) != domain) {
- 		dev_iommu_priv_set(dev, domain);
- 		gart->active_domain = domain;
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 2a8de975fe63..fe68bf94dc4b 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -432,8 +432,10 @@ static int tegra_smmu_as_prepare(struct tegra_smmu *smmu,
- 	}
- 
- 	err = tegra_smmu_alloc_asid(smmu, &as->id);
--	if (err < 0)
-+	if (err < 0) {
-+		err = -ENOSPC;
- 		goto err_unmap;
-+	}
- 
- 	smmu_flush_ptc(smmu, as->pd_dma, 0);
- 	smmu_flush_tlb_asid(smmu, as->id);
-@@ -487,7 +489,7 @@ static int tegra_smmu_attach_dev(struct iommu_domain *domain,
- 	int err;
- 
- 	if (!fwspec)
--		return -ENOENT;
-+		return -ENODEV;
- 
- 	for (index = 0; index < fwspec->num_ids; index++) {
- 		err = tegra_smmu_as_prepare(smmu, as);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1221cea11fca0f6946bdd032a45b22cecfc0f99
+commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
+date:   9 months ago
+config: mips-buildonly-randconfig-r002-20220914 (https://download.01.org/0day-ci/archive/20220914/202209141345.SIXtlp0W-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void putc(char c)
+        ^
+   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void putc(char c)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
