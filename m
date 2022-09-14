@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D905B8A96
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D7B5B8A9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiINOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S230100AbiINOdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiINOc5 (ORCPT
+        with ESMTP id S230146AbiINOdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:32:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4922B1AC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:32:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so19172302pjq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=rd6Fj2fC8Goem3fWccKD0y03WABlAKjmm2Db9Cox5Tw=;
-        b=H4w3kD3hFmJlmPgcet5r8dxOsHw//Z34IatU/K6OyD43YK4ed++kCCm11SFyN8qqOo
-         Bc7GNbvKKBIsoFe08tSzGNkqdNSYLrOD86jzfTTZHZvTb9Y1xyp1+jctaR08fBt9ocs7
-         6bHYUCKWcllmAUlmYA92wh3wI6YTx9Hjk+tsU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rd6Fj2fC8Goem3fWccKD0y03WABlAKjmm2Db9Cox5Tw=;
-        b=BijYAn8125yayS0F0C9BKGgjuLEqQjspEN0nciMZHOYpomRlFYYDcnTvHr15xdeZYL
-         khnzi3oQBK+0uO6gU1utvhg5OL43qxdi73GIh1tFPNArtg2BVZf+2RcEUGlZ5NXwUMQh
-         zJtJTOHjcFwH9QcVFgvMRBm7ooNhecNEHB3sKlVHaAOq7GsCskyPAqZI2vZI3u5YFYYr
-         qKVaDEhhVB4C8wBkXGCOMq6IZhGj9L12wSJMg7ZN4MpkORRgZ+Y/dwY/RUtr1oQgPNBZ
-         hZjXbrvCA2bnIJgcLpmX44hWdgdU0XsqX7vKYHntjZMxfs3ZellGTOlpiAIue7Wi0tmm
-         Bh2A==
-X-Gm-Message-State: ACrzQf3uvW37vfY6cabQofwcMS3FlzYAELbRiWyZ3YuWpLnqGt93GxkW
-        E6vskOTCImRJOcOXflEimXFagw==
-X-Google-Smtp-Source: AMsMyM7Lkehp4jFAefw+bGpu5ndb1mC1GwpcGhDZW9RVVLJxi6CkwzIZBAVM8VKcnw7lsvsilVonZA==
-X-Received: by 2002:a17:90b:4c0a:b0:202:54cc:6d5 with SMTP id na10-20020a17090b4c0a00b0020254cc06d5mr5111424pjb.121.1663165975042;
-        Wed, 14 Sep 2022 07:32:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m3-20020a638c03000000b0042bd73400b6sm9801656pgd.87.2022.09.14.07.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:32:54 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 07:32:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Rewrite the top-level index.rst
-Message-ID: <202209140718.991618E@keescook>
-References: <20220901231632.518583-1-corbet@lwn.net>
- <938a9905-217c-f02a-b5c2-35c1e5d7822b@leemhuis.info>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <938a9905-217c-f02a-b5c2-35c1e5d7822b@leemhuis.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 10:33:37 -0400
+X-Greylist: delayed 178 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 07:33:35 PDT
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5CB2C125;
+        Wed, 14 Sep 2022 07:33:35 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 6A99E2B059AB;
+        Wed, 14 Sep 2022 10:33:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 14 Sep 2022 10:33:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663166013; x=1663169613; bh=0UwiLm9wU3
+        WSNfSxDyHppyIXzHYDWSLCX7HdL5pdjGA=; b=U8HqBi9PfsGkfsCdkrz12F+ZAc
+        0cDBzVgonGcmcjSkr4ufqkTjDbFfL+iykG8prjDotuDt9xGH1BidESVImJmytVUU
+        DGdHM+ct1xwQaeQ9jvRHGniTW49a4WSdOKqYuy40WAtuunl6xhqpHNkCeEZ9nwiJ
+        v/apP+JayoIOeb88koFTXLQGH1GHrHSwiprrv2gPNNg1mENDVPW0bnDgTaTl3iEN
+        LkJeowub6uYfqaogrZdkjwatc3N4sKVVHUYZjIqMDrTncNgoFyj1GLsAOW+Gbr+/
+        DdTkNyXr5wyJbixWuW88qeU7SfwBteAJ0/B1VpfMdVq8urlk7FvnxRoXK59g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663166013; x=1663169613; bh=0UwiLm9wU3WSNfSxDyHppyIXzHYD
+        WSLCX7HdL5pdjGA=; b=kY8PbjarEfWRSC0PCGKMCFhPOEFU9xjnQSuLRvepFcxi
+        MDZt5RTJvqtetLam3jL7Bf60+2rUoevFWdGTOKK5CYATmXtIWuO3gj3uDnQ7JTmX
+        mjh7gMEYza6vCcRLv/9XszYzFrduAi92m+IsHcQ3ghzs8JxGvfb/Y/LRqulDIKF0
+        Ow6jfbDoxVBs+xyVbbNKzqJ+cgwPPLjul2S2NukfBXm7kRvm63LOXnwaLJMa1uLD
+        ocR/sSBihW44Oi1QhfpCah0jXdEy630ICrVtN3Ks/lQJtlFOL2Iz9PxehI4tezo2
+        wsNpnsDTjp0G/GONo1NnxGuB5lzuAQEuI+WuBtBNpQ==
+X-ME-Sender: <xms:PeYhY1BXlZq-lyBD17CO7IH9CI99Pye-0rG4x254hPBM0KVMtgeHVw>
+    <xme:PeYhYzgpviN6BoUgB_LQOU1LaiGnDImFMfJEA0IbAiemhm9mE8nKL89M1TIJ0Zoup
+    WAngjyOlK4lApRxiiI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:PeYhYwk1AJiBkKNb89UF5LFcQNV48_6gWkk7cS1dnStA73FTEy2UEQ>
+    <xmx:PeYhY_wW7N7R6mGUh9ib165mLsFQ6_8JBPv9Ct3-JIFa-BFRqrpbuA>
+    <xmx:PeYhY6T1v_v2n5m6QaDruKwQ42IJgb1J_8ECPQfoyB6cxqOHt7Z_MA>
+    <xmx:PeYhY3RxZC-g3EuWJDHOaERaVasqOCdnWjnXyDSqda5UNjdv_HdoetjRuKo>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7A394B60086; Wed, 14 Sep 2022 10:33:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-934-g6274855a4c-fm-20220913.002-g6274855a
+Mime-Version: 1.0
+Message-Id: <0485fd4d-21f3-4972-8667-91959180e60f@www.fastmail.com>
+In-Reply-To: <20220914142713.29351-2-lukas.bulwahn@gmail.com>
+References: <20220914142713.29351-1-lukas.bulwahn@gmail.com>
+ <20220914142713.29351-2-lukas.bulwahn@gmail.com>
+Date:   Wed, 14 Sep 2022 16:33:13 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ata: make PATA_PLATFORM selectable only for suitable
+ architectures
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 12:03:17PM +0200, Thorsten Leemhuis wrote:
-> On 02.09.22 01:16, Jonathan Corbet wrote:
-> > The top-level index.rst file is the entry point for the kernel's
-> > documentation, especially for readers of the HTML output.  It is currently
-> > a mess containing everything we thought to throw in there.  Firefox says it
-> > would require 26 pages of paper to print it.  That is not a user-friendly
-> > introduction.
-> <
-> > This series aims to improve our documentation entry point with a focus on
-> > rewriting index.rst.  The result is, IMO, simpler and more approachable.
-> > For anybody who wants to see the rendered results without building the
-> > docs, have a look at:
-> > 
-> >   https://static.lwn.net/kerneldoc/
-> > [...]
+On Wed, Sep 14, 2022, at 4:27 PM, Lukas Bulwahn wrote:
+> It is currently possible to select "Generic platform device PATA support"
+> in two situations:
+>
+>   - architecture allows the generic platform device PATA support and
+>     indicates that with "select HAVE_PATA_PLATFORM".
+>   - if the user claims to be an EXPERT by setting CONFIG_EXPERT to yes
+>
+> However, there is no use case to have Generic platform device PATA support
+> in a kernel build if the architecture definition, i.e., the selection of
+> configs by an architecture, does not support it.
+>
+> If the architecture definition is wrong, i.e., it just misses a 'select
+> HAVE_PATA_PLATFORM', then even an expert that configures the kernel build
+> should not just fix that by overruling the claimed support by an
+> architecture. If the architecture definition is wrong, the expert should
+> just provide a patch to correct the architecture definition instead---in
+> the end, if the user is an expert, sending a quick one-line patch should
+> not be an issue.
+>
+> In other words, I do not see the deeper why an expert can overrule the
+> architecture definition in this case, as the expert may not overrule the
+> config selections defined by the architecture in the large majority
+> ---or probably all other (modulo some mistakes)---of similar cases.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-I like it -- FWIW, I am able to find stuff much more easily with
-this. I am traditionally looking most for internal API details, how
-to test exposed userspace interfaces, and process docs (so I can send
-reference links to contributors when I'm doing reviews). These map to
-"how do I do it?", "how do I test it?", and "where can I aim people for
-common process details?"
+Sounds reasonable. My best guess about the intention of the EXPERT
+dependency is that it would be used for users with third-party
+board files or dts files referencing these. We can't really help
+users with out-of-tree boardfiles, and the external dts case would
+be covered by your patch 1/2.
 
-(So I'd expect to see
-https://static.lwn.net/kerneldoc/dev-tools/testing-overview.html
-linked under "Development tools and processes")
-
-> Great initiative. But looking at the rendered result made me wonder:
-> what overall structure for the docs are you aiming for in the end? I'm
-> sure you have a picture in your head, but I failed to grasp it, as for
-> me a few things looked a little odd:
-> 
-> * we do all of this for the users, so shouldn't the section aimed at
-> users be at the top? And list more things they will look for?
-
-I'd agree with Jon: I expect the primary consumer to be new and existing
-contributors. (Where "new" may just mean "new to this area of the code"
-too.)
-
-Under "Other documentation" on the front page that can move:
-"Atomic Types", "Atomic bitops" can be moved to Core API docs under
-"Data structures". I think "Memory Barriers" can go to "Concurrency
-primitives".
-
--Kees
-
--- 
-Kees Cook
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
