@@ -2,107 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FB75B859E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6442F5B8580
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiINJwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S231179AbiINJvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiINJwQ (ORCPT
+        with ESMTP id S230132AbiINJu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:52:16 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37AF6717C;
-        Wed, 14 Sep 2022 02:51:58 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28E9paU7116314;
-        Wed, 14 Sep 2022 04:51:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663149097;
-        bh=M2OCiw12134ibfKBaJCIdgir2DHx6Cv/honLctkks9s=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=OEaesC5zw3Xv39+HZAJ6MNmBJQThg65JETjK8+dcgSBDJV1+PTp0gPmHR0j6+VsEq
-         nkbM7ybeCpZghyD87sRJrw9RwwUpJNsr2ofqjGbZEgp0xCfDzJvffyKU/By0eQg0lm
-         Z7H37KsPcLBQ+gDlM6btI6wr8yaERx7Z2Vwa0tsg=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28E9pagY010441
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Sep 2022 04:51:36 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 14
- Sep 2022 04:51:36 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 14 Sep 2022 04:51:36 -0500
-Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28E9osD7046564;
-        Wed, 14 Sep 2022 04:51:31 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
-        <vigneshr@ti.com>, <nsekhar@ti.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 7/8] net: ethernet: ti: am65-cpsw: Add support for J721e CPSW9G
-Date:   Wed, 14 Sep 2022 15:20:52 +0530
-Message-ID: <20220914095053.189851-8-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914095053.189851-1-s-vadapalli@ti.com>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
+        Wed, 14 Sep 2022 05:50:57 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A743857E07;
+        Wed, 14 Sep 2022 02:50:55 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 074031C0001; Wed, 14 Sep 2022 11:50:53 +0200 (CEST)
+Date:   Wed, 14 Sep 2022 11:50:52 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 00/42] 4.9.328-rc1 review
+Message-ID: <20220914095052.GA25219@duo.ucw.cz>
+References: <20220913140342.228397194@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="HlL+5n6rz5pIUxbD"
+Content-Disposition: inline
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPSW9G in J721e supports additional modes like QSGMII and SGMII.
-Add new compatible for J721e in am65-cpsw driver.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+--HlL+5n6rz5pIUxbD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 3f40178436ff..65114f233550 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -2760,11 +2760,19 @@ static const struct am65_cpsw_pdata j7200_cpswxg_pdata = {
- 	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_SGMII),
- };
- 
-+static const struct am65_cpsw_pdata j721e_cpswxg_pdata = {
-+	.quirks = 0,
-+	.ale_dev_id = "am64-cpswxg",
-+	.fdqring_mode = K3_RINGACC_RING_MODE_MESSAGE,
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+};
-+
- static const struct of_device_id am65_cpsw_nuss_of_mtable[] = {
- 	{ .compatible = "ti,am654-cpsw-nuss", .data = &am65x_sr1_0},
- 	{ .compatible = "ti,j721e-cpsw-nuss", .data = &j721e_pdata},
- 	{ .compatible = "ti,am642-cpsw-nuss", .data = &am64x_cpswxg_pdata},
- 	{ .compatible = "ti,j7200-cpswxg-nuss", .data = &j7200_cpswxg_pdata},
-+	{ .compatible = "ti,j721e-cpswxg-nuss", .data = &j721e_cpswxg_pdata},
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, am65_cpsw_nuss_of_mtable);
--- 
-2.25.1
+Hi!
 
+> This is the start of the stable review cycle for the 4.9.328 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.9.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--HlL+5n6rz5pIUxbD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYyGj/AAKCRAw5/Bqldv6
+8n74AJ94ym+jVoSwr9cgpoGNBeatqph7IwCePJZ3IZ03MI8Yg/4XwC7RvxIQbaw=
+=c3Mh
+-----END PGP SIGNATURE-----
+
+--HlL+5n6rz5pIUxbD--
