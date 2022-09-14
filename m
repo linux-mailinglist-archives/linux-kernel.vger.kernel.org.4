@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2005B8B12
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAD85B8B14
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiINOxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S229929AbiINOxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiINOxA (ORCPT
+        with ESMTP id S229926AbiINOxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:53:00 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80427F245;
-        Wed, 14 Sep 2022 07:52:57 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id s18so9433086plr.4;
-        Wed, 14 Sep 2022 07:52:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=bkBSW6G3fC6jIoGQP+jCt7/KrqqVbXw36+sN6EqlQpY=;
-        b=nrS38boUEwVDOuYDymFvUckzZNotaw+hDHRrR3CfeBGd5Sxte7IXXmLICdDn4qRH0V
-         dXhCTeLNGFx2KHgblHD9Z1335c2K7VKDVATKBuJjPyZkKZLk+YwDJx8Qy9lQnyeF+cpe
-         zYiDuacMNcQbdzHsgWJpX+Q7kRgavuEd+h5pBeCOyIu8Ffg1W/TR1vUz8cZ63CCHc1KM
-         0EQzG7HhU6PBwfn5wFRdctZOPDxTQXk8Y72BK0A4VfLiJS7TS0h75B9RuGEThEKa09KK
-         UjgGLRDI0KcG3gb9OsEQh/MJ6OO+a3vY4FElHrcwa1IRYVA3ytjrGxeQ/B6QHIXIhE85
-         UtLQ==
-X-Gm-Message-State: ACrzQf16mxdsypbPl0njRqeJTROrQsXZoLlK5CcOpCVVTWpg4RJTDybJ
-        kIiy2BReqOMAhH6JehOKh0g=
-X-Google-Smtp-Source: AMsMyM4Ju0Qg4TkKmbRqShHQSEzgemlBp3OYI7LI/3SiNS8kPpacbuYC9vfCslhkFdtWm7E47SCSvw==
-X-Received: by 2002:a17:90a:e58a:b0:1e2:fe75:dd5f with SMTP id g10-20020a17090ae58a00b001e2fe75dd5fmr5367880pjz.138.1663167176969;
-        Wed, 14 Sep 2022 07:52:56 -0700 (PDT)
-Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id w12-20020a63f50c000000b004296719538esm9801098pgh.40.2022.09.14.07.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:52:56 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 23:52:52 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Vidya Sagar <vidyas@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
-        robh@kernel.org, bhelgaas@google.com, treding@nvidia.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <YyHqxGw6ADmJUTEv@rocinante>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
- <20220914062411.GD16459@workstation>
- <29b39edd-10ab-b679-f270-67b0b406ca2f@nvidia.com>
- <20220914111857.GF16459@workstation>
- <5ffe3dfa-28a5-a5fc-0ae2-28927c39dc03@nvidia.com>
- <20220914114306.GG16459@workstation>
- <YyHMvBhWgbDtv6V2@rocinante>
- <20220914134539.GI16459@workstation>
+        Wed, 14 Sep 2022 10:53:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CF28035F;
+        Wed, 14 Sep 2022 07:53:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1699361E34;
+        Wed, 14 Sep 2022 14:53:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDD8C433D6;
+        Wed, 14 Sep 2022 14:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663167196;
+        bh=x2mRu6ozYBweZ3MuATzw0nKMjh2Dk4MFiV0lclAWNLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JMNu79BxdLl9pL6vqHJQ9wWkKIG1wrgwsaZkVOtmmUrDaz8D/WQXV4KNkEhZUKDHw
+         wLD5bpNuCLmWSVaQ5nIX65a+yvhihMWKs2o4DhUiQUXWa85WiDR+Lr+tlBRCSyBlb5
+         PhU53dAXlsdZNyVLnSr/i5Hi58oYnyxX5ov2y2ZY=
+Date:   Wed, 14 Sep 2022 16:53:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, will@kernel.org, axboe@kernel.dk,
+        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
+        mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
+Subject: Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for sr1xx
+ series chip
+Message-ID: <YyHq9OOKBLP2GEcc@kroah.com>
+References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
+ <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914134539.GI16459@workstation>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-> > Perhaps it makes sense to make this a dev_dbg() over dev_info(), especially
-> > since it appears that this information is of more use to the developer (who
-> > most likely has the suitable log level set anyway), and given that there is
-> > no way to reliably detect a presence in a slot on some platforms, this
-> > might otherwise, add to the other messages that normal users don't pay
-> > attention to usually - if this is not to be treated as an error.
-> > 
+On Wed, Sep 14, 2022 at 07:59:44PM +0530, Manjunatha Venkatesh wrote:
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -471,6 +471,17 @@ config HISI_HIKEY_USB
+>  	  switching between the dual-role USB-C port and the USB-A host ports
+>  	  using only one USB controller.
 > 
-> No, this is clearly not a debug message. As I quoted above, the link up
-> can fail due to an issue with PHY also. In that case, user has to see
-> the log to debug/report the issue.
+> +config NXP_UWB
+> +    tristate "NXP UCI(Uwb Command Interface) protocol driver support"
+> +    depends on SPI
+> +    help
+> +      This option enables the UWB driver for NXP sr1xx device.
+> +      Such device supports UCI packet structure, FiRa compliant.
+> +
+> +      Say Y here to compile support for nxp-sr1xx into the kernel or
+> +      say M to compile it as a module. The module will be called
+> +      nxp-sr1xx.ko
 
-Apologies!  I missed that.  Thank you!
- 
-> So, either dev_info() or dev_err().
+No tabs?
 
-So, there is nothing to do here, then.  This stays as dev_err() as per the
-change from:
+> +
+>  config OPEN_DICE
+>  	tristate "Open Profile for DICE driver"
+>  	depends on OF_RESERVED_MEM
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index 2be8542616dd..ee8ca32c66f6 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -60,4 +60,5 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+>  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+>  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+>  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+>  obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
+> +obj-$(CONFIG_NXP_UWB) 		+= nxp-sr1xx.o
+> diff --git a/drivers/misc/nxp-sr1xx.c b/drivers/misc/nxp-sr1xx.c
+> new file mode 100644
+> index 000000000000..6ca9a2b54b86
+> --- /dev/null
+> +++ b/drivers/misc/nxp-sr1xx.c
+> @@ -0,0 +1,794 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
 
-  14c4ad125cf9 ("PCI: dwc: Log link speed and width if it comes up")
+Please no.  If you really want to dual-license your Linux kernel code,
+that's fine, but I will insist that you get a signed-off-by from your
+corporate lawyer so that I know that they agree with this and are
+willing to handle all of the complex issues that this entails as it will
+require work on their side over time.
 
-That said, perhaps adding a comment explaining why this is an error
-might help future reference, as the linked commit didn't justify the
-change.  There also will be redundant messages printed, as per:
+If that's not worth bothering your lawyers over, please just stick with
+GPL as the only license.
 
-  https://elixir.bootlin.com/linux/v6.0-rc5/source/drivers/pci/controller/dwc/pcie-fu740.c#L207
 
-Which the linked commit didn't take into account, I suppose.
+> +/*
+> + * Copyright 2018-2022 NXP.
+> + *
+> + * SPI driver for UWB SR1xx
+> + * Author: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+> + */
+> +
+> +#include <linux/miscdevice.h>
+> +#include <linux/module.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/uaccess.h>
+> +
+> +#define SR1XX_MAGIC 0xEA
+> +#define SR1XX_SET_PWR _IOW(SR1XX_MAGIC, 0x01, long)
+> +#define SR1XX_SET_FWD _IOW(SR1XX_MAGIC, 0x02, long)
 
-	Krzysztof
+You can't stick ioctl command definitions in a .c file that userspace
+never sees.  How are your userspace tools supposed to know what the
+ioctl is and how it is defined?
+
+How was this ever tested and where is your userspace code that interacts
+with this code?
+
+thanks,
+
+greg k-h
