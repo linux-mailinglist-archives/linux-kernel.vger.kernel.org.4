@@ -2,123 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00865B8123
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A855B8121
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiINFz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        id S229915AbiINFzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiINFzp (ORCPT
+        with ESMTP id S229898AbiINFzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:55:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999255B7B9;
-        Tue, 13 Sep 2022 22:55:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS8h751hKz4xD1;
-        Wed, 14 Sep 2022 15:55:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663134936;
-        bh=NfEmZq6Sx6fDVfmEUSsnlkgd0Drx7kbKPxREj7cu23A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IoXztMp6nijyIXeFz+yu4shv7yVmgvKVHaQryeCyPOWhVOpY4ggK7Qjl5SMeAihZP
-         jy3oGpDc2kVAhA9VWGtj1avdgeFeoklvlA7dpexVAAMv3NXD1DD/7B58m41V8iR/BO
-         4i9sOyYdHTwOhDPo6A31I1piiLr+tf7fFX9cJp64DFUSfiDRAOtFb2HDVzFKmJBc+q
-         j8oUXEo339Stf9QrEwXd3vojiQtsz2NzLsC/qyv7Nhr+8XHa5vQUvdjjC6zlA/MZq8
-         p7aJQOnKAemQ/++YcHfTTnGpvYy+0AfcvEWUXtckbCGf5fiS1vt0i+HH5yZU5YbQ73
-         6UDpxuDs2FY2w==
-Date:   Wed, 14 Sep 2022 15:55:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm tree with the execve tree
-Message-ID: <20220914155533.70c10493@canb.auug.org.au>
+        Wed, 14 Sep 2022 01:55:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D655AC75;
+        Tue, 13 Sep 2022 22:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663134938; x=1694670938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/Kok8QcTrx1w4Mm33cZGUh8x9aDy/k6r+LHmTh5k4OU=;
+  b=Sc/Tu5y+bng0mRC2fLJlDUMSk9u+y2ma9wKLdOHconIsk2jUVAUE+9QM
+   CLDDz4E7dgRe1J9xRzc/sIc5vtnFnO70EYFWLt9g5qp5UCcD63LuXZ2Cg
+   7PzbvDo7Y98DmxsfzWapQRxlmUgGo6qlLltr4kPoqlFoNreGs7wcUQhfN
+   iHB3lWhzGLTSrET9g8ULzHL9a35NO/Dgcr7hNshAQVy+S+uYxas4LYMGt
+   mP4LzkrabIB2DA1k71kFBCz8E5J+/uv7TkEOovWs8SYtIld2IZ2/S1XJF
+   WOynVTLxcxQAJ2Qwt1ax63D/1IUW0KBopvUuAIGbIh3KOeRTJiKeiOiAd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="295928329"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="295928329"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 22:55:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="705838950"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Sep 2022 22:55:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 9F1C7F7; Wed, 14 Sep 2022 08:55:50 +0300 (EEST)
+Date:   Wed, 14 Sep 2022 08:55:50 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
+        mario.limonciello@amd.com, timvp@google.com,
+        linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Thompson <davthompson@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Len Brown <lenb@kernel.org>,
+        Lu Wei <luwei32@huawei.com>, Paolo Abeni <pabeni@redhat.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 05/13] gpiolib: acpi: Add wake_capable parameter to
+ acpi_dev_gpio_irq_get_by
+Message-ID: <YyFs5q67RYR2aAy7@black.fi.intel.com>
+References: <20220912221317.2775651-1-rrangel@chromium.org>
+ <20220912160931.v2.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p._F.fVWJ=gm4OzKmoZmt6Y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912160931.v2.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+On Mon, Sep 12, 2022 at 04:13:09PM -0600, Raul E Rangel wrote:
+> +int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name,
+> +			     int index, int *wake_capable)
 
-Today's linux-next merge of the mm tree got a conflict in:
-
-  fs/exec.c
-
-between commit:
-
-  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
-k+exec"")
-
-from the execve tree and commit:
-
-  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
-k+exec"")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/exec.c
-index 3f69e5c1a622,afe55d0c3bcf..000000000000
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@@ -1023,9 -1029,12 +1026,9 @@@ static int exec_mmap(struct mm_struct *
-  	activate_mm(active_mm, mm);
-  	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
-  		local_irq_enable();
-- 	tsk->mm->vmacache_seqnum =3D 0;
-- 	vmacache_flush(tsk);
-  	task_unlock(tsk);
-+ 	lru_gen_use_mm(mm);
-+=20
- -	if (vfork)
- -		timens_on_fork(tsk->nsproxy, tsk);
- -
-  	if (old_mm) {
-  		mmap_read_unlock(old_mm);
-  		BUG_ON(active_mm !=3D old_mm);
-
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhbNUACgkQAVBC80lX
-0GzTAAf+JMjF0JAOaFmsc7XY38c81PJBCnKsganJrIS4B6tuqBRe34UTkF7flP4u
-Ffd3E9tNRnKcovsczVcspnfhUagw7AevXy/xoZMZtmlxMkrDULUe7CftQSEhg09K
-zLMxrxILtO+AVSyooche4131G/GtMItzUXLU7GnMtuMDMxMn1ZSUS8R/6FgXtxfv
-GKh4EAT+ZEe+mg4uFRD0n1rwZwqetsk2MuHqM3rqxjY2GS0Ua4zUEFThc6Da6nID
-2YXIa0mwfEiVsOsa6kRpQPJuTjjyFsokaRGTfcnoTPnUIM0Rk5ubMKsv438LogpV
-LEIucL8uKGkSMxNsKr/mhwW2VddEow==
-=DZx5
------END PGP SIGNATURE-----
-
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y--
+Here too bool.
