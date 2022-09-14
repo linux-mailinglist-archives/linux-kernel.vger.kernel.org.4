@@ -2,252 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B05B7E05
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B965B7E0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiINAx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 20:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S229802AbiINAzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 20:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiINAxZ (ORCPT
+        with ESMTP id S229493AbiINAzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 20:53:25 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65756171F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:53:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id s18so7581111plr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:53:22 -0700 (PDT)
+        Tue, 13 Sep 2022 20:55:43 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2338F252BB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:55:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u132so13323950pfc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=s7D2/n8L9/xlIj+hVN8GIcFvSkrDNM1KPpmGzxvTo/g=;
-        b=MjaKzwDN2gr+IBBkEtU4oKISjvr8IhyssXGGoZPdWL2vQ+Kc+kf4lIHFyxRCWZxe/6
-         tPIKyV/waFHwFtUW/s0IxrR+yzMbZxhaCYWJUbDrsoCjVHcCT8QPKI5L2jMpyVKpqoLr
-         C+lgLIDjYk2a/JgjpmDcGPYLaDXheZQ/5h1PjIB5ZCKPvMRzfJ8fo/CVu5Fhg2mDsWUR
-         UX3ZA5bX0+YXd0G5eaOP85mFoLnXoI/CIQvXLbCSUCqTxwx4dyJ1Ml2KvZqi7Zryg82w
-         ONSiaucCEFXmPb67TjV6JShvU2ZWb80s5L/8+SL7vNTx5v4zxFiLIiEZ48eG+5CvZ1Ka
-         0Kwg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=5vV4CilzLiWjPs5xReufWS8ipvCGneLgr8C9TBkLjw0=;
+        b=nhcftbz0F+5FieX2xbd8segHsRucGIuOwKvgYMu9lmxrssK8PpwDOXEh1Rw+Esp+dz
+         MilZoQWwJc4vabWLbqbTFAMTOE7qQ9msTC0w/k0ZfPeJCRS1vgzLelZxU3M2p0uFJ5QU
+         Cx6QDJlBXVOWNqdDgdJ4l/sQx4KTcvP2b1hrc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=s7D2/n8L9/xlIj+hVN8GIcFvSkrDNM1KPpmGzxvTo/g=;
-        b=V4MTUcKOUoB/sHThHoE4W+O/ai/2Pof0aoCPqHxnydXU/ju/xRBgugew38BObEKFTO
-         4VsAejd6jBBhz4KtN1BAy9ovIZQ7/fG+BQagH3kE9DdTwFc8ykwb4Wgt90fqIn4jmQA1
-         Q/AmG5MRJmIh4a0c1qdNbnxU2btnwLx8sdKdpcqUWwjiLTR/j6BVVbGmpg7mFA1YG8qj
-         diCGrcrxGHGYQTzqIVmWGr0mkPTA1BJJfUk72G5Od0xxL/OGUesG1uDpekCMfxLTa9W7
-         OylSozz1B09KqiR+SwEpPUiM1jcWg/CSAGsy2MRj1eSRMAMirDgbItMJkfRlLE8xxiDs
-         PdsA==
-X-Gm-Message-State: ACgBeo3E+Q+O0/qh0Ldr150wU3C9UxzewEyWGGcF80XQ2xWVsftVQ7AL
-        sUAwyva1M/HTb3gZbAloJg35gA==
-X-Google-Smtp-Source: AA6agR4y+7kaPNq1wJxvL/FXkrUH4iSFTMmdqNsD7Bn0tcQWSLnAZOkP8N3MaRfk0obT8kJGNMdoFA==
-X-Received: by 2002:a17:902:b616:b0:178:2321:8dbb with SMTP id b22-20020a170902b61600b0017823218dbbmr17687773pls.47.1663116801745;
-        Tue, 13 Sep 2022 17:53:21 -0700 (PDT)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id 8-20020a621408000000b0053e85a4a2ccsm8532407pfu.26.2022.09.13.17.53.20
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5vV4CilzLiWjPs5xReufWS8ipvCGneLgr8C9TBkLjw0=;
+        b=0HURuaXaELwRRjHbrmMyQRVffRhAywNSX4gn+D9V35wZb+gjOPHNx6YWJXEzlQol1S
+         RD9PEQ++UXvUNmUUAKnWGslxX6YCYd85JeTpjLUBG7keQB/NthDmlXTSt5/MQur3H2hO
+         krHlz5fO/q+4Udgznud+3FmwCYrXAF3/H9K2AvZwxZkeyM15D0T+8rJiYNgJzUyS750D
+         O5wgR9o/fpmDeutNIyFTEmJ/bYATH6GCWXNnobF7KIN5EfP3iKTRHjhpjfvGakf5U6Yc
+         flPdnodukYgiRL85HmAYz1EWLIk7q15hviUoGW768Z0e/3zNMrq5i2qFr1ozZ/GobOon
+         7blg==
+X-Gm-Message-State: ACgBeo1vPTfM37y2JufNbmSndCK1SKxL6bG/ssQEPUA5xzH0qSBWlHBF
+        UWzLnrh93KtPozU0tnV6HzDtTQ==
+X-Google-Smtp-Source: AA6agR48k91enu7+uh/AQ4joZbHAihyt0j9hntaWvaNHhQzbmNpt+4siuaaNR8At8OdvW016llHErg==
+X-Received: by 2002:a63:fb0e:0:b0:434:efad:10c8 with SMTP id o14-20020a63fb0e000000b00434efad10c8mr28905882pgh.316.1663116941537;
+        Tue, 13 Sep 2022 17:55:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i32-20020a17090a3da300b001fbb0f0b00fsm7846674pjc.35.2022.09.13.17.55.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 17:53:21 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 17:53:17 -0700
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/14] KVM: arm64: Make changes block->table to leaf PTEs
- parallel-aware
-Message-ID: <YyEl/UILu+OAP5zA@google.com>
-References: <20220830194132.962932-1-oliver.upton@linux.dev>
- <20220830195102.964724-1-oliver.upton@linux.dev>
- <YyElq0c6WD1zh7Lu@google.com>
+        Tue, 13 Sep 2022 17:55:40 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 17:55:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jason@zx2c4.com
+Cc:     syzbot <syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Subject: Re: [syzbot] linux-next test error: WARNING in set_peer
+Message-ID: <202209131753.D1BDA803@keescook>
+References: <00000000000060a74405e8945759@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YyElq0c6WD1zh7Lu@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <00000000000060a74405e8945759@google.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 05:51:55PM -0700, Ricardo Koller wrote:
-> On Tue, Aug 30, 2022 at 07:51:01PM +0000, Oliver Upton wrote:
-> > In order to service stage-2 faults in parallel, stage-2 table walkers
-> > must take exclusive ownership of the PTE being worked on. An additional
-> > requirement of the architecture is that software must perform a
-> > 'break-before-make' operation when changing the block size used for
-> > mapping memory.
-> > 
-> > Roll these two concepts together into helpers for performing a
-> > 'break-before-make' sequence. Use a special PTE value to indicate a PTE
-> > has been locked by a software walker. Additionally, use an atomic
-> > compare-exchange to 'break' the PTE when the stage-2 page tables are
-> > possibly shared with another software walker. Elide the DSB + TLBI if
-> > the evicted PTE was invalid (and thus not subject to break-before-make).
-> > 
-> > All of the atomics do nothing for now, as the stage-2 walker isn't fully
-> > ready to perform parallel walks.
-> > 
-> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> > ---
-> >  arch/arm64/kvm/hyp/pgtable.c | 87 +++++++++++++++++++++++++++++++++---
-> >  1 file changed, 82 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > index 61a4437c8c16..71ae96608752 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -49,6 +49,12 @@
-> >  #define KVM_INVALID_PTE_OWNER_MASK	GENMASK(9, 2)
-> >  #define KVM_MAX_OWNER_ID		1
-> >  
-> > +/*
-> > + * Used to indicate a pte for which a 'break-before-make' sequence is in
-> > + * progress.
-> > + */
-> > +#define KVM_INVALID_PTE_LOCKED		BIT(10)
-> > +
-> >  struct kvm_pgtable_walk_data {
-> >  	struct kvm_pgtable		*pgt;
-> >  	struct kvm_pgtable_walker	*walker;
-> > @@ -586,6 +592,8 @@ struct stage2_map_data {
-> >  
-> >  	/* Force mappings to page granularity */
-> >  	bool				force_pte;
-> > +
-> > +	bool				shared;
-> >  };
-> >  
-> >  u64 kvm_get_vtcr(u64 mmfr0, u64 mmfr1, u32 phys_shift)
-> > @@ -691,6 +699,11 @@ static bool stage2_pte_is_counted(kvm_pte_t pte)
-> >  	return kvm_pte_valid(pte) || kvm_invalid_pte_owner(pte);
-> >  }
-> >  
-> > +static bool stage2_pte_is_locked(kvm_pte_t pte)
-> > +{
-> > +	return !kvm_pte_valid(pte) && (pte & KVM_INVALID_PTE_LOCKED);
-> > +}
-> > +
-> >  static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bool shared)
-> >  {
-> >  	if (!shared) {
-> > @@ -701,6 +714,69 @@ static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bo
-> >  	return cmpxchg(ptep, old, new) == old;
-> >  }
-> >  
-> > +/**
-> > + * stage2_try_break_pte() - Invalidates a pte according to the
-> > + *			    'break-before-make' requirements of the
-> > + *			    architecture.
-> > + *
-> > + * @ptep: Pointer to the pte to break
-> > + * @old: The previously observed value of the pte
-> > + * @addr: IPA corresponding to the pte
-> > + * @level: Table level of the pte
-> > + * @shared: true if the stage-2 page tables could be shared by multiple software
-> > + *	    walkers
-> > + *
-> > + * Returns: true if the pte was successfully broken.
-> > + *
-> > + * If the removed pte was valid, performs the necessary serialization and TLB
-> > + * invalidation for the old value. For counted ptes, drops the reference count
-> > + * on the containing table page.
-> > + */
-> > +static bool stage2_try_break_pte(kvm_pte_t *ptep, kvm_pte_t old, u64 addr, u32 level,
-> > +				 struct stage2_map_data *data)
-> > +{
-> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-> > +
-> > +	if (stage2_pte_is_locked(old)) {
-> > +		/*
-> > +		 * Should never occur if this walker has exclusive access to the
-> > +		 * page tables.
-> > +		 */
-> > +		WARN_ON(!data->shared);
-> > +		return false;
-> > +	}
-> 
-> The above check is not needed as the cmpxchg() will return false if the
-> old pte is equal to "new" (KVM_INVALID_PTE_LOCKED).
-> 
-> > +
-> > +	if (!stage2_try_set_pte(ptep, old, KVM_INVALID_PTE_LOCKED, data->shared))
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * Perform the appropriate TLB invalidation based on the evicted pte
-> > +	 * value (if any).
-> > +	 */
-> > +	if (kvm_pte_table(old, level))
-> > +		kvm_call_hyp(__kvm_tlb_flush_vmid, data->mmu);
-> > +	else if (kvm_pte_valid(old))
-> > +		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, data->mmu, addr, level);
-> > +
-> > +	if (stage2_pte_is_counted(old))
-> > +		mm_ops->put_page(ptep);
-> > +
-> > +	return true;
-> > +}
-> > +
-> > +static void stage2_make_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new,
-> > +			    struct stage2_map_data *data)
-> > +{
+On Tue, Sep 13, 2022 at 12:51:42PM -0700, syzbot wrote:
+> memcpy: detected field-spanning write (size 28) of single field "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
 
-nit: old is not used
+This is one way to fix it:
 
-> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-> > +
-> > +	WARN_ON(!stage2_pte_is_locked(*ptep));
-> > +
-> > +	if (stage2_pte_is_counted(new))
-> > +		mm_ops->get_page(ptep);
-> > +
-> > +	smp_store_release(ptep, new);
-> > +}
-> > +
-> >  static void stage2_put_pte(kvm_pte_t *ptep, struct kvm_s2_mmu *mmu, u64 addr,
-> >  			   u32 level, struct kvm_pgtable_mm_ops *mm_ops)
-> >  {
-> > @@ -836,17 +912,18 @@ static int stage2_map_walk_leaf(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
-> >  	if (!childp)
-> >  		return -ENOMEM;
-> >  
-> > +	if (!stage2_try_break_pte(ptep, *old, addr, level, data)) {
-> > +		mm_ops->put_page(childp);
-> > +		return -EAGAIN;
-> > +	}
-> > +
-> >  	/*
-> >  	 * If we've run into an existing block mapping then replace it with
-> >  	 * a table. Accesses beyond 'end' that fall within the new table
-> >  	 * will be mapped lazily.
-> >  	 */
-> > -	if (stage2_pte_is_counted(pte))
-> > -		stage2_put_pte(ptep, data->mmu, addr, level, mm_ops);
-> > -
-> >  	new = kvm_init_table_pte(childp, mm_ops);
-> > -	mm_ops->get_page(ptep);
-> > -	smp_store_release(ptep, new);
-> > +	stage2_make_pte(ptep, *old, new, data);
-> >  	*old = new;
-> >  
-> >  	return 0;
-> > -- 
-> > 2.37.2.672.g94769d06f0-goog
-> > 
+diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
+index 0c0644e762e5..dbbeba216530 100644
+--- a/drivers/net/wireguard/netlink.c
++++ b/drivers/net/wireguard/netlink.c
+@@ -434,16 +434,16 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
+ 	}
+ 
+ 	if (attrs[WGPEER_A_ENDPOINT]) {
+-		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
++		struct endpoint *raw = nla_data(attrs[WGPEER_A_ENDPOINT]);
+ 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
+ 
+ 		if ((len == sizeof(struct sockaddr_in) &&
+-		     addr->sa_family == AF_INET) ||
++		     raw->addr.sa_family == AF_INET) ||
+ 		    (len == sizeof(struct sockaddr_in6) &&
+-		     addr->sa_family == AF_INET6)) {
++		     raw->addr.sa_family == AF_INET6)) {
+ 			struct endpoint endpoint = { { { 0 } } };
+ 
+-			memcpy(&endpoint.addr, addr, len);
++			memcpy(&endpoint.addrs, &raw->addrs, len);
+ 			wg_socket_set_peer_endpoint(peer, &endpoint);
+ 		}
+ 	}
+diff --git a/drivers/net/wireguard/peer.h b/drivers/net/wireguard/peer.h
+index 76e4d3128ad4..4fbe7940828b 100644
+--- a/drivers/net/wireguard/peer.h
++++ b/drivers/net/wireguard/peer.h
+@@ -19,11 +19,13 @@
+ struct wg_device;
+ 
+ struct endpoint {
+-	union {
+-		struct sockaddr addr;
+-		struct sockaddr_in addr4;
+-		struct sockaddr_in6 addr6;
+-	};
++	struct_group(addrs,
++		union {
++			struct sockaddr addr;
++			struct sockaddr_in addr4;
++			struct sockaddr_in6 addr6;
++		};
++	);
+ 	union {
+ 		struct {
+ 			struct in_addr src4;
+
+
+diffoscope shows the bounds check gets updated to the full union size:
+│ -     cmp    $0x11,%edx
+│ +     cmp    $0x1d,%edx
+
+and the field name changes in the warning:
+$ strings clang/drivers/net/wireguard/netlink.o.after | grep ^field
+field "&endpoint.addrs" at drivers/net/wireguard/netlink.c:446
+
+
+-- 
+Kees Cook
