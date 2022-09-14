@@ -2,265 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327C05B8EF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FF65B8F04
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiINSiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S229718AbiINSqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiINSiL (ORCPT
+        with ESMTP id S229473AbiINSqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:38:11 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95B574E17;
-        Wed, 14 Sep 2022 11:38:10 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 9so18455462ljr.2;
-        Wed, 14 Sep 2022 11:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=78CnzaAPH4z89FBxFwtTHbWcXI9P3dep9t1OMRvZpng=;
-        b=AET+Preuyw0r7MANwiGVh8fhlMt2pbWqsDfNC+8RxBdroWgUIc44Ll3xSO9CYGGbau
-         iTf85uuXCQtGPW36YMAlCOtBuGRrTR6e5wuJwYSP/OU5KZ/mcQcf3lssQjdti1RRqp/T
-         7Dg/LeeVae0Eai9LMY6Jkaj94D+Z2i/pN54emEK5GlRjjIxl5YbbQHcuUS22IrrewlvK
-         o3OgATaAbaEABHeYYMHHTVg+Ar3pRUsNx48Bp8WKYMY84RtGJJdrd4wZrh21DMB00hgL
-         1T7UNa1B0zaBCiDhsa6CAAe2NxypqzBlHGzf412dArDxkzM3+tNJAR1H06OOerGoMRXN
-         H4HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=78CnzaAPH4z89FBxFwtTHbWcXI9P3dep9t1OMRvZpng=;
-        b=RvjabqnqF4nkzrmptaJoOV+OPqmLCqbCQZ2NasSEZvD3sOzYctmYmjMovTCpAhqHJ6
-         ERbhaEu09z4v9E9GGXygdtvoPsLbOu2ngW71S7kHoC7hajs4bvndmQdZtqEtFN5WgG8V
-         SZx28zfyNah9LntSM5l7hh3+OEJUCZ0lthHH+K/VvmJ72ElHWwVlNu9Nvx4/yPJQ6Za0
-         pHuyPry7fX8ucRqYfvDtWXiMl4ydqBzjEDNU9wsnvcFD0cm5mNX83j9DB6YUh1V1NnYH
-         43ZjyTxkW5cbqWBIWqNNDGfhwDAMzDAUURKM5qhWSYb7Ug/SnUzs8tEFIdr8x6p/SpIb
-         M0WQ==
-X-Gm-Message-State: ACgBeo0UCc1rcvOXgvi3H3wjUGSv3N8cYP7pK7lUaCratMeFkJiLfs2/
-        i1Y3bNAv3DPSReKrRV5Stko=
-X-Google-Smtp-Source: AA6agR5yMPw4sfc/ilrCzNJbQpRxEsraQo4n/QorEbeHZAqQQwwLjNmj8VH5v2VxywDZ9W54idfzyg==
-X-Received: by 2002:a2e:bf23:0:b0:26c:83e:b4d3 with SMTP id c35-20020a2ebf23000000b0026c083eb4d3mr4700513ljr.282.1663180688737;
-        Wed, 14 Sep 2022 11:38:08 -0700 (PDT)
-Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id a6-20020a05651c010600b0026c079006bcsm2002102ljb.118.2022.09.14.11.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 11:38:07 -0700 (PDT)
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH] HID: Add driver for PhoenixRC Flight Controller
-Date:   Wed, 14 Sep 2022 20:43:45 +0200
-Message-Id: <20220914184345.270456-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 14 Sep 2022 14:46:13 -0400
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72347C322;
+        Wed, 14 Sep 2022 11:46:11 -0700 (PDT)
+Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oYXOi-0004Uw-Pq; Wed, 14 Sep 2022 20:46:08 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oYXOh-000nwv-1m;
+        Wed, 14 Sep 2022 20:46:07 +0200
+Message-ID: <c4dbfd1eea23b4495bb310dc78d174ef65adfc28.camel@decadent.org.uk>
+Subject: Re: [PATCH 4.19 77/79] x86/nospec: Fix i386 RSB stuffing
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Date:   Wed, 14 Sep 2022 20:46:00 +0200
+In-Reply-To: <20220913140352.600717282@linuxfoundation.org>
+References: <20220913140348.835121645@linuxfoundation.org>
+         <20220913140352.600717282@linuxfoundation.org>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-s3E3CzPI00VjpMVybfvG"
+User-Agent: Evolution 3.45.3-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 213.219.160.184
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PhoenixRC is a controller with 8 channels for use in flight
-simulators.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- MAINTAINERS            |   6 +++
- drivers/hid/Kconfig    |   9 ++++
- drivers/hid/Makefile   |   1 +
- drivers/hid/hid-ids.h  |   1 +
- drivers/hid/hid-pxrc.c | 112 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 129 insertions(+)
- create mode 100644 drivers/hid/hid-pxrc.c
+--=-s3E3CzPI00VjpMVybfvG
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..2f70b7d2b4b9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8907,6 +8907,12 @@ L:	linux-input@vger.kernel.org
- S:	Supported
- F:	drivers/hid/hid-playstation.c
- 
-+HID PHOENIX RC FLIGHT CONTROLLER
-+M:	Marcus Folkesson <marcus.folkesson@gmail.com>
-+L:	linux-input@vger.kernel.org
-+S:	Maintained
-+F:	drivers/hid/hid-pxrc.c
-+
- HID SENSOR HUB DRIVERS
- M:	Jiri Kosina <jikos@kernel.org>
- M:	Jonathan Cameron <jic23@kernel.org>
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 70da5931082f..8ca58141d5be 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -950,6 +950,15 @@ config PLAYSTATION_FF
- 	  Say Y here if you would like to enable force feedback support for
- 	  PlayStation game controllers.
- 
-+config HID_PXRC
-+       tristate "PhoenixRC HID Flight Controller"
-+       depends on HID
-+       help
-+       Support for PhoenixRC HID Flight Controller, a 8-axis flight controller.
-+
-+       To compile this driver as a module, choose M here: the
-+       module will be called hid-pxrc.
-+
- config HID_RAZER
- 	tristate "Razer non-fully HID-compliant devices"
- 	depends on HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index cac2cbe26d11..b3748b97d5b5 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -101,6 +101,7 @@ hid-picolcd-$(CONFIG_DEBUG_FS)		+= hid-picolcd_debugfs.o
- obj-$(CONFIG_HID_PLANTRONICS)	+= hid-plantronics.o
- obj-$(CONFIG_HID_PLAYSTATION)	+= hid-playstation.o
- obj-$(CONFIG_HID_PRIMAX)	+= hid-primax.o
-+obj-$(CONFIG_HID_PXRC)		+= hid-pxrc.o
- obj-$(CONFIG_HID_RAZER)	+= hid-razer.o
- obj-$(CONFIG_HID_REDRAGON)	+= hid-redragon.o
- obj-$(CONFIG_HID_RETRODE)	+= hid-retrode.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index d9eb676abe96..30ac56cb238b 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1381,6 +1381,7 @@
- 
- #define USB_VENDOR_ID_MULTIPLE_1781	0x1781
- #define USB_DEVICE_ID_RAPHNET_4NES4SNES_OLD	0x0a9d
-+#define USB_DEVICE_ID_PHOENIXRC        0x0898
- 
- #define USB_VENDOR_ID_DRACAL_RAPHNET	0x289b
- #define USB_DEVICE_ID_RAPHNET_2NES2SNES	0x0002
-diff --git a/drivers/hid/hid-pxrc.c b/drivers/hid/hid-pxrc.c
-new file mode 100644
-index 000000000000..b0e517f9cde7
---- /dev/null
-+++ b/drivers/hid/hid-pxrc.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * HID driver for PhoenixRC 8-axis flight controller
-+ *
-+ * Copyright (C) 2022 Marcus Folkesson <marcus.folkesson@gmail.com>
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+
-+#include "hid-ids.h"
-+
-+struct pxrc_priv {
-+	u8 slider;
-+	u8 dial;
-+	bool alternate;
-+};
-+
-+static __u8 pxrc_rdesc_fixed[] = {
-+	0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
-+	0x09, 0x04,        // Usage (Joystick)
-+	0xA1, 0x01,        // Collection (Application)
-+	0x09, 0x01,        //   Usage (Pointer)
-+	0xA1, 0x00,        //   Collection (Physical)
-+	0x09, 0x30,        //     Usage (X)
-+	0x09, 0x36,        //     Usage (Slider)
-+	0x09, 0x31,        //     Usage (Y)
-+	0x09, 0x32,        //     Usage (Z)
-+	0x09, 0x33,        //     Usage (Rx)
-+	0x09, 0x34,        //     Usage (Ry)
-+	0x09, 0x35,        //     Usage (Rz)
-+	0x09, 0x37,        //     Usage (Dial)
-+	0x15, 0x00,        //     Logical Minimum (0)
-+	0x26, 0xFF, 0x00,  //     Logical Maximum (255)
-+	0x35, 0x00,        //     Physical Minimum (0)
-+	0x46, 0xFF, 0x00,  //     Physical Maximum (255)
-+	0x75, 0x08,        //     Report Size (8)
-+	0x95, 0x08,        //     Report Count (8)
-+	0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-+	0xC0,              //   End Collection
-+	0xC0,              // End Collection
-+};
-+
-+static __u8 *pxrc_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-+				unsigned int *rsize)
-+{
-+	hid_info(hdev, "fixing up PXRC report descriptor\n");
-+	*rsize = sizeof(pxrc_rdesc_fixed);
-+	return pxrc_rdesc_fixed;
-+}
-+
-+static int pxrc_raw_event(struct hid_device *hdev, struct hid_report *report,
-+	 u8 *data, int size)
-+{
-+	struct pxrc_priv *priv = hid_get_drvdata(hdev);
-+
-+	if (priv->alternate)
-+		priv->slider = data[7];
-+	else
-+		priv->dial = data[7];
-+
-+	data[1] = priv->slider;
-+	data[7] = priv->dial;
-+
-+	priv->alternate = !priv->alternate;
-+	return 0;
-+}
-+
-+static int pxrc_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	int ret;
-+	struct pxrc_priv *priv;
-+
-+	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+	hid_set_drvdata(hdev, priv);
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "parse failed\n");
-+		return ret;
-+	}
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hid_device_id pxrc_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MULTIPLE_1781, USB_DEVICE_ID_PHOENIXRC) },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(hid, pxrc_devices);
-+
-+static struct hid_driver pxrc_driver = {
-+	.name = "hid-pxrc",
-+	.id_table = pxrc_devices,
-+	.report_fixup = pxrc_report_fixup,
-+	.probe = pxrc_probe,
-+	.raw_event = pxrc_raw_event,
-+};
-+module_hid_driver(pxrc_driver);
-+
-+MODULE_AUTHOR("Marcus Folkesson <marcus.folkesson@gmail.com>");
-+MODULE_DESCRIPTION("HID driver for PXRC 8-axis flight controller");
-+MODULE_LICENSE("GPL");
--- 
-2.37.1
+On Tue, 2022-09-13 at 16:07 +0200, Greg Kroah-Hartman wrote:
+> From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+>=20
+> From: Peter Zijlstra <peterz@infradead.org>
+>=20
+> commit 332924973725e8cdcc783c175f68cf7e162cb9e5 upstream.
 
+This should have only "From: Peter Zijlstra".
+
+Ben.
+
+>=20
+> Turns out that i386 doesn't unconditionally have LFENCE, as such the
+> loop in __FILL_RETURN_BUFFER isn't actually speculation safe on such
+> chips.
+>=20
+> Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
+> Reported-by: Ben Hutchings <ben@decadent.org.uk>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Link: https://lkml.kernel.org/r/Yv9tj9vbQ9nNlXoY@worktop.programming.kick=
+s-ass.net
+> [bwh: Backported to 4.19/5.4:
+>  - __FILL_RETURN_BUFFER takes an sp parameter
+>  - Open-code __FILL_RETURN_SLOT]
+> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  arch/x86/include/asm/nospec-branch.h |   14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>=20
+> --- a/arch/x86/include/asm/nospec-branch.h
+> +++ b/arch/x86/include/asm/nospec-branch.h
+> @@ -35,6 +35,7 @@
+>   * the optimal version =E2=80=94 two calls, each with their own speculat=
+ion
+>   * trap should their return address end up getting used, in a loop.
+>   */
+> +#ifdef CONFIG_X86_64
+>  #define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+>  	mov	$(nr/2), reg;			\
+>  771:						\
+> @@ -55,6 +56,19 @@
+>  	add	$(BITS_PER_LONG/8) * nr, sp;	\
+>  	/* barrier for jnz misprediction */	\
+>  	lfence;
+> +#else
+> +/*
+> + * i386 doesn't unconditionally have LFENCE, as such it can't
+> + * do a loop.
+> + */
+> +#define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+> +	.rept nr;				\
+> +	call	772f;				\
+> +	int3;					\
+> +772:;						\
+> +	.endr;					\
+> +	add	$(BITS_PER_LONG/8) * nr, sp;
+> +#endif
+> =20
+>  /* Sequence to mitigate PBRSB on eIBRS CPUs */
+>  #define __ISSUE_UNBALANCED_RET_GUARD(sp)	\
+>=20
+>=20
+
+--=20
+Ben Hutchings
+It is easier to change the specification to fit the program
+than vice versa.
+
+--=-s3E3CzPI00VjpMVybfvG
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmMiIWgACgkQ57/I7JWG
+EQlhxA//e6whw2n1t7ggWh9/rK0zVn5WMnCZyUqgflfuEJtWb3th6ANv49ZT/gJe
+EpZG0dnJcfRDZQ1IpkaG+Wg6Oz5quUuj1o7Rfym2pHAiVOBDNMV12Rt/7DI5IqEM
+Qu9oIAqOjWk21xkPPavVVdHS5lbNQUQeNUfKkxTFyuzrPWG1OFC1sngGnO3xyiq8
+zLScBPHwy5vYPSjzLj398OEiGVbV+PKoL1XMPQCyInP1X+nUQVfb8OMzDJwbVbMk
+mtkvDGbxiy5/yE8JAGMe6TLy8NDW267a/9NsQQ/8HfZcGjiUaD9y5Z+BUAylBjCU
+NbZxC0dVsI8vboCPo2lgspUuxRzGPFwBh7LNf3AGIo4YHnH0bLGQSApz1Q035uar
+oQ/Q0ZzTCbUzOA0+EiOJ3qpK2S7QIUA9sHI3snheztKhKOIlg+04X9h4H17hCuyR
+quDqFSPkZlBNmZrr1H/9VJFYrgEXjogLHWJRHdcX1B9XyCxKifcdpFQ0X+yf1cnL
+Vr8EEvvgJHHY+jnl45UqOiVWaArLBwuoJSNGz4gFWCJS3M4hEJcDFikm5UfkAfhC
+Jg6ZsMHYun0P4ZflaZ8BX5SIu9ZNp/h/GEZxA81UA8KP8GQEtWPA/MDY3YUI6f4E
+6YZ6qX07zJw/a1iQeLxXzHVhDgnrq/9bXWIuwzJlrNA708jCKno=
+=MPyT
+-----END PGP SIGNATURE-----
+
+--=-s3E3CzPI00VjpMVybfvG--
