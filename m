@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393555B8844
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040D85B8849
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiINMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        id S229740AbiINMc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiINMcF (ORCPT
+        with ESMTP id S229498AbiINMc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:32:05 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F4836DC9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:32:04 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so14309526pjl.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:32:04 -0700 (PDT)
+        Wed, 14 Sep 2022 08:32:56 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA33736DC9;
+        Wed, 14 Sep 2022 05:32:55 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c198so14749619pfc.13;
+        Wed, 14 Sep 2022 05:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=axYPoRUhqwCbtWfWpnfaxG81kXlH/8IOYnfhTtp6nB0=;
-        b=GCqSc2a+78bcoxCTglw1LN+/1Eb0Mg0EXazjToEt20tKD/cI6/m91jRRkqB76nSiAH
-         IZJatkQ10iy1mNogDw6rpYaYrSMDa6gbT09Kc2Up8jt4MwRX8YV5f89/36+q1Pdv12pQ
-         UaPDju5etLIl4n/zGL4beKcJS7kBRklxO2Px0=
+        bh=zV9/pNlaNjyK2el6e1fRNtIC3GGj80c975ZOZ3QDzu8=;
+        b=fpjDhGArOd00NcVhciHxdWcYBZ4cGta3ByCHJ6wwiK3ZsL1+dcCyu5yaTH1dUc4RVo
+         bJAnDB8HxETQ9AvtntRHw/L8aGAQ246/JDr48F+mINd4HtojNjF+yZIPFkU+dYFcKqY0
+         Jf5j3C1jnmbM8ouqSc2jCK/3uhy5mmXq97F7C2TOEPcm3Qxqsr+PxcNWJ3PV7+Fb+A/D
+         lC58rhZRnzuoPFbwrk73LpPxsSwoyW3nj+HyQK1OtHuXrnTjJSDRUWwRUZ6gBeEopqSV
+         9DFSMcSYWp7Eui55jM/daGA9YXBP+W+QDIOb6uI73nTZj5sPTOBzbr15FvdYIScA9ruj
+         JvBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=axYPoRUhqwCbtWfWpnfaxG81kXlH/8IOYnfhTtp6nB0=;
-        b=ueoXhCSzls4pUvhI7ZPsCJL7/Q6VUS8k+rOBwv0XS4p1rKj/zPTNfSDp2vmufLs/25
-         kqCJlsdaW9UG6Sk51dht4nAr+oB6amkkkRl88Y0VtSKg/u5cB7DTAT0AP74zdGXIbFXH
-         QsHCAuz4D2LaG8DOB83v3371YVQ5/vUI9b7kNCWPFG88vy9t8bu6Y5ghei2/qD3KBRrG
-         3OC3iHy+af0Q/5S4+Y5sW8nftWgWAKMfDBQeWcHL5sP9uUwRyy+7UKB1K0ccf0wo6Tfb
-         wtIy8pwQNXZJAOsv+o0JSzZSGREqg6P6WbfbYqEqg6/9T+lpt2EnYM37DQNCPDExrOVj
-         Rk4g==
-X-Gm-Message-State: ACgBeo2Om2Dh10sUsR7XhA7t/NipGnnu6fDZDM7vnEF6FYDemQxHwQFQ
-        USb4c6z4A4y1h1IXcGNE1sEoMCTyYFsd4Q==
-X-Google-Smtp-Source: AA6agR4Rv9AwcstSQHZdJtcKd9dL6V/NSNnmRrMuSsih1LiWUEzNLMRsvUGJ7yRVOfXuPmyuHXlXHA==
-X-Received: by 2002:a17:902:7602:b0:172:a064:4a2f with SMTP id k2-20020a170902760200b00172a0644a2fmr35916188pll.56.1663158724017;
-        Wed, 14 Sep 2022 05:32:04 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:e5f0:cfaf:bc8c:558e])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b0017854cee6ebsm2263266plg.72.2022.09.14.05.31.59
+        bh=zV9/pNlaNjyK2el6e1fRNtIC3GGj80c975ZOZ3QDzu8=;
+        b=zz5VBPffGjSIv98BwjwWsAjecsl+P9AR1kvo4Wes+ve9oNqaGOi4GGwBrgByEli869
+         ItPUdCfU4KQr7lQYSxu467hginxxm399X52Q4FWEhj+aZ71ivir3AB7l4Pscl959loM9
+         NvhucXda79bCeqIya592soc5P7Ue3oWsNQyo8kCQpms4UuC1/C7VmQEtrCXQLw+xivBz
+         xMIpIneLUiQGz3U149KtgSPm535QQLgn+BRKBBHsAJlMM2rpNeMaUddm4BlGFp5oGeEB
+         T/E0OjlilMtUDA/l6bRXtmE18dXpHFf0UL4Kpf8zYrd3f07NA6gMqVujRCYm3BW0Z3GI
+         6knw==
+X-Gm-Message-State: ACgBeo0WDN3/6B7ru9XesPyzUIR5Z0uYLYQxiFAxKOwDvZ2I/aRIqgLb
+        9AanMf2lDgaoit/359hA+fo=
+X-Google-Smtp-Source: AA6agR6tRNaPK5Q+XlGLTf7QBCvdF0OFTG9sr6Yo6lrI7k0fjU3OoTI+1Zk11+65m0d4cz9+PgI/zw==
+X-Received: by 2002:a05:6a00:3492:b0:540:b30d:8396 with SMTP id cp18-20020a056a00349200b00540b30d8396mr29749270pfb.81.1663158775134;
+        Wed, 14 Sep 2022 05:32:55 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:2f68:fe7:a2e6:7595])
+        by smtp.gmail.com with ESMTPSA id w17-20020a656951000000b00438b79c7049sm8341581pgq.42.2022.09.14.05.32.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 05:32:03 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 21:31:57 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [patch RFC 06/29] printk: Protect [un]register_console() with a
- mutex
-Message-ID: <YyHJvdQbmd1wf0bZ@google.com>
-References: <20220910221947.171557773@linutronix.de>
- <20220910222300.712668210@linutronix.de>
+        Wed, 14 Sep 2022 05:32:54 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 05:32:51 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jerome Neanne <jneanne@baylibre.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, lee.jones@linaro.org,
+        tony@atomide.com, afd@ti.com, khilman@baylibre.com,
+        narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v5 5/6] Input: Add tps65219 interrupt driven powerbutton
+Message-ID: <YyHJ8yOF+ZhKbdlp@google.com>
+References: <20220913121419.15420-1-jneanne@baylibre.com>
+ <20220913121419.15420-6-jneanne@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220910222300.712668210@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220913121419.15420-6-jneanne@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/11 00:27), Thomas Gleixner wrote:
-[..]
-> + * console_sem protects the console_drivers list, and also provides
-> + * serialization for access to the entire console driver system.
-> + *
-> + * console_mutex serializes register/unregister. console_sem has to be
-> + * taken for any list manipulation inside the console_mutex locked
-> + * section to keep the console BKL machinery happy.
->   */
-> +static DEFINE_MUTEX(console_mutex);
->  static DEFINE_SEMAPHORE(console_sem);
-[..]
->  /*
->   * Helper macros to handle lockdep when locking/unlocking console_sem. We use
->   * macros instead of functions so that _RET_IP_ contains useful information.
-> @@ -2978,17 +3008,21 @@ struct tty_driver *console_device(int *i
->  void console_stop(struct console *console)
->  {
->  	__pr_flush(console, 1000, true);
-> +	console_list_lock();
->  	console_lock();
->  	console->flags &= ~CON_ENABLED;
->  	console_unlock();
-> +	console_list_unlock();
->  }
->  EXPORT_SYMBOL(console_stop);
->  
->  void console_start(struct console *console)
->  {
-> +	console_list_lock();
->  	console_lock();
->  	console->flags |= CON_ENABLED;
->  	console_unlock();
-> +	console_list_unlock();
->  	__pr_flush(console, 1000, true);
->  }
->  EXPORT_SYMBOL(console_start);
+Hi Jerome,
 
-So the comment says that list lock (console_mutex) is to serialize
-register/unregister, but then we take it in stop/start as well. What
-does list lock protect us against in start/stop? console->flags reader
-(console_is_usable()) does not take list lock, it's called under console
-lock and console->flags writers (console_unregister() and console_stop())
-modify console->flags under console_lock.
+On Tue, Sep 13, 2022 at 02:14:18PM +0200, Jerome Neanne wrote:
+> +	idev = devm_input_allocate_device(dev);
+> +	if (!idev)
+> +		return -ENOMEM;
+> +
+> +	idev->name = pdev->name;
+> +	snprintf(pwr->phys, sizeof(pwr->phys), "%s/input0",
+> +		 pdev->name);
+> +	idev->phys = pwr->phys;
+> +	idev->dev.parent = dev;
+
+This assignment is not needed given that devm_input_allocate_device()
+is used. Otherwise:
+
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+Please feel free to merge through MFD tree.
+
+Thanks.
+
+-- 
+Dmitry
