@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D285B8EB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2605B8EB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiINSPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S229446AbiINSPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiINSPA (ORCPT
+        with ESMTP id S229771AbiINSPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:15:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21B01573F;
-        Wed, 14 Sep 2022 11:14:59 -0700 (PDT)
+        Wed, 14 Sep 2022 14:15:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B69C24F31;
+        Wed, 14 Sep 2022 11:15:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E7961E8E;
-        Wed, 14 Sep 2022 18:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FCCC433C1;
-        Wed, 14 Sep 2022 18:14:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87798B81ADA;
+        Wed, 14 Sep 2022 18:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A828C433D7;
+        Wed, 14 Sep 2022 18:15:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663179298;
-        bh=YSZCfCgBas7sM38vNqjuLIpxrhdHOeh3iNoKuSZSNgQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=urqn2kULlBPEfMnbgZ253cO6nn/5Qh9LuC6Lcr4XqSnVkxp5LlrLMjWdMBtzclWE2
-         lVxyH9SClgzxpd73uTmD1BDxZVd9Yx8bgP6wNuKevZMEabNN/6hTl9/a+ffQoaysbg
-         wLX/uJDhnoCu/XniMB0advt5wYr3AAFxWz6f6G/6tQ6/NzUmepf2ComI5equDKSwy+
-         qPescjzuN3MXPeivEFaHZopIhwR4++Tvs5xSwTcYAumlj+xH10EhT/DSwFCdHOUAS5
-         rXRxSTm5FE9nW1AYg3qtKJ2nqxtQCm26QlzSTraQt6QaXAjBct3ZXTzi1nP9ZWRYF3
-         kadx1bR66QF3Q==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1663179328;
+        bh=YbrYZ2ZhBJ5O8mFVCmYlQVg9rRG+9+sMUn6FrqNFaEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WEX3cu8amwYEdl+IULxHyJbZrZI5Lw18m2LldchYADZr0be/U0CVllE2UkRLyMdPW
+         UCKSEqCkmcj9JkRCElboZVVQ7lAJZDdKnRVszR3g7MTyM60gsiMUTLC+TD44/zcrsN
+         8b1Ws5hTHeN2DQgwwygjWxhTH6R4VnZmyROYU0It6QCMY958Dbz0qn4qTRoCcTSGde
+         Ls68gD5h1e/z4f/ph0BHPJnBPiFNDPRYfZWAWs7Yb9H6dSMsXqz0u5s+dphjTjiyGs
+         6XSmRdI7WV2jhHjFVzC9eWFT18yVfgFlSUwxANMHwFtaWvDgX8TRp9Kbi6nbsI5/ra
+         eArXctOiIXHDQ==
+Date:   Wed, 14 Sep 2022 11:15:27 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
+Subject: Re: [PATCH 3/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <YyIaP4EFNaYhqKkQ@magnolia>
+References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
+ <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <1662114961-66-4-git-send-email-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
-References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech> <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech> <20220914155035.88E45C433C1@smtp.kernel.org> <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com> <20220914180508.0EDD9C433D6@smtp.kernel.org> <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
-Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the maximum
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Date:   Wed, 14 Sep 2022 11:14:56 -0700
-User-Agent: alot/0.10
-Message-Id: <20220914181458.C6FCCC433C1@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662114961-66-4-git-send-email-ruansy.fnst@fujitsu.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,24 +58,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Stefan Wahren (2022-09-14 11:09:04)
-> Am 14.09.22 um 20:05 schrieb Stephen Boyd:
-> > Quoting Stefan Wahren (2022-09-14 10:45:48)
-> >> Am 14.09.22 um 17:50 schrieb Stephen Boyd:
-> >>> Furthermore, I wonder if even that part needs to be implemented.  Why
-> >>> not make a direct call to rpi_firmware_property() and get the max rat=
-e?
-> >>> All of that can live in the drm driver. Making it a generic API that
-> >>> takes a 'struct clk' means that it looks like any clk can be passed,
-> >>> when that isn't true. It would be better to restrict it to the one use
-> >>> case so that the scope of the problem doesn't grow. I understand that=
- it
-> >>> duplicates a few lines of code, but that looks like a fair tradeoff v=
-s.
-> >>> exposing an API that can be used for other clks in the future.
-> >> it would be nice to keep all the Rpi specific stuff out of the DRM
-> >> driver, since there more users of it.
-> > Instead of 'all' did you mean 'any'?
-> yes
+On Fri, Sep 02, 2022 at 10:36:01AM +0000, Shiyang Ruan wrote:
+> This patch is inspired by Dan's "mm, dax, pmem: Introduce
+> dev_pagemap_failure()"[1].  With the help of dax_holder and
+> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+> (or mapped device) on it to unmap all files in use and notify processes
+> who are using those files.
+> 
+> Call trace:
+> trigger unbind
+>  -> unbind_store()
+>   -> ... (skip)
+>    -> devres_release_all()   # was pmem driver ->remove() in v1
+>     -> kill_dax()
+>      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+>       -> xfs_dax_notify_failure()
+> 
+> Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+> event.  So do not shutdown filesystem directly if something not
+> supported, or if failure range includes metadata area.  Make sure all
+> files and processes are handled correctly.
+> 
+> [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  drivers/dax/super.c         |  3 ++-
+>  fs/xfs/xfs_notify_failure.c | 23 +++++++++++++++++++++++
+>  include/linux/mm.h          |  1 +
+>  3 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index 9b5e2a5eb0ae..cf9a64563fbe 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
+>  		return;
+>  
+>  	if (dax_dev->holder_data != NULL)
+> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+> +				MF_MEM_PRE_REMOVE);
+>  
+>  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+>  	synchronize_srcu(&dax_srcu);
+> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> index 3830f908e215..5e04ba7fa403 100644
+> --- a/fs/xfs/xfs_notify_failure.c
+> +++ b/fs/xfs/xfs_notify_failure.c
+> @@ -22,6 +22,7 @@
+>  
+>  #include <linux/mm.h>
+>  #include <linux/dax.h>
+> +#include <linux/fs.h>
+>  
+>  struct xfs_failure_info {
+>  	xfs_agblock_t		startblock;
+> @@ -77,6 +78,9 @@ xfs_dax_failure_fn(
+>  
+>  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+>  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> +		/* The device is about to be removed.  Not a really failure. */
+> +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+> +			return 0;
+>  		notify->want_shutdown = true;
+>  		return 0;
+>  	}
+> @@ -182,12 +186,23 @@ xfs_dax_notify_failure(
+>  	struct xfs_mount	*mp = dax_holder(dax_dev);
+>  	u64			ddev_start;
+>  	u64			ddev_end;
+> +	int			error;
+>  
+>  	if (!(mp->m_super->s_flags & SB_BORN)) {
+>  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+>  		return -EIO;
+>  	}
+>  
+> +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> +		xfs_info(mp, "device is about to be removed!");
+> +		down_write(&mp->m_super->s_umount);
+> +		error = sync_filesystem(mp->m_super);
+> +		drop_pagecache_sb(mp->m_super, NULL);
+> +		up_write(&mp->m_super->s_umount);
+> +		if (error)
+> +			return error;
+> +	}
+> +
+>  	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+>  		xfs_debug(mp,
+>  			 "notify_failure() not supported on realtime device!");
+> @@ -196,6 +211,8 @@ xfs_dax_notify_failure(
+>  
+>  	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+>  	    mp->m_logdev_targp != mp->m_ddev_targp) {
+> +		if (mf_flags & MF_MEM_PRE_REMOVE)
+> +			return 0;
+>  		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+>  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>  		return -EFSCORRUPTED;
+> @@ -209,6 +226,12 @@ xfs_dax_notify_failure(
+>  	ddev_start = mp->m_ddev_targp->bt_dax_part_off;
+>  	ddev_end = ddev_start + bdev_nr_bytes(mp->m_ddev_targp->bt_bdev) - 1;
+>  
+> +	/* Notify failure on the whole device */
+> +	if (offset == 0 && len == U64_MAX) {
+> +		offset = ddev_start;
+> +		len = bdev_nr_bytes(mp->m_ddev_targp->bt_bdev);
+> +	}
 
-Why?
+I wonder, won't the trimming code below take care of this?
+
+The rest of the patch looks ok to me.
+
+--D
+
+> +
+>  	/* Ignore the range out of filesystem area */
+>  	if (offset + len - 1 < ddev_start)
+>  		return -ENXIO;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 21f8b27bd9fd..9122a1c57dd2 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3183,6 +3183,7 @@ enum mf_flags {
+>  	MF_UNPOISON = 1 << 4,
+>  	MF_SW_SIMULATED = 1 << 5,
+>  	MF_NO_RETRY = 1 << 6,
+> +	MF_MEM_PRE_REMOVE = 1 << 7,
+>  };
+>  int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+>  		      unsigned long count, int mf_flags);
+> -- 
+> 2.37.2
+> 
