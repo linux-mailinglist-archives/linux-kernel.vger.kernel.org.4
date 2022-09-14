@@ -2,196 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D775B8A3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C905B8A44
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiINOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S230059AbiINOXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiINOWz (ORCPT
+        with ESMTP id S230021AbiINOXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:22:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82464662E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:22:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 742E061DD4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58531C433D6;
-        Wed, 14 Sep 2022 14:22:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663165372;
-        bh=Y6zycBhsCZgK5WNKVxWPiDaovSEbTGuLy5Mn5r3GsUM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZSQ3uaCOQMXH5jgxiHuNWDm6VdOWemg6XW+G1Vy3ZYbVuw2sIw8YCmbISVy9JAqmT
-         CpeIudTMBBSxMJmpIrVYJIf8BtfAIy3hWNwK2eDf9czR7E3uW2YV9uNWFy05ie01Rw
-         z2joeyvRn2/CqeQTtkQcyVgdMhhuN08mFc+RLO+zCTHdP9kjnc3nygzFekLx3pnZ8r
-         s8OAYMDrh2Ai3nZY82CdapbTIBNK0JeP0V3PMbcELbfs+mmo7fTrVsEBXzHVJi5jFR
-         RZDowiWJX4V8McliiljPdIFDwhdUphEbtw9lGj5ECobJXwp6JnGJApdU14+tMzmGWl
-         OrBWUZpvbG3AA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] mm/damon: simplify scheme create in lru_sort.c
-Date:   Wed, 14 Sep 2022 14:22:50 +0000
-Message-Id: <20220914142250.1269-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914113859.37637-1-xhao@linux.alibaba.com>
-References: 
+        Wed, 14 Sep 2022 10:23:18 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17E94DF33;
+        Wed, 14 Sep 2022 07:23:13 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id f20so18026186edf.6;
+        Wed, 14 Sep 2022 07:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date;
+        bh=YPvsRlxDXDggxUZEYNyLFWt8bhYF3sK51JF3gp5tKs4=;
+        b=DfG79Bxo9Mk220BFJ9GudyUmnYtx9ujPjDfk4CPL+eXGyLToURmJygHbRPzzhoDNR3
+         8LomaJpMLDvQJRGUR3oDoqNcci+/AgMCErdSECbIyUc+5VY9lV31R1bIKwnPsSJQQjfy
+         EnkuRZ+d5tje59EU/+Dg7e8FvcQLpY6Ae8qx0h5HwiVboV78l+QvJ4sb/h8gW1U5MH64
+         WPAqSvS+wU1ajlVNrxyrDUAsIfAzxV/9ePZREFKfeVlUAL6faXvGzJfWu2ZBuLv2r//G
+         VSp+IbwiAocSKQUVXQpN13LMvcYDpbTo+h5HvJ7R6wil/AnRgUWdE3CUHoTJR5/1oc/m
+         iOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YPvsRlxDXDggxUZEYNyLFWt8bhYF3sK51JF3gp5tKs4=;
+        b=3C+A5yvQ235m+ws5TS0NlZGjEAi7alTKY18Uvie0p1Pp6NW/4n0OVhtP9BaFhjl+TR
+         luo0l57qeEeeCg4L7gJzk4pe9YP6YVXFwaUfTF6wXkpi2YTw3R//7nb1mIMkjSd9m6Ak
+         ZtnpFF3DCGVQ6JRogwUaMBPr3jKjj5y+Z/ngsQmlbcZXvzHJYjDIfjoL0uqD1wxbXt7l
+         g8ffp5yNUtRBnN02thsVOJZBic0j73+s+W+maitlpY7S3yphP78iSDU5UJngFe2pW8AH
+         AbVCf9GqUBFdTlMxRyCI5BQa8nQRh7WJzmLuPET7zNsBaSjjDyVKNcMICTZw3PKRz++8
+         aApw==
+X-Gm-Message-State: ACgBeo3WY2i6ucCEvEitgDYliMhML4Y8er1g2jMRN6T/8XuMytPPJjvl
+        8F65Luu8E6eHGudlzBMoGBs=
+X-Google-Smtp-Source: AA6agR6Adtbwg0XngCJQUdCrR1RyjdAlF3r7kqv3d0tBhYlFZhnOKN2HDiBoeS7c7nURjfuAdXlX9Q==
+X-Received: by 2002:a05:6402:ca9:b0:44e:d8f3:3d0e with SMTP id cn9-20020a0564020ca900b0044ed8f33d0emr30442006edb.397.1663165391456;
+        Wed, 14 Sep 2022 07:23:11 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.googlemail.com with ESMTPSA id 9-20020a170906310900b00779cde476e4sm7614773ejx.62.2022.09.14.07.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 07:23:10 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Marc Herbert <marc.herbert@intel.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v5 0/5] Krait Documentation conversion
+Date:   Wed, 14 Sep 2022 16:22:51 +0200
+Message-Id: <20220914142256.28775-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+This series convert the krait-cc and the kpps-acc/gcc Documentation to
+yaml.
 
-On Wed, 14 Sep 2022 19:38:59 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+This series comes form a split of a bigger series that got too big and
+now hard to review.
 
-> In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
-> they have so much in common, so we can combine them into a single
-> function, and we just need to distinguish their differences.
+While they are still more or less wrong and doesn't really reflect real
+driver implementation, they are converted to prepare for a fixup later
+when dts and driver are finally fixed.
 
-Thank you again for patiently waiting for my changes and reworking on this!
+Minor changes are done to the kpss-gcc driver and minor fixes are done to
+the various affected dts to fix dtbs_check warning with the new introduced
+schema.
 
-> 
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> ---
->  mm/damon/lru_sort.c | 57 ++++++++++++++++++++++-----------------------
->  1 file changed, 28 insertions(+), 29 deletions(-)
-> 
-> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> index 07a0908963fd..2eac907e866d 100644
-> --- a/mm/damon/lru_sort.c
-> +++ b/mm/damon/lru_sort.c
-> @@ -135,17 +135,40 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
->  static struct damon_ctx *ctx;
->  static struct damon_target *target;
->  
-> -static struct damos *damon_lru_sort_new_scheme(
-> -		struct damos_access_pattern *pattern, enum damos_action action)
-> +static struct damos *damon_lru_sort_new_scheme(unsigned int thres,
-> +					       enum damos_action action)
->  {
-> +	struct damos_access_pattern pattern = {
-> +		/* Find regions having PAGE_SIZE or larger size */
-> +		.min_sz_region = PAGE_SIZE,
-> +		.max_sz_region = ULONG_MAX,
-> +		/* and accessed for more than the threshold */
+Also fix kpss-acc dtbs_check warning.
 
-This comment would be better to be written again?
+v5:
+- rebase on top of linux-next/master
+v4:
+- Fix error from kpss-acc schema
+- Fix dtbs_check warning from kpss-acc
+- Improve kpss-gcc for apq8064
+v3:
+- Update all Sob
+- Rework kpss-gcc Documentation with the new finding
+- Fix dtbs_check warning
+v2:
+- Fix bot error by adding missing #clock-cells
 
-> +		.min_nr_accesses = 0,
-> +		.max_nr_accesses = 0,
+Changelog for previous series "Modernize rest of the krait drivers"
+that was split to smaller series (only Documentation changes):
+v7:
+- Rework kpss-gcc Documentation (split patch for pure conversion and
+  tweaks)
+v6:
+- Address comments from Rob
+- Fix warning from make dtbs_check
+v5:
+- Address comments from Krzysztof
+v4:
+- Fix more dt-bindings bug errors
+v3:
+- Split Documentation files for kpss and krait-cc
+v2:
+- fix missing new line on patch 16 (krait-cc patch)
 
-If we're gonna set above two fields anyway later, we could simply remove above
-three lines.
+Christian Marangi (5):
+  dt-bindings: clock: Convert qcom,krait-cc to yaml
+  dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
+  dt-bindings: arm: msm: Rework kpss-gcc driver Documentation to yaml
+  ARM: dts: qcom: fix various wrong definition for kpss-gcc node
+  ARM: dts: qcom: fix various wrong definition for kpss-acc
 
-> +		/* no matter its age */
-> +		.min_age_region = 0,
-> +		.max_age_region = UINT_MAX,
-> +	};
->  	struct damos_quota quota = damon_lru_sort_quota;
->  
->  	/* Use half of total quota for hot/cold pages sorting */
->  	quota.ms = quota.ms / 2;
->  
-> +	switch (action) {
-> +	case DAMOS_LRU_PRIO:
-> +		pattern.min_nr_accesses = thres;
-> +		pattern.max_nr_accesses = UINT_MAX;
-> +		break;
-> +	case DAMOS_LRU_DEPRIO:
-> +		pattern.min_age_region = thres;
-> +		break;
-> +	default:
-> +		return NULL;
-> +	}
-> +
+ .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
+ .../bindings/arm/msm/qcom,kpss-acc.yaml       | 93 +++++++++++++++++++
+ .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
+ .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 90 ++++++++++++++++++
+ .../bindings/clock/qcom,krait-cc.txt          | 34 -------
+ .../bindings/clock/qcom,krait-cc.yaml         | 59 ++++++++++++
+ arch/arm/boot/dts/qcom-apq8064.dtsi           | 21 ++++-
+ arch/arm/boot/dts/qcom-ipq8064.dtsi           | 12 ++-
+ arch/arm/boot/dts/qcom-mdm9615.dtsi           |  2 +-
+ arch/arm/boot/dts/qcom-msm8660.dtsi           |  2 +-
+ arch/arm/boot/dts/qcom-msm8960.dtsi           | 15 ++-
+ 11 files changed, 287 insertions(+), 134 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 
-This switch-case makes me wondering if the 'default' case really possible case.
-I think it would be clearer to set these from caller.
+-- 
+2.37.2
 
-IMHO, it might be clearer and shorter to define a static global 'struct
-damos_access_pattern' stub variable, and make the
-damon_lru_sort_new_{hot,cold}_scheme() copies it to their local variable,
-update the relevant fields, and pass that to 'damon_new_scheme()'.  What do you
-think?
-
->  	return damon_new_scheme(
->  			/* find the pattern, and */
-> -			pattern,
-> +			&pattern,
->  			/* (de)prioritize on LRU-lists */
->  			action,
->  			/* under the quota. */
-> @@ -157,37 +180,13 @@ static struct damos *damon_lru_sort_new_scheme(
->  /* Create a DAMON-based operation scheme for hot memory regions */
->  static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
->  {
-> -	struct damos_access_pattern pattern = {
-> -		/* Find regions having PAGE_SIZE or larger size */
-> -		.min_sz_region = PAGE_SIZE,
-> -		.max_sz_region = ULONG_MAX,
-> -		/* and accessed for more than the threshold */
-> -		.min_nr_accesses = hot_thres,
-> -		.max_nr_accesses = UINT_MAX,
-> -		/* no matter its age */
-> -		.min_age_region = 0,
-> -		.max_age_region = UINT_MAX,
-> -	};
-> -
-> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
-> +	return damon_lru_sort_new_scheme(hot_thres, DAMOS_LRU_PRIO);
-
-If we follow what I suggested above, we could make this like below:
-
-	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
-
-	pattern.min_nr_accesses = hot_thres;
-	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
-
-
->  }
->  
->  /* Create a DAMON-based operation scheme for cold memory regions */
->  static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
->  {
-> -	struct damos_access_pattern pattern = {
-> -		/* Find regions having PAGE_SIZE or larger size */
-> -		.min_sz_region = PAGE_SIZE,
-> -		.max_sz_region = ULONG_MAX,
-> -		/* and not accessed at all */
-> -		.min_nr_accesses = 0,
-> -		.max_nr_accesses = 0,
-> -		/* for min_age or more micro-seconds */
-> -		.min_age_region = cold_thres,
-> -		.max_age_region = UINT_MAX,
-> -	};
-> -
-> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
-> +	return damon_lru_sort_new_scheme(cold_thres, DAMOS_LRU_DEPRIO);
-
-And similarly here.
-
->  }
->  
->  static int damon_lru_sort_apply_parameters(void)
-> -- 
-> 2.31.0
-> 
-> 
-
-
-Thanks,
-SJ
