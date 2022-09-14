@@ -2,83 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7EF5B8789
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE515B878B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiINLv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S229695AbiINLwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINLvW (ORCPT
+        with ESMTP id S229550AbiINLwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:51:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4941377540;
-        Wed, 14 Sep 2022 04:51:21 -0700 (PDT)
+        Wed, 14 Sep 2022 07:52:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75604785B7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D859B61C1E;
-        Wed, 14 Sep 2022 11:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A191C433D7;
-        Wed, 14 Sep 2022 11:51:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1C4261C63
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B40C433C1;
+        Wed, 14 Sep 2022 11:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663156280;
-        bh=X6kiqA3vAvyzSls3/AgVE2v/FEsxYi7tj84qKsyADRM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uJa0v9qeHwb8WVGx+Pmyq1IzVgQKGgEg/HVaKyYqi96uBhi47IDhEKa1x4Ul1y0mH
-         /w90TOMFwH8kX9giXvz3W7flfTWbaM/Q/B5u1FqNrs4/7m5vC5BEULUm6DShkSly67
-         R4FDaE8yKtWgRjMSHxFLOtV0ClClIS3Za4N0HVNMlYGwsaCBuyHg+x7bZb6huOD/AZ
-         +tCl7Au0A3qvfkB7e2I85bZG1RfS02XFGZrPXuvukiTg61tOt/3PRMn8l3KuDmd0yW
-         6EJnF4409xTaQzTOH2UpI4g9rYBZ9RZnaoTzMRSsuBl8UEr5bjmRE/e9vXQhQoG0+U
-         8NgmKnbtCRvmw==
-Message-ID: <f8a41b55efd1c59bc63950e8c1b734626d970a90.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Date:   Wed, 14 Sep 2022 07:51:16 -0400
-In-Reply-To: <166311144203.20483.1888757883086697314@noble.neil.brown.name>
-References: <91e31d20d66d6f47fe12c80c34b1cffdfc202b6a.camel@hammerspace.com>
-        , <166268467103.30452.1687952324107257676@noble.neil.brown.name>
-        , <166268566751.30452.13562507405746100242@noble.neil.brown.name>
-        , <29a6c2e78284e7947ddedf71e5cb9436c9330910.camel@hammerspace.com>
-        , <8d638cb3c63b0d2da8679b5288d1622fdb387f83.camel@hammerspace.com>
-        , <166270570118.30452.16939807179630112340@noble.neil.brown.name>
-        , <33d058be862ccc0ccaf959f2841a7e506e51fd1f.camel@kernel.org>
-        , <166285038617.30452.11636397081493278357@noble.neil.brown.name>
-        , <2e34a7d4e1a3474d80ee0402ed3bc0f18792443a.camel@kernel.org>
-        , <166302538820.30452.7783524836504548113@noble.neil.brown.name>
-        , <20220913011518.GE3600936@dread.disaster.area>
-        , <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>
-         <166311144203.20483.1888757883086697314@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        s=k20201202; t=1663156338;
+        bh=4f7QnIMHb0ycvGRooXpzyLGWeV+vETSC/ILe3NrR92s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DBiW2GLenZPedRpYFS7qErx8A1PpUdLZ1FTTi/nBL/N0kbQuLc/x9Uxaqfvvodb5Y
+         8/o+uSsMfNZUZVKHyslFCBLkRr41lV8BTuN9TodiXO7a5PW5du2iYvOt4vg8tdNUiL
+         XXhfNZqEiNeWOdjT70VoLYmAqhbiR6ZOLmAREHIpkK6XEUHKRdoTRnde/jgQ0sI9ei
+         9h+2qGnMcJ/MGtVFN1wVNtmPZUggTzSXtoZ+MESsPMK4ODw2AGTYa4mZtzO0eOIC7J
+         uH1xVMk65b+Kgf7R5APtqGqo1c5VRNLQiMSJ3aLW7EKz1eAaDPhZYjdCz+nSpszIh5
+         MyysSSCHtbclw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
+Subject: [PATCH v2] f2fs: fix to do sanity check on summary info
+Date:   Wed, 14 Sep 2022 19:51:51 +0800
+Message-Id: <20220914115151.2994632-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -89,32 +53,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-14 at 09:24 +1000, NeilBrown wrote:
-> On Wed, 14 Sep 2022, Jeff Layton wrote:
-> >=20
-> > At that point, bumping i_version both before and after makes a bit more
-> > sense, since it better ensures that a change will be noticed, whether
-> > the related read op comes before or after the statx.
->=20
-> How does bumping it before make any sense at all?  Maybe it wouldn't
-> hurt much, but how does it help anyone at all?
->=20
+As Wenqing Liu reported in bugzilla:
 
-My assumption (maybe wrong) was that timestamp updates were done before
-the actual write by design. Does doing it before the write make increase
-the chances that the inode metadata writeout will get done in the same
-physical I/O as the data write? IDK, just speculating here.
+https://bugzilla.kernel.org/show_bug.cgi?id=216456
 
-If there's no benefit to doing it before then we should just move it
-afterward.
+BUG: KASAN: use-after-free in recover_data+0x63ae/0x6ae0 [f2fs]
+Read of size 4 at addr ffff8881464dcd80 by task mount/1013
 
+CPU: 3 PID: 1013 Comm: mount Tainted: G        W          6.0.0-rc4 #1
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
+Call Trace:
+ dump_stack_lvl+0x45/0x5e
+ print_report.cold+0xf3/0x68d
+ kasan_report+0xa8/0x130
+ recover_data+0x63ae/0x6ae0 [f2fs]
+ f2fs_recover_fsync_data+0x120d/0x1fc0 [f2fs]
+ f2fs_fill_super+0x4665/0x61e0 [f2fs]
+ mount_bdev+0x2cf/0x3b0
+ legacy_get_tree+0xed/0x1d0
+ vfs_get_tree+0x81/0x2b0
+ path_mount+0x47e/0x19d0
+ do_mount+0xce/0xf0
+ __x64_sys_mount+0x12c/0x1a0
+ do_syscall_64+0x38/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
->   i_version must appear to change no sooner than the change it reflects
->   becomes visible and no later than the request which initiated that
->   change is acknowledged as complete.
->=20
-> Why would that definition ever not be satisfactory?
+The root cause is: in fuzzed image, SSA table is corrupted: ofs_in_node
+is larger than ADDRS_PER_PAGE(), result in out-of-range access on 4k-size
+page.
 
-It's fine with me.
---=20
-Jeff Layton <jlayton@kernel.org>
+- recover_data
+ - do_recover_data
+  - check_index_in_prev_nodes
+   - f2fs_data_blkaddr
+
+This patch adds sanity check on summary info in recovery and GC flow
+in where the flows rely on them.
+
+After patch:
+[   29.310883] F2FS-fs (loop0): Inconsistent ofs_in_node:65286 in summary, ino:0, nid:6, max:1018
+
+Cc: <stable@kernel.org>
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- fix to avoid use uninitialized variable
+ fs/f2fs/gc.c       | 10 +++++++++-
+ fs/f2fs/recovery.c | 15 ++++++++++++---
+ 2 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index fd400d148afb..3a820e5cdaee 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1078,7 +1078,7 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ {
+ 	struct page *node_page;
+ 	nid_t nid;
+-	unsigned int ofs_in_node;
++	unsigned int ofs_in_node, max_addrs;
+ 	block_t source_blkaddr;
+ 
+ 	nid = le32_to_cpu(sum->nid);
+@@ -1104,6 +1104,14 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ 		return false;
+ 	}
+ 
++	max_addrs = IS_INODE(node_page) ? DEF_ADDRS_PER_INODE :
++						DEF_ADDRS_PER_BLOCK;
++	if (ofs_in_node >= max_addrs) {
++		f2fs_err(sbi, "Inconsistent ofs_in_node:%u in summary, ino:%u, nid:%u, max:%u",
++			ofs_in_node, dni->ino, dni->nid, max_addrs);
++		return false;
++	}
++
+ 	*nofs = ofs_of_node(node_page);
+ 	source_blkaddr = data_blkaddr(NULL, node_page, ofs_in_node);
+ 	f2fs_put_page(node_page, 1);
+diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
+index 8326003e6918..5c9facec98f6 100644
+--- a/fs/f2fs/recovery.c
++++ b/fs/f2fs/recovery.c
+@@ -474,7 +474,7 @@ static int check_index_in_prev_nodes(struct f2fs_sb_info *sbi,
+ 	struct dnode_of_data tdn = *dn;
+ 	nid_t ino, nid;
+ 	struct inode *inode;
+-	unsigned int offset;
++	unsigned int offset, ofs_in_node, max_addrs;
+ 	block_t bidx;
+ 	int i;
+ 
+@@ -501,15 +501,24 @@ static int check_index_in_prev_nodes(struct f2fs_sb_info *sbi,
+ got_it:
+ 	/* Use the locked dnode page and inode */
+ 	nid = le32_to_cpu(sum.nid);
++	ofs_in_node = le16_to_cpu(sum.ofs_in_node);
++
++	max_addrs = ADDRS_PER_PAGE(dn->node_page, dn->inode);
++	if (ofs_in_node >= max_addrs) {
++		f2fs_err(sbi, "Inconsistent ofs_in_node:%u in summary, ino:%lu, nid:%u, max:%u",
++			ofs_in_node, dn->inode->i_ino, nid, max_addrs);
++		return -EFSCORRUPTED;
++	}
++
+ 	if (dn->inode->i_ino == nid) {
+ 		tdn.nid = nid;
+ 		if (!dn->inode_page_locked)
+ 			lock_page(dn->inode_page);
+ 		tdn.node_page = dn->inode_page;
+-		tdn.ofs_in_node = le16_to_cpu(sum.ofs_in_node);
++		tdn.ofs_in_node = ofs_in_node;
+ 		goto truncate_out;
+ 	} else if (dn->nid == nid) {
+-		tdn.ofs_in_node = le16_to_cpu(sum.ofs_in_node);
++		tdn.ofs_in_node = ofs_in_node;
+ 		goto truncate_out;
+ 	}
+ 
+-- 
+2.25.1
+
