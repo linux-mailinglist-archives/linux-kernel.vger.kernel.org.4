@@ -2,121 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F95B8BF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930255B8BE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiINPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S230112AbiINPdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiINPdl (ORCPT
+        with ESMTP id S230285AbiINPdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:33:41 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CED35A880;
-        Wed, 14 Sep 2022 08:33:40 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id v16so35573652ejr.10;
-        Wed, 14 Sep 2022 08:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=euBywoUqWY+9yPtFA/h7+K25+vefjCBo4JeDdhHgIhg=;
-        b=na7tS1cWTqcfmwovO/xG7sjSvLAaRTdSCnO+6swrap87QiTLrqQKu4jppnggBiwxR0
-         CX2heIiM4FhpIb/birHu1wjC6MTWWWHjIH3QY15ZFGcPx2nTOUQWwo4nPl76tJD94AAY
-         zsJwmVWai2JY/gyBwxAcR7dRmRUj7vlBd5bbt7dug8Bt2ckZDoGakuqqKPVzsgWuEthk
-         9pxgkGEFzkr0BnV3R9ohnK2lLB64JJ+0YXI6TKhJIZwzoRrzAF52erwFi/u+a/KnpAS6
-         y/o7yHTZBawGCDWaol6hc3jMrZlk2TfwPKLbxMpVNmNsBudZmGgJPs+cN/A8drMjf35l
-         VNYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=euBywoUqWY+9yPtFA/h7+K25+vefjCBo4JeDdhHgIhg=;
-        b=ICM5Rnx0/4XCng0kZdsOMVVDLbbfolecm3jhW6V8RZiP/+XEfQ43JudbY/sAl3Evl5
-         aGMuflvcBIuUgBGLihaFmVrVCSd6BxJSEWrG+VQAlvHT3xDpi5TesbNP6FqS7ExGnF4z
-         skAoiJq7MH/DF+kHfN8L3Zw0Y7jFGzF7cEQ6URQ+ED77E7Q9hQKMHU6uPSFG8WOKkI4o
-         nIq/GahYC5OuGOJZV8yYasi7pTeAmov+lQOF5ileoSu/apbGweXPZras/a4wHEn/yAju
-         ts/IGG8JVj4giEgJz4AZWz19ZL7AI12PD6lwkuWoaKpqBZoWPbvoC+bLOVYFg/5mi83E
-         oSig==
-X-Gm-Message-State: ACgBeo3s32W1VUmFFZq4WegQ8jA/WLuMpN/q1l98UUBXtkuDHRrDgrFB
-        bxnbKO6rlj9P44W8FjU7WMwETKiHGBOVoSn+4xw=
-X-Google-Smtp-Source: AA6agR6FfLnXUSOTPacpx7RREDFu38n5a5EdGdNa5zwcSzUCfG/WghGZdEtUSgmo4eg0hC4iuJsVeuEL0FdtOUeP6Kg=
-X-Received: by 2002:a17:907:80d:b0:73d:a576:dfbd with SMTP id
- wv13-20020a170907080d00b0073da576dfbdmr26468956ejb.402.1663169618930; Wed, 14
- Sep 2022 08:33:38 -0700 (PDT)
+        Wed, 14 Sep 2022 11:33:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279E74CA28;
+        Wed, 14 Sep 2022 08:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663169600; x=1694705600;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=i0coO9c2FKwC5925wxjPvabKFiFqb3KTprwtnRi8gUk=;
+  b=UA9LIZGhdB3WBYyy/fD5Ucp4pP2sWSyBE88UNkkpitFAOh8hNek56hKG
+   tEv3EOYuZI/hkdeemO5NIypAH5Jjaf/cqNaF+PlWMURhTjpEuySn/d/oz
+   xcgrDxhOph+obyej6kAdDn52uiKEIMv/xCXOTcMpFZe4l1Vn965ms1s6P
+   UtKhVO2REEJxRRo5yE7lwfzzNQQFar43a7E6vds7U3wA+P5euHszM0DRA
+   cmyaEs5mK2xSzuafI6mRYPP1+6/PsAZ78q2StFilYcUNqikIi1Q0j9o7e
+   MtHyU3E8i+W+PQBgp+P5Ujz/9MI0nuBf2yw+337r1cHF/96ASJY+lPsHz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299271446"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="299271446"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 08:33:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="792351983"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 14 Sep 2022 08:33:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 61CABF7; Wed, 14 Sep 2022 18:33:35 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 1/1] spi: mpc52xx: Replace of_gpio_count() by gpiod_count()
+Date:   Wed, 14 Sep 2022 18:33:33 +0300
+Message-Id: <20220914153333.37701-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220914151125.212876-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220914151125.212876-1-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Wed, 14 Sep 2022 17:33:27 +0200
-Message-ID: <CAJiuCcefkre611=1UXEkwScN+bYSBhE_ivGzTK7ZMvp-j4MbRQ@mail.gmail.com>
-Subject: Re: [PATCH v1] ARM: dts: sun8i: h3: orangepi-pc: Add CMA reserved
- memory node
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+As a preparation to unexport of_gpio_named_count(), convert the
+driver to use gpiod_count() instead.
 
-On Wed, 14 Sept 2022 at 17:12, Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> Add 256MB CMA node to the Orange Pi PC board. This fixes memory allocation
-> failures for Cedrus video decoder on trying to play a 1080p video with
-> gstreamer.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts b/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
-> index b96e015f54ee..e655346a9fb4 100644
-> --- a/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
-> +++ b/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
-> @@ -60,6 +60,20 @@ chosen {
->                 stdout-path = "serial0:115200n8";
->         };
->
-> +       reserved-memory {
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               ranges;
-> +
-> +               linux,cma@40000000 {
-> +                       compatible = "shared-dma-pool";
-> +                       alloc-ranges = <0x40000000 0x40000000>;
-> +                       size = <0x10000000>; /* 256MiB */
-> +                       linux,cma-default;
-> +                       reusable;
-> +               };
-> +       };
-> +
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-mpc52xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This change seems legit for all H3 boards and could be moved to the H3 dtsi, no?
+diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
+index bc5e36fd4288..97cdd6545ee1 100644
+--- a/drivers/spi/spi-mpc52xx.c
++++ b/drivers/spi/spi-mpc52xx.c
+@@ -15,6 +15,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/interrupt.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/spi/spi.h>
+ #include <linux/io.h>
+ #include <linux/of_gpio.h>
+@@ -438,7 +439,7 @@ static int mpc52xx_spi_probe(struct platform_device *op)
+ 	ms->irq1 = irq_of_parse_and_map(op->dev.of_node, 1);
+ 	ms->state = mpc52xx_spi_fsmstate_idle;
+ 	ms->ipb_freq = mpc5xxx_get_bus_frequency(&op->dev);
+-	ms->gpio_cs_count = of_gpio_count(op->dev.of_node);
++	ms->gpio_cs_count = gpiod_count(&op->dev, NULL);
+ 	if (ms->gpio_cs_count > 0) {
+ 		master->num_chipselect = ms->gpio_cs_count;
+ 		ms->gpio_cs = kmalloc_array(ms->gpio_cs_count,
+-- 
+2.35.1
 
-Regards,
-Clement
-
->         connector {
->                 compatible = "hdmi-connector";
->                 type = "a";
-> --
-> 2.37.3
->
->
