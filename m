@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A1A5B8F27
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80B5B8F29
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiINTJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 15:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S229635AbiINTKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 15:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiINTJZ (ORCPT
+        with ESMTP id S229550AbiINTKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 15:09:25 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09298274B
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:09:24 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id t3so16086864ply.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:09:24 -0700 (PDT)
+        Wed, 14 Sep 2022 15:10:04 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0DC2ED60;
+        Wed, 14 Sep 2022 12:10:03 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id c19so9734995qkm.7;
+        Wed, 14 Sep 2022 12:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Vf0GqOOK3uEkXN9WNsKg2nCcJ7gEgVHu0tfubCGolLk=;
-        b=Ix8wQG8P2YBtgMuYLRU2gZVvgfG/KvQdltCQJtYPe3r5Nw2RASFGCYjRlBE363g4Uq
-         LBRcA+z6swJhD/p979NxWvW0gtGKcRoxyYeoVs0n9+dgeFCd10TJG4Qs+FDhubksdM4G
-         44OOmlLoTGNzjI8X53X2M4UxQlVrwxh1eYRrZW/RHfyZxu4M5YOlR4bSELZPHPlEQyCj
-         gEHni2QM+xiJzfsEK0UED68GE9ZfQoaxwt5/VnDKK2DcPzG2EKEPdvh5ZSVmAJIfkaMR
-         FaycXB4gSxuQqBflbF2VfX4e9FiWR+KmGd8I49K4txy/xTIHr3+DairQNiYpIAyZOu1g
-         lvSA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=6mBQHGkTCxpZ0kR+Uol1DB+Rk5F3r94azBv7C4epuC0=;
+        b=Dw+JcD8DgkClgEkMagfiLANjV0/pvsu8mhEfMYKS7oDGdcZfuKNeFhI/Aoq7gPfQLV
+         e8Kwx4FZhkAXPB+vBkt9h4Jdvp+0RBQ4LU+E4Xgr9bdlw1/FqhFU29nRGFQ9zTfZw38Z
+         p7Je6UJUAwa54gPy3e+9UPpKoky64QyvHprd5ErvXlrdCDEcyXN6yTB9GhUbzi0AK5LE
+         HOEpB2MnXRM+djEY0AvyrOxocKyT8YTNfyTMFmxLDwH+i94Zyu1JIR6aGOIpi60vgvOb
+         WfgRj9PkKGvrrMSBQK7ouYKhoPR+A3L2SeloAaG4l7KYZViqKsgcPirutkSJJpSAvfCY
+         U9sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Vf0GqOOK3uEkXN9WNsKg2nCcJ7gEgVHu0tfubCGolLk=;
-        b=Rn5wzd3H9C2CKEneZXFfhWvhv3J7aI8N9eBrDg6uzeYVx+eI5BFUMDhRqsw5mKSwPA
-         Vhyk09wiDmdkc6+Vs7hrulh2nR2+pWaFB7V3mkcjCYwAovGsiIhZG2re4AV58JSveEbt
-         exbnJ1ioQ8jmtBbApx5xw8G3YSnoe5TMjbYB8vftnNjelb0uTh8SzAEB0/+8Njw/ihDP
-         48QeZlAmdm0BiNUuSbDem/w6GH0nZ6zfdUG78++4+KS0SZJtWakNWxhAlQ8kSjuTA4nJ
-         cHjgs1Y7E/bVA48XrcfJCsxa66N8EEMm1PCFyPQ1bEk6U+UHN4815pVCklknQB/gO7YX
-         XFzg==
-X-Gm-Message-State: ACrzQf2/p5fk15XsvqU6Xxol/JHfxPCd7WOEbhCK6ZmldPKuJ7CTj5Fc
-        QNmbUI7g8d/bn8DaMUi0Sbi7Q+Za7wzPBGwbOo1I6g==
-X-Google-Smtp-Source: AMsMyM4Ala40C7jBkQ2I54dEklxAZPC8zv+v2oEl63bhkLcXaIOX+9pXi8KM9ZGWLSuVRjS6+nBHZJGan+C2gOXb0UM=
-X-Received: by 2002:a17:90b:1d02:b0:203:2d73:8efb with SMTP id
- on2-20020a17090b1d0200b002032d738efbmr766863pjb.214.1663182564226; Wed, 14
- Sep 2022 12:09:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=6mBQHGkTCxpZ0kR+Uol1DB+Rk5F3r94azBv7C4epuC0=;
+        b=EJ7MvtnmSGvBYcw+KukO66V4/Ny+fepM6cq+g10KHx6g8iFDoxP3ZLeF5RBeu7k0f/
+         lIYzLTfoWE4Jxyrui0HKG7JaT2Crx+sLLzMZgF1z26VR7fUCiFlVdPGZQs4TQunD1zRD
+         TEsf+B8RQbM4uLCUp9S+QHKnlpI7bpSNcHQ/w0HoW/yi4gG0pvu5eEPzF1cnJM1OSfUL
+         8xNMsehjNVNkCbTS8JT/5YBMDDNAYTsvSa0mgJ6ptLS1HTVbvqt+TOlAONBctlfYsQ6D
+         28AEL7F5iO0MlVDLlT+2C+vn934INm0O3jufckVSIVYzRWt7AJnSjJdAkRKdGXidr3SN
+         sfZQ==
+X-Gm-Message-State: ACgBeo32yXgEPcHJxECtcOQEWLk3kC0fh+l3JViXa05ZPPhXtSKl/Clw
+        wfApYzsRk4dY5kTV2zpljapeODrRHYg=
+X-Google-Smtp-Source: AA6agR6/cTAVNB2gJ6Q5yLayiUSp9J8axMaA2UvkltnAQknb0qPfdRdMCbKdsCS63D4nEi+1IcaxrQ==
+X-Received: by 2002:a05:620a:4447:b0:6c6:c438:1ced with SMTP id w7-20020a05620a444700b006c6c4381cedmr28568302qkp.658.1663182602724;
+        Wed, 14 Sep 2022 12:10:02 -0700 (PDT)
+Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05622a00c800b0035bb8168daesm2300105qtw.57.2022.09.14.12.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 12:10:01 -0700 (PDT)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Doug Berger <opendmb@gmail.com>
+Subject: [PATCH] mm/hugetlb: correct demote page offset logic
+Date:   Wed, 14 Sep 2022 12:09:17 -0700
+Message-Id: <20220914190917.3517663-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220903012849.938069-1-vannapurve@google.com>
- <20220903012849.938069-2-vannapurve@google.com> <YxpaFfw4jbwwvEI6@google.com>
-In-Reply-To: <YxpaFfw4jbwwvEI6@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Wed, 14 Sep 2022 12:09:13 -0700
-Message-ID: <CAGtprH-3qyf4hn+J=G3RFtvYwDdH+Zd3deDnnCycobyyF1V30A@mail.gmail.com>
-Subject: Re: [V1 PATCH 1/5] selftests: kvm: move common startup logic to kvm_util.c
-To:     David Matlack <dmatlack@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oliver Upton <oupton@google.com>, peterx@redhat.com,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, drjones@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,16 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 2:09 PM David Matlack <dmatlack@google.com> wrote:
->
-...
-> >       print_skip("__NR_userfaultfd must be present for userfaultfd test");
-> > -     return KSFT_SKIP;
->
-> exit(KSFT_SKIP) to preserve the test behavior.
+With gigantic pages it may not be true that struct page structures
+are contiguous across the entire gigantic page. The nth_page macro
+is used here in place of direct pointer arithmetic to correct for
+this.
 
-Ack, though this change should go away in the next series with common
-selftest init using constructor attribute.
+Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Cc: <stable@vger.kernel.org>
+---
+ mm/hugetlb.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-Regards,
-Vishal
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index e070b8593b37..0bdfc7e1c933 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3420,6 +3420,7 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+ {
+ 	int i, nid = page_to_nid(page);
+ 	struct hstate *target_hstate;
++	struct page *subpage;
+ 	int rc = 0;
+ 
+ 	target_hstate = size_to_hstate(PAGE_SIZE << h->demote_order);
+@@ -3453,15 +3454,16 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+ 	mutex_lock(&target_hstate->resize_lock);
+ 	for (i = 0; i < pages_per_huge_page(h);
+ 				i += pages_per_huge_page(target_hstate)) {
++		subpage = nth_page(page, i);
+ 		if (hstate_is_gigantic(target_hstate))
+-			prep_compound_gigantic_page_for_demote(page + i,
++			prep_compound_gigantic_page_for_demote(subpage,
+ 							target_hstate->order);
+ 		else
+-			prep_compound_page(page + i, target_hstate->order);
+-		set_page_private(page + i, 0);
+-		set_page_refcounted(page + i);
+-		prep_new_huge_page(target_hstate, page + i, nid);
+-		put_page(page + i);
++			prep_compound_page(subpage, target_hstate->order);
++		set_page_private(subpage, 0);
++		set_page_refcounted(subpage);
++		prep_new_huge_page(target_hstate, subpage, nid);
++		put_page(subpage);
+ 	}
+ 	mutex_unlock(&target_hstate->resize_lock);
+ 
+-- 
+2.25.1
+
