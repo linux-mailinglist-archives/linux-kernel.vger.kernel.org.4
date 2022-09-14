@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66A15B8A7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772B35B8AFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiINO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S229815AbiINOuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiINO23 (ORCPT
+        with ESMTP id S229853AbiINOt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:28:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73393ED5C;
-        Wed, 14 Sep 2022 07:28:28 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 884331FAC1;
-        Wed, 14 Sep 2022 14:28:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663165707; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rNlI3zlemkHtad6UJYVAQefl5OerSoDA86fMBi08vO4=;
-        b=IMcU+sMzPrtf2swXGKoltws1DQ4PgrmVnuO6T/Q8delDYm0q8pNrJpq1MOP7xd6pZAf/Jb
-        Fj9kKS+pmhqrUq9gHQbLKe9xjwQzs0XXFM41HygdB74Nb7ZvF9w5/0sBD/TJQ6ijUhNld2
-        ovmAUy7zEQzNfJwAOOA+Lerl2Xz07qg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663165707;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rNlI3zlemkHtad6UJYVAQefl5OerSoDA86fMBi08vO4=;
-        b=3fJIRsrioi8AmmHGURizF9ChVKr3QoUbkZwIJ7IgJ5my1PvR3SHrnTkZipLA9y0w31fOb6
-        QBhZcoLjuWM9F4Bw==
-Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0A94B2C141;
-        Wed, 14 Sep 2022 14:28:27 +0000 (UTC)
-Received: by wotan.suse.de (Postfix, from userid 10510)
-        id EFA0E62AF; Wed, 14 Sep 2022 14:28:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by wotan.suse.de (Postfix) with ESMTP id EDC3C62AE;
-        Wed, 14 Sep 2022 14:28:26 +0000 (UTC)
-Date:   Wed, 14 Sep 2022 14:28:26 +0000 (UTC)
-From:   Michael Matz <matz@suse.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-toolchains@vger.kernel.org,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, "Jose E. Marchesi" <jemarch@gnu.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [RFC] Objtool toolchain proposal:
- -fannotate-{jump-table,noreturn}
-In-Reply-To: <YyHecBM8D0i1lRu8@hirez.programming.kicks-ass.net>
-Message-ID: <alpine.LSU.2.20.2209141415340.8265@wotan.suse.de>
-References: <20220909180704.jwwed4zhwvin7uyi@treble> <Yx8PcldkdOLN8eaw@nazgul.tnic> <alpine.LSU.2.20.2209121200120.8265@wotan.suse.de> <20220914000416.daxbgccbxwpknn2q@treble> <YyHecBM8D0i1lRu8@hirez.programming.kicks-ass.net>
-User-Agent: Alpine 2.20 (LSU 67 2015-01-07)
+        Wed, 14 Sep 2022 10:49:56 -0400
+X-Greylist: delayed 1268 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 07:49:55 PDT
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5786712A8C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:55 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id B59DE21ABB2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:28:46 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YTNeo07bfCE4UYTNeorhTV; Wed, 14 Sep 2022 09:28:46 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2nbWnZpDqspK8M+l3wuY1LlZYNNNGLo4dDPJVIDYOn8=; b=pxGivBBmG7m2joqZGJWU1azhNw
+        mbZ02DgKrnei52l8GvUf5FLPmktwBrnYXPGjM7m4BQsovdRrN7BKKJyPqDNADXRar0w66xAvQuws7
+        v2p9r7IxAsE54R3UDuaMPbuTBxfAqIWgRrNwdXIFWNaWtrwowPwv7ocIvD5R9PzN6v5ye9kIj2Fw3
+        SVw3Ks6/nO344ycn6IH6puOeMX6YPsEyq8zh7Aln5RsFOn+/IBAf1LN9ngOjiRVhEehboKma3eSFp
+        blqvym236lbuRM0O9qRQU3VYtJrMltoP2CDLIs7nIPQwrhygruJlkjLVM329HcAPCsYmbrxguGL0l
+        v1dH3EFg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39584 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oYTNd-002R0A-9S;
+        Wed, 14 Sep 2022 14:28:45 +0000
+Date:   Wed, 14 Sep 2022 07:28:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
+Message-ID: <20220914142843.GA941669@roeck-us.net>
+References: <20220913140410.043243217@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oYTNd-002R0A-9S
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:39584
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 17
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, 14 Sep 2022, Peter Zijlstra wrote:
-
-> > Maybe this is semantics, but I wouldn't characterize objtool's existence
-> > as being based on the mistrust of tools.  It's main motivation is to
-> > fill in the toolchain's blind spots in asm and inline-asm, which exist
-> > by design.
+On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.9 release.
+> There are 192 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> That and a fairly deep seated loathing for the regular CFI annotations
-> and DWARF in general. Linus was fairly firm he didn't want anything to
-> do with DWARF for in-kernel unwinding.
-
-I was referring only to the check-stuff functionality of objtool, not to 
-its other parts.  Altough, of course, "deep seated loathing" is a special 
-form of mistrust as well ;-)
-
-> That left us in a spot that we needed unwind information in a 'better'
-> format than DWARF.
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
 > 
-> Objtool was born out of those contraints. ORC not needing the CFI
-> annotations and ORC being *much* faster at unwiding and generation
-> (debug builds are slow) were all good.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> -------------
+> Pseudo-Shortlog of commits:
+> 
+[ ... ]
+> Csókás Bence <csokas.bence@prolan.hu>
+>     net: fec: Use a spinlock to guard `fep->ptp_clk_on`
+> 
 
-Don't mix DWARF debug info with DWARF-based unwinding info, the latter 
-doesn't imply the former.  Out of interest: how does ORC get around the 
-need for CFI annotations (or equivalents to restore registers) and what 
-makes it fast?  I want faster unwinding for DWARF as well, when there's 
-feature parity :-)  Maybe something can be learned for integration into 
-dwarf-unwind.
+This commit is broken, will be reverted upstream, and should not be
+applied to any stable releases.
 
-
-Ciao,
-Michael.
+Guenter
