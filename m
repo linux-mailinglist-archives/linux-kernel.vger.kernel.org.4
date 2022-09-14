@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E2C5B8876
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCDD5B8879
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiINMn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S229824AbiINMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiINMnx (ORCPT
+        with ESMTP id S229705AbiINMox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:43:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EB374E28
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:43:52 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id lc7so34493098ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mgqw+6JpGXn2oifvzQVlVRMAL4x59CkZWm4PptgSgFk=;
-        b=fVa4Ty+UkhM6eyVyz8m/FQl2wVTe94vkm2UAuMPeXqk2kvhGbi9GAU5q1ShPveFCZn
-         Y++NRtsmc1f20iIFZZ1jtBAelomaavMORZ7kl661S2hDY2Ki22yd99XeiNU+hMQEsF26
-         Ln9uS5aUrilbxCuv/oLwSqf+opxYiQfSkZeRaEXrwweq2TKKtGVw/Un182e4nemq5kcT
-         JfpA0jPVg4RpMTyOE8AkuSHuTq2DQBydLaI2Q53HH4lNJi0bpVd7pyNI/kngC85VjiX+
-         LB/1ka96RTB0//P+kPGd6+Rdu545gO1GB7WkbahmegUAs2GwUFLC0z7j2NXsp88vjzhl
-         wb6g==
+        Wed, 14 Sep 2022 08:44:53 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74786167C2;
+        Wed, 14 Sep 2022 05:44:50 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id b75so9559481pfb.7;
+        Wed, 14 Sep 2022 05:44:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mgqw+6JpGXn2oifvzQVlVRMAL4x59CkZWm4PptgSgFk=;
-        b=cgAsk/tfzYBa1WzdOLeGDqLHAitX6DYNlKCC68MYDDg4S//P6RIWmzdMIUOFW84rzF
-         bavU4TZ+aQxtx/GeWsUKaiJaEGvzLeU1F/43ryH6q8I7V7t5u5AeRYyIjWAW9XvwibzS
-         hWZaI8q8ko24RJ9qIxMaFpiZPlboOvURe5F0dTMXOP+N97sEJxC7l05X0IfUJrFC/gyM
-         2p5JMIuNkJL6tX94uojnjN1KEy91y4v0uCUvRrdI8drv9nrspmdioc1SGXeGnOz9q3Jr
-         2MC8GeFakcF6KGVcHxnYVDJwkj380ZIfW6TuaUlgksK5GvS2Imeq1De5w7Yv8YoabaoB
-         SB/g==
-X-Gm-Message-State: ACgBeo0Mg+W/nIyrzW17PQD5axOjGOBNHzjFRVlRNNVeGIWB4/VcW/oK
-        FpD55KuHK0aCAwW3xBaDIcrHhm/vtERM5FZetI523g==
-X-Google-Smtp-Source: AA6agR4aGz/CzCXBPA1eEHSbXj6QZOoC4n4RqZ/g4zieZlX6n+p/yT1Ft7+SAvQM3qQZZ8R1YS123Kdmx+ty0nhB+mQ=
-X-Received: by 2002:a17:907:a0c6:b0:77d:7ad3:d05f with SMTP id
- hw6-20020a170907a0c600b0077d7ad3d05fmr10320261ejc.734.1663159431415; Wed, 14
- Sep 2022 05:43:51 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ppilu497MeD4MTHY8A0xUP+wtHWmhwuugRsdgpfLbGA=;
+        b=I+YOzOgSWWu766CKlCqVcpO4JXuWaQOKg+JOnwz9CQsc0Jvo2Hb9weax980+LvFXvf
+         Km5Ez2PTCe3Bc+QxEljvOlyU2yF/0YLJv8/pwNYFqOYU/7c5ALmxKZCIUYZOvss2ycPI
+         zMyfdGHy5Yxokop5EAtZnxq0S51daTN9aFZGA6uy1DHrYy65aQPitiZ9bjucJaIIIP0v
+         YirGN78Gb3m/Gq+qPeA8d5DEyD3aIPLDOomgIPYhx9tpaIA+xVLoUWMUgWWIRZqHoBIa
+         8f/B7mXV6OXVD0lHzF0lPQhMaauDMENpK5pbCThzvf/i+OyToF6l5mW2sw8XtszcW8yV
+         JuaA==
+X-Gm-Message-State: ACgBeo2e062mF7wprKpS84mkb0zPFYZLSKDkcfxps5snQb3qtq0//PFt
+        yvulF5ml7RHMj0uiGTUkKZGIRxp+MlF2iO75QV8=
+X-Google-Smtp-Source: AA6agR595jtmRRtVgqCFvWfg/d46mv2gTdEmeyhgdhCf3g6mzk1Jk1n81Gp93vy58b3Rb5F2iyAgqw==
+X-Received: by 2002:a63:87c2:0:b0:438:f775:6eb7 with SMTP id i185-20020a6387c2000000b00438f7756eb7mr13361743pge.336.1663159489904;
+        Wed, 14 Sep 2022 05:44:49 -0700 (PDT)
+Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id 16-20020a17090a191000b001fb47692333sm9142244pjg.23.2022.09.14.05.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 05:44:49 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 21:44:44 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Vidya Sagar <vidyas@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
+        robh@kernel.org, bhelgaas@google.com, treding@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <YyHMvBhWgbDtv6V2@rocinante>
+References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+ <20220913200746.GA619956@bhelgaas>
+ <20220914062411.GD16459@workstation>
+ <29b39edd-10ab-b679-f270-67b0b406ca2f@nvidia.com>
+ <20220914111857.GF16459@workstation>
+ <5ffe3dfa-28a5-a5fc-0ae2-28927c39dc03@nvidia.com>
+ <20220914114306.GG16459@workstation>
 MIME-Version: 1.0
-References: <20220913155348.38716-1-martyn.welch@collabora.co.uk> <20220913155348.38716-2-martyn.welch@collabora.co.uk>
-In-Reply-To: <20220913155348.38716-2-martyn.welch@collabora.co.uk>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 14 Sep 2022 14:43:40 +0200
-Message-ID: <CAMRc=MdSsLfQDGHD0w5GwvYQMZWteY_vwbLB6Y=urVpzNhQJGA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: gpio: pca95xx: add entry for pcal6534
- and PI4IOE5V6534Q
-To:     Martyn Welch <martyn.welch@collabora.co.uk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220914114306.GG16459@workstation>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 5:54 PM Martyn Welch
-<martyn.welch@collabora.co.uk> wrote:
->
-> From: Martyn Welch <martyn.welch@collabora.com>
->
-> The NXP PCAL6534 is a 34-bit I2C I/O expander similar to the PCAL6524. The
-> Diodes PI4IOE5V6534Q is a functionally identical chip provided by Diodes
-> Inc.
->
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->
+Hello,
 
-Can you rebase this on top of my for-next branch[1]? We've had some
-new models added and the patch no longer applies.
+[...]
+> Anyway, I don't strongly object the change and leave it to the
+> maintainers to decide.
 
-Bart
+Perhaps it makes sense to make this a dev_dbg() over dev_info(), especially
+since it appears that this information is of more use to the developer (who
+most likely has the suitable log level set anyway), and given that there is
+no way to reliably detect a presence in a slot on some platforms, this
+might otherwise, add to the other messages that normal users don't pay
+attention to usually - if this is not to be treated as an error.
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+	Krzysztof
