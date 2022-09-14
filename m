@@ -2,95 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7049C5B8AF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD485B8B08
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiINOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S229697AbiINOu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiINOtt (ORCPT
+        with ESMTP id S230174AbiINOul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:49:49 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A3195B9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:47 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id d74-20020a4a524d000000b004755f8aae16so1801474oob.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=kJ9cObmCfJy7zayueRZ8avT0ZkBC3fAXveiFVXW2d3c=;
-        b=BS8LjY8kVKMrnEmhnKSq83R4AizxpIgEbctiVDPMRcdKOmBMECLYxiTY+zmFs9d/Am
-         Zp0NwuDgfToaqteR8JP4GOo7qgCTMbz/9pw9grsuTo+3xmlA67gGc+c4tdcBdEslPqXQ
-         cRaJDWOIXWvkeLsBnVclQAgo7wJ+2Y1vkW7ukrDyi0pGUu0MEJ/TJ3U/zA9frXxZ4PXv
-         GHe9hetUR1JtaCPXOrjBKVVSSo21VdPcBI+zdw4jDL9mf3y4LWC4SClyIdaOKHqcNLVB
-         XmCBcN+UOk2lhGJVwc3JTraZmcdd1AvoTXZyS0XaryNrkZpovJOKgNS2SsofpJ1RR+40
-         2ocg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=kJ9cObmCfJy7zayueRZ8avT0ZkBC3fAXveiFVXW2d3c=;
-        b=w54LWcckMPQfU69okPBlRUmqRINwabzxS7foRYNu6gdUIRjiVYt629/zt1fQjrH+Wf
-         j5kAWsNjtGC2LHmLq9E1AqXPXNXNZYkV1MbzRVx8DKrxBj3smwRyE4M7QUg+V3mZrXgw
-         7xnxs4idGZmQ3nQNRfZDXjakE1A2UbTmpWPbs2zJGi2poSAbUfU/2nMLr3CGDNugjvzI
-         +3bLd/gH0iLF9mXwbsnf/HMy2nkC4D7vQu2DY2Cs8vTngRBiVPh2ravoi+TjSgm5SBZf
-         dnjiQb8TAQcb2bkaF0BH8QLN5VKSK13tLJUJoLTsCGs+Xokq+IfIg+roZvGVsqKGEwLy
-         M/gg==
-X-Gm-Message-State: ACgBeo3uDf+5atBKDES0M81AgYPwoH4z7Y3jsM5EB1IVIgOdf62lN0wj
-        wsy0vi9ObtZoNzQUPcyJIr9Gwn1spa8E4kYN44c=
-X-Google-Smtp-Source: AA6agR5hbY7TnWmhNQMvFEFho6lqEUCWEj/P/ohu/W7QkUem154xEfPhzk+xspl1CmpWCz2IxmyClW+PwuQx7kBnhqA=
-X-Received: by 2002:a4a:bf11:0:b0:436:1611:6b51 with SMTP id
- r17-20020a4abf11000000b0043616116b51mr12780772oop.18.1663166986819; Wed, 14
- Sep 2022 07:49:46 -0700 (PDT)
+        Wed, 14 Sep 2022 10:50:41 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7679B2FFFB;
+        Wed, 14 Sep 2022 07:50:39 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EEH6KY003237;
+        Wed, 14 Sep 2022 14:50:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OTY8GuPkdqdk8EUNrFn83pUuir/JISykGcAd92LluLU=;
+ b=ZgqFrSOyeyafAKKJaxkUO0G0rd1BuwpZHgTjwNsIyQtfT31waUuVjql+Q/fFuUdKrgP8
+ nlTgi7coDbrtKB43GU4JOHlSVRUTecjcjsYhubS7z8qYDAg/JZLTNH6HWL/Ijv/EfJDU
+ RisOl2t0JhVAMDUmiAqF33x6eaR0WFLt1X3ywbIFosueIyVvpei/LoOs0k78Y77ihbZP
+ KAi1YAAtopNDYWSWOY7n2Tiy/xhieBYF3kikdny/FF6IvLsJK76QTocjOwhaRmt+m2v5
+ HE/COrUeoyzxm5MsduQETvOelocutOFztqCjW/TNhLzxsBFlaTvFqTEpnlXVpeIAIGGJ mg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0gje8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 14:50:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28EEoNc7025556
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 14:50:23 GMT
+Received: from [10.216.1.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 07:50:18 -0700
+Message-ID: <87138bc9-2fc0-39fb-89c1-d3826e28594e@quicinc.com>
+Date:   Wed, 14 Sep 2022 20:20:14 +0530
 MIME-Version: 1.0
-References: <20220815072835.74876-1-yang.yang29@zte.com.cn>
-In-Reply-To: <20220815072835.74876-1-yang.yang29@zte.com.cn>
-From:   Joonsoo Kim <js1304@gmail.com>
-Date:   Wed, 14 Sep 2022 23:49:35 +0900
-Message-ID: <CAAmzW4ORH=kMbzMg7tpGTF_0Ky4Rb1TZ+W=q=pgppNaRxkScQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/page_io: count submission time as thrashing
- delay for delayacct
-To:     cgel.zte@gmail.com
-Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power
+ up
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mka@chromium.org>, <quic_vbadigan@quicinc.com>,
+        <quic_hemantk@quicinc.com>, <quic_nitegupt@quicinc.com>,
+        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
+        <manivannan.sadhasivam@linaro.org>, <swboyd@chromium.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+ <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
+ <CAA8EJppgaAuEDU44ePOt+ZWK0_rNsXHnE3WOEc9F-n=VE=3aVQ@mail.gmail.com>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <CAA8EJppgaAuEDU44ePOt+ZWK0_rNsXHnE3WOEc9F-n=VE=3aVQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TU-05IkEFPn5b2aXCDOWOP7oMH83nch1
+X-Proofpoint-GUID: TU-05IkEFPn5b2aXCDOWOP7oMH83nch1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_06,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140071
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=EB=85=84 8=EC=9B=94 15=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 4:33, <=
-cgel.zte@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> From: Yang Yang <yang.yang29@zte.com.cn>
->
-> Once upon a time, we only support accounting thrashing of page cache.
-> Then Joonsoo introduced workingset detection for anonymous pages and
-> we gained the ability to account thrashing of them[1].
->
-> Likes PSI, we count submission time as thrashing delay because when
-> the device is congested, or the submitting cgroup IO-throttled,
-> submission can be a significant part of overall IO time.
 
-It's not the main purpose of this patch. Without this patch,
-swap thrashing through frontswap or some block device supporting rw_page
-operation isn't measured correctly. I think that description change is
-required. Please refer to commit 937790699be9c8100e
-(mm/page_io.c: annotate refault stalls from swap_readpage).
+On 9/9/2022 2:34 PM, Dmitry Baryshkov wrote:
+> On Fri, 9 Sept 2022 at 11:45, Krishna chaitanya chundru
+> <quic_krichai@quicinc.com> wrote:
+>> Introducing phy power down/up callbacks for allowing to park the
+>> link-state in L1ss without holding any PCIe resources during
+>> system suspend.
+>>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   drivers/phy/phy-core.c  | 30 ++++++++++++++++++++++++++++++
+>>   include/linux/phy/phy.h | 20 ++++++++++++++++++++
+>>   2 files changed, 50 insertions(+)
+>>
+>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+>> index d93ddf1..1b0b757 100644
+>> --- a/drivers/phy/phy-core.c
+>> +++ b/drivers/phy/phy-core.c
+>> @@ -441,6 +441,36 @@ int phy_set_speed(struct phy *phy, int speed)
+>>   }
+>>   EXPORT_SYMBOL_GPL(phy_set_speed);
+>>
+>> +int phy_power_down(struct phy *phy)
+>> +{
+>> +       int ret;
+>> +
+>> +       if (!phy || !phy->ops->power_down)
+>> +               return 0;
+>> +
+>> +       mutex_lock(&phy->mutex);
+>> +       ret = phy->ops->power_down(phy);
+>> +       mutex_unlock(&phy->mutex);
+>> +
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(phy_power_down);
+>> +
+>> +int phy_power_up(struct phy *phy)
+>> +{
+>> +       int ret;
+>> +
+>> +       if (!phy || !phy->ops->power_up)
+>> +               return 0;
+>> +
+>> +       mutex_lock(&phy->mutex);
+>> +       ret = phy->ops->power_up(phy);
+>> +       mutex_unlock(&phy->mutex);
+>> +
+>> +       return ret;
+>> +}
+> As it can be seen from the phy_power_off(), the PHY can be a shared
+> resource, with the power_count counting the number of users that
+> requested the PHY to be powered up. By introducing suc calls you break
+> directly into this by allowing a single user to power down the PHY, no
+> matter how many other users have requested the PHY to stay alive.
 
-No objection on the code side.
+can we use same power_count in this function also here and restrict the 
+single user to
 
-Thanks.
+power down the PHY same like phy_power_off?.
+
+>> +EXPORT_SYMBOL_GPL(phy_power_up);
+>> +
+>>   int phy_reset(struct phy *phy)
+>>   {
+>>          int ret;
+>> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+>> index b141375..3a45f4d 100644
+>> --- a/include/linux/phy/phy.h
+>> +++ b/include/linux/phy/phy.h
+>> @@ -76,6 +76,8 @@ union phy_configure_opts {
+>>    * @set_mode: set the mode of the phy
+>>    * @set_media: set the media type of the phy (optional)
+>>    * @set_speed: set the speed of the phy (optional)
+>> + * @power_down: parking the phy in power down state
+>> + * @power_up: pulling back the phy from power down
+>>    * @reset: resetting the phy
+>>    * @calibrate: calibrate the phy
+>>    * @release: ops to be performed while the consumer relinquishes the PHY
+>> @@ -89,6 +91,8 @@ struct phy_ops {
+>>          int     (*set_mode)(struct phy *phy, enum phy_mode mode, int submode);
+>>          int     (*set_media)(struct phy *phy, enum phy_media media);
+>>          int     (*set_speed)(struct phy *phy, int speed);
+>> +       int     (*power_down)(struct phy *phy);
+>> +       int     (*power_up)(struct phy *phy);
+>>
+>>          /**
+>>           * @configure:
+>> @@ -226,6 +230,8 @@ int phy_init(struct phy *phy);
+>>   int phy_exit(struct phy *phy);
+>>   int phy_power_on(struct phy *phy);
+>>   int phy_power_off(struct phy *phy);
+>> +int phy_power_down(struct phy *phy);
+>> +int phy_power_up(struct phy *phy);
+>>   int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode);
+>>   #define phy_set_mode(phy, mode) \
+>>          phy_set_mode_ext(phy, mode, 0)
+>> @@ -349,6 +355,20 @@ static inline int phy_power_off(struct phy *phy)
+>>          return -ENOSYS;
+>>   }
+>>
+>> +static inline int phy_power_down(struct phy *phy)
+>> +{
+>> +       if (!phy)
+>> +               return 0;
+>> +       return -ENOSYS;
+>> +}
+>> +
+>> +static inline int phy_power_up(struct phy *phy)
+>> +{
+>> +       if (!phy)
+>> +               return 0;
+>> +       return -ENOSYS;
+>> +}
+>> +
+>>   static inline int phy_set_mode_ext(struct phy *phy, enum phy_mode mode,
+>>                                     int submode)
+>>   {
+>> --
+>> 2.7.4
+>>
+>
