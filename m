@@ -2,174 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65285B88F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C736E5B88FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiINNSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S229625AbiINNVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiINNSd (ORCPT
+        with ESMTP id S229659AbiINNVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:18:33 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A00F58DD8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:18:31 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so15490468wmk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=DS/dB1Z8F2XdEan+7+v8LqVABBrY3Wgrn6yGpXksSnc=;
-        b=U3uQB5mdqAWulEk/fX6kGrPUKTRAaJXxtaOqKnZAK5Ttyefxo59iAwEwEq8JOs8iDO
-         8bg+Va6JCMlpApltHBGInErDhsVO/awvtfjGuzGNSlwI02Q0ktap8u/XuljHFlumrxPW
-         VLi5lh1mJys7EZxxZ/Nr7IES8Ir9goTJkdpzG2VjdnfSsdSNGhvpbQErQ+qsVh2WkQMu
-         oaXx1T8Y9JtzepZG8kPn4V5SP9bnXVKSbygKNW6mTmPEfC/OREA9Im1NSxl4L7Dm0UWf
-         wTkmIKou80/6UwkmnHY8AJxZTKgznM7FrmL6CVqn1JYMegf1VFmsHppG76zsL+OL9EMb
-         yS2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DS/dB1Z8F2XdEan+7+v8LqVABBrY3Wgrn6yGpXksSnc=;
-        b=cn67wRP9CIidzfn+ArBzSjHkA82ds8Z1G336rjjo4Hk85CLrRZKMAqFmUocFOgBEyw
-         WG6AavrYnHKYTNhRMy+7KrO1SErHtqlUa4YrgwMcWkNpq0XXIvJ+KmGdZKh2OnNH4dY7
-         o+c6fAyTU3gSdLUX4LD2ho3W8gUalIi22EI7Xl2w1mo6++hRh7JCIKmcVjv3nmpUuYy8
-         rCdJ1YkWGvKGsU80MzclFy9i5cFcSWJ/zDhbG8s52+7TEOoACM412zwYZ8UYsqRou+Qx
-         pB8ZMDqiCSBSoHPoDuZhYLsm/wR3XTX0dPq/jlLm0biKkpTOqqrz6btnq56To7N9mgyE
-         hPvQ==
-X-Gm-Message-State: ACgBeo3e9v2oxzEBafobGxOPM2Ji2z1VLPg3TnmYeFEE3rPEz5JYjaaA
-        ti/MOwp/urxHij6LGh3A9sw1rvrm+uArU0nt
-X-Google-Smtp-Source: AA6agR4grufWg+c3qXZKBLUKABCRUYDpCsb6qvLVWtV85cOL2R6YF4TAyyUjumc/HzIXaQ4ecB7u6w==
-X-Received: by 2002:a05:600c:1ca8:b0:3b4:a5d1:2033 with SMTP id k40-20020a05600c1ca800b003b4a5d12033mr1741290wms.23.1663161510097;
-        Wed, 14 Sep 2022 06:18:30 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05600c038a00b003b2878b9e0dsm16599554wmd.20.2022.09.14.06.18.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 06:18:29 -0700 (PDT)
-Message-ID: <fda72ade-3c47-e9f8-d041-3a87d55318aa@baylibre.com>
-Date:   Wed, 14 Sep 2022 15:18:27 +0200
+        Wed, 14 Sep 2022 09:21:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1906CD23
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:21:11 -0700 (PDT)
+X-UUID: c902cac383734ff1a6d31e5bbf788ddc-20220914
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VixrTTFoGyBOD0OrB8q5ACr+Mh4D5VFG/hDsOWGUjoM=;
+        b=tYOEZ9IC3ViSTEN+uwf+/Guaro7xNK1RAeZTC1fOG2bHdEayZh7cr1soxTlHApJj0BGqj/Uv64mXoBwu3LyWlpz5Qbunoyn6PGeDpQ8L5H4iB/NZDb6T+1y8wYWaGPYJHSU4HiwZ0A26tqwh9Bk9kiRPsEwgKw4HE/9vmL06/as=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:3180ad07-3d3e-4994-a517-58a0403acf6d,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:39a5ff1,CLOUDID:484664f6-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c902cac383734ff1a6d31e5bbf788ddc-20220914
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1630451661; Wed, 14 Sep 2022 21:21:06 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 14 Sep 2022 21:21:05 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Wed, 14 Sep 2022 21:21:04 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <matthias.bgg@gmail.com>, <jason-jh.lin@mediatek.com>,
+        <rex-bc.chen@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <jitao.shi@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v6,0/3] Add dpi output format control for MT8186
+Date:   Wed, 14 Sep 2022 21:20:59 +0800
+Message-ID: <1663161662-1598-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re:
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220914131219.18236-1-aouledameur@baylibre.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <20220914131219.18236-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-The subject has not been parsed correctly, I resent a proper patch here:
+Base on the branch of Linux-next/master.
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220914131339.18348-1-aouledameur@baylibre.com/
+Changes since v5:
+1. Separate the patch that adds edge_cfg_in_mmsys from the patch that
+adds mt8186 dpi support.
+2. Move the mmsys register definition to mmsys driver.
+ 
+Changes since v4:
+1. This series of cancellations is based on the following patches:
+   [1] Add MediaTek SoC(vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/
+   [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/
+2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
+3. MMSYS 0x400 register is modified to MT8186_MMSYS_DPI_OUTPUT_FORMAT;
+4. Fix formatting issues.
 
+Changes since v3:
+1. Fix formatting issues;
+2. Modify the edge output control name & description;
+3. Fix the threading problem.
 
-Sorry for the noise.
+Changes since v2:
+1. Modify key nouns in the description;
+2. Add the label of jitao to Co-developed-by;
+3. Macro definition address lowercase problem and function naming;
+4. Add missing a description of this property in the mtk_dpi_conf.
 
-Regards,
+Change since v1:
+1. Modify mt8186 compatiable location.
+2. Modify MT8186_DPI_OUTPUT_FORMAT name.
 
-Amjad
+When MT8186 outputs dpi signal, it is necessary to add dual edge output
+format control in mmsys.
 
-On 9/14/22 15:12, Amjad Ouled-Ameur wrote:
-> Subject: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones without
->   trips.
->
-> Thermal zones without trip point are not registered by thermal core.
->
-> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
-> only but are not supposed to remain on DT.
->
-> Remove the zones above and keep only cpu_thermal.
->
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 57 ------------------------
->   1 file changed, 57 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 9d32871973a2..f65fae8939de 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -1182,63 +1182,6 @@ THERMAL_NO_LIMIT
->   					};
->   				};
->   			};
-> -
-> -			/* The tzts1 ~ tzts6 don't need to polling */
-> -			/* The tzts1 ~ tzts6 don't need to thermal throttle */
-> -
-> -			tzts1: tzts1 {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 1>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
-> -
-> -			tzts2: tzts2 {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 2>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
-> -
-> -			tzts3: tzts3 {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 3>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
-> -
-> -			tzts4: tzts4 {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 4>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
-> -
-> -			tzts5: tzts5 {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 5>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
-> -
-> -			tztsABB: tztsABB {
-> -				polling-delay-passive = <0>;
-> -				polling-delay = <0>;
-> -				thermal-sensors = <&thermal 6>;
-> -				sustainable-power = <5000>;
-> -				trips {};
-> -				cooling-maps {};
-> -			};
->   		};
->   
->   		pwm0: pwm@1100e000 {
+Xinlei Lee (3):
+  soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
+  drm: mediatek: Adjust the dpi output format to MT8186
+  drm: mediatek: Add mt8186 dpi compatible to mtk_dpi.c
+
+ drivers/gpu/drm/mediatek/mtk_dpi.c     | 35 ++++++++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
+ drivers/soc/mediatek/mt8186-mmsys.h    |  6 +++++
+ drivers/soc/mediatek/mtk-mmsys.c       | 20 +++++++++++++++
+ include/linux/soc/mediatek/mtk-mmsys.h |  2 ++
+ 5 files changed, 65 insertions(+)
+
+-- 
+2.18.0
+
