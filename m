@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D46A5B915B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303835B915E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiINX7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 19:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S229631AbiINX7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 19:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiINX7P (ORCPT
+        with ESMTP id S229915AbiINX7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Sep 2022 19:59:15 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBC989CEF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 16:58:25 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id k2so8844729ilu.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 16:58:25 -0700 (PDT)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594E889CF9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 16:58:26 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id h194so11835149iof.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 16:58:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=H54d0G6AAErtN9paRV2+6Wo2Il0gAFeOcBLywRUXXa0=;
-        b=KKodXfjiFWL8hO25Cc/Etaa8UU5/33Qel0Ut/93Dd4jFqU1m4zVtYj9oryjfKZXV+1
-         SQH08v978uhL8OKjdw72ZoFUvOyKL23NvujZmenkJYBdgBBPzl8PgFPnPvmDXd4qPy4p
-         DKxG6UM6GG2c7X5o80ffKWILUsl3cYsiVRciI=
+        bh=ETp6lHAE1kwX97QdZzpHEsClO/L2A3yvzqUq+PQbIOE=;
+        b=Nes0kQOFzscL0Qf9zV4Hrr4MiAQ6+jxqLLdB+8yC192cawXtalPd3EcEcMoBVjRT3Y
+         T3/c/9YRh9Io5qmYle40ANr086Sy/CUbJT6RTvzGkEt5GruOugDUvKZtaiUsHzb42/Jy
+         2iiVSV5FY+xSEYlohMd4dab/lBKwWtAVu9EU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=H54d0G6AAErtN9paRV2+6Wo2Il0gAFeOcBLywRUXXa0=;
-        b=0mH5laNnVaRxAj7wCLgugq/UpryqhDZtKo5YT637U6H1Ei/quxyYtLSPutd9SSEzlb
-         00Mcx2Wkuk6aR4CsYKv+egCcUANScI5/dePGvLrJ4M3mN84Rf7VqXxC/5q4k4peFyvGA
-         JRUjxUerRNiPlvaHLr3gnev+d3SZKC1+t9lh0HeLHm0Srf2NoyMUDWlRhYMYKnFeCe2+
-         LJ0ecjm7mDnAqCNli5AWkEMws7pYW5eZfvvLEHZkxiWzLBkCqgTJX4ZtAjpz2KN2bi4Z
-         +FKR7PUqrpUMebGvOjY8/KJcgzc0Ee5N/ZfxeV2D8zFxars8SkrBx39L1mNM7Pfnn+Iz
-         nZMg==
-X-Gm-Message-State: ACgBeo00NP4sSBvRhJMJDIJBBOqvu+4/BBMQ043AGxOYck5ud8I/mgZA
-        raTayzPTThhY343zl0P7zkCiUg==
-X-Google-Smtp-Source: AA6agR77Y9L4Cs5c5NRnJj3AxXZXt2uIl+CPQ8FXJ/1cBBUpbTm6gMAL8RdFcXZFMGBt4hdpYAgA9g==
-X-Received: by 2002:a05:6e02:15c9:b0:2da:c33e:49c7 with SMTP id q9-20020a056e0215c900b002dac33e49c7mr15445970ilu.26.1663199904317;
-        Wed, 14 Sep 2022 16:58:24 -0700 (PDT)
+        bh=ETp6lHAE1kwX97QdZzpHEsClO/L2A3yvzqUq+PQbIOE=;
+        b=21c1HaoV8Egcl3EtozoC7fKJLw4jznjKMD6H6nrvX0g8cEGu215KOMUgOXPaKVbxkX
+         BpIXtl4hrOBpCEiFKnXxev54eSj6xaoEFsr7u/DvsZPB65LM2IbX36BgCwECG7y+Iiry
+         g2ixHgZwr8ObNPnF63d7RDJuEzbg3BKRUaw+8g5B/bJLXIVJFdDSgmtnOmNSNzMdr8yE
+         xQTgZPbByaTPtIMRf5bA0P5cqSsuYdaEKXkKTh3LBJTLOSfyBDQAyYkpIFfc+DSaZgB9
+         wenRvOaCjVClc4sRV6tZZSOGMfnr/d81Yq87IhPp+5ATgE6cbV/zb5jEdZd76kCH1GQG
+         1lEA==
+X-Gm-Message-State: ACgBeo09Ty7oRvCOdB9w4MXfkYcq5XHTCG0wkOtiNg5KMbg2cHJQZWj9
+        RzIfZj0gDDIcf1jsGDOalEp2uQ==
+X-Google-Smtp-Source: AA6agR5mTcH2fkavtZgo9Ruoe0xjaaOwQFLXmjLNc53nYsPlGtxolxjy0T1nW4+5zCmUvu58MldqKg==
+X-Received: by 2002:a05:6602:2e0e:b0:684:e4f9:734a with SMTP id o14-20020a0566022e0e00b00684e4f9734amr16433045iow.200.1663199905827;
+        Wed, 14 Sep 2022 16:58:25 -0700 (PDT)
 Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id a14-20020a027a0e000000b0034c0e8829c0sm353721jac.0.2022.09.14.16.58.23
+        by smtp.gmail.com with ESMTPSA id a14-20020a027a0e000000b0034c0e8829c0sm353721jac.0.2022.09.14.16.58.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 16:58:23 -0700 (PDT)
+        Wed, 14 Sep 2022 16:58:25 -0700 (PDT)
 From:   Raul E Rangel <rrangel@chromium.org>
 To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
 Cc:     jingle.wu@emc.com.tw, rafael@kernel.org,
         andriy.shevchenko@linux.intel.com, mario.limonciello@amd.com,
         hdegoede@redhat.com, linus.walleij@linaro.org, timvp@google.com,
         dmitry.torokhov@gmail.com, Raul E Rangel <rrangel@chromium.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 11/13] Input: elan_i2c - Don't set wake_capable and wake_irq
-Date:   Wed, 14 Sep 2022 17:57:59 -0600
-Message-Id: <20220914155914.v3.11.I7309b8f322082437b93581c6e2953886eeb998d7@changeid>
+Subject: [PATCH v3 12/13] Input: elants_i2c - Don't set wake_capable and wake_irq
+Date:   Wed, 14 Sep 2022 17:58:00 -0600
+Message-Id: <20220914155914.v3.12.I031ffbe411e1bae20bf16a1876da5baf444c7928@changeid>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 In-Reply-To: <20220914235801.1731478-1-rrangel@chromium.org>
 References: <20220914235801.1731478-1-rrangel@chromium.org>
@@ -77,28 +81,25 @@ for DT and ACPI systems.
 Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 ---
 
-(no changes since v2)
+(no changes since v1)
 
-Changes in v2:
-- I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
-
- drivers/input/mouse/elan_i2c_core.c | 16 ----------------
+ drivers/input/touchscreen/elants_i2c.c | 16 ----------------
  1 file changed, 16 deletions(-)
 
-diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
-index 3947474e93d16a..b25b94aba3e88e 100644
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -1332,22 +1332,6 @@ static int elan_probe(struct i2c_client *client,
- 		}
+diff --git a/drivers/input/touchscreen/elants_i2c.c b/drivers/input/touchscreen/elants_i2c.c
+index 80e16b533c452a..3500293bb1d8e1 100644
+--- a/drivers/input/touchscreen/elants_i2c.c
++++ b/drivers/input/touchscreen/elants_i2c.c
+@@ -1575,22 +1575,6 @@ static int elants_i2c_probe(struct i2c_client *client)
+ 		return error;
  	}
  
 -	/*
 -	 * Systems using device tree should set up wakeup via DTS,
 -	 * the rest will configure device as wakeup source by default.
 -	 */
--	if (!dev->of_node)
--		device_init_wakeup(dev, true);
+-	if (!client->dev.of_node)
+-		device_init_wakeup(&client->dev, true);
 -
 -	/*
 -	 * The wake IRQ should be declared via device tree instead of assuming
@@ -106,12 +107,12 @@ index 3947474e93d16a..b25b94aba3e88e 100644
 -	 * will be removed once the i2c-core supports querying ACPI for wake
 -	 * capabilities.
 -	 */
--	if (!dev->power.wakeirq)
--		dev_pm_set_wake_irq(dev, client->irq);
+-	if (!client->dev.power.wakeirq)
+-		dev_pm_set_wake_irq(&client->dev, client->irq);
 -
- 	return 0;
- }
- 
+ 	error = devm_device_add_group(&client->dev, &elants_attribute_group);
+ 	if (error) {
+ 		dev_err(&client->dev, "failed to create sysfs attributes: %d\n",
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
