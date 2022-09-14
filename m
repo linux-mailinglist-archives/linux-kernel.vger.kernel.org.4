@@ -2,157 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B113C5B88D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA355B88E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiINNGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S229826AbiINNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiINNGw (ORCPT
+        with ESMTP id S229904AbiINNNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:06:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94183474E0;
-        Wed, 14 Sep 2022 06:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663160807; x=1694696807;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z0axQ8qJC3iBquWFyEiDgeDMFF0a3+ccpP77u6bRgCM=;
-  b=dyNuHRx/vj7qH3PJPhcAzYDNVi5U+8GpBJTG00rBEHVbS2CZR+SHMZA9
-   yMpxDrEqfAd3nCBBabW7Xbdvxp0UpKs+VoLyzPIaVZQcsUGtILG/PQV+B
-   bLBkmg9KEVgP+4mPjW1q1TXxMZw2Gb8lHRs2PuPP8uuth5cNL/LPXm7mG
-   qIOIUS8I6sgjcTqw0wPgp2qxdqb6gexIwIkAdshrOJVp6oqheIs7MyMzu
-   0v7GnVHdqARbYOfdnAnk0Gs5TrbpOmjwbxgJI/4rlny9KJsZ/dzXk6lYc
-   7TZGuF+cThCy4MXgc1oQKArhyurDwPeXRVPhQu7CriqL5SNobsWN9cL0z
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362385383"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="362385383"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:06:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594377659"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:06:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oYS6E-002DFA-2H;
-        Wed, 14 Sep 2022 16:06:42 +0300
-Date:   Wed, 14 Sep 2022 16:06:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-Message-ID: <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org>
- <YyGoZLTFhYQvlf+P@smile.fi.intel.com>
- <YyG2tDdq9PWTlaBQ@wantstofly.org>
+        Wed, 14 Sep 2022 09:13:00 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464AE520A7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:58 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso2233474wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=c+CXqJzxevLGaFZnXFMUkD0mAJpWpY3HHP1XZ4X/APE=;
+        b=u+XT01IjaCLCz8d+8m02RUkMURuAC7Y57T1yTElVAjMz9t6zu9QTskZ5/QAmrc65fk
+         lSi/+v5aP2KayImK4B6PQOyCfqr422Y/WnQZZMKdLnyBKnRaDW118CY5G8nnn4yzS84Y
+         F2ZQBm+0A+DPolf9fdy4KYUeGvJiBd7S5fkVlnJx1NoDK/vWe+/NqmcHWiWbtDq5OoiB
+         +/40yL0rksS9xZhUCsMiCJqryi6y50sPhTWQtMYdiRtei42pIpTMo9rmdope+0sUSVoV
+         f8582kLOEaWVVhco8EAP9WW3fKhgqLEBrj5NqpyEMw9ZT3waIpijMBbB5Hcv5/weOgm/
+         mgTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=c+CXqJzxevLGaFZnXFMUkD0mAJpWpY3HHP1XZ4X/APE=;
+        b=qzNPBs3xfe1Zlxxnm0n38a2BfaxySeW+3fa6TwykpLMmlvgwnFeYsChVhkZ4Fe9n0f
+         jw8Wo7BOyQZ65OxKGy6LgVe2u6lnviSVUGYMJJCI9OcCt/hj/X5cusGg5mq7adkB3l7u
+         s9UqWXFLIrjbWYRJU2eT7S0u34T2moAJlhR/E1Xcpnwasp32fYdavk5KP2O6Hfilvvaf
+         n+ALRpZTXHIpYmPuwRi1sYZKFViDJIa9SMVfNAd9lzvEPbXhA1nZPuB7rJ9fq1FDeLr/
+         fB3F0kK6rEILSu27JO9y8IjRUimpl7Za7yGzj93rNLYAzuqYTklk2BcSLLzH363uMPJs
+         TbDg==
+X-Gm-Message-State: ACgBeo2c1bkKObm3XrWHxUivmVSnDiOORRc6akHr3dHL7R2PXIcTSH0x
+        oFou2eairUg2X7ADkoV04K9rDg==
+X-Google-Smtp-Source: AA6agR6AhmsKmw9U1RIEhuPZ5xg6Jj809FQ9MFO5psrfyvEWyVwyGP/mSb/5Gtm2SZ+pZAziD10o8A==
+X-Received: by 2002:a05:600c:1ca0:b0:3a8:41cf:a31f with SMTP id k32-20020a05600c1ca000b003a841cfa31fmr3115606wms.161.1663161176590;
+        Wed, 14 Sep 2022 06:12:56 -0700 (PDT)
+Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id c6-20020adffb46000000b0022acb7195aesm970605wrs.33.2022.09.14.06.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 06:12:56 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: 
+Date:   Wed, 14 Sep 2022 15:12:19 +0200
+Message-Id: <20220914131219.18236-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyG2tDdq9PWTlaBQ@wantstofly.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 02:10:44PM +0300, Lennert Buytenhek wrote:
-> On Wed, Sep 14, 2022 at 01:09:40PM +0300, Andy Shevchenko wrote:
-> > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
-> > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
-> > > the UARTs and then re-open that UART.
-> > > 
-> > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
-> > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
-> > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
-> > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
-> > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
-> > > __pci_write_msi_msg():
-> > > 
-> > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > 		Address: fee00278  Data: 0000
-> > > [root@icelake ~]# cat hangup.c
-> > > #include <stdio.h>
-> > > #include <sys/ioctl.h>
-> > > 
-> > > int main(int argc, char *argv[])
-> > > {
-> > > 	ioctl(1, TIOCVHANGUP);
-> > > 
-> > > 	return 0;
-> > > }
-> > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
-> > > [root@icelake ~]# ./hangup > /dev/ttyS4
-> > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > 		Address: 00000000  Data: 0000
-> > > [root@icelake ~]#
-> > > 
-> > > Opening the serial port device again while the UART is in this state
-> > > then appears to cause the UART to generate an interrupt
-> > 
-> > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
-> > Any of them can be possible, but to be sure, can you add:
-> > 
-> > 	dev_info(p->dev, "FISR: %x\n", fisr);
-> > 
-> > into dnv_handle_irq() before any other code and see which bits we
-> > actually got there before the crash?
-> > 
-> > (If it floods the logs, dev_info_ratelimited() may help)
-> 
-> I think that that wouldn't report anything because when the UART is
-> triggering an interrupt here, the MSI address/data are zero, so the
-> IRQ handler is not actually invoked.
+Subject: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones without
+ trips.
 
-Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
+Thermal zones without trip point are not registered by thermal core.
 
-> If Ilpo doesn't beat me to it, I'll try adding some debug code to see
-> exactly which UART register write in the tty open path is causing the
-> UART to signal an interrupt before the IRQ handler is set up.
-> 
-> (The IOMMU stops the write in this case, so the machine doesn't crash,
-> we just get an I/O page fault warning in dmesg every time this happens.)
+tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+only but are not supposed to remain on DT.
 
-And I believe you are not using that UART as debug console, so it won't
-dead lock itself. It's then better than I assumed.
+Remove the zones above and keep only cpu_thermal.
 
-> > > before the
-> > > MSI vector has been set up again, causing a DMA write to I/O virtual
-> > > address zero:
-> > > 
-> > > [root@icelake console]# echo > /dev/ttyS4
-> > > [  979.463307] DMAR: DRHD: handling fault status reg 3
-> > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> > > 
-> > > I'm guessing there's something under tty_open() -> uart_open() ->
-> > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
-> > > serial8250_do_startup() that triggers a UART interrupt before the
-> > > MSI vector has been set up again.
-> > > 
-> > > I did a quick search but it didn't seem like this is a known issue.
-> > 
-> > Thanks for your report and reproducer! Yes, I also never heard about
-> > such an issue before. Ilpo, who is doing more UART work nowadays, might
-> > have an idea, I hope.
-> 
-> Thank you!
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 57 ------------------------
+ 1 file changed, 57 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 9d32871973a2..f65fae8939de 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1182,63 +1182,6 @@ THERMAL_NO_LIMIT
+ 					};
+ 				};
+ 			};
+-
+-			/* The tzts1 ~ tzts6 don't need to polling */
+-			/* The tzts1 ~ tzts6 don't need to thermal throttle */
+-
+-			tzts1: tzts1 {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 1>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+-
+-			tzts2: tzts2 {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 2>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+-
+-			tzts3: tzts3 {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 3>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+-
+-			tzts4: tzts4 {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 4>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+-
+-			tzts5: tzts5 {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 5>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+-
+-			tztsABB: tztsABB {
+-				polling-delay-passive = <0>;
+-				polling-delay = <0>;
+-				thermal-sensors = <&thermal 6>;
+-				sustainable-power = <5000>;
+-				trips {};
+-				cooling-maps {};
+-			};
+ 		};
+ 
+ 		pwm0: pwm@1100e000 {
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
