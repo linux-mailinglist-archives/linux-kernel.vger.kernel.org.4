@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BB75B8B26
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC755B8B28
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiINO7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S229777AbiINPAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiINO7p (ORCPT
+        with ESMTP id S229520AbiINPAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:59:45 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A003BCBA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:59:44 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso19319957pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:59:44 -0700 (PDT)
+        Wed, 14 Sep 2022 11:00:46 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF45AA11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:00:45 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id bh13so14571697pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:00:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=YcOCvFv8Ww1CQ6MsvWRPqisqK9mPiN69h3UTY4oFQYk=;
-        b=fy8C5RC3erd4fSSCv04W7zDyJNWQuBtcaCMo47NACF4nQ6sqLj5lCvFviELvC/e0l4
-         DvhRdYP/l/tfs3xacVGNSIjLg1i/ZqZSN8yy/gTsWtlFoI/LCJnmdMA43qEGDO5Iml4I
-         qpnvPwhk+Tg3uMu9oO2NAHV/ElAVRPLfXeRxM=
+        bh=jioQxrQAqfCk9wKUDOON2Ly0Stj60gSfNnzyxWwUinI=;
+        b=m6Cvtm62KPKdP6K/ZNHnwvTlu6st8DlGbLCm5ohMi159b84EKI1+H8D7pOmedGG+OZ
+         4oNmJOgfYRgXkN4K+xb2n+IdATTpk7DC3uZzPV7hu1hRzpOIPg50waceiSIVdAv6Gxsa
+         Iu3yOJunVAQ/d3H1GFoh4d7CsHiHRnwEsljU35bso8LJe9tnhLwoLelIGykxiiOpvXZw
+         n3SEvFlB/w0hjxZAxVFspYSjjiBwRVzvIX+V7Sl/gWjJEuzAGIycAS1HvmSDMwe/e/Bj
+         WIaSun4KcGQwzaF16CamE+oUsCeyej3i3Ty/SvmLScXvUiaVHspcPX5uADTsoZGHBSLr
+         rK6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YcOCvFv8Ww1CQ6MsvWRPqisqK9mPiN69h3UTY4oFQYk=;
-        b=hYVceoY4TS4t+NRcxBTH/9zfA9ozosaX/SMIne0eRkG65xqWvuoLTNnwDudfgGRjgq
-         sKlKrgoNyPrZBsDHXzAt+0zJxI0jjsS6qEdD4kBGsQ5SEdNei+dDg6FyLbHlKA9WdFOW
-         aiAIDivDZjYFUuCwuncAsVtKZ4vFfNWmyTUTWF/wmkZsaP9+kVsikELfO1I54m1m4FQu
-         WueuvJ7T+kFePndzE0F97672olsVbwp/bbYbEtBMypATkJV6Timr1UZ20vqxO4486/SU
-         D+QhVx75peufpTeQFuoTXfQu+ZnGctqXoXz7u7UcX/YwteSowvArrxOCRP/W/mpm6EkA
-         rtJg==
-X-Gm-Message-State: ACgBeo3NI1NGe3dX1z5tjuv3D+7a8xiXkC3dY55TuTUMMuc3v2yxd6aV
-        7B4bymnB/HvU/soPTyXPxleErUYsaPpZYw==
-X-Google-Smtp-Source: AA6agR6nhDnf/eashzX/3gd+99g8YdobSXF5wix0WL47aF0M3CfNFWExj1BhQO3Oc2dP80yTnfJ42Q==
-X-Received: by 2002:a17:903:22cd:b0:176:ca53:3e82 with SMTP id y13-20020a17090322cd00b00176ca533e82mr37533818plg.59.1663167583839;
-        Wed, 14 Sep 2022 07:59:43 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:8201:ef09:d097:37b8])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b00176dd41320dsm10743768plb.119.2022.09.14.07.59.39
+        bh=jioQxrQAqfCk9wKUDOON2Ly0Stj60gSfNnzyxWwUinI=;
+        b=UksLHTSlQvaX0zq1ybugeZJ5aBdFEHa3gOZFzn91lstO5IWxln6X6/qa+UqJMWIoeG
+         PthwS/DwxOKx1iQmm/R0Qlo96KKnxwUYeeTB+C9DiWF6jJoMCaPB8PC5ScAWO12o3a+q
+         SrGLwI/NhW3CGOBviU41hZufYxfW46jx82SV4oNIZ0jvW7dCWT/gRRl7kVzygE1jpyCu
+         iBX55fFqLFv28xbhAWDPRG0dTuxdwjb+RncPPj0OCywTIofw72eiJ0fSRw1DIOYOuVrl
+         zIq6dK3TCwCuT9tmHukk2LMQkEpDHrZGXFGw+GCVA+3f6rkyxY6e5gntyPWPfPQLQII/
+         rnUw==
+X-Gm-Message-State: ACgBeo26nca+k9MISwrnUR0/BPvY2nMUtUSaucYHEiCyG6JLLY1nKu4a
+        rhfXP6d6tWxGLsmtdPLnvrNeFQ==
+X-Google-Smtp-Source: AA6agR48PI0M/HuS695G3gkJ7j0u/mGOE3A3ZZQiaZK3EMrhipX/WO+5WK1aEN/u/0shlmtIczX/ig==
+X-Received: by 2002:a63:4a53:0:b0:439:3c80:e053 with SMTP id j19-20020a634a53000000b004393c80e053mr8021643pgl.3.1663167645012;
+        Wed, 14 Sep 2022 08:00:45 -0700 (PDT)
+Received: from leoy-yangtze.lan (173.242.123.178.16clouds.com. [173.242.123.178])
+        by smtp.gmail.com with ESMTPSA id i6-20020a655b86000000b0043934d85847sm4469603pgr.36.2022.09.14.08.00.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:59:42 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 23:59:37 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [patch RFC 09/29] serial: kgdboc: Lock consoles in probe function
-Message-ID: <YyHsWTkvZ7PRwNZp@google.com>
-References: <20220910221947.171557773@linutronix.de>
- <20220910222300.906633712@linutronix.de>
+        Wed, 14 Sep 2022 08:00:44 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 23:00:39 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        alexander.shishkin@linux.intel.com, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] coresight: etm4x: Fix crash observed on Qcom ETM
+ parts with 'Low power override'
+Message-ID: <YyHsXodPYtyX3i0+@leoy-yangtze.lan>
+References: <20220825052232.11013-1-bhupesh.sharma@linaro.org>
+ <YyBg8JhNUnsaeKip@leoy-yangtze.lan>
+ <b6c2b3eb-a900-f94e-c472-39719faf65af@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220910222300.906633712@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <b6c2b3eb-a900-f94e-c472-39719faf65af@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,11 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/11 00:27), Thomas Gleixner wrote:
-> 
-> Unprotected list walks are not necessarily safe.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+On Wed, Sep 14, 2022 at 03:43:53PM +0100, Suzuki Kuruppassery Poulose wrote:
 
-For what it's worth
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+[...]
+
+> > > +	/*
+> > > +	 * Some Qualcomm implementations require skipping powering up the trace unit,
+> > > +	 * as the ETMs are in the same power domain as their CPU cores.
+> > > +	 *
+> > > +	 * Since the 'skip_power_up' flag is used inside 'etm4_init_arch_data' function,
+> > > +	 * initialize it before the function is called.
+> > > +	 */
+> > > +	if (fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
+> > > +		drvdata->skip_power_up = true;
+> > > +
+> > 
+> > I personally think this sentence should be placed in the function
+> > etm4_probe(), you need to move it just before smp call
+> > etm4_init_arch_data(), this can allow DT property "qcom,skip-power-up"
+> > to be respected.
+> 
+> Or we could move this to init_iomem_access() and explicitly set the flag
+> to true in init_sysreg_access().
+
+Agreed, this is more clear.
+
+[...]
+
+> > A side topic, in the mainline kernel I found the value
+> > "desc.access.io_mem" is always zero (see the initialized value in
+> > etm4_probe() and etm4_init_sysreg_access()).  Should we initialize
+> > desc.access.io_mem to true in etm4_probe()?
+> 
+> Thats not true. It is initialised at :
+> 
+> etm4_init_iomem_access():
+> 
+> 	*csa = CSDEV_ACCESS_IOMEM(drvdata->base);
+> 
+> Where
+> 
+> #define CSDEV_ACCESS_IOMEM(_addr)               \
+>         ((struct csdev_access)  {               \
+>                 .io_mem         = true,         \
+>                 .base           = (_addr),      \
+>         })
+
+Thanks a lot for explaination, sorry for noise.
+
+Leo
