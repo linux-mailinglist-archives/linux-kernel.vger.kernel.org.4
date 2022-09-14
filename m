@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55015B874B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ABA5B874D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiINLaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S229782AbiINLd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiINLaM (ORCPT
+        with ESMTP id S229459AbiINLd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:30:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF26FD33;
-        Wed, 14 Sep 2022 04:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA677B819DC;
-        Wed, 14 Sep 2022 11:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FFD5C433C1;
-        Wed, 14 Sep 2022 11:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663155009;
-        bh=vSZ2A3ZW8E08AXFK17PgjtALNq7eA35IpM9hBXnwfvA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=i7Q/fIioVqqVTloKvGSZfQmEj/mui0A+OLnV45h58eeuDD6MxiZ9HHS9Wc0cfeQnm
-         csmakQ2U/zKxrQq+ARBSEox7dx11SErDX3HPkFIOLZsEsYGX6ILoC0r6MAGEginBQp
-         YuXKTrHOUQORn7uUbECFHEoCag1R/tbevSxS5iOZIC522k/Z9OuvBjWoL8p+HNtgbp
-         HqkimxBP6zVGz4GBDKaQLw+vQ+BKwm3LnepIyAkzB5ZmF2QFgIk7T2OdG2BuXDsDQX
-         JqniOid96elGby5SuLLwD5JORNJPHdzzOrGpgc2r+ovYzc49n5ifzdGrGrrBaO2NPc
-         yVm/rMD+mSOuQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C55C85C06AB; Wed, 14 Sep 2022 04:30:06 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 04:30:06 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
+        Wed, 14 Sep 2022 07:33:26 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350B0796AC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:33:26 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id s18so8885660plr.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=gS8azrHSw5cgE5XIQ69TufFsmNMPVrJN1hbHC/2+Sw8=;
+        b=b6tXjno+mMOBvU/isCOEZ7b/o8PYetINlqjYchqGzbzAwZ11YE9P0b5nByQ8y4vMO5
+         RfquN2KgG/NMnQIVO33B57/DeCANhnjF8BY0SECG9xrYKDuoGq0EK15y90GvAzLgFJ7f
+         DEipuqMM4dQhufaD/RxNd+yYfUMLNspxrq2Ls=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gS8azrHSw5cgE5XIQ69TufFsmNMPVrJN1hbHC/2+Sw8=;
+        b=6INGb2YeTcHRaykv7z63W6cwXzelBJ3mJvmiHE26jP3mccySoL4px7NNIosipEBiC0
+         B72xbGemZ9Zqfb3SRZ/0AyytG0gbTmhvc4PYxDvgohzvy3QMiFtoo8rkV0qEdxy/Dyi8
+         /E9RYMEkRodU5/T+h5Tcdys7KrIoyCWBeRDMVj3uuQTejdJfshXLXDUfsTelGquIXUhg
+         yUsmJ/uR7ZbruLkg282l9TSnlua6Ly8TAHE8Pc1JLvA7fXObqyWQmMjrsZqPuLSI4VG0
+         qINldGo2TtQyGUhkeEBF1Njcqt22jQrn7cNFSQGNE7I4FvKOgz/YUI+NhubiAw8sVhbf
+         VKFQ==
+X-Gm-Message-State: ACrzQf2TzrOPl3gs4ZgBBRiRsm/S5CD3nMS3PhbwVMQOLTbrYiRBrGdY
+        LKWegDmRYYxYt1dSX/UVzB5dvQ==
+X-Google-Smtp-Source: AMsMyM5MvHvT7xmd2Z1YRLBfreKZ3xxqRq3hBpJbdqQqbLF3Zh7DkompjbKmNCmPLDER/H0gN75GrA==
+X-Received: by 2002:a17:90a:7e08:b0:200:7cd8:32f6 with SMTP id i8-20020a17090a7e0800b002007cd832f6mr4257908pjl.96.1663155205789;
+        Wed, 14 Sep 2022 04:33:25 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:e5f0:cfaf:bc8c:558e])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b00177e263303dsm9468791plr.183.2022.09.14.04.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 04:33:25 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 20:33:18 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] rcu: Simplify rcu_init_nohz() cpumask handling
-Message-ID: <20220914113006.GX246308@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220913030036.1569-1-thunder.leizhen@huawei.com>
- <20220913030036.1569-2-thunder.leizhen@huawei.com>
- <20220914104634.GC1936@lothringen>
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Subject: Re: [patch RFC 03/29] printk: Remove write only variable
+ nr_ext_console_drivers
+Message-ID: <YyG7/h3xlZz+Zj9T@google.com>
+References: <20220910221947.171557773@linutronix.de>
+ <20220910222300.524466942@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914104634.GC1936@lothringen>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220910222300.524466942@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 12:46:34PM +0200, Frederic Weisbecker wrote:
-> On Tue, Sep 13, 2022 at 11:00:36AM +0800, Zhen Lei wrote:
-> > In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
-> > CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
-> > Except that kernels booted without the rcu_nocbs= will not have
-> > allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
-> > its need_rcu_nocb_mask and offload_all local variables to track the
-> > rcu_nocb and nohz_full state.
-> > 
-> > But there is a much simpler approach, namely creating a cpumask pointer
-> > to track the default and then using cpumask_available() to check the
-> > rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
-> > and shortening the rcu_init_nohz() function.
-> > 
-> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > Acked-by: Frederic Weisbecker <frederic@kernel.org>
+On (22/09/11 00:27), Thomas Gleixner wrote:
+> Subject: [patch RFC 03/29] printk: Remove write only variable
+>  nr_ext_console_drivers
 > 
-> Looks good, thanks!
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Queued and pushed, thank you all!
-
-							Thanx, Paul
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
