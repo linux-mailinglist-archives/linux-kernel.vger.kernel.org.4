@@ -2,111 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3985B8D6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9795B8D7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiINQrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
+        id S230082AbiINQrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiINQrN (ORCPT
+        with ESMTP id S229888AbiINQrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:47:13 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49DD58DFD;
-        Wed, 14 Sep 2022 09:47:12 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10721548otb.6;
-        Wed, 14 Sep 2022 09:47:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=poU07QG/53Lj7mfUYNC19dIu65cPTjOwpYH+B4KRSLw=;
-        b=XHtHgdf3bmEEDLgh+5VkilUuwNZD/nxWA9HGNLzOYulMlDxdk3lyT3IxHrv49WyO0t
-         4w9qzVwJasaClbwQGd0aHecZQ2S/JonRD/2rjgXL06cKJ7qqN60ss/fOpCE2kiF5jiL9
-         nZoEAeuOeM6m5UEws3XL7Ud4Q1E02WLcByUcfi3XcDy0K2wgfWFYz3VEaybsJo59o4oO
-         +ohZLYXYz1FPLnM/3Ya3kBIx5PmMC4I+yGdbPge4Qx1/NoQbWwm4q1oUVcptYwupBZxu
-         YBH84M6rF1bhRJ1922m+ga1UQLuBa8+FHU5BI9UeKUkmduX6mXgs1959LGCJ50rHWBVx
-         Umog==
-X-Gm-Message-State: ACgBeo3IhXSTsONVFF4AgxM748CiwSulpWOUCD4Q7mUScSwsSeSxol65
-        pY/wnYOlx8YHFBI2qTAgww==
-X-Google-Smtp-Source: AA6agR4I7C5kFT5FMvxklN2eeypfFZeiWJscC8unUeZBnTPBBFd8t+iWIQ9dgf+zAmtFRVtWCBm3fw==
-X-Received: by 2002:a9d:4c02:0:b0:655:de94:6131 with SMTP id l2-20020a9d4c02000000b00655de946131mr6826342otf.116.1663174031817;
-        Wed, 14 Sep 2022 09:47:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y27-20020a544d9b000000b00342fedaf7d9sm6622931oix.43.2022.09.14.09.47.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:47:11 -0700 (PDT)
-Received: (nullmailer pid 2567032 invoked by uid 1000);
-        Wed, 14 Sep 2022 16:47:10 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     dmaengine@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Wed, 14 Sep 2022 12:47:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A57844C1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:47:30 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYVXm-0008JN-GU; Wed, 14 Sep 2022 18:47:22 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYVXm-000jK6-KY; Wed, 14 Sep 2022 18:47:21 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYVXk-000uI3-Hc; Wed, 14 Sep 2022 18:47:20 +0200
+Date:   Wed, 14 Sep 2022 18:47:20 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20220914140426.7609-1-ansuelsmth@gmail.com>
-References: <20220914140426.7609-1-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: dma: rework qcom,adm Documentation to yaml schema
-Date:   Wed, 14 Sep 2022 11:47:10 -0500
-Message-Id: <1663174030.707683.2567031.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [RFC v4 08/10] pwm: dwc: add of/platform support
+Message-ID: <20220914164720.bjh6tqw6zb66vsyz@pengutronix.de>
+References: <20220816211454.237751-1-ben.dooks@sifive.com>
+ <20220816211454.237751-9-ben.dooks@sifive.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vrox3ufov6gdtdde"
+Content-Disposition: inline
+In-Reply-To: <20220816211454.237751-9-ben.dooks@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 16:04:25 +0200, Christian Marangi wrote:
-> Rework the qcom,adm Documentation to yaml schema.
-> This is not a pure conversion since originally the driver has changed
-> implementation for the #dma-cells and was wrong from the start.
-> Also the driver now handles the common DMA clients implementation with
-> the first cell that denotes the channel number and nothing else since
-> the client will have to provide the crci information via other means.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+
+--vrox3ufov6gdtdde
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Aug 16, 2022 at 10:14:52PM +0100, Ben Dooks wrote:
+> The dwc pwm controller can be used in non-PCI systems, so allow
+> either platform or OF based probing.
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
 > ---
->  .../devicetree/bindings/dma/qcom,adm.yaml     | 96 +++++++++++++++++++
->  .../devicetree/bindings/dma/qcom_adm.txt      | 61 ------------
->  2 files changed, 96 insertions(+), 61 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
->  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
-> 
+> v4:
+>  - split the of code out of the core
+>  - moved the compile test code earlier
+>  - fixed review comments
+>   - used NS_PER_SEC
+>   - use devm_clk_get_enabled
+> v3:
+>  - changed compatible name
+> ---
+>  drivers/pwm/Kconfig      |  9 +++++
+>  drivers/pwm/Makefile     |  1 +
+>  drivers/pwm/pwm-dwc-of.c | 78 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 88 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-dwc-of.c
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index a9f1c554db2b..f1735653365f 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -192,6 +192,15 @@ config PWM_DWC_PCI
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called pwm-dwc-pci.
+> =20
+> +config PWM_DWC_OF
+> +	tristate "DesignWare PWM Controller (OF bus)
+> +	depends on PWM_DWC && OF
+> +	help
+> +	  PWM driver for Synopsys DWC PWM Controller on an OF bus.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called pwm-dwc-of.
+> +
+>  config PWM_EP93XX
+>  	tristate "Cirrus Logic EP93xx PWM support"
+>  	depends on ARCH_EP93XX || COMPILE_TEST
+> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+> index a70d36623129..d1fd1641f077 100644
+> --- a/drivers/pwm/Makefile
+> +++ b/drivers/pwm/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_PWM_CLPS711X)	+=3D pwm-clps711x.o
+>  obj-$(CONFIG_PWM_CRC)		+=3D pwm-crc.o
+>  obj-$(CONFIG_PWM_CROS_EC)	+=3D pwm-cros-ec.o
+>  obj-$(CONFIG_PWM_DWC)		+=3D pwm-dwc.o
+> +obj-$(CONFIG_PWM_DWC_OF)	+=3D pwm-dwc-of.o
+>  obj-$(CONFIG_PWM_DWC_PCI)	+=3D pwm-dwc-pci.o
+>  obj-$(CONFIG_PWM_EP93XX)	+=3D pwm-ep93xx.o
+>  obj-$(CONFIG_PWM_FSL_FTM)	+=3D pwm-fsl-ftm.o
+> diff --git a/drivers/pwm/pwm-dwc-of.c b/drivers/pwm/pwm-dwc-of.c
+> new file mode 100644
+> index 000000000000..d18fac287325
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-dwc-of.c
+> @@ -0,0 +1,78 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * DesignWare PWM Controller driver OF
+> + *
+> + * Copyright (C) 2022 SiFive, Inc.
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/export.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/clk.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/pwm.h>
+> +#include <linux/io.h>
+> +
+> +#include "pwm-dwc.h"
+> +
+> +static int dwc_pwm_plat_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct dwc_pwm *dwc;
+> +	int ret;
+> +
+> +	dwc =3D dwc_pwm_alloc(dev);
+> +	if (!dwc)
+> +		return -ENOMEM;
+> +
+> +	dwc->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(dwc->base))
+> +		return dev_err_probe(dev, PTR_ERR(dwc->base),
+> +				     "failed to map IO\n");
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+devm_platform_ioremap_resource() already emits an error message.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+> +
+> +	dwc->clk =3D devm_clk_get_enabled(dev, "timer");
+> +	if (IS_ERR(dwc->clk))
+> +		return dev_err_probe(dev, PTR_ERR(dwc->clk),
+> +				     "failed to get timer clock\n");
+> +
+> +	clk_prepare_enable(dwc->clk);
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+You don't need clk_prepare_enable() as you used devm_clk_get_enabled().
 
+(Otherwise, when keeping clk_prepare_enable() you need to check the
+return value.)
 
-dma-controller@18300000: reset-names:1: 'c0' was expected
-	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+> +	dwc->clk_ns =3D NSEC_PER_SEC / clk_get_rate(dwc->clk);
 
-dma-controller@18300000: reset-names:2: 'c1' was expected
-	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+I think I already pointed out this is non-optimal.
 
-dma-controller@18300000: reset-names:3: 'c2' was expected
-	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+Later you use clk_ns in __dwc_pwm_configure_timer():
 
-dma-controller@18300000: reset-names: ['clk', 'pbus', 'c0', 'c1', 'c2'] is too long
-	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+	tmp =3D DIV_ROUND_CLOSEST_ULL(state->duty_cycle, dwc->clk_ns);
 
-dma-controller@18300000: resets: [[12, 13], [12, 12], [12, 11], [12, 10], [12, 9]] is too long
-	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+So what you really want here is:
 
+	tmp =3D DIV_ROUND_CLOSEST_ULL(state->duty_cycle * clk_get_rate(dwc->clk), =
+NSEC_PER_SEC);
+
+With for example clk_get_rate(dwc->clk) =3D 201171875 and duty_cycle =3D
+4096 you now get clk_ns =3D 4 (while the exact value is 4.97087..), tmp =3D
+1024, while the exact value is 824.
+
+So the idea is to add a clkrate member to the private driver struct, let
+it default to 100000000 for the pci case and use the line I suggested
+above.
+
+> +
+> +	ret =3D devm_pwmchip_add(dev, &dwc->chip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+
+This is equivalent to
+
+	return ret;
+
+> +}
+> +
+> +static int dwc_pwm_plat_remove(struct platform_device *pdev)
+> +{
+> +	struct dwc_pwm *dwc =3D platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(dwc->clk);
+> +	return 0;
+> +}
+
+When dropping clk_prepare_enable() the .remove callback can go away,
+too.
+
+> +
+> +static const struct of_device_id dwc_pwm_dt_ids[] =3D {
+> +	{ .compatible =3D "snps,dw-apb-timers-pwm2" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, dwc_pwm_dt_ids);
+> +
+> +static struct platform_driver dwc_pwm_plat_driver =3D {
+> +	.driver =3D {
+> +		.name		=3D "dwc-pwm",
+> +		.of_match_table  =3D dwc_pwm_dt_ids,
+> +	},
+> +	.probe	=3D dwc_pwm_plat_probe,
+> +	.remove	=3D dwc_pwm_plat_remove,
+> +};
+> +
+> +module_platform_driver(dwc_pwm_plat_driver);
+> +
+> +MODULE_ALIAS("platform:dwc-pwm-of");
+> +MODULE_AUTHOR("Ben Dooks <ben.dooks@sifive.com>");
+> +MODULE_DESCRIPTION("DesignWare PWM Controller");
+> +MODULE_LICENSE("GPL");
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vrox3ufov6gdtdde
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMiBZUACgkQwfwUeK3K
+7AnUEAf8DFcFvAocXFQ0aMZh9EkwREAF7JEemItwF1/YrUeR+Xz1IHCm98kt5Xjw
+QzhyguClvQwxABq9mYryRYG7zf/7jw9KAyI/zScuUzpCS6rrLiEKiG66EgkA3gdp
+v/uHc2QMr/03l+D0tgJkxOhgN8FLdx9264oOnvhDqRzkLSEnN4xDTK+4CpIJuSZZ
+o1DfHKWejBTD2WM3KEraacvjc4hlgobIB+B3C5jFmXx6h+hWCt4SptPK0HRjMSOw
+x/e9e5boXikSD9cG0PgpuuNMiwfgPwarER+Io/BgDKWA1f95PA5EzZDogJmGdX0W
+iT9ULfqDkYQsDnmLLZNXjLBXC1EfNQ==
+=LGzt
+-----END PGP SIGNATURE-----
+
+--vrox3ufov6gdtdde--
