@@ -2,169 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7325B8973
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1C25B8974
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiINNsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S229824AbiINNsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiINNsF (ORCPT
+        with ESMTP id S229846AbiINNsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:48:05 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F46A73918;
-        Wed, 14 Sep 2022 06:47:47 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MSM7v3WRLz67xfT;
-        Wed, 14 Sep 2022 21:46:51 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 15:47:45 +0200
-Received: from [10.48.151.55] (10.48.151.55) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
- 2022 14:47:43 +0100
-Message-ID: <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
-Date:   Wed, 14 Sep 2022 14:47:43 +0100
+        Wed, 14 Sep 2022 09:48:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97D873925;
+        Wed, 14 Sep 2022 06:47:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7D3EB81B7A;
+        Wed, 14 Sep 2022 13:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AEBC433D6;
+        Wed, 14 Sep 2022 13:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663163270;
+        bh=agORPpng31kmjXNgwx2exKAuB9awArf8E2JRoM4XNJI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pVtpPJ98TjrKXi7c1H6lUotKDJZAaNlnEa3IfBPMhE8OULfy18kpOMRo8UcSQPz/8
+         0St95uAdpxrb0YHGRMOw9kPATXG5CYxe+KIOVU1p4RQzbPZSpZJVmyLDd/Xn1YRBBv
+         2Txfs6g7Czut7cW45V3hcuKhy+lsiotrPwj6MAQE0DxXS2IuZWoBP+S9BWYw2ayEJa
+         3W+/ZJ67fdlkNfFJWXwtxUqVBFzBb8A7BXzahB9zGRJcSDyvDZWzb0GgvsuXiHgMGi
+         Eqxn3aG6A23p8KN79KEHIZf4EdBuy5717u3sEeFbBfQOqfbgG4R/hzoLJ+yVAeqMPG
+         FXn599B+rwmjA==
+Message-ID: <2b669973-caf0-75e8-f421-7647dddf03ce@kernel.org>
+Date:   Wed, 14 Sep 2022 21:47:46 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RESEND PATCH v12 1/3] perf tool: arm: Refactor event list
- iteration in auxtrace_record__init()
-To:     Yicong Yang <yangyicong@huawei.com>, <acme@kernel.org>,
-        <peterz@infradead.org>, <alexander.shishkin@linux.intel.com>,
-        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
-        <mathieu.poirier@linaro.org>, <mark.rutland@arm.com>,
-        <suzuki.poulose@arm.com>, <jonathan.cameron@huawei.com>,
-        <mike.leach@linaro.org>
-CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <lorenzo.pieralisi@arm.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <prime.zeng@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>,
-        <liuqi6124@gmail.com>
-References: <20220914075925.48549-1-yangyicong@huawei.com>
- <20220914075925.48549-2-yangyicong@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220914075925.48549-2-yangyicong@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ Thunderbird/91.11.0
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix missing mapping caused by the
+ mount/umount race
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220829215206.3082124-1-jaegeuk@kernel.org>
+ <cbc4bfe5-14f9-a4e0-c9c5-6b6b06437d5d@kernel.org>
+ <Yw55Ebk8zLIgBFfn@google.com> <Yw7P6BkNZmqxji3B@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yw7P6BkNZmqxji3B@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.151.55]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 08:59, Yicong Yang wrote:
-> From: Qi Liu <liuqi115@huawei.com>
+On 2022/8/31 11:05, Jaegeuk Kim wrote:
+> On 08/30, Jaegeuk Kim wrote:
+>> On 08/30, Chao Yu wrote:
+>>> On 2022/8/30 5:52, Jaegeuk Kim wrote:
+>>>> Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
+>>>> all the time to fix the below panic.
+>>>>
+>>>> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>>>> Mem abort info:
+>>>>     ESR = 0x0000000086000004
+>>>>     EC = 0x21: IABT (current EL), IL = 32 bits
+>>>>     SET = 0, FnV = 0
+>>>>     EA = 0, S1PTW = 0
+>>>>     FSC = 0x04: level 0 translation fault
+>>>> user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
+>>>> [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+>>>> Internal error: Oops: 86000004 [#1] PREEMPT SMP
+>>>> Modules linked in:
+>>>> CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+>>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+>>>> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> pc : 0x0
+>>>> lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+>>>> sp : ffff800012783970
+>>>> x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
+>>>> x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
+>>>> x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
+>>>> x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
+>>>> x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
+>>>> x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+>>>> x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
+>>>> x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+>>>> x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
+>>>> x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
+>>>> Call trace:
+>>>>    0x0
+>>>>    set_page_dirty+0x38/0xbc mm/folio-compat.c:62
+>>>>    f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
+>>>>    do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
+>>>>    f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
+>>>>
+>>>> Cc: stable@vger.kernel.org
+>>>> Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>> ---
+>>>>    fs/f2fs/inode.c | 13 ++++++++-----
+>>>>    1 file changed, 8 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>>> index 6d11c365d7b4..1feb0a8a699e 100644
+>>>> --- a/fs/f2fs/inode.c
+>>>> +++ b/fs/f2fs/inode.c
+>>>> @@ -490,10 +490,7 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>>>>    	if (!inode)
+>>>>    		return ERR_PTR(-ENOMEM);
+>>>> -	if (!(inode->i_state & I_NEW)) {
+>>>> -		trace_f2fs_iget(inode);
+>>>> -		return inode;
+>>>> -	}
+>>>> +	/* We can see an old cached inode. Let's set the aops all the time. */
+>>>
+>>> Why an old cached inode (has no I_NEW flag) has NULL a_ops pointer? If it is a bad
+>>> inode, it should be unhashed before unlock_new_inode().
+>>
+>> I'm trying to dig further tho, it's not a bad inode, nor I_FREEING | I_CLEAR.
+>> It's very werid that thie meta inode is found in newly created superblock by
+>> the global hash table. I've checked that the same superblock pointer was used
+>> in the previous tests, but inode was evictied all the time.
 > 
-> Add find_pmu_for_event() and use to simplify logic in
-> auxtrace_record_init(). find_pmu_for_event() will be
-> reused in subsequent patches.
+> I'll drop this patch, since it turned out there is a bug in reiserfs which
+> doesn't free the root inode (ino=2). That leads f2fs to find an ino=2 with
+> the previous superblock point used by reiserfs. That stale inode has no valid
+
+One more question, why stale inode could be remained in inode hash table,
+shouldn't the stale inode be evicted/unhashed in below path during reiserfs
+umount:
+
+- reiserfs_kill_sb
+  - kill_block_super
+   - generic_shutdown_super
+    - evict_inodes
+     - dispose_list
+      - evict
+       - remove_inode_hash
+
+Thanks,
+
+> inode that f2fs can use. I tried to find where the root cause is in reiserfs,
+> but it seems quite hard to catch one.
 > 
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->   tools/perf/arch/arm/util/auxtrace.c | 53 ++++++++++++++++++-----------
->   1 file changed, 34 insertions(+), 19 deletions(-)
+> - reiserfs_fill_super
+>   - reiserfs_xattr_init
+>    - create_privroot
+>     - xattr_mkdir
+>      - reiserfs_new_inode
+>       - reiserfs_get_unused_objectid returned 0 due to map crash
 > 
-> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
-> index 5fc6a2a3dbc5..384c7cfda0fd 100644
-> --- a/tools/perf/arch/arm/util/auxtrace.c
-> +++ b/tools/perf/arch/arm/util/auxtrace.c
-> @@ -50,16 +50,32 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
->   	return arm_spe_pmus;
->   }
->   
-> +static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
-> +					   int pmu_nr, struct evsel *evsel)
-> +{
-> +	int i;
-> +
-> +	if (!pmus)
-> +		return NULL;
-> +
-> +	for (i = 0; i < pmu_nr; i++) {
-> +		if (evsel->core.attr.type == pmus[i]->type)
-> +			return pmus[i];
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->   struct auxtrace_record
->   *auxtrace_record__init(struct evlist *evlist, int *err)
->   {
-> -	struct perf_pmu	*cs_etm_pmu;
-> +	struct perf_pmu	*cs_etm_pmu = NULL;
-> +	struct perf_pmu **arm_spe_pmus = NULL;
->   	struct evsel *evsel;
-> -	bool found_etm = false;
-> +	struct perf_pmu *found_etm = NULL;
->   	struct perf_pmu *found_spe = NULL;
-> -	struct perf_pmu **arm_spe_pmus = NULL;
-> +	int auxtrace_event_cnt = 0;
->   	int nr_spes = 0;
-> -	int i = 0;
->   
->   	if (!evlist)
->   		return NULL;
-> @@ -68,24 +84,23 @@ struct auxtrace_record
->   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
->   
->   	evlist__for_each_entry(evlist, evsel) {
-> -		if (cs_etm_pmu &&
-> -		    evsel->core.attr.type == cs_etm_pmu->type)
-> -			found_etm = true;
-> -
-> -		if (!nr_spes || found_spe)
-> -			continue;
-> -
-> -		for (i = 0; i < nr_spes; i++) {
-> -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
-> -				found_spe = arm_spe_pmus[i];
-> -				break;
-> -			}
-> -		}
-> +		if (cs_etm_pmu && !found_etm) 
-> +			found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
-> +
-> +		if (arm_spe_pmus && !found_spe)
-> +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
-
-should you break if found_etm and found_spe are set? Or, indeed, error 
-and return directly as we do below? Indeed, I am not sure why you even 
-require auxtrace_event_cnt
-
->   	}
-> +
->   	free(arm_spe_pmus);
->   
-> -	if (found_etm && found_spe) {
-> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
-> +	if (found_etm)
-> +		auxtrace_event_cnt++;
-> +
-> +	if (found_spe)
-> +		auxtrace_event_cnt++;
-> +
-> +	if (auxtrace_event_cnt > 1) {
-> +		pr_err("Concurrent AUX trace operation not currently supported\n");
->   		*err = -EOPNOTSUPP;
->   		return NULL;
->   	}
-
+> It seems the error path doesn't handle the root inode properly.
+> 
+>>
+>>>
+>>> Thanks,
+>>>
+>>>>    	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
+>>>>    		goto make_now;
+>>>> @@ -502,6 +499,11 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>>>>    		goto make_now;
+>>>>    #endif
+>>>> +	if (!(inode->i_state & I_NEW)) {
+>>>> +		trace_f2fs_iget(inode);
+>>>> +		return inode;
+>>>> +	}
+>>>> +
+>>>>    	ret = do_read_inode(inode);
+>>>>    	if (ret)
+>>>>    		goto bad_inode;
+>>>> @@ -557,7 +559,8 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>>>>    		file_dont_truncate(inode);
+>>>>    	}
+>>>> -	unlock_new_inode(inode);
+>>>> +	if (inode->i_state & I_NEW)
+>>>> +		unlock_new_inode(inode);
+>>>>    	trace_f2fs_iget(inode);
+>>>>    	return inode;
+>>
+>>
+>> _______________________________________________
+>> Linux-f2fs-devel mailing list
+>> Linux-f2fs-devel@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
