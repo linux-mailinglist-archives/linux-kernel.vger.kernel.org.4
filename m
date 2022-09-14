@@ -2,595 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37625B89AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4357D5B8996
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiINOBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S229710AbiINN7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiINOAX (ORCPT
+        with ESMTP id S229600AbiINN7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:00:23 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00047.outbound.protection.outlook.com [40.107.0.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5136578231;
-        Wed, 14 Sep 2022 07:00:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l71LXeYEWgJwscEaeJaRsr7lNCYJ6KezvNPFjfDgPd6Su2F1n70wxnu98vprFMl8s+q/JRNfZkirW2nrCXCzQM36rtWtjVWaa14sQN7K6t6Lp5llz7ogagB86/YoqdkJwAlcvEIBDYcTpUcQrGObaj/pTXb7+4WyBYPhpk4+++1IgQKOEhVyP0xIr1SLFKkrC4B6Ef6hCh2rUIBX5G5c7gcLT+Vk+wU0IOw5tA2M/coi/VSzegR6WzxSbF7sAgz4wnvnZCfAPi1nn4+emQPTjeGWbOwc5M/gUV62onKRO1gD6QyiLNWk5ycc66YPfQvLp0iUDlFM9EuviRVb5NiW6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lZWddFMQiU3BDAkvHqTRqC6aWdp1rrfVvfSOy6X8VPY=;
- b=RKiVI4aFDcMiddTZK6X+0OWUYadjseIhhA6MQxvgEC84tsmYD1IY16eAhutvdnRraBmRTdLUq3KCWRc92++OyoO7kwxKDKqPVY4ezGC97LqvzkX1R/J1xz7QdPq/sCy3IB895DDU6gd1udIXR0AOVJo4jF+EPEd6Zk6lOifSSd/QLEvdSHGPm7Z/+CG8xIB5i70yks8BvVldWI0/d7lf6BU0/LV641yzeH30dtWXzxD2AGEGUaW8DWSD6fWsQweYTAqIAzjNM6ABs+PcVlUl/xZocxUPcQwFPwy1/KgPFW4u+wzG2qDUSJmwVm0P1ZUFG/ubqDXMyk9AGhN9fpEspg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lZWddFMQiU3BDAkvHqTRqC6aWdp1rrfVvfSOy6X8VPY=;
- b=i53BhhAjsCJ0265JMqVOQkFoMD82UVvmnBVUG34RKMLcAD/iiDEm9q3GmV+KN/ZyM3aoCdrEdhiDBYqGKEXUrMWwayq7mRqfdIye5gmTZnZRGiszBNGFBIVwTCUicoO4teafQ+dr6utNHcLZpBszL4Ya6xd7Gs3QvO9POww3m5I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB9176.eurprd04.prod.outlook.com (2603:10a6:20b:44b::7)
- by DB8PR04MB7129.eurprd04.prod.outlook.com (2603:10a6:10:127::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 14:00:00 +0000
-Received: from AS8PR04MB9176.eurprd04.prod.outlook.com
- ([fe80::a552:97fd:60f4:edd6]) by AS8PR04MB9176.eurprd04.prod.outlook.com
- ([fe80::a552:97fd:60f4:edd6%7]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 14:00:00 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Marek Vasut <marex@denx.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: [PATCH v8 5/5] arm64: dts: freescale: add support for i.MX8DXL EVK board
-Date:   Wed, 14 Sep 2022 08:58:48 -0500
-Message-Id: <20220914135848.118616-6-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914135848.118616-1-shenwei.wang@nxp.com>
-References: <20220914135848.118616-1-shenwei.wang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR16CA0034.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::47) To AS8PR04MB9176.eurprd04.prod.outlook.com
- (2603:10a6:20b:44b::7)
+        Wed, 14 Sep 2022 09:59:21 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A2B7645F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:59:20 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id e35-20020a9d01a6000000b0065798eb8754so1295893ote.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=vnjVAiOJlnLZLBilwSL/TnGg0RD1DfF2pxGdoWNw/sU=;
+        b=ITBYoTVr3FDGckJJJs/b8pmmofQ1zcncZiinppHGTkbRrqtfZFSJ/NccGWoaFpr5cP
+         azIVz5XL4xW9j/4gihvmBDY0PuUG+U8jBRGLaqIVLL/zI2i0/Ue+wqePDZ4nEzCnjnez
+         6tVG0NJcVL6M3XDP1V+1m4kCHaD24RO1xAS8F5ubb8ts2I83ljAq3CVFyYOqu+AWKJ+k
+         5AWBbYsh9N3C1XlVceOutwiSV4lSAoFQOoIRr2ikGcTyCfAmARCGR1oTZsERUol1jO/F
+         +uCcpxt4ZhGtN5YErRjv3XGrixgMIClI7GNuVzmIEAJvKVv0QQ40+zukbu6QU/rBBrK6
+         eCJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vnjVAiOJlnLZLBilwSL/TnGg0RD1DfF2pxGdoWNw/sU=;
+        b=XXvbrQCmn1WlwK84OVkkXYjxr2BQo1TsjcZniaD4Q1Yho2ljbeSryS2uPI6osf1u/i
+         VJJ0E4ZgVAMTRFPgVT133TScfQDXVqXTNJYRkI+c4KGoMUvgtsFb56gGE/wBJRSImJBg
+         nmYadhTdy5LPgALc0bNOXk1/eZNwHLuNpCJ/zUpX+90s7XRsH4WQy2Tr7SqFH6KnR7ra
+         rplmRPwJR/73x/Nc5TfQoCYJ5Bny5/mtkhYjRMFkK4KyyPufDVlAmzEVJdwrrBHryqTI
+         ZGnKg91GJYXy5lkAIw8dGhYlpabeGUbUfn9OTIQqkz+tqBkHUlcl4+fmspLX7EVxzn0N
+         tJ8A==
+X-Gm-Message-State: ACgBeo024KM+U5+LUOMdh4eTeOG+53SuuEg5WlsMt/cZi9GMO7ZeDHvb
+        3tnTNJu8JDt2DpGeK1YqbuLTKw==
+X-Google-Smtp-Source: AA6agR7A6KDWhzFrDbk4Z9NcKexHJ5YoQOinjjH5LpWjyN29gejiuDQAKQOonGXS9znnZdc70bHrog==
+X-Received: by 2002:a05:6830:6104:b0:654:fb1:faba with SMTP id ca4-20020a056830610400b006540fb1fabamr10815474otb.183.1663163959517;
+        Wed, 14 Sep 2022 06:59:19 -0700 (PDT)
+Received: from ?IPV6:2804:1b3:7000:d095:41f2:210c:b643:8576? ([2804:1b3:7000:d095:41f2:210c:b643:8576])
+        by smtp.gmail.com with ESMTPSA id v66-20020acade45000000b00344a22e71a9sm6449366oig.9.2022.09.14.06.59.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 06:59:19 -0700 (PDT)
+Message-ID: <24f4feb8-7ca1-eae3-570e-5ece870dee47@mojatatu.com>
+Date:   Wed, 14 Sep 2022 10:59:12 -0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB9176:EE_|DB8PR04MB7129:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0edfcce5-2cfd-4665-68a3-08da96596967
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YwrT5kFZZgFLWr7IlirUnmtW+XBWcAaBbAyox7sYml2WWMce+LOygIW072pL4pb7G2c7qLxSMQXxvI+WeNHfJzTWuf7DKScoDq1C/M8c6RsFWGdI+pNf9qT7b0EIuC/iWg+LXp+WEDrqspibawk0UxIcAhJp/3bRk7PMWmA950EYFXy7upJWjwu0TRSburfKg316UZFGFUlnI8NguEOxhimQINUeuXm/DqLawxyKcMO+7aBmjeYu+tzthOfx885FBuL1V0r8A+LyiUm/54+7JvP5gq/ZweoKSeTGcAr7OI9kZJvQEunN+ybJO7vBRv2KNpDfvnI5hDJYESr0Q+L7e7NdRuPv/zMgj/8SGQQzE3oL423+FXT6PssK3Zu8saNCAMMZwMY3bn/ZRp2UAKxPNR/SB9rlaPOsvI422Ba03QGRHESSRIUu9Fr4xfd7kvVY9zVhkAxtMyR524VTND5gM7bNSvttAVeEw4W/gMk36GkuY0/kGdhheohT12ohkqrR5vmBhFqGWcB7hNfk0teOZLmkXqOnc//DVMj6pts3LZVpN+MldeIFV+KgbRsYdCt2EbRjyUZo7pEOdBGyRO8cfQOb2y7+6hmT9F9nyjou7/NwluGvNAz417ncrfm9RKKM+dHF4kuPj34brErFLdV/MrmKrt2sTmDlNf79n4/ejQF70fSVkb4/t1/ztqDA6NrsVEAHghACbLhW366nxmxVih1zHVDqJMaQAZfM/AO/5Ar+W1c8uzgB67Who5wlotjyOLBUJ8TU1HZ+hdGcHrwJ55tK+1Bvl7Doa14JmYzY2mPSTLK6xBWAyfKbSVGMjy2T
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9176.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(38350700002)(4326008)(5660300002)(7416002)(66946007)(6666004)(55236004)(1076003)(66556008)(38100700002)(8936002)(8676002)(6486002)(186003)(44832011)(41300700001)(66476007)(30864003)(86362001)(26005)(316002)(110136005)(2906002)(478600001)(54906003)(2616005)(36756003)(52116002)(6506007)(83380400001)(6512007)(473944003)(414714003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zTvZTgdErkh0Bj0DLAnDChNejjO5+2cWywbFkwHDoTC6XzeFoqPq43Nz7M/B?=
- =?us-ascii?Q?3DiziqmNsgjTdaMLJj65css9lTnwaE71v6xWLmQFcOc0hFRtbKXep2Yms0iF?=
- =?us-ascii?Q?OpGMYHLT9e9y4AqvpWA2kTMEnnd1Dh7u369CpNgZzcgSTCOn2MTiV67ZOecH?=
- =?us-ascii?Q?tZoZjYnIGFm2Bx/zZTGgDEJZolzHwadEbB72qbfwb+CcMHsvJSMRphXyAnnN?=
- =?us-ascii?Q?rG/e9pdtMepHcyyvHlgB6Gl2RP/OinDG5YT2hC6aVMq6586BAD7zYjxtz9yw?=
- =?us-ascii?Q?1fqSYIo5MAN3Nqiu2R0meLpFgZlez8v96M6/QpLO1dXfIQIB52Tm+s9K9M4Y?=
- =?us-ascii?Q?NiHZLC0ycy8v6tvDBM+cW3H6CYZ4xwgNfskUmxJLFk1jpPAitDuRz0VK9+dA?=
- =?us-ascii?Q?FXRdLhpMJ/s/nle/PS/xDXxPO/hNVpIjINaSm5wQv1cdnDeKcjzbv0eywDo/?=
- =?us-ascii?Q?WuHvbD0G+LYzZSnD3N9BLPPlIBSHe2rlOhUxHEyLf+/pUHFbC2Xd7zqQdGOW?=
- =?us-ascii?Q?gclbGEYWgXDeHHS6J2ZbLLi5s5twCjrM+Pf9c+SCkozylz5b7WXqyqm0ih9x?=
- =?us-ascii?Q?d9oTAi4rTJHEJOF1rtaiCyb88kEzqCkrsLJm5pFoMFvm5l4yrggQQt7XRuOF?=
- =?us-ascii?Q?/wecaG/dy5tUMwEMNCG3ZgYI4fEup57bZmHiiB5RdL0IE3iK/p5LijeRcZua?=
- =?us-ascii?Q?pEh65fPKjAIh+cIHgbb9Oh+9FYRB5wkChIKOPUVsXfqTHl5gtVsAuRoz8ZSM?=
- =?us-ascii?Q?z3dvB6iiiW7JBvKODRqsBBVWDasDEUYpMNCwbOpXkkVJ2RyTicqyNIL6UYW7?=
- =?us-ascii?Q?OLcC8jg1zcozy96o+bJGeg+9SVP2+oxzh9aM+Rb7IDw0ipiiRV5z8Qt9YE9o?=
- =?us-ascii?Q?pjWtqzIsSag1fLfZtWYErDaECfZHeii3JkHw5vb/7A0cOwIyfGtRZiXORcuM?=
- =?us-ascii?Q?rYu4ZSu09HxrVlHz7cIRCSR3PuIRRsRs2Gj2Brh+KBERBCf/4Z7PbjP5hkM/?=
- =?us-ascii?Q?4hMyTXzM9fMUslRCTLPPxdfFvUayN81xPhcDBLQKp9XJm46HLYxZMGHvmsIW?=
- =?us-ascii?Q?dJc2YBEnmQ/7dD1i95D6UMsT1l0Hg/X/nX4W2P25VOo98Hmib02VmVmQgPrq?=
- =?us-ascii?Q?GhCH+0PgQYbGP10R23zT7csa5ouaXkvpPoOrCiHPVbM9lLoBOxPvpe0ppqZj?=
- =?us-ascii?Q?VNTeG2EdCK5+cld6WkCAxYQ4bSFwZ4YtLI2uf64XwaIZr/IQmrzvhxy+ES9M?=
- =?us-ascii?Q?CxK+CNE4t9qtonkybKvBCxCW1PleZTtFxDx9lgmDFucBvhRJjG0QZquZ1I0S?=
- =?us-ascii?Q?WTaABAy408WHcqvi+72JW1AKkG5iSnZAKHLjUwvnJMW2owFo44JXh4mbDLuD?=
- =?us-ascii?Q?EaTdjoNhTm8ZEzRwK1RkRzOawHJ+ArUtSH7lJate8V9gljVAszRq95XphPXN?=
- =?us-ascii?Q?1vzDb/cQBBvDggUzEC7YE9GF2wIH+VDhQeMlPI1DS4Ki56YWwuZWLGOvN6ux?=
- =?us-ascii?Q?YejVxtVYwXn633DPyu7z+Gt4gjn6eq6xckNRkD1w3WS2UfJBq2a+p8QM128H?=
- =?us-ascii?Q?LeNubhYifj7sO+vSZzRIsvrDmbENsh6T3w9VLbSH55SLNIh/mPqAwT3tnDes?=
- =?us-ascii?Q?jw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0edfcce5-2cfd-4665-68a3-08da96596967
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB9176.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 14:00:00.2234
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2c+476rEC0IQx6QM7QF6YwpPHQm9U5L725vs1NJLcunzFaVtBpPLnCF5FDGYqWSQBDWo4vHZEb02Eo2kpkYzAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7129
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next 0/9] refactor duplicate codes in the tc cls walk
+ function
+Content-Language: en-US
+To:     Zhengchao Shao <shaozhengchao@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, jiri@resnulli.us, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+References: <20220913042135.58342-1-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+In-Reply-To: <20220913042135.58342-1-shaozhengchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is to support the EVK (Evaluation Kit Board) for the i.MX8DXL.
-The patch has enabled the serial console, SD/EMMC interface, and
-the eqos and fec ethernet network.
+On 13/09/2022 01:21, Zhengchao Shao wrote:
+> The walk implementation of most tc cls modules is basically the same.
+> That is, the values of count and skip are checked first. If count is
+> greater than or equal to skip, the registered fn function is executed.
+> Otherwise, increase the value of count. So the code can be refactored.
+> Then use helper function to replace the code of each cls module in
+> alphabetical order.
+> 
+> The walk function is invoked during dump. Therefore, test cases related
+>   to the tdc filter need to be added.
+> 
+> Add test cases locally and perform the test. The test results are listed
+> below:
+> 
+> ./tdc.py -e 0811
+> ok 1 0811 - Add multiple basic filter with cmp ematch u8/link layer and
+> default action and dump them
+> 
+> ./tdc.py -e 5129
+> ok 1 5129 - List basic filters
+> 
+> ./tdc.py -c filters bpf
+> ok 13 23c3 - Add cBPF filter with valid bytecode
+> ok 14 1563 - Add cBPF filter with invalid bytecode
+> ok 15 2334 - Add eBPF filter with valid object-file
+> ok 16 2373 - Add eBPF filter with invalid object-file
+> ok 17 4423 - Replace cBPF bytecode
+> ok 18 5122 - Delete cBPF filter
+> ok 19 e0a9 - List cBPF filters
+> 
+> ./tdc.py -c filters cgroup
+> ok 1 6273 - Add cgroup filter with cmp ematch u8/link layer and drop
+> action
+> ok 2 4721 - Add cgroup filter with cmp ematch u8/link layer with trans
+> flag and pass action
+> ok 3 d392 - Add cgroup filter with cmp ematch u16/link layer and pipe
+> action
+> ok 4 0234 - Add cgroup filter with cmp ematch u32/link layer and miltiple
+> actions
+> ok 5 8499 - Add cgroup filter with cmp ematch u8/network layer and pass
+> action
+> ok 6 b273 - Add cgroup filter with cmp ematch u8/network layer with trans
+> flag and drop action
+> ok 7 1934 - Add cgroup filter with cmp ematch u16/network layer and pipe
+> action
+> ok 8 2733 - Add cgroup filter with cmp ematch u32/network layer and
+> miltiple actions
+> ok 9 3271 - Add cgroup filter with NOT cmp ematch rule and pass action
+> ok 10 2362 - Add cgroup filter with two ANDed cmp ematch rules and single
+> action
+> ok 11 9993 - Add cgroup filter with two ORed cmp ematch rules and single
+> action
+> ok 12 2331 - Add cgroup filter with two ANDed cmp ematch rules and one
+> ORed ematch rule and single action
+> ok 13 3645 - Add cgroup filter with two ANDed cmp ematch rules and one
+> NOT ORed ematch rule and single action
+> ok 14 b124 - Add cgroup filter with u32 ematch u8/zero offset and drop
+> action
+> ok 15 7381 - Add cgroup filter with u32 ematch u8/zero offset and invalid
+> value >0xFF
+> ok 16 2231 - Add cgroup filter with u32 ematch u8/positive offset and
+> drop action
+> ok 17 1882 - Add cgroup filter with u32 ematch u8/invalid mask >0xFF
+> ok 18 1237 - Add cgroup filter with u32 ematch u8/missing offset
+> ok 19 3812 - Add cgroup filter with u32 ematch u8/missing AT keyword
+> ok 20 1112 - Add cgroup filter with u32 ematch u8/missing value
+> ok 21 3241 - Add cgroup filter with u32 ematch u8/non-numeric value
+> ok 22 e231 - Add cgroup filter with u32 ematch u8/non-numeric mask
+> ok 23 4652 - Add cgroup filter with u32 ematch u8/negative offset and
+> pass action
+> ok 24 1331 - Add cgroup filter with u32 ematch u16/zero offset and pipe
+> action
+> ok 25 e354 - Add cgroup filter with u32 ematch u16/zero offset and
+> invalid value >0xFFFF
+> ok 26 3538 - Add cgroup filter with u32 ematch u16/positive offset and
+> drop action
+> ok 27 4576 - Add cgroup filter with u32 ematch u16/invalid mask >0xFFFF
+> ok 28 b842 - Add cgroup filter with u32 ematch u16/missing offset
+> ok 29 c924 - Add cgroup filter with u32 ematch u16/missing AT keyword
+> ok 30 cc93 - Add cgroup filter with u32 ematch u16/missing value
+> ok 31 123c - Add cgroup filter with u32 ematch u16/non-numeric value
+> ok 32 3675 - Add cgroup filter with u32 ematch u16/non-numeric mask
+> ok 33 1123 - Add cgroup filter with u32 ematch u16/negative offset and
+> drop action
+> ok 34 4234 - Add cgroup filter with u32 ematch u16/nexthdr+ offset and
+> pass action
+> ok 35 e912 - Add cgroup filter with u32 ematch u32/zero offset and pipe
+> action
+> ok 36 1435 - Add cgroup filter with u32 ematch u32/positive offset and
+> drop action
+> ok 37 1282 - Add cgroup filter with u32 ematch u32/missing offset
+> ok 38 6456 - Add cgroup filter with u32 ematch u32/missing AT keyword
+> ok 39 4231 - Add cgroup filter with u32 ematch u32/missing value
+> ok 40 2131 - Add cgroup filter with u32 ematch u32/non-numeric value
+> ok 41 f125 - Add cgroup filter with u32 ematch u32/non-numeric mask
+> ok 42 4316 - Add cgroup filter with u32 ematch u32/negative offset and
+> drop action
+> ok 43 23ae - Add cgroup filter with u32 ematch u32/nexthdr+ offset and
+> pipe action
+> ok 44 23a1 - Add cgroup filter with canid ematch and single SFF
+> ok 45 324f - Add cgroup filter with canid ematch and single SFF with mask
+> ok 46 2576 - Add cgroup filter with canid ematch and multiple SFF
+> ok 47 4839 - Add cgroup filter with canid ematch and multiple SFF with
+> masks
+> ok 48 6713 - Add cgroup filter with canid ematch and single EFF
+> ok 49 4572 - Add cgroup filter with canid ematch and single EFF with mask
+> ok 50 8031 - Add cgroup filter with canid ematch and multiple EFF
+> ok 51 ab9d - Add cgroup filter with canid ematch and multiple EFF with
+> masks
+> ok 52 5349 - Add cgroup filter with canid ematch and a combination of
+> SFF/EFF
+> ok 53 c934 - Add cgroup filter with canid ematch and a combination of
+> SFF/EFF with masks
+> ok 54 4319 - Replace cgroup filter with diffferent match
+> ok 55 4636 - Detele cgroup filter
+> 
+> ./tdc.py -c filters flow
+> ok 1 5294 - Add flow filter with map key and ops
+> ok 2 3514 - Add flow filter with map key or ops
+> ok 3 7534 - Add flow filter with map key xor ops
+> ok 4 4524 - Add flow filter with map key rshift ops
+> ok 5 0230 - Add flow filter with map key addend ops
+> ok 6 2344 - Add flow filter with src map key
+> ok 7 9304 - Add flow filter with proto map key
+> ok 8 9038 - Add flow filter with proto-src map key
+> ok 9 2a03 - Add flow filter with proto-dst map key
+> ok 10 a073 - Add flow filter with iif map key
+> ok 11 3b20 - Add flow filter with priority map key
+> ok 12 8945 - Add flow filter with mark map key
+> ok 13 c034 - Add flow filter with nfct map key
+> ok 14 0205 - Add flow filter with nfct-src map key
+> ok 15 5315 - Add flow filter with nfct-src map key
+> ok 16 7849 - Add flow filter with nfct-proto-src map key
+> ok 17 9902 - Add flow filter with nfct-proto-dst map key
+> ok 18 6742 - Add flow filter with rt-classid map key
+> ok 19 5432 - Add flow filter with sk-uid map key
+> ok 20 4234 - Add flow filter with sk-gid map key
+> ok 21 4522 - Add flow filter with vlan-tag map key
+> ok 22 4253 - Add flow filter with rxhash map key
+> ok 23 4452 - Add flow filter with hash key list
+> ok 24 4341 - Add flow filter with muliple ops
+> ok 25 4322 - List flow filters
+> ok 26 2320 - Replace flow filter with map key num
+> ok 27 3213 - Delete flow filter with map key num
+> 
+> ./tdc.py -c filters route
+> ok 1 e122 - Add route filter with from and to tag
+> ok 2 6573 - Add route filter with fromif and to tag
+> ok 3 1362 - Add route filter with to flag and reclassify action
+> ok 4 4720 - Add route filter with from flag and continue actions
+> ok 5 2812 - Add route filter with form tag and pipe action
+> ok 6 7994 - Add route filter with miltiple actions
+> ok 7 4312 - List route filters
+> ok 8 2634 - Delete route filters with pipe action
+> 
+> ./tdc.py -c filters rsvp
+> ok 1 2141 - Add rsvp filter with tcp proto and specific IP address
+> ok 2 5267 - Add rsvp filter with udp proto and specific IP address
+> ok 3 2819 - Add rsvp filter with src ip and src port
+> ok 4 c967 - Add rsvp filter with tunnelid and continue action
+> ok 5 5463 - Add rsvp filter with tunnel and pipe action
+> ok 6 2332 - Add rsvp filter with miltiple actions
+> ok 7 8879 - Add rsvp filter with tunnel and skp flag
+> ok 8 8261 - List rsvp filters
+> ok 9 8989 - Delete rsvp filters
+> 
+> ./tdc.py -c filters tcindex
+> ok 1 8293 - Add tcindex filter with default action
+> ok 2 7281 - Add tcindex filter with hash size and pass action
+> ok 3 b294 - Add tcindex filter with mask shift and reclassify action
+> ok 4 0532 - Add tcindex filter with pass_on and continue actions
+> ok 5 d473 - Add tcindex filter with pipe action
+> ok 6 2940 - Add tcindex filter with miltiple actions
+> ok 7 1893 - List tcindex filters
+> ok 8 2041 - Change tcindex filters with pass action
+> ok 9 9203 - Replace tcindex filters with pass action
+> ok 10 7957 - Delete tcindex filters with drop action
+> 
+> Zhengchao Shao (9):
+>    net/sched: cls_api: add helper for tc cls walker stats updating
+>    net/sched: use tc_cls_stats_update() in filter
+>    selftests/tc-testings: add selftests for bpf filter
+>    selftests/tc-testings: add selftests for cgroup filter
+>    selftests/tc-testings: add selftests for flow filter
+>    selftests/tc-testings: add selftests for route filter
+>    selftests/tc-testings: add selftests for rsvp filter
+>    selftests/tc-testings: add selftests for tcindex filter
+>    selftests/tc-testings: add list case for basic filter
+> 
+>   include/net/pkt_cls.h                         |   13 +
+>   net/sched/cls_basic.c                         |    9 +-
+>   net/sched/cls_bpf.c                           |    8 +-
+>   net/sched/cls_flow.c                          |    8 +-
+>   net/sched/cls_fw.c                            |    9 +-
+>   net/sched/cls_route.c                         |    9 +-
+>   net/sched/cls_rsvp.h                          |    9 +-
+>   net/sched/cls_tcindex.c                       |   18 +-
+>   net/sched/cls_u32.c                           |   20 +-
+>   .../tc-testing/tc-tests/filters/basic.json    |   47 +
+>   .../tc-testing/tc-tests/filters/bpf.json      |  171 +++
+>   .../tc-testing/tc-tests/filters/cgroup.json   | 1236 +++++++++++++++++
+>   .../tc-testing/tc-tests/filters/flow.json     |  623 +++++++++
+>   .../tc-testing/tc-tests/filters/route.json    |  181 +++
+>   .../tc-testing/tc-tests/filters/rsvp.json     |  203 +++
+>   .../tc-testing/tc-tests/filters/tcindex.json  |  227 +++
+>   16 files changed, 2716 insertions(+), 75 deletions(-)
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/route.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/rsvp.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+> 
 
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 426 ++++++++++++++++++
- 2 files changed, 427 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 8bf7f7ecebaa..2741205efe84 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -48,6 +48,7 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-85bb.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-899b.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-9999.dtb
- 
-+dtb-$(CONFIG_ARCH_MXC) += imx8dxl-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-new file mode 100644
-index 000000000000..ca2a43e0cbf6
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-@@ -0,0 +1,426 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2019~2020, 2022 NXP
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8dxl.dtsi"
-+
-+/ {
-+	model = "Freescale i.MX8DXL EVK";
-+	compatible = "fsl,imx8dxl-evk", "fsl,imx8dxl";
-+
-+	aliases {
-+		i2c2 = &i2c2;
-+		mmc0 = &usdhc1;
-+		mmc1 = &usdhc2;
-+		serial0 = &lpuart0;
-+	};
-+
-+	chosen {
-+		stdout-path = &lpuart0;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x80000000 0 0x40000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		/*
-+		 * Memory reserved for optee usage. Please do not use.
-+		 * This will be automatically added to dtb if OP-TEE is installed.
-+		 * optee@96000000 {
-+		 *     reg = <0 0x96000000 0 0x2000000>;
-+		 *     no-map;
-+		 * };
-+		 */
-+
-+		/* global autoconfigured region for contiguous allocations */
-+		linux,cma {
-+			compatible = "shared-dma-pool";
-+			reusable;
-+			size = <0 0x14000000>;
-+			alloc-ranges = <0 0x98000000 0 0x14000000>;
-+			linux,cma-default;
-+		};
-+	};
-+
-+	mux3_en: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-name = "mux3_en";
-+		gpio = <&pca6416_2 8 GPIO_ACTIVE_LOW>;
-+		regulator-always-on;
-+	};
-+
-+	reg_fec1_sel: regulator-1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fec1_supply";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&pca6416_1 11 GPIO_ACTIVE_LOW>;
-+		regulator-always-on;
-+		status = "disabled";
-+	};
-+
-+	reg_fec1_io: regulator-2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fec1_io_supply";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		gpio = <&max7322 0 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-always-on;
-+		status = "disabled";
-+	};
-+
-+	reg_usdhc2_vmmc: regulator-3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SD1_SPWR";
-+		regulator-min-microvolt = <3000000>;
-+		regulator-max-microvolt = <3000000>;
-+		gpio = <&lsio_gpio4 30 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		off-on-delay-us = <3480>;
-+	};
-+};
-+
-+&eqos {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_eqos>;
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ethphy0>;
-+	nvmem-cells = <&fec_mac1>;
-+	nvmem-cell-names = "mac-address";
-+	snps,reset-gpios = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
-+	snps,reset-delays-us = <10 20 200000>;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ethphy0: ethernet-phy@0 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			reg = <0>;
-+			eee-broken-1000t;
-+			qca,disable-smarteee;
-+			vddio-supply = <&vddio0>;
-+
-+			vddio0: vddio-regulator {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+			};
-+		};
-+	};
-+};
-+
-+/*
-+ * fec1 shares the some PINs with usdhc2.
-+ * by default usdhc2 is enabled in this dts.
-+ * Please disable usdhc2 to enable fec1
-+ */
-+&fec1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_fec1>;
-+	phy-mode = "rgmii-txid";
-+	phy-handle = <&ethphy1>;
-+	fsl,magic-packet;
-+	rx-internal-delay-ps = <2000>;
-+	nvmem-cells = <&fec_mac0>;
-+	nvmem-cell-names = "mac-address";
-+	status = "disabled";
-+
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ethphy1: ethernet-phy@1 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			reg = <1>;
-+			reset-gpios = <&pca6416_1 0 GPIO_ACTIVE_LOW>;
-+			reset-assert-us = <10000>;
-+			qca,disable-smarteee;
-+			vddio-supply = <&vddio1>;
-+
-+			vddio1: vddio-regulator {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c2 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	clock-frequency = <100000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	pca6416_1: gpio@20 {
-+		compatible = "ti,tca6416";
-+		reg = <0x20>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+
-+	pca6416_2: gpio@21 {
-+		compatible = "ti,tca6416";
-+		reg = <0x21>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+
-+	pca9548_1: i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0x0>;
-+
-+			max7322: gpio@68 {
-+				compatible = "maxim,max7322";
-+				reg = <0x68>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0x4>;
-+		};
-+
-+		i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0x5>;
-+		};
-+
-+		i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0x6>;
-+		};
-+	};
-+};
-+
-+&lpuart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lpuart0>;
-+	status = "okay";
-+};
-+
-+&lsio_gpio4 {
-+	status = "okay";
-+};
-+
-+&lsio_gpio5 {
-+	status = "okay";
-+};
-+
-+&thermal_zones {
-+	pmic-thermal0 {
-+		polling-delay-passive = <250>;
-+		polling-delay = <2000>;
-+		thermal-sensors = <&tsens IMX_SC_R_PMIC_0>;
-+
-+		trips {
-+			pmic_alert0: trip0 {
-+				temperature = <110000>;
-+				hysteresis = <2000>;
-+				type = "passive";
-+			};
-+
-+			pmic_crit0: trip1 {
-+				temperature = <125000>;
-+				hysteresis = <2000>;
-+				type = "critical";
-+			};
-+		};
-+
-+		cooling-maps {
-+			map0 {
-+				trip = <&pmic_alert0>;
-+				cooling-device =
-+					<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+			};
-+		};
-+	};
-+};
-+
-+&usdhc1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc1>;
-+	bus-width = <8>;
-+	no-sd;
-+	no-sdio;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&usdhc2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-+	bus-width = <4>;
-+	vmmc-supply = <&reg_usdhc2_vmmc>;
-+	cd-gpios = <&lsio_gpio5 1 GPIO_ACTIVE_LOW>;
-+	wp-gpios = <&lsio_gpio5 0 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			IMX8DXL_COMP_CTL_GPIO_1V8_3V3_GPIORHB_PAD	0x000514a0
-+			IMX8DXL_COMP_CTL_GPIO_1V8_3V3_GPIORHK_PAD	0x000014a0
-+			IMX8DXL_SPI3_CS0_ADMA_ACM_MCLK_OUT1		0x0600004c
-+			IMX8DXL_SNVS_TAMPER_OUT1_LSIO_GPIO2_IO05_IN	0x0600004c
-+		>;
-+	};
-+
-+	pinctrl_usbotg1: usbotg1grp {
-+		fsl,pins = <
-+			IMX8DXL_USB_SS3_TC0_CONN_USB_OTG1_PWR		0x00000021
-+		>;
-+	};
-+
-+	pinctrl_usbotg2: usbotg2grp {
-+		fsl,pins = <
-+			IMX8DXL_USB_SS3_TC1_CONN_USB_OTG2_PWR		0x00000021
-+		>;
-+	};
-+
-+	pinctrl_eqos: eqosgrp {
-+		fsl,pins = <
-+			IMX8DXL_ENET0_MDC_CONN_EQOS_MDC				0x06000020
-+			IMX8DXL_ENET0_MDIO_CONN_EQOS_MDIO			0x06000020
-+			IMX8DXL_ENET1_RGMII_RXC_CONN_EQOS_RGMII_RXC		0x06000020
-+			IMX8DXL_ENET1_RGMII_RXD0_CONN_EQOS_RGMII_RXD0		0x06000020
-+			IMX8DXL_ENET1_RGMII_RXD1_CONN_EQOS_RGMII_RXD1		0x06000020
-+			IMX8DXL_ENET1_RGMII_RXD2_CONN_EQOS_RGMII_RXD2		0x06000020
-+			IMX8DXL_ENET1_RGMII_RXD3_CONN_EQOS_RGMII_RXD3		0x06000020
-+			IMX8DXL_ENET1_RGMII_RX_CTL_CONN_EQOS_RGMII_RX_CTL	0x06000020
-+			IMX8DXL_ENET1_RGMII_TXC_CONN_EQOS_RGMII_TXC		0x06000020
-+			IMX8DXL_ENET1_RGMII_TXD0_CONN_EQOS_RGMII_TXD0		0x06000020
-+			IMX8DXL_ENET1_RGMII_TXD1_CONN_EQOS_RGMII_TXD1		0x06000020
-+			IMX8DXL_ENET1_RGMII_TXD2_CONN_EQOS_RGMII_TXD2		0x06000020
-+			IMX8DXL_ENET1_RGMII_TXD3_CONN_EQOS_RGMII_TXD3		0x06000020
-+			IMX8DXL_ENET1_RGMII_TX_CTL_CONN_EQOS_RGMII_TX_CTL	0x06000020
-+		>;
-+	};
-+
-+	pinctrl_fec1: fec1grp {
-+		fsl,pins = <
-+			IMX8DXL_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB0_PAD		0x000014a0
-+			IMX8DXL_COMP_CTL_GPIO_1V8_3V3_ENET_ENETB1_PAD		0x000014a0
-+			IMX8DXL_ENET0_MDC_CONN_ENET0_MDC			0x06000020
-+			IMX8DXL_ENET0_MDIO_CONN_ENET0_MDIO			0x06000020
-+			IMX8DXL_ENET0_RGMII_RXC_CONN_ENET0_RGMII_RXC		0x00000060
-+			IMX8DXL_ENET0_RGMII_RXD0_CONN_ENET0_RGMII_RXD0		0x00000060
-+			IMX8DXL_ENET0_RGMII_RXD1_CONN_ENET0_RGMII_RXD1		0x00000060
-+			IMX8DXL_ENET0_RGMII_RXD2_CONN_ENET0_RGMII_RXD2		0x00000060
-+			IMX8DXL_ENET0_RGMII_RXD3_CONN_ENET0_RGMII_RXD3		0x00000060
-+			IMX8DXL_ENET0_RGMII_RX_CTL_CONN_ENET0_RGMII_RX_CTL	0x00000060
-+			IMX8DXL_ENET0_RGMII_TXC_CONN_ENET0_RGMII_TXC		0x00000060
-+			IMX8DXL_ENET0_RGMII_TXD0_CONN_ENET0_RGMII_TXD0		0x00000060
-+			IMX8DXL_ENET0_RGMII_TXD1_CONN_ENET0_RGMII_TXD1		0x00000060
-+			IMX8DXL_ENET0_RGMII_TXD2_CONN_ENET0_RGMII_TXD2		0x00000060
-+			IMX8DXL_ENET0_RGMII_TXD3_CONN_ENET0_RGMII_TXD3		0x00000060
-+			IMX8DXL_ENET0_RGMII_TX_CTL_CONN_ENET0_RGMII_TX_CTL	0x00000060
-+		>;
-+	};
-+
-+	pinctrl_lpspi3: lpspi3grp {
-+		fsl,pins = <
-+			IMX8DXL_SPI3_SCK_ADMA_SPI3_SCK		0x6000040
-+			IMX8DXL_SPI3_SDO_ADMA_SPI3_SDO		0x6000040
-+			IMX8DXL_SPI3_SDI_ADMA_SPI3_SDI		0x6000040
-+			IMX8DXL_SPI3_CS1_ADMA_SPI3_CS1		0x6000040
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			IMX8DXL_SPI1_SCK_ADMA_I2C2_SDA		0x06000021
-+			IMX8DXL_SPI1_SDO_ADMA_I2C2_SCL		0x06000021
-+		>;
-+	};
-+
-+	pinctrl_cm40_lpuart: cm40lpuartgrp {
-+		fsl,pins = <
-+			IMX8DXL_ADC_IN2_M40_UART0_RX		0x06000020
-+			IMX8DXL_ADC_IN3_M40_UART0_TX		0x06000020
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			IMX8DXL_SPI1_CS0_ADMA_I2C3_SDA		0x06000021
-+			IMX8DXL_SPI1_SDI_ADMA_I2C3_SCL		0x06000021
-+		>;
-+	};
-+
-+	pinctrl_lpuart0: lpuart0grp {
-+		fsl,pins = <
-+			IMX8DXL_UART0_RX_ADMA_UART0_RX		0x06000020
-+			IMX8DXL_UART0_TX_ADMA_UART0_TX		0x06000020
-+		>;
-+	};
-+
-+	pinctrl_usdhc1: usdhc1grp {
-+		fsl,pins = <
-+			IMX8DXL_EMMC0_CLK_CONN_EMMC0_CLK	0x06000041
-+			IMX8DXL_EMMC0_CMD_CONN_EMMC0_CMD	0x00000021
-+			IMX8DXL_EMMC0_DATA0_CONN_EMMC0_DATA0	0x00000021
-+			IMX8DXL_EMMC0_DATA1_CONN_EMMC0_DATA1	0x00000021
-+			IMX8DXL_EMMC0_DATA2_CONN_EMMC0_DATA2	0x00000021
-+			IMX8DXL_EMMC0_DATA3_CONN_EMMC0_DATA3	0x00000021
-+			IMX8DXL_EMMC0_DATA4_CONN_EMMC0_DATA4	0x00000021
-+			IMX8DXL_EMMC0_DATA5_CONN_EMMC0_DATA5	0x00000021
-+			IMX8DXL_EMMC0_DATA6_CONN_EMMC0_DATA6	0x00000021
-+			IMX8DXL_EMMC0_DATA7_CONN_EMMC0_DATA7	0x00000021
-+			IMX8DXL_EMMC0_STROBE_CONN_EMMC0_STROBE	0x00000041
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
-+		fsl,pins = <
-+			IMX8DXL_ENET0_RGMII_TX_CTL_LSIO_GPIO4_IO30	0x00000040 /* RESET_B */
-+			IMX8DXL_ENET0_RGMII_TXD1_LSIO_GPIO5_IO00	0x00000021 /* WP */
-+			IMX8DXL_ENET0_RGMII_TXD2_LSIO_GPIO5_IO01	0x00000021 /* CD */
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			IMX8DXL_ENET0_RGMII_RXC_CONN_USDHC1_CLK		0x06000041
-+			IMX8DXL_ENET0_RGMII_RX_CTL_CONN_USDHC1_CMD	0x00000021
-+			IMX8DXL_ENET0_RGMII_RXD0_CONN_USDHC1_DATA0	0x00000021
-+			IMX8DXL_ENET0_RGMII_RXD1_CONN_USDHC1_DATA1	0x00000021
-+			IMX8DXL_ENET0_RGMII_RXD2_CONN_USDHC1_DATA2	0x00000021
-+			IMX8DXL_ENET0_RGMII_RXD3_CONN_USDHC1_DATA3	0x00000021
-+			IMX8DXL_ENET0_RGMII_TXD0_CONN_USDHC1_VSELECT	0x00000021
-+		>;
-+	};
-+};
--- 
-2.25.1
-
+Aside from tabs vs spaces nit-picking, the test patches in this set look 
+good.
