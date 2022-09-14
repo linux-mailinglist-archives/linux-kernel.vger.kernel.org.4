@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E225B84CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0C75B84DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiINJSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S230527AbiINJWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiINJSG (ORCPT
+        with ESMTP id S230453AbiINJVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AD07E005;
-        Wed, 14 Sep 2022 02:08:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7455619CC;
-        Wed, 14 Sep 2022 09:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F74AC433C1;
-        Wed, 14 Sep 2022 09:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663146456;
-        bh=a4oeQ9990DuYd/BWlXz07HHJJwmCGoY/tMmXJ6CXqdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nW3axlEo4kHzRRBGPoxZL2lW9pAs5a6QreRrjlJCGV9i4t9he44mAzsMbluWr5lqK
-         Wht6BSMuum8kHJYiieuOI9Zrc2MM3KWtUrs+z1kKlkDCXnaRPRIswmP7AVcraDDA8T
-         dn+nLXmaFHXnG3ktrC4pYqo49Ap2U9Oyc4vY+u0NaoLAFM8F51R8SDKsy222kp6CaZ
-         22ktpAjP1695EYATILGIs1cgUT7+XJCdBdcQuRgvNBBNHoVr/D3Y8Tm2S9Bkb0jfXb
-         9/ZCwu2aqmRorTSvhxFWvEUIs49WFZHSBcwNcPa9/4yim+IgW/LvbuAAEcLDqnIHDM
-         Ofjv6ZJg6hTkw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oYOMq-0001At-He; Wed, 14 Sep 2022 11:07:37 +0200
-Date:   Wed, 14 Sep 2022 11:07:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        andersson@kernel.org, agross@kernel.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mka@chromium.org, johan+linaro@kernel.org,
-        dianders@chromium.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb
- gdsc
-Message-ID: <YyGZ2D9LYYyF31Ug@hovoldconsulting.com>
-References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
- <20220901101756.28164-3-quic_rjendra@quicinc.com>
- <YyF+IuoDjBZzEQxO@hovoldconsulting.com>
- <33af27a0-85b9-4301-62d9-24132989e26e@quicinc.com>
- <32211aef-6b87-ab5b-637b-7cf9610f6926@quicinc.com>
+        Wed, 14 Sep 2022 05:21:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C01982742;
+        Wed, 14 Sep 2022 02:11:48 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bj12so33120030ejb.13;
+        Wed, 14 Sep 2022 02:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FG85OJtSMqVkntZUzAMmCxoRInDwAAoB7LIdaCx+6jo=;
+        b=kDgeSKN3Va30caiOyYiFGW/Ma0vOsc5SVTxE6kBNMOxsqdks41a3IGw3gxsb77i3mK
+         s6QeMVljIfyzsa/o8nwa+phA8JR3Fi7IQgbmd6P6Hw4M5ehz5+SDOEQVAt2aYDfz2s61
+         KYXfVVNNCHMix8lKgwSQkgCQvQ71hJgEG33GhBLhBWMlCPZKI/DMhR7GZtvN8cXn3Wcs
+         TvIyK/DRsPT2fGHPUC1SPa3UTHF4xMOPv3q+LcdWiYSo4GAhRYPiq0/3xBM+fem8L/TM
+         YgFZ2xNyBoD4QHcc0qLrDHFDtpmZxdTFBg7GBFIDlQqt1Pxs4Dj8lJPeytuErjPN3V2Q
+         uC3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FG85OJtSMqVkntZUzAMmCxoRInDwAAoB7LIdaCx+6jo=;
+        b=ElZfZJirfaGC/K41hfsV6tLxXoXY7hA3e6s4BlIIEADqDmOKckViP5Jeve0vJiBHDp
+         ZlIzjghb6bpSx3qf12NLywfUBSdXHRJEPKpj3r7cqfzdKXKYZfmP2wtELESnzYdt887N
+         Vd1sWrX51D6wi8eSls3qDBbpPxOQlpjaCx8BikpXgRLx5Y/vGNaPmov0ddSdOogo/m7H
+         q8upQSnCt6d2rSjo80+zYBP0qKmsfYwbiHwXE1ZSZyWeQDChpR6lSGwSkDomhSYIBKIg
+         jg35D4GOdX6+fOzEWSHBcXZDnNCTzMlZ+xMwhirukvvPpP8/+VFVamDg+edq+cffajs0
+         LaSw==
+X-Gm-Message-State: ACgBeo0aiI2erbPvs7E+MnSQKqQHxz4KCJbC+jfcB/z5mQaVDEX6flAR
+        OOs3DaLyjjcOqFbShIwerFc=
+X-Google-Smtp-Source: AA6agR513nM0QW+iAtMw730fZTdzlHDjx+lEHPAs117mk9weM+KJz0wmmcjnMU/yPMS3imNNcF3IOQ==
+X-Received: by 2002:a17:906:a0d3:b0:73d:be5b:2b52 with SMTP id bh19-20020a170906a0d300b0073dbe5b2b52mr25534262ejb.727.1663146650125;
+        Wed, 14 Sep 2022 02:10:50 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906314800b0077c52b512bcsm5475702eje.86.2022.09.14.02.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 02:10:49 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] mips: bmips: bcm63268: add TWD block binding
+Date:   Wed, 14 Sep 2022 11:10:45 +0200
+Message-Id: <20220914091045.29488-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <32211aef-6b87-ab5b-637b-7cf9610f6926@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Please try to wrap your replies at 72 columns or so. ]
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On Wed, Sep 14, 2022 at 02:28:31PM +0530, Rajendra Nayak wrote:
-> 
-> On 9/14/2022 2:07 PM, Krishna Kurapati PSSNV wrote:
-> > 
-> > 
-> > On 9/14/2022 12:39 PM, Johan Hovold wrote:
-> >> On Thu, Sep 01, 2022 at 03:47:56PM +0530, Rajendra Nayak wrote:
-> >>> USB on sc7280 cannot support wakeups from low power states
-> >>> if the GDSC is turned OFF. Update the .pwrsts for usb GDSC so it
-> >>> only transitions to RET in low power.
-> >>
-> >> It seems this isn't just needed for wakeup to work. On both sc7280 and
-> >> sc8280xp the controller doesn't resume properly if the domain has been
-> >> powered off (i.e. regardless of whether wakeup is enabled or not).
-> >>
-> > Hi Johan,
-> > 
-> >    I believe you are referring to the reinit that happens in xhci resume path after wakeup happens:
-> > 
-> > [   48.675839] xhci-hcd xhci-hcd.14.auto: xHC error in resume, USBSTS 0x411, Reinit
-> > 
-> > I see that when USB GDSC is not in retention, we don't retain controller state and go for reinit and re-enum of connected devices. We are seeing an additional delay of around ~0.7 sec (in chromebooks running on SC7280) in the wakeup path for re-enumeration of connected USB devices. To avoid this, we wanted to put GDSC in retention during PM suspend.
-> 
-> ok, so perhaps the commit msg should be updated to something like
-> 
-> 'USB on sc7280 needs to prevent the GDSC from being turned OFF for a couple of reasons
-> 1. To prevent re-init and re-enumeration of all connected devices resulting in additional delay coming out of low power states
-> 2. To support wakeups from connected devices from low power states'
+TWD is an MFD block that contains timers, watchdog & some clocks / reset
+controller.
 
-The fundamental issue here is that state is lost during suspend which
-the driver doesn't currently (or can not) restore. Doesn't hurt to
-mention the specific consequences you list above as well.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+It's the same patch as in the
+[PATCH RFC RFT] mips: bmips: bcm63268: add TWD block binding
+(sent back in January)
+---
+ arch/mips/boot/dts/brcm/bcm63268.dtsi | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-> >> Are you sure there's no state that needs to be retained regardless of
-> >> the wakeup setting?
-> >>
-> >>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> >>> ---
-> >>>   drivers/clk/qcom/gcc-sc7280.c | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
-> >>> index 7ff64d4d5920..de29a034e725 100644
-> >>> --- a/drivers/clk/qcom/gcc-sc7280.c
-> >>> +++ b/drivers/clk/qcom/gcc-sc7280.c
-> >>> @@ -3126,7 +3126,7 @@ static struct gdsc gcc_usb30_prim_gdsc = {
-> >>>       .pd = {
-> >>>           .name = "gcc_usb30_prim_gdsc",
-> >>>       },
-> >>> -    .pwrsts = PWRSTS_OFF_ON,
-> >>> +    .pwrsts = PWRSTS_RET_ON,
-> >>>       .flags = VOTABLE,
-> >>>   };
-> >>
-> >> And what about gcc_usb30_sec_gdsc?
-> > 
-> > Currently wakeup is not enabled on secondary controller as its not required for end product platform (herobrine variant). So leaving the usb30_sec_gdsc as it is for now.
-> 
-> It perhaps makes sense to update that as well, and given this is a compute specific chipset and we dont have to worry about
-> USB in device mode, its safe to assume if and when that controller is used (in future designs) it would only support host mode?
+diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+index c3ce49ec675f..8926417a8fbc 100644
+--- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+@@ -105,14 +105,20 @@ periph_intc: interrupt-controller@10000020 {
+ 			interrupts = <2>, <3>;
+ 		};
+ 
+-		wdt: watchdog@1000009c {
+-			compatible = "brcm,bcm7038-wdt";
+-			reg = <0x1000009c 0xc>;
++		timer-mfd@10000080 {
++			compatible = "brcm,bcm7038-twd", "simple-mfd", "syscon";
++			reg = <0x10000080 0x30>;
++			ranges = <0x0 0x10000080 0x30>;
+ 
+-			clocks = <&periph_osc>;
+-			clock-names = "refclk";
++			wdt: watchdog@1c {
++				compatible = "brcm,bcm7038-wdt";
++				reg = <0x1c 0xc>;
+ 
+-			timeout-sec = <30>;
++				clocks = <&periph_osc>;
++				clock-names = "refclk";
++
++				timeout-sec = <30>;
++			};
+ 		};
+ 
+ 		uart0: serial@10000180 {
+-- 
+2.34.1
 
-What would be the problem when using the controller in peripheral mode?
-Don't you want to retain the controller state when suspended also in
-that case?
-
-Johan
