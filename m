@@ -2,90 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A6D5B7F98
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 05:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FAD5B7F91
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 05:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiINDlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 23:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S229736AbiINDjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 23:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiINDli (ORCPT
+        with ESMTP id S229728AbiINDjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 23:41:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697356F26B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 20:41:31 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MS5d44xVGzcmyV;
-        Wed, 14 Sep 2022 11:37:44 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 11:41:29 +0800
-Received: from huawei.com (10.67.175.33) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
- 2022 11:41:29 +0800
-From:   Lin Yujun <linyujun809@huawei.com>
-To:     <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
-        <dave.jiang@intel.com>, <joao.m.martins@oracle.com>,
-        <akpm@linux-foundation.org>
-CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] ACPI: HMAT: Release platform device in case of platform_device_add_data() fails
-Date:   Wed, 14 Sep 2022 11:37:55 +0800
-Message-ID: <20220914033755.99924-1-linyujun809@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 13 Sep 2022 23:39:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA84B6DFB7;
+        Tue, 13 Sep 2022 20:39:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30F2F1BB2;
+        Tue, 13 Sep 2022 20:39:24 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AE753F73D;
+        Tue, 13 Sep 2022 20:39:13 -0700 (PDT)
+Message-ID: <c4800957-825c-a5c7-d8d4-946d9c6cdf6c@arm.com>
+Date:   Wed, 14 Sep 2022 09:09:10 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.33]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V2 3/7] arm64/perf: Update struct pmu_hw_events for BRBE
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20220908051046.465307-1-anshuman.khandual@arm.com>
+ <20220908051046.465307-4-anshuman.khandual@arm.com>
+ <Yx8GBq1FJN49iJs9@sirena.org.uk>
+ <84683aa7-58ad-85f8-327b-daed2f704834@arm.com>
+ <YyBs1PJwNoNYv4NJ@sirena.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <YyBs1PJwNoNYv4NJ@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platform device is not released when platform_device_add_data()
-fails. And platform_device_put() perfom one more pointer check than
-put_device() to check for errors in the 'pdev' pointer.
 
-Use platform_device_put() to release platform device in
-platform_device_add()/platform_device_add_data()/
-platform_device_add_resources() error case.
 
-Fixes: c01044cc8191 ("ACPI: HMAT: refactor hmat_register_target_device to hmem_register_device")
-Signed-off-by: Lin Yujun <linyujun809@huawei.com>
----
- drivers/dax/hmem/device.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 9/13/22 17:13, Mark Brown wrote:
+> On Tue, Sep 13, 2022 at 11:03:45AM +0530, Anshuman Khandual wrote:
+>> On 9/12/22 15:42, Mark Brown wrote:
+> 
+>>> like it would be clearer and safer to allocate these dynamically
+>>> when BRBE is used if that's possible, I'd expect that should also
+>>> deal with the stack frame size issues as well.
+> 
+>> That might not be possible because the generic 'struct perf_branch_stack'
+>> expects 'perf_branch_stack.entries' to be a variable array which is also
+>> contiguous in memory, with other elements in 'perf_branch_stack'. Besides
+>> that will be a deviation from similar implementations on x86 and powerpc
+>> platforms.
+> 
+>> The stack frame size came up because BRBE_MAX_ENTRIES is 64 compared to
+>> just 32 on other platforms, which follow the exact same method.
+> 
+> If this is a pattern used by other architectures and relied on by
+> the core that doesn't mean it's impossible to do anything, it
+> means that the existing code needs to be updated to allow the
+> larger number of entries for BRBE if we want to change things.
+> That is a lot of effort of course so something that moves the
+> allocation off the stack would be more expedient in the short
+> term.
 
-diff --git a/drivers/dax/hmem/device.c b/drivers/dax/hmem/device.c
-index cb6401c9e9a4..f87ae005431a 100644
---- a/drivers/dax/hmem/device.c
-+++ b/drivers/dax/hmem/device.c
-@@ -47,7 +47,7 @@ void hmem_register_device(int target_nid, struct resource *r)
- 	rc = platform_device_add_data(pdev, &info, sizeof(info));
- 	if (rc < 0) {
- 		pr_err("hmem memregion_info allocation failure for %pr\n", &res);
--		goto out_pdev;
-+		goto out_resource;
- 	}
+Something like the following change moves the buffer allocation off the stack,
+although it requires updating the driver, and buffer assignment during a PMU
+interrupt. But it does seem to work (will require some more testing).
+
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 3e7757d05146..a3401122d855 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -52,6 +52,12 @@ static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_PRIV) == ARMPMU_EVT_PRIV);
+  */
+ #define BRBE_MAX_ENTRIES 64
  
- 	rc = platform_device_add_resources(pdev, &res, 1);
-@@ -65,7 +65,7 @@ void hmem_register_device(int target_nid, struct resource *r)
- 	return;
++/* Captured BRBE buffer - copied as is into perf_sample_data */
++struct brbe_records {
++       struct perf_branch_stack        brbe_stack;
++       struct perf_branch_entry        brbe_entries[BRBE_MAX_ENTRIES];
++};
++
+ /* The events for a given PMU register set. */
+ struct pmu_hw_events {
+        /*
+@@ -92,9 +98,7 @@ struct pmu_hw_events {
+        unsigned int                    brbe_users;
+        void                            *brbe_context;
  
- out_resource:
--	put_device(&pdev->dev);
-+	platform_device_put(pdev);
- out_pdev:
- 	memregion_free(id);
- }
--- 
-2.17.1
-
+-       /* Captured BRBE buffer - copied as is into perf_sample_data */
+-       struct perf_branch_stack        brbe_stack;
+-       struct perf_branch_entry        brbe_entries[BRBE_MAX_ENTRIES];
++       struct brbe_records             *branch_records;
+ };
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 05848c6d955c..2f0957519307 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -951,6 +951,13 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
+                goto out_free_pmu;
+        }
+ 
++       for_each_possible_cpu(cpu) {
++               struct pmu_hw_events *events = per_cpu_ptr(pmu->hw_events, cpu);
++
++               events->branch_records = kmalloc(sizeof(struct brbe_records), flags);
++               WARN_ON(!events->branch_records);
++       }
