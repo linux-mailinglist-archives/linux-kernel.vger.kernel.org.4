@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613E25B8E8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AAD5B8E8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiINSGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S229670AbiINSHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiINSGi (ORCPT
+        with ESMTP id S229511AbiINSHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:06:38 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CFBF14;
-        Wed, 14 Sep 2022 11:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vtbQ/fNabv0KrEQaayiXWaRsKz9Ke9g5h9z5GEtHYt8=; b=B4an7rSdC7KfE0p1Yy2e5mm6cw
-        Zx5bYl+nwEjM/09111UDWT1oWDb+sr/ZqJ5X6HS5+FWJlHjHjA6XFz6piOtU/Ug6CEWQrIY1wHhYm
-        jRP7NttEU/191254syVQwKNUo2VWdwe5a3CihNcY4rFtdmI0Vrh17fqf9PZueoE0soENRLz7nBTwu
-        2R9RCljOROh8ueqV100ojCjHJCivX/N9/CQbZvhfxtfXFEK6yTGJ9lnpVgKaF1mYeufG9tKWlu15D
-        jWp9h7grqoy3UQO+CJ71UfrsQ7OSZHktFLqqNNKY+DfoYu6phwshLITu2n78eDelrvEqimRjdd0AJ
-        jlIIt/WA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34338)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oYWmQ-0004i0-11; Wed, 14 Sep 2022 19:06:34 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oYWmO-0001qn-F2; Wed, 14 Sep 2022 19:06:32 +0100
-Date:   Wed, 14 Sep 2022 19:06:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     mw@semihalf.com, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        stable <stable@kernel.org>
-Subject: Re: [PATCH net] net: mvpp2: debugfs: fix memory leak when using
- debugfs_lookup()
-Message-ID: <YyIYKGNX/r2LrngQ@shell.armlinux.org.uk>
-References: <20220902134111.280657-1-gregkh@linuxfoundation.org>
- <YyC2GGbzEuCuZzMk@shell.armlinux.org.uk>
- <YyIXXJmEmKEBtvYy@kroah.com>
+        Wed, 14 Sep 2022 14:07:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F4DF14;
+        Wed, 14 Sep 2022 11:07:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B588961E53;
+        Wed, 14 Sep 2022 18:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F586C433D6;
+        Wed, 14 Sep 2022 18:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663178834;
+        bh=u2oRx56dEvhrWV3ZEhglBUWqj/570fEv26z8NhtxT1U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=PBCzcVdkrrG14uxuvrHuAyh60xrk2mucc1WcgcwasSAW2ytLukURmYkNe+ODMp25K
+         tzuc5rpcmuOzuw4stTRGwUd4qFdjl6LwC9iwJkPFEFiR83Jhia3HBD1UjExPrYSXKk
+         gkEo/9fdzsFNeqhCwccsmp/rc/FUFDni4HkcUSe7NkjAAA+BlFANgSTtn7ncuzdrRf
+         FYHlP6a2QmAiHtRC9Ax5zosdwgyxqrLgIibIyz9qKotD5Ae3poREPQ4ICZ8rlJmFT7
+         6hbEyHp/s+6+62uZojx1KwlRKK5Ai4hiUwgCfNf9109KHn81+ljibt0JOdU7j3pfWS
+         BYh8mLRMmI/ig==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyIXXJmEmKEBtvYy@kroah.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220914161502.faiaccuxydyrdr6e@penduick>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech> <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech> <20220914155035.88E45C433C1@smtp.kernel.org> <20220914161502.faiaccuxydyrdr6e@penduick>
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the maximum
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Maxime Ripard <maxime@cerno.tech>
+Date:   Wed, 14 Sep 2022 11:07:12 -0700
+User-Agent: alot/0.10
+Message-Id: <20220914180714.0F586C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 08:03:08PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Sep 13, 2022 at 05:55:52PM +0100, Russell King (Oracle) wrote:
-> > On Fri, Sep 02, 2022 at 03:41:11PM +0200, Greg Kroah-Hartman wrote:
-> > > When calling debugfs_lookup() the result must have dput() called on it,
-> > > otherwise the memory will leak over time.  Fix this up to be much
-> > > simpler logic and only create the root debugfs directory once when the
-> > > driver is first accessed.  That resolves the memory leak and makes
-> > > things more obvious as to what the intent is.
-> > 
-> > To clarify a bit more on the original patch rather than one of the
-> > backported stable patches of this.
-> > 
-> > This patch introduces a bug, whereby if the driver is a module, and
-> > is inserted, binds to a device, then is removed and re-inserted,
-> > mvpp2_root will be NULL on the first call to mvpp2_dbgfs_init(),
-> > so we will attempt to call debugfs_create_dir(). However, the
-> > directory was already previously created, so this will fail, and
-> > mvpp2_root will be the EEXIST error pointer.
-> > 
-> > Since we never clean up this directory, the original code does NOT
-> > result in a memory leak - since the increase in refcount caused by
-> > debugfs_lookup() has absolutely no effect - because we never remove
-> > this directory once it's been created.
-> > 
-> > If the driver /did/ remove the directory when the module is removed,
-> > then yes, maybe there's an argument for this fix. However, as things
-> > currently stand, this is in no way a fix, but actually introduces a
-> > debugfs regression.
-> > 
-> > Please can the change be reverted in mainline and all stable trees.
-> 
-> I never considered the 'rmmod the driver and then load it again' as a
-> valid thing to worry about.  And I doubt that many others would either :)
-> 
-> Given that the current code does NOT clean up when it is removed, I
-> assumed that no one cared abou this, but yes, it is crazy but the
-> current code does work, but it leaks a dentry.  I'll send a follow-on
-> patch to do this "correctly" when I return from the Plumbers conference
-> next week.
-> 
-> But for now, this patch is correct, and does not leak memory anymore
-> like the code without this change currently does, so I think it should
-> stay.
+Quoting Maxime Ripard (2022-09-14 09:15:02)
+> Hi Stephen,
+>=20
+> Thanks for reviewing that series
+>=20
+> On Wed, Sep 14, 2022 at 08:50:33AM -0700, Stephen Boyd wrote:
+> > Quoting Maxime Ripard (2022-08-15 08:31:24)
+> > > @@ -254,6 +255,33 @@ static int raspberrypi_fw_dumb_determine_rate(st=
+ruct clk_hw *hw,
+> > >         return 0;
+> > >  }
+> > > =20
+> > > +unsigned long rpi_firmware_clk_get_max_rate(struct clk *clk)
+> > > +{
+> > > +       const struct raspberrypi_clk_data *data;
+> > > +       struct raspberrypi_clk *rpi;
+> > > +       struct clk_hw *hw;
+> > > +       u32 max_rate;
+> > > +       int ret;
+> > > +
+> > > +       if (!clk)
+> > > +               return 0;
+> > > +
+> > > +       hw =3D  __clk_get_hw(clk);
+> >=20
+> > Ideally we don't add more users of this API. I should document that :/
+>=20
+> What should be the proper way to implement this?
+>=20
+> > It begs the question though, why do we need this API to take a 'struct
+> > clk'?  Can it simply hardcode the data->id value for the clk you care
+> > about and call rpi_firmware_property() directly (or some wrapper of it)?
+>=20
+> You mean push it down to the consumer?
+>=20
+> We will have two users of that function eventually. The KMS driver, and
+> the codec driver that isn't upstream yet. AFAIK, both are using a
+> different clock, so we can' really hardcode it, and duplicating it at
+> the consumer level would be weird.
 
-Please can you explain which memory isn't leaked as a result of the
-patch?
+Can you make an API that returns 'max freq for KMS' and 'max freq for
+codec'? For example, it could take the enum value that the clk driver
+uses for data->id?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>=20
+> > Furthermore, I wonder if even that part needs to be implemented.  Why
+> > not make a direct call to rpi_firmware_property() and get the max rate?
+> > All of that can live in the drm driver. Making it a generic API that
+> > takes a 'struct clk' means that it looks like any clk can be passed,
+> > when that isn't true. It would be better to restrict it to the one use
+> > case so that the scope of the problem doesn't grow. I understand that it
+> > duplicates a few lines of code, but that looks like a fair tradeoff vs.
+> > exposing an API that can be used for other clks in the future.
+>=20
+> So we'll want to have that function shared between the KMS and codec
+> drivers eventually. The clock id used by both drivers is stored in the
+> DT so we would create a function (outside of the clock drivers) that
+> would parse the clocks property, get the ID, and then queries the
+> firmware for it. Would that make sense?
+>=20
+
+Sure. Is the ID ever changing? If not then a simpler design would be to
+ask for the particular ID and hardcode that in the driver.
