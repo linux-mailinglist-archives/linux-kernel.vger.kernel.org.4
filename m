@@ -2,144 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097055B82D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A3B5B82D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiINITE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S229937AbiINIVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiINITB (ORCPT
+        with ESMTP id S229639AbiINIVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:19:01 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C7A57E30
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:19:00 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id g5so21497173ybg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:19:00 -0700 (PDT)
+        Wed, 14 Sep 2022 04:21:51 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531F361112
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:21:49 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so480581wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=HuIXq0gxsLhtrekbIwvVhrdsOJWyOZiMwcr+S3al2lw=;
-        b=cAprc2ENkwAzsA1ScDy+/sr6d/3f9p0nPP8Mc6N0iDX/hEs+T1BUfS8BVAHrFx8MBJ
-         HgdkV+kfd0A7J7ZkjA4pAMF35RkIlAimda9FEzqjxzOjqbAqi6UcEzmg80AYkWzJLeXI
-         zCakpoSPHtw0VWKrXcAwGiT2kHvjFGxiv1LWCO1x3nMcoFAgS40VLpeBMd2E2Sq2drcS
-         dOMWDCuymV7EHVprME2crDl+J9zBU+jt+l8DKpJSeYYBkVBy0Hjq4GnKe8WMKbvghvh6
-         wixA88tuAYTRq3++zVPDafixpOW89tYSoKU9nEYwEn2VMSK/OfJ9UcfIWE7GZqM+8IAZ
-         WeeQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hMSGdNlxtlPnxBGnbW3hM3kVsWE36K0xZy1a/tGPCkg=;
+        b=OQ4OIy9GOmeg5xzg7T70zjN7bKVToFE5zPr9Nz/6JKhryYv2DnGvHEQx4x1dURBNcz
+         /capUXEu7BWPsUCVFTsrM082PdGmXG+dK4UBgZRzFi6mfeREO/rsb7s+MnIEfItare5C
+         RqBkttw568pesaBzzvvtn8MZuhcEnchA+pOrkSINlcEzW5YDnr2y+0hzKLsk8LHia2hK
+         njVh6Ro/FGDSXmfAb1DQLo4iGeqb662ZAeLKsOd/57x7MH7gbxVL5okwrVK4x2snrEAm
+         9CBhOxpbIBX0F87oSjJsMQoNU5uTAsswiCsavEgUmU9dKHAEIHSAAVKJfFY/jLkrEg7u
+         sijA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HuIXq0gxsLhtrekbIwvVhrdsOJWyOZiMwcr+S3al2lw=;
-        b=BLkSOsEuHElXdygucqlph3lLGDl1ngeheqi/luieqOdBP3XyGpXpUtekNhID+tbvTu
-         y/coZuepI4Ng3smF3h9KskAE3KGh00Zhprc/ejiVY6xIHiA1n0TW4qZmEAnXpGHh3cki
-         ex8i4/mwSjdR12nW1xfBLLULyytQSV56CrkmmK6BuEJSjxDSGyt8sYIgMWW8TF0/CxNK
-         RSdEP/I4LdfIXwuOtOAYCz7SK0UJvbWJwxDncwzYdfomM3zy8O39uLfIjE5f1tqA9v9a
-         VHKEuiIwAHAZi0i/GGYbctclcnlmgTySx6ojLL5UNeLnj81Hl+D6M4Vi1pQmT5xCvVgv
-         sNyg==
-X-Gm-Message-State: ACrzQf2jGcgY8IFK4CaSRL5bf+a8IeQo71CYBxEtbxRy2OhrVFTmsXkT
-        B5gEiQ4WG+1SYoGkdsVmGYQeKyfkcXbTRHOgMZ5HRw==
-X-Google-Smtp-Source: AMsMyM4gAetVuxJCy5rc8GccIvL8xPemtsGubVjAx9z1OYMfS0WxwpXd1nfRIx3By7x7exkAz6pnQPQ/bPRykgvkaz0=
-X-Received: by 2002:a25:3f03:0:b0:6af:f33f:7711 with SMTP id
- m3-20020a253f03000000b006aff33f7711mr2350646yba.376.1663143538967; Wed, 14
- Sep 2022 01:18:58 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hMSGdNlxtlPnxBGnbW3hM3kVsWE36K0xZy1a/tGPCkg=;
+        b=HC1A2YOvStBwX9tLo43kNxm72bK8SchvPzA2quCsgnFVGVgFeKsMU1osaIVoQLRQjO
+         +fiadLUiUpzruHPrGC1vtvkMwBChUH5mc8anyDdnIMJI9d1y8W2XdKy7C5Hn62d7/OKn
+         Rcsqe3st9db12KnYnqi/S4C50hefHURUNlRjXYNAsw/us5gtwyLnzNQETak324tsDGOI
+         fP5V33HKsfw3FfhKDOJluvnL4ybZ17jBHWW6O/cbpveNJ5Kn2YKUClYIaWZ8SDvOa5wr
+         1Xzz2wWAU1XPdk4BU/aNeYtdj7pQFGR7RRK/KylqOwQRSBXS7dLSgll4JBeNYC+u38WG
+         i/iA==
+X-Gm-Message-State: ACgBeo2txwAnPJ+NWt+mhBKmb1+kR/41qbHL5h/VNgv6fA2niXE2oWUC
+        aLirB2ycOa19QTSgSG+RgGwNobyMl0S+jBQmHg==
+X-Google-Smtp-Source: AA6agR4YcAj/dzl4amYqbHPoxvGWmBXtsFhboQ8tAV5cdG/5kn6jrtldNeNEHKltUr5P27JCbuBNDHhcbWAKR1wlaI4=
+X-Received: by 2002:a05:600c:1912:b0:3a5:f4fc:cd40 with SMTP id
+ j18-20020a05600c191200b003a5f4fccd40mr2104290wmq.205.1663143707737; Wed, 14
+ Sep 2022 01:21:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220909095811.2166073-1-glider@google.com> <20220913175210.50945edb0738bf95300dc500@linux-foundation.org>
-In-Reply-To: <20220913175210.50945edb0738bf95300dc500@linux-foundation.org>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 14 Sep 2022 10:18:22 +0200
-Message-ID: <CAG_fn=XsmcKNi1Sg-HgP9Hh98mf910o0Uo4fCpwijiS_3adgyQ@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] x86: crypto: kmsan: revert !KMSAN dependencies
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Robert Elliott <elliott@hpe.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
+References: <CAGjdHu=8pGmyBpVMpf-V=6w7hZHLmG4WH5EsNchn_+GqikTDxQ@mail.gmail.com>
+ <20220914080404.58913-1-sj@kernel.org>
+In-Reply-To: <20220914080404.58913-1-sj@kernel.org>
+From:   Kaixu Xia <xiakaixu1987@gmail.com>
+Date:   Wed, 14 Sep 2022 16:21:35 +0800
+Message-ID: <CAGjdHu=rixLvmd37eXxpH8R_V8x1RaTH-f-G=WtJuCGDz+N5DA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] mm/damon/vaddr: indicate the target is invalid when
+ 'nr_regions' is zero
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Kaixu Xia <kaixuxia@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 2:52 AM Andrew Morton <akpm@linux-foundation.org> w=
-rote:
+On Wed, Sep 14, 2022 at 4:04 PM SeongJae Park <sj@kernel.org> wrote:
 >
-> On Fri,  9 Sep 2022 11:58:10 +0200 Alexander Potapenko <glider@google.com=
-> wrote:
+> On Wed, 14 Sep 2022 12:02:05 +0800 Kaixu Xia <xiakaixu1987@gmail.com> wrote:
 >
-> > This patch reverts "crypto: Kconfig: fix up for "crypto: kmsan: disable
-> > accelerated configs under KMSAN" used by Stephen Rothwell to cleanly
-> > merge KMSAN patches into linux-next.
+> > On Tue, Sep 13, 2022 at 11:11 PM SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > On Tue, 13 Sep 2022 17:11:27 +0800 xiakaixu1987@gmail.com wrote:
+> > >
+> > > > From: Kaixu Xia <kaixuxia@tencent.com>
+> > > >
+> > > > When 'init()' and 'update()' DAMON operations failed and the number
+> > > > of the damon_target regions is zero,
+> > >
+> > > Well, I think that could be a temporal failure.  In the case, later call of
+> > > 'update()' could success?
+> > >
+> > Yeah, the kdamond while() loop calls 'update()' periodically to fix this
+> > temporary failure. But for extreme scenarios that 'update()' continues to fail,
+> > we should have some ways to detect this case.
+>
+> Even in the case, kdamond will do nothing but continuing the main loop while
+> sleeping sample_aggr interval (5ms by default) for each iteration, and calling
+> 'update()' for every update interval (100ms by default).  Waste is waste, but I
+> don't think that's a real issue.  Further, continuous 'update()' failures mean
+> the process is in some weird state anyway, so I'd assume the process would be
+> finished soon.  kdamond will also finish as soon as the process finishes.
+> Users could also find the strange situation (nothing in the monitoring results)
+> and finish kdamond on their own.
+>
+> Anything I'm missing?
+>
+That sounds reasonable. Thanks for your detailed explanation.
+
+
+Thanks,
+Kaixu
+>
+> Andrew, I found you merged this patch in mm-unstable.  Could you please hold it
+> until we finish this discussion?
+>
+>
+> Thanks,
+> SJ
+>
 > >
-> > Because now arch-specific crypto configs reside in a separate Kconfig
-> > file, we can disable them all by adding a single !KMSAN before includin=
-g
-> > that file (done in the following patch).
+> > Thanks,
+> > Kaixu
+> > >
+> > > Thanks,
+> > > SJ
+> > >
+> > > > the kdamond would do nothing
+> > > > to this monitoring target in this case. It makes no sense to run
+> > > > kdamond when all of monitoring targets have no regions. So add the
+> > > > judgement in 'target_valid()' operation to indicate the target is
+> > > > invalid when 'nr_regions' is zero.
+> > >
+> > > >
+> > > > Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> > > > ---
+> > > >  mm/damon/vaddr.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> > > > index 39ea48d9cc15..65ff98d49ec0 100644
+> > > > --- a/mm/damon/vaddr.c
+> > > > +++ b/mm/damon/vaddr.c
+> > > > @@ -598,6 +598,9 @@ static bool damon_va_target_valid(void *target)
+> > > >       struct damon_target *t = target;
+> > > >       struct task_struct *task;
+> > > >
+> > > > +     if (!damon_nr_regions(t))
+> > > > +             return false;
+> > > > +
+> > > >       task = damon_get_task_struct(t);
+> > > >       if (task) {
+> > > >               put_task_struct(task);
+> > > > --
+> > > > 2.27.0
 > >
-> > Among others, this patch reverts !KMSAN check for
-> > CONFIG_CRYPTO_AEGIS128_SIMD, which is ARM-only and is hence unnecessary=
-,
-> > because KMSAN does not support ARM yet.
->
-> As I understand it, these patches are against linux-next and only
-> linux-next because they pertain to linux-next's resolution of conflicts
-> between the MM tree and the crypto tree?
-
-The thing is that this patch only makes sense with its counterpart
-that adds a !KMSAN condition on "source arch/x86/crypto/Kconfig", and
-the latter file is missing in the -mm tree.
-
-> I'm not sure how to handle that, even if anyone wants to.  How about
-> you send an update to
-> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm's mm-unstable
-> branch so the code which is there makes sense?  Then we'll ask Stephen
-> to redo the crypto tree resolution?
-
-Because the crypto tree is moving code crypto/Kconfig to
-arch/x86/crypto/Kconfig, we'll still need to apply these two patches
-to the result of the crypto tree merge.
-
-I was going to send out the updated patch series anyway (there are
-minor improvements to the core which let us drop "kmsan: unpoison @tlb
-in arch_tlb_gather_mmu()", also there's a new test case).
-I could drop "crypto: kmsan: disable accelerated configs under KMSAN"
-from it, so that it would be possible to enable accelerated configs
-under KMSAN at the cost of false positives (which are only visible if
-one builds with KMSAN).
-Then, once arch/x86/crypto/Kconfig hits -mm, I can send the remaining
-patch that disables accelerated crypto under KMSAN:
-https://lore.kernel.org/all/20220909095811.2166073-2-glider@google.com/
-
-Or I could just send v7 patches against mm-unstable and ask Stephen to
-apply both https://lore.kernel.org/all/20220909095811.2166073-2-glider@goog=
-le.com/
-and https://lore.kernel.org/all/20220909095811.2166073-2-glider@google.com/
-at merge time.
-
-Which option is better?
-
-
---
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
