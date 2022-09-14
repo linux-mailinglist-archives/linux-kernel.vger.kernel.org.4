@@ -2,157 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0735B903B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D105B9048
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiINVrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 17:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S229896AbiINVuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 17:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiINVrK (ORCPT
+        with ESMTP id S229915AbiINVuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 17:47:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6E81695;
-        Wed, 14 Sep 2022 14:47:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663192029; x=1694728029;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=cbnXqtf2TMDhDBxTiSWRd+F7VowQpmqU+RCKBnbHXtk=;
-  b=FXoTuvP1cr9qwBNJx8u5qjAXvrV+lZjFWEWNJoRWOCO/nyHuez+cB9NH
-   xXQHLk4SckczThTWuSpLUgk5013fgoqr+u2N0KBfRuFIl2CT+KfrWi9vh
-   Nl++MEPA48x7QyC1kf3V1N10M545v94k7zNTn4KBvhUfRw4Ge7c0nlaNF
-   mvkaPr00IvXi0hed+9331kaFpGcoULh7LL+zJJCXHNWLHOiClyb5vK8wH
-   goxHX0noXA1YYI9rg2EHtm4RZAs++dcGTykUGKTFKcPdVnfXz5MXwRjSo
-   mau+NU9bxO7Uj+RGpkF++xqXs3QjcAO281MA/GC2MGrP7WncmC8APhESD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384842037"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="384842037"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 14:47:08 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="568172315"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 14:47:08 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 00/13] Add tc-taprio support for queueMaxSDU
-In-Reply-To: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
-References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
-Date:   Wed, 14 Sep 2022 14:47:08 -0700
-Message-ID: <87edwdiq77.fsf@intel.com>
+        Wed, 14 Sep 2022 17:50:00 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4506886C3E;
+        Wed, 14 Sep 2022 14:49:25 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id d1so12840071qvs.0;
+        Wed, 14 Sep 2022 14:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Mlq5OwfkX5sats/uQxVfRjfC54o1+5/BBTIbC7sExTw=;
+        b=P3WGL6HCwe/FzqQsrWKuwfxcBDAlRww2qK0jhR+mku7xO5FefjqI3YV/S45RrCGYic
+         zlp1QXwJQ3dkDyGXhUdaS/4XLlxPu8cByv2aTUjI8oBCLzTmVnMrQ4nZ73QRVkD/pgFe
+         ftkNtBgIcmXghkDDZYtm+anbDLdL8vVUNl413qi0ZKaVboNAI+7dGZ6RqQdMjSY8m/dU
+         hn9JNouatEN96CeASzDsvS8lFfI2spwl6dWYJmAqvrQpU8N8YZjy8HfnbBNxZMJWsguV
+         O9nft+cNwareLKke28PWKR5jpG3zWQUpB1+4XY1wT/KjaizWCYiZiAwzv2VG/ud2N7Qp
+         SxoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Mlq5OwfkX5sats/uQxVfRjfC54o1+5/BBTIbC7sExTw=;
+        b=NOufOfckh3NQSs1Gs6WzKWVm6dzfwodJKGRAourUiArghoOtkrKeFkJ1T4H7S13PoS
+         Tt4KIxFB+u+uw43DzDidEb3x6XhRPhToS9qoaDeE7a1OBOeKPezZgsjRe8Rv2k584zil
+         hCk7bBnFSPieMDFcMPYPSFbGrqkUWGXe4vR34mbbCbNp0IIt0Z7dObMLj46yR6dFI7NJ
+         Wr2lFdLP3u7S2VJ2ss5MZXbknzbowKYl6jK1AupwNGtl1g9kKg67IFHZTbs4EgaeButK
+         XDsYG7dp3KfiUfAxCkHEY2AcnIuHhjlrE5RPa7gCvgPT3T+FJ1Te62k9m3EK1hlGQv6N
+         MMqg==
+X-Gm-Message-State: ACgBeo1o+k9fCLNRsejS/JdnqJS/jQUr2dme4OlwWJHMRDeu++NuYOoE
+        s9+mPBPNm36HJctxUCPWK78=
+X-Google-Smtp-Source: AA6agR6y47JUxStZNmYwod7Tq6rTP+tvukyIGB2+Dioe5mB7f+v7zD8s97UyJ8TO9u81hWK23L9qfA==
+X-Received: by 2002:ad4:418b:0:b0:4aa:3b02:dba6 with SMTP id e11-20020ad4418b000000b004aa3b02dba6mr33169789qvp.7.1663192163932;
+        Wed, 14 Sep 2022 14:49:23 -0700 (PDT)
+Received: from [10.69.40.226] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id az31-20020a05620a171f00b006af0ce13499sm2811924qkb.115.2022.09.14.14.49.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 14:49:22 -0700 (PDT)
+Message-ID: <efd8008a-6b81-ff4c-f0bd-4f957f00295e@gmail.com>
+Date:   Wed, 14 Sep 2022 14:49:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] mm/hugetlb: correct demote page offset logic
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Oscar Salvador <osalvador@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20220914190917.3517663-1-opendmb@gmail.com>
+ <20220914134927.16c229ccdc1a6b9da5d698c3@linux-foundation.org>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <20220914134927.16c229ccdc1a6b9da5d698c3@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+On 9/14/2022 1:49 PM, Andrew Morton wrote:
+> On Wed, 14 Sep 2022 12:09:17 -0700 Doug Berger <opendmb@gmail.com> wrote:
+> 
+>> With gigantic pages it may not be true that struct page structures
+>> are contiguous across the entire gigantic page. The nth_page macro
+>> is used here in place of direct pointer arithmetic to correct for
+>> this.
+> 
+> What were the user-visible runtime effects of this bug?
+As Mike said this would only conceptually be a problem for systems with 
+CONFIG_SPARSEMEM && !CONFIG_SPARSEMEM_VMEMMAP, and could cause kernel 
+address exceptions or memory corruption with unpredictable side effects.
 
-> Michael and Xiaoliang will probably be aware that the tc-taprio offload
-> mode supported by the Felix DSA driver has limitations surrounding its
-> guard bands.
->
-> The initial discussion was at:
-> https://lore.kernel.org/netdev/c7618025da6723418c56a54fe4683bd7@walle.cc/
->
-> with the latest status being that we now have a vsc9959_tas_guard_bands_update()
-> method which makes a best-guess attempt at how much useful space to
-> reserve for packet scheduling in a taprio interval, and how much to
-> reserve for guard bands.
->
-> IEEE 802.1Q actually does offer a tunable variable (queueMaxSDU) which
-> can determine the max MTU supported per traffic class. In turn we can
-> determine the size we need for the guard bands, depending on the
-> queueMaxSDU. This way we can make the guard band of small taprio
-> intervals smaller than one full MTU worth of transmission time, if we
-> know that said traffic class will transport only smaller packets.
->
-> Allow input of queueMaxSDU through netlink into tc-taprio, offload it to
-> the hardware I have access to (LS1028A), and deny non-default values to
-> everyone else.
->
-> First 3 patches are some cleanups I made while figuring out what exactly
-> gets called for taprio software mode, and what gets called for offload
-> mode.
->
-> Vladimir Oltean (13):
->   net/sched: taprio: remove redundant FULL_OFFLOAD_IS_ENABLED check in
->     taprio_enqueue
->   net/sched: taprio: stop going through private ops for dequeue and peek
->   net/sched: taprio: add extack messages in taprio_init
+However, I am unaware of a system other than perhaps the PS3 that uses 
+the classic sparse addressing, so the odds of such a system also using 
+gigantic hugetlbfs pages that it wants to demote is likely quite small.
 
-Indeed. I think the first three patches can be in a separate series.
-
->   net/sched: taprio: allow user input of per-tc max SDU
->   net: dsa: felix: offload per-tc max SDU from tc-taprio
->   net: enetc: cache accesses to &priv->si->hw
->   net: enetc: offload per-tc max SDU from tc-taprio
->   net: dsa: hellcreek: deny tc-taprio changes to per-tc max SDU
->   net: dsa: sja1105: deny tc-taprio changes to per-tc max SDU
->   tsnep: deny tc-taprio changes to per-tc max SDU
->   igc: deny tc-taprio changes to per-tc max SDU
->   net: stmmac: deny tc-taprio changes to per-tc max SDU
->   net: am65-cpsw: deny tc-taprio changes to per-tc max SDU
->
->  drivers/net/dsa/hirschmann/hellcreek.c        |   5 +
->  drivers/net/dsa/ocelot/felix_vsc9959.c        |  20 +-
->  drivers/net/dsa/sja1105/sja1105_tas.c         |   6 +-
->  drivers/net/ethernet/engleder/tsnep_tc.c      |   6 +-
->  drivers/net/ethernet/freescale/enetc/enetc.c  |  28 ++-
->  drivers/net/ethernet/freescale/enetc/enetc.h  |  12 +-
->  .../net/ethernet/freescale/enetc/enetc_pf.c   |  25 ++-
->  .../net/ethernet/freescale/enetc/enetc_qos.c  |  70 +++----
->  drivers/net/ethernet/intel/igc/igc_main.c     |   6 +-
->  .../net/ethernet/stmicro/stmmac/stmmac_tc.c   |   6 +-
->  drivers/net/ethernet/ti/am65-cpsw-qos.c       |   6 +-
->  include/net/pkt_sched.h                       |   1 +
->  include/uapi/linux/pkt_sched.h                |  11 +
->  net/sched/sch_taprio.c                        | 194 +++++++++++++-----
->  14 files changed, 283 insertions(+), 113 deletions(-)
->
-> -- 
-> 2.34.1
->
-
-
-Cheers,
--- 
-Vinicius
+Thanks,
+-Doug
