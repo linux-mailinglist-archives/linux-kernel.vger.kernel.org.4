@@ -2,247 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC35B811C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00865B8123
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiINFyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S229589AbiINFz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiINFyT (ORCPT
+        with ESMTP id S229918AbiINFzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:54:19 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3753D01;
-        Tue, 13 Sep 2022 22:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663134858; x=1694670858;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g0ZDy774WTGsi9qoMGjCuWt0nAi4gxFyXs0tiK+AsLk=;
-  b=J1r0PWI0BKcp4kEbMeJ2WxI8lnwCAXFx+HHahW6IKd1EU6+RUzlJzxye
-   Lfasq7mFTLsFpbRvSIzxPRBH/04X430eOIitmUu7y3o6Q0nfWeAuJdPbB
-   N0SoYLbCnw18yhi5ftmp5Yh0HgNsNG7lqt+0eg9O9A6LWnitKsLHns0ND
-   4sRkmv7IFrFl4CJZ8Docjf/I6NmvMn7mzKjqHpcXpBDUSP8ojO5Ri5lHn
-   50r2jb1TwVXWX5hJk753HNfTY/Z1ZHALCfTQN98WoOMfwWRJqiHWEjqO2
-   b9f8hZ7HheC5AnXMtsHf1OseHOHOtjcX/wz7m/fwf8JTnYSy4s6DNQNhe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="298342848"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="298342848"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 22:54:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="649947388"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 13 Sep 2022 22:54:15 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 28560F7; Wed, 14 Sep 2022 08:54:31 +0300 (EEST)
-Date:   Wed, 14 Sep 2022 08:54:31 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, jingle.wu@emc.com.tw,
-        mario.limonciello@amd.com, timvp@google.com,
-        linus.walleij@linaro.org, hdegoede@redhat.com, rafael@kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set
- wake_irq
-Message-ID: <YyFslxMchzntebVb@black.fi.intel.com>
-References: <20220912221317.2775651-1-rrangel@chromium.org>
- <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+        Wed, 14 Sep 2022 01:55:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999255B7B9;
+        Tue, 13 Sep 2022 22:55:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS8h751hKz4xD1;
+        Wed, 14 Sep 2022 15:55:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663134936;
+        bh=NfEmZq6Sx6fDVfmEUSsnlkgd0Drx7kbKPxREj7cu23A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IoXztMp6nijyIXeFz+yu4shv7yVmgvKVHaQryeCyPOWhVOpY4ggK7Qjl5SMeAihZP
+         jy3oGpDc2kVAhA9VWGtj1avdgeFeoklvlA7dpexVAAMv3NXD1DD/7B58m41V8iR/BO
+         4i9sOyYdHTwOhDPo6A31I1piiLr+tf7fFX9cJp64DFUSfiDRAOtFb2HDVzFKmJBc+q
+         j8oUXEo339Stf9QrEwXd3vojiQtsz2NzLsC/qyv7Nhr+8XHa5vQUvdjjC6zlA/MZq8
+         p7aJQOnKAemQ/++YcHfTTnGpvYy+0AfcvEWUXtckbCGf5fiS1vt0i+HH5yZU5YbQ73
+         6UDpxuDs2FY2w==
+Date:   Wed, 14 Sep 2022 15:55:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the mm tree with the execve tree
+Message-ID: <20220914155533.70c10493@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/p._F.fVWJ=gm4OzKmoZmt6Y";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 12, 2022 at 04:13:11PM -0600, Raul E Rangel wrote:
-> Device tree already has a mechanism to pass the wake_irq. It does this
-> by looking for the wakeup-source property and setting the
-> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> ACPI interrupt wake flag to determine if the interrupt can be used to
-> wake the system. Previously the i2c drivers had to make assumptions and
-> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> If there is a device with an Active Low interrupt and the device gets
-> powered off while suspending, the interrupt line will go low since it's
-> no longer powered and wakes the system. For this reason we should
-> respect the board designers wishes and honor the wake bit defined on the
-> interrupt.
-> 
-> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - Look at wake_cabple bit for IRQ/Interrupt resources
-> 
->  drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
->  drivers/i2c/i2c-core-base.c |  6 +++++-
->  drivers/i2c/i2c-core.h      |  4 ++--
->  3 files changed, 35 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index c762a879c4cc6b..c3d69b287df824 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
->  	{}
->  };
->  
-> +struct i2c_acpi_irq_context {
-> +	int irq;
-> +	int wake_capable;
+Hi all,
 
-Why not bool?
+Today's linux-next merge of the mm tree got a conflict in:
 
-Also perhaps 'wakeable'?
+  fs/exec.c
 
-> +};
-> +
->  static int i2c_acpi_do_lookup(struct acpi_device *adev,
->  			      struct i2c_acpi_lookup *lookup)
->  {
-> @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
->  
->  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->  {
-> -	int *irq = data;
-> +	struct i2c_acpi_irq_context *irq_ctx = data;
->  	struct resource r;
->  
-> -	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
-> -		*irq = i2c_dev_irq_from_resources(&r, 1);
-> +	if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
-> +		irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
-> +		irq_ctx->wake_capable =
-> +			r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
+between commit:
 
-Then you can just do this:
+  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
+k+exec"")
 
-		irq_ctx->wakeable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+from the execve tree and commit:
 
-> +	}
->  
->  	return 1; /* No need to add resource to the list */
->  }
-> @@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->  /**
->   * i2c_acpi_get_irq - get device IRQ number from ACPI
->   * @client: Pointer to the I2C client device
-> + * @wake_capable: Set to 1 if the IRQ is wake capable
->   *
->   * Find the IRQ number used by a specific client device.
->   *
->   * Return: The IRQ number or an error code.
->   */
-> -int i2c_acpi_get_irq(struct i2c_client *client)
-> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
+k+exec"")
 
-bool here too
+from the mm tree.
 
->  {
->  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
->  	struct list_head resource_list;
-> -	int irq = -ENOENT;
-> +	struct i2c_acpi_irq_context irq_ctx = {
-> +		.irq = -ENOENT,
-> +		.wake_capable = 0,
-> +	};
->  	int ret;
->  
->  	INIT_LIST_HEAD(&resource_list);
->  
-> +	if (wake_capable)
-> +		*wake_capable = 0;
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-I think it is better to touch this only after the function succeeds so..
+--=20
+Cheers,
+Stephen Rothwell
 
-> +
->  	ret = acpi_dev_get_resources(adev, &resource_list,
-> -				     i2c_acpi_add_resource, &irq);
-> +				     i2c_acpi_add_resource, &irq_ctx);
->  	if (ret < 0)
->  		return ret;
->  
->  	acpi_dev_free_resource_list(&resource_list);
->  
-> -	if (irq == -ENOENT)
-> -		irq = acpi_dev_gpio_irq_get(adev, 0);
-> +	if (irq_ctx.irq == -ENOENT)
-> +		irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
-> +			adev, 0, &irq_ctx.wake_capable);
-> +
-> +	if (wake_capable)
-> +		*wake_capable = irq_ctx.wake_capable;
+diff --cc fs/exec.c
+index 3f69e5c1a622,afe55d0c3bcf..000000000000
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@@ -1023,9 -1029,12 +1026,9 @@@ static int exec_mmap(struct mm_struct *
+  	activate_mm(active_mm, mm);
+  	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
+  		local_irq_enable();
+- 	tsk->mm->vmacache_seqnum =3D 0;
+- 	vmacache_flush(tsk);
+  	task_unlock(tsk);
++ 	lru_gen_use_mm(mm);
++=20
+ -	if (vfork)
+ -		timens_on_fork(tsk->nsproxy, tsk);
+ -
+  	if (old_mm) {
+  		mmap_read_unlock(old_mm);
+  		BUG_ON(active_mm !=3D old_mm);
 
-... here only.
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->  
-> -	return irq;
-> +	return irq_ctx.irq;
->  }
->  
->  static int i2c_acpi_get_info(struct acpi_device *adev,
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 91007558bcb260..97315b41550213 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
->  	struct i2c_client	*client = i2c_verify_client(dev);
->  	struct i2c_driver	*driver;
->  	int status;
-> +	int acpi_wake_capable = 0;
+-----BEGIN PGP SIGNATURE-----
 
-You can declare this in the below block instead.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhbNUACgkQAVBC80lX
+0GzTAAf+JMjF0JAOaFmsc7XY38c81PJBCnKsganJrIS4B6tuqBRe34UTkF7flP4u
+Ffd3E9tNRnKcovsczVcspnfhUagw7AevXy/xoZMZtmlxMkrDULUe7CftQSEhg09K
+zLMxrxILtO+AVSyooche4131G/GtMItzUXLU7GnMtuMDMxMn1ZSUS8R/6FgXtxfv
+GKh4EAT+ZEe+mg4uFRD0n1rwZwqetsk2MuHqM3rqxjY2GS0Ua4zUEFThc6Da6nID
+2YXIa0mwfEiVsOsa6kRpQPJuTjjyFsokaRGTfcnoTPnUIM0Rk5ubMKsv438LogpV
+LEIucL8uKGkSMxNsKr/mhwW2VddEow==
+=DZx5
+-----END PGP SIGNATURE-----
 
->  
->  	if (!client)
->  		return 0;
-> @@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
->  			if (irq == -EINVAL || irq == -ENODATA)
->  				irq = of_irq_get(dev->of_node, 0);
->  		} else if (ACPI_COMPANION(dev)) {
-
-			bool wakeable;
-
-> -			irq = i2c_acpi_get_irq(client);
-> +			irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
-> +
-			if (irq > 0 && wakeable)
-				client->flags |= I2C_CLIENT_WAKE;
->  		}
->  		if (irq == -EPROBE_DEFER) {
->  			status = irq;
-> diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-> index 87e2c914f1c57b..8e336638a0cd2e 100644
-> --- a/drivers/i2c/i2c-core.h
-> +++ b/drivers/i2c/i2c-core.h
-> @@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
->  #ifdef CONFIG_ACPI
->  void i2c_acpi_register_devices(struct i2c_adapter *adap);
->  
-> -int i2c_acpi_get_irq(struct i2c_client *client);
-> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
->  #else /* CONFIG_ACPI */
->  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
->  
-> -static inline int i2c_acpi_get_irq(struct i2c_client *client)
-> +static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
->  {
->  	return 0;
->  }
-> -- 
-> 2.37.2.789.g6183377224-goog
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y--
