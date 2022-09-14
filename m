@@ -2,78 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D357E5B81F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2895B81F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiINHTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 03:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S230155AbiINHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 03:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiINHTu (ORCPT
+        with ESMTP id S230127AbiINHXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 03:19:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A21A1AF11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:19:48 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MSBSh3ph9zlVn6;
-        Wed, 14 Sep 2022 15:15:48 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 14 Sep 2022 15:19:45 +0800
-Message-ID: <57857e40-503a-25af-2f5d-2e14b9117a5f@huawei.com>
-Date:   Wed, 14 Sep 2022 15:19:35 +0800
+        Wed, 14 Sep 2022 03:23:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304D54DB70;
+        Wed, 14 Sep 2022 00:23:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSBdg5NDdz4x1T;
+        Wed, 14 Sep 2022 17:23:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663140216;
+        bh=PuqeKAEOp4fOu0sMwEauEi1UeWSNBz356aK1LLvMod8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=chJeCu/kVusOCTktV3zc5SwNHxMzazlMdLSqN3G8u3RDAwWPbA2+nWyNyVXCYHf1h
+         rDg2itpuey3DRKsY5qPU6399nMWdyTdK32X6QQJ40/MoUK4XuZNWLtoNOPdAqsNCG4
+         8zZRcLxle3/4AoKdiFxlfRcF+8TJ7z3Sb04LORwvpyF7ka+Og3iHbBRL+CbGrqPioJ
+         EhE7/lrUZvB0C9zIwK/ucTebQALOtUnhbmNLMKGKrLNH1I93ZEhU+WRuH0pzD9/4we
+         cz+aWJWrMAxHVWfHQbieljFJBJPkks+gRnbazl55JVFFjMS+ef5P33c9dRcddNTgu4
+         D6VHF4zk+/cPw==
+Date:   Wed, 14 Sep 2022 17:23:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Dang Huynh <danct12@riseup.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20220914172334.39b3730f@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next] ARM: mmp: Make mmp2_resource_gpio static
-To:     <lkundrak@v3.sk>, <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220901004524.81383-1-ruanjinjie@huawei.com>
-Content-Language: en-US
-In-Reply-To: <20220901004524.81383-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.254]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=gtO1y.DRmM/DhFDjfte1_P";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping.
+--Sig_/=gtO1y.DRmM/DhFDjfte1_P
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/9/1 8:45, ruanjinjie wrote:
-> The symbol is not used outside of the file, so mark it static.
-> 
-> Fixes the following warning:
-> 
-> ./arch/arm/mach-mmp/mmp2.c:157:17: warning: symbol 'mmp2_resource_gpio' was not declared. Should it be static?
-> 
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
-> ---
->  arch/arm/mach-mmp/mmp2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-mmp/mmp2.c b/arch/arm/mach-mmp/mmp2.c
-> index bbc4c2274de3..696bc1856e6d 100644
-> --- a/arch/arm/mach-mmp/mmp2.c
-> +++ b/arch/arm/mach-mmp/mmp2.c
-> @@ -154,7 +154,7 @@ MMP2_DEVICE(asram, "asram", -1, NONE, 0xe0000000, 0x4000);
->  /* 0xd1000000 ~ 0xd101ffff is reserved for secure processor */
->  MMP2_DEVICE(isram, "isram", -1, NONE, 0xd1020000, 0x18000);
->  
-> -struct resource mmp2_resource_gpio[] = {
-> +static struct resource mmp2_resource_gpio[] = {
->  	{
->  		.start	= 0xd4019000,
->  		.end	= 0xd4019fff,
+Hi all,
+
+In commit
+
+  50ee65dc512b ("clk: qcom: sm6115: Select QCOM_GDSC")
+
+Fixes tag
+
+  Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC)
+
+has these problem(s):
+
+  - Subject has leading but no trailing quotes
+
+It should have been:
+
+Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC) driver f=
+or SM6115")
+
+(no truncation or wrapping).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=gtO1y.DRmM/DhFDjfte1_P
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhgXYACgkQAVBC80lX
+0Gw9RQf/XU48rdwqVb68RQfOLo7ADOOURDAiMdfPo4eHNWMJLVEA0RnwS5Q7GWuQ
+mZG1yj85LUotaZ+XazSi76Wz4+XlQbSCvGOiUC1ybJ7xzqfW1ySAFf7SroZNdlvn
+R64pYtJZrV0sDL17bmdmGv2ThTG5Cvrt3qMTnWeNayciW5QnoCZYwGFbEsGveHdP
+04snwPDQm80Y2BWcH89BR/+zHgxAOFbZ5tRGPAH3pRGIb48/HJkJIsL3vR2C6ltP
+N06cgYB6GO64peQ66dtWo4ObtG1c+HcWzWB6EemQAdWpO9iY3OTYhgnz9pEjSgcb
+g7DFs8uz+B3nLsuYO3AFGPrP80p+jA==
+=1Gii
+-----END PGP SIGNATURE-----
+
+--Sig_/=gtO1y.DRmM/DhFDjfte1_P--
