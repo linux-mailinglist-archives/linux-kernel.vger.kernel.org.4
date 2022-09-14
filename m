@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDE45B8E3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB01F5B8E42
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiINRjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S229813AbiINRlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINRjH (ORCPT
+        with ESMTP id S229640AbiINRlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:39:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF75A7D783;
-        Wed, 14 Sep 2022 10:39:06 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EHMBUJ028956;
-        Wed, 14 Sep 2022 17:38:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rvVmLVjGZvLYsnQC4NpMDlUGCLF47EMYil578unxKAE=;
- b=DshsbVTUZA7O6bQDT+7+ojYtjWIPMBer0N2mWIX9+m9qwLdTlFYnfBkIv2sHOK3QeNe/
- fXkdcf3lUK+khhNXvQqf69p6fjsabmrOG2pplHQyDozFawrUSAM2TzCfBXuWRLQN9g9w
- rXI5JjLuS29pl2OUybWld2+sUiaN/DomiJfKV0wtRhmebneu9HDclg2Sx1nvGzke+/7d
- V/Je27IOwKbZFPJ4mEalKqS523OFqKepixrhVusfFqO4bnEqxEJEQErGvZ+gDSMBomZN
- 9PnaOttvYzcmlQ7HisxIHkx3ZJsrpXThlpPst9jyDLBMlYz3uTaSpx9uJKPQ384GGb14 ig== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0htrm4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 17:38:28 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28EHcRLg023297
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 17:38:27 GMT
-Received: from [10.110.68.235] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
- 2022 10:38:26 -0700
-Message-ID: <b8e0cbb4-8d4e-1208-0fa0-8f9178b6d85f@quicinc.com>
-Date:   Wed, 14 Sep 2022 10:38:25 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/2] mailbox: Add support for QTI CPUCP mailbox controller
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <manivannan.sadhasivam@linaro.org>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <konrad.dybcio@somainline.org>,
-        Gaurav Kohli <gkohli@codeaurora.org>
-References: <1663135386-26270-1-git-send-email-quic_sibis@quicinc.com>
- <1663135386-26270-3-git-send-email-quic_sibis@quicinc.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <1663135386-26270-3-git-send-email-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zsvqOhOkRg0rVPDsdfbuvfxrDPfjUjY2
-X-Proofpoint-GUID: zsvqOhOkRg0rVPDsdfbuvfxrDPfjUjY2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_08,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=766 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- malwarescore=0 clxscore=1011 impostorscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
- definitions=main-2209140085
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 13:41:10 -0400
+Received: from mail-oa1-x62.google.com (mail-oa1-x62.google.com [IPv6:2001:4860:4864:20::62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4269785A89
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:41:07 -0700 (PDT)
+Received: by mail-oa1-x62.google.com with SMTP id 586e51a60fabf-11eab59db71so42937123fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:41:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:message-id:date:subject:cc:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date;
+        bh=OC+An9rGy64Oo11LE9atBcfSR4Lnge42KOirmnmC0cI=;
+        b=nKoce94PSgppuJeSushHDiBrhEa+7mU3QWF7/5pw9OQpQGbbhI2pOq990Qut2FgrK9
+         7owhXiG4cONGPUuvMnRQ4eQNn+ry/vEdqIBkyfHLHZkmlTXA5ULRtgdmM1opG9bZwTFU
+         5oeXXkxo8noHL0+doNZGf1k1CZcJxgRkTDndy2uuN5eNjLQuTt8M+vnJ2eJ2e9uE7Buk
+         FCyk3El3BopuBcmtIgF2H9zJhJWPBq5/fxnYpxq5KtfYlByersMvoWocNvdrsjiFF3lU
+         uNyCoVb7KHJH78BCmF/EnOZAojBNfNA0EzhSnmA+TyQgAvRNSBBmjasYFNjNW7vBkJHU
+         FSTQ==
+X-Gm-Message-State: ACgBeo0wAuel3Uei0W/QyRHcf44xffeu5Ddh4ted4AZ7CUGQJzr4YYKx
+        ihQz9nLaBlbo/31AIOC2VZEtq2CJ/A1ZvYtxog7uNDosfKLz
+X-Google-Smtp-Source: AA6agR5bgI5MLvOj22J+/AeudGv75xiYxiZzZukCj+rDPoEoyuIFx/fYgw/OmBTKI/WXT18pBVICXOVpnXzP
+X-Received: by 2002:a05:6808:1142:b0:343:86a0:dedc with SMTP id u2-20020a056808114200b0034386a0dedcmr2453375oiu.44.1663177266220;
+        Wed, 14 Sep 2022 10:41:06 -0700 (PDT)
+Received: from smtp.aristanetworks.com (mx.aristanetworks.com. [162.210.129.12])
+        by smtp-relay.gmail.com with ESMTPS id pv11-20020a0568709d8b00b0012c35fc7611sm92940oab.9.2022.09.14.10.41.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Sep 2022 10:41:06 -0700 (PDT)
+X-Relaying-Domain: arista.com
+Received: from us267.sjc.aristanetworks.com (us267.sjc.aristanetworks.com [10.244.144.10])
+        by smtp.aristanetworks.com (Postfix) with ESMTP id 7FD34419011;
+        Wed, 14 Sep 2022 10:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-B; t=1663177265;
+        bh=OC+An9rGy64Oo11LE9atBcfSR4Lnge42KOirmnmC0cI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rt/XXv1dqIt0vD53QAmr8b3aO2LYrOVyvyCEIE/q+JfZq1WQHXXR2tffqAd/wQ5PR
+         BWb2CGpDsD4Zz/YuGPGdGlW3ZC9ddcbhxoRlvac5V+qQPkPJ2vM+NyWJDjnhHqNy6L
+         udG05JjdyOKIsg0pshqLQH8bx7lKCd2jIBpblA+I=
+Received: by us267.sjc.aristanetworks.com (Postfix, from userid 17566)
+        id 69E12B70033A; Wed, 14 Sep 2022 10:41:05 -0700 (PDT)
+From:   Gianfranco <gianfranco.dutka@arista.com>
+To:     hirofumi@mail.parknet.co.jp
+Cc:     gianfranco.dutka@arista.com, linux-kernel@vger.kernel.org
+Subject: [PATCH]     fat: device-level-flush-after-sync
+Date:   Wed, 14 Sep 2022 10:40:14 -0700
+Message-Id: <20220914174015.7158-1-gianfranco.dutka@arista.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sibi,
+    This patch forces a device-level flush after the generic Linux
+    code for sync has run.
 
-> +
-> +MODULE_AUTHOR("Gaurav Kohli <gkohli@codeaurora.org>");
-> +MODULE_AUTHOR("Sibi Sankar <quic_sibis@qti.qualcomm.com>");
+    The kernel depends upon filesystem-specific code to flush when
+    the filesystem itself thinks it is necessary, and otherwise
+    does nothing.  Someone expecting sync to behave as expected
+    might be in for a rude surprise.
 
-Email address should be quic_sibi@quicinc.com.
+    The usual caveats apply:  Devices that do not implement flush
+    or whose implementation is buggy will not behave well.  IO
+    that occurs after the sync will not be flushed.
 
-codeaurora.org is any way deprecated, so we should we keep it ? I know 
-giving the credit is important, but above address will not be reachable 
-anyways.
+Signed-off-by: Ken Kofman <gianfranco.dutka@arista.com>
 
----Trilok Soni
+---
+ fs/fat/inode.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/fs/fat/inode.c b/fs/fat/inode.c
+index a38238d75c08..ddaed94ee48f 100644
+--- a/fs/fat/inode.c
++++ b/fs/fat/inode.c
+@@ -823,6 +823,14 @@ static int fat_remount(struct super_block *sb, int *flags, char *data)
+ 	return 0;
+ }
+ 
++static int fat_sync_fs(struct super_block *sb, int wait)
++{
++	if (wait)
++		return blkdev_issue_flush(sb->s_bdev, GFP_KERNEL, NULL);
++	else
++		return 0;
++}
++
+ static int fat_statfs(struct dentry *dentry, struct kstatfs *buf)
+ {
+ 	struct super_block *sb = dentry->d_sb;
+@@ -937,6 +945,7 @@ static const struct super_operations fat_sops = {
+ 	.put_super	= fat_put_super,
+ 	.statfs		= fat_statfs,
+ 	.remount_fs	= fat_remount,
++	.sync_fs        = fat_sync_fs,
+ 
+ 	.show_options	= fat_show_options,
+ };
+-- 
+2.37.0
+
