@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C9D5B8E61
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE2C5B8E66
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiINRyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S229801AbiINR4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiINRye (ORCPT
+        with ESMTP id S229459AbiINR4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:54:34 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E51E097;
-        Wed, 14 Sep 2022 10:54:32 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id z18so11779763qts.7;
-        Wed, 14 Sep 2022 10:54:32 -0700 (PDT)
+        Wed, 14 Sep 2022 13:56:43 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A17832FD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:56:42 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id b136so23997724yba.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=078ohqEl3SbvSuLUyK3z9/YOVVWoH6vsNvPCy6kXlrI=;
-        b=KJeN8BAbeQhrvfhh8qJlMy+PCwI0ztOtPFYIGvj/n2ABIfXLdb93t6qjzN0kQM8+og
-         eWmqaiwNRo7hnpwsuVFYx50Blm6etKPmPVX+wURHIU8xXv/HpBmbVMp28HYu5oMSUsGX
-         +5EEDwSv5lIVQWgqp7TdRVAMdYl7ypTb2JnJm7oaXu08gcHZ1RFpv4YUkc63H8Pdw3RD
-         D9fMiyebzoyOnhPUFxWGi4D3UGHh5Zsj1o53imZgzb+W5ArT9HtuzMRqlK1Qrp3HuvaU
-         CjnoCGrYdIpmnafc2Tp/gi2czpGf2a79J1N08j6qoinJAsOfTLxH79I/JJq2e1CYp2/V
-         tvnA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=c6cSMgOvPaHundQ9+y+KZ95hMAdIVrUDqCcFSiVF8dE=;
+        b=pBc43sdsS6OvN916tV5em864gdR8OJVQ2yKeaICnaO9iyWUvlYvIQdzIuVB+QZYAtw
+         rCe9a2UrVI4422nzdUIlcZmmEVLU9rNJayEKWurv1HrF1nxYPC9Q4r5DHO3thXFyANi6
+         muBQi518+giFA2abogAbVv83oNLcBj9dFxrd9FhHbkvAhjCZXZFDc1cER/B6Ft33IK46
+         6ZfWffY7zNyQxB6379shX7IWcm1YsiaJR54Jk2B3mI7u5vF18neh/3R+mB13L5/r4z3s
+         gPysh98fN+qt/XH2aIBso6+2BG7ncBmyIPmkKMwHrsT0v6IiN/xcBWqFu1DqXSe9Y3ir
+         n5bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=078ohqEl3SbvSuLUyK3z9/YOVVWoH6vsNvPCy6kXlrI=;
-        b=2NspH0sbtWEPg7vGaROzVNaPP+Z38Wggi5WngXftYPKBYUbQpL+wz+O+30RaDJ9WBC
-         wKJ73iRdgK+1nEQnr1cVzfx6WwtTO24omgG3X4QVVRGUHt5pQS1JxybhS9pubCPYcLno
-         ZKSPhnwlhekXTsXw6FCVCn3r3iXCzVa5E48E2WZrJwKAs2aHw+a5yga3Fzmr6TBi3ci4
-         /QWXdQl83XHA33XfBKnPBu2FHOaTHdPA30zqeMsuGV25trkBXBDe+Dr8tzBYaZgag1Ya
-         w9nzgyFitlwQ+p/YamFntPJXbRUqW3uxReU1rSXJGRp76YKUOBCacCBlCQOUtqOPbX1A
-         xVdw==
-X-Gm-Message-State: ACgBeo1HWfjeoVMICKYHGUKksiJFnZ4Lfth51MUWLB8tjDSzII1SNrWQ
-        8euRHammi8X5kw5TVTar9fM=
-X-Google-Smtp-Source: AA6agR6TNcOs9G/1GT36JKa+IitWjuNF26XpK7u3lTR4YMggceCehr58RazsJJgUrvEATr7qoTnO3A==
-X-Received: by 2002:ac8:57c7:0:b0:344:55d9:dcd7 with SMTP id w7-20020ac857c7000000b0034455d9dcd7mr33921914qta.162.1663178071901;
-        Wed, 14 Sep 2022 10:54:31 -0700 (PDT)
-Received: from [10.69.40.226] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g21-20020a05620a40d500b006b59f02224asm2299077qko.60.2022.09.14.10.54.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 10:54:31 -0700 (PDT)
-Message-ID: <43aabfed-bc03-3fc0-5b9a-4c5e6ebb8416@gmail.com>
-Date:   Wed, 14 Sep 2022 10:54:27 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=c6cSMgOvPaHundQ9+y+KZ95hMAdIVrUDqCcFSiVF8dE=;
+        b=RpI88GbFVU4Z5oXhfUNfId7emrTF3JFt7C9SbJOKCe26lJ3PTmiKy3ZJbJ5QyhDlne
+         tQ9ZZQuzDtjXH9gnF2WL4BwtdcoGw7WJVn1ISX6ifX5c9+3TmAHOpQ3ADJ7ZkdSxVlWz
+         6/00HaTNvkeGlcB4l9kIp6NSLx06R87BO1xVwmeIKawzFMs+aeTpNEtrmGSD2PDGs3/i
+         7ypGTKCv6oEOQUiXc4Y3dgGElaHQRRkZnkYuHF2kr+o7znAvNvhWoZO6Pb1v12C47nK2
+         6rrPOFkUdRddJqtsMiBJBU/knJYY9Fo4Jmpr+KhJMm04c6TWzCj0gS0oaOVQ40MJHLW/
+         Tdww==
+X-Gm-Message-State: ACgBeo32EKSCHnOXoZqO3g71kWmy4Rmc7kpSHs621ka5YQIKJ/ol1map
+        KF8olxp9nqTJeL+tLo75D9jfsmtz4AZqPYsmgoXccpmrEPUWAgMx
+X-Google-Smtp-Source: AA6agR7DYdFynhauPAEovqsyZU+MuLmwL/B4GXIwPwSOv+x230Pt4Fik+o8L2sG3dv/qE2+uJ4Ex2zUl1oBUrrRzysk=
+X-Received: by 2002:a25:f823:0:b0:6a9:4227:8f79 with SMTP id
+ u35-20020a25f823000000b006a942278f79mr30197182ybd.55.1663178201469; Wed, 14
+ Sep 2022 10:56:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 03/21] mm/hugetlb: correct demote page offset logic
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux.dev
-References: <20220913195508.3511038-1-opendmb@gmail.com>
- <20220913195508.3511038-4-opendmb@gmail.com>
- <YyETeBdbldnoRZ+x@casper.infradead.org>
- <33ff9543-3396-7609-3865-7eed20b853f5@gmail.com> <YyIKcNRP+Q0Vt3CT@monkey>
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <YyIKcNRP+Q0Vt3CT@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <YyD0kMC7qIBNOE3j@riccipc> <YyH3gBoUNT9yqrUx@shredder>
+In-Reply-To: <YyH3gBoUNT9yqrUx@shredder>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 14 Sep 2022 10:56:30 -0700
+Message-ID: <CANn89iJyfkUN45mSPVkLF-ygik9AUzhUhE7UWLEFGswXaosAjQ@mail.gmail.com>
+Subject: Re: BUG: unable to handle page fault for address, with ipv6.disable=1
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Roberto Ricci <rroberto2r@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,34 +73,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/14/2022 10:08 AM, Mike Kravetz wrote:
-> On 09/13/22 18:07, Doug Berger wrote:
->> On 9/13/2022 4:34 PM, Matthew Wilcox wrote:
->>> On Tue, Sep 13, 2022 at 12:54:50PM -0700, Doug Berger wrote:
->>>> With gigantic pages it may not be true that struct page structures
->>>> are contiguous across the entire gigantic page. The mem_map_offset
->>>> function is used here in place of direct pointer arithmetic to
->>>> correct for this.
->>>
->>> We're just eliminating mem_map_offset().  Please use nth_page()
->>> instead.That's good to know. I will include that in v2.
-> 
-> Thanks Doug and Matthew.  I will take a closer look at this series soon.
-> 
-> It seems like this patch is a fix independent of the series.  If so, I
-> would suggest sending separate to make it easy for backports to stable.
-Yes, as I noted in [PATCH 00/21] the first three patches fit that 
-description, but I included them here in case someone was brave enough 
-to attempt to use this patch set. They were in my branch for my own testing.
+On Wed, Sep 14, 2022 at 8:47 AM Ido Schimmel <idosch@idosch.org> wrote:
+>
+> + Eric
+>
+> Original report:
+> https://lore.kernel.org/netdev/YyD0kMC7qIBNOE3j@riccipc/T/#u
+>
+> On Tue, Sep 13, 2022 at 11:22:24PM +0200, Roberto Ricci wrote:
+> > Executing the `ss` command in a system with kernel 5.19.8, booted with
+> > the "ipv6.disable=3D1" parameter, causes this oops:
+> >
+> >
+> > [   74.952477] BUG: unable to handle page fault for address: ffffffffff=
+ffffc8
+> > [   74.952568] #PF: supervisor read access in kernel mode
+> > [   74.952632] #PF: error_code(0x0000) - not-present page
+> > [   74.952695] PGD 25814067 P4D 25814067 PUD 25816067 PMD 0
+> > [   74.952770] Oops: 0000 [#1] PREEMPT SMP PTI
+> > [   74.952816] CPU: 0 PID: 704 Comm: ss Not tainted 5.19.8_1 #1
+> > [   74.952869] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
+IOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> > WARNING! Modules path isn't set, but is needed to parse this symbol
+> > [   74.953292] RIP: 0010:raw_diag_dump+0xea/0x1d0 raw_diag
+> [...]
+> > [   74.954188] Call Trace:
+> > [   74.954221]  <TASK>
+> > [   74.954248] __inet_diag_dump (net/ipv4/inet_diag.c:1179)
+> > [   74.954462] netlink_dump (net/netlink/af_netlink.c:2276)
+> > [   74.954549] __netlink_dump_start (net/netlink/af_netlink.c:2380)
+> > [   74.954613] inet_diag_handler_cmd (net/ipv4/inet_diag.c:1347)
+> > [   74.954672] ? inet_diag_dump_start_compat (net/ipv4/inet_diag.c:1244=
+)
+> > [   74.954725] ? inet_diag_dump_compat (net/ipv4/inet_diag.c:1197)
+> > [   74.954768] ? inet_diag_unregister (net/ipv4/inet_diag.c:1254)
+> > [   74.954811] sock_diag_rcv_msg (net/core/sock_diag.c:235 net/core/soc=
+k_diag.c:266)
+> > [   74.954905] ? sock_diag_bind (net/core/sock_diag.c:247)
+> > [   74.954950] netlink_rcv_skb (net/netlink/af_netlink.c:2501)
+> > [   74.954993] sock_diag_rcv (net/core/sock_diag.c:278)
+> > [   74.955032] netlink_unicast (net/netlink/af_netlink.c:1320 net/netli=
+nk/af_netlink.c:1345)
+> > [   74.955074] netlink_sendmsg (net/netlink/af_netlink.c:1921)
+> > [   74.955116] sock_sendmsg (net/socket.c:714 net/socket.c:734)
+> > [   74.955199] ____sys_sendmsg (net/socket.c:2488)
+> > [   74.955245] ? import_iovec (lib/iov_iter.c:2008)
+> > [   74.955302] ? sendmsg_copy_msghdr (net/socket.c:2429 net/socket.c:25=
+19)
+> > [   74.955348] ___sys_sendmsg (net/socket.c:2544)
+> > [   74.955447] ? __schedule (kernel/sched/core.c:6476)
+> > [   74.955522] ? _raw_spin_unlock_irqrestore (./arch/x86/include/asm/pr=
+eempt.h:103 ./include/linux/spinlock_api_smp.h:152 kernel/locking/spinlock.=
+c:194)
+> > [   74.955583] ? do_notify_parent_cldstop (kernel/signal.c:2191)
+> > [   74.955656] ? preempt_count_add (./include/linux/ftrace.h:910 kernel=
+/sched/core.c:5598 kernel/sched/core.c:5595 kernel/sched/core.c:5623)
+> > [   74.955712] ? _raw_spin_lock_irq (./arch/x86/include/asm/atomic.h:20=
+2 ./include/linux/atomic/atomic-instrumented.h:543 ./include/asm-generic/qs=
+pinlock.h:111 ./include/linux/spinlock.h:185 ./include/linux/spinlock_api_s=
+mp.h:120 kernel/locking/spinlock.c:170)
+> > [   74.955752] ? ptrace_stop.part.0 (kernel/signal.c:2331)
+> > [   74.955795] __sys_sendmsg (./include/linux/file.h:31 net/socket.c:25=
+73)
+> > [   74.955835] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry=
+/common.c:80)
+> > [   74.955914] ? syscall_exit_to_user_mode (./arch/x86/include/asm/jump=
+_label.h:55 ./arch/x86/include/asm/nospec-branch.h:382 ./arch/x86/include/a=
+sm/entry-common.h:94 kernel/entry/common.c:133 kernel/entry/common.c:296)
+> > [   74.955965] ? do_syscall_64 (arch/x86/entry/common.c:87)
+> > [   74.957786] ? do_syscall_64 (arch/x86/entry/common.c:87)
+> > [   74.959896] ? handle_mm_fault (mm/memory.c:5144)
+> > [   74.961184] ? do_user_addr_fault (arch/x86/mm/fault.c:1422)
+> > [   74.962609] ? fpregs_assert_state_consistent (arch/x86/kernel/fpu/co=
+ntext.h:39 arch/x86/kernel/fpu/core.c:772)
+> > [   74.964171] ? exit_to_user_mode_prepare (./arch/x86/include/asm/entr=
+y-common.h:57 kernel/entry/common.c:203)
+> > [   74.965968] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.=
+S:120)
+> > [   74.967266] RIP: 0033:0x7f66aac577d3
+>
+> [...]
+>
+> > I reproduced this with Void Linux x86_64 in a virtual machine. The kern=
+els are
+> > those provided by the distribution (Void uses vanilla kernels, I don't =
+believe
+> > these very small patches make any difference
+> > https://github.com/void-linux/void-packages/tree/0a87c670f35e01a3ac1d85=
+0f628fe1bab5d3c433/srcpkgs/linux5.19/patches).
+> >
+> > Kernels 5.19.8 and 5.18.19 are affected, 5.16.20 is not.
+> > I don't know about 5.17.x because Void doesn't package it.
+> > The iproute2 version is 5.16.0 (but this also happens with 5.19.0).
+>
+> This is most likely caused by commit 0daf07e52709 ("raw: convert raw
+> sockets to RCU") which is being back ported to stable kernels.
+>
+> It made the initialization of 'raw_v6_hashinfo' conditional on IPv6
+> being enabled. Can you try the following patch (works on my end)?
+>
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index 19732b5dce23..d40b7d60e00e 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -1072,13 +1072,13 @@ static int __init inet6_init(void)
+>         for (r =3D &inetsw6[0]; r < &inetsw6[SOCK_MAX]; ++r)
+>                 INIT_LIST_HEAD(r);
+>
+> +       raw_hashinfo_init(&raw_v6_hashinfo);
+> +
+>         if (disable_ipv6_mod) {
+>                 pr_info("Loaded, but administratively disabled, reboot re=
+quired to enable\n");
+>                 goto out;
+>         }
+>
+> -       raw_hashinfo_init(&raw_v6_hashinfo);
+> -
+>         err =3D proto_register(&tcpv6_prot, 1);
+>         if (err)
+>                 goto out;
+>
+> Another approach is the following, but I prefer the first:
 
-Full disclosure: An earlier version of this patch set had more complete 
-support for hugepage isolation that included migrating the isolation 
-state when demoting a hugepage that touched lines in 
-demote_free_huge_page() and depended on the subpage variable introduced 
-here.
++1, thanks for looking at this Ido !
 
-At this point I will submit a patch for this on its own and will likely 
-remove the first three commits when submitting V2 of the set.
-
-Thanks for your consideration.
--Doug
+>
+> diff --git a/net/ipv4/raw_diag.c b/net/ipv4/raw_diag.c
+> index 999321834b94..4fbdd69a2be8 100644
+> --- a/net/ipv4/raw_diag.c
+> +++ b/net/ipv4/raw_diag.c
+> @@ -20,7 +20,7 @@ raw_get_hashinfo(const struct inet_diag_req_v2 *r)
+>         if (r->sdiag_family =3D=3D AF_INET) {
+>                 return &raw_v4_hashinfo;
+>  #if IS_ENABLED(CONFIG_IPV6)
+> -       } else if (r->sdiag_family =3D=3D AF_INET6) {
+> +       } else if (r->sdiag_family =3D=3D AF_INET6 && ipv6_mod_enabled())=
+ {
+>                 return &raw_v6_hashinfo;
+>  #endif
+>         } else {
