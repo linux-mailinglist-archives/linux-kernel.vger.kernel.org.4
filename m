@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBEC5B8353
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B115B835D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiINIxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S229767AbiINIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiINIxS (ORCPT
+        with ESMTP id S229822AbiINIzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD566113E;
-        Wed, 14 Sep 2022 01:53:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8E0061957;
-        Wed, 14 Sep 2022 08:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED961C433D7;
-        Wed, 14 Sep 2022 08:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663145596;
-        bh=19OWbRY2d9LI079TVZxY+HNHoWLw1R8/3d3LhfyBcUE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CtBsTDHUc3FHh9/D3OzUcRRQn9gQK2LmQYpmeuc5GaZLWf8SBjut49Ee3RAxqwB6V
-         JzzM2FuiPruPQqZX5diAKpbji4NVeVQQ59tmAMxv+ILQvbGVdGvZlGS9xA23t5Ta4S
-         qnVlvwHyAoE0RAIZl2SCqfeKtbXqRsYHW282xSdcMEUOoXlmcxIi2HQq04T/luZs44
-         uMycqjKpesZoSF784B3clGbAi2bVn6CVPr5m6CuDiJZejei/ygosu2bRxTapLB3y5q
-         Bi2FItNBYhM2o89nvF9akVjgR+dwkD003Uru73SV0nxMcpo3HMlpD9C/1B/N1prbyE
-         whc815b/oqe6g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oYO8y-00015O-0L; Wed, 14 Sep 2022 10:53:16 +0200
-Date:   Wed, 14 Sep 2022 10:53:16 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mka@chromium.org,
-        johan+linaro@kernel.org, dianders@chromium.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb
- gdsc
-Message-ID: <YyGWfMKTII8NEHLk@hovoldconsulting.com>
-References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
- <20220901101756.28164-3-quic_rjendra@quicinc.com>
- <YyF+IuoDjBZzEQxO@hovoldconsulting.com>
- <33af27a0-85b9-4301-62d9-24132989e26e@quicinc.com>
+        Wed, 14 Sep 2022 04:55:47 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9732050;
+        Wed, 14 Sep 2022 01:55:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663145704; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Gjg8AqWpUhD3m3MK0P4K7x/Bct//nRGED2qY4TuaEIlrojvenQmGZBGEEkDqiWCWrM/cNfuUyM+gBOSPFYj1aB15CMrLMmdBKRgtnEQaBHitzIF7wbyblLGKENu7YGcPIh5M5lBiDW9tj1Ood5izj1jsvAV/k8o+0g2UvdYrreA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663145704; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=9UI9eP83Fgm+l/Q0CkzxP3QIa+aLPYZVv/RvTUoxtY0=; 
+        b=jtXHcg3BFSxuzGOT96wPbzL4NLtCnzgyHIxZSEtabmdsNHgXY8+MUk9ppCaahd+JRKneW0qY6j4fNPBt31JoxKN52mI5tY0Z6twTBAIrMKJf5AefC1QcbLN515Rwdu+UCiYZBauJSKNdf5uE53Fib6pmAWDp1zvet1LdEPS+u4E=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663145704;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=9UI9eP83Fgm+l/Q0CkzxP3QIa+aLPYZVv/RvTUoxtY0=;
+        b=X+XppHQ9toIBSo3MA8oAudZLQnta9EmpVSypCgMaRMOIvkogGwa4L3Yj/ICE1rs+
+        4x0Q7HU+UAImBw5sQug+Gt7HL5aMHIZBMaOem5fenIjQH/YI8v+TgZPupYTr5/zNo0r
+        raKpQl9wE74w3Y/AR2ezVeOcOxxBBx2FIMua+x4Y=
+Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1663145701578840.6285235337986; Wed, 14 Sep 2022 01:55:01 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH net-next 00/10] dt-bindings and mt7621 devicetree changes
+Date:   Wed, 14 Sep 2022 11:54:41 +0300
+Message-Id: <20220914085451.11723-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33af27a0-85b9-4301-62d9-24132989e26e@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,65 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 02:07:06PM +0530, Krishna Kurapati PSSNV wrote:
-> On 9/14/2022 12:39 PM, Johan Hovold wrote:
-> > On Thu, Sep 01, 2022 at 03:47:56PM +0530, Rajendra Nayak wrote:
-> >> USB on sc7280 cannot support wakeups from low power states
-> >> if the GDSC is turned OFF. Update the .pwrsts for usb GDSC so it
-> >> only transitions to RET in low power.
-> > 
-> > It seems this isn't just needed for wakeup to work. On both sc7280 and
-> > sc8280xp the controller doesn't resume properly if the domain has been
-> > powered off (i.e. regardless of whether wakeup is enabled or not).
+Hello there!
 
->    I believe you are referring to the reinit that happens in xhci resume 
-> path after wakeup happens:
-> 
-> [   48.675839] xhci-hcd xhci-hcd.14.auto: xHC error in resume, USBSTS 
-> 0x411, Reinit
+This patch series removes old MediaTek bindings, improves mediatek,mt7530
+and mt7621 memory controller bindings and improves mt7621 DTs.
 
-Right, and on sc8280xp the controller doesn't survive resume at all.
- 
-> I see that when USB GDSC is not in retention, we don't retain controller 
-> state and go for reinit and re-enum of connected devices. We are seeing 
-> an additional delay of around ~0.7 sec (in chromebooks running on 
-> SC7280) in the wakeup path for re-enumeration of connected USB devices. 
-> To avoid this, we wanted to put GDSC in retention during PM suspend.
+Arınç ÜNAL (10):
+  dt-bindings: net: drop old mediatek bindings
+  dt-bindings: net: dsa: mediatek,mt7530: change mt7530 switch address
+  dt-bindings: net: dsa: mediatek,mt7530: expand gpio-controller
+    description
+  dt-bindings: memory: mt7621: add syscon as compatible string
+  mips: dts: ralink: mt7621: fix some dtc warnings
+  mips: dts: ralink: mt7621: remove interrupt-parent from switch node
+  mips: dts: ralink: mt7621: change phy-mode of gmac1 to rgmii
+  mips: dts: ralink: mt7621: change mt7530 switch address
+  mips: dts: ralink: mt7621: fix external phy on GB-PC2
+  mips: dts: ralink: mt7621: add GB-PC2 LEDs
 
-Thanks for confirming. This needs to be described in the commit message
-of this patches, which currently only says that this change is needed
-for wakeup.
+ .../mediatek,mt7621-memc.yaml                   |  6 +-
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 34 ++++++-----
+ .../bindings/net/mediatek,mt7620-gsw.txt        | 24 --------
+ .../bindings/net/ralink,rt2880-net.txt          | 59 --------------------
+ .../bindings/net/ralink,rt3050-esw.txt          | 30 ----------
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts    |  8 +--
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts    | 50 +++++++++++++----
+ arch/mips/boot/dts/ralink/mt7621.dtsi           | 37 +++++-------
+ 8 files changed, 80 insertions(+), 168 deletions(-)
 
-> > Are you sure there's no state that needs to be retained regardless of
-> > the wakeup setting?
-> > 
-> >> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> >> ---
-> >>   drivers/clk/qcom/gcc-sc7280.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
-> >> index 7ff64d4d5920..de29a034e725 100644
-> >> --- a/drivers/clk/qcom/gcc-sc7280.c
-> >> +++ b/drivers/clk/qcom/gcc-sc7280.c
-> >> @@ -3126,7 +3126,7 @@ static struct gdsc gcc_usb30_prim_gdsc = {
-> >>   	.pd = {
-> >>   		.name = "gcc_usb30_prim_gdsc",
-> >>   	},
-> >> -	.pwrsts = PWRSTS_OFF_ON,
-> >> +	.pwrsts = PWRSTS_RET_ON,
-> >>   	.flags = VOTABLE,
-> >>   };
-> > 
-> > And what about gcc_usb30_sec_gdsc?
-> 
-> Currently wakeup is not enabled on secondary controller as its not 
-> required for end product platform (herobrine variant). So leaving the 
-> usb30_sec_gdsc as it is for now.
 
-This is generic code that can be used in different products and if this
-is needed for the first controller it is also needed for the second
-(i.e. even if wakeup isn't wired up or used on the products you are
-working on).
-
-Johan
